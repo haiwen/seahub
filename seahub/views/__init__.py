@@ -1205,6 +1205,7 @@ def react_fake_view(request):
 
     return render(request, "react_app.html", {
         'storages': get_library_storages(request),
+        'enable_wiki': settings.ENABLE_WIKI,
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,

@@ -163,6 +163,11 @@ ul,ol,li {
     user-select: none;
 }
 
+.dialog-list-container { /*for content is list dialog*/
+    height: 20rem;
+    overflow: auto;
+}
+
 /* UI Widget */
 
 /**** caret ****/
@@ -1038,4 +1043,8 @@ table .menu-toggle {
   background: #fff;
   text-align: center;
   z-index: 4;
+}
+
+.wiki-list-table td {
+    line-height: 1.5rem;
 }
