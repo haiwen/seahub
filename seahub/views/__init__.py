@@ -706,6 +706,20 @@ def libraries(request):
         logger.error(e)
         expire_days = -1
 
+    # Whether use new index page
+    use_new_page = True
+    if request.GET.get('_old', None):
+        use_new_page = False
+
+    if use_new_page:
+        return render(request, "react_app.html", {
+            'storages': get_library_storages(request),
+            'enable_wiki': settings.ENABLE_WIKI,
+            'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
+            'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
+            'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+        })
+
     return render(request, 'libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,

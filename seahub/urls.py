@@ -135,8 +135,7 @@ urlpatterns = [
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
 
-    url(r'^home/$', libraries, name='libraries'),
-    url(r'^$', react_fake_view, name='react_fake_view'),
+    url(r'^$', libraries, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     url(r'^home/wiki/$', personal_wiki, name='personal_wiki'),
