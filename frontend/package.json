@@ -16,6 +16,7 @@
     "glamor": "^2.20.40",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
+    "merge": "^1.2.1",
     "moment": "^2.22.2",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
