@@ -80,7 +80,7 @@ class SharedRepoListItem extends React.Component {
       isReadOnly = true;
     }
     let iconUrl = Utils.getLibIconUrl({
-      is_encryted: repo.encrypted, 
+      is_encrypted: repo.encrypted, 
       is_readonly: isReadOnly,
       size: Utils.isHiDPI() ? 48 : 24
     });
