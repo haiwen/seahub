@@ -45,6 +45,7 @@
   "copy": "复制",
   "copied": "已复制",
   "internal_link": "内部链接",
+  "copy_internal_link": "内部链接已复制到剪贴板",
   "internal_link_desc": "内部链接是指向文件或目录的链接，只有对该文件或目录有访问权限的人可以访问。",
   "remove_link": "删除链接",
   "generate_link": "生成链接",
@@ -88,6 +89,8 @@
   "view_review": "查看评审",
   "there_is_an_associated_review_with_this_file": "有一个与此文件相关联的评审。",
   "ask_for_review": "请求评审",
+  "this_file_is_in_draft_stage": "该文件处于草稿阶段。",
+  "this_file_is_in_review_stage": "该文件处于评审阶段。",
   "start_review": "开始评审",
   "userHelp": {
     "title": "键盘快捷键",

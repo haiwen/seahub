@@ -45,6 +45,7 @@
   "copy": "Copy",
   "copied": "Copied",
   "internal_link": "Internal Link",
+  "copy_internal_link": "Internal link has been copied to clipboard",
   "internal_link_desc": "An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder.",
   "remove_link": "Remove link",
   "generate_link": "Generate link",
@@ -88,6 +89,8 @@
   "there_is_an_associated_review_with_this_file": "There is an associated review with this file.",
   "ask_for_review": "Ask for review",
   "start_review": "Start Review",
+  "this_file_is_in_draft_stage": "This file is in draft stage.",
+  "this_file_is_in_review_stage": "This file is in review stage.",
   "userHelp": {
     "title":"Keyboard shortcuts",
     "userHelpData":[
