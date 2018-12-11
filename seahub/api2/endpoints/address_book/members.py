@@ -10,7 +10,6 @@ from seaserv import ccnet_api
 
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.group.utils import is_group_admin
-from seahub.base.accounts import User
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
@@ -18,6 +17,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import api_check_group
 from seahub.api2.endpoints.search_user import search_user_from_ccnet, \
         search_user_from_profile, format_searched_user_result
+from seahub.utils.user import get_exist_active_user_emails
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,8 @@ class AddressBookGroupsSearchMember(APIView):
         # remove duplicate emails
         group_email_list = {}.fromkeys(group_email_list).keys()
 
+        exist_active_user_emails = get_exist_active_user_emails(group_email_list)
+
         email_result = []
         for email in group_email_list:
 
@@ -74,12 +76,7 @@ class AddressBookGroupsSearchMember(APIView):
             if email not in email_list:
                 continue
 
-            try:
-                # remove nonexistent or inactive user
-                user = User.objects.get(email=email)
-                if not user.is_active:
-                    continue
-            except User.DoesNotExist:
+            if email not in exist_active_user_emails:
                 continue
 
             email_result.append(email)

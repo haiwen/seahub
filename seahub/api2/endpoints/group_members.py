@@ -23,6 +23,7 @@ from seahub.base.accounts import User
 from seahub.group.signals import add_user_to_group
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
+from seahub.utils.user import get_exist_user_emails
 
 from .utils import api_check_group
 
@@ -274,11 +275,11 @@ class GroupMembersBulk(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
 
+        exist_user_emails = get_exist_user_emails(emails_list)
+
         for email in emails_list:
             email_name = email2nickname(email)
-            try:
-                User.objects.get(email=email)
-            except User.DoesNotExist:
+            if email not in exist_user_emails:
                 result['failed'].append({
                     'email': email,
                     'email_name': email_name,

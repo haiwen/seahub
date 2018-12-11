@@ -29,6 +29,7 @@ from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         share_dir_to_group, update_user_dir_permission, \
         update_group_dir_permission, check_user_share_out_permission, \
         check_group_share_out_permission
+from seahub.utils.user import get_exist_user_emails
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
@@ -308,6 +309,9 @@ class DirSharedItemsEndpoint(APIView):
 
         if share_type == 'user':
             share_to_users = request.data.getlist('username')
+
+            exist_user_emails = get_exist_user_emails(share_to_users)
+
             for to_user in share_to_users:
                 if not is_valid_username(to_user):
                     result['failed'].append({
@@ -316,9 +320,7 @@ class DirSharedItemsEndpoint(APIView):
                         })
                     continue
 
-                try:
-                    User.objects.get(email=to_user)
-                except User.DoesNotExist:
+                if to_user not in exist_user_emails:
                     result['failed'].append({
                         'email': to_user,
                         'error_msg': _(u'User %s not found.') % to_user

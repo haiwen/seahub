@@ -38,6 +38,7 @@ from seahub.share.utils import share_dir_to_user, share_dir_to_group, update_use
         check_group_share_out_permission, check_user_share_in_permission
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.views import check_folder_permission
+from seahub.utils.user import get_exist_user_emails
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
 
@@ -345,6 +346,7 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
         result['success'] = []
 
         users = request.data.getlist('user_email')
+        exist_user_emails = get_exist_user_emails(users)
         for user in users:
             if not is_valid_username(user):
                 result['failed'].append({
@@ -353,9 +355,7 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
                 })
                 continue
 
-            try:
-                User.objects.get(email=user)
-            except User.DoesNotExist:
+            if user not in exist_user_emails:
                 result['failed'].append({
                     'user_email': user,
                     'error_msg': 'User %s not found.' % user
@@ -906,6 +906,7 @@ class GroupOwnedLibraryUserShare(APIView):
         result['success'] = []
 
         share_to_users = request.data.getlist('username')
+        exist_user_emails = get_exist_user_emails(share_to_users)
         for to_user in share_to_users:
             to_user = to_user.strip()
             if not is_valid_username(to_user):
@@ -915,9 +916,7 @@ class GroupOwnedLibraryUserShare(APIView):
                     })
                 continue
 
-            try:
-                User.objects.get(email=to_user)
-            except User.DoesNotExist:
+            if to_user not in exist_user_emails:
                 result['failed'].append({
                     'email': to_user,
                     'error_msg': _(u'User %s not found.') % to_user

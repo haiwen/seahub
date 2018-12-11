@@ -16,6 +16,7 @@ from seahub.base.accounts import User
 from seahub.utils import is_valid_email
 from seahub.invitations.models import Invitation
 from seahub.invitations.utils import block_accepter
+from seahub.utils.user import get_exist_user_emails
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -97,6 +98,8 @@ class InvitationsBatchView(APIView):
         result['failed'] = []
         result['success'] = []
 
+        exist_user_emails = get_exist_user_emails(accepters)
+
         for accepter in accepters:
 
             if not accepter.strip():
@@ -126,14 +129,13 @@ class InvitationsBatchView(APIView):
                     })
                 continue
 
-            try:
-                User.objects.get(accepter)
+            if accepter in exist_user_emails:
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('User %s already exists.') % accepter
                     })
                 continue
-            except User.DoesNotExist:
+            else:
                 i = Invitation.objects.add(inviter=request.user.username,
                         accepter=accepter)
                 m = i.send_to(email=accepter)

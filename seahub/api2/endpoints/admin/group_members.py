@@ -9,6 +9,7 @@ from rest_framework import status
 
 from seaserv import seafile_api, ccnet_api
 
+from seahub.utils.user import get_exist_user_emails
 from seahub.group.utils import get_group_member_info, is_group_member
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.accounts import User
@@ -91,10 +92,9 @@ class AdminGroupMembers(APIView):
         result['success'] = []
         emails_need_add = []
 
+        exist_user_emails = get_exist_user_emails(emails)
         for email in emails:
-            try:
-                User.objects.get(email=email)
-            except User.DoesNotExist:
+            if email not in exist_user_emails:
                 result['failed'].append({
                     'email': email,
                     'error_msg': 'User %s not found.' % email

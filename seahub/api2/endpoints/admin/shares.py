@@ -23,6 +23,7 @@ from seahub.share.signals import share_repo_to_user_successful, share_repo_to_gr
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import is_valid_username, send_perm_audit_msg
+from seahub.utils.user import get_exist_user_emails
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
 
@@ -174,13 +175,13 @@ class AdminShares(APIView):
         username = request.user.username
 
         if share_type == 'user':
+            exist_user_emails = get_exist_user_emails(share_to)
             for email in share_to:
                 if repo_owner == email:
                     result['failed'].append({
                         'user_email': email,
                         'error_msg': _(u'User %s is already library owner.') % email
                         })
-
                     continue
 
                 if not is_valid_username(email):
@@ -188,17 +189,13 @@ class AdminShares(APIView):
                         'user_email': email,
                         'error_msg': _('Email %s invalid.') % email
                         })
-
                     continue
 
-                try:
-                    User.objects.get(email=email)
-                except User.DoesNotExist:
+                if email not in exist_user_emails:
                     result['failed'].append({
                         'user_email': email,
                         'error_msg': 'User %s not found.' % email
                         })
-
                     continue
 
                 if has_shared_to_user(repo.repo_id, path, email):
