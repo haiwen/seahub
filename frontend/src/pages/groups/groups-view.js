@@ -5,8 +5,9 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import Group from '../../models/group';
 import RepoInfo from '../../models/repoInfo';
-import GeneralToolbar from '../../components/toolbar/general-toolbar';
+import GroupsToolbar from '../../components/toolbar/groups-toolbar';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
+import CreateGroupDialog from '../../components/dialog/create-group-dialog';
 
 import '../../css/groups.css';
 
@@ -76,10 +77,11 @@ class GroupsView extends React.Component {
       isLoading: true,
       errorMsg: '',
       groupList: [],
+      showAddGroupModal: false,
     }
   }
 
-  componentDidMount() {
+  listGroups = () => {
     seafileAPI.listGroupsV2({'with_repos': 1}).then((res) => { // TODO: api name
       // `{'with_repos': 1}`: list repos of every group
       // res: {data: [...], status: 200, statusText: "OK", headers: {…}, config: {…}, …}
@@ -114,10 +116,24 @@ class GroupsView extends React.Component {
     });
   }
 
+  toggleAddGroupModal = () => {
+    this.setState({
+      showAddGroupModal: !this.state.showAddGroupModal
+    });
+  }
+
+  componentDidMount() {
+    this.listGroups();
+  }
+
   render() {
     return (
       <Fragment>
-        <GeneralToolbar onShowSidePanel={this.props.onShowSidePanel} onSearchedClick={this.props.onSearchedClick}/>
+        <GroupsToolbar
+          onShowSidePanel={this.props.onShowSidePanel}
+          onSearchedClick={this.props.onSearchedClick}
+          toggleAddGroupModal={this.toggleAddGroupModal}
+        />
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -135,11 +151,24 @@ class GroupsView extends React.Component {
             </div>
           </div>
         </div>
+        { this.state.showAddGroupModal &&
+          <CreateGroupDialog
+            toggleAddGroupModal={this.toggleAddGroupModal}
+            listGroups={this.listGroups}
+            showAddGroupModal={this.state.showAddGroupModal}
+          />
+        }
       </Fragment>
     );
   }
 }
 
+const GroupsViewPropTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
+};
+
+GroupsView.propTypes = GroupsViewPropTypes;
 // Groups.propTypes = propTypes;
 
 export default GroupsView;
