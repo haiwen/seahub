@@ -1,16 +1,20 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, username } from '../../utils/constants';
 import Loading from '../loading';
 import DirentListItem from './dirent-list-item';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
 
 import '../../css/tip-for-new-md.css';
+import io from 'socket.io-client';
+import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../../components/toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  dirID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool,
   currentRepoInfo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
@@ -37,6 +41,35 @@ class DirentListView extends React.Component {
       isCreateFileDialogShow: false,
       fileType: ''
     };
+
+    const socket = io('https://dev.seafile.com/');
+
+    socket.emit('repo_update', {
+      request: 'watch_update',
+      repo_id: this.props.repoID,
+      user: {
+        name: '',
+        username: username,
+        constact_email: username,
+      },
+    });
+
+    socket.on('repo_update', (data) => {
+      console.log(data);
+      this.checkFileUpdate();
+    });
+    socket.on('connect', function(){});
+  }
+
+  checkFileUpdate = () => {
+    let repoID = this.props.repoID;
+    let path = this.props.path;
+
+    seafileAPI.dirMetaData(repoID, path).then((res) => {
+      if (res.data.id !== this.props.dirID) {
+        toaster.notify('File updated! Refresh.')
+      }
+    });
   }
 
   onFreezedItem = () => {

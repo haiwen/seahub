@@ -2047,10 +2047,14 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
     else:
         dentrys = dir_list + file_list
 
-    response = HttpResponse(json.dumps(dentrys), status=200,
+    data = dict()
+    data["data"] = dentrys
+    data["oid"] = dir_id
+    data["dir_perm"] = seafile_api.check_permission_by_path(repo.id, path, username)
+    response = HttpResponse(json.dumps(data), status=200,
                             content_type=json_content_type)
-    response["oid"] = dir_id
-    response["dir_perm"] = seafile_api.check_permission_by_path(repo.id, path, username)
+    # response["oid"] = dir_id
+    # response["dir_perm"] = seafile_api.check_permission_by_path(repo.id, path, username)
     return response
 
 def get_shared_link(request, repo_id, path):

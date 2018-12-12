@@ -48,6 +48,7 @@ class Wiki extends Component {
       reviewStatus: '',
       reviewID: '',
       draftFilePath: '',
+      dirID: '',
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
@@ -271,13 +272,14 @@ class Wiki extends Component {
     this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, filePath).then(res => {
       let direntList = [];
-      res.data.forEach(item => {
+      res.data.data.forEach(item => {
         let dirent = new Dirent(item);
         direntList.push(dirent);
       });
       this.setState({
         direntList: direntList,
         isDirentListLoading: false,
+        dirID: res.data.oid,
       });
     });
   }
@@ -835,6 +837,7 @@ class Wiki extends Component {
           onDeleteNode={this.onDeleteTreeNode}
         />
         <MainPanel
+          dirID={this.state.dirID}
           path={this.state.path}
           isViewFile={this.state.isViewFile}
           pathExist={this.state.pathExist}

@@ -34,6 +34,7 @@ class DirView extends React.Component {
       currentRepoInfo: null,
       direntList: [],
       selectedDirentList: [],
+      dirID: '',
     };
     window.onpopstate = this.onpopstate;
   }
@@ -73,12 +74,13 @@ class DirView extends React.Component {
     let repoID = this.state.repoID;
     this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, filePath).then(res => {
-      let direntList = res.data.map(item => {
+      let direntList = res.data.data.map(item => {
         return new Dirent(item);
       });
       this.setState({
         isDirentListLoading: false,
         direntList: direntList,
+        dirID: res.data.oid,
       });
     }).catch(() => {
       this.setState({pathExist: false});
@@ -460,6 +462,7 @@ class DirView extends React.Component {
   render() {
     return (
       <DirPanel 
+        dirID={this.state.dirID}
         pathPrefix={this.props.pathPrefix}
         currentRepoInfo={this.state.currentRepoInfo}
         path={this.state.path}
