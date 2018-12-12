@@ -310,8 +310,11 @@ class RepoView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
+        org_id = None
+        if is_org_context(request):
             org_id = request.user.org.org_id
+
+        try:
             related_users = get_related_users_by_repo(repo_id, org_id)
         except Exception as e:
             logger.error(e)
