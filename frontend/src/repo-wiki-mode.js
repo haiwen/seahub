@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { gettext, repoID, siteRoot, initialPath, isDir } from './utils/constants';
+import { gettext, repoID, siteRoot, initialPath, isDir, serviceUrl } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
@@ -42,7 +42,12 @@ class Wiki extends Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
       selectedDirentList: [],
-      libNeedDecrypt: false
+      libNeedDecrypt: false,
+      isDraft: false,
+      hasDraft: false,
+      reviewStatus: '',
+      reviewID: '',
+      draftFilePath: '',
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
@@ -226,7 +231,8 @@ class Wiki extends Component {
 
     this.setState({isFileLoading: true});
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, permission, last_modifier_name } = res.data;
+      let { mtime, permission, last_modifier_name, is_draft, has_draft,
+            review_status, review_id, draft_file_path } = res.data;
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         seafileAPI.getFileContent(res.data).then((res) => {
           this.setState({
@@ -235,6 +241,11 @@ class Wiki extends Component {
             latestContributor: last_modifier_name,
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,
+            isDraft: is_draft,
+            hasDraft: has_draft,
+            reviewStatus: review_status,
+            reviewID: review_id,
+            draftFilePath: draft_file_path
           });
         });
       });
@@ -269,6 +280,18 @@ class Wiki extends Component {
         isDirentListLoading: false,
       });
     });
+  }
+
+
+  onLinkClick = (event) => {
+    const url = event.path[2].href;
+    if (this.isInternalMarkdownLink(url)) {
+      let path = this.getPathFromInternalMarkdownLink(url);
+      this.showFile(path);
+    } else if (this.isInternalDirLink(url)) {
+      let path = this.getPathFromInternalDirLink(url);
+      this.showDir(path);
+    }
   }
 
   updateDirent = (dirent, paramKey, paramValue) => {
@@ -705,24 +728,24 @@ class Wiki extends Component {
   }
 
   isInternalMarkdownLink(url) {
-    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '.*\.md$');
+    var re = new RegExp(serviceUrl + '/wiki/lib/' + repoID + '/file' + '.*\.md$');
     return re.test(url);
   }
 
   isInternalDirLink(url) {
-    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '/.*');
+    var re = new RegExp(serviceUrl + '/wiki/lib/' + repoID + '/.*');
     return re.test(url);
   }
 
   getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '(.*\.md)');
+    var re = new RegExp(serviceUrl + '/wiki/lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
   }
 
   getPathFromInternalDirLink(url) {
-    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '(/.*)');
+    var re = new RegExp(serviceUrl + '/wiki/lib/' + repoID + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
 
@@ -776,6 +799,14 @@ class Wiki extends Component {
       this.loadSidePanel(initialPath);
   }
 
+  goReviewPage = () => {
+    window.location.href = siteRoot + 'drafts/review/' + this.state.reviewID;
+  }
+
+  goDraftPage = () => {
+    window.location.href = siteRoot + 'lib/' + repoID + '/file' + this.state.draftFilePath + '?mode=edit';
+  }
+
   render() {
     let { libNeedDecrypt } = this.state;
     if (libNeedDecrypt) {
@@ -823,6 +854,7 @@ class Wiki extends Component {
           onItemSelected={this.onDirentSelected}
           onItemDelete={this.onMainPanelItemDelete}
           onItemRename={this.onMainPanelItemRename}
+          onLinkClick={this.onLinkClick}
           onItemMove={this.onMoveItem}
           onItemCopy={this.onCopyItem}
           onAddFile={this.onAddFile}
@@ -835,6 +867,11 @@ class Wiki extends Component {
           onItemsCopy={this.onCopyItems}
           onItemsDelete={this.onDeleteItems}
           hash={this.hash}
+          isDraft={this.state.isDraft}
+          hasDraft={this.state.hasDraft}
+          reviewStatus={this.state.reviewStatus}
+          goDraftPage={this.goDraftPage}
+          goReviewPage={this.goReviewPage}
         />
       </div>
     );

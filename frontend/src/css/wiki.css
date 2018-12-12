@@ -177,3 +177,7 @@ img[src=""] {
 .wiki-md-viewer-rendered-content.article h1 {
   margin-top: 0;
 }
+
+.markdown-content a {
+    cursor: pointer;
+}

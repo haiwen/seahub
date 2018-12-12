@@ -13,7 +13,18 @@ const viewerPropTypes = {
   activeTitleIndex: PropTypes.number
 };
 
+const contentClass = 'markdown-content';
+
 class MarkdownContentViewer extends React.Component {
+  componentDidUpdate () {
+      var links = document.querySelectorAll(`.${contentClass} a`);
+      links.forEach((li) => {li.addEventListener('click', this.onLinkClick); });
+  }
+
+  onLinkClick = (event) => {
+    event.preventDefault(); 
+    this.props.onLinkClick(event);
+  }
 
   render() {
     if (this.props.isFileLoading) {
