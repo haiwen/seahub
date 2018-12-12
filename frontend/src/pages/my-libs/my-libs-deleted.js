@@ -155,7 +155,7 @@ class DeletedRepoItem extends Component {
         <td className="update">{localTime}</td>
         <td>
           {this.state.highlight && (
-            <a href="#" onClick={this.restoreDeletedRepo} className="sf2-icon-reply sf2-x repo-share-btn op-icon"></a>
+            <a href="#" onClick={this.restoreDeletedRepo} className="sf2-icon-reply sf2-x repo-share-btn op-icon" title={gettext('Restore')} aria-label={gettext('Restore')}></a>
           )}
         </td>
       </tr>

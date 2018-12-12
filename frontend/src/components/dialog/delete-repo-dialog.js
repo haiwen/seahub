@@ -24,13 +24,13 @@ class DeleteRepoDialog extends Component {
     let message = gettext("Are you sure you want to delete %s?");
     message = message.replace('%s', repoName);
     const popup = (
-      <Modal isOpen={true} toggle={this.toggle} centered={true}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext("Delete Library")}</ModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{__html: message}}></p>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.clickYes}>{gettext("Confirm")}</Button>
+          <Button color="primary" onClick={this.clickYes}>{gettext("Delete")}</Button>
           <Button color="secondary" onClick={this.toggle}>{gettext("Cancel")}</Button>
         </ModalFooter>
       </Modal>

@@ -178,7 +178,7 @@ class Item extends Component {
       operationMenuToggleIconClassName += iconVisibility; 
     }
 
-    const showShareLinks = !data.encrypted && (canGenerateShareLink || canGenerateUploadLink);
+    // const showShareLinks = !data.encrypted && (canGenerateShareLink || canGenerateUploadLink);
 
     const commonToggle = (
       <DropdownToggle
@@ -197,7 +197,7 @@ class Item extends Component {
         <DropdownItem onClick={this.transfer}>{gettext('Transfer')}</DropdownItem>
         <DropdownItem onClick={this.historySetting}>{gettext('History Setting')}</DropdownItem>
         {data.encrypted ? <DropdownItem onClick={this.changePassword}>{gettext('Change Password')}</DropdownItem> : ''}
-        {showShareLinks ? <DropdownItem onClick={this.showLinks}>{gettext('Share Links')}</DropdownItem> : ''}
+        {/* {showShareLinks ? <DropdownItem onClick={this.showLinks}>{gettext('Share Links')}</DropdownItem> : ''} */}
         {folderPermEnabled ? <DropdownItem onClick={this.folderPerm}>{gettext('Folder Permission')}</DropdownItem> : ''}
         <DropdownItem onClick={this.showDetails}>{gettext('Details')}</DropdownItem>
       </React.Fragment>
