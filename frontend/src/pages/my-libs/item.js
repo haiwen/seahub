@@ -168,7 +168,7 @@ class Item extends Component {
       'is_admin': data.is_admin,
       'permission': permission
     });
-    data.url = `${siteRoot}#my-libs/lib/${data.repo_id}/`;
+    data.url = `${siteRoot}library/${data.repo_id}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let shareIconClassName = 'sf2-icon-share sf2-x op-icon' + iconVisibility; 
@@ -205,8 +205,8 @@ class Item extends Component {
 
     const desktopOperations = (
       <div>
-        <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>
-        <a href="#" className={deleteIconClassName} title={gettext("Delete")} onClick={this.showDeleteItemPopup}></a>
+        <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
+        <a href="#" className={deleteIconClassName} title={gettext('Delete')} onClick={this.showDeleteItemPopup}></a>
         <Dropdown isOpen={this.state.operationMenuOpen} toggle={this.toggleOperationMenu}>
           {commonToggle}
           <DropdownMenu>
@@ -220,7 +220,7 @@ class Item extends Component {
     const mobileOperations = (
       <Dropdown isOpen={this.state.operationMenuOpen} toggle={this.toggleOperationMenu}>
         {commonToggle}
-        <div className={`${this.state.operationMenuOpen?'':'d-none'}`} onClick={this.toggleOperationMenu}>
+        <div className={`${this.state.operationMenuOpen ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
           <div className="mobile-operation-menu-bg-layer"></div>
           <div className="mobile-operation-menu">
             <DropdownItem onClick={this.share}>{gettext('Share')}</DropdownItem>

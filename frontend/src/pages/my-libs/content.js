@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, storages} from '../../utils/constants';
-import TransferDialog from '../../components/dialog/transfer-dialog';
-import LibHistorySetting from '../../components/dialog/lib-history-setting-dialog';
 import Loading from '../../components/loading';
-import ModalPortal from '../../components/modal-portal';
-import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import TableBody from './table-body';
+import ModalPortal from '../../components/modal-portal';
+import LibHistorySetting from '../../components/dialog/lib-history-setting-dialog';
+import TransferDialog from '../../components/dialog/transfer-dialog';
+import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 
 const propTypes = {
   loading: PropTypes.bool.isRequired,
@@ -83,13 +83,13 @@ class Content extends Component {
       const desktopThead = (
         <thead>
           <tr>
-            <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
-            <th width="42%">{gettext("Name")}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
-            <th width="14%"><span className="sr-only">{gettext("Actions")}</span></th>
+            <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width="42%">{gettext('Name')}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
+            <th width="14%"><span className="sr-only">{gettext('Actions')}</span></th>
 
-            <th width={showStorageBackend ? '15%' : '20%'}>{gettext("Size")}</th>
+            <th width={showStorageBackend ? '15%' : '20%'}>{gettext('Size')}</th>
             {showStorageBackend ? <th width="10%">{gettext('Storage backend')}</th> : null}
-            <th width={showStorageBackend ? '15%' : '20%'}>{gettext("Last Update")}<a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a></th>
+            <th width={showStorageBackend ? '15%' : '20%'}>{gettext('Last Update')}<a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a></th>
           </tr>
         </thead>
       );
@@ -97,13 +97,13 @@ class Content extends Component {
       const mobileThead = (
         <thead>
           <tr>
-            <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
+            <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="76%">
               {gettext("Sort:")} {/* TODO: sort */}
               {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
               {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
             </th>
-            <th width="6%"><span className="sr-only">{gettext("Actions")}</span></th>
+            <th width="6%"><span className="sr-only">{gettext('Actions')}</span></th>
           </tr>
         </thead>
       );
@@ -126,11 +126,14 @@ class Content extends Component {
       const nonEmpty = (
         <Fragment>
           {table}
-          <DeleteRepoDialog 
-            isOpen={this.state.deleteItemPopupOpen} 
-            toggle={this.toggleDeleteItemPopup} 
-            data={this.state.deleteItemPopupData} 
-          />
+          {this.state.deleteItemPopupOpen && (
+            <ModalPortal>
+              <DeleteRepoDialog 
+                toggle={this.toggleDeleteItemPopup} 
+                data={this.state.deleteItemPopupData} 
+              />
+            </ModalPortal>
+          )}
           {this.state.showTransfer &&
             <ModalPortal>
               <TransferDialog 

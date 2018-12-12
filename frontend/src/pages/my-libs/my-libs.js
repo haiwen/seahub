@@ -18,7 +18,7 @@ class MyLibraries extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listRepos({type:'mine'}).then((res) => {
+    seafileAPI.listRepos({type: 'mine'}).then((res) => {
       // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         loading: false,
@@ -29,19 +29,19 @@ class MyLibraries extends Component {
         if (error.response.status == 403) {
           this.setState({
             loading: false,
-            errorMsg: gettext("Permission denied")
+            errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,
-            errorMsg: gettext("Error")
+            errorMsg: gettext('Error')
           });
         }
       } else {
         this.setState({
           loading: false,
-          errorMsg: gettext("Please check the network.")
+          errorMsg: gettext('Please check the network.')
         });
       }
     });
@@ -102,7 +102,7 @@ class MyLibraries extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext("My Libraries")}</h3>
+              <h3 className="sf-heading">{gettext('My Libraries')}</h3>
             </div>
             <div className="cur-view-content">
               <Content 
