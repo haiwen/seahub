@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from '@reach/router';
 import { siteRoot, gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -49,7 +50,7 @@ class DirPath extends React.Component {
         {this.props.pathPrefix ? 
           this.props.pathPrefix :
             <Fragment>
-              <a href={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</a>
+              <Link to={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</Link>
               <span className="path-split">/</span>
             </Fragment>       
         }

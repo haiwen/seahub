@@ -67,6 +67,8 @@
 .sf2-icon-history:before { content:"\e014"; }
 .sf2-icon-cog1:before { content:"\e015"; }
 .sf2-icon-trash:before { content:"\e016"; }
+.sf2-icon-tick:before { content:"\e01e"; }
+.sf2-icon-x2:before { content:"\e01f"; }
 .sf2-icon-edit:before { content:"\e018"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
 .sf2-icon-x1:before { content:"\e01d"; }
@@ -78,6 +80,7 @@
 .sf2-icon-list-view:before { content:"\e026"; }
 .sf2-icon-copy:before {content:"\e028"}
 .sf2-icon-move:before {content:"\e029"}
+.sf2-icon-reply:before { content:"\e02a"; }
 .sf2-icon-menu:before { content: "\e031"; }
 .sf2-icon-more:before { content: "\e032"; }
 .sf2-icon-x3:before {content:"\e035";}
@@ -141,10 +144,6 @@ ul,ol,li {
     justify-content: flex-end;
 }
 
-.flex-direction-row {
-    flex-direction: row;
-}
-
 .sf-font {
     color: #eb8205 !important;
     text-decoration: none;
@@ -166,6 +165,18 @@ ul,ol,li {
 .dialog-list-container { /*for content is list dialog*/
     height: 20rem;
     overflow: auto;
+}
+
+.link-dropdown-item {
+    color: #6e7687;
+}
+
+.link-dropdown-item:hover {
+    color: #16181b;
+    text-decoration: none;
+}
+.link-dropdown-item:active {
+    color: #fff;
 }
 
 /* UI Widget */

@@ -206,6 +206,7 @@ urlpatterns = [
     url(r'^groups/$', react_fake_view, name="groups"),
     url(r'^group/(?P<group_id>\d+)/$', react_group, name="group"),
     url(r'^library/.*$', react_fake_view, name="lib_view"),
+    url(r'^my-libs/deleted/$', react_fake_view, name="my_libs_deleted"),
 
     ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
