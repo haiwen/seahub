@@ -83,7 +83,7 @@ class TransferDialog extends React.Component {
             isClearable classNamePrefix
             inputId={'react-select-transfer-input'}
           /><br />
-          <Button onClick={this.submit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
         </ModalBody>
       </Modal>
     );
