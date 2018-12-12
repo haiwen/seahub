@@ -13,6 +13,7 @@ import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import TransferDialog from '../../components/dialog/transfer-dialog';
 import LibHistorySetting from '../../components/dialog/lib-history-setting-dialog';
 import LibDetail from '../../components/dirent-detail/lib-details';
+import RenameInput from '../../components/rename-input';
 
 class Content extends Component {
 
@@ -440,21 +441,21 @@ class Item extends Component {
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        {
-          this.state.showChangeLibName ? (
-            <td>
-              <input value={this.state.repoName} onChange={this.onChangeLibName} />
-              <button type='button' className='sf2-icon-tick text-success' onClick={this.updateLibName} />
-              <button type='button' className='sf2-icon-x2' onClick={this.rename}/>
-            </td>
-          ) : (
-            <td>
-              {data.repo_name ?
-                <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link> :
-                gettext('Broken (please contact your administrator to fix this library)')}
-            </td>
-          )
-        }
+        <td>
+          {this.state.showChangeLibName && (
+            <RenameInput 
+              name={data.repo_name} 
+              onRenameConfirm={this.updateLibName} 
+              onRenameCancel={this.rename}
+            />
+          )}
+          {!this.state.showChangeLibName && data.repo_name && (
+            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link>
+          )}
+          {!this.state.showChangeLibName && !data.repo_name && 
+            (gettext('Broken (please contact your administrator to fix this library)'))
+          }
+        </td>
         <td>{data.repo_name ? desktopOperations : ''}</td>
         <td>{Utils.formatSize({bytes: data.size})}</td>
         {storages.length ? <td>{data.storage_name}</td> : null}
