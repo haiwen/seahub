@@ -44,11 +44,10 @@ class DirPath extends React.Component {
   render() {
     let { currentPath, repoName } = this.props;
     let pathElem = this.turnPathToLink(currentPath);
-    let pathPrefix = this.props.pathPrefix !== undefined ? this.props.pathPrefix : false;
     return (
       <div className="path-containter">
-        {pathPrefix ? 
-          pathPrefix :
+        {this.props.pathPrefix ? 
+          this.props.pathPrefix :
             <Fragment>
               <a href={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</a>
               <span className="path-split">/</span>
