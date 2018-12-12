@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, storages} from '../../utils/constants';
-import TransferDialog from '../dialog/transfer-dialog';
-import LibHistorySetting from '../dialog/lib-history-setting-dialog';
-import Loading from '../loading';
-import ModalPortal from '../modal-portal';
-import DeleteItemPopup from './popups/delete-item';
+import TransferDialog from '../../components/dialog/transfer-dialog';
+import LibHistorySetting from '../../components/dialog/lib-history-setting-dialog';
+import Loading from '../../components/loading';
+import ModalPortal from '../../components/modal-portal';
+import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import TableBody from './table-body';
 
 const propTypes = {
@@ -126,7 +126,7 @@ class Content extends Component {
       const nonEmpty = (
         <Fragment>
           {table}
-          <DeleteItemPopup 
+          <DeleteRepoDialog 
             isOpen={this.state.deleteItemPopupOpen} 
             toggle={this.toggleDeleteItemPopup} 
             data={this.state.deleteItemPopupData} 

@@ -3,8 +3,8 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl} from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
-import Content from '../../components/mylib-repo-list-view/content';
 import LibDetail from '../../components/dirent-detail/lib-details';
+import Content from './content';
 
 class MyLibraries extends Component {
   constructor(props) {
