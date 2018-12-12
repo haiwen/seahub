@@ -167,6 +167,18 @@ ul,ol,li {
     overflow: auto;
 }
 
+.link-dropdown-item {
+    color: #6e7687;
+}
+
+.link-dropdown-item:hover {
+    color: #16181b;
+    text-decoration: none;
+}
+.link-dropdown-item:active {
+    color: #fff;
+}
+
 /* UI Widget */
 
 /**** caret ****/

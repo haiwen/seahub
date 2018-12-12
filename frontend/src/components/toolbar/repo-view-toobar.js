@@ -52,7 +52,7 @@ class RepoViewToolbar extends React.Component {
                 </DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem>
-                    <Link to={siteRoot + 'my-libs/deleted/'}>{gettext('Deleted Libraries')}</Link>
+                    <Link className="link-dropdown-item" to={siteRoot + 'my-libs/deleted/'}>{gettext('Deleted Libraries')}</Link>
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
