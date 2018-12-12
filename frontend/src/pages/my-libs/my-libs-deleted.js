@@ -4,7 +4,6 @@ import { gettext, siteRoot, lang } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import classnames from 'classnames';
 import moment from 'moment';
 moment.locale(lang);
 
@@ -104,7 +103,7 @@ class DeletedRepoItem extends Component {
     super(props);
     this.state = {
       hideRestoreMenu: true,
-      highlight: '',
+      highlight: false,
     };
   }
 
@@ -112,7 +111,7 @@ class DeletedRepoItem extends Component {
     if (!this.props.isItemFreezed) {
       this.setState({
         hideRestoreMenu: false,
-        highlight: 'tr-highlight'
+        highlight: true,
       });
     }
   }
@@ -121,7 +120,7 @@ class DeletedRepoItem extends Component {
     if (!this.props.isItemFreezed) {
       this.setState({
         hideRestoreMenu: true,
-        highlight: ''
+        highlight: false,
       });
     }
   } 
@@ -144,11 +143,15 @@ class DeletedRepoItem extends Component {
     localTime = moment(localTime).fromNow();
 
     return (
-      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt='icon' /></td>
         <td className="name">{this.props.repo.repo_name}</td>
         <td className="update">{localTime}</td>
-        <td className={classnames({hide: this.state.hideRestoreMenu})}><i onClick={this.restoreDeletedRepo} className="fas fa-reply"></i></td>
+        <td>
+          {this.state.highlight && (
+            <a href="#" onClick={this.restoreDeletedRepo} className="sf2-icon-reply sf2-x repo-share-btn op-icon"></a>
+          )}
+        </td>
       </tr>
     );
   }
