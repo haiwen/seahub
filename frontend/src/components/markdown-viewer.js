@@ -9,7 +9,7 @@ const viewerPropTypes = {
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   markdownContent: PropTypes.string,
-  onContentRendered: PropTypes.func,
+  onContentRendered: PropTypes.func.isRequired,
   activeTitleIndex: PropTypes.number
 };
 

@@ -46,6 +46,10 @@ class MainPanel extends Component {
     this.props.onMainNavBarClick(e.target.dataset.path);
   }
 
+  onContentRendered = (markdownViewer) => {
+    //
+  }
+
   render() {
 
     let filePathList = this.props.filePath.split('/');
@@ -107,6 +111,7 @@ class MainPanel extends Component {
                 lastModified = {this.props.lastModified}
                 onLinkClick={this.props.onLinkClick}
                 isFileLoading={this.props.isFileLoading}
+                onContentRendered={this.onContentRendered}
               />
             }
             { !this.props.isViewFileState && 
