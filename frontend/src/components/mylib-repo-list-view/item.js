@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
@@ -8,6 +9,13 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import RenameInput from '../../components/rename-input';
 
+const propTypes = {
+  data: PropTypes.object.isRequired,
+  operations: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onItemFreezedToggle: PropTypes.func.isRequired,
+}
+
 class Item extends Component {
 
   constructor(props) {
@@ -15,68 +23,56 @@ class Item extends Component {
     this.state = {
       showOpIcon: false,
       operationMenuOpen: false,
-      deleted: false,
       showChangeLibName: false, 
-      repoName: this.props.data.repo_name,
+      highlight: false,
     };
-
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
-    this.toggleOperationMenu = this.toggleOperationMenu.bind(this);
-    this.clickOperationMenuToggle = this.clickOperationMenuToggle.bind(this);
-
-    this.share = this.share.bind(this);
-
-    this.showDeleteItemPopup = this.showDeleteItemPopup.bind(this);
-    this.deleteItem = this.deleteItem.bind(this);
-
-    this.rename = this.rename.bind(this);
-    this.transfer = this.transfer.bind(this);
-    this.historySetting = this.historySetting.bind(this);
-    this.changePassword = this.changePassword.bind(this);
-    this.showLinks = this.showLinks.bind(this);
-    this.folderPerm = this.folderPerm.bind(this);
-    this.showDetails = this.showDetails.bind(this);
-    this.label = this.label.bind(this);
   }
 
-  handleMouseOver() {
-    if (this.state.operationMenuOpen) {
-      return;
+  handleMouseOver = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        showOpIcon: true,
+        highlight: true,
+      });
     }
-    this.setState({
-      showOpIcon: true
-    });
   }
 
-  handleMouseOut() {
-    if (this.state.operationMenuOpen) {
-      return;
+  handleMouseOut = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        showOpIcon: false,
+        highlight: false
+      });
     }
-    this.setState({
-      showOpIcon: false
-    });
   }
 
-  toggleOperationMenu() {
-    this.setState({
-      operationMenuOpen: !this.state.operationMenuOpen
-    });
-  }
-
-  clickOperationMenuToggle(e) {
+  clickOperationMenuToggle = (e) => {
     e.preventDefault();
-    this.toggleOperationMenu();
+    this.toggleOperationMenu(e);
+  }
+  
+  toggleOperationMenu = (e) => {
+    if (e.target.dataset.toggle !== 'item') {
+      if (this.props.isItemFreezed) {
+        this.setState({
+          highlight: false,
+          showOpIcon: false,
+        });
+      }
+      this.setState({
+        operationMenuOpen: !this.state.operationMenuOpen
+      });
+      this.props.onItemFreezedToggle();
+    }
   }
 
-  share(e) {
+  share = (e) => {
     e.preventDefault();
     // TODO
   }
 
-  showDeleteItemPopup(e) {
+  showDeleteItemPopup = (e) => {
     e.preventDefault(); // for `<a>`
-
     const data = this.props.data;
     this.props.operations.showDeleteItemPopup({
       repoName: data.repo_name,
@@ -85,75 +81,67 @@ class Item extends Component {
     });
   }
 
-  deleteItem() {
+  deleteItem = () => {
     const data = this.props.data;
     seafileAPI.deleteRepo(data.repo_id).then((res) => {
-      this.setState({
-        deleted: true
-      });
+
       // TODO: show feedback msg
     }).catch((error) => {
-        // TODO: show feedback msg
+      
+      // TODO: show feedback msg
     });
   }
 
-  rename() {
+  rename = () => {
     this.setState({
-      showChangeLibName: !this.state.showChangeLibName
-    })
-  }
-
-  onChangeLibName = (e) => {
-    this.setState({
-      repoName: e.target.value
+      showOpIcon: false,
+      showChangeLibName: !this.state.showChangeLibName,
+      operationMenuOpen: !this.state.operationMenuOpen,
     })
   }
 
   updateLibName = () => {
     const itemID = this.props.data.repo_id;
     seafileAPI.renameRepo(itemID, this.state.repoName).then(res => {
-      this.rename();
       this.props.operations.onRenameRepo(itemID, this.state.repoName);
-    }).catch(res => {
-      // TODO res error 
-    })
+      this.setState({
+        showOpIcon: false,
+        showChangeLibName: false,
+      });
+      this.props.onItemFreezedToggle();
+    });
   }
 
-  transfer() {
+  transfer = () => {
     const itemName = this.props.data.repo_name;
     const itemID = this.props.data.repo_id;
     this.props.operations.onTransfer(itemName, itemID);
   }
 
-  historySetting() {
+  historySetting = () => {
     const itemName = this.props.data.repo_name;
     const itemID = this.props.data.repo_id;
     this.props.operations.onHistorySetting(itemName, itemID);
   }
 
-  changePassword() {
+  changePassword = () => {
   }
 
-  showLinks() {
+  showLinks = () => {
   }
 
-  folderPerm() {
+  folderPerm = () => {
   }
 
-  showDetails() {
+  showDetails = () => {
     let data = this.props.data;
     this.props.operations.onDetails(data);
   }
   
-  label() {
+  label = () => {
   }
 
   render() {
-
-    if (this.state.deleted) {
-      return null;
-    }
-
     const data = this.props.data;
     const permission = data.permission;
 
@@ -185,14 +173,18 @@ class Item extends Component {
 
     const commonToggle = (
       <DropdownToggle
-        tag="a" href="#" className={operationMenuToggleIconClassName} title={gettext('More Operations')}
-        onClick={this.clickOperationMenuToggle}
-        data-toggle="dropdown" aria-expanded={this.state.operationMenuOpen}>
-      </DropdownToggle>
+        tag="a" 
+        href="#" 
+        className={operationMenuToggleIconClassName} 
+        title={gettext('More Operations')}
+        // onClick={this.clickOperationMenuToggle}
+        data-toggle="dropdown" 
+        aria-expanded={this.state.operationMenuOpen}
+      />
     );
     const commonOperationsInMenu = (
       <React.Fragment>
-        <DropdownItem onClick={this.rename}>{gettext('Rename')}</DropdownItem>
+        <DropdownItem data-toggle="item" onClick={this.rename}>{gettext('Rename')}</DropdownItem>
         <DropdownItem onClick={this.transfer}>{gettext('Transfer')}</DropdownItem>
         <DropdownItem onClick={this.historySetting}>{gettext('History Setting')}</DropdownItem>
         {data.encrypted ? <DropdownItem onClick={this.changePassword}>{gettext('Change Password')}</DropdownItem> : ''}
@@ -231,7 +223,7 @@ class Item extends Component {
     );
 
     const desktopItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
         <td>
           {this.state.showChangeLibName && (
@@ -256,7 +248,7 @@ class Item extends Component {
     );
 
     const mobileItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
         <td>
           {data.repo_name ?
@@ -273,5 +265,7 @@ class Item extends Component {
     return window.innerWidth >= 768 ? desktopItem : mobileItem;
   }
 }
+
+Item.propTypes = propTypes;
 
 export default Item;
