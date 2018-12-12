@@ -247,7 +247,8 @@ class Wiki extends Component {
 
   loadDirentList = (filePath) => {
     this.setState({isDirentListLoading: true});
-    seafileAPI.listDir(repoID, filePath).then(res => {
+    const path = encodeURIComponent(filePath);
+    seafileAPI.listDir(repoID, path).then(res => {
       let direntList = [];
       res.data.forEach(item => {
         let dirent = new Dirent(item);

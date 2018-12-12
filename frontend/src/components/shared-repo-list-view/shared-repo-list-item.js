@@ -91,7 +91,7 @@ class SharedRepoListItem extends React.Component {
     });
 
     //todo change to library; div-view is not compatibility
-    let libPath = `${siteRoot}library/${this.props.repo.repo_id}/`;
+    let libPath = `${siteRoot}library/${this.props.repo.repo_id}/${this.props.repo.repo_name}/`;
 
     return { iconUrl, iconTitle, libPath };
   }
@@ -285,7 +285,7 @@ class SharedRepoListItem extends React.Component {
       <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle}/></td>
         <td>
-          <a href={libPath}>{repo.repo_name}</a><br />
+          <Link to={libPath}>{repo.repo_name}</Link><br />
           <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
           <span className="item-meta-info">{repo.size}</span>
           <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
