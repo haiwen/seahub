@@ -73,7 +73,7 @@ class MyLibraries extends Component {
   }
   
   onDeleteRepo = (repo) => {
-    let items = this.state.items.map(item => {
+    let items = this.state.items.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
     this.setState({items: items});
