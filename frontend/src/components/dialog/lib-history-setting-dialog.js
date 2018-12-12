@@ -96,29 +96,30 @@ class LibHistorySetting extends React.Component {
     return (
       <Modal isOpen={true} centered={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
-        <span className="sf-font" title={itemName}>{itemName}</span>{gettext(' History Setting')}
+          <span className="sf-font" title={itemName}>{itemName}</span>{' '}
+          {gettext('History Setting')}
         </ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.allHistory} onChange={() => {this.setLimitDays('allHistory')}}/>
-              <Label>{gettext(' Keep full history')}</Label>
+              <Input type="radio" name="radio1" checked={this.state.allHistory} onChange={() => {this.setLimitDays('allHistory')}}/>{' '}
+              <Label>{gettext('Keep full history')}</Label>
             </FormGroup>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.noHistory} onChange={() =>{this.setLimitDays('noHistory')}}/>
-              <Label>{gettext(' Don\'t keep history')}</Label>
+              <Input type="radio" name="radio1" checked={this.state.noHistory} onChange={() =>{this.setLimitDays('noHistory')}}/>{' '}
+              <Label>{gettext('Don\'t keep history')}</Label>
             </FormGroup>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.autoHistory} onChange={() =>{this.setLimitDays('autoHistory')}}/>
-              <Label>{gettext(' Only keep a period of history:')}</Label>
+              <Input type="radio" name="radio1" checked={this.state.autoHistory} onChange={() =>{this.setLimitDays('autoHistory')}}/>{' '}
+              <Label>{gettext('Only keep a period of history:')}</Label>
               <Input 
                 type="text" 
                 className="expire-input" 
                 value={this.state.expireDays}
                 onChange={this.onChange} 
                 disabled={this.state.disabled}
-              /> 
-              <Label><span>{gettext(' days')}</span></Label>
+              />{' '}
+              <Label><span>{gettext('days')}</span></Label>
             </FormGroup>
             <Label className="err-message">{this.state.errorInfo}</Label><br />
             <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
