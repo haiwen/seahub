@@ -4,7 +4,12 @@ import Item from './item';
 
 const propTypes = {
   items: PropTypes.array.isRequired,
-  operations: PropTypes.object.isRequired,
+  onRenameRepo: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onTransfer: PropTypes.func.isRequired,
+  showDeleteItemPopup: PropTypes.func.isRequired,
+  onHistorySetting: PropTypes.func.isRequired,
+  onRepoDetails: PropTypes.func.isRequired,
 };
 
 class TableBody extends Component {
@@ -12,7 +17,6 @@ class TableBody extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: this.props.items,
       isItemFreezed: false,
     };
   }
@@ -22,14 +26,19 @@ class TableBody extends Component {
   }
 
   render() {
-    let listItems = this.state.items.map((item, index) => {
+    let listItems = this.props.items.map((item, index) => {
       return (
         <Item 
           key={index} 
           data={item} 
-          operations={this.props.operations}
           isItemFreezed={this.state.isItemFreezed}
           onItemFreezedToggle={this.onItemFreezedToggle}
+          onRenameRepo={this.props.onRenameRepo}
+          onDeleteRepo={this.props.onDeleteRepo}
+          onTransfer={this.props.onTransfer}
+          showDeleteItemPopup={this.props.showDeleteItemPopup}
+          onHistorySetting={this.props.onHistorySetting}
+          onRepoDetails={this.props.onRepoDetails}
         />
       );
     });

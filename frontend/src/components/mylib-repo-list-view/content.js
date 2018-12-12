@@ -1,16 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { gettext, storages} from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
 import TransferDialog from '../dialog/transfer-dialog';
 import LibHistorySetting from '../dialog/lib-history-setting-dialog';
-import LibDetail from '../dirent-detail/lib-details';
 import Loading from '../loading';
 import ModalPortal from '../modal-portal';
 import DeleteItemPopup from './popups/delete-item';
 import TableBody from './table-body';
+
+const propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  onRenameRepo: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onTransferRepo: PropTypes.func.isRequired,
+  onRepoDetails: PropTypes.func.isRequired,
+};
 
 class Content extends Component {
 
@@ -26,38 +32,22 @@ class Content extends Component {
       libSize: '',
       libUpdateTime: ''
     };
-
-    this.toggleDeleteItemPopup = this.toggleDeleteItemPopup.bind(this);
-    this.showDeleteItemPopup = this.showDeleteItemPopup.bind(this);
-    this.onTransfer = this.onTransfer.bind(this);
-    this.onHistorySetting = this.onHistorySetting.bind(this);
-    this.onFileTagChanged = this.onFileTagChanged.bind(this);
-    this.onDetails = this.onDetails.bind(this);
-    this.closeDetails = this.closeDetails.bind(this);
-
-    this.operations = {
-      showDeleteItemPopup: this.showDeleteItemPopup,
-      onTransfer: this.onTransfer,
-      onHistorySetting: this.onHistorySetting,
-      onDetails: this.onDetails,
-      onRenameRepo: this.props.renameRepo,
-    };
   }
 
-  toggleDeleteItemPopup() {
+  toggleDeleteItemPopup = () => {
     this.setState({
       deleteItemPopupOpen: !this.state.deleteItemPopupOpen
     });
   }
 
-  showDeleteItemPopup(data) {
+  showDeleteItemPopup = (data) => {
     this.toggleDeleteItemPopup();
     this.setState({
       deleteItemPopupData: data
     });
   }
 
-  onTransfer(itemName, itemID) {
+  onTransfer = (itemName, itemID) => {
     this.setState({
       showTransfer: !this.state.showTransfer,
       itemName: itemName,
@@ -65,7 +55,7 @@ class Content extends Component {
     });
   } 
 
-  onHistorySetting(itemName, itemID) {
+  onHistorySetting = (itemName, itemID) => {
     this.setState({
       showHistorySetting: !this.state.showHistorySetting,
       itemName: itemName,
@@ -73,36 +63,8 @@ class Content extends Component {
     });
   } 
 
-  onDetails(data) {
-    const libSize = Utils.formatSize({bytes: data.size});
-    const libID = data.repo_id;
-    const libUpdateTime = moment(data.last_modified).fromNow(); 
-
-    this.setState({
-      showDetails: !this.state.showDetails,
-      libID: libID,
-      libSize: libSize,
-      libUpdateTime: libUpdateTime
-    });
-  }
-
-  closeDetails() {
-    this.setState({
-      showDetails: !this.state.showDetails
-    })
-  }
-
-   onFileTagChanged() {
-    seafileAPI.listFileTags(this.state.detailsRepoID, '/').then(res => {
-      let fileTags = res.data.file_tags.map(item => {
-        console.log(item);
-      });
-    });
-   }
-
-
   render() {
-    const {loading, errorMsg, items} = this.props.data;
+    const { loading, errorMsg, items } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -149,47 +111,53 @@ class Content extends Component {
       const table = (
         <table>
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
-          <TableBody items={items} operations={this.operations} />
+          <TableBody 
+            items={items} 
+            onRenameRepo={this.props.onRenameRepo}
+            onDeleteRepo={this.props.onDeleteRepo}
+            onRepoDetails={this.props.onRepoDetails}
+            onTransfer={this.onTransfer}
+            showDeleteItemPopup={this.showDeleteItemPopup}
+            onHistorySetting={this.onHistorySetting}
+          />
         </table>
       );
 
       const nonEmpty = (
-        <React.Fragment>
+        <Fragment>
           {table}
-          <DeleteItemPopup isOpen={this.state.deleteItemPopupOpen} 
-            toggle={this.toggleDeleteItemPopup} data={this.state.deleteItemPopupData} />
+          <DeleteItemPopup 
+            isOpen={this.state.deleteItemPopupOpen} 
+            toggle={this.toggleDeleteItemPopup} 
+            data={this.state.deleteItemPopupData} 
+          />
           {this.state.showTransfer &&
             <ModalPortal>
-              <TransferDialog toggleDialog={this.onTransfer} 
-                              itemName={this.state.itemName}
-                              repoID={this.state.libID}
-                              submit={this.props.toggleTransferSubmit}
-                              />
+              <TransferDialog 
+                toggleDialog={this.onTransfer} 
+                itemName={this.state.itemName}
+                repoID={this.state.libID}
+                submit={this.props.onTransferRepo}
+              />
             </ModalPortal>
           }
           {this.state.showHistorySetting &&
             <ModalPortal>
-              <LibHistorySetting toggleDialog={this.onHistorySetting} 
-                                 itemName={this.state.itemName}
-                                 repoID={this.state.libID}
-                                 />
+              <LibHistorySetting 
+                toggleDialog={this.onHistorySetting} 
+                itemName={this.state.itemName}
+                repoID={this.state.libID}
+              />
             </ModalPortal>
           }
-          {this.state.showDetails && (
-            <div className="cur-view-detail">
-              <LibDetail libID={this.state.libID}
-                         libSize={this.state.libSize}
-                         libUpdateTime={this.state.libUpdateTime}
-                         closeDetails={this.closeDetails}
-                         />
-            </div>
-          )}
-        </React.Fragment>
+        </Fragment>
       );
 
       return items.length ? nonEmpty : emptyTip; 
     }
   }
 }
+
+Content.propTypes = propTypes;
 
 export default Content;

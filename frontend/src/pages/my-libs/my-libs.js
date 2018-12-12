@@ -4,16 +4,16 @@ import { gettext, loginUrl} from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import Content from '../../components/mylib-repo-list-view/content';
-
-
+import LibDetail from '../../components/dirent-detail/lib-details';
 
 class MyLibraries extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isShowDetails: false,
       loading: true,
       errorMsg: '',
-      items: []
+      items: [],
     };
   }
 
@@ -38,7 +38,6 @@ class MyLibraries extends Component {
             errorMsg: gettext("Error")
           });
         }
-
       } else {
         this.setState({
           loading: false,
@@ -50,25 +49,47 @@ class MyLibraries extends Component {
 
   onCreateRepo = (repo) => {
     seafileAPI.createMineRepo(repo).then((res) => {
-      //todo update repoList 
+      let repo = res.data;
+      this.state.items.push(repo);
+      this.setState({items: this.state.items});
     });
   }
 
-  toggleTransferSubmit = (repoID) => {
-    this.setState({
-      items: this.state.items.filter(item => item.repo_id !== repoID) 
-    }) 
+  onTransferRepo = (repoID) => {
+    let items = this.state.items.filter(item => {
+      return item.repo_id !== repoID;
+    })
+    this.setState({items: items});
   }
 
-  renameRepo = (repoID, newName) => {
-    let array = this.state.items;
-    for (var i=0; i < array.length; i++) {
-      if (array[i].repo_id === repoID) {
-        array[i].repo_name=newName; 
-        break;
+  onRenameRepo = (repo, newName) => {
+    let items = this.state.items.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.repo_name = newName;
       }
-    }
-    this.setState({items: array});
+      return item;
+    });
+    this.setState({items: items});
+  }
+  
+  onDeleteRepo = (repo) => {
+    let items = this.state.items.map(item => {
+      return item.repo_id !== repo.repo_id;
+    });
+    this.setState({items: items});
+  }
+
+  onRepoDetails = (repo) => {
+    this.setState({
+      isShowDetails: true,
+      currentRepo: repo
+    })
+  }
+
+  closeDetails = () => {
+    this.setState({
+      isShowDetails: !this.state.isShowDetails
+    });
   }
 
   render() {
@@ -78,19 +99,31 @@ class MyLibraries extends Component {
           <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} libraryType={'mine'}/>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
-        <div className="main-panel-center">
+        <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext("My Libraries")}</h3>
             </div>
             <div className="cur-view-content">
               <Content 
-                data={this.state}  
-                toggleTransferSubmit={this.toggleTransferSubmit}
-                renameRepo={this.renameRepo}
+                loading={this.state.loading}
+                errorMsg={this.state.errorMsg}
+                items={this.state.items}
+                onDeleteRepo={this.onDeleteRepo}
+                onRenameRepo={this.onRenameRepo}
+                onTransferRepo={this.onTransferRepo}
+                onRepoDetails={this.onRepoDetails}
               />
             </div>
           </div>
+          {this.state.isShowDetails && (
+            <div className="cur-view-detail">
+              <LibDetail 
+                currentRepo={this.state.currentRepo}
+                closeDetails={this.closeDetails}
+              />
+            </div>
+          )}
         </div>
       </Fragment>
     );

@@ -198,7 +198,7 @@ class MainPanel extends Component {
           </div>
           <CommonToolbar repoID={repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
         </div>
-        <div className="main-panel-center flex-direction-row">
+        <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
               <CurDirPath 

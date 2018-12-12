@@ -11,9 +11,14 @@ import RenameInput from '../../components/rename-input';
 
 const propTypes = {
   data: PropTypes.object.isRequired,
-  operations: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onItemFreezedToggle: PropTypes.func.isRequired,
+  onRenameRepo: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onTransfer: PropTypes.func.isRequired,
+  showDeleteItemPopup: PropTypes.func.isRequired,
+  onHistorySetting: PropTypes.func.isRequired,
+  onRepoDetails: PropTypes.func.isRequired,
 }
 
 class Item extends Component {
@@ -74,7 +79,7 @@ class Item extends Component {
   showDeleteItemPopup = (e) => {
     e.preventDefault(); // for `<a>`
     const data = this.props.data;
-    this.props.operations.showDeleteItemPopup({
+    this.props.showDeleteItemPopup({
       repoName: data.repo_name,
       yesCallback: this.deleteItem,
       _this: this
@@ -82,46 +87,50 @@ class Item extends Component {
   }
 
   deleteItem = () => {
-    const data = this.props.data;
-    seafileAPI.deleteRepo(data.repo_id).then((res) => {
-
+    const repo = this.props.data;
+    seafileAPI.deleteRepo(repo.repo_id).then((res) => {
+      this.props.onDeleteRepo(repo);
       // TODO: show feedback msg
     }).catch((error) => {
-      
+
       // TODO: show feedback msg
     });
   }
 
-  rename = () => {
+  onRenameToggle = () => {
     this.setState({
       showOpIcon: false,
-      showChangeLibName: !this.state.showChangeLibName,
-      operationMenuOpen: !this.state.operationMenuOpen,
-    })
+      showChangeLibName: true,
+      operationMenuOpen: false,
+    });
   }
 
-  updateLibName = () => {
-    const itemID = this.props.data.repo_id;
-    seafileAPI.renameRepo(itemID, this.state.repoName).then(res => {
-      this.props.operations.onRenameRepo(itemID, this.state.repoName);
-      this.setState({
-        showOpIcon: false,
-        showChangeLibName: false,
-      });
-      this.props.onItemFreezedToggle();
+  onRenameConfirm = (newName) => {
+    let repo = this.props.data;
+    let repoID = repo.repo_id;
+    seafileAPI.renameRepo(repoID, newName).then(() => {
+      this.props.onRenameRepo(repo, newName);
+      this.onRenameCancel();
     });
+  }
+  
+  onRenameCancel = () => {
+    this.setState({
+      showChangeLibName: !this.state.showChangeLibName,
+    });
+    this.props.onItemFreezedToggle();
   }
 
   transfer = () => {
     const itemName = this.props.data.repo_name;
     const itemID = this.props.data.repo_id;
-    this.props.operations.onTransfer(itemName, itemID);
+    this.props.onTransfer(itemName, itemID);
   }
 
   historySetting = () => {
     const itemName = this.props.data.repo_name;
     const itemID = this.props.data.repo_id;
-    this.props.operations.onHistorySetting(itemName, itemID);
+    this.props.onHistorySetting(itemName, itemID);
   }
 
   changePassword = () => {
@@ -135,7 +144,7 @@ class Item extends Component {
 
   showDetails = () => {
     let data = this.props.data;
-    this.props.operations.onDetails(data);
+    this.props.onRepoDetails(data);
   }
   
   label = () => {
@@ -184,7 +193,7 @@ class Item extends Component {
     );
     const commonOperationsInMenu = (
       <React.Fragment>
-        <DropdownItem data-toggle="item" onClick={this.rename}>{gettext('Rename')}</DropdownItem>
+        <DropdownItem data-toggle="item" onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
         <DropdownItem onClick={this.transfer}>{gettext('Transfer')}</DropdownItem>
         <DropdownItem onClick={this.historySetting}>{gettext('History Setting')}</DropdownItem>
         {data.encrypted ? <DropdownItem onClick={this.changePassword}>{gettext('Change Password')}</DropdownItem> : ''}
@@ -229,8 +238,8 @@ class Item extends Component {
           {this.state.showChangeLibName && (
             <RenameInput 
               name={data.repo_name} 
-              onRenameConfirm={this.updateLibName} 
-              onRenameCancel={this.rename}
+              onRenameConfirm={this.onRenameConfirm} 
+              onRenameCancel={this.onRenameCancel}
             />
           )}
           {!this.state.showChangeLibName && data.repo_name && (
