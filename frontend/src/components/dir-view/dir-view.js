@@ -44,7 +44,7 @@ class DirView extends React.Component {
   }
 
   componentDidMount() {
-    //eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
+    // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
     let location = decodeURIComponent(window.location.href);
     let repoID = this.props.repoID;
     seafileAPI.getRepoInfo(repoID).then(res => {
@@ -66,8 +66,7 @@ class DirView extends React.Component {
   updateDirentList = (filePath) => {
     let repoID = this.state.repoID;
     this.setState({isDirentListLoading: true});
-    const path = Utils.encodePath(filePath);
-    seafileAPI.listDir(repoID, path).then(res => {
+    seafileAPI.listDir(repoID, filePath).then(res => {
       let direntList = res.data.map(item => {
         return new Dirent(item);
       });
