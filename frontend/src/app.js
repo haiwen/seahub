@@ -64,9 +64,6 @@ class App extends Component {
     let href = window.location.href.split('/');
     this.getDrafts();
     this.setState({currentTab: href[href.length - 2]});
-    if (this.currentTab) {
-      this.setState({currentTab: this.currentTab});
-    }
   }
 
   getDrafts = () => {
