@@ -19,7 +19,6 @@ class GroupsToolbar extends React.Component {
 
   render() {
     let { onShowSidePanel, onSearchedClick } = this.props;
-    let placeHolder = this.props.searchPlaceholder || 'Search files in this library';
     return (
       <div className="main-panel-north">
         <div className="cur-view-toolbar">
@@ -32,7 +31,7 @@ class GroupsToolbar extends React.Component {
             className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
           </span>
         </div>
-        <CommonToolbar searchPlaceholder={placeHolder} onSearchedClick={onSearchedClick}/>
+        <CommonToolbar searchPlaceholder={this.props.searchPlaceholder} onSearchedClick={onSearchedClick}/>
       </div>
     );
   }
