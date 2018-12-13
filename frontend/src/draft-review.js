@@ -21,7 +21,7 @@ import { findRange } from '@seafile/slate-react';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
-import { Value } from 'slate';
+import { Value, Document, Block } from 'slate';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -58,6 +58,7 @@ class DraftReview extends React.Component {
     this.newIndex = null;
     this.oldIndex = null;
     this.changeIndex = -1;
+    this.range = null;
   }
 
   componentDidMount() {
@@ -210,14 +211,17 @@ class DraftReview extends React.Component {
   setBtnPosition = (e) => {
     const nativeSelection = window.getSelection();
     if (!nativeSelection.rangeCount) {
+      this.range = null;
       return;
     }
     if (nativeSelection.isCollapsed === false) {
       const nativeRange = nativeSelection.getRangeAt(0);
       let range = findRange(nativeRange, this.refs.diffViewer.value);
       if (!range) {
+        this.range = null;
         return;
       }
+      this.range = range;
       let rect = nativeRange.getBoundingClientRect();
       // fix Safari bug
       if (navigator.userAgent.indexOf('Chrome') < 0 && navigator.userAgent.indexOf('Safari') > 0) {
@@ -237,7 +241,6 @@ class DraftReview extends React.Component {
       }
       let style = this.refs.commentbtn.style;
       style.top = `${rect.top - 100 + this.refs.viewContent.scrollTop}px`;
-      return range;
     }
     else {
       let style = this.refs.commentbtn.style;
@@ -247,7 +250,7 @@ class DraftReview extends React.Component {
 
   getQuote = () => {
     this.quote = '';
-    let range = this.setBtnPosition();
+    let range = this.range;
     if (!range) {
       return;
     }
@@ -280,14 +283,43 @@ class DraftReview extends React.Component {
       }
     }
     let fragment = document.getFragmentAtRange(range);
+    let nodes = this.removeNullNode(fragment.nodes);
+    let newFragment = Document.create({
+      nodes: nodes
+    });
     let newValue = Value.create({
-      document: fragment
+      document: newFragment
     });
     this.quote = serialize(newValue.toJSON());
     let blockPath = document.createSelection(range).anchor.path.slice(0, 1);
     let node = document.getNode(blockPath);
     this.newIndex = node.data.get('new_index');
     this.oldIndex = node.data.get('old_index');
+  }
+
+  removeNullNode = (oldNodes) => {
+    let newNodes = [];
+    oldNodes.map((node) => {
+      const text = node.text.trim();
+      const childNodes = node.nodes;
+      if (!text) {
+        return;
+      }
+      if ((childNodes && childNodes.size === 1) || (!childNodes)) {
+        newNodes.push(node);
+      }
+      else if (childNodes.size > 1) {
+        let nodes = this.removeNullNode(childNodes);
+        let newNode = Block.create({
+          nodes: nodes,
+          data: node.data,
+          key: node.key,
+          type: node.type
+        });
+        newNodes.push(newNode);
+      }
+    });
+    return newNodes;
   }
 
   addComment = (e) => {
