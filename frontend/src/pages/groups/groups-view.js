@@ -139,7 +139,7 @@ class GroupsView extends React.Component {
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext("My Groups")}</h3>
             </div>
-            <div className="cur-view-content">
+            <div className="cur-view-content group-table-container">
               {this.state.isLoading && <Loading />}
               {(!this.state.isLoading && this.state.errorMsg !== '') && this.state.errorMsg}
               {/* {(!this.state.isLoading && this.state.groupList.length === 0 ) && emptyTip} //todo */}
