@@ -131,7 +131,7 @@ class App extends Component {
     } else {
       let navTab = {
         url: siteRoot + tabName + '/',
-        showName: this.getTabShowName(tabName, groupID),
+        showName: this.getTabShowName(tabName),
         name: tabName,
         id: null,
       };

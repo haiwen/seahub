@@ -1,14 +1,10 @@
-.group-table-container {
-  padding-top: 0.625rem !important;
-}
-
-.group-table-container thead th { /* overwrite bootstrap styles */
+.cur-view-content-groups thead th { /* overwrite bootstrap styles */
   padding: 0;
   font-size: 0;
   border: 0;
 }
 
-.group-table-container td { /* overwrite bootstrap styles */
+.cur-view-content-groups td { /* overwrite bootstrap styles */
   border-top:0;
 }
 

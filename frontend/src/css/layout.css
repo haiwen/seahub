@@ -95,7 +95,7 @@
 }
 
 .cur-view-content {
-  padding: 1.625rem 1rem 1.25rem;
+  padding: 0.625rem 1rem 1.25rem;
   height: calc(100% - 40px);
   flex: 1;
   min-height: 0;
