@@ -23,7 +23,6 @@ class GeneralToolbar extends React.Component {
           </span>
         </div>
         <CommonToolbar 
-          repoID={'todo'}
           searchPlaceholder={this.props.searchPlaceholder}
           onSearchedClick={onSearchedClick} 
         />
