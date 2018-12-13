@@ -91,7 +91,7 @@ class SharedRepoListItem extends React.Component {
     });
 
     //todo change to library; div-view is not compatibility
-    let libPath = `${siteRoot}library/${this.props.repo.repo_id}/${this.props.repo.repo_name}/`;
+    let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return { iconUrl, iconTitle, libPath };
   }

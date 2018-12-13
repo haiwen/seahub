@@ -168,7 +168,7 @@ class Item extends Component {
       'is_admin': data.is_admin,
       'permission': permission
     });
-    data.url = `${siteRoot}library/${data.repo_id}/`;
+    data.url = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let shareIconClassName = 'sf2-icon-share sf2-x op-icon' + iconVisibility; 
@@ -243,7 +243,7 @@ class Item extends Component {
             />
           )}
           {!this.state.showChangeLibName && data.repo_name && (
-            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link>
+            <Link to={data.url}>{data.repo_name}</Link>
           )}
           {!this.state.showChangeLibName && !data.repo_name && 
             (gettext('Broken (please contact your administrator to fix this library)'))
@@ -261,7 +261,7 @@ class Item extends Component {
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
         <td>
           {data.repo_name ?
-            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link> :
+            <Link to={data.url}>{data.repo_name}</Link> :
             gettext('Broken (please contact your administrator to fix this library)')}
           <br />
           <span className="item-meta-info">{Utils.formatSize({bytes: data.size})}</span>

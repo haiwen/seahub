@@ -376,7 +376,7 @@ class DirentListItem extends React.Component {
   render() {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
-    let href = siteRoot + 'wiki/lib/' + this.props.repoID + direntPath;
+    let href = siteRoot + 'wiki/lib/' + this.props.repoID + Utils.encodePath(direntPath);
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
