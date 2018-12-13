@@ -48,17 +48,17 @@ class DirentListView extends React.Component {
       request: 'watch_update',
       repo_id: this.props.repoID,
       user: {
-        name: '',
+        name: username,
         username: username,
-        constact_email: username,
+        constact_email: '',
       },
     });
 
+    socket.on('connect', function(){});
     socket.on('repo_update', (data) => {
       console.log(data);
       this.checkFileUpdate();
     });
-    socket.on('connect', function(){});
   }
 
   checkFileUpdate = () => {
@@ -67,9 +67,13 @@ class DirentListView extends React.Component {
 
     seafileAPI.dirMetaData(repoID, path).then((res) => {
       if (res.data.id !== this.props.dirID) {
-        toaster.notify('File updated! Refresh.')
+        toaster.notify(<span>{gettext('This folder has been updated. ')}<a href='#' onClick={this.onRefresh}>{gettext('Refresh')}</a></span>, {duration: 3600});
       }
     });
+  }
+
+  onRefresh = () => {
+    location.reload();
   }
 
   onFreezedItem = () => {
