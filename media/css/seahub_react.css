@@ -167,7 +167,14 @@ ul,ol,li {
     overflow: auto;
 }
 
+.link-dropdown-container {
+    padding: 0;
+    text-align: center;
+}
+
 .link-dropdown-item {
+    display: block;
+    padding: 0.25rem 1.5rem;
     color: #6e7687;
 }
 
@@ -762,7 +769,7 @@ a.op-icon:focus {
 }
 
 /* begin path navigation */
-.path-containter { /* for the real path */
+.path-container { /* for the real path */
     font-size: 1rem;
     word-break: break-all;
 }

@@ -48,7 +48,7 @@ class RepoListViewPanel extends React.Component {
     let group = this.props.group;
     const emptyTip = <p className="group-item-empty-tip">{gettext('No libraries')}</p>;
     return (
-      <Fragment>
+      <div className="group-list-panel">
         <h4 className="group-item-heading ellipsis">
           <a href={`${siteRoot}group/${group.id}/`} title={group.name}>{group.name}</a>
         </h4>
@@ -62,7 +62,7 @@ class RepoListViewPanel extends React.Component {
             onItemUnshare={this.onItemUnshare}
           />
         }
-      </Fragment>
+      </div>
     );
   }
  }

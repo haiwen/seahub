@@ -51,7 +51,7 @@ class DirPath extends React.Component {
     let { currentPath, repoName } = this.props;
     let pathElem = this.turnPathToLink(currentPath);
     return (
-      <div className="path-containter">
+      <div className="path-container">
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
           return (
             <Fragment key={index}>
