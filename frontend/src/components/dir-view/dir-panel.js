@@ -14,7 +14,7 @@ import FileUploader from '../file-uploader/file-uploader';
 
 const propTypes = {
   currentRepo: PropTypes.object,
-  pathPrefix: PropTypes.object.isRequired,
+  pathPrefix: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
@@ -40,6 +40,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func.isRequired,
   onMenuClick: PropTypes.func.isRequired,
   onPathClick: PropTypes.func.isRequired,
+  onTabNavClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onFileUploadSuccess: PropTypes.func.isRequired,
@@ -152,6 +153,7 @@ class DirPanel extends React.Component {
                 currentPath={this.props.path} 
                 permission={this.props.permission}
                 onPathClick={this.props.onPathClick}
+                onTabNavClick={this.props.onTabNavClick}
               />
             </div>
             <div className="cur-view-content">

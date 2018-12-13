@@ -5,9 +5,10 @@ import { siteRoot, gettext } from '../../utils/constants';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,
-  pathPrefix: PropTypes.object,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
+  onTabNavClick: PropTypes.func,
+  pathPrefix: PropTypes.array,
 };
 
 class DirPath extends React.Component {
@@ -15,6 +16,10 @@ class DirPath extends React.Component {
   onPathClick = (e) => {
     let path = e.target.dataset.path;
     this.props.onPathClick(path);
+  }
+
+  onTabNavClick = (tabName, id) => {
+    this.props.onTabNavClick(tabName, id);
   }
 
   turnPathToLink = (path) => {
@@ -47,13 +52,27 @@ class DirPath extends React.Component {
     let pathElem = this.turnPathToLink(currentPath);
     return (
       <div className="path-containter">
-        {this.props.pathPrefix ? 
-          this.props.pathPrefix :
-            <Fragment>
-              <Link to={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</Link>
+        {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
+          return (
+            <Fragment key={index}>
+              <Link to={item.url} className="normal" onClick={() => this.onTabNavClick(item.name, item.id)}>{gettext(item.showName)}</Link>
               <span className="path-split">/</span>
-            </Fragment>       
+            </Fragment>
+          );
+        })}
+        {this.props.pathPrefix && this.props.pathPrefix.length === 0 && (
+          <Fragment>
+            <Link to={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick.bind(this, 'my-libs')}>{gettext('Libraries')}</Link>
+            <span className="path-split">/</span>
+          </Fragment>
+        )
         }
+        {!this.props.pathPrefix && (
+          <Fragment>
+            <a href={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick.bind(this, 'my-libs')}>{gettext('Libraries')}</a>
+            <span className="path-split">/</span>
+          </Fragment>
+        )}
         {currentPath === '/' ?
           <span>{repoName}</span>:
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>

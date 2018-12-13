@@ -791,7 +791,6 @@ table th, table td {
     border-bottom: 1px solid #eee;
 }
 table th {
-    padding-top: 1rem;
     text-align: left;
     font-weight: normal;
     font-size: 13px;

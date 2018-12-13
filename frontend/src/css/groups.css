@@ -1,3 +1,13 @@
+.cur-view-content-groups thead th { /* overwrite bootstrap styles */
+  padding: 0;
+  font-size: 0;
+  border: 0;
+}
+
+.cur-view-content-groups td { /* overwrite bootstrap styles */
+  border-top:0;
+}
+
 .group-item-heading {
   font-size: 16px;
   font-weight: normal;
@@ -12,14 +22,7 @@
   border-bottom: 1px solid #e5e5e5;
   margin: 0 0 32px;
 }
-.group-item-table thead th { /* overwrite bootstrap styles */
-  padding: 0;
-  font-size: 0;
-  border: 0;
-}
-.group-item-table td { /* overwrite bootstrap styles */
-  border-top:0;
-}
+
 .group-top-op-icon {
     display: inline-block;
     font-size: 22px;
