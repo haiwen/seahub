@@ -10,6 +10,7 @@ class CreateGroupDialog extends React.Component {
     super(props);
     this.state = {
       groupName: '',
+      errorMsg: '',
     };
   }
 
@@ -18,6 +19,11 @@ class CreateGroupDialog extends React.Component {
     this.setState({
       groupName: name
     });
+    if (this.state.errorMsg) {
+      this.setState({
+        errorMsg: ''
+      })
+    }
   }
 
   handleSubmitGroup = () => {
@@ -25,13 +31,23 @@ class CreateGroupDialog extends React.Component {
     if (name) {
       let that = this;
       seafileAPI.createGroup(name).then((res)=> {
-        that.props.listGroups();
+        that.props.onCreateGroup();
+      }).catch((error) => {
+        let errorMsg = gettext(error.response.data.error_msg);
+        this.setState({
+          errorMsg: errorMsg
+        });
       });
     }
     this.setState({
       groupName: '',
     });
-    this.props.toggleAddGroupModal();
+  }
+
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      this.handleSubmitGroup();
+    }
   }
 
   render() {
@@ -40,11 +56,13 @@ class CreateGroupDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('New group')}</ModalHeader>
         <ModalBody>
           <label htmlFor="groupName">{gettext('Name')}</label>
-          <Input type="text" id="groupName" value={this.state.groupName} onChange={this.handleGroupChange}/>
+          <Input type="text" id="groupName" value={this.state.groupName}
+            onChange={this.handleGroupChange} onKeyDown={this.handleKeyDown}/>
+          <span className="error">{this.state.errorMsg}</span>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmitGroup}>{gettext('Submit')}</Button>
           <Button color="secondary" onClick={this.props.toggleAddGroupModal}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmitGroup}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
@@ -53,7 +71,7 @@ class CreateGroupDialog extends React.Component {
 
 const CreateGroupDialogPropTypes = {
   toggleAddGroupModal: PropTypes.func.isRequired,
-  listGroups: PropTypes.func.isRequired,
+  onCreateGroup: PropTypes.func.isRequired,
   showAddGroupModal: PropTypes.bool.isRequired,
 };
 
