@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Link } from '@reach/router';
-import { gettext, siteRoot } from './utils/constants';
+import { Router } from '@reach/router';
+import { siteRoot } from './utils/constants';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
@@ -53,8 +53,9 @@ class App extends Component {
       draftList:[],
       isLoadingDraft: true,
       currentTab: '/',
-      pathPrefix: null,
+      pathPrefix: [],
     };
+    this.dirViewPanels = ['my-libs', 'shared-libs', 'org']; // and group
   }
 
   componentDidMount() {
@@ -100,41 +101,55 @@ class App extends Component {
   }
 
   tabItemClick = (tabName, groupID) => {
-    let pathPrefix = this.generatorPrefix(tabName, groupID);
+    let pathPrefix = [];
+    if (groupID || this.dirViewPanels.indexOf(tabName) > -1) {
+      pathPrefix = this.generatorPrefix(tabName, groupID);
+    }
     this.setState({
       currentTab: tabName,
       pathPrefix: pathPrefix
     });
   } 
 
-  generatorPrefix = (currentTab, groupID) => {
-    if (groupID) { //group
-      return (
-        <Fragment>
-          <Link to={siteRoot + 'groups/'} className="normal">{gettext('Groups')}</Link>
-          <span className="path-split">/</span>
-          <Link to={siteRoot + 'group/' + groupID + '/'} className="normal">{currentTab}</Link>
-          <span className="path-split">/</span>
-        </Fragment>
-      );
+  generatorPrefix = (tabName, groupID) => {
+    let pathPrefix = [];
+    if (groupID) {
+      let navTab1 = {
+        url: siteRoot + 'groups/',
+        showName: 'Groups',
+        name: 'groups',
+        id: null,
+      }
+      let navTab2 = {
+        url: siteRoot + 'group/' + groupID + '/',
+        showName: tabName,
+        name: tabName,
+        id: groupID,
+      };
+      pathPrefix.push(navTab1);
+      pathPrefix.push(navTab2);
+    } else {
+      let navTab = {
+        url: siteRoot + tabName + '/',
+        showName: this.getTabShowName(tabName, groupID),
+        name: tabName,
+        id: null,
+      };
+      pathPrefix.push(navTab);
     }
-    if (currentTab === 'my-libs') {
-      return (
-        <Fragment>
-          <Link to={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</Link>
-          <span className="path-split">/</span>
-        </Fragment>
-      );
+    return pathPrefix;
+  }
+
+  getTabShowName = (tabName) => {
+    if (tabName === 'my-libs') {
+      return 'Libraries';
     }
-    if (currentTab === 'shared-libs') {
-      return (
-        <Fragment>
-          <Link to={siteRoot + 'shared-libs/'} className="normal">{gettext('Shared with me')}</Link>
-          <span className="path-split">/</span>
-        </Fragment>
-      );
+    if (tabName === 'shared-libs') {
+      return 'Shared with me';
     }
-    return null;
+    if (tabName === 'org') {
+      return 'Shared with all';
+    }
   }
 
   render() {
@@ -170,9 +185,9 @@ class App extends Component {
             <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
-            <DirView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel}/>
+            <DirView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
             <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
-            <Group path={siteRoot + 'group/:groupID'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
+            <Group path={siteRoot + 'group/:groupID'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
             <WikisWrapper path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
           </Router>
         </MainPanel>

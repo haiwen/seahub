@@ -180,6 +180,10 @@ class GroupView extends React.Component {
     });
   }
 
+  onTabNavClick = (tabName) => {
+    this.props.onTabNavClick(tabName);
+  }
+
   render() {
     let { errMessage, emptyTip, currentGroup } = this.state;
     let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
@@ -203,7 +207,7 @@ class GroupView extends React.Component {
               {currentGroup && (
                 <Fragment>
                   <div className="path-container">
-                    <Link to={`${siteRoot}groups/`}>{gettext("Groups")}</Link>
+                    <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext("Groups")}</Link>
                     <span className="path-split">/</span>
                     <span>{currentGroup.name}</span>
                     {currentGroup.parent_group_id !== 0 && (

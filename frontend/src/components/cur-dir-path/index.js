@@ -5,11 +5,12 @@ import DirTool from './dir-tool';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  pathPrefix: PropTypes.object.isRequired,
   repoName: PropTypes.string.isRequired,
   permission: PropTypes.bool.isRequired,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
+  onTabNavClick: PropTypes.func,
+  pathPrefix: PropTypes.array,
 };
 
 class CurDirPath extends React.Component {
@@ -22,6 +23,7 @@ class CurDirPath extends React.Component {
           pathPrefix={this.props.pathPrefix}
           currentPath={this.props.currentPath}
           onPathClick={this.props.onPathClick}
+          onTabNavClick={this.props.onTabNavClick}
         />
         <DirTool 
           repoID={this.props.repoID}

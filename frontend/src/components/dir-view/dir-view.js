@@ -11,7 +11,8 @@ import FileTag from '../../models/file-tag';
 import Repo from '../../models/repo';
 
 const propTypes = {
-  pathPrefix: PropTypes.object.isRequired,
+  pathPrefix: PropTypes.array.isRequired,
+  onTabNavClick: PropTypes.func.isRequired,
   onMenuClick: PropTypes.func.isRequired,
 };
 
@@ -456,6 +457,7 @@ class DirView extends React.Component {
         onFileTagChanged={this.onFileTagChanged}
         onMenuClick={this.onMenuClick}
         onPathClick={this.onPathClick}
+        onTabNavClick={this.props.onTabNavClick}
         updateDirent={this.updateDirent}
         switchViewMode={this.switchViewMode}
         onSearchedClick={this.onSearchedClick}
