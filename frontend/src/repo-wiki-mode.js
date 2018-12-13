@@ -272,14 +272,14 @@ class Wiki extends Component {
     this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, filePath).then(res => {
       let direntList = [];
-      res.data.data.forEach(item => {
+      res.data.forEach(item => {
         let dirent = new Dirent(item);
         direntList.push(dirent);
       });
       this.setState({
         direntList: direntList,
         isDirentListLoading: false,
-        dirID: res.data.oid,
+        dirID: res.headers.oid,
       });
     });
   }

@@ -74,13 +74,13 @@ class DirView extends React.Component {
     let repoID = this.state.repoID;
     this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, filePath).then(res => {
-      let direntList = res.data.data.map(item => {
+      let direntList = res.data.map(item => {
         return new Dirent(item);
       });
       this.setState({
         isDirentListLoading: false,
         direntList: direntList,
-        dirID: res.data.oid,
+        dirID: res.headers.oid,
       });
     }).catch(() => {
       this.setState({pathExist: false});
