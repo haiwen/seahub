@@ -325,8 +325,18 @@ class DirView extends React.Component {
     // todo update upload file to direntList
   }
 
-  onSearchedClick = () => {
-    // todo
+  onSearchedClick = (selectedItem) => {
+    if (selectedItem.is_dir === true) {
+      this.setState({path: selectedItem.path});
+    } else if (Utils.isMarkdownFile(selectedItem.path)) {
+      let url = siteRoot + 'wiki/lib/' + selectedItem.repo_id + selectedItem.path;
+      let newWindow = window.open('markdown-editor');
+      newWindow.location.href = url;
+    } else {
+      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + selectedItem.path;
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    }
   }
 
   resetSelected = () => {

@@ -283,13 +283,26 @@ class Wiki extends Component {
   }
 
   onSearchedClick = (item) => {
-    //just for file
-    let path = item.path;
-    if (this.state.currentFilePath !== path) {
-      let tree = this.state.treeData.clone();
-      let node = tree.getNodeByPath(path);
-      tree.expandNode(node);
-      this.showFile(node.path);
+    if (item.is_dir) {
+      let path = item.path.slice(0, item.path.length - 1);
+      if (this.state.currentFilePath !== path) {
+        let tree = this.state.treeData.clone();
+        let node = tree.getNodeByPath(path);
+        tree.expandNode(node);
+        this.showDir(node.path);
+      }
+    } else if (Utils.isMarkdownFile(item.path)) {
+      let path = item.path;
+      if (this.state.currentFilePath !== path) {
+        let tree = this.state.treeData.clone();
+        let node = tree.getNodeByPath(path);
+        tree.expandNode(node);
+        this.showFile(node.path);
+      }
+    } else {
+      let url = siteRoot + 'lib/' + item.repo_id + '/file' + item.path;
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
     }
   }
 

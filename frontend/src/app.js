@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from '@reach/router';
+import { Router, navigate } from '@reach/router';
 import { siteRoot } from './utils/constants';
+import { Utils } from './utils/utils';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
@@ -96,8 +97,20 @@ class App extends Component {
     });
   }
 
-  onSearchedClick = () => {
-    //todos
+  onSearchedClick = (selectedItem) => {
+    if (selectedItem.is_dir === true) {
+      this.setState({currentTab: '', pathPrefix: []});
+      let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
+      navigate(url, {repalce: true});
+    } else if (Utils.isMarkdownFile(selectedItem.path)) {
+      let url = siteRoot + 'wiki/lib/' + selectedItem.repo_id + selectedItem.path;
+      let newWindow = window.open('markdown-editor');
+      newWindow.location.href = url;
+    } else {
+      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + selectedItem.path;
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    }
   }
 
   tabItemClick = (tabName, groupID) => {

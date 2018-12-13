@@ -6,8 +6,8 @@ import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
 
 const propTypes = {
-  placeholder: PropTypes.string,
   repoID: PropTypes.string,
+  placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
 };
 
@@ -65,9 +65,7 @@ class Search extends Component {
     let queryData = {
       q: newValue,
       search_repo: repoID ? repoID : 'all',
-      search_ftypes: repoID ? 'custom' : 'all',
-      ftype: repoID ? 'Markdown' : '',
-      input_fexts: repoID ? 'md' : ''
+      search_ftypes: 'all',
     };
 
     if (this.timer) {
@@ -146,6 +144,8 @@ class Search extends Component {
       items[i]['name'] = data[i].name;
       items[i]['path'] = data[i].fullpath;
       items[i]['repo_id'] = data[i].repo_id;
+      items[i]['repo_name'] = data[i].repo_name;
+      items[i]['is_dir'] = data[i].is_dir;
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
     }
