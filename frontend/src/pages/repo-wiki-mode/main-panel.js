@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, repoID, siteRoot, slug, permission } from '../../utils/constants';
+import { gettext, repoID, siteRoot, permission } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
@@ -201,13 +201,15 @@ class MainPanel extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <CurDirPath 
-                repoID={repoID}
-                repoName={slug}
-                currentPath={this.props.path} 
-                permission={permission} 
-                onPathClick={this.onMainNavBarClick}
-              />
+              {this.state.currentRepo && (
+                <CurDirPath 
+                  repoID={repoID}
+                  repoName={this.state.currentRepo.repo_name}
+                  currentPath={this.props.path} 
+                  permission={permission} 
+                  onPathClick={this.onMainNavBarClick}
+                />
+              )}
             </div>
             <div className="cur-view-content" onScroll={this.handlePageScroll} ref="curViewContent">
               {!this.props.pathExist ?
