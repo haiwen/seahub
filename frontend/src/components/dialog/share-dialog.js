@@ -9,6 +9,7 @@ import GenerateUploadLink from './generate-upload-link';
 import '../../css/share-link-dialog.css';
 
 const propTypes = {
+  isGroupOwnedRepo: PropTypes.bool,
   itemType: PropTypes.string.isRequired, // there will be three choose: ['library', 'dir', 'file']
   itemName: PropTypes.string.isRequired,
   itemPath: PropTypes.string.isRequired,
@@ -67,10 +68,10 @@ class ShareDialog extends React.Component {
               <GenerateUploadLink itemPath={this.props.itemPath} repoID={this.props.repoID} />
             </TabPane>
             <TabPane tabId="shareToUser">
-              <ShareToUser itemPath={this.props.itemPath} repoID={this.props.repoID} />
+              <ShareToUser isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
             </TabPane>
             <TabPane tabId="shareToGroup">
-              <ShareToGroup itemPath={this.props.itemPath} repoID={this.props.repoID} />
+              <ShareToGroup isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
             </TabPane>
           </TabContent>
         </div>

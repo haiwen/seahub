@@ -274,6 +274,7 @@ class SharedRepoListItem extends React.Component {
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
+    let isGroupOwnedRepo = repo.owner_email.indexOf('@seafile_group') > -1;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -291,6 +292,7 @@ class SharedRepoListItem extends React.Component {
               itemName={repo.repo_name}
               itemPath={'/'}
               repoID={repo.repo_id}
+              isGroupOwnedRepo={isGroupOwnedRepo}
               toggleDialog={this.toggleShareDialog}
             />
           </ModalPotal>
@@ -302,6 +304,7 @@ class SharedRepoListItem extends React.Component {
   renderMobileUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
+    let isGroupOwnedRepo = repo.owner_email.indexOf('@seafile_group') > -1;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -321,6 +324,7 @@ class SharedRepoListItem extends React.Component {
               itemName={repo.repo_name}
               itemPath={'/'}
               repoID={repo.repo_id}
+              isGroupOwnedRepo={isGroupOwnedRepo}
               toggleDialog={this.toggleShareDialog}
             />
           </ModalPotal>

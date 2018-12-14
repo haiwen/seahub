@@ -7,6 +7,7 @@ import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 const propTypes = {
+  isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired
 };
@@ -92,29 +93,62 @@ class ShareToUser extends React.Component {
         users[i] = this.state.selectedOption[i].email;
       }
     }
-    seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
-      if (res.data.failed.length > 0) {
-        let errorMsg = [];
-        for (let i = 0 ; i < res.data.failed.length ; i++) {
-          errorMsg[i] = res.data.failed[i];
+    if (this.props.isGroupOwnedRepo) {
+      seafileAPI.shareGroupOwnedRepoToUser(repoID, this.state.permission, users).then(res => {
+        if (res.data.failed.length > 0) {
+          let errorMsg = [];
+          for (let i = 0 ; i < res.data.failed.length ; i++) {
+            errorMsg[i] = res.data.failed[i];
+          }
+          this.setState({errorMsg: errorMsg});
         }
-        this.setState({errorMsg: errorMsg});
-      }
-      this.setState({
-        sharedItems: this.state.sharedItems.concat(res.data.success)
+        // todo modify api
+        
+        let items = res.data.success.map(item => {
+          let sharedItem = {
+            'user_info': { 'nickname': item.user_name, 'name': item.user_email},
+            'permission': item.permission,
+            'share_type': 'user',
+          };
+          return sharedItem;
+        });
+        this.setState({
+          sharedItems: this.state.sharedItems.concat(items)
+        });
+      })
+    } else {
+      seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
+        if (res.data.failed.length > 0) {
+          let errorMsg = [];
+          for (let i = 0 ; i < res.data.failed.length ; i++) {
+            errorMsg[i] = res.data.failed[i];
+          }
+          this.setState({errorMsg: errorMsg});
+        }
+        this.setState({
+          sharedItems: this.state.sharedItems.concat(res.data.success)
+        });
       });
-    });
+    }
   } 
 
   deleteShareItem = (e, username) => {
     e.preventDefault();
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
-    seafileAPI.deleteShareToUserItem(repoID, path, 'user', username).then(res => {
-      this.setState({
-        sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+    if (this.props.isGroupOwnedRepo) {
+      seafileAPI.deleteGroupOwnedRepoUserShared(repoID, username).then(res => {
+        this.setState({
+          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+        });
       });
-    });
+    } else {
+      seafileAPI.deleteShareToUserItem(repoID, path, 'user', username).then(res => {
+        this.setState({
+          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+        });
+      });
+    }
   }
 
   render() {
@@ -152,14 +186,16 @@ class ShareToUser extends React.Component {
             </td>
           </tr>
           <tr>
-            {this.state.errorMsg.length > 0 &&
-              this.state.errorMsg.map((item, index = 0, arr) => {
-                return (
-                  <p className="error" key={index}>{this.state.errorMsg[index].email}
-                    {': '}{this.state.errorMsg[index].error_msg}</p>
-                );
-              })
-            }
+            <td colSpan={3}>
+              {this.state.errorMsg.length > 0 &&
+                this.state.errorMsg.map((item, index = 0, arr) => {
+                  return (
+                    <p className="error" key={index}>{this.state.errorMsg[index].email}
+                      {': '}{this.state.errorMsg[index].error_msg}</p>
+                  );
+                })
+              }
+            </td>
           </tr>
         </thead>
         <UserList items={sharedItems} deleteShareItem={this.deleteShareItem} />
