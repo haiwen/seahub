@@ -11,6 +11,7 @@ const propTypes = {
   onPathClick: PropTypes.func.isRequired,
   onTabNavClick: PropTypes.func,
   pathPrefix: PropTypes.array,
+  isViewFile: PropTypes.bool.isRequired,
 };
 
 class CurDirPath extends React.Component {
@@ -24,6 +25,8 @@ class CurDirPath extends React.Component {
           currentPath={this.props.currentPath}
           onPathClick={this.props.onPathClick}
           onTabNavClick={this.props.onTabNavClick}
+          repoID={this.props.repoID}
+          isViewFile={this.props.isViewFile}
         />
         <DirTool 
           repoID={this.props.repoID}

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { siteRoot, gettext } from '../../utils/constants';
+import InternalLinkDialog from '../dialog/internal-link-dialog';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,
@@ -9,6 +10,8 @@ const propTypes = {
   onPathClick: PropTypes.func.isRequired,
   onTabNavClick: PropTypes.func,
   pathPrefix: PropTypes.array,
+  repoID: PropTypes.string.isRequired,
+  isViewFile: PropTypes.bool.isRequired,
 };
 
 class DirPath extends React.Component {
@@ -78,6 +81,11 @@ class DirPath extends React.Component {
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}
+        { this.props.isViewFile && 
+          <InternalLinkDialog repoID={this.props.repoID}
+                              path={this.props.currentPath}
+          />
+        }
       </div>
     );
   }
