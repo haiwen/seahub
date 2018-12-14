@@ -264,13 +264,13 @@ class Item extends Component {
         </tr>
         {this.state.isShowSharedDialog && (
           <ModalPotal>
-              <ShareDialog 
-                itemType={'library'}
-                itemName={data.repo_name}
-                itemPath={'/'}
-                repoID={data.repo_id}
-                toggleDialog={this.toggleShareDialog}
-              />
+            <ShareDialog 
+              itemType={'library'}
+              itemName={data.repo_name}
+              itemPath={'/'}
+              repoID={data.repo_id}
+              toggleDialog={this.toggleShareDialog}
+            />
           </ModalPotal>
         )}
       </Fragment>
@@ -292,13 +292,13 @@ class Item extends Component {
         </tr>
         {this.state.isShowSharedDialog && (
           <ModalPotal>
-              <ShareDialog 
-                itemType={'library'}
-                itemName={data.repo_name}
-                itemPath={'/'}
-                repoID={data.repo_id}
-                toggleDialog={this.toggleShareDialog}
-              />
+            <ShareDialog 
+              itemType={'library'}
+              itemName={data.repo_name}
+              itemPath={'/'}
+              repoID={data.repo_id}
+              toggleDialog={this.toggleShareDialog}
+            />
           </ModalPotal>
         )}
       </Fragment>
