@@ -5,6 +5,7 @@ import MainPanel from './pages/wiki/main-panel';
 import moment from 'moment';
 import { slug, repoID, siteRoot, initialPath } from './utils/constants';
 import editorUtilities from './utils/editor-utilties';
+import { Utils } from './utils/utils';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
 import './assets/css/fa-solid.css';
@@ -113,14 +114,28 @@ class Wiki extends Component {
   }
   
   onSearchedClick = (item) => {
-    let path = item.path;
-    if (this.state.filePath !== path) {
-      this.initMainPanelData(path); 
-
-      let tree = this.state.tree_data.clone();
-      let node = tree.getNodeByPath(path);
-      tree.expandNode(node);
-      this.enterViewFileState(tree, node, node.path);
+    if (item.is_dir) {
+      let path = item.path.slice(0, item.path.length - 1);
+      if (this.state.filePath !== path) {
+        let tree = this.state.tree_data.clone();
+        let node = tree.getNodeByPath(path);
+        tree.expandNode(node);
+        this.exitViewFileState(tree, node);
+      }
+    } else if (Utils.isMarkdownFile(item.path)) {
+      let path = item.path;
+      if (this.state.filePath !== path) {
+        this.initMainPanelData(path); 
+  
+        let tree = this.state.tree_data.clone();
+        let node = tree.getNodeByPath(path);
+        tree.expandNode(node);
+        this.enterViewFileState(tree, node, node.path);
+      }
+    } else {
+      let url = siteRoot + 'lib/' + item.repo_id + '/file' + item.path;
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
     }
   }
 

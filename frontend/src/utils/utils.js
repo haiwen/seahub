@@ -320,6 +320,19 @@ export const Utils = {
     } else {
       return bytes + ' B';
     }
-  }
+  },
 
+  isMarkdownFile: function(filePath) {
+    let index = filePath.lastIndexOf('.');
+    if (index === -1) {
+      return false;
+    } else {
+      let type = filePath.substring(index).toLowerCase();
+      if (type === '.md' || type === '.markdown') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 };
