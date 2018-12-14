@@ -103,7 +103,7 @@ class ShareToUser extends React.Component {
           this.setState({errorMsg: errorMsg});
         }
         // todo modify api
-        
+
         let items = res.data.success.map(item => {
           let sharedItem = {
             'user_info': { 'nickname': item.user_name, 'name': item.user_email},
@@ -137,7 +137,7 @@ class ShareToUser extends React.Component {
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
     if (this.props.isGroupOwnedRepo) {
-      seafileAPI.deleteGroupOwnedRepoUserShared(repoID, username).then(res => {
+      seafileAPI.deleteGroupOwnedRepoSharedUserItem(repoID, username).then(res => {
         this.setState({
           sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
         });

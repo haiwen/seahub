@@ -142,7 +142,7 @@ class ShareToGroup extends React.Component {
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
     if (this.props.isGroupOwnedRepo) {
-      seafileAPI.deleteGroupOwnedRepoGroupShared(repoID, groupID).then(() => {
+      seafileAPI.deleteGroupOwnedRepoSharedGroupItem(repoID, groupID).then(() => {
         this.setState({
           sharedItems: this.state.sharedItems.filter(item => { return item.group_info.id !== groupID; }) 
         });
