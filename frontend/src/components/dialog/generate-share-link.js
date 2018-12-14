@@ -73,11 +73,13 @@ class GenerateShareLink extends React.Component {
   }
 
   inputPassword = (e) => {
-    this.setState({password: e.target.value});
+    let passwd = e.target.value.trim();
+    this.setState({password: passwd});
   }
 
   inputPasswordNew = (e) => {
-    this.setState({passwdnew: e.target.value});
+    let passwd = e.target.value.trim();
+    this.setState({passwdnew: passwd});
   }
 
   setPermission = (permission) => {
@@ -133,7 +135,8 @@ class GenerateShareLink extends React.Component {
   }
 
   onExpireDaysChanged = (e) => {
-    this.setState({expireDays: e.target.value});
+    let day = e.target.value.trim();
+    this.setState({expireDays: day});
   }
 
   validateParamsInput = () => {
