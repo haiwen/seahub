@@ -32,6 +32,6 @@
 }
 .review-comment-dialog .review-comment-dialog-quote {
   margin-top: 10px;
-  max-height: 4rem;
-  overflow: hidden;
+  max-height: 6rem;
+  overflow: auto;
 }
