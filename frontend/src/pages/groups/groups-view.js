@@ -122,6 +122,15 @@ class GroupsView extends React.Component {
     });
   }
 
+  onCreateGroup = () => {
+    this.setState({
+      showAddGroupModal: false,
+      isLoading: true,
+      groupList: [],
+    });
+    this.listGroups();
+  }
+
   componentDidMount() {
     this.listGroups();
   }
@@ -154,7 +163,7 @@ class GroupsView extends React.Component {
         { this.state.showAddGroupModal &&
           <CreateGroupDialog
             toggleAddGroupModal={this.toggleAddGroupModal}
-            listGroups={this.listGroups}
+            onCreateGroup={this.onCreateGroup}
             showAddGroupModal={this.state.showAddGroupModal}
           />
         }
