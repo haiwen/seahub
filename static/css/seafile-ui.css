@@ -8335,11 +8335,11 @@ button.bg-lime:focus {
     font-weight: 400;
     padding: 1rem 0; }
     .nav-tabs .nav-link:hover:not(.disabled) {
-      border-color: #6e7687;
-      color: #6e7687; }
+      border-color: #fd9644;
+      color: #fd9644; }
     .nav-tabs .nav-link.active {
-      border-color: #467fcf;
-      color: #467fcf;
+      border-color: #fd9644;
+      color: #fd9644;
       background: transparent; }
     .nav-tabs .nav-link.disabled {
       opacity: .4;
