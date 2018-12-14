@@ -28,35 +28,21 @@ def get_draft_file_name(repo_id, file_path):
 
 
 def is_draft_file(repo_id, file_path):
-
     is_draft = False
-    review_id = None
-    draft_id = None
-    review_status = None
-
     file_path = normalize_file_path(file_path)
 
     from .models import Draft
     try:
-        draft = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
+        Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
         is_draft = True
-        draft_id = draft.id
-        if hasattr(draft, 'draftreview'):
-            review_id = draft.draftreview.id
-            review_status = draft.draftreview.status
     except Draft.DoesNotExist:
         pass
 
-    return is_draft, review_id, draft_id, review_status
+    return is_draft
 
 
 def has_draft_file(repo_id, file_path):
     has_draft = False
-    draft_file_path = None
-    draft_id = None
-    review_id = None
-    review_status = None
-
     file_path = normalize_file_path(file_path)
     parent_path = os.path.dirname(file_path)
     filename = os.path.basename(file_path)
@@ -67,15 +53,51 @@ def has_draft_file(repo_id, file_path):
     from .models import Draft
     if file_uuid:
         try:
-            draft = Draft.objects.get(origin_file_uuid=file_uuid)
-            if hasattr(draft, 'draftreview'):
-                review_id = draft.draftreview.id
-                review_status = draft.draftreview.status
-
-            draft_id = draft.id
+            Draft.objects.get(origin_file_uuid=file_uuid)
             has_draft = True
-            draft_file_path = draft.draft_file_path
         except Draft.DoesNotExist:
             pass
 
-    return has_draft, draft_file_path, draft_id, review_id, review_status
+    return has_draft
+
+
+def get_file_review(repo_id, file_path, is_draft=False, has_draft=False):
+    review = {}
+    review['review_id'] = None
+    review['review_status'] = None
+    review['draft_id'] = None
+    review['draft_file_path'] = ''
+
+    from .models import Draft, DraftReview
+
+    if is_draft:
+        d = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
+        review['draft_id'] = d.id
+
+        try:
+            d_r = DraftReview.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
+            review['review_id'] = d_r.id
+            review['review_status'] = d_r.status
+            review['draft_file_path'] = file_path
+        except DraftReview.DoesNotExist:
+            pass
+
+    if has_draft:
+        file_path = normalize_file_path(file_path)
+        parent_path = os.path.dirname(file_path)
+        filename = os.path.basename(file_path)
+
+        file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(
+                repo_id, parent_path, filename, is_dir=False)
+
+        if file_uuid:
+            try:
+                DraftReview.objects.get(origin_file_uuid=file_uuid)
+                review['review_id'] = d_r.id
+                review['review_status'] = d_r.status
+                review['draft_id'] = d_r.draft_id.id
+                review['draft_file_path'] = d_r.draft_file_path
+            except DraftReview.DoesNotExist:
+                pass
+
+    return review

@@ -58,7 +58,7 @@ from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.drafts.models import Draft
-from seahub.drafts.utils import is_draft_file, has_draft_file
+from seahub.drafts.utils import is_draft_file, has_draft_file, get_file_review
 from seahub.signals import (repo_created, repo_deleted)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
@@ -3038,18 +3038,17 @@ class FileDetailView(APIView):
 
         file_type, file_ext = get_file_type_and_ext(file_name)
         if file_type == MARKDOWN:
-            is_draft, review_id, draft_id, review_status = is_draft_file(repo_id, path)
+            is_draft = is_draft_file(repo_id, path)
 
-            has_draft = False
-            draft_file_path = ''
-            if not is_draft:
-                has_draft, draft_file_path, draft_id, review_id, review_status = has_draft_file(repo_id, path)
+            has_draft = has_draft_file(repo_id, path)
 
-            entry['review_id'] = review_id
-            entry['review_status'] = review_status
+            review = get_file_review(repo_id, path, is_draft, has_draft)
+
             entry['is_draft'] = is_draft
             entry['has_draft'] = has_draft
-            entry['draft_file_path'] = draft_file_path
+            entry['review_id'] = review['review_id']
+            entry['review_status'] = review['review_status']
+            entry['draft_file_path'] = review['draft_file_path']
 
         # fetch file contributors and latest contributor
         try:
