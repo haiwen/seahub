@@ -9,10 +9,10 @@ import GenerateUploadLink from './generate-upload-link';
 import '../../css/share-link-dialog.css';
 
 const propTypes = {
-  itemPath: PropTypes.string.isRequired,
+  itemType: PropTypes.bool.isRequired, // there will be three choose: ['library', 'dir', 'file']
   itemName: PropTypes.string.isRequired,
+  itemPath: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
-  isDir: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired
 };
 
@@ -79,14 +79,13 @@ class ShareDialog extends React.Component {
   }
 
   renderFileContent = () => {
-    let activeTab = this.state.activeTab;
     return (
       <Fragment>
         <div className="share-dialog-side">
           <Nav pills vertical>
             <NavItem>
               <NavLink
-                className={activeTab === 'shareLink' ? 'active' : ''} onClick={() => {this.toggle.bind(this, 'shareLink');}}>
+                className="active" onClick={() => {this.toggle.bind(this, 'shareLink');}}>
                 {gettext('Share Link')}
               </NavLink>
             </NavItem>
@@ -104,15 +103,14 @@ class ShareDialog extends React.Component {
   }
 
   render() {
-    let itemName = this.props.itemName;
-    
+    let { itemType, itemName } = this.props;
     return (
       <div>
         <Modal isOpen={true} style={{maxWidth: '720px'}} className="share-dialog">
-          <ModalHeader toggle={this.props.toggleDialog}>Share <span className="sf-font" title={itemName}>{itemName}</span></ModalHeader>
+          <ModalHeader toggle={this.props.toggleDialog}>{gettext('Share')} <span className="sf-font" title={itemName}>{itemName}</span></ModalHeader>
           <ModalBody className="share-dialog-content">
-            {this.props.isDir && this.renderDirContent()}
-            {!this.props.isDir && this.renderFileContent()}
+            {(itemType === 'library' || itemType === 'dir') && this.renderDirContent()}
+            {itemType === 'file' && this.renderFileContent()}
           </ModalBody>
         </Modal>
       </div>
