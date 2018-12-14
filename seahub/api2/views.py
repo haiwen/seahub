@@ -3040,7 +3040,9 @@ class FileDetailView(APIView):
         if file_type == MARKDOWN:
             is_draft = is_draft_file(repo_id, path)
 
-            has_draft = has_draft_file(repo_id, path)
+            has_draft = False
+            if not is_draft:
+                has_draft = has_draft_file(repo_id, path)
 
             review = get_file_review(repo_id, path, is_draft, has_draft)
 

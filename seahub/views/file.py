@@ -624,9 +624,11 @@ def view_lib_file(request, repo_id, path):
 
         mode = request.GET.get('mode', '')
 
-        is_draft= is_draft_file(repo.id, path)
+        is_draft = is_draft_file(repo.id, path)
 
-        has_draft = has_draft_file(repo.id, path)
+        has_draft = False
+        if not is_draft:
+            has_draft = has_draft_file(repo.id, path)
 
         review = get_file_review(repo.id, path, is_draft, has_draft)
 
