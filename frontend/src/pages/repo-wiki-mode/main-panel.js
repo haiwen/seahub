@@ -208,6 +208,7 @@ class MainPanel extends Component {
                   currentPath={this.props.path} 
                   permission={permission} 
                   onPathClick={this.onMainNavBarClick}
+                  isViewFile={this.props.isViewFile}
                 />
               )}
             </div>

@@ -1,0 +1,10 @@
+.file-internal-link {
+    font-size: .875rem;
+    cursor: pointer;
+    margin-left: .5rem;
+    vertical-align: text-bottom;
+}
+
+.file-internal-link {
+    color: #585858;
+}
