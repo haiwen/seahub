@@ -9,7 +9,7 @@ import GenerateUploadLink from './generate-upload-link';
 import '../../css/share-link-dialog.css';
 
 const propTypes = {
-  itemType: PropTypes.bool.isRequired, // there will be three choose: ['library', 'dir', 'file']
+  itemType: PropTypes.string.isRequired, // there will be three choose: ['library', 'dir', 'file']
   itemName: PropTypes.string.isRequired,
   itemPath: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,

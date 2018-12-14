@@ -99,6 +99,7 @@ class GenerateShareLink extends React.Component {
   generateShareLink = () => {
     let isValid = this.validateParamsInput();
     if (isValid) {
+      this.setState({errorInfo: ''});
       let { itemPath, repoID } = this.props;
       let { password, expireDays } = this.state;
       let permissions = this.permissions;
@@ -122,6 +123,7 @@ class GenerateShareLink extends React.Component {
         isShowPasswordInput: false,
         expireDays: '',
         isExpireChecked: false,
+        errorInfo: '',
       });
       this.permissions = {
         'can_edit': false,
@@ -163,7 +165,7 @@ class GenerateShareLink extends React.Component {
     if (this.isExpireDaysNoLimit) {
       if (isExpireChecked) {
         if (!expireDays) {
-          this.setState({errorInfo: gettext('Please enter days')});
+          this.setState({errorInfo: 'Please enter days'});
           return false;
         }
         let flag = reg.test(expireDays);
@@ -175,7 +177,7 @@ class GenerateShareLink extends React.Component {
       }
     } else {
       if (!expireDays) {
-        this.setState({errorInfo: gettext('Please enter days')});
+        this.setState({errorInfo: 'Please enter days'});
         return false;
       }
       let flag = reg.test(expireDays);
@@ -284,7 +286,7 @@ class GenerateShareLink extends React.Component {
               <Input type="radio" name="radio1" onChange={this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
-          <Label className="err-message">{this.state.errorInfo}</Label><br />
+          <Label className="err-message">{gettext(this.state.errorInfo)}</Label><br />
           <Button onClick={this.generateShareLink}>{gettext('Generate')}</Button>
         </Form>
       );

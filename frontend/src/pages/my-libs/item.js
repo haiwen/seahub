@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
@@ -8,6 +8,8 @@ import { gettext, siteRoot, storages, canGenerateShareLink, canGenerateUploadLin
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import RenameInput from '../../components/rename-input';
+import ModalPotal from '../../components/modal-portal';
+import ShareDialog from '../../components/dialog/share-dialog';
 
 const propTypes = {
   data: PropTypes.object.isRequired,
@@ -29,6 +31,7 @@ class Item extends Component {
       showOpIcon: false,
       operationMenuOpen: false,
       showChangeLibName: false, 
+      isShowSharedDialog: false,
       highlight: false,
     };
   }
@@ -73,7 +76,11 @@ class Item extends Component {
 
   share = (e) => {
     e.preventDefault();
-    // TODO
+    this.setState({isShowSharedDialog: true});
+  }
+
+  toggleShareDialog = () => {
+    this.setState({isShowSharedDialog: false});
   }
 
   showDeleteItemPopup = (e) => {
@@ -232,43 +239,69 @@ class Item extends Component {
     );
 
     const desktopItem = (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td>
-          {this.state.showChangeLibName && (
-            <RenameInput 
-              name={data.repo_name} 
-              onRenameConfirm={this.onRenameConfirm} 
-              onRenameCancel={this.onRenameCancel}
-            />
-          )}
-          {!this.state.showChangeLibName && data.repo_name && (
-            <Link to={data.url}>{data.repo_name}</Link>
-          )}
-          {!this.state.showChangeLibName && !data.repo_name && 
-            (gettext('Broken (please contact your administrator to fix this library)'))
-          }
-        </td>
-        <td>{data.repo_name ? desktopOperations : ''}</td>
-        <td>{Utils.formatSize({bytes: data.size})}</td>
-        {storages.length ? <td>{data.storage_name}</td> : null}
-        <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
-      </tr>
+      <Fragment>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+          <td>
+            {this.state.showChangeLibName && (
+              <RenameInput 
+                name={data.repo_name} 
+                onRenameConfirm={this.onRenameConfirm} 
+                onRenameCancel={this.onRenameCancel}
+              />
+            )}
+            {!this.state.showChangeLibName && data.repo_name && (
+              <Link to={data.url}>{data.repo_name}</Link>
+            )}
+            {!this.state.showChangeLibName && !data.repo_name && 
+              (gettext('Broken (please contact your administrator to fix this library)'))
+            }
+          </td>
+          <td>{data.repo_name ? desktopOperations : ''}</td>
+          <td>{Utils.formatSize({bytes: data.size})}</td>
+          {storages.length ? <td>{data.storage_name}</td> : null}
+          <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
+        </tr>
+        {this.state.isShowSharedDialog && (
+          <ModalPotal>
+              <ShareDialog 
+                itemType={'library'}
+                itemName={data.repo_name}
+                itemPath={'/'}
+                repoID={data.repo_id}
+                toggleDialog={this.toggleShareDialog}
+              />
+          </ModalPotal>
+        )}
+      </Fragment>
     );
 
     const mobileItem = (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td>
-          {data.repo_name ?
-            <Link to={data.url}>{data.repo_name}</Link> :
-            gettext('Broken (please contact your administrator to fix this library)')}
-          <br />
-          <span className="item-meta-info">{Utils.formatSize({bytes: data.size})}</span>
-          <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
-        </td>
-        <td>{data.repo_name ? mobileOperations : ''}</td>
-      </tr>
+      <Fragment>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+          <td>
+            {data.repo_name ?
+              <Link to={data.url}>{data.repo_name}</Link> :
+              gettext('Broken (please contact your administrator to fix this library)')}
+            <br />
+            <span className="item-meta-info">{Utils.formatSize({bytes: data.size})}</span>
+            <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
+          </td>
+          <td>{data.repo_name ? mobileOperations : ''}</td>
+        </tr>
+        {this.state.isShowSharedDialog && (
+          <ModalPotal>
+              <ShareDialog 
+                itemType={'library'}
+                itemName={data.repo_name}
+                itemPath={'/'}
+                repoID={data.repo_id}
+                toggleDialog={this.toggleShareDialog}
+              />
+          </ModalPotal>
+        )}
+      </Fragment>
     );
 
     return window.innerWidth >= 768 ? desktopItem : mobileItem;
