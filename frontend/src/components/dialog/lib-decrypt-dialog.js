@@ -27,12 +27,6 @@ class LibDecryptDialog extends React.Component {
     })
   } 
 
-  handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.handleSubmit();
-    }
-  }
-
   handleChange = (e) => {
     this.setState({
       password: e.target.value,
@@ -41,12 +35,12 @@ class LibDecryptDialog extends React.Component {
   }
 
   toggle = () => {
-    window.history.back();
+    window.location.href = siteRoot;
   };
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} centered={true}>
         <ModalBody>
         <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button> 
         <Form className="lib-decrypt-form text-center">
@@ -55,7 +49,9 @@ class LibDecryptDialog extends React.Component {
           {this.state.showError &&
             <p className="error">{gettext('Wrong password')}</p>
           }
-          <Input type="password" name="password" placeholder={gettext('Password')} onChange={this.handleChange}/>
+          <FormGroup>
+            <Input type="password" name="password" placeholder={gettext('Password')} onChange={this.handleChange}/>
+          </FormGroup>
           <br />
           <Button onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           <br />
