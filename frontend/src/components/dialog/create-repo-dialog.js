@@ -155,9 +155,9 @@ class CreateRepoDialog extends React.Component {
             <FormGroup>
               <Label for="fileName">{gettext('Name')}</Label>
               <Input 
+                id="fileName"
                 onKeyPress={this.handleKeyPress} 
                 innerRef={input => {this.newInput = input;}} 
-                id="fileName" placeholder={gettext('newName')} 
                 value={this.state.repoName} 
                 onChange={this.handleRepoNameChange}
               />
@@ -186,7 +186,7 @@ class CreateRepoDialog extends React.Component {
               />
             </FormGroup>
             <FormGroup>
-              <Label for="passwd2">{gettext('Password again')}: </Label>
+              <Label for="passwd2">{gettext('Password again')}</Label>
               <Input 
                 id="passwd2"
                 type="password"
