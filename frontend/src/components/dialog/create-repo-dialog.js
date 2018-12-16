@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, FormText } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+
+import '../../css/modal.css';
 
 const propTypes = {
   onCreateRepo: PropTypes.func.isRequired,
@@ -18,6 +20,7 @@ class CreateRepoDialog extends React.Component {
       password1: '',
       password2: '',
       errMessage: '',
+      permission: 'rw'
     };
     this.newInput = React.createRef();
   }
@@ -39,7 +42,8 @@ class CreateRepoDialog extends React.Component {
     if (isValid) {
       let repoName = this.state.repoName.trim();
       let password = this.state.encrypt ? this.state.password1 : '';
-      let repo = this.createRepo(repoName, password);
+      let permission= this.state.permission;
+      let repo = this.createRepo(repoName, password, permission);
       this.props.onCreateRepo(repo);
     }
   } 
@@ -98,6 +102,11 @@ class CreateRepoDialog extends React.Component {
     return true;
   }
 
+  onPermissionChange = (e) => {
+    let permission = e.target.value;
+    this.setState({permission: permission});
+  }
+
   onEncrypted = (e) => {
     let isChecked = e.target.checked;
     this.setState({
@@ -106,7 +115,7 @@ class CreateRepoDialog extends React.Component {
     });
   }
 
-  createRepo = (repoName, password) => {
+  createRepo = (repoName, password, permission) => {
     let libraryType = this.props.libraryType;
     let encrypt = password ? true : false;
     let repo = null;
@@ -131,7 +140,7 @@ class CreateRepoDialog extends React.Component {
       repo = {
         repo_name: repoName,
         password: password,
-        permission: 'rw',
+        permission: permission,
       };
     }
     return repo;
@@ -139,12 +148,12 @@ class CreateRepoDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} className="repo-dialog">
         <ModalHeader toggle={this.toggle}>{gettext('New Library')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="fileName">{gettext('Name')}: </Label>
+              <Label for="fileName">{gettext('Name')}</Label>
               <Input 
                 onKeyPress={this.handleKeyPress} 
                 innerRef={input => {this.newInput = input;}} 
@@ -153,12 +162,21 @@ class CreateRepoDialog extends React.Component {
                 onChange={this.handleRepoNameChange}
               />
             </FormGroup>
+            {this.props.libraryType === 'group' && (
+              <FormGroup>
+                <Label for="exampleSelect">{gettext('Permission')}</Label>
+                <Input type="select" name="select" id="exampleSelect" onChange={this.onPermissionChange} value={this.state.permission}>
+                  <option value='rw'>rw</option>
+                  <option value='r'>r</option>
+                </Input>
+              </FormGroup>
+            )}
             <FormGroup check>
               <Input type="checkbox" id="encrypt" onChange={this.onEncrypted}/>
-              <Label for="encrypt">{gettext('Encrypt')}</Label>
+              <FormText className="text">{gettext('Encrypt')}</FormText>
             </FormGroup>
             <FormGroup>
-              <Label for="passwd1">{gettext('Password')} ({gettext('at least 8 characters')})</Label>
+              <Label for="passwd1">{gettext('Password')}{' '}<span className="tip">({gettext('at least 8 characters')})</span></Label>
               <Input 
                 id="passwd1" 
                 type="password"
