@@ -152,16 +152,48 @@ class GroupView extends React.Component {
     this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
   }
 
-  onCreateRepo = (repo) => {
+  onCreateRepo = (repo, groupOwnerType) => {
     let groupId = this.props.groupID;
-    seafileAPI.createGroupRepo(groupId, repo).then(res => {
-      let repo = new RepoInfo(res.data);
-      let repoList = this.addRepoItem(repo);
+    if (groupOwnerType && groupOwnerType === 'department') {
+      seafileAPI.createGroupOwnedLibrary(groupId, repo).then(res => { //need modify endpoint api
+        let object = {
+          repo_id: res.data.id,
+          repo_name: res.data.name,
+          owner_email: res.data.owner,
+          permission: res.data.permission,
+          mtime: res.data.mtime,
+          size: res.data.size,
+          encrypted: res.data.encrypted,
+        };
+        let repo = new RepoInfo(object);
+        let repoList = this.addRepoItem(repo);
+        this.setState({repoList: repoList});
+      }).then(() => {
+        //todo
+      });
+
+    } else {
+      seafileAPI.createGroupRepo(groupId, repo).then(res => {
+        let repo = new RepoInfo(res.data);
+        let repoList = this.addRepoItem(repo);
+        this.setState({repoList: repoList});
+      }).catch(() => {
+        //todo
+      });
+    }
+    this.onCreateRepoToggle();
+  }
+
+  onItemDelete = (repo) => {
+    let groupID = this.props.groupID;
+    seafileAPI.deleteGroupOwnedLibrary(groupID, repo.repo_id).then(() => {
+      let repoList = this.state.repoList.filter(item => {
+        return item.repo_id !== repo.repo_id;
+      });
       this.setState({repoList: repoList});
     }).catch(() => {
-      //todo
+      // todo;
     });
-    this.onCreateRepoToggle();
   }
 
   addRepoItem = (repo) => {
@@ -232,6 +264,7 @@ class GroupView extends React.Component {
                   repoList={this.state.repoList} 
                   currentGroup={this.state.currentGroup} 
                   onItemUnshare={this.onItemUnshare}
+                  onItemDelete={this.onItemDelete}
                 />
               }
             </div>

@@ -146,6 +146,7 @@ class SharedRepoListItem extends React.Component {
 
   onItemDelete = () => {
     // todo
+    this.props.onItemDelete(this.props.repo);
   }
 
   toggleShareDialog = () => {

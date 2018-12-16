@@ -44,6 +44,18 @@ class RepoListViewPanel extends React.Component {
     });
   }
 
+  onItemDelete = (repo) => {
+    let group = this.props.group;
+    seafileAPI.deleteGroupOwnedLibrary(group.id, repo.repo_id).then(() => {
+      let repoList = this.state.repoList.filter(item => {
+        return item.repo_id !== repo.repo_id;
+      });
+      this.setState({repoList: repoList});
+    }).catch(() => {
+      // todo;
+    });
+  }
+
   render() {
     let group = this.props.group;
     const emptyTip = <p className="group-item-empty-tip">{gettext('No libraries')}</p>;
@@ -60,6 +72,7 @@ class RepoListViewPanel extends React.Component {
             currentGroup={this.props.group} 
             repoList={this.state.repoList}
             onItemUnshare={this.onItemUnshare}
+            onItemDelete={this.onItemDelete}
           />
         }
       </div>
