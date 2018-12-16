@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, FormText } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-
-import '../../css/modal.css';
 
 const propTypes = {
   onCreateRepo: PropTypes.func.isRequired,
@@ -148,7 +146,7 @@ class CreateRepoDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle} className="repo-dialog">
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('New Library')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -173,7 +171,7 @@ class CreateRepoDialog extends React.Component {
             )}
             <FormGroup check>
               <Input type="checkbox" id="encrypt" onChange={this.onEncrypted}/>
-              <FormText className="text">{gettext('Encrypt')}</FormText>
+              <Label for="encrypt">{gettext('Encrypt')}</Label>
             </FormGroup>
             <FormGroup>
               <Label for="passwd1">{gettext('Password')}{' '}<span className="tip">({gettext('at least 8 characters')})</span></Label>
