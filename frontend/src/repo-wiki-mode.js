@@ -870,6 +870,7 @@ class Wiki extends Component {
           isDraft={this.state.isDraft}
           hasDraft={this.state.hasDraft}
           reviewStatus={this.state.reviewStatus}
+          reviewID={this.state.reviewID}
           goDraftPage={this.goDraftPage}
           goReviewPage={this.goReviewPage}
         />

@@ -54,6 +54,7 @@ const propTypes = {
   reviewStatus: PropTypes.any,
   goReviewPage: PropTypes.func,
   goDraftPage: PropTypes.func,
+  reviewID: PropTypes.any,
 };
 
 class MainPanel extends Component {
@@ -193,9 +194,6 @@ class MainPanel extends Component {
                   repoID={repoID}
                   isDraft={this.props.isDraft}
                   hasDraft={this.props.hasDraft}
-                  reviewStatus={this.props.reviewStatus}
-                  goDraftPage={this.props.goDraftPage}
-                  goReviewPage={this.props.goReviewPage}
                   permission={this.props.permission}
                   isViewFile={this.props.isViewFile}
                   onAddFile={this.props.onAddFile}
@@ -236,6 +234,12 @@ class MainPanel extends Component {
                       activeTitleIndex={this.state.activeTitleIndex}
                       onContentRendered={this.onContentRendered}
                       onLinkClick={this.props.onLinkClick}
+                      isDraft={this.props.isDraft}
+                      hasDraft={this.props.hasDraft}
+                      reviewID={this.props.reviewID}
+                      reviewStatus={this.props.reviewStatus}
+                      goDraftPage={this.props.goDraftPage}
+                      goReviewPage={this.props.goReviewPage}
                     /> :
                     <Fragment>
                       <DirentListView

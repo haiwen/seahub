@@ -92,10 +92,10 @@ def get_file_review(repo_id, file_path, is_draft=False, has_draft=False):
 
         if file_uuid:
             try:
-                DraftReview.objects.get(origin_file_uuid=file_uuid)
+                d_r = DraftReview.objects.get(origin_file_uuid=file_uuid)
                 review['review_id'] = d_r.id
                 review['review_status'] = d_r.status
-                review['draft_id'] = d_r.draft_id.id
+                review['draft_id'] = d_r.draft_id_id
                 review['draft_file_path'] = d_r.draft_file_path
             except DraftReview.DoesNotExist:
                 pass

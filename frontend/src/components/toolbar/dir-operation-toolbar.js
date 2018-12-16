@@ -19,9 +19,6 @@ const propTypes = {
   onUploadFolder: PropTypes.func.isRequired,
   isDraft: PropTypes.bool,
   hasDraft: PropTypes.bool,
-  reviewStatus: PropTypes.any,
-  goDraftPage: PropTypes.func,
-  goReviewPage: PropTypes.func,
 };
 
 class DirOperationToolbar extends React.Component {
@@ -149,22 +146,15 @@ class DirOperationToolbar extends React.Component {
     return (
       <Fragment>
         <div className="operation">
-          {(this.props.isViewFile && this.props.permission === 'rw') && (
+          {(this.props.isViewFile && this.props.permission === 'rw' && !this.props.hasDraft ) && (
             <Fragment>
             <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
-            <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
             </Fragment>
           )}
 
-          {(this.props.isViewFile && this.props.permission !== 'None' && !this.props.isDraft && !this.props.hasDraft) && (
+          {(this.props.isViewFile && !this.props.isDraft && !this.props.hasDraft) && (
             <button className="btn btn-secondary operation-item" title={gettext('New Draft')} onClick={this.onNewDraft}>{gettext('New Draft')}</button>
           )}
-          {(this.props.reviewStatus === 'open') && 
-            <button className="btn btn-secondary operation-item" title={gettext('View Review')} onClick={this.onViewReview}>{gettext('View Review')}</button>
-          }
-          {(!this.props.isDraft && this.props.hasDraft) && 
-            <button className="btn btn-secondary operation-item" title={gettext('View Draft')} onClick={this.onViewDraft}>{gettext('View Draft')}</button>
-          }
 
           {!this.props.isViewFile && (
             <Fragment>
@@ -173,9 +163,9 @@ class DirOperationToolbar extends React.Component {
                 <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
               }
               <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
-              <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
             </Fragment>
           )}
+          <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
         </div>
         {this.state.isUploadMenuShow && (
           <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
