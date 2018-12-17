@@ -677,7 +677,7 @@ if EVENTS_CONFIG_FILE:
         }
 
         if not event_type_dict.has_key(e.etype):
-            event_type_dict[e.etype] = (e.etype, '')
+            event_type_dict[e.etype] = (e.etype, e.device if e.device else '')
 
         return event_type_dict[e.etype]
 
