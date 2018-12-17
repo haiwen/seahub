@@ -134,20 +134,10 @@ class DirOperationToolbar extends React.Component {
     this.props.goDraftPage();
   }
 
-  getFolderName = (path) => {
-    // eg: /
-    if (path === '/') {
-      return path;
-    }
-    // eg: /abc/bcd/; /abc/bcd
-    path = path[path.length - 1] !== '/' ? path : path.slice(0, path.length -2);
-    return path.slice(path.lastIndexOf('/') + 1);
-  }
-
   render() {
     let { path, isViewFile } = this.props;
     let itemType = isViewFile ? 'file' : 'dir';
-    let itemName = isViewFile ? Utils.getFileName(path) : this.getFolderName(path);
+    let itemName = isViewFile ? Utils.getFileName(path) : Utils.getFolderName(path);
     return (
       <Fragment>
         <div className="operation">
