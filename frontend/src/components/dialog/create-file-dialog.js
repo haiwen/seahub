@@ -112,10 +112,9 @@ class CreateFile extends React.Component {
             <FormGroup>
               <Label for="fileName">{gettext('Name')}</Label>
               <Input 
+                id="fileName" 
                 onKeyPress={this.handleKeyPress} 
                 innerRef={input => {this.newInput = input;}} 
-                id="fileName" 
-                placeholder={gettext('new name')} 
                 value={this.state.childName} 
                 onChange={this.handleChange}
               />

@@ -62,7 +62,6 @@ class CreateForder extends React.Component {
               <Label for="folderName">{gettext('Name')}</Label>
               <Input 
                 id="folderName" 
-                placeholder={gettext('new name')} 
                 value={this.state.childName} 
                 innerRef={input => {this.newInput = input;}} 
                 onKeyPress={this.handleKeyPress} 
