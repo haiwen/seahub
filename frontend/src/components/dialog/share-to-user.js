@@ -113,9 +113,10 @@ class ShareToUser extends React.Component {
           return sharedItem;
         });
         this.setState({
-          sharedItems: this.state.sharedItems.concat(items)
+          sharedItems: this.state.sharedItems.concat(items),
+          selectedOption: null,
         });
-      })
+      });
     } else {
       seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
         if (res.data.failed.length > 0) {
@@ -126,7 +127,8 @@ class ShareToUser extends React.Component {
           this.setState({errorMsg: errorMsg});
         }
         this.setState({
-          sharedItems: this.state.sharedItems.concat(res.data.success)
+          sharedItems: this.state.sharedItems.concat(res.data.success),
+          selectedOption: null,
         });
       });
     }
@@ -164,12 +166,16 @@ class ShareToUser extends React.Component {
           <tr>
             <td>
               <AsyncSelect
-                className='reviewer-select' isMulti isFocused
-                loadOptions={this.loadOptions}
-                placeholder={gettext('Please enter 1 or more character')}
-                onChange={this.handleSelectChange}
-                isClearable classNamePrefix
                 inputId={'react-select-1-input'}
+                className='reviewer-select' 
+                placeholder={gettext('Please enter 1 or more character')}
+                loadOptions={this.loadOptions}
+                onChange={this.handleSelectChange}
+                value={this.state.selectedOption}
+                isMulti 
+                isFocused
+                isClearable 
+                classNamePrefix
               />
             </td>
             <td>
@@ -211,7 +217,7 @@ function UserList(props) {
         <tr key={index}>
           <td>{item.user_info.nickname}</td>
           <td>{Utils.sharePerms[item.permission]}</td>
-          <td><i onClick={(e) => {props.deleteShareItem(e, item.user_info.name);}} className="sf2-icon-delete" title="Delete"></i></td>
+          <td><a href="#" onClick={(e) => {props.deleteShareItem(e, item.user_info.name);}} className="sf2-icon-x3 sf2-x op-icon" title={gettext('Delete')}></a></td>
         </tr>
       ))}
     </tbody>

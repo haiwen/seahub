@@ -27,9 +27,7 @@ class ShareToGroup extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({
-      selectedOption: option,
-    });
+    this.setState({selectedOption: option});
   }
 
   componentDidMount() {
@@ -115,7 +113,8 @@ class ShareToGroup extends React.Component {
         });
   
         this.setState({
-          sharedItems: this.state.sharedItems.concat(items)
+          sharedItems: this.state.sharedItems.concat(items),
+          selectedOption: null,
         });
       });
     } else {
@@ -131,7 +130,8 @@ class ShareToGroup extends React.Component {
         }
   
         this.setState({
-          sharedItems: this.state.sharedItems.concat(res.data.success)
+          sharedItems: this.state.sharedItems.concat(res.data.success),
+          selectedOption: null,
         });
       });
     }
@@ -173,6 +173,7 @@ class ShareToGroup extends React.Component {
                 options={this.options}
                 components={makeAnimated()}
                 inputId={'react-select-2-input'}
+                value={this.state.selectedOption}
               />
             </td>
             <td>
@@ -213,7 +214,7 @@ function GroupList(props) {
         <tr key={index}>
           <td>{item.group_info.name}</td>
           <td>{Utils.sharePerms[item.permission]}</td>
-          <td><i onClick={(e) => {props.deleteShareItem(e, item.group_info.id);}} className="sf2-icon-delete" title="Delete"></i></td>
+          <td><a href="#" onClick={(e) => {props.deleteShareItem(e, item.group_info.id);}} className="sf2-icon-x3 sf2-x op-icon" title={gettext('Delete')}></a></td>
         </tr>
       ))}
     </tbody>
