@@ -43,8 +43,8 @@ class MainSideNav extends React.Component {
 
   loadGroups = () => {
     let _this = this;
-    seafileAPI.listGroups().then(res =>{
-      let data   = res.data.groups;
+    seafileAPI.listGroupsV2({'with_repos': 0}).then(res =>{
+      let data = res.data;
       this.groupsHeight = (data.length + 1) * _this.listHeight;
       _this.setState({
         groupItems: data
