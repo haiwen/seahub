@@ -300,6 +300,8 @@ class AccountInfo(APIView):
             org_id = request.user.org.org_id
             quota_total = seafile_api.get_org_user_quota(org_id, email)
             quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
+            is_org_staff = request.user.org.is_staff
+            info['is_org_staff'] = is_org_staff
         else:
             quota_total = seafile_api.get_user_quota(email)
             quota_usage = seafile_api.get_user_self_usage(email)

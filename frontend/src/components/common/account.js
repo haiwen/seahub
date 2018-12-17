@@ -14,6 +14,7 @@ class Account extends Component {
       quotaUsage: '',
       quotaTotal: '',
       isStaff: false,
+      isOrgStaff: false,
       usageRate: '',
       avatarURL: '',
     };
@@ -79,6 +80,7 @@ class Account extends Component {
         quotaUsage: Utils.bytesToSize(resp.data.usage),
         quotaTotal: Utils.bytesToSize(resp.data.total),
         isStaff: resp.data.is_staff,
+        isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
         avatarURL: resp.data.avatar_url
       });
     });
@@ -88,6 +90,11 @@ class Account extends Component {
     if(this.state.isStaff){
       return (
         <a href={siteRoot + 'sys/useradmin/'} title={gettext('System Admin')} className="item">{gettext('System Admin')}</a>
+      );
+    }
+    if (this.state.isOrgStaff) {
+      return (
+        <a href={siteRoot + 'org/useradmin/'} title={gettext('Organization Admin')} className="item">{gettext('Organization Admin')}</a>
       );
     }
   }
