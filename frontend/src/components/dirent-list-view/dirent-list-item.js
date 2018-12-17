@@ -401,9 +401,10 @@ class DirentListItem extends React.Component {
           </td>
           <td>
             <div className="dirent-item tag-list tag-list-stacked ">
-              { dirent.type !== 'dir' && dirent.file_tags.map((fileTag) => {
+              { dirent.type !== 'dir' && dirent.file_tags.map((fileTag, index) => {
+                let length = dirent.file_tags.length;
                 return (
-                  <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name}></span>
+                  <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name} style={{zIndex: length - index }}></span>
                 );
               })}
             </div>
