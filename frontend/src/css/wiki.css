@@ -181,3 +181,12 @@ img[src=""] {
 .markdown-content a {
     cursor: pointer;
 }
+  
+.wiki-main-panel .markdown-content .ml-2 {
+  text-decoration: underline;
+}
+
+.wiki-main-panel .markdown-content .ml-2:hover {
+  text-decoration: underline;
+  color:#eb8205;
+}
