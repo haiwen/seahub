@@ -152,9 +152,9 @@ class CreateRepoDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="fileName">{gettext('Name')}</Label>
+              <Label for="repoName">{gettext('Name')}</Label>
               <Input 
-                id="fileName"
+                id="repoName"
                 onKeyPress={this.handleKeyPress} 
                 innerRef={input => {this.newInput = input;}} 
                 value={this.state.repoName} 
@@ -165,8 +165,8 @@ class CreateRepoDialog extends React.Component {
               <FormGroup>
                 <Label for="exampleSelect">{gettext('Permission')}</Label>
                 <Input type="select" name="select" id="exampleSelect" onChange={this.onPermissionChange} value={this.state.permission}>
-                  <option value='rw'>rw</option>
-                  <option value='r'>r</option>
+                  <option value='rw'>{gettext('Read-Write')}</option>
+                  <option value='r'>{gettext('Read-Only')}</option>
                 </Input>
               </FormGroup>
             )}
