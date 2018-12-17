@@ -191,6 +191,5 @@ const GroupsViewPropTypes = {
 };
 
 GroupsView.propTypes = GroupsViewPropTypes;
-// Groups.propTypes = propTypes;
 
 export default GroupsView;

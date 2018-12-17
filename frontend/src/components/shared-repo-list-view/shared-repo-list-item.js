@@ -93,7 +93,6 @@ class SharedRepoListItem extends React.Component {
       'permission': repo.permission
     });
 
-    //todo change to library; div-view is not compatibility
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return { iconUrl, iconTitle, libPath };
@@ -135,17 +134,14 @@ class SharedRepoListItem extends React.Component {
   }
 
   onItemShare = () => {
-    // todo
     this.setState({isShowSharedDialog: true});
   }
 
   onItemUnshare = () => {
-    // todo
     this.props.onItemUnshare(this.props.repo);
   }
 
   onItemDelete = () => {
-    // todo
     this.props.onItemDelete(this.props.repo);
   }
 
