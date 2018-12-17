@@ -134,15 +134,20 @@ class DirOperationToolbar extends React.Component {
     this.props.goDraftPage();
   }
 
-  render() {
-    let isFile = this.props.isViewFile;
-    let itemName;
-    if (this.props.isViewFile) {
-        itemName =  Utils.getFileName(this.props.path)
-    } else {
-        itemName = this.props.path.replace('\/','');
+  getFolderName = (path) => {
+    // eg: /
+    if (path === '/') {
+      return path;
     }
+    // eg: /abc/bcd/; /abc/bcd
+    path = path[path.length - 1] !== '/' ? path : path.slice(0, path.length -2);
+    return path.slice(path.lastIndexOf('/') + 1);
+  }
 
+  render() {
+    let { path, isViewFile } = this.props;
+    let itemType = isViewFile ? 'file' : 'dir';
+    let itemName = isViewFile ? Utils.getFileName(path) : this.getFolderName(path);
     return (
       <Fragment>
         <div className="operation">
@@ -203,7 +208,7 @@ class DirOperationToolbar extends React.Component {
         {this.state.isShareDialogShow &&
           <ModalPortal>
             <ShareDialog 
-              isDir={!isFile}
+              itemType={itemType}
               itemName={itemName}
               itemPath={this.props.path}
               repoID={this.props.repoID}

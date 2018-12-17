@@ -7,6 +7,61 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
+class GroupItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOperationShow: false
+    };
+  }
+  onMouseEnter = () => {
+    this.setState({isOperationShow: true});
+  }
+
+  onMouseLeave = () => {
+    this.setState({isOperationShow: false});
+  }
+
+  deleteShareItem = () => {
+    let item = this.props.item;
+    this.props.deleteShareItem(item.group_info.id);
+  }
+
+  render() {
+    let item = this.props.item;
+    return (
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td>{item.group_info.name}</td>
+        <td>{Utils.sharePerms[item.permission]}</td>
+        <td>
+          <span
+            className={`sf2-icon-x3 sf2-x op-icon a-simulate ${this.state.isOperationShow ? '' : 'hide'}`}
+            onClick={this.deleteShareItem} 
+            title={gettext('Delete')}
+          >
+          </span>
+        </td>
+      </tr>
+    );
+  }
+}
+
+class GroupList extends React.Component {
+
+  render() {
+    let items = this.props.items;
+    return (
+      <tbody>
+        {items.map((item, index) => {
+          return (
+            <GroupItem key={index} item={item} deleteShareItem={this.props.deleteShareItem}/>
+          );
+        })}
+      </tbody>
+    );
+  }
+}
+
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
@@ -85,7 +140,7 @@ class ShareToGroup extends React.Component {
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
     let isGroupOwnedRepo = this.props.isGroupOwnedRepo;
-    if (this.state.selectedOption.length > 0 ) {
+    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
         groups[i] = this.state.selectedOption[i].id;
       }
@@ -137,8 +192,7 @@ class ShareToGroup extends React.Component {
     }
   }
 
-  deleteShareItem = (e, groupID) => {
-    e.preventDefault();
+  deleteShareItem = (groupID) => {
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
     if (this.props.isGroupOwnedRepo) {
@@ -205,20 +259,6 @@ class ShareToGroup extends React.Component {
       </table>
     );
   }
-}
-
-function GroupList(props) {
-  return (
-    <tbody>
-      {props.items.map((item, index) => (
-        <tr key={index}>
-          <td>{item.group_info.name}</td>
-          <td>{Utils.sharePerms[item.permission]}</td>
-          <td><a href="#" onClick={(e) => {props.deleteShareItem(e, item.group_info.id);}} className="sf2-icon-x3 sf2-x op-icon" title={gettext('Delete')}></a></td>
-        </tr>
-      ))}
-    </tbody>
-  );
 }
 
 ShareToGroup.propTypes = propTypes;
