@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGr
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
+  libraryType: PropTypes.string.isRequired,
   onCreateRepo: PropTypes.func.isRequired,
   onCreateToggle: PropTypes.func.isRequired,
 };
