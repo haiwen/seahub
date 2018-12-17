@@ -666,13 +666,20 @@ if EVENTS_CONFIG_FILE:
         return events if events else None
 
     def generate_file_audit_event_type(e):
-        return {
+
+        event_type_dict = {
             'file-download-web': ('web', ''),
             'file-download-share-link': ('share-link',''),
             'file-download-api': ('API', e.device),
             'repo-download-sync': ('download-sync', e.device),
             'repo-upload-sync': ('upload-sync', e.device),
-        }[e.etype]
+            'seadrive-download-file': ('seadrive-download', e.device),
+        }
+
+        if not event_type_dict.has_key(e.etype):
+            event_type_dict[e.etype] = (e.etype, e.device if e.device else '')
+
+        return event_type_dict[e.etype]
 
     def get_file_audit_events_by_path(email, org_id, repo_id, file_path, start, limit):
         """Return file audit events list by file path. (If no file audit, return 'None')
