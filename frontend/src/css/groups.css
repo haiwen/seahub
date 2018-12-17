@@ -1,6 +1,12 @@
-.cur-view-content-groups .department-group-icon {
+.department-group-icon { /* for cur-view-path*/
   margin-left: 0.25rem;
   color:#888;
+}
+
+.group-top-op-icon { /* for cur-view-path*/
+  display: inline-block;
+  font-size: 22px;
+  margin: 3px 0 0 10px;
 }
 
 .cur-view-content-groups .group-list-panel {
