@@ -268,6 +268,12 @@ class RepoView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
+
+        lib_need_decrypt = False
+        if repo.encrypted \
+                and not seafile_api.is_password_set(repo.id, username):
+            lib_need_decrypt = True
+
         repo_owner = get_repo_owner(request, repo_id)
 
         try:
@@ -292,6 +298,8 @@ class RepoView(APIView):
             "is_admin": is_repo_admin(username, repo_id),
             "is_virtual": repo.is_virtual,
             "has_been_shared_out": has_been_shared_out,
+
+            "lib_need_decrypt": lib_need_decrypt,
         }
 
         return Response(result)

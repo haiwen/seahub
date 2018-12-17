@@ -11,6 +11,8 @@ import CurDirPath from '../cur-dir-path';
 import DirentListView from '../dirent-list-view/dirent-list-view';
 import DirentDetail from '../dirent-detail/dirent-details';
 import FileUploader from '../file-uploader/file-uploader';
+import ModalPortal from '../modal-portal';
+import LibDecryptDialog from '../dialog/lib-decrypt-dialog';
 
 const propTypes = {
   currentRepo: PropTypes.object,
@@ -110,6 +112,7 @@ class DirPanel extends React.Component {
     return (
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-north">
+        {!this.props.libNeedDecrypt &&
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onMenuClick}></span>
             <div className="dir-operation">
@@ -137,6 +140,7 @@ class DirPanel extends React.Component {
               switchViewMode={this.switchViewMode}
             />
           </div>
+          }
           <CommonToolbar 
             repoID={this.props.repoID} 
             onSearchedClick={this.props.onSearchedClick} 
@@ -144,6 +148,7 @@ class DirPanel extends React.Component {
           />
         </div>
         <div className="main-panel-center flex-direction-row">
+          {!this.props.libNeedDecrypt &&
           <div className="cur-view-container">
             <div className="cur-view-path">
               <CurDirPath 
@@ -190,6 +195,7 @@ class DirPanel extends React.Component {
               }
             </div>
           </div>
+          }
           {this.state.isDirentDetailShow && (
             <div className="cur-view-detail">
               <DirentDetail
@@ -200,6 +206,13 @@ class DirPanel extends React.Component {
                 onItemDetailsClose={this.onItemDetailsClose}
               />
             </div>
+          )}
+          {this.props.libNeedDecrypt && (
+            <ModalPortal>
+              <LibDecryptDialog repoID={this.props.repoID} 
+                                onLibDecryptDialog={this.props.onLibDecryptDialog}
+                                />
+            </ModalPortal>
           )}
         </div>
       </div>

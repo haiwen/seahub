@@ -9,6 +9,8 @@ import MainPanel from './pages/repo-wiki-mode/main-panel';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
 import toaster from './components/toast';
+import LibDecryptDialog from './components/dialog/lib-decrypt-dialog';
+import ModalPortal from './components/modal-portal';
 import Dirent from './models/dirent';
 import FileTag from './models/file-tag';
 import './assets/css/fa-solid.css';
@@ -40,6 +42,7 @@ class Wiki extends Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
       selectedDirentList: [],
+      libNeedDecrypt: false
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
@@ -53,15 +56,23 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
-    if (isDir === 'None') {
-      this.setState({pathExist: false});
-    } else if (isDir === 'True') {
-      this.showDir(initialPath);
-    } else if (isDir === 'False') {
-      this.showFile(initialPath);
-    }
+    seafileAPI.getRepoInfo(repoID).then(res => {
+      this.setState({
+        libNeedDecrypt: res.data.lib_need_decrypt, 
+      });
 
-    this.loadSidePanel(initialPath);
+    if (!res.data.lib_need_decrypt) {
+      if (isDir === 'None') {
+          this.setState({pathExist: false});
+        } else if (isDir === 'True') {
+          this.showDir(initialPath);
+        } else if (isDir === 'False') {
+          this.showFile(initialPath);
+        }
+
+        this.loadSidePanel(initialPath);
+      }
+    });
   }
 
 
@@ -749,7 +760,34 @@ class Wiki extends Component {
     });
   }
 
+  onLibDecryptDialog = () => {
+    this.setState({
+      libNeedDecrypt: false,
+    })
+
+    if (isDir === 'None') {
+        this.setState({pathExist: false});
+      } else if (isDir === 'True') {
+        this.showDir(initialPath);
+      } else if (isDir === 'False') {
+        this.showFile(initialPath);
+      }
+
+      this.loadSidePanel(initialPath);
+  }
+
   render() {
+    let { libNeedDecrypt } = this.state;
+    if (libNeedDecrypt) {
+      return (
+        <ModalPortal>
+          <LibDecryptDialog repoID={repoID}
+                            onLibDecryptDialog={this.onLibDecryptDialog}
+          />
+        </ModalPortal>
+      )
+    }
+
     return (
       <div id="main" className="wiki-main">
         <SidePanel

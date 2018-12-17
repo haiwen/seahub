@@ -27,6 +27,7 @@ class DirView extends React.Component {
       repoName: '',
       repoID: '',
       permission: true,
+      libNeedDecrypt: false,
       isDirentSelected: false,
       isAllDirentSelected: false,
       isDirentListLoading: true,
@@ -55,12 +56,16 @@ class DirView extends React.Component {
         repoName: repo.repo_name,
         permission: repo.permission === 'rw',
         currentRepo: repo,
+        libNeedDecrypt: res.data.lib_need_decrypt,
       });
+
       let repoName = repo.repo_name;
       let index = location.indexOf(repoName);
       let path = location.slice(index + repoName.length);
-      this.updateDirentList(path);
       this.setState({path: path});
+      if (!res.data.lib_need_decrypt) {
+        this.updateDirentList(path);
+      }
     });
   }
   
@@ -437,6 +442,13 @@ class DirView extends React.Component {
     }
   }
 
+  onLibDecryptDialog = () => {
+    this.setState({
+      libNeedDecrypt: !this.state.libNeedDecrypt
+    })
+    this.updateDirentList(this.state.path);
+  }
+
   render() {
     return (
       <DirPanel 
@@ -472,6 +484,8 @@ class DirView extends React.Component {
         switchViewMode={this.switchViewMode}
         onSearchedClick={this.onSearchedClick}
         onFileUploadSuccess={this.onFileUploadSuccess}
+        libNeedDecrypt={this.state.libNeedDecrypt}
+        onLibDecryptDialog={this.onLibDecryptDialog}
       />
     );
   }
