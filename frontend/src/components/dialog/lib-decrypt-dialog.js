@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Col, FormText } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, Form, FormGroup, Label } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 
@@ -52,10 +52,9 @@ class LibDecryptDialog extends React.Component {
           <FormGroup>
             <Input type="password" name="password" placeholder={gettext('Password')} onChange={this.handleChange}/>
           </FormGroup>
-          <br />
           <Button onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           <br />
-          <p className="tip">*{gettext('The password will be kept in the server for only 1 hour.')}</p>
+          <p className="tip">{'* '}{gettext('The password will be kept in the server for only 1 hour.')}</p>
         </Form>
         </ModalBody>
       </Modal>
