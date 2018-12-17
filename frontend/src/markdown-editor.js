@@ -117,22 +117,22 @@ class EditorUtilities {
       if (fileNode.isImage()) {
         url = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(fileNode.path()) + '?raw=1';
       } else {
-        url = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(fileNode.path());
+        url = serviceUrl + '/wiki/lib/' + repoID + '/file' + encodeURIComponent(fileNode.path());
       }
     } else {
-      url = serviceUrl + '/#common/lib/' + repoID + encodeURIComponent(fileNode.path());
+      url = serviceUrl + '/wiki/lib/' + repoID + encodeURIComponent(fileNode.path());
     }
     return url;
   }
   
   isInternalFileLink(url) {
-    var re = new RegExp(this.serviceUrl + '/lib/[0-9a-f-]{36}/file.*');
+    var re = new RegExp(this.serviceUrl + '/wiki/lib/[0-9a-f-]{36}/file.*');
     return re.test(url);
   }
 
   
   isInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + '[0-9a-f\-]{36}.*');
+    var re = new RegExp(serviceUrl + '/wiki/lib/' + '[0-9a-f\-]{36}.*');
     return re.test(url);
   }
 

@@ -31,7 +31,7 @@ from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
 
 from seahub.drafts.models import Draft, DraftReview
-from seahub.drafts.utils import is_draft_file
+from seahub.drafts.utils import is_draft_file, get_file_review
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -291,7 +291,10 @@ class FileView(APIView):
             # rename draft file
             filetype, fileext = get_file_type_and_ext(new_file_name)
             if filetype == MARKDOWN or filetype == TEXT:
-                is_draft, review_id, draft_id, _ = is_draft_file(repo.id, path)
+                is_draft = is_draft_file(repo.id, path)
+                review = get_file_review(repo.id, path, is_draft)
+                review_id = review['review_id']
+                draft_id = review['draft_id']
                 if is_draft:
                     try:
                         draft = Draft.objects.get(pk=draft_id)

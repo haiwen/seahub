@@ -48,6 +48,13 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  onLinkClick: PropTypes.func.isRequired,
+  isDraft: PropTypes.bool,
+  hasDraft: PropTypes.bool,
+  reviewStatus: PropTypes.any,
+  goReviewPage: PropTypes.func,
+  goDraftPage: PropTypes.func,
+  reviewID: PropTypes.any,
 };
 
 class MainPanel extends Component {
@@ -185,6 +192,8 @@ class MainPanel extends Component {
                 <DirOperationToolBar 
                   path={this.props.path}
                   repoID={repoID}
+                  isDraft={this.props.isDraft}
+                  hasDraft={this.props.hasDraft}
                   permission={this.props.permission}
                   isViewFile={this.props.isViewFile}
                   onAddFile={this.props.onAddFile}
@@ -224,6 +233,13 @@ class MainPanel extends Component {
                       isFileLoading={this.props.isFileLoading}
                       activeTitleIndex={this.state.activeTitleIndex}
                       onContentRendered={this.onContentRendered}
+                      onLinkClick={this.props.onLinkClick}
+                      isDraft={this.props.isDraft}
+                      hasDraft={this.props.hasDraft}
+                      reviewID={this.props.reviewID}
+                      reviewStatus={this.props.reviewStatus}
+                      goDraftPage={this.props.goDraftPage}
+                      goReviewPage={this.props.goReviewPage}
                     /> :
                     <Fragment>
                       <DirentListView

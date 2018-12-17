@@ -72,7 +72,7 @@ from seahub.utils.repo import is_repo_owner, parse_repo_perm
 from seahub.group.utils import is_group_member
 from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, THUMBNAIL_ROOT
-from seahub.drafts.utils import is_draft_file, has_draft_file
+from seahub.drafts.utils import is_draft_file, has_draft_file, get_file_review
 
 from seahub.constants import HASH_URLS
 
@@ -624,12 +624,13 @@ def view_lib_file(request, repo_id, path):
 
         mode = request.GET.get('mode', '')
 
-        is_draft, review_id, draft_id, review_status = is_draft_file(repo.id, path)
+        is_draft = is_draft_file(repo.id, path)
 
         has_draft = False
-        draft_file_path = ''
         if not is_draft:
-            has_draft, draft_file_path, draft_id, review_id, review_status = has_draft_file(repo.id, path)
+            has_draft = has_draft_file(repo.id, path)
+
+        review = get_file_review(repo.id, path, is_draft, has_draft)
 
         if filetype == MARKDOWN:
             return_dict['protocol'] = request.is_secure() and 'https' or 'http'
@@ -639,12 +640,12 @@ def view_lib_file(request, repo_id, path):
             return_dict['language_code'] = get_language()
             return_dict['seafile_collab_server'] = SEAFILE_COLLAB_SERVER
             return_dict['mode'] = 'edit' if mode else 'viewer'
-            return_dict['draft_id'] = draft_id
-            return_dict['review_id'] = review_id
-            return_dict['review_status'] = review_status
             return_dict['is_draft'] = is_draft
             return_dict['has_draft'] = has_draft
-            return_dict['draft_file_path'] = draft_file_path
+            return_dict['draft_id'] = review['draft_id']
+            return_dict['review_id'] = review['review_id']
+            return_dict['review_status'] = review['review_status']
+            return_dict['draft_file_path'] = review['draft_file_path']
         else:
             return_dict['file_content'] = file_content
 

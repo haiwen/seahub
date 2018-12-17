@@ -58,6 +58,7 @@ from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.drafts.models import Draft
+from seahub.drafts.utils import is_draft_file, has_draft_file, get_file_review
 from seahub.signals import (repo_created, repo_deleted)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
@@ -78,7 +79,7 @@ from seahub.utils.repo import get_repo_owner, get_library_storages, \
         parse_repo_perm
 from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
 from seahub.utils.file_tags import get_files_tags_in_dir
-from seahub.utils.file_types import DOCUMENT
+from seahub.utils.file_types import DOCUMENT, MARKDOWN
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, \
@@ -3028,11 +3029,28 @@ class FileDetailView(APIView):
             real_path = path
             real_repo_id = repo_id
 
+        file_name = os.path.basename(path)
         entry = {}
         entry["type"] = "file"
         entry["id"] = obj_id
-        entry["name"] = os.path.basename(path)
+        entry["name"] = file_name
         entry["permission"] = permission
+
+        file_type, file_ext = get_file_type_and_ext(file_name)
+        if file_type == MARKDOWN:
+            is_draft = is_draft_file(repo_id, path)
+
+            has_draft = False
+            if not is_draft:
+                has_draft = has_draft_file(repo_id, path)
+
+            review = get_file_review(repo_id, path, is_draft, has_draft)
+
+            entry['is_draft'] = is_draft
+            entry['has_draft'] = has_draft
+            entry['review_id'] = review['review_id']
+            entry['review_status'] = review['review_status']
+            entry['draft_file_path'] = review['draft_file_path']
 
         # fetch file contributors and latest contributor
         try:
