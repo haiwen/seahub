@@ -96,7 +96,7 @@ class DirView extends React.Component {
       window.history.pushState({url: fileUrl, path: direntPath}, direntPath, fileUrl);
     } else {
       const w=window.open('about:blank');
-      const url = siteRoot + 'lib/' + this.state.repoID + '/file' + direntPath;
+      const url = siteRoot + 'lib/' + this.state.repoID + '/file' + Utils.encodePath(direntPath);
       w.location.href = url;
     }
   }

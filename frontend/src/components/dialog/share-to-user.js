@@ -7,6 +7,7 @@ import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 const propTypes = {
+  isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired
 };
@@ -92,29 +93,64 @@ class ShareToUser extends React.Component {
         users[i] = this.state.selectedOption[i].email;
       }
     }
-    seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
-      if (res.data.failed.length > 0) {
-        let errorMsg = [];
-        for (let i = 0 ; i < res.data.failed.length ; i++) {
-          errorMsg[i] = res.data.failed[i];
+    if (this.props.isGroupOwnedRepo) {
+      seafileAPI.shareGroupOwnedRepoToUser(repoID, this.state.permission, users).then(res => {
+        if (res.data.failed.length > 0) {
+          let errorMsg = [];
+          for (let i = 0 ; i < res.data.failed.length ; i++) {
+            errorMsg[i] = res.data.failed[i];
+          }
+          this.setState({errorMsg: errorMsg});
         }
-        this.setState({errorMsg: errorMsg});
-      }
-      this.setState({
-        sharedItems: this.state.sharedItems.concat(res.data.success)
+        // todo modify api
+
+        let items = res.data.success.map(item => {
+          let sharedItem = {
+            'user_info': { 'nickname': item.user_name, 'name': item.user_email},
+            'permission': item.permission,
+            'share_type': 'user',
+          };
+          return sharedItem;
+        });
+        this.setState({
+          sharedItems: this.state.sharedItems.concat(items),
+          selectedOption: null,
+        });
       });
-    });
+    } else {
+      seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
+        if (res.data.failed.length > 0) {
+          let errorMsg = [];
+          for (let i = 0 ; i < res.data.failed.length ; i++) {
+            errorMsg[i] = res.data.failed[i];
+          }
+          this.setState({errorMsg: errorMsg});
+        }
+        this.setState({
+          sharedItems: this.state.sharedItems.concat(res.data.success),
+          selectedOption: null,
+        });
+      });
+    }
   } 
 
   deleteShareItem = (e, username) => {
     e.preventDefault();
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
-    seafileAPI.deleteShareToUserItem(repoID, path, 'user', username).then(res => {
-      this.setState({
-        sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+    if (this.props.isGroupOwnedRepo) {
+      seafileAPI.deleteGroupOwnedRepoSharedUserItem(repoID, username).then(res => {
+        this.setState({
+          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+        });
       });
-    });
+    } else {
+      seafileAPI.deleteShareToUserItem(repoID, path, 'user', username).then(res => {
+        this.setState({
+          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+        });
+      });
+    }
   }
 
   render() {
@@ -130,12 +166,16 @@ class ShareToUser extends React.Component {
           <tr>
             <td>
               <AsyncSelect
-                className='reviewer-select' isMulti isFocused
-                loadOptions={this.loadOptions}
-                placeholder={gettext('Please enter 1 or more character')}
-                onChange={this.handleSelectChange}
-                isClearable classNamePrefix
                 inputId={'react-select-1-input'}
+                className='reviewer-select' 
+                placeholder={gettext('Please enter 1 or more character')}
+                loadOptions={this.loadOptions}
+                onChange={this.handleSelectChange}
+                value={this.state.selectedOption}
+                isMulti 
+                isFocused
+                isClearable 
+                classNamePrefix
               />
             </td>
             <td>
@@ -152,14 +192,16 @@ class ShareToUser extends React.Component {
             </td>
           </tr>
           <tr>
-            {this.state.errorMsg.length > 0 &&
-              this.state.errorMsg.map((item, index = 0, arr) => {
-                return (
-                  <p className="error" key={index}>{this.state.errorMsg[index].email}
-                    {': '}{this.state.errorMsg[index].error_msg}</p>
-                );
-              })
-            }
+            <td colSpan={3}>
+              {this.state.errorMsg.length > 0 &&
+                this.state.errorMsg.map((item, index = 0, arr) => {
+                  return (
+                    <p className="error" key={index}>{this.state.errorMsg[index].email}
+                      {': '}{this.state.errorMsg[index].error_msg}</p>
+                  );
+                })
+              }
+            </td>
           </tr>
         </thead>
         <UserList items={sharedItems} deleteShareItem={this.deleteShareItem} />
@@ -175,7 +217,7 @@ function UserList(props) {
         <tr key={index}>
           <td>{item.user_info.nickname}</td>
           <td>{Utils.sharePerms[item.permission]}</td>
-          <td><i onClick={(e) => {props.deleteShareItem(e, item.user_info.name);}} className="sf2-icon-delete" title="Delete"></i></td>
+          <td><a href="#" onClick={(e) => {props.deleteShareItem(e, item.user_info.name);}} className="sf2-icon-x3 sf2-x op-icon" title={gettext('Delete')}></a></td>
         </tr>
       ))}
     </tbody>

@@ -22,12 +22,10 @@
 }
 
 .share-dialog-content label {
-    font-weight: bold;
     padding: 0.5rem 0 0.25rem;
 }
 
 .share-dialog-content label.form-check-label {
-    font-weight: normal;
     padding: 0.25rem 0;
 }
 

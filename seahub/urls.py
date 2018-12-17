@@ -204,7 +204,7 @@ urlpatterns = [
     url(r'^shared-libs/$', react_fake_view, name="shared_libs"),
     url(r'^my-libs/$', react_fake_view, name="my_libs"),
     url(r'^groups/$', react_fake_view, name="groups"),
-    url(r'^group/(?P<group_id>\d+)/$', react_group, name="group"),
+    url(r'^group/.*$', react_fake_view, name="group"),
     url(r'^library/.*$', react_fake_view, name="lib_view"),
     url(r'^my-libs/deleted/$', react_fake_view, name="my_libs_deleted"),
 

@@ -48,8 +48,17 @@ class MyLibraries extends Component {
   }
 
   onCreateRepo = (repo) => {
+    let permission = repo.permission;
     seafileAPI.createMineRepo(repo).then((res) => {
-      let repo = res.data;
+      let repo = {
+        repo_id: res.data.repo_id,
+        repo_name: res.data.repo_name,
+        size: res.data.repo_size,
+        mtime: res.data.mtime,
+        owner_email: res.data.email,
+        encrypted: res.data.encrypted,
+        permission: permission,
+      };
       this.state.items.push(repo);
       this.setState({items: this.state.items});
     });

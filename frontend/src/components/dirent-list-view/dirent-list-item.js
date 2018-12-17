@@ -477,9 +477,9 @@ class DirentListItem extends React.Component {
         {this.state.isShareDialogShow &&
           <ModalPortal>
             <ShareDialog 
-              isDir={dirent.isDir()}
-              itemPath={direntPath}
+              itemType={dirent.type}
               itemName={dirent.name}
+              itemPath={direntPath}
               repoID={this.props.repoID}
               toggleDialog={this.onItemShare}
             />

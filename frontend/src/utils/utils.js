@@ -147,7 +147,9 @@ export const Utils = {
        return encodeURIComponent(e);
        }).join('/');
        */
-
+    if (!path) {
+      return '';
+    }
     var path_arr = path.split('/');
     var path_arr_ = [];
     for (var i = 0, len = path_arr.length; i < len; i++) {

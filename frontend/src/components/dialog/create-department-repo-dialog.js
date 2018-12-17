@@ -28,9 +28,8 @@ class CreateDepartmentRepoDialog extends React.Component {
     let isValid = this.validateRepoName();
     if (isValid) {
       let repo = this.createRepo(this.state.repoName);
-      this.props.onCreateRepo(repo);
+      this.props.onCreateRepo(repo, 'department');
     }
-
   } 
 
   handleKeyPress = (e) => {

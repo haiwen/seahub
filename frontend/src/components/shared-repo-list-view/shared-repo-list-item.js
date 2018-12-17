@@ -5,6 +5,8 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { Link } from '@reach/router';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled } from '../../utils/constants';
+import ModalPotal from '../../components/modal-portal';
+import ShareDialog from '../../components/dialog/share-dialog';
 
 const propTypes = {
   currentGroup: PropTypes.object,
@@ -22,6 +24,7 @@ class SharedRepoListItem extends React.Component {
       highlight: false,
       isOperationShow: false,
       isItemMenuShow: false,
+      isShowSharedDialog: false,
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -90,7 +93,6 @@ class SharedRepoListItem extends React.Component {
       'permission': repo.permission
     });
 
-    //todo change to library; div-view is not compatibility
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return { iconUrl, iconTitle, libPath };
@@ -109,7 +111,7 @@ class SharedRepoListItem extends React.Component {
         this.onItemDetails();
         break;
       case 'Share':
-        this.onItemShared();
+        this.onItemShare();
         break;
       case 'Unshare':
         this.onItemUnshare();
@@ -132,16 +134,19 @@ class SharedRepoListItem extends React.Component {
   }
 
   onItemShare = () => {
-    // todo
+    this.setState({isShowSharedDialog: true});
   }
 
   onItemUnshare = () => {
-    // todo
     this.props.onItemUnshare(this.props.repo);
   }
 
   onItemDelete = () => {
-    // todo
+    this.props.onItemDelete(this.props.repo);
+  }
+
+  toggleShareDialog = () => {
+    this.setState({isShowSharedDialog: false});
   }
 
   generatorOperations = () => {
@@ -217,7 +222,7 @@ class SharedRepoListItem extends React.Component {
     // scene one: (share, delete, itemToggle and other operations);
     // scene two: (share, unshare), (share), (unshare)
     let operations = this.generatorOperations();
-    const shareOperation   = <a href="#" className="sf2-icon-share sf2-x op-icon" title={gettext("Share")} onClick={this.onItemShared}></a>;
+    const shareOperation   = <a href="#" className="sf2-icon-share sf2-x op-icon" title={gettext("Share")} onClick={this.onItemShare}></a>;
     const unshareOperation = <a href="#" className="sf2-icon-x3 sf2-x op-icon" title={gettext("Unshare")} onClick={this.onItemUnshare}></a>
     const deleteOperation  = <a href="#" className="sf2-icon-delete sf2-x op-icon" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
     
@@ -266,32 +271,62 @@ class SharedRepoListItem extends React.Component {
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
+    let isGroupOwnedRepo = repo.owner_email.indexOf('@seafile_group') > -1;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-        <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
-        <td><Link to={libPath}>{repo.repo_name}</Link></td>
-        <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
-        <td>{repo.size}</td>
-        <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
-        <td title={repo.owner_contact_email}>{repo.owner_name}</td>
-      </tr>
+      <Fragment>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+          <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
+          <td><Link to={libPath}>{repo.repo_name}</Link></td>
+          <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
+          <td>{repo.size}</td>
+          <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
+          <td title={repo.owner_contact_email}>{repo.owner_name}</td>
+        </tr>
+        {this.state.isShowSharedDialog && (
+          <ModalPotal>
+            <ShareDialog 
+              itemType={'library'}
+              itemName={repo.repo_name}
+              itemPath={'/'}
+              repoID={repo.repo_id}
+              isGroupOwnedRepo={isGroupOwnedRepo}
+              toggleDialog={this.toggleShareDialog}
+            />
+          </ModalPotal>
+        )}
+      </Fragment>
     );
   }
   
   renderMobileUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
+    let isGroupOwnedRepo = repo.owner_email.indexOf('@seafile_group') > -1;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-        <td><img src={iconUrl} title={iconTitle} alt={iconTitle}/></td>
-        <td>
-          <Link to={libPath}>{repo.repo_name}</Link><br />
-          <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
-          <span className="item-meta-info">{repo.size}</span>
-          <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
-        </td>
-        <td>{this.generatorMobileMenu()}</td>
-      </tr>
+      <Fragment>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+          <td><img src={iconUrl} title={iconTitle} alt={iconTitle}/></td>
+          <td>
+            <Link to={libPath}>{repo.repo_name}</Link><br />
+            <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
+            <span className="item-meta-info">{repo.size}</span>
+            <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
+          </td>
+          <td>{this.generatorMobileMenu()}</td>
+        </tr>
+        {this.state.isShowSharedDialog && (
+          <ModalPotal>
+            <ShareDialog 
+              itemType={'library'}
+              itemName={repo.repo_name}
+              itemPath={'/'}
+              repoID={repo.repo_id}
+              isGroupOwnedRepo={isGroupOwnedRepo}
+              toggleDialog={this.toggleShareDialog}
+            />
+          </ModalPotal>
+        )}
+      </Fragment>
     );
   }
 

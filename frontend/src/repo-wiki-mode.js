@@ -334,7 +334,7 @@ class Wiki extends Component {
         this.showFile(node.path);
       }
     } else {
-      let url = siteRoot + 'lib/' + item.repo_id + '/file' + item.path;
+      let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(item.path);
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
@@ -367,7 +367,7 @@ class Wiki extends Component {
       this.showDir(node.path);
     } else {
       const w=window.open('about:blank');
-      const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
+      const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
       w.location.href = url;
     }
   }
