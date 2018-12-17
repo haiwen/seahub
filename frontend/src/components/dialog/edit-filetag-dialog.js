@@ -82,7 +82,7 @@ class EditFileTagDialog extends React.Component {
     let repoTagIdList = this.getRepoTagIdList();
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('File Tags')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Select Tags')}</ModalHeader>
         <ModalBody>
           {
             <ul className="tag-list tag-list-container">

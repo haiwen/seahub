@@ -147,7 +147,7 @@ class DirPanel extends React.Component {
             searchPlaceholder={'Search files in this library'}
           />
         </div>
-        <div className="main-panel-center flex-direction-row">
+        <div className="main-panel-center flex-row">
           {!this.props.libNeedDecrypt &&
           <div className="cur-view-container">
             <div className="cur-view-path">

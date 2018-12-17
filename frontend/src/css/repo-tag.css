@@ -48,3 +48,26 @@
   position: absolute;
   right: 0.5rem;
 }
+
+.tag-edit-icon {
+  padding: 0 0.5rem;
+  color: #888;
+  cursor: pointer;
+}
+
+.tag-edit-icon:hover {
+  color: #333;
+}
+
+.file-tag-item {
+  margin: 0.25rem 0;
+  padding: 0 0.5rem;
+  width: max-content;
+  cursor: pointer;
+  background-color: #eee;
+  border-radius: 1rem;
+}
+
+.file-tag-item:hover {
+  background-color: #bbb;
+}
