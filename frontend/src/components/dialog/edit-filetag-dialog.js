@@ -102,7 +102,7 @@ class EditFileTagDialog extends React.Component {
           }
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.toggle}>{gettext('Close')}</Button>
+          <Button onClick={this.toggle}>{gettext('Close')}</Button>
         </ModalFooter>
       </Modal>
     );

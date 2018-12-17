@@ -1011,7 +1011,7 @@ table .menu-toggle {
 
 .tag-list-stacked .file-tag{
     margin-right: -0.3rem;
-    box-shadow: 0 0 0 0.125rem #fff;
+    border: 0.125rem solid #fff;
     cursor: pointer;
 }
 

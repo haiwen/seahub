@@ -377,6 +377,12 @@ class DirentListItem extends React.Component {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let href = siteRoot + 'wiki/lib/' + this.props.repoID + Utils.encodePath(direntPath);
+    let tagTitle = '';
+    if (dirent.file_tags) {
+      dirent.file_tags.forEach(item => {
+        tagTitle += item.name + ' ';
+      });
+    }
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -400,11 +406,11 @@ class DirentListItem extends React.Component {
             }
           </td>
           <td>
-            <div className="dirent-item tag-list tag-list-stacked ">
+            <div className="dirent-item tag-list tag-list-stacked" title={tagTitle}>
               { dirent.type !== 'dir' && dirent.file_tags.map((fileTag, index) => {
                 let length = dirent.file_tags.length;
                 return (
-                  <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name} style={{zIndex: length - index }}></span>
+                  <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} style={{zIndex: length - index }}></span>
                 );
               })}
             </div>
