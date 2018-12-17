@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, enableRepoHistorySetting } from '../../utils/constants';
 import toaster from '../toast';
 import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
@@ -101,16 +101,21 @@ class LibHistorySetting extends React.Component {
         </ModalHeader>
         <ModalBody>
           <Form>
+            {!enableRepoHistorySetting &&
+              <FormGroup>
+                <Label className="error">{gettext('Setting library history is disabled by Admin.')}</Label>
+              </FormGroup>
+            }
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.allHistory} onChange={() => {this.setLimitDays('allHistory')}}/>{' '}
+              <Input type="radio" name="radio1" checked={this.state.allHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('allHistory')}}/>{' '}
               <Label>{gettext('Keep full history')}</Label>
             </FormGroup>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.noHistory} onChange={() =>{this.setLimitDays('noHistory')}}/>{' '}
+              <Input type="radio" name="radio1" checked={this.state.noHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('noHistory')}}/>{' '}
               <Label>{gettext('Don\'t keep history')}</Label>
             </FormGroup>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.autoHistory} onChange={() =>{this.setLimitDays('autoHistory')}}/>{' '}
+              <Input type="radio" name="radio1" checked={this.state.autoHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('autoHistory')}}/>{' '}
               <Label>{gettext('Only keep a period of history:')}</Label>
               <Input 
                 type="text" 

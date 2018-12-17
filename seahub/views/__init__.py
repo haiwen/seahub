@@ -719,6 +719,7 @@ def libraries(request):
             'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
             'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
             'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
+            'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
         })
 
     return render(request, 'libraries.html', {
