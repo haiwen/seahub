@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
+import Group from '../models/group';
 import { gettext, siteRoot, enableWiki } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Badge } from 'reactstrap';
@@ -43,11 +44,15 @@ class MainSideNav extends React.Component {
 
   loadGroups = () => {
     let _this = this;
-    seafileAPI.listGroupsV2({'with_repos': 0}).then(res =>{
-      let data = res.data;
-      this.groupsHeight = (data.length + 1) * _this.listHeight;
+    seafileAPI.listGroupsV2().then(res =>{
+      let groupList = res.data.map(item => {
+        let group = new Group(item);
+        return group;
+      })
+
+      this.groupsHeight = (groupList.length + 1) * _this.listHeight;
       _this.setState({
-        groupItems: data
+        groupItems: groupList
       });
     });
   }
