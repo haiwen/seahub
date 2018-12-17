@@ -159,6 +159,7 @@ class GroupView extends React.Component {
         let object = {
           repo_id: res.data.id,
           repo_name: res.data.name,
+          owner_name: res.data.group_name,
           owner_email: res.data.owner,
           permission: res.data.permission,
           mtime: res.data.mtime,
