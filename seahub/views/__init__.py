@@ -718,6 +718,7 @@ def libraries(request):
             'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
             'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
             'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+            'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
         })
 
     return render(request, 'libraries.html', {

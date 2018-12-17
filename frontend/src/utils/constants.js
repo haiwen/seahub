@@ -29,6 +29,7 @@ export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDays
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
 export const maxFileName = window.app.pageOptions.maxFileName;
 export const enableWiki = window.app.pageOptions.enableWiki;
+export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary === '1';
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
