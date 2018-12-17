@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Col, FormText } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -58,21 +58,22 @@ class CreateForder extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('New Folder')}</ModalHeader>
         <ModalBody>
           <Form>
-            <FormGroup row>
-              <Label sm={3}>Parent path: </Label>
-              <Col sm={9} className="parent-path"><FormText>{this.state.parentPath}</FormText></Col>
-            </FormGroup>
-            <FormGroup row>
-              <Label for="fileName" sm={3}>{gettext('Name')}: </Label>
-              <Col sm={9}>
-                <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} id="fileName" placeholder={gettext('newName')} value={this.state.childName} onChange={this.handleChange}/>
-              </Col>
+            <FormGroup>
+              <Label for="folderName">{gettext('Name')}</Label>
+              <Input 
+                id="folderName" 
+                placeholder={gettext('new name')} 
+                value={this.state.childName} 
+                innerRef={input => {this.newInput = input;}} 
+                onKeyPress={this.handleKeyPress} 
+                onChange={this.handleChange}
+              />
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
