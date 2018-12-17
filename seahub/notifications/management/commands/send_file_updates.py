@@ -32,8 +32,8 @@ def td(con):
     return con
     # return '<td>%s</td>' % con
 
-def a_tag(con, href='#'):
-    return '<a href="%s">%s</a>' % (href, e(con))
+def a_tag(con, href='#', style=''):
+    return '<a href="%s" style="%s">%s</a>' % (href, style, e(con))
 
 def repo_url(repo_id):
     p = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
@@ -101,6 +101,7 @@ class Command(BaseCommand):
 
     def format_file_operation(self, ev):
         lib_link = a_tag(ev.repo_name, repo_url(ev.repo_id))
+        small_lib_link = a_tag(ev.repo_name, repo_url(ev.repo_id), 'color:#868e96;font-size:87.5%;')
         if ev.obj_type == 'repo':
             if ev.op_type == 'create':
                 op = _('Created library')
@@ -127,50 +128,50 @@ class Command(BaseCommand):
             file_link = a_tag(file_name, file_url(ev.repo_id, ev.path))
             if ev.op_type == 'create':
                 op = _('Created file')
-                details = td("%s<br />%s" % (file_link, lib_link))
+                details = td("%s<br />%s" % (file_link, small_lib_link))
             elif ev.op_type == 'delete':
                 op = _('Deleted file')
-                details = td("%s<br />%s" % (e(file_name), lib_link))
+                details = td("%s<br />%s" % (e(file_name), small_lib_link))
             elif ev.op_type == 'recover':
                 op = _('Restored file')
-                details = td("%s<br />%s" % (file_link, lib_link))
+                details = td("%s<br />%s" % (file_link, small_lib_link))
             elif ev.op_type == 'rename':
                 op = _('Renamed file')
                 old_name = os.path.basename(ev.old_path)
                 details = td("%s => %s<br />%s" % (
-                    e(old_name), file_link, lib_link)
+                    e(old_name), file_link, small_lib_link)
                 )
             elif ev.op_type == 'move':
                 op = _('Moved file')
                 file_path_link = a_tag(ev.path, file_url(ev.repo_id, ev.path))
                 details = td('%s => %s<br />%s' % (
-                    e(ev.old_path), file_path_link, lib_link)
+                    e(ev.old_path), file_path_link, small_lib_link)
                 )
             else:  # ev.op_type == 'edit':
                 op = _('Updated file')
-                details = td("%s<br />%s" % (file_link, lib_link))
+                details = td("%s<br />%s" % (file_link, small_lib_link))
 
         else:                   # dir
             dir_name = os.path.basename(ev.path)
             dir_link = a_tag(dir_name, dir_url(ev.repo_id, ev.path))
             if ev.op_type == 'create':
                 op = _('Created folder')
-                details = td('%s<br />%s' % (dir_link, lib_link))
+                details = td('%s<br />%s' % (dir_link, small_lib_link))
             elif ev.op_type == 'delete':
                 op = _('Deleted folder')
-                details = td('%s<br />%s' % (e(dir_name), lib_link))
+                details = td('%s<br />%s' % (e(dir_name), small_lib_link))
             elif ev.op_type == 'recover':
                 op = _('Restored folder')
-                details = td('%s<br />%s' % (dir_link, lib_link))
+                details = td('%s<br />%s' % (dir_link, small_lib_link))
             elif ev.op_type == 'rename':
                 op = _('Renamed folder')
                 old_name = os.path.basename(ev.old_path)
                 details = td('%s => %s<br />%s' % (e(old_name), dir_link,
-                                                   lib_link))
+                                                   small_lib_link))
             else:  # ev.op_type == 'move':
                 op = _('Moved folder')
                 details = td('%s => %s<br />%s' % (e(ev.old_path), dir_link,
-                                                   lib_link))
+                                                   small_lib_link))
 
         return (op, details)
 
