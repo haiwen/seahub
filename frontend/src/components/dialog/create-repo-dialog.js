@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, enableEncryptedLibrary } from '../../utils/constants';
 
 const propTypes = {
   libraryType: PropTypes.string.isRequired,
@@ -170,30 +170,34 @@ class CreateRepoDialog extends React.Component {
                 </Input>
               </FormGroup>
             )}
-            <FormGroup check>
-              <Input type="checkbox" id="encrypt" onChange={this.onEncrypted}/>
-              <Label for="encrypt">{gettext('Encrypt')}</Label>
-            </FormGroup>
-            <FormGroup>
-              <Label for="passwd1">{gettext('Password')}{' '}<span className="tip">({gettext('at least 8 characters')})</span></Label>
-              <Input 
-                id="passwd1" 
-                type="password"
-                disabled={this.state.disabled}
-                value={this.state.password1} 
-                onChange={this.handlePassword1Change}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="passwd2">{gettext('Password again')}</Label>
-              <Input 
-                id="passwd2"
-                type="password"
-                disabled={this.state.disabled}
-                value={this.state.password2} 
-                onChange={this.handlePassword2Change}
-              />
-            </FormGroup>
+            {enableEncryptedLibrary &&
+              <div>
+                <FormGroup check>
+                  <Input type="checkbox" id="encrypt" onChange={this.onEncrypted}/>
+                  <Label for="encrypt">{gettext('Encrypt')}</Label>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="passwd1">{gettext('Password')}{' '}<span className="tip">({gettext('at least 8 characters')})</span></Label>
+                  <Input 
+                    id="passwd1" 
+                    type="password"
+                    disabled={this.state.disabled}
+                    value={this.state.password1} 
+                    onChange={this.handlePassword1Change}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="passwd2">{gettext('Password again')}</Label>
+                  <Input 
+                    id="passwd2"
+                    type="password"
+                    disabled={this.state.disabled}
+                    value={this.state.password2} 
+                    onChange={this.handlePassword2Change}
+                  />
+                </FormGroup>
+              </div>
+            }
           </Form>
           <Label className="err-message">{gettext(this.state.errMessage)}</Label>
         </ModalBody>
