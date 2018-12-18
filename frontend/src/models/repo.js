@@ -8,7 +8,7 @@ class Repo {
     this.size = Utils.bytesToSize(object.size);
     this.owner_name = object.owner_name;
     this.owner_email = object.owner_email;
-    this.owner_contact_email = object.owner_contact_name;
+    this.owner_contact_email = object.owner_contact_email;
     this.is_admin = object.is_admin;
     this.encrypted = object.encrypted;
     this.last_modified = object.last_modified;
