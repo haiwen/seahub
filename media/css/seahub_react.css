@@ -998,20 +998,20 @@ table .menu-toggle {
 /* begin file-tag */
 .tag-list {
     position: relative;
+    justify-content: flex-end;
 }
 
 .tag-list .file-tag {
-    margin-left: 0.25rem;
     cursor: pointer;
 }
 
-.tag-list .file-tag:first-child {
-    margin-left: 0;
+.tag-list .file-tag:last-child {
+    margin-right: 0;
 }
 
 .tag-list-stacked .file-tag{
-    margin-left: -0.5rem;
-    box-shadow: 0 0 0 2px #fff;
+    margin-right: -0.5rem;
+    border: 0.125rem solid #fff;
     cursor: pointer;
 }
 
@@ -1028,6 +1028,7 @@ table .menu-toggle {
 .dirent-item.tag-list {
     display: flex;
     align-items: center;
+    width: max-content;
 }
 
 .item-meta-info {

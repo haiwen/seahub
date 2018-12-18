@@ -62,11 +62,11 @@ class DirentListView extends React.Component {
             <th width="3%" className="select">
               <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
             </th>
-            <th width="3%"></th>
-            <th width="5%"></th>
-            <th width="35%">{gettext('Name')}</th>
-            <th width="10%"></th>
-            <th width="20%"></th>
+            <th width="3%">{/*icon */}</th>
+            <th width="5%">{/*star */}</th>
+            <th width="39%">{gettext('Name')}</th>
+            <th width="6%">{/*tag */}</th>
+            <th width="20%">{/*operation */}</th>
             <th width="11%">{gettext('Size')}</th>
             <th width="13%">{gettext('Last Update')}</th>
           </tr>

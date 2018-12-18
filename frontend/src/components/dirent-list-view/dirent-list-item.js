@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import MD5 from 'MD5';
+import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -48,6 +50,7 @@ class DirentListItem extends React.Component {
       isCopyDialogShow: false,
       isShareDialogShow: false,
       isMutipleOperation: false,
+      isShowTagTooltip: false,
     };
     this.zipToken = null;
   }
@@ -373,10 +376,22 @@ class DirentListItem extends React.Component {
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   }
 
+  onTagTooltipToggle = (e) => {
+    e.stopPropagation();
+    this.setState({isShowTagTooltip: !this.state.isShowTagTooltip})
+  }
+
   render() {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let href = siteRoot + 'wiki/lib/' + this.props.repoID + Utils.encodePath(direntPath);
+    let toolTipID = MD5(dirent.name).slice(0, 7);
+    let tagTitle = '';
+    if (dirent.file_tags && dirent.file_tags.length > 0) {
+      dirent.file_tags.forEach(item => {
+        tagTitle += item.name + ' ';
+      });
+    }
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -400,13 +415,21 @@ class DirentListItem extends React.Component {
             }
           </td>
           <td>
-            <div className="dirent-item tag-list tag-list-stacked ">
-              { dirent.type !== 'dir' && dirent.file_tags.map((fileTag) => {
-                return (
-                  <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name}></span>
-                );
-              })}
-            </div>
+            {(dirent.type !== 'dir' && dirent.file_tags) && (
+              <Fragment>
+                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
+                  {dirent.file_tags.map((fileTag, index) => {
+                    let length = dirent.file_tags.length;
+                    return (
+                      <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} style={{zIndex: length - index }}></span>
+                    );
+                  })}
+                </div>
+                <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
+                  {tagTitle}
+                </UncontrolledTooltip>
+              </Fragment>
+            )} 
           </td>
           <td className="operation">
             {
