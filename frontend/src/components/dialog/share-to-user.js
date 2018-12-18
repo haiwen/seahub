@@ -7,12 +7,14 @@ import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 class UserItem extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       isOperationShow: false
     };
   }
+  
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
   }

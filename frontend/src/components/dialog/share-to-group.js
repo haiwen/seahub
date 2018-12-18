@@ -8,12 +8,14 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 class GroupItem extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       isOperationShow: false
     };
   }
+  
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
   }
