@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
+import ModalPortal from '../modal-portal';
 import ListTagDialog from '../dialog/list-tag-dialog';
 import CreateTagDialog from '../dialog/create-tag-dialog';
 import UpdateTagDialog from '../dialog/update-tag-dialog';
@@ -73,39 +74,43 @@ class DirTool extends React.Component {
             <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
           </ul>
-          {
-            this.state.isListRepoTagShow &&
-            <ListTagDialog
-              repoID={repoID}
-              onListTagCancel={this.onListRepoTagToggle}
-              onCreateRepoTag={this.onCreateRepoTagToggle}
-              onUpdateRepoTag={this.onUpdateRepoTagToggle}
-              onListTaggedFiles={this.onListTaggedFileToggle}
-            />
-          }
-          {
-            this.state.isCreateRepoTagShow &&
-            <CreateTagDialog
-              repoID={repoID}
-              toggleCancel={this.onCreateRepoTagToggle}
-            />
-          }
-          {
-            this.state.isUpdateRepoTagShow &&
-            <UpdateTagDialog
-              repoID={repoID}
-              currentTag={this.state.currentTag}
-              toggleCancel={this.onUpdateRepoTagToggle}
-            />
-          }
-          {
-            this.state.isListTaggedFileShow &&
-            <ListTaggedFilesDialog
-              repoID={this.props.repoID}
-              currentTag={this.state.currentTag}
-              toggleCancel={this.onListTaggedFileToggle}
-            />
-          }
+          {this.state.isListRepoTagShow && (
+            <ModalPortal>
+              <ListTagDialog
+                repoID={repoID}
+                onListTagCancel={this.onListRepoTagToggle}
+                onCreateRepoTag={this.onCreateRepoTagToggle}
+                onUpdateRepoTag={this.onUpdateRepoTagToggle}
+                onListTaggedFiles={this.onListTaggedFileToggle}
+              />
+            </ModalPortal>
+          )}
+          {this.state.isCreateRepoTagShow && (
+            <ModalPortal>
+              <CreateTagDialog
+                repoID={repoID}
+                toggleCancel={this.onCreateRepoTagToggle}
+              />
+            </ModalPortal>
+          )}
+          {this.state.isUpdateRepoTagShow && (
+            <ModalPortal>
+              <UpdateTagDialog
+                repoID={repoID}
+                currentTag={this.state.currentTag}
+                toggleCancel={this.onUpdateRepoTagToggle}
+              />
+            </ModalPortal>
+          )}
+          {this.state.isListTaggedFileShow && (
+            <ModalPortal>
+              <ListTaggedFilesDialog
+                repoID={this.props.repoID}
+                currentTag={this.state.currentTag}
+                toggleCancel={this.onListTaggedFileToggle}
+              />
+            </ModalPortal>
+          )}
         </Fragment>
       );
     } else if (!isFile && permission) {
