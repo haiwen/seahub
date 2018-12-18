@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
@@ -49,30 +49,26 @@ class ListTaggedFilesDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Tagged Files')}</ModalHeader>
         <ModalBody>
-          {
-            <table>
-              <thead>
-                <tr>
-                  <th width='25%'>{gettext('Name')}</th>
-                  <th width='25%'>{gettext('Size')}</th>
-                  <th width='25%'>{gettext('Last Update')}</th>
-                  <th width='25%'>{gettext('Parent Path')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {taggedFileList.map((taggedFile, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{taggedFile.filename}</td>
-                      <td>{Utils.bytesToSize(taggedFile.size)}</td>
-                      <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
-                      <td>{taggedFile.parent_path}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          }
+          <table>
+            <thead>
+              <tr>
+                <th width='30%'>{gettext('Name')}</th>
+                <th width='30%'>{gettext('Size')}</th>
+                <th width='40%'>{gettext('Last Update')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {taggedFileList.map((taggedFile, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{taggedFile.filename}</td>
+                    <td>{Utils.bytesToSize(taggedFile.size)}</td>
+                    <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.toggle}>{gettext('Close')}</Button>

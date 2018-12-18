@@ -27,8 +27,8 @@ class TagListItem extends React.Component {
     return(
       <li className="tag-list-item">
         <span className={`tag-demo bg-${color}`}>
-          <td width='90%'>{this.props.item.name}</td>
-          <span onClick={this.onListFileCancel}>{this.props.item.fileCount}</span>
+          <span className="tag-name">{this.props.item.name}</span>
+          <span className="tag-files" onClick={this.onListFileCancel}>{this.props.item.fileCount}{' '}{gettext('files')}</span>
         </span>
         <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
       </li>

@@ -25,7 +25,16 @@
 
 .tag-list-item .tag-demo:hover {
   border-left: 0.75rem solid #eb8205;
+}
 
+.tag-demo .tag-name {
+  flex: 1;
+}
+
+.tag-demo .tag-files {
+  margin-right: 0.5rem;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .tag-list-item .tag-edit {
