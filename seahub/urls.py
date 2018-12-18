@@ -104,7 +104,7 @@ from seahub.api2.endpoints.admin.upload_links import AdminUploadLink, \
         AdminUploadLinkUpload, AdminUploadLinkCheckPassword
 from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
-from seahub.api2.endpoints.admin.organizations import AdminOrganization
+from seahub.api2.endpoints.admin.organizations import AdminOrganizations, AdminOrganization
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
 from seahub.api2.endpoints.admin.org_stats import AdminOrgStatsTraffic
 from seahub.api2.endpoints.admin.logo import AdminLogo
@@ -403,6 +403,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/admin-role/$', AdminAdminRole.as_view(), name='api-v2.1-admin-admin-role'),
 
     ## admin::organizations
+    url(r'^api/v2.1/admin/organizations/$', AdminOrganizations.as_view(), name='api-v2.1-admin-organizations'),
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/$', AdminOrganization.as_view(), name='api-v2.1-admin-organization'),
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/(?P<email>[^/]+)/$', AdminOrgUser.as_view(), name='api-v2.1-admin-org-user'),
