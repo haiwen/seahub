@@ -50,7 +50,7 @@
 <script type="text/template" id="add-group-member-form-tmpl">
     <form id="add-group-member-form" action="" method="post" class="hide">{% csrf_token %}
         <h3 id="dialogTitle">{% trans "Add Member" %}</h3>
-        <label for="email">{% trans "Email" %}</label><br />
+        <label for="email">{% trans "User" %}</label><br />
         <input type="text" name="email" value="" id="email" /><br />
         <p class="error hide"></p>
         <input type="submit" class="submit" value="{% trans "Submit" %}" />
