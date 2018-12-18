@@ -156,7 +156,10 @@ class UserPermissions(object):
         """
 
         if CLOUD_MODE:
-            return False
+            if MULTI_TENANCY:
+                return True
+            else:
+                return False
         elif self.user.is_staff:
             return True
         elif get_enabled_role_permissions_by_role(self.user.role)['can_add_public_repo']:
