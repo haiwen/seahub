@@ -182,12 +182,9 @@ ul,ol,li {
     color: #16181b;
     text-decoration: none;
 }
+
 .link-dropdown-item:active {
     color: #fff;
-}
-
-.table-thread-hidden {
-    border-bottom: 1px solid #e6e6e6;
 }
 
 .table-thread-hidden th {
