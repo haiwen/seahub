@@ -34,7 +34,7 @@
 .tag-demo .tag-files {
   margin-right: 0.5rem;
   cursor: pointer;
-  text-decoration: underline;
+  border-bottom: 1px solid;
 }
 
 .tag-list-item .tag-edit {

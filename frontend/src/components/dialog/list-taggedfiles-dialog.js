@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { gettext, repoID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import moment from 'moment';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  repoTagId: PropTypes.number.isRequired,
+  repoID: PropTypes.string.isRequired,
+  currentTag: PropTypes.object.isRequired,
   toggleCancel: PropTypes.func.isRequired,
 };
 
@@ -25,8 +26,8 @@ class ListTaggedFilesDialog extends React.Component {
   }
 
   getTaggedFiles = () => {
-    let repoTagId = this.props.repoTagId;
-    seafileAPI.listTaggedFiles(repoID, repoTagId).then(res => {
+    let { repoID, currentTag } = this.props;
+    seafileAPI.listTaggedFiles(repoID, currentTag.id).then(res => {
       let taggedFileList = [];
       res.data.tagged_files !== undefined &&
       res.data.tagged_files.forEach(file => {
@@ -50,11 +51,11 @@ class ListTaggedFilesDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('Tagged Files')}</ModalHeader>
         <ModalBody>
           <table>
-            <thead>
+            <thead className="table-thread-hidden">
               <tr>
-                <th width='30%'>{gettext('Name')}</th>
-                <th width='30%'>{gettext('Size')}</th>
-                <th width='40%'>{gettext('Last Update')}</th>
+                <th width='50%' className="ellipsis">{gettext('Name')}</th>
+                <th width='25%'>{gettext('Size')}</th>
+                <th width='25%'>{gettext('Last Update')}</th>
               </tr>
             </thead>
             <tbody>

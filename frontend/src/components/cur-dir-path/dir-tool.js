@@ -80,7 +80,7 @@ class DirTool extends React.Component {
               onListTagCancel={this.onListRepoTagToggle}
               onCreateRepoTag={this.onCreateRepoTagToggle}
               onUpdateRepoTag={this.onUpdateRepoTagToggle}
-              onListFileCancel={this.onListTaggedFileToggle}
+              onListTaggedFiles={this.onListTaggedFileToggle}
             />
           }
           {
@@ -101,7 +101,8 @@ class DirTool extends React.Component {
           {
             this.state.isListTaggedFileShow &&
             <ListTaggedFilesDialog
-              repoTagId={this.state.currentTag.id}
+              repoID={this.props.repoID}
+              currentTag={this.state.currentTag}
               toggleCancel={this.onListTaggedFileToggle}
             />
           }

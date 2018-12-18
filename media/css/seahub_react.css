@@ -186,6 +186,16 @@ ul,ol,li {
     color: #fff;
 }
 
+.table-thread-hidden {
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.table-thread-hidden th {
+    padding: 0;
+    font-size: 0;
+    border: 0;
+}
+
 /* UI Widget */
 
 /**** caret ****/
