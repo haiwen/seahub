@@ -170,6 +170,24 @@ export const Utils = {
     return filePath.slice(lastIndex+1);
   },
 
+    /**
+   * input: 
+   *  eg: /
+   *      ../abc/abc/
+   *      ../abc/bc
+   * output(return):
+   *  eg: /
+   *      abc
+   *      bc
+   */
+  getFolderName: function(path) {
+    if (path === '/') {
+      return path;
+    }
+    path = path[path.length - 1] !== '/' ? path : path.slice(0, path.length -2);
+    return path.slice(path.lastIndexOf('/') + 1);
+  },
+
   /*
     return dirname of a path.
     if path is '/', return '/'.

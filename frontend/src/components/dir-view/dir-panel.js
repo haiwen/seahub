@@ -126,6 +126,7 @@ class DirPanel extends React.Component {
                   onItemsDelete={this.props.onItemsDelete}
                 /> :
                 <DirOperationToolBar 
+                  isViewFile={false}
                   path={this.props.path}
                   repoID={this.props.repoID}
                   onAddFile={this.props.onAddFile}
@@ -152,6 +153,7 @@ class DirPanel extends React.Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <CurDirPath 
+                isViewFile={false}
                 repoID={this.props.repoID}
                 repoName={this.props.repoName}
                 pathPrefix={this.props.pathPrefix}
@@ -209,9 +211,10 @@ class DirPanel extends React.Component {
           )}
           {this.props.libNeedDecrypt && (
             <ModalPortal>
-              <LibDecryptDialog repoID={this.props.repoID} 
-                                onLibDecryptDialog={this.props.onLibDecryptDialog}
-                                />
+              <LibDecryptDialog 
+                repoID={this.props.repoID} 
+                onLibDecryptDialog={this.props.onLibDecryptDialog}
+              />
             </ModalPortal>
           )}
         </div>

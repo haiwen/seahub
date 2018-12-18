@@ -175,7 +175,7 @@ class Item extends Component {
       'is_admin': data.is_admin,
       'permission': permission
     });
-    data.url = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}`;
+    data.url = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let shareIconClassName = 'sf2-icon-share sf2-x op-icon' + iconVisibility; 

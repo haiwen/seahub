@@ -6,6 +6,63 @@ import PropTypes from 'prop-types';
 import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
+class UserItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOperationShow: false
+    };
+  }
+  
+  onMouseEnter = () => {
+    this.setState({isOperationShow: true});
+  }
+
+  onMouseLeave = () => {
+    this.setState({isOperationShow: false});
+  }
+
+  deleteShareItem = () => {
+    let item = this.props.item;
+    this.props.deleteShareItem(item.name);
+  }
+
+  render() {
+    let item = this.props.item;
+    return (
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td>{item.user_info.nickname}</td>
+        <td>{Utils.sharePerms[item.permission]}</td>
+        <td>
+          <span
+            className={`sf2-icon-x3 sf2-x op-icon a-simulate ${this.state.isOperationShow ? '' : 'hide'}`}
+            onClick={this.deleteShareItem} 
+            title={gettext('Delete')}
+          >
+          </span>
+        </td>
+      </tr>
+    );
+  }
+}
+
+class UserList extends React.Component {
+
+  render() {
+    let items = this.props.items;
+    return (
+      <tbody>
+        {items.map((item, index) => {
+          return (
+            <UserItem key={index} item={item} deleteShareItem={this.props.deleteShareItem}/>
+          );
+        })}
+      </tbody>
+    );
+  }
+}
+
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
@@ -88,7 +145,7 @@ class ShareToUser extends React.Component {
     let users = [];
     let path = this.props.itemPath; 
     let repoID = this.props.repoID;
-    if (this.state.selectedOption.length > 0 ) {
+    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
         users[i] = this.state.selectedOption[i].email;
       }
@@ -134,8 +191,7 @@ class ShareToUser extends React.Component {
     }
   } 
 
-  deleteShareItem = (e, username) => {
-    e.preventDefault();
+  deleteShareItem = (username) => {
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
     if (this.props.isGroupOwnedRepo) {
@@ -208,20 +264,6 @@ class ShareToUser extends React.Component {
       </table>
     );
   }
-}
-
-function UserList(props) {
-  return (
-    <tbody>
-      {props.items.map((item, index) => (
-        <tr key={index}>
-          <td>{item.user_info.nickname}</td>
-          <td>{Utils.sharePerms[item.permission]}</td>
-          <td><a href="#" onClick={(e) => {props.deleteShareItem(e, item.user_info.name);}} className="sf2-icon-x3 sf2-x op-icon" title={gettext('Delete')}></a></td>
-        </tr>
-      ))}
-    </tbody>
-  );
 }
 
 ShareToUser.propTypes = propTypes;

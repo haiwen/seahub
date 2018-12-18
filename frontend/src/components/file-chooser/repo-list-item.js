@@ -46,14 +46,14 @@ class RepoListItem extends React.Component {
           <span className="icon far fa-folder"></span>
           <span className="name">{this.props.repo.repo_name}</span>
         </span>
-        {
+        {this.state.isShowChildren && (
           <DirentListView 
             repo={this.props.repo} 
             isShowChildren={this.state.isShowChildren} 
             onDirentItemClick={this.onDirentItemClick}
             selectedPath={this.props.selectedPath}
           />
-        }
+        )}
       </li>
     );
   }
