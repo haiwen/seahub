@@ -4,7 +4,7 @@ import { Utils } from '../../utils/utils';
 import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import DetailListView from './detail-list-view';
-import RepoInfo from '../../models/real-repo-info';
+import RepoInfo from '../../models/repo-info';
 import FileTag from '../../models/file-tag';
 import '../../css/dirent-detail.css';
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RepoListView from './repo-list-view';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
-import RepoInfo from '../../models/real-repo-info';
+import RepoInfo from '../../models/repo-info';
 
 import '../../css/file-chooser.css';
 

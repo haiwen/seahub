@@ -8,7 +8,7 @@ import toaster from '../toast';
 import DirPanel from './dir-panel';
 import Dirent from '../../models/dirent';
 import FileTag from '../../models/file-tag';
-import RepoInfo from '../../models/real-repo-info';
+import RepoInfo from '../../models/repo-info';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -234,7 +234,11 @@ class DirView extends React.Component {
     let repoID = this.state.repoID;
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
       let direntList = this.deleteItems(dirNames);
-      this.setState({direntList: direntList});
+      this.setState({
+        direntList: direntList,
+        isDirentSelected: false,
+        selectedDirentList: [],
+      });
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirNames);
       toaster.success(message);
@@ -264,7 +268,11 @@ class DirView extends React.Component {
     let repoID = this.state.repoID;
     seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
       let direntList = this.deleteItems(dirNames);
-      this.setState({direntList: direntList});
+      this.setState({
+        direntList: direntList,
+        isDirentSelected: false,
+        selectedDirentList: [],
+      });
     });
   }
 

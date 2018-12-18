@@ -4,7 +4,7 @@ import cookie from 'react-cookies';
 import { gettext, repoID, siteRoot, permission } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import RepoInfo from '../../models/real-repo-info';
+import RepoInfo from '../../models/repo-info';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';

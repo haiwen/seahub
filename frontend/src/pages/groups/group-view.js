@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
-import RepoInfo from '../../models/repoInfo';
+import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
@@ -87,8 +87,8 @@ class GroupView extends React.Component {
     this.setState({isLoading: true});
     seafileAPI.listGroupRepos(groupID).then((res) => {
       let repoList = res.data.map(item => {
-        let repoInfo = new RepoInfo(item);
-        return repoInfo;
+        let repo = new Repo(item);
+        return repo;
       });
       this.setState({
         isLoading: false,
@@ -166,7 +166,7 @@ class GroupView extends React.Component {
           size: res.data.size,
           encrypted: res.data.encrypted,
         };
-        let repo = new RepoInfo(object);
+        let repo = new Repo(object);
         let repoList = this.addRepoItem(repo);
         this.setState({repoList: repoList});
       }).then(() => {
@@ -175,7 +175,7 @@ class GroupView extends React.Component {
 
     } else {
       seafileAPI.createGroupRepo(groupId, repo).then(res => {
-        let repo = new RepoInfo(res.data);
+        let repo = new Repo(res.data);
         let repoList = this.addRepoItem(repo);
         this.setState({repoList: repoList});
       }).catch(() => {
