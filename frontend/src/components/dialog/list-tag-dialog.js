@@ -9,19 +9,29 @@ import '../../css/repo-tag.css';
 const tagListItemPropTypes = {
   item: PropTypes.object.isRequired,
   onTagUpdate: PropTypes.func.isRequired,
+  onListTaggedFiles: PropTypes.func.isRequired,
 };
 
 class TagListItem extends React.Component {
-  
+
   onTagUpdate = () => {
     this.props.onTagUpdate(this.props.item);
+  }
+
+  onListTaggedFiles = () => {
+    this.props.onListTaggedFiles(this.props.item)
   }
 
   render() {
     let color = this.props.item.color;
     return(
       <li className="tag-list-item">
-        <span className={`tag-demo bg-${color}`}>{this.props.item.name}</span>
+        <span className={`tag-demo bg-${color}`}>
+          <span className="tag-name">{this.props.item.name}</span>
+          <span className="tag-files" onClick={this.onListTaggedFiles}>
+            {this.props.item.fileCount}{' '}{gettext('files')}
+          </span>
+        </span>
         <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
       </li>
     );
@@ -35,6 +45,7 @@ const listTagPropTypes = {
   onListTagCancel: PropTypes.func.isRequired,
   onCreateRepoTag: PropTypes.func.isRequired,
   onUpdateRepoTag: PropTypes.func.isRequired,
+  onListTaggedFiles: PropTypes.func.isRequired,
 };
 
 class ListTagDialog extends React.Component {
@@ -69,21 +80,25 @@ class ListTagDialog extends React.Component {
         <Modal isOpen={true} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>{gettext('Tags')}</ModalHeader>
           <ModalBody>
-            {
-              this.state.repotagList.length === 0 && 
+            {this.state.repotagList.length === 0 && (
               <div className="tag-list tag-list-container">
                 {gettext('Click new tag button to create tags.')}
               </div>
-            }
-            { this.state.repotagList.length > 0 &&
+            )}
+            {this.state.repotagList.length > 0 && (
               <ul className="tag-list tag-list-container">
                 {this.state.repotagList.map((repoTag, index) => {
                   return (
-                    <TagListItem key={index} item={repoTag} onTagUpdate={this.props.onUpdateRepoTag}/>
+                    <TagListItem 
+                      key={index} 
+                      item={repoTag} 
+                      onTagUpdate={this.props.onUpdateRepoTag}
+                      onListTaggedFiles={this.props.onListTaggedFiles}
+                    />
                   );
                 })}
               </ul>
-            }
+            )}
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={this.props.onCreateRepoTag}>{gettext('New Tag')}</Button>

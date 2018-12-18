@@ -182,8 +182,15 @@ ul,ol,li {
     color: #16181b;
     text-decoration: none;
 }
+
 .link-dropdown-item:active {
     color: #fff;
+}
+
+.table-thread-hidden th {
+    padding: 0;
+    font-size: 0;
+    border: 0;
 }
 
 /* UI Widget */

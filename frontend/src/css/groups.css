@@ -21,17 +21,6 @@
   margin: 0.75rem 0 0; 
 }
 
-.group-list-panel thead th { /* overwrite bootstrap styles */
-  padding: 0;
-  font-size: 0;
-  border: 0;
-}
-
-.cur-view-content-groups td { /* overwrite bootstrap styles */
-  border-top:0;
-}
-
-
 .group-list-panel .group-item-empty-tip {
   color: #a4a4a4;
   text-align: center;

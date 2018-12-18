@@ -48,6 +48,7 @@ def get_tagged_files(repo, repo_tag_id):
         tagged_file["parent_path"] = parent_path
         tagged_file["filename"] = filename
         tagged_file["size"] = file_obj.size
+        tagged_file["mtime"] = file_obj.mtime
         tagged_file["last_modified"] = timestamp_to_isoformat_timestr(file_obj.mtime)
         tagged_file["modifier_email"] = file_obj.modifier
         tagged_file["modifier_contact_email"] = email2contact_email(file_obj.modifier)
