@@ -84,7 +84,8 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK
+    FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
+    SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX
 
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
@@ -646,6 +647,8 @@ def view_lib_file(request, repo_id, path):
             return_dict['review_id'] = review['review_id']
             return_dict['review_status'] = review['review_status']
             return_dict['draft_file_path'] = review['draft_file_path']
+            return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
+            return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
         else:
             return_dict['file_content'] = file_content
 
