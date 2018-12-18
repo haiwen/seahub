@@ -4,7 +4,7 @@ import cookie from 'react-cookies';
 import { gettext, repoID, siteRoot, permission } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import Repo from '../../models/repo';
+import RepoInfo from '../../models/real-repo-info';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
@@ -66,7 +66,7 @@ class MainPanel extends Component {
       isDirentDetailShow: false,
       currentDirent: null,
       direntPath: '',
-      currentRepo: null,
+      currentRepoInfo: null,
       isRepoOwner: false,
       activeTitleIndex: -1,
     };
@@ -76,12 +76,12 @@ class MainPanel extends Component {
 
   componentDidMount() {
     seafileAPI.getRepoInfo(repoID).then(res => {
-      let repo = new Repo(res.data);
+      let repoInfo = new RepoInfo(res.data);
       seafileAPI.getAccountInfo().then(res => {
         let user_email = res.data.email;
-        let isRepoOwner = repo.owner_email === user_email;
+        let isRepoOwner = repoInfo.owner_email === user_email;
         this.setState({
-          currentRepo: repo,
+          currentRepoInfo: repoInfo,
           isRepoOwner: isRepoOwner,
         });
       });
@@ -210,10 +210,10 @@ class MainPanel extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              {this.state.currentRepo && (
+              {this.state.currentRepoInfo && (
                 <CurDirPath 
                   repoID={repoID}
-                  repoName={this.state.currentRepo.repo_name}
+                  repoName={this.state.currentRepoInfo.repo_name}
                   currentPath={this.props.path} 
                   permission={permission} 
                   onPathClick={this.onMainNavBarClick}
@@ -254,7 +254,7 @@ class MainPanel extends Component {
                         onItemDetails={this.onItemDetails}
                         isDirentListLoading={this.props.isDirentListLoading}
                         updateDirent={this.props.updateDirent}
-                        currentRepo={this.state.currentRepo}
+                        currentRepoInfo={this.state.currentRepoInfo}
                         isRepoOwner={this.state.isRepoOwner}
                         isAllItemSelected={this.props.isAllDirentSelected}
                         onAllItemSelected={this.props.onAllDirentSelected}

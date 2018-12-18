@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RepoListItem from './repo-list-item';
 
 const propTypes = {
-  repo: PropTypes.object,
+  currentRepoInfo: PropTypes.object,
   repoList: PropTypes.array,
   selectedRepo: PropTypes.object,
   initToShowChildren: PropTypes.bool.isRequired,
@@ -15,10 +15,10 @@ const propTypes = {
 class RepoListView extends React.Component {
 
   render() {
-    let { repo, repoList } = this.props;
-    if (repo) {
+    let { currentRepoInfo, repoList } = this.props;
+    if (currentRepoInfo) {
       repoList = [];
-      repoList.push(repo);
+      repoList.push(currentRepoInfo);
     }
     return (
       <ul className="list-view-content file-chooser-item">

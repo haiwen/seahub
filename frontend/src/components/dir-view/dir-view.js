@@ -8,7 +8,7 @@ import toaster from '../toast';
 import DirPanel from './dir-panel';
 import Dirent from '../../models/dirent';
 import FileTag from '../../models/file-tag';
-import Repo from '../../models/repo';
+import RepoInfo from '../../models/real-repo-info';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -31,7 +31,7 @@ class DirView extends React.Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
       isDirentListLoading: true,
-      currentRepo: null,
+      currentRepoInfo: null,
       direntList: [],
       selectedDirentList: [],
     };
@@ -50,16 +50,16 @@ class DirView extends React.Component {
     let location = decodeURIComponent(window.location.href);
     let repoID = this.props.repoID;
     seafileAPI.getRepoInfo(repoID).then(res => {
-      let repo = new Repo(res.data);
+      let repoInfo = new RepoInfo(res.data);
       this.setState({
-        repoID: repo.repo_id,
-        repoName: repo.repo_name,
-        permission: repo.permission === 'rw',
-        currentRepo: repo,
+        currentRepoInfo: repoInfo,
+        repoID: repoInfo.repo_id,
+        repoName: repoInfo.repo_name,
+        permission: repoInfo.permission === 'rw',
         libNeedDecrypt: res.data.lib_need_decrypt,
       });
 
-      let repoName = repo.repo_name;
+      let repoName = repoInfo.repo_name;
       let index = location.indexOf(repoName);
       let path = location.slice(index + repoName.length);
       this.setState({path: path});
@@ -453,7 +453,7 @@ class DirView extends React.Component {
     return (
       <DirPanel 
         pathPrefix={this.props.pathPrefix}
-        currentRepo={this.state.currentRepo}
+        currentRepoInfo={this.state.currentRepoInfo}
         path={this.state.path}
         pathExist={this.state.pathExit}
         repoID={this.state.repoID}

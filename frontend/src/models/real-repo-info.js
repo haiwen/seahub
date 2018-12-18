@@ -1,6 +1,6 @@
 import { Utils } from '../utils/utils';
 
-class Repo {
+class RepoInfo {
   constructor(object) {
     this.repo_id = object.repo_id;
     this.repo_name = object.repo_name;
@@ -18,4 +18,4 @@ class Repo {
   }
 }
 
-export default Repo;
+export default RepoInfo;

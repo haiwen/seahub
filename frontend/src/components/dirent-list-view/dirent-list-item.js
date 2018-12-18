@@ -31,7 +31,7 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  currentRepo: PropTypes.object,
+  currentRepoInfo: PropTypes.object,
   isRepoOwner: PropTypes.bool,
 };
 
@@ -455,7 +455,7 @@ class DirentListItem extends React.Component {
                     dirent={this.props.dirent}
                     menuPosition={this.state.menuPosition}
                     onMenuItemClick={this.onMenuItemClick}
-                    currentRepo={this.props.currentRepo}
+                    currentRepoInfo={this.props.currentRepoInfo}
                     isRepoOwner={this.props.isRepoOwner}
                   />
                 }

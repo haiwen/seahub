@@ -8,7 +8,7 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool,
-  currentRepo: PropTypes.object,
+  currentRepoInfo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
@@ -80,7 +80,7 @@ class DirentListView extends React.Component {
                   dirent={dirent}
                   path={this.props.path}
                   repoID={this.props.repoID}
-                  currentRepo={this.props.currentRepo}
+                  currentRepoInfo={this.props.currentRepoInfo}
                   isRepoOwner={this.props.isRepoOwner}
                   onItemClick={this.props.onItemClick}
                   onItemRenameToggle={this.onItemRenameToggle}
