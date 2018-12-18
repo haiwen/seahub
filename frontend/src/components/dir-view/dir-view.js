@@ -4,6 +4,7 @@ import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
+import collabServer from '../../utils/collab-server';
 import toaster from '../toast';
 import DirPanel from './dir-panel';
 import Dirent from '../../models/dirent';
@@ -82,6 +83,7 @@ class DirView extends React.Component {
         direntList: direntList,
         dirID: res.headers.oid,
       });
+      collabServer.watchRepo(this.state.repoID, this.state.path, this.state.dirID);
     }).catch(() => {
       this.setState({pathExist: false});
     });
@@ -462,7 +464,6 @@ class DirView extends React.Component {
   render() {
     return (
       <DirPanel 
-        dirID={this.state.dirID}
         pathPrefix={this.props.pathPrefix}
         currentRepoInfo={this.state.currentRepoInfo}
         path={this.state.path}

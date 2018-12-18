@@ -4,6 +4,7 @@ import moment from 'moment';
 import { gettext, repoID, siteRoot, initialPath, isDir, serviceUrl } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
+import collabServer from './utils/collab-server';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
 import Node from './components/tree-view/node';
@@ -281,6 +282,7 @@ class Wiki extends Component {
         isDirentListLoading: false,
         dirID: res.headers.oid,
       });
+      collabServer.watchRepo(repoID, this.state.path, this.state.dirID);
     });
   }
 
@@ -837,7 +839,6 @@ class Wiki extends Component {
           onDeleteNode={this.onDeleteTreeNode}
         />
         <MainPanel
-          dirID={this.state.dirID}
           path={this.state.path}
           isViewFile={this.state.isViewFile}
           pathExist={this.state.pathExist}

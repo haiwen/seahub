@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import Loading from '../loading';
 import DirentListItem from './dirent-list-item';
 import ModalPortal from '../modal-portal';
@@ -14,7 +14,6 @@ import toaster from '../../components/toast';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
-  dirID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool,
   currentRepoInfo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
@@ -41,39 +40,6 @@ class DirentListView extends React.Component {
       isCreateFileDialogShow: false,
       fileType: ''
     };
-
-    const socket = io('https://dev.seafile.com/');
-
-    socket.emit('repo_update', {
-      request: 'watch_update',
-      repo_id: this.props.repoID,
-      user: {
-        name: username,
-        username: username,
-        constact_email: '',
-      },
-    });
-
-    socket.on('connect', function(){});
-    socket.on('repo_update', (data) => {
-      console.log(data);
-      this.checkFileUpdate();
-    });
-  }
-
-  checkFileUpdate = () => {
-    let repoID = this.props.repoID;
-    let path = this.props.path;
-
-    seafileAPI.dirMetaData(repoID, path).then((res) => {
-      if (res.data.id !== this.props.dirID) {
-        toaster.notify(<span>{gettext('This folder has been updated. ')}<a href='#' onClick={this.onRefresh}>{gettext('Refresh')}</a></span>, {duration: 3600});
-      }
-    });
-  }
-
-  onRefresh = () => {
-    location.reload();
   }
 
   onFreezedItem = () => {

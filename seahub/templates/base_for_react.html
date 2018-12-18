@@ -37,6 +37,9 @@
             fileServerRoot: '{{ FILE_SERVER_ROOT }}'
         },
         pageOptions: {
+            seafileCollabServer: '{{seafile_collab_server}}',
+            name: "{{request.user.username|email2nickname|escapejs}}",
+            contactEmail: "{{request.user.username|email2contact_email|escapejs}}",
             username: "{{request.user.username|escapejs}}",
             canGenerateShareLink: '{{ user.permissions.can_generate_share_link }}',
             canGenerateUploadLink: '{{ user.permissions.can_generate_upload_link }}',

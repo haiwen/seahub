@@ -14,6 +14,9 @@ export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
 
 //pageOptions
+export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
+export const name = window.app.pageOptions.name;
+export const contactEmail = window.app.pageOptions.contactEmail;
 export const username = window.app.pageOptions.username;
 export const canGenerateShareLink = window.app.pageOptions.canGenerateShareLink === 'True';
 export const canGenerateUploadLink = window.app.pageOptions.canGenerateUploadLink === 'True';

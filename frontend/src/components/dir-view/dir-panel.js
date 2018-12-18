@@ -18,7 +18,6 @@ const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
-  dirID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
   permission: PropTypes.bool.isRequired,
@@ -166,7 +165,6 @@ class DirPanel extends React.Component {
                 ErrMessage :
                 <Fragment>
                   <DirentListView
-                    dirID={this.props.dirID}
                     path={this.props.path}
                     repoID={this.props.repoID}
                     direntList={this.props.direntList}

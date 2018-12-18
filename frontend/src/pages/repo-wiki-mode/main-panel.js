@@ -30,7 +30,6 @@ const propTypes = {
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
-  dirID: PropTypes.string.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onSideNavMenuClick: PropTypes.func.isRequired,
@@ -245,7 +244,6 @@ class MainPanel extends Component {
                     /> :
                     <Fragment>
                       <DirentListView
-                        dirID={this.props.dirID}
                         path={this.props.path}
                         repoID={repoID}
                         direntList={this.props.direntList}
