@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RepoListView from './repo-list-view';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
-import Repo from '../../models/repo';
+import RepoInfo from '../../models/repo-info';
 
 import '../../css/file-chooser.css';
 
@@ -22,7 +22,7 @@ class FileChooser extends React.Component {
       isCurrentRepoShow: true,
       isOtherRepoShow: false,
       repoList: [],
-      currentRepo: null,
+      currentRepoInfo: null,
       selectedRepo: null,
       selectedPath: '',
     };
@@ -31,22 +31,24 @@ class FileChooser extends React.Component {
   componentDidMount() {
     let repoID = this.props.repoID;
     seafileAPI.getRepoInfo(repoID).then(res => {
-      let repo = new Repo(res.data);
+      // need to optimized
+      let repoInfo = new RepoInfo(res.data);
       this.setState({
-        currentRepo: repo,
+        currentRepoInfo: repoInfo,
       });
     });
   }
 
   onOtherRepoToggle = () => {
     if (!this.state.hasRequest) {
-      let { currentRepo } = this.state;
+      let { currentRepoInfo } = this.state;
       seafileAPI.listRepos().then(res => {
+        // todo optimized code
         let repos = res.data.repos;
         let repoList = [];
         let repoIdList = [];
         for(let i = 0; i < repos.length; i++) {
-          if (repos[i].repo_name === currentRepo.repo_name || repos[i].permission !== 'rw') {
+          if (repos[i].repo_name === currentRepoInfo.repo_name || repos[i].permission !== 'rw') {
             continue;
           }
           if (repoIdList.indexOf(repos[i].repo_id) > -1) {
@@ -94,10 +96,10 @@ class FileChooser extends React.Component {
             <span className="library">{gettext('Current Library')}</span>
           </div>
           {
-            this.state.isCurrentRepoShow && this.state.currentRepo &&
+            this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
             <RepoListView 
               initToShowChildren={true}
-              repo={this.state.currentRepo}
+              currentRepoInfo={this.state.currentRepoInfo}
               selectedRepo={this.state.selectedRepo}
               selectedPath={this.state.selectedPath}
               onRepoItemClick={this.onRepoItemClick} 

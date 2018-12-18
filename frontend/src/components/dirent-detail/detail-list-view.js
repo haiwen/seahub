@@ -6,7 +6,7 @@ import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
 const propTypes = {
-  repo: PropTypes.object.isRequired,
+  repoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
   dirent: PropTypes.object.isRequired,
   direntType: PropTypes.string.isRequired,
@@ -26,9 +26,9 @@ class DetailListView extends React.Component {
   }
 
   getDirentPostion = () => {
-    let { repo } = this.props;
+    let { repoInfo } = this.props;
     let direntPath = this.getDirentPath();
-    let position = repo.repo_name;
+    let position = repoInfo.repo_name;
     if (direntPath !== '/') {
       let index = direntPath.lastIndexOf('/');
       let path = direntPath.slice(0, index);

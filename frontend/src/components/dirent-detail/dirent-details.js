@@ -4,7 +4,7 @@ import { Utils } from '../../utils/utils';
 import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import DetailListView from './detail-list-view';
-import Repo from '../../models/repo';
+import RepoInfo from '../../models/repo-info';
 import FileTag from '../../models/file-tag';
 import '../../css/dirent-detail.css';
 
@@ -23,7 +23,7 @@ class DirentDetail extends React.Component {
     this.state = {
       direntType: '',
       direntDetail: '',
-      repo: null,
+      repoInfo: null,
       fileTagList: [],
     };
   }
@@ -32,8 +32,8 @@ class DirentDetail extends React.Component {
     let { dirent, path, repoID } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     seafileAPI.getRepoInfo(repoID).then(res => {
-      let repo = new Repo(res.data);
-      this.setState({repo: repo});
+      let repoInfo = new RepoInfo(res.data);
+      this.setState({repoInfo: repoInfo});
       this.updateDetailView(dirent, direntPath);
     });
   }
@@ -89,7 +89,7 @@ class DirentDetail extends React.Component {
           {this.state.direntDetail && 
             <div className="dirent-table-container">
               <DetailListView 
-                repo={this.state.repo}
+                repoInfo={this.state.repoInfo}
                 path={this.props.path}
                 repoID={this.props.repoID}
                 dirent={this.props.dirent}

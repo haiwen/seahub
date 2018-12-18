@@ -4,7 +4,7 @@ import { gettext, siteRoot, loginUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import Group from '../../models/group';
-import RepoInfo from '../../models/repoInfo';
+import Repo from '../../models/repo';
 import GroupsToolbar from '../../components/toolbar/groups-toolbar';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import CreateGroupDialog from '../../components/dialog/create-group-dialog';
@@ -28,7 +28,7 @@ class RepoListViewPanel extends React.Component {
   componentDidMount() {
     let group = this.props.group;
     let repoList = group.repos.map(item => {
-      let repo = new RepoInfo(item);
+      let repo = new Repo(item);
       return repo;
     });
     this.setState({repoList: repoList});

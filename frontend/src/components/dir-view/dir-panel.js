@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, siteRoot } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import CommonToolbar from '../toolbar/common-toolbar';
 import ViewModeToolbar from '../toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../toolbar/dir-operation-toolbar';
@@ -15,7 +14,7 @@ import ModalPortal from '../modal-portal';
 import LibDecryptDialog from '../dialog/lib-decrypt-dialog';
 
 const propTypes = {
-  currentRepo: PropTypes.object,
+  currentRepoInfo: PropTypes.object,
   pathPrefix: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -56,18 +55,15 @@ class DirPanel extends React.Component {
       currentDirent: null,
       currentMode: 'list',
       isDirentDetailShow: false,
-      isRepoOwner: true,
+      isRepoOwner: false,
     };
   }
 
   componentDidMount() {
-    let currentRepo = this.props.currentRepo;
-    if (currentRepo) {
-      seafileAPI.getAccountInfo().then(res => {
-        let user_email = res.data.email;
-        let isRepoOwner = currentRepo.owner_email === user_email;
-        this.setState({isRepoOwner: isRepoOwner});
-      });
+    let currentRepoInfo = this.props.currentRepoInfo;
+    if (currentRepoInfo) {
+      let isRepoOwner = currentRepoInfo.owner_email === username;
+      this.setState({isRepoOwner: isRepoOwner});
     }
   }
 
@@ -79,6 +75,7 @@ class DirPanel extends React.Component {
   }
 
   onItemDetailsClose = () => {
+    // todo there is bug when change item
     this.setState({isDirentDetailShow: false});
   }
 
@@ -171,7 +168,7 @@ class DirPanel extends React.Component {
                     path={this.props.path}
                     repoID={this.props.repoID}
                     direntList={this.props.direntList}
-                    currentRepo={this.props.currentRepo}
+                    currentRepoInfo={this.props.currentRepoInfo}
                     isDirentListLoading={this.props.isDirentListLoading}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     isRepoOwner={this.state.isRepoOwner}

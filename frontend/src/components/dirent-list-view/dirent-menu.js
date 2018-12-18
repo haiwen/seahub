@@ -7,7 +7,7 @@ const propTypes = {
   dirent: PropTypes.object.isRequired,
   menuPosition: PropTypes.object.isRequired, 
   onMenuItemClick: PropTypes.func.isRequired,
-  currentRepo: PropTypes.object.isRequired,
+  currentRepoInfo: PropTypes.object.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
 };
 
@@ -21,8 +21,8 @@ class DirentMenu extends React.Component {
   }
 
   componentDidMount() {
-    let repo = this.props.currentRepo;
-    let menuList = this.calculateMenuList(repo);
+    let repoInfo = this.props.currentRepoInfo;
+    let menuList = this.calculateMenuList(repoInfo);
     this.setState({
       menuList: menuList,
       menuHeight: menuList.length * 30,

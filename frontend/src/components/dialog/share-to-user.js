@@ -25,7 +25,7 @@ class UserItem extends React.Component {
 
   deleteShareItem = () => {
     let item = this.props.item;
-    this.props.deleteShareItem(item.name);
+    this.props.deleteShareItem(item.user_info.name);
   }
 
   render() {
