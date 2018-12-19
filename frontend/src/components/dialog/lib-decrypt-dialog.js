@@ -15,7 +15,7 @@ class LibDecryptDialog extends React.Component {
     };
   }
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
     let repoID = this.props.repoID;
     let password = this.state.password;
     seafileAPI.setRepoDecryptPassword(repoID, password).then(res => {
@@ -25,7 +25,14 @@ class LibDecryptDialog extends React.Component {
         showError: true
       });
     })
+    e.preventDefault();
   } 
+
+  handleKeyPress = (e) => {
+    if (e.key == 'Enter') {
+      this.handleSubmit(e);
+    }
+  };
 
   handleChange = (e) => {
     this.setState({
@@ -50,10 +57,11 @@ class LibDecryptDialog extends React.Component {
             <p className="error">{gettext('Wrong password')}</p>
           }
           <FormGroup>
-            <Input type="password" name="password" placeholder={gettext('Password')} onChange={this.handleChange}/>
+            <Input type="password" name="password" onKeyPress={this.handleKeyPress} placeholder={gettext('Password')} onChange={this.handleChange}/>
           </FormGroup>
-          <Button onClick={this.handleSubmit}>{gettext('Submit')}</Button>
-          <br />
+          <FormGroup>
+            <Button type="submit" value="Submit" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          </FormGroup>
           <p className="tip">{'* '}{gettext('The password will be kept in the server for only 1 hour.')}</p>
         </Form>
         </ModalBody>
