@@ -34,7 +34,7 @@ class GroupItem extends React.Component {
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>{item.group_info.name}</td>
-        <td>{Utils.sharePerms[item.permission]}</td>
+        <td>{Utils.sharePerms(item.permission)}</td>
         <td>
           <span
             className={`sf2-icon-x3 sf2-x op-icon a-simulate ${this.state.isOperationShow ? '' : 'hide'}`}
@@ -128,7 +128,7 @@ class ShareToGroup extends React.Component {
       });
     } else if (e.target.value == 'Preview-Edit-on-Cloud') {
       this.setState({
-        permission: 'clod-edit',
+        permission: 'cloud-edit',
       });
     } else if (e.target.value == 'Preview-on-Cloud') {
       this.setState({

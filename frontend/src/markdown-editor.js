@@ -2,8 +2,10 @@ import React from 'react';
 import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
 import { SeafileAPI } from 'seafile-js';
+import { Utils } from './utils/utils';
 import cookie from 'react-cookies';
 let repoID = window.app.pageOptions.repoID;
+let repoName = window.app.pageOptions.repoName;
 let filePath = window.app.pageOptions.filePath;
 let fileName = window.app.pageOptions.fileName;
 let siteRoot = window.app.config.siteRoot;
@@ -66,7 +68,9 @@ class EditorUtilities {
 
   getParentDectionaryUrl() {
     let parentPath = this.filePath.substring(0, this.filePath.lastIndexOf('/'));
-    return this.serviceUrl + '/#common/lib/' + this.repoID + parentPath;
+    let libName = encodeURIComponent(repoName);
+    let path = Utils.encodePath(parentPath);
+    return this.serviceUrl + '/library/' + this.repoID + '/' + libName + path + '/';
   }
   
   _getImageURL(fileName) {

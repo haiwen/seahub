@@ -302,12 +302,26 @@ export const Utils = {
     return title;
   },
 
-  sharePerms: {
-    'rw': gettext("Read-Write"),
-    'r': gettext("Read-Only"),
-    'admin': gettext("Admin"),
-    'cloud-edit': gettext("Preview-Edit-on-Cloud"),
-    'preview': gettext("Preview-on-Cloud")
+  sharePerms: function(permission) {
+    var title;
+    switch(permission) {
+      case 'rw':
+        title = gettext("Read-Write");
+        break;
+      case 'r':
+        title = gettext("Read-Only");
+        break;
+      case 'admin':
+        title = gettext("Admin");
+        break;
+      case 'cloud-edit':
+        title = gettext("Preview-Edit-on-Cloud");
+        break;
+      case 'preview':
+        title = gettext("Preview-on-Cloud");
+        break;
+    }
+    return title;
   },
 
   formatSize: function(options) {
