@@ -20,6 +20,7 @@
               },
               pageOptions: {
                   repoID: '{{ repo.id }}',
+                  repoName: '{{ repo.name|escapejs }}',
                   filePath: '{{ path|escapejs }}',
                   fileName: '{{ filename|escapejs }}',
                   domain: '{{ domain }}',

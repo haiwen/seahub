@@ -198,14 +198,14 @@ class Item extends Component {
     }
 
     data.cur_perm = share_permission;
-    data.cur_perm_text = Utils.sharePerms[data.cur_perm];
+    data.cur_perm_text = Utils.sharePerms(data.cur_perm);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let editIconClassName = 'perm-edit-icon sf2-icon-edit op-icon' + iconVisibility; 
     let unshareIconClassName = 'unshare op-icon sf2-icon-delete' + iconVisibility;
 
     let permOption = function(options) {
-        return <option value={options.perm}>{Utils.sharePerms[options.perm]}</option>;
+        return <option value={options.perm}>{Utils.sharePerms(options.perm)}</option>;
     };
 
     const item = (
