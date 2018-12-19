@@ -700,8 +700,7 @@ a.op-icon:focus {
 }
 .sf-popover-hd {
     padding:5px 0 3px;
-    border-bottom:1px solid #dfdfe1;
-    margin:0 10px;
+    margin: 10px;
 }
 .sf-popover-title {
     text-align:center;
@@ -710,10 +709,27 @@ a.op-icon:focus {
     font-size:16px;
     color:#b9b9b9;
     margin:4px 0 0;
+    float:right;
 }
 .sf-popover-con {
     padding:0 10px;
     overflow:auto;
+}
+.sf-popover-list {
+  border-top: 1px solid #e3e3e5;
+  list-style: none;
+}
+a.sf-popover-item {
+    display:block;
+    color:#444;
+    font-weight:normal;
+    line-height:31px;
+    text-decoration:none;
+    padding:0 10px;
+    margin:5px -10px;
+}
+a.sf-popover-item:hover {
+    background-color: #f8f8f8;
 }
 
 /* for go-back */
