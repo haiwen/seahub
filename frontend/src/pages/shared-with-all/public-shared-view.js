@@ -88,7 +88,7 @@ class PublicSharedView extends React.Component {
 
   onRepoSelectedHandler = (selectedRepoList) => {
     selectedRepoList.forEach(repo => {
-      seafileAPI.shareRepo(repo.repo_id, {share_type: 'public', permission: repo.sharePermission}).then(() => {
+      seafileAPI.selectOwnedRepoToPublic(repo.repo_id, {share_type: 'public', permission: repo.sharePermission}).then(() => {
         let repoList = this.addRepoItem(repo);
         this.setState({repoList: repoList});
       }).catch(() => {
