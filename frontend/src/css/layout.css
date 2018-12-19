@@ -103,6 +103,10 @@
 }
 
 .cur-view-content .article {
+  padding: 40px;
+}
+
+.wiki-main-panel .cur-view-content .article {
   padding: 0 10px;
 }
 
