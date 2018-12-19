@@ -27,7 +27,8 @@ from seahub.utils import  gen_dir_share_link, \
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
-    MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD
+    MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD, SHARE_LINK_EXPIRE_DAYS_MIN, \
+    SHARE_LINK_EXPIRE_DAYS_MAX
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.constants import HASH_URLS
@@ -183,7 +184,9 @@ def view_lib_as_wiki(request, repo_id, path):
         'initial_path': path,
         'is_dir': is_dir,
         'repo_name': repo.name,
-        'permission': user_can_write
+        'permission': user_can_write,
+        'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
+        'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
         })
 
 ########## shared dir/uploadlink

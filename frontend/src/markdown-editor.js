@@ -16,6 +16,8 @@ let reviewStatus = window.app.pageOptions.reviewStatus;
 let isDraft = window.app.pageOptions.isDraft;
 let hasDraft = window.app.pageOptions.hasDraft;
 let draftFilePath = window.app.pageOptions.draftFilePath;
+let shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
+let shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
 let userName = window.app.userInfo.username;
 let dirPath = '/';
 
@@ -321,6 +323,8 @@ class MarkdownEditor extends React.Component {
           reviewStatus={reviewStatus}
           isDraft={isDraft}
           hasDraft={hasDraft}
+          shareLinkExpireDaysMin={shareLinkExpireDaysMin}
+          shareLinkExpireDaysMax={shareLinkExpireDaysMax}
         />
       );
     }   
