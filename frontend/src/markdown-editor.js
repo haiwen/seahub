@@ -169,8 +169,8 @@ class EditorUtilities {
     return seafileAPI.getShareLink(repoID, filePath);
   }
 
-  createShareLink (repoID, filePath, userPassword, userValidDays) {
-    return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays);
+  createShareLink (repoID, filePath, userPassword, userValidDays, permissions) {
+    return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays, permissions);
   }
 
   deleteShareLink(token){
