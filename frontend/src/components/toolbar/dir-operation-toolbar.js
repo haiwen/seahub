@@ -116,6 +116,27 @@ class DirOperationToolbar extends React.Component {
     });
   }
 
+  onCreateExcelToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: '.xlsx'
+    });
+  }
+
+  onCreatePPTToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: '.pptx'
+    });
+  }
+
+  onCreateWordToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: '.docx'
+    });
+  }
+
   onAddFile = (filePath, isDraft) => {
     this.setState({isCreateFileDialogShow: false});
     this.props.onAddFile(filePath, isDraft);
@@ -174,6 +195,9 @@ class DirOperationToolbar extends React.Component {
             <li className="dropdown-item" onClick={this.onCreateFileToggle}>{gettext('New File')}</li>
             <li className="dropdown-divider"></li>
             <li className="dropdown-item" onClick={this.onCreateMarkdownToggle}>{gettext('New Markdown File')}</li>
+            <li className="dropdown-item" onClick={this.onCreateExcelToggle}>{gettext('New Excel File')}</li>
+            <li className="dropdown-item" onClick={this.onCreatePPTToggle}>{gettext('New PowerPoint File')}</li>
+            <li className="dropdown-item" onClick={this.onCreateWordToggle}>{gettext('New Word File')}</li>
           </ul>
         )}
         {this.state.isCreateFileDialogShow && (
