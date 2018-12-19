@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, navigate } from '@reach/router';
 import { siteRoot } from './utils/constants';
@@ -19,7 +19,7 @@ import ShareAdminUploadLinks from './pages/share-admin/upload-links';
 import SharedLibraries from './pages/shared-libs/shared-libs';
 import MyLibraries from './pages/my-libs/my-libs';
 import MyLibDeleted from './pages/my-libs/my-libs-deleted';
-import PublichSharedView from './pages/shared-with-all/public-shared-view';
+import PublicSharedView from './pages/shared-with-all/public-shared-view';
 import DirView from './components/dir-view/dir-view';
 import Group from './pages/groups/group-view';
 import Groups from './pages/groups/groups-view';
@@ -222,7 +222,7 @@ class App extends Component {
               onGroupChanged={this.onGroupChanged}
               />
             <WikisWrapper path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
-            <PublichSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
+            <PublicSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
           </Router>
         </MainPanel>
       </div>
