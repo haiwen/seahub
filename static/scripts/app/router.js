@@ -130,10 +130,19 @@ define([
                 this.currentView = newView;
             } else {
                 if (this.currentView != newView) {
+                    if (this.currentView == this.dirView) {
+                        if ($('#upload-file-dialog').is(':visible') &&
+                            $('#upload-file-dialog .status').text() == window.fileuploading) {
+                            if (!window.confirm('A file is being uploaded. Are you sure you want to leave this page?')) {
+                                return false;
+                            }
+                        }
+                    }
                     this.currentView.hide();
                     this.currentView = newView;
                 }
             }
+            return true;
         },
 
         showRepos: function() {
@@ -145,19 +154,25 @@ define([
         },
 
         showMyRepos: function() {
-            this.switchCurrentView(this.myReposView);
+            if (!this.switchCurrentView(this.myReposView)) {
+                return false;
+            };
             this.myReposView.show();
             this.sideNavView.setCurTab('mine');
         },
 
         showMyDeletedRepos: function() {
-            this.switchCurrentView(this.myDeletedReposView);
+            if (!this.switchCurrentView(this.myDeletedReposView)) {
+                return false;
+            };
             this.myDeletedReposView.show();
             this.sideNavView.setCurTab('mine');
         },
 
         showSharedRepos: function() {
-            this.switchCurrentView(this.sharedReposView);
+            if (!this.switchCurrentView(this.sharedReposView)) {
+                return false;
+            }
             this.sharedReposView.show();
             this.sideNavView.setCurTab('shared');
         },
@@ -196,7 +211,9 @@ define([
         },
 
         showGroups: function () {
-            this.switchCurrentView(this.groupsView);
+            if (!this.switchCurrentView(this.groupsView)) {
+                return false;
+            }
             this.groupsView.show();
             this.sideNavView.setCurTab('group', {
                 'cur_group_tab': 'groups',
@@ -205,7 +222,9 @@ define([
         },
 
         showGroup: function(group_id, options) {
-            this.switchCurrentView(this.groupView);
+            if (!this.switchCurrentView(this.groupView)) {
+                return false;
+            }
             this.groupView.show(group_id, options);
             this.sideNavView.setCurTab('group', {
                 'cur_group_tab': '',
@@ -247,7 +266,9 @@ define([
         },
 
         showOrgRepos: function() {
-            this.switchCurrentView(this.orgView);
+            if (!this.switchCurrentView(this.orgView)) {
+                return false;
+            }
             this.orgView.show();
             this.sideNavView.setCurTab('org');
         },
@@ -264,49 +285,65 @@ define([
         },
 
         showStarredFile: function() {
-            this.switchCurrentView(this.starredFileView);
+            if (!this.switchCurrentView(this.starredFileView)) {
+                return false;
+            }
             this.starredFileView.show();
             this.sideNavView.setCurTab('starred');
         },
 
         showActivities: function() {
-            this.switchCurrentView(this.activitiesView);
+            if (!this.switchCurrentView(this.activitiesView)) {
+                return false;
+            }
             this.activitiesView.show();
             this.sideNavView.setCurTab('activities');
         },
 
         showDevices: function() {
-            this.switchCurrentView(this.devicesView);
+            if (!this.switchCurrentView(this.devicesView)) {
+                return false;
+            }
             this.devicesView.show();
             this.sideNavView.setCurTab('devices');
         },
 
         showInvitations: function() {
-            this.switchCurrentView(this.invitationsView);
+            if (!this.switchCurrentView(this.invitationsView)) {
+                return false;
+            }
             this.invitationsView.show();
             this.sideNavView.setCurTab('invitations');
         },
 
         showShareAdminRepos: function() {
-            this.switchCurrentView(this.shareAdminReposView);
+            if (!this.switchCurrentView(this.shareAdminReposView)) {
+                return false;
+            }
             this.shareAdminReposView.show();
             this.sideNavView.setCurTab('share-admin-repos', {'show_share_admin': true});
         },
 
         showShareAdminFolders: function() {
-            this.switchCurrentView(this.shareAdminFoldersView);
+            if (!this.switchCurrentView(this.shareAdminFoldersView)) {
+                return false;
+            }
             this.shareAdminFoldersView.show();
             this.sideNavView.setCurTab('share-admin-folders', {'show_share_admin': true});
         },
 
         showShareAdminShareLinks: function() {
-            this.switchCurrentView(this.shareAdminShareLinksView);
+            if (!this.switchCurrentView(this.shareAdminShareLinksView)) {
+                return false;
+            }
             this.shareAdminShareLinksView.show();
             this.sideNavView.setCurTab('share-admin-links', {'show_share_admin': true});
         },
 
         showShareAdminUploadLinks: function() {
-            this.switchCurrentView(this.shareAdminUploadLinksView);
+            if (!this.switchCurrentView(this.shareAdminUploadLinksView)) {
+                return false;
+            }
             this.shareAdminUploadLinksView.show();
             this.sideNavView.setCurTab('share-admin-links', {'show_share_admin': true});
         }
