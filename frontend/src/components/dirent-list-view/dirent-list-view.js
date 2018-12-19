@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import Loading from '../loading';
 import DirentListItem from './dirent-list-item';
+import ModalPortal from '../modal-portal';
+import CreateFile from '../../components/dialog/create-file-dialog';
+
+import '../../css/tip-for-new-md.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -12,6 +16,7 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  onAddFile: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
@@ -29,6 +34,8 @@ class DirentListView extends React.Component {
     super(props);
     this.state = {
       isItemFreezed: false,
+      isCreateFileDialogShow: false,
+      fileType: ''
     };
   }
 
@@ -48,11 +55,51 @@ class DirentListView extends React.Component {
     this.props.onItemDetails(dirent);
   }
 
+  onCreateFileToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: ''
+    });
+  }
+
+  onCreateMarkdownToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: '.md'
+    });
+  }
+
+  onAddFile = (filePath, isDraft) => {
+    this.setState({isCreateFileDialogShow: false});
+    this.props.onAddFile(filePath, isDraft);
+  }
+
   render() {
     const { direntList } = this.props;
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);
+    }
+
+    if (this.props.path == '/' && !direntList.length) {
+      return (
+        <Fragment>
+          <div className="tip-for-new-md d-flex">
+            <button className="big-new-md-button" onClick={this.onCreateMarkdownToggle}><span className="sf2-icon-plus add-md-icon"></span><br />{gettext('Markdown Document')}</button>
+            <p>{gettext('You can create online document using Markdown format easily. When creating a document, you can mark it as draft. After finishing the draft, you can ask others to review it. They can view the document history in the review page and leave comments on the document.')}</p>
+          </div>
+          {this.state.isCreateFileDialogShow && (
+            <ModalPortal>
+              <CreateFile
+                parentPath={this.props.path}
+                fileType={this.state.fileType}
+                onAddFile={this.onAddFile}
+                addFileCancel={this.onCreateFileToggle}
+              />
+            </ModalPortal>
+          )}
+        </Fragment>
+      );
     }
 
     return (

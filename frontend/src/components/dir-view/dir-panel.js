@@ -175,6 +175,7 @@ class DirPanel extends React.Component {
                     isDirentListLoading={this.props.isDirentListLoading}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     isRepoOwner={this.state.isRepoOwner}
+                    onAddFile={this.props.onAddFile}
                     onItemDetails={this.onItemDetails}
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}
