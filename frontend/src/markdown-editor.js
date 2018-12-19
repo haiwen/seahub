@@ -68,7 +68,7 @@ class EditorUtilities {
 
   getParentDectionaryUrl() {
     let parentPath = this.filePath.substring(0, this.filePath.lastIndexOf('/'));
-    let libName = Utils.encodePath(repoName);
+    let libName = encodeURIComponent(repoName);
     let path = Utils.encodePath(parentPath);
     return this.serviceUrl + '/library/' + this.repoID + '/' + libName + path + '/';
   }
