@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
 import Repo from '../../models/repo';
@@ -7,6 +8,7 @@ import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
+import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 
 const propTypes = {
@@ -24,7 +26,9 @@ class PublicSharedView extends React.Component {
       emptyTip: '',
       repoList: [],
       libraryType: 'public',
+      isCreateMenuShow: false,
       isCreateRepoDialogShow: false,
+      isSelectRepoDialpgShow: false,
     }
   }
 
@@ -82,6 +86,17 @@ class PublicSharedView extends React.Component {
     })
   }
 
+  onRepoSelectedHandler = (selectedRepoList) => {
+    selectedRepoList.forEach(repo => {
+      seafileAPI.shareRepo(repo.repo_id, {share_type: 'public', permission: repo.sharePermission}).then(() => {
+        let repoList = this.addRepoItem(repo);
+        this.setState({repoList: repoList});
+      }).catch(() => {
+        // todo
+      });
+    })
+  }
+
   onItemUnshare = (repo) => {
     seafileAPI.unshareRepo(repo.repo_id, {share_type: 'public'}).then(() => {
       let repoList = this.state.repoList.filter(item => {
@@ -96,13 +111,33 @@ class PublicSharedView extends React.Component {
   }
 
   addRepoItem = (repo) => {
+    let isExist = false;
+    let repoList = this.state.repoList;
+    for (let i = 0; i < repoList.length; i ++) {
+      if (repo.repo_id === repoList[i].repo_id) {
+        isExist = true;
+        break;
+      }
+    }
+    if (isExist) {
+      return this.state.repoList;
+    }
+
     let newRepoList = this.state.repoList.map(item => {return item;});
     newRepoList.push(repo);
     return newRepoList;
   }
 
+  onAddRepoToggle = () => {
+    this.setState({isCreateMenuShow: !this.state.isCreateMenuShow});
+  }
+
   onCreateRepoToggle = () => {
     this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
+  }
+
+  onSelectRepoToggle = () => {
+    this.setState({isSelectRepoDialpgShow: !this.state.isSelectRepoDialpgShow});
   }
 
   render() {
@@ -119,10 +154,16 @@ class PublicSharedView extends React.Component {
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-              <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
-                <i className="fas fa-plus-square op-icon"></i>
-                {gettext('New Library')}
-              </button>
+              <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
+                <DropdownToggle className='btn btn-secondary operation-item'>
+                  <i className="fas fa-plus-square op-icon"></i>
+                  {gettext('Add Library')}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={this.onSelectRepoToggle}>{gettext('Share existing libraries')}</DropdownItem>
+                  <DropdownItem onClick={this.onCreateRepoToggle}>{gettext('New Library')}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
@@ -153,6 +194,14 @@ class PublicSharedView extends React.Component {
               libraryType={this.state.libraryType}
               onCreateToggle={this.onCreateRepoToggle}
               onCreateRepo={this.onCreateRepo}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isSelectRepoDialpgShow && (
+          <ModalPortal>
+            <ShareRepoDialog 
+              onRepoSelectedHandler={this.onRepoSelectedHandler}
+              onShareRepoDialogClose={this.onSelectRepoToggle}
             />
           </ModalPortal>
         )}
