@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import RepoTag from '../../models/repo-tag';
+
 import '../../css/repo-tag.css';
 
 const tagListItemPropTypes = {
@@ -13,6 +14,25 @@ const tagListItemPropTypes = {
 };
 
 class TagListItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showSelectedTag: false
+    };
+  }
+
+  onMouseOver = () => {
+    this.setState({
+      showSelectedTag: true
+    });
+  }
+
+  onMouseOut = () => {
+    this.setState({
+      showSelectedTag: false
+    });
+  }
 
   onTagUpdate = () => {
     this.props.onTagUpdate(this.props.item);
@@ -24,14 +44,15 @@ class TagListItem extends React.Component {
 
   render() {
     let color = this.props.item.color;
-    return(
+    return (
       <li className="tag-list-item">
-        <span className={`tag-demo bg-${color}`}>
+        <div className={`tag-demo bg-${color}`} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+          <span className={`bg-${color}-dark ${this.state.showSelectedTag ? 'show-tag-selected': ''}`}></span>
           <span className="tag-name">{this.props.item.name}</span>
           <span className="tag-files" onClick={this.onListTaggedFiles}>
             {this.props.item.fileCount}{' '}{gettext('files')}
           </span>
-        </span>
+        </div>
         <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
       </li>
     );
@@ -74,34 +95,32 @@ class ListTagDialog extends React.Component {
     this.props.onListTagCancel();
   }
 
+  createNewTag = (e) => {
+    e.preventDefault();
+    this.props.onCreateRepoTag();
+  }
+
   render() {
     return (
       <Fragment>
         <Modal isOpen={true} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>{gettext('Tags')}</ModalHeader>
           <ModalBody>
-            {this.state.repotagList.length === 0 && (
-              <div className="tag-list tag-list-container">
-                {gettext('Click new tag button to create tags.')}
-              </div>
-            )}
-            {this.state.repotagList.length > 0 && (
-              <ul className="tag-list tag-list-container">
-                {this.state.repotagList.map((repoTag, index) => {
-                  return (
-                    <TagListItem 
-                      key={index} 
-                      item={repoTag} 
-                      onTagUpdate={this.props.onUpdateRepoTag}
-                      onListTaggedFiles={this.props.onListTaggedFiles}
-                    />
-                  );
-                })}
-              </ul>
-            )}
+            <ul className="tag-list tag-list-container">
+              {this.state.repotagList.map((repoTag, index) => {
+                return (
+                  <TagListItem
+                    key={index}
+                    item={repoTag}
+                    onTagUpdate={this.props.onUpdateRepoTag}
+                    onListTaggedFiles={this.props.onListTaggedFiles}
+                  />
+                );
+              })}
+            </ul>
+            <a href="#" className="add-tag-link" onClick={this.createNewTag}>{gettext('Create a new tag')}</a>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.props.onCreateRepoTag}>{gettext('New Tag')}</Button>
             <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
           </ModalFooter>
         </Modal>

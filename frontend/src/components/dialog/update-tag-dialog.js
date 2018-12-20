@@ -17,7 +17,7 @@ class UpdateTagDialog extends React.Component {
       deleteRepoTag: false,
       newName: this.props.currentTag.name,
       newColor: this.props.currentTag.color,
-      colorList: ['lime', 'teal', 'azure', 'green', 'blue', 'purple', 'pink', 'indigo'],
+      colorList: ['blue', 'azure', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'lime', 'green', 'teal', 'cyan', 'gray']
     };
     this.newInput = React.createRef();
   }

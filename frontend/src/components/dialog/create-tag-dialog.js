@@ -16,7 +16,7 @@ class CreateTagDialog extends React.Component {
       tagName: '',
       tagColor: '',
       newTag: {},
-      colorList: ['lime', 'teal', 'azure', 'green', 'blue', 'purple', 'pink', 'indigo'],
+      colorList: ['blue', 'azure', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'lime', 'green', 'teal', 'cyan', 'gray']
     };
     this.newInput = React.createRef();
   }

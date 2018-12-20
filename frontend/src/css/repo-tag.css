@@ -1,9 +1,19 @@
 .tag-list-container {
-  padding: 0.5rem;
-  padding-bottom: 0;
   max-height: 15rem;
   list-style: none;
   overflow: auto;
+}
+
+.add-tag-link {
+  display: block;
+  color: #666;
+  padding: .4rem .5rem;
+  border-radius: 4px;
+  text-decoration: underline;
+}
+.add-tag-link:hover {
+  color: #444;
+  background: #eee;
 }
 
 .tag-list-item {
@@ -17,18 +27,20 @@
 .tag-list-item .tag-demo {
   flex: 1;
   border-radius: 0.25rem;
-  padding-left: 0.5rem;
   display: flex;
   align-items: center;
   color: #ffffff;
+  overflow: hidden;
 }
 
-.tag-list-item .tag-demo:hover {
-  border-left: 0.75rem solid #eb8205;
+.show-tag-selected {
+  width: .5em;
+  align-self: stretch;
 }
 
 .tag-demo .tag-name {
   flex: 1;
+  padding-left: 0.5rem;
 }
 
 .tag-demo .tag-files {
