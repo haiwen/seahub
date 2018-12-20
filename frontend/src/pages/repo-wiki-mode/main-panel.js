@@ -96,8 +96,9 @@ class MainPanel extends Component {
 
   switchViewMode = (mode) => {
     cookie.save('view_mode', mode, { path: '/' });
+    let repoName = this.state.currentRepoInfo.repo_name;
     let dirPath = this.props.isViewFile ? Utils.getDirName(this.props.path) : this.props.path;
-    window.location.href = siteRoot + '#common/lib/' + repoID + dirPath;
+    window.location.href = siteRoot + 'library/' + repoID + '/' + repoName + dirPath;
   }
 
   onSideNavMenuClick = () => {
