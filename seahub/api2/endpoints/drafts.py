@@ -77,8 +77,12 @@ class DraftsView(APIView):
             d = Draft.objects.add(username, repo, file_path, file_id)
 
             return Response(d.to_dict())
-        except (DraftFileExist, IntegrityError):
+        except DraftFileExist:
             return api_error(status.HTTP_409_CONFLICT, 'Draft already exists.')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
 
 class DraftView(APIView):
@@ -115,9 +119,13 @@ class DraftView(APIView):
             d.publish(operator=username)
             d.delete(operator=username)
             return Response(status.HTTP_200_OK)
-        except (DraftFileConflict, IntegrityError):
+        except DraftFileConflict:
             return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
     def delete(self, request, pk, format=None):
         """Delete a draft if user is draft owner
