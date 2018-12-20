@@ -49,6 +49,8 @@ define([
                 'canceled': gettext("File Upload canceled"),
                 'failed': gettext("File Upload failed")
             };
+            // for the leaving page confirm popup
+            window.fileuploading = fu_status.uploading;
 
             var uploaded_files = [];
             var updated_files = [];
