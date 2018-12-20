@@ -63,4 +63,46 @@
     var $fileDiff = $('.file-diff');
     $fileDiff.attr('href', $fileDiff.attr('href') + '&referer=' + encodeURIComponent(location.href));
 </script>
+
+{% if seafile_collab_server %}
+<script type="text/javascript" src="{{ seafile_collab_server }}socket.io/socket.io.js"></script>
+<script type="text/javascript">
+  function check_file_update(cid) {
+    $.ajax({
+         url: "{% url 'FileMetaDataView' repo.id %}?p={{path|urlencode}}",
+         type: "GET",
+         cache: false,
+         success: function(data) {
+           if (data.id !== cid) {
+            //  alert('File updated! Refresh.') //TODO
+           }
+         }
+    })
+  }
+
+  var socket = io('{{ seafile_collab_server }}');
+
+  socket.emit('repo_update', {
+    request: 'watch_update',
+    repo_id: '{{repo.id}}',
+    user: {
+      name: '{{user.username}}',
+      username: '{{user.username}}',
+      constact_email: ''
+    }
+  });
+ 
+  socket.on('connect', function(){});
+  socket.on('repo_update', function(data){
+    /* alert('repo updated'); */
+    console.log(data);
+
+    var cid = '{{file_id}}';
+    check_file_update(cid);
+  });
+
+  socket.on('disconnect', function(){});
+</script>
+{% endif %}
+
 {% endblock%}

@@ -4,6 +4,7 @@ import moment from 'moment';
 import { gettext, repoID, siteRoot, initialPath, isDir, serviceUrl } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
+import collabServer from './utils/collab-server';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
 import Node from './components/tree-view/node';
@@ -48,6 +49,7 @@ class Wiki extends Component {
       reviewStatus: '',
       reviewID: '',
       draftFilePath: '',
+      dirID: '',
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
@@ -61,6 +63,7 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
+    collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
     seafileAPI.getRepoInfo(repoID).then(res => {
       this.setState({
         libNeedDecrypt: res.data.lib_need_decrypt, 
@@ -80,6 +83,24 @@ class Wiki extends Component {
     });
   }
 
+  componentWillUnmount() {
+    collabServer.unwatchRepo(repoID);
+  }
+
+  onRepoUpdateEvent = () => {
+    let { path, dirID } = this.state;
+    seafileAPI.dirMetaData(repoID, path).then((res) => {
+      if (res.data.id !== dirID) {
+        toaster.notify(
+          <span>
+            {gettext('This folder has been updated. ')}
+            <a href='' >{gettext('Refresh')}</a>
+          </span>,
+          {duration: 3600}
+        );
+      }
+    })
+  }
 
   deleteItemAjaxCallback(path, isDir) {
     let node = this.state.treeData.getNodeByPath(path);
@@ -278,6 +299,7 @@ class Wiki extends Component {
       this.setState({
         direntList: direntList,
         isDirentListLoading: false,
+        dirID: res.headers.oid,
       });
     });
   }

@@ -4,6 +4,7 @@ import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
+import collabServer from '../../utils/collab-server';
 import toaster from '../toast';
 import DirPanel from './dir-panel';
 import Dirent from '../../models/dirent';
@@ -34,6 +35,7 @@ class DirView extends React.Component {
       currentRepoInfo: null,
       direntList: [],
       selectedDirentList: [],
+      dirID: '',
     };
     window.onpopstate = this.onpopstate;
   }
@@ -49,6 +51,7 @@ class DirView extends React.Component {
     // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
     let location = decodeURIComponent(window.location.href);
     let repoID = this.props.repoID;
+    collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repoInfo = new RepoInfo(res.data);
       this.setState({
@@ -68,7 +71,27 @@ class DirView extends React.Component {
       }
     });
   }
-  
+
+  componentWillUnmount() {
+    collabServer.unwatchRepo(this.props.repoID);
+  }
+
+  onRepoUpdateEvent = () => {
+    let repoID = this.props.repoID;
+    let { path, dirID } = this.state;
+    seafileAPI.dirMetaData(repoID, path).then((res) => {
+      if (res.data.id !== dirID) {
+        toaster.notify(
+          <span>
+            {gettext('This folder has been updated. ')}
+            <a href='' >{gettext('Refresh')}</a>
+          </span>,
+          {duration: 3600}
+        );
+      }
+    })
+  }
+
   updateDirentList = (filePath) => {
     let repoID = this.state.repoID;
     this.setState({isDirentListLoading: true});
@@ -79,6 +102,7 @@ class DirView extends React.Component {
       this.setState({
         isDirentListLoading: false,
         direntList: direntList,
+        dirID: res.headers.oid,
       });
     }).catch(() => {
       this.setState({pathExist: false});

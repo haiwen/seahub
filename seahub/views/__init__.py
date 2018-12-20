@@ -55,7 +55,7 @@ import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
-    SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT
+    SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, SEAFILE_COLLAB_SERVER
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
@@ -713,6 +713,7 @@ def libraries(request):
 
     if use_new_page:
         return render(request, "react_app.html", {
+            'seafile_collab_server': SEAFILE_COLLAB_SERVER,
             'storages': get_library_storages(request),
             'enable_wiki': settings.ENABLE_WIKI,
             'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
@@ -1220,6 +1221,7 @@ def choose_register(request):
 def react_fake_view(request):
 
     return render(request, "react_app.html", {
+        'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
         'enable_wiki': settings.ENABLE_WIKI,
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,

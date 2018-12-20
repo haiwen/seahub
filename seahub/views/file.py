@@ -512,6 +512,7 @@ def view_lib_file(request, repo_id, path):
     return_dict = {
         'is_pro': is_pro_version(),
         'repo': repo,
+        'file_id': file_id,
         'last_commit_id': repo.head_cmmt_id,
         'is_repo_owner': is_repo_owner(request, repo_id, username),
         'path': path,
@@ -522,6 +523,7 @@ def view_lib_file(request, repo_id, path):
         'enable_file_comment': settings.ENABLE_FILE_COMMENT,
         'enable_watermark': ENABLE_WATERMARK,
         'can_download_file': parse_repo_perm(permission).can_download,
+        'seafile_collab_server': SEAFILE_COLLAB_SERVER,
     }
 
     # check whether file is starred
@@ -640,7 +642,6 @@ def view_lib_file(request, repo_id, path):
             return_dict['file_content'] = convert_md_link(file_content, repo_id, username)
             return_dict['serviceUrl'] = get_service_url().rstrip('/')
             return_dict['language_code'] = get_language()
-            return_dict['seafile_collab_server'] = SEAFILE_COLLAB_SERVER
             return_dict['mode'] = 'edit' if mode else 'viewer'
             return_dict['is_draft'] = is_draft
             return_dict['has_draft'] = has_draft
