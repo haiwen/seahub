@@ -177,7 +177,8 @@ class CreateRepoDialog extends React.Component {
                   <Label for="encrypt">{gettext('Encrypt')}</Label>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="passwd1">{gettext('Password')}{' '}<span className="tip">({gettext('at least 8 characters')})</span></Label>
+                  {/* todo translate */}
+                  <Label for="passwd1">{gettext('Password')}{' '}<span className="tip">(at least 8 characters)</span></Label>
                   <Input 
                     id="passwd1" 
                     type="password"
