@@ -411,6 +411,9 @@ class DraftReview extends React.Component {
       else if (node.data.get('diff_state') === 'diff-removed' && lastDiffState !== 'diff-removed') {
         keys.push(node.key);
       }
+      else if (node.data.get('diff_state') === 'diff-replaced' && lastDiffState !== 'diff-replaced') {
+        keys.push(node.key);
+      }
       lastDiffState = node.data.get('diff_state');
     });
     this.setState({
