@@ -356,7 +356,7 @@ class SharedReposTest(BaseTestCase):
 
         self.assertEqual(403, resp.status_code)
 
-    def test_delete_perm_if_not_owner(self):
+    def test_admin_delete_perm(self):
         self.share_repo_to_user()
 
         # admin can view repo but NOT owner
@@ -369,4 +369,4 @@ class SharedReposTest(BaseTestCase):
         url = reverse('api-v2.1-shared-repo', args=[self.repo_id]) + args
         resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')
 
-        self.assertEqual(403, resp.status_code)
+        self.assertEqual(200, resp.status_code)
