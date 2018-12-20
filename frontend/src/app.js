@@ -113,6 +113,19 @@ class App extends Component {
     }
   }
 
+  onGroupChanged = (groupID) => {
+    setTimeout(function(){
+      let url = new URL(window.location.origin);
+      if (groupID) {
+        url = url + 'group/' + groupID + '/';
+      }
+      else {
+        url = url + 'groups/';
+      }
+      window.location = url.toString();
+    }, 1);
+  }
+
   tabItemClick = (tabName, groupID) => {
     let pathPrefix = [];
     if (groupID || this.dirViewPanels.indexOf(tabName) > -1) {
@@ -200,7 +213,13 @@ class App extends Component {
             <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
             <DirView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
             <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
-            <Group path={siteRoot + 'group/:groupID'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
+            <Group
+              path={siteRoot + 'group/:groupID'}
+              onShowSidePanel={this.onShowSidePanel}
+              onSearchedClick={this.onSearchedClick}
+              onTabNavClick={this.tabItemClick}
+              onGroupChanged={this.onGroupChanged}
+              />
             <WikisWrapper path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
           </Router>
         </MainPanel>

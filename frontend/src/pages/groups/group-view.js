@@ -1,4 +1,5 @@
 import React,{ Fragment } from 'react';
+import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot, username, loginUrl } from '../../utils/constants';
 import { Link } from '@reach/router';
@@ -10,11 +11,15 @@ import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
+import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
+import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
+  onGroupChanged: PropTypes.func.isRequired,
+  groupID: PropTypes.string,
 };
 
 const DEPARETMENT_GROUP_ONWER_NAME = 'system admin';
@@ -33,7 +38,10 @@ class GroupView extends React.Component {
       libraryType: 'group',
       isCreateRepoDialogShow: false,
       isDepartmentGroup: false,
-    }
+      showGroupDropdown: false,
+      showRenameGroupDialog: false,
+      showDismissGroupDialog: false,
+    };
   }
 
   componentDidMount() {
@@ -216,6 +224,24 @@ class GroupView extends React.Component {
   onTabNavClick = (tabName) => {
     this.props.onTabNavClick(tabName);
   }
+  
+  toggleGroupDropdown = () => {
+    this.setState({
+      showGroupDropdown: !this.state.showGroupDropdown
+    });
+  }
+
+  toggleDismissGroupDialog = () => {
+    this.setState({
+      showDismissGroupDialog: !this.state.showDismissGroupDialog
+    });
+  }
+
+  toggleRenameGroupDialog = () => {
+    this.setState({
+      showRenameGroupDialog: !this.state.showRenameGroupDialog
+    });
+  }
 
   render() {
     let { errMessage, emptyTip, currentGroup } = this.state;
@@ -248,9 +274,28 @@ class GroupView extends React.Component {
                     )}
                   </div>
                   <div className="path-tool">
-                    {isShowSettingIcon && (
-                      <a href="#" className="sf2-icon-cog1 op-icon group-top-op-icon" title={gettext("Settings")} aria-label={gettext("Settings")}></a>
-                    )}
+                    { isShowSettingIcon &&
+                    <React.Fragment>
+                      <a href="#" className="sf2-icon-cog1 op-icon group-top-op-icon" title="Settings" id="settings"
+                        onClick={this.toggleGroupDropdown}></a>
+                      <Popover placement="bottom" isOpen={this.state.showGroupDropdown} target="settings"
+                        toggle={this.toggleGroupDropdown} hideArrow={true} className="sf-popover">
+                        <div className="sf-popover-hd sf-popover-title">
+                          <span>{gettext("Settings")}</span>
+                          <a href="#" className="sf-popover-close js-close sf2-icon-x1 op-icon"
+                            onClick={this.toggleGroupDropdown}></a>
+                        </div>
+                        <div className="sf-popover-con">
+                          <ul className="sf-popover-list">
+                            <li><a href="#" className="sf-popover-item" onClick={this.toggleRenameGroupDialog} >{gettext("Rename")}</a></li>
+                          </ul>
+                          <ul className="sf-popover-list">
+                            <li><a href="#" className="sf-popover-item" onClick={this.toggleDismissGroupDialog}>{gettext("Dismiss")}</a></li>
+                          </ul>
+                        </div>
+                      </Popover>
+                    </React.Fragment>
+                    }
                     <a href="#" className="sf2-icon-user2 op-icon group-top-op-icon" title={gettext("Members")} aria-label={gettext("Members")}></a>
                   </div>
                 </Fragment>
@@ -286,6 +331,24 @@ class GroupView extends React.Component {
             isAdmin={this.state.isAdmin}
             onCreateToggle={this.onCreateRepoToggle}
             onCreateRepo={this.onCreateRepo}
+          />
+        }
+        { this.state.showRenameGroupDialog &&
+          <RenameGroupDialog
+            showRenameGroupDialog={this.state.showRenameGroupDialog}
+            toggleRenameGroupDialog={this.toggleRenameGroupDialog}
+            loadGroup={this.loadGroup}
+            groupID={this.props.groupID}
+            onGroupChanged={this.props.onGroupChanged}
+          />
+        }
+        { this.state.showDismissGroupDialog &&
+          <DismissGroupDialog
+            showDismissGroupDialog={this.state.showDismissGroupDialog}
+            toggleDismissGroupDialog={this.toggleDismissGroupDialog}
+            loadGroup={this.loadGroup}
+            groupID={this.props.groupID}
+            onGroupChanged={this.props.onGroupChanged}
           />
         }
       </Fragment>
