@@ -102,11 +102,11 @@ class Account extends Component {
   renderAvatar = () => {
     if (this.state.avatarURL) {
       return (
-        <img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('avatar')} />
+        <img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} />
       );
     }
     return (
-      <img src="" width="36" height="36" className="avatar" alt={gettext('avatar')} />
+      <img src="" width="36" height="36" className="avatar" alt={gettext('Avatar')} />
     );
   }
 
@@ -114,7 +114,7 @@ class Account extends Component {
     return (
       <div id="account">
         <a id="my-info" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label="View profile and more">
-          <span><img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('avatar')} /></span>
+          <span><img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} /></span>
           <span className="fas fa-caret-down vam"></span>
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>

@@ -101,7 +101,7 @@ class ReviewCommentDialog extends React.Component {
         <textarea value={this.state.comment} onChange={this.handleCommentChange}></textarea>
         <div className="button-group">
           <Button size="sm" color="primary" onClick={this.submitComment}>{gettext('Submit')}</Button>
-          <Button size="sm" color="secondary" onClick={this.props.toggleCommentDialog}>{gettext('Cancle')}</Button>
+          <Button size="sm" color="secondary" onClick={this.props.toggleCommentDialog}>{gettext('Cancel')}</Button>
         </div>
         <span className="review-comment-dialog-triangle"></span>
       </div>

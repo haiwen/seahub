@@ -53,7 +53,7 @@ class CreateGroupDialog extends React.Component {
   render() {
     return(
       <Modal isOpen={this.props.showAddGroupModal} toggle={this.props.toggleAddGroupModal}>
-        <ModalHeader toggle={this.toggle}>{gettext('New group')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('New Group')}</ModalHeader>
         <ModalBody>
           <label htmlFor="groupName">{gettext('Name')}</label>
           <Input type="text" id="groupName" value={this.state.groupName}

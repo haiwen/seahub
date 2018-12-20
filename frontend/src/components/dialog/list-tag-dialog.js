@@ -29,7 +29,8 @@ class TagListItem extends React.Component {
         <span className={`tag-demo bg-${color}`}>
           <span className="tag-name">{this.props.item.name}</span>
           <span className="tag-files" onClick={this.onListTaggedFiles}>
-            {this.props.item.fileCount}{' '}{gettext('files')}
+            {/* todo 0 file 2 files  */}
+            {this.props.item.fileCount}{' '}{'files'}
           </span>
         </span>
         <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
