@@ -7,9 +7,6 @@ import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
 
 import '../../css/tip-for-new-md.css';
-import io from 'socket.io-client';
-import { seafileAPI } from '../../utils/seafile-api';
-import toaster from '../../components/toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

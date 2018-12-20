@@ -63,6 +63,7 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
+    collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
     seafileAPI.getRepoInfo(repoID).then(res => {
       this.setState({
         libNeedDecrypt: res.data.lib_need_decrypt, 
@@ -82,6 +83,24 @@ class Wiki extends Component {
     });
   }
 
+  componentWillUnmount() {
+    collabServer.unwatchRepo(repoID);
+  }
+
+  onRepoUpdateEvent = () => {
+    let { path, dirID } = this.state;
+    seafileAPI.dirMetaData(repoID, path).then((res) => {
+      if (res.data.id !== dirID) {
+        toaster.notify(
+          <span>
+            {gettext('This folder has been updated. ')}
+            <a href='' >{gettext('Refresh')}</a>
+          </span>,
+          {duration: 3600}
+        );
+      }
+    })
+  }
 
   deleteItemAjaxCallback(path, isDir) {
     let node = this.state.treeData.getNodeByPath(path);
@@ -282,7 +301,6 @@ class Wiki extends Component {
         isDirentListLoading: false,
         dirID: res.headers.oid,
       });
-      collabServer.watchRepo(repoID, this.state.path, this.state.dirID);
     });
   }
 

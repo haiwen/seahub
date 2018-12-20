@@ -51,6 +51,7 @@ class DirView extends React.Component {
     // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
     let location = decodeURIComponent(window.location.href);
     let repoID = this.props.repoID;
+    collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repoInfo = new RepoInfo(res.data);
       this.setState({
@@ -70,7 +71,27 @@ class DirView extends React.Component {
       }
     });
   }
-  
+
+  componentWillUnmount() {
+    collabServer.unwatchRepo(this.props.repoID);
+  }
+
+  onRepoUpdateEvent = () => {
+    let repoID = this.props.repoID;
+    let { path, dirID } = this.state;
+    seafileAPI.dirMetaData(repoID, path).then((res) => {
+      if (res.data.id !== dirID) {
+        toaster.notify(
+          <span>
+            {gettext('This folder has been updated. ')}
+            <a href='' >{gettext('Refresh')}</a>
+          </span>,
+          {duration: 3600}
+        );
+      }
+    })
+  }
+
   updateDirentList = (filePath) => {
     let repoID = this.state.repoID;
     this.setState({isDirentListLoading: true});
@@ -83,7 +104,6 @@ class DirView extends React.Component {
         direntList: direntList,
         dirID: res.headers.oid,
       });
-      collabServer.watchRepo(this.state.repoID, this.state.path, this.state.dirID);
     }).catch(() => {
       this.setState({pathExist: false});
     });
