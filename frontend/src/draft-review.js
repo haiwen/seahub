@@ -216,12 +216,20 @@ class DraftReview extends React.Component {
     }
     if (nativeSelection.isCollapsed === false) {
       const nativeRange = nativeSelection.getRangeAt(0);
-      let range = findRange(nativeRange, this.refs.diffViewer.value);
-      if (!range) {
-        this.range = null;
-        return;
+      const focusNode = nativeSelection.focusNode;
+      if ((focusNode.tagName === "I") ||
+          (focusNode.nodeType !== 3 && focusNode.getAttribute("class") === "language-type")) {
+        // fix select last paragraph
+        let fragment = nativeRange.cloneContents();
+        let startNode = fragment.firstChild.firstChild;
+        let newNativeRange = document.createRange();
+        newNativeRange.setStartBefore(startNode);
+        newNativeRange.setEndAfter(startNode);
+        this.range =  findRange(newNativeRange, this.refs.diffViewer.value);
       }
-      this.range = range;
+      else {
+        this.range = findRange(nativeRange, this.refs.diffViewer.value);
+      }
       let rect = nativeRange.getBoundingClientRect();
       // fix Safari bug
       if (navigator.userAgent.indexOf('Chrome') < 0 && navigator.userAgent.indexOf('Safari') > 0) {
@@ -249,11 +257,11 @@ class DraftReview extends React.Component {
   }
 
   getQuote = () => {
-    this.quote = '';
     let range = this.range;
     if (!range) {
       return;
     }
+    this.quote = '';
     const { document } = this.refs.diffViewer.value;
     let { anchor, focus } = range;
     const anchorText = document.getNode(anchor.key);
@@ -262,9 +270,6 @@ class DraftReview extends React.Component {
     const focusInline = document.getClosestInline(focus.key);
     const focusBlock = document.getClosestBlock(focus.key);
     const anchorBlock = document.getClosestBlock(anchor.key);
-    if (anchorBlock && anchor.offset == 0 && focusBlock && focus.offset != 0) {
-      range = range.setFocus(focus.setOffset(0));
-    }
     // COMPAT: If the selection is at the end of a non-void inline node, and
     // there is a node after it, put it in the node after instead. This
     // standardizes the behavior, since it's indistinguishable to the user.
