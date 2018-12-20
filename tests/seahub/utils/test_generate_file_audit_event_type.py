@@ -1,6 +1,11 @@
 from seahub.test_utils import BaseTestCase
 from seahub.utils import generate_file_audit_event_type
 
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
+
 class Events():
 
     def __init__(self, etype, device):
@@ -11,6 +16,9 @@ class Events():
 class GenerateFileAuditEventTypeTest(BaseTestCase):
 
     def test_generate_file_audit_event_type(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
 
         event_type_device = {
             'file-download-web': '',
