@@ -62,7 +62,7 @@ def has_draft_file(repo_id, file_path):
     return has_draft
 
 
-def get_file_review(repo_id, file_path, is_draft=False, has_draft=False):
+def get_file_draft_and_related_review(repo_id, file_path, is_draft=False, has_draft=False):
     review = {}
     review['review_id'] = None
     review['review_status'] = None
@@ -74,12 +74,13 @@ def get_file_review(repo_id, file_path, is_draft=False, has_draft=False):
     if is_draft:
         d = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
         review['draft_id'] = d.id
+        review['draft_file_path'] = d.draft_file_path
 
+        # return review (closed / open)
         try:
-            d_r = DraftReview.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
+            d_r = DraftReview.objects.get(origin_repo_id=repo_id, draft_file_path=file_path, draft_id=d)
             review['review_id'] = d_r.id
             review['review_status'] = d_r.status
-            review['draft_file_path'] = file_path
         except DraftReview.DoesNotExist:
             pass
 
@@ -91,14 +92,17 @@ def get_file_review(repo_id, file_path, is_draft=False, has_draft=False):
         file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(
                 repo_id, parent_path, filename, is_dir=False)
 
+        d = Draft.objects.get(origin_file_uuid=file_uuid)
+        # return review (closed / open)
         if file_uuid:
             try:
-                d_r = DraftReview.objects.get(origin_file_uuid=file_uuid)
+                d_r = DraftReview.objects.get(origin_file_uuid=file_uuid, draft_id=d)
                 review['review_id'] = d_r.id
                 review['review_status'] = d_r.status
-                review['draft_id'] = d_r.draft_id_id
-                review['draft_file_path'] = d_r.draft_file_path
             except DraftReview.DoesNotExist:
                 pass
+
+        review['draft_id'] = d.id
+        review['draft_file_path'] = d.draft_file_path
 
     return review

@@ -58,7 +58,8 @@ from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.drafts.models import Draft
-from seahub.drafts.utils import is_draft_file, has_draft_file, get_file_review
+from seahub.drafts.utils import get_file_draft_and_related_review, \
+    is_draft_file, has_draft_file
 from seahub.signals import (repo_created, repo_deleted)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
@@ -3046,7 +3047,7 @@ class FileDetailView(APIView):
             if not is_draft:
                 has_draft = has_draft_file(repo_id, path)
 
-            review = get_file_review(repo_id, path, is_draft, has_draft)
+            review = get_file_draft_and_related_review(repo_id, path, is_draft, has_draft)
 
             entry['is_draft'] = is_draft
             entry['has_draft'] = has_draft
