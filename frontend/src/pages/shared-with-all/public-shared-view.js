@@ -4,6 +4,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
 import Repo from '../../models/repo';
+import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
@@ -103,6 +104,7 @@ class PublicSharedView extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
+      toaster.success('Successfully unshared 1 item.');
     });
   }
 

@@ -35,7 +35,7 @@ class ShareRepoListItem extends React.Component {
         <td className="name">{gettext(repo.repo_name)}</td>
         <td>{moment(repo.last_modified).fromNow()}</td>
         <td>
-          <Input style={{height: '1.5rem'}} type="select" name="select" onChange={this.onPermissionChange} value={repo.sharePermission}>
+          <Input style={{height: '1.5rem', padding: 0}} type="select" name="select" onChange={this.onPermissionChange} value={repo.sharePermission}>
             <option value='rw'>{gettext('Read-Write')}</option>
             <option value='r'>{gettext('Read-Only')}</option>
           </Input>
