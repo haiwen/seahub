@@ -1,0 +1,9 @@
+.transfer-group-name {
+  line-height: 2rem;
+  margin-left: 10px;
+}
+
+.group-transfer-select .true__dropdown-indicator,
+.reviewer-select .true__indicator-separator {
+  display: none;
+}

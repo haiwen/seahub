@@ -1,0 +1,28 @@
+.manage-members {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+.manage-members-table {
+  margin: 1rem 0 2rem;
+}
+.manage-members-table th,
+.manage-members-table td {
+  vertical-align: middle;
+  text-align: left;
+}
+.toggle-group-admin-icon,
+.delete-group-member-icon {
+  opacity: 0;
+  cursor: pointer;
+  color: #888;
+  margin-left: 5px;
+}
+.manage-members-table tr:hover .toggle-group-admin-icon,
+.manage-members-table tr:hover .delete-group-member-icon {
+  opacity: 1;
+}
+
+.toggle-group-admin-icon:hover,
+.delete-group-member-icon:hover {
+  color: #333;
+}
