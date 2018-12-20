@@ -115,12 +115,12 @@ class App extends Component {
 
   onGroupChanged = (groupID) => {
     setTimeout(function(){
-      let url = new URL(window.location.origin);
+      let url;
       if (groupID) {
-        url = url + 'group/' + groupID + '/';
+        url = siteRoot + 'group/' + groupID + '/';
       }
       else {
-        url = url + 'groups/';
+        url = siteRoot + 'groups/';
       }
       window.location = url.toString();
     }, 1);
