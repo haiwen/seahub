@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -10,6 +10,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentTag: PropTypes.object.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  togglePopup: PropTypes.func.isRequired
 };
 
 class ListTaggedFilesDialog extends React.Component {
@@ -40,15 +41,14 @@ class ListTaggedFilesDialog extends React.Component {
     });
   }
 
-  toggle = () => {
-    this.props.toggleCancel();
-  }
-
   render() {
     let taggedFileList = this.state.taggedFileList;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Tagged Files')}</ModalHeader>
+      <Fragment>
+        <ModalHeader toggle={this.props.togglePopup}>
+          <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          {gettext('Tagged Files')}
+        </ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead className="table-thread-hidden">
@@ -81,9 +81,9 @@ class ListTaggedFilesDialog extends React.Component {
           </table>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.toggle}>{gettext('Close')}</Button>
+          <Button color="primary" onClick={this.props.toggleCancel}>{gettext('Close')}</Button>
         </ModalFooter>
-      </Modal>
+      </Fragment>
     );
   }
 }

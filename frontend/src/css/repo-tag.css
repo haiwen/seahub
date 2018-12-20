@@ -92,3 +92,13 @@
 .file-tag-item:hover {
   background-color: #bbb;
 }
+
+.tag-popup-back {
+  color: #888;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.tag-popup-back:hover,
+.tag-popup-back:focus {
+  color: #444;
+}

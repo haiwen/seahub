@@ -103,27 +103,25 @@ class ListTagDialog extends React.Component {
   render() {
     return (
       <Fragment>
-        <Modal isOpen={true} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>{gettext('Tags')}</ModalHeader>
-          <ModalBody>
-            <ul className="tag-list tag-list-container">
-              {this.state.repotagList.map((repoTag, index) => {
-                return (
-                  <TagListItem
-                    key={index}
-                    item={repoTag}
-                    onTagUpdate={this.props.onUpdateRepoTag}
-                    onListTaggedFiles={this.props.onListTaggedFiles}
-                  />
-                );
-              })}
-            </ul>
-            <a href="#" className="add-tag-link" onClick={this.createNewTag}>{gettext('Create a new tag')}</a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
-          </ModalFooter>
-        </Modal>
+        <ModalHeader toggle={this.toggle}>{gettext('Tags')}</ModalHeader>
+        <ModalBody>
+          <ul className="tag-list tag-list-container">
+            {this.state.repotagList.map((repoTag, index) => {
+              return (
+                <TagListItem
+                  key={index}
+                  item={repoTag}
+                  onTagUpdate={this.props.onUpdateRepoTag}
+                  onListTaggedFiles={this.props.onListTaggedFiles}
+                />
+              );
+            })}
+          </ul>
+          <a href="#" className="add-tag-link" onClick={this.createNewTag}>{gettext('Create a new tag')}</a>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
+        </ModalFooter>
       </Fragment>
     );
   }

@@ -8,6 +8,7 @@ const propTypes = {
   currentTag: PropTypes.object,
   repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  togglePopup: PropTypes.func.isRequired
 };
 
 class UpdateTagDialog extends React.Component {
@@ -55,10 +56,6 @@ class UpdateTagDialog extends React.Component {
     } 
   }
 
-  toggle = () => {
-    this.props.toggleCancel();
-  }
-
   deleteTagClick = (item) => {
     this.setState({
       deleteRepoTag: !this.state.deleteRepoTag,
@@ -77,39 +74,40 @@ class UpdateTagDialog extends React.Component {
     let colorList = this.state.colorList;
     return (
       <Fragment>
-        <Modal isOpen={true} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>{gettext('Edit Tag')}</ModalHeader>
-          <ModalBody>
-            <div className="tag-edit">
-              <div className="form-group">
-                <label className="form-label">{gettext('Name')}</label>
-                <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder="newName" value={this.state.newName} onChange={this.inputNewName}/>
-              </div>
-              <div className="form-group">
-                <label className="form-label">{gettext('Select a color')}</label>
-                <div className="row gutters-xs">
-                  {colorList.map((item, index)=>{
-                    var className = 'colorinput-color bg-' + item;
-                    return (
-                      <div key={index} className="col-auto" onChange={this.selectNewcolor}>
-                        <label className="colorinput">
-                          {item===this.props.currentTag.color ? 
-                            <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onChange={this.selectNewcolor}></input> :
-                            <input name="color" type="radio" value={item} className="colorinput-input" onChange={this.selectNewcolor}></input>}
-                          <span className={className}></span>
-                        </label>
-                      </div>
-                    );
-                  })}
-                </div>
+        <ModalHeader toggle={this.props.togglePopup}>
+          <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          {gettext('Edit Tag')}
+        </ModalHeader>
+        <ModalBody>
+          <div className="tag-edit">
+            <div className="form-group">
+              <label className="form-label">{gettext('Name')}</label>
+              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder="newName" value={this.state.newName} onChange={this.inputNewName}/>
+            </div>
+            <div className="form-group">
+              <label className="form-label">{gettext('Select a color')}</label>
+              <div className="row gutters-xs">
+                {colorList.map((item, index)=>{
+                  var className = 'colorinput-color bg-' + item;
+                  return (
+                    <div key={index} className="col-auto" onChange={this.selectNewcolor}>
+                      <label className="colorinput">
+                        {item===this.props.currentTag.color ? 
+                          <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onChange={this.selectNewcolor}></input> :
+                          <input name="color" type="radio" value={item} className="colorinput-input" onChange={this.selectNewcolor}></input>}
+                        <span className={className}></span>
+                      </label>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.updateTag}>{gettext('Save')}</Button>
-            <Button color="danger" onClick={this.onDeleteTag}>{gettext('Delete')}</Button>
-          </ModalFooter>
-        </Modal>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={this.updateTag}>{gettext('Save')}</Button>
+          <Button color="danger" onClick={this.onDeleteTag}>{gettext('Delete')}</Button>
+        </ModalFooter>
       </Fragment>
     );
   }

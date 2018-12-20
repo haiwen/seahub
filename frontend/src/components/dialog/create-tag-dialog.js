@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
@@ -7,6 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  togglePopup: PropTypes.func.isRequired
 };
 
 class CreateTagDialog extends React.Component {
@@ -48,10 +49,6 @@ class CreateTagDialog extends React.Component {
     } 
   }
 
-  toggle = () => {
-    this.props.toggleCancel();
-  }
-
   componentDidMount() {
     this.setState({
       tagColor: this.state.colorList[0]
@@ -63,8 +60,11 @@ class CreateTagDialog extends React.Component {
   render() {
     let colorList = this.state.colorList;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('New Tag')}</ModalHeader>
+      <Fragment>
+        <ModalHeader toggle={this.props.togglePopup}>
+          <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          {gettext('New Tag')}
+        </ModalHeader>
         <ModalBody>
           <div role="form" className="tag-create">
             <div className="form-group">
@@ -94,9 +94,9 @@ class CreateTagDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.createTag}>{gettext('Save')}</Button>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Cancel')}</Button>
         </ModalFooter>
-      </Modal>
+      </Fragment>
     );
   }
 }
