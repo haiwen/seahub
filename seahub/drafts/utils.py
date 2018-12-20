@@ -23,6 +23,7 @@ def get_draft_file_name(repo_id, file_path):
     file_name, file_ext = os.path.splitext(os.path.basename(file_path))
 
     draft_file_name = "%s%s%s" % (file_name, '(draft)', file_ext)
+    draft_file_name = check_filename_with_rename(repo_id, '/Drafts', draft_file_name)
 
     return draft_file_name
 
