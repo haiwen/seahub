@@ -29,7 +29,7 @@ class About extends React.Component {
           <ModalBody>
             <div className="about-content">
               <p><img src="/media/img/seafile-logo.png" title="Private Seafile" alt="logo" width="128" height="32" /></p>
-              <p>{gettext('Server Version: 6.3.3')}<br />{gettext('© 2018 Seafile')}</p>
+              <p>{gettext('Server Version: ')}6.3.3<br />© 2018 {gettext('Seafile')}</p>
               <p><a href="http://seafile.com/about/" target="_blank">{gettext('About Us')}</a></p>
             </div>
           </ModalBody>
