@@ -21,7 +21,7 @@ class DeleteRepoDialog extends Component {
 
     const data = this.props.data;
     const repoName = data ? '<span class="sf-font">' + data.repoName + '</span>' : null;
-    let message = gettext("Are you sure you want to delete %s?");
+    let message = gettext("Are you sure you want to delete %s ?");
     message = message.replace('%s', repoName);
     const popup = (
       <Modal isOpen={true} toggle={this.toggle}>
