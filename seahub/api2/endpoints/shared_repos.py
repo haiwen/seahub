@@ -220,7 +220,7 @@ class SharedRepo(APIView):
         """ Unshare a repo.
 
         Permission checking:
-        1. Only repo owner can unshare a library.
+        1. Only repo owner and system admin can unshare a publib library.
         """
 
         # argument check
@@ -245,7 +245,7 @@ class SharedRepo(APIView):
         else:
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
-        if username != repo_owner:
+        if not request.user.is_staff and not username == repo_owner:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
