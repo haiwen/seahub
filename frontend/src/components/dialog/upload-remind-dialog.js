@@ -29,7 +29,7 @@ class UploadRemindDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button outline color="primary" onClick={this.props.replaceRepetitionFile}>{gettext('Replace')}</Button>
-          <Button outline color="info" onClick={this.props.uploadFile}>{gettext("Don't Replace")}</Button>
+          <Button outline color="info" onClick={this.props.uploadFile}>{gettext("Don't replace")}</Button>
           <Button outline color="danger" onClick={this.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>

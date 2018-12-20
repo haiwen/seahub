@@ -446,7 +446,7 @@ class DirentListItem extends React.Component {
                     <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
-                    <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuToggle}></i>
+                    <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operations')} onClick={this.onItemMenuToggle}></i>
                   </li>
                 </ul>
                 {

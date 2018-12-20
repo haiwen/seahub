@@ -25,7 +25,7 @@ class Search extends Component {
       isCloseShow: false
     };
     this.inputValue = '';
-    this.source = null; // used to cancle request;
+    this.source = null; // used to cancel request;
   }
 
   onFocusHandler = () => {
