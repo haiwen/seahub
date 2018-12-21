@@ -217,14 +217,14 @@ class DirentListItem extends React.Component {
     }
 
     if (!newName) {
-      let errMessage = 'It is required.';
-      toaster.danger(gettext(errMessage));
+      let errMessage = gettext('Name is required.');
+      toaster.danger(errMessage);
       return false;
     }
 
     if (newName.indexOf('/') > -1) {
-      let errMessage = 'Name should not include ' + '\'/\'' + '.';
-      toaster.danger(gettext(errMessage));
+      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
+      toaster.danger(errMessage);
       return false;
     }
 

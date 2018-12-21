@@ -206,7 +206,7 @@ class MainPanel extends Component {
             </div>
             <ViewModeToolbar currentMode={this.state.currentMode} switchViewMode={this.switchViewMode}/>
           </div>
-          <CommonToolbar repoID={repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
+          <CommonToolbar repoID={repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
         </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">

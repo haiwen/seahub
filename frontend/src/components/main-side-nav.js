@@ -129,7 +129,7 @@ class MainSideNav extends React.Component {
     return (
       <div className="side-nav">
         <div className="side-nav-con">
-          <h3 className="sf-heading">Files</h3>
+          <h3 className="sf-heading">{gettext('Files')}</h3>
           <ul className="nav nav-pills flex-column nav-container">
             <li className="nav-item">
               <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={() => this.tabItemClick('my-libs')}>
@@ -161,7 +161,7 @@ class MainSideNav extends React.Component {
             </li>
           </ul>
 
-          <h3 className="sf-heading">Tools</h3>
+          <h3 className="sf-heading">{gettext('Tools')}</h3>
           <ul className="nav nav-pills flex-column nav-container">
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={() => this.tabItemClick('starred')}>

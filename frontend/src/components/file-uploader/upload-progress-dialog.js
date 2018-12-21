@@ -25,7 +25,7 @@ class UploadProgressDialog extends React.Component {
 
   render() {
     let uploadedMessage = gettext('File Upload');
-    let uploadingMessage = gettext('File is upload...') + this.props.totalProgress + '%';
+    let uploadingMessage = gettext('File Uploading...') + this.props.totalProgress + '%';
 
     let uploadingOptions = (<span className="sf2-icon-minus" onClick={this.onMinimizeUpload}></span>);
 

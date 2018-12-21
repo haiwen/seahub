@@ -91,7 +91,7 @@ class MainPanel extends Component {
           <CommonToolbar 
             repoID={repoID}
             onSearchedClick={this.props.onSearchedClick} 
-            searchPlaceholder={'Search files in this library'}
+            searchPlaceholder={gettext('Search files in this library')}
           />
         </div>
         <div className="cur-view-container">
