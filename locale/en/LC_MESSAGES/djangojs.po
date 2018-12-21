@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-21 17:40+0800\n"
+"POT-Creation-Date: 2018-12-21 18:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -623,7 +623,7 @@ msgid "icon"
 msgstr ""
 
 #: frontend/src/components/dialog/share-repo-dialog.js:103
-msgid "Place select a library to share."
+msgid "Please select a library to share."
 msgstr ""
 
 #: frontend/src/components/dialog/share-repo-dialog.js:118
@@ -929,6 +929,7 @@ msgstr ""
 
 #: frontend/src/components/main-side-nav.js:148
 #: frontend/src/components/main-side-nav.js:150
+#: frontend/src/pages/shared-with-all/public-shared-view.js:176
 msgid "Shared with all"
 msgstr ""
 
@@ -1653,10 +1654,6 @@ msgstr ""
 
 #: frontend/src/pages/shared-with-all/public-shared-view.js:165
 msgid "Share existing libraries"
-msgstr ""
-
-#: frontend/src/pages/shared-with-all/public-shared-view.js:176
-msgid "Shared with All"
 msgstr ""
 
 #: frontend/src/pages/starred/starred.js:20
