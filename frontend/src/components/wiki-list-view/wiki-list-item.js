@@ -88,13 +88,13 @@ class WikiListItem extends Component {
       return false;
     }
     if (!newName) {
-      let errMessage = 'Name is required.';
-      Toast.error(gettext(errMessage));
+      let errMessage = gettext('Name is required.');
+      Toast.error(errMessage);
       return false;
     }
     if (newName.indexOf('/') > -1) {
-      let errMessage = 'Name should not include ' + '\'/\'' + '.';
-      Toast.error(gettext(errMessage));
+      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
+      Toast.error(errMessage);
       return false;
     }
     this.renameWiki(newName);

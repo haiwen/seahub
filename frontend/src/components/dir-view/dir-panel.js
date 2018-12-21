@@ -142,7 +142,7 @@ class DirPanel extends React.Component {
           <CommonToolbar 
             repoID={this.props.repoID} 
             onSearchedClick={this.props.onSearchedClick} 
-            searchPlaceholder={'Search files in this library'}
+            searchPlaceholder={gettext('Search files in this library')}
           />
         </div>
         <div className="main-panel-center flex-row">
