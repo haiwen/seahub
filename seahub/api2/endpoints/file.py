@@ -157,6 +157,8 @@ class FileView(APIView):
         username = request.user.username
         parent_dir = os.path.dirname(path)
 
+        is_draft = request.POST.get('is_draft', '')
+
         if operation == 'create':
             # resource check
             try:
@@ -175,6 +177,17 @@ class FileView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+            if is_draft.lower() == 'true':
+                file_name = os.path.basename(path)
+                file_dir = os.path.dirname(path)
+
+                draft_type = os.path.splitext(file_name)[0][-7:]
+                file_type = os.path.splitext(file_name)[-1]
+
+                if draft_type != '(draft)':
+                    f = os.path.splitext(file_name)[0]
+                    path = file_dir + '/' + f + '(draft)' + file_type
+
             # create new empty file
             new_file_name = os.path.basename(path)
 
@@ -190,6 +203,10 @@ class FileView(APIView):
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if is_draft.lower() == 'true':
+                repo = seafile_api.get_repo(repo_id)
+                Draft.objects.add(username, repo, path, file_exist=False)
 
             # update office file by template
             if new_file_name.endswith('.xlsx'):
