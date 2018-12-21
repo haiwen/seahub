@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
@@ -7,6 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 class CreateTagDialog extends React.Component {
@@ -16,7 +17,7 @@ class CreateTagDialog extends React.Component {
       tagName: '',
       tagColor: '',
       newTag: {},
-      colorList: ['lime', 'teal', 'azure', 'green', 'blue', 'purple', 'pink', 'indigo'],
+      colorList: ['blue', 'azure', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'lime', 'green', 'teal', 'cyan', 'gray']
     };
     this.newInput = React.createRef();
   }
@@ -24,7 +25,7 @@ class CreateTagDialog extends React.Component {
   inputNewName = (e) => {
     this.setState({
       tagName: e.target.value,
-    }); 
+    });
   }
 
   selectTagcolor = (e) => {
@@ -33,7 +34,7 @@ class CreateTagDialog extends React.Component {
     });
   }
 
-  createTag = () => {  
+  createTag = () => {
     let name = this.state.tagName;
     let color = this.state.tagColor;
     let repoID = this.props.repoID;
@@ -45,11 +46,7 @@ class CreateTagDialog extends React.Component {
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.createTag();
-    } 
-  }
-
-  toggle = () => {
-    this.props.toggleCancel();
+    }
   }
 
   componentDidMount() {
@@ -63,8 +60,11 @@ class CreateTagDialog extends React.Component {
   render() {
     let colorList = this.state.colorList;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('New Tag')}</ModalHeader>
+      <Fragment>
+        <ModalHeader toggle={this.props.onClose}>
+          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          {gettext('New Tag')}
+        </ModalHeader>
         <ModalBody>
           <div role="form" className="tag-create">
             <div className="form-group">
@@ -79,7 +79,7 @@ class CreateTagDialog extends React.Component {
                   return (
                     <div key={index} className="col-auto" onChange={this.selectTagcolor}>
                       <label className="colorinput">
-                        {index===0 ? 
+                        {index===0 ?
                           <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onClick={this.selectTagcolor}></input> :
                           <input name="color" type="radio" value={item} className="colorinput-input" onClick={this.selectTagcolor}></input>}
                         <span className={className}></span>
@@ -94,9 +94,9 @@ class CreateTagDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.createTag}>{gettext('Save')}</Button>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Cancel')}</Button>
         </ModalFooter>
-      </Modal>
+      </Fragment>
     );
   }
 }

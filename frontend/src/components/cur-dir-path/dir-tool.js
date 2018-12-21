@@ -3,6 +3,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
 import ModalPortal from '../modal-portal';
+import { Modal } from 'reactstrap';
 import ListTagDialog from '../dialog/list-tag-dialog';
 import CreateTagDialog from '../dialog/create-tag-dialog';
 import UpdateTagDialog from '../dialog/update-tag-dialog';
@@ -20,6 +21,7 @@ class DirTool extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isRepoTagDialogShow: false,
       currentTag: null,
       isListRepoTagShow: false,
       isUpdateRepoTagShow: false,
@@ -28,8 +30,24 @@ class DirTool extends React.Component {
     };
   }
 
-  onListRepoTagToggle = () => {
-    this.setState({isListRepoTagShow: !this.state.isListRepoTagShow});
+  onShowListRepoTag = () => {
+    this.setState({
+      isRepoTagDialogShow: true,
+      isListRepoTagShow: true,
+      isUpdateRepoTagShow: false,
+      isCreateRepoTagShow: false,
+      isListTaggedFileShow: false
+    });
+  }
+
+  onCloseRepoTagDialog = () => {
+    this.setState({
+      isRepoTagDialogShow: false,
+      isListRepoTagShow: false,
+      isUpdateRepoTagShow: false,
+      isCreateRepoTagShow: false,
+      isListTaggedFileShow: false
+    });
   }
 
   onCreateRepoTagToggle = () => {
@@ -70,45 +88,50 @@ class DirTool extends React.Component {
       return (
         <Fragment>
           <ul className="path-toolbar">
-            <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onListRepoTagToggle} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
+            <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
           </ul>
-          {this.state.isListRepoTagShow && (
+
+          {this.state.isRepoTagDialogShow && (
             <ModalPortal>
-              <ListTagDialog
-                repoID={repoID}
-                onListTagCancel={this.onListRepoTagToggle}
-                onCreateRepoTag={this.onCreateRepoTagToggle}
-                onUpdateRepoTag={this.onUpdateRepoTagToggle}
-                onListTaggedFiles={this.onListTaggedFileToggle}
-              />
-            </ModalPortal>
-          )}
-          {this.state.isCreateRepoTagShow && (
-            <ModalPortal>
-              <CreateTagDialog
-                repoID={repoID}
-                toggleCancel={this.onCreateRepoTagToggle}
-              />
-            </ModalPortal>
-          )}
-          {this.state.isUpdateRepoTagShow && (
-            <ModalPortal>
-              <UpdateTagDialog
-                repoID={repoID}
-                currentTag={this.state.currentTag}
-                toggleCancel={this.onUpdateRepoTagToggle}
-              />
-            </ModalPortal>
-          )}
-          {this.state.isListTaggedFileShow && (
-            <ModalPortal>
-              <ListTaggedFilesDialog
-                repoID={this.props.repoID}
-                currentTag={this.state.currentTag}
-                toggleCancel={this.onListTaggedFileToggle}
-              />
+              <Modal isOpen={true}>
+                {this.state.isListRepoTagShow && (
+                  <ListTagDialog
+                    repoID={repoID}
+                    onListTagCancel={this.onCloseRepoTagDialog}
+                    onCreateRepoTag={this.onCreateRepoTagToggle}
+                    onUpdateRepoTag={this.onUpdateRepoTagToggle}
+                    onListTaggedFiles={this.onListTaggedFileToggle}
+                  />
+                )}
+
+                {this.state.isCreateRepoTagShow && (
+                  <CreateTagDialog
+                    repoID={repoID}
+                    onClose={this.onCloseRepoTagDialog}
+                    toggleCancel={this.onCreateRepoTagToggle}
+                  />
+                )}
+
+                {this.state.isUpdateRepoTagShow && (
+                  <UpdateTagDialog
+                    repoID={repoID}
+                    currentTag={this.state.currentTag}
+                    onClose={this.onCloseRepoTagDialog}
+                    toggleCancel={this.onUpdateRepoTagToggle}
+                  />
+                )}
+
+                {this.state.isListTaggedFileShow && (
+                  <ListTaggedFilesDialog
+                    repoID={this.props.repoID}
+                    currentTag={this.state.currentTag}
+                    onClose={this.onCloseRepoTagDialog}
+                    toggleCancel={this.onListTaggedFileToggle}
+                  />
+                )}
+              </Modal>
             </ModalPortal>
           )}
         </Fragment>
