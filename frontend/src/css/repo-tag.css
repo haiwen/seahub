@@ -93,12 +93,12 @@
   background-color: #bbb;
 }
 
-.tag-popup-back {
+.tag-dialog-back {
   color: #888;
   cursor: pointer;
   margin-right: 10px;
 }
-.tag-popup-back:hover,
-.tag-popup-back:focus {
+.tag-dialog-back:hover,
+.tag-dialog-back:focus {
   color: #444;
 }

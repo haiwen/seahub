@@ -50,13 +50,6 @@ class DirTool extends React.Component {
     });
   }
 
-  onListRepoTagToggle = () => {
-    this.setState({
-      isTagDialogShow: !this.state.isTagDialogShow,
-      isListRepoTagShow: !this.state.isListRepoTagShow
-    });
-  }
-
   onCreateRepoTagToggle = () => {
     this.setState({
       isCreateRepoTagShow: !this.state.isCreateRepoTagShow,

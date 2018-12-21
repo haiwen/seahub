@@ -10,7 +10,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentTag: PropTypes.object.isRequired,
   toggleCancel: PropTypes.func.isRequired,
-  togglePopup: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired
 };
 
 class ListTaggedFilesDialog extends React.Component {
@@ -46,7 +46,7 @@ class ListTaggedFilesDialog extends React.Component {
     return (
       <Fragment>
         <ModalHeader toggle={this.props.onClose}>
-          <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('Tagged Files')}
         </ModalHeader>
         <ModalBody className="dialog-list-container">

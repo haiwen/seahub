@@ -8,7 +8,7 @@ const propTypes = {
   currentTag: PropTypes.object,
   repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
-  togglePopup: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired
 };
 
 class UpdateTagDialog extends React.Component {
@@ -75,7 +75,7 @@ class UpdateTagDialog extends React.Component {
     return (
       <Fragment>
         <ModalHeader toggle={this.props.onClose}>
-          <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('Edit Tag')}
         </ModalHeader>
         <ModalBody>

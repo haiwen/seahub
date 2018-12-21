@@ -7,7 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
-  togglePopup: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired
 };
 
 class CreateTagDialog extends React.Component {
@@ -62,7 +62,7 @@ class CreateTagDialog extends React.Component {
     return (
       <Fragment>
         <ModalHeader toggle={this.props.onClose}>
-          <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('New Tag')}
         </ModalHeader>
         <ModalBody>
