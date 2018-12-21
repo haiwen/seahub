@@ -25,7 +25,7 @@ class CreateTagDialog extends React.Component {
   inputNewName = (e) => {
     this.setState({
       tagName: e.target.value,
-    }); 
+    });
   }
 
   selectTagcolor = (e) => {
@@ -34,7 +34,7 @@ class CreateTagDialog extends React.Component {
     });
   }
 
-  createTag = () => {  
+  createTag = () => {
     let name = this.state.tagName;
     let color = this.state.tagColor;
     let repoID = this.props.repoID;
@@ -46,7 +46,7 @@ class CreateTagDialog extends React.Component {
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.createTag();
-    } 
+    }
   }
 
   componentDidMount() {
@@ -61,7 +61,7 @@ class CreateTagDialog extends React.Component {
     let colorList = this.state.colorList;
     return (
       <Fragment>
-        <ModalHeader toggle={this.props.togglePopup}>
+        <ModalHeader toggle={this.props.onClose}>
           <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('New Tag')}
         </ModalHeader>
@@ -79,7 +79,7 @@ class CreateTagDialog extends React.Component {
                   return (
                     <div key={index} className="col-auto" onChange={this.selectTagcolor}>
                       <label className="colorinput">
-                        {index===0 ? 
+                        {index===0 ?
                           <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onClick={this.selectTagcolor}></input> :
                           <input name="color" type="radio" value={item} className="colorinput-input" onClick={this.selectTagcolor}></input>}
                         <span className={className}></span>

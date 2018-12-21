@@ -40,7 +40,7 @@ class UpdateTagDialog extends React.Component {
     });
   }
 
-  updateTag = () => {  
+  updateTag = () => {
     let tag_id = this.props.currentTag.id;
     let name = this.state.newName;
     let color = this.state.newColor;
@@ -53,7 +53,7 @@ class UpdateTagDialog extends React.Component {
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.updateTag();
-    } 
+    }
   }
 
   deleteTagClick = (item) => {
@@ -74,7 +74,7 @@ class UpdateTagDialog extends React.Component {
     let colorList = this.state.colorList;
     return (
       <Fragment>
-        <ModalHeader toggle={this.props.togglePopup}>
+        <ModalHeader toggle={this.props.onClose}>
           <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('Edit Tag')}
         </ModalHeader>
@@ -92,7 +92,7 @@ class UpdateTagDialog extends React.Component {
                   return (
                     <div key={index} className="col-auto" onChange={this.selectNewcolor}>
                       <label className="colorinput">
-                        {item===this.props.currentTag.color ? 
+                        {item===this.props.currentTag.color ?
                           <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onChange={this.selectNewcolor}></input> :
                           <input name="color" type="radio" value={item} className="colorinput-input" onChange={this.selectNewcolor}></input>}
                         <span className={className}></span>

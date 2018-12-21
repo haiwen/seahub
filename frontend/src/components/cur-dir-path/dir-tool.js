@@ -21,7 +21,7 @@ class DirTool extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showTagPopup: false,
+      isRepoTagDialogShow: false,
       currentTag: null,
       isListRepoTagShow: false,
       isUpdateRepoTagShow: false,
@@ -30,9 +30,29 @@ class DirTool extends React.Component {
     };
   }
 
+  onShowListRepoTag = () => {
+    this.setState({
+      isRepoTagDialogShow: true,
+      isListRepoTagShow: true,
+      isUpdateRepoTagShow: false,
+      isCreateRepoTagShow: false,
+      isListTaggedFileShow: false
+    });
+  }
+
+  onCloseRepoTagDialog = () => {
+    this.setState({
+      isRepoTagDialogShow: false,
+      isListRepoTagShow: false,
+      isUpdateRepoTagShow: false,
+      isCreateRepoTagShow: false,
+      isListTaggedFileShow: false
+    });
+  }
+
   onListRepoTagToggle = () => {
     this.setState({
-      showTagPopup: !this.state.showTagPopup,
+      isTagDialogShow: !this.state.isTagDialogShow,
       isListRepoTagShow: !this.state.isListRepoTagShow
     });
   }
@@ -44,12 +64,14 @@ class DirTool extends React.Component {
     });
   }
 
+  /*
   onCreateRepoTagPopupToggle = () => {
     this.setState({
       isCreateRepoTagShow: !this.state.isCreateRepoTagShow,
-      showTagPopup: !this.state.showTagPopup
+      isTagDialogShow: !this.state.isTagDialogShow
     });
   }
+  */
 
   onUpdateRepoTagToggle = (currentTag) => {
     this.setState({
@@ -59,12 +81,14 @@ class DirTool extends React.Component {
     });
   }
 
+  /*
   onUpdateRepoTagPopupToggle = () => {
     this.setState({
       isUpdateRepoTagShow: !this.state.isUpdateRepoTagShow,
-      showTagPopup: !this.state.showTagPopup
+      isTagDialogShow: !this.state.isTagDialogShow
     });
   }
+  */
 
   onListTaggedFileToggle = (currentTag) => {
     this.setState({
@@ -74,12 +98,14 @@ class DirTool extends React.Component {
     });
   }
 
+  /*
   onListTaggedFilePopupToggle = () => {
     this.setState({
       isListTaggedFileShow: !this.state.isListTaggedFileShow,
-      showTagPopup: !this.state.showTagPopup
+      isTagDialogShow: !this.state.isTagDialogShow
     });
   }
+  */
 
   isMarkdownFile(filePath) {
     let name = Utils.getFileName(filePath);
@@ -96,18 +122,18 @@ class DirTool extends React.Component {
       return (
         <Fragment>
           <ul className="path-toolbar">
-            <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onListRepoTagToggle} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
+            <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
           </ul>
 
-          {this.state.showTagPopup && (
+          {this.state.isRepoTagDialogShow && (
             <ModalPortal>
               <Modal isOpen={true}>
                 {this.state.isListRepoTagShow && (
                   <ListTagDialog
                     repoID={repoID}
-                    onListTagCancel={this.onListRepoTagToggle}
+                    onListTagCancel={this.onCloseRepoTagDialog}
                     onCreateRepoTag={this.onCreateRepoTagToggle}
                     onUpdateRepoTag={this.onUpdateRepoTagToggle}
                     onListTaggedFiles={this.onListTaggedFileToggle}
@@ -117,7 +143,7 @@ class DirTool extends React.Component {
                 {this.state.isCreateRepoTagShow && (
                   <CreateTagDialog
                     repoID={repoID}
-                    togglePopup={this.onCreateRepoTagPopupToggle}
+                    onClose={this.onCloseRepoTagDialog}
                     toggleCancel={this.onCreateRepoTagToggle}
                   />
                 )}
@@ -126,7 +152,7 @@ class DirTool extends React.Component {
                   <UpdateTagDialog
                     repoID={repoID}
                     currentTag={this.state.currentTag}
-                    togglePopup={this.onUpdateRepoTagPopupToggle}
+                    onClose={this.onCloseRepoTagDialog}
                     toggleCancel={this.onUpdateRepoTagToggle}
                   />
                 )}
@@ -135,7 +161,7 @@ class DirTool extends React.Component {
                   <ListTaggedFilesDialog
                     repoID={this.props.repoID}
                     currentTag={this.state.currentTag}
-                    togglePopup={this.onListTaggedFilePopupToggle}
+                    onClose={this.onCloseRepoTagDialog}
                     toggleCancel={this.onListTaggedFileToggle}
                   />
                 )}

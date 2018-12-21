@@ -45,7 +45,7 @@ class ListTaggedFilesDialog extends React.Component {
     let taggedFileList = this.state.taggedFileList;
     return (
       <Fragment>
-        <ModalHeader toggle={this.props.togglePopup}>
+        <ModalHeader toggle={this.props.onClose}>
           <span className="tag-popup-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('Tagged Files')}
         </ModalHeader>
