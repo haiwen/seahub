@@ -137,9 +137,9 @@ class DirView extends React.Component {
   
   onAddFile = (filePath, isDraft) => {
     let repoID = this.state.repoID;
-    seafileAPI.createFile(repoID, filePath, isDraft).then(() => {
+    seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
       let name = Utils.getFileName(filePath);
-      let dirent = this.createDirent(name, 'file');
+      let dirent = this.createDirent(name, 'file', res.data);
       let direntList = this.addItem(dirent, 'file');
       this.setState({direntList: direntList});
     });
@@ -419,7 +419,7 @@ class DirView extends React.Component {
     return direntList;
   }
   
-  createDirent(name, type) {
+  createDirent(name, type, direntInfo) {
     let data = new Date().getTime()/1000;
     let dirent = null;
     if (type === 'dir') {
@@ -437,7 +437,7 @@ class DirView extends React.Component {
         type: type,
         mtime: data,
         permission: 'rw',
-        size: 0,
+        size: direntInfo.size,
         starred: false,
         is_locked: false,
         lock_time: '',

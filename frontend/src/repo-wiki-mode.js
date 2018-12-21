@@ -155,7 +155,7 @@ class Wiki extends Component {
 
       this.addNodeToTree(name, parentPath, 'file');
       if (parentPath === this.state.path && !this.state.isViewFile) {
-        this.addDirent(name, 'file');
+        this.addDirent(name, 'file', res.data);
       }
     }).catch(() => {
       //todo;
@@ -510,8 +510,8 @@ class Wiki extends Component {
     // else do nothing
   }
 
-  addDirent = (name, type) => {
-    let item = this.createDirent(name, type);
+  addDirent = (name, type, direntInfo) => {
+    let item = this.createDirent(name, type, direntInfo);
     let direntList = this.state.direntList;
     if (type === 'dir') {
       direntList.unshift(item);
@@ -702,7 +702,7 @@ class Wiki extends Component {
     return node;
   }
 
-  createDirent(name, type) {
+  createDirent(name, type, direntInfo) {
     let data = new Date().getTime()/1000;
     let dirent = null;
     if (type === 'dir') {
@@ -720,7 +720,7 @@ class Wiki extends Component {
         type: type,
         mtime: data,
         permission: 'rw',
-        size: 0,
+        size: direntInfo.size,
         starred: false,
         is_locked: false,
         lock_time: '',
