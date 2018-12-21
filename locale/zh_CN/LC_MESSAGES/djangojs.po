@@ -7,18 +7,19 @@
 # Alfred <alfredhuang211@qq.com>, 2015
 # C_Q <helloworld.c@outlook.com>, 2018
 # C_Q <helloworld.c@outlook.com>, 2018
-# Daniel Pan <daniel.pan@seafile.com>, 2016
+# Daniel Pan <daniel.pan@seafile.com>, 2015-2016
 # imwhatiam <imwhatiam123@gmail.com>, 2015-2018
 # llj <lingjun.li1@gmail.com>, 2017-2018
 # Daniel Pan <daniel.pan@seafile.com>, 2015
 # zheng xie <xiez1989@gmail.com>, 2015,2018
+# zMingGit <517046497@qq.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-20 15:55+0800\n"
-"PO-Revision-Date: 2018-12-20 07:57+0000\n"
-"Last-Translator: llj <lingjun.li1@gmail.com>\n"
+"PO-Revision-Date: 2018-12-21 09:34+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -96,11 +97,11 @@ msgstr "历史"
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:116
 msgid "Request a review"
-msgstr ""
+msgstr "请求评审"
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:118
 msgid "Add new reviewer"
-msgstr ""
+msgstr "添加评审人"
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:122
 #: frontend/src/components/dialog/share-to-user.js:227
@@ -216,7 +217,7 @@ msgstr "新建文件"
 
 #: frontend/src/components/dialog/create-file-dialog.js:124
 msgid "This is a draft."
-msgstr ""
+msgstr "这是草稿文件。"
 
 #: frontend/src/components/dialog/create-folder-dialog.js:58
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:194
@@ -284,7 +285,7 @@ msgstr "请再次输入密码"
 #: frontend/src/components/dialog/create-tag-dialog.js:67
 #: frontend/src/components/dialog/list-tag-dialog.js:105
 msgid "New Tag"
-msgstr ""
+msgstr "新建标签"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:72
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:83
@@ -296,16 +297,16 @@ msgstr "名称"
 #: frontend/src/components/dialog/create-tag-dialog.js:75
 #: frontend/src/components/dialog/update-tag-dialog.js:89
 msgid "Select a color"
-msgstr ""
+msgstr "选择一个颜色"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:96
 #: frontend/src/components/dialog/update-tag-dialog.js:109
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: frontend/src/components/dialog/delete-dialog.js:22
 msgid "Delete Tag"
-msgstr ""
+msgstr "删除标签"
 
 #: frontend/src/components/dialog/delete-dialog.js:24
 msgid "Are you sure to delete"
@@ -364,7 +365,7 @@ msgstr "删除"
 
 #: frontend/src/components/dialog/edit-filetag-dialog.js:85
 msgid "Select Tags"
-msgstr ""
+msgstr "选择标签"
 
 #: frontend/src/components/dialog/generate-share-link.js:232
 #: frontend/src/components/dialog/generate-upload-link.js:133
@@ -387,11 +388,11 @@ msgstr "天"
 
 #: frontend/src/components/dialog/generate-share-link.js:267
 msgid "Greater than or equal to"
-msgstr ""
+msgstr "大于或等于"
 
 #: frontend/src/components/dialog/generate-share-link.js:270
 msgid "Less than or equal to"
-msgstr ""
+msgstr "小于或等于"
 
 #: frontend/src/components/dialog/generate-share-link.js:277
 msgid "Set permission"
@@ -433,12 +434,12 @@ msgstr "你可以共享生成好的链接给别人，他们就能通过这个链
 
 #: frontend/src/components/dialog/internal-link-dialog.js:50
 msgid "Copy internal link"
-msgstr ""
+msgstr "复制内部链接"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:59
 #: frontend/src/components/dialog/internal-link-dialog.js:62
 msgid "Internal Link"
-msgstr ""
+msgstr "内部链接"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:72
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:100
@@ -464,7 +465,7 @@ msgstr "成功设置资料库历史。"
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:59
 msgid "Please enter a non-negative integer"
-msgstr ""
+msgstr "请输入一个非负整数。"
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:100
 #: frontend/src/pages/my-libs/item.js:205
@@ -473,7 +474,7 @@ msgstr "历史设置"
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:106
 msgid "Setting library history is disabled by Admin."
-msgstr ""
+msgstr "资料库历史设置已被管理员禁用。"
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:111
 msgid "Keep full history"
@@ -489,11 +490,11 @@ msgstr "仅保留一段时间的历史:"
 
 #: frontend/src/components/dialog/list-tag-dialog.js:86
 msgid "Click new tag button to create tags."
-msgstr ""
+msgstr "点击新建标签按钮新建标签"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:51
 msgid "Tagged Files"
-msgstr ""
+msgstr "被标记的文件"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:57
 #: frontend/src/components/dirent-detail/detail-list-view.js:67
@@ -638,7 +639,7 @@ msgstr "转移资料库 {library_name} 给"
 
 #: frontend/src/components/dialog/update-tag-dialog.js:81
 msgid "Edit Tag"
-msgstr ""
+msgstr "修改标签"
 
 #: frontend/src/components/dialog/upload-remind-dialog.js:21
 #: static/scripts/app/views/fileupload.js:280
@@ -683,7 +684,7 @@ msgstr "图标"
 #: frontend/src/components/dir-view/dir-panel.js:107
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:176
 msgid "Folder does not exist."
-msgstr ""
+msgstr "文件夹不存在。"
 
 #: frontend/src/components/dir-view/dir-panel.js:114
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:182
@@ -730,7 +731,7 @@ msgstr "文件"
 #: frontend/src/components/dirent-detail/detail-list-view.js:68
 #: frontend/src/components/dirent-detail/detail-list-view.js:80
 msgid "Position"
-msgstr ""
+msgstr "位置"
 
 #: frontend/src/components/dirent-detail/lib-details.js:50
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:190
@@ -739,7 +740,7 @@ msgstr "文件"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:407
 msgid "file icon"
-msgstr ""
+msgstr "图标"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:408
 msgid "locked"
@@ -762,7 +763,7 @@ msgstr "更多操作"
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:88
 msgid "Markdown Document"
-msgstr ""
+msgstr "Markdown 文档"
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:89
 msgid ""
@@ -770,17 +771,17 @@ msgid ""
 " document, you can mark it as draft. After finishing the draft, you can ask "
 "others to review it. They can view the document history in the review page "
 "and leave comments on the document."
-msgstr ""
+msgstr "您可以使用Markdown格式轻松创建在线文档。创建文档时，可以将其标记为草稿。写完草稿后，你可以请别人审阅。他们可以在评审页面中查看文档历史，并对文档留下评论。"
 
 #: frontend/src/components/draft-list-view/draft-list-menu.js:26
 #: frontend/src/draft-review.js:533
 msgid "Publish"
-msgstr ""
+msgstr "发布"
 
 #: frontend/src/components/draft-list-view/draft-list-menu.js:27
 #: frontend/src/components/draft-list-view/draft-list-menu.js:36
 msgid "Ask for review"
-msgstr ""
+msgstr "请求评审"
 
 #: frontend/src/components/draft-list-view/draft-list-view.js:22
 #: frontend/src/components/review-list-view/review-list-view.js:63
@@ -793,7 +794,7 @@ msgstr "资料库"
 
 #: frontend/src/components/draft-list-view/draft-list-view.js:23
 msgid "Review"
-msgstr ""
+msgstr "评审"
 
 #: frontend/src/components/file-chooser/file-chooser.js:96
 msgid "Current Library"
@@ -815,7 +816,7 @@ msgstr "文件上传"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:28
 msgid "File is upload..."
-msgstr ""
+msgstr "文件上传中..."
 
 #: frontend/src/components/history-list-view/history-list-menu.js:51
 #: frontend/src/pages/my-libs/my-libs-deleted.js:158
@@ -889,7 +890,7 @@ msgstr "已连接的设备"
 #: frontend/src/components/main-side-nav.js:196
 #: frontend/src/pages/drafts/drafts-view.js:28
 msgid "Drafts"
-msgstr ""
+msgstr "草稿"
 
 #: frontend/src/components/main-side-nav.js:202
 #: frontend/src/components/main-side-nav.js:205
@@ -898,19 +899,19 @@ msgstr "共享管理"
 
 #: frontend/src/components/markdown-viewer.js:50
 msgid "This file is in review stage"
-msgstr ""
+msgstr "该文件处于评审状态"
 
 #: frontend/src/components/markdown-viewer.js:51
 msgid "View Review"
-msgstr ""
+msgstr "查看评审"
 
 #: frontend/src/components/markdown-viewer.js:59
 msgid "This file is in draft stage."
-msgstr ""
+msgstr "该文件处于草稿状态"
 
 #: frontend/src/components/markdown-viewer.js:60
 msgid "Edit Draft"
-msgstr ""
+msgstr "编辑草稿"
 
 #: frontend/src/components/markdown-viewer.js:69
 msgid "Last modified by"
@@ -918,11 +919,11 @@ msgstr "最近修改"
 
 #: frontend/src/components/more.js:14
 msgid "show more"
-msgstr ""
+msgstr "显示更多"
 
 #: frontend/src/components/review-list-view/review-comments.js:160
 msgid "Show resolved comments"
-msgstr ""
+msgstr "显示已解决的评论"
 
 #: frontend/src/components/review-list-view/review-comments.js:174
 msgid "No comment yet."
@@ -930,34 +931,34 @@ msgstr "还没有评论。"
 
 #: frontend/src/components/review-list-view/review-comments.js:201
 msgid "Add a comment."
-msgstr ""
+msgstr "添加评论"
 
 #: frontend/src/components/review-list-view/review-comments.js:298
 msgid "Mark as resolved"
-msgstr ""
+msgstr "标记为已解决"
 
 #: frontend/src/components/review-list-view/review-list-view.js:38
 msgid "Open"
-msgstr ""
+msgstr "打开"
 
 #: frontend/src/components/review-list-view/review-list-view.js:46
 msgid "Published"
-msgstr ""
+msgstr "发布"
 
 #: frontend/src/components/review-list-view/review-list-view.js:54
 #: frontend/src/draft-review.js:542
 msgid "Closed"
-msgstr ""
+msgstr "关闭"
 
 #: frontend/src/components/review-list-view/review-list-view.js:65
 #: frontend/src/draft-review.js:703
 msgid "Author"
-msgstr ""
+msgstr "所有者"
 
 #: frontend/src/components/review-list-view/review-list-view.js:66
 #: frontend/src/draft-review.js:672
 msgid "Reviewers"
-msgstr ""
+msgstr "评审者"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:226
 #: frontend/src/pages/share-admin/folders.js:233
@@ -1027,7 +1028,7 @@ msgstr "客户端"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:167
 msgid "Edit File"
-msgstr ""
+msgstr "编辑文件"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:167
 #: frontend/src/pages/share-admin/folders.js:229
@@ -1037,7 +1038,7 @@ msgstr "编辑"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:172
 msgid "New Draft"
-msgstr ""
+msgstr "创建草稿"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:178
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:179
@@ -1050,7 +1051,7 @@ msgstr "新建"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:189
 msgid "Folder Upload"
-msgstr ""
+msgstr "上传文件夹"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:197
 #: static/scripts/app/views/dir.js:807
@@ -1102,55 +1103,55 @@ msgstr "重命名"
 
 #: frontend/src/draft-review.js:113
 msgid "Successfully closed review %(reviewID)s."
-msgstr ""
+msgstr "成功关闭评审%(reviewID)s。"
 
 #: frontend/src/draft-review.js:117
 msgid "Failed to close review %(reviewID)s"
-msgstr ""
+msgstr "关闭评审%(reviewID)s失败"
 
 #: frontend/src/draft-review.js:126
 msgid "Successfully published draft."
-msgstr ""
+msgstr "成功发布草稿"
 
 #: frontend/src/draft-review.js:129
 msgid "Failed to publish draft."
-msgstr ""
+msgstr "发布草稿失败"
 
 #: frontend/src/draft-review.js:509
 msgid "review"
-msgstr ""
+msgstr "评审"
 
 #: frontend/src/draft-review.js:510
 msgid "Edit draft"
-msgstr ""
+msgstr "编辑草稿"
 
 #: frontend/src/draft-review.js:511
 msgid "View File"
-msgstr ""
+msgstr "查看原文件"
 
 #: frontend/src/draft-review.js:525
 msgid "View diff"
-msgstr ""
+msgstr "查看对比"
 
 #: frontend/src/draft-review.js:530
 msgid "Close review"
-msgstr ""
+msgstr "关闭评审"
 
 #: frontend/src/draft-review.js:532
 msgid "Publish draft"
-msgstr ""
+msgstr "发布草稿"
 
 #: frontend/src/draft-review.js:538
 msgid "Finished"
-msgstr ""
+msgstr "已结束"
 
 #: frontend/src/draft-review.js:685
 msgid "No reviewer yet."
-msgstr ""
+msgstr "还没有评审人"
 
 #: frontend/src/draft-review.js:722
 msgid "Changes"
-msgstr ""
+msgstr "改动"
 
 #: frontend/src/pages/dashboard/files-activities.js:26
 msgid "Operation"
@@ -1166,7 +1167,7 @@ msgstr "创建了资料库"
 
 #: frontend/src/pages/dashboard/files-activities.js:75
 msgid "Renamed library"
-msgstr ""
+msgstr "重命名资料库"
 
 #: frontend/src/pages/dashboard/files-activities.js:79
 msgid "Deleted library"
@@ -1174,7 +1175,7 @@ msgstr "已删除的资料库"
 
 #: frontend/src/pages/dashboard/files-activities.js:83
 msgid "Restored library"
-msgstr ""
+msgstr "恢复资料库"
 
 #: frontend/src/pages/dashboard/files-activities.js:88
 #: static/scripts/app/views/activity-item.js:25
@@ -1188,47 +1189,47 @@ msgstr "删除了回收站中{n}天前的条目."
 
 #: frontend/src/pages/dashboard/files-activities.js:100
 msgid "Created file"
-msgstr ""
+msgstr "创建文件"
 
 #: frontend/src/pages/dashboard/files-activities.js:104
 msgid "Deleted file"
-msgstr ""
+msgstr "删除文件"
 
 #: frontend/src/pages/dashboard/files-activities.js:108
 msgid "Restored file"
-msgstr ""
+msgstr "恢复文件"
 
 #: frontend/src/pages/dashboard/files-activities.js:112
 msgid "Renamed file"
-msgstr ""
+msgstr "重命名文件"
 
 #: frontend/src/pages/dashboard/files-activities.js:117
 msgid "Moved file"
-msgstr ""
+msgstr "移动文件"
 
 #: frontend/src/pages/dashboard/files-activities.js:121
 msgid "Updated file"
-msgstr ""
+msgstr "上传文件"
 
 #: frontend/src/pages/dashboard/files-activities.js:130
 msgid "Created folder"
-msgstr ""
+msgstr "创建文件夹"
 
 #: frontend/src/pages/dashboard/files-activities.js:134
 msgid "Deleted folder"
-msgstr ""
+msgstr "删除文件夹"
 
 #: frontend/src/pages/dashboard/files-activities.js:138
 msgid "Restored folder"
-msgstr ""
+msgstr "恢复文件夹"
 
 #: frontend/src/pages/dashboard/files-activities.js:142
 msgid "Renamed folder"
-msgstr ""
+msgstr "命名文件夹"
 
 #: frontend/src/pages/dashboard/files-activities.js:147
 msgid "Moved folder"
-msgstr ""
+msgstr "移动文件夹"
 
 #: frontend/src/pages/dashboard/files-activities.js:199
 #: frontend/src/pages/dashboard/files-activities.js:222
@@ -1249,42 +1250,42 @@ msgstr "没有权限"
 
 #: frontend/src/pages/drafts/draft-content.js:42
 msgid "Successfully deleted draft %(draft)s."
-msgstr ""
+msgstr "成功删除草稿%(draft)s。"
 
 #: frontend/src/pages/drafts/draft-content.js:46
 msgid "Failed to delete draft %(draft)s."
-msgstr ""
+msgstr "删除草稿 %(draft)s失败。"
 
 #: frontend/src/pages/drafts/draft-content.js:57
 msgid "Successfully published draft %(draft)s."
-msgstr ""
+msgstr "成功发布草稿%(draft)s。"
 
 #: frontend/src/pages/drafts/draft-content.js:61
 msgid "Failed to publish draft %(draft)s."
-msgstr ""
+msgstr "发布草稿 %(draft)s失败。"
 
 #: frontend/src/pages/drafts/draft-content.js:75
 msgid "Review already exists."
-msgstr ""
+msgstr "评审已存在"
 
 #: frontend/src/pages/drafts/draft-content.js:121
 msgid "No draft yet"
-msgstr ""
+msgstr "还没有草稿"
 
 #: frontend/src/pages/drafts/draft-content.js:122
 msgid ""
 "Draft is a way to let you collaborate with others on files. You can create a"
 " draft from a file, edit the draft and then ask for a review. The original "
 "file will be updated only after the draft be reviewed."
-msgstr ""
+msgstr "你可以使用草稿和他人进行文件协同编辑。你可以创建草稿、编辑草稿，然后要求评审。原始文件只有在草稿审核后才会更新。"
 
 #: frontend/src/pages/drafts/drafts-view.js:31
 msgid "Reviews"
-msgstr ""
+msgstr "评审"
 
 #: frontend/src/pages/file-history/side-panel.js:145
 msgid "History Versions"
-msgstr ""
+msgstr "历史版本"
 
 #: frontend/src/pages/groups/group-view.js:74
 #: frontend/src/pages/groups/group-view.js:108
@@ -1394,7 +1395,7 @@ msgstr "断开 %(name)s 连接成功。"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:108
 msgid "Failed to unlink %(name)s"
-msgstr ""
+msgstr "断开 %(name)s 连接失败"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:131
 #: frontend/src/pages/linked-devices/linked-devices.js:141
@@ -1485,13 +1486,13 @@ msgstr "所有成员"
 
 #: frontend/src/pages/share-admin/share-links.js:45
 msgid "You don't have any share links"
-msgstr ""
+msgstr "你没有任何分享链接。"
 
 #: frontend/src/pages/share-admin/share-links.js:46
 msgid ""
 "You can generate a share link for a folder or a file. Anyone who receives "
 "this link can view the folder or the file online."
-msgstr ""
+msgstr "您可以为文件夹或文件生成共享链接。不管谁接收这个链接，都可以在线查看对应的文件夹或文件。"
 
 #: frontend/src/pages/share-admin/share-links.js:58
 #: frontend/src/pages/share-admin/upload-links.js:58
@@ -1975,7 +1976,7 @@ msgstr "删除 %(name)s 成功"
 
 #: static/scripts/app/views/dirent.js:651
 msgid "The draft already exists."
-msgstr ""
+msgstr "文件草稿已存在。"
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too big"
