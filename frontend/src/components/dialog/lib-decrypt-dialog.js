@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  onLibDecryptDialog: PropTypes.string.isRequired
+  onLibDecryptDialog: PropTypes.func.isRequired
 };
 
 
