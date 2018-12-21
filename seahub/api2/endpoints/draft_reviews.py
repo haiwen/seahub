@@ -71,13 +71,6 @@ class DraftReviewsView(APIView):
 
         username = request.user.username
         try:
-            d_r = DraftReview.objects.get(creator=username, draft_id=d)
-            if d_r.status == 'closed':
-                d_r.delete()
-        except DraftReview.DoesNotExist:
-            pass
-
-        try:
             d_r = DraftReview.objects.add(creator=username, draft=d)
         except (DraftReviewExist):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')

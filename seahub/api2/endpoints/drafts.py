@@ -40,13 +40,7 @@ class DraftsView(APIView):
         """List all user drafts.
         """
         username = request.user.username
-        data = [x.to_dict() for x in Draft.objects.filter(username=username)]
-
-        draft_counts = len(data)
-
-        result = {}
-        result['data'] = data
-        result['draft_counts'] = draft_counts
+        result = Draft.objects.list_draft_by_username(username)
         return Response(result)
 
     @add_org_context

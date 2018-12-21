@@ -24,6 +24,73 @@ class DraftFileConflict(Exception):
 
 
 class DraftManager(models.Manager):
+    def list_draft_by_username(self, username):
+        data = []
+        repo_list = []
+
+        for d in self.filter(username=username):
+            uuid = d.origin_file_uuid
+            file_path = posixpath.join(uuid.parent_path, uuid.filename)
+
+            # If repo does not exist, no related items are displayed.
+            has_repo = False
+            for r in repo_list:
+                if r['id'] == d.origin_repo_id:
+                    has_repo = True
+                    repo = r
+
+            if not has_repo:
+                repo_obj = {}
+                repo = seafile_api.get_repo(d.origin_repo_id)
+                if repo:
+                    repo_obj['id'] = repo.id
+                    repo_obj['name'] = repo.name
+                    repo_list.append(repo_obj)
+
+                    repo = repo_obj
+                    has_repo = True
+
+            if not has_repo:
+                continue
+
+            # If origin file does not exist, no related items are displayed.
+            origin_file_id = seafile_api.get_file_id_by_path(d.origin_repo_id, file_path)
+            if not origin_file_id:
+                continue
+
+            # Query whether there is an associated review
+            try:
+                review = DraftReview.objects.get(draft_id=d)
+                review_id = review.id
+                review_status = review.status
+            except DraftReview.DoesNotExist:
+                review_id = None
+                review_status = None
+
+            draft = {}
+            draft['id'] = d.id
+            draft['review_id'] = review_id
+            draft['review_status'] = review_status
+            draft['owner'] = d.username
+            draft['repo_name'] = repo['name']
+            draft['owner_nickname'] = email2nickname(d.username)
+            draft['origin_repo_id'] = d.origin_repo_id
+            draft['origin_file_path'] = file_path
+            draft['origin_file_version'] = d.origin_file_version
+            draft['draft_file_path'] = d.draft_file_path
+            draft['created_at'] = datetime_to_isoformat_timestr(d.created_at)
+            draft['updated_at'] = datetime_to_isoformat_timestr(d.updated_at)
+
+            data.append(draft)
+
+        draft_counts = len(data)
+
+        result = {}
+        result['data'] = data
+        result['draft_counts'] = draft_counts
+
+        return result
+
     def create_exist_file_draft(self, repo, username, file_uuid, file_path):
         # create drafts dir if does not exist
         draft_dir_id = seafile_api.get_dir_id_by_path(repo.id, '/Drafts')
@@ -136,20 +203,9 @@ class Draft(TimestampedModel):
         uuid = self.origin_file_uuid
         file_path = posixpath.join(uuid.parent_path, uuid.filename)
 
-        repo = seafile_api.get_repo(self.origin_repo_id)
-
-        review_id = None
-        review_status = None
-        if hasattr(self, 'draftreview'):
-            review_id = self.draftreview.id
-            review_status = self.draftreview.status
-
         return {
             'id': self.pk,
-            'review_id': review_id,
-            'review_status': review_status,
             'owner': self.username,
-            'repo_name': repo.name,
             'owner_nickname': email2nickname(self.username),
             'origin_repo_id': self.origin_repo_id,
             'origin_file_path': file_path,
@@ -166,10 +222,14 @@ class DraftReviewExist(Exception):
 
 class DraftReviewManager(models.Manager):
     def add(self, creator, draft):
-
-        has_review = hasattr(draft, 'draftreview')
-        if has_review:
-            raise DraftReviewExist
+        try:
+            d_r = self.get(creator=creator, draft_id=draft)
+            if d_r.status == 'closed':
+                d_r.delete()
+            if d_r.status == 'open':
+                raise DraftReviewExist
+        except DraftReview.DoesNotExist:
+            pass
 
         draft_review = self.model(creator=creator,
                                   author=draft.username,
@@ -190,6 +250,7 @@ class DraftReviewManager(models.Manager):
         reviewers = ReviewReviewer.objects.filter(review_id__in=reviews)
 
         data = []
+        repo_list = []
         for review in reviews:
             reviewer_list = []
             for r in reviewers:
@@ -199,10 +260,51 @@ class DraftReviewManager(models.Manager):
 
             author = user_to_dict(review.creator, avatar_size=64)
 
-            review = review.to_dict()
-            review.update({'reviewers': reviewer_list})
-            review.update({'author': author})
-            data.append(review)
+            # If repo does not exist, no related items are displayed.
+            has_repo = False
+            for r in repo_list:
+                if r['id'] == review.origin_repo_id:
+                    has_repo = True
+                    repo = r
+
+            if not has_repo:
+                repo_obj = {}
+                repo = seafile_api.get_repo(review.origin_repo_id)
+                if repo:
+                    repo_obj['id'] = repo.id
+                    repo_obj['name'] = repo.name
+                    repo_list.append(repo_obj)
+                    repo = repo_obj
+                    has_repo = True
+
+            if not has_repo:
+                continue
+
+            uuid = review.origin_file_uuid
+            file_path = posixpath.join(uuid.parent_path, uuid.filename)
+
+            # If origin file does not exist, no related items are displayed.
+            origin_file_id = seafile_api.get_file_id_by_path(review.origin_repo_id, file_path)
+            if not origin_file_id:
+                continue
+
+            review_obj = {}
+            review_obj['id'] = review.id
+            review_obj['creator'] = review.creator
+            review_obj['status'] = review.status
+            review_obj['creator_name'] = email2nickname(review.creator)
+            review_obj['draft_origin_repo_id'] = review.origin_repo_id
+            review_obj['draft_origin_repo_name'] = repo['name']
+            review_obj['draft_origin_file_version'] = review.origin_file_version
+            review_obj['draft_publish_file_version'] = review.publish_file_version
+            review_obj['draft_file_path'] = review.draft_file_path
+            review_obj['created_at'] = datetime_to_isoformat_timestr(review.created_at)
+            review_obj['updated_at'] = datetime_to_isoformat_timestr(review.updated_at)
+
+            if review_obj:
+                review_obj.update({'reviewers': reviewer_list})
+                review_obj.update({'author': author})
+                data.append(review_obj)
 
         return data
 
@@ -213,6 +315,7 @@ class DraftReviewManager(models.Manager):
         reviewers = ReviewReviewer.objects.filter(review_id__in=reviews)
 
         data = []
+        repo_list = []
         for review in reviews:
             reviewer_list = []
             for r in reviewers:
@@ -222,10 +325,51 @@ class DraftReviewManager(models.Manager):
 
             author = user_to_dict(review.creator, avatar_size=64)
 
-            review = review.to_dict()
-            review.update({'author': author})
-            review.update({'reviewers': reviewer_list})
-            data.append(review)
+            # If repo does not exist, no related items are displayed.
+            has_repo = False
+            for r in repo_list:
+                if r['id'] == review.origin_repo_id:
+                    has_repo = True
+                    repo = r
+
+            if not has_repo:
+                repo_obj = {}
+                repo = seafile_api.get_repo(review.origin_repo_id)
+                if repo:
+                    repo_obj['id'] = repo.id
+                    repo_obj['name'] = repo.name
+                    repo_list.append(repo_obj)
+                    repo = repo_obj
+                    has_repo = True
+
+            if not has_repo:
+                continue
+
+            uuid = review.origin_file_uuid
+            file_path = posixpath.join(uuid.parent_path, uuid.filename)
+
+            # If origin file does not exist, no related items are displayed.
+            origin_file_id = seafile_api.get_file_id_by_path(review.origin_repo_id, file_path)
+            if not origin_file_id:
+                continue
+
+            review_obj = {}
+            review_obj['id'] = review.id
+            review_obj['creator'] = review.creator
+            review_obj['status'] = review.status
+            review_obj['creator_name'] = email2nickname(review.creator)
+            review_obj['draft_origin_repo_id'] = review.origin_repo_id
+            review_obj['draft_origin_repo_name'] = repo['name']
+            review_obj['draft_origin_file_version'] = review.origin_file_version
+            review_obj['draft_publish_file_version'] = review.publish_file_version
+            review_obj['draft_file_path'] = review.draft_file_path
+            review_obj['created_at'] = datetime_to_isoformat_timestr(review.created_at)
+            review_obj['updated_at'] = datetime_to_isoformat_timestr(review.updated_at)
+
+            if review_obj:
+                review_obj.update({'reviewers': reviewer_list})
+                review_obj.update({'author': author})
+                data.append(review_obj)
 
         return data
 
@@ -244,17 +388,12 @@ class DraftReview(TimestampedModel):
     objects = DraftReviewManager()
 
     def to_dict(self):
-        r_repo = seafile_api.get_repo(self.origin_repo_id)
-        if not r_repo:
-            raise DraftFileConflict
-
         return {
             'id': self.pk,
             'creator': self.creator,
             'status': self.status,
             'creator_name': email2nickname(self.creator),
             'draft_origin_repo_id': self.origin_repo_id,
-            'draft_origin_repo_name': r_repo.name,
             'draft_origin_file_version': self.origin_file_version,
             'draft_publish_file_version': self.publish_file_version,
             'draft_file_path': self.draft_file_path,

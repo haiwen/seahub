@@ -54,8 +54,11 @@ def has_draft_file(repo_id, file_path):
     from .models import Draft
     if file_uuid:
         try:
-            Draft.objects.get(origin_file_uuid=file_uuid)
-            has_draft = True
+            d = Draft.objects.get(origin_file_uuid=file_uuid)
+            file_id = seafile_api.get_file_id_by_path(repo_id, d.draft_file_path)
+            if file_id:
+                has_draft = True
+
         except Draft.DoesNotExist:
             pass
 
