@@ -67,8 +67,8 @@ class DraftListItem extends React.Component {
         </td>
         <td className="review">
           {(draft.review_id && draft.review_status === 'open') ? 
-              <a href={reviewUrl} target="_blank">#{draft.review_id}</a> : 
-              <span>--</span> 
+            <a href={reviewUrl} target="_blank">#{draft.review_id}</a> : 
+            <span>--</span> 
           }
         </td>
         <td className="update">{localTime}</td>
