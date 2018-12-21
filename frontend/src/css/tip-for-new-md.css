@@ -6,6 +6,11 @@
   background: #eee;
   border-radius: 8px; 
   margin-right: 1.5em;
+  cursor: pointer;
+}
+.big-new-md-button:hover,
+.big-new-md-button:focus {
+  background: #dfdfdf;
 }
 .add-md-icon {
   font-size: 1.2em;
