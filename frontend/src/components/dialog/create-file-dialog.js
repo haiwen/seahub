@@ -119,11 +119,13 @@ class CreateFile extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft.')}
-              </Label>
-            </FormGroup>
+            {this.props.fileType == '.md' && (
+              <FormGroup check>
+                <Label check>
+                  <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft.')}
+                </Label>
+              </FormGroup>
+            )}
           </Form>
         </ModalBody>
         <ModalFooter>
