@@ -100,7 +100,7 @@ class ShareRepoDialog extends React.Component {
 
   handleSubmit = () => {
     if (this.state.selectedRepoList.length === 0) {
-      toaster.danger(gettext('Place select a library to share.'));
+      toaster.danger(gettext('Please select a library to share.'));
       return;
     }
 
