@@ -48,9 +48,9 @@ class CreateRepoDialog extends React.Component {
   } 
 
   handleKeyPress = (e) => {
-    e.preventDefault();
     if (e.key === 'Enter') {
       this.handleSubmit();
+      e.preventDefault();
     }
   }
 
