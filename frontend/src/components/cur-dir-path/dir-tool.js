@@ -64,15 +64,6 @@ class DirTool extends React.Component {
     });
   }
 
-  /*
-  onCreateRepoTagPopupToggle = () => {
-    this.setState({
-      isCreateRepoTagShow: !this.state.isCreateRepoTagShow,
-      isTagDialogShow: !this.state.isTagDialogShow
-    });
-  }
-  */
-
   onUpdateRepoTagToggle = (currentTag) => {
     this.setState({
       currentTag: currentTag,
@@ -81,15 +72,6 @@ class DirTool extends React.Component {
     });
   }
 
-  /*
-  onUpdateRepoTagPopupToggle = () => {
-    this.setState({
-      isUpdateRepoTagShow: !this.state.isUpdateRepoTagShow,
-      isTagDialogShow: !this.state.isTagDialogShow
-    });
-  }
-  */
-
   onListTaggedFileToggle = (currentTag) => {
     this.setState({
       currentTag: currentTag,
@@ -97,15 +79,6 @@ class DirTool extends React.Component {
       isListTaggedFileShow: !this.state.isListTaggedFileShow,
     });
   }
-
-  /*
-  onListTaggedFilePopupToggle = () => {
-    this.setState({
-      isListTaggedFileShow: !this.state.isListTaggedFileShow,
-      isTagDialogShow: !this.state.isTagDialogShow
-    });
-  }
-  */
 
   isMarkdownFile(filePath) {
     let name = Utils.getFileName(filePath);
