@@ -191,7 +191,7 @@ class DirView extends React.Component {
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, this.state.path, dirName).then(() => {
       
       let direntList = this.deleteItem(dirent);
-      this.setState(direntList);
+      this.setState({direntList: direntList});
 
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirName);

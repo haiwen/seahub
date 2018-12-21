@@ -4,9 +4,10 @@ import { gettext } from '../../utils/constants';
 import SharedRepoListItem from './shared-repo-list-item';
 
 const propTypes = {
+  libraryType: PropTypes.string,
   currentGroup: PropTypes.object,
-  repoList: PropTypes.array.isRequired,
   isShowTableThread: PropTypes.bool,
+  repoList: PropTypes.array.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
 };
@@ -34,6 +35,7 @@ class SharedRepoListView extends React.Component {
             <SharedRepoListItem
               key={repo.repo_id}
               repo={repo}
+              libraryType={this.props.libraryType}
               currentGroup={this.props.currentGroup}
               isItemFreezed={this.state.isItemFreezed}
               onFreezedItem={this.onFreezedItem}

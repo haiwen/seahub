@@ -145,10 +145,10 @@ class MainSideNav extends React.Component {
             </li>
             { canViewOrg &&
               <li className="nav-item" onClick={() => this.tabItemClick('org')}>
-                <a href={ siteRoot + '#org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
+                <Link to={ siteRoot + 'org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
                   <span className="sf2-icon-organization" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Shared with all')}</span>
-                </a>
+                </Link>
               </li>
             }
             <li className="nav-item flex-column" id="group-nav">

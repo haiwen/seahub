@@ -68,6 +68,7 @@
             enableWiki: {% if enable_wiki %} true {% else %} false {% endif %},
             enableEncryptedLibrary: '{{ enable_encrypted_library }}',
             enableRepoHistorySetting: '{{ enable_repo_history_setting }}',
+            isSystemStaff: {% if request.user.is_staff %} true {% else %} false {% endif %},
         }
      };
 </script>

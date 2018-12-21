@@ -319,7 +319,6 @@ class GroupView extends React.Component {
         {this.state.isCreateRepoDialogShow && !this.state.isDepartmentGroup && (
           <ModalPortal>
             <CreateRepoDialog 
-              hasPermission={this.hasPermission}
               libraryType={this.state.libraryType}
               onCreateToggle={this.onCreateRepoToggle}
               onCreateRepo={this.onCreateRepo}

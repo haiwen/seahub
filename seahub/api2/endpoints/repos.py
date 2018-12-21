@@ -215,16 +215,28 @@ class ReposView(APIView):
         if filter_by['public'] and request.user.permissions.can_view_org():
             public_repos = list_inner_pub_repos(request)
 
+            # get repo id owner dict
+            all_repo_owner = []
+            repo_id_owner_dict = {}
+            for repo in public_repos:
+                repo_id = repo.repo_id
+                if repo_id not in repo_id_owner_dict:
+                    repo_owner = get_repo_owner(request, repo_id)
+                    all_repo_owner.append(repo_owner)
+                    repo_id_owner_dict[repo_id] = repo_owner
+
             # Reduce memcache fetch ops.
+            owner_set = set(all_repo_owner)
             share_from_set = set([x.user for x in public_repos])
             modifiers_set = set([x.last_modifier for x in public_repos])
-            for e in modifiers_set | share_from_set:
+            for e in modifiers_set | share_from_set | owner_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
             for r in public_repos:
+                repo_owner = repo_id_owner_dict[r.repo_id]
                 repo_info = {
                     "type": "public",
                     "repo_id": r.repo_id,
@@ -233,6 +245,9 @@ class ReposView(APIView):
                     "modifier_email": r.last_modifier,
                     "modifier_name": nickname_dict.get(r.last_modifier, ''),
                     "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
+                    "owner_email": repo_owner,
+                    "owner_name": nickname_dict.get(repo_owner, ''),
+                    "owner_contact_email": contact_email_dict.get(repo_owner, ''),
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,

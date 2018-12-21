@@ -4,12 +4,13 @@ import moment from 'moment';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link } from '@reach/router';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, isPro, username, folderPermEnabled } from '../../utils/constants';
+import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff } from '../../utils/constants';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 
 const propTypes = {
   currentGroup: PropTypes.object,
+  libraryType: PropTypes.string,
   repo: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
@@ -152,7 +153,7 @@ class SharedRepoListItem extends React.Component {
   generatorOperations = () => {
     let { repo, currentGroup } = this.props;
     //todo this have a bug; use current api is not return admins param;
-    let isStaff = currentGroup.admins && currentGroup.admins.indexOf(username) > -1; //for group repolist;
+    let isStaff = currentGroup && currentGroup.admins && currentGroup.admins.indexOf(username) > -1; //for group repolist;
     let isRepoOwner = repo.owner_email === username;
     let isAdmin = repo.is_admin;
     let operations = [];
@@ -189,10 +190,18 @@ class SharedRepoListItem extends React.Component {
   } 
 
   generatorMobileMenu = () => {
-    let operations = this.generatorOperations();
-    if (this.isDeparementOnwerGroupMember) {
-      operations.unshift('unshare');
-      operations.unshift('share');
+    let operations = [];
+    if (this.props.libraryType && this.props.libraryType === 'public') {
+      let isRepoOwner = this.props.repo.owner_email === username;
+      if (isSystemStaff || isRepoOwner) {
+        operations.push('unshare');
+      }
+    } else {
+      operations = this.generatorOperations();
+      if (this.isDeparementOnwerGroupMember) {
+        operations.unshift('unshare');
+        operations.unshift('share');
+      }
     }
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
@@ -219,9 +228,17 @@ class SharedRepoListItem extends React.Component {
   }
 
   generatorPCMenu = () => {
-    // scene one: (share, delete, itemToggle and other operations);
-    // scene two: (share, unshare), (share), (unshare)
-    let operations = this.generatorOperations();
+    let operations = [];
+    if (this.props.libraryType && this.props.libraryType === 'public') {
+      let isRepoOwner = this.props.repo.owner_email === username;
+      if (isSystemStaff || isRepoOwner) {
+        operations.push('unshare');
+      }
+    } else {
+      // scene one: (share, delete, itemToggle and other operations);
+      // scene two: (share, unshare), (share), (unshare)
+      operations = this.generatorOperations();
+    }
     const shareOperation   = <a href="#" className="sf2-icon-share sf2-x op-icon" title={gettext("Share")} onClick={this.onItemShare}></a>;
     const unshareOperation = <a href="#" className="sf2-icon-x3 sf2-x op-icon" title={gettext("Unshare")} onClick={this.onItemUnshare}></a>
     const deleteOperation  = <a href="#" className="sf2-icon-delete sf2-x op-icon" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
