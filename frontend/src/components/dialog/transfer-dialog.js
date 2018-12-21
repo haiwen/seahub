@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import toaster from '../toast';
 import { gettext } from '../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 const propTypes = {
@@ -58,10 +58,10 @@ class TransferDialog extends React.Component {
       this.props.submit(repoID);
       this.props.toggleDialog();
     }).catch(res => {
-        let message = gettext('Failed. Please check the network.')
-        this.props.toggleDialog();
-        toaster.danger(message);
-    })
+      let message = gettext('Failed. Please check the network.');
+      this.props.toggleDialog();
+      toaster.danger(message);
+    });
   } 
 
   render() {
