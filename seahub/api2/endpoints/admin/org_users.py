@@ -34,9 +34,7 @@ logger = logging.getLogger(__name__)
 def get_org_user_info(org_id, email):
     user_info = {}
 
-    user_obj = User.objects.get(email=email)
     user_info['org_id'] = org_id
-    user_info['active'] = user_obj.is_active
     user_info['email'] = email
     user_info['name'] = email2nickname(email)
     user_info['contact_email'] = email2contact_email(email)
@@ -46,7 +44,6 @@ def get_org_user_info(org_id, email):
 
     org_user_quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
     user_info['quota_usage'] = org_user_quota_usage / get_file_size_unit('MB')
-
     return user_info
 
 def check_org_user(func):
@@ -94,6 +91,32 @@ class AdminOrgUsers(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser, IsProVersion)
 
+    def get(self, request, org_id):
+        """ Get all users in an org.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        # argument check
+        org_id = int(org_id)
+        if org_id == 0:
+            error_msg = 'org_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            error_msg = 'Organization %d not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        result = []
+        org_users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+        for org_user in org_users:
+            user_info = get_org_user_info(org_id, org_user.email)
+            user_info['active'] = org_user.is_active
+            result.append(user_info)
+
+        return Response({'users': result})
+
     def post(self, request, org_id):
         """ Add new user to org.
 
@@ -121,6 +144,14 @@ class AdminOrgUsers(APIView):
             error_msg = 'password invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        active = request.POST.get('active', 'true')
+        active = active.lower()
+        if active not in ('true', 'false'):
+            error_msg = 'active invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        is_active = active == 'true'
+
         try:
             User.objects.get(email=email)
             user_exists = True
@@ -147,7 +178,8 @@ class AdminOrgUsers(APIView):
 
         # create user
         try:
-            User.objects.create_user(email, password, is_staff=False, is_active=True)
+            User.objects.create_user(email, password, is_staff=False,
+                    is_active=is_active)
         except User.DoesNotExist as e:
             logger.error(e)
             error_msg = 'Fail to add user %s.' % email
@@ -170,6 +202,7 @@ class AdminOrgUsers(APIView):
             UserOptions.objects.set_force_passwd_change(email)
 
         user_info = get_org_user_info(org_id, email)
+        user_info['active'] = is_active
         return Response(user_info)
 
 
@@ -188,7 +221,24 @@ class AdminOrgUser(APIView):
         """
 
         # argument check
+        org_id = int(org_id)
+        if org_id == 0:
+            error_msg = 'org_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            error_msg = 'Organization %d not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            user_obj = User.objects.get(email=email)
+        except User.DoesNotExist:
+            error_msg = 'User %s not found.' % email
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         user_info = get_org_user_info(org_id, email)
+        user_info['active'] = user_obj.is_active
         return Response(user_info)
 
     @check_org_user
@@ -199,6 +249,12 @@ class AdminOrgUser(APIView):
         1. only admin can perform this action.
         """
 
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            error_msg = 'User %s not found.' % email
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         # update active
         active = request.data.get('active', None)
         if active:
@@ -207,7 +263,6 @@ class AdminOrgUser(APIView):
                 error_msg = "active invalid, should be 'true' or 'false'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            user = User.objects.get(email=email)
             if active == 'true':
                 user.is_active = True
             else:
@@ -267,6 +322,7 @@ class AdminOrgUser(APIView):
             seafile_api.set_org_user_quota(org_id, email, user_quota)
 
         user_info = get_org_user_info(org_id, email)
+        user_info['active'] = user.is_active
         return Response(user_info)
 
     @check_org_user
