@@ -509,7 +509,7 @@ a.op-icon:focus {
 .side-nav-con .nav .nav-item,
 .side-nav-con .nav .nav-item .nav-link {
     display: block;
-    padding-right: 0;
+    padding-left: 0;
     margin-right: 0;
 }
 .side-nav-con .active .sharp,
@@ -536,7 +536,7 @@ a.op-icon:focus {
 .side-nav-con .sharp {
     display:inline-block;
     width:2.625rem;
-    margin-right:0.25rem;
+    margin-right:0.325rem;
     text-align:right;
     color:#aaa;
 }
