@@ -9,7 +9,7 @@ class Dirent {
     this.type = json.type;
     this.mtime = moment.unix(json.mtime).fromNow();
     this.permission = json.permission;
-    this.isSelected = false;
+    this.isSelected = false; // is check or not
     if (json.type === 'file') {
       this.size = Utils.bytesToSize(json.size);
       this.starred = json.starred;
