@@ -114,19 +114,21 @@ class PublicSharedView extends React.Component {
 
   addRepoItem = (repo) => {
     let isExist = false;
+    let repoIndex = 0;
     let repoList = this.state.repoList;
     for (let i = 0; i < repoList.length; i ++) {
       if (repo.repo_id === repoList[i].repo_id) {
         isExist = true;
+        repoIndex = i;
         break;
       }
     }
     if (isExist) {
-      return this.state.repoList;
+      this.state.repoList.splice(repoIndex, 1);
     }
 
     let newRepoList = this.state.repoList.map(item => {return item;});
-    newRepoList.push(repo);
+    newRepoList.unshift(repo);
     return newRepoList;
   }
 

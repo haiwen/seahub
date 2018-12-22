@@ -24,7 +24,7 @@ class DirView extends React.Component {
 
     this.state = {
       path: '/',
-      pathExit: true,
+      pathExist: true,
       repoName: '',
       repoID: '',
       permission: true,
@@ -68,6 +68,10 @@ class DirView extends React.Component {
       this.setState({path: path});
       if (!res.data.lib_need_decrypt) {
         this.updateDirentList(path);
+      }
+    }).catch(error => {
+      if (error.response) {
+        this.setState({pathExist: false});
       }
     });
   }
@@ -365,10 +369,6 @@ class DirView extends React.Component {
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
       this.setState({path: selectedItem.path});
-    } else if (Utils.isMarkdownFile(selectedItem.path)) {
-      let url = siteRoot + 'wiki/lib/' + selectedItem.repo_id + selectedItem.path;
-      let newWindow = window.open('markdown-editor');
-      newWindow.location.href = url;
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + selectedItem.path;
       let newWindow = window.open('about:blank');
@@ -487,7 +487,7 @@ class DirView extends React.Component {
         pathPrefix={this.props.pathPrefix}
         currentRepoInfo={this.state.currentRepoInfo}
         path={this.state.path}
-        pathExist={this.state.pathExit}
+        pathExist={this.state.pathExist}
         repoID={this.state.repoID}
         repoName={this.state.repoName}
         permission={this.state.permission}

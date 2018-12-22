@@ -207,7 +207,7 @@ class GroupView extends React.Component {
 
   addRepoItem = (repo) => {
     let newRepoList = this.state.repoList.map(item => {return item;});
-    newRepoList.push(repo);
+    newRepoList.unshift(repo);
     return newRepoList;
   }
 

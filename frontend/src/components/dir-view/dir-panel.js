@@ -109,35 +109,35 @@ class DirPanel extends React.Component {
     return (
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-north">
-        {!this.props.libNeedDecrypt &&
-          <div className="cur-view-toolbar border-left-show">
-            <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onMenuClick}></span>
-            <div className="dir-operation">
-              {this.props.isDirentSelected ?
-                <MutipleDirOperationToolbar
-                  path={this.props.path}
-                  repoID={this.props.repoID}
-                  selectedDirentList={this.props.selectedDirentList}
-                  onItemsMove={this.props.onItemsMove}
-                  onItemsCopy={this.props.onItemsCopy}
-                  onItemsDelete={this.props.onItemsDelete}
-                /> :
-                <DirOperationToolBar 
-                  isViewFile={false}
-                  path={this.props.path}
-                  repoID={this.props.repoID}
-                  onAddFile={this.props.onAddFile}
-                  onAddFolder={this.props.onAddFolder}
-                  onUploadFile={this.onUploadFile}
-                  onUploadFolder={this.onUploadFolder}
-                />
-              }
+          {!this.props.libNeedDecrypt &&
+            <div className="cur-view-toolbar border-left-show">
+              <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onMenuClick}></span>
+              <div className="dir-operation">
+                {this.props.isDirentSelected ?
+                  <MutipleDirOperationToolbar
+                    path={this.props.path}
+                    repoID={this.props.repoID}
+                    selectedDirentList={this.props.selectedDirentList}
+                    onItemsMove={this.props.onItemsMove}
+                    onItemsCopy={this.props.onItemsCopy}
+                    onItemsDelete={this.props.onItemsDelete}
+                  /> :
+                  <DirOperationToolBar 
+                    isViewFile={false}
+                    path={this.props.path}
+                    repoID={this.props.repoID}
+                    onAddFile={this.props.onAddFile}
+                    onAddFolder={this.props.onAddFolder}
+                    onUploadFile={this.onUploadFile}
+                    onUploadFolder={this.onUploadFolder}
+                  />
+                }
+              </div>
+              <ViewModeToolbar
+                currentMode={this.state.currentMode} 
+                switchViewMode={this.switchViewMode}
+              />
             </div>
-            <ViewModeToolbar
-              currentMode={this.state.currentMode} 
-              switchViewMode={this.switchViewMode}
-            />
-          </div>
           }
           <CommonToolbar 
             repoID={this.props.repoID} 
@@ -147,54 +147,54 @@ class DirPanel extends React.Component {
         </div>
         <div className="main-panel-center flex-row">
           {!this.props.libNeedDecrypt &&
-          <div className="cur-view-container">
-            <div className="cur-view-path">
-              <CurDirPath 
-                isViewFile={false}
-                repoID={this.props.repoID}
-                repoName={this.props.repoName}
-                pathPrefix={this.props.pathPrefix}
-                currentPath={this.props.path} 
-                permission={this.props.permission}
-                onPathClick={this.props.onPathClick}
-                onTabNavClick={this.props.onTabNavClick}
-              />
+            <div className="cur-view-container">
+              <div className="cur-view-path">
+                <CurDirPath 
+                  isViewFile={false}
+                  repoID={this.props.repoID}
+                  repoName={this.props.repoName}
+                  pathPrefix={this.props.pathPrefix}
+                  currentPath={this.props.path} 
+                  permission={this.props.permission}
+                  onPathClick={this.props.onPathClick}
+                  onTabNavClick={this.props.onTabNavClick}
+                />
+              </div>
+              <div className="cur-view-content">
+                {!this.props.pathExist ?
+                  ErrMessage :
+                  <Fragment>
+                    <DirentListView
+                      path={this.props.path}
+                      repoID={this.props.repoID}
+                      direntList={this.props.direntList}
+                      currentRepoInfo={this.props.currentRepoInfo}
+                      isDirentListLoading={this.props.isDirentListLoading}
+                      isAllItemSelected={this.props.isAllDirentSelected}
+                      isRepoOwner={this.state.isRepoOwner}
+                      onAddFile={this.props.onAddFile}
+                      onItemDetails={this.onItemDetails}
+                      onItemMove={this.props.onItemMove}
+                      onItemCopy={this.props.onItemCopy}
+                      onItemClick={this.props.onItemClick}
+                      onItemDelete={this.props.onItemDelete}
+                      onItemRename={this.props.onItemRename}
+                      onItemSelected={this.props.onItemSelected}
+                      onAllItemSelected={this.props.onAllItemSelected}
+                      updateDirent={this.props.updateDirent}
+                    />
+                    <FileUploader
+                      dragAndDrop={true}
+                      ref={uploader => this.uploader = uploader}
+                      path={this.props.path}
+                      repoID={this.props.repoID}
+                      direntList={this.props.direntList}
+                      onFileUploadSuccess={this.props.onFileUploadSuccess}
+                    />
+                  </Fragment>
+                }
+              </div>
             </div>
-            <div className="cur-view-content">
-              {!this.props.pathExist ?
-                ErrMessage :
-                <Fragment>
-                  <DirentListView
-                    path={this.props.path}
-                    repoID={this.props.repoID}
-                    direntList={this.props.direntList}
-                    currentRepoInfo={this.props.currentRepoInfo}
-                    isDirentListLoading={this.props.isDirentListLoading}
-                    isAllItemSelected={this.props.isAllDirentSelected}
-                    isRepoOwner={this.state.isRepoOwner}
-                    onAddFile={this.props.onAddFile}
-                    onItemDetails={this.onItemDetails}
-                    onItemMove={this.props.onItemMove}
-                    onItemCopy={this.props.onItemCopy}
-                    onItemClick={this.props.onItemClick}
-                    onItemDelete={this.props.onItemDelete}
-                    onItemRename={this.props.onItemRename}
-                    onItemSelected={this.props.onItemSelected}
-                    onAllItemSelected={this.props.onAllItemSelected}
-                    updateDirent={this.props.updateDirent}
-                  />
-                  <FileUploader
-                    dragAndDrop={true}
-                    ref={uploader => this.uploader = uploader}
-                    path={this.props.path}
-                    repoID={this.props.repoID}
-                    direntList={this.props.direntList}
-                    onFileUploadSuccess={this.props.onFileUploadSuccess}
-                  />
-                </Fragment>
-              }
-            </div>
-          </div>
           }
           {this.state.isDirentDetailShow && (
             <div className="cur-view-detail">
