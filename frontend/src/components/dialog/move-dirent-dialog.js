@@ -167,8 +167,8 @@ class MoveDirent extends React.Component {
           {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

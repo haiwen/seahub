@@ -59,7 +59,7 @@ class MyLibraries extends Component {
         encrypted: res.data.encrypted,
         permission: permission,
       };
-      this.state.items.push(repo);
+      this.state.items.unshift(repo);
       this.setState({items: this.state.items});
     });
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -24,7 +24,7 @@ class DirView extends React.Component {
 
     this.state = {
       path: '/',
-      pathExit: true,
+      pathExist: true,
       repoName: '',
       repoID: '',
       permission: true,
@@ -36,6 +36,7 @@ class DirView extends React.Component {
       direntList: [],
       selectedDirentList: [],
       dirID: '',
+      errorMsg: '',
     };
     window.onpopstate = this.onpopstate;
   }
@@ -69,6 +70,25 @@ class DirView extends React.Component {
       if (!res.data.lib_need_decrypt) {
         this.updateDirentList(path);
       }
+    }).catch(error => {
+      if (error.response) {
+        if (error.response.status == 403) {
+          this.setState({
+            isDirentListLoading: false,
+            errorMsg: gettext('Permission denied')
+          });
+        } else {
+          this.setState({
+            isDirentListLoading: false,
+            errorMsg: gettext('Error')
+          });
+        }
+      } else {
+        this.setState({
+          isDirentListLoading: false,
+          errorMsg: gettext('Please check the network.')
+        });
+      }
     });
   }
 
@@ -101,11 +121,15 @@ class DirView extends React.Component {
       });
       this.setState({
         isDirentListLoading: false,
+        pathExist: true,
         direntList: direntList,
         dirID: res.headers.oid,
       });
     }).catch(() => {
-      this.setState({pathExist: false});
+      this.setState({
+        isDirentListLoading: false,
+        pathExist: false
+      });
     });
   }
 
@@ -365,10 +389,6 @@ class DirView extends React.Component {
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
       this.setState({path: selectedItem.path});
-    } else if (Utils.isMarkdownFile(selectedItem.path)) {
-      let url = siteRoot + 'wiki/lib/' + selectedItem.repo_id + selectedItem.path;
-      let newWindow = window.open('markdown-editor');
-      newWindow.location.href = url;
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + selectedItem.path;
       let newWindow = window.open('about:blank');
@@ -487,7 +507,8 @@ class DirView extends React.Component {
         pathPrefix={this.props.pathPrefix}
         currentRepoInfo={this.state.currentRepoInfo}
         path={this.state.path}
-        pathExist={this.state.pathExit}
+        pathExist={this.state.pathExist}
+        errorMsg={this.state.errorMsg}
         repoID={this.state.repoID}
         repoName={this.state.repoName}
         permission={this.state.permission}

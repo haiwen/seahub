@@ -103,10 +103,6 @@ class App extends Component {
       this.setState({currentTab: '', pathPrefix: []});
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
       navigate(url, {repalce: true});
-    } else if (Utils.isMarkdownFile(selectedItem.path)) {
-      let url = siteRoot + 'wiki/lib/' + selectedItem.repo_id + selectedItem.path;
-      let newWindow = window.open('markdown-editor');
-      newWindow.location.href = url;
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
       let newWindow = window.open('about:blank');
