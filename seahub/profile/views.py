@@ -23,6 +23,8 @@ from seahub.utils import is_ldap_user
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 
+from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
+
 @login_required
 def edit_profile(request):
     """
@@ -93,6 +95,8 @@ def edit_profile(request):
             'two_factor_auth_enabled': has_two_factor_auth(),
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
+            'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
+            'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'webdav_passwd': webdav_passwd,
     }
 
@@ -173,6 +177,11 @@ def get_user_profile(request, user):
 
 @login_required
 def delete_user_account(request):
+    if not ENABLE_DELETE_ACCOUNT:
+        messages.error(request, _(u'Permission denied.'))
+        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next)
+
     if request.method != 'POST':
         raise Http404
 
