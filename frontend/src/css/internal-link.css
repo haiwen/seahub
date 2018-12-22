@@ -1,10 +1,10 @@
 .file-internal-link {
-    font-size: .875rem;
-    cursor: pointer;
-    margin-left: .5rem;
-    vertical-align: text-bottom;
+  font-size: .8em;
+  color: #808080;
+  cursor: pointer;
+  margin-left: .5rem;
+  vertical-align: text-bottom;
 }
-
-.file-internal-link {
-    color: #585858;
+.file-internal-link:hover {
+  color: #333;
 }
