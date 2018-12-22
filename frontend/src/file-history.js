@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import editUtilties from './utils/editor-utilties';
-import { filePath } from './utils/constants';
+import { filePath, fileName } from './utils/constants';
 import URLDecorator from './utils/url-decorator';
+import CommonToolbar from './components/toolbar/common-toolbar';
 import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';
 import axios from 'axios';
+
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
@@ -19,20 +21,17 @@ class FileHistory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: '',
       renderingContent: true,
-      fileOwner: '',
-      markdownContent: '',
-      markdownContentOld: ''
+      newmarkdownContent: '',
+      oldMarkdownContent: ''
     };
   }
 
-
-  setDiffContent = (markdownContent, markdownContentOld)=> {
+  setDiffContent = (newmarkdownContent, oldMarkdownContent)=> {
     this.setState({
       renderingContent: false,
-      markdownContent: markdownContent,
-      markdownContentOld: markdownContentOld
+      newmarkdownContent: newmarkdownContent,
+      oldMarkdownContent: oldMarkdownContent,
     });
   }
 
@@ -52,19 +51,30 @@ class FileHistory extends React.Component {
 
   render() {
     return(
-      <div id="main" className="history-main">
-        <SidePanel 
-          fileOwner={this.state.fileOwner}
-          onHistoryItemClick={this.onHistoryItemClick}
-          setDiffContent={this.setDiffContent}
-        />
-        <MainPanel 
-          markdownContent={this.state.markdownContent}
-          markdownContentOld={this.state.markdownContentOld}
-          renderingContent={this.state.renderingContent}
-        />
-
-      </div>
+      <Fragment>
+        <div id="header" className="history-header">
+          <div className="title">
+            <a href="javascript:window.history.back()" className="go-back" title="Back">
+              <span className="fas fa-chevron-left"></span>
+            </a>
+            <span className="name">{fileName}</span>
+          </div>
+          <div className='toolbar'>
+            <CommonToolbar onSearchedClick={this.onSearchedClick} />
+          </div>
+        </div>
+        <div id="main" className="history-content">
+          <SidePanel 
+            onHistoryItemClick={this.onHistoryItemClick}
+            setDiffContent={this.setDiffContent}
+          />
+          <MainPanel 
+            newMarkdownContent={this.state.newMarkdownContent}
+            oldMarkdownContent={this.state.oldMarkdownContent}
+            renderingContent={this.state.renderingContent}
+          />
+        </div>
+      </Fragment>
     );
   }
 }

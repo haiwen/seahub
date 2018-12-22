@@ -732,18 +732,6 @@ a.sf-popover-item:hover {
     background-color: #f8f8f8;
 }
 
-/* for go-back */
-.go-back {
-    font-size: 25px;
-    padding-right: 0.75rem;
-    color:#ccc;
-}
-
-.go-back:hover {
-    color:#ff9933;
-    text-decoration: none;
-}
-
 /* basic layout */
 .side-panel-top {
     padding: .5rem 1rem;
