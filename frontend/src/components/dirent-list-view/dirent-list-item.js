@@ -295,7 +295,7 @@ class DirentListItem extends React.Component {
           toaster.danger(errMessage);
         }
       } else {
-        let errMessage = gettext('Create draft failed');
+        let errMessage = gettext('Create draft failed.');
         toaster.danger(errMessage);
       }
     });
