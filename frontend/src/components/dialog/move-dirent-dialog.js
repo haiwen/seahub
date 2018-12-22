@@ -59,19 +59,19 @@ class MoveDirent extends React.Component {
       direntPaths.push(path);
     });
     
-    // copy dirents to one of them. eg: A/B, A/C -> A/B
+    // move dirents to one of them. eg: A/B, A/C -> A/B
     if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
       this.setState({errMessage: message});
       return;
     }
 
-    // copy dirents to current path
+    // move dirents to current path
     if (selectedPath && selectedPath === this.props.path && (repo.repo_id === repoID)) {
       this.setState({errMessage: message});
       return;
     }
 
-    // copy dirents to one of their child. eg: A/B, A/D -> A/B/C
+    // move dirents to one of their child. eg: A/B, A/D -> A/B/C
     let moveDirentPath = '';
     let isChildPath = direntPaths.some(direntPath => {
       let flag = selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1;

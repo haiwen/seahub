@@ -495,7 +495,7 @@ class DirView extends React.Component {
         isDirentSelected={this.state.isDirentSelected}
         isAllDirentSelected={this.state.isAllDirentSelected}
         direntList={this.state.direntList}
-        selectedDirentList={this.state.direntList}
+        selectedDirentList={this.state.selectedDirentList}
         onItemClick={this.onItemClick}
         onAddFile={this.onAddFile}
         onAddFolder={this.onAddFolder}

@@ -287,8 +287,17 @@ class DirentListItem extends React.Component {
       let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId});
       let newWindow = window.open('draft');
       newWindow.location.href = url;
-    }).catch(() => {
-      toaster.danger('Create draft failed.');
+    }).catch((error) => {
+      if (error.response) {
+        let errMessage = 'Draft already exists.';
+        if (errMessage === error.response.data.error_msg) {
+          errMessage = gettext('Draft already exists.');
+          toaster.danger(errMessage);
+        }
+      } else {
+        let errMessage = gettext('Create draft failed.');
+        toaster.danger(errMessage);
+      }
     });
     this.onItemMenuHide();
   }
