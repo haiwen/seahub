@@ -37,6 +37,8 @@ class DirView extends React.Component {
       selectedDirentList: [],
       dirID: '',
       errorMsg: '',
+      lastRefreshTime: new Date(),
+      isNotified: false,
     };
     window.onpopstate = this.onpopstate;
   }
@@ -98,6 +100,13 @@ class DirView extends React.Component {
   }
 
   onRepoUpdateEvent = () => {
+    let currentTime = new Date();
+    if ((parseInt(currentTime - this.state.lastRefreshTime)/60000) <= 5) {
+      return;
+    }
+    if (this.state.isNotified) {
+      return;
+    }
     let repoID = this.props.repoID;
     let { path, dirID } = this.state;
     seafileAPI.dirMetaData(repoID, path).then((res) => {
@@ -109,6 +118,7 @@ class DirView extends React.Component {
           </span>,
           {duration: 3600}
         );
+        this.setState({isNotified: true});
       }
     })
   }
