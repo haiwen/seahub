@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, Form, FormGroup } from 'reactstrap';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+
+import '../../css/lib-decrypt.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -56,17 +58,13 @@ class LibDecryptDialog extends React.Component {
         <ModalBody>
           <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button> 
           <Form className="lib-decrypt-form text-center">
-            <img src={siteRoot + 'media/img/lock.png'} alt=""/>
-            <p>{gettext('This library is password protected')}</p>
+            <img src={`${mediaUrl}img/lock.png`} alt="" aria-hidden="true" />
+            <p className="intro">{gettext('This library is password protected')}</p>
             {this.state.showError &&
               <p className="error">{gettext('Wrong password')}</p>
             }
-            <FormGroup>
-              <Input type="password" name="password" onKeyPress={this.handleKeyPress} placeholder={gettext('Password')} onChange={this.handleChange}/>
-            </FormGroup>
-            <FormGroup>
-              <Button type="submit" value="Submit" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
-            </FormGroup>
+            <input type="password" name="password" className="form-control password-input" autoComplete="off" onKeyPress={this.handleKeyPress} placeholder={gettext('Password')} onChange={this.handleChange} />
+            <button type="submit" className="btn btn-primary submit" onClick={this.handleSubmit}>{gettext('Submit')}</button>
             <p className="tip">{'* '}{gettext('The password will be kept in the server for only 1 hour.')}</p>
           </Form>
         </ModalBody>
