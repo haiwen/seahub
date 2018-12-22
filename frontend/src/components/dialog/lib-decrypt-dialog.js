@@ -64,7 +64,7 @@ class LibDecryptDialog extends React.Component {
               <p className="error">{gettext('Wrong password')}</p>
             }
             <input type="password" name="password" className="form-control password-input" autoComplete="off" onKeyPress={this.handleKeyPress} placeholder={gettext('Password')} onChange={this.handleChange} />
-            <button type="submit" className="btn btn-block btn-secondary submit" onClick={this.handleSubmit}>{gettext('Submit')}</button>
+            <button type="submit" className="btn btn-primary submit" onClick={this.handleSubmit}>{gettext('Submit')}</button>
             <p className="tip">{'* '}{gettext('The password will be kept in the server for only 1 hour.')}</p>
           </Form>
         </ModalBody>
