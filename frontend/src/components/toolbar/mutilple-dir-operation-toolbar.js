@@ -95,7 +95,7 @@ class MutipleDirOperationToolbar extends React.Component {
   render() {
     return (
       <Fragment>
-        <div className="operation mutiple-dirents-operation">
+        <div className="operation multiple-dirents-operation">
           <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></button>
           <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></button>
           <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onItemsDelete}></button>

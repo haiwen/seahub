@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -36,6 +36,7 @@ class DirView extends React.Component {
       direntList: [],
       selectedDirentList: [],
       dirID: '',
+      errorMsg: '',
     };
     window.onpopstate = this.onpopstate;
   }
@@ -71,7 +72,22 @@ class DirView extends React.Component {
       }
     }).catch(error => {
       if (error.response) {
-        this.setState({pathExist: false});
+        if (error.response.status == 403) {
+          this.setState({
+            isDirentListLoading: false,
+            errorMsg: gettext('Permission denied')
+          });
+        } else {
+          this.setState({
+            isDirentListLoading: false,
+            errorMsg: gettext('Error')
+          });
+        }
+      } else {
+        this.setState({
+          isDirentListLoading: false,
+          errorMsg: gettext('Please check the network.')
+        });
       }
     });
   }
@@ -105,11 +121,15 @@ class DirView extends React.Component {
       });
       this.setState({
         isDirentListLoading: false,
+        pathExist: true,
         direntList: direntList,
         dirID: res.headers.oid,
       });
     }).catch(() => {
-      this.setState({pathExist: false});
+      this.setState({
+        isDirentListLoading: false,
+        pathExist: false
+      });
     });
   }
 
@@ -488,6 +508,7 @@ class DirView extends React.Component {
         currentRepoInfo={this.state.currentRepoInfo}
         path={this.state.path}
         pathExist={this.state.pathExist}
+        errorMsg={this.state.errorMsg}
         repoID={this.state.repoID}
         repoName={this.state.repoName}
         permission={this.state.permission}

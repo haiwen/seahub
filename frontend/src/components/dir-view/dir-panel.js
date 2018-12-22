@@ -17,6 +17,7 @@ const propTypes = {
   currentRepoInfo: PropTypes.object,
   pathPrefix: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
+  errorMsg: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
@@ -104,7 +105,7 @@ class DirPanel extends React.Component {
   }
 
   render() {
-    const ErrMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
+    const errMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
 
     return (
       <div className="main-panel wiki-main-panel o-hidden">
@@ -161,36 +162,41 @@ class DirPanel extends React.Component {
                 />
               </div>
               <div className="cur-view-content">
-                {!this.props.pathExist ?
-                  ErrMessage :
+                {this.props.errorMsg ?
+                 <p className="error text-center">{this.props.errorMsg}</p> :
                   <Fragment>
-                    <DirentListView
-                      path={this.props.path}
-                      repoID={this.props.repoID}
-                      direntList={this.props.direntList}
-                      currentRepoInfo={this.props.currentRepoInfo}
-                      isDirentListLoading={this.props.isDirentListLoading}
-                      isAllItemSelected={this.props.isAllDirentSelected}
-                      isRepoOwner={this.state.isRepoOwner}
-                      onAddFile={this.props.onAddFile}
-                      onItemDetails={this.onItemDetails}
-                      onItemMove={this.props.onItemMove}
-                      onItemCopy={this.props.onItemCopy}
-                      onItemClick={this.props.onItemClick}
-                      onItemDelete={this.props.onItemDelete}
-                      onItemRename={this.props.onItemRename}
-                      onItemSelected={this.props.onItemSelected}
-                      onAllItemSelected={this.props.onAllItemSelected}
-                      updateDirent={this.props.updateDirent}
-                    />
-                    <FileUploader
-                      dragAndDrop={true}
-                      ref={uploader => this.uploader = uploader}
-                      path={this.props.path}
-                      repoID={this.props.repoID}
-                      direntList={this.props.direntList}
-                      onFileUploadSuccess={this.props.onFileUploadSuccess}
-                    />
+                    {!this.props.pathExist ?
+                      errMessage :
+                      <Fragment>
+                        <DirentListView
+                          path={this.props.path}
+                          repoID={this.props.repoID}
+                          direntList={this.props.direntList}
+                          currentRepoInfo={this.props.currentRepoInfo}
+                          isDirentListLoading={this.props.isDirentListLoading}
+                          isAllItemSelected={this.props.isAllDirentSelected}
+                          isRepoOwner={this.state.isRepoOwner}
+                          onAddFile={this.props.onAddFile}
+                          onItemDetails={this.onItemDetails}
+                          onItemMove={this.props.onItemMove}
+                          onItemCopy={this.props.onItemCopy}
+                          onItemClick={this.props.onItemClick}
+                          onItemDelete={this.props.onItemDelete}
+                          onItemRename={this.props.onItemRename}
+                          onItemSelected={this.props.onItemSelected}
+                          onAllItemSelected={this.props.onAllItemSelected}
+                          updateDirent={this.props.updateDirent}
+                        />
+                        <FileUploader
+                          dragAndDrop={true}
+                          ref={uploader => this.uploader = uploader}
+                          path={this.props.path}
+                          repoID={this.props.repoID}
+                          direntList={this.props.direntList}
+                          onFileUploadSuccess={this.props.onFileUploadSuccess}
+                        />
+                      </Fragment>
+                    }
                   </Fragment>
                 }
               </div>
