@@ -1,0 +1,19 @@
+.lib-decrypt-form .intro {
+  color: #464646;
+  font-size: 1.3em;
+}
+.lib-decrypt-form .password-input {
+  width: 50%;
+  margin: 0 auto;
+}
+.lib-decrypt-form .submit {
+  width: 50%;
+  margin: 1.5em auto 1em;
+  background: -webkit-linear-gradient(top, #fafafb, #eeeeee);
+  background: -moz-linear-gradient(top, #fafafb, #eeeeee);
+  background: linear-gradient(top, #fafafb, #eeeeee);
+  font-weight: normal;
+}
+.lib-decrypt-form .submit:hover {
+  background: #fff;
+}
