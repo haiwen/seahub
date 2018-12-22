@@ -12,6 +12,7 @@ const propTypes = {
   updateDraftsList: PropTypes.func.isRequired,
   isLoadingDraft: PropTypes.bool.isRequired,
   draftList: PropTypes.arrayOf(PropTypes.object),
+  getDrafts: PropTypes.func.isRequired,
 };
 
 class DraftContent extends React.Component {
@@ -27,6 +28,7 @@ class DraftContent extends React.Component {
   }
 
   componentDidMount() {
+    this.props.getDrafts();
     document.addEventListener('click', this.onHideContextMenu);
   }
 
