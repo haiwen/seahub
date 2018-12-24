@@ -53,6 +53,7 @@ class Wiki extends Component {
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
+    this.lastModifyTime = new Date();
   }
 
   componentWillMount() {
@@ -87,7 +88,15 @@ class Wiki extends Component {
     collabServer.unwatchRepo(repoID);
   }
 
+  componentDidUpdate() {
+    this.lastModifyTime = new Date();
+  }
+
   onRepoUpdateEvent = () => {
+    let currentTime = new Date();
+    if ((parseFloat(currentTime - this.lastModifyTime)/60000) <= 5) {
+      return;
+    }
     let { path, dirID } = this.state;
     seafileAPI.dirMetaData(repoID, path).then((res) => {
       if (res.data.id !== dirID) {
@@ -98,6 +107,7 @@ class Wiki extends Component {
           </span>,
           {duration: 3600}
         );
+        this.lastModifyTime = new Date();
       }
     })
   }

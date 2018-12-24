@@ -37,10 +37,9 @@ class DirView extends React.Component {
       selectedDirentList: [],
       dirID: '',
       errorMsg: '',
-      lastRefreshTime: new Date(),
-      isNotified: false,
     };
     window.onpopstate = this.onpopstate;
+    this.lastModifyTime = new Date();
   }
 
   onpopstate = (event) => {
@@ -99,12 +98,13 @@ class DirView extends React.Component {
     collabServer.unwatchRepo(this.props.repoID);
   }
 
+  componentDidUpdate() {
+    this.lastModifyTime = new Date();
+  }
+
   onRepoUpdateEvent = () => {
     let currentTime = new Date();
-    if ((parseInt(currentTime - this.state.lastRefreshTime)/60000) <= 5) {
-      return;
-    }
-    if (this.state.isNotified) {
+    if ((parseFloat(currentTime - this.lastModifyTime)/60000) <= 5) {
       return;
     }
     let repoID = this.props.repoID;
@@ -116,9 +116,9 @@ class DirView extends React.Component {
             {gettext('This folder has been updated. ')}
             <a href='' >{gettext('Refresh')}</a>
           </span>,
-          {duration: 3600}
+          {duration: 300}
         );
-        this.setState({isNotified: true});
+        this.lastModifyTime = new Date();
       }
     })
   }
