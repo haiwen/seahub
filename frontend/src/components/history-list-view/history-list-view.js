@@ -2,24 +2,41 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import HisotyListItem from './history-list-item';
 import Loading from '../loading';
-import axios from 'axios';
-import editUtilties from '../../utils/editor-utilties';
-import URLDecorator from '../../utils/url-decorator';
-import { filePath } from '../../utils/constants';
 
 const propTypes = {
   hasMore: PropTypes.bool.isRequired,
   isReloadingData: PropTypes.bool.isRequired,
-  isItemFrezeed: PropTypes.bool.isRequired,
   historyList: PropTypes.array.isRequired,
-  currentItem: PropTypes.object,
   reloadMore: PropTypes.func.isRequired,
-  onMenuControlClick: PropTypes.func.isRequired,
-  onHistoryItemClick: PropTypes.func.isRequired,
-  setDiffContent: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
 };
 
 class HistoryListView extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false,
+      currentItem: null,
+    };
+  }
+
+  componentDidMount = () => {
+    let historyList = this.props.historyList;
+    // todo add fault-tolerant；
+    if (historyList.length > 0) {
+      this.setState({currentItem: historyList[0]});
+      if (historyList === 1) {
+        this.props.onItemClick(historyList[0]);
+      } else {
+        this.props.onItemClick(historyList[0], historyList[1]);
+      }
+    }
+  }
+
+  onFreezedItemToggle = () => {
+    this.setState({isItemFreezed: !this.state.isItemFreezed});
+  }
 
   onScrollHandler = (event) => {
     const clientHeight = event.target.clientHeight;
@@ -32,46 +49,30 @@ class HistoryListView extends React.Component {
     }
   }
 
-  componentDidMount() {
-    let historyList = this.props.historyList;
-    if (historyList.length > 1) {
-      let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: historyList[0].rev_file_id});
-      let downLoadURL1 = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: historyList[1].rev_file_id});
-      axios.all([
-        editUtilties.getFileContent(downLoadURL),
-        editUtilties.getFileContent(downLoadURL1)
-      ]).then(axios.spread((res1, res2) => {
-        this.props.setDiffContent(res1.data, res2.data);
-      }));
+  onItemClick = (item, currentIndex) => {
+    this.setState({currentItem: item});
+    if (currentIndex !== this.props.historyList.length) {
+      let preItem = this.props.historyList[currentIndex + 1];
+      this.props.onItemClick(item, preItem);
     } else {
-      let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: historyList[0].rev_file_id});
-      axios.all([
-        editUtilties.getFileContent(downLoadURL),
-      ]).then(axios.spread((res1) => {
-        this.props.setDiffContent(res1.data, '');
-      }));
+      this.props.onItemClick(item);
     }
-   
   }
 
   render() {
     return (
       <ul className="history-list-container" onScroll={this.onScrollHandler}>
-        {this.props.historyList.map((item, index, historyList) => {
-          let preItemIndex = index + 1;
-          if (preItemIndex === historyList.length) {
-            preItemIndex = index;
-          }
+        {this.props.historyList.map((item, index) => {
           return (
             <HisotyListItem
               key={index} 
               item={item}
-              isFirstItem={index === 0}
-              preCommitID={historyList[preItemIndex].rev_file_id}
-              currentItem={this.props.currentItem}
-              isItemFrezeed={this.props.isItemFrezeed}
-              onMenuControlClick={this.props.onMenuControlClick}
-              onHistoryItemClick={this.props.onHistoryItemClick}
+              index={index}
+              currentItem={this.state.currentItem}
+              isItemFreezed={this.state.isItemFreezed}
+              onItemClick={this.onItemClick}
+              onItemRestore={this.props.onItemRestore}
+              onFreezedItemToggle={this.onFreezedItemToggle}
             />
           );
         })}

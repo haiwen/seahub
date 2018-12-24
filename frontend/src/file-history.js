@@ -27,6 +27,10 @@ class FileHistory extends React.Component {
     };
   }
 
+  onSearchedClick = () => {
+    // todo;
+  }
+
   setDiffContent = (newmarkdownContent, oldMarkdownContent)=> {
     this.setState({
       renderingContent: false,
@@ -36,17 +40,28 @@ class FileHistory extends React.Component {
   }
 
 
-  onHistoryItemClick = (item, preCommitID)=> {
-    let objID = item.rev_file_id;
-    let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: objID});
-    let downLoadURL1 = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: preCommitID});
+  onHistoryItemClick = (item, preItem)=> {
     this.setState({renderingContent: true});
-    axios.all([
-      editUtilties.getFileContent(downLoadURL),
-      editUtilties.getFileContent(downLoadURL1)
-    ]).then(axios.spread((res1, res2) => {
-      this.setDiffContent(res1.data, res2.data);
-    }));
+    if (preItem) {
+      let currID = item.rev_file_id;
+      let preID = preItem.rev_file_id;
+      let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: currID});
+      let downLoadURL1 = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: preID});
+      axios.all([
+        editUtilties.getFileContent(downLoadURL),
+        editUtilties.getFileContent(downLoadURL1)
+      ]).then(axios.spread((res1, res2) => {
+        this.setDiffContent(res1.data, res2.data);
+      }));
+    } else {
+      let currID = item.rev_file_id;
+      let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: currID});
+      axios.all([
+        editUtilties.getFileContent(downLoadURL),
+      ]).then(axios.spread((res1) => {
+        this.setDiffContent(res1.data, '');
+      }));
+    }
   }
 
   render() {
@@ -64,10 +79,7 @@ class FileHistory extends React.Component {
           </div>
         </div>
         <div id="main" className="history-content">
-          <SidePanel 
-            onHistoryItemClick={this.onHistoryItemClick}
-            setDiffContent={this.setDiffContent}
-          />
+          <SidePanel onItemClick={this.onHistoryItemClick}/>
           <MainPanel 
             newMarkdownContent={this.state.newMarkdownContent}
             oldMarkdownContent={this.state.oldMarkdownContent}
