@@ -53,7 +53,7 @@ class TableBody extends Component {
       let op, details;
       let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.author_email)}/`;
 
-      let libURL = siteRoot + 'library/' + item.repo_id + '/' + item.repo_name + '/';
+      let libURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + '/';
       let libLink = <a href={libURL}>{item.repo_name}</a>;
       let smallLibLink = <a className="small text-secondary" href={libURL}>{item.repo_name}</a>;
 
@@ -115,7 +115,7 @@ class TableBody extends Component {
           break;
         }
       } else { // dir
-        let dirURL = siteRoot + 'library/' + item.repo_id + '/' + item.repo_name + Utils.encodePath(item.path);
+        let dirURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + Utils.encodePath(item.path);
         let dirLink = <a href={dirURL}>{item.name}</a>;
         switch(item.op_type) {
         case 'create':
