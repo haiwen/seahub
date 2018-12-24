@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const contentPropTypes = {
   data: PropTypes.object.isRequired,
@@ -47,21 +48,12 @@ const tablePropTypes = {
 
 class TableBody extends Component {
 
-  encodePath(path) {
-    let path_arr = path.split('/');
-    let path_arr_ = [];
-    for (let i = 0, len = path_arr.length; i < len; i++) {
-      path_arr_.push(encodeURIComponent(path_arr[i]));
-    }     
-    return path_arr_.join('/');
-  }
-
   render() {
     let listFilesActivities = this.props.items.map(function(item, index) {
       let op, details;
       let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.author_email)}/`;
 
-      let libURL = `${siteRoot}#common/lib/${item.repo_id}`;
+      let libURL = siteRoot + 'library/' + item.repo_id + '/' + item.repo_name + '/';
       let libLink = <a href={libURL}>{item.repo_name}</a>;
       let smallLibLink = <a className="small text-secondary" href={libURL}>{item.repo_name}</a>;
 
@@ -93,7 +85,7 @@ class TableBody extends Component {
           break;
         }
       } else if (item.obj_type == 'file') {
-        let fileURL = `${siteRoot}lib/${item.repo_id}/file${this.encodePath(item.path)}`;
+        let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
         switch(item.op_type) {
         case 'create':
@@ -123,7 +115,7 @@ class TableBody extends Component {
           break;
         }
       } else { // dir
-        let dirURL = `${siteRoot}#common/lib/${item.repo_id}${this.encodePath(item.path)}`;
+        let dirURL = siteRoot + 'library/' + item.repo_id + '/' + item.repo_name + Utils.encodePath(item.path);
         let dirLink = <a href={dirURL}>{item.name}</a>;
         switch(item.op_type) {
         case 'create':
