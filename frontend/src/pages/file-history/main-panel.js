@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Prism from 'prismjs';
 import Loading from '../../components/loading';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import '../../css/initial-style.css';
 

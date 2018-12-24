@@ -22,7 +22,7 @@ class FileHistory extends React.Component {
     super(props);
     this.state = {
       renderingContent: true,
-      newmarkdownContent: '',
+      newMarkdownContent: '',
       oldMarkdownContent: ''
     };
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, PER_PAGE, filePath, fileName } from '../../utils/constants';
+import { gettext, PER_PAGE, filePath } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
 import HistoryListView from '../../components/history-list-view/history-list-view';
@@ -134,7 +134,7 @@ class SidePanel extends React.Component {
     return (
       <div className="side-panel">
         <div className="side-panel-center">
-          <div className="panel-heading history-heading">{gettext('History Versions')}</div>
+          <div className="panel-header">{gettext('History Versions')}</div>
           <div className="history-body">
             {this.state.isLoading && <Loading />}
             {this.state.historyInfo &&
