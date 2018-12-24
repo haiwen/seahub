@@ -94,7 +94,7 @@ class Wiki extends Component {
 
   onRepoUpdateEvent = () => {
     let currentTime = new Date();
-    if ((parseFloat(currentTime - this.lastModifyTime)/60000) <= 5) {
+    if ((parseFloat(currentTime - this.lastModifyTime)/1000) <= 5) {
       return;
     }
     let { path, dirID } = this.state;
@@ -105,9 +105,8 @@ class Wiki extends Component {
             {gettext('This folder has been updated. ')}
             <a href='' >{gettext('Refresh')}</a>
           </span>,
-          {duration: 3600}
+          {id: 'repo_updated', duration: 3600}
         );
-        this.lastModifyTime = new Date();
       }
     })
   }
