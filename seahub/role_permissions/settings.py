@@ -26,6 +26,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_export_files_via_mobile_client': True,
         'storage_ids': [],
         'role_quota': '',
+        'can_use_online_office': True,
     },
     GUEST_USER: {
         'can_add_repo': False,
@@ -44,6 +45,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_export_files_via_mobile_client': False,
         'storage_ids': [],
         'role_quota': '',
+        'can_use_online_office': False,
     },
 }
 

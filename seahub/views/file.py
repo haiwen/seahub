@@ -670,7 +670,7 @@ def view_lib_file(request, repo_id, path):
             return_dict['err'] = _(u'The library is encrypted, can not open file online.')
             return render(request, 'view_file_base.html', return_dict)
 
-        if ENABLE_OFFICE_WEB_APP:
+        if ENABLE_OFFICE_WEB_APP and request.user.permissions.can_use_online_office():
             action_name = None
             # first check if can view file
             if fileext in OFFICE_WEB_APP_FILE_EXTENSION:
@@ -701,7 +701,8 @@ def view_lib_file(request, repo_id, path):
             else:
                 return_dict['err'] = _(u'Error when prepare Office Online file preview page.')
 
-        if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+        if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION and \
+                request.user.permissions.can_use_online_office():
 
             can_edit = False
             if permission == 'rw' and \
@@ -791,7 +792,8 @@ def view_history_file_common(request, repo_id, ret_dict):
 
             username = request.user.username
 
-            if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
+            if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION and \
+                    request.user.permissions.can_use_online_office():
 
                 # obj_id for view trash/history file
                 wopi_dict = get_wopi_dict(username, repo_id, path,
@@ -802,7 +804,8 @@ def view_history_file_common(request, repo_id, ret_dict):
                 else:
                     ret_dict['err'] = _(u'Error when prepare Office Online file preview page.')
 
-            if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+            if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION and \
+                    request.user.permissions.can_use_online_office():
 
                 onlyoffice_dict = get_onlyoffice_dict(username, repo_id, path,
                         file_id=obj_id)
@@ -1060,7 +1063,8 @@ def view_shared_file(request, fileshare):
             except Exception as e:
                 logger.error(e)
 
-        if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
+        if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION and \
+                request.user.permissions.can_use_online_office():
 
             action_name = 'edit' if can_edit else 'view'
             wopi_dict = get_wopi_dict(username, repo_id, path,
@@ -1076,7 +1080,8 @@ def view_shared_file(request, fileshare):
             else:
                 ret_dict['err'] = _(u'Error when prepare Office Online file preview page.')
 
-        if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+        if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION and \
+                request.user.permissions.can_use_online_office():
 
             onlyoffice_dict = get_onlyoffice_dict(username, repo_id, path,
                     can_edit=can_edit, can_download=can_download)
@@ -1224,7 +1229,8 @@ def view_file_via_shared_dir(request, fileshare):
         else:
             username = request.user.username
 
-        if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
+        if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION and \
+                request.user.permissions.can_use_online_office():
 
             wopi_dict = get_wopi_dict(username, repo_id, real_path,
                     language_code=request.LANGUAGE_CODE)
@@ -1234,7 +1240,8 @@ def view_file_via_shared_dir(request, fileshare):
             else:
                 ret_dict['err'] = _(u'Error when prepare Office Online file preview page.')
 
-        if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+        if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION and \
+                request.user.permissions.can_use_online_office():
 
             onlyoffice_dict = get_onlyoffice_dict(username,
                     repo_id, real_path)

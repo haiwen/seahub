@@ -2486,7 +2486,8 @@ class OwaFileView(APIView):
             error_msg = 'Office Web App feature only supported in professional edition.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if check_folder_permission(request, repo_id, path) is None:
+        if not check_folder_permission(request, repo_id, path)  or \
+                not request.user.permissions.can_use_online_office():
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

@@ -200,6 +200,9 @@ class UserPermissions(object):
     def storage_ids(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('storage_ids', [])
 
+    def can_use_online_office(self):
+        return get_enabled_role_permissions_by_role(self.user.role)['can_use_online_office']
+
 class AdminPermissions(object):
     def __init__(self, user):
         self.user = user
