@@ -724,7 +724,7 @@ class SidePanelChanges extends React.Component {
       <div className="review-side-panel-item">
         <div className="review-side-panel-header">{gettext('Changes')}</div>
         <div className="changes-info">
-          <span>{gettext(`Number of changes: ${this.props.changedNumber}`)}</span>
+          <span>{gettext('Number of changes:')}{' '}{this.props.changedNumber}</span>
           { this.props.changedNumber > 0 &&
             <div>
               <i className="fa fa-arrow-circle-up" onClick={() => { this.props.scrollToChangedNode('down');}}></i>

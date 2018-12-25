@@ -100,14 +100,17 @@ class ManageMembersDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('Manage group members')}</ModalHeader>
         <ModalBody>
           <p>{gettext('Add group member')}</p>
-          <AsyncSelect
-            className='group-transfer-select'
-            isClearable classNamePrefix
-            loadOptions={this.loadOptions}
-            onChange={this.handleSelectChange}
-            placeholder={gettext('Search users...')}
-            ref="memberSelect"
-          />
+          <div className='group-transfer'>
+            <AsyncSelect
+              className='group-transfer-select'
+              isClearable classNamePrefix
+              loadOptions={this.loadOptions}
+              onChange={this.handleSelectChange}
+              placeholder={gettext('Search users...')}
+              ref="memberSelect"
+            />
+            <Button color="secondary" onClick={this.addGroupMember}>{gettext('Submit')}</Button>
+          </div>
           <span className="error">{this.state.errMessage}</span>
           <div className="manage-members">
             <Table hover size="sm" className="manage-members-table">
@@ -163,7 +166,6 @@ class ManageMembersDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
-          <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
