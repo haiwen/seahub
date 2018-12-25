@@ -118,23 +118,7 @@ class ShareToGroup extends React.Component {
   }
 
   setPermission = (e) => {
-    if (e.target.value == 'Read-Write') {
-      this.setState({
-        permission: 'rw',
-      });
-    } else if (e.target.value == 'Read-Only') {
-      this.setState({
-        permission: 'r',
-      });
-    } else if (e.target.value == 'Preview-Edit-on-Cloud') {
-      this.setState({
-        permission: 'cloud-edit',
-      });
-    } else if (e.target.value == 'Preview-on-Cloud') {
-      this.setState({
-        permission: 'preview',
-      });
-    } 
+    this.setState({permission: e.target.value});
   }
 
   shareToGroup = () => {
@@ -227,6 +211,7 @@ class ShareToGroup extends React.Component {
                 isMulti
                 onChange={this.handleSelectChange}
                 options={this.options}
+                placeholder={gettext('Select a group')}
                 components={makeAnimated()}
                 inputId={'react-select-2-input'}
                 value={this.state.selectedOption}
@@ -234,28 +219,26 @@ class ShareToGroup extends React.Component {
             </td>
             <td>
               <Input type="select" name="select" onChange={this.setPermission}>
-                <option>{gettext('Read-Write')}</option>
-                <option>{gettext('Read-Only')}</option>
-                <option>{gettext('Preview-Edit-on-Cloud')}</option>
-                <option>{gettext('Preview-on-Cloud')}</option>
+                <option value='rw'>{gettext('Read-Write')}</option>
+                <option value='r'>{gettext('Read-Only')}</option>
+                <option value='cloud-edit'>{gettext('Preview-Edit-on-Cloud')}</option>
+                <option value='preview'>{gettext('Preview-on-Cloud')}</option>
               </Input>
             </td>
             <td>
               <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
             </td>
           </tr>
-          <tr>
-            <td colSpan={3}>
-              {this.state.errorMsg.length > 0 &&                  
-                this.state.errorMsg.map((item, index = 0, arr) => {
-                  return (                                        
-                    <p className="error" key={index}>{this.state.errorMsg[index].group_name}
-                      {': '}{this.state.errorMsg[index].error_msg}</p>
-                  );                                               
-                })                                                
-              }
-            </td>
-          </tr>
+          {this.state.errorMsg.length > 0 &&                  
+            this.state.errorMsg.map((item, index) => {
+              let errMessage = item.group_name + ': ' + item.error_msg;
+              return (
+                <tr key={index}>
+                  <td colSpan={3}><p className="error">{errMessage}</p></td>
+                </tr>
+              );
+            })                                                
+          }
         </thead>
         <GroupList items={this.state.sharedItems} deleteShareItem={this.deleteShareItem} />
       </table>

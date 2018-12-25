@@ -98,27 +98,7 @@ class ShareToUser extends React.Component {
   }
 
   setPermission = (e) => {
-    if (e.target.value == 'Read-Write') {
-      this.setState({
-        permission: 'rw',
-      });
-    } else if (e.target.value == 'Read-Only') {
-      this.setState({
-        permission: 'r',
-      });
-    } else if (e.target.value == 'Admin') {
-      this.setState({
-        permission: 'admin',
-      });
-    } else if (e.target.value == 'Preview-Edit-on-Cloud') {
-      this.setState({
-        permission: 'cloud-edit',
-      });
-    } else if (e.target.value == 'Preview-on-Cloud') {
-      this.setState({
-        permission: 'preview',
-      });
-    } 
+    this.setState({permission: e.target.value});
   }
 
   loadOptions = (value, callback) => {
@@ -173,6 +153,13 @@ class ShareToUser extends React.Component {
           sharedItems: this.state.sharedItems.concat(items),
           selectedOption: null,
         });
+      }).catch(error => {
+        if (error.response) {
+          let message = gettext('Library can not be shared to owner.');
+          let errMessage = [];
+          errMessage.push(message);
+          this.setState({errorMsg: errMessage});
+        }
       });
     } else {
       seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
@@ -187,6 +174,13 @@ class ShareToUser extends React.Component {
           sharedItems: this.state.sharedItems.concat(res.data.success),
           selectedOption: null,
         });
+      }).catch(error => {
+        if (error.response) {
+          let message = gettext('Library can not be shared to owner.');
+          let errMessage = [];
+          errMessage.push(message);
+          this.setState({errorMsg: errMessage});
+        }
       });
     }
   } 
@@ -224,7 +218,7 @@ class ShareToUser extends React.Component {
               <AsyncSelect
                 inputId={'react-select-1-input'}
                 className='reviewer-select' 
-                placeholder={gettext('Please enter 1 or more character')}
+                placeholder={gettext('Select users...')}
                 loadOptions={this.loadOptions}
                 onChange={this.handleSelectChange}
                 value={this.state.selectedOption}
@@ -236,29 +230,32 @@ class ShareToUser extends React.Component {
             </td>
             <td>
               <Input type="select" name="select" onChange={this.setPermission}>
-                <option>{gettext('Read-Write')}</option>
-                <option>{gettext('Read-Only')}</option>
-                <option>{gettext('Admin')}</option>
-                <option>{gettext('Preview-Edit-on-Cloud')}</option>
-                <option>{gettext('Preview-on-Cloud')}</option>
+                <option value='rw'>{gettext('Read-Write')}</option>
+                <option value='r'>{gettext('Read-Only')}</option>
+                <option value='admin'>{gettext('Admin')}</option>
+                <option value='cloud-edit'>{gettext('Preview-Edit-on-Cloud')}</option>
+                <option value='preview'>{gettext('Preview-on-Cloud')}</option>
               </Input>
             </td>
             <td>
               <Button onClick={this.shareToUser}>{gettext('Submit')}</Button>
             </td>
           </tr>
-          <tr>
-            <td colSpan={3}>
-              {this.state.errorMsg.length > 0 &&
-                this.state.errorMsg.map((item, index = 0, arr) => {
-                  return (
-                    <p className="error" key={index}>{this.state.errorMsg[index].email}
-                      {': '}{this.state.errorMsg[index].error_msg}</p>
-                  );
-                })
+          {this.state.errorMsg.length > 0 &&
+            this.state.errorMsg.map((item, index) => {
+              let errMessage = '';
+              if (item.email) {
+                errMessage = item.email + ': ' + item.error_msg;
+              } else {
+                errMessage = item;
               }
-            </td>
-          </tr>
+              return (
+                <tr key={index}>
+                  <td colSpan={3}><p className="error">{errMessage}</p></td>
+                </tr>
+              );
+            })
+          }
         </thead>
         <UserList items={sharedItems} deleteShareItem={this.deleteShareItem} />
       </table>
