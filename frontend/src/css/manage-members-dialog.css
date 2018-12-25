@@ -26,3 +26,16 @@
 .delete-group-member-icon:hover {
   color: #333;
 }
+
+.group-transfer-select .true__indicator-separator {
+  display: none;
+}
+
+.group-transfer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.group-transfer-select {
+  width: 82%;
+}
