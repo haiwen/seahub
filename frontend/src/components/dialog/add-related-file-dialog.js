@@ -9,6 +9,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   filePath: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  onRelatedFileChange: PropTypes.func.isRequired,
 };
 
 class AddRelatedFileDialog extends React.Component {
@@ -18,12 +19,12 @@ class AddRelatedFileDialog extends React.Component {
     this.state = {
       repo: null,
       selectedPath: '',
-      errMessage: '',
       isShowFile: true,
+      errMessage: '',
     };
   }
 
-  handleSumbmit = () => {
+  handleSubmit = () => {
     this.onAddRelatedFile();
   }
 
@@ -40,26 +41,35 @@ class AddRelatedFileDialog extends React.Component {
       return;
     }
 
-    seafileAPI.addRelatedFile(oRepoID, rRepoID, oFilePath, rFilePath);
-    this.toggle();
+    seafileAPI.addRelatedFile(oRepoID, rRepoID, oFilePath, rFilePath).then((res) => {
+      this.props.onRelatedFileChange();
+      this.toggle();
+    }).catch((error) => {
+      if (error.response) {
+        this.setState({
+          errMessage: error.response.data.error_msg
+        });
+      }
+    });
   }
 
   toggle = () => {
     this.props.toggleCancel();
   }
 
-  onDirentItemClick = (repo, selectedPath) => {
-    this.setState({
-      repo: repo,
-      selectedPath: selectedPath,
-      errMessage: '',
-    });
-  }
-
-  onRepoItemClick = () => {
-    this.setState({
-      errMessage: 'Can not select library as a related file.'
-    });
+  onDirentItemClick = (repo, selectedPath, dirent) => {
+    if(dirent.type === 'file') {
+      this.setState({
+        repo: repo,
+        selectedPath: selectedPath,
+      });
+    }
+    else {
+      this.setState({
+        repo: null,
+        selectedPath: '',
+      });
+    }
   }
 
   render() {
@@ -71,13 +81,18 @@ class AddRelatedFileDialog extends React.Component {
             isShowFile={this.state.isShowFile}
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
-            onRepoItemClick={this.onRepoItemClick}
           />
-          {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>}
+          {this.state.errMessage &&
+          <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>
+          }
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSumbmit}>{gettext('Submit')}</Button>
+          { this.state.selectedPath ?
+            <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+            :
+            <Button color="primary" disabled>{gettext('Submit')}</Button>
+          }
         </ModalFooter>
       </Modal>
     );

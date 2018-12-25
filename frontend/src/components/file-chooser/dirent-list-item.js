@@ -29,44 +29,27 @@ class DirentListItem extends React.Component {
   }
 
   onItemClick = () => {
-    let { isShowFile, dirent } = this.props;
-    if (isShowFile === true) {
-      if (dirent.type === 'file') {
-        this.props.onDirentItemClick(this.state.filePath);
-      }
-    }
-    else {
-      this.props.onDirentItemClick(this.state.filePath);
-    }
+    this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
   }
 
   onToggleClick = () => {
     if (!this.state.hasRequest) {
       seafileAPI.listDir(this.props.repo.repo_id, this.state.filePath).then(res => {
         let direntList = [];
-        if (this.props.isShowFile === true) {
-          res.data.forEach(item => {
+        res.data.forEach(item => {
+          if (this.props.isShowFile === true) {
             let dirent = new Dirent(item);
             direntList.push(dirent);
-            this.setState({
-              hasRequest: true,
-              direntList: direntList,
-            });
+          }
+          else if (item.type === 'dir') {
+            let dirent = new Dirent(item);
+            direntList.push(dirent);
+          }
+          this.setState({
+            hasRequest: true,
+            direntList: direntList,
           });
-        }
-        else {
-          res.data.forEach(item => {
-            if (item.type === 'dir') {
-              let dirent = new Dirent(item);
-              direntList.push(dirent);
-            }
-            this.setState({
-              hasRequest: true,
-              direntList: direntList,
-            });
-          });
-        }
-
+        });
         if (res.data.length === 0 || direntList.length === 0) {
           this.setState({
             hasRequest: true,

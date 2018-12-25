@@ -105,3 +105,39 @@
   display: inline-block;
   margin-left: 0.5rem;
 }
+
+.dirent-table-container .file-tag-container .tag-edit-icon {
+  padding: 0;
+}
+
+.file-related-files th {
+  vertical-align: top;
+}
+
+.file-related-files td ul {
+  list-style: none;
+  max-height: 100px;
+  overflow-y: scroll;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-related-files td ul li {
+  margin-bottom: 5px;
+}
+
+.file-related-files ul li a,
+.list-related-file-table tr td a {
+  color: #333;
+}
+
+.list-related-file-body {
+  min-height: 200px;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+.no-related-file {
+  text-align: center;
+}

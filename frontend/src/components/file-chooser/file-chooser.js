@@ -72,8 +72,8 @@ class FileChooser extends React.Component {
     this.setState({isCurrentRepoShow: !this.state.isCurrentRepoShow})
   ]
 
-  onDirentItemClick = (repo, filePath) => {
-    this.props.onDirentItemClick(repo, filePath);
+  onDirentItemClick = (repo, filePath, dirent) => {
+    this.props.onDirentItemClick(repo, filePath, dirent);
     this.setState({
       selectedRepo: repo,
       selectedPath: filePath
@@ -81,11 +81,13 @@ class FileChooser extends React.Component {
   }
 
   onRepoItemClick = (repo) => {
-    this.props.onRepoItemClick(repo);
-    this.setState({
-      selectedRepo: repo,
-      selectedPath: '',
-    });
+    if (this.props.onRepoItemClick) {
+      this.props.onRepoItemClick(repo);
+      this.setState({
+        selectedRepo: repo,
+        selectedPath: '',
+      });
+    }
   }
 
   render() {

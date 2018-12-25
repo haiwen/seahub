@@ -167,6 +167,12 @@ class EditorUtilities {
     );
   }
 
+  getRepoInfo(newRepoID) {
+    return (
+      seafileAPI.getRepoInfo(newRepoID)
+    );
+  }
+
   getInternalLink() {
     return seafileAPI.getInternalLink(repoID, filePath);
   }
@@ -273,6 +279,7 @@ class MarkdownEditor extends React.Component {
         lastModifier: '',
       },
       collabServer: seafileCollabServer ? seafileCollabServer : null,
+      relatedFiles: [],
     };
   }
 
@@ -303,6 +310,12 @@ class MarkdownEditor extends React.Component {
         });
       });
     });
+
+    seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
+      this.setState({
+        relatedFiles: res.data.related_files
+      })
+    });
   }
 
   render() {
@@ -329,6 +342,7 @@ class MarkdownEditor extends React.Component {
           hasDraft={hasDraft}
           shareLinkExpireDaysMin={shareLinkExpireDaysMin}
           shareLinkExpireDaysMax={shareLinkExpireDaysMax}
+          relatedFiles={this.state.relatedFiles}
         />
       );
     }   

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import Dirent from '../../models/dirent';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 
@@ -10,40 +11,92 @@ const propTypes = {
   filePath: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   addRelatedFileToggle: PropTypes.func.isRequired,
+  onRelatedFileChange: PropTypes.func.isRequired,
 };
 
 class ListRelatedFileDialog extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = ({
+      direntList: [],
+    });
+  }
 
   onDeleteRelatedFile = (item) => {
     let filePath = this.props.filePath;
     let repoID = this.props.repoID;
     let relatedID = item.related_id;
-    seafileAPI.deleteRelatedFile(repoID, filePath, relatedID)
+    seafileAPI.deleteRelatedFile(repoID, filePath, relatedID).then((res) => {
+      this.props.onRelatedFileChange();
+    });
   }
 
   toggle = () => {
     this.props.toggleCancel();
   }
 
+  getDirentList = (relatedFiles) => {
+    if (relatedFiles.length === 0) {
+      this.setState({
+        direntList: [],
+      });
+      return;
+    }
+    let direntList = [];
+    relatedFiles.map((item) => {
+      seafileAPI.getFileInfo(item.repo_id, item.path).then(res => {
+        let dirent = new Dirent(res.data);
+        dirent['related_id'] = item.related_id;
+        dirent['link'] = item.link;
+        direntList.push(dirent);
+        this.setState({
+          direntList: direntList
+        });
+      });
+    });
+  }
+
+  componentWillMount() {
+    this.getDirentList(this.props.relatedFiles);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.relatedFiles.length !== this.props.relatedFiles.length) {
+      this.getDirentList(nextProps.relatedFiles);
+    }
+  }
+
   render() {
-    let relatedFiles = this.props.relatedFiles;
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} size={this.state.direntList.length > 0 ? 'lg' : 'sm'}>
         <ModalHeader toggle={this.toggle}>{gettext('Related Files')}</ModalHeader>
-        <ModalBody>
+        <ModalBody className={this.state.direntList.length > 0 ? 'list-related-file-body' : ''}>
           {
-            <table>
-              <tbody>
-                {relatedFiles.map((relatedFile, index) => {
-                  return (
-                    <tr key={index}>
-                      <td width='90%'><a href={relatedFile.link} target='_blank'>{relatedFile.name}</a></td>
-                      <td><i className='fa fa-trash' onClick={this.onDeleteRelatedFile.bind(this, relatedFile)}></i></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            this.state.direntList.length > 0 ?
+              <Table hover size="sm" className="list-related-file-table">
+                <thead>
+                  <tr>
+                    <th width='50%'>{gettext('Name')}</th>
+                    <th width='25%'>{gettext('Size')}</th>
+                    <th width='20%'>{gettext('Last Update')}</th>
+                    <th width='5%'></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    this.state.direntList.map((relatedFile, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <RelatedFile relatedFile={relatedFile} onDeleteRelatedFile={this.onDeleteRelatedFile}/>
+                        </React.Fragment>
+                      );
+                    })
+                  }
+                </tbody>
+              </Table>
+              :
+              <div className="no-related-file">{gettext('No related file yet')}</div>
           }
         </ModalBody>
         <ModalFooter>
@@ -56,5 +109,47 @@ class ListRelatedFileDialog extends React.Component {
 }
 
 ListRelatedFileDialog.propTypes = propTypes;
+
+const RelatedFilePropTypes = {
+  relatedFile: PropTypes.object,
+  onDeleteRelatedFile: PropTypes.func.isRequired,
+};
+
+class RelatedFile extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = ({
+      isOperationShow: false,
+    });
+  }
+
+  onMouseEnter = () => {
+    this.setState({
+      isOperationShow: true
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      isOperationShow: false
+    });
+  }
+
+  render() {
+    let className = this.state.isOperationShow ? 'action-icon fa fa-times' : 'action-icon vh fa fa-times';
+    const relatedFile = this.props.relatedFile;
+    return (
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td><a href={relatedFile.link} target='_blank'>{relatedFile.name}</a></td>
+        <td>{relatedFile.size}</td>
+        <td>{relatedFile.mtime}</td>
+        <td><i className={className} onClick={this.props.onDeleteRelatedFile.bind(this, relatedFile)}></i></td>
+      </tr>
+    );
+  }
+}
+
+RelatedFile.propTypes = RelatedFilePropTypes;
 
 export default ListRelatedFileDialog;

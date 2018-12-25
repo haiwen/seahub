@@ -17,6 +17,7 @@ const propTypes = {
   fileTagList: PropTypes.array.isRequired,
   relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
+  onRelatedFileChange: PropTypes.func.isRequired,
 };
 
 class DetailListView extends React.Component {
@@ -96,21 +97,8 @@ class DetailListView extends React.Component {
               <tr><th>{gettext('Size')}</th><td>{direntDetail.size}</td></tr>
               <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
               <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
-              <tr><th style={{verticalAlign:"top"}}>{gettext('Related Files')}</th>
-                <td>
-                  <ul style={{listStyle:"none"}}>
-                    {relatedFiles.map((relatedFile, index) => {
-                      return (
-                        <li key={index}>
-                          <a href={relatedFile.link} target='_blank'>{relatedFile.name}</a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <i className='fa fa-pencil' onClick={this.onListRelatedFileToggle}></i>
-                </td>
-              </tr>
-              <tr className="file-tag-container"><th>{gettext('Tags')}</th>
+              <tr className="file-tag-container">
+                <th>{gettext('Tags')}</th>
                 <td>
                   <ul className="file-tag-list">
                     {fileTagList.map((fileTag) => {
@@ -125,6 +113,21 @@ class DetailListView extends React.Component {
                   <i className='fa fa-pencil tag-edit-icon' onClick={this.onEditFileTagToggle}></i>
                 </td>
               </tr>
+              <tr className="file-related-files">
+                <th>{gettext('Related Files')}</th>
+                <td>
+                  <ul>
+                    {relatedFiles.map((relatedFile, index) => {
+                      return (
+                        <li key={index}>
+                          <a href={relatedFile.link} target='_blank'>{relatedFile.name}</a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <i className='fa fa-pencil action-icon' onClick={this.onListRelatedFileToggle}></i>
+                </td>
+              </tr>
             </tbody>
           </table>
           {
@@ -133,6 +136,7 @@ class DetailListView extends React.Component {
               filePath={direntPath}
               repoID={this.props.repoID}
               toggleCancel={this.onAddRelatedFileToggle}
+              onRelatedFileChange={this.props.onRelatedFileChange}
             />
           }
           {
@@ -143,6 +147,7 @@ class DetailListView extends React.Component {
               filePath={direntPath}
               toggleCancel={this.onListRelatedFileToggle}
               addRelatedFileToggle={this.onAddRelatedFileToggle}
+              onRelatedFileChange={this.props.onRelatedFileChange}
             />
           }
           {

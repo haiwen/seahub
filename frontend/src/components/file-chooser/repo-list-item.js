@@ -25,9 +25,9 @@ class RepoListItem extends React.Component {
     this.setState({isShowChildren: !this.state.isShowChildren});
   }
 
-  onDirentItemClick = (filePath) => {
+  onDirentItemClick = (filePath, dirent) => {
     let repo = this.props.repo;
-    this.props.onDirentItemClick(repo, filePath);
+    this.props.onDirentItemClick(repo, filePath, dirent);
   }
 
   onRepoItemClick = () => {
