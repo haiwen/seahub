@@ -69,7 +69,7 @@ class CreateTagDialog extends React.Component {
           <div role="form" className="tag-create">
             <div className="form-group">
               <label className="form-label">{gettext('Name')}</label>
-              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder={gettext('name')} value={this.state.tagName} onChange={this.inputNewName}/>
+              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} value={this.state.tagName} onChange={this.inputNewName}/>
             </div>
             <div className="form-group">
               <label className="form-label">{gettext('Select a color')}</label>
