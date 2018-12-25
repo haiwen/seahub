@@ -1,11 +1,14 @@
 import io from 'socket.io-client';
 import { name, username, contactEmail, seafileCollabServer } from './constants';
 
-const socket = io(seafileCollabServer);
+const socket = (seafileCollabServer !== '') ? io(seafileCollabServer) : undefined;
 
 class CollabServer {
 
   watchRepo(repoID, fn) {
+    if (!socket) {
+      return;
+    }
     socket.emit('repo_update', {
       request: 'watch_update',
       repo_id: repoID,
@@ -15,11 +18,13 @@ class CollabServer {
         contact_email: contactEmail,
       },
     });
-
     socket.on('repo_update', fn)
   }
 
   unwatchRepo(repoID) {
+    if (!socket) {
+      return;
+    }
     socket.emit('repo_update', {
       request: 'unwatch_update',
       repo_id: repoID,
