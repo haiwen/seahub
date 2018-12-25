@@ -7,8 +7,13 @@ class Notification extends React.Component {
     super(props);
     this.state = {
       showNotice: false,
-      notice_html: ''
+      notice_html: '',
+      unseenCount: 0,
     };
+  }
+
+  componentDidMount() {
+    this.loadUnseenCount();
   }
 
   onClick = () => {
@@ -22,7 +27,14 @@ class Notification extends React.Component {
 
     if (this.state.showNotice) {
       seafileAPI.updateNotifications();
+      this.loadUnseenCount();
     }
+  }
+
+  loadUnseenCount = () => {
+    seafileAPI.getUnseenCount().then(res => {
+      this.setState({unseenCount: res.data.unseen_count});
+    });
   }
 
   loadNotices = () => {
@@ -40,7 +52,7 @@ class Notification extends React.Component {
       <div id="notifications">
         <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title="Notifications" aria-label="Notifications">
           <span className="sf2-icon-bell"></span>
-          <span className="num hide">0</span>
+          <span className={`num ${this.state.unseenCount ? '' : 'hide'}`}>{this.state.unseenCount}</span>
         </a>
         <div id="notice-popover" className={`sf-popover ${this.state.showNotice ? '': 'hide'}`}>
           <div className="outer-caret up-outer-caret"><div className="inner-caret"></div></div>
