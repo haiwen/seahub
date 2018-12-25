@@ -41,8 +41,8 @@ class UserItem extends React.Component {
         <td>
           <PermissionEditor 
             isTextMode={true}
-            permission={item.permission}
-            permissions={this.props.permissions}
+            currentPermission={item.permission}
+            ownedPermissions={this.props.ownedPermissions}
             onPermissionChangedHandler={this.onChangeUserPermission}
           />
         </td>
@@ -70,7 +70,7 @@ class UserList extends React.Component {
             <UserItem 
               key={index} 
               item={item} 
-              permissions={this.props.permissions}
+              ownedPermissions={this.props.ownedPermissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}
             />
@@ -98,9 +98,9 @@ class ShareToUser extends React.Component {
       sharedItems: []
     };
     this.options = [];
-    this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    this.ownedPermissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
     if (this.props.isGroupOwnedRepo) {
-      this.permissions = ['rw', 'r'];
+      this.ownedPermissions = ['rw', 'r'];
     }
   }
 
@@ -287,8 +287,8 @@ class ShareToUser extends React.Component {
             <td>
               <PermissionEditor 
                 isTextMode={false}
-                permission={this.state.permission}
-                permissions={this.permissions}
+                currentPermission={this.state.permission}
+                ownedPermissions={this.ownedPermissions}
                 onPermissionChangedHandler={this.setPermission}
               />
             </td>
@@ -314,7 +314,7 @@ class ShareToUser extends React.Component {
         </thead>
         <UserList 
           items={sharedItems}
-          permissions={this.permissions}
+          ownedPermissions={this.ownedPermissions}
           deleteShareItem={this.deleteShareItem} 
           onChangeUserPermission={this.onChangeUserPermission}
         />

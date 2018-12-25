@@ -5,8 +5,8 @@ import { Input } from 'reactstrap';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
-  permission: PropTypes.string.isRequired,
-  permissions: PropTypes.array.isRequired,
+  currentPermission: PropTypes.string.isRequired,
+  ownedPermissions: PropTypes.array.isRequired,
   onPermissionChangedHandler: PropTypes.func.isRequired,
 };
 
@@ -35,7 +35,7 @@ class PermissionEditor extends React.Component {
   onPermissionChangedHandler = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     let permission = e.target.value;
-    if (permission !== this.props.permission) {
+    if (permission !== this.props.currentPermission) {
       this.props.onPermissionChangedHandler(permission);
     }
     this.setState({isEditing: false});
@@ -50,7 +50,7 @@ class PermissionEditor extends React.Component {
   }
 
   render() {
-    let { permission, permissions, isTextMode } = this.props;
+    let { currentPermission, ownedPermissions, isTextMode } = this.props;
 
     // scence1: isTextMode (text)editor-icon --> select
     // scence2: !isTextMode select
@@ -64,8 +64,8 @@ class PermissionEditor extends React.Component {
     return (
       <div className="permission-editor">
         {(!isTextMode || this.state.isEditing) &&
-          <Input style={selectStyle} type="select" onChange={this.onPermissionChangedHandler} onClick={this.onSelectHandler} value={permission}>
-            {permissions.map((item, index) => {
+          <Input style={selectStyle} type="select" onChange={this.onPermissionChangedHandler} onClick={this.onSelectHandler} value={currentPermission}>
+            {ownedPermissions.map((item, index) => {
               return (
                 <option key={index} value={item}>{Utils.sharePerms(item)}</option>
               )
@@ -74,7 +74,7 @@ class PermissionEditor extends React.Component {
         }
         {(isTextMode && !this.state.isEditing) &&
           <div>
-            {Utils.sharePerms(permission)}
+            {Utils.sharePerms(currentPermission)}
             <span style={{fontSize: '0.875rem', marginLeft: '0.5rem'}} className="fa fa-pencil op-icon" onClick={this.onEidtPermission}></span>
           </div>
         }
