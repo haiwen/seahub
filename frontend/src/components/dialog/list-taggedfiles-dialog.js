@@ -81,7 +81,7 @@ class ListTaggedFilesDialog extends React.Component {
           </table>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.props.toggleCancel}>{gettext('Close')}</Button>
+          <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Close')}</Button>
         </ModalFooter>
       </Fragment>
     );

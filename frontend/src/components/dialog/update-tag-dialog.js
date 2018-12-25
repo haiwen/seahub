@@ -82,7 +82,7 @@ class UpdateTagDialog extends React.Component {
           <div className="tag-edit">
             <div className="form-group">
               <label className="form-label">{gettext('Name')}</label>
-              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder="newName" value={this.state.newName} onChange={this.inputNewName}/>
+              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} value={this.state.newName} onChange={this.inputNewName}/>
             </div>
             <div className="form-group">
               <label className="form-label">{gettext('Select a color')}</label>
@@ -105,8 +105,8 @@ class UpdateTagDialog extends React.Component {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.updateTag}>{gettext('Save')}</Button>
           <Button color="danger" onClick={this.onDeleteTag}>{gettext('Delete')}</Button>
+          <Button color="primary" onClick={this.updateTag}>{gettext('Save')}</Button>
         </ModalFooter>
       </Fragment>
     );
