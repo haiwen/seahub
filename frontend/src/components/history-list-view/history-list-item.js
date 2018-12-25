@@ -54,8 +54,7 @@ class HistoryListItem extends React.Component {
   }
 
   onItemRestore = () => {
-    let commitId = this.props.currentItem.commit_id;
-    this.props.onItemRestore(commitId);
+    this.props.onItemRestore(this.props.currentItem);
   }
 
   onItemDownload = () => {
@@ -98,8 +97,8 @@ class HistoryListItem extends React.Component {
               alt={gettext('More Operations')}
             />
             <DropdownMenu>
-              {(this.props.index) && <DropdownItem onClick={this.onRestoreItem}>{gettext('Restore')}</DropdownItem>}
-              <DropdownItem tag='a' href={url} onClick={this.onDownLoadItem}>{gettext('Download')}</DropdownItem>
+              {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>}
+              <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
