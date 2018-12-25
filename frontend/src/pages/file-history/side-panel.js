@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, PER_PAGE, filePath, fileName } from '../../utils/constants';
+import { gettext, PER_PAGE, filePath } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
 import HistoryListView from '../../components/history-list-view/history-list-view';
-import HistoryListMenu from '../../components/history-list-view/history-list-menu';
 
 const propTypes = {
-  onHistoryItemClick: PropTypes.func.isRequired,
-  setDiffContent: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
 };
 
 class SidePanel extends React.Component {
@@ -22,24 +20,19 @@ class SidePanel extends React.Component {
       isLoading: true,
       isError: false,
       fileOwner: '',
-      isListMenuShow: false,
-      isFirstItem: false,
-      currentItem: null,
-      menuPosition: {top: '', left: ''},
-      isItemFrezeed: false,
       isReloadingData: false,
     };
   }
 
   componentDidMount() {
     editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+      let historyList = res.data;
+      if (historyList.length === 0) {
+        this.setState({isLoading: false});
+        throw Error('there has an error in server');
+      }
       this.initResultState(res.data);
-      document.addEventListener('click', this.onHideContextMenu);
     });
-  }
-  
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onHideContextMenu);
   }
   
   refershFileList() {
@@ -57,7 +50,6 @@ class SidePanel extends React.Component {
         isLoading: false,
         isError: false,
         fileOwner: result.data[0].creator_email,
-        currentItem: result.data[0],
       });
     }
   }
@@ -75,25 +67,6 @@ class SidePanel extends React.Component {
     }
   }
 
-  onShowContenxtMenu = (e, item, isFirstItem) => {
-    let left = e.clientX - 8*16;
-    let top  = e.clientY + 10;
-    this.setState({
-      currentItem: item,
-      isFirstItem: isFirstItem,
-      isListMenuShow: !this.state.isListMenuShow,
-      menuPosition: {top: top, left: left},
-      isItemFrezeed: !this.state.isItemFrezeed,
-    });
-  }
-
-  onHideContextMenu = (e) => {
-    this.setState({
-      isListMenuShow: false,
-      isItemFrezeed: false
-    });
-  }
-
   reloadMore = () => {
     if (!this.state.isReloadingData) {
       let currentPage = this.state.currentPage + 1;
@@ -103,16 +76,13 @@ class SidePanel extends React.Component {
       });
       editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
         this.updateResultState(res.data);
-        this.setState({
-          isReloadingData: false
-        });
+        this.setState({isReloadingData: false});
       });
     }
   }
 
-  onRestoreFile = () => {
-    this.onHideContextMenu();
-    let commitId = this.state.currentItem.commit_id;
+  onItemRestore = (currentItem) => {
+    let commitId = currentItem.commit_id;
     editUtilties.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
         this.setState({isLoading: true});
@@ -121,28 +91,15 @@ class SidePanel extends React.Component {
     });
   }
 
-  onDownloadFile = () => {
-    this.onHideContextMenu();
-  }
-
-  onHistoryItemClick =(item, preCommitID) => {
-    this.setState({currentItem: item});
-    this.props.onHistoryItemClick(item, preCommitID);
+  onItemClick =(item, preItem) => {
+    this.props.onItemClick(item, preItem);
   }
 
   render() {
     return (
       <div className="side-panel">
-        <div className="side-panel-north">
-          <div className="history-heading">
-            <a href="javascript:window.history.back()" className="go-back" title="Back">
-              <span className="fas fa-chevron-left"></span>
-            </a>
-            <span className="history-doc-name">{fileName}</span>
-          </div>
-        </div>
-        <div className="side-panel-center history">
-          <div className="panel-heading history-heading">{gettext('History Versions')}</div>
+        <div className="side-panel-center">
+          <div className="panel-header">{gettext('History Versions')}</div>
           <div className="history-body">
             {this.state.isLoading && <Loading />}
             {this.state.historyInfo &&
@@ -150,22 +107,11 @@ class SidePanel extends React.Component {
                 hasMore={this.state.hasMore}
                 isReloadingData={this.state.isReloadingData}
                 historyList={this.state.historyInfo}
-                onMenuControlClick={this.onShowContenxtMenu}
-                isItemFrezeed={this.state.isItemFrezeed}
                 reloadMore={this.reloadMore}
-                currentItem={this.state.currentItem}
-                onHistoryItemClick={this.onHistoryItemClick}
-                setDiffContent={this.props.setDiffContent}
+                onItemClick={this.onItemClick}
+                onItemRestore={this.onItemRestore}
               />
             }
-            <HistoryListMenu
-              isListMenuShow={this.state.isListMenuShow}
-              menuPosition={this.state.menuPosition}
-              isFirstItem={this.state.isFirstItem}
-              currentItem={this.state.currentItem}
-              onRestoreFile={this.onRestoreFile}
-              onDownloadFile={this.onDownloadFile}
-            />
           </div>
         </div>
       </div>
