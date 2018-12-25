@@ -132,15 +132,13 @@ class ShareToUser extends React.Component {
     }
     if (this.props.isGroupOwnedRepo) {
       seafileAPI.shareGroupOwnedRepoToUser(repoID, this.state.permission, users).then(res => {
+        let errorMsg = [];
         if (res.data.failed.length > 0) {
-          let errorMsg = [];
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
-          this.setState({errorMsg: errorMsg});
         }
         // todo modify api
-
         let items = res.data.success.map(item => {
           let sharedItem = {
             'user_info': { 'nickname': item.user_name, 'name': item.user_email},
@@ -150,6 +148,7 @@ class ShareToUser extends React.Component {
           return sharedItem;
         });
         this.setState({
+          errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(items),
           selectedOption: null,
         });
@@ -158,19 +157,22 @@ class ShareToUser extends React.Component {
           let message = gettext('Library can not be shared to owner.');
           let errMessage = [];
           errMessage.push(message);
-          this.setState({errorMsg: errMessage});
+          this.setState({
+            errorMsg: errMessage,
+            selectedOption: null,
+          });
         }
       });
     } else {
       seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
+        let errorMsg = [];
         if (res.data.failed.length > 0) {
-          let errorMsg = [];
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
-          this.setState({errorMsg: errorMsg});
         }
         this.setState({
+          errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(res.data.success),
           selectedOption: null,
         });
@@ -179,7 +181,10 @@ class ShareToUser extends React.Component {
           let message = gettext('Library can not be shared to owner.');
           let errMessage = [];
           errMessage.push(message);
-          this.setState({errorMsg: errMessage});
+          this.setState({
+            errorMsg: errMessage,
+            selectedOption: null,
+          });
         }
       });
     }
