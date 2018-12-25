@@ -241,7 +241,7 @@ class ShareToUser extends React.Component {
         this.updateSharedItems(item, permission);
       });
     } else {
-      seafileAPI.updateFolderSharedToUserPerm(repoID, path, 'user', permission, username).then(() => {
+      seafileAPI.updateShareToUserItemPermission(repoID, path, 'user', username, permission).then(() => {
         this.updateSharedItems(item, permission);
       });
     }
@@ -265,8 +265,8 @@ class ShareToUser extends React.Component {
       <table>
         <thead> 
           <tr>
-            <th style={{'width': '50%'}}>{gettext('User')}</th>
-            <th style={{'width': '30%'}}>{gettext('Permission')}</th>
+            <th style={{'width': '40%'}}>{gettext('User')}</th>
+            <th style={{'width': '40%'}}>{gettext('Permission')}</th>
             <th></th>
           </tr>
           <tr>

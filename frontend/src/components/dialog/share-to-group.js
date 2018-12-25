@@ -225,7 +225,7 @@ class ShareToGroup extends React.Component {
         this.updateSharedItems(item, permission);
       })
     } else {
-      seafileAPI.updateFolderSharedToGroupPerm(repoID, path, 'group', permission, groupID).then(() => {
+      seafileAPI.updateShareToGroupItemPermission(repoID, path, 'group', groupID, permission).then(() => {
         this.updateSharedItems(item, permission);
       });
     }
@@ -248,8 +248,8 @@ class ShareToGroup extends React.Component {
       <table>
         <thead>
           <tr>
-            <th style={{'width': '50%'}}>{gettext('Group')}</th>
-            <th style={{'width': '30%'}}>{gettext('Permission')}</th>
+            <th style={{'width': '40%'}}>{gettext('Group')}</th>
+            <th style={{'width': '40%'}}>{gettext('Permission')}</th>
             <th></th>
           </tr>
           <tr>
