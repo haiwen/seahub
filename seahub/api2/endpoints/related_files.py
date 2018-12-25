@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
+import posixpath
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -14,6 +15,7 @@ from seahub.api2.utils import api_error
 from seahub.related_files.models import RelatedFiles
 from seahub.tags.models import FileUUIDMap
 from seahub.utils import normalize_file_path
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.api2.endpoints.smart_link import gen_smart_link
@@ -34,6 +36,12 @@ class RelatedFilesView(APIView):
         related_file = dict()
         related_file["name"] = file_uuid.filename
         related_file["link"] = gen_smart_link(file_uuid.uuid)
+        related_file["repo_id"] = file_uuid.repo_id
+        file_path = posixpath.join(file_uuid.parent_path, file_uuid.filename)
+        related_file["path"] = file_path
+        file_obj = seafile_api.get_dirent_by_path(file_uuid.repo_id, file_path)
+        related_file["size"] = file_obj.size
+        related_file["last_modified"] = timestamp_to_isoformat_timestr(file_obj.mtime)
         return related_file
 
     def get(self, request):
