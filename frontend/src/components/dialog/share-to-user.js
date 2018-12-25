@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import PropTypes from 'prop-types';
-import { Button, Input } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import PermissionEditor from '../permission-editor';
 
 class UserItem extends React.Component {
 
@@ -27,13 +27,25 @@ class UserItem extends React.Component {
     let item = this.props.item;
     this.props.deleteShareItem(item.user_info.name);
   }
+  
+  onChangeUserPermission = (permission) => {
+    let item = this.props.item;
+    this.props.onChangeUserPermission(item, permission);
+  }
 
   render() {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>{item.user_info.nickname}</td>
-        <td>{Utils.sharePerms(item.permission)}</td>
+        <td>
+          <PermissionEditor 
+            isTextMode={true}
+            currentPermission={item.permission}
+            permissions={this.props.permissions}
+            onPermissionChangedHandler={this.onChangeUserPermission}
+          />
+        </td>
         <td>
           <span
             className={`sf2-icon-x3 sf2-x op-icon a-simulate ${this.state.isOperationShow ? '' : 'hide'}`}
@@ -55,7 +67,13 @@ class UserList extends React.Component {
       <tbody>
         {items.map((item, index) => {
           return (
-            <UserItem key={index} item={item} deleteShareItem={this.props.deleteShareItem}/>
+            <UserItem 
+              key={index} 
+              item={item} 
+              permissions={this.props.permissions}
+              deleteShareItem={this.props.deleteShareItem}
+              onChangeUserPermission={this.props.onChangeUserPermission}
+            />
           );
         })}
       </tbody>
@@ -80,6 +98,10 @@ class ShareToUser extends React.Component {
       sharedItems: []
     };
     this.options = [];
+    this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    if (this.props.isGroupOwnedRepo) {
+      this.permissions = ['rw', 'r'];
+    }
   }
 
   handleSelectChange = (option) => {
@@ -97,28 +119,8 @@ class ShareToUser extends React.Component {
     });
   }
 
-  setPermission = (e) => {
-    if (e.target.value == 'Read-Write') {
-      this.setState({
-        permission: 'rw',
-      });
-    } else if (e.target.value == 'Read-Only') {
-      this.setState({
-        permission: 'r',
-      });
-    } else if (e.target.value == 'Admin') {
-      this.setState({
-        permission: 'admin',
-      });
-    } else if (e.target.value == 'Preview-Edit-on-Cloud') {
-      this.setState({
-        permission: 'cloud-edit',
-      });
-    } else if (e.target.value == 'Preview-on-Cloud') {
-      this.setState({
-        permission: 'preview',
-      });
-    } 
+  setPermission = (permission) => {
+    this.setState({permission: permission});
   }
 
   loadOptions = (value, callback) => {
@@ -131,8 +133,8 @@ class ShareToUser extends React.Component {
           obj.email = res.data.users[i].email;
           obj.label =
             <Fragment>
-              <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
-              <span className='reviewer-select-name'>{res.data.users[i].name}</span>
+              <img src={res.data.users[i].avatar_url} className="select-module select-module-icon avatar" alt="Avatar"/>
+              <span className='select-module select-module-name'>{res.data.users[i].name}</span>
             </Fragment>;
           this.options.push(obj);
         }
@@ -152,15 +154,13 @@ class ShareToUser extends React.Component {
     }
     if (this.props.isGroupOwnedRepo) {
       seafileAPI.shareGroupOwnedRepoToUser(repoID, this.state.permission, users).then(res => {
+        let errorMsg = [];
         if (res.data.failed.length > 0) {
-          let errorMsg = [];
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
-          this.setState({errorMsg: errorMsg});
         }
         // todo modify api
-
         let items = res.data.success.map(item => {
           let sharedItem = {
             'user_info': { 'nickname': item.user_name, 'name': item.user_email},
@@ -170,23 +170,46 @@ class ShareToUser extends React.Component {
           return sharedItem;
         });
         this.setState({
+          errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(items),
           selectedOption: null,
+          permission: 'rw',
         });
+      }).catch(error => {
+        if (error.response) {
+          let message = gettext('Library can not be shared to owner.');
+          let errMessage = [];
+          errMessage.push(message);
+          this.setState({
+            errorMsg: errMessage,
+            selectedOption: null,
+          });
+        }
       });
     } else {
       seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
+        let errorMsg = [];
         if (res.data.failed.length > 0) {
-          let errorMsg = [];
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
-          this.setState({errorMsg: errorMsg});
         }
         this.setState({
+          errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(res.data.success),
           selectedOption: null,
+          permission: 'rw',
         });
+      }).catch(error => {
+        if (error.response) {
+          let message = gettext('Library can not be shared to owner.');
+          let errMessage = [];
+          errMessage.push(message);
+          this.setState({
+            errorMsg: errMessage,
+            selectedOption: null,
+          });
+        }
       });
     }
   } 
@@ -209,14 +232,41 @@ class ShareToUser extends React.Component {
     }
   }
 
+  onChangeUserPermission = (item, permission) => {
+    let path = this.props.itemPath;
+    let repoID = this.props.repoID;
+    let username = item.user_info.name;
+    if (this.props.isGroupOwnedRepo) {
+      seafileAPI.modifyGroupOwnedRepoUserSharedPermission(repoID, permission, username).then(() => {
+        this.updateSharedItems(item, permission);
+      });
+    } else {
+      seafileAPI.updateShareToUserItemPermission(repoID, path, 'user', username, permission).then(() => {
+        this.updateSharedItems(item, permission);
+      });
+    }
+  }
+  
+  updateSharedItems = (item, permission) => {
+    let username = item.user_info.name;
+    let sharedItems = this.state.sharedItems.map(sharedItem => {
+      let sharedItemUsername = sharedItem.user_info.name;
+      if (username === sharedItemUsername) {
+        sharedItem.permission = permission;
+      }
+      return sharedItem;
+    });
+    this.setState({sharedItems: sharedItems});
+  }
+
   render() {
     let { sharedItems } = this.state;
     return (
       <table>
         <thead> 
           <tr>
-            <th style={{'width': '50%'}}>{gettext('User')}</th>
-            <th style={{'width': '30%'}}>{gettext('Permission')}</th>
+            <th style={{'width': '40%'}}>{gettext('User')}</th>
+            <th style={{'width': '40%'}}>{gettext('Permission')}</th>
             <th></th>
           </tr>
           <tr>
@@ -224,7 +274,7 @@ class ShareToUser extends React.Component {
               <AsyncSelect
                 inputId={'react-select-1-input'}
                 className='reviewer-select' 
-                placeholder={gettext('Please enter 1 or more character')}
+                placeholder={gettext('Select users...')}
                 loadOptions={this.loadOptions}
                 onChange={this.handleSelectChange}
                 value={this.state.selectedOption}
@@ -235,32 +285,39 @@ class ShareToUser extends React.Component {
               />
             </td>
             <td>
-              <Input type="select" name="select" onChange={this.setPermission}>
-                <option>{gettext('Read-Write')}</option>
-                <option>{gettext('Read-Only')}</option>
-                <option>{gettext('Admin')}</option>
-                <option>{gettext('Preview-Edit-on-Cloud')}</option>
-                <option>{gettext('Preview-on-Cloud')}</option>
-              </Input>
+              <PermissionEditor 
+                isTextMode={false}
+                currentPermission={this.state.permission}
+                permissions={this.permissions}
+                onPermissionChangedHandler={this.setPermission}
+              />
             </td>
             <td>
               <Button onClick={this.shareToUser}>{gettext('Submit')}</Button>
             </td>
           </tr>
-          <tr>
-            <td colSpan={3}>
-              {this.state.errorMsg.length > 0 &&
-                this.state.errorMsg.map((item, index = 0, arr) => {
-                  return (
-                    <p className="error" key={index}>{this.state.errorMsg[index].email}
-                      {': '}{this.state.errorMsg[index].error_msg}</p>
-                  );
-                })
+          {this.state.errorMsg.length > 0 &&
+            this.state.errorMsg.map((item, index) => {
+              let errMessage = '';
+              if (item.email) {
+                errMessage = item.email + ': ' + item.error_msg;
+              } else {
+                errMessage = item;
               }
-            </td>
-          </tr>
+              return (
+                <tr key={index}>
+                  <td colSpan={3}><p className="error">{errMessage}</p></td>
+                </tr>
+              );
+            })
+          }
         </thead>
-        <UserList items={sharedItems} deleteShareItem={this.deleteShareItem} />
+        <UserList 
+          items={sharedItems}
+          permissions={this.permissions}
+          deleteShareItem={this.deleteShareItem} 
+          onChangeUserPermission={this.onChangeUserPermission}
+        />
       </table>
     );
   }
