@@ -13,7 +13,7 @@ class Notification extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.getUnseenCount().then(res => {
+    seafileAPI.getUnseenNotificationCount().then(res => {
       this.setState({unseenCount: res.data.unseen_count});
     });
   }
