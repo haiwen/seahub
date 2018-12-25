@@ -13,28 +13,22 @@ class Notification extends React.Component {
   }
 
   componentDidMount() {
-    this.loadUnseenCount();
-  }
-
-  onClick = () => {
-    this.setState({
-      showNotice: !this.state.showNotice
-    });
-
-    if (!this.state.showNotice) {
-      this.loadNotices();
-    }
-
-    if (this.state.showNotice) {
-      seafileAPI.updateNotifications();
-      this.loadUnseenCount();
-    }
-  }
-
-  loadUnseenCount = () => {
     seafileAPI.getUnseenCount().then(res => {
       this.setState({unseenCount: res.data.unseen_count});
     });
+  }
+
+  onClick = () => {
+    if (this.state.showNotice) {
+      seafileAPI.updateNotifications();
+      this.setState({
+        showNotice: false,
+        unseenCount: 0
+      })
+    } else {
+      this.loadNotices();
+      this.setState({showNotice: true});
+    }
   }
 
   loadNotices = () => {
