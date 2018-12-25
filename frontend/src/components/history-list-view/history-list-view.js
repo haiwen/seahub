@@ -23,7 +23,6 @@ class HistoryListView extends React.Component {
 
   componentDidMount = () => {
     let historyList = this.props.historyList;
-    // todo add fault-tolerant；
     if (historyList.length > 0) {
       this.setState({currentItem: historyList[0]});
       if (historyList === 1) {
