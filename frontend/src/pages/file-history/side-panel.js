@@ -26,6 +26,11 @@ class SidePanel extends React.Component {
 
   componentDidMount() {
     editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+      let historyList = res.data;
+      if (historyList.length === 0) {
+        this.setState({isLoading: false});
+        throw Error('there has an error in server');
+      }
       this.initResultState(res.data);
     });
   }
@@ -71,9 +76,7 @@ class SidePanel extends React.Component {
       });
       editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
         this.updateResultState(res.data);
-        this.setState({
-          isReloadingData: false
-        });
+        this.setState({isReloadingData: false});
       });
     }
   }

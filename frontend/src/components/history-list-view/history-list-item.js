@@ -67,7 +67,7 @@ class HistoryListItem extends React.Component {
       return '';
     }
     let item = this.props.item;
-    let time = moment.parseZone(item.ctime).format('YYYY-MM-DD HH:mm');
+    let time = moment(item.ctime).format('YYYY-MM-DD HH:mm');
     let isHigtlightItem = false;
     if (this.props.item && this.props.currentItem) {
       isHigtlightItem = this.props.item.commit_id === this.props.currentItem.commit_id;

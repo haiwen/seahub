@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 import editUtilties from './utils/editor-utilties';
-import { filePath, fileName } from './utils/constants';
+import { siteRoot, filePath, fileName } from './utils/constants';
+import { Utils } from './utils/utils';
 import URLDecorator from './utils/url-decorator';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';
-import axios from 'axios';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -27,8 +28,16 @@ class FileHistory extends React.Component {
     };
   }
 
-  onSearchedClick = () => {
-    // todo;
+  onSearchedClick = (selectedItem) => {
+    if (selectedItem.is_dir === true) {
+      let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    } else {
+      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    }
   }
 
   setDiffContent = (newmarkdownContent, oldMarkdownContent)=> {
