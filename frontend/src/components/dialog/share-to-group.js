@@ -43,7 +43,7 @@ class GroupItem extends React.Component {
           <PermissionEditor 
             isTextMode={true}
             currentPermission={item.permission}
-            ownedPermissions={this.props.ownedPermissions}
+            permissions={this.props.permissions}
             onPermissionChangedHandler={this.onChangeUserPermission}
           />
         </td>
@@ -71,7 +71,7 @@ class GroupList extends React.Component {
             <GroupItem 
               key={index} 
               item={item} 
-              ownedPermissions={this.props.ownedPermissions}
+              permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}
             />
@@ -99,9 +99,9 @@ class ShareToGroup extends React.Component {
       sharedItems: []
     };
     this.options = [];
-    this.ownedPermissions = ['rw', 'r', 'cloud-edit', 'preview'];
+    this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
     if (this.props.isGroupOwnedRepo) {
-      this.ownedPermissions = ['rw', 'r'];
+      this.permissions = ['rw', 'r'];
     }
   }
 
@@ -268,7 +268,7 @@ class ShareToGroup extends React.Component {
               <PermissionEditor 
                 isTextMode={false}
                 currentPermission={this.state.permission}
-                ownedPermissions={this.ownedPermissions}
+                permissions={this.permissions}
                 onPermissionChangedHandler={this.setPermission}
               />
             </td>
@@ -289,7 +289,7 @@ class ShareToGroup extends React.Component {
         </thead>
         <GroupList 
           items={this.state.sharedItems}
-          ownedPermissions={this.ownedPermissions}
+          permissions={this.permissions}
           deleteShareItem={this.deleteShareItem} 
           onChangeUserPermission={this.onChangeUserPermission}
         />

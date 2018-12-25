@@ -6,7 +6,7 @@ import { Input } from 'reactstrap';
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
   currentPermission: PropTypes.string.isRequired,
-  ownedPermissions: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
   onPermissionChangedHandler: PropTypes.func.isRequired,
 };
 
@@ -50,7 +50,7 @@ class PermissionEditor extends React.Component {
   }
 
   render() {
-    let { currentPermission, ownedPermissions, isTextMode } = this.props;
+    let { currentPermission, permissions, isTextMode } = this.props;
 
     // scence1: isTextMode (text)editor-icon --> select
     // scence2: !isTextMode select
@@ -65,7 +65,7 @@ class PermissionEditor extends React.Component {
       <div className="permission-editor">
         {(!isTextMode || this.state.isEditing) &&
           <Input style={selectStyle} type="select" onChange={this.onPermissionChangedHandler} onClick={this.onSelectHandler} value={currentPermission}>
-            {ownedPermissions.map((item, index) => {
+            {permissions.map((item, index) => {
               return (
                 <option key={index} value={item}>{Utils.sharePerms(item)}</option>
               )
