@@ -133,8 +133,8 @@ class ShareToUser extends React.Component {
           obj.email = res.data.users[i].email;
           obj.label =
             <Fragment>
-              <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
-              <span className='reviewer-select-name'>{res.data.users[i].name}</span>
+              <img src={res.data.users[i].avatar_url} className="select-module select-module-icon avatar" alt="Avatar"/>
+              <span className='select-module select-module-name'>{res.data.users[i].name}</span>
             </Fragment>;
           this.options.push(obj);
         }

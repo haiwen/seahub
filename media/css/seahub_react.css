@@ -1078,3 +1078,16 @@ table .menu-toggle {
 .wiki-list-table td {
     line-height: 1.5rem;
 }
+
+/* react select-module */
+.select-module {
+    font-size: 1rem;
+}
+.select-module.select-module-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.select-module.select-module-name {
+    margin-left: 0.5rem;
+}
