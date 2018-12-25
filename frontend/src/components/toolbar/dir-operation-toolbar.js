@@ -82,6 +82,16 @@ class DirOperationToolbar extends React.Component {
     });
   }
 
+  onUploadFile = (e) => {
+    this.setState({isUploadMenuShow: false});
+    this.props.onUploadFile(e);
+  }
+  
+  onUploadFolder = (e) => {
+    this.setState({isUploadMenuShow: false});
+    this.props.onUploadFolder(e);
+  }
+
   onCreateClick = (e) => {
     this.toggleOperationMenu(e);
     this.setState({
@@ -185,8 +195,8 @@ class DirOperationToolbar extends React.Component {
         </div>
         {this.state.isUploadMenuShow && (
           <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-            <li className="dropdown-item" onClick={this.props.onUploadFile}>{gettext('File Upload')}</li>
-            <li className="dropdown-item" onClick={this.props.onUploadFolder}>{gettext('Folder Upload')}</li>
+            <li className="dropdown-item" onClick={this.onUploadFile}>{gettext('File Upload')}</li>
+            <li className="dropdown-item" onClick={this.onUploadFolder}>{gettext('Folder Upload')}</li>
           </ul>
         )}
         {this.state.isCreateMenuShow && (
