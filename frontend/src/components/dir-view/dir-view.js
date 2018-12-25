@@ -39,6 +39,7 @@ class DirView extends React.Component {
       errorMsg: '',
     };
     window.onpopstate = this.onpopstate;
+    this.lastModifyTime = new Date();
   }
 
   onpopstate = (event) => {
@@ -97,7 +98,15 @@ class DirView extends React.Component {
     collabServer.unwatchRepo(this.props.repoID);
   }
 
+  componentDidUpdate() {
+    this.lastModifyTime = new Date();
+  }
+
   onRepoUpdateEvent = () => {
+    let currentTime = new Date();
+    if ((parseFloat(currentTime - this.lastModifyTime)/1000) <= 5) {
+      return;
+    }
     let repoID = this.props.repoID;
     let { path, dirID } = this.state;
     seafileAPI.dirMetaData(repoID, path).then((res) => {
@@ -107,7 +116,7 @@ class DirView extends React.Component {
             {gettext('This folder has been updated. ')}
             <a href='' >{gettext('Refresh')}</a>
           </span>,
-          {duration: 3600}
+          {id: 'repo_updated', duration: 3600}
         );
       }
     })
