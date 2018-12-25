@@ -685,6 +685,11 @@ a.op-icon:focus {
     top: 5px;
 }
 
+#notice-popover .sf-popover-hd {
+    border-bottom: 1px solid #dfdfe1;
+    margin: 0 10px;
+}
+
 
 /**** sf-popover ****/ /* e.g. top notice popup, group members popup */
 .sf-popover-container {

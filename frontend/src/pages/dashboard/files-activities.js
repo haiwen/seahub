@@ -195,7 +195,7 @@ class FilesActivities extends Component {
         this.setState({
           loading: false,
           items: res.data.events,
-          has_more: res.data.events.length == '0' ? false : true
+          has_more: res.data.events.length < 25 ? false : true
         });
       }
     });
@@ -203,25 +203,22 @@ class FilesActivities extends Component {
 
   getMore() {
     const pageNum = this.state.page + 1;
-    this.setState({
-      page: pageNum
+    this.setState({page: pageNum});
+    seafileAPI.listActivities(pageNum).then(res => {
+      if (res.status == 403) {
+        this.setState({
+          loading: false,
+          error_msg: gettext('Permission denied')
+        });
+      } else {
+        // {"events":[...]}
+        this.setState({
+          loading: false,
+          items: [...this.state.items, ...res.data.events],
+          has_more: res.data.events.length < 25 ? false : true 
+        });
+      }
     });
-    seafileAPI.listActivities(pageNum)
-      .then(res => {
-        if (res.status == 403) {
-          this.setState({
-            loading: false,
-            error_msg: gettext('Permission denied')
-          });
-        } else {
-          // {"events":[...]}
-          this.setState({
-            loading: false,
-            items: [...this.state.items, ...res.data.events],
-            has_more: res.data.events.length == '0' ? false : true 
-          });
-        }
-      });
   }
 
   handleScroll(event) {
