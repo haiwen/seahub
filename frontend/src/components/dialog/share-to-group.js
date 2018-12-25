@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input } from 'reactstrap';
+import { Button } from 'reactstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import PermissionEditor from '../permission-editor';
 
 class GroupItem extends React.Component {
 
@@ -29,12 +29,24 @@ class GroupItem extends React.Component {
     this.props.deleteShareItem(item.group_info.id);
   }
 
+  onChangeUserPermission = (permission) => {
+    let item = this.props.item;
+    this.props.onChangeUserPermission(item, permission);
+  }
+
   render() {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>{item.group_info.name}</td>
-        <td>{Utils.sharePerms(item.permission)}</td>
+        <td>
+          <PermissionEditor 
+            isTextMode={true}
+            permission={item.permission}
+            permissions={this.props.permissions}
+            onPermissionChangedHandler={this.onChangeUserPermission}
+          />
+        </td>
         <td>
           <span
             className={`sf2-icon-x3 sf2-x op-icon a-simulate ${this.state.isOperationShow ? '' : 'hide'}`}
@@ -56,7 +68,13 @@ class GroupList extends React.Component {
       <tbody>
         {items.map((item, index) => {
           return (
-            <GroupItem key={index} item={item} deleteShareItem={this.props.deleteShareItem}/>
+            <GroupItem 
+              key={index} 
+              item={item} 
+              permissions={this.props.permissions}
+              deleteShareItem={this.props.deleteShareItem}
+              onChangeUserPermission={this.props.onChangeUserPermission}
+            />
           );
         })}
       </tbody>
@@ -81,6 +99,10 @@ class ShareToGroup extends React.Component {
       sharedItems: []
     };
     this.options = [];
+    this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+    if (this.props.isGroupOwnedRepo) {
+      this.permissions = ['rw', 'r'];
+    }
   }
 
   handleSelectChange = (option) => {
@@ -117,8 +139,8 @@ class ShareToGroup extends React.Component {
     });
   }
 
-  setPermission = (e) => {
-    this.setState({permission: e.target.value});
+  setPermission = (permission) => {
+    this.setState({permission: permission});
   }
 
   shareToGroup = () => {
@@ -133,14 +155,11 @@ class ShareToGroup extends React.Component {
     }
     if (isGroupOwnedRepo) {
       seafileAPI.shareGroupOwnedRepoToGroup(repoID, this.state.permission, groups).then(res => {
+        let errorMsg = [];
         if (res.data.failed.length > 0) {
-          let errorMsg = [];
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
-          this.setState({
-            errorMsg: errorMsg
-          });
         }
 
         // todo modify api
@@ -154,25 +173,26 @@ class ShareToGroup extends React.Component {
         });
   
         this.setState({
+          errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(items),
           selectedOption: null,
+          permission: 'rw',
         });
       });
     } else {
       seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, groups).then(res => {
+        let errorMsg = [];
         if (res.data.failed.length > 0) {
-          let errorMsg = [];
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
-          this.setState({
-            errorMsg: errorMsg
-          });
         }
   
         this.setState({
+          errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(res.data.success),
           selectedOption: null,
+          permission: 'rw'
         });
       });
     }
@@ -194,6 +214,33 @@ class ShareToGroup extends React.Component {
         });
       });
     }
+  }
+
+  onChangeUserPermission = (item, permission) => {
+    let path = this.props.itemPath;
+    let repoID = this.props.repoID;
+    let groupID = item.group_info.id;
+    if (this.props.isGroupOwnedRepo) {
+      seafileAPI.modifyGroupOwnedRepoGroupSharedPermission(repoID, permission, groupID).then(() => {
+        this.updateSharedItems(item, permission);
+      })
+    } else {
+      seafileAPI.updateFolderSharedToGroupPerm(repoID, path, 'group', permission, groupID).then(() => {
+        this.updateSharedItems(item, permission);
+      });
+    }
+  }
+  
+  updateSharedItems = (item, permission) => {
+    let groupID = item.group_info.id;
+    let sharedItems = this.state.sharedItems.map(sharedItem => {
+      let sharedItemGroupID = sharedItem.group_info.id;
+      if (groupID === sharedItemGroupID) {
+        sharedItem.permission = permission;
+      }
+      return sharedItem;
+    });
+    this.setState({sharedItems: sharedItems});
   }
 
   render() {
@@ -218,12 +265,12 @@ class ShareToGroup extends React.Component {
               />
             </td>
             <td>
-              <Input type="select" name="select" onChange={this.setPermission}>
-                <option value='rw'>{gettext('Read-Write')}</option>
-                <option value='r'>{gettext('Read-Only')}</option>
-                <option value='cloud-edit'>{gettext('Preview-Edit-on-Cloud')}</option>
-                <option value='preview'>{gettext('Preview-on-Cloud')}</option>
-              </Input>
+              <PermissionEditor 
+                isTextMode={false}
+                permission={this.state.permission}
+                permissions={this.permissions}
+                onPermissionChangedHandler={this.setPermission}
+              />
             </td>
             <td>
               <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
@@ -240,7 +287,12 @@ class ShareToGroup extends React.Component {
             })                                                
           }
         </thead>
-        <GroupList items={this.state.sharedItems} deleteShareItem={this.deleteShareItem} />
+        <GroupList 
+          items={this.state.sharedItems}
+          permissions={this.permissions}
+          deleteShareItem={this.deleteShareItem} 
+          onChangeUserPermission={this.onChangeUserPermission}
+        />
       </table>
     );
   }

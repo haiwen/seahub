@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import PropTypes from 'prop-types';
-import { Button, Input } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import PermissionEditor from '../permission-editor';
 
 class UserItem extends React.Component {
 
@@ -27,13 +27,25 @@ class UserItem extends React.Component {
     let item = this.props.item;
     this.props.deleteShareItem(item.user_info.name);
   }
+  
+  onChangeUserPermission = (permission) => {
+    let item = this.props.item;
+    this.props.onChangeUserPermission(item, permission);
+  }
 
   render() {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>{item.user_info.nickname}</td>
-        <td>{Utils.sharePerms(item.permission)}</td>
+        <td>
+          <PermissionEditor 
+            isTextMode={true}
+            permission={item.permission}
+            permissions={this.props.permissions}
+            onPermissionChangedHandler={this.onChangeUserPermission}
+          />
+        </td>
         <td>
           <span
             className={`sf2-icon-x3 sf2-x op-icon a-simulate ${this.state.isOperationShow ? '' : 'hide'}`}
@@ -55,7 +67,13 @@ class UserList extends React.Component {
       <tbody>
         {items.map((item, index) => {
           return (
-            <UserItem key={index} item={item} deleteShareItem={this.props.deleteShareItem}/>
+            <UserItem 
+              key={index} 
+              item={item} 
+              permissions={this.props.permissions}
+              deleteShareItem={this.props.deleteShareItem}
+              onChangeUserPermission={this.props.onChangeUserPermission}
+            />
           );
         })}
       </tbody>
@@ -80,6 +98,10 @@ class ShareToUser extends React.Component {
       sharedItems: []
     };
     this.options = [];
+    this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    if (this.props.isGroupOwnedRepo) {
+      this.permissions = ['rw', 'r'];
+    }
   }
 
   handleSelectChange = (option) => {
@@ -97,8 +119,8 @@ class ShareToUser extends React.Component {
     });
   }
 
-  setPermission = (e) => {
-    this.setState({permission: e.target.value});
+  setPermission = (permission) => {
+    this.setState({permission: permission});
   }
 
   loadOptions = (value, callback) => {
@@ -151,6 +173,7 @@ class ShareToUser extends React.Component {
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(items),
           selectedOption: null,
+          permission: 'rw',
         });
       }).catch(error => {
         if (error.response) {
@@ -175,6 +198,7 @@ class ShareToUser extends React.Component {
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(res.data.success),
           selectedOption: null,
+          permission: 'rw',
         });
       }).catch(error => {
         if (error.response) {
@@ -208,6 +232,33 @@ class ShareToUser extends React.Component {
     }
   }
 
+  onChangeUserPermission = (item, permission) => {
+    let path = this.props.itemPath;
+    let repoID = this.props.repoID;
+    let username = item.user_info.name;
+    if (this.props.isGroupOwnedRepo) {
+      seafileAPI.modifyGroupOwnedRepoUserSharedPermission(repoID, permission, username).then(() => {
+        this.updateSharedItems(item, permission);
+      });
+    } else {
+      seafileAPI.updateFolderSharedToUserPerm(repoID, path, 'user', permission, username).then(() => {
+        this.updateSharedItems(item, permission);
+      });
+    }
+  }
+  
+  updateSharedItems = (item, permission) => {
+    let username = item.user_info.name;
+    let sharedItems = this.state.sharedItems.map(sharedItem => {
+      let sharedItemUsername = sharedItem.user_info.name;
+      if (username === sharedItemUsername) {
+        sharedItem.permission = permission;
+      }
+      return sharedItem;
+    });
+    this.setState({sharedItems: sharedItems});
+  }
+
   render() {
     let { sharedItems } = this.state;
     return (
@@ -234,13 +285,12 @@ class ShareToUser extends React.Component {
               />
             </td>
             <td>
-              <Input type="select" name="select" onChange={this.setPermission}>
-                <option value='rw'>{gettext('Read-Write')}</option>
-                <option value='r'>{gettext('Read-Only')}</option>
-                <option value='admin'>{gettext('Admin')}</option>
-                <option value='cloud-edit'>{gettext('Preview-Edit-on-Cloud')}</option>
-                <option value='preview'>{gettext('Preview-on-Cloud')}</option>
-              </Input>
+              <PermissionEditor 
+                isTextMode={false}
+                permission={this.state.permission}
+                permissions={this.permissions}
+                onPermissionChangedHandler={this.setPermission}
+              />
             </td>
             <td>
               <Button onClick={this.shareToUser}>{gettext('Submit')}</Button>
@@ -262,7 +312,12 @@ class ShareToUser extends React.Component {
             })
           }
         </thead>
-        <UserList items={sharedItems} deleteShareItem={this.deleteShareItem} />
+        <UserList 
+          items={sharedItems}
+          permissions={this.permissions}
+          deleteShareItem={this.deleteShareItem} 
+          onChangeUserPermission={this.onChangeUserPermission}
+        />
       </table>
     );
   }
