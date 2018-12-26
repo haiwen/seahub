@@ -4,6 +4,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
 import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
 import WikiListView from '../../components/wiki-list-view/wiki-list-view';
@@ -118,14 +119,11 @@ class Wikis extends Component {
   render() {
     return (
       <Fragment>
-        <div className="main-panel-center">
-          <div className="cur-view-container" id="wikis">
-            <div className="cur-view-path">
-              <div className="path-container">
-                <h3 className="sf-heading">{gettext('Wikis')}</h3>
-              </div>
-              <div className="path-toolbar">
-                <Dropdown tag="div" className="btn btn-secondary operation-item" style={{marginTop: '-0.25rem'}} isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
+        <div className="main-panel-north">
+          <div className="cur-view-toolbar border-left-show">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+            <div className="operation">
+                <Dropdown tag="div" className="btn btn-secondary operation-item" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
                   <DropdownToggle 
                     tag="i" 
                     className="fa fa-plus-square op-icon" 
@@ -134,13 +132,22 @@ class Wikis extends Component {
                     aria-expanded={this.state.isShowAddWikiMenu}
                     onClick={this.clickMenuToggle}
                   >
-                    {' '}{gettext('Add Wiki')}
+                    {' '}<span className="btn-secondary">{gettext('Add Wiki')}</span>
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem onClick={this.onCreateToggle}>{gettext('New Wiki')}</DropdownItem>
                     <DropdownItem onClick={this.onSelectToggle}>{gettext('Choose a library as Wiki')}</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
+            </div>
+          </div>
+          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
+        </div>
+        <div className="main-panel-center">
+          <div className="cur-view-container" id="wikis">
+            <div className="cur-view-path">
+              <div className="path-container">
+                <h3 className="sf-heading">{gettext('Wikis')}</h3>
               </div>
             </div>
             <div className="cur-view-content">
