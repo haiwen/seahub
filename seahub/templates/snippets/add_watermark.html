@@ -3,6 +3,9 @@
 watermark.load({
     {% if request.user.username %}
     watermark_txt: "{{site_name}} {{request.user.username|email2nickname|escapejs}}",
+    {# used when view shared file #}
+    {% elif shared_by %}
+    watermark_txt: "{{site_name}} {{shared_by|email2nickname|escapejs}}",
     {% else %}
     watermark_txt: "{% trans "Anonymous User" %}",
     {% endif %}
