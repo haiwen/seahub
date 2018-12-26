@@ -42,7 +42,6 @@ const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
 const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
 const ShareAdminShareLinksWrapper = MainContentWrapper(ShareAdminShareLinks);
 const ShareAdminUploadLinksWrapper = MainContentWrapper(ShareAdminUploadLinks);
-const WikisWrapper = MainContentWrapper(Wikis);
 
 class App extends Component {
 
@@ -217,7 +216,7 @@ class App extends Component {
               onTabNavClick={this.tabItemClick}
               onGroupChanged={this.onGroupChanged}
               />
-            <WikisWrapper path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
+            <Wikis path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
             <PublicSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
           </Router>
         </MainPanel>
