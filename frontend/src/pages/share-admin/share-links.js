@@ -49,11 +49,11 @@ class Content extends Component {
 
       const table = (
         <React.Fragment>
-          <table className="table table-hover table-vcenter">
+          <table className="table-hover">
             <thead>
               <tr>
-                <th width="10%">{/*icon*/}</th>
-                <th width="30%">{gettext("Name")}<a className="table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-up"></span></a></th>{/* TODO:sort */}
+                <th width="4%">{/*icon*/}</th>
+                <th width="36%">{gettext("Name")}<a className="table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-up"></span></a></th>{/* TODO:sort */}
                 <th width="24%">{gettext("Library")}</th>
                 <th width="12%">{gettext("Visits")}</th>
                 <th width="14%">{gettext("Expiration")}<a className="table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-down hide" aria-hidden="true"></span></a></th>{/*TODO:sort*/}

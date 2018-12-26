@@ -21,13 +21,13 @@ class Content extends Component {
       );
 
       const table = (
-        <table className="table table-hover table-vcenter">
+        <table className="table-hover">
           <thead>
             <tr>
-              <th width="7%">{/*icon*/}</th>
-              <th width="30%">{gettext("Name")} <a className="table-sort-op by-name" href="#"><span className="sort-icon icon-caret-down hide"></span>{/* TODO: sort by name */}</a></th>
+              <th width="4%">{/*icon*/}</th>
+              <th width="34%">{gettext("Name")} <a className="table-sort-op by-name" href="#"><span className="sort-icon icon-caret-down hide"></span>{/* TODO: sort by name */}</a></th>
               <th width="30%">{gettext("Share To")}</th>
-              <th width="25%">{gettext("Permission")}</th>
+              <th width="24%">{gettext("Permission")}</th>
               <th width="8%"></th>
             </tr>
           </thead>

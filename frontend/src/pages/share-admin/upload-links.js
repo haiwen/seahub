@@ -49,13 +49,13 @@ class Content extends Component {
 
       const table = (
         <React.Fragment>
-          <table className="table table-hover table-vcenter">
+          <table className="table-hover">
             <thead>
               <tr>
-                <th width="10%">{/*icon*/}</th>
-                <th width="35%">{gettext("Name")}</th>
+                <th width="4%">{/*icon*/}</th>
+                <th width="42%">{gettext("Name")}</th>
                 <th width="30%">{gettext("Library")}</th>
-                <th width="15%">{gettext("Visits")}</th>
+                <th width="14%">{gettext("Visits")}</th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
