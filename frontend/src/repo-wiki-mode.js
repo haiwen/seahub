@@ -14,6 +14,7 @@ import LibDecryptDialog from './components/dialog/lib-decrypt-dialog';
 import ModalPortal from './components/modal-portal';
 import Dirent from './models/dirent';
 import FileTag from './models/file-tag';
+import RepoTag from './models/repo-tag';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
@@ -50,6 +51,7 @@ class Wiki extends Component {
       reviewID: '',
       draftFilePath: '',
       dirID: '',
+      usedRepoTags: [],
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
@@ -65,6 +67,16 @@ class Wiki extends Component {
 
   componentDidMount() {
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
+    seafileAPI.listRepoTags(repoID).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount !== 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.setState({usedRepoTags: usedRepoTags});
+    });
     seafileAPI.getRepoInfo(repoID).then(res => {
       this.setState({
         libNeedDecrypt: res.data.lib_need_decrypt, 
@@ -904,6 +916,7 @@ class Wiki extends Component {
           reviewID={this.state.reviewID}
           goDraftPage={this.goDraftPage}
           goReviewPage={this.goReviewPage}
+          usedRepoTags={this.state.usedRepoTags}
         />
       </div>
     );

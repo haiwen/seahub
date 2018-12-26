@@ -9,6 +9,7 @@ import toaster from '../toast';
 import DirPanel from './dir-panel';
 import Dirent from '../../models/dirent';
 import FileTag from '../../models/file-tag';
+import RepoTag from '../../models/repo-tag';
 import RepoInfo from '../../models/repo-info';
 
 const propTypes = {
@@ -37,6 +38,7 @@ class DirView extends React.Component {
       selectedDirentList: [],
       dirID: '',
       errorMsg: '',
+      usedRepoTags: [],
     };
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
@@ -54,6 +56,16 @@ class DirView extends React.Component {
     let location = decodeURIComponent(window.location.href);
     let repoID = this.props.repoID;
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
+    seafileAPI.listRepoTags(repoID).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount !== 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.setState({usedRepoTags: usedRepoTags});
+    });
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repoInfo = new RepoInfo(res.data);
       this.setState({
@@ -549,6 +561,7 @@ class DirView extends React.Component {
         onFileUploadSuccess={this.onFileUploadSuccess}
         libNeedDecrypt={this.state.libNeedDecrypt}
         onLibDecryptDialog={this.onLibDecryptDialog}
+        usedRepoTags={this.state.usedRepoTags}
       />
     );
   }

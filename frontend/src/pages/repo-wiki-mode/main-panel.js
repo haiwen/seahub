@@ -14,6 +14,7 @@ import MarkdownContentViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import FileUploader from '../../components/file-uploader/file-uploader';
+import FileTagsViewer from '../../components/filetags-viewer';
 
 const propTypes = {
   content: PropTypes.string,
@@ -55,6 +56,7 @@ const propTypes = {
   goReviewPage: PropTypes.func,
   goDraftPage: PropTypes.func,
   reviewID: PropTypes.any,
+  usedRepoTags: PropTypes.array.isRequired,
 };
 
 class MainPanel extends Component {
@@ -229,6 +231,16 @@ class MainPanel extends Component {
                 />
               )}
             </div>
+            {(this.props.usedRepoTags.length !==0 && permission && this.props.path === '/') && (
+              <div className='' style={{margin:'4px 16px', height:'40px', border:'1px solid #868e96', borderRadius:'5px'}}>
+                <FileTagsViewer
+                  repoID={repoID}
+                  permission={permission}
+                  currentPath={this.props.path}
+                  usedRepoTags={this.props.usedRepoTags}
+                />
+              </div>
+            )}
             <div className="cur-view-content" onScroll={this.handlePageScroll} ref="curViewContent">
               {!this.props.pathExist ?
                 ErrMessage :
