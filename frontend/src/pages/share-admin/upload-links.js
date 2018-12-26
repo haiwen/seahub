@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from '@reach/router';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { gettext, siteRoot, loginUrl, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, loginUrl, canGenerateShareLink } from '../../utils/constants';
+import SharedUploadInfo from '../../models/shared-upload-info';
 
 class Content extends Component {
 
@@ -30,7 +31,7 @@ class Content extends Component {
   }
 
   render() {
-    const {loading, errorMsg, items} = this.props.data;
+    const { loading, errorMsg, items } = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -56,7 +57,11 @@ class Content extends Component {
                 <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
-            <TableBody items={items} showModal={this.showModal} />
+            <tbody>
+              {items.map((item, index) => {
+                return (<Item key={index} item={item} showModal={this.showModal} onRemoveLink={this.props.onRemoveLink}/>);
+              })}
+            </tbody>
           </table>
 
           <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal} centered={true}>
@@ -73,34 +78,12 @@ class Content extends Component {
   }
 }
 
-class TableBody extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      //items: this.props.items
-    };
-  }
-
-  render() {
-
-    let listItems = this.props.items.map(function(item, index) {
-      return <Item key={index} data={item} showModal={this.props.showModal} />;
-    }, this);
-
-    return (
-      <tbody>{listItems}</tbody>
-    );
-  }
-}
-
 class Item extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       showOpIcon: false,
-      deleted: false
     };
   }
 
@@ -114,60 +97,46 @@ class Item extends Component {
 
   viewLink = (e) => {
     e.preventDefault();
-    this.props.showModal({content: this.props.data.link});
+    this.props.showModal({content: this.props.item.link});
   }
 
-  removeLink = (e) => {
-    e.preventDefault();
-
-    const data = this.props.data;
-    seafileAPI.deleteUploadLink(data.token)
-      .then((res) => {
-        this.setState({
-          deleted: true
-        });
-        // TODO: show feedback msg
-        // gettext("Successfully deleted 1 item")
-      })
-      .catch((error) => {
-      // TODO: show feedback msg
-      });
+  removeLink = () => {
+    this.props.onRemoveLink(this.props.item);
   }
 
-  render() {
-
-    if (this.state.deleted) {
-      return null;
-    }
-
-    const data = this.props.data;
-
+  getUploadParams = () => {
+    let item = this.props.item;
     const icon_size = Utils.isHiDPI() ? 48 : 24;
-    data.icon_url = Utils.getFolderIconUrl({
+    let iconUrl = Utils.getFolderIconUrl({
       is_readonly: false, 
       size: icon_size
     });
 
-    data.url = `${siteRoot}library/${data.repo_id}/${data.repo_name}${Utils.encodePath(data.path)}`;
+    let uploadUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}${Utils.encodePath(item.path)}`;
+
+    return { iconUrl, uploadUrl };
+  }
+
+  render() {
+    let item = this.props.item;
+    let { iconUrl, uploadUrl } = this.getUploadParams();
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let linkIconClassName = 'sf2-icon-link op-icon' + iconVisibility; 
     let deleteIconClassName = 'sf2-icon-delete op-icon' + iconVisibility;
 
-    const item = (
+    return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img src={data.icon_url} width="24" /></td>
-        <td><Link to={data.url}>{data.obj_name}</Link></td>
-        <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}`}>{data.repo_name}</Link></td>
-        <td>{data.view_cnt}</td>
+        <td><img src={iconUrl} width="24" /></td>
+        <td><Link to={uploadUrl}>{item.obj_name}</Link></td>
+        <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}`}>{item.repo_name}</Link></td>
+        <td>{item.view_cnt}</td>
         <td>
           <a href="#" className={linkIconClassName} title={gettext('View')} onClick={this.viewLink}></a>
           <a href="#" className={deleteIconClassName} title={gettext('Remove')} onClick={this.removeLink}></a>
         </td>
       </tr>
     );
-
-    return item;
   }
 }
 
@@ -185,9 +154,12 @@ class ShareAdminUploadLinks extends Component {
   componentDidMount() {
     seafileAPI.listUploadLinks().then((res) => {
       // res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
+      let items = res.data.map(item => {
+        return new SharedUploadInfo(item);
+      });
       this.setState({
         loading: false,
-        items: res.data
+        items: items
       });
     }).catch((error) => {
       if (error.response) {
@@ -203,7 +175,6 @@ class ShareAdminUploadLinks extends Component {
             errorMsg: gettext("Error")
           });
         }
-
       } else {
         this.setState({
           loading: false,
@@ -213,20 +184,38 @@ class ShareAdminUploadLinks extends Component {
     });
   }
 
+  onRemoveLink = (item) => {
+    seafileAPI.deleteUploadLink(item.token).then(() => {
+      let items = this.state.items.filter(uploadItem => {
+        return uploadItem.token !== item.token;
+      });
+      this.setState({items: items});
+      // TODO: show feedback msg
+      // gettext("Successfully deleted 1 item")
+    }).catch((error) => {
+    // TODO: show feedback msg
+    });
+  }
+
   render() {
     return (
       <div className="main-panel-center">
         <div className="cur-view-container">
           <div className="cur-view-path">
             <ul className="nav">
-              { canGenerateShareLink ?
-              <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
-                : '' }
+              { canGenerateShareLink && (
+                <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
+              )}
               <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
             </ul>
           </div>
           <div className="cur-view-content">
-            <Content data={this.state} />
+            <Content
+              errorMsg={this.state.errorMsg}
+              items={this.state.items}
+              loading={this.state.loading}
+              onRemoveLink={this.onRemoveLink}
+            />
           </div>
         </div>
       </div>
