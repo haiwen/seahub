@@ -222,6 +222,9 @@ class DraftReview extends React.Component {
         // fix select last paragraph
         let fragment = nativeRange.cloneContents();
         let startNode = fragment.firstChild.firstChild;
+        if (!startNode) {
+          return;
+        }
         let newNativeRange = document.createRange();
         newNativeRange.setStartBefore(startNode);
         newNativeRange.setEndAfter(startNode);
@@ -229,6 +232,9 @@ class DraftReview extends React.Component {
       }
       else {
         this.range = findRange(nativeRange, this.refs.diffViewer.value);
+      }
+      if (!this.range) {
+        return;
       }
       let rect = nativeRange.getBoundingClientRect();
       // fix Safari bug
