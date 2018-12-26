@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { reviewID, gettext } from '../../utils/constants';
+import { reviewID, gettext, name } from '../../utils/constants';
 import { processor } from '../../utils/seafile-markdown2html';
 
 import '../../css/review-comment-dialog.css';
@@ -21,7 +21,6 @@ class ReviewCommentDialog extends React.Component {
     super(props);
     this.state = {
       comment: '',
-      userName: '',
       quote: '',
     };
   }
@@ -32,14 +31,6 @@ class ReviewCommentDialog extends React.Component {
       comment: comment
     });
   }
-
-  getUserName = () => {
-    seafileAPI.getAccountInfo().then((res) => {
-      this.setState({
-        userName: res.data.name
-      });
-    });
-  } 
 
   submitComment = () => {
     let comment = this.state.comment.trim();
@@ -77,10 +68,6 @@ class ReviewCommentDialog extends React.Component {
     );
   }
 
-  componentWillMount() {
-    this.getUserName();
-  }
-
   componentDidMount() {
     this.setQuoteText(this.props.quote);
   }
@@ -94,7 +81,7 @@ class ReviewCommentDialog extends React.Component {
   render() {
     return (
       <div className="review-comment-dialog">
-        <div>{this.state.userName}</div>
+        <div>{name}</div>
         <blockquote className="review-comment-dialog-quote">
           <div dangerouslySetInnerHTML={{ __html: this.state.quote}}></div>
         </blockquote>
