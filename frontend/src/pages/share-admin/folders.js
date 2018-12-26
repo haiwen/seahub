@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
+import PermissionEditor from '../../components/permission-editor';
 
 class Content extends Component {
 
@@ -86,6 +87,10 @@ class Item extends Component {
     this.showSelect = this.showSelect.bind(this);
     this.changePerm = this.changePerm.bind(this);
     this.unshare = this.unshare.bind(this);
+    this.permissions = ['rw', 'r'];
+    if (isPro) {
+      this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+    }
   }
 
   handleMouseOver() {
@@ -137,10 +142,10 @@ class Item extends Component {
     });
   }
 
-  changePerm(e) {
+  changePerm(permission) {
     const data = this.props.data;
     const share_type = data.share_type;
-    const perm = e.target.value;
+    const perm = permission;
     const postData = {
       'permission': perm
     };
@@ -201,35 +206,21 @@ class Item extends Component {
     data.cur_perm_text = Utils.sharePerms(data.cur_perm);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let editIconClassName = 'perm-edit-icon sf2-icon-edit op-icon' + iconVisibility; 
     let unshareIconClassName = 'unshare op-icon sf2-icon-delete' + iconVisibility;
-
-    let permOption = function(options) {
-        return <option value={options.perm}>{Utils.sharePerms(options.perm)}</option>;
-    };
 
     const item = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
         <td><a href={data.url}>{data.folder_name}</a></td>
         {shareTo}
-        {
-          this.state.showSelect ? (
-            <td>
-              <select className="form-control" defaultValue={data.cur_perm} onChange={this.changePerm}>
-                {permOption({perm: 'rw'})}
-                {permOption({perm: 'r'})}
-                {isPro ? permOption({perm: 'cloud-edit'}) : ''}
-                {isPro ? permOption({perm: 'preview'}) : ''}
-              </select>
-            </td>
-          ) : (
-            <td>
-              <span>{data.cur_perm_text}</span>
-              <a href="#" title={gettext('Edit')} className={editIconClassName} onClick={this.showSelect}></a>
-            </td>
-          )
-        }
+        <td>
+          <PermissionEditor 
+            isTextMode={true}
+            currentPermission={data.cur_perm}
+            permissions={this.permissions}
+            onPermissionChangedHandler={this.changePerm}
+          />
+        </td>
         <td><a href="#" className={unshareIconClassName} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
     );

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../utils/utils';
 import { Input } from 'reactstrap';
+import { Utils } from '../utils/utils';
+import { gettext } from '../utils/constants';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
@@ -75,7 +76,7 @@ class PermissionEditor extends React.Component {
         {(isTextMode && !this.state.isEditing) &&
           <div>
             {Utils.sharePerms(currentPermission)}
-            <span style={{fontSize: '0.875rem', marginLeft: '0.5rem'}} className="fa fa-pencil op-icon" onClick={this.onEidtPermission}></span>
+            <span title={gettext('Edit')} style={{fontSize: '0.875rem', marginLeft: '0.5rem'}} className="fa fa-pencil op-icon" onClick={this.onEidtPermission}></span>
           </div>
         }
       </div>
