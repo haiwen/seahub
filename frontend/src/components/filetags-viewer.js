@@ -6,7 +6,6 @@ import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  permission: PropTypes.bool.isRequired,
   currentPath: PropTypes.string.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
 };
@@ -40,14 +39,14 @@ class FileTagsViewer extends React.Component {
 
     return (
       <Fragment>
-        <ul style={{listStyle:'none', lineHeight:'40px'}}>
-          {usedRepoTags.map((repoTag) => {
+        <ul className="used-tag-list">
+          {usedRepoTags.map((usedRepoTag) => {
             return (
-              <li key={repoTag.id} style={{display:'inline', margin:'auto 15px'}}>
-                <span className={`file-tag bg-${repoTag.color}`}></span>
-                <span className="tag-name" title={repoTag.name}>{repoTag.name}</span>
-                <span className="tag-files" style={{cursor: 'pointer', textDecoration: 'underline'}} onClick={this.onListTaggedFiles.bind(this, repoTag)}>
-                  {repoTag.fileCount}{' '}{'files'}
+              <li key={usedRepoTag.id} className="used-tag-item">
+                <span className={`used-tag bg-${usedRepoTag.color}`}></span>
+                <span className="used-tag-name" title={usedRepoTag.name}>{usedRepoTag.name}</span>
+                <span className="used-tag-files" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
+                  {usedRepoTag.fileCount > 1 ? usedRepoTag.fileCount + ' files' : usedRepoTag.fileCount + ' file'}
                 </span>
               </li>
             );

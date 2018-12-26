@@ -173,11 +173,10 @@ class DirPanel extends React.Component {
                   onTabNavClick={this.props.onTabNavClick}
                 />
               </div>
-              {(this.props.usedRepoTags.length !==0 && this.props.permission && this.props.path === '/') && (
-                <div className='' style={{margin:'4px 16px', height:'40px', border:'1px solid #868e96', borderRadius:'5px'}}>
+              {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
+                <div className="cur-view-tag">
                   <FileTagsViewer
                     repoID={this.props.repoID}
-                    permission={this.props.permission}
                     currentPath={this.props.path}
                     usedRepoTags={this.props.usedRepoTags}
                   />

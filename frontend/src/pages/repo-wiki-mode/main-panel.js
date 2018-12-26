@@ -231,11 +231,10 @@ class MainPanel extends Component {
                 />
               )}
             </div>
-            {(this.props.usedRepoTags.length !==0 && permission && this.props.path === '/') && (
-              <div className='' style={{margin:'4px 16px', height:'40px', border:'1px solid #868e96', borderRadius:'5px'}}>
+            {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
+              <div className="cur-view-tag">
                 <FileTagsViewer
                   repoID={repoID}
-                  permission={permission}
                   currentPath={this.props.path}
                   usedRepoTags={this.props.usedRepoTags}
                 />
