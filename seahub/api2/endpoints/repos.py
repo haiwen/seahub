@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+import datetime
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -26,7 +27,7 @@ from seahub.utils.repo import get_repo_owner, is_repo_admin, \
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
-from seaserv import seafile_api
+from seaserv import seafile_api, send_message
 
 logger = logging.getLogger(__name__)
 
@@ -253,6 +254,14 @@ class ReposView(APIView):
                     "permission": r.permission,
                 }
                 repo_info_list.append(repo_info)
+
+        utc_dt = datetime.datetime.utcnow()
+        timestamp = utc_dt.strftime('%Y-%m-%d %H:%M:%S')
+        org_id = request.user.org.org_id if is_org_context(request) else -1
+        try:
+            send_message('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
+        except Exception as e:
+            logger.error('Error when sending user-login message: %s' % str(e))
 
         return Response({'repos': repo_info_list})
 
