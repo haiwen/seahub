@@ -81,8 +81,8 @@ class Item extends Component {
       unshared: false
     };
 
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
 
     this.showSelect = this.showSelect.bind(this);
     this.changePerm = this.changePerm.bind(this);
@@ -93,16 +93,12 @@ class Item extends Component {
     }
   }
 
-  handleMouseOver() {
-    this.setState({
-      showOpIcon: true
-    });
+  onMouseEnter() {
+    this.setState({showOpIcon: true});
   }
 
-  handleMouseOut() {
-    this.setState({
-      showOpIcon: false
-    });
+  onMouseLeave() {
+    this.setState({showOpIcon: false});
   }
 
   unshare(e) {
@@ -209,13 +205,14 @@ class Item extends Component {
     let unshareIconClassName = 'unshare op-icon sf2-icon-x3' + iconVisibility;
 
     const item = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
         <td><a href={data.url}>{data.folder_name}</a></td>
         {shareTo}
         <td>
           <PermissionEditor 
             isTextMode={true}
+            isEditIconShow={this.state.showOpIcon}
             currentPermission={data.cur_perm}
             permissions={this.permissions}
             onPermissionChangedHandler={this.changePerm}

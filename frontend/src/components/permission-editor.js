@@ -6,6 +6,7 @@ import { gettext } from '../utils/constants';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
+  isEditIconShow: PropTypes.bool.isRequired,
   currentPermission: PropTypes.string.isRequired,
   permissions: PropTypes.array.isRequired,
   onPermissionChangedHandler: PropTypes.func.isRequired,
@@ -76,7 +77,14 @@ class PermissionEditor extends React.Component {
         {(isTextMode && !this.state.isEditing) &&
           <div>
             {Utils.sharePerms(currentPermission)}
-            <span title={gettext('Edit')} style={{fontSize: '0.875rem', marginLeft: '0.5rem'}} className="fa fa-pencil op-icon" onClick={this.onEidtPermission}></span>
+            {this.props.isEditIconShow && (
+              <span 
+                title={gettext('Edit')} 
+                style={{fontSize: '0.875rem', marginLeft: '0.5rem'}} 
+                className="fa fa-pencil op-icon" 
+                onClick={this.onEidtPermission}>
+              </span>
+            )}
           </div>
         }
       </div>

@@ -41,6 +41,7 @@ class UserItem extends React.Component {
         <td>
           <PermissionEditor 
             isTextMode={true}
+            isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
             permissions={this.props.permissions}
             onPermissionChangedHandler={this.onChangeUserPermission}
@@ -287,6 +288,7 @@ class ShareToUser extends React.Component {
             <td>
               <PermissionEditor 
                 isTextMode={false}
+                isEditIconShow={this.state.isOperationShow}
                 currentPermission={this.state.permission}
                 permissions={this.permissions}
                 onPermissionChangedHandler={this.setPermission}

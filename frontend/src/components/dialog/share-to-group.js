@@ -42,6 +42,7 @@ class GroupItem extends React.Component {
         <td>
           <PermissionEditor 
             isTextMode={true}
+            isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
             permissions={this.props.permissions}
             onPermissionChangedHandler={this.onChangeUserPermission}

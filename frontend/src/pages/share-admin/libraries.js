@@ -227,6 +227,7 @@ class Item extends Component {
         <td>
           <PermissionEditor 
             isTextMode={true}
+            isEditIconShow={this.state.showOpIcon}
             currentPermission={data.cur_perm}
             permissions={this.permissions}
             onPermissionChangedHandler={this.changePerm}
