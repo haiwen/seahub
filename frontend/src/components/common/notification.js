@@ -1,6 +1,6 @@
 import React from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 
 class Notification extends React.Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class Notification extends React.Component {
           </div>
           <div className="sf-popover-con">
             <ul className="notice-list" dangerouslySetInnerHTML={{__html: notice_html}}></ul>
-            <a href="/notification/list/" className="view-all">{gettext('See All Notifications')}</a>
+            <a href={siteRoot + 'notification/list/'} className="view-all">{gettext('See All Notifications')}</a>
           </div>
         </div>
       </div>
