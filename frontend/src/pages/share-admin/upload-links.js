@@ -99,14 +99,15 @@ class Item extends Component {
     e.preventDefault();
     this.props.showModal({content: this.props.item.link});
   }
-
-  removeLink = () => {
+  
+  removeLink = (e) => {
+    e.preventDefault();
     this.props.onRemoveLink(this.props.item);
   }
 
   getUploadParams = () => {
     let item = this.props.item;
-    const icon_size = Utils.isHiDPI() ? 48 : 24;
+    let icon_size = Utils.isHiDPI() ? 48 : 24;
     let iconUrl = Utils.getFolderIconUrl({
       is_readonly: false, 
       size: icon_size
