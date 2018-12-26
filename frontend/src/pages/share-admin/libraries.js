@@ -4,11 +4,12 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import PermissionEditor from '../../components/permission-editor';
+import SharedRepoInfo from '../../models/shared-repo-info';
 
 class Content extends Component {
 
   render() {
-    const {loading, errorMsg, items} = this.props.data;
+    const {loading, errorMsg, items} = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -33,7 +34,11 @@ class Content extends Component {
               <th width="8%"></th>
             </tr>
           </thead>
-          <TableBody items={items} />
+          <tbody>
+            {items.map((item, index) => {
+              return (<Item key={index} item={item} unshareFolder={this.props.unshareFolder}/>);
+            })}
+          </tbody>
         </table>
       );
 
@@ -42,34 +47,15 @@ class Content extends Component {
   }
 }
 
-class TableBody extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: this.props.items
-    };
-  }
-
-  render() {
-
-    let listItems = this.state.items.map(function(item, index) {
-      return <Item key={index} data={item} />;
-    }, this);
-
-    return (
-      <tbody>{listItems}</tbody>
-    );
-  }
-}
-
 class Item extends Component {
 
   constructor(props) {
     super(props);
+
+    let item = this.props.item;
     this.state = {
-      share_permission: this.props.data.share_permission,
-      is_admin: this.props.data.is_admin,
+      share_permission: item.share_permission,
+      is_admin: item.is_admin,
       showOpIcon: false,
       unshared: false
     };
@@ -87,50 +73,25 @@ class Item extends Component {
     this.setState({showOpIcon: false});
   }
 
-  unshare = (e) => {
-    e.preventDefault();
-
-    const data = this.props.data;
-    const share_type = data.share_type;
-    let options = {
-      'share_type': share_type
-    };
-    if (share_type == 'personal') {
-      options.user = data.user_email;
-    } else if (share_type == 'group') {
-      options.group_id = data.group_id;
-    } 
-
-    seafileAPI.unshareRepo(data.repo_id, options)
-      .then((res) => {
-        this.setState({
-          unshared: true
-        });
-        // TODO: show feedback msg
-        // gettext("Successfully deleted 1 item")
-      })
-      .catch((error) => {
-      // TODO: show feedback msg
-      });
-  }
-
   changePerm = (permission) => {
-    const data = this.props.data;
-    const share_type = data.share_type;
-    const perm = permission;
+    const item = this.props.item;
+    const share_type = item.share_type;
     let options = {
       'share_type': share_type,
-      'permission': perm
+      'permission': permission
     };
     if (share_type == 'personal') {
-      options.user = data.user_email;
+      options.user = item.user_email;
     } else if (share_type == 'group') {
-      options.group_id = data.group_id;
-    }  
-    seafileAPI.updateRepoSharePerm(data.repo_id, options).then((res) => {
+      options.group_id = item.group_id;
+    } else if (share_type === 'public') {
+      // nothing todo
+    }
+
+    seafileAPI.updateRepoSharePerm(item.repo_id, options).then(() => {
       this.setState({
-        share_permission: perm == 'admin' ? 'rw' : perm,
-        is_admin: perm == 'admin',
+        share_permission: permission == 'admin' ? 'rw' : permission,
+        is_admin: permission == 'admin',
       });
       // TODO: show feedback msg
       // gettext("Successfully modified permission")
@@ -139,67 +100,72 @@ class Item extends Component {
     });
   }
 
-  render() {
+  unshare = () => {
+    this.props.unshareFolder(this.props.item);
+  }
 
-    if (this.state.unshared) {
-      return null;
-    }
-
-    const data = this.props.data;
-    const share_permission = this.state.share_permission;
-    const is_admin = this.state.is_admin;
+  getRepoParams = () => {
+    let item = this.props.item;
+    const { share_permission, is_admin } = this.state;
 
     let is_readonly = false;
     if (share_permission == 'r' || share_permission == 'preview') {
       is_readonly = true;
     }
-    data.icon_url = Utils.getLibIconUrl({
-      is_encrypted: data.encrypted,
+    let iconUrl = Utils.getLibIconUrl({
+      is_encrypted: item.encrypted,
       is_readonly: is_readonly, 
       size: Utils.isHiDPI() ? 48 : 24
     }); 
-    data.icon_title = Utils.getLibIconTitle({
-      'encrypted': data.encrypted,
+    let iconTitle = Utils.getLibIconTitle({
+      'encrypted': item.encrypted,
       'is_admin': is_admin,
       'permission': share_permission
     });
-    data.url = `${siteRoot}library/${data.repo_id}/${data.repo_name}`;
+    let repoUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}`;
+
+    return { iconUrl, iconTitle, repoUrl };
+  }
+
+  render() {
+
+    let { iconUrl, iconTitle, repoUrl } = this.getRepoParams();
+    let item = this.props.item;
+    let { share_permission, is_admin } = this.state;
 
     let shareTo;
-    const shareType = data.share_type;
+    const shareType = item.share_type;
     if (shareType == 'personal') {
-      shareTo = <td title={data.contact_email}>{data.user_name}</td>;
+      shareTo = <td title={item.contact_email}>{item.user_name}</td>;
     } else if (shareType == 'group') {
-      shareTo = <td>{data.group_name}</td>;
+      shareTo = <td>{item.group_name}</td>;
     } else if (shareType == 'public') {
       shareTo = <td>{gettext('all members')}</td>;
     }
 
-    data.cur_perm = share_permission;
     // show 'admin' perm or not
-    data.show_admin = isPro && data.share_type != 'public'; 
-    if (data.show_admin && is_admin) {
-      data.cur_perm = 'admin';
+    let showAdmin = isPro && (item.share_type !== 'public'); 
+    if (showAdmin && is_admin) {
+      share_permission = 'admin';
     }
-    data.cur_perm_text = Utils.sharePerms(data.cur_perm);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let unshareIconClassName = 'unshare op-icon sf2-icon-x3' + iconVisibility;
 
-    if (data.show_admin && this.permissions.indexOf('admin') === -1) {
+    if (showAdmin && this.permissions.indexOf('admin') === -1) {
       this.permissions.splice(2, 0, 'admin'); // add a item after 'r' permission;
     }
 
-    const item = (
+    return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td><Link to={data.url}>{data.repo_name}</Link></td>
+        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td><Link to={repoUrl}>{item.repo_name}</Link></td>
         {shareTo}
         <td>
           <PermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.showOpIcon}
-            currentPermission={data.cur_perm}
+            currentPermission={share_permission}
             permissions={this.permissions}
             onPermissionChangedHandler={this.changePerm}
           />
@@ -207,8 +173,6 @@ class Item extends Component {
         <td><a href="#" className={unshareIconClassName} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
     );
-
-    return item;
   }
 }
 
@@ -226,9 +190,12 @@ class ShareAdminLibraries extends Component {
   componentDidMount() {
     seafileAPI.listSharedRepos().then((res) => {
       // res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
+      let items = res.data.map(item => {
+        return new SharedRepoInfo(item);
+      });
       this.setState({
         loading: false,
-        items: res.data
+        items: items
       });
     }).catch((error) => {
       if (error.response) {
@@ -244,13 +211,46 @@ class ShareAdminLibraries extends Component {
             errorMsg: gettext("Error")
           });
         }
-
       } else {
         this.setState({
           loading: false,
           errorMsg: gettext("Please check the network.")
         });
       }
+    });
+  }
+
+  unshareFolder = (item) => {
+    const share_type = item.share_type;
+    let options = {
+      'share_type': share_type
+    };
+    if (share_type == 'personal') {
+      options.user = item.user_email;
+    } else if (share_type == 'group') {
+      options.group_id = item.group_id;
+    } 
+
+    seafileAPI.unshareRepo(item.repo_id, options).then((res) => {
+      let items = [];
+      if (item.share_type === 'personal') {
+        items = this.state.items.filter(repoItem => {
+          return !(repoItem.user_email === item.user_email && repoItem.repo_id === item.repo_id);
+        });
+      } else if (item.share_type === 'group') {
+        items = this.state.items.filter(repoItem => {
+          return !(repoItem.group_id === item.group_id && repoItem.repo_id === item.repo_id);
+        });
+      } else if (item.share_type === 'public') {
+        items = this.state.items.filter(repoItem => {
+          return !(repoItem.share_type === 'public' && repoItem.repo_id === item.repo_id);
+        });
+      }
+      this.setState({items: items});
+      // TODO: show feedback msg
+      // gettext("Successfully deleted 1 item")
+    }).catch((error) => {
+    // TODO: show feedback msg
     });
   }
 
@@ -262,7 +262,12 @@ class ShareAdminLibraries extends Component {
             <h3 className="sf-heading">{gettext("Libraries")}</h3>
           </div>
           <div className="cur-view-content">
-            <Content data={this.state} />
+            <Content 
+              errorMsg={this.state.errorMsg}
+              loading={this.state.loading}
+              items={this.state.items}
+              unshareFolder={this.unshareFolder}
+            />
           </div>
         </div>
       </div>

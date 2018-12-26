@@ -104,8 +104,9 @@ class Item extends Component {
 
   getFolderParams = () => {
     let item = this.props.item;
+    let share_permission = this.state.share_permission;
     let is_readonly = false;
-    if (item.share_permission == 'r' || item.share_permission == 'preview') {
+    if (share_permission == 'r' || share_permission == 'preview') {
       is_readonly = true;
     }
     let iconUrl = Utils.getFolderIconUrl({
@@ -113,7 +114,7 @@ class Item extends Component {
       size: Utils.isHiDPI() ? 48 : 24
     }); 
     let iconTitle = Utils.getFolderIconTitle({
-      'permission': item.share_permission
+      'permission': share_permission
     });
     let folderUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}${Utils.encodePath(item.path)}`;
 
@@ -137,7 +138,7 @@ class Item extends Component {
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img src={iconUrl} title={iconTitle} alt={item.icon_title} width="24" /></td>
+        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td><Link to={folderUrl}>{item.folder_name}</Link></td>
         {shareTo}
         <td>

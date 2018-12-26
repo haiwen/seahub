@@ -10,7 +10,6 @@ class SharedRepoInfo {
     this.modifier_contact_email = object.modifier_contact_email;
     this.encrypted = object.encrypted;
     if (this.share_type === 'personal') {
-      this.share_type = 'user'; // change personal to user;
       this.is_admin = object.is_admin;
       this.user_name = object.user_name;
       this.user_email = object.user_email;
