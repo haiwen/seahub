@@ -38,10 +38,11 @@ class GroupItem extends React.Component {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{item.group_info.name}</td>
+        <td className='name'>{item.group_info.name}</td>
         <td>
           <PermissionEditor 
             isTextMode={true}
+            isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
             permissions={this.props.permissions}
             onPermissionChangedHandler={this.onChangeUserPermission}
@@ -49,7 +50,7 @@ class GroupItem extends React.Component {
         </td>
         <td>
           <span
-            className={`sf2-icon-x3 sf2-x op-icon a-simulate ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf2-icon-x3 op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteShareItem} 
             title={gettext('Delete')}
           >

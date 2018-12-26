@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
+import PermissionEditor from '../../components/permission-editor';
 
 class Content extends Component {
 
@@ -21,13 +23,13 @@ class Content extends Component {
       );
 
       const table = (
-        <table className="table table-hover table-vcenter">
+        <table className="table-hover">
           <thead>
             <tr>
-              <th width="7%">{/*icon*/}</th>
-              <th width="30%">{gettext("Name")} <a className="table-sort-op by-name" href="#"><span className="sort-icon icon-caret-down hide"></span>{/* TODO: sort by name */}</a></th>
+              <th width="4%">{/*icon*/}</th>
+              <th width="34%">{gettext("Name")} <a className="table-sort-op by-name" href="#"><span className="sort-icon icon-caret-down hide"></span>{/* TODO: sort by name */}</a></th>
               <th width="30%">{gettext("Share To")}</th>
-              <th width="25%">{gettext("Permission")}</th>
+              <th width="24%">{gettext("Permission")}</th>
               <th width="8%"></th>
             </tr>
           </thead>
@@ -80,27 +82,21 @@ class Item extends Component {
       unshared: false
     };
 
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
-
-    this.showSelect = this.showSelect.bind(this);
-    this.changePerm = this.changePerm.bind(this);
-    this.unshare = this.unshare.bind(this);
+    this.permissions = ['rw', 'r'];
+    if (isPro) {
+      this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+    }
   }
 
-  handleMouseOver() {
-    this.setState({
-      showOpIcon: true
-    });
+  onMouseEnter = () => {
+    this.setState({showOpIcon: true});
   }
 
-  handleMouseOut() {
-    this.setState({
-      showOpIcon: false
-    });
+  onMouseLeave = () => {
+    this.setState({showOpIcon: false});
   }
 
-  unshare(e) {
+  unshare = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -130,17 +126,17 @@ class Item extends Component {
       });
   }
 
-  showSelect(e) {
+  showSelect = (e) => {
     e.preventDefault();
     this.setState({
       showSelect: true
     });
   }
 
-  changePerm(e) {
+  changePerm = (permission) => {
     const data = this.props.data;
     const share_type = data.share_type;
-    const perm = e.target.value;
+    const perm = permission;
     const postData = {
       'permission': perm
     };
@@ -173,7 +169,6 @@ class Item extends Component {
     }
 
     const data = this.props.data;
-
     const share_permission = this.state.share_permission;
 
     let is_readonly = false;
@@ -187,7 +182,7 @@ class Item extends Component {
     data.icon_title = Utils.getFolderIconTitle({
       'permission': share_permission
     });
-    data.url = `${siteRoot}#my-libs/lib/${data.repo_id}${Utils.encodePath(data.path)}`;
+    data.url = `${siteRoot}library/${data.repo_id}/${data.repo_name}${Utils.encodePath(data.path)}`;
 
     let shareTo;
     const shareType = data.share_type;
@@ -201,35 +196,22 @@ class Item extends Component {
     data.cur_perm_text = Utils.sharePerms(data.cur_perm);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let editIconClassName = 'perm-edit-icon sf2-icon-edit op-icon' + iconVisibility; 
-    let unshareIconClassName = 'unshare op-icon sf2-icon-delete' + iconVisibility;
-
-    let permOption = function(options) {
-        return <option value={options.perm}>{Utils.sharePerms(options.perm)}</option>;
-    };
+    let unshareIconClassName = 'unshare op-icon sf2-icon-x3' + iconVisibility;
 
     const item = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td><a href={data.url}>{data.folder_name}</a></td>
+        <td><Link to={data.url}>{data.folder_name}</Link></td>
         {shareTo}
-        {
-          this.state.showSelect ? (
-            <td>
-              <select className="form-control" defaultValue={data.cur_perm} onChange={this.changePerm}>
-                {permOption({perm: 'rw'})}
-                {permOption({perm: 'r'})}
-                {isPro ? permOption({perm: 'cloud-edit'}) : ''}
-                {isPro ? permOption({perm: 'preview'}) : ''}
-              </select>
-            </td>
-          ) : (
-            <td>
-              <span>{data.cur_perm_text}</span>
-              <a href="#" title={gettext('Edit')} className={editIconClassName} onClick={this.showSelect}></a>
-            </td>
-          )
-        }
+        <td>
+          <PermissionEditor 
+            isTextMode={true}
+            isEditIconShow={this.state.showOpIcon}
+            currentPermission={data.cur_perm}
+            permissions={this.permissions}
+            onPermissionChangedHandler={this.changePerm}
+          />
+        </td>
         <td><a href="#" className={unshareIconClassName} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
     );
@@ -239,6 +221,7 @@ class Item extends Component {
 }
 
 class ShareAdminFolders extends Component {
+
   constructor(props) {
     super(props);
     this.state = {

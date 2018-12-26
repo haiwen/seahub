@@ -4,28 +4,26 @@ import moment from 'moment';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, loginUrl, isPro, canGenerateUploadLink } from '../../utils/constants';
+import { gettext, siteRoot, loginUrl, canGenerateUploadLink } from '../../utils/constants';
 
 class Content extends Component {
+
  constructor(props) {
     super(props);
     this.state = {
       modalOpen: false,
       modalContent: ''
     };
-
-    this.toggleModal = this.toggleModal.bind(this);
-    this.showModal = this.showModal.bind(this);
   }
 
   // required by `Modal`, and can only set the 'open' state
-  toggleModal() {
+  toggleModal = () => {
     this.setState({
       modalOpen: !this.state.modalOpen
     });
   }
 
-  showModal(options) {
+  showModal = (options) => {
     this.toggleModal();
     this.setState({
       modalContent: options.content
@@ -49,11 +47,11 @@ class Content extends Component {
 
       const table = (
         <React.Fragment>
-          <table className="table table-hover table-vcenter">
+          <table className="table-hover">
             <thead>
               <tr>
-                <th width="10%">{/*icon*/}</th>
-                <th width="30%">{gettext("Name")}<a className="table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-up"></span></a></th>{/* TODO:sort */}
+                <th width="4%">{/*icon*/}</th>
+                <th width="36%">{gettext("Name")}<a className="table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-up"></span></a></th>{/* TODO:sort */}
                 <th width="24%">{gettext("Library")}</th>
                 <th width="12%">{gettext("Visits")}</th>
                 <th width="14%">{gettext("Expiration")}<a className="table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-down hide" aria-hidden="true"></span></a></th>{/*TODO:sort*/}
@@ -106,32 +104,26 @@ class Item extends Component {
       showOpIcon: false,
       deleted: false
     };
-
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
-
-    this.viewLink = this.viewLink.bind(this);
-    this.removeLink = this.removeLink.bind(this);
   }
 
-  handleMouseOver() {
+  handleMouseOver = () => {
     this.setState({
       showOpIcon: true
     });
   }
 
-  handleMouseOut() {
+  handleMouseOut = () => {
     this.setState({
       showOpIcon: false
     });
   }
 
-  viewLink(e) {
+  viewLink = (e) => {
     e.preventDefault();
     this.props.showModal({content: this.props.data.link});
   }
 
-  removeLink(e) {
+  removeLink = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -155,14 +147,13 @@ class Item extends Component {
     }
 
     const data = this.props.data;
-
     const icon_size = Utils.isHiDPI() ? 48 : 24;
     if (data.is_dir) {
       data.icon_url = Utils.getFolderIconUrl({
         is_readonly: false, 
         size: icon_size
       }); 
-      data.url = `${siteRoot}#my-libs/lib/${data.repo_id}${Utils.encodePath(data.path)}`;
+      data.url = `${siteRoot}library/${data.repo_id}/${data.repo_name}${Utils.encodePath(data.path)}`;
     } else {
       data.icon_url = Utils.getFileIconUrl(data.obj_name, icon_size); 
       data.url = `${siteRoot}lib/${data.repo_id}/file${Utils.encodePath(data.path)}`;
@@ -179,8 +170,8 @@ class Item extends Component {
     const item = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} width="24" /></td>
-        <td><a href={data.url}>{data.obj_name}</a></td>
-        <td><a href={`${siteRoot}#my-libs/lib/${data.repo_id}/`}>{data.repo_name}</a></td>
+        <td><Link to={data.url}>{data.obj_name}</Link></td>
+        <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link></td>
         <td>{data.view_cnt}</td>
         <td>{data.expire_date ? showDate({date: data.expire_date, is_expired: data.is_expired}) : '--'}</td> 
         <td>
@@ -195,6 +186,7 @@ class Item extends Component {
 }
 
 class ShareAdminShareLinks extends Component {
+
   constructor(props) {
     super(props);
     this.state = {

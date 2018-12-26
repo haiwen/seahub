@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
 import { Link } from '@reach/router';
-import moment from 'moment';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, loginUrl, isPro, canGenerateShareLink } from '../../utils/constants';
+import { gettext, siteRoot, loginUrl, canGenerateShareLink } from '../../utils/constants';
 
 class Content extends Component {
+
    constructor(props) {
     super(props);
     this.state = {
       modalOpen: false,
       modalContent: ''
     };
-
-    this.toggleModal = this.toggleModal.bind(this);
-    this.showModal = this.showModal.bind(this);
   }
 
   // required by `Modal`, and can only set the 'open' state
-  toggleModal() {
+  toggleModal = () => {
     this.setState({
       modalOpen: !this.state.modalOpen
     });
   }
 
-  showModal(options) {
+  showModal = (options) => {
     this.toggleModal();
     this.setState({
       modalContent: options.content
@@ -49,13 +46,13 @@ class Content extends Component {
 
       const table = (
         <React.Fragment>
-          <table className="table table-hover table-vcenter">
+          <table className="table-hover">
             <thead>
               <tr>
-                <th width="10%">{/*icon*/}</th>
-                <th width="35%">{gettext("Name")}</th>
+                <th width="4%">{/*icon*/}</th>
+                <th width="42%">{gettext("Name")}</th>
                 <th width="30%">{gettext("Library")}</th>
-                <th width="15%">{gettext("Visits")}</th>
+                <th width="14%">{gettext("Visits")}</th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
@@ -105,32 +102,22 @@ class Item extends Component {
       showOpIcon: false,
       deleted: false
     };
-
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
-
-    this.viewLink = this.viewLink.bind(this);
-    this.removeLink = this.removeLink.bind(this);
   }
 
-  handleMouseOver() {
-    this.setState({
-      showOpIcon: true
-    });
+  handleMouseOver = () => {
+    this.setState({showOpIcon: true});
   }
 
-  handleMouseOut() {
-    this.setState({
-      showOpIcon: false
-    });
+  handleMouseOut = () => {
+    this.setState({showOpIcon: false});
   }
 
-  viewLink(e) {
+  viewLink = (e) => {
     e.preventDefault();
     this.props.showModal({content: this.props.data.link});
   }
 
-  removeLink(e) {
+  removeLink = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -159,8 +146,9 @@ class Item extends Component {
     data.icon_url = Utils.getFolderIconUrl({
       is_readonly: false, 
       size: icon_size
-    }); 
-    data.url = `${siteRoot}#my-libs/lib/${data.repo_id}${Utils.encodePath(data.path)}`;
+    });
+
+    data.url = `${siteRoot}library/${data.repo_id}/${data.repo_name}${Utils.encodePath(data.path)}`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let linkIconClassName = 'sf2-icon-link op-icon' + iconVisibility; 
@@ -169,8 +157,8 @@ class Item extends Component {
     const item = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} width="24" /></td>
-        <td><a href={data.url}>{data.obj_name}</a></td>
-        <td><a href={`${siteRoot}#my-libs/lib/${data.repo_id}/`}>{data.repo_name}</a></td>
+        <td><Link to={data.url}>{data.obj_name}</Link></td>
+        <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}`}>{data.repo_name}</Link></td>
         <td>{data.view_cnt}</td>
         <td>
           <a href="#" className={linkIconClassName} title={gettext('View')} onClick={this.viewLink}></a>
@@ -184,6 +172,7 @@ class Item extends Component {
 }
 
 class ShareAdminUploadLinks extends Component {
+
   constructor(props) {
     super(props);
     this.state = {

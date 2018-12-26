@@ -288,6 +288,12 @@ ul,ol,li {
     margin-right:3px;
     vertical-align:middle;
 }
+.op-icon:focus,
+.op-icon:hover {
+    color: #333;
+    text-decoration:none;
+}
+
 .op-icon.sf2-x,
 .op-icon.sf2-x:hover {
     color:#f89a68;
@@ -413,15 +419,6 @@ ul,ol,li {
         font-size:22px;
         margin-right:8px;
     }
-}
-
-a.op-icon:focus {
-    outline:none;
-    text-decoration:none;
-}
-.op-icon:hover {/** for <a> **/
-    color:#888;
-    text-decoration:none;
 }
 
 /* sf-nav-link */
@@ -852,6 +849,10 @@ table .star .empty {
     color: #d0d0d0;
 }
 
+table .name {
+    line-height: 1.5rem;
+}
+
 table .rename-container input {
     box-sizing: content-box;
     padding: 2px 3px;
@@ -1079,10 +1080,6 @@ table .menu-toggle {
   background: #fff;
   text-align: center;
   z-index: 4;
-}
-
-.wiki-list-table td {
-    line-height: 1.5rem;
 }
 
 /* react select-module */
