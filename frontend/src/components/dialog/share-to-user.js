@@ -37,7 +37,7 @@ class UserItem extends React.Component {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{item.user_info.nickname}</td>
+        <td className="name">{item.user_info.nickname}</td>
         <td>
           <PermissionEditor 
             isTextMode={true}
