@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
@@ -81,27 +82,21 @@ class Item extends Component {
       unshared: false
     };
 
-    this.onMouseEnter = this.onMouseEnter.bind(this);
-    this.onMouseLeave = this.onMouseLeave.bind(this);
-
-    this.showSelect = this.showSelect.bind(this);
-    this.changePerm = this.changePerm.bind(this);
-    this.unshare = this.unshare.bind(this);
     this.permissions = ['rw', 'r'];
     if (isPro) {
       this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
     }
   }
 
-  onMouseEnter() {
+  onMouseEnter = () => {
     this.setState({showOpIcon: true});
   }
 
-  onMouseLeave() {
+  onMouseLeave = () => {
     this.setState({showOpIcon: false});
   }
 
-  unshare(e) {
+  unshare = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -131,14 +126,14 @@ class Item extends Component {
       });
   }
 
-  showSelect(e) {
+  showSelect = (e) => {
     e.preventDefault();
     this.setState({
       showSelect: true
     });
   }
 
-  changePerm(permission) {
+  changePerm = (permission) => {
     const data = this.props.data;
     const share_type = data.share_type;
     const perm = permission;
@@ -174,7 +169,6 @@ class Item extends Component {
     }
 
     const data = this.props.data;
-
     const share_permission = this.state.share_permission;
 
     let is_readonly = false;
@@ -188,7 +182,7 @@ class Item extends Component {
     data.icon_title = Utils.getFolderIconTitle({
       'permission': share_permission
     });
-    data.url = `${siteRoot}#my-libs/lib/${data.repo_id}${Utils.encodePath(data.path)}`;
+    data.url = `${siteRoot}library/${data.repo_id}/${data.repo_name}${Utils.encodePath(data.path)}`;
 
     let shareTo;
     const shareType = data.share_type;
@@ -207,7 +201,7 @@ class Item extends Component {
     const item = (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td><a href={data.url}>{data.folder_name}</a></td>
+        <td><Link to={data.url}>{data.folder_name}</Link></td>
         {shareTo}
         <td>
           <PermissionEditor 
@@ -227,6 +221,7 @@ class Item extends Component {
 }
 
 class ShareAdminFolders extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
