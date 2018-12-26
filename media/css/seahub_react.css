@@ -288,6 +288,12 @@ ul,ol,li {
     margin-right:3px;
     vertical-align:middle;
 }
+.op-icon:focus,
+.op-icon:hover {
+    color: #333;
+    text-decoration:none;
+}
+
 .op-icon.sf2-x,
 .op-icon.sf2-x:hover {
     color:#f89a68;
@@ -413,15 +419,6 @@ ul,ol,li {
         font-size:22px;
         margin-right:8px;
     }
-}
-
-a.op-icon:focus {
-    outline:none;
-    text-decoration:none;
-}
-.op-icon:hover {/** for <a> **/
-    color:#888;
-    text-decoration:none;
 }
 
 /* sf-nav-link */

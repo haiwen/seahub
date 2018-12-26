@@ -206,7 +206,7 @@ class Item extends Component {
     data.cur_perm_text = Utils.sharePerms(data.cur_perm);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let unshareIconClassName = 'unshare op-icon sf2-icon-delete' + iconVisibility;
+    let unshareIconClassName = 'unshare op-icon sf2-icon-x3' + iconVisibility;
 
     const item = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
