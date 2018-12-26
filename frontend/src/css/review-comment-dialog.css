@@ -8,6 +8,7 @@
   border: 1px solid rgba(0,0,0,.2);
   border-radius: .3rem;
   box-shadow: 0 0 3px #ccc;
+  z-index: 1000;
 }
 .review-comment-dialog-triangle {
   position: absolute;
@@ -26,6 +27,7 @@
   width: 100%;
   min-height: 100px;
   max-height: 300px;
+  padding: 5px;
 }
 .review-comment-dialog .button-group .btn {
   margin-right: 10px;
@@ -34,4 +36,9 @@
   margin-top: 10px;
   max-height: 6rem;
   overflow: auto;
+  padding-left: 1rem;
+}
+.review-comment-dialog .review-comment-dialog-quote ul,
+.review-comment-dialog .review-comment-dialog-quote ol {
+  padding-left: 1rem;
 }
