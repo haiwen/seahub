@@ -17,3 +17,5 @@ class SharedLinkInfo {
   }
 
 }
+
+export default SharedLinkInfo;

@@ -268,6 +268,7 @@ class ShareToGroup extends React.Component {
             <td>
               <PermissionEditor 
                 isTextMode={false}
+                isEditIconShow={false}
                 currentPermission={this.state.permission}
                 permissions={this.permissions}
                 onPermissionChangedHandler={this.setPermission}

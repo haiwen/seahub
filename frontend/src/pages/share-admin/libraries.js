@@ -51,14 +51,6 @@ class TableBody extends Component {
     };
   }
 
-  componentDidMount() {
-    document.addEventListener('click', this.clickDocument);
-  }
-
-  clickDocument(e) {
-    // TODO: click 'outside' to hide `<select>`
-  }
-
   render() {
 
     let listItems = this.state.items.map(function(item, index) {
@@ -79,7 +71,6 @@ class Item extends Component {
       share_permission: this.props.data.share_permission,
       is_admin: this.props.data.is_admin,
       showOpIcon: false,
-      showSelect: false,
       unshared: false
     };
     this.permissions = ['rw', 'r'];
@@ -123,13 +114,6 @@ class Item extends Component {
       });
   }
 
-  showSelect = (e) => {
-    e.preventDefault();
-    this.setState({
-      showSelect: true
-    });
-  }
-
   changePerm = (permission) => {
     const data = this.props.data;
     const share_type = data.share_type;
@@ -147,7 +131,6 @@ class Item extends Component {
       this.setState({
         share_permission: perm == 'admin' ? 'rw' : perm,
         is_admin: perm == 'admin',
-        showSelect: false
       });
       // TODO: show feedback msg
       // gettext("Successfully modified permission")

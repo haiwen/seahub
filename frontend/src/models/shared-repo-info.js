@@ -23,3 +23,5 @@ class SharedRepoInfo {
   }
 
 }
+
+export default SharedRepoInfo;

@@ -19,3 +19,5 @@ class SharedFolderInfo {
   }
 
 }
+
+export default SharedFolderInfo;

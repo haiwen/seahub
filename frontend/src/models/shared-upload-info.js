@@ -13,3 +13,6 @@ class SharedUploadInfo {
   }
 
 }
+
+
+export default SharedUploadInfo;

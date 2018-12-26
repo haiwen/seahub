@@ -288,7 +288,7 @@ class ShareToUser extends React.Component {
             <td>
               <PermissionEditor 
                 isTextMode={false}
-                isEditIconShow={this.state.isOperationShow}
+                isEditIconShow={false}
                 currentPermission={this.state.permission}
                 permissions={this.permissions}
                 onPermissionChangedHandler={this.setPermission}
