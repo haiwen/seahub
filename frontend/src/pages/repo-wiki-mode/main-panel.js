@@ -232,7 +232,7 @@ class MainPanel extends Component {
               )}
             </div>
             {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
-              <div className="used-repo-tag">
+              <div className="tags-summary-bar">
                 <FileTagsViewer
                   repoID={repoID}
                   currentPath={this.props.path}

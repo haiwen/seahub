@@ -174,7 +174,7 @@ class DirPanel extends React.Component {
                 />
               </div>
               {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
-                <div className="used-repo-tag">
+                <div className="tags-summary-bar">
                   <FileTagsViewer
                     repoID={this.props.repoID}
                     currentPath={this.props.path}
