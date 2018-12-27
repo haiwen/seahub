@@ -3,39 +3,34 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Loading from '../../components/loading';
 
 const contentPropTypes = {
-  data: PropTypes.object.isRequired,
+  isLoadingMore: PropTypes.bool.isRequired,
+  items: PropTypes.array.isRequired,
 };
 
 class FileActivitiesContent extends Component {
 
   render() {
-    let {loading, error_msg, items, has_more} = this.props.data;
-    if (loading) {
-      return <span className="loading-icon loading-tip"></span>;
-    } else if (error_msg) {
-      return <p className="error text-center">{error_msg}</p>;
-    } else {
-      return ( 
-        <Fragment>
-          <table className="table table-hover table-vcenter">
-            <thead>
-              <tr>
-                <th width="8%">{/* avatar */}</th>
-                <th width="10%">{gettext('User')}</th>
-                <th width="25%">{gettext('Operation')}</th>
-                <th width="37%">{gettext('File')} / {gettext('Library')}</th>
-                <th width="20%">{gettext('Time')}</th>
-              </tr>
-            </thead>
-            <TableBody items={items} />
-          </table>
-          {has_more ? <span className="loading-icon loading-tip"></span> : ''}
-          {error_msg ? <p className="error text-center">{error_msg}</p> : ''}
-        </Fragment>
-      ); 
-    }
+    let {items, isLoadingMore} = this.props;
+    return ( 
+      <Fragment>
+        <table className="table table-hover table-vcenter">
+          <thead>
+            <tr>
+              <th width="8%">{/* avatar */}</th>
+              <th width="10%">{gettext('User')}</th>
+              <th width="25%">{gettext('Operation')}</th>
+              <th width="37%">{gettext('File')} / {gettext('Library')}</th>
+              <th width="20%">{gettext('Time')}</th>
+            </tr>
+          </thead>
+          <TableBody items={items} />
+        </table>
+        {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
+      </Fragment>
+    ); 
   }
 }
 
@@ -169,64 +164,63 @@ class FilesActivities extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
-      error_msg: '',
-      events: {},
+      errorMsg: '',
+      isFirstLoading: true,
+      isLoadingMore: false,
+      currentPage: 1,
+      hasMore: false,
       items: [],
-      page: 1,
-      has_more: false
     };
-
-    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
-    const pageNum = 1;
     const avatarSize = 72;
-    seafileAPI.listActivities(pageNum, avatarSize).then(res => {
-      // not logged in
-      if (res.status == 403) {
+    let currentPage = this.state.currentPage;
+    seafileAPI.listActivities(currentPage, avatarSize).then(res => {
+      // {"events":[...]}
+      this.setState({
+        items: res.data.events,
+        currentPage: currentPage + 1,
+        isFirstLoading: false,
+        hasMore: true,
+      });
+    }).catch(error => {
+      if (error.response.status == 403) {
         this.setState({
-          loading: false,
-          error_msg: gettext('Permission denied')
-        });
-      } else {
-        // {"events":[...]}
-        this.setState({
-          loading: false,
-          items: res.data.events,
-          has_more: false
+          isFirstLoading: false,
+          errorMsg: gettext('Permission denied')
         });
       }
     });
   }
 
   getMore() {
-    const pageNum = this.state.page + 1;
-    this.setState({page: pageNum});
-    seafileAPI.listActivities(pageNum).then(res => {
-      if (res.status == 403) {
+    this.setState({isLoadingMore: true});
+    let currentPage = this.state.currentPage;
+    seafileAPI.listActivities(currentPage).then(res => {
+      // {"events":[...]}
+      this.setState({
+        isLoadingMore: false,
+        items: [...this.state.items, ...res.data.events],
+        currentPage: currentPage + 1,
+        hasMore: res.data.events.length === 0 ? false : true 
+      });
+    }).catch(error => {
+      if (error.response.status == 403) {
         this.setState({
-          loading: false,
-          error_msg: gettext('Permission denied')
-        });
-      } else {
-        // {"events":[...]}
-        this.setState({
-          loading: false,
-          items: [...this.state.items, ...res.data.events],
-          has_more: res.data.events.length === 0 ? false : true 
+          isLoadingMore: false,
+          errorMsg: gettext('Permission denied')
         });
       }
     });
   }
 
-  handleScroll(event) {
+  handleScroll = (event) => {
     const clientHeight = event.target.clientHeight;
     const scrollHeight = event.target.scrollHeight;
     const scrollTop    = event.target.scrollTop;
     const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
-    if ((this.state.has_more || this.state.page === 1) && isBottom) { // scroll to the bottom
+    if (this.state.hasMore && isBottom) { // scroll to the bottom
       this.getMore();
     }
   }
@@ -239,7 +233,13 @@ class FilesActivities extends Component {
             <h3 className="sf-heading">{gettext('Activities')}</h3>
           </div>
           <div className="cur-view-content" onScroll={this.handleScroll}>
-            <FileActivitiesContent data={this.state} />
+            {this.state.isFirstLoading && <Loading />}
+            {(!this.state.isFirstLoading && this.state.errorMsg) && 
+              <p className="error text-center">{this.state.errorMsg}</p>
+            }
+            {!this.state.isFirstLoading && 
+              <FileActivitiesContent items={this.state.items} isLoadingMore={this.state.isLoadingMore}/>
+            }
           </div>
         </div>
       </div>
