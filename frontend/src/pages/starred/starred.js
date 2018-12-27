@@ -159,7 +159,7 @@ class Item extends Component {
 
     const data = this.props.data;
 
-    let opClasses = 'sf2-icon-delete unstar action-icon';
+    let opClasses = 'sf2-icon-x3 unstar action-icon';
     opClasses += this.state.showOpIcon ? '' : ' invisible';
 
     const desktopItem = (
