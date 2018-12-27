@@ -4,11 +4,12 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import PermissionEditor from '../../components/permission-editor';
+import SharedFolderInfo from '../../models/shared-folder-info';
 
 class Content extends Component {
 
   render() {
-    const {loading, errorMsg, items} = this.props.data;
+    const { loading, errorMsg, items } = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -33,7 +34,11 @@ class Content extends Component {
               <th width="8%"></th>
             </tr>
           </thead>
-          <TableBody items={items} />
+          <tbody>
+            {items.map((item, index) => {
+              return (<Item key={index} item={item} unshareFolder={this.props.unshareFolder}/>);
+            })}
+          </tbody>
         </table>
       );
 
@@ -42,43 +47,13 @@ class Content extends Component {
   }
 }
 
-class TableBody extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: this.props.items
-    };
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.clickDocument);
-  }
-
-  clickDocument(e) {
-    // TODO: click 'outside' to hide `<select>`
-  }
-
-  render() {
-
-    let listItems = this.state.items.map(function(item, index) {
-      return <Item key={index} data={item} />;
-    }, this);
-
-    return (
-      <tbody>{listItems}</tbody>
-    );
-  }
-}
-
 class Item extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      share_permission: this.props.data.share_permission,
+      share_permission: this.props.item.share_permission,
       showOpIcon: false,
-      showSelect: false,
       unshared: false
     };
 
@@ -98,63 +73,28 @@ class Item extends Component {
 
   unshare = (e) => {
     e.preventDefault();
-
-    const data = this.props.data;
-    const share_type = data.share_type;
-
-    let options = {
-      'p': data.path,
-    };
-    if (share_type == 'personal') {
-      options.share_type = 'user';
-      options.username = data.user_email;
-    } else if (share_type == 'group') {
-      options.share_type = 'group';
-      options.group_id = data.group_id;
-    }
-
-    seafileAPI.unshareFolder(data.repo_id, options)
-      .then((res) => {
-        this.setState({
-          unshared: true
-        });
-        // TODO: show feedback msg
-        // gettext("Successfully deleted 1 item")
-      })
-      .catch((error) => {
-      // TODO: show feedback msg
-      });
-  }
-
-  showSelect = (e) => {
-    e.preventDefault();
-    this.setState({
-      showSelect: true
-    });
+    const item = this.props.item;
+    this.props.unshareFolder(item);
   }
 
   changePerm = (permission) => {
-    const data = this.props.data;
-    const share_type = data.share_type;
     const perm = permission;
     const postData = {
       'permission': perm
     };
+    const item = this.props.item;
     let options = {
-      'p': data.path,
+      'p': item.path,
+      'share_type': item.share_type
     };
-    if (share_type == 'personal') {
-      options.share_type = 'user';
-      options.username = data.user_email;
-    } else if (share_type == 'group') {
-      options.share_type = 'group';
-      options.group_id = data.group_id;
+    if (item.share_type == 'user') {
+      options.username = item.user_email;
+    } else {
+      options.group_id = item.group_id;
     }
-    seafileAPI.updateFolderSharePerm(data.repo_id, postData, options).then((res) => {
-      this.setState({
-        share_permission: perm,
-        showSelect: false
-      });
+
+    seafileAPI.updateFolderSharePerm(item.repo_id, postData, options).then((res) => {
+      this.setState({share_permission: perm});
       // TODO: show feedback msg
       // gettext("Successfully modified permission")
     }).catch((error) => {
@@ -162,52 +102,50 @@ class Item extends Component {
     });
   }
 
-  render() {
-
-    if (this.state.unshared) {
-      return null;
-    }
-
-    const data = this.props.data;
-    const share_permission = this.state.share_permission;
-
+  getFolderParams = () => {
+    let item = this.props.item;
+    let share_permission = this.state.share_permission;
     let is_readonly = false;
     if (share_permission == 'r' || share_permission == 'preview') {
       is_readonly = true;
     }
-    data.icon_url = Utils.getFolderIconUrl({
+    let iconUrl = Utils.getFolderIconUrl({
       is_readonly: is_readonly, 
       size: Utils.isHiDPI() ? 48 : 24
     }); 
-    data.icon_title = Utils.getFolderIconTitle({
+    let iconTitle = Utils.getFolderIconTitle({
       'permission': share_permission
     });
-    data.url = `${siteRoot}library/${data.repo_id}/${data.repo_name}${Utils.encodePath(data.path)}`;
+    let folderUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}${Utils.encodePath(item.path)}`;
+
+    return { iconUrl, iconTitle, folderUrl };
+  }
+
+  render() {
+    const item = this.props.item;
+    let { iconUrl, iconTitle, folderUrl } = this.getFolderParams();
 
     let shareTo;
-    const shareType = data.share_type;
-    if (shareType == 'personal') {
-      shareTo = <td title={data.contact_email}>{data.user_name}</td>;
+    const shareType = item.share_type;
+    if (shareType == 'user') {
+      shareTo = <td title={item.contact_email}>{item.user_name}</td>;
     } else if (shareType == 'group') {
-      shareTo = <td>{data.group_name}</td>;
+      shareTo = <td>{item.group_name}</td>;
     }
-
-    data.cur_perm = share_permission;
-    data.cur_perm_text = Utils.sharePerms(data.cur_perm);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let unshareIconClassName = 'unshare op-icon sf2-icon-x3' + iconVisibility;
 
-    const item = (
+    return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td><Link to={data.url}>{data.folder_name}</Link></td>
+        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td><Link to={folderUrl}>{item.folder_name}</Link></td>
         {shareTo}
         <td>
           <PermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.showOpIcon}
-            currentPermission={data.cur_perm}
+            currentPermission={this.state.share_permission}
             permissions={this.permissions}
             onPermissionChangedHandler={this.changePerm}
           />
@@ -215,8 +153,6 @@ class Item extends Component {
         <td><a href="#" className={unshareIconClassName} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
     );
-
-    return item;
   }
 }
 
@@ -234,9 +170,12 @@ class ShareAdminFolders extends Component {
   componentDidMount() {
     seafileAPI.listSharedFolders().then((res) => {
       // res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
+      let items = res.data.map(item => {
+        return new SharedFolderInfo(item);
+      });
       this.setState({
         loading: false,
-        items: res.data
+        items: items
       });
     }).catch((error) => {
       if (error.response) {
@@ -262,6 +201,32 @@ class ShareAdminFolders extends Component {
     });
   }
 
+  unshareFolder = (item) => {
+    let options = {};
+    options['p'] = item.path;
+    options.share_type = item.share_type;
+    if (item.share_type == 'user') { // or group
+      options.username = item.user_email;
+    } else {
+      options.group_id = item.group_id;
+    }
+
+    seafileAPI.unshareFolder(item.repo_id, options).then((res) => {
+      let items = this.state.items.filter(folderItem => {
+        if (item.share_type === 'user') {
+          return folderItem.user_email !== item.user_email;
+        } else {
+          return folderItem.group_id !== item.group_id;
+        }
+      });
+      this.setState({items: items});
+      // TODO: show feedback msg
+      // gettext("Successfully deleted 1 item")
+    }).catch((error) => {
+      // TODO: show feedback msg
+    });
+  }
+
   render() {
     return (
       <div className="main-panel-center">
@@ -270,7 +235,12 @@ class ShareAdminFolders extends Component {
             <h3 className="sf-heading">{gettext("Folders")}</h3>
           </div>
           <div className="cur-view-content">
-            <Content data={this.state} />
+            <Content 
+              errorMsg={this.state.errorMsg}
+              loading={this.state.loading}
+              items={this.state.items}
+              unshareFolder={this.unshareFolder}
+            />
           </div>
         </div>
       </div>
