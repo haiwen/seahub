@@ -150,7 +150,7 @@ class WikiListItem extends Component {
           </td>
           <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
-          <td className="menu-toggle">
+          <td className="text-center cursor-pointer">
             {this.state.isShowMenuControl && (
               <Dropdown isOpen={this.state.isShowWikiMenu} toggle={this.onMenuToggle}>
                 <DropdownToggle 

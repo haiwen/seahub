@@ -178,8 +178,8 @@ class Item extends Component {
     data.url = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'action-icon sf2-icon-share' + iconVisibility; 
-    let deleteIconClassName = 'action-icon sf2-icon-delete' + iconVisibility;
+    let shareIconClassName = 'op-icon sf2-icon-share' + iconVisibility; 
+    let deleteIconClassName = 'op-icon sf2-icon-delete' + iconVisibility;
     let operationMenuToggleIconClassName = 'sf-dropdown-toggle sf2-icon-caret-down'; 
     if (window.innerWidth >= 768) {
       operationMenuToggleIconClassName += iconVisibility; 

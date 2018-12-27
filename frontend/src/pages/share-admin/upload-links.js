@@ -123,8 +123,8 @@ class Item extends Component {
     let { iconUrl, uploadUrl } = this.getUploadParams();
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let linkIconClassName = 'sf2-icon-link op-icon' + iconVisibility; 
-    let deleteIconClassName = 'sf2-icon-delete op-icon' + iconVisibility;
+    let linkIconClassName = 'sf2-icon-link action-icon' + iconVisibility; 
+    let deleteIconClassName = 'sf2-icon-delete action-icon' + iconVisibility;
 
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>

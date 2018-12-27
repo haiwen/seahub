@@ -103,11 +103,11 @@ class ReviewListItem extends React.Component {
 
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="icon" style={{width: '4%'}}><img src={siteRoot + 'media/img/file/192/txt.png'} alt="icon"/></td>
-        <td className="name" style={{width: '26%'}}><a href={reviewUrl} target="_blank">{fileName}</a></td>
+        <td className="text-center" style={{width: '4%'}}><img src={siteRoot + 'media/img/file/192/txt.png'} alt="icon"/></td>
+        <td style={{width: '26%'}}><a href={reviewUrl} target="_blank">{fileName}</a></td>
         <td className='library' style={{width: '25%'}}>{item.draft_origin_repo_name}</td>
         <td className="update" style={{width: '20%'}}>{localTime}</td>
-        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm avatar-with-tooltip" id={'tip-' + item.id} src={item.author.avatar_url} alt={item.user_name} /></td>
+        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm cursor-pointer" id={'tip-' + item.id} src={item.author.avatar_url} alt={item.user_name} /></td>
         <td className="reviewer" style={{width: '15%'}}><Reviewers item={item}/></td>
         <Tooltip placement="bottom-end" isOpen={this.state.authorTipOpen} target={'tip-' + item.id} toggle={this.toggle}>
           {item.author.user_name}

@@ -304,7 +304,7 @@ class GroupView extends React.Component {
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
               <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
-                <i className="fas fa-plus-square op-icon"></i>
+                <i className="fas fa-plus-square action-icon"></i>
                 {gettext('New Library')}
               </button>
             </div>
@@ -327,13 +327,13 @@ class GroupView extends React.Component {
                   <div className="path-tool">
                     { (isShowSettingIcon && this.state.isStaff) &&
                     <React.Fragment>
-                      <a href="#" className="sf2-icon-cog1 op-icon group-top-op-icon" title="Settings" id="settings"
+                      <a href="#" className="sf2-icon-cog1 action-icon group-top-action-icon" title="Settings" id="settings"
                         onClick={this.toggleGroupDropdown}></a>
                       <Popover placement="bottom" isOpen={this.state.showGroupDropdown} target="settings"
                         toggle={this.toggleGroupDropdown} hideArrow={true} className="sf-popover">
                         <div className="sf-popover-hd sf-popover-title">
                           <span>{gettext('Settings')}</span>
-                          <a href="#" className="sf-popover-close js-close sf2-icon-x1 op-icon"
+                          <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
                             onClick={this.toggleGroupDropdown}></a>
                         </div>
                         <div className="sf-popover-con">
@@ -359,7 +359,7 @@ class GroupView extends React.Component {
                     </React.Fragment>
                     }
                     <a href="#"
-                      className="sf2-icon-user2 op-icon group-top-op-icon"
+                      className="sf2-icon-user2 action-icon group-top-action-icon"
                       title={gettext('Members')} id="groupMembers"
                       onClick={() => this.toggleGroupMembersPopover('open')}>
                     </a>
@@ -367,7 +367,7 @@ class GroupView extends React.Component {
                       toggle={this.toggleGroupMembersPopover} hideArrow={true} className="sf-popover">
                       <div className="sf-popover-hd sf-popover-title">
                         <span>{gettext('Members')}</span>
-                        <a href="#" className="sf-popover-close js-close sf2-icon-x1 op-icon"
+                        <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
                           onClick={this.toggleGroupMembersPopover}></a>
                       </div>
                       <div className="sf-popover-con">

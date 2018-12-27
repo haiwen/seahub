@@ -16,20 +16,20 @@ class Content extends Component {
       const desktopThead = (
         <thead>
           <tr>
-            <th width="5%"></th>
+            <th width="4%"></th>
             <th width="40%">{gettext('File Name')}</th>
             <th width="32%">{gettext('Library')}</th>
             <th width="18%">{gettext('Last Update')}</th>
-            <th width="5%"></th>
+            <th width="6%"></th>
           </tr>
         </thead>
       );
       const mobileThead = (
         <thead>
           <tr>
-            <th width="5%"></th>
+            <th width="4%"></th>
             <th width="90%">{gettext('File Name')}</th>
-            <th width="5%"></th>
+            <th width="6%"></th>
           </tr>
         </thead>
       );
@@ -159,7 +159,7 @@ class Item extends Component {
 
     const data = this.props.data;
 
-    let opClasses = 'sf2-icon-delete unstar op-icon';
+    let opClasses = 'sf2-icon-delete unstar action-icon';
     opClasses += this.state.showOpIcon ? '' : ' invisible';
 
     const desktopItem = (
@@ -206,7 +206,7 @@ class Item extends Component {
           <span className="dirent-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
         </td>
         <td>
-          <a href="#" className="sf2-icon-delete unstar op-icon" title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.handleClick}></a>
+          <a href="#" className="sf2-icon-delete unstar action-icon" title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.handleClick}></a>
         </td>
       </tr>
     );
