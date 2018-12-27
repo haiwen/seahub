@@ -39,7 +39,8 @@ else:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
             org_id = -1
 
-        related_users.append(creator)
+        if creator not in related_users:
+            related_users.append(creator)
 
         record = {
             'op_type':'create',
@@ -85,7 +86,8 @@ else:
         repo_owner = kwargs['repo_owner']
         repo_id = kwargs['repo_id']
         repo_name = kwargs['repo_name']
-        related_users.append(repo_owner)
+        if repo_owner not in related_users:
+            related_users.append(repo_owner)
 
 
         record = {
@@ -121,7 +123,8 @@ else:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
             org_id = -1
 
-        related_users.append(repo_owner)
+        if repo_owner not in related_users:
+            related_users.append(repo_owner)
         record = {
             'op_type':'clean-up-trash',
             'obj_type':'repo',
@@ -152,7 +155,8 @@ else:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
-        related_users.append(repo_owner)
+        if repo_owner not in related_users:
+            related_users.append(repo_owner)
 
         record = {
             'op_type':'recover',
