@@ -24,10 +24,7 @@ class MyLibraries extends Component {
       // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         loading: false,
-        items: Utils.sortRepos({
-          sortBy: this.state.sortBy,
-          repos: res.data.repos
-        })
+        items: Utils.sortRepos(res.data.repos, this.state.sortBy)
       });
     }).catch((error) => {
       if (error.response) {
@@ -72,10 +69,7 @@ class MyLibraries extends Component {
   sortItems = (sortBy) => {
     this.setState({
       sortBy: sortBy,
-      items: Utils.sortRepos({
-        sortBy: sortBy,
-        repos: this.state.items
-      })
+      items: Utils.sortRepos(this.state.items, sortBy)
     });
   }
 

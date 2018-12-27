@@ -436,11 +436,9 @@ export const Utils = {
     return (a >= b) - (a <= b);
   },
 
-  sortRepos: function(options) {
-    const sortBy = options.sortBy;
-    let repos = options.repos;
-    let comparator;
+  sortRepos: function(repos, sortBy) {
     const _this = this;
+    let comparator;
 
     switch (sortBy) {
       case 'name_up':
