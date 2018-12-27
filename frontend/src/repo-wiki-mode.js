@@ -71,7 +71,7 @@ class Wiki extends Component {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
         let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount !== 0) {
+        if (usedRepoTag.fileCount > 0) {
           usedRepoTags.push(usedRepoTag);
         }
       });
@@ -335,6 +335,10 @@ class Wiki extends Component {
       let path = this.getPathFromInternalDirLink(url);
       this.showDir(path);
     }
+  }
+
+  updateUsedRepoTags = (newUsedRepoTags) => {
+    this.setState({usedRepoTags: newUsedRepoTags});
   }
 
   updateDirent = (dirent, paramKey, paramValue) => {
@@ -606,6 +610,17 @@ class Wiki extends Component {
         return new FileTag(item);
       });
       this.updateDirent(dirent, 'file_tags', fileTags);
+    });
+
+    seafileAPI.listRepoTags(repoID).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount > 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.updateUsedRepoTags(usedRepoTags);
     });
   }
 
