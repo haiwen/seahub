@@ -23,12 +23,13 @@
  * sf-popover
  * go-back
  * top-logo
- * table-list
+ * base-table
+ * table-item rename-component
+ * more-btn
  * dropdown-menu
  * empty-tip
- * more-btn
- * list-operation
- * prompt-message
+ * file-tag
+ * mobile-menu
  */
 /****** sf2-icon-xx ********/
 @font-face {
@@ -840,17 +841,6 @@ table td img {
 
 .tr-highlight {
     background-color: #f8f8f8;
-}
-
-/* table-item op-icon-container */
-.operations {
-    display: flex;
-}
-.operations .operation-group {
-    list-style: none;
-}
-.operation-group .operation-group-item {
-    display: inline-block;
 }
 
 /* table-item reanme-component */
