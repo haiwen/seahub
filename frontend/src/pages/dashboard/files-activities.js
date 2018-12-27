@@ -195,7 +195,7 @@ class FilesActivities extends Component {
         this.setState({
           loading: false,
           items: res.data.events,
-          has_more: res.data.events.length < 25 ? false : true
+          has_more: false
         });
       }
     });
@@ -215,7 +215,7 @@ class FilesActivities extends Component {
         this.setState({
           loading: false,
           items: [...this.state.items, ...res.data.events],
-          has_more: res.data.events.length < 25 ? false : true 
+          has_more: res.data.events.length === 0 ? false : true 
         });
       }
     });
@@ -226,7 +226,7 @@ class FilesActivities extends Component {
     const scrollHeight = event.target.scrollHeight;
     const scrollTop    = event.target.scrollTop;
     const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
-    if (this.state.has_more && isBottom) { // scroll to the bottom
+    if ((this.state.has_more || this.state.page === 1) && isBottom) { // scroll to the bottom
       this.getMore();
     }
   }
