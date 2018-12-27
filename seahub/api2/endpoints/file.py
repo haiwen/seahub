@@ -205,7 +205,6 @@ class FileView(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             if is_draft.lower() == 'true':
-                repo = seafile_api.get_repo(repo_id)
                 Draft.objects.add(username, repo, path, file_exist=False)
 
             # update office file by template

@@ -2918,7 +2918,6 @@ class FileView(APIView):
                                  'Failed to create file.')
 
             if is_draft.lower() == 'true':
-                repo = seafile_api.get_repo(repo_id)
                 Draft.objects.add(username, repo, path, file_exist=False)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
