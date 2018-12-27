@@ -40,7 +40,14 @@ class DraftsView(APIView):
         """List all user drafts.
         """
         username = request.user.username
-        result = Draft.objects.list_draft_by_username(username)
+        data = Draft.objects.list_draft_by_username(username)
+
+        draft_counts = len(data)
+
+        result = {}
+        result['data'] = data
+        result['draft_counts'] = draft_counts
+
         return Response(result)
 
     @add_org_context
@@ -101,8 +108,7 @@ class DraftView(APIView):
         # perm check
         repo_id = d.origin_repo_id
         uuid = d.origin_file_uuid
-        file_path = posixpath.join(uuid.parent_path, uuid.filename)
-        perm = check_folder_permission(request, repo_id, file_path)
+        perm = check_folder_permission(request, repo_id, uuid.parent_path)
 
         if perm != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
