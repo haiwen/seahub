@@ -168,8 +168,8 @@ class Item extends Component {
     data.url = `${siteRoot}#shared-libs/lib/${data.repo_id}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'sf2-icon-share sf2-x repo-share-btn op-icon' + iconVisibility; 
-    let leaveShareIconClassName = 'sf2-icon-delete sf2-x op-icon' + iconVisibility;
+    let shareIconClassName = 'action-icon sf2-icon-share repo-share-btn' + iconVisibility; 
+    let leaveShareIconClassName = 'action-icon sf2-icon-delete' + iconVisibility;
 
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>

@@ -206,8 +206,8 @@ class SharedRepoListItem extends React.Component {
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 
-          tag="a" 
-          className="sf2-icon-caret-down item-operation-menu-toggle-icon op-icon" 
+          tag="i" 
+          className="sf-dropdown-toggle sf2-icon-caret-down" 
           title={gettext('More Operations')} 
           data-toggle="dropdown" 
           aria-expanded={this.state.isItemMenuShow}
@@ -239,9 +239,9 @@ class SharedRepoListItem extends React.Component {
       // scene two: (share, unshare), (share), (unshare)
       operations = this.generatorOperations();
     }
-    const shareOperation   = <a href="#" className="sf2-icon-share sf2-x op-icon" title={gettext("Share")} onClick={this.onItemShare}></a>;
-    const unshareOperation = <a href="#" className="sf2-icon-x3 sf2-x op-icon" title={gettext("Unshare")} onClick={this.onItemUnshare}></a>
-    const deleteOperation  = <a href="#" className="sf2-icon-delete sf2-x op-icon" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
+    const shareOperation   = <a href="#" className="action-icon sf2-icon-share" title={gettext("Share")} onClick={this.onItemShare}></a>;
+    const unshareOperation = <a href="#" className="action-icon sf2-icon-x3" title={gettext("Unshare")} onClick={this.onItemUnshare}></a>
+    const deleteOperation  = <a href="#" className="action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
     
     if (this.isDeparementOnwerGroupMember) {
       return (
@@ -250,8 +250,8 @@ class SharedRepoListItem extends React.Component {
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle 
-              tag="a" 
-              className="sf2-icon-caret-down item-operation-menu-toggle-icon op-icon" 
+              tag="i" 
+              className="sf-dropdown-toggle sf2-icon-caret-down" 
               title={gettext('More Operations')}
               data-toggle="dropdown" 
               aria-expanded={this.state.isItemMenuShow}

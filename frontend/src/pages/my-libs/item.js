@@ -178,9 +178,9 @@ class Item extends Component {
     data.url = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'sf2-icon-share sf2-x op-icon' + iconVisibility; 
-    let deleteIconClassName = 'sf2-icon-delete sf2-x op-icon' + iconVisibility;
-    let operationMenuToggleIconClassName = 'sf2-icon-caret-down item-operation-menu-toggle-icon op-icon'; 
+    let shareIconClassName = 'action-icon sf2-icon-share' + iconVisibility; 
+    let deleteIconClassName = 'action-icon sf2-icon-delete' + iconVisibility;
+    let operationMenuToggleIconClassName = 'sf-dropdown-toggle sf2-icon-caret-down'; 
     if (window.innerWidth >= 768) {
       operationMenuToggleIconClassName += iconVisibility; 
     }
@@ -189,8 +189,7 @@ class Item extends Component {
 
     const commonToggle = (
       <DropdownToggle
-        tag="a" 
-        href="#" 
+        tag="i" 
         className={operationMenuToggleIconClassName} 
         title={gettext('More Operations')}
         // onClick={this.clickOperationMenuToggle}

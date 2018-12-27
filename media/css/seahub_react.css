@@ -123,14 +123,6 @@ ul,ol,li {
     line-height: 1.5;
 }
 
-.text-left {
-    text-align: left;
-}
-
-.text-right {
-    text-align: right;
-}
-
 .a-simulate {
     color: #eb8205 !important;
     text-decoration: none;
@@ -150,6 +142,15 @@ ul,ol,li {
     color: #eb8205 !important;
     text-decoration: none;
     font-weight: normal;
+}
+
+.sf-dropdown-toggle {
+    vertical-align: middle;
+    font-style: normal;
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #888;
 }
 
 .avatar-with-tooltip {
@@ -280,27 +281,34 @@ ul,ol,li {
 }
 
 /** op-icon **/
-.op-icon {
-    font-size:20px;
-    line-height:1;
-    color:#888;
-    cursor:pointer;
-    margin-right:3px;
-    vertical-align:middle;
+.op-icon,
+.action-icon {
+    margin-right: 0.5rem;
+    font-size: 1.25rem;
+    font-style: normal;
+    line-height: 1;
+    cursor: pointer;
+    vertical-align: middle;
 }
+
+.op-icon {
+    color:#888;
+}
+
 .op-icon:focus,
 .op-icon:hover {
     color: #333;
-    text-decoration:none;
+    text-decoration: none;
 }
 
-.op-icon.sf2-x,
-.op-icon.sf2-x:hover {
-    color:#f89a68;
+.action-icon {
+    color: #f89a68;
 }
-.op-icon.sf2-x:hover,
-.op-icon.sf2-x:focus {
-    border-bottom: 0.125rem solid #f89a68;;
+
+.action-icon:focus,
+.action-icon:hover {
+    padding-bottom: 0.125rem;
+    border-bottom: 0.125rem solid #f89a68;
 }
 
 /** Account info **/
@@ -342,7 +350,6 @@ ul,ol,li {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
 }
 
 .account-popup {
@@ -741,7 +748,7 @@ a.sf-popover-item:hover {
 }
 @media (max-width: 767px) {
     .side-panel-top {
-        border-right:1px solid #eee;
+        border-right: 1px solid #eee;
     }
 }
 .side-panel-close {
@@ -962,26 +969,6 @@ table .menu-toggle {
 }
 .operation-group .operation-group-item {
     display: inline-block;
-    color: #f89a68;
-    margin-right: 0.5rem;
-}
-.operation-group-item i {
-    font-style: normal;
-    font-size: 1.25rem;
-    line-height: 1;
-    cursor: pointer;
-    vertical-align: middle;
-}
-.operation-group-item i:hover {
-    padding-bottom: 0.125rem;
-    border-bottom: 0.125rem solid #f89a68;
-}
-.operation-group-item .sf-dropdown-toggle {
-    font-size: 0.85rem;
-    color: #888;
-}
-.operation-group-item .sf-dropdown-toggle:hover {
-    text-decoration: none;
 }
 /* end operaton menu */
 
