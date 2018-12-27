@@ -11,6 +11,8 @@ import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 const propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortItems: PropTypes.func.isRequired,
   items: PropTypes.array.isRequired,
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
@@ -63,6 +65,18 @@ class Content extends Component {
     });
   } 
 
+  sortByName = (e) => {
+    e.preventDefault();
+    let sortBy = `name_${this.props.sortBy.indexOf('up') == -1 ? 'up' : 'down'}`;
+    this.props.sortItems(sortBy);
+  }
+
+  sortByTime = (e) => {
+    e.preventDefault();
+    let sortBy = `time_${this.props.sortBy.indexOf('up') == -1 ? 'up' : 'down'}`;
+    this.props.sortItems(sortBy);
+  }
+
   render() {
     const { loading, errorMsg, items } = this.props;
 
@@ -78,18 +92,23 @@ class Content extends Component {
         </div>
       );
 
+      // sort
+      const sortByName = this.props.sortBy.indexOf('name') != -1;
+      const sortByTime = this.props.sortBy.indexOf('time') != -1;
+      const sortIcon = this.props.sortBy.indexOf('up') != -1 ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+
       // TODO: test 'storage backend'
       const showStorageBackend = storages.length > 0; // only for desktop
       const desktopThead = (
         <thead>
           <tr>
             <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="42%">{gettext('Name')}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
+            <th width="42%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="14%"><span className="sr-only">{gettext('Actions')}</span></th>
 
             <th width={showStorageBackend ? '15%' : '20%'}>{gettext('Size')}</th>
             {showStorageBackend ? <th width="10%">{gettext('Storage backend')}</th> : null}
-            <th width={showStorageBackend ? '15%' : '20%'}>{gettext('Last Update')}<a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a></th>
+            <th width={showStorageBackend ? '15%' : '20%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
           </tr>
         </thead>
       );
@@ -99,9 +118,9 @@ class Content extends Component {
           <tr>
             <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="76%">
-              {gettext("Sort:")} {/* TODO: sort */}
-              {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
-              {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
+              {gettext("Sort:")}
+              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext("name")} {sortByName && sortIcon}</a>
+              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext("last update")} {sortByTime && sortIcon}</a>
             </th>
             <th width="6%"><span className="sr-only">{gettext('Actions')}</span></th>
           </tr>

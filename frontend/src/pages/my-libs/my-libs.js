@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl} from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
@@ -14,6 +15,7 @@ class MyLibraries extends Component {
       loading: true,
       errorMsg: '',
       items: [],
+      sortBy: 'name_up' // TODO
     };
   }
 
@@ -22,7 +24,10 @@ class MyLibraries extends Component {
       // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         loading: false,
-        items: res.data.repos
+        items: Utils.sortRepos({
+          sortBy: this.state.sortBy,
+          repos: res.data.repos
+        })
       });
     }).catch((error) => {
       if (error.response) {
@@ -61,6 +66,16 @@ class MyLibraries extends Component {
       };
       this.state.items.unshift(repo);
       this.setState({items: this.state.items});
+    });
+  }
+
+  sortItems = (sortBy) => {
+    this.setState({
+      sortBy: sortBy,
+      items: Utils.sortRepos({
+        sortBy: sortBy,
+        repos: this.state.items
+      })
     });
   }
 
@@ -118,6 +133,8 @@ class MyLibraries extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
+                sortBy={this.state.sortBy}
+                sortItems={this.sortItems}
                 onDeleteRepo={this.onDeleteRepo}
                 onRenameRepo={this.onRenameRepo}
                 onTransferRepo={this.onTransferRepo}

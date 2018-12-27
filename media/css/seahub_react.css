@@ -1004,3 +1004,18 @@ table td img {
   text-align: center;
   z-index: 4;
 }
+
+a.table-sort-op {
+  color: inherit;
+}
+@media (max-width:767px) {
+  a.table-sort-op {
+    display: inline-block;
+    margin-left: 15px;
+  }
+}
+a.table-sort-op:hover,
+a.table-sort-op:focus {
+  outline: none;
+  text-decoration: none;
+}
