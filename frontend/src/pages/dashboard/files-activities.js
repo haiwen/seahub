@@ -168,7 +168,7 @@ class FilesActivities extends Component {
       isFirstLoading: true,
       isLoadingMore: false,
       currentPage: 1,
-      hasMore: false,
+      hasMore: true,
       items: [],
     };
   }
