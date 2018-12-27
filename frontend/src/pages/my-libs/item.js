@@ -257,7 +257,7 @@ class Item extends Component {
             }
           </td>
           <td>{data.repo_name ? desktopOperations : ''}</td>
-          <td>{Utils.formatSize({bytes: data.size})}</td>
+          <td>{Utils.bytesToSize(data.size)}</td>
           {storages.length ? <td>{data.storage_name}</td> : null}
           <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
         </tr>
@@ -284,7 +284,7 @@ class Item extends Component {
               <Link to={data.url}>{data.repo_name}</Link> :
               gettext('Broken (please contact your administrator to fix this library)')}
             <br />
-            <span className="item-meta-info">{Utils.formatSize({bytes: data.size})}</span>
+            <span className="item-meta-info">{Utils.bytesToSize(data.size)}</span>
             <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
           </td>
           <td>{data.repo_name ? mobileOperations : ''}</td>

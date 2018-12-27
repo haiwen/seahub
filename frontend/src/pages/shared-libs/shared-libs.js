@@ -181,7 +181,7 @@ class Item extends Component {
             : ''}
           <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
         </td>
-        <td>{Utils.formatSize({bytes: data.size})}</td>
+        <td>{Utils.bytesToSize(data.size)}</td>
         <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
         <td title={data.owner_contact_email}>{data.owner_name}</td>
       </tr>
@@ -193,7 +193,7 @@ class Item extends Component {
         <td>
           <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link><br />
           <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
-          <span className="item-meta-info">{Utils.formatSize({bytes: data.size})}</span>
+          <span className="item-meta-info">{Utils.bytesToSize(data.size)}</span>
           <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
         </td>
         <td>
