@@ -567,19 +567,16 @@ class DraftReview extends React.Component {
     switch(this.state.reviewStatus) {
       case "closed":
         return <p className="error">{gettext('The review has been closed.')}</p>;
-        break;
       case "open":
         if (!draftFileExists) {
           return <p className="error">{gettext('Draft has been deleted.')}</p>;
         }
         return this.showDiffViewer();
-        break;
       case "finished":
         if (!originFileExists) {
           return <p className="error">{gettext('Original file has been deleted.')}</p>
         }
         return this.showDiffViewer();
-        break;
     }
   }
 
@@ -603,7 +600,6 @@ class DraftReview extends React.Component {
     switch(this.state.reviewStatus) {
       case "closed":
         return;
-        break;
       case "open":
         if (!draftFileExists) {
           return;
@@ -613,13 +609,11 @@ class DraftReview extends React.Component {
           return;
         }
         return this.showDiffButton();
-        break;
       case "finished":
         if (!originFileExists) {
           return;
         } 
         return this.showDiffButton();
-        break;
     }
   }
 
@@ -629,26 +623,23 @@ class DraftReview extends React.Component {
     switch(this.state.reviewStatus) {
       case "closed":
         return viewFile;
-        break;
       case "open": 
         if (!draftFileExists) {
           return viewFile;
         }
 
         return editDraft; 
-        break;
       case "finished":
         if (!originFileExists) {
           return;
         }
         return viewFile;
-        break;
     }  
   }
 
   showNavItem = (showTab) => {
     switch(showTab) {
-      case "showInfo":
+      case "info":
         return (
           <NavItem className="nav-item">
            <NavLink
@@ -659,8 +650,7 @@ class DraftReview extends React.Component {
            </NavLink>
           </NavItem>
         );
-        break;
-      case "showComments":
+      case "comments":
         return (
           <NavItem className="nav-item">
             <NavLink
@@ -673,8 +663,7 @@ class DraftReview extends React.Component {
             </NavLink>
           </NavItem>
         );
-        break;
-      case "showHistory":
+      case "history":
         return (
           <NavItem className="nav-item">
             <NavLink
@@ -685,51 +674,47 @@ class DraftReview extends React.Component {
             </NavLink>
           </NavItem>
         );
-        break;
     }
   } 
 
-  renderNavItem = () => {
+  renderNavItems = () => {
     switch(this.state.reviewStatus) {
       case "closed":
         return (
           <Nav tabs className="review-side-panel-nav">
-            {this.showNavItem("showInfo")}
+            {this.showNavItem("info")}
           </Nav>
         );
-        break;
       case "open":
         if (!draftFileExists) {
           return (
             <Nav tabs className="review-side-panel-nav">
-              {this.showNavItem("showInfo")}
+              {this.showNavItem("info")}
             </Nav>
           );
         }
 
         return (
           <Nav tabs className="review-side-panel-nav">
-           {this.showNavItem('showInfo')}
-           {this.showNavItem('showComments')}
-           {this.showNavItem('showHistory')}
+           {this.showNavItem('info')}
+           {this.showNavItem('comments')}
+           {this.showNavItem('history')}
           </Nav>
         );
-        break;
     case "finished":
       if (!originFileExists) {
         return (
           <Nav tabs className="review-side-panel-nav">
-            {this.showNavItem("showInfo")}
+            {this.showNavItem("info")}
           </Nav>
         );
       }
       return (
         <Nav tabs className="review-side-panel-nav">
-           {this.showNavItem('showInfo')}
-           {this.showNavItem('showComments')}
+           {this.showNavItem('info')}
+           {this.showNavItem('comments')}
         </Nav>
       )
-      break;
     } 
   }
 
@@ -792,7 +777,7 @@ class DraftReview extends React.Component {
             <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
               <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
               <div className="review-side-panel">
-                {this.renderNavItem()}
+                {this.renderNavItems()}
                 <TabContent activeTab={this.state.activeTab}>
                   <TabPane tabId="reviewInfo">
                     <div className="review-side-panel-body">
