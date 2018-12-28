@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import DirentListView from './dirent-list-view';
 
 const propTypes = {
+  isShowFile: PropTypes.bool,
   selectedPath: PropTypes.string,
   selectedRepo: PropTypes.object,
   repo: PropTypes.object.isRequired,
@@ -24,9 +25,9 @@ class RepoListItem extends React.Component {
     this.setState({isShowChildren: !this.state.isShowChildren});
   }
 
-  onDirentItemClick = (filePath) => {
+  onDirentItemClick = (filePath, dirent) => {
     let repo = this.props.repo;
-    this.props.onDirentItemClick(repo, filePath);
+    this.props.onDirentItemClick(repo, filePath, dirent);
   }
 
   onRepoItemClick = () => {
@@ -52,6 +53,7 @@ class RepoListItem extends React.Component {
             isShowChildren={this.state.isShowChildren} 
             onDirentItemClick={this.onDirentItemClick}
             selectedPath={this.props.selectedPath}
+            isShowFile={this.props.isShowFile}
           />
         )}
       </li>

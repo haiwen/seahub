@@ -8,6 +8,7 @@ import RepoInfo from '../../models/repo-info';
 import '../../css/file-chooser.css';
 
 const propTypes = {
+  isShowFile: PropTypes.bool,
   repoID: PropTypes.string.isRequired,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
@@ -71,8 +72,8 @@ class FileChooser extends React.Component {
     this.setState({isCurrentRepoShow: !this.state.isCurrentRepoShow})
   ]
 
-  onDirentItemClick = (repo, filePath) => {
-    this.props.onDirentItemClick(repo, filePath);
+  onDirentItemClick = (repo, filePath, dirent) => {
+    this.props.onDirentItemClick(repo, filePath, dirent);
     this.setState({
       selectedRepo: repo,
       selectedPath: filePath
@@ -80,7 +81,9 @@ class FileChooser extends React.Component {
   }
 
   onRepoItemClick = (repo) => {
-    this.props.onRepoItemClick(repo);
+    if (this.props.onRepoItemClick) {
+      this.props.onRepoItemClick(repo);
+    }
     this.setState({
       selectedRepo: repo,
       selectedPath: '',
@@ -104,6 +107,7 @@ class FileChooser extends React.Component {
               selectedPath={this.state.selectedPath}
               onRepoItemClick={this.onRepoItemClick} 
               onDirentItemClick={this.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
             />
           }
         </div>
@@ -121,6 +125,7 @@ class FileChooser extends React.Component {
               selectedPath={this.state.selectedPath}
               onRepoItemClick={this.onRepoItemClick} 
               onDirentItemClick={this.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
             /> 
           }
         </div>

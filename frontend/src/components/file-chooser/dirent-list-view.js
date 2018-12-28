@@ -5,6 +5,7 @@ import Dirent from '../../models/dirent';
 import DirentListItem from './dirent-list-item';
 
 const propTypes = {
+  isShowFile: PropTypes.bool,
   selectedPath: PropTypes.string,
   repo: PropTypes.object.isRequired,
   isShowChildren: PropTypes.bool.isRequired,
@@ -25,7 +26,11 @@ class DirentListView extends React.Component {
     seafileAPI.listDir(repo.repo_id, '/').then(res => {
       let direntList = [];
       res.data.forEach(item => {
-        if (item.type === 'dir') {
+        if (this.props.isShowFile === true) {
+          let dirent = new Dirent(item);
+          direntList.push(dirent);
+        }
+        else if (item.type === 'dir') {
           let dirent = new Dirent(item);
           direntList.push(dirent);
         }
@@ -48,6 +53,7 @@ class DirentListView extends React.Component {
               dirent={dirent}
               onDirentItemClick={this.props.onDirentItemClick}
               selectedPath={this.props.selectedPath}
+              isShowFile={this.props.isShowFile}
             />
           );
         })}

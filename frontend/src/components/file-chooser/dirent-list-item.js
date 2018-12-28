@@ -4,6 +4,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
 
 const propTypes = {
+  isShowFile: PropTypes.bool,
   filePath: PropTypes.string,
   selectedPath: PropTypes.string,
   dirent: PropTypes.object.isRequired,
@@ -28,7 +29,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemClick = () => {
-    this.props.onDirentItemClick(this.state.filePath);
+    this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
   }
 
   onToggleClick = () => {
@@ -36,7 +37,11 @@ class DirentListItem extends React.Component {
       seafileAPI.listDir(this.props.repo.repo_id, this.state.filePath).then(res => {
         let direntList = [];
         res.data.forEach(item => {
-          if (item.type === 'dir') {
+          if (this.props.isShowFile === true) {
+            let dirent = new Dirent(item);
+            direntList.push(dirent);
+          }
+          else if (item.type === 'dir') {
             let dirent = new Dirent(item);
             direntList.push(dirent);
           }
@@ -71,6 +76,7 @@ class DirentListItem extends React.Component {
               onItemClick={this.onItemClick}
               selectedPath={this.props.selectedPath}
               onDirentItemClick={this.props.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
             />
           );
         })}
@@ -82,11 +88,11 @@ class DirentListItem extends React.Component {
     return (
       <li className="file-chooser-item">
         {
-          this.state.hasChildren &&
+          this.state.hasChildren && this.props.dirent.type !== 'file' &&
           <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         }
         <span className={`item-info ${this.state.filePath === this.props.selectedPath ? 'item-active' : ''}`} onClick={this.onItemClick}>
-          <span className="icon far fa-folder"></span>
+          <span className={`icon far ${this.props.dirent.type === 'dir' ? 'fa-folder' : 'fa-file'}`}></span>
           <span className="name">{this.props.dirent && this.props.dirent.name}</span>
         </span>
         {this.state.isShowChildren && this.renderChildren()}

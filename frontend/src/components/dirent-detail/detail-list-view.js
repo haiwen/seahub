@@ -4,6 +4,8 @@ import moment from 'moment';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
+import ListRelatedFileDialog from '../dialog/list-related-file-dialog';
+import AddRelatedFileDialog from '../dialog/add-related-file-dialog';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -13,7 +15,9 @@ const propTypes = {
   direntDetail: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
+  relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
+  onRelatedFileChange: PropTypes.func.isRequired,
 };
 
 class DetailListView extends React.Component {
@@ -22,6 +26,8 @@ class DetailListView extends React.Component {
     super(props);
     this.state = {
       isEditFileTagShow: false,
+      isListRelatedFileShow: false,
+      isAddRelatedFileShow: false,
     };
   }
 
@@ -53,8 +59,21 @@ class DetailListView extends React.Component {
     return Utils.joinPath(path, dirent.name);
   }
 
+  onListRelatedFileToggle = () => {
+    this.setState({
+      isListRelatedFileShow: !this.state.isListRelatedFileShow
+    });
+  }
+
+  onAddRelatedFileToggle = () => {
+    this.setState({
+      isListRelatedFileShow: !this.state.isListRelatedFileShow,
+      isAddRelatedFileShow: !this.state.isAddRelatedFileShow
+    });
+  }
+  
   render() {
-    let { direntType, direntDetail, fileTagList } = this.props;
+    let { direntType, direntDetail, fileTagList, relatedFiles } = this.props;
     let position = this.getDirentPostion();
     let direntPath = this.getDirentPath();
     if (direntType === 'dir') {
@@ -79,7 +98,8 @@ class DetailListView extends React.Component {
               <tr><th>{gettext('Size')}</th><td>{direntDetail.size}</td></tr>
               <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
               <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
-              <tr className="file-tag-container"><th>{gettext('Tags')}</th>
+              <tr className="file-tag-container">
+                <th>{gettext('Tags')}</th>
                 <td>
                   <ul className="file-tag-list">
                     {fileTagList.map((fileTag) => {
@@ -94,8 +114,43 @@ class DetailListView extends React.Component {
                   <i className='fa fa-pencil tag-edit-icon' onClick={this.onEditFileTagToggle}></i>
                 </td>
               </tr>
+              <tr className="file-related-files">
+                <th>{gettext('Related Files')}</th>
+                <td>
+                  <ul>
+                    {relatedFiles.map((relatedFile, index) => {
+                      return (
+                        <li key={index}>
+                          <a href={relatedFile.link} target='_blank'>{relatedFile.name}</a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <i className='fa fa-pencil tag-edit-icon' onClick={this.onListRelatedFileToggle}></i>
+                </td>
+              </tr>
             </tbody>
           </table>
+          {
+            this.state.isAddRelatedFileShow &&
+            <AddRelatedFileDialog
+              filePath={direntPath}
+              repoID={this.props.repoID}
+              toggleCancel={this.onAddRelatedFileToggle}
+              onRelatedFileChange={this.props.onRelatedFileChange}
+            />
+          }
+          {
+            this.state.isListRelatedFileShow &&
+            <ListRelatedFileDialog
+              relatedFiles={relatedFiles}
+              repoID={this.props.repoID}
+              filePath={direntPath}
+              toggleCancel={this.onListRelatedFileToggle}
+              addRelatedFileToggle={this.onAddRelatedFileToggle}
+              onRelatedFileChange={this.props.onRelatedFileChange}
+            />
+          }
           {
             this.state.isEditFileTagShow &&
             <EditFileTagDialog

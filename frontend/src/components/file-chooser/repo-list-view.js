@@ -4,6 +4,8 @@ import RepoListItem from './repo-list-item';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object,
+  isShowFile: PropTypes.bool,
+  repo: PropTypes.object,
   repoList: PropTypes.array,
   selectedRepo: PropTypes.object,
   initToShowChildren: PropTypes.bool.isRequired,
@@ -32,6 +34,7 @@ class RepoListView extends React.Component {
               selectedPath={this.props.selectedPath}
               onRepoItemClick={this.props.onRepoItemClick} 
               onDirentItemClick={this.props.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
             />
           );
         })}

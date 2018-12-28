@@ -25,6 +25,7 @@ class DirentDetail extends React.Component {
       direntDetail: '',
       repoInfo: null,
       fileTagList: [],
+      relatedFiles: [],
     };
   }
 
@@ -61,6 +62,21 @@ class DirentDetail extends React.Component {
         });
         this.setState({fileTagList: fileTagList});
       });
+      seafileAPI.listRelatedFiles(repoID, direntPath).then(res => {
+        let relatedFiles = [];
+        res.data.related_files.map((relatedFile) => {
+          relatedFiles.push(relatedFile);
+        });
+        this.setState({
+          relatedFiles: relatedFiles,
+        });
+      }).catch((error) => {
+        if (error.response.status === 500) {
+          this.setState({
+            relatedFiles: []
+          });
+        }
+      });
     } else {
       seafileAPI.getDirInfo(repoID, direntPath).then(res => {
         this.setState({
@@ -69,6 +85,12 @@ class DirentDetail extends React.Component {
         });
       });
     }
+  }
+
+  onRelatedFileChange = () => {
+    let { dirent, path } = this.props;
+    let direntPath = Utils.joinPath(path, dirent.name);
+    this.updateDetailView(dirent, direntPath);
   }
 
   render() {
@@ -96,7 +118,9 @@ class DirentDetail extends React.Component {
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail} 
                 fileTagList={this.state.fileTagList}
+                relatedFiles={this.state.relatedFiles}
                 onFileTagChanged={this.props.onFileTagChanged}
+                onRelatedFileChange={this.onRelatedFileChange}
               />
             </div>
           }

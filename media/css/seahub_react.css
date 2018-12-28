@@ -124,6 +124,10 @@ ul,ol,li {
     line-height: 1.5;
 }
 
+.vh {
+    visibility: hidden;
+}
+
 .a-simulate {
     color: #eb8205 !important;
     text-decoration: none;
