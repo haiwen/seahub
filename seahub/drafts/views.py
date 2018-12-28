@@ -39,9 +39,6 @@ def review(request, pk):
     origin_file = seafile_api.get_file_id_by_path(origin_repo_id, origin_file_path)
     origin_file_exists = True
     if not origin_file:
-        if d_r.status == 'finished':
-            return render_error(request, _(u'Original file not found.'))
-
         origin_file_exists = False
 
     draft_file = seafile_api.get_file_id_by_path(origin_repo_id, d_r.draft_file_path)

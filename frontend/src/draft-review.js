@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import Prism from 'prismjs';
 /* eslint-enable */
 import { siteRoot, gettext, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID,
-  draftFileName, opStatus, publishFileVersion, originFileVersion, author, authorAvatar
-} from './utils/constants';
+  draftFileName, opStatus, publishFileVersion, originFileVersion, author, authorAvatar, 
+  draftFileExists, originFileExists } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
@@ -71,36 +71,77 @@ class DraftReview extends React.Component {
   }
 
   initialContent = () => {
-    if (publishFileVersion == 'None') {
-      axios.all([
-        seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
-        seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
-      ]).then(axios.spread((res1, res2) => {
+    switch(this.state.reviewStatus) {
+      case 'closed':
+        this.setState({
+          isLoading: false,
+          isShowDiff: false
+        })
+        break;
+      case "open":
+        if (!draftFileExists) {
+          this.setState({
+            isLoading: false,
+            isShowDiff: false
+          })
+          return;
+        }
+
+        if (!originFileExists) {
+          seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath)
+            .then(res => { 
+              seafileAPI.getFileContent(res.data)
+                .then(res => {
+                  this.setState({
+                    draftContent: res.data,
+                    draftOriginContent: res.data,
+                    isLoading: false,
+                    isShowDiff: false
+                  }); 
+                })
+            })
+          return;
+        }
+
         axios.all([
-          seafileAPI.getFileContent(res1.data),
-          seafileAPI.getFileContent(res2.data)
+          seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
+          seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
+        ]).then(axios.spread((res1, res2) => {
+          axios.all([
+            seafileAPI.getFileContent(res1.data),
+            seafileAPI.getFileContent(res2.data)
+          ]).then(axios.spread((draftContent, draftOriginContent) => {
+            this.setState({
+              draftContent: draftContent.data,
+              draftOriginContent: draftOriginContent.data,
+              isLoading: false
+            }); 
+          }));
+        }));
+        break;
+      case "finished":  
+        if (!originFileExists) {
+          this.setState({
+            isLoading: false,
+            isShowDiff: false
+          }) 
+          return;
+        }
+
+        let dl0 = siteRoot + 'repo/' + draftOriginRepoID + '/' + publishFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
+        let dl = siteRoot + 'repo/' + draftOriginRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
+        axios.all([
+          seafileAPI.getFileContent(dl0),
+          seafileAPI.getFileContent(dl)
         ]).then(axios.spread((draftContent, draftOriginContent) => {
           this.setState({
             draftContent: draftContent.data,
             draftOriginContent: draftOriginContent.data,
-            isLoading: false
+            isLoading: false,
           }); 
         }));
-      }));
-    } else {
-      let dl0 = siteRoot + 'repo/' + draftOriginRepoID + '/' + publishFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
-      let dl = siteRoot + 'repo/' + draftOriginRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
-      axios.all([
-        seafileAPI.getFileContent(dl0),
-        seafileAPI.getFileContent(dl)
-      ]).then(axios.spread((draftContent, draftOriginContent) => {
-        this.setState({
-          draftContent: draftContent.data,
-          draftOriginContent: draftOriginContent.data,
-          isLoading: false,
-        }); 
-      }));
-    }
+        break;
+    } 
   }
 
   componentWillUnmount() {
@@ -501,6 +542,197 @@ class DraftReview extends React.Component {
     this.toggleCommentDialog();
   }
 
+  showDiffViewer = () => {
+    return (
+      <div>
+        {this.state.isShowDiff ?
+          <DiffViewer
+            newMarkdownContent={this.state.draftContent}
+            oldMarkdownContent={this.state.draftOriginContent}
+            ref="diffViewer"
+          />
+        :
+          <DiffViewer
+            newMarkdownContent={this.state.draftContent}
+            oldMarkdownContent={this.state.draftContent}
+            ref="diffViewer"
+          />
+        }
+        <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>
+      </div>
+    )  
+  }
+
+  renderContent = () => {
+    switch(this.state.reviewStatus) {
+      case "closed":
+        return <p className="error">{gettext('The review has been closed.')}</p>;
+        break;
+      case "open":
+        if (!draftFileExists) {
+          return <p className="error">{gettext('Draft has been deleted.')}</p>;
+        }
+        return this.showDiffViewer();
+        break;
+      case "finished":
+        if (!originFileExists) {
+          return <p className="error">{gettext('Original file has been deleted.')}</p>
+        }
+        return this.showDiffViewer();
+        break;
+    }
+  }
+
+  showDiffButton = () => {
+    return (
+      <div className={'seafile-toggle-diff'}>
+        <label className="custom-switch" id="toggle-diff">
+          <input type="checkbox" checked={this.state.isShowDiff && 'checked'}
+            name="option" className="custom-switch-input"
+            onChange={this.onSwitchShowDiff}/>
+          <span className="custom-switch-indicator"></span>
+        </label>
+        <Tooltip placement="bottom" isOpen={this.state.showDiffTip}
+          target="toggle-diff" toggle={this.toggleDiffTip}>
+          {gettext('View diff')}</Tooltip>
+      </div>
+    )  
+  }
+
+  renderDiffButton = () => {
+    switch(this.state.reviewStatus) {
+      case "closed":
+        return;
+        break;
+      case "open":
+        if (!draftFileExists) {
+          return;
+        }
+
+        if (!originFileExists) {
+          return;
+        }
+        return this.showDiffButton();
+        break;
+      case "finished":
+        if (!originFileExists) {
+          return;
+        } 
+        return this.showDiffButton();
+        break;
+    }
+  }
+
+  renderGo = (OriginFileLink, draftLink) => {
+    let viewFile = <a href={OriginFileLink} className="view-file-link">{gettext('View File')}</a>;
+    let editDraft = <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>;
+    switch(this.state.reviewStatus) {
+      case "closed":
+        return viewFile;
+        break;
+      case "open": 
+        if (!draftFileExists) {
+          return viewFile;
+        }
+
+        return editDraft; 
+        break;
+      case "finished":
+        if (!originFileExists) {
+          return;
+        }
+        return viewFile;
+        break;
+    }  
+  }
+
+  showNavItem = (showTab) => {
+    switch(showTab) {
+      case "showInfo":
+        return (
+          <NavItem className="nav-item">
+           <NavLink
+             className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
+             onClick={() => { this.tabItemClick('reviewInfo');}}
+           >
+             <i className="fas fa-info-circle"></i>
+           </NavLink>
+          </NavItem>
+        );
+        break;
+      case "showComments":
+        return (
+          <NavItem className="nav-item">
+            <NavLink
+              className={classnames({ active: this.state.activeTab === 'comments' })}
+              onClick={() => {this.tabItemClick('comments');}}
+            >
+              <i className="fa fa-comments"></i>
+              { this.state.commentsNumber > 0 &&
+                <div className='comments-number'>{this.state.commentsNumber}</div>}
+            </NavLink>
+          </NavItem>
+        );
+        break;
+      case "showHistory":
+        return (
+          <NavItem className="nav-item">
+            <NavLink
+              className={classnames({ active: this.state.activeTab === 'history' })}
+              onClick={() => { this.tabItemClick('history');}}
+            >
+              <i className="fas fa-history"></i>
+            </NavLink>
+          </NavItem>
+        );
+        break;
+    }
+  } 
+
+  renderNavItem = () => {
+    switch(this.state.reviewStatus) {
+      case "closed":
+        return (
+          <Nav tabs className="review-side-panel-nav">
+            {this.showNavItem("showInfo")}
+          </Nav>
+        );
+        break;
+      case "open":
+        if (!draftFileExists) {
+          return (
+            <Nav tabs className="review-side-panel-nav">
+              {this.showNavItem("showInfo")}
+            </Nav>
+          );
+        }
+
+        return (
+          <Nav tabs className="review-side-panel-nav">
+           {this.showNavItem('showInfo')}
+           {this.showNavItem('showComments')}
+           {this.showNavItem('showHistory')}
+          </Nav>
+        );
+        break;
+    case "finished":
+      if (!originFileExists) {
+        return (
+          <Nav tabs className="review-side-panel-nav">
+            {this.showNavItem("showInfo")}
+          </Nav>
+        );
+      }
+      return (
+        <Nav tabs className="review-side-panel-nav">
+           {this.showNavItem('showInfo')}
+           {this.showNavItem('showComments')}
+        </Nav>
+      )
+      break;
+    } 
+  }
+
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath + '?mode=edit';
@@ -516,30 +748,20 @@ class DraftReview extends React.Component {
               <React.Fragment>
                 <span className="file-name">{draftFileName}</span>
                 <span className="file-copywriting">{gettext('review')}</span>
-                { opStatus == 'open' && <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>}
-                { opStatus !== 'open' && <a href={OriginFileLink} className="view-file-link">{gettext('View File')}</a>} 
+                {this.renderGo(OriginFileLink, draftLink)}
               </React.Fragment>
             </div>
           </div>
           <div className="button-group">
-            <div className={'seafile-toggle-diff'}>
-              <label className="custom-switch" id="toggle-diff">
-                <input type="checkbox" checked={this.state.isShowDiff && 'checked'}
-                  name="option" className="custom-switch-input"
-                  onChange={this.onSwitchShowDiff}/>
-                <span className="custom-switch-indicator"></span>
-              </label>
-              <Tooltip placement="bottom" isOpen={this.state.showDiffTip}
-                target="toggle-diff" toggle={this.toggleDiffTip}>
-                {gettext('View diff')}</Tooltip>
-            </div>
+            {this.renderDiffButton()}
             {
               this.state.reviewStatus === 'open' &&
               <div className="cur-file-operation">
                 <button className='btn btn-secondary file-operation-btn' title={gettext('Close review')}
                   onClick={this.onCloseReview}>{gettext('Close')}</button>
-                <button className='btn btn-success file-operation-btn' title={gettext('Publish draft')}
+                  { draftFileExists && <button className='btn btn-success file-operation-btn' title={gettext('Publish draft')}
                   onClick={this.onPublishReview}>{gettext('Publish')}</button>
+                  }
               </div>
             }
             {
@@ -563,56 +785,14 @@ class DraftReview extends React.Component {
                 </div> 
                 :
                 <div className="markdown-viewer-render-content article" ref="mainPanel">
-                  {this.state.isShowDiff ? 
-                    <DiffViewer
-                      newMarkdownContent={this.state.draftContent}
-                      oldMarkdownContent={this.state.draftOriginContent}
-                      ref="diffViewer"
-                    />
-                    : 
-                    <DiffViewer
-                      newMarkdownContent={this.state.draftContent}
-                      oldMarkdownContent={this.state.draftContent}
-                      ref="diffViewer"
-                    />
-                  }
-                  <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>
+                  {this.renderContent()}
                 </div>
               }
             </div>
             <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
               <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
               <div className="review-side-panel">
-                <Nav tabs className="review-side-panel-nav">
-                  <NavItem className="nav-item">
-                    <NavLink
-                      className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
-                      onClick={() => { this.tabItemClick('reviewInfo');}}
-                    >
-                      <i className="fas fa-info-circle"></i>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem className="nav-item">
-                    <NavLink
-                      className={classnames({ active: this.state.activeTab === 'comments' })}
-                      onClick={() => { this.tabItemClick('comments');}}
-                    >
-                      <i className="fa fa-comments"></i>
-                      { this.state.commentsNumber > 0 &&
-                        <div className='comments-number'>{this.state.commentsNumber}</div>}
-                    </NavLink>
-                  </NavItem>
-                  { this.state.reviewStatus == 'finished' ? '':
-                    <NavItem className="nav-item">
-                      <NavLink
-                        className={classnames({ active: this.state.activeTab === 'history' })}
-                        onClick={() => { this.tabItemClick('history');}}
-                      >
-                        <i className="fas fa-history"></i>
-                      </NavLink>
-                    </NavItem>
-                  }
-                </Nav>
+                {this.renderNavItem()}
                 <TabContent activeTab={this.state.activeTab}>
                   <TabPane tabId="reviewInfo">
                     <div className="review-side-panel-body">
