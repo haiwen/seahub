@@ -62,13 +62,12 @@ class DraftManager(models.Manager):
             draft = {}
             # Query whether there is an associated review
             if with_reviews:
+                draft['review_id'] = None
+                draft['review_status'] = None
                 for r in qs_r:
                     if r.draft_id == d:
                         draft['review_id'] = r.id
                         draft['review_status'] = r.status
-                    else:
-                        draft['review_id'] = None
-                        draft['review_status'] = None
 
             draft['id'] = d.id
             draft['owner'] = d.username

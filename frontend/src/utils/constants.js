@@ -64,3 +64,5 @@ export const publishFileVersion = window.draftReview ? window.draftReview.config
 export const originFileVersion = window.draftReview ? window.draftReview.config.originFileVersion : '';
 export const author = window.draftReview ? window.draftReview.config.author : '';
 export const authorAvatar = window.draftReview ? window.draftReview.config.authorAvatar : '';
+export const originFileExists = window.draftReview ? window.draftReview.config.originFileExists : '';
+export const draftFileExists = window.draftReview ? window.draftReview.config.draftFileExists : '';
