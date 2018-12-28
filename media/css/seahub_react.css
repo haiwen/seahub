@@ -163,7 +163,7 @@ ul,ol,li {
     user-select: none;
 }
 
-.dialog-list-container { /*for content is list dialog*/
+.dialog-list-container { /* for dialog containing list */
     min-height: 15rem;
     max-height: 35rem;
     overflow: auto;
