@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl} from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
@@ -14,15 +16,20 @@ class MyLibraries extends Component {
       loading: true,
       errorMsg: '',
       items: [],
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc' // 'asc' or 'desc'
     };
   }
 
   componentDidMount() {
     seafileAPI.listRepos({type: 'mine'}).then((res) => {
       // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
+      let repoList = res.data.repos.map((item) => {
+        return new Repo(item);
+      });
       this.setState({
         loading: false,
-        items: res.data.repos
+        items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       if (error.response) {
@@ -61,6 +68,14 @@ class MyLibraries extends Component {
       };
       this.state.items.unshift(repo);
       this.setState({items: this.state.items});
+    });
+  }
+
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      items: Utils.sortRepos(this.state.items, sortBy, sortOrder)
     });
   }
 
@@ -118,6 +133,9 @@ class MyLibraries extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
+                sortBy={this.state.sortBy}
+                sortOrder={this.state.sortOrder}
+                sortItems={this.sortItems}
                 onDeleteRepo={this.onDeleteRepo}
                 onRenameRepo={this.onRenameRepo}
                 onTransferRepo={this.onTransferRepo}

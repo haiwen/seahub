@@ -898,6 +898,22 @@ table td img {
     color: #888;
     text-decoration: underline;
 }
+
+/* table sort */
+a.table-sort-op {
+  color: inherit;
+}
+@media (max-width:767px) {
+  a.table-sort-op {
+    display: inline-block;
+    margin-left: 15px;
+  }
+}
+a.table-sort-op:hover,
+a.table-sort-op:focus {
+  outline: none;
+  text-decoration: none;
+}
   
 /* dropdown-menu style */
 .dropdown-menu {
