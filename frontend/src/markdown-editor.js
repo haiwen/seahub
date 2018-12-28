@@ -343,6 +343,7 @@ class MarkdownEditor extends React.Component {
           shareLinkExpireDaysMin={shareLinkExpireDaysMin}
           shareLinkExpireDaysMax={shareLinkExpireDaysMax}
           relatedFiles={this.state.relatedFiles}
+          siteRoot={siteRoot}
         />
       );
     }   

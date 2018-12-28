@@ -48,6 +48,7 @@ class ListRelatedFileDialog extends React.Component {
     relatedFiles.map((item) => {
       seafileAPI.getFileInfo(item.repo_id, item.path).then(res => {
         let dirent = new Dirent(res.data);
+        dirent['repo_name'] = item.repo_name;
         dirent['related_id'] = item.related_id;
         dirent['link'] = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(item.path);
         direntList.push(dirent);
@@ -78,8 +79,9 @@ class ListRelatedFileDialog extends React.Component {
               <Table hover size="sm" className="list-related-file-table">
                 <thead>
                   <tr>
-                    <th width='50%'>{gettext('Name')}</th>
-                    <th width='25%'>{gettext('Size')}</th>
+                    <th width='30%'>{gettext('Name')}</th>
+                    <th width='25%'>{gettext('Library Name')}</th>
+                    <th width='20%'>{gettext('Size')}</th>
                     <th width='20%'>{gettext('Last Update')}</th>
                     <th width='5%'></th>
                   </tr>
@@ -143,6 +145,7 @@ class RelatedFile extends React.Component {
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><a href={relatedFile.link} target='_blank'>{relatedFile.name}</a></td>
+        <td>{relatedFile.repo_name}</td>
         <td>{relatedFile.size}</td>
         <td>{relatedFile.mtime}</td>
         <td><i className={className} onClick={this.props.onDeleteRelatedFile.bind(this, relatedFile)}></i></td>
