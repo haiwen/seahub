@@ -3,6 +3,7 @@
     min-height: 15rem;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 }
 
 .share-dialog-content .share-dialog-side {
