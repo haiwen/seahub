@@ -18,7 +18,7 @@ from seahub.constants import PERMISSION_READ_WRITE
 from seahub.views import check_folder_permission
 
 from seahub.drafts.models import Draft, DraftReview, DraftReviewExist, \
-        DraftFileConflict, ReviewReviewer
+        DraftFileConflict, ReviewReviewer, OriginalFileConflict
 from seahub.drafts.signals import update_review_successful
 
 
@@ -62,21 +62,21 @@ class DraftReviewsView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Draft %s not found.' % draft_id)
 
+        origin_repo_id = d.origin_repo_id
+        file_path = d.draft_file_path
+        draft_file = seafile_api.get_file_id_by_path(origin_repo_id, file_path)
+        if not draft_file:
+            error_msg = 'Draft file not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         # perm check
-        perm = check_folder_permission(request, d.origin_repo_id, '/')
+        perm = check_folder_permission(request, origin_repo_id, '/')
 
         if perm is None:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Permission denied.')
 
         username = request.user.username
-        try:
-            d_r = DraftReview.objects.get(creator=username, draft_id=d)
-            if d_r.status == 'closed':
-                d_r.delete()
-        except DraftReview.DoesNotExist:
-            pass
-
         try:
             d_r = DraftReview.objects.add(creator=username, draft=d)
         except (DraftReviewExist):
@@ -129,7 +129,14 @@ class DraftReviewView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            r.publish(operator=username)
+            try:
+                r.publish(operator=username)
+            except DraftFileConflict:
+                error_msg = 'There is a conflict between the draft and the original file.'
+                return api_error(status.HTTP_409_CONFLICT, error_msg)
+            except OriginalFileConflict:
+                error_msg = 'Original file not found.'
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         reviewers = ReviewReviewer.objects.filter(review_id=r)
         # send notice to other reviewers if has

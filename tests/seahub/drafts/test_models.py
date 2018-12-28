@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from seahub.drafts.models import Draft, DraftReview, ReviewReviewer, \
         DraftFileExist
 from seahub.test_utils import BaseTestCase
@@ -6,6 +7,52 @@ from seaserv import seafile_api
 
 
 class DraftManagerTest(BaseTestCase):
+    def test_list_draft_by_username(self):
+        assert len(Draft.objects.all()) == 0
+        Draft.objects.add(self.user.username, self.repo, self.file)
+
+        draft_list = Draft.objects.list_draft_by_username(self.user.username)
+
+        assert len(draft_list) == 1
+
+    def test_list_draft_by_username_with_invalid_repo(self):
+        self.login_as(self.user)
+        assert len(Draft.objects.all()) == 0
+        Draft.objects.add(self.user.username, self.repo, self.file)
+
+        url = reverse('api2-repo', args=[self.repo.id])
+        resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+
+        draft_list = Draft.objects.list_draft_by_username(self.user.username)
+
+        assert len(draft_list) == 0
+        assert len(Draft.objects.all()) == 1
+
+    def test_list_draft_by_username_with_invalid_origin_file(self):
+        self.login_as(self.user)
+        assert len(Draft.objects.all()) == 0
+
+        url = reverse('api-v2.1-drafts')
+        resp = self.client.post(url, {
+            'repo_id': self.repo.id,
+            'file_path': self.file,
+        })
+
+        self.assertEqual(200, resp.status_code)
+
+        file_url = reverse('api-v2.1-file-view', args=[self.repo.id])
+        d_resp = self.client.delete(file_url + '?p=' + self.file,
+                {}, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, d_resp.status_code)
+
+        draft_list = Draft.objects.list_draft_by_username(self.user.username)
+
+        assert len(draft_list) == 1
+        assert len(Draft.objects.all()) == 1
+
     def test_add(self):
         assert len(Draft.objects.all()) == 0
         draft = Draft.objects.add(self.user.username, self.repo, self.file)
@@ -81,6 +128,32 @@ class DraftReviewManagerTest(BaseTestCase):
     def test_get_reviews_by_creator_and_status(self):
         assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 0)
         DraftReview.objects.add(self.user.username, self.draft)
+        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 1)
+
+    def test_get_reviews_by_creator_and_status_with_invalid_repo(self):
+        self.login_as(self.user)
+        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 0)
+        DraftReview.objects.add(self.user.username, self.draft)
+
+        resp = self.client.delete(
+            reverse('api2-repo', args=[self.repo.id])
+        )
+        self.assertEqual(200, resp.status_code)
+
+        assert(len(DraftReview.objects.all()) == 1)
+        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 0)
+
+    def test_get_reviews_by_creator_and_status_with_invalid_origin_file(self):
+        self.login_as(self.user)
+        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 0)
+
+        DraftReview.objects.add(self.user.username, self.draft)
+        url = reverse('api-v2.1-file-view', args=[self.repo.id])
+        d_resp = self.client.delete(url + '?p=' + self.file,
+                {}, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, d_resp.status_code)
+
+        assert(len(DraftReview.objects.all()) == 1)
         assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 1)
 
     def test_get_reviews_by_reviewer_and_status(self):
