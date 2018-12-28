@@ -190,7 +190,7 @@ define([
                                 data.jqXHR = popup.fileupload('send', data);
 
                             } else {
-                                var block_size = 1024 * 1024;
+                                var block_size = 100 * 1024 * 1024;
                                 if (enable_resumable_fileupload &&
                                         file.size && file.size > block_size) {
                                     popup.fileupload('option', 'maxChunkSize', block_size);
