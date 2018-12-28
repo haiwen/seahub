@@ -50,7 +50,7 @@ class LibDetail extends React.Component {
               </thead>
               <tbody>
                 <tr><th>{gettext('Files')}</th><td>{this.state.fileCount}</td></tr>
-                <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(repo.size)}</td></tr>
+                <tr><th>{gettext('Size')}</th><td>{repo.size}</td></tr>
                 <tr><th>{gettext('Last Update')}</th><td>{ moment(repo.last_modified).fromNow()}</td></tr>
               </tbody>
             </table>
