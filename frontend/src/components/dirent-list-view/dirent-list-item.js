@@ -15,6 +15,8 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 
+import '../../css/dirent-list-item.css';
+
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -404,14 +406,14 @@ class DirentListItem extends React.Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-          <td className="select">
+          <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
-          <td className="star" onClick={this.onItemStarred}>
-            {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star empty"></i>}
+          <td className="text-center cursor-pointer" onClick={this.onItemStarred}>
+            {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty"></i>}
             {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star"></i>}
           </td>
-          <td className="icon">
+          <td className="text-center">
             <div className="dir-icon">
               <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt=''></img>
               {dirent.is_locked && <img className="locked" src={siteRoot + 'media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
@@ -446,13 +448,13 @@ class DirentListItem extends React.Component {
               <div className="operations">
                 <ul className="operation-group">
                   <li className="operation-group-item">
-                    <i className="sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
                   <li className="operation-group-item">
-                    <i className="sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>
                   <li className="operation-group-item">
-                    <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
                     <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operations')} onClick={this.onItemMenuToggle}></i>

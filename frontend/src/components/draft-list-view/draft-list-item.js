@@ -58,7 +58,7 @@ class DraftListItem extends React.Component {
     localTime = moment(localTime).fromNow();
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="icon"><img src={siteRoot + 'media/img/file/192/txt.png'} alt='icon' /></td>
+        <td className="text-center"><img src={siteRoot + 'media/img/file/192/txt.png'} alt='icon' /></td>
         <td className="name" >
           <a href={draftUrl} target="_blank">{fileName}</a>
         </td>
@@ -72,7 +72,7 @@ class DraftListItem extends React.Component {
           }
         </td>
         <td className="update">{localTime}</td>
-        <td className="menu-toggle">
+        <td className="text-center cursor-pointer">
           { 
             this.props.draft.review_status !== 'open' &&
             <MenuControl

@@ -81,7 +81,7 @@ class PermissionEditor extends React.Component {
               <span 
                 title={gettext('Edit')} 
                 style={{fontSize: '0.875rem', marginLeft: '0.5rem'}} 
-                className="fa fa-pencil op-icon" 
+                className="fa fa-pencil action-icon" 
                 onClick={this.onEidtPermission}>
               </span>
             )}

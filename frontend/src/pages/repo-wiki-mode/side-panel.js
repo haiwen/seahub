@@ -179,7 +179,7 @@ class SidePanel extends Component {
           <a href={siteRoot} id="logo">
             <img src={mediaUrl + logoPath} title={siteTitle} alt="logo" width={logoWidth} height={logoHeight} />
           </a>
-          <a title="Close" aria-label="Close" onClick={this.closeSide} className="sf2-icon-x1 sf-popover-close side-panel-close op-icon d-md-none "></a>
+          <a title="Close" aria-label="Close" onClick={this.closeSide} className="sf2-icon-x1 sf-popover-close side-panel-close action-icon d-md-none "></a>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
           <h3

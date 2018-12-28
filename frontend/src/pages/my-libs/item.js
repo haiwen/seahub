@@ -178,9 +178,9 @@ class Item extends Component {
     data.url = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'sf2-icon-share sf2-x op-icon' + iconVisibility; 
-    let deleteIconClassName = 'sf2-icon-delete sf2-x op-icon' + iconVisibility;
-    let operationMenuToggleIconClassName = 'sf2-icon-caret-down item-operation-menu-toggle-icon op-icon'; 
+    let shareIconClassName = 'op-icon sf2-icon-share' + iconVisibility; 
+    let deleteIconClassName = 'op-icon sf2-icon-delete' + iconVisibility;
+    let operationMenuToggleIconClassName = 'sf-dropdown-toggle sf2-icon-caret-down'; 
     if (window.innerWidth >= 768) {
       operationMenuToggleIconClassName += iconVisibility; 
     }
@@ -189,8 +189,7 @@ class Item extends Component {
 
     const commonToggle = (
       <DropdownToggle
-        tag="a" 
-        href="#" 
+        tag="i" 
         className={operationMenuToggleIconClassName} 
         title={gettext('More Operations')}
         // onClick={this.clickOperationMenuToggle}
@@ -258,7 +257,7 @@ class Item extends Component {
             }
           </td>
           <td>{data.repo_name ? desktopOperations : ''}</td>
-          <td>{Utils.formatSize({bytes: data.size})}</td>
+          <td>{Utils.bytesToSize(data.size)}</td>
           {storages.length ? <td>{data.storage_name}</td> : null}
           <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
         </tr>
@@ -285,7 +284,7 @@ class Item extends Component {
               <Link to={data.url}>{data.repo_name}</Link> :
               gettext('Broken (please contact your administrator to fix this library)')}
             <br />
-            <span className="item-meta-info">{Utils.formatSize({bytes: data.size})}</span>
+            <span className="item-meta-info">{Utils.bytesToSize(data.size)}</span>
             <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
           </td>
           <td>{data.repo_name ? mobileOperations : ''}</td>

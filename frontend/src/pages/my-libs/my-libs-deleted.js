@@ -150,12 +150,12 @@ class DeletedRepoItem extends Component {
 
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="icon"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt='icon' /></td>
+        <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt='' /></td>
         <td className="name">{this.props.repo.repo_name}</td>
         <td className="update">{localTime}</td>
         <td>
           {this.state.highlight && (
-            <a href="#" onClick={this.restoreDeletedRepo} className="sf2-icon-reply sf2-x repo-share-btn op-icon" title={gettext('Restore')} aria-label={gettext('Restore')}></a>
+            <a href="#" onClick={this.restoreDeletedRepo} className="op-icon sf2-icon-reply repo-share-btn" title={gettext('Restore')} aria-label={gettext('Restore')}></a>
           )}
         </td>
       </tr>

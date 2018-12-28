@@ -30,8 +30,8 @@ class ShareRepoListItem extends React.Component {
     let repo = this.props.repo;
     return (
       <tr>
-        <td className="select"><input type="checkbox" className="vam" name="repo" onChange={this.onRepoSelect} /></td>
-        <td className="icon"><img src={siteRoot + 'media/img/lib/48/lib.png'} width="24" alt={gettext('icon')} /></td>
+        <td className="text-center"><input type="checkbox" className="vam" name="repo" onChange={this.onRepoSelect} /></td>
+        <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt={gettext('icon')} /></td>
         <td className="name">{gettext(repo.repo_name)}</td>
         <td>{moment(repo.last_modified).fromNow()}</td>
         <td>
