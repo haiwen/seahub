@@ -1,15 +1,31 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import Repo from '../../models/repo';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import Loading from '../../components/loading';
 
 class Content extends Component {
 
+  sortByName = (e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
+  sortByTime = (e) => {
+    e.preventDefault();
+    const sortBy = 'time';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   render() {
-    const {loading, errorMsg, items} = this.props.data;
+    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -23,14 +39,19 @@ class Content extends Component {
         </div>
       );
 
+      // sort
+      const sortByName = sortBy == 'name';
+      const sortByTime = sortBy == 'time';
+      const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+
       const desktopThead = (
         <thead>
           <tr>
             <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
-            <th width="38%">{gettext("Name")}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
+            <th width="38%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="10%"><span className="sr-only">{gettext("Actions")}</span></th>
             <th width="14%">{gettext("Size")}</th>
-            <th width="18%">{gettext("Last Update")}<a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a></th>
+            <th width="18%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             <th width="16%">{gettext("Owner")}</th>
           </tr>
         </thead>
@@ -41,9 +62,9 @@ class Content extends Component {
           <tr>
             <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="76%">
-              {gettext("Sort:")} {/* TODO: sort */}
-              {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
-              {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
+              {gettext("Sort:")}
+              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext("name")} {sortByName && sortIcon}</a>
+              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext("last update")} {sortByTime && sortIcon}</a>
             </th>
             <th width="6%"><span className="sr-only">{gettext("Actions")}</span></th>
           </tr>
@@ -62,18 +83,20 @@ class Content extends Component {
   }
 }
 
-class TableBody extends Component {
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortItems: PropTypes.func.isRequired
+};
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: this.props.items
-    };
-  }
+class TableBody extends Component {
 
   render() {
 
-    let listItems = this.state.items.map(function(item, index) {
+    let listItems = this.props.items.map(function(item, index) {
       return <Item key={index} data={item} />;
     }, this);
 
@@ -82,6 +105,10 @@ class TableBody extends Component {
     );
   }
 }
+
+TableBody.propTypes = {
+  items: PropTypes.array.isRequired
+};
 
 class Item extends Component {
 
@@ -181,7 +208,7 @@ class Item extends Component {
             : ''}
           <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
         </td>
-        <td>{Utils.bytesToSize(data.size)}</td>
+        <td>{data.size}</td>
         <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
         <td title={data.owner_contact_email}>{data.owner_name}</td>
       </tr>
@@ -193,7 +220,7 @@ class Item extends Component {
         <td>
           <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link><br />
           <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
-          <span className="item-meta-info">{Utils.bytesToSize(data.size)}</span>
+          <span className="item-meta-info">{data.size}</span>
           <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
         </td>
         <td>
@@ -209,22 +236,31 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  data: PropTypes.object.isRequired
+};
+
 class SharedLibraries extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
       errorMsg: '',
-      items: []
+      items: [],
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc' // 'asc' or 'desc'
     };
   }
 
   componentDidMount() {
     seafileAPI.listRepos({type:'shared'}).then((res) => {
       // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
+      let repoList = res.data.repos.map((item) => {
+        return new Repo(item);
+      });
       this.setState({
         loading: false,
-        items: res.data.repos
+        items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       if (error.response) {
@@ -250,6 +286,14 @@ class SharedLibraries extends Component {
     });
   }
 
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      items: Utils.sortRepos(this.state.items, sortBy, sortOrder)
+    });
+  }
+
   render() {
     return (
       <div className="main-panel-center">
@@ -258,7 +302,14 @@ class SharedLibraries extends Component {
             <h3 className="sf-heading">{gettext("Shared with me")}</h3>
           </div>
           <div className="cur-view-content">
-            <Content data={this.state} />
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={this.state.items}
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortItems={this.sortItems}
+            />
           </div>
         </div>
       </div>
