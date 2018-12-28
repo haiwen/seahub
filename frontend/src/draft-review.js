@@ -443,7 +443,11 @@ class DraftReview extends React.Component {
     }
     const win = window;
     let key = this.state.changedNodes[this.changeIndex];
-    const element = win.document.querySelector(`[data-key="${key}"]`);
+    let element = win.document.querySelector(`[data-key="${key}"]`);
+    // fix code-block or tables
+    while (element.className.indexOf('diff-') === -1 && element.tagName !== "BODY") {
+      element = element.parentNode;
+    }
     const scroller = this.findScrollContainer(element, win);
     const isWindow = scroller == win.document.body || scroller == win.document.documentElement;
     if (isWindow) {
