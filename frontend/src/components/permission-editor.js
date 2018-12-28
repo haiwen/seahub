@@ -80,7 +80,7 @@ class PermissionEditor extends React.Component {
             {this.props.isEditIconShow && (
               <span 
                 title={gettext('Edit')} 
-                className="fa fa-pencil attr-icon" 
+                className="fa fa-pencil attr-action-icon" 
                 onClick={this.onEidtPermission}>
               </span>
             )}

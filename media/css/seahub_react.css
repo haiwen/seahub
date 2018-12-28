@@ -295,7 +295,7 @@ ul,ol,li {
 /** op-icon **/
 .op-icon,
 .action-icon,
-.attr-icon {
+.attr-action-icon {
     margin-left: 0.5rem;
     font-size: 1.25rem;
     font-style: normal;
@@ -315,19 +315,19 @@ ul,ol,li {
 }
 
 .action-icon,
-.attr-icon {
+.attr-action-icon {
     color:#888;
 }
 
 .action-icon:focus,
 .action-icon:hover,
-.attr-icon:focus,
-.attr-icon:hover {
+.attr-action-icon:focus,
+.attr-action-icon:hover {
     color: #333;
     text-decoration: none;
 }
 
-.attr-icon {
+.attr-action-icon {
     font-size: 0.875rem;
 }
 

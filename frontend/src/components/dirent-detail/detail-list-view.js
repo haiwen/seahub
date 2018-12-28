@@ -91,7 +91,7 @@ class DetailListView extends React.Component {
                       );
                     })}
                   </ul>
-                  <i className='fa fa-pencil attr-icon' onClick={this.onEditFileTagToggle}></i>
+                  <i className='fa fa-pencil attr-action-icon' onClick={this.onEditFileTagToggle}></i>
                 </td>
               </tr>
             </tbody>
