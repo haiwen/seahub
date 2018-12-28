@@ -426,7 +426,7 @@ class DirentListItem extends React.Component {
               <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
             }
           </td>
-          <td>
+          <td className="tag-list-title">
             {(dirent.type !== 'dir' && dirent.file_tags) && (
               <Fragment>
                 <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">

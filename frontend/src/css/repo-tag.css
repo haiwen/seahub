@@ -31,6 +31,7 @@
   align-items: center;
   color: #ffffff;
   overflow: hidden;
+  padding: 10px;
 }
 
 .show-tag-selected {
@@ -94,9 +95,9 @@
 }
 
 .tags-summary-bar {
-  margin: 4px 16px;
-  height: 40px;
-  border: 1px solid #868e96;
+  margin: 16px 16px 4px;
+  padding: 0 10px;
+  border: 1px solid #e6e6dd;
   border-radius: 5px;
 }
 .used-tag-list {
@@ -104,7 +105,7 @@
   line-height: 40px;
 }
 .used-tag-item {
-  display: inline;
+  display: inline-block;
   margin: auto 15px;
 }
 .used-tag {
@@ -115,6 +116,10 @@
 }
 .used-tag-name {
   margin: 0 0.25rem;
+}
+.used-tag-files {
+  color: #666;
+  font-size: 14px;
 }
 .used-tag-files:hover {
   cursor: pointer;

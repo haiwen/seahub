@@ -44,6 +44,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .dirent-info .img {
@@ -103,11 +105,16 @@
 .file-tag-list li {
   display: flex;
   align-items: center;
+  max-width: 180px;
 }
 
 .file-tag-list .tag-name {
   display: inline-block;
-  margin-left: 0.5rem;
+  margin-left: 5px;
+  width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .file-related-files th {
