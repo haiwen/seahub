@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import Select from 'react-select';
@@ -246,56 +246,71 @@ class ShareToGroup extends React.Component {
 
   render() {
     return (
-      <table>
-        <thead>
-          <tr>
-            <th style={{'width': '40%'}}>{gettext('Group')}</th>
-            <th style={{'width': '40%'}}>{gettext('Permission')}</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td>
-              <Select
-                isMulti
-                onChange={this.handleSelectChange}
-                options={this.options}
-                placeholder={gettext('Select a group')}
-                components={makeAnimated()}
-                inputId={'react-select-2-input'}
-                value={this.state.selectedOption}
-              />
-            </td>
-            <td>
-              <PermissionEditor 
-                isTextMode={false}
-                isEditIconShow={false}
-                currentPermission={this.state.permission}
-                permissions={this.permissions}
-                onPermissionChangedHandler={this.setPermission}
-              />
-            </td>
-            <td>
-              <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
-            </td>
-          </tr>
-          {this.state.errorMsg.length > 0 &&                  
-            this.state.errorMsg.map((item, index) => {
-              let errMessage = item.group_name + ': ' + item.error_msg;
-              return (
-                <tr key={index}>
-                  <td colSpan={3}><p className="error">{errMessage}</p></td>
-                </tr>
-              );
-            })                                                
-          }
-        </thead>
-        <GroupList 
-          items={this.state.sharedItems}
-          permissions={this.permissions}
-          deleteShareItem={this.deleteShareItem} 
-          onChangeUserPermission={this.onChangeUserPermission}
-        />
-      </table>
+      <Fragment>
+        <table>
+          <thead>
+            <tr>
+              <th width="40%">{gettext('Group')}</th>
+              <th width="40%">{gettext('Permission')}</th>
+              <th width="20%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <Select
+                  isMulti
+                  onChange={this.handleSelectChange}
+                  options={this.options}
+                  placeholder={gettext('Select a group')}
+                  components={makeAnimated()}
+                  inputId={'react-select-2-input'}
+                  value={this.state.selectedOption}
+                />
+              </td>
+              <td>
+                <PermissionEditor 
+                  isTextMode={false}
+                  isEditIconShow={false}
+                  currentPermission={this.state.permission}
+                  permissions={this.permissions}
+                  onPermissionChangedHandler={this.setPermission}
+                />
+              </td>
+              <td>
+                <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
+              </td>
+            </tr>
+            {this.state.errorMsg.length > 0 &&                  
+              this.state.errorMsg.map((item, index) => {
+                let errMessage = item.group_name + ': ' + item.error_msg;
+                return (
+                  <tr key={index}>
+                    <td colSpan={3}><p className="error">{errMessage}</p></td>
+                  </tr>
+                );
+              })                                                
+            }
+          </tbody>
+        </table>
+        <div className="share-list-container">
+          <table className="table-thead-hidden">
+            <thead>
+              <tr>
+                <th width="40%">{gettext('Group')}</th>
+                <th width="40%">{gettext('Permission')}</th>
+                <th width="20%"></th>
+              </tr>
+            </thead>
+            <GroupList 
+              items={this.state.sharedItems}
+              permissions={this.permissions}
+              deleteShareItem={this.deleteShareItem} 
+              onChangeUserPermission={this.onChangeUserPermission}
+            />
+          </table>
+        </div>
+      </Fragment>
     );
   }
 }

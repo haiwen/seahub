@@ -22,6 +22,11 @@
     flex: 1;
 }
 
+.share-list-container {
+    max-height: 15rem;
+    overflow: auto;
+}
+
 .share-dialog-content label {
     padding: 0.5rem 0 0.25rem;
 }

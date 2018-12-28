@@ -263,64 +263,79 @@ class ShareToUser extends React.Component {
   render() {
     let { sharedItems } = this.state;
     return (
-      <table>
-        <thead> 
-          <tr>
-            <th style={{'width': '40%'}}>{gettext('User')}</th>
-            <th style={{'width': '40%'}}>{gettext('Permission')}</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td>
-              <AsyncSelect
-                inputId={'react-select-1-input'}
-                className='reviewer-select' 
-                placeholder={gettext('Select users...')}
-                loadOptions={this.loadOptions}
-                onChange={this.handleSelectChange}
-                value={this.state.selectedOption}
-                isMulti 
-                isFocused
-                isClearable 
-                classNamePrefix
-              />
-            </td>
-            <td>
-              <PermissionEditor 
-                isTextMode={false}
-                isEditIconShow={false}
-                currentPermission={this.state.permission}
-                permissions={this.permissions}
-                onPermissionChangedHandler={this.setPermission}
-              />
-            </td>
-            <td>
-              <Button onClick={this.shareToUser}>{gettext('Submit')}</Button>
-            </td>
-          </tr>
-          {this.state.errorMsg.length > 0 &&
-            this.state.errorMsg.map((item, index) => {
-              let errMessage = '';
-              if (item.email) {
-                errMessage = item.email + ': ' + item.error_msg;
-              } else {
-                errMessage = item;
-              }
-              return (
-                <tr key={index}>
-                  <td colSpan={3}><p className="error">{errMessage}</p></td>
-                </tr>
-              );
-            })
-          }
-        </thead>
-        <UserList 
-          items={sharedItems}
-          permissions={this.permissions}
-          deleteShareItem={this.deleteShareItem} 
-          onChangeUserPermission={this.onChangeUserPermission}
-        />
-      </table>
+      <Fragment>
+        <table>
+          <thead>
+            <tr>
+              <th width="40%">{gettext('User')}</th>
+              <th width="40%">{gettext('Permission')}</th>
+              <th width="20%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <AsyncSelect
+                  inputId={'react-select-1-input'}
+                  className='reviewer-select' 
+                  placeholder={gettext('Select users...')}
+                  loadOptions={this.loadOptions}
+                  onChange={this.handleSelectChange}
+                  value={this.state.selectedOption}
+                  isMulti 
+                  isFocused
+                  isClearable 
+                  classNamePrefix
+                />
+              </td>
+              <td>
+                <PermissionEditor 
+                  isTextMode={false}
+                  isEditIconShow={false}
+                  currentPermission={this.state.permission}
+                  permissions={this.permissions}
+                  onPermissionChangedHandler={this.setPermission}
+                />
+              </td>
+              <td>
+                <Button onClick={this.shareToUser}>{gettext('Submit')}</Button>
+              </td>
+            </tr>
+            {this.state.errorMsg.length > 0 &&
+              this.state.errorMsg.map((item, index) => {
+                let errMessage = '';
+                if (item.email) {
+                  errMessage = item.email + ': ' + item.error_msg;
+                } else {
+                  errMessage = item;
+                }
+                return (
+                  <tr key={index}>
+                    <td colSpan={3}><p className="error">{errMessage}</p></td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+        <div className="share-list-container">
+          <table className="table-thead-hidden">
+            <thead>
+              <tr>
+                <th width="40%">{gettext('User')}</th>
+                <th width="40%">{gettext('Permission')}</th>
+                <th width="20%"></th>
+              </tr>
+            </thead>
+            <UserList 
+              items={sharedItems}
+              permissions={this.permissions}
+              deleteShareItem={this.deleteShareItem} 
+              onChangeUserPermission={this.onChangeUserPermission}
+            />
+          </table>
+        </div>
+      </Fragment>
     );
   }
 }
