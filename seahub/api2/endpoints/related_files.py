@@ -37,7 +37,7 @@ class RelatedFilesView(APIView):
         related_file["repo_id"] = r_repo_id
         r_repo = seafile_api.get_repo(r_repo_id)
         if not r_repo:
-            related_file["repo_name"] = None
+            related_file["repo_name"] = ""
         related_file["repo_name"] = r_repo.name
         related_file["path"] = r_file_path
         file_obj = seafile_api.get_dirent_by_path(r_repo_id, r_file_path)
