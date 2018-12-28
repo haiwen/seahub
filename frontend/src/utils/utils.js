@@ -436,12 +436,12 @@ export const Utils = {
     return (a >= b) - (a <= b);
   },
 
-  sortRepos: function(repos, sortBy) {
+  sortRepos: function(repos, sortBy, sortOrder) {
     const _this = this;
     let comparator;
 
-    switch (sortBy) {
-      case 'name_up':
+    switch (`${sortBy}-${sortOrder}`) {
+      case 'name-asc':
         comparator = function(a, b) {
           if (!a.repo_name) {
             return 1;
@@ -453,7 +453,7 @@ export const Utils = {
           return result;
         };
         break;
-      case 'name_down':
+      case 'name-desc':
         comparator = function(a, b) {
           if (!a.repo_name) {
             return -1;
@@ -465,12 +465,12 @@ export const Utils = {
           return -result;
         };
         break;
-      case 'time_up':
+      case 'time-asc':
         comparator = function(a, b) {
           return a.last_modified < b.last_modified ? -1 : 1;
         };
         break;
-      case 'time_down':
+      case 'time-desc':
         comparator = function(a, b) {
           return a.last_modified < b.last_modified ? 1 : -1;
         };

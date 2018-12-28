@@ -12,6 +12,7 @@ const propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
   items: PropTypes.array.isRequired,
   onRenameRepo: PropTypes.func.isRequired,
@@ -67,18 +68,20 @@ class Content extends Component {
 
   sortByName = (e) => {
     e.preventDefault();
-    let sortBy = `name_${this.props.sortBy.indexOf('up') == -1 ? 'up' : 'down'}`;
-    this.props.sortItems(sortBy);
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
   }
 
   sortByTime = (e) => {
     e.preventDefault();
-    let sortBy = `time_${this.props.sortBy.indexOf('up') == -1 ? 'up' : 'down'}`;
-    this.props.sortItems(sortBy);
+    const sortBy = 'time';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
   }
 
   render() {
-    const { loading, errorMsg, items } = this.props;
+    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -93,9 +96,9 @@ class Content extends Component {
       );
 
       // sort
-      const sortByName = this.props.sortBy.indexOf('name') != -1;
-      const sortByTime = this.props.sortBy.indexOf('time') != -1;
-      const sortIcon = this.props.sortBy.indexOf('up') != -1 ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+      const sortByName = sortBy == 'name';
+      const sortByTime = sortBy == 'time';
+      const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
       // TODO: test 'storage backend'
       const showStorageBackend = storages.length > 0; // only for desktop
