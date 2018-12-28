@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { gettext } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ListRelatedFileDialog from '../dialog/list-related-file-dialog';
@@ -123,9 +123,10 @@ class DetailListView extends React.Component {
                 <td>
                   <ul>
                     {relatedFiles.map((relatedFile, index) => {
+                      let href = siteRoot + 'lib/' + relatedFile.repo_id + '/file' + Utils.encodePath(relatedFile.path);
                       return (
                         <li key={index}>
-                          <a href={relatedFile.link} target='_blank'>{relatedFile.name}</a>
+                          <a href={href} target='_blank'>{relatedFile.name}</a>
                         </li>
                       );
                     })}

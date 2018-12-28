@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import Dirent from '../../models/dirent';
-import { gettext } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
@@ -48,7 +49,7 @@ class ListRelatedFileDialog extends React.Component {
       seafileAPI.getFileInfo(item.repo_id, item.path).then(res => {
         let dirent = new Dirent(res.data);
         dirent['related_id'] = item.related_id;
-        dirent['link'] = item.link;
+        dirent['link'] = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(item.path);
         direntList.push(dirent);
         this.setState({
           direntList: direntList
