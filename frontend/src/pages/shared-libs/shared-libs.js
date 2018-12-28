@@ -196,7 +196,7 @@ class Item extends Component {
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility; 
-    let leaveShareIconClassName = 'op-icon sf2-icon-delete' + iconVisibility;
+    let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
 
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>

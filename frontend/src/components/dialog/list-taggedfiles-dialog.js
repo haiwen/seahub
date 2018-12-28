@@ -51,7 +51,7 @@ class ListTaggedFilesDialog extends React.Component {
         </ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
-            <thead className="table-thread-hidden">
+            <thead className="table-thead-hidden">
               <tr>
                 <th width='50%' className="ellipsis">{gettext('Name')}</th>
                 <th width='25%'>{gettext('Size')}</th>
