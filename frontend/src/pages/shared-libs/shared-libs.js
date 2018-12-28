@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import Repo from '../../models/repo';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import Loading from '../../components/loading';
 
@@ -11,18 +12,20 @@ class Content extends Component {
 
   sortByName = (e) => {
     e.preventDefault();
-    let sortBy = `name_${this.props.sortBy.indexOf('up') == -1 ? 'up' : 'down'}`;
-    this.props.sortItems(sortBy);
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
   }
 
   sortByTime = (e) => {
     e.preventDefault();
-    let sortBy = `time_${this.props.sortBy.indexOf('up') == -1 ? 'up' : 'down'}`;
-    this.props.sortItems(sortBy);
+    const sortBy = 'time';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
   }
 
   render() {
-    const {loading, errorMsg, items, sortBy} = this.props;
+    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -37,9 +40,9 @@ class Content extends Component {
       );
 
       // sort
-      const sortByName = sortBy.indexOf('name') != -1;
-      const sortByTime = sortBy.indexOf('time') != -1;
-      const sortIcon = sortBy.indexOf('up') != -1 ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+      const sortByName = sortBy == 'name';
+      const sortByTime = sortBy == 'time';
+      const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
       const desktopThead = (
         <thead>
@@ -85,6 +88,7 @@ Content.propTypes = {
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
   sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired
 };
 
@@ -204,7 +208,7 @@ class Item extends Component {
             : ''}
           <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
         </td>
-        <td>{Utils.bytesToSize(data.size)}</td>
+        <td>{data.size}</td>
         <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
         <td title={data.owner_contact_email}>{data.owner_name}</td>
       </tr>
@@ -216,7 +220,7 @@ class Item extends Component {
         <td>
           <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link><br />
           <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
-          <span className="item-meta-info">{Utils.bytesToSize(data.size)}</span>
+          <span className="item-meta-info">{data.size}</span>
           <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
         </td>
         <td>
@@ -243,16 +247,20 @@ class SharedLibraries extends Component {
       loading: true,
       errorMsg: '',
       items: [],
-      sortBy: 'name_up' // TODO
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc' // 'asc' or 'desc'
     };
   }
 
   componentDidMount() {
     seafileAPI.listRepos({type:'shared'}).then((res) => {
       // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
+      let repoList = res.data.repos.map((item) => {
+        return new Repo(item);
+      });
       this.setState({
         loading: false,
-        items: Utils.sortRepos(res.data.repos, this.state.sortBy)
+        items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       if (error.response) {
@@ -278,10 +286,11 @@ class SharedLibraries extends Component {
     });
   }
 
-  sortItems = (sortBy) => {
+  sortItems = (sortBy, sortOrder) => {
     this.setState({
       sortBy: sortBy,
-      items: Utils.sortRepos(this.state.items, sortBy)
+      sortOrder: sortOrder,
+      items: Utils.sortRepos(this.state.items, sortBy, sortOrder)
     });
   }
 
@@ -298,6 +307,7 @@ class SharedLibraries extends Component {
               errorMsg={this.state.errorMsg}
               items={this.state.items}
               sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
               sortItems={this.sortItems}
             />
           </div>
