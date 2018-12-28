@@ -18,7 +18,6 @@ from seahub.utils import normalize_file_path
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.constants import PERMISSION_READ_WRITE
-from seahub.api2.endpoints.smart_link import gen_smart_link
 
 from seaserv import seafile_api
 
@@ -32,15 +31,16 @@ class RelatedFilesView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def get_related_file(self, file_uuid):
+    def get_related_file(self, r_repo_id, r_file_path, r_uuid):
         related_file = dict()
-        related_file["name"] = file_uuid.filename
-        related_file["link"] = gen_smart_link(file_uuid.uuid)
-        related_file["repo_id"] = file_uuid.repo_id
-        related_file["repo_name"] = seafile_api.get_repo(file_uuid.repo_id).name
-        file_path = posixpath.join(file_uuid.parent_path, file_uuid.filename)
-        related_file["path"] = file_path
-        file_obj = seafile_api.get_dirent_by_path(file_uuid.repo_id, file_path)
+        related_file["name"] = r_uuid.filename
+        related_file["repo_id"] = r_repo_id
+        r_repo = seafile_api.get_repo(r_repo_id)
+        if not r_repo:
+            related_file["repo_name"] = None
+        related_file["repo_name"] = r_repo.name
+        related_file["path"] = r_file_path
+        file_obj = seafile_api.get_dirent_by_path(r_repo_id, r_file_path)
         related_file["size"] = file_obj.size
         related_file["last_modified"] = timestamp_to_isoformat_timestr(file_obj.mtime)
         return related_file
@@ -89,11 +89,21 @@ class RelatedFilesView(APIView):
         related_files = list()
         for file_uuid in file_uuid_list:
             if file_uuid.o_uuid == uuid:
-                related_file = self.get_related_file(file_uuid.r_uuid)
+                r_path = posixpath.join(file_uuid.r_uuid.parent_path, file_uuid.r_uuid.filename)
+                r_repo_id = file_uuid.r_uuid.repo_id
+                r_file_id = seafile_api.get_file_id_by_path(r_repo_id, r_path)
+                if not r_file_id:
+                    continue
+                related_file = self.get_related_file(r_repo_id, r_path, file_uuid.r_uuid)
                 related_file["related_id"] = file_uuid.pk
                 related_files.append(related_file)
             else:
-                related_file = self.get_related_file(file_uuid.o_uuid)
+                r_path = posixpath.join(file_uuid.o_uuid.parent_path, file_uuid.o_uuid.filename)
+                r_repo_id = file_uuid.o_uuid.repo_id
+                r_file_id = seafile_api.get_file_id_by_path(r_repo_id, r_path)
+                if not r_file_id:
+                    continue
+                related_file = self.get_related_file(r_repo_id, r_path, file_uuid.o_uuid)
                 related_file["related_id"] = file_uuid.pk
                 related_files.append(related_file)
 
@@ -165,7 +175,7 @@ class RelatedFilesView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        related_file = self.get_related_file(related_file_uuid.r_uuid)
+        related_file = self.get_related_file(r_repo_id, r_path, related_file_uuid.r_uuid)
         related_file["related_id"] = related_file_uuid.pk
 
         return Response({"related_file": related_file}, status.HTTP_201_CREATED)
