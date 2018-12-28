@@ -78,9 +78,11 @@ class DetailListView extends React.Component {
     let direntPath = this.getDirentPath();
     if (direntType === 'dir') {
       return (
-        <table>
+        <table className="table-thead-hidden">
+          <thead>
+            <tr><th width="35%"></th><th width="65%"></th></tr>
+          </thead>
           <tbody>
-            <tr><th width="35%"></th><td width="65%"></td></tr>
             <tr><th>{gettext('Folder')}</th><td>{direntDetail.dir_count}</td></tr>
             <tr><th>{gettext('File')}</th><td>{direntDetail.file_count}</td></tr>
             <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
@@ -92,9 +94,11 @@ class DetailListView extends React.Component {
     } else {
       return (
         <Fragment>
-          <table>
+          <table className="table-thead-hidden">
+            <thead>
+              <tr><th width="35%"></th><th width="65%"></th></tr>
+            </thead>
             <tbody>
-              <tr><th width="35%"></th><td width="65%"></td></tr>
               <tr><th>{gettext('Size')}</th><td>{direntDetail.size}</td></tr>
               <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
               <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
@@ -126,7 +130,7 @@ class DetailListView extends React.Component {
                       );
                     })}
                   </ul>
-                  <i className='fa fa-pencil tag-edit-icon' onClick={this.onListRelatedFileToggle}></i>
+                  <i className='fa fa-pencil attr-action-icon' onClick={this.onListRelatedFileToggle}></i>
                 </td>
               </tr>
             </tbody>

@@ -44,11 +44,13 @@ class LibDetail extends React.Component {
             <img src={siteRoot + 'media/img/lib/256/lib.png'} alt="icon"></img>
           </div>
           <div className="dirent-table-container">
-            <table>
+            <table className="table-thead-hidden">
+              <thead>
+                <tr><th width="35%"></th><th width="65%"></th></tr>
+              </thead>
               <tbody>
-                <tr><th width="35%"></th><td width="65%"></td></tr>
                 <tr><th>{gettext('Files')}</th><td>{this.state.fileCount}</td></tr>
-                <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(repo.size)}</td></tr>
+                <tr><th>{gettext('Size')}</th><td>{repo.size}</td></tr>
                 <tr><th>{gettext('Last Update')}</th><td>{ moment(repo.last_modified).fromNow()}</td></tr>
               </tbody>
             </table>

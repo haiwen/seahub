@@ -853,7 +853,7 @@ table td img {
     border: 0;
 }
 
-.table-thead-hidden th {   /* hide table th */
+.table-thead-hidden thead th {   /* hide table th */
     padding: 0;
     border: 0;
     font-size: 0;
