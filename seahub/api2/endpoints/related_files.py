@@ -37,6 +37,7 @@ class RelatedFilesView(APIView):
         related_file["name"] = file_uuid.filename
         related_file["link"] = gen_smart_link(file_uuid.uuid)
         related_file["repo_id"] = file_uuid.repo_id
+        related_file["repo_name"] = seafile_api.get_repo(file_uuid.repo_id).name
         file_path = posixpath.join(file_uuid.parent_path, file_uuid.filename)
         related_file["path"] = file_path
         file_obj = seafile_api.get_dirent_by_path(file_uuid.repo_id, file_path)
