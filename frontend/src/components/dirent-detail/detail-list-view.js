@@ -71,6 +71,7 @@ class DetailListView extends React.Component {
       isAddRelatedFileShow: !this.state.isAddRelatedFileShow
     });
   }
+  
   render() {
     let { direntType, direntDetail, fileTagList, relatedFiles } = this.props;
     let position = this.getDirentPostion();
@@ -125,7 +126,7 @@ class DetailListView extends React.Component {
                       );
                     })}
                   </ul>
-                  <i className='fa fa-pencil action-icon' onClick={this.onListRelatedFileToggle}></i>
+                  <i className='fa fa-pencil tag-edit-icon' onClick={this.onListRelatedFileToggle}></i>
                 </td>
               </tr>
             </tbody>

@@ -128,14 +128,6 @@ ul,ol,li {
     visibility: hidden;
 }
 
-.text-left {
-    text-align: left;
-}
-
-.text-right {
-    text-align: right;
-}
-
 .a-simulate {
     color: #eb8205 !important;
     text-decoration: none;
@@ -332,16 +324,6 @@ ul,ol,li {
 .action-icon:hover {
     color: #333;
     text-decoration: none;
-}
-
-/** Action icon **/
-.action-icon {
-    color: #888;
-}
-
-.action-icon:hover,
-.action-icon:focus {
-    color: #333;
 }
 
 /** Account info **/

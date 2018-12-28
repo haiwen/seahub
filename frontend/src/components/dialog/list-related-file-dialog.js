@@ -96,7 +96,7 @@ class ListRelatedFileDialog extends React.Component {
                 </tbody>
               </Table>
               :
-              <div className="no-related-file">{gettext('No related file yet')}</div>
+              <div className="no-related-file">{gettext('No related file yet.')}</div>
           }
         </ModalBody>
         <ModalFooter>
@@ -120,24 +120,24 @@ class RelatedFile extends React.Component {
   constructor(props) {
     super(props);
     this.state = ({
-      isOperationShow: false,
+      active: false,
     });
   }
 
   onMouseEnter = () => {
     this.setState({
-      isOperationShow: true
+      active: true
     });
   }
 
   onMouseLeave = () => {
     this.setState({
-      isOperationShow: false
+      active: false
     });
   }
 
   render() {
-    let className = this.state.isOperationShow ? 'action-icon fa fa-times' : 'action-icon vh fa fa-times';
+    let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
     const relatedFile = this.props.relatedFile;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

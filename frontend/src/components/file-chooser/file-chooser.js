@@ -83,11 +83,11 @@ class FileChooser extends React.Component {
   onRepoItemClick = (repo) => {
     if (this.props.onRepoItemClick) {
       this.props.onRepoItemClick(repo);
-      this.setState({
-        selectedRepo: repo,
-        selectedPath: '',
-      });
     }
+    this.setState({
+      selectedRepo: repo,
+      selectedPath: '',
+    });
   }
 
   render() {

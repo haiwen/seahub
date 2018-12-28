@@ -74,7 +74,7 @@ class AddRelatedFileDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} className="sf-add-related-file">
         <ModalHeader toggle={this.toggle}>{gettext('Select File')}</ModalHeader>
         <ModalBody>
           <FileChooser
@@ -82,9 +82,7 @@ class AddRelatedFileDialog extends React.Component {
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
           />
-          {this.state.errMessage &&
-          <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>
-          }
+          {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

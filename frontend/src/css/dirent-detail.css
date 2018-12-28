@@ -64,6 +64,10 @@
   display: flex;
 }
 
+.dirent-table-container tr {
+  border: none;
+}
+
 .dirent-table-container table {
   flex: 1;
 }
@@ -114,6 +118,10 @@
   vertical-align: top;
 }
 
+.file-related-files td i {
+  padding: 0;
+}
+
 .file-related-files td ul {
   list-style: none;
   max-height: 100px;
@@ -140,4 +148,8 @@
 
 .no-related-file {
   text-align: center;
+}
+
+.sf-add-related-file .alert {
+  margin: 0.5rem;
 }
