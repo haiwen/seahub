@@ -146,6 +146,7 @@ ul,ol,li {
 }
 
 .sf-dropdown-toggle {
+    margin-left: 0.5rem;
     vertical-align: middle;
     font-style: normal;
     font-size: 0.85rem;
@@ -293,8 +294,9 @@ ul,ol,li {
 
 /** op-icon **/
 .op-icon,
-.action-icon {
-    margin-right: 0.5rem;
+.action-icon,
+.attr-icon {
+    margin-left: 0.5rem;
     font-size: 1.25rem;
     font-style: normal;
     line-height: 1;
@@ -312,14 +314,21 @@ ul,ol,li {
     border-bottom: 0.125rem solid #f89a68;
 }
 
-.action-icon {
+.action-icon,
+.attr-icon {
     color:#888;
 }
 
 .action-icon:focus,
-.action-icon:hover {
+.action-icon:hover,
+.attr-icon:focus,
+.attr-icon:hover {
     color: #333;
     text-decoration: none;
+}
+
+.attr-icon {
+    font-size: 0.875rem;
 }
 
 /** Account info **/
