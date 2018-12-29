@@ -343,10 +343,6 @@ ul,ol,li {
     text-decoration: none;
 }
 
-.attr-action-icon.attr-btn-icon {
-    margin-left: 0;
-}
-
 /** Account info **/
 #account {
     position:relative;
