@@ -301,7 +301,7 @@ ul,ol,li {
 .op-icon,
 .action-icon,
 .attr-action-icon {
-    margin-right: 0.5rem;
+    margin-left: 0.5rem;
     font-size: 1.25rem;
     font-style: normal;
     line-height: 1;
@@ -334,7 +334,6 @@ ul,ol,li {
 .attr-action-icon {
     color: #888;
     font-size: 0.875rem;
-    margin-left: 0.5rem;
     margin-right: 0.25rem;
 }
 
