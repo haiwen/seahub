@@ -46,6 +46,7 @@
   display: inline-block;
   height: 1.5rem;
   cursor: pointer;
+  padding: 0 5px;
 }
 
 .file-chooser-item .item-info:hover {

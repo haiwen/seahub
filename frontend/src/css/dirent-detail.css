@@ -149,3 +149,7 @@
 .sf-add-related-file .alert {
   margin: 0.5rem;
 }
+
+.sf-add-related-file .related-file-subtitle {
+  margin-bottom: 10px;
+}

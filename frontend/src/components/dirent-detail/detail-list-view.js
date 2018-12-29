@@ -143,6 +143,7 @@ class DetailListView extends React.Component {
               repoID={this.props.repoID}
               toggleCancel={this.onAddRelatedFileToggle}
               onRelatedFileChange={this.props.onRelatedFileChange}
+              dirent={this.props.dirent}
             />
           }
           {
