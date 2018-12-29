@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
@@ -7,6 +7,8 @@ import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import Loading from '../../components/loading';
+import ModalPotal from '../../components/modal-portal';
+import ShareDialog from '../../components/dialog/share-dialog';
 
 class Content extends Component {
 
@@ -116,7 +118,8 @@ class Item extends Component {
     super(props);
     this.state = {
       showOpIcon: false,
-      unshared: false
+      unshared: false,
+      isShowSharedDialog: false,
     };
 
     this.handleMouseOver = this.handleMouseOver.bind(this);
@@ -140,7 +143,7 @@ class Item extends Component {
 
   share(e) {
     e.preventDefault();
-    // TODO
+    this.setState({isShowSharedDialog: true});
   }
 
   leaveShare(e) {
@@ -167,6 +170,10 @@ class Item extends Component {
     }).catch((error) => {
         // TODO: show feedback msg
     });
+  }
+
+  toggleShareDialog = () => {
+    this.setState({isShowSharedDialog: false});
   }
 
   render() {
@@ -199,37 +206,63 @@ class Item extends Component {
     let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
 
     const desktopItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link></td>
-        <td>
-          { isPro && data.is_admin ?
-            <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>
-            : ''}
-          <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
-        </td>
-        <td>{data.size}</td>
-        <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
-        <td title={data.owner_contact_email}>{data.owner_name}</td>
-      </tr>
+      <Fragment>
+        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+          <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link></td>
+          <td>
+            {(isPro && data.is_admin) &&
+              <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>
+            }
+            <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
+          </td>
+          <td>{data.size}</td>
+          <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
+          <td title={data.owner_contact_email}>{data.owner_name}</td>
+        </tr>
+        {this.state.isShowSharedDialog && (
+          <ModalPotal>
+            <ShareDialog 
+              itemType={'library'}
+              itemName={data.repo_name}
+              itemPath={'/'}
+              repoID={data.repo_id}
+              toggleDialog={this.toggleShareDialog}
+            />
+          </ModalPotal>
+        )}
+      </Fragment>
     );
 
     const mobileItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td>
-          <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link><br />
-          <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
-          <span className="item-meta-info">{data.size}</span>
-          <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
-        </td>
-        <td>
-          { isPro && data.is_admin ?
-            <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>
-            : ''}
-          <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
-        </td>
-      </tr>
+      <Fragment>
+        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+          <td>
+            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link><br />
+            <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
+            <span className="item-meta-info">{data.size}</span>
+            <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
+          </td>
+          <td>
+            {(isPro && data.is_admin) &&
+              <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>
+            }
+            <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
+          </td>
+        </tr>
+          {this.state.isShowSharedDialog && (
+            <ModalPotal>
+              <ShareDialog 
+                itemType={'library'}
+                itemName={data.repo_name}
+                itemPath={'/'}
+                repoID={data.repo_id}
+                toggleDialog={this.toggleShareDialog}
+              />
+            </ModalPotal>
+          )}
+      </Fragment>
     );
 
     return window.innerWidth >= 768 ? desktopItem : mobileItem;
