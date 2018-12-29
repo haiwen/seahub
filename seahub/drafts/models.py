@@ -290,7 +290,7 @@ class DraftReviewManager(models.Manager):
         reviews = self.filter(creator=creator, status=status)
 
         if with_reviewers:
-            reviewers = ReviewReviewer.objects.filter(review_id__in=reviews)
+            reviewers = list(ReviewReviewer.objects.filter(review_id__in=reviews))
 
         data = []
         for review in reviews:
@@ -352,7 +352,7 @@ class DraftReviewManager(models.Manager):
         from seahub.api2.utils import user_to_dict
         reviews = self.filter(reviewreviewer__reviewer=reviewer, status=status)
 
-        reviewers = ReviewReviewer.objects.filter(review_id__in=reviews)
+        reviewers = list(ReviewReviewer.objects.filter(review_id__in=reviews))
 
         data = []
         for review in reviews:
