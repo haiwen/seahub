@@ -133,7 +133,7 @@ define([
                     if (this.currentView == this.dirView) {
                         if ($('#upload-file-dialog').is(':visible') &&
                             $('#upload-file-dialog .status').text() == window.fileuploading) {
-                            if (!window.confirm('A file is being uploaded. Are you sure you want to leave this page?')) {
+                            if (!window.confirm(gettext('A file is being uploaded. Are you sure you want to leave this page?'))) {
                                 return false;
                             }
                         }
