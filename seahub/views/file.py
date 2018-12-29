@@ -626,10 +626,13 @@ def view_lib_file(request, repo_id, path):
             can_edit_file = False
 
         return_dict['can_edit_file'] = can_edit_file
+
+        send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
     elif filetype in (VIDEO, AUDIO, PDF, SVG):
         return_dict['raw_path'] = raw_path
+        send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
     elif filetype == IMAGE:
@@ -662,6 +665,8 @@ def view_lib_file(request, repo_id, path):
         return_dict['img_prev'] = img_prev
         return_dict['img_next'] = img_next
         return_dict['raw_path'] = raw_path
+
+        send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
     elif filetype in (DOCUMENT, SPREADSHEET):
@@ -743,6 +748,7 @@ def view_lib_file(request, repo_id, path):
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
 
+        send_file_access_msg(request, repo, path, 'web')
         # render file preview page
         return render(request, template, return_dict)
     else:
