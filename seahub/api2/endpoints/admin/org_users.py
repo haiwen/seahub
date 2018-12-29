@@ -40,10 +40,11 @@ def get_org_user_info(org_id, email):
     user_info['contact_email'] = email2contact_email(email)
 
     org_user_quota = seafile_api.get_org_user_quota(org_id, email)
-    user_info['quota_total'] = org_user_quota / get_file_size_unit('MB')
+    user_info['quota_total'] = org_user_quota
 
     org_user_quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
-    user_info['quota_usage'] = org_user_quota_usage / get_file_size_unit('MB')
+    user_info['quota_usage'] = org_user_quota_usage
+
     return user_info
 
 def check_org_user(func):
