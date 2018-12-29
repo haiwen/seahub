@@ -93,10 +93,11 @@
   "review_already_exists": "Review already exists",
   "view_review": "View review",
   "there_is_an_associated_review_with_this_file": "There is an associated review with this file.",
-  "ask_for_review": "Ask for review",
   "start_review": "Start Review",
   "this_file_is_in_draft_stage": "This file is in draft stage.",
   "this_file_is_in_review_stage": "This file is in review stage.",
+  "this_file_has_been_updated": "This file has been updated.",
+  "refresh": "Refresh",
   "userHelp": {
     "title":"Keyboard shortcuts",
     "userHelpData":[
