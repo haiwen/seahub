@@ -105,7 +105,14 @@ class MainPanel extends Component {
     this.props.onSideNavMenuClick();
   }
 
+  onItemClick = (dirent) => {
+    this.setState({isDirentDetailShow: false});
+    this.props.onItemClick(dirent);
+  }
+
+
   onMainNavBarClick = (path) => {
+    this.setState({isDirentDetailShow: false});
     this.props.onMainNavBarClick(path);
   }
 
@@ -247,7 +254,7 @@ class MainPanel extends Component {
                         path={this.props.path}
                         repoID={repoID}
                         direntList={this.props.direntList}
-                        onItemClick={this.props.onItemClick}
+                        onItemClick={this.onItemClick}
                         onItemDelete={this.props.onItemDelete}
                         onItemRename={this.props.onItemRename}
                         onItemMove={this.props.onItemMove}
