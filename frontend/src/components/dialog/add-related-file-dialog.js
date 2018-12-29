@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
@@ -10,6 +11,7 @@ const propTypes = {
   filePath: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   onRelatedFileChange: PropTypes.func.isRequired,
+  dirent: PropTypes.object.isRequired,
 };
 
 class AddRelatedFileDialog extends React.Component {
@@ -73,10 +75,13 @@ class AddRelatedFileDialog extends React.Component {
   }
 
   render() {
+    let subtitle = gettext('Select related file for {placeholder}');
+    subtitle = subtitle.replace('{placeholder}', '<span class="sf-font">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     return (
       <Modal isOpen={true} className="sf-add-related-file">
         <ModalHeader toggle={this.toggle}>{gettext('Select File')}</ModalHeader>
         <ModalBody>
+          <div className="related-file-subtitle" dangerouslySetInnerHTML={{__html: subtitle}}></div>
           <FileChooser
             isShowFile={this.state.isShowFile}
             repoID={this.props.repoID}
