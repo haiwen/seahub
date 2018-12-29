@@ -98,6 +98,7 @@
   "start_review": "开始评审",
   "this_file_has_been_updated": "这个文件已被修改。",
   "refresh": "刷新",
+  "related_files": "相关文件",
   "userHelp": {
     "title": "键盘快捷键",
     "userHelpData":[
