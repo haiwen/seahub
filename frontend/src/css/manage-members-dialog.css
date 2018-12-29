@@ -36,6 +36,9 @@
   justify-content: space-between;
 }
 
-.group-transfer-select {
-  width: 82%;
+.group-transfer .group-transfer-select {
+  width: 385px;
+}
+.group-transfer .btn {
+  width: 75px;
 }

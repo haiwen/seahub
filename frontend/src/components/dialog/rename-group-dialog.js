@@ -9,7 +9,7 @@ class RenameGroupDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newGroupName: '',
+      newGroupName: this.props.currentGroupName,
     };
   }
 
@@ -65,6 +65,7 @@ const RenameGroupDialogPropTypes = {
   loadGroup: PropTypes.func.isRequired,
   groupID: PropTypes.string.isRequired,
   onGroupChanged: PropTypes.func.isRequired,
+  currentGroupName: PropTypes.string.isRequired,
 };
 
 RenameGroupDialog.propTypes = RenameGroupDialogPropTypes;
