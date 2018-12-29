@@ -123,16 +123,9 @@ class Wikis extends Component {
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-                <Dropdown tag="div" className="btn btn-secondary operation-item" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
-                  <DropdownToggle 
-                    tag="i" 
-                    className="fa fa-plus-square action-icon" 
-                    title={gettext('More Operations')}
-                    data-toggle="dropdown" 
-                    aria-expanded={this.state.isShowAddWikiMenu}
-                    onClick={this.clickMenuToggle}
-                  >
-                    {' '}<span className="btn-secondary">{gettext('Add Wiki')}</span>
+                <Dropdown tag="div" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
+                  <DropdownToggle className="btn btn-secondary operation-item">
+                    <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Add Wiki')}
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem onClick={this.onCreateToggle}>{gettext('New Wiki')}</DropdownItem>

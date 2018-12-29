@@ -42,8 +42,7 @@ class RepoViewToolbar extends React.Component {
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
           <div className="operation">
             <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateToggle}>
-              <i className="fas fa-plus-square action-icon"></i>
-              {gettext('New Library')}
+              <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
             </button>
             {this.props.libraryType !== 'group' && (
               <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>

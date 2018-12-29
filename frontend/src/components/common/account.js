@@ -129,7 +129,7 @@ class Account extends Component {
             </div>
             <div id="space-traffic">
               <div className="item">
-                <p>{gettext('Used')}: {this.state.quotaUsage} / {this.state.quotaTotal}</p>
+                <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
                 <div id="quota-bar"><span id="quota-usage" className="usage" style={{width: this.state.usageRate}}></span></div>
               </div>
             </div>

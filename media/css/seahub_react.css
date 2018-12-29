@@ -321,7 +321,6 @@ ul,ol,li {
 
 .action-icon,
 .attr-action-icon {
-    margin-right: 0.25rem;
     color:#888;
 }
 
@@ -822,11 +821,11 @@ table {
 
 table tr {
     height: 2.1875rem;
-    border-bottom: 1px solid #eee;
 }
 
 table th, table td {
     padding: 0.3125rem 0.1875rem;
+    border-bottom: 1px solid #eee;
 }
 
 table th {
