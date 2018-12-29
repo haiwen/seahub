@@ -43,6 +43,8 @@ class EditorUtilities {
     this.repoID = repoID;
     this.filePath = filePath;
     this.serviceUrl = serviceUrl;
+    this.name = userName;
+    this.contact_email = userInfo.contact_email;
   }
   
   saveContent(content) {
@@ -257,6 +259,10 @@ class EditorUtilities {
       window.location.href = serviceUrl + '/drafts/review/' + res.data.id;
     });
   }
+
+  fileMetaData() {
+    return seafileAPI.fileMetaData(repoID, filePath);
+  }
 }
 
 const editorUtilities = new EditorUtilities();
@@ -277,6 +283,7 @@ class MarkdownEditor extends React.Component {
         starred: false,
         permission: '',
         lastModifier: '',
+        id: '',
       },
       collabServer: seafileCollabServer ? seafileCollabServer : null,
       relatedFiles: [],
@@ -286,7 +293,7 @@ class MarkdownEditor extends React.Component {
   componentDidMount() {
 
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, size, starred, permission, last_modifier_name } = res.data;
+      let { mtime, size, starred, permission, last_modifier_name, id } = res.data;
       let lastModifier = last_modifier_name;
 
       this.setState((prevState, props) => ({
@@ -296,7 +303,8 @@ class MarkdownEditor extends React.Component {
           size,
           starred,
           permission,
-          lastModifier
+          lastModifier,
+          id
         }
       }));
 
