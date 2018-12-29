@@ -68,6 +68,16 @@ class DirPanel extends React.Component {
     }
   }
 
+  onPathClick = (path) => {
+    this.setState({isDirentDetailShow: false});
+    this.props.onPathClick(path);
+  }
+
+  onItemClick = (dirent) => {
+    this.setState({isDirentDetailShow: false});
+    this.props.onItemClick(dirent);
+  }
+
   onItemDetails = (dirent) => {
     this.setState({
       currentDirent: dirent,
@@ -157,7 +167,7 @@ class DirPanel extends React.Component {
                   pathPrefix={this.props.pathPrefix}
                   currentPath={this.props.path} 
                   permission={this.props.permission}
-                  onPathClick={this.props.onPathClick}
+                  onPathClick={this.onPathClick}
                   onTabNavClick={this.props.onTabNavClick}
                 />
               </div>
@@ -180,7 +190,7 @@ class DirPanel extends React.Component {
                           onItemDetails={this.onItemDetails}
                           onItemMove={this.props.onItemMove}
                           onItemCopy={this.props.onItemCopy}
-                          onItemClick={this.props.onItemClick}
+                          onItemClick={this.onItemClick}
                           onItemDelete={this.props.onItemDelete}
                           onItemRename={this.props.onItemRename}
                           onItemSelected={this.props.onItemSelected}
