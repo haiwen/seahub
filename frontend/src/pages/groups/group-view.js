@@ -17,6 +17,8 @@ import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
 // import ImportMembersDialog from '../../components/dialog/import-members-dialog';
 import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
+import LibDetail from '../../components/dirent-detail/lib-details';
+
 import '../../css/group-view.css';
 
 const propTypes = {
@@ -37,6 +39,7 @@ class GroupView extends React.Component {
       errMessage: '',
       emptyTip: null,
       currentGroup: null,
+      currentRepo: null,
       isStaff: false,
       isOwner: false,
       repoList: [],
@@ -51,6 +54,7 @@ class GroupView extends React.Component {
       // showImportMembersDialog: false,
       showManageMembersDialog: false,
       groupMembers: [],
+      isShowDetails: false,
     };
   }
 
@@ -298,6 +302,17 @@ class GroupView extends React.Component {
     }
   }
 
+  onItemDetails = (repo) => {
+    this.setState({
+      isShowDetails: true,
+      currentRepo: repo,
+    });
+  }
+
+  closeDetails = () => {
+    this.setState({isShowDetails: false});
+  }
+
   render() {
     let { errMessage, emptyTip, currentGroup } = this.state;
     let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
@@ -314,7 +329,7 @@ class GroupView extends React.Component {
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
-        <div className="main-panel-center">
+        <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
               {currentGroup && (
@@ -405,10 +420,16 @@ class GroupView extends React.Component {
                   currentGroup={this.state.currentGroup} 
                   onItemUnshare={this.onItemUnshare}
                   onItemDelete={this.onItemDelete}
+                  onItemDetails={this.onItemDetails}
                 />
               }
             </div>
           </div>
+          {this.state.isShowDetails && (
+            <div className="cur-view-detail">
+              <LibDetail currentRepo={this.state.currentRepo} closeDetails={this.closeDetails}/>
+            </div>
+          )}
         </div>
         {this.state.isCreateRepoDialogShow && !this.state.isDepartmentGroup && (
           <ModalPortal>

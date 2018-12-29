@@ -10,6 +10,7 @@ const propTypes = {
   repoList: PropTypes.array.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
+  onItemDetails: PropTypes.func,
 };
 
 class SharedRepoListView extends React.Component {
@@ -41,6 +42,7 @@ class SharedRepoListView extends React.Component {
               onFreezedItem={this.onFreezedItem}
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
+              onItemDetails={this.props.onItemDetails}
             />
           );
         })}

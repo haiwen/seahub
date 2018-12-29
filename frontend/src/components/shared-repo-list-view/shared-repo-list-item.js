@@ -15,6 +15,7 @@ const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
+  onItmeDetails: PropTypes.func,
 };
 
 class SharedRepoListItem extends React.Component {
@@ -131,7 +132,7 @@ class SharedRepoListItem extends React.Component {
   }
 
   onItemDetails = () => {
-    // todo
+    this.props.onItemDetails(this.props.repo);
   }
 
   onItemShare = () => {
