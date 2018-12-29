@@ -245,19 +245,22 @@ class GroupView extends React.Component {
 
   toggleDismissGroupDialog = () => {
     this.setState({
-      showDismissGroupDialog: !this.state.showDismissGroupDialog
+      showDismissGroupDialog: !this.state.showDismissGroupDialog,
+      showGroupDropdown: false,
     });
   }
 
   toggleRenameGroupDialog = () => {
     this.setState({
-      showRenameGroupDialog: !this.state.showRenameGroupDialog
+      showRenameGroupDialog: !this.state.showRenameGroupDialog,
+      showGroupDropdown: false,
     });
   }
 
   toggleTransferGroupDialog = () => {
     this.setState({
-      showTransferGroupDialog: !this.state.showTransferGroupDialog
+      showTransferGroupDialog: !this.state.showTransferGroupDialog,
+      showGroupDropdown: false,
     });
   }
 
@@ -269,7 +272,8 @@ class GroupView extends React.Component {
 
   toggleManageMembersDialog = () => {
     this.setState({
-      showManageMembersDialog: !this.state.showManageMembersDialog
+      showManageMembersDialog: !this.state.showManageMembersDialog,
+      showGroupDropdown: false,
     });
   }
 
@@ -430,6 +434,7 @@ class GroupView extends React.Component {
             loadGroup={this.loadGroup}
             groupID={this.props.groupID}
             onGroupChanged={this.props.onGroupChanged}
+            currentGroupName={currentGroup.name}
           />
         }
         {this.state.showDismissGroupDialog &&
