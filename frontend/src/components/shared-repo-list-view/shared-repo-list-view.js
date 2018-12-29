@@ -76,8 +76,8 @@ class SharedRepoListView extends React.Component {
   renderMobileUI = () => {
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
     return (
-      <table>
-        <thead className={isShowTableThread ? '' : 'vh'}>
+      <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
+        <thead>
           <tr>
             <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="68%">
