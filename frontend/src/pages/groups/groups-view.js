@@ -8,6 +8,7 @@ import Repo from '../../models/repo';
 import GroupsToolbar from '../../components/toolbar/groups-toolbar';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import CreateGroupDialog from '../../components/dialog/create-group-dialog';
+import LibDetail from '../../components/dirent-detail/lib-details';
 
 import '../../css/groups.css';
 
@@ -73,6 +74,7 @@ class RepoListViewPanel extends React.Component {
             repoList={this.state.repoList}
             onItemUnshare={this.onItemUnshare}
             onItemDelete={this.onItemDelete}
+            onItemDetails={this.props.onItemDetails}
           />
         }
       </div>
@@ -91,6 +93,8 @@ class GroupsView extends React.Component {
       errorMsg: '',
       groupList: [],
       showAddGroupModal: false,
+      isShowDetails: false,
+      currentRepo: null,
     }
   }
 
@@ -148,6 +152,17 @@ class GroupsView extends React.Component {
     this.listGroups();
   }
 
+  onItemDetails = (repo) => {
+    this.setState({
+      isShowDetails: true,
+      currentRepo: repo,
+    });
+  }
+
+  closeDetails = () => {
+    this.setState({isShowDetails: false});
+  }
+
   render() {
     return (
       <Fragment>
@@ -156,7 +171,7 @@ class GroupsView extends React.Component {
           onSearchedClick={this.props.onSearchedClick}
           toggleAddGroupModal={this.toggleAddGroupModal}
         />
-        <div className="main-panel-center">
+        <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext("My Groups")}</h3>
@@ -167,11 +182,20 @@ class GroupsView extends React.Component {
               {/* {(!this.state.isLoading && this.state.groupList.length === 0 ) && emptyTip} //todo */}
               {!this.state.isLoading && this.state.groupList.map((group, index) => {
                 return (
-                  <RepoListViewPanel key={index} group={group} />
+                  <RepoListViewPanel 
+                    key={index} 
+                    group={group} 
+                    onItemDetails={this.onItemDetails}
+                  />
                 );
               })}
             </div>
           </div>
+          {this.state.isShowDetails && (
+            <div className="cur-view-detail">
+              <LibDetail currentRepo={this.state.currentRepo} closeDetails={this.closeDetails}/>
+            </div>
+          )}
         </div>
         { this.state.showAddGroupModal &&
           <CreateGroupDialog
