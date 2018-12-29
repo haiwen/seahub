@@ -7,6 +7,9 @@ const propTypes = {
   libraryType: PropTypes.string,
   currentGroup: PropTypes.object,
   isShowTableThread: PropTypes.bool,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
+  sortItems: PropTypes.func,
   repoList: PropTypes.array.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
@@ -19,6 +22,28 @@ class SharedRepoListView extends React.Component {
     super(props);
     this.state = {
       isItemFreezed: false,
+    };
+  }
+
+  sortByName = (e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
+  sortByTime = (e) => {
+    e.preventDefault();
+    const sortBy = 'time';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
+  getSortMetaData = () => {
+    return {
+      sortByName: this.props.sortBy == 'name',
+      sortByTime: this.props.sortBy == 'time',
+      sortIcon: this.props.sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>
     };
   }
 
@@ -52,19 +77,18 @@ class SharedRepoListView extends React.Component {
 
   renderPCUI = () => {
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
+
+    const { sortByName, sortByTime, sortIcon } = this.getSortMetaData();
+
     return (
       <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
         <thead>
           <tr>
             <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
-            <th width="40%">{gettext("Name")}
-              <a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a>
-            </th>
+            <th width="40%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="12%"><span className="sr-only">{gettext("Actions")}</span></th>
             <th width={'14%'}>{gettext("Size")}</th>
-            <th width={'14%'}>{gettext("Last Update")}
-              <a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a>
-            </th>
+            <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             <th width="16%">{gettext("Owner")}</th>
           </tr>
         </thead>
@@ -77,15 +101,18 @@ class SharedRepoListView extends React.Component {
 
   renderMobileUI = () => {
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
+
+    const { sortByName, sortByTime, sortIcon } = this.getSortMetaData();
+
     return (
       <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
         <thead>
           <tr>
             <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="68%">
-              {gettext("Sort:")} {/* TODO: sort */}
-              {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
-              {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
+              {gettext("Sort:")}
+              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext("name")} {sortByName && sortIcon}</a>
+              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext("last update")} {sortByTime && sortIcon}</a>
             </th>
             <th width="14%"><span className="sr-only">{gettext("Actions")}</span></th>
           </tr>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
@@ -26,6 +27,8 @@ class PublicSharedView extends React.Component {
       errMessage: '',
       emptyTip: '',
       repoList: [],
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc', // 'asc' or 'desc'
       libraryType: 'public',
       isCreateMenuShow: false,
       isCreateRepoDialogShow: false,
@@ -41,7 +44,7 @@ class PublicSharedView extends React.Component {
       });
       this.setState({
         isLoading: false,
-        repoList: repoList
+        repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       if (error.response) {
@@ -144,6 +147,14 @@ class PublicSharedView extends React.Component {
     this.setState({isSelectRepoDialpgShow: !this.state.isSelectRepoDialpgShow});
   }
 
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
+    });
+  }
+
   render() {
     let errMessage = this.state.errMessage;
     let emptyTip = (
@@ -184,6 +195,9 @@ class PublicSharedView extends React.Component {
                 <SharedRepoListView 
                   libraryType={this.state.libraryType}
                   repoList={this.state.repoList}
+                  sortBy={this.state.sortBy}
+                  sortOrder={this.state.sortOrder}
+                  sortItems={this.sortItems}
                   onItemUnshare={this.onItemUnshare}
                   onItemDelete={this.onItemDelete}
                 />
