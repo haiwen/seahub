@@ -50,8 +50,8 @@ class ListTaggedFilesDialog extends React.Component {
           {gettext('Tagged Files')}
         </ModalHeader>
         <ModalBody className="dialog-list-container">
-          <table>
-            <thead className="table-thead-hidden">
+          <table className="table-thead-hidden">
+            <thead>
               <tr>
                 <th width='50%' className="ellipsis">{gettext('Name')}</th>
                 <th width='25%'>{gettext('Size')}</th>

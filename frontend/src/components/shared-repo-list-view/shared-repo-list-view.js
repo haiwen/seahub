@@ -51,8 +51,8 @@ class SharedRepoListView extends React.Component {
   renderPCUI = () => {
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
     return (
-      <table>
-        <thead className={isShowTableThread ? '' : 'table-thead-hidden'}>
+      <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
+        <thead>
           <tr>
             <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="40%">{gettext("Name")}
