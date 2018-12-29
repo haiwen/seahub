@@ -301,7 +301,7 @@ ul,ol,li {
 .op-icon,
 .action-icon,
 .attr-action-icon {
-    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     font-size: 1.25rem;
     font-style: normal;
     line-height: 1;
@@ -315,26 +315,37 @@ ul,ol,li {
 
 .op-icon:focus,
 .op-icon:hover {
+    text-decoration: none;
     padding-bottom: 0.125rem;
     border-bottom: 0.125rem solid #f89a68;
 }
 
 .action-icon,
 .attr-action-icon {
-    margin-right: 0.25rem;
     color:#888;
 }
 
 .action-icon:focus,
-.action-icon:hover,
+.action-icon:hover {
+    color: #333;
+    text-decoration: none;
+}
+
+.attr-action-icon {
+    color: #888;
+    font-size: 0.875rem;
+    margin-left: 0.5rem;
+    margin-right: 0.25rem;
+}
+
 .attr-action-icon:focus,
 .attr-action-icon:hover {
     color: #333;
     text-decoration: none;
 }
 
-.attr-action-icon {
-    font-size: 0.875rem;
+.attr-action-icon.attr-btn-icon {
+    margin-left: 0;
 }
 
 /** Account info **/

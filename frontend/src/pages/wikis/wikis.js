@@ -126,7 +126,7 @@ class Wikis extends Component {
                 <Dropdown tag="div" className="btn btn-secondary operation-item" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
                   <DropdownToggle 
                     tag="i" 
-                    className="fa fa-plus-square action-icon" 
+                    className="fa fa-plus-square attr-action-icon attr-btn-icon" 
                     title={gettext('More Operations')}
                     data-toggle="dropdown" 
                     aria-expanded={this.state.isShowAddWikiMenu}

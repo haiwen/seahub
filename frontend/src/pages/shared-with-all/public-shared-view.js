@@ -160,7 +160,7 @@ class PublicSharedView extends React.Component {
             <div className="operation">
               <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
                 <DropdownToggle className='btn btn-secondary operation-item'>
-                  <i className="fas fa-plus-square action-icon"></i>
+                  <i className="fas fa-plus-square attr-action-icon attr-btn-icon"></i>
                   {gettext('Add Library')}
                 </DropdownToggle>
                 <DropdownMenu>
