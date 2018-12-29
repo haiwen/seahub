@@ -755,11 +755,17 @@ class DraftReview extends React.Component {
             }
             {
               this.state.reviewStatus === 'finished' &&
-              <div className="review-state review-state-finished">{gettext('Finished')}</div>
+              <div className="cur-file-operation">
+                <button className='btn review-state review-state-finished'
+                  title={gettext('Finished')}>{gettext('Finished')}</button>
+              </div>
             }
             {
-              this.state.reviewStatus === 'closed' && 
-              <div className="review-state review-state-closed">{gettext('Closed')}</div>
+              this.state.reviewStatus === 'closed' &&               
+              <div className="cur-file-operation">
+                <button className='btn review-state review-state-closed'
+                  title={gettext('Closed')}>{gettext('Closed')}</button>
+              </div>
             }
           </div>
         </div>

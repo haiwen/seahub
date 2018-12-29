@@ -192,7 +192,6 @@
 
 .review-state {
   position: relative;
-  padding: 0.75rem 1.25rem;
   margin: auto 0.5rem;
   border: 1px solid transparent;
   border-radius: 3px;
@@ -208,6 +207,11 @@
   color: #6b1110;
   background-color: #f5d2d2;
   border-color: #f1c1c0;
+}
+
+.review-state-closed:focus, 
+.review-state-finished:focus {
+  box-shadow: 0 0 0 0;
 }
 
 img[src=""],img:not([src]){ /* for first loading img*/
