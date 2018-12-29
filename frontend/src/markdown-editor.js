@@ -74,7 +74,7 @@ class EditorUtilities {
   }
   
   _getImageURL(fileName) {
-    const url = `${protocol}://${domain}${siteRoot}lib/${repoID}/file/images/${fileName}?raw=1`;
+    const url = this.serviceUrl + '/lib/' + repoID + '/file/images/auto-upload/' + fileName + '?raw=1';
     return url;
   }
 
@@ -88,7 +88,7 @@ class EditorUtilities {
         const newFile = new File([blob], name, {type: 'image/png'});
         const formData = new FormData();
         formData.append('parent_dir', '/');
-        formData.append('relative_path', 'images');
+        formData.append('relative_path', 'images/auto-upload');
         formData.append('file', newFile);
         return {uploadLink, formData};
       }).then(({ uploadLink, formData}) => {
@@ -108,7 +108,7 @@ class EditorUtilities {
         const newFile = new File([imageFile], imageFile.name, {type: imageFile.type});
         const formData = new FormData();
         formData.append('parent_dir', '/');
-        formData.append('relative_path', 'images');
+        formData.append('relative_path', 'images/auto-upload');
         formData.append('file', newFile);
         return seafileAPI.uploadImage(uploadLink, formData);
       }).then ((res) => {
