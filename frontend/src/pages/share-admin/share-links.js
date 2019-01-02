@@ -161,7 +161,12 @@ class Item extends Component {
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={iconUrl} width="24" /></td>
-        <td><Link to={linkUrl} onClick={this.onItemClick}>{item.obj_name}</Link></td>
+        <td>
+          {item.is_dir ?
+            <Link to={linkUrl}>{item.obj_name}</Link> :
+            <a href={linkUrl} onClick={this.onItemClick}>{item.obj_name}</a>
+          }
+        </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}/`}>{item.repo_name}</Link></td>
         <td>{item.view_cnt}</td>
         <td>{this.renderExpriedData()}</td> 
