@@ -8,8 +8,15 @@ import SharedFolderInfo from '../../models/shared-folder-info';
 
 class Content extends Component {
 
+  sortByName = (e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   render() {
-    const { loading, errorMsg, items } = this.props;
+    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -23,12 +30,16 @@ class Content extends Component {
         </div>
       );
 
+      // sort
+      const sortByName = sortBy == 'name';
+      const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+
       const table = (
         <table className="table-hover">
           <thead>
             <tr>
               <th width="4%">{/*icon*/}</th>
-              <th width="34%">{gettext("Name")} <a className="table-sort-op by-name" href="#"><span className="sort-icon icon-caret-down hide"></span>{/* TODO: sort by name */}</a></th>
+              <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
               <th width="30%">{gettext("Share To")}</th>
               <th width="24%">{gettext("Permission")}</th>
               <th width="8%"></th>
@@ -163,8 +174,40 @@ class ShareAdminFolders extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      items: []
+      items: [],
+      sortBy: 'name',
+      sortOrder: 'asc' // 'asc' or 'desc'
     };
+  }
+
+  _sortItems = (items, sortBy, sortOrder) => {
+    let comparator;
+
+    switch (`${sortBy}-${sortOrder}`) {
+      case 'name-asc':
+        comparator = function(a, b) {
+          var result = Utils.compareTwoWord(a.folder_name, b.folder_name);
+          return result;
+        }
+        break;
+      case 'name-desc':
+        comparator = function(a, b) {
+          var result = Utils.compareTwoWord(a.folder_name, b.folder_name);
+          return -result;
+        }
+        break;
+    }
+
+    items.sort(comparator);
+    return items;
+  }
+
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      items: this._sortItems(this.state.items, sortBy, sortOrder)
+    });
   }
 
   componentDidMount() {
@@ -175,7 +218,7 @@ class ShareAdminFolders extends Component {
       });
       this.setState({
         loading: false,
-        items: items
+        items: this._sortItems(items, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       if (error.response) {
@@ -239,6 +282,9 @@ class ShareAdminFolders extends Component {
               errorMsg={this.state.errorMsg}
               loading={this.state.loading}
               items={this.state.items}
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortItems={this.sortItems}
               unshareFolder={this.unshareFolder}
             />
           </div>
