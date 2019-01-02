@@ -104,6 +104,15 @@ class Item extends Component {
     this.props.onRemoveLink(this.props.item);
   }
 
+  onItemClick = (e) => {
+    let item = this.props.item;
+    if (!item.is_dir) {
+      e.preventDefault();
+      let href = e.target.href;
+      window.open(href);
+    }
+  }
+
   getLinkParams = () => {
     let item = this.props.item;
     let icon_size = Utils.isHiDPI() ? 48 : 24;
@@ -152,7 +161,7 @@ class Item extends Component {
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={iconUrl} width="24" /></td>
-        <td><Link to={linkUrl}>{item.obj_name}</Link></td>
+        <td><Link to={linkUrl} onClick={this.onItemClick}>{item.obj_name}</Link></td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}/`}>{item.repo_name}</Link></td>
         <td>{item.view_cnt}</td>
         <td>{this.renderExpriedData()}</td> 
