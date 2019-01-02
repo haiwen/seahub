@@ -215,14 +215,13 @@ def handle_two_factor_auth(request, user, redirect_to):
     request.session[SESSION_KEY_TWO_FACTOR_FAILED_ATTEMPT] = 0
     return redirect(reverse('two_factor_auth'))
 
-def verify_two_factor_token(username, token):
+def verify_two_factor_token(user, token):
     """
-    This function is called when doing the api authentication. We only support
-    totp here to simply the case. Backup token is not supported, because if the
-    user has the backup token, he can always login the website and re-setup the
-    totp.
+    This function is called when doing the api authentication.
+    Backup token is not supported, because if the user has the backup token,
+    he can always login the website and re-setup the totp.
     """
-    device = TOTPDevice.objects.device_for_user(username)
+    device = default_device(user)
     if device:
         return device.verify_token(token)
 
