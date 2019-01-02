@@ -395,7 +395,8 @@ class DirentListItem extends React.Component {
   render() {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
-    let href = siteRoot + 'wiki/lib/' + this.props.repoID + Utils.encodePath(direntPath);
+    let dirHref = siteRoot + 'library/' + this.props.repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
+    let fileHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(direntPath);
     let toolTipID = MD5(dirent.name).slice(0, 7);
     let tagTitle = '';
     if (dirent.file_tags && dirent.file_tags.length > 0) {
@@ -422,7 +423,7 @@ class DirentListItem extends React.Component {
           <td className="name">
             {this.state.isRenameing ?
               <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-              <a href={href} onClick={this.onItemClick}>{dirent.name}</a>
+              <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
             }
           </td>
           <td>
