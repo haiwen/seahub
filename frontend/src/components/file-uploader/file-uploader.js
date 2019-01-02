@@ -40,6 +40,7 @@ class FileUploader extends React.Component {
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
     };
+    this.isUpdateUploadedFile = false;
   }
 
   componentDidMount() {
@@ -243,6 +244,9 @@ class FileUploader extends React.Component {
   }
 
   setHeaders = (resumableFile, resumable) => {
+    if (!this.isUpdateUploadedFile) {
+      return [];
+    }
     let offset = resumable.offset;
     let chunkSize = resumable.getOpt('chunkSize');
     let fileSize = resumableFile.size;
@@ -328,14 +332,23 @@ class FileUploader extends React.Component {
   }
 
   replaceRepetitionFile = () => {
-    let resumableFile =  this.resumable.files[this.resumable.files.length - 1];
-    resumableFile.formData['replace'] = 1;
+    let { repoID, path } = this.props;
+    this.isUpdateUploadedFile = true;
+    seafileAPI.getUpdateLink(repoID, path).then(res => {
+      this.resumable.opts.target = res.data;
 
-    // this.setState({isUploadRemindDialogShow: false});
+      let resumableFile =  this.resumable.files[this.resumable.files.length - 1];
+      resumableFile.formData['replace'] = 1;
+      resumableFile.formData['target_file'] = resumableFile.formData.parent_dir + resumableFile.fileName;
+  
+      // this.setState({isUploadRemindDialogShow: false});
+  
+      this.setUploadFileList(this.resumable.files);
+  
+      this.resumable.upload();
 
-    this.setUploadFileList(this.resumable.files);
-
-    this.resumable.upload();
+      this.isUpdateUploadedFile = false;
+    });
   }
 
   uploadFile = () => {
