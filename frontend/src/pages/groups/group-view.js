@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { gettext, siteRoot, username, loginUrl } from '../../utils/constants';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
@@ -42,6 +43,8 @@ class GroupView extends React.Component {
       currentRepo: null,
       isStaff: false,
       isOwner: false,
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc', // 'asc' or 'desc'
       repoList: [],
       libraryType: 'group',
       isCreateRepoDialogShow: false,
@@ -116,7 +119,7 @@ class GroupView extends React.Component {
       });
       this.setState({
         isLoading: false,
-        repoList: repoList
+        repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       if (error.response) {
@@ -313,6 +316,14 @@ class GroupView extends React.Component {
     this.setState({isShowDetails: false});
   }
 
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
+    });
+  }
+
   render() {
     let { errMessage, emptyTip, currentGroup } = this.state;
     let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
@@ -418,6 +429,9 @@ class GroupView extends React.Component {
                 <SharedRepoListView 
                   repoList={this.state.repoList} 
                   currentGroup={this.state.currentGroup} 
+                  sortBy={this.state.sortBy}
+                  sortOrder={this.state.sortOrder}
+                  sortItems={this.sortItems}
                   onItemUnshare={this.onItemUnshare}
                   onItemDelete={this.onItemDelete}
                   onItemDetails={this.onItemDetails}
