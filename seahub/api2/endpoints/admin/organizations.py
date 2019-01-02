@@ -9,8 +9,6 @@ from rest_framework import status
 
 from seaserv import ccnet_api, seafile_api
 
-from seaserv import seafserv_threaded_rpc
-
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -40,12 +38,11 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-def get_org_info(org_id):
+def get_org_info(org):
+
+    org_id = org.org_id
 
     org_info = {}
-
-    org = ccnet_api.get_org_by_id(org_id)
-
     org_info['org_id'] = org_id
     org_info['org_name'] = org.org_name
     org_info['ctime'] = timestamp_to_isoformat_timestr(org.ctime)
@@ -57,11 +54,43 @@ def get_org_info(org_id):
     org_info['creator_contact_email'] = email2contact_email(creator)
 
     org_info['quota'] = seafile_api.get_org_quota(org_id)
+    org_info['quota_usage'] = seafile_api.get_org_quota_usage(org_id)
 
     if ORG_MEMBER_QUOTA_ENABLED:
         org_info['max_user_number'] = OrgMemberQuota.objects.get_quota(org_id)
 
     return org_info
+
+class AdminOrganizations(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Get all organizations
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not (CLOUD_MODE and MULTI_TENANCY):
+            error_msg = 'Feature is not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            orgs = ccnet_api.get_all_orgs(-1, -1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = []
+        for org in orgs:
+            org_info = get_org_info(org)
+            result.append(org_info)
+
+        return Response({'organizations': result})
 
 
 class AdminOrganization(APIView):
@@ -92,7 +121,7 @@ class AdminOrganization(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            org_info = get_org_info(org_id)
+            org_info = get_org_info(org)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -174,7 +203,7 @@ class AdminOrganization(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        org_info = get_org_info(org_id)
+        org_info = get_org_info(org)
         return Response(org_info)
 
     def delete(self, request, org_id):

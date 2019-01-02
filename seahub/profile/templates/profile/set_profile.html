@@ -29,7 +29,9 @@
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
 
+        {% if ENABLE_DELETE_ACCOUNT %}
         <li class="tab" id="del-account-nav"><a href="#del-account">{% trans "Delete Account" %}</a></li>
+        {% endif %}
     </ul>
 </div>
 
@@ -48,10 +50,13 @@
     </div>
 
     <form action="" method="post">{% csrf_token %}
-        <label>{% trans "Name:" context "true name" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="input" />
+        <label>{% trans "Name:" context "true name" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="input" {% if not ENABLE_UPDATE_USER_INFO %} disabled {% endif %}/>
+
+        {% if ENABLE_UPDATE_USER_INFO %}
         {% for error in form.nickname.errors %}
         <span class="error">{{ error|escape }}</span>
         {% endfor %}
+        {% endif %}
         <br/>
 
         {% if form.data.login_id %}
@@ -67,14 +72,15 @@
         {% endif %}
 
         {% if form.telephone %}
-        <label>{% trans "Telephone:" %}</label><input type="text" name="telephone" value="{{ form.data.telephone }}" class="input" />
+        <label>{% trans "Telephone:" %}</label><input type="text" name="telephone" value="{{ form.data.telephone }}" class="input" {% if not ENABLE_UPDATE_USER_INFO %} disabled {% endif %} />
         {% for error in form.telephone.errors %}
         <span class="error">{{ error|escape }}</span>
         {% endfor %}
         <br/>
         {% endif %}
-
+        {% if ENABLE_UPDATE_USER_INFO %}
         <input type="submit" value="{% trans "Submit" %}" class="submit vh" />
+        {% endif %}
     </form>
 </div>
 
@@ -165,6 +171,7 @@
 </div>
 {% endif %}
 
+{% if ENABLE_DELETE_ACCOUNT %}
 <div class="setting-item" id="del-account">
     <h3>{% trans "Delete Account" %}</h3>
     <p class="txt-before-btn">{% trans "This operation will not be reverted. Please think twice!" %}</p>
@@ -173,6 +180,7 @@
         <input type="submit" value="{% trans "Delete" %}" class="submit" />
     </form>
 </div>
+{% endif %}
 
 </div> <!-- right-panel -->
 </div> <!-- row -->
@@ -228,6 +236,7 @@ $('#user-avatar-input').on('change', function() {
 
 $('#user-basic-info .submit').css({'margin-left': $('#user-basic-info label').outerWidth(true)}).removeClass('vh');
 
+{% if ENABLE_DELETE_ACCOUNT %}
 $('#account-delete-btn').on('click', function () {
     var title = "{% trans "Delete Account" %}",
         con = "{% trans "Really want to delete your account?" %}";
@@ -240,6 +249,7 @@ $('#account-delete-btn').on('click', function () {
         $('#account-delete-form').trigger('submit');
     });
 });
+{% endif %}
 
 {% if ENABLE_ADDRESSBOOK_OPT_IN %}
 $("#list-in-address-book input[type='checkbox']").on('change', function() {

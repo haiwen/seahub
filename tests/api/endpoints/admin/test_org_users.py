@@ -57,6 +57,30 @@ class OrgUsersTest(BaseTestCase):
             remove_org(self.org_id)
             self.remove_user(self.org_creator)
 
+    def test_can_get_users(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+        resp = self.client.get(self.org_users_url)
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+
+        users = json_resp['organizaton_members']
+        assert len(users) > 0
+        assert users[0]['org_id'] == self.org_id
+        assert users[0]['email'] == self.org_creator
+
+    def test_can_not_get_users_if_not_admin(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.user)
+        resp = self.client.get(self.org_users_url)
+        self.assertEqual(403, resp.status_code)
+
     def test_can_create(self):
 
         if not LOCAL_PRO_DEV_ENV:
