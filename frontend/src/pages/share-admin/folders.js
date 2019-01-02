@@ -188,13 +188,13 @@ class ShareAdminFolders extends Component {
         comparator = function(a, b) {
           var result = Utils.compareTwoWord(a.folder_name, b.folder_name);
           return result;
-        }
+        };
         break;
       case 'name-desc':
         comparator = function(a, b) {
           var result = Utils.compareTwoWord(a.folder_name, b.folder_name);
           return -result;
-        }
+        };
         break;
     }
 

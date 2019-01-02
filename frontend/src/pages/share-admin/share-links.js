@@ -9,6 +9,20 @@ import SharedLinkInfo from '../../models/shared-link-info';
 
 class Content extends Component {
 
+  sortByName = (e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
+  sortByTime = (e) => {
+    e.preventDefault();
+    const sortBy = 'time';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
  constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +44,7 @@ class Content extends Component {
   }
 
   render() {
-    const { loading, errorMsg, items } = this.props;
+    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -44,16 +58,21 @@ class Content extends Component {
         </div>
       );
 
+      // sort
+      const sortByName = sortBy == 'name';
+      const sortByTime = sortBy == 'time';
+      const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+
       const table = (
         <React.Fragment>
           <table className="table-hover">
             <thead>
               <tr>
                 <th width="4%">{/*icon*/}</th>
-                <th width="36%">{gettext("Name")}<a className="table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-up"></span></a></th>{/* TODO:sort */}
+                <th width="36%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
                 <th width="24%">{gettext("Library")}</th>
                 <th width="12%">{gettext("Visits")}</th>
-                <th width="14%">{gettext("Expiration")}<a className="table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-down hide" aria-hidden="true"></span></a></th>{/*TODO:sort*/}
+                <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
@@ -177,8 +196,58 @@ class ShareAdminShareLinks extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      items: []
+      items: [],
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc' // 'asc' or 'desc'
     };
+  }
+
+  _sortItems = (items, sortBy, sortOrder) => {
+    let comparator;
+
+    switch (`${sortBy}-${sortOrder}`) {
+      case 'name-asc':
+        comparator = function(a, b) {
+          var result = Utils.compareTwoWord(a.obj_name, b.obj_name);
+          return result;
+        };
+        break;
+      case 'name-desc':
+        comparator = function(a, b) {
+          var result = Utils.compareTwoWord(a.obj_name, b.obj_name);
+          return -result;
+        };
+        break;
+      case 'time-asc':
+        comparator = function(a, b) {
+          return a.expire_date < b.expire_date ? -1 : 1;
+        };
+        break;
+      case 'time-desc':
+        comparator = function(a, b) {
+          return a.expire_date < b.expire_date ? 1 : -1;
+        };
+        break;
+    }
+
+    items.sort((a, b) => {
+      if (a.is_dir && !b.is_dir) {
+        return -1;
+      } else if (!a.is_dir && b.is_dir) {
+        return 1;
+      } else {
+        return comparator(a, b);
+      }
+    });
+    return items;
+  }
+
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      items: this._sortItems(this.state.items, sortBy, sortOrder)
+    });
   }
 
   componentDidMount() {
@@ -189,7 +258,7 @@ class ShareAdminShareLinks extends Component {
       });
       this.setState({
         loading: false,
-        items: items
+        items: this._sortItems(items, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       if (error.response) {
@@ -244,9 +313,12 @@ class ShareAdminShareLinks extends Component {
           </div>
           <div className="cur-view-content">
             <Content
+              loading={this.state.loading}
               errorMsg={this.state.errorMsg}
               items={this.state.items}
-              loading={this.state.loading}
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortItems={this.sortItems}
               onRemoveLink={this.onRemoveLink}
             />
           </div>
