@@ -12,6 +12,7 @@ import DirentDetail from '../dirent-detail/dirent-details';
 import FileUploader from '../file-uploader/file-uploader';
 import ModalPortal from '../modal-portal';
 import LibDecryptDialog from '../dialog/lib-decrypt-dialog';
+import FileTagsViewer from '../../components/filetags-viewer';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object,
@@ -46,6 +47,7 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onFileUploadSuccess: PropTypes.func.isRequired,
+  usedRepoTags: PropTypes.array.isRequired,
 };
 
 class DirPanel extends React.Component {
@@ -171,6 +173,15 @@ class DirPanel extends React.Component {
                   onTabNavClick={this.props.onTabNavClick}
                 />
               </div>
+              {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
+                <div className="tags-summary-bar">
+                  <FileTagsViewer
+                    repoID={this.props.repoID}
+                    currentPath={this.props.path}
+                    usedRepoTags={this.props.usedRepoTags}
+                  />
+                </div>
+              )}
               <div className="cur-view-content">
                 {this.props.errorMsg ?
                  <p className="error text-center">{this.props.errorMsg}</p> :

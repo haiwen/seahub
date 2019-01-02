@@ -31,6 +31,7 @@
   align-items: center;
   color: #ffffff;
   overflow: hidden;
+  padding: 10px;
 }
 
 .show-tag-selected {
@@ -91,4 +92,36 @@
 .tag-dialog-back:hover,
 .tag-dialog-back:focus {
   color: #444;
+}
+
+.tags-summary-bar {
+  margin: 16px 16px 4px;
+  padding: 0 10px;
+  border: 1px solid #e6e6dd;
+  border-radius: 5px;
+}
+.used-tag-list {
+  list-style: none;
+  line-height: 40px;
+}
+.used-tag-item {
+  display: inline-block;
+  margin: auto 15px;
+}
+.used-tag {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+}
+.used-tag-name {
+  margin: 0 0.25rem;
+}
+.used-tag-files {
+  color: #666;
+  font-size: 14px;
+}
+.used-tag-files:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
