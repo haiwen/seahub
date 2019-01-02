@@ -104,15 +104,6 @@ class Item extends Component {
     this.props.onRemoveLink(this.props.item);
   }
 
-  onItemClick = (e) => {
-    let item = this.props.item;
-    if (!item.is_dir) {
-      e.preventDefault();
-      let href = e.target.href;
-      window.open(href);
-    }
-  }
-
   getLinkParams = () => {
     let item = this.props.item;
     let icon_size = Utils.isHiDPI() ? 48 : 24;
@@ -164,7 +155,7 @@ class Item extends Component {
         <td>
           {item.is_dir ?
             <Link to={linkUrl}>{item.obj_name}</Link> :
-            <a href={linkUrl} onClick={this.onItemClick}>{item.obj_name}</a>
+            <a href={linkUrl} target="_blank">{item.obj_name}</a>
           }
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}/`}>{item.repo_name}</Link></td>
