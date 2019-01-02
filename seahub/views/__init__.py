@@ -713,6 +713,7 @@ def libraries(request):
             'enable_wiki': settings.ENABLE_WIKI,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
+            'resumable_upload_file_block_size': settings.RESUMABLE_UPLOAD_FILE_BLOCK_SIZE,
             'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
             'enable_thumbnail': settings.ENABLE_THUMBNAIL,
             'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
