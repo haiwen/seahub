@@ -1,0 +1,97 @@
+.header {
+  background: #f4f4f7;
+  width: 100%;
+  height: 53px;
+  font-size: 14px;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 8px 16px 4px;
+  /* display: flex; */
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.file-view-hd {
+    font-size: 1.4em;
+    margin-bottom: 0px;
+}
+
+.no-bold {
+    font-weight: normal;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #222;
+    font-weight: bold;
+}
+
+.shared-file-view-hd {
+    margin-top: 4px;
+    flex-shrink: 0;
+    width: 950px;
+    margin: 0 auto;
+
+}
+
+.ovhd {
+    overflow: hidden;
+}
+
+.shared-file-view-hd .share-by {
+     margin: 0;
+}
+
+.shared-file-op-btn {
+    padding: 7px;
+    margin-top: 9px;
+}
+
+.obv-btn {
+    display: inline-block;
+    color: #fff;
+    padding: 4px 10px;
+    background: #60b044;
+    border: 1px solid #5ca941;
+    border-radius: 3px;
+}
+
+a {
+    color: #eb8205;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.file-view {
+    padding: 30px 0 15px;
+    background: #f4f4f4;
+    border: 1px solid #ededed;
+    margin-top: 12px;
+}
+
+.ov-auto {
+    overflow: auto;
+}
+
+.flex-auto {
+    flex: auto;
+}
+
+.md-view {
+    min-height: 400px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+    box-shadow: 0 0 6px #ccc;
+    padding: 40px 96px;
+    width: 960px;
+    background: #fff;
+}
+
+.file-enc-cont {
+    width: 950px;
+    margin: -20px auto 6px;
+    text-align: right;
+}
+
+.article {
+    padding: 20px 30px;
+}
