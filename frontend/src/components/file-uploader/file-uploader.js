@@ -41,7 +41,6 @@ class FileUploader extends React.Component {
       currentResumableFile: null,
     };
 
-    this.isUpdateUploadedFile = false;
     this.needCreateFolders = [];
     this.needUpdateFolders = [];
     this.needCreateFiles = [];
@@ -220,11 +219,12 @@ class FileUploader extends React.Component {
     let formData = resumableFile.formData;
     let direntList = this.props.direntList;
     let currentTime = new Date().getTime()/1000;
+    message = formData.replace ? message : JSON.parse(message)[0];
     if (formData.relative_path) {                // uploading a forder
-      message = JSON.parse(message)[0];
       let relative_path = formData.relative_path;
       let dir_name = relative_path.slice(0, relative_path.indexOf('/'));
-      if (direntList.indexOf(dir_name) !== -1) { // the dir exist in current path
+      let isExist = direntList.some(item => { return item.name === dir_name; })
+      if (isExist) { // the dir exist in current path
         let dirent = {                           // execute update operation
           id: message.id,
           name: dir_name,
@@ -245,10 +245,9 @@ class FileUploader extends React.Component {
     } else {                              // uploading a file
       if (formData.replace) {             // update the file is exist;
         let dirent = {                    // execute update operation
-          id: message.id,
-          name: message.name,
+          id: message,
+          name: resumableFile.fileName,
           type: 'file',
-          size: message.size,
           mtime: currentTime,
         };
         this.addDirentToUpdateFiles(dirent);
@@ -266,6 +265,20 @@ class FileUploader extends React.Component {
     }
   }
 
+  addDirentToUpdateFolders = (dirent) => {
+    let needUpdateFolders = this.needUpdateFolders;
+    let isExist = false;
+    for (let i = 0; i < needUpdateFolders.length; i++) {
+      if (needUpdateFolders[i].name === dirent.name) {
+        isExist = true;
+        break;
+      }
+    }
+    if (!isExist) {
+      this.needUpdateFolders.push(dirent);
+    }
+  }
+
   addDirentToCreateFolders = (dirent) => {
     let needCreateFolders = this.needCreateFolders;
     let isExist = false;
@@ -280,36 +293,16 @@ class FileUploader extends React.Component {
     }
   }
 
-  addDirentToUpdateFolders = (dirent) => {
-    let needUpdateFolders = this.needUpdateFolders;
-    let isExist = false;
-    let index = 0;
-    for (let i = 0; i < needUpdateFolders.length; i++) {
-      if (needUpdateFolders[i].name === dirent.name) {
-        isExist = true;
-        index = i;
-        break;
-      }
-    }
-    if (!isExist) {
-      this.needUpdateFolders.splice(index, 1);
-      this.needUpdateFolders.push(dirent);
-    }
-  }
-
   addDirentToUpdateFiles = (dirent) => {
     let needUpdateFiles = this.needUpdateFiles;
     let isExist = false;
-    let index = 0;
     for (let i = 0; i < needUpdateFiles.length; i++) {
       if (needUpdateFiles[i].name === dirent.name) {
         isExist = true;
-        index = i;
         break;
       }
     }
     if (!isExist) {
-      this.needUpdateFiles.splice(index, 1);
       this.needUpdateFiles.push(dirent);
     }
   }
@@ -347,7 +340,7 @@ class FileUploader extends React.Component {
   }
 
   setHeaders = (resumableFile, resumable) => {
-    if (!this.isUpdateUploadedFile) {
+    if (resumableFile.formData.replace) {
       return [];
     }
     let offset = resumable.offset;
@@ -437,7 +430,6 @@ class FileUploader extends React.Component {
   replaceRepetitionFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     let { repoID, path } = this.props;
-    this.isUpdateUploadedFile = true;
     seafileAPI.getUpdateLink(repoID, path).then(res => {
       this.resumable.opts.target = res.data;
 
@@ -446,7 +438,6 @@ class FileUploader extends React.Component {
       resumableFile.formData['target_file'] = resumableFile.formData.parent_dir + resumableFile.fileName;
       this.setUploadFileList(this.resumable.files);
       this.resumable.upload();
-      this.isUpdateUploadedFile = false;
     });
   }
   
