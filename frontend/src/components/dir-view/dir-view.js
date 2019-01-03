@@ -393,42 +393,50 @@ class DirView extends React.Component {
     this.setState({direntList: newDirentList});
   }
 
-  onFileUploadComplete = (needCreateFolders, needUpdateFolders, needCreateFiles, needUpdateFiles) => {
-    if (needUpdateFolders.length > 0) {
-      let direntList = this.updateDirentListParams(needUpdateFolders);
-      this.setState({direntList: direntList});
-    }
-    if (needUpdateFiles.length > 0) {
-      let direntList = this.updateDirentListParams(needUpdateFiles);
-      this.setState({direntList: direntList});
-    }
+  onFileUploadComplete = (uploadedFolders, uploadedFiles) => {
+    let isExist = false;
     let direntList1 = [];
     let direntList2 = [];
-    if (needCreateFolders.length > 0) {
-      direntList1 = needCreateFolders.map(item => {
-        let dirent = new Dirent(item);
-        return dirent;
-      });
+    while (uploadedFolders.length) {
+      let uploadedFolder = uploadedFolders.shift();
+      isExist = this.isCurrentDirentObjectExist(uploadedFolder);
+      if (isExist) {
+        direntList1 = this.updateDirentListParams(uploadedFolder);
+      } else {
+        let dirent = new Dirent(uploadedFolder);
+        direntList1.push(dirent);
+      }
     }
-    if (needCreateFiles.length > 0) {
-      direntList2 = needCreateFiles.map(item => {
-        let dirent = new Dirent(item);
-        return dirent;
-      });
+
+    while (uploadedFiles.length) {
+      let uploadedFile = uploadedFiles.shift();
+      isExist = this.isCurrentDirentObjectExist(uploadedFile);
+      if (isExist) {
+        direntList2 = this.updateDirentListParams(uploadedFile);
+      } else {
+        let dirent = new Dirent(uploadedFile);
+        direntList2.push(dirent);
+      }
     }
-    this.setState({direntList: [...direntList1, ...this.state.direntList, ...direntList2]});
+    if (isExist) {
+      this.setState({direntList: [...direntList1, ...direntList2]});
+    } else {
+      let direntList = this.state.direntList;
+      this.setState({direntList: [...direntList1, ...direntList, ...direntList2]});
+    }
   }
 
-  updateDirentListParams = (updateList) => {
+  isCurrentDirentObjectExist = (direntObject) => {
+    return this.state.direntList.some(item => { return item.name === direntObject.name;});
+  }
+
+  updateDirentListParams = (direntObject) => {
     let direntList = this.state.direntList.map(item => {return item});  // clone
-    while (updateList.length) {
-      let updateItem = updateList.shift();
-      for (let i = 0; i < direntList.length; i++) {
-        if (direntList[i].name === updateItem.name && direntList[i].type === updateItem.type) {
-          direntList[i].id = updateItem.id;
-          direntList[i].mtime = moment.unix(updateItem.mtime).fromNow();
-          break;
-        }
+    for (let i = 0; i < direntList.length; i++) {
+      let dirent = direntList[i];
+      if (dirent.name === direntObject.name && dirent.type === direntObject.type) {
+        dirent.id = direntObject.id;
+        dirent.mtime = moment.unix(direntObject.mtime).fromNow();
       }
     }
     return direntList;

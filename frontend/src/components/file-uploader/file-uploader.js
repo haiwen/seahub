@@ -41,10 +41,8 @@ class FileUploader extends React.Component {
       currentResumableFile: null,
     };
 
-    this.needCreateFolders = [];
-    this.needUpdateFolders = [];
-    this.needCreateFiles = [];
-    this.needUpdateFiles = [];
+    this.uploadedFolders = [];
+    this.uploadedFiles = [];
   }
 
   componentDidMount() {
@@ -213,97 +211,71 @@ class FileUploader extends React.Component {
     let progress = Math.round(this.resumable.progress() * 100);
     this.setState({totalProgress: progress});
   }
-  
+
   onFileUploadSuccess = (resumableFile, message) => {
     let formData = resumableFile.formData;
-    let direntList = this.props.direntList;
     let currentTime = new Date().getTime()/1000;
     message = formData.replace ? message : JSON.parse(message)[0];
-    if (formData.relative_path) {                // uploading a forder
+    if (formData.relative_path) { // upload folder
       let relative_path = formData.relative_path;
       let dir_name = relative_path.slice(0, relative_path.indexOf('/'));
-      let isExist = direntList.some(item => { return item.name === dir_name; })
-      if (isExist) { // the dir exist in current path
-        let dirent = {                           // execute update operation
-          id: message.id,
-          name: dir_name,
-          type: 'dir',
-          mtime: currentTime,
+      let dirent = {
+        id: message.id,
+        name: dir_name,
+        type: 'dir',
+        mtime: currentTime,
+      };
+
+      // update folders cache
+      let isExist = this.uploadedFolders.some(item => {return item.name === dirent.name;});
+      if (!isExist) {
+        this.uploadedFolders.push(dirent);
+      }
+
+      // update uploadFileList
+      let uploadFileList = this.state.uploadFileList.map(item => {
+        if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
+          item.resumableFile.fileName = message.name;
+          item.resumableFile.relativePath = relative_path + message.name;
         }
-        this.addDirentToUpdateFolders(dirent);
-      } else {                                  // the dir not exist in current path
-        let dirent = {                          // execute create operation
-          id: message.id,
-          name: dir_name,
-          type: 'dir',
-          permission: 'rw',
-          mtime: currentTime,
-        }
-        this.addDirentToCreateFolders(dirent);
-      }
-    } else {                              // uploading a file
-      if (formData.replace) {             // update the file is exist;
-        let dirent = {                    // execute update operation
-          id: message,
-          name: resumableFile.fileName,
-          type: 'file',
-          mtime: currentTime,
-        };
-        this.addDirentToUpdateFiles(dirent);
-      } else {                            // upload a new file
-        let dirent = {                    // execute create operaion
-          id: message.id,
-          name: message.name,
-          type: 'file',
-          size: message.size,
-          mtime: currentTime,
-          permission: 'rw',
-        };
-        this.needCreateFiles.push(dirent);
-      }
-    }
-  }
+        return item;
+      });
+      this.setState({uploadFileList: uploadFileList});
 
-  addDirentToUpdateFolders = (dirent) => {
-    let needUpdateFolders = this.needUpdateFolders;
-    let isExist = false;
-    for (let i = 0; i < needUpdateFolders.length; i++) {
-      if (needUpdateFolders[i].name === dirent.name) {
-        isExist = true;
-        break;
-      }
+      return;
     }
-    if (!isExist) {
-      this.needUpdateFolders.push(dirent);
-    }
-  }
 
-  addDirentToCreateFolders = (dirent) => {
-    let needCreateFolders = this.needCreateFolders;
-    let isExist = false;
-    for (let i = 0; i < needCreateFolders.length; i++) {
-      if (needCreateFolders[i].name === dirent.name) {
-        isExist = true;
-        break;
-      }
-    }
-    if (!isExist) {
-      this.needCreateFolders.push(dirent);
-    }
-  }
+    if (formData.replace) { // upload file -- replace exist file
+      let fileName = resumableFile.fileName;
+      let dirent = {
+        id: message,
+        name: fileName,
+        type: 'file',
+        mtime: currentTime
+      };
+      this.uploadedFiles.push(dirent);  // this contance: just one file
 
-  addDirentToUpdateFiles = (dirent) => {
-    let needUpdateFiles = this.needUpdateFiles;
-    let isExist = false;
-    for (let i = 0; i < needUpdateFiles.length; i++) {
-      if (needUpdateFiles[i].name === dirent.name) {
-        isExist = true;
-        break;
+      return;
+    }
+
+    // upload file -- add files
+    let dirent = {
+      id: message.id,
+      type: 'file',
+      name: message.name,
+      size: message.size,
+      mtime: currentTime,
+    };
+    this.uploadedFiles.push(dirent);  // this contance:  no repetition file;
+
+    let uploadFileList = this.state.uploadFileList.map(item => {
+      if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
+        item.resumableFile.fileName = message.name;
+        item.resumableFile.relativePath = message.name;
       }
-    }
-    if (!isExist) {
-      this.needUpdateFiles.push(dirent);
-    }
+      return item;
+    });
+    this.setState({uploadFileList: uploadFileList});
   }
 
   onFileError = (file) => {
@@ -311,16 +283,14 @@ class FileUploader extends React.Component {
   }
 
   onComplete = () => {
-    this.props.onFileUploadComplete(this.needCreateFolders, this.needUpdateFolders, this.needCreateFiles, this.needUpdateFiles);
-    this.needCreateFolders = [];
-    this.needUpdateFolders = [];
-    this.needCreateFiles = [];
-    this.needUpdateFiles = [];
+    this.props.onFileUploadComplete(this.uploadedFolders, this.uploadedFiles);
+    this.uploadedFolders = [];
+    this.uploadedFiles = [];
   }
 
-  onPause = () => [
+  onPause = () => {
 
-  ]
+  }
 
   onError = () => {
 
