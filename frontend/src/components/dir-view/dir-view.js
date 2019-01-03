@@ -416,7 +416,7 @@ class DirView extends React.Component {
         return dirent;
       });
     }
-    this.setState({direntList: [...this.state.direntList, ...direntList1, ...direntList2]});
+    this.setState({direntList: [...direntList1, ...this.state.direntList, ...direntList2]});
   }
 
   updateDirentListParams = (updateList) => {
@@ -424,16 +424,10 @@ class DirView extends React.Component {
     while (updateList.length) {
       let updateItem = updateList.shift();
       for (let i = 0; i < direntList.length; i++) {
-        if (direntList[i].name = updateItem.name) {
-          if (updateItem.type === 'dir') {
-            direntList[i].id = updateItem.id;
-            direntList[i].mtime = moment.unix(updateItem.mtime).fromNow();
-            break;
-          } else {
-            direntList[i].id = updateItem.id;
-            direntList[i].mtime = moment.unix(updateItem.mtime).fromNow();
-            direntList[i].size = Utils.bytesToSize(updateItem.size);
-          }
+        if (direntList[i].name === updateItem.name && direntList[i].type === updateItem.type) {
+          direntList[i].id = updateItem.id;
+          direntList[i].mtime = moment.unix(updateItem.mtime).fromNow();
+          break;
         }
       }
     }

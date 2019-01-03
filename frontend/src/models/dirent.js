@@ -12,8 +12,8 @@ class Dirent {
     this.isSelected = false; // is check or not
     if (json.type === 'file') {
       this.size = Utils.bytesToSize(json.size);
-      this.starred = json.starred;
-      this.is_locked = json.is_locked;
+      this.starred = json.starred || false;
+      this.is_locked = json.is_locked || false;
       this.lock_time = moment.unix(json.lock_time).fromNow();
       this.lock_owner= json.lock_owner;
       this.locked_by_me = json.locked_by_me;
