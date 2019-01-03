@@ -753,6 +753,8 @@ ul,ol,li {
 .sf-popover-list {
   border-top: 1px solid #e3e3e5;
   list-style: none;
+  margin-top: 5px;
+  padding-top: 5px;
 }
 a.sf-popover-item {
     display:block;
@@ -760,8 +762,8 @@ a.sf-popover-item {
     font-weight:normal;
     line-height:31px;
     text-decoration:none;
-    padding:0 10px;
-    margin:5px -10px;
+    padding: 5px 10px;
+    margin: 0px -10px;
 }
 a.sf-popover-item:hover {
     background-color: #f8f8f8;
