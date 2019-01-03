@@ -422,7 +422,10 @@ class DraftReview extends React.Component {
     }
     if (typeof(key) === 'string') {
       const win = window;
-      const element = win.document.querySelector(`[data-key="${key}"]`);
+      let element = win.document.querySelector(`[data-key="${key}"]`);
+      while (element.tagName === "CODE") {
+        element = element.parentNode;
+      }
       const scroller = this.findScrollContainer(element, win);
       const isWindow = scroller == win.document.body || scroller == win.document.documentElement;
       if (isWindow) {
