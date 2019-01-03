@@ -285,7 +285,7 @@ class ShareAdminShareLinks extends Component {
   }
 
   onRemoveLink = (item) => {
-    seafileAPI.deleteUploadLink(item.token).then(() => {
+    seafileAPI.deleteShareLink(item.token).then(() => {
       let items = this.state.items.filter(uploadItem => {
         return uploadItem.token !== item.token;
       });
