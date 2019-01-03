@@ -2004,6 +2004,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
         entry["name"] = dirent.obj_name
         entry["id"] = dirent.obj_id
         entry["mtime"] = dirent.mtime
+        entry["last_modified"] = timestamp_to_isoformat_timestr(dirent.mtime)
         entry["permission"] = dirent.permission
         if dtype == 'dir':
             dir_list.append(entry)
