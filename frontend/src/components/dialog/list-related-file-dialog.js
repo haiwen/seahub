@@ -103,7 +103,7 @@ class ListRelatedFileDialog extends React.Component {
           }
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
           <Button color="primary" onClick={this.props.addRelatedFileToggle}>{gettext('Add File')}</Button>
         </ModalFooter>
       </Modal>
