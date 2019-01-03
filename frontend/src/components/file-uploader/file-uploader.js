@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
@@ -26,7 +26,7 @@ const propTypes = {
   fileTypeErrorCallback: PropTypes.func,
   dragAndDrop: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
-  onFileUploadSuccess: PropTypes.func.isRequired,
+  onFileUploadComplete: PropTypes.func.isRequired,
 };
 
 class FileUploader extends React.Component {
@@ -40,7 +40,12 @@ class FileUploader extends React.Component {
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
     };
+
     this.isUpdateUploadedFile = false;
+    this.needCreateFolders = [];
+    this.needUpdateFolders = [];
+    this.needCreateFiles = [];
+    this.needUpdateFiles = [];
   }
 
   componentDidMount() {
@@ -205,22 +210,120 @@ class FileUploader extends React.Component {
 
     this.setState({uploadFileList: uploadFileList});
   }
+  
+  onProgress = () => {
+    let progress = Math.round(this.resumable.progress() * 100);
+    this.setState({totalProgress: progress});
+  }
+  
+  onFileUploadSuccess = (resumableFile, message) => {
+    let formData = resumableFile.formData;
+    let direntList = this.props.direntList;
+    let currentTime = new Date().getTime()/1000;
+    if (formData.relative_path) {                // uploading a forder
+      message = JSON.parse(message)[0];
+      let relative_path = formData.relative_path;
+      let dir_name = relative_path.slice(0, relative_path.indexOf('/'));
+      if (direntList.indexOf(dir_name) !== -1) { // the dir exist in current path
+        let dirent = {                           // execute update operation
+          id: message.id,
+          name: dir_name,
+          type: 'dir',
+          mtime: currentTime,
+        }
+        this.addDirentToUpdateFolders(dirent);
+      } else {                                  // the dir not exist in current path
+        let dirent = {                          // execute create operation
+          id: message.id,
+          name: dir_name,
+          type: 'dir',
+          permission: 'rw',
+          mtime: currentTime,
+        }
+        this.addDirentToCreateFolders(dirent);
+      }
+    } else {                              // uploading a file
+      if (formData.replace) {             // update the file is exist;
+        let dirent = {                    // execute update operation
+          id: message.id,
+          name: message.name,
+          type: 'file',
+          size: message.size,
+          mtime: currentTime,
+        };
+        this.addDirentToUpdateFiles(dirent);
+      } else {                            // upload a new file
+        let dirent = {                    // execute create operaion
+          id: message.id,
+          name: message.name,
+          type: 'file',
+          size: message.size,
+          mtime: currentTime,
+          permission: 'rw',
+        };
+        this.needCreateFiles.push(dirent);
+      }
+    }
+  }
 
-  onFileUploadSuccess = (file) => {
-    // todos, update uploadList or updateList;
+  addDirentToCreateFolders = (dirent) => {
+    let needCreateFolders = this.needCreateFolders;
+    let isExist = false;
+    for (let i = 0; i < needCreateFolders.length; i++) {
+      if (needCreateFolders[i].name === dirent.name) {
+        isExist = true;
+        break;
+      }
+    }
+    if (!isExist) {
+      this.needCreateFolders.push(dirent);
+    }
+  }
+
+  addDirentToUpdateFolders = (dirent) => {
+    let needUpdateFolders = this.needUpdateFolders;
+    let isExist = false;
+    let index = 0;
+    for (let i = 0; i < needUpdateFolders.length; i++) {
+      if (needUpdateFolders[i].name === dirent.name) {
+        isExist = true;
+        index = i;
+        break;
+      }
+    }
+    if (!isExist) {
+      this.needUpdateFolders.splice(index, 1);
+      this.needUpdateFolders.push(dirent);
+    }
+  }
+
+  addDirentToUpdateFiles = (dirent) => {
+    let needUpdateFiles = this.needUpdateFiles;
+    let isExist = false;
+    let index = 0;
+    for (let i = 0; i < needUpdateFiles.length; i++) {
+      if (needUpdateFiles[i].name === dirent.name) {
+        isExist = true;
+        index = i;
+        break;
+      }
+    }
+    if (!isExist) {
+      this.needUpdateFiles.splice(index, 1);
+      this.needUpdateFiles.push(dirent);
+    }
   }
 
   onFileError = (file) => {
 
   }
 
-  onProgress = () => {
-    let progress = Math.round(this.resumable.progress() * 100);
-    this.setState({totalProgress: progress});
-  }
-
   onComplete = () => {
-
+    this.props.onFileUploadComplete(this.needCreateFolders, this.needUpdateFolders, this.needCreateFiles, this.needUpdateFiles);
+    this.needCreateFolders = [];
+    this.needUpdateFolders = [];
+    this.needCreateFiles = [];
+    this.needUpdateFiles = [];
   }
 
   onPause = () => [
@@ -331,7 +434,8 @@ class FileUploader extends React.Component {
 
   }
 
-  replaceRepetitionFile = () => {
+  replaceRepetitionFile = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
     let { repoID, path } = this.props;
     this.isUpdateUploadedFile = true;
     seafileAPI.getUpdateLink(repoID, path).then(res => {
@@ -340,19 +444,14 @@ class FileUploader extends React.Component {
       let resumableFile =  this.resumable.files[this.resumable.files.length - 1];
       resumableFile.formData['replace'] = 1;
       resumableFile.formData['target_file'] = resumableFile.formData.parent_dir + resumableFile.fileName;
-  
-      // this.setState({isUploadRemindDialogShow: false});
-  
       this.setUploadFileList(this.resumable.files);
-  
       this.resumable.upload();
-
       this.isUpdateUploadedFile = false;
     });
   }
-
-  uploadFile = () => {
-    // this.setState({isUploadRemindDialogShow: false});
+  
+  uploadFile = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
 
     this.setUploadFileList(this.resumable.files);
     this.resumable.upload();
@@ -365,30 +464,32 @@ class FileUploader extends React.Component {
 
   render() {
     return (
-      <div className="file-uploader-container">
-        <div className="file-uploader">
-          <input className="upload-input" type="file" ref={node => this.uploadInput = node} onClick={this.onClick}/>
+      <Fragment>
+        <div className="file-uploader-container">
+          <div className="file-uploader">
+            <input className="upload-input" type="file" ref={node => this.uploadInput = node} onClick={this.onClick}/>
+          </div>
         </div>
-        {
-          this.state.isUploadProgressDialogShow &&
-          <UploadProgressDialog
-            uploadFileList={this.state.uploadFileList}
-            totalProgress={this.state.totalProgress}
-            onMinimizeUploadDialog={this.onMinimizeUploadDialog}
-            onCloseUploadDialog={this.onCloseUploadDialog}
-            onUploadCancel={this.onUploadCancel}
-          />
-        }
-        {
-          this.state.isUploadRemindDialogShow &&
-          <UploadRemindDialog
-            currentResumableFile={this.state.currentResumableFile}
-            replaceRepetitionFile={this.replaceRepetitionFile}
-            uploadFile={this.uploadFile}
-            cancelFileUpload={this.cancelFileUpload}
-          />
-        }
-      </div>
+          {
+            this.state.isUploadRemindDialogShow &&
+            <UploadRemindDialog
+              currentResumableFile={this.state.currentResumableFile}
+              replaceRepetitionFile={this.replaceRepetitionFile}
+              uploadFile={this.uploadFile}
+              cancelFileUpload={this.cancelFileUpload}
+            />
+          }
+          {
+            this.state.isUploadProgressDialogShow &&
+            <UploadProgressDialog
+              uploadFileList={this.state.uploadFileList}
+              totalProgress={this.state.totalProgress}
+              onMinimizeUploadDialog={this.onMinimizeUploadDialog}
+              onCloseUploadDialog={this.onCloseUploadDialog}
+              onUploadCancel={this.onUploadCancel}
+            />
+          }
+      </Fragment>
     );
   }
 }

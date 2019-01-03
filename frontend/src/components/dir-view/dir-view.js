@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -392,8 +393,51 @@ class DirView extends React.Component {
     this.setState({direntList: newDirentList});
   }
 
-  onFileUploadSuccess = () => {
-    // todo update upload file to direntList
+  onFileUploadComplete = (needCreateFolders, needUpdateFolders, needCreateFiles, needUpdateFiles) => {
+    if (needUpdateFolders.length > 0) {
+      let direntList = this.updateDirentListParams(needUpdateFolders);
+      this.setState({direntList: direntList});
+    }
+    if (needUpdateFiles.length > 0) {
+      let direntList = this.updateDirentListParams(needUpdateFiles);
+      this.setState({direntList: direntList});
+    }
+    let direntList1 = [];
+    let direntList2 = [];
+    if (needCreateFolders.length > 0) {
+      direntList1 = needCreateFolders.map(item => {
+        let dirent = new Dirent(item);
+        return dirent;
+      });
+    }
+    if (needCreateFiles.length > 0) {
+      direntList2 = needCreateFiles.map(item => {
+        let dirent = new Dirent(item);
+        return dirent;
+      });
+    }
+    this.setState({direntList: [...this.state.direntList, ...direntList1, ...direntList2]});
+  }
+
+  updateDirentListParams = (updateList) => {
+    let direntList = this.state.direntList.map(item => {return item});  // clone
+    while (updateList.length) {
+      let updateItem = updateList.shift();
+      for (let i = 0; i < direntList.length; i++) {
+        if (direntList[i].name = updateItem.name) {
+          if (updateItem.type === 'dir') {
+            direntList[i].id = updateItem.id;
+            direntList[i].mtime = moment.unix(updateItem.mtime).fromNow();
+            break;
+          } else {
+            direntList[i].id = updateItem.id;
+            direntList[i].mtime = moment.unix(updateItem.mtime).fromNow();
+            direntList[i].size = Utils.bytesToSize(updateItem.size);
+          }
+        }
+      }
+    }
+    return direntList;
   }
 
   onSearchedClick = (selectedItem) => {
@@ -546,7 +590,7 @@ class DirView extends React.Component {
         updateDirent={this.updateDirent}
         switchViewMode={this.switchViewMode}
         onSearchedClick={this.onSearchedClick}
-        onFileUploadSuccess={this.onFileUploadSuccess}
+        onFileUploadComplete={this.onFileUploadComplete}
         libNeedDecrypt={this.state.libNeedDecrypt}
         onLibDecryptDialog={this.onLibDecryptDialog}
       />
