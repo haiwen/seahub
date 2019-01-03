@@ -11,87 +11,92 @@
 }
 
 .file-view-hd {
-    font-size: 1.4em;
-    margin-bottom: 0px;
+  font-size: 1.4em;
+  margin-bottom: 0px;
 }
 
 .no-bold {
-    font-weight: normal;
+  font-weight: normal;
 }
 
-h2 {
-    font-size: 1.5em;
-    color: #222;
-    font-weight: bold;
+.shared-file-view-hd h2 {
+  margin-top: 9px;
+  font-size: 1.5em;
+  color: #222;
+  font-weight: bold;
 }
 
 .shared-file-view-hd {
-    margin-top: 4px;
-    flex-shrink: 0;
-    width: 950px;
-    margin: 0 auto;
-
+  margin-top: 4px;
+  flex-shrink: 0;
+  width: 950px;
+  margin: 0 auto;
 }
 
 .ovhd {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .shared-file-view-hd .share-by {
-     margin: 0;
+  margin: 0;
 }
 
 .shared-file-op-btn {
-    padding: 7px;
-    margin-top: 9px;
+  padding: 7px;
+  margin-top: 9px;
+}
+
+.shared-file-op-btn a {
+  color: #fff;
+  text-decoration: none;
 }
 
 .obv-btn {
-    display: inline-block;
-    color: #fff;
-    padding: 4px 10px;
-    background: #60b044;
-    border: 1px solid #5ca941;
-    border-radius: 3px;
+  display: inline-block;
+  color: #fff;
+  padding: 4px 10px;
+  background: #60b044;
+  border: 1px solid #5ca941;
+  border-radius: 3px;
 }
 
 a {
-    color: #eb8205;
-    text-decoration: none;
-    font-weight: bold;
+  color: #eb8205;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .file-view {
-    padding: 30px 0 15px;
-    background: #f4f4f4;
-    border: 1px solid #ededed;
-    margin-top: 12px;
+  padding: 30px 0 15px;
+  background: #f4f4f4;
+  border: 1px solid #ededed;
+  margin-top: 12px;
 }
 
 .ov-auto {
-    overflow: auto;
+  overflow: auto;
 }
 
 .flex-auto {
-    flex: auto;
+  flex: auto;
 }
 
 .md-view {
-    min-height: 400px;
-    border: 1px solid #ccc;
-    margin: 0 auto;
-    box-shadow: 0 0 6px #ccc;
-    padding: 40px 96px;
-    width: 960px;
-    background: #fff;
+  min-height: 400px;
+  border: 1px solid #ccc;
+  margin: 0 auto;
+  box-shadow: 0 0 6px #ccc;
+  padding: 40px 96px;
+  width: 960px;
+  background: #fff;
 }
 
 .file-enc-cont {
-    width: 950px;
-    margin: -20px auto 6px;
-    text-align: right;
+  width: 950px;
+  margin: -20px auto 6px;
+  text-align: right;
 }
 
 .article {
-    padding: 20px 30px;
+  padding: 20px 30px;
 }

@@ -2,9 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Account from './components/common/account';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { Button } from 'reactstrap';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import Loading from './components/loading';
+import SaveSharedFileDialog from './components/dialog/save-shared-file-dialog';
+import toaster from '@seafile/seafile-editor/dist/components/toast';
 
 import MarkdownViewer from './seafile-editor/src/viewer/markdown-viewer';
 
@@ -23,15 +26,36 @@ let loginUser = window.app.pageOptions.name;
 let enableWatermark = window.shared.pageOptions.enableWatermark;
 let download = window.shared.pageOptions.download;
 let siteName = window.shared.pageOptions.siteName;
-
+const pageOptions = window.shared.pageOptions;
+const { repoID, filePath, sharedToken, trafficOverLimit } = pageOptions;
 
 class SharedFileView extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       markdownContent: '',
       loading: true,
+      showSaveSharedFileDialog: false,
     };
+  }
+
+  handleSaveSharedFileDialog = () => {
+    this.setState({
+      showSaveSharedFileDialog: true
+    });
+  }
+
+  toggleCancel = () => {
+    this.setState({
+      showSaveSharedFileDialog: false
+    });
+  }
+
+  handleSaveSharedFile = () => {
+    toaster.success({gettext('Save Successfully')}, {
+      duration: 3
+    });
   }
 
   componentDidMount() {
@@ -41,51 +65,46 @@ class SharedFileView extends React.Component {
         loading: false
       });
     });
+    if (trafficOverLimit == "True") {
+      toaster.danger({gettext('File download is disabled: the share link traffic of owner is used up.')}, {
+        duration: 10
+      });
+    }
   }
 
   canDownload = () => {
     if (download) {
       return (
         <div className="float-right js-file-op">
-          <a href="?dl=1" className="obv-btn shared-file-op-btn">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
+          {(loginUser && loginUser !== sharedBy) &&
+            <Button color="secondary" id="save" className="shared-file-op-btn" onClick={this.handleSaveSharedFileDialog}>
+              {gettext('Save as ...')}</Button>
+          }
+          {' '}
+          {(trafficOverLimit === "False") &&
+            <Button color="success" className="shared-file-op-btn">
+              <a href="?dl=1">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
+            </Button>
+          }
         </div>
-         
       )
     }
-  }
-
-  fileEncode = () => {
-    return (
-      <div className="file-enc-cont">
-        <label htmlFor="file-enc">{gettext('Encoding:')}</label>
-        <select id="file-enc">
-          <option value="auto">auto detect</option>
-          <option value="utf-8">utf-8</option>
-          <option value="gbk">gbk</option>
-          <option value="ISO-8859-1">ISO-8859-1</option>
-          <option value="ISO-8859-5">ISO-8859-5</option>
-        </select>
-      </div>
-    )
   }
 
   render() {
     if (this.state.loading) {
       return <Loading />
     }
-
     return (
-      <div>
-
+      <React.Fragment>
         <div className="header d-flex">
-          <div>
+          <React.Fragment>
             <a href={siteRoot}>
               <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
             </a>
-          </div>
+          </React.Fragment>
           { loginUser && <Account /> }
         </div>
-
         <div className="shared-file-view-hd ovhd">
           <div className="float-left js-file-info" style={{'maxWidth': '804.812px'}}>
             <h2 className="file-view-hd ellipsis no-bold" title={fileName}>{fileName}</h2>
@@ -93,14 +112,21 @@ class SharedFileView extends React.Component {
           </div>
           {this.canDownload()}
         </div>
-
         <div className="file-view ">
-          {this.fileEncode()}
           <div className="md-view article">
             <MarkdownViewer markdownContent={this.state.markdownContent} showTOC={false} />
           </div>
         </div>
-      </div>
+        {this.state.showSaveSharedFileDialog &&
+          <SaveSharedFileDialog
+            repoID={repoID}
+            filePath={filePath}
+            sharedToken={sharedToken}
+            toggleCancel={this.toggleCancel}
+            handleSaveSharedFile={this.handleSaveSharedFile}
+          />
+        }
+      </React.Fragment>
     );
   }
 }
