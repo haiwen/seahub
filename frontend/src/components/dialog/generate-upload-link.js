@@ -124,14 +124,14 @@ class GenerateUploadLink extends React.Component {
       let message = gettext('You can share the generated link to others and they can upload files to this directory via the link.');
       return (
         <div>
-          <Form>
+          <Form className="mb-4">
             <FormText className="message">{message}</FormText>
             <FormGroup>
-              <Label>{gettext('Upload Link:')}</Label>
-              <div className="d-flex">
+              <dt className="text-secondary font-weight-normal">{gettext('Upload Link:')}</dt>
+              <dd className="d-flex">
                 <span>{sharedUploadInfo.link}</span>
                 <span className="far fa-copy action-icon" onClick={this.onCopyUploadLink}></span>
-              </div>
+              </dd>
             </FormGroup>
           </Form>
           <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>

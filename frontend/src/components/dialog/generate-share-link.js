@@ -27,6 +27,7 @@ class GenerateShareLink extends React.Component {
       expireDays: '',
       errorInfo: '',
       sharedLinkInfo: null,
+      isNoticeMessageShow: false,
     };
     this.permissions = {
       'can_edit': false, 
@@ -135,6 +136,7 @@ class GenerateShareLink extends React.Component {
         isExpireChecked: false,
         errorInfo: '',
         sharedLinkInfo: null,
+        isNoticeMessageShow: false,
       });
       this.permissions = {
         'can_edit': false,
@@ -227,42 +229,54 @@ class GenerateShareLink extends React.Component {
     return true;
   }
 
+  onNoticeMessageToggle = () => {
+    this.setState({isNoticeMessageShow: !this.state.isNoticeMessageShow});
+  }
+
   render() {
     if (this.state.sharedLinkInfo) {
       let sharedLinkInfo = this.state.sharedLinkInfo;
       return (
         <div>
-          <Form>
-            <FormGroup>
-              <Label>{gettext('Link:')}</Label>
-              <div className="d-flex">
+          <Form className="mb-4">
+            <FormGroup className="mb-0">
+              <dt className="text-secondary font-weight-normal">{gettext('Link:')}</dt>
+              <dd className="d-flex">
                 <span>{sharedLinkInfo.link}</span>{' '}
                 {sharedLinkInfo.is_expired ?
                   <span className="err-message">({gettext('Expired')})</span> :
                   <span className="far fa-copy action-icon" onClick={this.onCopySharedLink}></span>
                 }
-              </div>
+              </dd>
             </FormGroup>
             {!sharedLinkInfo.is_dir && (  //just for file
-              <FormGroup>
-                <Label>{gettext('Direct Download Link:')}</Label>
-                <div className="d-flex">
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
+                <dd className="d-flex">
                   <span>{sharedLinkInfo.link}?dl</span>{' '}
                   {sharedLinkInfo.is_expired ?
                     <span className="err-message">({gettext('Expired')})</span> :
                     <span className="far fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
                   }
-                </div>
+                </dd>
               </FormGroup>
             )}
             {sharedLinkInfo.expire_date && (
-              <FormGroup>
-                <Label>{gettext('Expiration Date:')}</Label>
-                <div>{moment(sharedLinkInfo.expire_date).format('YY-MM-DD hh:mm:ss')}</div>
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
+                <dd>{moment(sharedLinkInfo.expire_date).format('YY-MM-DD hh:mm:ss')}</dd>
               </FormGroup>
             )}
           </Form>
-          <Button onClick={this.deleteShareLink}>{gettext('Delete')}</Button>
+          {!this.state.isNoticeMessageShow ?
+            <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button> :
+            <div className="alert alert-warning">
+              <h4 className="alert-heading">{gettext('Are you sure you want to remove the share link?')}</h4>
+              <p className="mb-4">{gettext('If the share link is removed, no one will be able to access it any more.')}</p>
+              <button className="btn btn-secondary" onClick={this.deleteShareLink}>{gettext('Yes')}</button>{' '}
+              <button className="btn btn-secondary" onClick={this.onNoticeMessageToggle}>{gettext('No')}</button>
+            </div>
+          }
         </div>
       );
     } else {
