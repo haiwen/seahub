@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SharedLinkInfo from '../../models/shared-link-info';
+import toaster from '../toast';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -107,6 +110,12 @@ class GenerateShareLink extends React.Component {
         this.setState({sharedLinkInfo: sharedLinkInfo});
       });
     }
+  }
+
+  onCopySharedLink = () => {
+    let sharedLink = this.state.sharedLinkInfo.link;
+    copy(sharedLink);
+    toaster.success(gettext('Share link is copied to the clipboard.'));
   }
 
   deleteShareLink = () => {
@@ -217,16 +226,24 @@ class GenerateShareLink extends React.Component {
       let sharedLinkInfo = this.state.sharedLinkInfo;
       return (
         <div>
-          <div>
-            <div>
-              <span>{sharedLinkInfo.link}</span>
-              <span className="fas fa-copy action-icon"></span>
-            </div>
-            <div>
-              <span>{gettext('Expiration Data')}:</span>
-              <span>{sharedLinkInfo.expire_date}</span>
-            </div>
-          </div>
+          <Form>
+            <FormGroup>
+              <Label>{gettext('Link')}:</Label>
+              <div>
+                <span>{sharedLinkInfo.link}</span>{' '}
+                {sharedLinkInfo.is_expired ?
+                  <span className="err-message">({gettext('Expired')})</span> :
+                  <span className="fas fa-copy action-icon" onClick={this.onCopySharedLink}></span>
+                }
+              </div>
+            </FormGroup>
+            {sharedLinkInfo.expire_date && (
+              <FormGroup>
+                <Label>{gettext('Expiration Data')}:</Label>
+                <div>{moment(sharedLinkInfo.expire_date).format('YY-MM-DD hh:mm:ss')}</div>
+              </FormGroup>
+            )}
+          </Form>
           <Button onClick={this.deleteShareLink}>{gettext('Delete')}</Button>
         </div>
       );

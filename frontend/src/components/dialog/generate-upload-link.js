@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, FormText, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SharedUploadInfo from '../../models/shared-upload-info';
+import toaster from '../toast';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -98,6 +100,12 @@ class GenerateUploadLink extends React.Component {
     }
   }
 
+  onCopyUploadLink = () => {
+    let uploadLink = this.state.sharedUploadInfo.link;
+    copy(uploadLink);
+    toaster.success(gettext('Upload link is copied to the clipboard.'));
+  }
+
   deleteUploadLink = () => {
     let sharedUploadInfo = this.state.sharedUploadInfo
     seafileAPI.deleteUploadLink(sharedUploadInfo.token).then(() => {
@@ -116,14 +124,16 @@ class GenerateUploadLink extends React.Component {
       let message = gettext('You can share the generated link to others and they can upload files to this directory via the link.');
       return (
         <div>
-          <div>
-            <div className="message">{message}</div>
-            <div>
-              <div>{gettext('Upload Link')}:</div>
-              <span>{sharedUploadInfo.link}</span>
-              <span className="fas fa-copy action-icon"></span>
-            </div>
-          </div>
+          <Form>
+            <FormText className="message">{message}</FormText>
+            <FormGroup>
+              <Label>{gettext('Upload Link')}:</Label>
+              <div>
+                <span>{sharedUploadInfo.link}</span>
+                <span className="fas fa-copy action-icon" onClick={this.onCopyUploadLink}></span>
+              </div>
+            </FormGroup>
+          </Form>
           <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>
         </div>
       );
