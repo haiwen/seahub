@@ -393,53 +393,31 @@ class DirView extends React.Component {
     this.setState({direntList: newDirentList});
   }
 
-  onFileUploadComplete = (uploadedFolders, uploadedFiles) => {
-    let isExist = false;
-    let direntList1 = [];
-    let direntList2 = [];
-    while (uploadedFolders.length) {
-      let uploadedFolder = uploadedFolders.shift();
-      isExist = this.isCurrentDirentObjectExist(uploadedFolder);
-      if (isExist) {
-        direntList1 = this.updateDirentListParams(uploadedFolder);
-      } else {
-        let dirent = new Dirent(uploadedFolder);
-        direntList1.push(dirent);
-      }
-    }
-
-    while (uploadedFiles.length) {
-      let uploadedFile = uploadedFiles.shift();
-      isExist = this.isCurrentDirentObjectExist(uploadedFile);
-      if (isExist) {
-        direntList2 = this.updateDirentListParams(uploadedFile);
-      } else {
-        let dirent = new Dirent(uploadedFile);
-        direntList2.push(dirent);
-      }
-    }
+  onFileUploadSuccess = (direntObject) => {
+    let direntList = [];
+    let isExist = this.state.direntList.some(item => { 
+      return item.name === direntObject.name && item.type === direntObject.type;
+    });
     if (isExist) {
-      this.setState({direntList: [...direntList1, ...direntList2]});
+      let currentDirentList = this.state.direntList;
+      direntList = this.state.direntList.map(item => {return item}); 
+      for (let i = 0; i < currentDirentList.length; i++) {
+        let dirent = currentDirentList[i];
+        if (dirent.name === direntObject.name && dirent.type === direntObject.type) {
+          dirent.id = direntObject.id;
+          dirent.mtime = moment.unix(direntObject.mtime).fromNow();
+          break;
+        }
+      }
+      this.setState({direntList: direntList});
     } else {
-      let direntList = this.state.direntList;
-      this.setState({direntList: [...direntList1, ...direntList, ...direntList2]});
-    }
-  }
-
-  isCurrentDirentObjectExist = (direntObject) => {
-    return this.state.direntList.some(item => { return item.name === direntObject.name;});
-  }
-
-  updateDirentListParams = (direntObject) => {
-    let direntList = this.state.direntList.map(item => {return item});  // clone
-    for (let i = 0; i < direntList.length; i++) {
-      let dirent = direntList[i];
-      if (dirent.name === direntObject.name && dirent.type === direntObject.type) {
-        dirent.id = direntObject.id;
-        dirent.mtime = moment.unix(direntObject.mtime).fromNow();
+      let dirent = new Dirent(direntObject);
+      if (direntObject.type === 'dir') {
+        this.setState({direntList: [dirent, ...this.state.direntList]});
+      } else {
+        this.setState({direntList: [...this.state.direntList, dirent]});
       }
     }
-    return direntList;
   }
 
   onSearchedClick = (selectedItem) => {
@@ -592,6 +570,7 @@ class DirView extends React.Component {
         updateDirent={this.updateDirent}
         switchViewMode={this.switchViewMode}
         onSearchedClick={this.onSearchedClick}
+        onFileUploadSuccess={this.onFileUploadSuccess}
         onFileUploadComplete={this.onFileUploadComplete}
         libNeedDecrypt={this.state.libNeedDecrypt}
         onLibDecryptDialog={this.onLibDecryptDialog}

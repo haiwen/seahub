@@ -26,7 +26,7 @@ const propTypes = {
   fileTypeErrorCallback: PropTypes.func,
   dragAndDrop: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
-  onFileUploadComplete: PropTypes.func.isRequired,
+  onFileUploadSuccess: PropTypes.func.isRequired,
 };
 
 class FileUploader extends React.Component {
@@ -229,7 +229,7 @@ class FileUploader extends React.Component {
       // update folders cache
       let isExist = this.uploadedFolders.some(item => {return item.name === dirent.name;});
       if (!isExist) {
-        this.uploadedFolders.push(dirent);
+        this.props.onFileUploadSuccess(dirent);
       }
 
       // update uploadFileList
@@ -253,7 +253,7 @@ class FileUploader extends React.Component {
         type: 'file',
         mtime: currentTime
       };
-      this.uploadedFiles.push(dirent);  // this contance: just one file
+      this.props.onFileUploadSuccess(dirent); // this contance: just one file
 
       return;
     }
@@ -266,7 +266,7 @@ class FileUploader extends React.Component {
       size: message.size,
       mtime: currentTime,
     };
-    this.uploadedFiles.push(dirent);  // this contance:  no repetition file;
+    this.props.onFileUploadSuccess(dirent); // this contance:  no repetition file
 
     let uploadFileList = this.state.uploadFileList.map(item => {
       if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
@@ -283,7 +283,6 @@ class FileUploader extends React.Component {
   }
 
   onComplete = () => {
-    this.props.onFileUploadComplete(this.uploadedFolders, this.uploadedFiles);
     this.uploadedFolders = [];
     this.uploadedFiles = [];
   }
