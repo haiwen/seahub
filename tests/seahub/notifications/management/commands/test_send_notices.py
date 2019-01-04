@@ -127,8 +127,8 @@ class CommandTest(BaseTestCase):
         notice = UserNotification.objects.add_repo_share_msg('to@to.com', detail)
         resp = Command().format_repo_share_msg(notice)
 
-        assert resp.repo_url == '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
-                                                                       'path': ''}
+        assert resp.repo_url == '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {
+                'repo_id': self.repo.id, 'repo_name': self.repo.name, 'path': ''}
 
     def test_format_group_message(self):
         detail = group_msg_to_json(self.group.id, 'from@email.com', 'message')
@@ -144,9 +144,9 @@ class CommandTest(BaseTestCase):
         notice = UserNotification.objects.add_repo_share_to_group_msg('group@share.com', detail)
         resp = Command().format_repo_share_to_group_msg(notice)
 
-        assert resp.repo_url == '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
-                                                                       'path': ''}
-        assert resp.group_url == '/#group/%(group_id)s/' % {'group_id': self.group.id}
+        assert resp.repo_url == '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {
+                'repo_id': self.repo.id, 'repo_name': self.repo.name, 'path': ''}
+        assert resp.group_url == '/group/%(group_id)s/' % {'group_id': self.group.id}
 
     def test_format_file_uploaded_msg(self):
         upload_to = '/'
@@ -154,8 +154,8 @@ class CommandTest(BaseTestCase):
         notice = UserNotification.objects.add_file_uploaded_msg('file@upload.com', detail)
         resp = Command().format_file_uploaded_msg(notice)
 
-        assert resp.folder_link == '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
-                                                                          'path': upload_to.strip('/')}
+        assert resp.folder_link == '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {
+                'repo_id': self.repo.id, 'repo_name': self.repo.name, 'path': upload_to.strip('/')}
 
     def test_format_group_join_request(self):
         detail = group_join_request_to_json('group_join', self.group.id, 'join_request_msg')
@@ -171,4 +171,4 @@ class CommandTest(BaseTestCase):
                                                                        detail=detail)
         resp = Command().format_add_user_to_group(notice)
 
-        assert resp.group_url == '/#group/%(group_id)s/' % {'group_id': self.group.id}
+        assert resp.group_url == '/group/%(group_id)s/' % {'group_id': self.group.id}

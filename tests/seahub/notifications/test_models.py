@@ -25,7 +25,8 @@ class UserNotificationTest(BaseTestCase):
         notice = UserNotification.objects.add_file_uploaded_msg('file@upload.com', detail)
 
         msg = notice.format_file_uploaded_msg()
-        assert '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
+        assert '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {'repo_id': self.repo.id,
+                                                      'repo_name': self.repo.name,
                                                       'path': upload_to.strip('/')} in msg
 
     def test_format_group_message_title(self):
@@ -46,7 +47,7 @@ class UserNotificationTest(BaseTestCase):
         notice = UserNotification.objects.set_add_user_to_group_notice(self.user.username,
                                                                        detail=detail)
         msg = notice.format_add_user_to_group()
-        assert '/#group/%(group_id)s/' % {'group_id': self.group.id} in msg
+        assert '/group/%(group_id)s/' % {'group_id': self.group.id} in msg
 
     def test_format_repo_share_msg(self):
         notice = UserNotification.objects.add_repo_share_msg(
@@ -56,8 +57,10 @@ class UserNotificationTest(BaseTestCase):
         msg = notice.format_repo_share_msg()
         assert msg is not None
         assert 'bar has shared a library named' in msg
-        assert '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
-                                                      'path': ''} in msg
+        assert '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {
+                'repo_id': self.repo.id,
+                'repo_name': self.repo.name,
+                'path': ''} in msg
 
     def test_format_repo_share_msg_with_folder(self):
         folder_path = self.folder
@@ -79,7 +82,7 @@ class UserNotificationTest(BaseTestCase):
         msg = notice.format_repo_share_to_group_msg()
         assert msg is not None
         assert 'bar has shared a library named' in msg
-        assert '/#group/%(group_id)s/' % {'group_id': self.group.id} in msg
+        assert '/group/%(group_id)s/' % {'group_id': self.group.id} in msg
 
     def test_format_repo_share_to_group_msg_with_folder(self):
         folder_path = self.folder

@@ -17,5 +17,5 @@ class RepoHistoryTest(BaseTestCase):
         resp = self.client.get(reverse('repo_history', args=[self.enc_repo.id]))
 
         self.assertEqual(302, resp.status_code)
-        assert '/#common/lib/%(repo_id)s/%(path)s' % {
-                 'repo_id': self.enc_repo.id, 'path': ''} in resp.url
+        assert '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {
+                'repo_id': self.enc_repo.id, 'repo_name': self.enc_repo.name, 'path': ''} in resp.url

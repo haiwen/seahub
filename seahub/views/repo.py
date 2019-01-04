@@ -4,6 +4,7 @@ import os
 import posixpath
 import logging
 
+from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
@@ -115,7 +116,7 @@ def repo_history_view(request, repo_id):
         # Assume server_crypto is ``False`` if this option is not set.
         server_crypto = False
 
-    reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+    reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
     if repo.encrypted and \
         (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
         and not is_password_set(repo.id, username):

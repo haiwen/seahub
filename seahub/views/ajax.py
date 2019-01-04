@@ -817,8 +817,8 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
             success.append(obj_name)
 
     if len(success) > 0:
-        url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': dst_repo_id, 'path': dst_path.strip('/')},
-
+        dst_repo = seafile_api.get_repo(dst_repo_id)
+        url = reverse('lib_view', args=[dst_repo_id, dst_repo.name, dst_path.strip('/')])
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
 
@@ -890,8 +890,8 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
             success.append(obj_name)
 
     if len(success) > 0:
-        url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': dst_repo_id, 'path': dst_path.strip('/')},
-
+        dst_repo = seafile_api.get_repo(dst_repo_id)
+        url = reverse('lib_view', args=[dst_repo_id, dst_repo.name, dst_path.strip('/')])
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
 
