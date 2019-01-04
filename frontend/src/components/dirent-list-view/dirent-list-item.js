@@ -475,7 +475,7 @@ class DirentListItem extends React.Component {
             }
           </td>
           <td className="file-size">{dirent.size && dirent.size}</td>
-          <td className="last-update" dangerouslySetInnerHTML={{__html: dirent.mtime}}></td>
+          <td className="last-update">{dirent.mtime_relative}</td>
         </tr>
         {this.state.isMoveDialogShow &&
           <ModalPortal>

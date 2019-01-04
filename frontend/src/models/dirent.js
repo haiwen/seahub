@@ -7,7 +7,8 @@ class Dirent {
     this.id = json.id;
     this.name = json.name;
     this.type = json.type;
-    this.mtime = moment.unix(json.mtime).fromNow();
+    this.mtime = json.mtime;
+    this.mtime_relative = moment.unix(json.mtime).fromNow();
     this.permission = json.permission;
     this.isSelected = false; // is check or not
     if (json.type === 'file') {
