@@ -7,24 +7,16 @@
     window.shared = {
         pageOptions: {
             repoID: '{{ repo.id }}',
-            objID: '{{ obj_id }}',
             path: '{{ path|escapejs }}',
+            sharedToken: '{{ shared_token }}',
+            trafficOverLimit: '{{ traffic_over_limit }}',
             fileName: '{{ file_name|escapejs }}',
             fileSize: '{{ file_size }}',
-            sharedToken: '{{ shared_token }}',
-            accessToken: '{{ access_token }}',
-            fileext: '{{ fileext }}',
             rawPath: '{{ raw_path|escapejs }}',
             sharedBy: '{{ shared_by|email2nickname }}',
-            err: '{{ err }}',
-            encoding: '{{ encoding }}',
-            fileEncodingList: '{{ file_encoding_list|escapejs }}',
-            fileType: '{{ filetype }}',
-            saveToLink: '{{ save_to_link }}',
-            trafficOverLimit: '{{ traffic_over_limit }}',
-            download: '{{ permissions.can_download}}' == 'True',
-            enableWatermark: '{{ enable_watermark }}' == 'True',
             siteName: '{{ site_name }}',
+            enableWatermark: '{{ enable_watermark }}' == 'True',
+            download: '{{ permissions.can_download}}' == 'True',
         }
     };
 </script>
