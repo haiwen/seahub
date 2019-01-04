@@ -1176,7 +1176,11 @@ def view_shared_file(request, fileshare):
 
     permissions = fileshare.get_permissions()
 
-    return render(request, 'shared_file_view.html', {
+    template = 'shared_file_view.html'
+    if filetype == MARKDOWN:
+        template = 'shared_file_view_react_markdown.html'
+
+    return render(request, template, {
             'repo': repo,
             'obj_id': obj_id,
             'path': path,
