@@ -35,6 +35,8 @@ class Wiki extends Component {
       currentNode: null,
       isDirentListLoading: true,
       isViewFile: false,
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc', // 'asc' or 'desc'
       direntList: [],
       isFileLoading: true,
       content: '',
@@ -318,7 +320,7 @@ class Wiki extends Component {
         direntList.push(dirent);
       });
       this.setState({
-        direntList: direntList,
+        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         isDirentListLoading: false,
         dirID: res.headers.oid,
       });
@@ -865,6 +867,14 @@ class Wiki extends Component {
     window.location.href = siteRoot + 'lib/' + repoID + '/file' + this.state.draftFilePath + '?mode=edit';
   }
 
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      items: Utils.sortDirents(this.state.direntList, sortBy, sortOrder)
+    })
+  }
+
   render() {
     let { libNeedDecrypt } = this.state;
     if (libNeedDecrypt) {
@@ -903,6 +913,9 @@ class Wiki extends Component {
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
           direntList={this.state.direntList}
+          sortBy={this.state.sortBy}
+          sortOrder={this.state.sortOrder}
+          sortItems={this.sortItems}
           selectedDirentList={this.state.selectedDirentList}
           updateDirent={this.updateDirent}
           onSideNavMenuClick={this.onSideNavMenuClick}

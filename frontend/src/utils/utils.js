@@ -479,5 +479,47 @@ export const Utils = {
 
     repos.sort(comparator);
     return repos;
+  },
+
+  sortDirents: function(items, sortBy, sortOrder) {
+    const _this = this;
+    let comparator;
+
+    switch (`${sortBy}-${sortOrder}`) {
+      case 'name-asc':
+        comparator = function(a, b) {
+          var result = _this.compareTwoWord(a.name, b.name);
+          return result;
+        };
+        break;
+      case 'name-desc':
+        comparator = function(a, b) {
+          var result = _this.compareTwoWord(a.name, b.name);
+          return -result;
+        };
+        break;
+      case 'time-asc':
+        comparator = function(a, b) {
+          return a.mtime < b.mtime ? -1 : 1;
+        };
+        break;
+      case 'time-desc':
+        comparator = function(a, b) {
+          return a.mtime < b.mtime ? 1 : -1;
+        };
+        break;
+    }
+
+    items.sort((a, b) => {
+      if (a.type == 'dir' && b.type == 'file') {
+        return -1;
+      } else if (a.type == 'file' && b.type == 'dir') {
+        return 1;
+      } else {
+        return comparator(a, b);
+      }
+    });
+    return items;
   }
+
 };

@@ -31,6 +31,9 @@ const propTypes = {
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortItems: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onSideNavMenuClick: PropTypes.func.isRequired,
@@ -265,6 +268,9 @@ class MainPanel extends Component {
                         path={this.props.path}
                         repoID={repoID}
                         direntList={this.props.direntList}
+                        sortBy={this.props.sortBy}
+                        sortOrder={this.props.sortOrder}
+                        sortItems={this.props.sortItems}
                         onItemClick={this.onItemClick}
                         onItemDelete={this.props.onItemDelete}
                         onItemRename={this.props.onItemRename}

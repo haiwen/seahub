@@ -27,6 +27,9 @@ const propTypes = {
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortItems: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
@@ -193,6 +196,9 @@ class DirPanel extends React.Component {
                           path={this.props.path}
                           repoID={this.props.repoID}
                           direntList={this.props.direntList}
+                          sortBy={this.props.sortBy}
+                          sortOrder={this.props.sortOrder}
+                          sortItems={this.props.sortItems}
                           currentRepoInfo={this.props.currentRepoInfo}
                           isDirentListLoading={this.props.isDirentListLoading}
                           isAllItemSelected={this.props.isAllDirentSelected}
