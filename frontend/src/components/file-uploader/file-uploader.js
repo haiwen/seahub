@@ -42,7 +42,6 @@ class FileUploader extends React.Component {
     };
 
     this.uploadedFolders = [];
-    this.uploadedFiles = [];
   }
 
   componentDidMount() {
@@ -229,6 +228,7 @@ class FileUploader extends React.Component {
       // update folders cache
       let isExist = this.uploadedFolders.some(item => {return item.name === dirent.name;});
       if (!isExist) {
+        this.uploadedFolders.push(dirent);
         this.props.onFileUploadSuccess(dirent);
       }
 
@@ -284,7 +284,6 @@ class FileUploader extends React.Component {
 
   onComplete = () => {
     this.uploadedFolders = [];
-    this.uploadedFiles = [];
   }
 
   onPause = () => {
