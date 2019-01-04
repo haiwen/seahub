@@ -118,6 +118,12 @@ class GenerateShareLink extends React.Component {
     toaster.success(gettext('Share link is copied to the clipboard.'));
   }
 
+  onCopyDownloadLink = () => {
+    let downloadLink = this.state.sharedLinkInfo.link + '?dl';
+    copy(downloadLink);
+    toaster.success(gettext('Direct download link is copied to the clipboard.'));
+  }
+
   deleteShareLink = () => {
     let sharedLinkInfo = this.state.sharedLinkInfo;
     seafileAPI.deleteShareLink(sharedLinkInfo.token).then(() => {
@@ -228,8 +234,8 @@ class GenerateShareLink extends React.Component {
         <div>
           <Form>
             <FormGroup>
-              <Label>{gettext('Link')}:</Label>
-              <div>
+              <Label>{gettext('Link: ')}</Label>
+              <div className="d-flex">
                 <span>{sharedLinkInfo.link}</span>{' '}
                 {sharedLinkInfo.is_expired ?
                   <span className="err-message">({gettext('Expired')})</span> :
@@ -237,6 +243,18 @@ class GenerateShareLink extends React.Component {
                 }
               </div>
             </FormGroup>
+            {!sharedLinkInfo.is_dir && (  //just for file
+              <FormGroup>
+                <Label>{gettext('Direct Download Link: ')}</Label>
+                <div className="d-flex">
+                  <span>{sharedLinkInfo.link}?dl</span>{' '}
+                  {sharedLinkInfo.is_expired ?
+                    <span className="err-message">({gettext('Expired')})</span> :
+                    <span className="fas fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
+                  }
+                </div>
+              </FormGroup>
+            )}
             {sharedLinkInfo.expire_date && (
               <FormGroup>
                 <Label>{gettext('Expiration Data')}:</Label>

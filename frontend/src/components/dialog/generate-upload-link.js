@@ -127,8 +127,8 @@ class GenerateUploadLink extends React.Component {
           <Form>
             <FormText className="message">{message}</FormText>
             <FormGroup>
-              <Label>{gettext('Upload Link')}:</Label>
-              <div>
+              <Label>{gettext('Upload Link: ')}</Label>
+              <div className="d-flex">
                 <span>{sharedUploadInfo.link}</span>
                 <span className="fas fa-copy action-icon" onClick={this.onCopyUploadLink}></span>
               </div>
