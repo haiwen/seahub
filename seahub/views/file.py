@@ -1178,7 +1178,7 @@ def view_shared_file(request, fileshare):
 
     template = 'shared_file_view.html'
     if filetype == MARKDOWN:
-        template = 'view_shared_file.html'
+        template = 'shared_file_view_react_markdown.html'
 
     return render(request, template, {
             'repo': repo,

@@ -84,10 +84,10 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/draw/draw.js",
     ],
-    sharedFileView: [
+    sharedFileViewMarkdown: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view.js",
+      paths.appSrc + "/shared-file-view-markdown.js",
     ]
   },
 

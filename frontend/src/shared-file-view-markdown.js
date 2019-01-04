@@ -29,7 +29,7 @@ let siteName = window.shared.pageOptions.siteName;
 const pageOptions = window.shared.pageOptions;
 const { repoID, filePath, sharedToken, trafficOverLimit } = pageOptions;
 
-class SharedFileView extends React.Component {
+class SharedFileViewMarkdown extends React.Component {
 
   constructor(props) {
     super(props);
@@ -142,6 +142,6 @@ if (enableWatermark) {
 }
 
 ReactDOM.render (
-  <SharedFileView />,
+  <SharedFileViewMarkdown />,
   document.getElementById('wrapper')
 );
