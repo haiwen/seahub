@@ -234,30 +234,30 @@ class GenerateShareLink extends React.Component {
         <div>
           <Form>
             <FormGroup>
-              <Label>{gettext('Link: ')}</Label>
+              <Label>{gettext('Link:')}</Label>
               <div className="d-flex">
                 <span>{sharedLinkInfo.link}</span>{' '}
                 {sharedLinkInfo.is_expired ?
                   <span className="err-message">({gettext('Expired')})</span> :
-                  <span className="fas fa-copy action-icon" onClick={this.onCopySharedLink}></span>
+                  <span className="far fa-copy action-icon" onClick={this.onCopySharedLink}></span>
                 }
               </div>
             </FormGroup>
             {!sharedLinkInfo.is_dir && (  //just for file
               <FormGroup>
-                <Label>{gettext('Direct Download Link: ')}</Label>
+                <Label>{gettext('Direct Download Link:')}</Label>
                 <div className="d-flex">
                   <span>{sharedLinkInfo.link}?dl</span>{' '}
                   {sharedLinkInfo.is_expired ?
                     <span className="err-message">({gettext('Expired')})</span> :
-                    <span className="fas fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
+                    <span className="far fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
                   }
                 </div>
               </FormGroup>
             )}
             {sharedLinkInfo.expire_date && (
               <FormGroup>
-                <Label>{gettext('Expiration Data')}:</Label>
+                <Label>{gettext('Expiration Date:')}</Label>
                 <div>{moment(sharedLinkInfo.expire_date).format('YY-MM-DD hh:mm:ss')}</div>
               </FormGroup>
             )}
