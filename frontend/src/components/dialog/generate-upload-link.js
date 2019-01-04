@@ -1,8 +1,9 @@
 import React from 'react';
-import { gettext } from '../../utils/constants';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Button, Form, FormGroup, FormText, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import SharedUploadInfo from '../../models/shared-upload-info';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -17,8 +18,7 @@ class GenerateUploadLink extends React.Component {
       passwordVisible: false,
       password: '',
       passwdnew: '',
-      link: '',
-      token:''
+      sharedUploadInfo: null,
     };
   }
 
@@ -31,10 +31,8 @@ class GenerateUploadLink extends React.Component {
     let repoID = this.props.repoID; 
     seafileAPI.getUploadLinks(repoID, path).then((res) => {
       if (res.data.length !== 0) {
-        this.setState({
-          link: res.data[0].link,
-          token: res.data[0].token,
-        });
+        let sharedUploadInfo = new SharedUploadInfo(res.data[0]);
+        this.setState({sharedUploadInfo: sharedUploadInfo});
       }
     });
   }
@@ -94,33 +92,40 @@ class GenerateUploadLink extends React.Component {
       });
     } else {
       seafileAPI.createUploadLink(repoID, path, this.state.password).then((res) => {
-        this.setState({
-          link: res.data.link,
-          token: res.data.token  
-        }); 
+        let sharedUploadInfo = new SharedUploadInfo(res.data);
+        this.setState({sharedUploadInfo: sharedUploadInfo}); 
       });
     }
   }
 
   deleteUploadLink = () => {
-    seafileAPI.deleteUploadLink(this.state.token).then(() => {
+    let sharedUploadInfo = this.state.sharedUploadInfo
+    seafileAPI.deleteUploadLink(sharedUploadInfo.token).then(() => {
       this.setState({
-        link: '',
-        token: '',
         showPasswordInput: false,
         password: '',
         passwordnew: '',
+        sharedUploadInfo: null,
       });
     });
   }
 
   render() {
-    if (this.state.link) {
+    if (this.state.sharedUploadInfo) {
+      let sharedUploadInfo = this.state.sharedUploadInfo;
+      let message = gettext('You can share the generated link to others and they can upload files to this directory via the link.');
       return (
-        <Form>
-          <p>{this.state.link}</p>
+        <div>
+          <div>
+            <div className="message">{message}</div>
+            <div>
+              <div>{gettext('Upload Link')}:</div>
+              <span>{sharedUploadInfo.link}</span>
+              <span className="fas fa-copy action-icon"></span>
+            </div>
+          </div>
           <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>
-        </Form>
+        </div>
       );
     }
     return (

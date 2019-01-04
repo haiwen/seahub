@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import SharedLinkInfo from '../../models/shared-link-info';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -21,9 +22,8 @@ class GenerateShareLink extends React.Component {
       password: '',
       passwdnew: '',
       expireDays: '',
-      token: '',
-      link: '',
-      errorInfo: ''
+      errorInfo: '',
+      sharedLinkInfo: null,
     };
     this.permissions = {
       'can_edit': false, 
@@ -41,10 +41,8 @@ class GenerateShareLink extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.getShareLink(repoID, path).then((res) => {
       if (res.data.length !== 0) {
-        this.setState({
-          link: res.data[0].link,
-          token: res.data[0].token,
-        });
+        let sharedLinkInfo = new SharedLinkInfo(res.data[0]);
+        this.setState({sharedLinkInfo: sharedLinkInfo});
       }
     });
   } 
@@ -105,25 +103,23 @@ class GenerateShareLink extends React.Component {
       let permissions = this.permissions;
       permissions = JSON.stringify(permissions);
       seafileAPI.createShareLink(repoID, itemPath, password, expireDays, permissions).then((res) => {
-        this.setState({
-          link: res.data.link,
-          token: res.data.token
-        });
+        let sharedLinkInfo = new SharedLinkInfo(res.data);
+        this.setState({sharedLinkInfo: sharedLinkInfo});
       });
     }
   }
 
   deleteShareLink = () => {
-    seafileAPI.deleteShareLink(this.state.token).then(() => {
+    let sharedLinkInfo = this.state.sharedLinkInfo;
+    seafileAPI.deleteShareLink(sharedLinkInfo.token).then(() => {
       this.setState({
-        link: '',
-        token: '',
         password: '',
         passwordnew: '',
         isShowPasswordInput: false,
         expireDays: '',
         isExpireChecked: false,
         errorInfo: '',
+        sharedLinkInfo: null,
       });
       this.permissions = {
         'can_edit': false,
@@ -217,12 +213,22 @@ class GenerateShareLink extends React.Component {
   }
 
   render() {
-    if (this.state.link) {
+    if (this.state.sharedLinkInfo) {
+      let sharedLinkInfo = this.state.sharedLinkInfo;
       return (
-        <Form>
-          <p>{this.state.link}</p>
+        <div>
+          <div>
+            <div>
+              <span>{sharedLinkInfo.link}</span>
+              <span className="fas fa-copy action-icon"></span>
+            </div>
+            <div>
+              <span>{gettext('Expiration Data')}:</span>
+              <span>{sharedLinkInfo.expire_date}</span>
+            </div>
+          </div>
           <Button onClick={this.deleteShareLink}>{gettext('Delete')}</Button>
-        </Form>
+        </div>
       );
     } else {
       return (
