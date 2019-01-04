@@ -1,5 +1,6 @@
 .tip-for-new-md {
   padding: 5em 8em; 
+  align-self: flex-start; /* for repo wiki mode */
 }
 .big-new-md-button {
   padding: .9em 2em 1em; 
