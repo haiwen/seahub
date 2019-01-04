@@ -569,7 +569,6 @@ class DirView extends React.Component {
         switchViewMode={this.switchViewMode}
         onSearchedClick={this.onSearchedClick}
         onFileUploadSuccess={this.onFileUploadSuccess}
-        onFileUploadComplete={this.onFileUploadComplete}
         libNeedDecrypt={this.state.libNeedDecrypt}
         onLibDecryptDialog={this.onLibDecryptDialog}
       />
