@@ -385,19 +385,6 @@ def can_edit_file(file_name, file_size, repo):
 
     return False, 'File edit unsupported'
 
-def send_file_access_msg_when_preview(request, repo, path, access_from):
-    """ send file access msg when user preview file from web
-    """
-    filename = os.path.basename(path)
-    filetype, fileext = get_file_type_and_ext(filename)
-
-    if filetype in (TEXT, IMAGE, MARKDOWN, VIDEO, AUDIO, PDF):
-        send_file_access_msg(request, repo, path, access_from)
-
-    if filetype in (DOCUMENT, SPREADSHEET) and \
-        HAS_OFFICE_CONVERTER:
-        send_file_access_msg(request, repo, path, access_from)
-
 @login_required
 def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
 
@@ -492,8 +479,10 @@ def view_lib_file(request, repo_id, path):
             return render_permission_error(request, _(u'Unable to view file'))
 
         dl_or_raw_url = gen_file_get_url(token, filename)
+
         # send stats message
         send_file_access_msg(request, repo, path, 'web')
+
         return HttpResponseRedirect(dl_or_raw_url)
 
     org_id = request.user.org.org_id if is_org_context(request) else -1
@@ -804,6 +793,8 @@ def view_history_file_common(request, repo_id, ret_dict):
                         language_code=request.LANGUAGE_CODE, obj_id=obj_id)
 
                 if wopi_dict:
+                    # send file audit message
+                    send_file_access_msg(request, repo, path, 'web')
                     ret_dict['wopi_dict'] = wopi_dict
                 else:
                     ret_dict['err'] = _(u'Error when prepare Office Online file preview page.')
@@ -814,6 +805,8 @@ def view_history_file_common(request, repo_id, ret_dict):
                         file_id=obj_id)
 
                 if onlyoffice_dict:
+                    # send file audit message
+                    send_file_access_msg(request, repo, path, 'web')
                     ret_dict['onlyoffice_dict'] = onlyoffice_dict
                 else:
                     ret_dict['err'] = _(u'Error when prepare OnlyOffice file preview page.')
@@ -822,7 +815,10 @@ def view_history_file_common(request, repo_id, ret_dict):
         fsize = get_file_size(repo.store_id, repo.version, obj_id)
         can_preview, err_msg = can_preview_file(u_filename, fsize, repo)
         if can_preview:
-            send_file_access_msg_when_preview(request, repo, path, 'web')
+
+            # send file audit message
+            send_file_access_msg(request, repo, path, 'web')
+
             """Choose different approach when dealing with different type of file."""
             if is_textual_file(file_type=filetype):
                 handle_textual_file(request, filetype, inner_path, ret_dict)
@@ -948,8 +944,6 @@ def _download_file_from_share_link(request, fileshare):
         messages.error(request, _(u'Unable to download file, share link traffic is used up.'))
         return HttpResponseRedirect(next)
 
-    send_file_access_msg(request, repo, real_path, 'share-link')
-
     dl_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'download-link', fileshare.username, use_onetime=False)
 
@@ -996,10 +990,6 @@ def view_shared_file(request, fileshare):
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
 
-    # send statistic messages
-    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
-    send_file_access_msg(request, repo, path, 'share-link')
-
     # get share link permission
     can_download = fileshare.get_permissions()['can_download']
     can_edit = fileshare.get_permissions()['can_edit']
@@ -1008,6 +998,9 @@ def view_shared_file(request, fileshare):
     if request.GET.get('dl', '') == '1':
         if can_download is False:
             raise Http404
+
+        # send file audit message
+        send_file_access_msg(request, repo, path, 'share-link')
 
         return _download_file_from_share_link(request, fileshare)
 
@@ -1031,6 +1024,7 @@ def view_shared_file(request, fileshare):
             next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
             return HttpResponseRedirect(next)
 
+        # send file audit message
         send_file_access_msg(request, repo, path, 'share-link')
 
         # view raw shared file, directly show/download file depends on
@@ -1078,6 +1072,10 @@ def view_shared_file(request, fileshare):
                     online_office_lock_or_refresh_lock(repo_id, path, username)
 
                 wopi_dict['share_link_token'] = token
+
+                # send file audit message
+                send_file_access_msg(request, repo, path, 'share-link')
+
                 return render(request, 'view_file_wopi.html', wopi_dict)
             else:
                 ret_dict['err'] = _(u'Error when prepare Office Online file preview page.')
@@ -1092,14 +1090,21 @@ def view_shared_file(request, fileshare):
                     online_office_lock_or_refresh_lock(repo_id, path, username)
 
                 onlyoffice_dict['share_link_token'] = token
+
+                # send file audit message
+                send_file_access_msg(request, repo, path, 'share-link')
+
                 return render(request, 'view_file_onlyoffice.html',
                         onlyoffice_dict)
             else:
                 ret_dict['err'] = _(u'Error when prepare OnlyOffice file preview page.')
 
+    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(filename, file_size, repo)
     if can_preview:
-        send_file_access_msg_when_preview(request, repo, path, 'share-link')
+
+        # send file audit message
+        send_file_access_msg(request, repo, path, 'share-link')
 
         """Choose different approach when dealing with different type of file."""
         inner_path = gen_inner_file_get_url(access_token, filename)
@@ -1183,17 +1188,13 @@ def view_file_via_shared_dir(request, fileshare):
     if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
         return render_error(request, _(u'Permission denied'))
 
-    # send stats message
-    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
-    send_file_access_msg(request, repo, real_path, 'share-link')
-
     # download shared file
     if request.GET.get('dl', '') == '1':
         if fileshare.get_permissions()['can_download'] is False:
             raise Http404
 
-        send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
-                     (repo_id, shared_by, obj_id, file_size))
+        # send file audit message
+        send_file_access_msg(request, repo, real_path, 'share-link')
 
         return _download_file_from_share_link(request, fileshare)
 
@@ -1216,6 +1217,9 @@ def view_file_via_shared_dir(request, fileshare):
             next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
             return HttpResponseRedirect(next)
 
+        # send file audit message
+        send_file_access_msg(request, repo, real_path, 'share-link')
+
         # view raw shared file, directly show/download file depends on browsers
         return HttpResponseRedirect(raw_path)
 
@@ -1236,6 +1240,10 @@ def view_file_via_shared_dir(request, fileshare):
                     language_code=request.LANGUAGE_CODE)
 
             if wopi_dict:
+
+                # send file audit message
+                send_file_access_msg(request, repo, real_path, 'share-link')
+
                 return render(request, 'view_file_wopi.html', wopi_dict)
             else:
                 ret_dict['err'] = _(u'Error when prepare Office Online file preview page.')
@@ -1246,6 +1254,10 @@ def view_file_via_shared_dir(request, fileshare):
                     repo_id, real_path)
 
             if onlyoffice_dict:
+
+                # send file audit message
+                send_file_access_msg(request, repo, real_path, 'share-link')
+
                 return render(request, 'view_file_onlyoffice.html',
                         onlyoffice_dict)
             else:
@@ -1255,9 +1267,12 @@ def view_file_via_shared_dir(request, fileshare):
     img_next = None
 
     inner_path = gen_inner_file_get_url(access_token, filename)
+    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(filename, file_size, repo)
     if can_preview:
-        send_file_access_msg_when_preview(request, repo, real_path, 'share-link')
+
+        # send file audit message
+        send_file_access_msg(request, repo, real_path, 'share-link')
 
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
