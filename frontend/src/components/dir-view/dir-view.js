@@ -394,23 +394,21 @@ class DirView extends React.Component {
   }
 
   onFileUploadSuccess = (direntObject) => {
-    let direntList = [];
     let isExist = this.state.direntList.some(item => { 
       return item.name === direntObject.name && item.type === direntObject.type;
     });
     if (isExist) {
-      let currentDirentList = this.state.direntList;
-      direntList = this.state.direntList.map(item => {return item}); 
-      for (let i = 0; i < currentDirentList.length; i++) {
-        let dirent = currentDirentList[i];
+      let direntList = this.state.direntList;
+      for (let i = 0; i < direntList.length; i++) {
+        let dirent = direntList[i];
         if (dirent.name === direntObject.name && dirent.type === direntObject.type) {
-          dirent.id = direntObject.id;
-          dirent.mtime = moment.unix(direntObject.mtime).fromNow();
+          let mtime = moment.unix(direntObject.mtime).fromNow();
+          this.updateDirent(dirent, 'mtime', mtime);  // todo file size is need update too, api is not return;
           break;
         }
       }
-      this.setState({direntList: direntList});
     } else {
+      direntObject.permission = 'rw';
       let dirent = new Dirent(direntObject);
       if (direntObject.type === 'dir') {
         this.setState({direntList: [dirent, ...this.state.direntList]});

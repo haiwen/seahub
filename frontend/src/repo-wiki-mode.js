@@ -538,6 +538,32 @@ class Wiki extends Component {
     this.setState({direntList: direntList});
   }
 
+  onFileUploadSuccess = (direntObject) => {
+    let isExist = this.state.direntList.some(item => { 
+      return item.name === direntObject.name && item.type === direntObject.type;
+    });
+    if (isExist) {
+      let direntList = this.state.direntList;
+      for (let i = 0; i < direntList.length; i++) {
+        let dirent = direntList[i];
+        if (dirent.name === direntObject.name && dirent.type === direntObject.type) {
+          let mtime = moment.unix(direntObject.mtime).fromNow();
+          this.updateDirent(dirent, 'mtime', mtime);  // todo file size is need update too, api is not return;
+          break;
+        }
+      }
+    } else {
+      direntObject.permission = 'rw';
+      let dirent = new Dirent(direntObject);
+      this.addNodeToTree(dirent.name, this.state.path, dirent.type);
+      if (direntObject.type === 'dir') {
+        this.setState({direntList: [dirent, ...this.state.direntList]});
+      } else {
+        this.setState({direntList: [...this.state.direntList, dirent]});
+      }
+    }
+  }
+
   onMoveItems = (destRepo, destDirentPath) => {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
@@ -897,6 +923,7 @@ class Wiki extends Component {
           onItemsMove={this.onMoveItems}
           onItemsCopy={this.onCopyItems}
           onItemsDelete={this.onDeleteItems}
+          onFileUploadSuccess={this.onFileUploadSuccess}
           hash={this.hash}
           isDraft={this.state.isDraft}
           hasDraft={this.state.hasDraft}

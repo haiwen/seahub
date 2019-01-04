@@ -49,6 +49,7 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
+  onFileUploadSuccess: PropTypes.func.isRequired,
   isDraft: PropTypes.bool,
   hasDraft: PropTypes.bool,
   reviewStatus: PropTypes.any,
@@ -141,8 +142,8 @@ class MainPanel extends Component {
     this.uploader.onFolderUpload();
   }
 
-  onFileUploadSuccess = (file) => {
-    // todo
+  onFileUploadSuccess = (direntObject) => {
+    this.props.onFileUploadSuccess(direntObject);
   }
 
   handlePageScroll = () => {    
@@ -273,8 +274,8 @@ class MainPanel extends Component {
                         dragAndDrop={true}
                         path={this.props.path}
                         repoID={repoID}
-                        onFileUploadSuccess={this.onFileUploadSuccess}
                         direntList={this.props.direntList}
+                        onFileUploadSuccess={this.onFileUploadSuccess}
                       />
                     </Fragment>
                   }
