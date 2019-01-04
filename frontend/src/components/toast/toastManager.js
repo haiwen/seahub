@@ -11,7 +11,7 @@ const wrapperClass = css({
   left: 0,
   right: 0,
   position: 'fixed',
-  zIndex: 30
+  zIndex: 999999,
 });
 
 

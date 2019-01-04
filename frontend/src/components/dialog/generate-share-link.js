@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import copy from 'copy-to-clipboard';
+import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import SharedLinkInfo from '../../models/shared-link-info';
+import toaster from '../toast';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -21,9 +25,9 @@ class GenerateShareLink extends React.Component {
       password: '',
       passwdnew: '',
       expireDays: '',
-      token: '',
-      link: '',
-      errorInfo: ''
+      errorInfo: '',
+      sharedLinkInfo: null,
+      isNoticeMessageShow: false,
     };
     this.permissions = {
       'can_edit': false, 
@@ -41,10 +45,8 @@ class GenerateShareLink extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.getShareLink(repoID, path).then((res) => {
       if (res.data.length !== 0) {
-        this.setState({
-          link: res.data[0].link,
-          token: res.data[0].token,
-        });
+        let sharedLinkInfo = new SharedLinkInfo(res.data[0]);
+        this.setState({sharedLinkInfo: sharedLinkInfo});
       }
     });
   } 
@@ -105,25 +107,36 @@ class GenerateShareLink extends React.Component {
       let permissions = this.permissions;
       permissions = JSON.stringify(permissions);
       seafileAPI.createShareLink(repoID, itemPath, password, expireDays, permissions).then((res) => {
-        this.setState({
-          link: res.data.link,
-          token: res.data.token
-        });
+        let sharedLinkInfo = new SharedLinkInfo(res.data);
+        this.setState({sharedLinkInfo: sharedLinkInfo});
       });
     }
   }
 
+  onCopySharedLink = () => {
+    let sharedLink = this.state.sharedLinkInfo.link;
+    copy(sharedLink);
+    toaster.success(gettext('Share link is copied to the clipboard.'));
+  }
+
+  onCopyDownloadLink = () => {
+    let downloadLink = this.state.sharedLinkInfo.link + '?dl';
+    copy(downloadLink);
+    toaster.success(gettext('Direct download link is copied to the clipboard.'));
+  }
+
   deleteShareLink = () => {
-    seafileAPI.deleteShareLink(this.state.token).then(() => {
+    let sharedLinkInfo = this.state.sharedLinkInfo;
+    seafileAPI.deleteShareLink(sharedLinkInfo.token).then(() => {
       this.setState({
-        link: '',
-        token: '',
         password: '',
         passwordnew: '',
         isShowPasswordInput: false,
         expireDays: '',
         isExpireChecked: false,
         errorInfo: '',
+        sharedLinkInfo: null,
+        isNoticeMessageShow: false,
       });
       this.permissions = {
         'can_edit': false,
@@ -216,13 +229,55 @@ class GenerateShareLink extends React.Component {
     return true;
   }
 
+  onNoticeMessageToggle = () => {
+    this.setState({isNoticeMessageShow: !this.state.isNoticeMessageShow});
+  }
+
   render() {
-    if (this.state.link) {
+    if (this.state.sharedLinkInfo) {
+      let sharedLinkInfo = this.state.sharedLinkInfo;
       return (
-        <Form>
-          <p>{this.state.link}</p>
-          <Button onClick={this.deleteShareLink}>{gettext('Delete')}</Button>
-        </Form>
+        <div>
+          <Form className="mb-4">
+            <FormGroup className="mb-0">
+              <dt className="text-secondary font-weight-normal">{gettext('Link:')}</dt>
+              <dd className="d-flex">
+                <span>{sharedLinkInfo.link}</span>{' '}
+                {sharedLinkInfo.is_expired ?
+                  <span className="err-message">({gettext('Expired')})</span> :
+                  <span className="far fa-copy action-icon" onClick={this.onCopySharedLink}></span>
+                }
+              </dd>
+            </FormGroup>
+            {!sharedLinkInfo.is_dir && (  //just for file
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
+                <dd className="d-flex">
+                  <span>{sharedLinkInfo.link}?dl</span>{' '}
+                  {sharedLinkInfo.is_expired ?
+                    <span className="err-message">({gettext('Expired')})</span> :
+                    <span className="far fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
+                  }
+                </dd>
+              </FormGroup>
+            )}
+            {sharedLinkInfo.expire_date && (
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
+                <dd>{moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD hh:mm:ss')}</dd>
+              </FormGroup>
+            )}
+          </Form>
+          {!this.state.isNoticeMessageShow ?
+            <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button> :
+            <div className="alert alert-warning">
+              <h4 className="alert-heading">{gettext('Are you sure you want to delete the share link?')}</h4>
+              <p className="mb-4">{gettext('If the share link is deleted, no one will be able to access it any more.')}</p>
+              <button className="btn btn-primary" onClick={this.deleteShareLink}>{gettext('Delete')}</button>{' '}
+              <button className="btn btn-secondary" onClick={this.onNoticeMessageToggle}>{gettext('Cancel')}</button>
+            </div>
+          }
+        </div>
       );
     } else {
       return (
