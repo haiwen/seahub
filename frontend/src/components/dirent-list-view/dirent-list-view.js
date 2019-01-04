@@ -16,6 +16,9 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
+  sortItems: PropTypes.func,
   onAddFile: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
@@ -74,8 +77,22 @@ class DirentListView extends React.Component {
     this.props.onAddFile(filePath, isDraft);
   }
 
+  sortByName = (e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
+  sortByTime = (e) => {
+    e.preventDefault();
+    const sortBy = 'time';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   render() {
-    const { direntList } = this.props;
+    const { direntList, sortBy, sortOrder } = this.props;
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);
@@ -102,6 +119,11 @@ class DirentListView extends React.Component {
       );
     }
 
+    // sort
+    const sortByName = sortBy == 'name';
+    const sortByTime = sortBy == 'time';
+    const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+
     return (
       <table>
         <thead>
@@ -111,11 +133,11 @@ class DirentListView extends React.Component {
             </th>
             <th width="3%">{/*icon */}</th>
             <th width="5%">{/*star */}</th>
-            <th width="39%">{gettext('Name')}</th>
+            <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="6%">{/*tag */}</th>
             <th width="20%">{/*operation */}</th>
             <th width="11%">{gettext('Size')}</th>
-            <th width="13%">{gettext('Last Update')}</th>
+            <th width="13%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
           </tr>
         </thead>
         <tbody>

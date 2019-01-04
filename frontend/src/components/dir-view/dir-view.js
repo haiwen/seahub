@@ -34,6 +34,8 @@ class DirView extends React.Component {
       isAllDirentSelected: false,
       isDirentListLoading: true,
       currentRepoInfo: null,
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc', // 'asc' or 'desc'
       direntList: [],
       selectedDirentList: [],
       dirID: '',
@@ -148,7 +150,7 @@ class DirView extends React.Component {
       this.setState({
         isDirentListLoading: false,
         pathExist: true,
-        direntList: direntList,
+        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.headers.oid,
       });
     }).catch(() => {
@@ -538,6 +540,14 @@ class DirView extends React.Component {
     this.updateDirentList(this.state.path);
   }
 
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      items: Utils.sortDirents(this.state.direntList, sortBy, sortOrder)
+    })
+  }
+
   render() {
     return (
       <DirPanel 
@@ -553,6 +563,9 @@ class DirView extends React.Component {
         isDirentSelected={this.state.isDirentSelected}
         isAllDirentSelected={this.state.isAllDirentSelected}
         direntList={this.state.direntList}
+        sortBy={this.state.sortBy}
+        sortOrder={this.state.sortOrder}
+        sortItems={this.sortItems}
         selectedDirentList={this.state.selectedDirentList}
         onItemClick={this.onItemClick}
         onAddFile={this.onAddFile}
