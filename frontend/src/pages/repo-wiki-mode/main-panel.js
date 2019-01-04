@@ -271,6 +271,7 @@ class MainPanel extends Component {
                         sortBy={this.props.sortBy}
                         sortOrder={this.props.sortOrder}
                         sortItems={this.props.sortItems}
+                        onAddFile={this.props.onAddFile}
                         onItemClick={this.onItemClick}
                         onItemDelete={this.props.onItemDelete}
                         onItemRename={this.props.onItemRename}
