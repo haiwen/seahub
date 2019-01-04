@@ -121,11 +121,9 @@ class GenerateUploadLink extends React.Component {
   render() {
     if (this.state.sharedUploadInfo) {
       let sharedUploadInfo = this.state.sharedUploadInfo;
-      let message = gettext('You can share the generated link to others and they can upload files to this directory via the link.');
       return (
         <div>
           <Form className="mb-4">
-            <FormText className="message">{message}</FormText>
             <FormGroup>
               <dt className="text-secondary font-weight-normal">{gettext('Upload Link:')}</dt>
               <dd className="d-flex">

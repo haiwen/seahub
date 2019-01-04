@@ -264,17 +264,17 @@ class GenerateShareLink extends React.Component {
             {sharedLinkInfo.expire_date && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-                <dd>{moment(sharedLinkInfo.expire_date).format('YY-MM-DD hh:mm:ss')}</dd>
+                <dd>{moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD hh:mm:ss')}</dd>
               </FormGroup>
             )}
           </Form>
           {!this.state.isNoticeMessageShow ?
             <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button> :
             <div className="alert alert-warning">
-              <h4 className="alert-heading">{gettext('Are you sure you want to remove the share link?')}</h4>
-              <p className="mb-4">{gettext('If the share link is removed, no one will be able to access it any more.')}</p>
-              <button className="btn btn-secondary" onClick={this.deleteShareLink}>{gettext('Yes')}</button>{' '}
-              <button className="btn btn-secondary" onClick={this.onNoticeMessageToggle}>{gettext('No')}</button>
+              <h4 className="alert-heading">{gettext('Are you sure you want to delete the share link?')}</h4>
+              <p className="mb-4">{gettext('If the share link is deleted, no one will be able to access it any more.')}</p>
+              <button className="btn btn-primary" onClick={this.deleteShareLink}>{gettext('Delete')}</button>{' '}
+              <button className="btn btn-secondary" onClick={this.onNoticeMessageToggle}>{gettext('Cancel')}</button>
             </div>
           }
         </div>
