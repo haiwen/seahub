@@ -203,6 +203,7 @@ class AdminOrganization(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)
         return Response(org_info)
 
