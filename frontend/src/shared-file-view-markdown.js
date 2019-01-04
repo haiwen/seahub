@@ -17,7 +17,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 
 let loginUser = window.app.pageOptions.name;
-const { repoID, filePath, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
+const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
 
 class SharedFileViewMarkdown extends React.Component {
 
@@ -43,7 +43,7 @@ class SharedFileViewMarkdown extends React.Component {
   }
 
   handleSaveSharedFile = () => {
-    toaster.success(gettext('Save Successfully'), {
+    toaster.success(gettext('Successfully saved'), {
       duration: 3
     });
   }
@@ -106,7 +106,6 @@ class SharedFileViewMarkdown extends React.Component {
         {this.state.showSaveSharedFileDialog &&
           <SaveSharedFileDialog
             repoID={repoID}
-            filePath={filePath}
             sharedToken={sharedToken}
             toggleCancel={this.toggleCancel}
             handleSaveSharedFile={this.handleSaveSharedFile}
@@ -124,7 +123,7 @@ if (enableWatermark) {
   } else {
     watermark_txt = gettext("Anonymous User");
   }
-  watermark.init({ watermark_txt: watermark_txt});
+  watermark.init({ watermark_txt: watermark_txt });
 }
 
 ReactDOM.render (

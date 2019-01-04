@@ -43,30 +43,8 @@ class FileChooser extends React.Component {
   }
 
   onOtherRepoToggle = () => {
-    if (!this.state.hasRequest && this.props.repoID) {
-      let { currentRepoInfo } = this.state;
-      seafileAPI.listRepos().then(res => {
-        // todo optimized code
-        let repos = res.data.repos;
-        let repoList = [];
-        let repoIdList = [];
-        for(let i = 0; i < repos.length; i++) {
-          if (repos[i].repo_name === currentRepoInfo.repo_name || repos[i].permission !== 'rw') {
-            continue;
-          }
-          if (repoIdList.indexOf(repos[i].repo_id) > -1) {
-            continue;
-          }
-          repoList.push(repos[i]);
-          repoIdList.push(repos[i].repo_id);
-        }
-        this.setState({
-          repoList: repoList,
-          isOtherRepoShow: !this.state.isOtherRepoShow,
-        });
-      });
-    }
-    else if (!this.state.hasRequest && !this.props.repoID) {
+    if (!this.state.hasRequest) {
+      let that = this;
       seafileAPI.listRepos().then(res => {
         // todo optimized code
         let repos = res.data.repos;
@@ -74,6 +52,9 @@ class FileChooser extends React.Component {
         let repoIdList = [];
         for(let i = 0; i < repos.length; i++) {
           if (repos[i].permission !== 'rw') {
+            continue;
+          }
+          if (that.props.repoID && (repos[i].repo_name === that.state.currentRepoInfo.repo_name)) {
             continue;
           }
           if (repoIdList.indexOf(repos[i].repo_id) > -1) {

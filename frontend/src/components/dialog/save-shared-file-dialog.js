@@ -7,7 +7,6 @@ import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  filePath: PropTypes.string.isRequired,
   sharedToken: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   handleSaveSharedFile: PropTypes.func.isRequired,
