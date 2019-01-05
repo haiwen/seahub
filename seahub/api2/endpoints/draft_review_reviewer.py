@@ -81,7 +81,7 @@ class DraftReviewReviewerView(APIView):
 
             # can't share to owner
             if reviewer == r.creator:
-                error_msg = _(u'Draft review can not be asked owner to review.')
+                error_msg = 'Draft review can not be asked owner to review.'
                 result['failed'].append({
                     'email': reviewer,
                     'error_msg': error_msg
@@ -100,7 +100,7 @@ class DraftReviewReviewerView(APIView):
                 continue
 
             if ReviewReviewer.objects.filter(review_id=r, reviewer=reviewer):
-                error_msg = _(u'Reviewer %s has existed.') % reviewer
+                error_msg = u'Reviewer %s has existed.' % reviewer
                 result['failed'].append({
                     'email': reviewer,
                     'error_msg': error_msg

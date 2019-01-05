@@ -18,7 +18,7 @@
         {% endif %}
 
         {% if ENABLE_WEBDAV_SECRET %}
-        <li class="tab"><a href="#update-webdav-passwd">{% trans "WebDav Password" %}</a></li>
+        <li class="tab"><a href="#update-webdav-passwd">WebDav {% trans "Password" %}</a></li>
         {% endif %}
 
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
@@ -93,7 +93,7 @@
 
 {% if ENABLE_WEBDAV_SECRET %}
 <div id="update-webdav-passwd" class="setting-item">
-    <h3>{% trans "WebDav Password" %}</h3>
+    <h3>WebDav {% trans "Password" %}</h3>
     <label>{% trans "Password" %}</label>
     <div class="passwd-wrapper">
         <input type="password" name="password" value="{{ webdav_passwd }}" class="passwd input" />
