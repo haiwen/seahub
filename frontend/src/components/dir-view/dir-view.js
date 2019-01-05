@@ -86,6 +86,9 @@ class DirView extends React.Component {
       this.setState({path: path});
       if (!res.data.lib_need_decrypt) {
         this.updateDirentList(path);
+
+        let fileUrl = siteRoot + 'library/' + repoInfo.repo_id + '/' + repoInfo.repo_name + Utils.encodePath(path);
+        window.history.pushState({url: fileUrl, path: path}, path, fileUrl);
       }
     }).catch(error => {
       if (error.response) {
