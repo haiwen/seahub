@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -421,8 +422,29 @@ class DirView extends React.Component {
     this.setState({direntList: newDirentList});
   }
 
-  onFileUploadSuccess = () => {
-    // todo update upload file to direntList
+  onFileUploadSuccess = (direntObject) => {
+    let isExist = this.state.direntList.some(item => { 
+      return item.name === direntObject.name && item.type === direntObject.type;
+    });
+    if (isExist) {
+      let direntList = this.state.direntList;
+      for (let i = 0; i < direntList.length; i++) {
+        let dirent = direntList[i];
+        if (dirent.name === direntObject.name && dirent.type === direntObject.type) {
+          let mtime = moment.unix(direntObject.mtime).fromNow();
+          this.updateDirent(dirent, 'mtime', mtime);  // todo file size is need update too, api is not return;
+          break;
+        }
+      }
+    } else {
+      direntObject.permission = 'rw';
+      let dirent = new Dirent(direntObject);
+      if (direntObject.type === 'dir') {
+        this.setState({direntList: [dirent, ...this.state.direntList]});
+      } else {
+        this.setState({direntList: [...this.state.direntList, dirent]});
+      }
+    }
   }
 
   onSearchedClick = (selectedItem) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
@@ -40,6 +40,8 @@ class FileUploader extends React.Component {
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
     };
+
+    this.uploadedFolders = [];
   }
 
   componentDidMount() {
@@ -174,14 +176,13 @@ class FileUploader extends React.Component {
     // single file uploading can check repetition, because custom dialog conn't prevent program execution;
   }
 
-  setUploadFileList = (files) => {
-    let uploadFileList = files.map(resumableFile => {
+  setUploadFileList = () => {
+    let uploadFileList = this.resumable.files.map(resumableFile => {
       return this.buildCustomFileObj(resumableFile);
     });
     this.setState({
-      isUploadRemindDialogShow: false,
       isUploadProgressDialogShow: true,
-      uploadFileList: uploadFileList
+      uploadFileList: uploadFileList,
     });
   }
 
@@ -204,27 +205,90 @@ class FileUploader extends React.Component {
 
     this.setState({uploadFileList: uploadFileList});
   }
+  
+  onProgress = () => {
+    let progress = Math.round(this.resumable.progress() * 100);
+    this.setState({totalProgress: progress});
+  }
 
-  onFileUploadSuccess = (file) => {
-    // todos, update uploadList or updateList;
+  onFileUploadSuccess = (resumableFile, message) => {
+    let formData = resumableFile.formData;
+    let currentTime = new Date().getTime()/1000;
+    message = formData.replace ? message : JSON.parse(message)[0];
+    if (formData.relative_path) { // upload folder
+      let relative_path = formData.relative_path;
+      let dir_name = relative_path.slice(0, relative_path.indexOf('/'));
+      let dirent = {
+        id: message.id,
+        name: dir_name,
+        type: 'dir',
+        mtime: currentTime,
+      };
+
+      // update folders cache
+      let isExist = this.uploadedFolders.some(item => {return item.name === dirent.name;});
+      if (!isExist) {
+        this.uploadedFolders.push(dirent);
+        this.props.onFileUploadSuccess(dirent);
+      }
+
+      // update uploadFileList
+      let uploadFileList = this.state.uploadFileList.map(item => {
+        if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
+          item.resumableFile.fileName = message.name;
+          item.resumableFile.relativePath = relative_path + message.name;
+        }
+        return item;
+      });
+      this.setState({uploadFileList: uploadFileList});
+
+      return;
+    }
+
+    if (formData.replace) { // upload file -- replace exist file
+      let fileName = resumableFile.fileName;
+      let dirent = {
+        id: message,
+        name: fileName,
+        type: 'file',
+        mtime: currentTime
+      };
+      this.props.onFileUploadSuccess(dirent); // this contance: just one file
+
+      return;
+    }
+
+    // upload file -- add files
+    let dirent = {
+      id: message.id,
+      type: 'file',
+      name: message.name,
+      size: message.size,
+      mtime: currentTime,
+    };
+    this.props.onFileUploadSuccess(dirent); // this contance:  no repetition file
+
+    let uploadFileList = this.state.uploadFileList.map(item => {
+      if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
+        item.resumableFile.fileName = message.name;
+        item.resumableFile.relativePath = message.name;
+      }
+      return item;
+    });
+    this.setState({uploadFileList: uploadFileList});
   }
 
   onFileError = (file) => {
 
   }
 
-  onProgress = () => {
-    let progress = Math.round(this.resumable.progress() * 100);
-    this.setState({totalProgress: progress});
-  }
-
   onComplete = () => {
-
+    this.uploadedFolders = [];
   }
 
-  onPause = () => [
+  onPause = () => {
 
-  ]
+  }
 
   onError = () => {
 
@@ -243,6 +307,9 @@ class FileUploader extends React.Component {
   }
 
   setHeaders = (resumableFile, resumable) => {
+    if (resumableFile.formData.replace) {
+      return [];
+    }
     let offset = resumable.offset;
     let chunkSize = resumable.getOpt('chunkSize');
     let fileSize = resumableFile.size;
@@ -328,21 +395,29 @@ class FileUploader extends React.Component {
   }
 
   replaceRepetitionFile = () => {
-    let resumableFile =  this.resumable.files[this.resumable.files.length - 1];
-    resumableFile.formData['replace'] = 1;
+    let { repoID, path } = this.props;
+    seafileAPI.getUpdateLink(repoID, path).then(res => {
+      this.resumable.opts.target = res.data;
 
-    // this.setState({isUploadRemindDialogShow: false});
-
-    this.setUploadFileList(this.resumable.files);
-
-    this.resumable.upload();
+      let resumableFile = this.resumable.files[this.resumable.files.length - 1];
+      resumableFile.formData['replace'] = 1;
+      resumableFile.formData['target_file'] = resumableFile.formData.parent_dir + resumableFile.fileName;
+      this.setState({isUploadRemindDialogShow: false});
+      this.setUploadFileList(this.resumable.files);
+      this.resumable.upload();
+    });
   }
-
+  
   uploadFile = () => {
-    // this.setState({isUploadRemindDialogShow: false});
-
-    this.setUploadFileList(this.resumable.files);
-    this.resumable.upload();
+    let resumableFile = this.resumable.files[this.resumable.files.length - 1];
+    let fileObject = this.buildCustomFileObj(resumableFile);
+    this.setState({
+      isUploadRemindDialogShow: false,
+      isUploadProgressDialogShow: true,
+      uploadFileList: [...this.state.uploadFileList, fileObject]
+    }, () => {
+      this.resumable.upload();
+    });
   }
 
   cancelFileUpload = () => {
@@ -352,30 +427,32 @@ class FileUploader extends React.Component {
 
   render() {
     return (
-      <div className="file-uploader-container">
-        <div className="file-uploader">
-          <input className="upload-input" type="file" ref={node => this.uploadInput = node} onClick={this.onClick}/>
+      <Fragment>
+        <div className="file-uploader-container">
+          <div className="file-uploader">
+            <input className="upload-input" type="file" ref={node => this.uploadInput = node} onClick={this.onClick}/>
+          </div>
         </div>
-        {
-          this.state.isUploadProgressDialogShow &&
-          <UploadProgressDialog
-            uploadFileList={this.state.uploadFileList}
-            totalProgress={this.state.totalProgress}
-            onMinimizeUploadDialog={this.onMinimizeUploadDialog}
-            onCloseUploadDialog={this.onCloseUploadDialog}
-            onUploadCancel={this.onUploadCancel}
-          />
-        }
-        {
-          this.state.isUploadRemindDialogShow &&
-          <UploadRemindDialog
-            currentResumableFile={this.state.currentResumableFile}
-            replaceRepetitionFile={this.replaceRepetitionFile}
-            uploadFile={this.uploadFile}
-            cancelFileUpload={this.cancelFileUpload}
-          />
-        }
-      </div>
+          {
+            this.state.isUploadRemindDialogShow &&
+            <UploadRemindDialog
+              currentResumableFile={this.state.currentResumableFile}
+              replaceRepetitionFile={this.replaceRepetitionFile}
+              uploadFile={this.uploadFile}
+              cancelFileUpload={this.cancelFileUpload}
+            />
+          }
+          {
+            this.state.isUploadProgressDialogShow &&
+            <UploadProgressDialog
+              uploadFileList={this.state.uploadFileList}
+              totalProgress={this.state.totalProgress}
+              onMinimizeUploadDialog={this.onMinimizeUploadDialog}
+              onCloseUploadDialog={this.onCloseUploadDialog}
+              onUploadCancel={this.onUploadCancel}
+            />
+          }
+      </Fragment>
     );
   }
 }
