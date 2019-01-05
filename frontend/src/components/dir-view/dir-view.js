@@ -87,7 +87,7 @@ class DirView extends React.Component {
       if (!res.data.lib_need_decrypt) {
         this.updateDirentList(path);
 
-        let fileUrl = siteRoot + 'library/' + repoInfo.repo_id + '/' + repoInfo.repo_name + Utils.encodePath(path);
+        let fileUrl = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
         window.history.pushState({url: fileUrl, path: path}, path, fileUrl);
       }
     }).catch(error => {
@@ -172,7 +172,7 @@ class DirView extends React.Component {
       this.updateDirentList(direntPath);
       this.setState({path: direntPath});
 
-      let fileUrl = siteRoot + 'library/' + this.state.repoID + '/' + this.state.repoName + Utils.encodePath(direntPath);
+      let fileUrl = siteRoot + 'library/' + this.state.repoID + '/' + encodeURIComponent(this.state.repoName) + Utils.encodePath(direntPath);
       window.history.pushState({url: fileUrl, path: direntPath}, direntPath, fileUrl);
     } else {
       const w=window.open('about:blank');
@@ -411,7 +411,7 @@ class DirView extends React.Component {
     this.updateDirentList(path);
     this.setState({path: path});
 
-    let fileUrl = siteRoot + 'library/' + this.state.repoID + '/' + this.state.repoName  + Utils.encodePath(path);
+    let fileUrl = siteRoot + 'library/' + this.state.repoID + '/' + encodeURIComponent(this.state.repoName)  + Utils.encodePath(path);
     window.history.pushState({url: fileUrl, path: path}, path, fileUrl);
   }
 
