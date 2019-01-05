@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import PermissionEditor from '../permission-editor';
 import '../../css/manage-members-dialog.css';
 
 const propTypes = {
@@ -57,7 +58,7 @@ class ManageMembersDialog extends React.Component {
     if (this.state.selectedOption && this.state.selectedOption.email) {
       this.refs.memberSelect.select.onChange([], { action: 'clear' });
       seafileAPI.addGroupMember(this.props.groupID, this.state.selectedOption.email).then((res) => {
-        this.listGroupMembers();
+        this.onGroupMembersChange();
         this.options = [];
         this.setState({
           selectedOption: null,
@@ -80,10 +81,8 @@ class ManageMembersDialog extends React.Component {
     });
   }
 
-  deleteMember = (name) => {
-    seafileAPI.deleteGroupMember(this.props.groupID, name).then((res) => {
-      this.listGroupMembers();
-    });
+  onGroupMembersChange = () => {
+    this.listGroupMembers();
   }
 
   toggle = () => {
@@ -127,36 +126,14 @@ class ManageMembersDialog extends React.Component {
                   this.state.groupMembers.length > 0 &&
                   this.state.groupMembers.map((item, index = 0) => {
                     return (
-                      <tr key={index} >
-                        <th scope="row"><img className="avatar" src={item.avatar_url} alt=""/></th>
-                        <td>{item.name}</td>
-                        <td>
-                          {
-                            ((this.props.isOwner === false) || (this.props.isOwner === true && item.role === 'Owner')) && 
-                            <span className="group-admin">{item.role}</span>
-                          }
-                          {
-                            (this.props.isOwner === true && item.role !== 'Owner') &&
-                            <ChangeMemberAdmin
-                              item={item}
-                              listGroupMembers={this.listGroupMembers}
-                              groupID={this.props.groupID}
-                              isOwner={this.props.isOwner}
-                            />
-                          }
-                        </td>
-                        <td>
-                          {
-                            ((item.role !== 'Owner' && this.props.isOwner === true) ||
-                            (item.role === 'Member' && this.props.isOwner === false)) &&
-                            <i
-                              className="fa fa-times delete-group-member-icon"
-                              name={item.email}
-                              onClick={this.deleteMember.bind(this, item.email)}>
-                            </i>
-                          }
-                        </td>
-                      </tr>
+                      <React.Fragment key={index}>
+                        <ManageMembers
+                          item={item}
+                          onGroupMembersChange={this.onGroupMembersChange}
+                          groupID={this.props.groupID}
+                          isOwner={this.props.isOwner}
+                        />
+                      </React.Fragment>
                     );
                   })
                 }
@@ -174,63 +151,68 @@ class ManageMembersDialog extends React.Component {
 
 ManageMembersDialog.propTypes = propTypes;
 
-const ChangeMemberAdminPropTypes = {
-  item: PropTypes.object,
-  listGroupMembers: PropTypes.func.isRequired,
+const MemberPropTypes = {
+  item: PropTypes.object.isRequired,
+  onGroupMembersChange: PropTypes.func.isRequired,
   groupID: PropTypes.string.isRequired,
   isOwner: PropTypes.bool.isRequired,
 };
 
-class ChangeMemberAdmin extends React.PureComponent {
+class Member extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      changeAdmin: false
-    };
   }
 
-  toggleGroupAdmin = () => {
-    this.setState({
-      changeAdmin: !this.state.changeAdmin
+  onChangeUserPermission = (permission) => {
+    let isAdmin = permission === 'Admin' ? 'True' : 'False';
+    seafileAPI.setGroupAdmin(this.props.groupID, this.props.item.email, isAdmin).then((res) => {
+      this.props.onGroupMembersChange();
     });
   }
 
-  setGroupAdmin = (e) => {
-    const isAdmin = e.target.value.indexOf('admin') > -1 ? 'true' : 'false';
-    const userName = e.target.value.split('-', 2)[1];
-    seafileAPI.setGroupAdmin(this.props.groupID, userName, isAdmin).then((res) => {
-      this.props.listGroupMembers();
-      this.setState({
-        changeAdmin: false
-      });
+  deleteMember = (name) => {
+    seafileAPI.deleteGroupMember(this.props.groupID, name).then((res) => {
+      this.props.onGroupMembersChange();
     });
   }
 
   render() {
-    const item = this.props.item;
-    const value = item.email;
-    let options = item.role === 'Member' ?
-      (<React.Fragment>
-        <option value={`member-${value}`}>{gettext('Member')}</option>
-        <option value={`admin-${value}`}>{gettext('Admin')}</option>
-      </React.Fragment>):
-      (<React.Fragment>
-        <option value={`admin-${value}`}>{gettext('Admin')}</option>
-        <option value={`member-${value}`}>{gettext('Member')}</option>
-      </React.Fragment>);
-    let admin = this.state.changeAdmin ? 
-      (<select className="custom-select-sm" onChange={this.setGroupAdmin}>{options}</select>) :
-      (<span className="group-admin">{item.role}
-        <i className="fa fa-pencil toggle-group-admin-icon" onClick={this.toggleGroupAdmin}></i>
-      </span>);
+    const { item, isOwner } = this.props;
+    const permissions = ['Admin', 'Member'];
     return(
-      admin
+      <tr>
+        <th scope="row"><img className="avatar" src={item.avatar_url} alt=""/></th>
+        <td>{item.name}</td>
+        <td>
+          {((isOwner === false) || (isOwner === true && item.role === 'Owner')) && 
+            <span className="group-admin">{item.role}</span>
+          }
+          {(isOwner === true && item.role !== 'Owner') &&
+            <PermissionEditor 
+              isTextMode={true}
+              isEditIconShow={true}
+              currentPermission={this.props.item.role}
+              permissions={permissions}
+              onPermissionChangedHandler={this.onChangeUserPermission}
+            />
+          }
+        </td>
+        <td>
+          {((item.role !== 'Owner' && isOwner === true) || (item.role === 'Member' && isOwner === false)) &&
+            <i
+              className="fa fa-times delete-group-member-icon"
+              name={item.email}
+              onClick={this.deleteMember.bind(this, item.email)}>
+            </i>
+          }
+        </td>
+      </tr>
     );
   }
 }
 
-ChangeMemberAdmin.propTypes = ChangeMemberAdminPropTypes;
+Member.propTypes = MemberPropTypes;
 
 
 export default ManageMembersDialog;

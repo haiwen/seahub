@@ -2,9 +2,8 @@
   box-sizing: border-box;
 }
 .group-member-list .user-item {
-  margin: 10px -10px;
-  padding: 0 10px;
-  height: 2rem;
+  margin: 0px -10px;
+  padding: 5px 10px;
   line-height: 2rem;
 }
 .group-member-list .user-item:hover {

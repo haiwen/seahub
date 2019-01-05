@@ -321,6 +321,12 @@ export const Utils = {
       case 'preview':
         title = gettext("Preview-on-Cloud");
         break;
+      case 'Member':
+        title = gettext("Member");
+        break;
+      case 'Admin':
+        title = gettext("Admin");
+        break;
     }
     return title;
   },
