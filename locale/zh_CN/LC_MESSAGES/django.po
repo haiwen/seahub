@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-05 11:23+0800\n"
-"PO-Revision-Date: 2019-01-05 03:31+0000\n"
+"POT-Creation-Date: 2019-01-05 14:34+0800\n"
+"PO-Revision-Date: 2019-01-05 06:48+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -6218,6 +6218,20 @@ msgstr "仅云端只读"
 #: seahub/templates/priv/seaf-docs.html:5
 msgid "Login with: "
 msgstr "其他登录方式："
+
+#: seahub/templates/priv/seaf-docs.html:6
+msgid "Invite user"
+msgstr "邀请用户"
+
+#: seahub/templates/priv/seaf-docs.html:7
+msgid ""
+"Send the invitation link to the others, and they will be able to join the "
+"organization via scanning the QR code."
+msgstr "把邀请链接发给其他人，其他人可以扫码加入机构。"
+
+#: seahub/templates/priv/seaf-docs.html:8
+msgid "Invitation link is copied."
+msgstr "邀请链接已复制。"
 
 #: seahub/templates/registration/activation_email.html:12
 #, python-format

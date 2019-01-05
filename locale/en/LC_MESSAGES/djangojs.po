@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-05 14:34+0800\n"
+"POT-Creation-Date: 2019-01-05 15:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,6 +86,7 @@ msgstr ""
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:93
 #: frontend/src/components/cur-dir-path/dir-tool.js:149
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:49
 msgid "History"
 msgstr ""
 
@@ -268,6 +269,7 @@ msgstr ""
 #: frontend/src/components/dialog/share-to-group.js:301
 #: frontend/src/components/dialog/share-to-user.js:271
 #: frontend/src/components/dialog/share-to-user.js:326
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:31
 #: frontend/src/pages/share-admin/folders.js:44
 #: frontend/src/pages/share-admin/libraries.js:44
 msgid "Permission"
@@ -524,6 +526,7 @@ msgid "Internal Link"
 msgstr ""
 
 #: frontend/src/components/dialog/internal-link-dialog.js:72
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:28
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:100
 msgid "Copy"
 msgstr ""
@@ -1030,6 +1033,50 @@ msgid ""
 "and leave comments on the document."
 msgstr ""
 
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:22
+#: frontend/src/components/tree-view/node-menu.js:50
+#: frontend/src/components/tree-view/node-menu.js:58
+#: frontend/src/components/wiki-list-view/wiki-list-item.js:165
+#: frontend/src/pages/groups/group-view.js:370
+#: frontend/src/pages/my-libs/item.js:202
+msgid "Rename"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:25
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:99
+msgid "Move"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:34
+#: frontend/src/pages/my-libs/item.js:208
+msgid "Details"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:37
+msgid "Unlock"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:40
+msgid "Lock"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:43
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:182
+msgid "New Draft"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:46
+msgid "Comment"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:52
+msgid "Access Log"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu-item.js:55
+msgid "Open via Client"
+msgstr ""
+
 #: frontend/src/components/draft-list-view/draft-list-menu.js:26
 #: frontend/src/draft-review.js:755
 msgid "Publish"
@@ -1308,10 +1355,6 @@ msgstr ""
 msgid "Edit File"
 msgstr ""
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:182
-msgid "New Draft"
-msgstr ""
-
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:188
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:189
 msgid "Upload"
@@ -1345,10 +1388,6 @@ msgstr ""
 msgid "New Word File"
 msgstr ""
 
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:99
-msgid "Move"
-msgstr ""
-
 #: frontend/src/components/toolbar/repo-view-toobar.js:50
 msgid "More"
 msgstr ""
@@ -1364,14 +1403,6 @@ msgstr ""
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:27
 msgid "Wiki"
-msgstr ""
-
-#: frontend/src/components/tree-view/node-menu.js:50
-#: frontend/src/components/tree-view/node-menu.js:58
-#: frontend/src/components/wiki-list-view/wiki-list-item.js:165
-#: frontend/src/pages/groups/group-view.js:370
-#: frontend/src/pages/my-libs/item.js:202
-msgid "Rename"
 msgstr ""
 
 #: frontend/src/draft-review.js:154
@@ -1663,10 +1694,6 @@ msgstr ""
 
 #: frontend/src/pages/my-libs/item.js:207
 msgid "Folder Permission"
-msgstr ""
-
-#: frontend/src/pages/my-libs/item.js:208
-msgid "Details"
 msgstr ""
 
 #: frontend/src/pages/my-libs/item.js:220
