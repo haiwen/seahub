@@ -1346,7 +1346,7 @@ def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     - `path`: dir path
     - `perm`: r or rw
     """
-    msg = 'perm-update\t%s\t%s\t%s\t%s\t%s\t%s' % \
+    msg = 'perm-change\t%s\t%s\t%s\t%s\t%s\t%s' % \
         (etype, from_user, to, repo_id, path, perm)
     msg_utf8 = msg.encode('utf-8')
 
