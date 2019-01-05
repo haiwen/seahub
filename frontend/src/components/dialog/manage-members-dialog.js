@@ -127,7 +127,7 @@ class ManageMembersDialog extends React.Component {
                   this.state.groupMembers.map((item, index = 0) => {
                     return (
                       <React.Fragment key={index}>
-                        <ManageMembers
+                        <Member
                           item={item}
                           onGroupMembersChange={this.onGroupMembersChange}
                           groupID={this.props.groupID}
