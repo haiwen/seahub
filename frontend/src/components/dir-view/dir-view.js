@@ -109,7 +109,7 @@ class DirView extends React.Component {
   }
 
   componentWillUnmount() {
-    collabServer.unwatchRepo(this.props.repoID);
+    collabServer.unwatchRepo(this.props.repoID, this.onRepoUpdateEvent);
   }
 
   componentDidUpdate() {

@@ -18,10 +18,10 @@ class CollabServer {
         contact_email: contactEmail,
       },
     });
-    socket.on('repo_update', fn)
+    socket.on('repo_update', fn);
   }
 
-  unwatchRepo(repoID) {
+  unwatchRepo(repoID, fn) {
     if (!socket) {
       return;
     }
@@ -34,6 +34,7 @@ class CollabServer {
         contact_email: contactEmail,
       },
     });
+    socket.off('repo_update', fn);
   }
 }
 
