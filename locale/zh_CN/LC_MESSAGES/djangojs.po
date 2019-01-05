@@ -17,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-05 15:17+0800\n"
-"PO-Revision-Date: 2019-01-05 07:19+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2019-01-05 16:48+0800\n"
+"PO-Revision-Date: 2019-01-05 08:49+0000\n"
+"Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,7 +64,7 @@ msgstr "通知"
 #: frontend/src/components/dialog/list-related-file-dialog.js:106
 #: frontend/src/components/dialog/list-tag-dialog.js:124
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:84
-#: frontend/src/components/dialog/manage-members-dialog.js:168
+#: frontend/src/components/dialog/manage-members-dialog.js:145
 #: frontend/src/components/dialog/share-repo-dialog.js:145
 #: frontend/src/components/dialog/transfer-group-dialog.js:90
 #: frontend/src/draft-review.js:753
@@ -146,7 +146,7 @@ msgstr "取消"
 #: frontend/src/components/dialog/create-repo-dialog.js:207
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:130
-#: frontend/src/components/dialog/manage-members-dialog.js:112
+#: frontend/src/components/dialog/manage-members-dialog.js:111
 #: frontend/src/components/dialog/move-dirent-dialog.js:171
 #: frontend/src/components/dialog/new-wiki-dialog.js:60
 #: frontend/src/components/dialog/rename-dialog.js:77
@@ -219,7 +219,7 @@ msgstr "新建部门资料库"
 #: frontend/src/components/dialog/create-tag-dialog.js:71
 #: frontend/src/components/dialog/list-related-file-dialog.js:82
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:56
-#: frontend/src/components/dialog/manage-members-dialog.js:120
+#: frontend/src/components/dialog/manage-members-dialog.js:119
 #: frontend/src/components/dialog/new-wiki-dialog.js:55
 #: frontend/src/components/dialog/share-repo-dialog.js:125
 #: frontend/src/components/dialog/update-tag-dialog.js:84
@@ -236,7 +236,6 @@ msgstr "新建部门资料库"
 #: frontend/src/pages/share-admin/libraries.js:42
 #: frontend/src/pages/share-admin/share-links.js:72
 #: frontend/src/pages/share-admin/upload-links.js:54
-#: frontend/src/pages/shared-libs/shared-libs.js:53
 msgid "Name"
 msgstr "名称"
 
@@ -601,7 +600,6 @@ msgstr "资料库名称"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:90
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:23
 #: frontend/src/pages/my-libs/content.js:112
-#: frontend/src/pages/shared-libs/shared-libs.js:55
 msgid "Size"
 msgstr "大小"
 
@@ -640,32 +638,21 @@ msgstr "新建标签"
 msgid "Tagged Files"
 msgstr "打标签的文件"
 
-#: frontend/src/components/dialog/manage-members-dialog.js:100
+#: frontend/src/components/dialog/manage-members-dialog.js:99
 msgid "Manage group members"
 msgstr "管理群组成员"
 
-#: frontend/src/components/dialog/manage-members-dialog.js:102
+#: frontend/src/components/dialog/manage-members-dialog.js:101
 msgid "Add group member"
 msgstr "增加群组成员"
 
-#: frontend/src/components/dialog/manage-members-dialog.js:109
+#: frontend/src/components/dialog/manage-members-dialog.js:108
 msgid "Search users..."
 msgstr "搜索用户..."
 
-#: frontend/src/components/dialog/manage-members-dialog.js:121
+#: frontend/src/components/dialog/manage-members-dialog.js:120
 msgid "Role"
 msgstr "用户角色"
-
-#: frontend/src/components/dialog/manage-members-dialog.js:215
-#: frontend/src/components/dialog/manage-members-dialog.js:220
-msgid "Member"
-msgstr "群组成员"
-
-#: frontend/src/components/dialog/manage-members-dialog.js:216
-#: frontend/src/components/dialog/manage-members-dialog.js:219
-#: frontend/src/utils/utils.js:316
-msgid "Admin"
-msgstr "管理"
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:152
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:54
@@ -1295,8 +1282,6 @@ msgstr "取消共享"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:111
 #: frontend/src/pages/my-libs/content.js:108
 #: frontend/src/pages/my-libs/content.js:122
-#: frontend/src/pages/shared-libs/shared-libs.js:52
-#: frontend/src/pages/shared-libs/shared-libs.js:65
 msgid "Library Type"
 msgstr "资料库类型"
 
@@ -1304,7 +1289,6 @@ msgstr "资料库类型"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:117
 #: frontend/src/pages/my-libs/content.js:110
 #: frontend/src/pages/my-libs/content.js:128
-#: frontend/src/pages/shared-libs/shared-libs.js:54
 #: frontend/src/pages/shared-libs/shared-libs.js:71
 msgid "Actions"
 msgstr "操作"
@@ -1317,13 +1301,11 @@ msgstr "拥有者"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:113
 #: frontend/src/pages/my-libs/content.js:124
-#: frontend/src/pages/shared-libs/shared-libs.js:67
 msgid "Sort:"
 msgstr "排序："
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:114
 #: frontend/src/pages/my-libs/content.js:125
-#: frontend/src/pages/shared-libs/shared-libs.js:68
 msgid "name"
 msgstr "名称"
 
@@ -1337,23 +1319,23 @@ msgstr "更新时间"
 msgid "About"
 msgstr "关于"
 
-#: frontend/src/components/side-nav-footer.js:32
+#: frontend/src/components/side-nav-footer.js:33
 msgid "Server Version: "
 msgstr "服务器版本："
 
-#: frontend/src/components/side-nav-footer.js:32
+#: frontend/src/components/side-nav-footer.js:33
 msgid "Seafile"
 msgstr "海文互知"
 
-#: frontend/src/components/side-nav-footer.js:33
+#: frontend/src/components/side-nav-footer.js:34
 msgid "About Us"
 msgstr "关于我们"
 
-#: frontend/src/components/side-nav-footer.js:48
+#: frontend/src/components/side-nav-footer.js:49
 msgid "Help"
 msgstr "使用帮助"
 
-#: frontend/src/components/side-nav-footer.js:52
+#: frontend/src/components/side-nav-footer.js:53
 msgid "Clients"
 msgstr "客户端"
 
@@ -1815,7 +1797,11 @@ msgid ""
 "link can upload files to this folder."
 msgstr "你可以给任意文件夹生成上传外链。别人通过这个外链就可以上传文件到该文件夹。"
 
-#: frontend/src/pages/shared-libs/shared-libs.js:40
+#: frontend/src/pages/shared-libs/shared-libs.js:34
+msgid "No libraries have been shared with you"
+msgstr "还没有任何资料库被共享给你"
+
+#: frontend/src/pages/shared-libs/shared-libs.js:35
 msgid ""
 "No libraries have been shared directly with you. You can find more shared "
 "libraries at \"Shared with groups\"."
@@ -1948,6 +1934,10 @@ msgstr "仅云端读写文件夹"
 msgid "Preview-on-Cloud folder"
 msgstr "仅云端预览文件夹"
 
+#: frontend/src/utils/utils.js:316 frontend/src/utils/utils.js:328
+msgid "Admin"
+msgstr "管理"
+
 #: frontend/src/utils/utils.js:319 seahub/templates/priv/ali.js:17
 #: static/scripts/app/views/share-admin-folder.js:115
 #: static/scripts/app/views/share-admin-repo.js:129
@@ -1959,6 +1949,10 @@ msgstr "仅云端读写"
 #: static/scripts/app/views/share-admin-repo.js:132
 msgid "Preview-on-Cloud"
 msgstr "仅云端预览"
+
+#: frontend/src/utils/utils.js:325
+msgid "Member"
+msgstr "群组成员"
 
 #: seahub/templates/priv/ali.js:21
 msgid "Read-Write-Sync"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-05 15:17+0800\n"
+"POT-Creation-Date: 2019-01-05 16:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgstr ""
 #: frontend/src/components/dialog/list-related-file-dialog.js:106
 #: frontend/src/components/dialog/list-tag-dialog.js:124
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:84
-#: frontend/src/components/dialog/manage-members-dialog.js:168
+#: frontend/src/components/dialog/manage-members-dialog.js:145
 #: frontend/src/components/dialog/share-repo-dialog.js:145
 #: frontend/src/components/dialog/transfer-group-dialog.js:90
 #: frontend/src/draft-review.js:753
@@ -136,7 +136,7 @@ msgstr ""
 #: frontend/src/components/dialog/create-repo-dialog.js:207
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:130
-#: frontend/src/components/dialog/manage-members-dialog.js:112
+#: frontend/src/components/dialog/manage-members-dialog.js:111
 #: frontend/src/components/dialog/move-dirent-dialog.js:171
 #: frontend/src/components/dialog/new-wiki-dialog.js:60
 #: frontend/src/components/dialog/rename-dialog.js:77
@@ -209,7 +209,7 @@ msgstr ""
 #: frontend/src/components/dialog/create-tag-dialog.js:71
 #: frontend/src/components/dialog/list-related-file-dialog.js:82
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:56
-#: frontend/src/components/dialog/manage-members-dialog.js:120
+#: frontend/src/components/dialog/manage-members-dialog.js:119
 #: frontend/src/components/dialog/new-wiki-dialog.js:55
 #: frontend/src/components/dialog/share-repo-dialog.js:125
 #: frontend/src/components/dialog/update-tag-dialog.js:84
@@ -226,7 +226,6 @@ msgstr ""
 #: frontend/src/pages/share-admin/libraries.js:42
 #: frontend/src/pages/share-admin/share-links.js:72
 #: frontend/src/pages/share-admin/upload-links.js:54
-#: frontend/src/pages/shared-libs/shared-libs.js:53
 msgid "Name"
 msgstr ""
 
@@ -591,7 +590,6 @@ msgstr ""
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:90
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:23
 #: frontend/src/pages/my-libs/content.js:112
-#: frontend/src/pages/shared-libs/shared-libs.js:55
 msgid "Size"
 msgstr ""
 
@@ -630,31 +628,20 @@ msgstr ""
 msgid "Tagged Files"
 msgstr ""
 
-#: frontend/src/components/dialog/manage-members-dialog.js:100
+#: frontend/src/components/dialog/manage-members-dialog.js:99
 msgid "Manage group members"
 msgstr ""
 
-#: frontend/src/components/dialog/manage-members-dialog.js:102
+#: frontend/src/components/dialog/manage-members-dialog.js:101
 msgid "Add group member"
 msgstr ""
 
-#: frontend/src/components/dialog/manage-members-dialog.js:109
+#: frontend/src/components/dialog/manage-members-dialog.js:108
 msgid "Search users..."
 msgstr ""
 
-#: frontend/src/components/dialog/manage-members-dialog.js:121
+#: frontend/src/components/dialog/manage-members-dialog.js:120
 msgid "Role"
-msgstr ""
-
-#: frontend/src/components/dialog/manage-members-dialog.js:215
-#: frontend/src/components/dialog/manage-members-dialog.js:220
-msgid "Member"
-msgstr ""
-
-#: frontend/src/components/dialog/manage-members-dialog.js:216
-#: frontend/src/components/dialog/manage-members-dialog.js:219
-#: frontend/src/utils/utils.js:316
-msgid "Admin"
 msgstr ""
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:152
@@ -1285,8 +1272,6 @@ msgstr ""
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:111
 #: frontend/src/pages/my-libs/content.js:108
 #: frontend/src/pages/my-libs/content.js:122
-#: frontend/src/pages/shared-libs/shared-libs.js:52
-#: frontend/src/pages/shared-libs/shared-libs.js:65
 msgid "Library Type"
 msgstr ""
 
@@ -1294,7 +1279,6 @@ msgstr ""
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:117
 #: frontend/src/pages/my-libs/content.js:110
 #: frontend/src/pages/my-libs/content.js:128
-#: frontend/src/pages/shared-libs/shared-libs.js:54
 #: frontend/src/pages/shared-libs/shared-libs.js:71
 msgid "Actions"
 msgstr ""
@@ -1307,13 +1291,11 @@ msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:113
 #: frontend/src/pages/my-libs/content.js:124
-#: frontend/src/pages/shared-libs/shared-libs.js:67
 msgid "Sort:"
 msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:114
 #: frontend/src/pages/my-libs/content.js:125
-#: frontend/src/pages/shared-libs/shared-libs.js:68
 msgid "name"
 msgstr ""
 
@@ -1327,23 +1309,23 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: frontend/src/components/side-nav-footer.js:32
+#: frontend/src/components/side-nav-footer.js:33
 msgid "Server Version: "
 msgstr ""
 
-#: frontend/src/components/side-nav-footer.js:32
+#: frontend/src/components/side-nav-footer.js:33
 msgid "Seafile"
 msgstr ""
 
-#: frontend/src/components/side-nav-footer.js:33
+#: frontend/src/components/side-nav-footer.js:34
 msgid "About Us"
 msgstr ""
 
-#: frontend/src/components/side-nav-footer.js:48
+#: frontend/src/components/side-nav-footer.js:49
 msgid "Help"
 msgstr ""
 
-#: frontend/src/components/side-nav-footer.js:52
+#: frontend/src/components/side-nav-footer.js:53
 msgid "Clients"
 msgstr ""
 
@@ -1805,7 +1787,11 @@ msgid ""
 "link can upload files to this folder."
 msgstr ""
 
-#: frontend/src/pages/shared-libs/shared-libs.js:40
+#: frontend/src/pages/shared-libs/shared-libs.js:34
+msgid "No libraries have been shared with you"
+msgstr ""
+
+#: frontend/src/pages/shared-libs/shared-libs.js:35
 msgid ""
 "No libraries have been shared directly with you. You can find more shared "
 "libraries at \"Shared with groups\"."
@@ -1938,6 +1924,10 @@ msgstr ""
 msgid "Preview-on-Cloud folder"
 msgstr ""
 
+#: frontend/src/utils/utils.js:316 frontend/src/utils/utils.js:328
+msgid "Admin"
+msgstr ""
+
 #: frontend/src/utils/utils.js:319 seahub/templates/priv/ali.js:17
 #: static/scripts/app/views/share-admin-folder.js:115
 #: static/scripts/app/views/share-admin-repo.js:129
@@ -1948,6 +1938,10 @@ msgstr ""
 #: static/scripts/app/views/share-admin-folder.js:118
 #: static/scripts/app/views/share-admin-repo.js:132
 msgid "Preview-on-Cloud"
+msgstr ""
+
+#: frontend/src/utils/utils.js:325
+msgid "Member"
 msgstr ""
 
 #: seahub/templates/priv/ali.js:21
