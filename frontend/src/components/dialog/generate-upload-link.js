@@ -9,7 +9,8 @@ import toaster from '../toast';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
-  repoID: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  closeShareDialog: PropTypes.func.isRequired,
 };
 
 class GenerateUploadLink extends React.Component {
@@ -104,6 +105,7 @@ class GenerateUploadLink extends React.Component {
     let uploadLink = this.state.sharedUploadInfo.link;
     copy(uploadLink);
     toaster.success(gettext('Upload link is copied to the clipboard.'));
+    this.props.closeShareDialog();
   }
 
   deleteUploadLink = () => {

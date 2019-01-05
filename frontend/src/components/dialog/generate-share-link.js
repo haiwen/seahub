@@ -10,7 +10,8 @@ import toaster from '../toast';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
-  repoID: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  closeShareDialog: PropTypes.func.isRequired,
 };
 
 class GenerateShareLink extends React.Component {
@@ -117,12 +118,14 @@ class GenerateShareLink extends React.Component {
     let sharedLink = this.state.sharedLinkInfo.link;
     copy(sharedLink);
     toaster.success(gettext('Share link is copied to the clipboard.'));
+    this.props.closeShareDialog();
   }
-
+  
   onCopyDownloadLink = () => {
     let downloadLink = this.state.sharedLinkInfo.link + '?dl';
     copy(downloadLink);
     toaster.success(gettext('Direct download link is copied to the clipboard.'));
+    this.props.closeShareDialog();
   }
 
   deleteShareLink = () => {
