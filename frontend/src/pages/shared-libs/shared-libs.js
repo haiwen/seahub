@@ -28,19 +28,19 @@ class Content extends Component {
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
+    
+    const emptyTip = (
+      <div className="empty-tip">
+        <h2>{gettext('No libraries have been shared with you')}</h2>
+        <p>{gettext('No libraries have been shared directly with you. You can find more shared libraries at "Shared with groups".')}</p>
+      </div>
+    );
 
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const emptyTip = (
-        <div className="empty-tip">
-          <h2>{gettext('No libraries have been shared with you')}</h2>
-          <p>{gettext('No libraries have been shared directly with you. You can find more shared libraries at "Shared with groups".')}</p>
-        </div>
-      );
-
       // sort
       const sortByName = sortBy == 'name';
       const sortByTime = sortBy == 'time';
