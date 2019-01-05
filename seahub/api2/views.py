@@ -988,7 +988,6 @@ class PubRepos(APIView):
             repo = {
                 "id": r.repo_id,
                 "name": r.repo_name,
-                "desc": r.repo_desc,
                 "owner": r.user,
                 "owner_nickname": email2nickname(r.user),
                 "owner_name": email2nickname(r.user),
@@ -998,12 +997,7 @@ class PubRepos(APIView):
                 "size_formatted": filesizeformat(r.size),
                 "encrypted": r.encrypted,
                 "permission": r.permission,
-                "root": r.root,
             }
-            if r.encrypted:
-                repo["enc_version"] = r.enc_version
-                repo["magic"] = r.magic
-                repo["random_key"] = r.random_key
             repos_json.append(repo)
 
         return Response(repos_json)
@@ -4525,7 +4519,6 @@ class GroupRepos(APIView):
             repo = {
                 "id": r.id,
                 "name": r.name,
-                "desc": r.desc,
                 "size": r.size,
                 "size_formatted": filesizeformat(r.size),
                 "mtime": r.last_modified,
