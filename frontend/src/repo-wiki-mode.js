@@ -359,8 +359,11 @@ class Wiki extends Component {
       if (this.isMarkdownFile(path)) {
         this.showFile(path);
       } else {
-        let currentNode = this.state.treeData.getNodeByPath(path);
-        this.showDir(currentNode.path);
+        this.loadDirentList(path);
+        this.setState({
+          path: path,
+          isViewFile: false
+        });
       }
     }
   }
