@@ -124,6 +124,37 @@
   display: flex;
 }
 
+.readme-content {
+  border: 1px solid #e6e6dd;
+  border-radius: 5px;
+  margin: 16px auto;
+}
+
+.readme-header {
+  padding: 8px!important;
+  border: 1px solid #e6e6dd;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin: -1px -1px 0;
+  background-color: #f6f8fa;
+}
+
+.h4 {
+  margin: '0 auto';
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: inherit;
+}
+
+.readme-paragraph {
+  padding: 30px!important;
+  border-bottom: 1px solid #e6e6dd;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  margin-bottom: -1px;
+}
+
 /* for reach/router */
 [role=group] {
   display: flex;
