@@ -15,9 +15,54 @@ class DirentMenuItem extends React.Component {
     this.props.onItemClick(operation);
   }
 
+  translateOperation = (operation) => {
+    let translateOperation = '';
+    switch(operation) {
+      case 'Rename':
+        translateOperation = gettext('Rename');
+        break;
+      case 'Move':
+        translateOperation = gettext('Move');
+        break;
+      case 'Copy':
+        translateOperation = gettext('Copy');
+        break;
+      case 'Permission':
+        translateOperation = gettext('Permission');
+        break;
+      case 'Details':
+        translateOperation = gettext('Details');
+        break;
+      case 'Unlock':
+        translateOperation = gettext('Unlock');
+        break;
+      case 'Lock':
+        translateOperation = gettext('Lock');
+        break;
+      case 'New Draft':
+        translateOperation = gettext('New Draft');
+        break;
+      case 'Comment':
+        translateOperation = gettext('Comment');
+        break;
+      case 'History':
+        translateOperation = gettext('History');
+        break;
+      case 'Access Log':
+        translateOperation = gettext('Access Log');
+        break;
+      case 'Open via Client':
+        translateOperation = gettext('Open via Client');
+        break;
+      default:
+        break;
+    }
+    return translateOperation;
+  }
+
   render() {
     let operation = this.props.item;
-    let operationMessage = gettext(operation);
+    let operationMessage = this.translateOperation(operation);
     return (
       <Fragment>
         {
