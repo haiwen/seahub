@@ -9,11 +9,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
-from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
-        email2contact_email
-from seahub.utils import EVENTS_ENABLED, is_org_context, \
-        get_user_activities
-from seahub.utils.timeutils import utc_to_local
+from seahub.base.templatetags.seahub_tags import email2contact_email
+from seahub.utils import EVENTS_ENABLED, get_user_activities
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -47,7 +45,12 @@ class ActivitiesView(APIView):
 
         email = request.user.username
 
-        events = get_user_activities(email, start, count)
+        try:
+            events = get_user_activities(email, start, count)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         events_list = []
         for e in events:
@@ -63,13 +66,13 @@ class ActivitiesView(APIView):
             d['author_contact_email'] = email2contact_email(e.op_user)
 
             try:
-                size = int(request.GET.get('size', 36))
+                avatar_size = int(request.GET.get('avatar_size', 72))
             except ValueError as e:
-                size = 36
+                avatar_size = 72
 
-            url, is_default, date_uploaded = api_avatar_url(e.op_user, size)
+            url, is_default, date_uploaded = api_avatar_url(e.op_user, avatar_size)
             d['avatar_url'] = request.build_absolute_uri(url)
-            d['time_relative'] = translate_seahub_time(utc_to_local(e.timestamp))
+            d['time'] = utc_datetime_to_isoformat_timestr(e.timestamp)
 
             if e.op_type == 'clean-up-trash':
                 d['days'] = e.days
