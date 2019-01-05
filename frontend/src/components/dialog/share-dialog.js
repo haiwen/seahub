@@ -62,10 +62,18 @@ class ShareDialog extends React.Component {
         <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
             <TabPane tabId="shareLink">
-              <GenerateShareLink itemPath={this.props.itemPath} repoID={this.props.repoID} />
+              <GenerateShareLink 
+                itemPath={this.props.itemPath} 
+                repoID={this.props.repoID}
+                closeShareDialog={this.props.toggleDialog} 
+                />
             </TabPane>
             <TabPane tabId="uploadLink">
-              <GenerateUploadLink itemPath={this.props.itemPath} repoID={this.props.repoID} />
+              <GenerateUploadLink 
+                itemPath={this.props.itemPath} 
+                repoID={this.props.repoID} 
+                closeShareDialog={this.props.toggleDialog} 
+              />
             </TabPane>
             <TabPane tabId="shareToUser">
               <ShareToUser isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
@@ -95,7 +103,11 @@ class ShareDialog extends React.Component {
         <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
             <TabPane tabId="shareLink">
-              <GenerateShareLink itemPath={this.props.itemPath} repoID={this.props.repoID} />
+              <GenerateShareLink 
+                itemPath={this.props.itemPath} 
+                repoID={this.props.repoID} 
+                closeShareDialog={this.props.toggleDialog}
+              />
             </TabPane>
           </TabContent>
         </div>

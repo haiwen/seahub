@@ -160,6 +160,10 @@ class DirentListItem extends React.Component {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
 
+  closeSharedDialog = () => {
+    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+  }
+
   onMenuItemClick = (operation) => {
     switch(operation) {
     case 'Rename':
@@ -516,7 +520,7 @@ class DirentListItem extends React.Component {
               itemName={dirent.name}
               itemPath={direntPath}
               repoID={this.props.repoID}
-              toggleDialog={this.onItemShare}
+              toggleDialog={this.closeSharedDialog}
             />
           </ModalPortal>
         }
