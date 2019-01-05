@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-05 11:23+0800\n"
+"POT-Creation-Date: 2019-01-05 14:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6197,6 +6197,20 @@ msgstr ""
 
 #: seahub/templates/priv/seaf-docs.html:5
 msgid "Login with: "
+msgstr ""
+
+#: seahub/templates/priv/seaf-docs.html:6
+msgid "Invite user"
+msgstr ""
+
+#: seahub/templates/priv/seaf-docs.html:7
+msgid ""
+"Send the invitation link to the others, and they will be able to join the "
+"organization via scanning the QR code."
+msgstr ""
+
+#: seahub/templates/priv/seaf-docs.html:8
+msgid "Invitation link is copied."
 msgstr ""
 
 #: seahub/templates/registration/activation_email.html:12
