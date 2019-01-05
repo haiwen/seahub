@@ -326,7 +326,6 @@ def get_user_repos(username, org_id=None):
             # repos.
             r.id = r.repo_id
             r.name = r.repo_name
-            r.desc = r.repo_desc
             r.last_modify = r.last_modified
     else:
         owned_repos = seafile_api.get_org_owned_repo_list(org_id,
@@ -342,7 +341,6 @@ def get_user_repos(username, org_id=None):
             # repos.
             r.id = r.repo_id
             r.name = r.repo_name
-            r.desc = r.repo_desc
             r.last_modify = r.last_modified
 
     return (owned_repos, shared_repos, groups_repos, public_repos)
