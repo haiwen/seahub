@@ -1,9 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
+
+moment.locale(window.app.config.lang);
 
 const contentPropTypes = {
   isLoadingMore: PropTypes.bool.isRequired,
@@ -147,7 +150,9 @@ class TableBody extends Component {
           </td>
           <td><span className="activity-op">{op}</span></td>
           {details}
-          <td className="text-secondary" dangerouslySetInnerHTML={{__html:item.time_relative}}></td>
+          <td className="text-secondary">
+            <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
+          </td>
         </tr>
       );
     }, this);
