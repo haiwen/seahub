@@ -57,11 +57,6 @@ img[src=""] {
   min-height: 0;
 }
 
-.wiki-main-panel .cur-view-content {
-  display: flex;
-  overflow: auto;
-}
-
 .cur-view-content .markdown-container{
   padding: 0 1.5rem;
   display: flex;
