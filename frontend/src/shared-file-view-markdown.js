@@ -98,7 +98,7 @@ class SharedFileViewMarkdown extends React.Component {
             }
           </div>
           <div className="shared-file-view-body">
-            <div className="md-view article">
+            <div className="md-view">
               <MarkdownViewer markdownContent={this.state.markdownContent} showTOC={false} />
             </div>
           </div>
@@ -123,7 +123,10 @@ if (enableWatermark) {
   } else {
     watermark_txt = gettext("Anonymous User");
   }
-  watermark.init({ watermark_txt: watermark_txt });
+  watermark.init({
+    watermark_txt: watermark_txt,
+    watermark_alpha: 0.075
+  });
 }
 
 ReactDOM.render (
