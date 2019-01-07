@@ -64,10 +64,6 @@ class DraftReview extends React.Component {
   componentDidMount() {
     this.initialContent();
     document.addEventListener('selectionchange', this.setBtnPosition);
-    let that = this;
-    setTimeout(() => {
-      that.getChangedNodes();
-    }, 1000);
   }
 
   initialContent = () => {
@@ -116,6 +112,10 @@ class DraftReview extends React.Component {
               draftOriginContent: draftOriginContent.data,
               isLoading: false
             }); 
+            let that = this;
+            setTimeout(() => {
+              that.getChangedNodes();
+            }, 100);
           }));
         }));
         break;
