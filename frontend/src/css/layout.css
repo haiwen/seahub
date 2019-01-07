@@ -226,6 +226,10 @@ img[src=""],img:not([src]){ /* for first loading img*/
   color: #333;
 }
 
+.readme-flag {
+  color: #888;
+}
+
 .readme-name {
   margin: 0 0.25rem;
 }

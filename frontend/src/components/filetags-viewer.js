@@ -62,7 +62,7 @@ class FileTagsViewer extends React.Component {
             let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.joinPath(this.props.path, dirent.name);
             return (
               <div className="readme-file" key={index}>
-                <i className="fa fa-flag"></i>
+                <i className="readme-flag fa fa-flag"></i>
                 <a className="readme-name" href={href} target='_blank'>{dirent.name}</a>
               </div>
             );
