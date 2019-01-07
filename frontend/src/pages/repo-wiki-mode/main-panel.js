@@ -235,15 +235,6 @@ class MainPanel extends Component {
                 />
               )}
             </div>
-            {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
-              <div className="tags-summary-bar">
-                <FileTagsViewer
-                  repoID={repoID}
-                  currentPath={this.props.path}
-                  usedRepoTags={this.props.usedRepoTags}
-                />
-              </div>
-            )}
             <div className="cur-view-content" onScroll={this.handlePageScroll} ref="curViewContent">
               {!this.props.pathExist ?
                 ErrMessage :
@@ -265,6 +256,15 @@ class MainPanel extends Component {
                       goReviewPage={this.props.goReviewPage}
                     /> :
                     <Fragment>
+                      {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
+                        <div className="tags-summary-bar">
+                          <FileTagsViewer
+                            repoID={repoID}
+                            currentPath={this.props.path}
+                            usedRepoTags={this.props.usedRepoTags}
+                          />
+                        </div>
+                      )}
                       <DirentListView
                         path={this.props.path}
                         repoID={repoID}
