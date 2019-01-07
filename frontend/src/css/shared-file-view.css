@@ -60,7 +60,7 @@
   border: 1px solid #ccc;
   margin: 0 auto;
   box-shadow: 0 0 6px #ccc;
-  width: 756px;
+  width: 950px;
   background: #fff;
   overflow: auto;
 }
@@ -69,5 +69,11 @@
   .shared-file-view-head {
     width: 100%;
     padding: 10px 20px;
+  }
+  .shared-file-view-body .md-view {
+    width: 95%;
+  }
+  .shared-file-view-body .md-view .article {
+    padding: 40px;
   }
 }
