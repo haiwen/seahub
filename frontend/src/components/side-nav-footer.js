@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
-import { gettext, siteRoot } from '../utils/constants';
+import { gettext, lang, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, seafileVersion } from '../utils/constants';
 
 const propTypes = {
   className: PropTypes.string, 
@@ -21,6 +21,16 @@ class About extends React.Component {
     });
   }
 
+  aboutUrl = () => {
+    let url;
+    if (lang == 'zh-cn') {
+      url = 'http://seafile.com/about/';
+      return url; 
+    }
+    url = 'http://seafile.com/en/about/';
+    return url; 
+  }
+
   render() {
     return (
       <div>
@@ -29,9 +39,9 @@ class About extends React.Component {
           <ModalBody>
             <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button>
             <div className="about-content">
-              <p><img src="/media/img/seafile-logo.png" title="Private Seafile" alt="logo" width="128" height="32" /></p>
-              <p>{gettext('Server Version: ')}6.3.3<br />© 2018 {gettext('Seafile')}</p>
-              <p><a href="http://seafile.com/about/" target="_blank">{gettext('About Us')}</a></p>
+              <p><img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" /></p>
+              <p>{gettext('Server Version: ')}{seafileVersion}<br />© 2019 {gettext('Seafile')}</p>
+              <p><a href={this.aboutUrl()} target="_blank">{gettext('About Us')}</a></p>
             </div>
           </ModalBody>
         </Modal>

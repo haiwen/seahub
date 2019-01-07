@@ -12,6 +12,7 @@ export const logoHeight = window.app.config.logoHeight;
 export const isPro = window.app.config.isPro === 'True';
 export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
+export const seafileVersion = window.app.config.seafileVersion;
 
 //pageOptions
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
