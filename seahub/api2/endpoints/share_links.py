@@ -78,6 +78,45 @@ def get_share_link_info(fileshare):
     data['permissions'] = fileshare.get_permissions()
     return data
 
+def check_permissions_arg(request):
+    permissions = request.data.get('permissions', None)
+    if permissions is not None:
+        if isinstance(permissions, dict):
+            perm_dict = permissions
+        elif isinstance(permissions, basestring):
+            import json
+            try:
+                perm_dict = json.loads(permissions)
+            except ValueError:
+                error_msg = 'permissions invalid: %s' % permissions
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        else:
+            error_msg = 'permissions invalid: %s' % permissions
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+    else:
+        perm_dict = None
+
+    can_download = True
+    can_edit = False
+
+    if perm_dict is not None:
+        can_download = perm_dict.get('can_download', True)
+        can_edit = perm_dict.get('can_edit', False)
+
+    if not can_edit and can_download:
+        perm = FileShare.PERM_VIEW_DL
+
+    if not can_edit and not can_download:
+        perm = FileShare.PERM_VIEW_ONLY
+
+    if can_edit and can_download:
+        perm = FileShare.PERM_EDIT_DL
+
+    if can_edit and not can_download:
+        perm = FileShare.PERM_EDIT_ONLY
+
+    return perm
+
 class ShareLinks(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -95,45 +134,6 @@ class ShareLinks(APIView):
             return (dir_id, 'd')
 
         return (None, None)
-
-    def _check_permissions_arg(self, request):
-        permissions = request.data.get('permissions', None)
-        if permissions is not None:
-            if isinstance(permissions, dict):
-                perm_dict = permissions
-            elif isinstance(permissions, basestring):
-                import json
-                try:
-                    perm_dict = json.loads(permissions)
-                except ValueError:
-                    error_msg = 'permissions invalid: %s' % permissions
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            else:
-                error_msg = 'permissions invalid: %s' % permissions
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        else:
-            perm_dict = None
-
-        can_download = True
-        can_edit = False
-
-        if perm_dict is not None:
-            can_download = perm_dict.get('can_download', True)
-            can_edit = perm_dict.get('can_edit', False)
-
-        if not can_edit and can_download:
-            perm = FileShare.PERM_VIEW_DL
-
-        if not can_edit and not can_download:
-            perm = FileShare.PERM_VIEW_ONLY
-
-        if can_edit and can_download:
-            perm = FileShare.PERM_EDIT_DL
-
-        if can_edit and not can_download:
-            perm = FileShare.PERM_EDIT_ONLY
-
-        return perm
 
     def get(self, request):
         """ Get all share links of a user.
@@ -244,7 +244,7 @@ class ShareLinks(APIView):
         else:
             expire_date = timezone.now() + relativedelta(days=expire_days)
 
-        perm = self._check_permissions_arg(request)
+        perm = check_permissions_arg(request)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -315,6 +315,33 @@ class ShareLink(APIView):
         except FileShare.DoesNotExist:
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        link_info = get_share_link_info(fs)
+        return Response(link_info)
+
+    def put(self, request, token):
+        """ Update share link, currently only available for permission.
+
+        Permission checking:
+        share link creater
+        """
+
+        try:
+            fs = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        if not fs.is_owner(username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        permissions = request.data.get('permissions', None)
+        if permissions:
+            perm = check_permissions_arg(request)
+            fs.permission = perm
+            fs.save()
 
         link_info = get_share_link_info(fs)
         return Response(link_info)
