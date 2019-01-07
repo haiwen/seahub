@@ -36,9 +36,12 @@ class UploadListItem extends React.Component {
     return (
       <tr className="file-upload-item">
         <td className="upload-name ellipsis">{item.resumableFile.relativePath}</td>
-        <td className="upload-progress upload-size">
-          {
-            progress === 100 ? this.formatFileSize(item.resumableFile.size) : progress + '%'
+        <td className="upload-progress">
+          <span className="file-size">{this.formatFileSize(item.resumableFile.size)}</span>
+          {progress !== 100 &&
+            <div className="progress">
+              <div className="progress-bar bg-progress" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={`${progress}`} aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
           }
         </td>
         <td className="upload-operation">

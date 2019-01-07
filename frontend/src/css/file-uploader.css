@@ -46,3 +46,11 @@
   background-color: #fff;
   overflow: auto;
 }
+
+.file-upload-item .progress {
+  width: 80%;
+}
+
+.file-upload-item .bg-progress {
+  color: #e83;
+}

@@ -374,11 +374,11 @@ class FileUploader extends React.Component {
     this.setState({isUploadProgressDialogShow: false, uploadFileList: []});
   }
 
-  onUploadCancel = (resumableFile) => {
+  onUploadCancel = (uploadingItem) => {
     let uploadFileList = this.state.uploadFileList.filter(item => {
-      if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
-        resumableFile.cancel();
-        this.resumable.removeFile(resumableFile.file);
+      if (item.uniqueIdentifier === uploadingItem.uniqueIdentifier) {
+        uploadingItem.resumableFile.cancel();
+        this.resumable.removeFile(uploadingItem.resumableFile.file);
       } else {
         return item;
       }
