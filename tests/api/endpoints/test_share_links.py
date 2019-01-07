@@ -2,12 +2,12 @@
 import json
 
 from mock import patch
-from seaserv import seafile_api
 from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import FileShare
 from seahub.api2.permissions import CanGenerateShareLink
+from seahub.utils import gen_token
 
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
@@ -41,7 +41,7 @@ class ShareLinksTest(BaseTestCase):
         link = FileShare.objects.get(token=token)
         link.delete()
 
-    def test_get_file_share_link(self):
+    def test_get_file_share_links(self):
         self.login_as(self.user)
         token = self._add_file_share_link()
 
@@ -309,3 +309,139 @@ class ShareLinksTest(BaseTestCase):
         url = reverse('api-v2.1-share-link', args=[token])
         resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')
         self.assertEqual(403, resp.status_code)
+
+
+class ShareLinkTest(BaseTestCase):
+
+    def setUp(self):
+        self.repo_id = self.repo.id
+        self.file_path= self.file
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def _remove_share_link(self, token):
+        link = FileShare.objects.get(token=token)
+        link.delete()
+
+    def test_get_file_share_link(self):
+
+        self.login_as(self.user)
+
+        # create a share link first
+        json_str = json.dumps({'path': self.file_path, 'repo_id': self.repo_id})
+        url = reverse('api-v2.1-share-links')
+        resp = self.client.post(url, json_str,
+                content_type="application/json")
+        json_resp = json.loads(resp.content)
+        token = json_resp['token']
+
+        url = reverse('api-v2.1-share-link', args=[token])
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['token'] == token
+
+        self._remove_share_link(token)
+
+    def test_get_file_share_link_with_invalid_token(self):
+
+        self.login_as(self.user)
+        invalid_token = gen_token(max_length=20)
+        url = reverse('api-v2.1-share-link', args=[invalid_token])
+        resp = self.client.get(url)
+        self.assertEqual(404, resp.status_code)
+
+    def test_update_file_share_link_permissions(self):
+
+        self.login_as(self.user)
+
+        # create a share link first
+        # all True
+        json_str = json.dumps({'path': self.file_path, 'repo_id': self.repo_id,
+                               'permissions': {
+                                   'can_edit': True,
+                                   'can_download': True
+                               }})
+        url = reverse('api-v2.1-share-links')
+        resp = self.client.post(url, json_str,
+                content_type="application/json")
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['permissions']['can_edit'] == True
+        assert json_resp['permissions']['can_download'] == True
+
+        token = json_resp['token']
+
+        # update share link permission
+        # all False
+        json_str = json.dumps({'permissions': {'can_edit': False, 'can_download': False}})
+        url = reverse('api-v2.1-share-link', args=[token])
+        resp = self.client.put(url, json_str,
+                content_type="application/json")
+
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['token'] == token
+        assert json_resp['permissions']['can_edit'] == False
+        assert json_resp['permissions']['can_download'] == False
+
+        self._remove_share_link(token)
+
+    def test_update_file_share_link_permission_if_not_creator(self):
+
+        self.login_as(self.user)
+
+        # create a share link first
+        # all True
+        json_str = json.dumps({'path': self.file_path, 'repo_id': self.repo_id,
+                               'permissions': {
+                                   'can_edit': True,
+                                   'can_download': True
+                               }})
+        url = reverse('api-v2.1-share-links')
+        resp = self.client.post(url, json_str,
+                content_type="application/json")
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['permissions']['can_edit'] == True
+        assert json_resp['permissions']['can_download'] == True
+
+        token = json_resp['token']
+
+        self.logout()
+        self.login_as(self.admin)
+
+        # update share link permission
+        # all False
+        json_str = json.dumps({'permissions': {'can_edit': False, 'can_download': False}})
+        url = reverse('api-v2.1-share-link', args=[token])
+        resp = self.client.put(url, json_str,
+                content_type="application/json")
+
+        self.assertEqual(403, resp.status_code)
+        self._remove_share_link(token)
+
+    def test_delete_file_share_link(self):
+
+        self.login_as(self.user)
+
+        # create a share link first
+        json_str = json.dumps({'path': self.file_path, 'repo_id': self.repo_id})
+        url = reverse('api-v2.1-share-links')
+        resp = self.client.post(url, json_str,
+                content_type="application/json")
+        json_resp = json.loads(resp.content)
+        token = json_resp['token']
+
+        url = reverse('api-v2.1-share-link', args=[token])
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+
+        # delete share link
+        url = reverse('api-v2.1-share-link', args=[token])
+        resp = self.client.delete(url)
+        self.assertEqual(200, resp.status_code)
+
+        assert not FileShare.objects.filter(token=token)
