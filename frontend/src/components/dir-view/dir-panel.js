@@ -176,17 +176,6 @@ class DirPanel extends React.Component {
                   onTabNavClick={this.props.onTabNavClick}
                 />
               </div>
-              {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
-                <div className="tags-summary-bar">
-                  <FileTagsViewer
-                    repoID={this.props.repoID}
-                    currentPath={this.props.path}
-                    usedRepoTags={this.props.usedRepoTags}
-                    path={this.props.path}
-                    direntList={this.props.direntList}
-                  />
-                </div>
-              )}
               <div className="cur-view-content">
                 {this.props.errorMsg ?
                  <p className="error text-center">{this.props.errorMsg}</p> :
@@ -200,6 +189,8 @@ class DirPanel extends React.Component {
                               repoID={this.props.repoID}
                               currentPath={this.props.path}
                               usedRepoTags={this.props.usedRepoTags}
+                              path={this.props.path}
+                              direntList={this.props.direntList}
                             />
                           </div>
                         )}

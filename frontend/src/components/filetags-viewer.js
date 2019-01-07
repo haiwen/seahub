@@ -56,14 +56,14 @@ class FileTagsViewer extends React.Component {
             );
           })}
         </ul>
-        {this.props.direntList.map(dirent => {
+        {this.props.direntList.map((dirent, index) => {
           let fileName = dirent.name.toLowerCase();
           if (fileName === 'readme.md' || fileName === 'readme.markdown') {
             let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.joinPath(this.props.path, dirent.name);
             return (
-              <div >
+              <div className="readme-file" key={index}>
                 <i className="fa fa-flag"></i>
-                <a target='_blank' href={href}>{dirent.name}</a>
+                <a className="readme-name" href={href} target='_blank'>{dirent.name}</a>
               </div>
             );
           }

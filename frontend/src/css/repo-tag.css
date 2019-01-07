@@ -102,7 +102,7 @@
 }
 .used-tag-list {
   list-style: none;
-  line-height: 40px;
+  margin: 8px 0;
 }
 .used-tag-item {
   display: inline-block;
