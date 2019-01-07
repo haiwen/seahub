@@ -60,7 +60,7 @@ class AddRelatedFileDialog extends React.Component {
   }
 
   onDirentItemClick = (repo, selectedPath, dirent) => {
-    if(dirent.type === 'file') {
+    if (dirent.type === 'file') {
       this.setState({
         repo: repo,
         selectedPath: selectedPath,
@@ -72,6 +72,13 @@ class AddRelatedFileDialog extends React.Component {
         selectedPath: '',
       });
     }
+  }
+
+  onRepoItemClick = (repo) => {
+    this.setState({
+      repo: null,
+      selectedPath: '',
+    });
   }
 
   render() {
@@ -86,6 +93,7 @@ class AddRelatedFileDialog extends React.Component {
             isShowFile={this.state.isShowFile}
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
+            onRepoItemClick={this.onRepoItemClick}
           />
           {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
         </ModalBody>
