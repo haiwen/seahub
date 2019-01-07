@@ -1,6 +1,6 @@
 .share-dialog .share-dialog-content {
     padding: 0;
-    min-height: 15rem;
+    min-height: 20rem;
     display: flex;
     flex-direction: row;
     overflow: hidden;

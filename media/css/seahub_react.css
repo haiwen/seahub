@@ -168,8 +168,8 @@ ul,ol,li {
 }
 
 .dialog-list-container { /* for dialog containing list */
-    min-height: 15rem;
-    max-height: 35rem;
+    min-height: 20rem;
+    max-height: 25rem;
     overflow: auto;
 }
 
