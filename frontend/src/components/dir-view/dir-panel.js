@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { gettext, siteRoot, username } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
 import CommonToolbar from '../toolbar/common-toolbar';
 import ViewModeToolbar from '../toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../toolbar/dir-operation-toolbar';
@@ -15,7 +13,6 @@ import FileUploader from '../file-uploader/file-uploader';
 import ModalPortal from '../modal-portal';
 import LibDecryptDialog from '../dialog/lib-decrypt-dialog';
 import FileTagsViewer from '../../components/filetags-viewer';
-import ReadmeContentViewer from '../../components/readme-viewer';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object,
@@ -65,10 +62,7 @@ class DirPanel extends React.Component {
       currentMode: 'list',
       isDirentDetailShow: false,
       isRepoOwner: false,
-      readmeContent: '',
-      isReadmeLoading: false,
     };
-    this.titlesInfo = null;
   }
 
   componentDidMount() {
@@ -77,21 +71,6 @@ class DirPanel extends React.Component {
       let isRepoOwner = currentRepoInfo.owner_email === username;
       this.setState({isRepoOwner: isRepoOwner});
     }
-  }
-
-  showReadme = (filePath, fileName) => {
-    this.setState({
-      isReadmeLoading: true,
-    });
-    let readmePath = Utils.joinPath(filePath, fileName);
-    seafileAPI.getFileDownloadLink(this.props.repoID, readmePath).then((res) => {
-      seafileAPI.getFileContent(res.data).then((res) => {
-        this.setState({
-          readmeContent: res.data,
-          isReadmeLoading: false,
-        });
-      });
-    });
   }
 
   onPathClick = (path) => {
@@ -138,10 +117,6 @@ class DirPanel extends React.Component {
     cookie.save('view_mode', mode, { path: '/' });
     
     this.setState({currentMode: mode});
-  }
-
-  onContentRendered = (readmeViewer) => {
-    this.titlesInfo = readmeViewer.titlesInfo;
   }
 
   render() {
@@ -201,6 +176,17 @@ class DirPanel extends React.Component {
                   onTabNavClick={this.props.onTabNavClick}
                 />
               </div>
+              {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
+                <div className="tags-summary-bar">
+                  <FileTagsViewer
+                    repoID={this.props.repoID}
+                    currentPath={this.props.path}
+                    usedRepoTags={this.props.usedRepoTags}
+                    path={this.props.path}
+                    direntList={this.props.direntList}
+                  />
+                </div>
+              )}
               <div className="cur-view-content">
                 {this.props.errorMsg ?
                  <p className="error text-center">{this.props.errorMsg}</p> :
@@ -239,22 +225,6 @@ class DirPanel extends React.Component {
                           onAllItemSelected={this.props.onAllItemSelected}
                           updateDirent={this.props.updateDirent}
                         />
-                        {this.props.direntList.map(dirent => {
-                          let fileName = dirent.name.toLowerCase();
-                          if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-                            return (
-                              <ReadmeContentViewer
-                                key={dirent.id}
-                                readmeContent={this.state.readmeContent}
-                                isReadmeLoading={this.state.isReadmeLoading}
-                                onContentRendered={this.onContentRendered}
-                                showReadme={this.showReadme}
-                                filePath={this.props.path}
-                                fileName={dirent.name}
-                              />
-                            );
-                          }
-                        })}
                         <FileUploader
                           dragAndDrop={true}
                           ref={uploader => this.uploader = uploader}
@@ -268,23 +238,6 @@ class DirPanel extends React.Component {
                   </Fragment>
                 }
               </div>
-              {/* {this.props.direntList.map(dirent => {
-                let fileName = dirent.name.toLowerCase();
-                if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-                  return (
-                    <div key={dirent.id} className="cur-view-readme">
-                      <ReadmeContentViewer
-                        readmeContent={this.state.readmeContent}
-                        isReadmeLoading={this.state.isReadmeLoading}
-                        onContentRendered={this.onContentRendered}
-                        showReadme={this.showReadme}
-                        filePath={this.props.path}
-                        fileName={dirent.name}
-                      />
-                    </div>
-                  );
-                }
-              })} */}
             </div>
           }
           {this.state.isDirentDetailShow && (

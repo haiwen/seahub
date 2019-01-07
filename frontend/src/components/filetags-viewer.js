@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Modal } from 'reactstrap';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
+import { siteRoot } from '../utils/constants';
+import { Utils } from '../utils/utils';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
+  direntList: PropTypes.array.isRequired,
+  path: PropTypes.string.isRequired,
 };
 
 class FileTagsViewer extends React.Component {
@@ -52,6 +56,18 @@ class FileTagsViewer extends React.Component {
             );
           })}
         </ul>
+        {this.props.direntList.map(dirent => {
+          let fileName = dirent.name.toLowerCase();
+          if (fileName === 'readme.md' || fileName === 'readme.markdown') {
+            let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.joinPath(this.props.path, dirent.name);
+            return (
+              <div >
+                <i className="fa fa-flag"></i>
+                <a target='_blank' href={href}>{dirent.name}</a>
+              </div>
+            );
+          }
+        })}
         {this.state.isListTaggedFileShow && (
           <ModalPortal>
             <Modal isOpen={true}>

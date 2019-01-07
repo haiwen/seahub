@@ -15,7 +15,6 @@ import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import FileTagsViewer from '../../components/filetags-viewer';
-import ReadmeContentViewer from '../../components/readme-viewer';
 
 const propTypes = {
   content: PropTypes.string,
@@ -76,8 +75,6 @@ class MainPanel extends Component {
       currentRepoInfo: null,
       isRepoOwner: false,
       activeTitleIndex: -1,
-      readmeContent: '',
-      isReadmeLoading: false,
     };
     this.titlesInfo = null;
     this.pageScroll = false;
@@ -101,21 +98,6 @@ class MainPanel extends Component {
         window.location.hash = hash;
       }, 500);
     }
-  }
-
-  showReadme = (filePath, fileName) => {
-    this.setState({
-      isReadmeLoading: true,
-    });
-    let readmePath = Utils.joinPath(filePath, fileName);
-    seafileAPI.getFileDownloadLink(repoID, readmePath).then((res) => {
-      seafileAPI.getFileContent(res.data).then((res) => {
-        this.setState({
-          readmeContent: res.data,
-          isReadmeLoading: false,
-        });
-      });
-    });
   }
 
   switchViewMode = (mode) => {
@@ -305,21 +287,6 @@ class MainPanel extends Component {
                         onAllItemSelected={this.props.onAllDirentSelected}
                         onItemSelected={this.props.onItemSelected}
                       />
-                      {!this.props.isViewFile && this.props.direntList.map(dirent => {
-                        let fileName = dirent.name.toLowerCase();
-                        if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-                          return (
-                            <ReadmeContentViewer
-                              readmeContent={this.state.readmeContent}
-                              isReadmeLoading={this.state.isReadmeLoading}
-                              onContentRendered={this.onContentRendered}
-                              showReadme={this.showReadme}
-                              filePath={this.props.path}
-                              fileName={dirent.name}
-                            />
-                          );
-                        }
-                      })}
                       <FileUploader
                         ref={uploader => this.uploader = uploader}
                         dragAndDrop={true}
@@ -333,23 +300,6 @@ class MainPanel extends Component {
                 </Fragment>
               }
             </div>
-            {/* {!this.props.isViewFile && this.props.direntList.map(dirent => {
-              let fileName = dirent.name.toLowerCase();
-              if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-                return (
-                  <div key={dirent.id} className="cur-view-readme">
-                    <ReadmeContentViewer
-                      readmeContent={this.state.readmeContent}
-                      isReadmeLoading={this.state.isReadmeLoading}
-                      onContentRendered={this.onContentRendered}
-                      showReadme={this.showReadme}
-                      filePath={this.props.path}
-                      fileName={dirent.name}
-                    />
-                  </div>
-                );
-              }
-            })} */}
           </div>
           {this.state.isDirentDetailShow && (
             <div className="cur-view-detail">
