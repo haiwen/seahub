@@ -546,7 +546,23 @@ class Wiki extends Component {
     if (type === 'dir') {
       direntList.unshift(item);
     } else {
-      direntList.push(item);
+      // there will be there conditions;
+      // first: direntList.length === 0;
+      // second: all the direntList's items are dir;
+      // third: direntList has dir and file;
+      let length = direntList.length
+      if (length === 0 || direntList[length - 1].type === 'dir') {
+        direntList.push(item);
+      } else {
+        let index = 0;
+        for (let i = 0; i <= length; i++) {
+          if (direntList[i].type === 'file') {
+            index = i;
+            break;
+          }
+        }
+        direntList.splice(index, 0, item);
+      }
     }
     this.setState({direntList: direntList});
   }

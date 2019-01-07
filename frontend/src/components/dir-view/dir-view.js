@@ -469,9 +469,26 @@ class DirView extends React.Component {
     if (type === 'dir') {
       direntList.unshift(dirent);
       return direntList;
+    } else {  // type === 'file'
+      // there will be there conditions;
+      // first: direntList.length === 0;
+      // second: all the direntList's items are dir;
+      // third: direntList has dir and file;
+      let length = direntList.length
+      if (length === 0 || direntList[length - 1].type === 'dir') {
+        direntList.push(dirent);
+      } else {
+        let index = 0;
+        for (let i = 0; i <= length; i++) {
+          if (direntList[i].type === 'file') {
+            index = i;
+            break;
+          }
+        }
+        direntList.splice(index, 0, dirent);
+      }
+      return direntList;
     }
-    direntList.push(dirent);
-    return direntList;
   }
 
   deleteItem = (dirent) => {
