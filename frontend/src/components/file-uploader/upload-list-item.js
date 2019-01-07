@@ -11,9 +11,7 @@ class UploadListItem extends React.Component {
 
   onUploadCancel = (e) => {
     e.preventDefault();
-    let item = this.props.item;
-    item.resumableFile.cancel();
-    this.props.onUploadCancel(item);
+    this.props.onUploadCancel(this.props.item);
   }
 
   formatFileSize = (size) => {
@@ -37,13 +35,13 @@ class UploadListItem extends React.Component {
     let progress = Math.round(item.resumableFile.progress() * 100);
     return (
       <tr className="file-upload-item">
-        <td width="50%" className="upload-name ellipsis">{item.resumableFile.relativePath}</td>
-        <td width="30%" className="upload-progress upload-size">
+        <td className="upload-name ellipsis">{item.resumableFile.relativePath}</td>
+        <td className="upload-progress upload-size">
           {
             progress === 100 ? this.formatFileSize(item.resumableFile.size) : progress + '%'
           }
         </td>
-        <td width="20%" className="upload-operation">
+        <td className="upload-operation">
           { progress !== 100 ?
             <a href="#" onClick={this.onUploadCancel}>{gettext(('cancel'))}</a> :
             <span>{gettext('uploaded')}</span>

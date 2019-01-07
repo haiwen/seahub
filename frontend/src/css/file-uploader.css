@@ -15,8 +15,7 @@
   right: 1px;
   bottom: 1px;
   width: 35rem;
-  min-height: 15rem;
-  max-height: 20rem;
+  height: 20rem;
   border: 1px solid #ddd;
   border-radius: 3px;
   box-shadow: 0 0 6px #ddd;

@@ -370,17 +370,18 @@ class FileUploader extends React.Component {
     });
   }
 
-  onMinimizeUploadDialog = () => {
-    this.setState({isUploadProgressDialogShow: false});
-  }
-
   onCloseUploadDialog = () => {
     this.setState({isUploadProgressDialogShow: false, uploadFileList: []});
   }
 
   onUploadCancel = (resumableFile) => {
     let uploadFileList = this.state.uploadFileList.filter(item => {
-      return item.uniqueIdentifier !== resumableFile.uniqueIdentifier;
+      if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
+        resumableFile.cancel();
+        this.resumable.removeFile(resumableFile.file);
+      } else {
+        return item;
+      }
     });
     let newUploaderFileList = uploadFileList.map(item => {
       let progress = Math.round(item.resumableFile.progress() * 100);
@@ -388,6 +389,19 @@ class FileUploader extends React.Component {
       return item;
     });
     this.setState({uploadFileList: newUploaderFileList});
+  }
+
+  onCancelAllUploading = () => {
+    let uploadFileList = this.state.uploadFileList.filter(item => {
+      let resumableFile = item.resumableFile;
+      if (Math.round(resumableFile.progress() !== 1)) {
+        resumableFile.cancel();
+        this.resumable.removeFile(resumableFile.file);
+      } else {
+        return item;
+      }
+    });
+    this.setState({uploadFileList: uploadFileList});
   }
 
   onUploaderRetry = () => {
@@ -447,8 +461,8 @@ class FileUploader extends React.Component {
             <UploadProgressDialog
               uploadFileList={this.state.uploadFileList}
               totalProgress={this.state.totalProgress}
-              onMinimizeUploadDialog={this.onMinimizeUploadDialog}
               onCloseUploadDialog={this.onCloseUploadDialog}
+              onCancelAllUploading={this.onCancelAllUploading}
               onUploadCancel={this.onUploadCancel}
             />
           }
