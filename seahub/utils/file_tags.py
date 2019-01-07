@@ -45,6 +45,11 @@ def get_tagged_files(repo, repo_tag_id):
 
         tagged_file = dict()
         file_obj = seafile_api.get_dirent_by_path(repo.store_id, file_path)
+        if not file_obj:
+            exception = "Can't find tagged file. Repo_id: %s, Path: %s." % (repo.id, file_path)
+            logger.warning(exception)
+            continue
+
         tagged_file["parent_path"] = parent_path
         tagged_file["filename"] = filename
         tagged_file["size"] = file_obj.size
