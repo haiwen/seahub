@@ -43,7 +43,7 @@ from seahub.utils import render_permission_error, render_error, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
-    is_windows_operating_system, get_service_url
+    is_windows_operating_system, get_service_url, seafevents_api
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
@@ -838,8 +838,13 @@ def file_revisions(request, repo_id):
         else:
             use_new_page = True
     else:
-        new_file_history_suffix = ['txt', 'md'] # TODO: read from seafevents
-        use_new_page = True if file_ext in new_file_history_suffix else False
+        suffix_list = seafevents_api.get_file_history_suffix()
+        if suffix_list and isinstance(suffix_list, list):
+            suffix_list = [x.lower() for x in suffix_list]
+        else:
+            logger.error('Wrong type of suffix_list: %s' % repr(suffix_list))
+            suffix_list = []
+        use_new_page = True if '.' + file_ext in suffix_list else False
 
     if use_new_page:
         return render(request, 'file_revisions_new.html', {

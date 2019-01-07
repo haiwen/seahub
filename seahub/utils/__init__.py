@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
+from functools import partial
 import os
 import re
 import urllib
@@ -1229,7 +1230,13 @@ if EVENTS_CONFIG_FILE:
     from seafevents import seafevents_api
     seafevents_api.init(EVENTS_CONFIG_FILE)
 else:
-    seafevents_api = None       # TODO
+    class RPCProxy(object):
+        def __getattr__(self, name):
+            return partial(self.method_missing, name)
+
+        def method_missing(self, name, *args, **kwargs):
+            return None
+    seafevents_api = RPCProxy()
 
 def user_traffic_over_limit(username):
     """Return ``True`` if user traffic over the limit, otherwise ``False``.
