@@ -147,7 +147,7 @@ class RelatedFile extends React.Component {
         <td><a href={relatedFile.link} target='_blank'>{relatedFile.name}</a></td>
         <td>{relatedFile.repo_name}</td>
         <td>{relatedFile.size}</td>
-        <td>{relatedFile.mtime}</td>
+        <td>{relatedFile.mtime_relative}</td>
         <td><i className={className} onClick={this.props.onDeleteRelatedFile.bind(this, relatedFile)}></i></td>
       </tr>
     );
