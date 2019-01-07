@@ -1328,10 +1328,8 @@ def is_pro_version():
         if hasattr(seahub.settings, 'IS_PRO_VERSION') \
             and seahub.settings.IS_PRO_VERSION:
             return True
-    if EVENTS_CONFIG_FILE:
-        return True
-    else:
-        return False
+
+    return bool(seafevents_api.is_pro())
 
 def clear_token(username):
     '''
