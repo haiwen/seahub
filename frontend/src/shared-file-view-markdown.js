@@ -17,7 +17,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 
 let loginUser = window.app.pageOptions.name;
-const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
+const { serviceURL, repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
 
 class SharedFileViewMarkdown extends React.Component {
 
@@ -50,16 +50,52 @@ class SharedFileViewMarkdown extends React.Component {
 
   componentDidMount() {
     seafileAPI.getFileContent(rawPath).then((res) => {
-      this.setState({
-        markdownContent: res.data,
-        loading: false
-      });
+      this.initialMarkdownContent(res.data);
     });
     if (trafficOverLimit == "True") {
       toaster.danger(gettext('File download is disabled: the share link traffic of owner is used up.'), {
         duration: 3
       });
     }
+  }
+
+  initialMarkdownContent = (data) => {
+    let markdownContent = data;
+    // get image url
+    const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*\?raw=1', 'g');
+    const imageUrls = data.match(re); 
+    
+    // image dose not exists
+    if (!imageUrls) {
+      this.setState({
+        markdownContent: markdownContent,
+        loading: false
+      });
+      return;
+    }
+
+    // image exists
+    const num = imageUrls.length;
+    let i = 0;
+    // change image url 
+    imageUrls.map((imageUrl) => {
+      i = i + 1;
+
+      // get image path
+      let index = imageUrl.indexOf('file');
+      let index2 = imageUrl.indexOf('?');
+      const path = imageUrl.substring(index + 4, index2);
+      const newImageUrl = serviceURL + '/media-file-via-share-link/?token=' + sharedToken + '&path=' + path;
+      markdownContent = markdownContent.replace(imageUrl, newImageUrl);
+
+      // change markdown content
+      if (i == num) {
+        this.setState({
+          markdownContent: markdownContent,
+          loading: false
+        });
+      }
+    });
   }
 
   render() {

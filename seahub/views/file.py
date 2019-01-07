@@ -19,6 +19,7 @@ import urlparse
 import datetime
 
 from django.core import signing
+from django.core.cache import cache
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -55,8 +56,8 @@ from seahub.utils import render_error, is_org_context, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
-    normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE
-
+    normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
+    normalize_cache_key
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
@@ -1212,6 +1213,7 @@ def view_shared_file(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
+            'serviceUrl': get_service_url().rstrip('/'),
             })
 
 @share_link_audit
@@ -2002,3 +2004,68 @@ def file_access(request, repo_id):
         'per_page': per_page,
         'page_next': page_next,
         })
+
+
+def view_media_file_via_share_link(request):
+    image_path = request.GET.get('path', '')
+    token = request.GET.get('token', '')
+
+    if not image_path or not token:
+        return HttpResponseBadRequest('invalid params')
+
+    file_share = FileShare.objects.get_valid_file_link_by_token(token)
+
+    if not file_share:
+        raise Http404
+
+    shared_file_name = os.path.basename(file_share.path)
+    file_type, _ = get_file_type_and_ext(shared_file_name)
+
+    if file_type != MARKDOWN:
+        raise Http404
+
+    # recourse check
+    repo_id = file_share.repo_id
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # read file from cache, if hit
+    cache_key = normalize_cache_key(shared_file_name, token=token)
+    file_content = cache.get(cache_key)
+    if not file_content:
+        # otherwise, read file from database and update cache
+        file_id = seafile_api.get_file_id_by_path(repo_id, file_share.path)
+        if not file_id:
+            return render_error(request, _(u'File does not exist'))
+
+        access_token = seafile_api.get_fileserver_access_token(repo_id,
+                file_id, 'view', '', use_onetime=False)
+
+        if not access_token:
+            return render_error(request, _(u'Unable to view file'))
+
+        shared_file_raw_path = gen_inner_file_get_url(access_token, shared_file_name)
+
+        _, file_content, _ = repo_file_get(shared_file_raw_path, 'auto')
+        cache.set(cache_key, file_content, 24 * 60 * 60)
+
+    # If the image does not exist in markdown
+    serviceURL = get_service_url().rstrip('/')
+    image_file_name = os.path.basename(image_path)
+    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
+    result = re.search(p, file_content)
+    if not result:
+        raise Http404
+
+    # get image
+    obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)
+    if not obj_id:
+        return render_error(request, _(u'File does not exist'))
+
+    access_token = seafile_api.get_fileserver_access_token(repo_id,
+            obj_id, 'view', '', use_onetime=False)
+
+    dl_or_raw_url = gen_file_get_url(access_token, image_file_name)
+
+    return HttpResponseRedirect(dl_or_raw_url)
