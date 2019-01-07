@@ -282,6 +282,7 @@ class ShareToUser extends React.Component {
                   loadOptions={this.loadOptions}
                   onChange={this.handleSelectChange}
                   value={this.state.selectedOption}
+                  maxMenuHeight={120}
                   isMulti 
                   isFocused
                   isClearable 

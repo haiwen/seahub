@@ -264,6 +264,7 @@ class ShareToGroup extends React.Component {
                   options={this.options}
                   placeholder={gettext('Select a group')}
                   components={makeAnimated()}
+                  maxMenuHeight={120}
                   inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
                 />
