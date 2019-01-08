@@ -122,7 +122,7 @@ class CreateFile extends React.Component {
             {this.props.fileType == '.md' && (
               <FormGroup check>
                 <Label check>
-                  <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft.')}
+                  <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft')}
                 </Label>
               </FormGroup>
             )}
