@@ -42,6 +42,7 @@ class DirView extends React.Component {
       dirID: '',
       errorMsg: '',
       usedRepoTags: [],
+      readmeMarkdown: null,
     };
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
@@ -149,6 +150,10 @@ class DirView extends React.Component {
     this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, filePath).then(res => {
       let direntList = res.data.map(item => {
+        let fileName = item.name.toLowerCase();
+        if (fileName === 'readme.md' || fileName === 'readme.markdown') {
+          this.setState({readmeMarkdown: item});
+        }
         return new Dirent(item);
       });
       this.setState({
@@ -632,6 +637,7 @@ class DirView extends React.Component {
         libNeedDecrypt={this.state.libNeedDecrypt}
         onLibDecryptDialog={this.onLibDecryptDialog}
         usedRepoTags={this.state.usedRepoTags}
+        readmeMarkdown={this.state.readmeMarkdown}
       />
     );
   }

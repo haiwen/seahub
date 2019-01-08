@@ -6,20 +6,20 @@ import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
 import { siteRoot } from '../utils/constants';
 import { Utils } from '../utils/utils';
 
+import '../css/root-path-viewer.css';
+
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
-  direntList: PropTypes.array.isRequired,
-  path: PropTypes.string.isRequired,
+  readmeMarkdown: PropTypes.object,
 };
 
-class FileTagsViewer extends React.Component {
+class RootPathViewer extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      usedRepoTags: [],
       currentTag: null,
       isListTaggedFileShow: false,
     };
@@ -39,7 +39,8 @@ class FileTagsViewer extends React.Component {
   }
 
   render() {
-    let {usedRepoTags, repoID} = this.props;
+    let {repoID, currentPath, usedRepoTags, readmeMarkdown} = this.props;
+    let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) : '';
 
     return (
       <Fragment>
@@ -56,18 +57,12 @@ class FileTagsViewer extends React.Component {
             );
           })}
         </ul>
-        {this.props.direntList.map((dirent, index) => {
-          let fileName = dirent.name.toLowerCase();
-          if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-            let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.joinPath(this.props.path, dirent.name);
-            return (
-              <div className="readme-file" key={index}>
-                <i className="readme-flag fa fa-flag"></i>
-                <a className="readme-name" href={href} target='_blank'>{dirent.name}</a>
-              </div>
-            );
-          }
-        })}
+        {readmeMarkdown !== null && (
+          <div className="readme-file">
+            <i className="readme-flag fa fa-flag"></i>
+            <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
+          </div>
+        )}
         {this.state.isListTaggedFileShow && (
           <ModalPortal>
             <Modal isOpen={true}>
@@ -85,6 +80,6 @@ class FileTagsViewer extends React.Component {
   }
 }
 
-FileTagsViewer.propTypes = propTypes;
+RootPathViewer.propTypes = propTypes;
 
-export default FileTagsViewer;
+export default RootPathViewer;

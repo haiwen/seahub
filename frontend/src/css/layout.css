@@ -217,19 +217,3 @@
 img[src=""],img:not([src]){ /* for first loading img*/
   opacity:0;
 }
-
-.readme-file {
-  margin: 8px 15px;
-}
-
-.readme-file a {
-  color: #333;
-}
-
-.readme-flag {
-  color: #888;
-}
-
-.readme-name {
-  margin: 0 0.25rem;
-}
