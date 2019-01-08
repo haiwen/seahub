@@ -5,6 +5,7 @@ import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import PermissionEditor from '../permission-editor';
+import UserSelect from '../../models/user-select';
 import '../../css/manage-members-dialog.css';
 
 const propTypes = {
@@ -21,52 +22,33 @@ class ManageMembersDialog extends React.Component {
     this.state = {
       groupMembers: [],
       selectedOption: null,
-      errMessage: '',
+      errMessage: [],
+      clearSelect: false,
     };
-    this.options = [];
   }
 
-  handleSelectChange = (option) => {
+  onSelectChange = (option) => {
     this.setState({
       selectedOption: option,
-      errMessage: '',
+      errMessage: [],
     });
-    this.options = [];
-  }
-
-  loadOptions = (value, callback) => {
-    if (value.trim().length > 0) {
-      seafileAPI.searchUsers(value.trim()).then((res) => {
-        this.options = [];
-        for (let i = 0 ; i < res.data.users.length; i++) {
-          let obj = {};
-          obj.value = res.data.users[i].name;
-          obj.email = res.data.users[i].email;
-          obj.label =
-            <React.Fragment>
-              <img src={res.data.users[i].avatar_url} className="avatar" alt=""/>
-              <span className="transfer-group-name">{res.data.users[i].name}</span>
-            </React.Fragment>;
-          this.options.push(obj);
-        }
-        callback(this.options);
-      });
-    }
   }
 
   addGroupMember = () => {
-    if (this.state.selectedOption && this.state.selectedOption.email) {
-      this.refs.memberSelect.select.onChange([], { action: 'clear' });
-      seafileAPI.addGroupMember(this.props.groupID, this.state.selectedOption.email).then((res) => {
+    if (this.state.selectedOption.length > 0) {
+      let emails = [];
+      for (let i = 0; i < this.state.selectedOption.length; i++) {
+        emails.push(this.state.selectedOption[i].email);
+      }
+      seafileAPI.addGroupMembers(this.props.groupID, emails).then((res) => {
         this.onGroupMembersChange();
-        this.options = [];
         this.setState({
           selectedOption: null,
+          clearSelect: true,
         });
-      }).catch((error) => {
-        if (error.response) {
+        if (res.data.failed.length > 0) {
           this.setState({
-            errMessage: error.response.data.error_msg
+            errMessage: res.data.failed
           });
         }
       });
@@ -100,17 +82,23 @@ class ManageMembersDialog extends React.Component {
         <ModalBody>
           <p>{gettext('Add group member')}</p>
           <div className='group-transfer'>
-            <AsyncSelect
-              className='group-transfer-select'
-              isClearable classNamePrefix
-              loadOptions={this.loadOptions}
-              onChange={this.handleSelectChange}
-              placeholder={gettext('Search users...')}
-              ref="memberSelect"
+            <UserSelect
+              placeholder='Search users...'
+              onSelectChange={this.onSelectChange}
+              clearSelect={this.state.clearSelect}
+              isMulti={true}
+              className="group-transfer-select"
             />
             <Button color="secondary" onClick={this.addGroupMember}>{gettext('Submit')}</Button>
           </div>
-          <span className="error">{this.state.errMessage}</span>
+          {
+            this.state.errMessage.length > 0 &&
+            this.state.errMessage.map((item, index = 0) => {
+              return (
+                <div className="group-error error" key={index}>{item.error_msg}</div>
+              );
+            })
+          }
           <div className="manage-members">
             <Table hover size="sm" className="manage-members-table">
               <thead>
