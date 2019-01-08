@@ -98,7 +98,7 @@ class DirentListItem extends React.Component {
         }
         <span className={`item-info ${this.state.filePath === this.props.selectedPath ? 'item-active' : ''}`} onClick={this.onItemClick}>
           <span className={`icon far ${this.props.dirent.type === 'dir' ? 'fa-folder' : 'fa-file'}`}></span>
-          <span className="name user-select-none">{this.props.dirent && this.props.dirent.name}</span>
+          <span className="name user-select-none ellipsis">{this.props.dirent && this.props.dirent.name}</span>
         </span>
         {this.state.isShowChildren && this.renderChildren()}
       </li>

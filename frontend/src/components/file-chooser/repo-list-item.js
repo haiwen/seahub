@@ -54,7 +54,7 @@ class RepoListItem extends React.Component {
         <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         <span className={`item-info ${repoActive ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
           <span className="icon far fa-folder"></span>
-          <span className="name user-select-none">{this.props.repo.repo_name}</span>
+          <span className="name user-select-none ellipsis">{this.props.repo.repo_name}</span>
         </span>
         {this.state.isShowChildren && (
           <DirentListView 
