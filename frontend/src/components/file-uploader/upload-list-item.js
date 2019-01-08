@@ -40,7 +40,7 @@ class UploadListItem extends React.Component {
           <span className="file-size">{this.formatFileSize(item.resumableFile.size)}</span>
           {progress !== 100 &&
             <div className="progress">
-              <div className="progress-bar bg-progress" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={`${progress}`} aria-valuemin="0" aria-valuemax="100"></div>
+              <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={`${progress}`} aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           }
         </td>

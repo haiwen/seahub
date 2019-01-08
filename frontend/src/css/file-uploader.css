@@ -51,6 +51,6 @@
   width: 80%;
 }
 
-.file-upload-item .bg-progress {
+.file-upload-item .progress .progress-bar {
   color: #e83;
 }
