@@ -31,12 +31,21 @@ class RepoListItem extends React.Component {
   }
 
   onRepoItemClick = () => {
-    this.props.onRepoItemClick(this.props.repo);
+    if (!this.isCurrentRepo()) {
+      this.props.onRepoItemClick(this.props.repo);
+    } else {
+      this.onToggleClick();
+    }
+  }
+
+  isCurrentRepo = () => {
+    let { selectedRepo, repo } = this.props;
+    return selectedRepo && (repo.repo_id === selectedRepo.repo_id);
   }
 
   render() {
     let repoActive = false;
-    let isCurrentRepo = this.props.selectedRepo && (this.props.repo.repo_id === this.props.selectedRepo.repo_id);
+    let isCurrentRepo = this.isCurrentRepo();
     if (isCurrentRepo && !this.props.selectedPath) {
       repoActive = true;
     }
@@ -45,7 +54,7 @@ class RepoListItem extends React.Component {
         <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         <span className={`item-info ${repoActive ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
           <span className="icon far fa-folder"></span>
-          <span className="name">{this.props.repo.repo_name}</span>
+          <span className="name user-select-none">{this.props.repo.repo_name}</span>
         </span>
         {this.state.isShowChildren && (
           <DirentListView 
