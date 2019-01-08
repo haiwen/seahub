@@ -6,7 +6,7 @@ import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
 import { siteRoot } from '../utils/constants';
 import { Utils } from '../utils/utils';
 
-import '../css/root-path-viewer.css';
+import '../css/repo-info-bar.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -15,7 +15,7 @@ const propTypes = {
   readmeMarkdown: PropTypes.object,
 };
 
-class RootPathViewer extends React.Component {
+class RepoInfoBar extends React.Component {
 
   constructor(props) {
     super(props);
@@ -80,6 +80,6 @@ class RootPathViewer extends React.Component {
   }
 }
 
-RootPathViewer.propTypes = propTypes;
+RepoInfoBar.propTypes = propTypes;
 
-export default RootPathViewer;
+export default RepoInfoBar;

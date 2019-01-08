@@ -14,7 +14,7 @@ import MarkdownContentViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import FileUploader from '../../components/file-uploader/file-uploader';
-import RootPathViewer from '../../components/root-path-viewer';
+import RepoInfoBar from '../../components/repo-info-bar';
 
 const propTypes = {
   content: PropTypes.string,
@@ -258,8 +258,8 @@ class MainPanel extends Component {
                     /> :
                     <Fragment>
                       {this.props.path === '/' && !(this.props.usedRepoTags.length === 0 && this.props.readmeMarkdown === null) && (
-                        <div className="root-path-viewer">
-                          <RootPathViewer
+                        <div className="repo-info-bar">
+                          <RepoInfoBar
                             repoID={repoID}
                             currentPath={this.props.path}
                             usedRepoTags={this.props.usedRepoTags}
