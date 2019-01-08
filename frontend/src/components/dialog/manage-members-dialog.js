@@ -31,28 +31,27 @@ class ManageMembersDialog extends React.Component {
     this.setState({
       selectedOption: option,
       errMessage: [],
+      clearSelect: false,
     });
   }
 
   addGroupMember = () => {
-    if (this.state.selectedOption.length > 0) {
-      let emails = [];
-      for (let i = 0; i < this.state.selectedOption.length; i++) {
-        emails.push(this.state.selectedOption[i].email);
-      }
-      seafileAPI.addGroupMembers(this.props.groupID, emails).then((res) => {
-        this.onGroupMembersChange();
-        this.setState({
-          selectedOption: null,
-          clearSelect: true,
-        });
-        if (res.data.failed.length > 0) {
-          this.setState({
-            errMessage: res.data.failed
-          });
-        }
-      });
+    let emails = [];
+    for (let i = 0; i < this.state.selectedOption.length; i++) {
+      emails.push(this.state.selectedOption[i].email);
     }
+    seafileAPI.addGroupMembers(this.props.groupID, emails).then((res) => {
+      this.onGroupMembersChange();
+      this.setState({
+        selectedOption: null,
+        clearSelect: true,
+      });
+      if (res.data.failed.length > 0) {
+        this.setState({
+          errMessage: res.data.failed
+        });
+      }
+    });
   }
 
   listGroupMembers = () => {
@@ -89,7 +88,10 @@ class ManageMembersDialog extends React.Component {
               isMulti={true}
               className="group-transfer-select"
             />
-            <Button color="secondary" onClick={this.addGroupMember}>{gettext('Submit')}</Button>
+            {this.state.selectedOption ?
+              <Button color="secondary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
+              <Button color="secondary" disabled>{gettext('Submit')}</Button>
+            }
           </div>
           {
             this.state.errMessage.length > 0 &&

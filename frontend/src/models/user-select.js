@@ -4,6 +4,14 @@ import AsyncSelect from 'react-select/lib/Async';
 import { seafileAPI } from '../utils/seafile-api.js';
 import { gettext } from '../utils/constants';
 
+const propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  onSelectChange: PropTypes.func.isRequired,
+  clearSelect: PropTypes.bool.isRequired,
+  isMulti: PropTypes.bool.isRequired,
+  className: PropTypes.string.isRequired,
+};
+
 class UserSelect extends React.Component {
 
   constructor(props) {
@@ -16,9 +24,10 @@ class UserSelect extends React.Component {
     this.props.onSelectChange(option);
   }
 
-  loadOptions = (value, callback) => {
-    if (value.trim().length > 0) {
-      seafileAPI.searchUsers(value.trim()).then((res) => {
+  loadOptions = (input, callback) => {
+    const value = input.trim();
+    if (value.length > 0) {
+      seafileAPI.searchUsers(value).then((res) => {
         this.options = [];
         for (let i = 0 ; i < res.data.users.length; i++) {
           const item = res.data.users[i];
@@ -38,7 +47,7 @@ class UserSelect extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.clearSelect === true && nextProps.clearSelect !== this.props.clearSelect) {
+    if (nextProps.clearSelect === true && this.props.clearSelect === false) {
       this.refs.userSelect.select.onChange([], { action: 'clear' });
     }
   }
@@ -58,14 +67,6 @@ class UserSelect extends React.Component {
     );
   }
 }
-
-const propTypes = {
-  placeholder: PropTypes.string.isRequired,
-  onSelectChange: PropTypes.func.isRequired,
-  clearSelect: PropTypes.bool.isRequired,
-  isMulti: PropTypes.bool.isRequired,
-  className: PropTypes.string.isRequired,
-};
 
 UserSelect.propTypes = propTypes;
 
