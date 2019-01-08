@@ -15,8 +15,7 @@
   right: 1px;
   bottom: 1px;
   width: 35rem;
-  min-height: 15rem;
-  max-height: 20rem;
+  height: 20rem;
   border: 1px solid #ddd;
   border-radius: 3px;
   box-shadow: 0 0 6px #ddd;
@@ -46,4 +45,12 @@
   padding: 0.625rem 1rem 1.25rem;
   background-color: #fff;
   overflow: auto;
+}
+
+.file-upload-item .progress {
+  width: 80%;
+}
+
+.file-upload-item .progress .progress-bar {
+  color: #e83;
 }

@@ -363,6 +363,24 @@ export const Utils = {
     }
   },
 
+  formatBitRate: function(bits) {
+    var Bs;
+    if (typeof bits !== 'number') {
+        return '';
+    }
+    Bs = bits / 8;
+    if (Bs >= 1000000000) {
+        return (Bs / 1000000000).toFixed(2) + ' GB/s';
+    }
+    if (Bs >= 1000000) {
+        return (Bs / 1000000).toFixed(2) + ' MB/s';
+    }
+    if (Bs >= 1000) {
+        return (Bs / 1000).toFixed(2) + ' kB/s';
+    }
+    return Bs.toFixed(2) + ' B/s';
+  },
+
   isMarkdownFile: function(filePath) {
     let index = filePath.lastIndexOf('.');
     if (index === -1) {
