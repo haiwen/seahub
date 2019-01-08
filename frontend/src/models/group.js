@@ -8,7 +8,7 @@ class Group {
     this.created_at = object.created_at;
     this.parent_group_id = object.parent_group_id;
     this.wiki_enabled = object.wiki_enabled;
-    this.repos = object.repos;
+    this.repos = object.repos || [];
   }
 }
 
