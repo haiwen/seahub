@@ -171,9 +171,7 @@ class Search extends Component {
     let queryData = {
       q: newValue,
       search_repo: repoID ? repoID : 'all',
-      search_ftypes: repoID ? 'custom' : 'all',
-      ftype: repoID ? 'Markdown' : '',
-      input_fexts: repoID ? 'md' : ''
+      search_ftypes: 'all',
     };
     let params = '';
     for (let key in queryData) {
