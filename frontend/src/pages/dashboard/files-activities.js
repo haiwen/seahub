@@ -176,12 +176,12 @@ class FilesActivities extends Component {
       hasMore: true,
       items: [],
     };
+    this.avatarSize = 72;
   }
 
   componentDidMount() {
-    const avatarSize = 72;
     let currentPage = this.state.currentPage;
-    seafileAPI.listActivities(currentPage, avatarSize).then(res => {
+    seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
       this.setState({
         items: res.data.events,
@@ -202,7 +202,7 @@ class FilesActivities extends Component {
   getMore() {
     this.setState({isLoadingMore: true});
     let currentPage = this.state.currentPage;
-    seafileAPI.listActivities(currentPage).then(res => {
+    seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
       this.setState({
         isLoadingMore: false,
@@ -221,12 +221,16 @@ class FilesActivities extends Component {
   }
 
   handleScroll = (event) => {
-    const clientHeight = event.target.clientHeight;
-    const scrollHeight = event.target.scrollHeight;
-    const scrollTop    = event.target.scrollTop;
-    const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
-    if (this.state.hasMore && isBottom) { // scroll to the bottom
-      this.getMore();
+    if (this.state.hasMore) {
+      const clientHeight = event.target.clientHeight;
+      const scrollHeight = event.target.scrollHeight;
+      const scrollTop    = event.target.scrollTop;
+      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+      if (isBottom) { // scroll to the bottom
+        this.setState({hasMore: false}, () => {
+          this.getMore();
+        });
+      }
     }
   }
 
