@@ -408,6 +408,10 @@ class DirentListItem extends React.Component {
         tagTitle += item.name + ' ';
       });
     }
+
+    const fileIconSize = Utils.isHiDPI() ? 48 : 24;
+    const fileIconUrl = dirent.type == 'file' ? Utils.getFileIconUrl(dirent.name, fileIconSize) : '';
+
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -420,8 +424,8 @@ class DirentListItem extends React.Component {
           </td>
           <td className="text-center">
             <div className="dir-icon">
-              <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt=''></img>
-              {dirent.is_locked && <img className="locked" src={siteRoot + 'media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
+              <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : fileIconUrl} alt='' />
+              {dirent.is_locked && <img className="locked" src={siteRoot + 'media/img/file-locked-32.png'} alt={gettext('locked')} />}
             </div>
           </td>
           <td className="name">
