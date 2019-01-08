@@ -4,6 +4,7 @@ import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
 import { enableResumableFileUpload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import UploadProgressDialog from './upload-progress-dialog';
 import UploadRemindDialog from '../dialog/upload-remind-dialog';
 import '../../css/file-uploader.css';
@@ -39,9 +40,14 @@ class FileUploader extends React.Component {
       isUploadProgressDialogShow: false,
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
+      uploadBitrate: 0
     };
 
     this.notifiedFolders = [];
+
+    this.timestamp = null;
+    this.loaded = 0;
+    this.bitrateInterval = 500; // Interval in milliseconds to calculate the bitrate
   }
 
   componentDidMount() {
@@ -95,20 +101,20 @@ class FileUploader extends React.Component {
   }
 
   bindEventHandler = () => {
-    this.resumable.on('chunkingComplete', this.onChunkingComplete);
-    this.resumable.on('fileAdded', this.onFileAdded);
-    this.resumable.on('filesAddedComplete', this.filesAddedComplete);
-    this.resumable.on('fileProgress', this.onFileProgress);
-    this.resumable.on('fileSuccess', this.onFileUploadSuccess);
-    this.resumable.on('progress', this.onProgress);
-    this.resumable.on('complete', this.onComplete);
-    this.resumable.on('pause', this.onPause);
-    this.resumable.on('fileRetry', this.onFileRetry);
-    this.resumable.on('fileError', this.onFileError);
-    this.resumable.on('error', this.onError);
-    this.resumable.on('beforeCancel', this.onBeforeCancel);
-    this.resumable.on('cancel', this.onCancel);
-    this.resumable.on('dragstart', this.onDragStart);
+    this.resumable.on('chunkingComplete', this.onChunkingComplete.bind(this));
+    this.resumable.on('fileAdded', this.onFileAdded.bind(this));
+    this.resumable.on('filesAddedComplete', this.filesAddedComplete.bind(this));
+    this.resumable.on('fileProgress', this.onFileProgress.bind(this));
+    this.resumable.on('fileSuccess', this.onFileUploadSuccess.bind(this));
+    this.resumable.on('progress', this.onProgress.bind(this));
+    this.resumable.on('complete', this.onComplete.bind(this));
+    this.resumable.on('pause', this.onPause.bind(this));
+    this.resumable.on('fileRetry', this.onFileRetry.bind(this));
+    this.resumable.on('fileError', this.onFileError.bind(this));
+    this.resumable.on('error', this.onError.bind(this));
+    this.resumable.on('beforeCancel', this.onBeforeCancel.bind(this));
+    this.resumable.on('cancel', this.onCancel.bind(this));
+    this.resumable.on('dragstart', this.onDragStart.bind(this));
   }
 
   onChunkingComplete = (file) => {
@@ -205,10 +211,38 @@ class FileUploader extends React.Component {
 
     this.setState({uploadFileList: uploadFileList});
   }
+
+  getBitrate = () => {
+    let loaded = 0;
+    let uploadBitrate = 0;
+    let now = new Date().getTime();
+    
+    this.resumable.files.forEach(file => {
+      loaded += file.progress() * file.size;
+    });
+
+    if (this.timestamp) {
+      let timeDiff = (now - this.timestamp);
+      if (timeDiff < this.bitrateInterval) {
+        return this.state.uploadBitrate;
+      }
+      uploadBitrate = (loaded - this.loaded) * (1000 / timeDiff) * 8;
+    }
+
+    this.timestamp = now;
+    this.loaded = loaded;
+
+    uploadBitrate = Utils.formatBitRate(uploadBitrate);
+    return uploadBitrate;
+  }
   
   onProgress = () => {
     let progress = Math.round(this.resumable.progress() * 100);
-    this.setState({totalProgress: progress});
+    let uploadBitrate = this.getBitrate();
+    this.setState({
+      totalProgress: progress,
+      uploadBitrate: uploadBitrate
+    });
   }
 
   onFileUploadSuccess = (resumableFile, message) => {
@@ -464,6 +498,7 @@ class FileUploader extends React.Component {
               onCloseUploadDialog={this.onCloseUploadDialog}
               onCancelAllUploading={this.onCancelAllUploading}
               onUploadCancel={this.onUploadCancel}
+              uploadBitrate={this.state.uploadBitrate}
             />
           }
       </Fragment>

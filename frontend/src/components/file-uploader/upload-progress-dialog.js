@@ -4,6 +4,7 @@ import { gettext } from '../../utils/constants';
 import UploadListItem from './upload-list-item';
 
 const propTypes = {
+  uploadBitrate: PropTypes.number.isRequired,
   totalProgress: PropTypes.number.isRequired,
   uploadFileList: PropTypes.array.isRequired,
   onCloseUploadDialog: PropTypes.func.isRequired,
@@ -36,7 +37,7 @@ class UploadProgressDialog extends React.Component {
 
   render() {
     let uploadedMessage = gettext('File Upload');
-    let uploadingMessage = gettext('File Uploading...') + ' ' + this.props.totalProgress + '%';
+    let uploadingMessage = gettext('File Uploading...') + ' ' + this.props.totalProgress + '%' + ' (' + this.props.uploadBitrate + ')';
 
     let uploadingOptions = (<span className="sf2-icon-minus" onClick={this.onMinimizeUpload}></span>);
 
