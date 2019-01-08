@@ -4,7 +4,7 @@ import { gettext } from '../../utils/constants';
 import UploadListItem from './upload-list-item';
 
 const propTypes = {
-  uploadBitrate: PropTypes.number.isRequired,
+  uploadBitrate: PropTypes.string.isRequired,
   totalProgress: PropTypes.number.isRequired,
   uploadFileList: PropTypes.array.isRequired,
   onCloseUploadDialog: PropTypes.func.isRequired,

@@ -40,7 +40,7 @@ class FileUploader extends React.Component {
       isUploadProgressDialogShow: false,
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
-      uploadBitrate: 0
+      uploadBitrate: '0'
     };
 
     this.notifiedFolders = [];
@@ -224,7 +224,7 @@ class FileUploader extends React.Component {
     if (this.timestamp) {
       let timeDiff = (now - this.timestamp);
       if (timeDiff < this.bitrateInterval) {
-        return this.state.uploadBitrate;
+        return this.state.uploadBitrate; 
       }
       uploadBitrate = (loaded - this.loaded) * (1000 / timeDiff) * 8;
     }
