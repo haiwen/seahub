@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import RepoListView from './repo-list-view';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import RepoInfo from '../../models/repo-info';
 
 import '../../css/file-chooser.css';
@@ -63,6 +64,7 @@ class FileChooser extends React.Component {
           repoList.push(repos[i]);
           repoIdList.push(repos[i].repo_id);
         }
+        repoList = Utils.sortRepos(repoList, 'name', 'asc');
         this.setState({
           repoList: repoList,
           isOtherRepoShow: !this.state.isOtherRepoShow,
