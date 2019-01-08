@@ -44,7 +44,7 @@ class MainSideNav extends React.Component {
 
   loadGroups = () => {
     let _this = this;
-    seafileAPI.listGroupsV2().then(res =>{
+    seafileAPI.listGroups().then(res =>{
       let groupList = res.data.map(item => {
         let group = new Group(item);
         return group;

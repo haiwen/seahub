@@ -99,7 +99,7 @@ class GroupsView extends React.Component {
   }
 
   listGroups = () => {
-    seafileAPI.listGroupsV2({'with_repos': 1}).then((res) => { // TODO: api name
+    seafileAPI.listGroups({'with_repos': 1}).then((res) => { // TODO: api name
       // `{'with_repos': 1}`: list repos of every group
       // res: {data: [...], status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       let groupList = res.data.map(item => {
