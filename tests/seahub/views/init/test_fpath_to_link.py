@@ -8,7 +8,8 @@ class FpathToLinkTest(BaseTestCase):
     def test_fpath_to_link(self):
         path = '/海文/'.decode('utf-8')
         resp = fpath_to_link(self.repo.id, path, is_dir=True)
-        url = '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
+        url = '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {'repo_id': self.repo.id,
+                                    'repo_name': self.repo.name,
                                     'path': path.strip('/')}
 
-        assert urlquote(url, safe='/#') in resp
+        assert urlquote(url) in resp

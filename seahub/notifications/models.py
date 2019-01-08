@@ -5,6 +5,7 @@ import os
 import json
 import logging
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.conf import settings
 from django.forms import ModelForm, Textarea
@@ -505,15 +506,13 @@ class UserNotification(models.Model):
             if d['uploaded_to'] == '/':
                 # current upload path is '/'
                 file_path = '/' + filename
-                link = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+                link = reverse('lib_view', args=[repo_id, repo.name, ''])
                 name = repo.name
             else:
                 uploaded_to = d['uploaded_to'].rstrip('/')
                 file_path = uploaded_to + '/' + filename
-                link = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id,
-                                              'path': uploaded_to.lstrip('/')}
+                link = reverse('lib_view', args=[repo_id, repo.name, uploaded_to.lstrip('/')])
                 name = os.path.basename(uploaded_to)
-
             file_link = reverse('view_lib_file', args=[repo_id, file_path])
 
             msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
@@ -571,12 +570,10 @@ class UserNotification(models.Model):
         else:
             tmpl = 'notifications/notice_msg/folder_share_msg.html'
 
+        lib_url = reverse('lib_view', args=[repo.id, repo.name, ''])
         msg = render_to_string(tmpl, {
             'user': share_from,
-            'lib_url': HASH_URLS["VIEW_COMMON_LIB_DIR"] % {
-                'repo_id': repo.id,
-                'path': ''
-            },
+            'lib_url': lib_url,
             'lib_name': repo.name,
         })
 
@@ -626,14 +623,13 @@ class UserNotification(models.Model):
         else:
             tmpl = 'notifications/notice_msg/folder_share_to_group_msg.html'
 
+        lib_url = reverse('lib_view', args=[repo.id, repo.name, ''])
+        group_url = reverse('group', args=[group.id])
         msg = render_to_string(tmpl, {
             'user': share_from,
-            'lib_url': HASH_URLS["VIEW_COMMON_LIB_DIR"] % {
-                'repo_id': repo.id,
-                'path': ''
-            },
+            'lib_url': lib_url,
             'lib_name': repo.name,
-            'group_url': HASH_URLS['GROUP_INFO'] % {'group_id': group.id},
+            'group_url': group_url,
             'group_name': group.group_name,
         })
 
@@ -742,7 +738,7 @@ class UserNotification(models.Model):
         msg = _(u"User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group <a href='%(href)s'>%(group_name)s</a>") % {
             'user_profile': reverse('user_profile', args=[group_staff]),
             'group_staff': escape(email2nickname(group_staff)),
-            'href': HASH_URLS['GROUP_INFO'] % {'group_id': group_id},
+            'href': reverse('group', args=[group_id]),
             'group_name': escape(group.group_name)}
         return msg
 
@@ -858,7 +854,6 @@ class UserNotification(models.Model):
 
 
 ########## handle signals
-from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 
 from seahub.signals import upload_file_successful, comment_file_successful

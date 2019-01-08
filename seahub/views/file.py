@@ -1676,7 +1676,7 @@ def download_file(request, repo_id, obj_id):
         raise Http404
 
     if repo.encrypted and not seafile_api.is_password_set(repo_id, username):
-        reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+        reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
         return HttpResponseRedirect(reverse_url)
 
     # only check the permissions at the repo level

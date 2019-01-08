@@ -180,8 +180,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
         fileshares = FileShare.objects.filter(repo_id=repo.id).filter(username=username)
         uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=username)
 
-
-        view_dir_base = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo.id, 'path': ''}
+        view_dir_base = reverse('lib_view', args=[repo.id, repo.name, ''])
         dl_dir_base = reverse('repo_download_dir', args=[repo.id])
         file_history_base = reverse('file_revisions', args=[repo.id])
         for dirent in dirs:
@@ -466,7 +465,7 @@ def repo_history(request, repo_id):
             return render_error(request, e.msg)
 
         if not password_set:
-            reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+            reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
             return HttpResponseRedirect(reverse_url)
 
     try:
@@ -551,7 +550,7 @@ def repo_revert_history(request, repo_id):
             return render_error(request, e.msg)
 
         if not password_set:
-            reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+            reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
             return HttpResponseRedirect(reverse_url)
 
     commit_id = request.GET.get('commit_id', '')
@@ -576,8 +575,8 @@ def repo_revert_history(request, repo_id):
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
     if is_dir:
-        href = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': path.strip('/')}
-        href = urlquote(href, safe='/#')
+        repo = seafile_api.get_repo(repo_id)
+        href = reverse('lib_view', args=[repo_id, repo.name, path.strip('/')])
     else:
         if not path.startswith('/'):
             p = '/' + path
@@ -754,7 +753,8 @@ def libraries(request):
 def repo_set_access_property(request, repo_id):
     ap = request.GET.get('ap', '')
     seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
-    reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+    repo = seafile_api.get_repo(repo_id)
+    reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
 
     return HttpResponseRedirect(reverse_url)
 
@@ -1051,13 +1051,13 @@ def convert_cmmt_desc_link(request):
         elif d.status == 'mov':  # Move or Rename non-empty file/folder
             if '/' in d.new_name:
                 new_dir_name = d.new_name.split('/')[0]
-                reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': new_dir_name}
+                reverse_url = reverse('lib_view', args=[repo_id, repo.name, new_dir_name])
                 return HttpResponseRedirect(reverse_url)
             else:
                 return HttpResponseRedirect(
                     reverse('view_lib_file', args=[repo_id, '/' + d.new_name]))
         elif d.status == 'newdir':
-            reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': d.name.strip('/')},
+            reverse_url = reverse('lib_view', args=[repo_id, repo.name, d.name.strip('/')])
             return HttpResponseRedirect(reverse_url)
         else:
             continue
@@ -1214,7 +1214,7 @@ def choose_register(request):
     })
 
 @login_required
-def react_fake_view(request):
+def react_fake_view(request, **kwargs):
 
     return render(request, "react_app.html", {
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,

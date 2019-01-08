@@ -35,18 +35,18 @@ def td(con):
 def a_tag(con, href='#', style=''):
     return '<a href="%s" style="%s">%s</a>' % (href, style, e(con))
 
-def repo_url(repo_id):
-    p = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+def repo_url(repo_id, repo_name):
+    p = reverse('lib_view', args=[repo_id, repo_name, ''])
+
     return get_site_scheme_and_netloc() + p
 
 def file_url(repo_id, file_path):
     p = reverse('view_lib_file', args=[repo_id, file_path])
     return get_site_scheme_and_netloc() + p
 
-def dir_url(repo_id, dir_path):
-    p = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {
-        'repo_id': repo_id, 'path': dir_path.strip('/')
-    }
+def dir_url(repo_id, repo_name, dir_path):
+    p = reverse('lib_view', args=[repo_id, repo_name, dir_path.strip('/')])
+
     return get_site_scheme_and_netloc() + p
 
 def user_info_url(username):
@@ -100,8 +100,8 @@ class Command(BaseCommand):
         return Profile.objects.get_user_language(username)
 
     def format_file_operation(self, ev):
-        lib_link = a_tag(ev.repo_name, repo_url(ev.repo_id))
-        small_lib_link = a_tag(ev.repo_name, repo_url(ev.repo_id), 'color:#868e96;font-size:87.5%;')
+        lib_link = a_tag(ev.repo_name, repo_url(ev.repo_id, ev.repo_name))
+        small_lib_link = a_tag(ev.repo_name, repo_url(ev.repo_id, ev.repo_name), 'color:#868e96;font-size:87.5%;')
         if ev.obj_type == 'repo':
             if ev.op_type == 'create':
                 op = _('Created library')
@@ -153,7 +153,7 @@ class Command(BaseCommand):
 
         else:                   # dir
             dir_name = os.path.basename(ev.path)
-            dir_link = a_tag(dir_name, dir_url(ev.repo_id, ev.path))
+            dir_link = a_tag(dir_name, dir_url(ev.repo_id, ev.repo_name, ev.path))
             if ev.op_type == 'create':
                 op = _('Created folder')
                 details = td('%s<br />%s' % (dir_link, small_lib_link))

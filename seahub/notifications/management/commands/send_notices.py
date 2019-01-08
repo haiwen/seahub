@@ -98,7 +98,8 @@ class Command(BaseCommand):
                 owner = seafile_api.get_repo_owner(repo_id)
                 repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        notice.repo_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+        repo_url = reverse('lib_view', args=[repo_id, repo.name, '']) 
+        notice.repo_url = repo_url
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
@@ -128,11 +129,12 @@ class Command(BaseCommand):
                 owner = seafile_api.get_repo_owner(repo_id)
                 repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        notice.repo_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+        repo_url = reverse('lib_view', args=[repo_id, repo.name, '']) 
+        notice.repo_url = repo_url
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
-        notice.group_url = HASH_URLS['GROUP_INFO'] % {'group_id': group.id}
+        notice.group_url = reverse('group', args=[group.id])
         notice.group_name = group.group_name
         notice.shared_type = shared_type
 
@@ -143,10 +145,12 @@ class Command(BaseCommand):
 
         file_name = d['file_name']
         repo_id = d['repo_id']
+        repo = seafile_api.get_repo(repo_id)
         uploaded_to = d['uploaded_to'].rstrip('/')
         file_path = uploaded_to + '/' + file_name
         file_link = reverse('view_lib_file', args=[repo_id, file_path])
-        folder_link = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': uploaded_to.strip('/')}
+
+        folder_link = reverse('lib_view', args=[repo_id, repo.name, uploaded_to.strip('/')])
         folder_name = os.path.basename(uploaded_to)
 
         notice.file_link = file_link
@@ -184,7 +188,7 @@ class Command(BaseCommand):
         notice.avatar_src = self.get_avatar_src(group_staff)
         notice.group_staff_profile_url = reverse('user_profile',
                                                   args=[group_staff])
-        notice.group_url = HASH_URLS['GROUP_INFO'] % {'group_id': group_id}
+        notice.group_url = reverse('group', args=[group.id])
         notice.group_name = group.group_name
         return notice
 
