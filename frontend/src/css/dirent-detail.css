@@ -16,14 +16,21 @@
 }
 
 .detail-header .detail-control {
-  position: absolute;
+  padding-left: 0.5rem;
   font-size: 16px;
   color: #b9b9b9;
-  left: 0.5rem;
 }
 
 .detail-header .detail-control:hover {
   color: #888;
+}
+
+.detail-header .detail-title {
+  margin-left: 0.25rem;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  width: 0; /* prevent strut flex layout */
 }
 
 .detail-header .detail-title img{
@@ -32,8 +39,7 @@
 }
 
 .detail-header .detail-title .name {
-  display: inline-block;
-  margin-left: 0.25rem;
+  margin: 0 0.5rem 0 0.25rem;
   line-height: 1.5rem;
   vertical-align: middle;
   font-size: 1rem;

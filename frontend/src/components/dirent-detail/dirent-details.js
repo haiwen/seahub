@@ -101,7 +101,7 @@ class DirentDetail extends React.Component {
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
             <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt="icon"></img>
-            <span className="name">{dirent.name}</span>
+            <span className="name ellipsis" title={dirent.name}>{dirent.name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
