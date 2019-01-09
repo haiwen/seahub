@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom';
 import { Router, navigate } from '@reach/router';
 import { siteRoot } from './utils/constants';
