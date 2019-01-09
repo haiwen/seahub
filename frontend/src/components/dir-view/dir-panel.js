@@ -185,14 +185,12 @@ class DirPanel extends React.Component {
                       errMessage :
                       <Fragment>
                         {this.props.path === '/' && !(this.props.usedRepoTags.length === 0 && this.props.readmeMarkdown === null) && (
-                          <div className="repo-info-bar">
-                            <RepoInfoBar
-                              repoID={this.props.repoID}
-                              currentPath={this.props.path}
-                              usedRepoTags={this.props.usedRepoTags}
-                              readmeMarkdown={this.props.readmeMarkdown}
-                            />
-                          </div>
+                          <RepoInfoBar
+                            repoID={this.props.repoID}
+                            currentPath={this.props.path}
+                            usedRepoTags={this.props.usedRepoTags}
+                            readmeMarkdown={this.props.readmeMarkdown}
+                          />
                         )}
                         <DirentListView
                           path={this.props.path}

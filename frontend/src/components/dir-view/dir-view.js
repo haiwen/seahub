@@ -147,7 +147,7 @@ class DirView extends React.Component {
 
   updateReadmeMarkdown = (direntList) => {
     this.setState({readmeMarkdown: null});
-    direntList.map(item => {
+    direntList.some(item => {
       let fileName = item.name.toLowerCase();
       if (fileName === 'readme.md' || fileName === 'readme.markdown') {
         this.setState({readmeMarkdown: item});

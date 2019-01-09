@@ -258,14 +258,12 @@ class MainPanel extends Component {
                     /> :
                     <Fragment>
                       {this.props.path === '/' && !(this.props.usedRepoTags.length === 0 && this.props.readmeMarkdown === null) && (
-                        <div className="repo-info-bar">
-                          <RepoInfoBar
-                            repoID={repoID}
-                            currentPath={this.props.path}
-                            usedRepoTags={this.props.usedRepoTags}
-                            readmeMarkdown={this.props.readmeMarkdown}
-                          />
-                        </div>
+                        <RepoInfoBar
+                          repoID={repoID}
+                          currentPath={this.props.path}
+                          usedRepoTags={this.props.usedRepoTags}
+                          readmeMarkdown={this.props.readmeMarkdown}
+                        />
                       )}
                       <DirentListView
                         path={this.props.path}

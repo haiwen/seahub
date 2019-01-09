@@ -44,37 +44,39 @@ class RepoInfoBar extends React.Component {
 
     return (
       <Fragment>
-        <ul className="used-tag-list">
-          {usedRepoTags.map((usedRepoTag) => {
-            return (
-              <li key={usedRepoTag.id} className="used-tag-item">
-                <span className={`used-tag bg-${usedRepoTag.color}`}></span>
-                <span className="used-tag-name" title={usedRepoTag.name}>{usedRepoTag.name}</span>
-                <span className="used-tag-files" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
-                  {usedRepoTag.fileCount > 1 ? usedRepoTag.fileCount + ' files' : usedRepoTag.fileCount + ' file'}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-        {readmeMarkdown !== null && (
-          <div className="readme-file">
-            <i className="readme-flag fa fa-flag"></i>
-            <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
-          </div>
-        )}
-        {this.state.isListTaggedFileShow && (
-          <ModalPortal>
-            <Modal isOpen={true}>
-              <ListTaggedFilesDialog
-                repoID={repoID}
-                currentTag={this.state.currentTag}
-                onClose={this.onCloseDialog}
-                toggleCancel={this.onListTaggedFiles}
-              />
-            </Modal>
-          </ModalPortal>
-        )}
+        <div className="repo-info-bar">
+          <ul className="used-tag-list">
+            {usedRepoTags.map((usedRepoTag) => {
+              return (
+                <li key={usedRepoTag.id} className="used-tag-item">
+                  <span className={`used-tag bg-${usedRepoTag.color}`}></span>
+                  <span className="used-tag-name" title={usedRepoTag.name}>{usedRepoTag.name}</span>
+                  <span className="used-tag-files" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
+                    {usedRepoTag.fileCount > 1 ? usedRepoTag.fileCount + ' files' : usedRepoTag.fileCount + ' file'}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          {readmeMarkdown !== null && (
+            <div className="readme-file">
+              <i className="readme-flag fa fa-flag"></i>
+              <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
+            </div>
+          )}
+          {this.state.isListTaggedFileShow && (
+            <ModalPortal>
+              <Modal isOpen={true}>
+                <ListTaggedFilesDialog
+                  repoID={repoID}
+                  currentTag={this.state.currentTag}
+                  onClose={this.onCloseDialog}
+                  toggleCancel={this.onListTaggedFiles}
+                />
+              </Modal>
+            </ModalPortal>
+          )}
+        </div>
       </Fragment>
     );
   }
