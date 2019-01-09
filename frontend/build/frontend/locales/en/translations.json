@@ -65,7 +65,6 @@
   "please_enter_valid_days": "Please enter valid days",
   "please_enter_a_non-negative_integer": "Please enter a non-negative integer",
   "please_enter_days": "Please enter days",
-  "please_enter_password": "Please enter password",
   "password_is_too_short": "Password is too short",
   "passwords_do_not_match": "Passwords do not match",
   "return_to_wiki_page": "Return to Wiki Page",
@@ -102,40 +101,75 @@
   "userHelp": {
     "title":"Keyboard shortcuts",
     "userHelpData":[
-  {
-    "shortcutType":"Block shortcuts",
-    "shortcutData" :{
-      "Blockquote": [">", "space"],
-      "Heading 1":["#", "space"],
-      "Heading 2":["##", "space"],
-      "Heading 3":["###", "space"],
-      "List":["* / + / -", "space"],
-      "Ordered list":["1.", "space"]
-    }
-  },
+      {
+        "shortcutType":"List shortcuts",
+        "shortcutData" :{
+        "Make list": [["* / + / -", "space"]],
+        "Make Ordered list": [["1.", "space"]],
+        "Insert new item": [["Enter"]],
+        "Insert child in item": [["Shift","Enter"]],
+        "Increase depth": [["Tab"]]
+      }
+    },
 
-  {
-    "shortcutType":"Inline shortcuts",
-    "shortcutData" :{
-      "Bold": ["**bold** / __bold__", "space"],
-      "Italic":["*italic* / _italic_", "space"],
-      "Italic + Bold":["***italic*** / ___italic___", "space"],
-      "Inline code":["`code`", "space"]
-    }
-  },
-  {
-    "shortcutType":"Save shortcuts",
-    "shortcutData" :{
-      "Save file": [["Ctrl", "Cmd"], "s"]
-    }
-  },
-  {
-    "shortcutType":"Image shortcuts",
-    "shortcutData" :{
-      "Paste screenshot": [["Ctrl", "Cmd"], "v"],
-      "Drag image from anywhere to upload it":[]
-    }
-  }
-    ]
+    {
+      "shortcutType": "Head shortcuts",
+      "shortcutData" :{
+        "Heading 1": [["#", "space"]],
+        "Heading 2": [["##", "space"]],
+        "Heading 3": [["###", "space"]],
+        "Heading 4": [["####", "space"]],
+        "Heading 5": [["#####", "space"]],
+        "Heading 6": [["######", "space"]]
+      }
+    },
+
+    {
+      "shortcutType": "Code block shortcuts",
+      "shortcutData": {
+        "Make code block": [["space*3"], ["```"]],
+        "Insert new line": [["Enter"]],
+        "Escape code block": [[["Ctrl", "Cmd"], "Enter"]],
+        "Insert indent": [["Tab"]]
+      }
+    },
+
+    {
+      "shortcutType": "Blockquote shortcuts",
+      "shortcutData": {
+        "Make Blockquote": [["* / + / -", "space"]],
+        "Escape Blockquote": [["Enter"]]
+      }
+    },
+    {
+      "shortcutType": "Table shortcuts",
+      "shortcutData": {
+        "Insert Table Row": [["Enter"]],
+        "Escape table": [[["Ctrl", "Cmd"], "Enter"]]
+      }
+    },
+
+    {
+      "shortcutType":"Inline shortcuts",
+      "shortcutData" :{
+        "Bold": [["**bold** / __bold__", "space"]],
+        "Italic": [["*italic* / _italic_", "space"]],
+        "Italic + Bold": [["***italic*** / ___italic___", "space"]],
+        "Inline code": [["`code`", "space"]]
+      }
+    },
+    {
+      "shortcutType": "Save shortcuts",
+      "shortcutData" : {
+        "Save file": [[["Ctrl", "Cmd"], "s"]]
+      }
+    },
+    {
+      "shortcutType": "Image shortcuts",
+      "shortcutData" : {
+        "Paste screenshot": [[["Ctrl", "Cmd"], "v"]],
+        "Drag image from anywhere to upload it":[]
+      }
+    }]
   }
 }

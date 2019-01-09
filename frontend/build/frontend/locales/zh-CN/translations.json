@@ -65,7 +65,6 @@
   "please_enter_valid_days": "请输入有效的天数",
   "please_enter_a_non-negative_integer": "请输入一个非负整数",
   "please_enter_days": "请输入天数",
-  "please_enter_password": "请输入密码",
   "password_is_too_short": "密码长度太短",
   "passwords_do_not_match": "两次输入的密码不一致",
   "return_to_wiki_page": "返回维基页面",
@@ -103,35 +102,71 @@
     "title": "键盘快捷键",
     "userHelpData":[
       {
-        "shortcutType":"块级操作",
+        "shortcutType":"列表快捷键",
         "shortcutData" :{
-          "块级引用": [">", "space"],
-          "一级标题":["#", "space"],
-          "二级标题":["##", "space"],
-          "三级标题":["###", "space"],
-          "列表":["* / + / -", "space"],
-          "有序列表":["1.", "space"]
+          "生成列表": [["* / + / -", "space"]],
+          "生成有序列表": [["* / + / -", "space"]],
+          "插入新列表项": [["Enter"]],
+          "插入新段落": [["Shift","Enter"]],
+          "增加列表项深度": [["Tab"]]
+        }
+      },
+
+      {
+        "shortcutType": "标题快捷键",
+        "shortcutData" :{
+          "一级标题": [["#", "space"]],
+          "二级标题": [["##", "space"]],
+          "三级标题": [["###", "space"]],
+          "四级标题": [["####", "space"]],
+          "五级标题": [["#####", "space"]],
+          "六级标题": [["######", "space"]]
+        }
+      },
+
+      {
+        "shortcutType": "代码块快捷键",
+        "shortcutData": {
+          "生成代码块": [["space*3"], ["```"]],
+          "插入行": [["Enter"]],
+          "退出代码块": [[["Ctrl", "Cmd"], "Enter"]],
+          "缩进": [["Tab"]]
+        }
+      },
+
+      {
+        "shortcutType": "引用快捷键",
+        "shortcutData": {
+          "生成引用": [["* / + / -", "space"]],
+          "退出引用": [["Enter"]]
+        }
+      },
+      {
+        "shortcutType": "表格快捷键",
+        "shortcutData": {
+          "插入行": [["Enter"]],
+          "退出表格": [[["Ctrl", "Cmd"], "Enter"]]
         }
       },
       {
         "shortcutType":"行级操作",
         "shortcutData" :{
-          "加粗": ["**bold** / __bold__", "space"],
-          "斜体":["*italic* / _italic_", "space"],
-          "斜体加粗":["***italic*** / ___italic___", "space"],
-          "行内代码":["`code`", "space"]
+          "加粗": [["**bold** / __bold__", "space"]],
+          "斜体": [["*italic* / _italic_", "space"]],
+          "斜体加粗": [["***italic*** / ___italic___", "space"]],
+          "行内代码": [["`code`", "space"]]
         }
       },
       {
         "shortcutType":"文件保存",
         "shortcutData" :{
-          "保存修改": [["Ctrl","Cmd"], "S"]
+          "保存修改": [[["Ctrl", "Cmd"], "s"]]
         }
       },
       {
         "shortcutType":"图片操作",
         "shortcutData" :{
-          "上传截图": [["Ctrl","Cmd"], "V"],
+          "上传截图": [[["Ctrl", "Cmd"], "v"]],
           "拖拽任意图片上传":[]
         }
       }
