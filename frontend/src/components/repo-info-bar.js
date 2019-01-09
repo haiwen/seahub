@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Modal } from 'reactstrap';
@@ -43,8 +43,8 @@ class RepoInfoBar extends React.Component {
     let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) : '';
 
     return (
-      <Fragment>
-        <div className="repo-info-bar">
+      <div className="repo-info-bar">
+        {usedRepoTags.length > 0 && (
           <ul className="used-tag-list">
             {usedRepoTags.map((usedRepoTag) => {
               return (
@@ -58,26 +58,26 @@ class RepoInfoBar extends React.Component {
               );
             })}
           </ul>
-          {readmeMarkdown !== null && (
-            <div className="readme-file">
-              <i className="readme-flag fa fa-flag"></i>
-              <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
-            </div>
-          )}
-          {this.state.isListTaggedFileShow && (
-            <ModalPortal>
-              <Modal isOpen={true}>
-                <ListTaggedFilesDialog
-                  repoID={repoID}
-                  currentTag={this.state.currentTag}
-                  onClose={this.onCloseDialog}
-                  toggleCancel={this.onListTaggedFiles}
-                />
-              </Modal>
-            </ModalPortal>
-          )}
-        </div>
-      </Fragment>
+        )}
+        {readmeMarkdown !== null && (
+          <div className="readme-file">
+            <i className="readme-flag fa fa-flag"></i>
+            <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
+          </div>
+        )}
+        {this.state.isListTaggedFileShow && (
+          <ModalPortal>
+            <Modal isOpen={true}>
+              <ListTaggedFilesDialog
+                repoID={repoID}
+                currentTag={this.state.currentTag}
+                onClose={this.onCloseDialog}
+                toggleCancel={this.onListTaggedFiles}
+              />
+            </Modal>
+          </ModalPortal>
+        )}
+      </div>
     );
   }
 }
