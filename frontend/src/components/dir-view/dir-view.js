@@ -151,6 +151,7 @@ class DirView extends React.Component {
       let fileName = item.name.toLowerCase();
       if (fileName === 'readme.md' || fileName === 'readme.markdown') {
         this.setState({readmeMarkdown: item});
+        return true;
       }
     });
   }
