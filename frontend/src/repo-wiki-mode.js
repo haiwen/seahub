@@ -236,7 +236,7 @@ class Wiki extends Component {
     });
   }
 
-  loadSidePanel = (filePath) => {
+  loadSidePanel = (initialPath) => {
     seafileAPI.listDir(repoID, '/',{recursive: true}).then(items => {
       const files = items.data.map(item => {
         return {
@@ -253,7 +253,7 @@ class Wiki extends Component {
       var treeData = new Tree();
       treeData.parseListToTree(files);
 
-      let node = treeData.getNodeByPath(filePath);
+      let node = treeData.getNodeByPath(initialPath);
       if (node) {
         treeData.expandNode(node);
         this.setState({treeData: treeData, currentNode: node});
@@ -323,9 +323,9 @@ class Wiki extends Component {
     });
   }
 
-  loadDirentList = (filePath) => {
+  loadDirentList = (direntPath) => {
     this.setState({isDirentListLoading: true});
-    seafileAPI.listDir(repoID, filePath).then(res => {
+    seafileAPI.listDir(repoID, direntPath).then(res => {
       let direntList = [];
       res.data.forEach(item => {
         let fileName = item.name.toLowerCase();
@@ -586,8 +586,8 @@ class Wiki extends Component {
     this.updateReadmeMarkdown(direntList);
   }
 
-  moveDirent = (filePath) => {
-    let name = filePath.slice(filePath.lastIndexOf('/') + 1);
+  moveDirent = (direntPath) => {
+    let name = direntPath.slice(direntPath.lastIndexOf('/') + 1);
     let direntList = this.state.direntList.filter(item => {
       return item.name !== name;
     });
