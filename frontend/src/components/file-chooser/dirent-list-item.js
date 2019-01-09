@@ -32,7 +32,9 @@ class DirentListItem extends React.Component {
     if (this.props.selectedPath !== this.state.filePath) {
       this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
     } else {
-      this.onToggleClick();
+      if (this.props.dirent.type === 'dir') {
+        this.onToggleClick();
+      }
     }
   }
 
