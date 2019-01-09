@@ -199,6 +199,7 @@ class FileUploader extends React.Component {
       uniqueIdentifier: resumableFile.uniqueIdentifier,
       resumableFile: resumableFile,
       progress: resumableFile.progress(),
+      isSaved: false,
     };
   }
 
@@ -273,6 +274,7 @@ class FileUploader extends React.Component {
         if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
           item.resumableFile.fileName = message.name;
           item.resumableFile.relativePath = relative_path + message.name;
+          item.isSaved = true;
         }
         return item;
       });
@@ -291,6 +293,14 @@ class FileUploader extends React.Component {
       };
       this.props.onFileUploadSuccess(dirent); // this contance: just one file
 
+      let uploadFileList = this.state.uploadFileList.map(item => {
+        if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
+          item.isSaved = true;
+        }
+        return item;
+      });
+      this.setState({uploadFileList: uploadFileList});
+
       return;
     }
 
@@ -308,6 +318,7 @@ class FileUploader extends React.Component {
       if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
         item.resumableFile.fileName = message.name;
         item.resumableFile.relativePath = message.name;
+        item.isSaved = true;
       }
       return item;
     });

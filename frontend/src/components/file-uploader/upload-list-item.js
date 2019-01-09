@@ -45,10 +45,15 @@ class UploadListItem extends React.Component {
           }
         </td>
         <td className="upload-operation">
-          { progress !== 100 ?
-            <a href="#" onClick={this.onUploadCancel}>{gettext(('cancel'))}</a> :
+          {(!item.isSaved && progress !== 100) && (
+            <a href="#" onClick={this.onUploadCancel}>{gettext(('cancel'))}</a>
+          )}
+          {(!item.isSaved && process === 100) && (
+            <span>{gettext('saving...')}</span>
+          )}
+          {item.isSaved && (
             <span>{gettext('uploaded')}</span>
-          }
+          )}
         </td>
       </tr>
     );
