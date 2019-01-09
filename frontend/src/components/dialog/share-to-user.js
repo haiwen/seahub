@@ -4,7 +4,7 @@ import AsyncSelect from 'react-select/lib/Async';
 import { gettext } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
-import PermissionEditor from '../permission-editor';
+import PermissionEditor from '../select-editor/permission-editor';
 
 class UserItem extends React.Component {
 
@@ -35,6 +35,7 @@ class UserItem extends React.Component {
 
   render() {
     let item = this.props.item;
+    let currentPermission = item.is_admin ? 'admin' : item.permission;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="name">{item.user_info.nickname}</td>
@@ -42,7 +43,7 @@ class UserItem extends React.Component {
           <PermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
-            currentPermission={item.permission}
+            currentPermission={currentPermission}
             permissions={this.props.permissions}
             onPermissionChangedHandler={this.onChangeUserPermission}
           />
@@ -255,6 +256,7 @@ class ShareToUser extends React.Component {
       if (username === sharedItemUsername) {
         sharedItem.permission = permission;
       }
+      sharedItem.is_admin = permission === 'admin' ? true : false;
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
@@ -267,9 +269,9 @@ class ShareToUser extends React.Component {
         <table>
           <thead>
             <tr>
-              <th width="40%">{gettext('User')}</th>
-              <th width="40%">{gettext('Permission')}</th>
-              <th width="20%"></th>
+              <th width="50%">{gettext('User')}</th>
+              <th width="35%">{gettext('Permission')}</th>
+              <th width="15%"></th>
             </tr>
           </thead>
           <tbody>
@@ -323,9 +325,9 @@ class ShareToUser extends React.Component {
           <table className="table-thead-hidden">
             <thead>
               <tr>
-                <th width="40%">{gettext('User')}</th>
-                <th width="40%">{gettext('Permission')}</th>
-                <th width="20%"></th>
+                <th width="50%">{gettext('User')}</th>
+                <th width="35%">{gettext('Permission')}</th>
+                <th width="15%"></th>
               </tr>
             </thead>
             <UserList 

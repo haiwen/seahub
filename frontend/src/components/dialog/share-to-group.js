@@ -5,7 +5,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
-import PermissionEditor from '../permission-editor';
+import PermissionEditor from '../select-editor/permission-editor';
 
 class GroupItem extends React.Component {
 
@@ -250,9 +250,9 @@ class ShareToGroup extends React.Component {
         <table>
           <thead>
             <tr>
-              <th width="40%">{gettext('Group')}</th>
-              <th width="40%">{gettext('Permission')}</th>
-              <th width="20%"></th>
+              <th width="50%">{gettext('Group')}</th>
+              <th width="35%">{gettext('Permission')}</th>
+              <th width="15%"></th>
             </tr>
           </thead>
           <tbody>
@@ -298,9 +298,9 @@ class ShareToGroup extends React.Component {
           <table className="table-thead-hidden">
             <thead>
               <tr>
-                <th width="40%">{gettext('Group')}</th>
-                <th width="40%">{gettext('Permission')}</th>
-                <th width="20%"></th>
+                <th width="50%">{gettext('Group')}</th>
+                <th width="35%">{gettext('Permission')}</th>
+                <th width="15%"></th>
               </tr>
             </thead>
             <GroupList 

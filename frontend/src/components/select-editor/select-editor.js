@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
-import { Utils } from '../utils/utils';
-import { gettext } from '../utils/constants';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
   isEditIconShow: PropTypes.bool.isRequired,
-  currentPermission: PropTypes.string.isRequired,
-  permissions: PropTypes.array.isRequired,
-  onPermissionChangedHandler: PropTypes.func.isRequired,
+  options: PropTypes.array.isRequired,
+  currentOption: PropTypes.string.isRequired,
+  translateOption: PropTypes.func.isRequired,
+  onOptionChangedHandler: PropTypes.func.isRequired,
 };
 
-class PermissionEditor extends React.Component {
+class SelectEditor extends React.Component {
 
   constructor(props) {
     super(props);
@@ -34,11 +34,11 @@ class PermissionEditor extends React.Component {
     this.setState({isEditing: true});
   }
 
-  onPermissionChangedHandler = (e) => {
+  onOptionChangedHandler = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     let permission = e.target.value;
-    if (permission !== this.props.currentPermission) {
-      this.props.onPermissionChangedHandler(permission);
+    if (permission !== this.props.currentOption) {
+      this.props.onOptionChangedHandler(permission);
     }
     this.setState({isEditing: false});
   }
@@ -52,7 +52,7 @@ class PermissionEditor extends React.Component {
   }
 
   render() {
-    let { currentPermission, permissions, isTextMode } = this.props;
+    let { currentOption, options, isTextMode } = this.props;
 
     // scence1: isTextMode (text)editor-icon --> select
     // scence2: !isTextMode select
@@ -66,17 +66,17 @@ class PermissionEditor extends React.Component {
     return (
       <div className="permission-editor">
         {(!isTextMode || this.state.isEditing) &&
-          <Input style={selectStyle} type="select" onChange={this.onPermissionChangedHandler} onClick={this.onSelectHandler} value={currentPermission}>
-            {permissions.map((item, index) => {
+          <Input style={selectStyle} type="select" onChange={this.onOptionChangedHandler} onClick={this.onSelectHandler} value={currentOption}>
+            {options.map((item, index) => {
               return (
-                <option key={index} value={item}>{Utils.sharePerms(item)}</option>
-              )
+                <option key={index} value={item}>{this.props.translateOption(item)}</option>
+              );
             })}
           </Input>
         }
         {(isTextMode && !this.state.isEditing) &&
           <div>
-            {Utils.sharePerms(currentPermission)}
+            {this.props.translateOption(currentOption)}
             {this.props.isEditIconShow && (
               <span 
                 title={gettext('Edit')} 
@@ -91,6 +91,6 @@ class PermissionEditor extends React.Component {
   }
 }
 
-PermissionEditor.propTypes = propTypes;
+SelectEditor.propTypes = propTypes;
 
-export default PermissionEditor;
+export default SelectEditor;
