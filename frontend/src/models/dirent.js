@@ -15,7 +15,7 @@ class Dirent {
       this.size = Utils.bytesToSize(json.size);
       this.starred = json.starred || false;
       this.is_locked = json.is_locked || false;
-      this.lock_time = moment.unix(json.lock_time).fromNow();
+      this.lock_time = json.lock_time;
       this.lock_owner= json.lock_owner;
       this.locked_by_me = json.locked_by_me;
       this.modifier_name = json.modifier_name;
