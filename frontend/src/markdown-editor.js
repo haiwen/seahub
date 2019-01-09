@@ -262,6 +262,14 @@ class EditorUtilities {
   fileMetaData() {
     return seafileAPI.fileMetaData(repoID, filePath);
   }
+
+  listFileTags() {
+    return seafileAPI.listFileTags(repoID, filePath);
+  }
+
+  deleteFileTag(fileTagId) {
+    return seafileAPI.deleteFileTag(repoID, fileTagId);
+  }
 }
 
 const editorUtilities = new EditorUtilities();
