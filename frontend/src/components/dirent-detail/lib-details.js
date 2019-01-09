@@ -36,7 +36,7 @@ class LibDetail extends React.Component {
           <div className="detail-control sf2-icon-x1" onClick={this.props.closeDetails}></div>
           <div className="detail-title dirent-title">
             <img src={siteRoot + 'media/img/lib/256/lib.png'} alt="icon"></img>{'  '}
-            <span className="name">{repo.repo_name}</span>
+            <span className="name ellipsis" title={repo.repo_name}>{repo.repo_name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">

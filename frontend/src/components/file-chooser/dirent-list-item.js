@@ -29,7 +29,13 @@ class DirentListItem extends React.Component {
   }
 
   onItemClick = () => {
-    this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
+    if (this.props.selectedPath !== this.state.filePath) {
+      this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
+    } else {
+      if (this.props.dirent.type === 'dir') {
+        this.onToggleClick();
+      }
+    }
   }
 
   onToggleClick = () => {
@@ -37,13 +43,14 @@ class DirentListItem extends React.Component {
       seafileAPI.listDir(this.props.repo.repo_id, this.state.filePath).then(res => {
         let direntList = [];
         res.data.forEach(item => {
-          if (this.props.isShowFile === true) {
+          if (this.props.isShowFile === true) { // show dir and file
             let dirent = new Dirent(item);
             direntList.push(dirent);
-          }
-          else if (item.type === 'dir') {
-            let dirent = new Dirent(item);
-            direntList.push(dirent);
+          } else { // just show dir
+            if (item.type === 'dir') {
+              let dirent = new Dirent(item);
+              direntList.push(dirent);
+            }
           }
           this.setState({
             hasRequest: true,
@@ -93,7 +100,7 @@ class DirentListItem extends React.Component {
         }
         <span className={`item-info ${this.state.filePath === this.props.selectedPath ? 'item-active' : ''}`} onClick={this.onItemClick}>
           <span className={`icon far ${this.props.dirent.type === 'dir' ? 'fa-folder' : 'fa-file'}`}></span>
-          <span className="name">{this.props.dirent && this.props.dirent.name}</span>
+          <span className="name user-select-none ellipsis">{this.props.dirent && this.props.dirent.name}</span>
         </span>
         {this.state.isShowChildren && this.renderChildren()}
       </li>

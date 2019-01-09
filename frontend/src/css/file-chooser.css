@@ -43,10 +43,10 @@
 }
 
 .file-chooser-item .item-info {
-  display: inline-block;
+  display: flex;
   height: 1.5rem;
   cursor: pointer;
-  padding: 0 5px;
+  padding: 0;
 }
 
 .file-chooser-item .item-info:hover {
@@ -62,9 +62,16 @@
 }
 
 .file-chooser-item .item-info .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #b0b0b0;
   width: 1.5rem;
   height: 1.5rem;
+}
+
+.file-chooser-item .item-info .name {
+  flex: 1;
 }
 
 
