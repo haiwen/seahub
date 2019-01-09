@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
 import DirentListItem from './dirent-list-item';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
@@ -29,14 +30,14 @@ class DirentListView extends React.Component {
         if (this.props.isShowFile === true) {
           let dirent = new Dirent(item);
           direntList.push(dirent);
+        } else {
+          if (item.type === 'dir') {
+            let dirent = new Dirent(item);
+            direntList.push(dirent);
+          }
         }
-        else if (item.type === 'dir') {
-          let dirent = new Dirent(item);
-          direntList.push(dirent);
-        }
-        this.setState({
-          direntList: direntList,
-        });
+        direntList = Utils.sortDirents(direntList, 'name', 'asc');
+        this.setState({direntList: direntList});
       });
     });
   }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
@@ -52,6 +53,7 @@ class DirentListItem extends React.Component {
               direntList.push(dirent);
             }
           }
+          direntList = Utils.sortDirents(direntList, 'name', 'asc');
           this.setState({
             hasRequest: true,
             direntList: direntList,
