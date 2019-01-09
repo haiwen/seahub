@@ -63,7 +63,8 @@ class DirOperationToolbar extends React.Component {
   onEditClick = (e) => {
     e.preventDefault();
     let { path, repoID } = this.props;
-    window.location.href= siteRoot + 'lib/' + repoID + '/file' + path + '?mode=edit';
+    let url = siteRoot + 'lib/' + repoID + '/file' + path + '?mode=edit';
+    window.open(url);
   }
 
   onNewDraft = (e) => {
