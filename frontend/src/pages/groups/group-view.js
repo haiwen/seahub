@@ -15,7 +15,7 @@ import CreateDepartmentRepoDialog from '../../components/dialog/create-departmen
 import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
 import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
-// import ImportMembersDialog from '../../components/dialog/import-members-dialog';
+import ImportMembersDialog from '../../components/dialog/import-members-dialog';
 import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import LibDetail from '../../components/dirent-detail/lib-details';
@@ -54,7 +54,7 @@ class GroupView extends React.Component {
       showRenameGroupDialog: false,
       showDismissGroupDialog: false,
       showTransferGroupDialog: false,
-      // showImportMembersDialog: false,
+      showImportMembersDialog: false,
       showManageMembersDialog: false,
       groupMembers: [],
       isShowDetails: false,
@@ -271,11 +271,11 @@ class GroupView extends React.Component {
     });
   }
 
-  // toggleImportMembersDialog= () => {
-  //   this.setState({
-  //     showImportMembersDialog: !this.state.showImportMembersDialog
-  //   });
-  // }
+  toggleImportMembersDialog= () => {
+    this.setState({
+      showImportMembersDialog: !this.state.showImportMembersDialog
+    });
+  }
 
   toggleManageMembersDialog = () => {
     this.setState({
@@ -374,7 +374,7 @@ class GroupView extends React.Component {
                             }
                           </ul>
                           <ul className="sf-popover-list">
-                            {/* <li><a href="#" className="sf-popover-item" onClick={this.toggleImportMembersDialog} >{gettext('Import Members')}</a></li> */}
+                            <li><a href="#" className="sf-popover-item" onClick={this.toggleImportMembersDialog} >{gettext('Import Members')}</a></li>
                             <li><a href="#" className="sf-popover-item" onClick={this.toggleManageMembersDialog} >{gettext('Manage Members')}</a></li>
                           </ul>
                           {
@@ -487,13 +487,13 @@ class GroupView extends React.Component {
             onGroupChanged={this.props.onGroupChanged}
           />
         }
-        {/* this.state.showImportMembersDialog &&
+        { this.state.showImportMembersDialog &&
           <ImportMembersDialog
             toggleImportMembersDialog={this.toggleImportMembersDialog}
             groupID={this.props.groupID}
             onGroupChanged={this.props.onGroupChanged}
           />
-        */}
+        }
         {this.state.showManageMembersDialog &&
           <ManageMembersDialog
             toggleManageMembersDialog={this.toggleManageMembersDialog}
