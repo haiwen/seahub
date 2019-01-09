@@ -16,7 +16,7 @@ set +x
 
 function commit_dist_files() {
   git checkout -b dist-$TRAVIS_BRANCH
-  git add -u . && git add -A media/assets && git add -A static/scripts
+  git add -u . && git add -A media/assets && git add -A static/scripts && git add -A frontend
   git commit -m "[dist] Travis build: #$TRAVIS_BUILD_NUMBER, based on commit $TRAVIS_COMMIT." -m "https://travis-ci.org/haiwen/seahub/builds/$TRAVIS_BUILD_ID" -m "$TRAVIS_COMMIT_MESSAGE"
 }
 
@@ -29,7 +29,13 @@ function make_dist() {
     make dist
 }
 
+function build_frontend() {
+    echo "Building frontend/src files ..."
+    cd ./frontend && npm install && CI=false npm run build && cd ..
 
+}
+
+build_frontend
 make_dist
 commit_dist_files
 upload_files
