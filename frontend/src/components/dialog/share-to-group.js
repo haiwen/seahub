@@ -5,7 +5,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
-import PermissionEditor from '../permission-editor';
+import PermissionEditor from '../select-editor/permission-editor';
 
 class GroupItem extends React.Component {
 

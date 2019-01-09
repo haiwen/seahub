@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
-import PermissionEditor from '../../components/permission-editor';
+import PermissionEditor from '../../components/select-editor/permission-editor';
 import SharedRepoInfo from '../../models/shared-repo-info';
 
 class Content extends Component {

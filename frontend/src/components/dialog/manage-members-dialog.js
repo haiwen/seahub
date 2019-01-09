@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
-import PermissionEditor from '../permission-editor';
+import RoleEditor from '../select-editor/role-eidtor';
 import UserSelect from '../../models/user-select';
 import '../../css/manage-members-dialog.css';
 
@@ -152,10 +152,11 @@ class Member extends React.PureComponent {
 
   constructor(props) {
     super(props);
+    this.roles = ['Admin', 'Member'];
   }
 
-  onChangeUserPermission = (permission) => {
-    let isAdmin = permission === 'Admin' ? 'True' : 'False';
+  onChangeUserRole = (role) => {
+    let isAdmin = role === 'Admin' ? 'True' : 'False';
     seafileAPI.setGroupAdmin(this.props.groupID, this.props.item.email, isAdmin).then((res) => {
       this.props.onGroupMembersChange();
     });
@@ -169,7 +170,6 @@ class Member extends React.PureComponent {
 
   render() {
     const { item, isOwner } = this.props;
-    const permissions = ['Admin', 'Member'];
     return(
       <tr>
         <th scope="row"><img className="avatar" src={item.avatar_url} alt=""/></th>
@@ -179,12 +179,12 @@ class Member extends React.PureComponent {
             <span className="group-admin">{item.role}</span>
           }
           {(isOwner === true && item.role !== 'Owner') &&
-            <PermissionEditor 
+            <RoleEditor 
               isTextMode={true}
               isEditIconShow={true}
-              currentPermission={this.props.item.role}
-              permissions={permissions}
-              onPermissionChangedHandler={this.onChangeUserPermission}
+              currentRole={this.props.item.role}
+              roles={this.roles}
+              onRoleChangedHandler={this.onChangeUserRole}
             />
           }
         </td>

@@ -4,7 +4,7 @@ import AsyncSelect from 'react-select/lib/Async';
 import { gettext } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
-import PermissionEditor from '../permission-editor';
+import PermissionEditor from '../select-editor/permission-editor';
 
 class UserItem extends React.Component {
 
