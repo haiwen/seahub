@@ -394,8 +394,6 @@ class DirDetailViewTest(BaseTestCase):
         json_resp = json.loads(resp.content)
 
         assert json_resp['name'] == self.folder_name
-        assert json_resp['file_count'] == 1
-        assert json_resp['dir_count'] == 1
 
     def test_get_dir_detail_with_invalid_perm(self):
 
