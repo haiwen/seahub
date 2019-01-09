@@ -7,7 +7,6 @@ import { gettext } from '../utils/constants';
 const propTypes = {
   placeholder: PropTypes.string.isRequired,
   onSelectChange: PropTypes.func.isRequired,
-  clearSelect: PropTypes.bool.isRequired,
   isMulti: PropTypes.bool.isRequired,
   className: PropTypes.string.isRequired,
 };
@@ -46,10 +45,8 @@ class UserSelect extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.clearSelect === true && this.props.clearSelect === false) {
-      this.refs.userSelect.select.onChange([], { action: 'clear' });
-    }
+  clearSelect = () => {
+    this.refs.userSelect.select.onChange([], { action: 'clear' });
   }
 
   render() {
