@@ -14,7 +14,7 @@ import MarkdownContentViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import FileUploader from '../../components/file-uploader/file-uploader';
-import FileTagsViewer from '../../components/filetags-viewer';
+import RepoInfoBar from '../../components/repo-info-bar';
 
 const propTypes = {
   content: PropTypes.string,
@@ -61,6 +61,7 @@ const propTypes = {
   goDraftPage: PropTypes.func,
   reviewID: PropTypes.any,
   usedRepoTags: PropTypes.array.isRequired,
+  readmeMarkdown: PropTypes.object,
 };
 
 class MainPanel extends Component {
@@ -256,14 +257,13 @@ class MainPanel extends Component {
                       goReviewPage={this.props.goReviewPage}
                     /> :
                     <Fragment>
-                      {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
-                        <div className="tags-summary-bar">
-                          <FileTagsViewer
-                            repoID={repoID}
-                            currentPath={this.props.path}
-                            usedRepoTags={this.props.usedRepoTags}
-                          />
-                        </div>
+                      {this.props.path === '/' && !(this.props.usedRepoTags.length === 0 && this.props.readmeMarkdown === null) && (
+                        <RepoInfoBar
+                          repoID={repoID}
+                          currentPath={this.props.path}
+                          usedRepoTags={this.props.usedRepoTags}
+                          readmeMarkdown={this.props.readmeMarkdown}
+                        />
                       )}
                       <DirentListView
                         path={this.props.path}

@@ -12,7 +12,7 @@ import DirentDetail from '../dirent-detail/dirent-details';
 import FileUploader from '../file-uploader/file-uploader';
 import ModalPortal from '../modal-portal';
 import LibDecryptDialog from '../dialog/lib-decrypt-dialog';
-import FileTagsViewer from '../../components/filetags-viewer';
+import RepoInfoBar from '../repo-info-bar';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object,
@@ -51,6 +51,7 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   onFileUploadSuccess: PropTypes.func.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
+  readmeMarkdown: PropTypes.object,
 };
 
 class DirPanel extends React.Component {
@@ -183,14 +184,13 @@ class DirPanel extends React.Component {
                     {!this.props.pathExist ?
                       errMessage :
                       <Fragment>
-                        {(this.props.usedRepoTags.length > 0 && this.props.path === '/') && (
-                          <div className="tags-summary-bar">
-                            <FileTagsViewer
-                              repoID={this.props.repoID}
-                              currentPath={this.props.path}
-                              usedRepoTags={this.props.usedRepoTags}
-                            />
-                          </div>
+                        {this.props.path === '/' && !(this.props.usedRepoTags.length === 0 && this.props.readmeMarkdown === null) && (
+                          <RepoInfoBar
+                            repoID={this.props.repoID}
+                            currentPath={this.props.path}
+                            usedRepoTags={this.props.usedRepoTags}
+                            readmeMarkdown={this.props.readmeMarkdown}
+                          />
                         )}
                         <DirentListView
                           path={this.props.path}

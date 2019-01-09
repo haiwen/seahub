@@ -1,0 +1,56 @@
+.repo-info-bar {
+  margin-bottom: 5px;
+  padding: 0 10px;
+  border: 1px solid #e6e6dd;
+  border-radius: 5px;
+  background: #f8f8f8;
+}
+
+.used-tag-list {
+  list-style: none;
+  margin: 8px 0;
+}
+
+.used-tag-item {
+  display: inline-block;
+  margin: auto 15px;
+}
+
+.used-tag {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.used-tag-name {
+  margin: 0 0.25rem;
+}
+
+.used-tag-files {
+  color: #666;
+  font-size: 14px;
+}
+
+.used-tag-files:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.readme-file {
+  margin: 8px 15px;
+}
+
+.readme-file a {
+  color: #333;
+}
+
+.readme-flag {
+  font-size: 12px;
+  color: #f19645;
+}
+
+.readme-name {
+  margin: 0 0.25rem;
+  font-size: 14px;
+}

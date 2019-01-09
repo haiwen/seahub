@@ -42,6 +42,7 @@ class DirView extends React.Component {
       dirID: '',
       errorMsg: '',
       usedRepoTags: [],
+      readmeMarkdown: null,
     };
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
@@ -144,11 +145,26 @@ class DirView extends React.Component {
     this.setState({usedRepoTags: newUsedRepoTags});
   }
 
+  updateReadmeMarkdown = (direntList) => {
+    this.setState({readmeMarkdown: null});
+    direntList.some(item => {
+      let fileName = item.name.toLowerCase();
+      if (fileName === 'readme.md' || fileName === 'readme.markdown') {
+        this.setState({readmeMarkdown: item});
+        return true;
+      }
+    });
+  }
+
   updateDirentList = (filePath) => {
     let repoID = this.state.repoID;
     this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, filePath).then(res => {
       let direntList = res.data.map(item => {
+        let fileName = item.name.toLowerCase();
+        if (fileName === 'readme.md' || fileName === 'readme.markdown') {
+          this.setState({readmeMarkdown: item});
+        }
         return new Dirent(item);
       });
       this.setState({
@@ -198,6 +214,7 @@ class DirView extends React.Component {
       let dirent = this.createDirent(name, 'file', res.data);
       let direntList = this.addItem(dirent, 'file');
       this.setState({direntList: direntList});
+      this.updateReadmeMarkdown(direntList);
     });
   }
 
@@ -215,6 +232,7 @@ class DirView extends React.Component {
       seafileAPI.deleteFile(repoID, direntPath).then(() => {
         let direntList = this.deleteItem(dirent);
         this.setState({direntList: direntList});
+        this.updateReadmeMarkdown(direntList);
       }).catch(() => {
         // todo
       })
@@ -235,6 +253,7 @@ class DirView extends React.Component {
       seafileAPI.renameFile(repoID, direntPath, newName).then(() => {
         let direntList = this.renameItem(dirent, newName);
         this.setState({direntList: direntList});
+        this.updateReadmeMarkdown(direntList);
       }).catch(() => {
         //todo
       });
@@ -248,6 +267,7 @@ class DirView extends React.Component {
       
       let direntList = this.deleteItem(dirent);
       this.setState({direntList: direntList});
+      this.updateReadmeMarkdown(direntList);
 
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirName);
@@ -319,6 +339,7 @@ class DirView extends React.Component {
         isDirentSelected: false,
         selectedDirentList: [],
       });
+      this.updateReadmeMarkdown(direntList);
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirNames);
       toaster.success(message);
@@ -348,6 +369,7 @@ class DirView extends React.Component {
     let repoID = this.state.repoID;
     seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
       let direntList = this.deleteItems(dirNames);
+      this.updateReadmeMarkdown(direntList);
       this.setState({
         direntList: direntList,
         isDirentSelected: false,
@@ -446,6 +468,7 @@ class DirView extends React.Component {
         this.setState({direntList: [dirent, ...this.state.direntList]});
       } else {
         this.setState({direntList: [...this.state.direntList, dirent]});
+        this.updateReadmeMarkdown(this.state.direntList);
       }
     }
   }
@@ -632,6 +655,7 @@ class DirView extends React.Component {
         libNeedDecrypt={this.state.libNeedDecrypt}
         onLibDecryptDialog={this.onLibDecryptDialog}
         usedRepoTags={this.state.usedRepoTags}
+        readmeMarkdown={this.state.readmeMarkdown}
       />
     );
   }

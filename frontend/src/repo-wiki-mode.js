@@ -54,6 +54,7 @@ class Wiki extends Component {
       draftFilePath: '',
       dirID: '',
       usedRepoTags: [],
+      readmeMarkdown: null,
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
@@ -99,7 +100,7 @@ class Wiki extends Component {
   }
 
   componentWillUnmount() {
-    collabServer.unwatchRepo(repoID);
+    collabServer.unwatchRepo(repoID, this.onRepoUpdateEvent);
   }
 
   componentDidUpdate() {
@@ -311,11 +312,26 @@ class Wiki extends Component {
     window.history.pushState({ url: url, path: path}, path, url);
   }
 
+  updateReadmeMarkdown = (direntList) => {
+    this.setState({readmeMarkdown: null});
+    direntList.some(item => {
+      let fileName = item.name.toLowerCase();
+      if (fileName === 'readme.md' || fileName === 'readme.markdown') {
+        this.setState({readmeMarkdown: item});
+        return true;
+      }
+    });
+  }
+
   loadDirentList = (filePath) => {
     this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, filePath).then(res => {
       let direntList = [];
       res.data.forEach(item => {
+        let fileName = item.name.toLowerCase();
+        if (fileName === 'readme.md' || fileName === 'readme.markdown') {
+          this.setState({readmeMarkdown: item});
+        }
         let dirent = new Dirent(item);
         direntList.push(dirent);
       });
@@ -513,6 +529,7 @@ class Wiki extends Component {
         return item;
       });
       this.setState({ direntList: direntList });
+      this.updateReadmeMarkdown(direntList);
     } else if (Utils.isAncestorPath(direntPath, this.state.path)) {
       // example: direntPath = /A/B, state.path = /A/B/C
       let newPath = Utils.renameAncestorPath(this.state.path, direntPath, newDirentPath);
@@ -532,6 +549,7 @@ class Wiki extends Component {
         return item.name !== name;
       });
       this.setState({ direntList: direntList });
+      this.updateReadmeMarkdown(direntList);
     } else if (Utils.isAncestorPath(direntPath, this.state.path)) {
       // the deleted item is ancester of the current item
       let parentPath = Utils.getDirName(direntPath);
@@ -565,6 +583,7 @@ class Wiki extends Component {
       }
     }
     this.setState({direntList: direntList});
+    this.updateReadmeMarkdown(direntList);
   }
 
   moveDirent = (filePath) => {
@@ -573,6 +592,7 @@ class Wiki extends Component {
       return item.name !== name;
     });
     this.setState({direntList: direntList});
+    this.updateReadmeMarkdown(direntList);
   }
 
   onFileUploadSuccess = (direntObject) => {
@@ -597,6 +617,7 @@ class Wiki extends Component {
         this.setState({direntList: [dirent, ...this.state.direntList]});
       } else {
         this.setState({direntList: [...this.state.direntList, dirent]});
+        this.updateReadmeMarkdown(this.state.direntList);
       }
     }
   }
@@ -991,6 +1012,7 @@ class Wiki extends Component {
           goDraftPage={this.goDraftPage}
           goReviewPage={this.goReviewPage}
           usedRepoTags={this.state.usedRepoTags}
+          readmeMarkdown={this.state.readmeMarkdown}
         />
       </div>
     );
