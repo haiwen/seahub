@@ -321,6 +321,15 @@ export const Utils = {
       case 'preview':
         title = gettext("Preview-on-Cloud");
         break;
+      case 'private':
+        title = gettext("Private");
+        break;
+      case 'public':
+        title = gettext("Public");
+        break;
+      case 'login-user':
+        title = gettext("Login User");
+        break;
     }
     return title;
   },

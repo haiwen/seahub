@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import PermissionEditor from '../permission-editor';
 import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
@@ -26,7 +28,10 @@ class WikiListItem extends Component {
       isShowMenuControl: false,
       isRenameing: false,
       highlight: false,
+      permission: this.props.wiki.permission,
+      showOpIcon: false,
     };
+    this.permissions = ['private', 'public', 'login-user'];
   }
 
   clickMenuToggle = (e) => {
@@ -58,6 +63,7 @@ class WikiListItem extends Component {
       this.setState({
         isShowMenuControl: true,
         highlight: true,
+        showOpIcon: true,
       });
     }
   }
@@ -67,8 +73,16 @@ class WikiListItem extends Component {
       this.setState({
         isShowMenuControl: false,
         highlight: false,
+        showOpIcon: false,
       });
     }
+  }
+
+  changePerm = (permission) => {
+    let wiki = this.props.wiki;
+    seafileAPI.editWikiPermission(wiki.slug, permission).then(() => {
+      this.setState({permission: permission});
+    })
   }
 
   onRenameToggle = (e) => {
@@ -150,6 +164,15 @@ class WikiListItem extends Component {
           </td>
           <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
+          <td>
+            <PermissionEditor 
+              isTextMode={true}
+              isEditIconShow={this.state.showOpIcon}
+              currentPermission={this.state.permission}
+              permissions={this.permissions}
+              onPermissionChangedHandler={this.changePerm}
+            />
+          </td>
           <td className="text-center cursor-pointer">
             {this.state.isShowMenuControl && (
               <Dropdown isOpen={this.state.isShowWikiMenu} toggle={this.onMenuToggle}>
