@@ -33,7 +33,7 @@ before_scipt: true
 
 # int & start seahub server, run seahub tests
 script:
-  - ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test
+  - .travis/test_seahub_changes.sh && ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test || true
 
 after_success:
   # notify seafile-docs to rebuild if master is updated
