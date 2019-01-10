@@ -23,7 +23,6 @@ class ManageMembersDialog extends React.Component {
       groupMembers: [],
       selectedOption: null,
       errMessage: [],
-      clearSelect: false,
     };
   }
 
@@ -31,7 +30,6 @@ class ManageMembersDialog extends React.Component {
     this.setState({
       selectedOption: option,
       errMessage: [],
-      clearSelect: false,
     });
   }
 
@@ -44,8 +42,8 @@ class ManageMembersDialog extends React.Component {
       this.onGroupMembersChange();
       this.setState({
         selectedOption: null,
-        clearSelect: true,
       });
+      this.refs.userSelect.clearSelect();
       if (res.data.failed.length > 0) {
         this.setState({
           errMessage: res.data.failed
@@ -84,7 +82,7 @@ class ManageMembersDialog extends React.Component {
             <UserSelect
               placeholder='Search users...'
               onSelectChange={this.onSelectChange}
-              clearSelect={this.state.clearSelect}
+              ref="userSelect"
               isMulti={true}
               className="group-transfer-select"
             />
