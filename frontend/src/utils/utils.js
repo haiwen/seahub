@@ -327,9 +327,6 @@ export const Utils = {
       case 'public':
         title = gettext("Public");
         break;
-      case 'login-user':
-        title = gettext("Login User");
-        break;
     }
     return title;
   },

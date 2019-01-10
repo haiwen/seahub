@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import PermissionEditor from '../permission-editor';
+import PermissionEditor from '../select-editor/permission-editor';
 import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
@@ -31,7 +31,7 @@ class WikiListItem extends Component {
       permission: this.props.wiki.permission,
       showOpIcon: false,
     };
-    this.permissions = ['private', 'public', 'login-user'];
+    this.permissions = ['private', 'public'];
   }
 
   clickMenuToggle = (e) => {
@@ -82,7 +82,12 @@ class WikiListItem extends Component {
     let wiki = this.props.wiki;
     seafileAPI.editWikiPermission(wiki.slug, permission).then(() => {
       this.setState({permission: permission});
-    })
+    }).catch((error) => {
+      if(error.response) {
+        let errorMsg = error.response.data.error_msg;
+        Toast.danger(errorMsg);
+      }
+    });
   }
 
   onRenameToggle = (e) => {
