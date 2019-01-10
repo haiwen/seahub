@@ -23,7 +23,9 @@
 
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
 
+        {% if is_pro %}
         <li class="tab"><a href="#email-notice">{% trans "Email Notification" %}</a></li>
+        {% endif %}
 
         {% if two_factor_auth_enabled %}
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
@@ -132,6 +134,7 @@
     </div>
 </div>
 
+{% if is_pro %}
 <div class="setting-item" id="email-notice">
     <h3>{% trans "Email Notification of File Changes" %}</h3>
     <form method="post" action="" id="set-email-notice-interval-form">{% csrf_token %}
@@ -144,6 +147,7 @@
         <button type="submit" class="submit">{% trans "Submit" %}</button>
     </form>
 </div>
+{% endif %}
 
 {% if two_factor_auth_enabled %}
 <div class="setting-item" id="two-factor-auth">
