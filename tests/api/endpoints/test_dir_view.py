@@ -284,7 +284,6 @@ class DirViewTest(BaseTestCase):
         assert len(json_resp) == 1
         assert json_resp[0]['type'] == 'file'
         assert json_resp[0]['name'] == image_file_name
-        assert json_resp[0]['is_img'] == True
         assert image_file_name in json_resp[0]['encoded_thumbnail_src']
 
     def test_get_dir_with_invalid_perm(self):

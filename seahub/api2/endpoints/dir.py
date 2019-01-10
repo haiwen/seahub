@@ -233,15 +233,6 @@ class DirView(APIView):
                     fileExt = os.path.splitext(file_name)[1][1:].lower()
                     file_type = FILEEXT_TYPE_MAP.get(fileExt)
 
-                    if file_type == IMAGE:
-                        file_info['is_img'] = True
-
-                    if file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
-                        file_info['is_video'] = True
-
-                    if file_type == XMIND:
-                        file_info['is_xmind'] = True
-
                     if file_type in (IMAGE, XMIND) or \
                             file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
 
