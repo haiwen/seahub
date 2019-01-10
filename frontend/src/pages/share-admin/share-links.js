@@ -299,7 +299,7 @@ class ShareAdminShareLinks extends Component {
 
   render() {
     return (
-      <div className="main-panel-cneter">
+      <div className="main-panel-center">
         <div className="cur-view-container">
           <div className="cur-view-path">
             <ul className="nav">
