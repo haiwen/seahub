@@ -21,11 +21,12 @@ class SearchResultItem extends React.Component {
     let fileIconUrl = item.is_dir ? siteRoot + 'media/img/folder-192.png' : Utils.getFileIconUrl(item.name, fileIconSize);
     return (
       <li className="search-result-item" onClick={this.onClickHandler}>
-        <span className="item-content item-name">
-          <img src={fileIconUrl} alt="" />{item.name}
-        </span>
-        <span className="item-content item-link">{item.repo_name}/{item.link_content}</span>
-        <div className="item-content item-text" dangerouslySetInnerHTML={{__html: item.content}}></div>
+        <img className="item-img" src={fileIconUrl} alt="" />
+        <div className="item-content">
+          <dt className="item-name ellipsis">{item.name}</dt>
+          <dd className="item-link ellipsis">{item.repo_name}/{item.link_content}</dd>
+          <dd className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content}}></dd>
+        </div>
       </li>
     );
   }
