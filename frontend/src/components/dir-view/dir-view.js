@@ -76,6 +76,7 @@ class DirView extends React.Component {
         currentRepoInfo: repoInfo,
         repoID: repoInfo.repo_id,
         repoName: repoInfo.repo_name,
+        encrypted: repoInfo.encrypted,
         permission: repoInfo.permission === 'rw',
         libNeedDecrypt: res.data.lib_need_decrypt,
       });
@@ -138,7 +139,7 @@ class DirView extends React.Component {
           {id: 'repo_updated', duration: 3600}
         );
       }
-    })
+    });
   }
 
   updateUsedRepoTags = (newUsedRepoTags) => {
@@ -156,10 +157,10 @@ class DirView extends React.Component {
     });
   }
 
-  updateDirentList = (filePath) => {
+  updateDirentList = (path) => {
     let repoID = this.state.repoID;
     this.setState({isDirentListLoading: true});
-    seafileAPI.listDir(repoID, filePath).then(res => {
+    seafileAPI.listDir(repoID, path).then(res => {
       let direntList = res.data.map(item => {
         let fileName = item.name.toLowerCase();
         if (fileName === 'readme.md' || fileName === 'readme.markdown') {
@@ -167,18 +168,54 @@ class DirView extends React.Component {
         }
         return new Dirent(item);
       });
+
       this.setState({
         isDirentListLoading: false,
         pathExist: true,
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.headers.oid,
       });
+
+      if (!this.state.encrypted && direntList.length) {
+        this.getThumbnails(repoID, path, this.state.direntList);
+      }
     }).catch(() => {
       this.setState({
         isDirentListLoading: false,
         pathExist: false
       });
     });
+  }
+
+  getThumbnails = (repoID, path, direntList) => {
+    let items = direntList.filter((item) => {
+      return Utils.imageCheck(item.name) && !item.encoded_thumbnail_src;
+    });
+    if (items.length == 0) {
+      return ;
+    }
+
+    const _this = this;
+    const len = items.length;
+    const thumbnailSize = 48;
+    let getThumbnail = (i) => {
+      const curItem = items[i];
+      const curItemPath = [path, curItem.name].join('/');
+      seafileAPI.createThumbnail(repoID, curItemPath, thumbnailSize).then((res) => {
+        curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
+      }).catch((error) => {
+        // do nothing
+      }).then(() => {
+        if (i < len - 1) {
+          getThumbnail(++i);
+        } else {
+          _this.setState({
+            direntList: direntList
+          });
+        }
+      });
+    };
+    getThumbnail(0);
   }
 
   onItemClick = (dirent) => {
@@ -227,7 +264,7 @@ class DirView extends React.Component {
         this.setState({direntList: direntList});
       }).catch(() => {
         // todo
-      })
+      });
     } else {
       seafileAPI.deleteFile(repoID, direntPath).then(() => {
         let direntList = this.deleteItem(dirent);
@@ -235,7 +272,7 @@ class DirView extends React.Component {
         this.updateReadmeMarkdown(direntList);
       }).catch(() => {
         // todo
-      })
+      });
     }
   }
 
@@ -488,7 +525,7 @@ class DirView extends React.Component {
   }
 
   addItem = (dirent, type) => {
-    let direntList = this.state.direntList.map(item => {return item}); //clone
+    let direntList = this.state.direntList.map(item => {return item;}); //clone
     if (type === 'dir') {
       direntList.unshift(dirent);
       return direntList;
@@ -497,7 +534,7 @@ class DirView extends React.Component {
       // first: direntList.length === 0;
       // second: all the direntList's items are dir;
       // third: direntList has dir and file;
-      let length = direntList.length
+      let length = direntList.length;
       if (length === 0 || direntList[length - 1].type === 'dir') {
         direntList.push(dirent);
       } else {
@@ -530,7 +567,7 @@ class DirView extends React.Component {
   }
   
   deleteItems = (dirNames) => {
-    let direntList = this.state.direntList.map(item => {return item}); //clone
+    let direntList = this.state.direntList.map(item => {return item;}); //clone
     while (dirNames.length) {
       for (let i = 0; i < direntList.length; i++) {
         if (direntList[i].name === dirNames[0]) {
@@ -601,7 +638,7 @@ class DirView extends React.Component {
   onLibDecryptDialog = () => {
     this.setState({
       libNeedDecrypt: !this.state.libNeedDecrypt
-    })
+    });
     this.updateDirentList(this.state.path);
   }
 
@@ -610,7 +647,7 @@ class DirView extends React.Component {
       sortBy: sortBy,
       sortOrder: sortOrder,
       items: Utils.sortDirents(this.state.direntList, sortBy, sortOrder)
-    })
+    });
   }
 
   render() {

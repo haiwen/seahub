@@ -433,7 +433,10 @@ class DirentListItem extends React.Component {
           </td>
           <td className="text-center">
             <div className="dir-icon">
-              <img src={iconUrl} width="24" alt='' />
+              {dirent.encoded_thumbnail_src ?
+                <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail" alt="" /> :
+                <img src={iconUrl} width="24" alt='' />
+              }
               {dirent.is_locked && <img className="locked" src={siteRoot + mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} />}
             </div>
           </td>
