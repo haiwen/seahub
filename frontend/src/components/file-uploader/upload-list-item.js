@@ -46,7 +46,7 @@ class UploadListItem extends React.Component {
         </td>
         <td className="upload-operation">
           {(!item.isSaved && progress !== 100) && (
-            <a href="#" onClick={this.onUploadCancel}>{gettext(('cancel'))}</a>
+            <a href="#" onClick={this.onUploadCancel}>{gettext('cancel')}</a>
           )}
           {(!item.isSaved && progress === 100) && (
             <span className="sf-font">{gettext('saving...')}</span>
