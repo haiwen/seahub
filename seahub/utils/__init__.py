@@ -59,6 +59,27 @@ try:
 except ImportError:
     CHECK_SHARE_LINK_TRAFFIC = False
 
+# init Seafevents API
+if EVENTS_CONFIG_FILE:
+    from seafevents import seafevents_api
+    seafevents_api.init(EVENTS_CONFIG_FILE)
+else:
+    class RPCProxy(object):
+        def __getattr__(self, name):
+            return partial(self.method_missing, name)
+
+        def method_missing(self, name, *args, **kwargs):
+            return None
+    seafevents_api = RPCProxy()
+
+def is_pro_version():
+    if seahub.settings.DEBUG:
+        if hasattr(seahub.settings, 'IS_PRO_VERSION') \
+            and seahub.settings.IS_PRO_VERSION:
+            return True
+
+    return bool(seafevents_api.is_pro())
+
 def is_cluster_mode():
     cfg = ConfigParser.ConfigParser()
     if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
@@ -1030,12 +1051,14 @@ def more_files_in_commit(commit):
 FILE_AUDIT_ENABLED = False
 if EVENTS_CONFIG_FILE:
     def check_file_audit_enabled():
-        enabled = seafevents.is_audit_enabled(parsed_events_conf)
+        enabled = False
+        if hasattr(seafevents, 'is_audit_enabled'):
+            enabled = seafevents.is_audit_enabled(parsed_events_conf)
 
-        if enabled:
-            logging.debug('file audit: enabled')
-        else:
-            logging.debug('file audit: not enabled')
+            if enabled:
+                logging.debug('file audit: enabled')
+            else:
+                logging.debug('file audit: not enabled')
         return enabled
 
     FILE_AUDIT_ENABLED = check_file_audit_enabled()
@@ -1044,12 +1067,14 @@ if EVENTS_CONFIG_FILE:
 HAS_OFFICE_CONVERTER = False
 if EVENTS_CONFIG_FILE:
     def check_office_converter_enabled():
-        enabled = seafevents.is_office_converter_enabled(parsed_events_conf)
+        enabled = False
+        if hasattr(seafevents, 'is_office_converter_enabled'):
+            enabled = seafevents.is_office_converter_enabled(parsed_events_conf)
 
-        if enabled:
-            logging.debug('office converter: enabled')
-        else:
-            logging.debug('office converter: not enabled')
+            if enabled:
+                logging.debug('office converter: enabled')
+            else:
+                logging.debug('office converter: not enabled')
         return enabled
 
     def get_office_converter_html_dir():
@@ -1225,18 +1250,6 @@ if EVENTS_CONFIG_FILE:
 
     HAS_FILE_SEARCH = check_search_enabled()
 
-# init Seafevents API
-if EVENTS_CONFIG_FILE:
-    from seafevents import seafevents_api
-    seafevents_api.init(EVENTS_CONFIG_FILE)
-else:
-    class RPCProxy(object):
-        def __getattr__(self, name):
-            return partial(self.method_missing, name)
-
-        def method_missing(self, name, *args, **kwargs):
-            return None
-    seafevents_api = RPCProxy()
 
 def user_traffic_over_limit(username):
     """Return ``True`` if user traffic over the limit, otherwise ``False``.
@@ -1322,16 +1335,6 @@ def do_urlopen(url, data=None, headers=None):
     req = urllib2.Request(url, data=data, headers=headers)
     ret = urllib2.urlopen(req)
     return ret
-
-def is_pro_version():
-    if seahub.settings.DEBUG:
-        if hasattr(seahub.settings, 'IS_PRO_VERSION') \
-            and seahub.settings.IS_PRO_VERSION:
-            return True
-    if EVENTS_CONFIG_FILE:
-        return True
-    else:
-        return False
 
 def clear_token(username):
     '''

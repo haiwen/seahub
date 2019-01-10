@@ -729,6 +729,18 @@ ENABLE_REPO_SNAPSHOT_LABEL = False
 #  Repo wiki mode
 ENABLE_REPO_WIKI_MODE = True
 
+d = os.path.dirname
+EVENTS_CONFIG_FILE = os.environ.get(
+    'EVENTS_CONFIG_FILE',
+    os.path.join(
+        d(d(d(d(os.path.abspath(__file__))))), 'conf', 'seafevents.conf'
+    )
+)
+
+del d
+if not os.path.exists(EVENTS_CONFIG_FILE):
+    del EVENTS_CONFIG_FILE
+
 #####################
 # External settings #
 #####################
