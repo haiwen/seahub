@@ -78,7 +78,10 @@ def is_pro_version():
             and seahub.settings.IS_PRO_VERSION:
             return True
 
-    return bool(seafevents_api.is_pro())
+    try:
+        return bool(seafevents_api.is_pro())
+    except AttributeError:
+        return False
 
 def is_cluster_mode():
     cfg = ConfigParser.ConfigParser()
