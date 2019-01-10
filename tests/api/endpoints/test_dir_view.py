@@ -11,6 +11,7 @@ from seahub.test_utils import BaseTestCase
 from seahub.utils import check_filename_with_rename
 
 from tests.common.utils import randstring
+from seahub.settings import THUMBNAIL_ROOT
 
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
@@ -42,6 +43,10 @@ class DirViewTest(BaseTestCase):
 
     def setUp(self):
         self.repo_id = self.repo.id
+
+        self.file_path = self.file
+        self.file_name = os.path.basename(self.file_path.rstrip('/'))
+
         self.folder_path = self.folder
         self.folder_name = os.path.basename(self.folder_path)
 
@@ -54,14 +59,233 @@ class DirViewTest(BaseTestCase):
         self.remove_repo()
 
     # for test http GET request
-    def test_can_get_dir(self):
+    def test_can_get(self):
+
         self.login_as(self.user)
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
+        assert len(json_resp) == 2
+
         assert json_resp[0]['type'] == 'dir'
         assert json_resp[0]['name'] == self.folder_name
+
+        assert json_resp[1]['type'] == 'file'
+        assert json_resp[1]['name'] == self.file_name
+
+    def test_can_get_with_dir_type_parameter(self):
+
+        self.login_as(self.user)
+        resp = self.client.get(self.url + '?t=d')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'dir'
+        assert json_resp[0]['name'] == self.folder_name
+
+    def test_can_get_with_file_type_parameter(self):
+
+        self.login_as(self.user)
+        resp = self.client.get(self.url + '?t=f')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == self.file_name
+
+    def test_can_get_with_recursive_parameter(self):
+
+        # create a sub folder
+        new_dir_name = randstring(6)
+        seafile_api.post_dir(self.repo_id, self.folder_path,
+                new_dir_name, self.user_name)
+
+        self.login_as(self.user)
+        resp = self.client.get(self.url + '?recursive=1')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert len(json_resp) == 3
+        assert json_resp[0]['type'] == 'dir'
+        assert json_resp[0]['name'] == self.folder_name
+        assert json_resp[0]['parent_dir'] == '/'
+
+        assert json_resp[1]['type'] == 'dir'
+        assert json_resp[1]['name'] == new_dir_name
+        assert json_resp[1]['parent_dir'] == self.folder_path
+
+        assert json_resp[2]['type'] == 'file'
+        assert json_resp[2]['name'] == self.file_name
+
+    def test_can_get_with_recursive_and_dir_type_parameter(self):
+
+        # create a sub folder
+        new_dir_name = randstring(6)
+        seafile_api.post_dir(self.repo_id, self.folder_path,
+                new_dir_name, self.user_name)
+
+        self.login_as(self.user)
+        resp = self.client.get(self.url + '?recursive=1&t=d')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert len(json_resp) == 2
+        assert json_resp[0]['type'] == 'dir'
+        assert json_resp[0]['name'] == self.folder_name
+        assert json_resp[0]['parent_dir'] == '/'
+
+        assert json_resp[1]['type'] == 'dir'
+        assert json_resp[1]['name'] == new_dir_name
+        assert json_resp[1]['parent_dir'] == self.folder_path
+
+    def test_can_get_with_recursive_and_file_type_parameter(self):
+
+        # create a sub folder
+        new_dir_name = randstring(6)
+        seafile_api.post_dir(self.repo_id, self.folder_path,
+                new_dir_name, self.user_name)
+
+        self.login_as(self.user)
+        resp = self.client.get(self.url + '?recursive=1&t=f')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == self.file_name
+
+    def test_can_get_file_with_lock_info(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.user)
+
+        # no lock owner info returned
+        resp = self.client.get(self.url + '?t=f')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == self.file_name
+        assert json_resp[0]['lock_owner'] == ''
+
+        # lock file
+        seafile_api.lock_file(self.repo_id, self.file_path, self.admin_name, 1)
+
+        # return lock owner info
+        resp = self.client.get(self.url + '?t=f')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == self.file_name
+        assert json_resp[0]['lock_owner'] == self.admin_name
+
+    def test_can_get_file_with_star_info(self):
+
+        self.login_as(self.user)
+
+        # file is not starred
+        resp = self.client.get(self.url + '?t=f')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == self.file_name
+        assert json_resp[0]['starred'] == False
+
+        # star file
+        resp = self.client.post(reverse('starredfiles'), {'repo_id': self.repo.id, 'p': self.file_path})
+        self.assertEqual(201, resp.status_code)
+
+        # file is starred
+        resp = self.client.get(self.url + '?t=f')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == self.file_name
+        assert json_resp[0]['starred'] == True
+
+    def test_can_get_file_with_tag_info(self):
+
+        self.login_as(self.user)
+
+        # file has no tags
+        resp = self.client.get(self.url + '?t=f')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == self.file_name
+        assert not json_resp[0].has_key('file_tags')
+
+        # add file tag
+        tag_name = randstring(6)
+        tag_color = randstring(6)
+        repo_tag_data = {'name': tag_name, 'color': tag_color}
+        resp = self.client.post(reverse('api-v2.1-repo-tags', args=[self.repo_id]), repo_tag_data)
+        json_resp = json.loads(resp.content)
+        repo_tag_id = json_resp['repo_tag']['repo_tag_id']
+        file_tag_data = {'file_path': self.file_path, 'repo_tag_id': repo_tag_id}
+        resp = self.client.post(reverse('api-v2.1-file-tags', args=[self.repo_id]), file_tag_data)
+
+        # file has tag
+        resp = self.client.get(self.url + '?t=f')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == self.file_name
+        assert json_resp[0]['file_tags'][0]['repo_tag_id'] == repo_tag_id
+        assert json_resp[0]['file_tags'][0]['tag_name'] == tag_name
+        assert json_resp[0]['file_tags'][0]['tag_color'] == tag_color
+
+    def test_can_get_file_with_thumbnail_info(self):
+
+        self.login_as(self.user)
+
+        # create a image file
+        image_file_name = randstring(6) + '.jpg'
+        seafile_api.post_empty_file(self.repo_id, self.folder_path,
+                image_file_name, self.user_name)
+
+        # file has no thumbnail
+        resp = self.client.get(self.url + '?t=f&with_thumbnail=true&p=%s' % self.folder_path)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == image_file_name
+        assert not json_resp[0].has_key('encoded_thumbnail_src')
+
+        file_id = json_resp[0]['id']
+
+        # prepare thumbnail
+        size = 48
+        thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
+        if not os.path.exists(thumbnail_dir):
+            os.makedirs(thumbnail_dir)
+        thumbnail_file = os.path.join(thumbnail_dir, file_id)
+
+        with open(thumbnail_file, 'w'):
+            pass
+        assert os.path.exists(thumbnail_file)
+
+        # file has thumbnail
+        resp = self.client.get(self.url + '?t=f&with_thumbnail=true&p=%s' % self.folder_path)
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+        assert json_resp[0]['type'] == 'file'
+        assert json_resp[0]['name'] == image_file_name
+        assert json_resp[0]['is_img'] == True
+        assert image_file_name in json_resp[0]['encoded_thumbnail_src']
 
     def test_get_dir_with_invalid_perm(self):
         # login as admin, then get dir info in user's repo
@@ -206,7 +430,6 @@ class DirViewTest(BaseTestCase):
 
         # check old file has been renamed to new_name
         json_resp = json.loads(resp.content)
-        print old_folder_name, new_name, checked_name
         assert checked_name == json_resp['obj_name']
 
     def test_rename_folder_with_invalid_repo_perm(self):
