@@ -123,24 +123,23 @@ class EditorUtilities {
     var url;
     if (fileNode.type === 'file') {
       if (fileNode.isImage()) {
-        url = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(fileNode.path()) + '?raw=1';
+        url = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(fileNode.path()) + '?raw=1';
       } else {
-        url = serviceUrl + '/wiki/lib/' + repoID + '/file' + encodeURIComponent(fileNode.path());
+        url = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(fileNode.path());
       }
     } else {
-      url = serviceUrl + '/wiki/lib/' + repoID + encodeURIComponent(fileNode.path());
+      url = serviceUrl + '/library/' + repoID + '/' + encodeURIComponent(repoName) + Utils.encodePath(fileNode.path());
     }
     return url;
   }
   
   isInternalFileLink(url) {
-    var re = new RegExp(this.serviceUrl + '/wiki/lib/[0-9a-f-]{36}/file.*');
+    var re = new RegExp(this.serviceUrl + '/lib/[0-9a-f-]{36}/file.*');
     return re.test(url);
   }
-
   
   isInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/wiki/lib/' + '[0-9a-f\-]{36}.*');
+    var re = new RegExp(serviceUrl + '/library/' + '[0-9a-f\-]{36}.*');
     return re.test(url);
   }
 
