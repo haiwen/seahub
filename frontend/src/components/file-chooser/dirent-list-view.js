@@ -36,9 +36,9 @@ class DirentListView extends React.Component {
             direntList.push(dirent);
           }
         }
-        direntList = Utils.sortDirents(direntList, 'name', 'asc');
-        this.setState({direntList: direntList});
       });
+      direntList = Utils.sortDirents(direntList, 'name', 'asc');
+      this.setState({direntList: direntList});
     });
   }
 
