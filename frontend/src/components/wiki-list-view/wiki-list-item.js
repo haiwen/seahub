@@ -80,7 +80,7 @@ class WikiListItem extends Component {
 
   changePerm = (permission) => {
     let wiki = this.props.wiki;
-    seafileAPI.editWikiPermission(wiki.slug, permission).then(() => {
+    seafileAPI.updateWikiPermission(wiki.slug, permission).then(() => {
       this.setState({permission: permission});
     }).catch((error) => {
       if(error.response) {
