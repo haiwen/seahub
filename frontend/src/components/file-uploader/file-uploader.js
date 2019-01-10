@@ -81,6 +81,12 @@ class FileUploader extends React.Component {
     this.bindEventHandler();
   }
 
+  componentWillUnmount = () => {
+    if (this.props.dragAndDrop === true) {
+      this.resumable.disableDropOnDocument();
+    }
+  }
+
   bindCallbackHandler = () => {
     let {maxFilesErrorCallback, minFileSizeErrorCallback, maxFileSizeErrorCallback, fileTypeErrorCallback } = this.props;
 
