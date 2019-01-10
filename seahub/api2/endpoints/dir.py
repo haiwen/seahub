@@ -28,7 +28,7 @@ from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 
-from seahub.settings import ENABLE_THUMBNAIL, ENABLE_VIDEO_THUMBNAIL, \
+from seahub.settings import ENABLE_VIDEO_THUMBNAIL, \
         THUMBNAIL_ROOT
 
 from seaserv import seafile_api
@@ -224,8 +224,7 @@ class DirView(APIView):
                         file_info['file_tags'].append(file_tag)
 
                 # get thumbnail info
-                if with_thumbnail == 'true' and \
-                        not repo.encrypted and ENABLE_THUMBNAIL:
+                if with_thumbnail == 'true' and not repo.encrypted:
 
                     # used for providing a way to determine
                     # if send a request to create thumbnail.
