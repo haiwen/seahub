@@ -225,7 +225,7 @@ class WikiPagesDirView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # perm check
-        if not wiki.check_access_wiki(request):
+        if not wiki.has_read_perm(request.user):
             error_msg = "Permission denied"
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -266,7 +266,7 @@ class WikiPageContentView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # perm check
-        if not wiki.check_access_wiki(request):
+        if not wiki.has_read_perm(request.user):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
