@@ -70,7 +70,13 @@
   text-overflow: ellipsis;
 }
 .search-result-item .item-name {
+  display: flex;
+  align-items: center;
   color: #eb8205 !important;
+}
+.search-result-item .item-name img {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 .search-result-item .item-link {
   color: #888;
