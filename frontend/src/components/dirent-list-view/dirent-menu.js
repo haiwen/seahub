@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { isPro, enableFileComment, fileAuditEnabled, folderPermEnabled} from '../../utils/constants';
 import DirentMenuItem from './dirent-menu-item';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   dirent: PropTypes.object.isRequired,
@@ -65,7 +66,9 @@ class DirentMenu extends React.Component {
           menuList.push('Lock');
         }
       }
-      menuList.push('New Draft');
+      if (Utils.isMarkdownFile(dirent.name)) {
+        menuList.push('New Draft');
+      }
       menuList.push('Divider');
       if (enableFileComment) {
         menuList.push('Comment');
