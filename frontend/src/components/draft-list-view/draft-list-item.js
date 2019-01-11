@@ -56,9 +56,12 @@ class DraftListItem extends React.Component {
     let reviewUrl = siteRoot + 'drafts/review/' + draft.review_id + '/';
     let localTime = moment.utc(draft.updated_at).toDate();
     localTime = moment(localTime).fromNow();
+
+    let size = Utils.isHiDPI() ? 48 : 24;
+    let iconUrl = Utils.getFileIconUrl(fileName, size);
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="text-center"><img className="icon" src={siteRoot + 'media/img/file/192/txt.png'} alt='icon' /></td>
+        <td className="text-center"><img src={iconUrl} width="24" alt='' /></td>
         <td className="name" >
           <a href={draftUrl} target="_blank">{fileName}</a>
         </td>

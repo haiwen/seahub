@@ -95,18 +95,31 @@ class DirentDetail extends React.Component {
 
   render() {
     let { dirent } = this.props;
+    let size = Utils.isHiDPI() ? 48 : 24;
+
+    let iconUrl = '';
+    if (dirent.type === 'file') {
+      iconUrl = Utils.getFileIconUrl(dirent.name, size);
+    } else {
+      let isReadOnly = false;
+      if (dirent.permission === 'r' || dirent.permission === 'preview') {
+        isReadOnly = true;
+      }
+      iconUrl = Utils.getFolderIconUrl({isReadOnly, size});
+    }
+
     return (
       <div className="detail-container">
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
-            <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt="icon" />
+            <img src={iconUrl} width="24" alt="" />
             <span className="name ellipsis" title={dirent.name}>{dirent.name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt="icon" />
+            <img src={iconUrl} alt="" />
           </div>
           {this.state.direntDetail && 
             <div className="dirent-table-container">

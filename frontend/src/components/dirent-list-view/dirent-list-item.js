@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -409,8 +409,17 @@ class DirentListItem extends React.Component {
       });
     }
 
-    const fileIconSize = Utils.isHiDPI() ? 48 : 24;
-    const fileIconUrl = dirent.type == 'file' ? Utils.getFileIconUrl(dirent.name, fileIconSize) : '';
+    let size = Utils.isHiDPI() ? 48 : 24;
+    let iconUrl = '';
+    if (dirent.type === 'file') {
+      iconUrl = Utils.getFileIconUrl(dirent.name, size);
+    } else {
+      let isReadOnly = false;
+      if (dirent.permission === 'r' || dirent.permission === 'preview') {
+        isReadOnly = true;
+      }
+      iconUrl = Utils.getFolderIconUrl({isReadOnly, size});
+    }
 
     return (
       <Fragment>
@@ -424,8 +433,8 @@ class DirentListItem extends React.Component {
           </td>
           <td className="text-center">
             <div className="dir-icon">
-              <img className="icon" src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : fileIconUrl} alt='' />
-              {dirent.is_locked && <img className="locked" src={siteRoot + 'media/img/file-locked-32.png'} alt={gettext('locked')} />}
+              <img src={iconUrl} width="24" alt='' />
+              {dirent.is_locked && <img className="locked" src={siteRoot + mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} />}
             </div>
           </td>
           <td className="name">
