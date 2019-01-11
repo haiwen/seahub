@@ -31,7 +31,7 @@
     "react-moment": "^0.7.9",
     "react-select": "^2.1.1",
     "reactstrap": "^6.4.0",
-    "seafile-js": "^0.2.55",
+    "seafile-js": "^0.2.56",
     "seafile-ui": "^0.1.10",
     "socket.io-client": "^2.2.0",
     "sw-precache-webpack-plugin": "0.11.4",

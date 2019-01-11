@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
-import PermissionEditor from '../../components/select-editor/permission-editor';
+import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
 import SharedRepoInfo from '../../models/shared-repo-info';
 
 class Content extends Component {
@@ -173,7 +173,7 @@ class Item extends Component {
         <td><Link to={repoUrl}>{item.repo_name}</Link></td>
         {shareTo}
         <td>
-          <PermissionEditor 
+          <SharePermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.showOpIcon}
             currentPermission={share_permission}

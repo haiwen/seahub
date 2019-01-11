@@ -4,7 +4,7 @@ import AsyncSelect from 'react-select/lib/Async';
 import { gettext } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
-import PermissionEditor from '../select-editor/permission-editor';
+import SharePermissionEditor from '../select-editor/share-permission-editor';
 
 class UserItem extends React.Component {
 
@@ -40,7 +40,7 @@ class UserItem extends React.Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="name">{item.user_info.nickname}</td>
         <td>
-          <PermissionEditor 
+          <SharePermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -292,7 +292,7 @@ class ShareToUser extends React.Component {
                 />
               </td>
               <td>
-                <PermissionEditor 
+                <SharePermissionEditor 
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}

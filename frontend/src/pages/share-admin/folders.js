@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
-import PermissionEditor from '../../components/select-editor/permission-editor';
+import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
 import SharedFolderInfo from '../../models/shared-folder-info';
 
 class Content extends Component {
@@ -153,7 +153,7 @@ class Item extends Component {
         <td><Link to={folderUrl}>{item.folder_name}</Link></td>
         {shareTo}
         <td>
-          <PermissionEditor 
+          <SharePermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.showOpIcon}
             currentPermission={this.state.share_permission}

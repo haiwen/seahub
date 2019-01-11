@@ -5,6 +5,7 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
+let loginUser = window.app.pageOptions.username;
 const propTypes = {
   content: PropTypes.string,
   lastModified: PropTypes.string,
@@ -88,11 +89,13 @@ class MainPanel extends Component {
               <button className="btn btn-secondary operation-item" title="Edit File" onClick={this.onEditClick}>{gettext('Edit Page')}</button>
             }
           </div>
-          <CommonToolbar 
-            repoID={repoID}
-            onSearchedClick={this.props.onSearchedClick} 
-            searchPlaceholder={gettext('Search files in this library')}
-          />
+          {loginUser &&
+            <CommonToolbar 
+              repoID={repoID}
+              onSearchedClick={this.props.onSearchedClick} 
+              searchPlaceholder={gettext('Search files in this library')}
+            />
+          }
         </div>
         <div className="cur-view-container">
           <div className="cur-view-path">

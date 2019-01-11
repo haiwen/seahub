@@ -5,7 +5,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
-import PermissionEditor from '../select-editor/permission-editor';
+import SharePermissionEditor from '../select-editor/share-permission-editor';
 
 class GroupItem extends React.Component {
 
@@ -40,7 +40,7 @@ class GroupItem extends React.Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className='name'>{item.group_info.name}</td>
         <td>
-          <PermissionEditor 
+          <SharePermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
@@ -270,7 +270,7 @@ class ShareToGroup extends React.Component {
                 />
               </td>
               <td>
-                <PermissionEditor 
+                <SharePermissionEditor 
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
