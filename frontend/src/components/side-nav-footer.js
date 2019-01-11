@@ -35,7 +35,7 @@ class About extends React.Component {
     return (
       <div>
         <a href="#" className="item" onClick={this.toggle}>{gettext('About')}</a>
-        <Modal isOpen={this.state.modal} centered={true} toggle={this.toggle} className={this.props.className}>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
           <ModalBody>
             <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button>
             <div className="about-content">

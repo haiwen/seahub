@@ -52,7 +52,7 @@
 
 .search-result-container .search-result-item {
   display: flex;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.5rem;
   border-left: 2px solid #fff;
   font-size: 0.8125rem;
   cursor: pointer;
