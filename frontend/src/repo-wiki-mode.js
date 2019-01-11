@@ -326,7 +326,7 @@ class Wiki extends Component {
 
   loadDirentList = (path) => {
     this.setState({isDirentListLoading: true});
-    seafileAPI.listDir(repoID, path).then(res => {
+    seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
       res.data.forEach(item => {
         let fileName = item.name.toLowerCase();

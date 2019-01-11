@@ -160,7 +160,7 @@ class DirView extends React.Component {
   updateDirentList = (path) => {
     let repoID = this.state.repoID;
     this.setState({isDirentListLoading: true});
-    seafileAPI.listDir(repoID, path).then(res => {
+    seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = res.data.map(item => {
         let fileName = item.name.toLowerCase();
         if (fileName === 'readme.md' || fileName === 'readme.markdown') {

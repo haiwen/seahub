@@ -28,6 +28,9 @@ class Dirent {
         });
       }
       this.file_tags = file_tags;
+      if (json.encoded_thumbnail_src) {
+        this.encoded_thumbnail_src = json.encoded_thumbnail_src;
+      }
     }
   }
 
