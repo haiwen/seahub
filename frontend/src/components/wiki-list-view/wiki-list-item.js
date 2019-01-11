@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import PermissionEditor from '../select-editor/permission-editor';
+import WikiPermissionEditor from '../select-editor/wiki-permission-editor.js';
 import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
@@ -170,7 +170,7 @@ class WikiListItem extends Component {
           <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
           <td>
-            <PermissionEditor 
+            <WikiPermissionEditor 
               isTextMode={true}
               isEditIconShow={this.state.showOpIcon}
               currentPermission={this.state.permission}

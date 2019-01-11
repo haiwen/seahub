@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../utils/utils';
+import { gettext } from '../../utils/constants';
 import SelectEditor from './select-editor';
 
 const propTypes = {
@@ -11,10 +11,16 @@ const propTypes = {
   onPermissionChangedHandler: PropTypes.func.isRequired
 };
 
-class PermissionEditor extends React.Component {
+class WikiPermissionEditor extends React.Component {
 
   translatePermission = (permission) => {
-    return Utils.sharePerms(permission);
+    if (permission === 'private') {
+      return gettext('Private');
+    }
+    
+    if (permission === 'public') {
+      return gettext('Public');
+    }
   }
 
   render() {
@@ -29,8 +35,9 @@ class PermissionEditor extends React.Component {
       />
     );
   }
+
 }
 
-PermissionEditor.propTypes = propTypes;
+WikiPermissionEditor.propTypes = propTypes;
 
-export default PermissionEditor;
+export default WikiPermissionEditor;
