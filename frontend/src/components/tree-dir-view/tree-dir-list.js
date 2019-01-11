@@ -21,7 +21,6 @@ class TreeDirList extends React.Component {
     this.setState({highlight: true});
   }
 
-
   onMouseLeave = () => {
     this.setState({highlight: false});
   }
@@ -37,7 +36,7 @@ class TreeDirList extends React.Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="text-center">
-          <img className="icon" src={node.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt='icon'></img>
+          <img className="icon" src={node.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt='icon' />
         </td>
         <td className="name">
           <a href={href} onClick={this.onMainNodeClick}>{node.name}</a>

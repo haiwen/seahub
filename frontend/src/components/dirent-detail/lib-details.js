@@ -35,13 +35,13 @@ class LibDetail extends React.Component {
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.closeDetails}></div>
           <div className="detail-title dirent-title">
-            <img src={siteRoot + 'media/img/lib/256/lib.png'} alt="icon"></img>{'  '}
+            <img src={siteRoot + 'media/img/lib/256/lib.png'} alt="icon" />{'  '}
             <span className="name ellipsis" title={repo.repo_name}>{repo.repo_name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={siteRoot + 'media/img/lib/256/lib.png'} alt="icon"></img>
+            <img src={siteRoot + 'media/img/lib/256/lib.png'} alt="icon" />
           </div>
           <div className="dirent-table-container">
             <table className="table-thead-hidden">
