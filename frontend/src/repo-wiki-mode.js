@@ -353,6 +353,7 @@ class Wiki extends Component {
       let path = this.getPathFromInternalDirLink(url);
       this.showDir(path);
     }
+    window.open(url);
   }
 
   updateUsedRepoTags = (newUsedRepoTags) => {
