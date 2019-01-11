@@ -844,7 +844,7 @@ def file_revisions(request, repo_id):
         else:
             logger.error('Wrong type of suffix_list: %s' % repr(suffix_list))
             suffix_list = []
-        use_new_page = True if '.' + file_ext in suffix_list else False
+        use_new_page = True if file_ext in suffix_list else False
 
     if use_new_page:
         return render(request, 'file_revisions_new.html', {
