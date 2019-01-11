@@ -17,7 +17,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 
 let loginUser = window.app.pageOptions.name;
-const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
+const { serviceURL, repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
 
 class SharedFileViewMarkdown extends React.Component {
 
@@ -99,7 +99,13 @@ class SharedFileViewMarkdown extends React.Component {
           </div>
           <div className="shared-file-view-body">
             <div className="md-view">
-              <MarkdownViewer markdownContent={this.state.markdownContent} showTOC={false} />
+              <MarkdownViewer markdownContent={this.state.markdownContent}
+                              showTOC={false}
+                              serviceURL={serviceURL}
+                              isShared={true} 
+                              sharedToken={sharedToken}
+                              repoID={repoID}
+              />
             </div>
           </div>
         </div>
