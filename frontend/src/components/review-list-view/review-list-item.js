@@ -103,7 +103,7 @@ class ReviewListItem extends React.Component {
 
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="text-center" style={{width: '4%'}}><img className="icon" src={siteRoot + 'media/img/file/192/txt.png'} alt="icon"/></td>
+        <td className="text-center" style={{width: '4%'}}><img src={siteRoot + 'media/img/file/192/txt.png'} alt="icon"/></td>
         <td style={{width: '26%'}}><a href={reviewUrl} target="_blank">{fileName}</a></td>
         <td className='library' style={{width: '25%'}}>{item.draft_origin_repo_name}</td>
         <td className="update" style={{width: '20%'}}>{localTime}</td>

@@ -149,7 +149,7 @@ class Item extends Component {
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img className="icon" src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td><Link to={folderUrl}>{item.folder_name}</Link></td>
         {shareTo}
         <td>

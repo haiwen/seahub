@@ -58,7 +58,7 @@ class DraftListItem extends React.Component {
     localTime = moment(localTime).fromNow();
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="text-center"><img className="icon" src={siteRoot + 'media/img/file/192/txt.png'} alt='icon' /></td>
+        <td className="text-center"><img src={siteRoot + 'media/img/file/192/txt.png'} alt='icon' /></td>
         <td className="name" >
           <a href={draftUrl} target="_blank">{fileName}</a>
         </td>

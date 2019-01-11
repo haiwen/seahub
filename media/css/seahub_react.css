@@ -844,9 +844,9 @@ table td {
     word-break: break-all;
 }
 
-table td .icon {
-    width: 24px;
-    height: 24px;
+table td img {
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 .table-thead-hidden thead tr {

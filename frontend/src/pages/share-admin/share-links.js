@@ -170,7 +170,7 @@ class Item extends Component {
 
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img className="icon" src={iconUrl} width="24" /></td>
+        <td><img src={iconUrl} width="24" /></td>
         <td>
           {item.is_dir ?
             <Link to={linkUrl}>{item.obj_name}</Link> :
