@@ -163,7 +163,7 @@
     {% endif %}
 
     {% if can_download_file %}
-    <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
+    <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download-file" title="{% trans "Download"%}"></a>
     {% endif %}
 
     {% if enable_file_comment %}
@@ -206,7 +206,7 @@
 
             {% if can_download_file %}
             <li>
-                <a id="download" class="op download" href="?dl=1" title="{% trans "Download"%}">{% trans "Download"%}</a>
+                <a id="download-file" class="op download" href="?dl=1" title="{% trans "Download"%}">{% trans "Download"%}</a>
             </li>
             {% endif %}
         </ul>
@@ -610,7 +610,7 @@ var DropDownMenu = {
                 }
                 return true;
             });
-            $("#download").on("click", function(){
+            $("#download-file").on("click", function(){
                 _this.clickToClosePopMenu();
             })
         }
