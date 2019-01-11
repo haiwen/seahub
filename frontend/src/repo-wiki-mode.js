@@ -83,6 +83,7 @@ class Wiki extends Component {
     seafileAPI.getRepoInfo(repoID).then(res => {
       this.setState({
         libNeedDecrypt: res.data.lib_need_decrypt, 
+        encrypted: res.data.encrypted
       });
 
     if (!res.data.lib_need_decrypt) {
@@ -323,9 +324,9 @@ class Wiki extends Component {
     });
   }
 
-  loadDirentList = (direntPath) => {
+  loadDirentList = (path) => {
     this.setState({isDirentListLoading: true});
-    seafileAPI.listDir(repoID, direntPath).then(res => {
+    seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
       res.data.forEach(item => {
         let fileName = item.name.toLowerCase();
@@ -335,14 +336,49 @@ class Wiki extends Component {
         let dirent = new Dirent(item);
         direntList.push(dirent);
       });
+
       this.setState({
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         isDirentListLoading: false,
         dirID: res.headers.oid,
       });
+
+      if (!this.state.encrypted && direntList.length) {
+        this.getThumbnails(repoID, path, this.state.direntList);
+      }
     });
   }
 
+  getThumbnails = (repoID, path, direntList) => {
+    let items = direntList.filter((item) => {
+      return Utils.imageCheck(item.name) && !item.encoded_thumbnail_src;
+    });
+    if (items.length == 0) {
+      return ;
+    }
+
+    const _this = this;
+    const len = items.length;
+    const thumbnailSize = 48;
+    let getThumbnail = (i) => {
+      const curItem = items[i];
+      const curItemPath = [path, curItem.name].join('/');
+      seafileAPI.createThumbnail(repoID, curItemPath, thumbnailSize).then((res) => {
+        curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
+      }).catch((error) => {
+        // do nothing
+      }).then(() => {
+        if (i < len - 1) {
+          getThumbnail(++i);
+        } else {
+          _this.setState({
+            direntList: direntList 
+          });
+        }
+      });
+    };
+    getThumbnail(0);
+  }
 
   onLinkClick = (event) => {
     const url = event.path[2].href;

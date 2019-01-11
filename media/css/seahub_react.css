@@ -1032,3 +1032,10 @@ a.table-sort-op:focus {
   text-align: center;
   z-index: 4;
 }
+
+/* thumbnail */
+.thumbnail {
+    max-width: 24px;
+    max-height: 24px;
+}
+
