@@ -30,13 +30,34 @@ class Wiki extends Component {
       permission: '',
       isFileLoading: false,
       changedNode: null,
-      isViewFileState: true
+      isViewFileState: true,
+      hasIndex: false,
+      indexContent: '',
     };
     window.onpopstate = this.onpopstate;
   }
 
   componentDidMount() {
     this.initWikiData(initialPath);
+  }
+
+  getIndexContent = (files) => {
+    this.setState({
+      hasIndex: false,
+      indexContent: '',
+    });
+    files.some(file => {
+      if (file.type === 'file' && file.name === 'index.md') {
+        let filePath = Utils.joinPath(file.parent_path, file.name);
+        editorUtilities.getWikiFileContent(slug, filePath).then((res) => {
+          this.setState({
+            hasIndex: true,
+            indexContent: res.data.content,
+          });
+          return;
+        });
+      }
+    });
   }
 
   initWikiData(filePath){
@@ -68,6 +89,7 @@ class Wiki extends Component {
         let fileUrl = siteRoot + 'wikis/' + slug + filePath + hash;
         window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
       }
+      this.getIndexContent(files);
     }, () => {
       this.setState({
         isLoadFailed: true
@@ -492,6 +514,9 @@ class Wiki extends Component {
           onRenameNode={this.onRenameNode}
           onDeleteNode={this.onDeleteNode}
           onDirCollapse={this.onDirCollapse}
+          onLinkClick={this.onLinkClick}
+          hasIndex={this.state.hasIndex}
+          indexContent={this.state.indexContent}
         />
         <MainPanel
           content={this.state.content}

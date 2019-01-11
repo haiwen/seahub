@@ -34,6 +34,12 @@
 .wiki-pages-container .tree-view {
   padding-left:0;
 }
+.wiki-pages-container .article {
+  padding: 0 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
 
 .wiki-md-viewer-rendered-content {
   padding: 30px 0 0;
