@@ -168,7 +168,7 @@ class Item extends Component {
           {
             data.thumbnail_url ?
               <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
-              <img src={data.file_icon_url} alt={gettext('icon')} width="24" />
+              <img className="icon" src={data.file_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
         <td>
@@ -192,7 +192,7 @@ class Item extends Component {
           {
             data.thumbnail_url ?
               <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
-              <img src={data.file_icon_url} alt={gettext('icon')} width="24" />
+              <img className="icon" src={data.file_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
         <td>
