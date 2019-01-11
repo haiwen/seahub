@@ -240,7 +240,7 @@ class Item extends Component {
     const desktopItem = (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td><img className="icon" src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td>
             {this.state.showChangeLibName && (
               <RenameInput 
@@ -278,7 +278,7 @@ class Item extends Component {
     const mobileItem = (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td><img className="icon" src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td>
             {data.repo_name ?
               <Link to={data.url}>{data.repo_name}</Link> :

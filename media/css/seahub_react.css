@@ -844,11 +844,6 @@ table td {
     word-break: break-all;
 }
 
-table td .icon {
-    width: 24px;
-    height: 24px;
-}
-
 .table-thead-hidden thead tr {
     height: 0;
     border: 0;

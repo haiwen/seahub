@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Tooltip } from 'reactstrap';
 import { siteRoot, lang } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 moment.locale(lang);
 const propTypes = {
@@ -101,9 +102,12 @@ class ReviewListItem extends React.Component {
     let localTime = moment.utc(item.updated_at).toDate();
     localTime = moment(localTime).fromNow();
 
+    let size = Utils.isHiDPI() ? 48 : 24;
+    let iconUrl = Utils.getFileIconUrl(fileName, size);
+
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="text-center" style={{width: '4%'}}><img className="icon" src={siteRoot + 'media/img/file/192/txt.png'} alt="icon"/></td>
+        <td className="text-center" style={{width: '4%'}}><img src={iconUrl} width="24" alt="" /></td>
         <td style={{width: '26%'}}><a href={reviewUrl} target="_blank">{fileName}</a></td>
         <td className='library' style={{width: '25%'}}>{item.draft_origin_repo_name}</td>
         <td className="update" style={{width: '20%'}}>{localTime}</td>

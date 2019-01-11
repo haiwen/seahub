@@ -293,7 +293,7 @@ class SharedRepoListItem extends React.Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-          <td><img className="icon" src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
+          <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
           <td><Link to={libPath}>{repo.repo_name}</Link></td>
           <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
           <td>{repo.size}</td>
@@ -323,7 +323,7 @@ class SharedRepoListItem extends React.Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-          <td><img className="icon" src={iconUrl} title={iconTitle} alt={iconTitle}/></td>
+          <td><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
           <td>
             <Link to={libPath}>{repo.repo_name}</Link><br />
             <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
