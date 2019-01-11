@@ -183,7 +183,7 @@ urlpatterns = [
     url(r'^d/(?P<token>[a-f0-9]+)/$', view_shared_dir, name='view_shared_dir'),
     url(r'^d/(?P<token>[a-f0-9]+)/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
     url(r'^u/d/(?P<token>[a-f0-9]+)/$', view_shared_upload_link, name='view_shared_upload_link'),
-    url(r'^media-file-via-share-link/$', view_media_file_via_share_link, name='view_media_file_via_share_link'),
+    url(r'^view-image-via-share-link/$', view_media_file_via_share_link, name='view_media_file_via_share_link'),
 
     ### Misc ###
     url(r'^image-view/(?P<filename>.*)$', image_view, name='image_view'),
