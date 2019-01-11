@@ -62,12 +62,6 @@ class SharedFileViewMarkdown extends React.Component {
     }
   }
 
-  initialMarkdownContent = (data) => {
-    const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*\?raw=1', 'g');
-    const imageUrls = data.match(re); 
-    
-  }
-
   render() {
     if (this.state.loading) {
       return <Loading />
