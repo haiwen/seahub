@@ -24,19 +24,24 @@
   height: 2.25rem;
 }
 
-.tag-list-item .tag-demo {
+.tag-list-item .tag-demo-container {
+  flex: 1;
+  border-radius: 0.25rem;
+  display: flex;
+}
+
+ .tag-demo-container .tag-demo {
   flex: 1;
   border-radius: 0.25rem;
   display: flex;
   align-items: center;
   color: #ffffff;
   overflow: hidden;
-  padding: 10px;
+  padding: 0 10px;
 }
 
-.show-tag-selected {
-  width: .5em;
-  align-self: stretch;
+.tag-selected {
+  margin-left: 0.5rem;
 }
 
 .tag-demo .tag-name {

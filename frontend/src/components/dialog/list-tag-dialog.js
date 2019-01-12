@@ -46,13 +46,14 @@ class TagListItem extends React.Component {
     let color = this.props.item.color;
     return (
       <li className="tag-list-item">
-        <div className={`tag-demo bg-${color}`} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-          <span className={`bg-${color}-dark ${this.state.showSelectedTag ? 'show-tag-selected': ''}`}></span>
-          <span className="tag-name">{this.props.item.name}</span>
-          <span className="tag-files" onClick={this.onListTaggedFiles}>
-            {/* todo 0 file 2 files  */}
-            {this.props.item.fileCount}{' '}{'files'}
-          </span>
+        <div className={`tag-demo-container bg-${color}-dark`}>
+          <div className={`tag-demo bg-${color} ${this.state.showSelectedTag ? 'tag-selected' : ''}`} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+            <span className="tag-name">{this.props.item.name}</span>
+            <span className="tag-files" onClick={this.onListTaggedFiles}>
+              {/* todo 0 file 2 files  */}
+              {this.props.item.fileCount}{' '}{'files'}
+            </span>
+          </div>
         </div>
         <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
       </li>
