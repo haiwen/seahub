@@ -4,6 +4,8 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import moment from 'moment';
+import Repo from '../../models/repo';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
@@ -24,9 +26,12 @@ class WikiSelectDialog extends React.Component {
 
   componentDidMount() {
     seafileAPI.listRepos().then(res => {
-      this.setState({
-        repos: res.data.repos,
-      }); 
+      let repoList = res.data.repos.map(item => {
+        let repo = new Repo(item);
+        return repo;
+      });
+      repoList = Utils.sortRepos(repoList, 'name', 'asc');
+      this.setState({repos: repoList}); 
     });
   }
 
@@ -66,7 +71,7 @@ class WikiSelectDialog extends React.Component {
                 return (
                   <tr key={index}>
                     <td className="text-center"><input type="radio" className="vam" name="repo" value={repo.repo_id} onChange={this.onChange.bind(this, repo)} /></td>
-                    <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt={gettext('icon')} /></td>
+                    <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} width="24" alt={gettext('icon')} /></td>
                     <td>{gettext(repo.repo_name)}</td>
                     <td>{moment(repo.last_modified).fromNow()}</td>
                   </tr>
