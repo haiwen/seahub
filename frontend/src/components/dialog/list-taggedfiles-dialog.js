@@ -61,12 +61,7 @@ class ListTaggedFilesDialog extends React.Component {
             <tbody>
               {taggedFileList.map((taggedFile, index) => {
                 let path = Utils.joinPath(taggedFile.parent_path, taggedFile.filename);
-                let href = '';
-                if (Utils.isMarkdownFile(path)) {
-                  href = siteRoot + 'wiki/lib/' + this.props.repoID + Utils.encodePath(path);
-                } else {
-                  href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
-                }
+                let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
                 return (
                   <tr key={index}>
                     <td className="name">
