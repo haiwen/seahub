@@ -787,6 +787,7 @@ a.sf-popover-item:hover {
     border-bottom: 1px solid #e8e8e8;
     display:flex;
     flex-shrink:0;
+    min-height: 49px;
 }
 
 /* top logo */
