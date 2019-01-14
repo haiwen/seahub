@@ -2016,29 +2016,29 @@ def view_media_file_via_share_link(request):
     file_share = FileShare.objects.get_valid_file_link_by_token(token)
 
     if not file_share:
-        err_msg = _(u'Shared link does not exist')
+        err_msg = 'Share link does not exist'
         return render_error(request, err_msg)
 
     if file_share.is_expired():
-        err_msg = _(u'Shared link has expired')
+        err_msg = 'Share link has expired'
         return render_error(request, err_msg)
 
     shared_file_name = os.path.basename(file_share.path)
     file_type, file_ext = get_file_type_and_ext(shared_file_name)
 
     if file_type != MARKDOWN:
-        err_msg = _(u'Invalid file type')
+        err_msg = 'Invalid file type'
         return render_error(request, err_msg)
 
     # recourse check
     repo_id = file_share.repo_id
     repo = get_repo(repo_id)
     if not repo:
-        return render_error(request, _(u'Repo does not exist'))
+        return render_error(request, 'Repo does not exist')
 
     file_id = seafile_api.get_file_id_by_path(repo_id, file_share.path)
     if not file_id:
-        return render_error(request, _(u'File does not exist'))
+        return render_error(request, 'File does not exist')
 
     # read file from cache, if hit
     cache_key = normalize_cache_key(file_id, token=token)
@@ -2064,12 +2064,12 @@ def view_media_file_via_share_link(request):
     p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
     result = re.search(p, file_content)
     if not result:
-        return render_error(request, _(u'Image does not exist'))
+        return render_error(request, 'Image does not exist')
 
     # get image
     obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)
     if not obj_id:
-        return render_error(request, _(u'Image does not exist'))
+        return render_error(request, 'Image does not exist')
 
     access_token = seafile_api.get_fileserver_access_token(repo_id,
             obj_id, 'view', '', use_onetime=False)
