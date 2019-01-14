@@ -8,7 +8,7 @@ const propTypes = {
   isEditIconShow: PropTypes.bool.isRequired,
   roles: PropTypes.array.isRequired,
   currentRole: PropTypes.string.isRequired,
-  onRoleChangedHandler: PropTypes.func.isRequired,
+  onRoleChanged: PropTypes.func.isRequired,
 };
 
 class RoleEditor extends React.Component {
@@ -30,7 +30,7 @@ class RoleEditor extends React.Component {
         isEditIconShow={this.props.isEditIconShow}
         options={this.props.roles}
         currentOption={this.props.currentRole}
-        onOptionChangedHandler={this.props.onRoleChangedHandler}
+        onOptionChanged={this.props.onRoleChanged}
         translateOption={this.translateRole}
       />
     );

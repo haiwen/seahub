@@ -175,7 +175,7 @@ class WikiListItem extends Component {
               isEditIconShow={this.state.showOpIcon}
               currentPermission={this.state.permission}
               permissions={this.permissions}
-              onPermissionChangedHandler={this.changePerm}
+              onPermissionChanged={this.changePerm}
             />
           </td>
           <td className="text-center cursor-pointer">

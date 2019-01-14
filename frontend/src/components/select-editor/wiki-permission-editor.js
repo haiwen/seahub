@@ -8,7 +8,7 @@ const propTypes = {
   isEditIconShow: PropTypes.bool.isRequired,
   permissions: PropTypes.array.isRequired,
   currentPermission: PropTypes.string.isRequired,
-  onPermissionChangedHandler: PropTypes.func.isRequired
+  onPermissionChanged: PropTypes.func.isRequired
 };
 
 class WikiPermissionEditor extends React.Component {
@@ -30,7 +30,7 @@ class WikiPermissionEditor extends React.Component {
         isEditIconShow={this.props.isEditIconShow}
         options={this.props.permissions}
         currentOption={this.props.currentPermission}
-        onOptionChangedHandler={this.props.onPermissionChangedHandler}
+        onOptionChanged={this.props.onPermissionChanged}
         translateOption={this.translatePermission}
       />
     );

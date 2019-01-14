@@ -45,7 +45,7 @@ class GroupItem extends React.Component {
             isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
             permissions={this.props.permissions}
-            onPermissionChangedHandler={this.onChangeUserPermission}
+            onPermissionChanged={this.onChangeUserPermission}
           />
         </td>
         <td>
@@ -275,7 +275,7 @@ class ShareToGroup extends React.Component {
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
-                  onPermissionChangedHandler={this.setPermission}
+                  onPermissionChanged={this.setPermission}
                 />
               </td>
               <td>
