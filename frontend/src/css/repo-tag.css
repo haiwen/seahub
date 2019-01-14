@@ -31,11 +31,10 @@
   align-items: center;
   color: #ffffff;
   overflow: hidden;
-  padding: 10px;
 }
 
 .show-tag-selected {
-  width: .5em;
+  width: 0.5rem;
   align-self: stretch;
 }
 
