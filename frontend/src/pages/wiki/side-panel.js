@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../utils/constants';
+import { gettext, siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight, repoID } from '../../utils/constants';
 import TreeView from '../../components/tree-view/tree-view';
 import NodeMenu from '../../components/tree-view/node-menu';
 import MenuControl from '../../components/menu-control';
@@ -25,6 +25,8 @@ const propTypes = {
   onLinkClick: PropTypes.func,
   hasIndex: PropTypes.bool.isRequired,
   indexContent: PropTypes.string,
+  indexPath: PropTypes.string,
+  indexPermission: PropTypes.string,
 };
 
 class SidePanel extends Component {
@@ -177,6 +179,11 @@ class SidePanel extends Component {
     this.setState({showRename: !this.state.showRename});
   }
 
+  onEditClick = (e) => {
+    e.preventDefault();
+    window.location.href= siteRoot + 'lib/' + repoID + '/file' + this.props.indexPath + '?mode=edit';
+  }
+
   onContentRendered = () => {
     // todo
   }
@@ -193,7 +200,12 @@ class SidePanel extends Component {
         <div id="side-nav" className="wiki-side-nav" role="navigation">
           {this.props.hasIndex ?
             <Fragment>
-              <h3 className="wiki-pages-heading">{gettext('Contents')}</h3>
+              <h3 className="wiki-pages-heading">
+                {gettext('Contents')}
+                {this.props.indexPermission === 'rw' && 
+                  <button className="index-edit" title="Edit Index" onClick={this.onEditClick}>{gettext('Edit')}</button>
+                }
+              </h3>
               <div className="wiki-pages-container">
                 <IndexContentViewer
                   onLinkClick={this.props.onLinkClick}

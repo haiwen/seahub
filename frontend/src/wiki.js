@@ -33,6 +33,8 @@ class Wiki extends Component {
       isViewFileState: true,
       hasIndex: false,
       indexContent: '',
+      indexPath: '',
+      indexPermission: '',
     };
     window.onpopstate = this.onpopstate;
   }
@@ -49,6 +51,8 @@ class Wiki extends Component {
           this.setState({
             hasIndex: true,
             indexContent: res.data.content,
+            indexPath: filePath,
+            indexPermission: res.data.permission,
           });
           return;
         });
@@ -99,6 +103,7 @@ class Wiki extends Component {
       .then(res => {
         this.setState({
           content: res.data.content,
+          isViewFileState: true,
           latestContributor: res.data.latest_contributor,
           lastModified: moment.unix(res.data.last_modified).fromNow(),
           permission: res.data.permission,
@@ -468,7 +473,7 @@ class Wiki extends Component {
   }
 
   isInternalDirLink(url) {
-    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '/.*');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '/.*');
     return re.test(url);
   }
 
@@ -480,11 +485,12 @@ class Wiki extends Component {
   }
 
   getPathFromInternalDirLink(url) {
-    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '(/.*)');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
 
-    var dirPath = path.substring(1);
+    var index = path.substring(1).indexOf('/');
+    var dirPath = path.substring(index + 1);
     re = new RegExp('(^/.*)');
     if (re.test(dirPath)) {
       path = dirPath;
@@ -513,6 +519,8 @@ class Wiki extends Component {
           onLinkClick={this.onLinkClick}
           hasIndex={this.state.hasIndex}
           indexContent={this.state.indexContent}
+          indexPath={this.state.indexPath}
+          indexPermission={this.state.indexPermission}
         />
         <MainPanel
           content={this.state.content}

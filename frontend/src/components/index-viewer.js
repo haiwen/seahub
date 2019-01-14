@@ -8,17 +8,10 @@ const viewerPropTypes = {
   indexContent: PropTypes.string,
 };
 
-const contentClass = 'markdown-content';
-
 class IndexContentViewer extends React.Component {
 
-  componentDidUpdate () {
-    var links = document.querySelectorAll(`.${contentClass} a`);
-    links.forEach((li) => {li.addEventListener('click', this.onLinkClick); });
-  }
-
   onLinkClick = (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     this.props.onLinkClick(event);
   }
 
