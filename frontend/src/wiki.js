@@ -42,10 +42,6 @@ class Wiki extends Component {
   }
 
   getIndexContent = (files) => {
-    this.setState({
-      hasIndex: false,
-      indexContent: '',
-    });
     files.some(file => {
       if (file.type === 'file' && file.name === 'index.md') {
         let filePath = Utils.joinPath(file.parent_path, file.name);

@@ -177,6 +177,10 @@ class SidePanel extends Component {
     this.setState({showRename: !this.state.showRename});
   }
 
+  onContentRendered = () => {
+    // todo
+  }
+
   render() {
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
@@ -193,7 +197,7 @@ class SidePanel extends Component {
               <div className="wiki-pages-container">
                 <IndexContentViewer
                   onLinkClick={this.props.onLinkClick}
-                  hasIndex={this.props.hasIndex}
+                  onContentRendered={this.onContentRendered}
                   indexContent={this.props.indexContent}
                 />
               </div>

@@ -4,11 +4,11 @@ import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer'
 
 const viewerPropTypes = {
   onLinkClick: PropTypes.func,
-  hasIndex: PropTypes.bool.isRequired,
+  onContentRendered: PropTypes.func.isRequired,
   indexContent: PropTypes.string,
-}
+};
 
-const contentClass = 'wiki-pages-container';
+const contentClass = 'markdown-content';
 
 class IndexContentViewer extends React.Component {
 
@@ -22,16 +22,14 @@ class IndexContentViewer extends React.Component {
     this.props.onLinkClick(event);
   }
 
-  onContentRendered = () => {
-    // todo
-  }
-
   render() {
     return (
-      <MarkdownViewer
-        markdownContent={this.props.indexContent}
-        onContentRendered={this.onContentRendered}
-      />  
+      <div className="markdown-content">
+        <MarkdownViewer
+          markdownContent={this.props.indexContent}
+          onContentRendered={this.props.onContentRendered}
+        />
+      </div>
     );
   }
 
