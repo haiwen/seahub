@@ -2016,52 +2016,60 @@ def view_media_file_via_share_link(request):
     file_share = FileShare.objects.get_valid_file_link_by_token(token)
 
     if not file_share:
-        raise Http404
+        err_msg = _(u'Shared link does not exist')
+        return render_error(request, err_msg)
+
+    if file_share.is_expired():
+        err_msg = _(u'Shared link has expired')
+        return render_error(request, err_msg)
 
     shared_file_name = os.path.basename(file_share.path)
-    file_type, _ = get_file_type_and_ext(shared_file_name)
+    file_type, file_ext = get_file_type_and_ext(shared_file_name)
 
     if file_type != MARKDOWN:
-        raise Http404
+        err_msg = _(u'Invalid file type')
+        return render_error(request, err_msg)
 
     # recourse check
     repo_id = file_share.repo_id
     repo = get_repo(repo_id)
     if not repo:
-        raise Http404
+        return render_error(request, _(u'Repo does not exist'))
+
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_share.path)
+    if not file_id:
+        return render_error(request, _(u'File does not exist'))
 
     # read file from cache, if hit
-    cache_key = normalize_cache_key(shared_file_name, token=token)
+    cache_key = normalize_cache_key(file_id, token=token)
     file_content = cache.get(cache_key)
     if not file_content:
         # otherwise, read file from database and update cache
-        file_id = seafile_api.get_file_id_by_path(repo_id, file_share.path)
-        if not file_id:
-            return render_error(request, _(u'File does not exist'))
-
         access_token = seafile_api.get_fileserver_access_token(repo_id,
                 file_id, 'view', '', use_onetime=False)
 
         if not access_token:
-            return render_error(request, _(u'Unable to view file'))
+            err_msg = 'Unable to view file'
+            return render_error(request, err_msg)
 
         shared_file_raw_path = gen_inner_file_get_url(access_token, shared_file_name)
 
-        _, file_content, _ = repo_file_get(shared_file_raw_path, 'auto')
+        err, file_content, encode = repo_file_get(shared_file_raw_path, 'auto')
         cache.set(cache_key, file_content, 24 * 60 * 60)
 
     # If the image does not exist in markdown
     serviceURL = get_service_url().rstrip('/')
     image_file_name = os.path.basename(image_path)
+    image_file_name = urlquote(image_file_name)
     p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
     result = re.search(p, file_content)
     if not result:
-        raise Http404
+        return render_error(request, _(u'Image does not exist'))
 
     # get image
     obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)
     if not obj_id:
-        return render_error(request, _(u'File does not exist'))
+        return render_error(request, _(u'Image does not exist'))
 
     access_token = seafile_api.get_fileserver_access_token(repo_id,
             obj_id, 'view', '', use_onetime=False)
