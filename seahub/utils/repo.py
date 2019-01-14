@@ -272,13 +272,13 @@ def add_encrypted_repo_secret_key_to_database(repo_id, password):
         logger.error(e)
 
 
-def is_group_repo_staff(repo_id, username):
+def is_group_repo_staff(request, repo_id, username):
     is_staff = False
 
-    group_repo_owner = seafile_api.get_repo_owner(repo_id)
+    repo_owner = get_repo_owner(request, repo_id)
 
-    if '@seafile_group' in group_repo_owner:
-        group_id = email2nickname(group_repo_owner)
+    if '@seafile_group' in repo_owner:
+        group_id = email2nickname(repo_owner)
         is_staff = seaserv.check_group_staff(group_id, username)
 
     return is_staff
