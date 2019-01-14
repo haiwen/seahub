@@ -9,7 +9,7 @@ const propTypes = {
   options: PropTypes.array.isRequired,
   currentOption: PropTypes.string.isRequired,
   translateOption: PropTypes.func.isRequired,
-  onOptionChangedHandler: PropTypes.func.isRequired,
+  onOptionChanged: PropTypes.func.isRequired,
 };
 
 class SelectEditor extends React.Component {
@@ -34,11 +34,11 @@ class SelectEditor extends React.Component {
     this.setState({isEditing: true});
   }
 
-  onOptionChangedHandler = (e) => {
+  onOptionChanged = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     let permission = e.target.value;
     if (permission !== this.props.currentOption) {
-      this.props.onOptionChangedHandler(permission);
+      this.props.onOptionChanged(permission);
     }
     this.setState({isEditing: false});
   }
@@ -66,7 +66,7 @@ class SelectEditor extends React.Component {
     return (
       <div className="permission-editor">
         {(!isTextMode || this.state.isEditing) &&
-          <Input style={selectStyle} type="select" onChange={this.onOptionChangedHandler} onClick={this.onSelectHandler} value={currentOption}>
+          <Input style={selectStyle} type="select" onChange={this.onOptionChanged} onClick={this.onSelectHandler} value={currentOption}>
             {options.map((item, index) => {
               return (
                 <option key={index} value={item}>{this.props.translateOption(item)}</option>

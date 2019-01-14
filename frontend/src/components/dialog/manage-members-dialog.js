@@ -182,7 +182,7 @@ class Member extends React.PureComponent {
               isEditIconShow={true}
               currentRole={this.props.item.role}
               roles={this.roles}
-              onRoleChangedHandler={this.onChangeUserRole}
+              onRoleChanged={this.onChangeUserRole}
             />
           }
         </td>

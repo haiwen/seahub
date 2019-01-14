@@ -158,7 +158,7 @@ class Item extends Component {
             isEditIconShow={this.state.showOpIcon}
             currentPermission={this.state.share_permission}
             permissions={this.permissions}
-            onPermissionChangedHandler={this.changePerm}
+            onPermissionChanged={this.changePerm}
           />
         </td>
         <td><a href="#" className={unshareIconClassName} title={gettext('Unshare')} onClick={this.unshare}></a></td>
