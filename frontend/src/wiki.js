@@ -113,7 +113,7 @@ class Wiki extends Component {
   }
 
   onLinkClick = (event) => {
-    const url = event.target.href;
+    const url = event.path[2].href;
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
       this.initMainPanelData(path);
