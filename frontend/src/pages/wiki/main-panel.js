@@ -102,8 +102,12 @@ class MainPanel extends Component {
         <div className="cur-view-container">
           <div className="cur-view-path">
             <div className="path-containter">
-              {loginUser ? <a href={siteRoot + 'wikis/'} className="normal">{gettext('Wikis')}</a>: ''}
-              {loginUser ? <span className="path-split">/</span> : ''}
+              {loginUser &&
+                <Fragment>
+                  <a href={siteRoot + 'wikis/'} className="normal">{gettext('Wikis')}</a>
+                  <span className="path-split">/</span>
+                </Fragment>
+              }
               <a href={siteRoot + 'wikis/' + slug} className="normal">{slug}</a>
               {pathElem}
             </div>
