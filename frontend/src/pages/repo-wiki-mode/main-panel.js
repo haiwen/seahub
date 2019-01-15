@@ -62,6 +62,10 @@ const propTypes = {
   reviewID: PropTypes.any,
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
+  drafts: PropTypes.array,
+  reviews: PropTypes.array,
+  draftCounts: PropTypes.number,
+  reviewCounts: PropTypes.number,
 };
 
 class MainPanel extends Component {
@@ -263,6 +267,10 @@ class MainPanel extends Component {
                           currentPath={this.props.path}
                           usedRepoTags={this.props.usedRepoTags}
                           readmeMarkdown={this.props.readmeMarkdown}
+                          drafts={this.props.drafts}
+                          reviews={this.props.reviews}
+                          draftCounts={this.props.draftCounts}
+                          reviewCounts={this.props.reviewCounts}
                         />
                       )}
                       <DirentListView
