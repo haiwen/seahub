@@ -60,14 +60,21 @@ img[src=""] {
   min-height: 0;
 }
 
-.cur-view-content .markdown-container{
-  padding: 0 1.5rem;
+.cur-view-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cur-view-content .wiki-page-container{
+  margin: -0.625rem -1rem -1.25rem;
+  padding: 0.625rem 1rem 1.25rem;
   display: flex;
   flex: 1;
   overflow: auto;
 }
 
-.cur-view-content .markdown-content {
+.cur-view-content .wiki-page-content {
   width: calc(100% - 160px);
   padding-right: 40px;
 }
@@ -86,10 +93,10 @@ img[src=""] {
 }
 
 @media (max-width: 991.98px) {
-  .cur-view-content .markdown-container {
+  .cur-view-content .wiki-page-container {
     padding-right: 1.5rem;
   }
-  .cur-view-content .markdown-content {
+  .cur-view-content .wiki-page-content {
     width: 100%;
     padding-right: 0;
   }
@@ -176,11 +183,11 @@ img[src=""] {
   margin-top: 0;
 }
 
-.markdown-content a {
+.wiki-page-content a {
     cursor: pointer;
 }
 
-.wiki-side-nav .markdown-content a {
+.wiki-side-nav .wiki-page-content a {
   color: #212529;
   cursor: pointer;
 }
@@ -191,11 +198,11 @@ img[src=""] {
   top: 0.25rem;
 }
 
-.wiki-main-panel .markdown-content .ml-2 {
+.wiki-main-panel .wiki-page-content .ml-2 {
   text-decoration: underline;
 }
 
-.wiki-main-panel .markdown-content .ml-2:hover {
+.wiki-main-panel .wiki-page-content .ml-2:hover {
   text-decoration: underline;
   color:#eb8205;
 }

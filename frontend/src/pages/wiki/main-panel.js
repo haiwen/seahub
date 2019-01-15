@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID, slug, siteRoot } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import MarkdownViewer from '../../components/markdown-viewer';
+import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
 let loginUser = window.app.pageOptions.username;
@@ -47,9 +47,6 @@ class MainPanel extends Component {
     this.props.onMainNavBarClick(e.target.dataset.path);
   }
 
-  onContentRendered = (markdownViewer) => {
-    //
-  }
 
   render() {
 
@@ -113,17 +110,16 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className="cur-view-content">
-            { this.props.isViewFileState && 
-              <MarkdownViewer
+            {this.props.isViewFileState && 
+              <WikiMarkdownViewer
                 markdownContent={this.props.content}
-                latestContributor={this.props.latestContributor}
-                lastModified = {this.props.lastModified}
-                onLinkClick={this.props.onLinkClick}
                 isFileLoading={this.props.isFileLoading}
-                onContentRendered={this.onContentRendered}
+                lastModified = {this.props.lastModified}
+                latestContributor={this.props.latestContributor}
+                onLinkClick={this.props.onLinkClick}
               />
             }
-            { !this.props.isViewFileState && 
+            {!this.props.isViewFileState && 
               <TreeDirView node={this.props.changedNode} onMainNodeClick={this.props.onMainNodeClick} />
             }
           </div>
