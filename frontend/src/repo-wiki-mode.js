@@ -902,7 +902,7 @@ class Wiki extends Component {
   }
 
   getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug +'(.*/*.md)');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug + '(.*/*.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
