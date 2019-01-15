@@ -5,6 +5,7 @@ import { gettext } from '../utils/constants';
 import Loading from './loading';
 
 const propTypes = {
+  children: PropTypes.object,
   isFileLoading: PropTypes.bool.isRequired,
   markdownContent: PropTypes.string.isRequired,
   latestContributor: PropTypes.string.isRequired,
