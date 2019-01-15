@@ -905,14 +905,12 @@ class Wiki extends Component {
     var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug +'(.*/*.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
-    console.log(array);
     return path;
   }
   
   getPathFromInternalDirLink(url) {
     var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug  + '(/.*)');
     var array = re.exec(url);
-    console.log(array);
     var path = decodeURIComponent(array[1]);
 
     var index = path.substring(1).indexOf('/');
