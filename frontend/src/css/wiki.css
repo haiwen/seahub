@@ -60,8 +60,14 @@ img[src=""] {
   min-height: 0;
 }
 
+.cur-view-content {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+}
+
 .cur-view-content .markdown-container{
-  padding: 0 1.5rem;
+  padding: 0.625rem 1rem 1.25rem;
   display: flex;
   flex: 1;
   overflow: auto;

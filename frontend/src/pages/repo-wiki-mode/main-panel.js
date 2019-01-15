@@ -10,7 +10,7 @@ import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
 import CurDirPath from '../../components/cur-dir-path';
-import MarkdownContentViewer from '../../components/markdown-viewer';
+import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import FileUploader from '../../components/file-uploader/file-uploader';
@@ -75,10 +75,7 @@ class MainPanel extends Component {
       direntPath: '',
       currentRepoInfo: null,
       isRepoOwner: false,
-      activeTitleIndex: -1,
     };
-    this.titlesInfo = null;
-    this.pageScroll = false;
   }
 
   componentDidMount() {
@@ -152,40 +149,6 @@ class MainPanel extends Component {
     this.props.onFileUploadSuccess(direntObject);
   }
 
-  handlePageScroll = () => {    
-    if (this.props.pathExist && this.props.isViewFile && !this.pageScroll &&  this.titlesInfo && this.titlesInfo.length > 0) {
-      this.pageScroll = true;
-      let that = this;
-      setTimeout(function() {
-        that.pageScroll = false;
-      }, 100);
-      const contentScrollTop = this.refs.curViewContent.scrollTop + 180;
-      let activeTitleIndex;
-      if (contentScrollTop <= this.titlesInfo[0]) {
-        activeTitleIndex = 0;
-      }
-      else if (contentScrollTop > this.titlesInfo[this.titlesInfo.length - 1]) {
-        activeTitleIndex = this.titlesInfo.length - 1;
-      }
-      else {
-        for (let i = 0; i < this.titlesInfo.length - 1; i++) {
-          if (contentScrollTop > this.titlesInfo[i] && this.titlesInfo[i + 1] &&
-            contentScrollTop < this.titlesInfo[i + 1]) {
-            activeTitleIndex = i;
-            break;
-          }
-        }
-      }
-      this.setState({
-        activeTitleIndex: activeTitleIndex
-      });
-    }
-  }
-
-  onContentRendered = (markdownViewer) => {
-    this.titlesInfo = markdownViewer.titlesInfo;
-  }
-
   render() {
     const ErrMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
     
@@ -241,21 +204,32 @@ class MainPanel extends Component {
                 ErrMessage :
                 <Fragment>
                   { this.props.isViewFile ?
-                    <MarkdownContentViewer
+                    <WikiMarkdownViewer
+                      isFileLoading={this.props.isFileLoading}
                       markdownContent={this.props.content}
                       latestContributor={this.props.latestContributor}
                       lastModified = {this.props.lastModified}
-                      isFileLoading={this.props.isFileLoading}
-                      activeTitleIndex={this.state.activeTitleIndex}
-                      onContentRendered={this.onContentRendered}
                       onLinkClick={this.props.onLinkClick}
-                      isDraft={this.props.isDraft}
-                      hasDraft={this.props.hasDraft}
-                      reviewID={this.props.reviewID}
-                      reviewStatus={this.props.reviewStatus}
-                      goDraftPage={this.props.goDraftPage}
-                      goReviewPage={this.props.goReviewPage}
-                    /> :
+                    >
+                      <Fragment>
+                        {this.props.reviewStatus === 'open' &&
+                          <div className='seafile-btn-view-review text-center'>
+                            <div className='tag tag-green'> 
+                              {gettext('This file is in review stage')}
+                              <a className="ml-2" onMouseDown={this.props.goReviewPage}>{gettext('View Review')}</a>
+                            </div>
+                          </div>
+                        }
+                        {(!this.props.isDraft && this.props.hasDraft && this.props.reviewStatus !== 'open') &&
+                          <div className='seafile-btn-view-review text-center'>
+                            <div className='tag tag-green'>
+                              {gettext('This file is in draft stage.')}
+                              <a className="ml-2" onMouseDown={this.props.goDraftPage}>{gettext('Edit Draft')}</a>
+                            </div>
+                          </div>
+                        }
+                      </Fragment>
+                    </WikiMarkdownViewer> :
                     <Fragment>
                       {this.props.path === '/' && !(this.props.usedRepoTags.length === 0 && this.props.readmeMarkdown === null) && (
                         <RepoInfoBar
