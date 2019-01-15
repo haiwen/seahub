@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
-import { gettext } from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
@@ -101,7 +101,7 @@ class ShareToUser extends React.Component {
     };
     this.options = [];
     this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
-    if (this.props.isGroupOwnedRepo) {
+    if (this.props.isGroupOwnedRepo || !isPro) {
       this.permissions = ['rw', 'r'];
     }
   }
