@@ -30,13 +30,34 @@ class Wiki extends Component {
       permission: '',
       isFileLoading: false,
       changedNode: null,
-      isViewFileState: true
+      isViewFileState: true,
+      hasIndex: false,
+      indexContent: '',
+      indexPath: '',
+      indexPermission: '',
     };
     window.onpopstate = this.onpopstate;
   }
 
   componentDidMount() {
     this.initWikiData(initialPath);
+  }
+
+  getIndexContent = (files) => {
+    files.some(file => {
+      if (file.type === 'file' && file.name === 'index.md') {
+        let filePath = Utils.joinPath(file.parent_path, file.name);
+        editorUtilities.getWikiFileContent(slug, filePath).then((res) => {
+          this.setState({
+            hasIndex: true,
+            indexContent: res.data.content,
+            indexPath: filePath,
+            indexPermission: res.data.permission,
+          });
+          return;
+        });
+      }
+    });
   }
 
   initWikiData(filePath){
@@ -68,6 +89,7 @@ class Wiki extends Component {
         let fileUrl = siteRoot + 'wikis/' + slug + filePath + hash;
         window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
       }
+      this.getIndexContent(files);
     }, () => {
       this.setState({
         isLoadFailed: true
@@ -81,6 +103,7 @@ class Wiki extends Component {
       .then(res => {
         this.setState({
           content: res.data.content,
+          isViewFileState: true,
           latestContributor: res.data.latest_contributor,
           lastModified: moment.unix(res.data.last_modified).fromNow(),
           permission: res.data.permission,
@@ -95,7 +118,7 @@ class Wiki extends Component {
   }
 
   onLinkClick = (event) => {
-    const url = event.target.href;
+    const url = event.path[2].href;
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
       this.initMainPanelData(path);
@@ -450,7 +473,7 @@ class Wiki extends Component {
   }
 
   isInternalDirLink(url) {
-    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '/.*');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '/.*');
     return re.test(url);
   }
 
@@ -462,11 +485,12 @@ class Wiki extends Component {
   }
 
   getPathFromInternalDirLink(url) {
-    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '(/.*)');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
 
-    var dirPath = path.substring(1);
+    var index = path.substring(1).indexOf('/');
+    var dirPath = path.substring(index + 1);
     re = new RegExp('(^/.*)');
     if (re.test(dirPath)) {
       path = dirPath;
@@ -492,6 +516,11 @@ class Wiki extends Component {
           onRenameNode={this.onRenameNode}
           onDeleteNode={this.onDeleteNode}
           onDirCollapse={this.onDirCollapse}
+          onLinkClick={this.onLinkClick}
+          hasIndex={this.state.hasIndex}
+          indexContent={this.state.indexContent}
+          indexPath={this.state.indexPath}
+          indexPermission={this.state.indexPermission}
         />
         <MainPanel
           content={this.state.content}

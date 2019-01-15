@@ -34,6 +34,9 @@
 .wiki-pages-container .tree-view {
   padding-left:0;
 }
+.wiki-pages-container .article {
+  padding: 0 20px;
+}
 
 .wiki-md-viewer-rendered-content {
   padding: 30px 0 0;
@@ -176,7 +179,18 @@ img[src=""] {
 .markdown-content a {
     cursor: pointer;
 }
-  
+
+.wiki-side-nav .markdown-content a {
+  color: #212529;
+  cursor: pointer;
+}
+
+.index-edit {
+  position: absolute;
+  right: 0.25rem;
+  top: 0.25rem;
+}
+
 .wiki-main-panel .markdown-content .ml-2 {
   text-decoration: underline;
 }

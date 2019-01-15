@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../utils/constants';
+import { gettext, siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight, repoID } from '../../utils/constants';
 import TreeView from '../../components/tree-view/tree-view';
 import NodeMenu from '../../components/tree-view/node-menu';
 import MenuControl from '../../components/menu-control';
@@ -8,6 +8,7 @@ import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import IndexContentViewer from '../../components/index-viewer';
 
 const propTypes = {
   changedNode: PropTypes.object,
@@ -21,6 +22,11 @@ const propTypes = {
   onDeleteNode: PropTypes.func.isRequired,
   onAddFileNode: PropTypes.func.isRequired,
   onAddFolderNode: PropTypes.func.isRequired,
+  onLinkClick: PropTypes.func,
+  hasIndex: PropTypes.bool.isRequired,
+  indexContent: PropTypes.string,
+  indexPath: PropTypes.string,
+  indexPermission: PropTypes.string,
 };
 
 class SidePanel extends Component {
@@ -173,6 +179,15 @@ class SidePanel extends Component {
     this.setState({showRename: !this.state.showRename});
   }
 
+  onEditClick = (e) => {
+    e.preventDefault();
+    window.location.href= siteRoot + 'lib/' + repoID + '/file' + this.props.indexPath + '?mode=edit';
+  }
+
+  onContentRendered = () => {
+    // todo
+  }
+
   render() {
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
@@ -183,71 +198,90 @@ class SidePanel extends Component {
           <a title="Close" aria-label="Close" onClick={this.closeSide} className="sf2-icon-x1 sf-popover-close side-panel-close action-icon d-md-none "></a>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
-          <h3 
-            className="wiki-pages-heading" 
-            onMouseEnter={this.onMouseEnter} 
-            onMouseLeave={this.onMouseLeave}
-          >
-            {gettext('Pages')}
-            <div className="heading-icon">
-              <MenuControl 
-                isShow={this.state.isMenuIconShow}
-                onClick={this.onHeadingMenuClick}
-              />
-            </div>
-          </h3>
-          <div className="wiki-pages-container">
-            {this.props.treeData && 
-            <TreeView
-              currentPath={this.props.currentPath}
-              treeData={this.props.treeData}
-              currentNode={this.state.currentNode}
-              isNodeItemFrezee={this.state.isNodeItemFrezee}
-              onNodeClick={this.onNodeClick}
-              onShowContextMenu={this.onShowContextMenu}
-              onDirCollapse={this.props.onDirCollapse}
-            />
-            }
-            {this.state.isShowMenu && 
-            <NodeMenu 
-              menuPosition={this.state.menuPosition}
-              currentNode={this.state.currentNode}
-              toggleAddFile={this.toggleAddFile}
-              toggleAddFolder={this.toggleAddFolder}
-              toggleRename={this.toggleRename}
-              toggleDelete={this.toggleDelete}
-            />
-            }
-            {this.state.showDelete &&
-            <Delete 
-              currentNode={this.state.currentNode}
-              handleSubmit={this.onDeleteNode}
-              toggleCancel={this.deleteCancel}
-            />
-            }
-            {this.state.showFile && 
-            <CreateFile
-              fileType={'.md'}
-              parentPath={this.state.currentNode.path}
-              onAddFile={this.onAddFileNode}
-              addFileCancel={this.addFileCancel}
-            />
-            }
-            {this.state.showFolder &&
-            <CreateFolder 
-              parentPath={this.state.currentNode.path}
-              onAddFolder={this.onAddFolderNode}
-              addFolderCancel={this.addFolderCancel}
-            />
-            }
-            {this.state.showRename &&
-            <Rename 
-              currentNode={this.state.currentNode}
-              onRename={this.onRenameNode} 
-              toggleCancel={this.renameCancel} 
-            />
-            }
-          </div>
+          {this.props.hasIndex ?
+            <Fragment>
+              <h3 className="wiki-pages-heading">
+                {gettext('Contents')}
+                {this.props.indexPermission === 'rw' && 
+                  <button className="btn btn-secondary operation-item index-edit" title="Edit Index" onClick={this.onEditClick}>{gettext('Edit')}</button>
+                }
+              </h3>
+              <div className="wiki-pages-container">
+                <IndexContentViewer
+                  onLinkClick={this.props.onLinkClick}
+                  onContentRendered={this.onContentRendered}
+                  indexContent={this.props.indexContent}
+                />
+              </div>
+            </Fragment> :
+            <Fragment>
+              <h3 
+                className="wiki-pages-heading" 
+                onMouseEnter={this.onMouseEnter} 
+                onMouseLeave={this.onMouseLeave}
+              >
+                {gettext('Pages')}
+                <div className="heading-icon">
+                  <MenuControl 
+                    isShow={this.state.isMenuIconShow}
+                    onClick={this.onHeadingMenuClick}
+                  />
+                </div>
+              </h3>
+              <div className="wiki-pages-container">
+                {this.props.treeData && 
+                <TreeView
+                  currentPath={this.props.currentPath}
+                  treeData={this.props.treeData}
+                  currentNode={this.state.currentNode}
+                  isNodeItemFrezee={this.state.isNodeItemFrezee}
+                  onNodeClick={this.onNodeClick}
+                  onShowContextMenu={this.onShowContextMenu}
+                  onDirCollapse={this.props.onDirCollapse}
+                />
+                }
+                {this.state.isShowMenu && 
+                <NodeMenu 
+                  menuPosition={this.state.menuPosition}
+                  currentNode={this.state.currentNode}
+                  toggleAddFile={this.toggleAddFile}
+                  toggleAddFolder={this.toggleAddFolder}
+                  toggleRename={this.toggleRename}
+                  toggleDelete={this.toggleDelete}
+                />
+                }
+                {this.state.showDelete &&
+                <Delete 
+                  currentNode={this.state.currentNode}
+                  handleSubmit={this.onDeleteNode}
+                  toggleCancel={this.deleteCancel}
+                />
+                }
+                {this.state.showFile && 
+                <CreateFile
+                  fileType={'.md'}
+                  parentPath={this.state.currentNode.path}
+                  onAddFile={this.onAddFileNode}
+                  addFileCancel={this.addFileCancel}
+                />
+                }
+                {this.state.showFolder &&
+                <CreateFolder 
+                  parentPath={this.state.currentNode.path}
+                  onAddFolder={this.onAddFolderNode}
+                  addFolderCancel={this.addFolderCancel}
+                />
+                }
+                {this.state.showRename &&
+                <Rename 
+                  currentNode={this.state.currentNode}
+                  onRename={this.onRenameNode} 
+                  toggleCancel={this.renameCancel} 
+                />
+                }
+              </div>
+            </Fragment>
+          }
         </div>
       </div>
     );
