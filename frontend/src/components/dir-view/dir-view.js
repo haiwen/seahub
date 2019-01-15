@@ -9,6 +9,8 @@ import collabServer from '../../utils/collab-server';
 import toaster from '../toast';
 import DirPanel from './dir-panel';
 import Dirent from '../../models/dirent';
+import Review from '../../models/review';
+import Draft from '../../models/draft';
 import FileTag from '../../models/file-tag';
 import RepoTag from '../../models/repo-tag';
 import RepoInfo from '../../models/repo-info';
@@ -43,6 +45,10 @@ class DirView extends React.Component {
       errorMsg: '',
       usedRepoTags: [],
       readmeMarkdown: null,
+      drafts: [],
+      reviews: [],
+      draftCounts: 0,
+      reviewCounts: 0,
     };
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
@@ -60,6 +66,25 @@ class DirView extends React.Component {
     let location = decodeURIComponent(window.location.href);
     let repoID = this.props.repoID;
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
+    seafileAPI.listRepoDraftsReviews(repoID).then(res => {
+      let drafts = res.data.drafts.map(item => {
+        let draft = new Draft(item);
+        return draft
+      });
+
+      let reviews = res.data.reviews.map(item => {
+        let review = new Review(item);
+        return review
+      });
+
+      this.setState({
+        drafts: drafts,
+        reviews: reviews,
+        draftCounts: res.data.draft_counts,
+        reviewCounts: res.data.review_counts 
+      })
+    })
+
     seafileAPI.listRepoTags(repoID).then(res => {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
@@ -693,6 +718,10 @@ class DirView extends React.Component {
         onLibDecryptDialog={this.onLibDecryptDialog}
         usedRepoTags={this.state.usedRepoTags}
         readmeMarkdown={this.state.readmeMarkdown}
+        drafts={this.state.drafts}
+        reviews={this.state.reviews}
+        draftCounts={this.state.draftCounts}
+        reviewCounts={this.state.reviewCounts}
       />
     );
   }

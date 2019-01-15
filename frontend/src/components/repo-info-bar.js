@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Modal } from 'reactstrap';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
-import { siteRoot } from '../utils/constants';
+import { siteRoot, gettext } from '../utils/constants';
 import { Utils } from '../utils/utils';
 
 import '../css/repo-info-bar.css';
@@ -13,6 +13,10 @@ const propTypes = {
   currentPath: PropTypes.string.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
+  drafts: PropTypes.array,
+  reviews: PropTypes.array,
+  draftCounts: PropTypes.number,
+  reviewCounts: PropTypes.number,
 };
 
 class RepoInfoBar extends React.Component {
@@ -60,11 +64,28 @@ class RepoInfoBar extends React.Component {
           </ul>
         )}
         {readmeMarkdown !== null && (
-          <div className="readme-file">
+          <div className="readme-file" style={{'display':'inline'}}>
             <i className="readme-flag fa fa-flag"></i>
             <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
           </div>
         )}
+
+        {this.props.draftCounts > 0 &&
+          <div className="readme-file" style={{'display':'inline'}}>
+            <i className="readme-flag sf2-icon-edit"></i>
+            <span className="used-tag-name">{gettext('draft')}</span>
+            <span className="used-tag-files">{this.props.draftCounts} file</span>
+          </div>
+        }
+
+        {this.props.reviewCounts > 0 &&
+          <div className="readme-file" style={{'display':'inline'}}>
+            <i className="readme-flag sf2-icon-review"></i>
+            <span className="used-tag-name">{gettext('review')}</span>
+            <span className="used-tag-files">{this.props.reviewCounts} file</span>
+          </div>
+        }
+
         {this.state.isListTaggedFileShow && (
           <ModalPortal>
             <Modal isOpen={true}>
