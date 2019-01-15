@@ -28,6 +28,22 @@ class OriginalFileConflict(Exception):
 
 
 class DraftManager(models.Manager):
+    def list_draft_by_repo_id(self, repo_id):
+        """list draft by repo id
+        """
+        drafts = []
+        qs = self.filter(origin_repo_id=repo_id)
+
+        for d in qs:
+            draft = {}
+            draft['id'] = d.id
+            draft['owner_nickname'] = email2nickname(d.username)
+            draft['created_at'] = datetime_to_isoformat_timestr(d.created_at)
+
+            drafts.append(draft)
+
+        return drafts
+
     def list_draft_by_username(self, username, with_reviews=True):
         """list all user drafts 
         If with_reviews is true, return the draft associated review
@@ -246,6 +262,19 @@ class DraftReviewExist(Exception):
 
 
 class DraftReviewManager(models.Manager):
+    def list_review_by_repo_id(self, repo_id, status='open'):
+        reviews = []
+        qs = self.filter(origin_repo_id=repo_id, status=status)
+
+        for review in qs:
+            review_obj = {}
+            review_obj['id'] = review.id
+            review_obj['creator_name'] = email2nickname(review.creator)
+            review_obj['created_at'] = datetime_to_isoformat_timestr(review.created_at)
+            reviews.append(review_obj)
+
+        return reviews
+
     def add(self, creator, draft):
         try:
             d_r = self.get(creator=creator, draft_id=draft)
