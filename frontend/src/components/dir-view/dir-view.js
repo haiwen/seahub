@@ -512,6 +512,7 @@ class DirView extends React.Component {
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
+      this.updateDirentList(selectedItem.path);
       this.setState({path: selectedItem.path});
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + selectedItem.path;
