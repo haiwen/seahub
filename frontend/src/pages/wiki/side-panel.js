@@ -203,7 +203,7 @@ class SidePanel extends Component {
               <h3 className="wiki-pages-heading">
                 {gettext('Contents')}
                 {this.props.indexPermission === 'rw' && 
-                  <button className="index-edit" title="Edit Index" onClick={this.onEditClick}>{gettext('Edit')}</button>
+                  <button className="btn btn-secondary operation-item index-edit" title="Edit Index" onClick={this.onEditClick}>{gettext('Edit')}</button>
                 }
               </h3>
               <div className="wiki-pages-container">

@@ -187,14 +187,8 @@ img[src=""] {
 
 .index-edit {
   position: absolute;
-  right: 1rem;
-  background-color: #fff;
-  color: #212529;
-  font-size: 0.8125rem;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  letter-spacing: .03em;
+  right: 0.25rem;
+  top: 0.25rem;
 }
 
 .wiki-main-panel .markdown-content .ml-2 {
