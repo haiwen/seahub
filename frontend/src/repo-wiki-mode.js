@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { gettext, repoID, siteRoot, initialPath, isDir, serviceUrl } from './utils/constants';
+import { gettext, repoID, siteRoot, initialPath, isDir, slug } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import collabServer from './utils/collab-server';
@@ -380,16 +380,17 @@ class Wiki extends Component {
     getThumbnail(0);
   }
 
-  onLinkClick = (event) => {
-    const url = event.path[2].href;
+  onLinkClick = (link) => {
+    const url = link;
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
       this.showFile(path);
     } else if (this.isInternalDirLink(url)) {
       let path = this.getPathFromInternalDirLink(url);
       this.showDir(path);
+    } else {
+      window.open(url);
     }
-    window.open(url);
   }
 
   updateUsedRepoTags = (newUsedRepoTags) => {
@@ -891,28 +892,31 @@ class Wiki extends Component {
   }
 
   isInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/wiki/lib/' + repoID + '/file' + '.*\.md$');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '.*/*.md$');
     return re.test(url);
   }
 
   isInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/wiki/lib/' + repoID + '/.*');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '.*');
     return re.test(url);
   }
 
   getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/wiki/lib/' + repoID + '/file' + '(.*\.md)');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug +'(.*/*.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
+    console.log(array);
     return path;
   }
-
+  
   getPathFromInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/wiki/lib/' + repoID + '(/.*)');
+    var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug  + '(/.*)');
     var array = re.exec(url);
+    console.log(array);
     var path = decodeURIComponent(array[1]);
 
-    var dirPath = path.substring(1);
+    var index = path.substring(1).indexOf('/');
+    var dirPath = path.substring(index + 1);
     re = new RegExp('(^/.*)');
     if (re.test(dirPath)) {
       path = dirPath;

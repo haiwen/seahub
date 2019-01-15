@@ -38,7 +38,17 @@ class MarkdownContentViewer extends React.Component {
 
   onLinkClick = (event) => {
     event.preventDefault(); 
-    this.props.onLinkClick(event);
+    let link = '';
+    if (event.target.tagName !== 'A') {
+      let target = event.target.parentNode;
+      while (target.tagName !== 'A') {
+        target = target.parentNode;
+      }
+      link = target.href;
+    } else {
+      link = event.target.hraf;
+    }
+    this.props.onLinkClick(link);
   }
 
   render() {
