@@ -67,7 +67,7 @@ img[src=""] {
 }
 
 .cur-view-content .wiki-page-container{
-  margin: -0.625rem -1rem 1.25rem;
+  margin: -0.625rem -1rem -1.25rem;
   padding: 0.625rem 1rem 1.25rem;
   display: flex;
   flex: 1;
