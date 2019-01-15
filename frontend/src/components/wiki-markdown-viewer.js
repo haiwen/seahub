@@ -13,7 +13,7 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired
 };
 
-const contentClass = 'markdown-content';
+const contentClass = 'wiki-page-content';
 
 class WikiMarkdownViewer extends React.Component {
 
@@ -23,12 +23,12 @@ class WikiMarkdownViewer extends React.Component {
       activeTitleIndex: 0
     };
     this.markdownContainer = React.createRef();
-    this.links = null;
+    this.links = [];
     this.titlesInfo = [];
   }
 
   componentDidUpdate() {
-    if (this.links) {
+    if (!this.links.length) {
       this.links = document.querySelectorAll(`.${contentClass} a`);
       this.links.forEach(link => {
         link.addEventListener('click', this.onLinkClick);
@@ -93,8 +93,8 @@ class WikiMarkdownViewer extends React.Component {
       return <Loading />
     }
     return (
-      <div ref={this.markdownContainer} className="markdown-container" onScroll={this.onScrollHandler.bind(this)}>
-        <div className="markdown-content">
+      <div ref={this.markdownContainer} className="wiki-page-container" onScroll={this.onScrollHandler.bind(this)}>
+        <div className={contentClass}>
           {this.props.children}
           <MarkdownViewer
             showTOC={true}
