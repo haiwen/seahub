@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
-import { gettext } from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 
@@ -101,7 +101,7 @@ class ShareToGroup extends React.Component {
     };
     this.options = [];
     this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
-    if (this.props.isGroupOwnedRepo) {
+    if (this.props.isGroupOwnedRepo || !isPro) {
       this.permissions = ['rw', 'r'];
     }
   }
