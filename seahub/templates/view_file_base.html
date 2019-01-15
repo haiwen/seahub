@@ -135,7 +135,7 @@
 </script>
 
 <script type="text/template" id="editor-tools-tmpl">
-    <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ parent_dir|strip_slash }}" title="{% trans "Open parent folder" %}"></a>
+    <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{{ SITE_ROOT }}library/{{ repo.id }}/{{ repo.name|urlencode }}/{{ parent_dir|strip_slash|urlencode }}" title="{% trans "Open parent folder" %}"></a>
 
     {% if not err and file_perm == 'rw' %}
     {% if filetype == 'Document' or filetype == 'SpreadSheet' %}
@@ -177,7 +177,7 @@
     <div class="sf-dropdown-menu sf2-mobile-menu">
         <ul>
             <li>
-                <a  id="openParent" class="op openfolder" href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ parent_dir|strip_slash }}" title="{% trans "Open parent folder" %}">{% trans "Open parent folder" %}</a>
+                <a  id="openParent" class="op openfolder" href="{{ SITE_ROOT }}library/{{ repo.id }}/{{ repo.name|urlencode }}/{{ parent_dir|strip_slash|urlencode }}" title="{% trans "Open parent folder" %}">{% trans "Open parent folder" %}</a>
             </li>
 
             {% if can_lock_unlock_file %}
