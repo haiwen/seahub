@@ -263,7 +263,6 @@ class DirentListItem extends React.Component {
         toaster.danger(errMessage);
       }
     });
-
   }
 
   onComnentItem = () => {
@@ -276,7 +275,6 @@ class DirentListItem extends React.Component {
     let referer = location.href;
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath, referer: referer});
     location.href = url;
-
   }
 
   onAccessLog = () => {
@@ -288,7 +286,6 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
     location.href = url;
-
   }
 
   onItemDownload = (e) => {
@@ -331,7 +328,6 @@ class DirentListItem extends React.Component {
           _this.setState({isProgressDialogShow: false});
         }, 500);
       }
-
     });
   }
 
