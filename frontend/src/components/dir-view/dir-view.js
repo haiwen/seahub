@@ -66,25 +66,7 @@ class DirView extends React.Component {
     let location = decodeURIComponent(window.location.href);
     let repoID = this.props.repoID;
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
-    seafileAPI.listRepoDraftsReviews(repoID).then(res => {
-      let drafts = res.data.drafts.map(item => {
-        let draft = new Draft(item);
-        return draft
-      });
-
-      let reviews = res.data.reviews.map(item => {
-        let review = new Review(item);
-        return review
-      });
-
-      this.setState({
-        drafts: drafts,
-        reviews: reviews,
-        draftCounts: res.data.draft_counts,
-        reviewCounts: res.data.review_counts 
-      })
-    })
-
+    this.listRepoDraftsReviewsInfo();
     seafileAPI.listRepoTags(repoID).then(res => {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
@@ -145,6 +127,27 @@ class DirView extends React.Component {
 
   componentDidUpdate() {
     this.lastModifyTime = new Date();
+  }
+
+  listRepoDraftsReviewsInfo = () => {
+    seafileAPI.listRepoDraftsReviews(this.props.repoID).then(res => {
+      let drafts = res.data.drafts.map(item => {
+        let draft = new Draft(item);
+        return draft
+      });
+
+      let reviews = res.data.reviews.map(item => {
+        let review = new Review(item);
+        return review
+      });
+
+      this.setState({
+        drafts: drafts,
+        reviews: reviews,
+        draftCounts: res.data.draft_counts,
+        reviewCounts: res.data.review_counts 
+      })
+    })
   }
 
   onRepoUpdateEvent = () => {
@@ -272,6 +275,9 @@ class DirView extends React.Component {
   onAddFile = (filePath, isDraft) => {
     let repoID = this.state.repoID;
     seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
+      if (isDraft) {
+        this.listRepoDraftsReviewsInfo();
+      }
       let name = Utils.getFileName(filePath);
       let dirent = this.createDirent(name, 'file', res.data);
       let direntList = this.addItem(dirent, 'file');
