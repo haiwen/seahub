@@ -38,6 +38,8 @@ class DraftManager(models.Manager):
             draft = {}
             draft['id'] = d.id
             draft['owner_nickname'] = email2nickname(d.username)
+            draft['origin_repo_id'] = d.origin_repo_id
+            draft['draft_file_path'] = d.draft_file_path
             draft['created_at'] = datetime_to_isoformat_timestr(d.created_at)
 
             drafts.append(draft)
@@ -271,6 +273,7 @@ class DraftReviewManager(models.Manager):
             review_obj['id'] = review.id
             review_obj['creator_name'] = email2nickname(review.creator)
             review_obj['created_at'] = datetime_to_isoformat_timestr(review.created_at)
+            review_obj['draft_file_path'] = review.draft_file_path
             reviews.append(review_obj)
 
         return reviews
