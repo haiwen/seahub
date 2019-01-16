@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import RepoTag from '../../models/repo-tag';
+require('../../css/repo-tag.css');
 
 const TagItemPropTypes = {
   repoTag: PropTypes.object.isRequired,
