@@ -137,7 +137,7 @@ class DirentMenu extends React.Component {
     return translateResult;
   }
 
-  clickOperationMenuToggle = (e) => {
+  onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu();
   }
@@ -172,7 +172,7 @@ class DirentMenu extends React.Component {
           title={gettext('More Operations')}
           data-toggle="dropdown" 
           aria-expanded={this.state.isItemMenuShow}
-          onClick={this.clickOperationMenuToggle}
+          onClick={this.onDropdownToggleClick}
         />
         <DropdownMenu>
           {this.menuList.map((menuItem, index) => {

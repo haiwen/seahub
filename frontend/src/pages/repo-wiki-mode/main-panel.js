@@ -150,6 +150,7 @@ class MainPanel extends Component {
   }
 
   render() {
+
     const ErrMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
     
     return (
@@ -199,11 +200,11 @@ class MainPanel extends Component {
                 />
               )}
             </div>
-            <div className="cur-view-content" onScroll={this.handlePageScroll} ref="curViewContent">
+            <div className="cur-view-content">
               {!this.props.pathExist ?
                 ErrMessage :
                 <Fragment>
-                  { this.props.isViewFile ?
+                  {this.props.isViewFile ?
                     <WikiMarkdownViewer
                       isFileLoading={this.props.isFileLoading}
                       markdownContent={this.props.content}
