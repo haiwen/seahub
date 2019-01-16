@@ -177,7 +177,6 @@ class DirentListItem extends React.Component {
     this.props.onItemRenameToggle(this.props.dirent);
     this.setState({
       isOperationShow: false,
-      isItemMenuShow: false,
       isRenameing: true,
     });
   }
@@ -205,9 +204,7 @@ class DirentListItem extends React.Component {
   }
 
   onRenameCancel = () => {
-    this.setState({
-      isRenameing: false,
-    });
+    this.setState({isRenameing: false});
     this.props.onUnfreezedItem();
   }
 
