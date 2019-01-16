@@ -44,6 +44,7 @@ class DirentListView extends React.Component {
       isItemFreezed: false,
 
       isImagePopupOpen: false,
+      imageItems: [],
       imageIndex: 0,
 
       isCreateFileDialogShow: false,
@@ -138,8 +139,23 @@ class DirentListView extends React.Component {
     });
     this.setState({
       isImagePopupOpen: true,
+      imageItems: this.prepareImageItems(),
       imageIndex: items.indexOf(dirent)
     });
+  }
+
+  moveToPrevImage = () => {
+    const imageItemsLength = this.state.imageItems.length;
+    this.setState((prevState) => ({
+      imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
+    }));
+  }
+
+  moveToNextImage = () => {
+    const imageItemsLength = this.state.imageItems.length;
+    this.setState((prevState) => ({
+      imageIndex: (prevState.imageIndex + 1) % imageItemsLength
+    }));
   }
 
   closeImagePopup = () => {
@@ -182,7 +198,7 @@ class DirentListView extends React.Component {
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     // for image popup
-    const imageItems = this.prepareImageItems();
+    const imageItems = this.state.imageItems;
     const imageIndex = this.state.imageIndex;
     const imageItemsLength = imageItems.length;
     const imageCaption = imageItemsLength && (
@@ -249,16 +265,8 @@ class DirentListView extends React.Component {
           nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
           prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
           onCloseRequest={this.closeImagePopup}
-          onMovePrevRequest={() =>
-            this.setState({
-              imageIndex: (imageIndex + imageItemsLength - 1) % imageItemsLength
-            })
-          }
-          onMoveNextRequest={() =>
-            this.setState({
-              imageIndex: (imageIndex + 1) % imageItemsLength
-            })
-          }
+          onMovePrevRequest={this.moveToPrevImage}
+          onMoveNextRequest={this.moveToNextImage}
           imageLoadErrorMessage={gettext('The image could not be loaded.')}
           prevLabel={gettext("Previous (Left arrow key)")}
           nextLabel={gettext("Next (Right arrow key)")}
