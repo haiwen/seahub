@@ -261,7 +261,7 @@ class MainPanel extends Component {
                       goReviewPage={this.props.goReviewPage}
                     /> :
                     <Fragment>
-                      {this.props.path === '/' && !(this.props.usedRepoTags.length === 0 && this.props.readmeMarkdown === null) && (
+                      {this.props.path === '/' && (this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null || this.props.draftCounts !=0 || this.props.reviewCounts != 0) && (
                         <RepoInfoBar
                           repoID={repoID}
                           currentPath={this.props.path}
