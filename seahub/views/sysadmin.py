@@ -36,13 +36,13 @@ from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER, DEFAULT_ADMIN, \
-        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN, HASH_URLS
+        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN, HASH_URLS, DEFAULT_ORG
 from seahub.institutions.models import (Institution, InstitutionAdmin,
                                         InstitutionQuota)
 from seahub.institutions.utils import get_institution_space_usage
 from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles, \
-        get_available_admin_roles
+        get_available_admin_roles, get_available_org_roles
 from seahub.role_permissions.models import AdminRole
 from seahub.two_factor.models import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
@@ -84,6 +84,7 @@ if ENABLE_TRIAL_ACCOUNT:
     from seahub_extra.trialaccount.models import TrialAccount
 try:
     from seahub.settings import MULTI_TENANCY
+    from seahub_extra.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
 from seahub.utils.two_factor_auth import has_two_factor_auth
@@ -1320,6 +1321,11 @@ def sys_org_admin(request):
     else:
         trial_orgs = []
 
+    org_roles = OrgSettings.objects.get_by_orgs(orgs)
+    org_roles_dict = {}
+    for x in org_roles:
+        org_roles_dict[x.org_id] = x.role
+
     for org in orgs:
         org.quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org.org_id)
         org.total_quota = seafserv_threaded_rpc.get_org_quota(org.org_id)
@@ -1341,6 +1347,11 @@ def sys_org_admin(request):
         else:
             org.is_expired = False
 
+        org.role = org_roles_dict.get(org.org_id, DEFAULT_ORG)
+        org.is_default_role = True if org.role == DEFAULT_ORG else False
+
+    extra_org_roles = [x for x in get_available_org_roles() if x != DEFAULT_ORG]
+
     return render(request, 'sysadmin/sys_org_admin.html', {
             'orgs': orgs,
             'current_page': current_page,
@@ -1350,6 +1361,8 @@ def sys_org_admin(request):
             'page_next': page_next,
             'enable_org_plan': enable_org_plan,
             'all_page': True,
+            'extra_org_roles': extra_org_roles,
+            'default_org': DEFAULT_ORG,
             })
 
 @login_required

@@ -1,7 +1,10 @@
 import json
+from mock import patch
 
 from seaserv import ccnet_api
 from django.core.urlresolvers import reverse
+from django.test import override_settings
+
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
@@ -30,7 +33,7 @@ def remove_org(org_id):
         # remove org
         ccnet_api.remove_org(org_id)
 
-class OrgsTest(BaseTestCase):
+class AdminOrganizationsTest(BaseTestCase):
 
     def setUp(self):
 
@@ -83,3 +86,46 @@ class OrgsTest(BaseTestCase):
         self.login_as(self.user)
         resp = self.client.get(self.orgs_url)
         self.assertEqual(403, resp.status_code)
+
+
+class AdminOrganizationTest(BaseTestCase):
+    def setUp(self):
+        org_name = randstring(6)
+        org_url_prefix = randstring(6)
+        tmp_user = self.create_user(email='%s@%s.com' % (randstring(6), randstring(6)))
+        org_creator = tmp_user.username
+        org_id = ccnet_api.create_org(
+            org_name, org_url_prefix, org_creator)
+
+        self.org = ccnet_api.get_org_by_id(org_id)
+        self.url = reverse('api-v2.1-admin-organization', args=[self.org.org_id])
+        self.login_as(self.admin)
+
+    def tearDown(self, ):
+        users = ccnet_api.get_org_emailusers(self.org.url_prefix, -1, -1)
+        for u in users:
+            ccnet_api.remove_org_user(self.org.org_id, u.email)
+
+        ccnet_api.remove_org(self.org.org_id)
+
+    def test_can_get(self, ):
+        resp = self.client.get(self.url)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['org_id'] == self.org.org_id
+        assert json_resp['role'] == 'default'
+
+    @patch('seahub.api2.endpoints.admin.organizations.get_available_org_roles')
+    @patch('seahub_extra.organizations.models.get_available_org_roles')
+    def test_can_update_role(self, mock_1, mock_2):
+        mock_1.return_value = ['default', 'custom']
+        mock_2.return_value = ['default', 'custom']
+
+        resp = self.client.put(self.url, 'role=custom',
+                               'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['org_id'] == self.org.org_id
+        assert json_resp['role'] == 'custom'

@@ -19,7 +19,8 @@ from seahub.auth import login
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
-        get_enabled_admin_role_permissions_by_role
+        get_enabled_admin_role_permissions_by_role, \
+        get_enabled_org_role_permissions_by_role
 from seahub.utils import is_user_password_strong, get_site_name, \
     clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
@@ -125,20 +126,36 @@ class UserPermissions(object):
     def __init__(self, user):
         self.user = user
 
+    def _get_perm_by_roles(self, perm_name):
+        role = self.user.role
+        perm = get_enabled_role_permissions_by_role(role)[perm_name]
+        if perm is False:
+            return False
+
+        org_role = self.user.org_role
+        if org_role is None:
+            return perm
+
+        perm2 = get_enabled_org_role_permissions_by_role(org_role)[perm_name]
+        if perm2 is False:
+            return False
+
+        return True
+
     def can_add_repo(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_add_repo']
+        return self._get_perm_by_roles('can_add_repo')
 
     def can_add_group(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_add_group']
+        return self._get_perm_by_roles('can_add_group')
 
     def can_generate_share_link(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_generate_share_link']
+        return self._get_perm_by_roles('can_generate_share_link')
 
     def can_generate_upload_link(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_generate_upload_link']
+        return self._get_perm_by_roles('can_generate_upload_link')
 
     def can_use_global_address_book(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_use_global_address_book']
+        return self._get_perm_by_roles('can_use_global_address_book')
 
     def can_view_org(self):
         if MULTI_TENANCY:
@@ -147,7 +164,7 @@ class UserPermissions(object):
         if CLOUD_MODE:
             return False
 
-        return get_enabled_role_permissions_by_role(self.user.role)['can_view_org']
+        return self._get_perm_by_roles('can_view_org')
 
     def can_add_public_repo(self):
         """ Check if user can create public repo or share existed repo to public.
@@ -162,28 +179,28 @@ class UserPermissions(object):
                 return False
         elif self.user.is_staff:
             return True
-        elif get_enabled_role_permissions_by_role(self.user.role)['can_add_public_repo']:
+        elif self._get_perm_by_roles('can_add_public_repo'):
             return True
         else:
             return bool(config.ENABLE_USER_CREATE_ORG_REPO)
 
     def can_drag_drop_folder_to_sync(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_drag_drop_folder_to_sync']
+        return self._get_perm_by_roles('can_drag_drop_folder_to_sync')
 
     def can_connect_with_android_clients(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_android_clients']
+        return self._get_perm_by_roles('can_connect_with_android_clients')
 
     def can_connect_with_ios_clients(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_ios_clients']
+        return self._get_perm_by_roles('can_connect_with_ios_clients')
 
     def can_connect_with_desktop_clients(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_desktop_clients']
+        return self._get_perm_by_roles('can_connect_with_desktop_clients')
 
     def can_invite_guest(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_invite_guest']
+        return self._get_perm_by_roles('can_invite_guest')
 
     def can_export_files_via_mobile_client(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_export_files_via_mobile_client']
+        return self._get_perm_by_roles('can_export_files_via_mobile_client')
 
     # Add default value for compatible issue when EMAILBE_ROLE_PERMISSIONS
     # is not updated with newly added permissions.
@@ -236,6 +253,24 @@ class User(object):
     groups = []
     org = None
     objects = UserManager()
+
+    @property
+    def org_role(self):
+        if not MULTI_TENANCY:
+            return None
+
+        if not hasattr(self, '_cached_orgs'):
+            self._cached_orgs = ccnet_api.get_orgs_by_user(self.username)
+
+        if not self._cached_orgs:
+            return None
+
+        if not hasattr(self, '_cached_org_role'):
+            from seahub_extra.organizations.models import OrgSettings
+            self._cached_org_role = OrgSettings.objects.get_role_by_org(
+                self._cached_orgs[0])
+
+        return self._cached_org_role
 
     class DoesNotExist(Exception):
         pass

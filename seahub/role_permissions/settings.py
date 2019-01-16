@@ -2,7 +2,7 @@
 import logging
 
 from django.conf import settings
-from seahub.constants import DEFAULT_USER, GUEST_USER, \
+from seahub.constants import DEFAULT_USER, GUEST_USER, DEFAULT_ORG, \
         DEFAULT_ADMIN, SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
 
 # Get an instance of a logger
@@ -141,3 +141,30 @@ def get_enabled_admin_role_permissions():
     return permissions
 
 ENABLED_ADMIN_ROLE_PERMISSIONS = get_enabled_admin_role_permissions()
+
+# role permissions for Org
+def merge_roles(default, custom):
+    """Merge custom dict into the copy of default dict, and return the copy."""
+    copy = default.copy()
+    for key in custom:
+        if key in default:
+            copy[key].update(custom[key])
+        else:
+            default_copy = default['default'].copy()
+            default_copy.update(custom[key])
+            copy[key] = default_copy
+
+    return copy
+
+DEFAULT_ENABLED_ORG_ROLE_PERMISSIONS = {
+    DEFAULT_ORG: DEFAULT_ENABLED_ROLE_PERMISSIONS[DEFAULT_USER]
+}
+
+try:
+    custom_org_role_permission = settings.ENABLED_ORG_ROLE_PERMISSIONS
+except AttributeError:
+    custom_org_role_permission = {}
+
+ENABLED_ORG_ROLE_PERMISSIONS = merge_roles(
+    DEFAULT_ENABLED_ORG_ROLE_PERMISSIONS, custom_org_role_permission
+)
