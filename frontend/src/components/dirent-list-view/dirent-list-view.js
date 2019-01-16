@@ -1,16 +1,21 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import DirentListItem from './dirent-list-item';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
+
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 import '../../css/tip-for-new-md.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
   isRepoOwner: PropTypes.bool,
   currentRepoInfo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
@@ -37,6 +42,10 @@ class DirentListView extends React.Component {
     super(props);
     this.state = {
       isItemFreezed: false,
+
+      isImagePopupOpen: false,
+      imageIndex: 0,
+
       isCreateFileDialogShow: false,
       fileType: ''
     };
@@ -91,6 +100,54 @@ class DirentListView extends React.Component {
     this.props.sortItems(sortBy, sortOrder);
   }
 
+  // for image popup
+  prepareImageItems = () => {
+    let items = this.props.direntList.filter((item) => {
+      return Utils.imageCheck(item.name);
+    });
+
+    const useThumbnail = !this.props.repoEncrypted;
+    let prepareItem = (item) => {
+      const name = item.name;
+
+      const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
+      const isGIF = fileExt == 'gif';
+
+      const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
+      const repoID = this.props.repoID;
+      let src;
+      if (useThumbnail && !isGIF) {
+        src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+      } else {
+        src = `${siteRoot}repo/${repoID}/raw${path}`;
+      }
+
+      return {
+        'name': name,
+        'url': `${siteRoot}lib/${repoID}/file${path}`,
+        'src': src
+      };
+    }
+
+    return items.map((item) => { return prepareItem(item); });
+  }
+
+  showImagePopup = (dirent) => {
+    let items = this.props.direntList.filter((item) => {
+      return Utils.imageCheck(item.name);
+    });
+    this.setState({
+      isImagePopupOpen: true,
+      imageIndex: items.indexOf(dirent)
+    });
+  }
+
+  closeImagePopup = () => {
+    this.setState({
+      isImagePopupOpen: false
+    });
+  }
+
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
 
@@ -124,7 +181,20 @@ class DirentListView extends React.Component {
     const sortByTime = sortBy == 'time';
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
+    // for image popup
+    const imageItems = this.prepareImageItems();
+    const imageIndex = this.state.imageIndex;
+    const imageItemsLength = imageItems.length;
+    const imageCaption = imageItemsLength && (
+      <Fragment>
+        <span>{gettext("%curr% of %total%").replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
+        <br />
+        <a href={imageItems[imageIndex].url} target="_blank">{gettext("Open in New Tab")}</a>
+      </Fragment>
+    );
+
     return (
+      <Fragment>
       <table>
         <thead>
           <tr>
@@ -163,12 +233,41 @@ class DirentListView extends React.Component {
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
                   onItemDetails={this.onItemDetails}
+                  showImagePopup={this.showImagePopup}
                 />
               );
             })
           }
         </tbody>
       </table>
+
+      {this.state.isImagePopupOpen && (
+        <Lightbox
+          mainSrc={imageItems[imageIndex].src}
+          imageTitle={imageItems[imageIndex].name}
+          imageCaption={imageCaption}
+          nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
+          prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
+          onCloseRequest={this.closeImagePopup}
+          onMovePrevRequest={() =>
+            this.setState({
+              imageIndex: (imageIndex + imageItemsLength - 1) % imageItemsLength
+            })
+          }
+          onMoveNextRequest={() =>
+            this.setState({
+              imageIndex: (imageIndex + 1) % imageItemsLength
+            })
+          }
+          imageLoadErrorMessage={gettext('The image could not be loaded.')}
+          prevLabel={gettext("Previous (Left arrow key)")}
+          nextLabel={gettext("Next (Right arrow key)")}
+          closeLabel={gettext("Close (Esc)")}
+          zoomInLabel={gettext('Zoom in')}
+          zoomOutLabel={gettext('Zoom out')}
+        />
+      )}
+      </Fragment>
     );
   }
 }

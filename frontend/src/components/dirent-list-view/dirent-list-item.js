@@ -147,7 +147,13 @@ class DirentListItem extends React.Component {
 
   onItemClick = (e) => {
     e.preventDefault();
-    this.props.onItemClick(this.props.dirent);
+
+    const dirent = this.props.dirent;
+    if (Utils.imageCheck(dirent.name)) {
+      this.props.showImagePopup(dirent);
+    } else {
+      this.props.onItemClick(dirent);
+    }
   }
 
   onItemDelete = (e) => {

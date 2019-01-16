@@ -195,6 +195,7 @@ class DirPanel extends React.Component {
                         <DirentListView
                           path={this.props.path}
                           repoID={this.props.repoID}
+                          repoEncrypted={this.props.repoEncrypted}
                           direntList={this.props.direntList}
                           sortBy={this.props.sortBy}
                           sortOrder={this.props.sortOrder}
