@@ -29,6 +29,7 @@ class DirView extends React.Component {
       pathExist: true,
       repoName: '',
       repoID: '',
+      repoEncrypted: false,
       permission: true,
       libNeedDecrypt: false,
       isDirentSelected: false,
@@ -76,7 +77,7 @@ class DirView extends React.Component {
         currentRepoInfo: repoInfo,
         repoID: repoInfo.repo_id,
         repoName: repoInfo.repo_name,
-        encrypted: repoInfo.encrypted,
+        repoEncrypted: repoInfo.encrypted,
         permission: repoInfo.permission === 'rw',
         libNeedDecrypt: res.data.lib_need_decrypt,
       });
@@ -176,7 +177,7 @@ class DirView extends React.Component {
         dirID: res.headers.oid,
       });
 
-      if (!this.state.encrypted && direntList.length) {
+      if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
     }).catch(() => {
@@ -661,6 +662,7 @@ class DirView extends React.Component {
         errorMsg={this.state.errorMsg}
         repoID={this.state.repoID}
         repoName={this.state.repoName}
+        repoEncrypted={this.state.repoEncrypted}
         permission={this.state.permission}
         isDirentListLoading={this.state.isDirentListLoading}
         isDirentSelected={this.state.isDirentSelected}

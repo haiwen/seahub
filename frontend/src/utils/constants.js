@@ -36,6 +36,7 @@ export const enableWiki = window.app.pageOptions.enableWiki;
 export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary === '1';
 export const enableRepoHistorySetting = window.app.pageOptions.enableRepoHistorySetting === '1';
 export const isSystemStaff = window.app.pageOptions.isSystemStaff;
+export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForOriginal;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';

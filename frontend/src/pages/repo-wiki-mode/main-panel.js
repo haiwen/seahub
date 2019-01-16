@@ -23,6 +23,7 @@ const propTypes = {
   permission: PropTypes.string,
   hash: PropTypes.string,
   path: PropTypes.string.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
   // whether the file or dir corresponding to the path exist
   pathExist: PropTypes.bool.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
@@ -243,6 +244,7 @@ class MainPanel extends Component {
                       <DirentListView
                         path={this.props.path}
                         repoID={repoID}
+                        repoEncrypted={this.props.repoEncrypted}
                         direntList={this.props.direntList}
                         sortBy={this.props.sortBy}
                         sortOrder={this.props.sortOrder}

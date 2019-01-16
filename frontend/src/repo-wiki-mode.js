@@ -28,6 +28,7 @@ class Wiki extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      repoEncrypted: false,
       path: '',
       pathExist: true,
       treeData: new Tree(),
@@ -83,7 +84,7 @@ class Wiki extends Component {
     seafileAPI.getRepoInfo(repoID).then(res => {
       this.setState({
         libNeedDecrypt: res.data.lib_need_decrypt, 
-        encrypted: res.data.encrypted
+        repoEncrypted: res.data.encrypted
       });
 
     if (!res.data.lib_need_decrypt) {
@@ -343,7 +344,7 @@ class Wiki extends Component {
         dirID: res.headers.oid,
       });
 
-      if (!this.state.encrypted && direntList.length) {
+      if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
     });
@@ -1000,6 +1001,7 @@ class Wiki extends Component {
         />
         <MainPanel
           path={this.state.path}
+          repoEncrypted={this.state.repoEncrypted}
           isViewFile={this.state.isViewFile}
           pathExist={this.state.pathExist}
           isDirentListLoading={this.state.isDirentListLoading}
