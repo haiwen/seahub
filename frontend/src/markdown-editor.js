@@ -4,6 +4,12 @@ import 'whatwg-fetch';
 import { SeafileAPI } from 'seafile-js';
 import { Utils } from './utils/utils';
 import cookie from 'react-cookies';
+import ModalPortal from './components/modal-portal';
+import { Modal } from 'reactstrap';
+import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
+import ListRelatedFileDialog from './components/dialog/list-related-file-dialog';
+import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
+import Dirent from './models/dirent';
 let repoID = window.app.pageOptions.repoID;
 let repoName = window.app.pageOptions.repoName;
 let filePath = window.app.pageOptions.filePath;
@@ -262,6 +268,14 @@ class EditorUtilities {
   fileMetaData() {
     return seafileAPI.fileMetaData(repoID, filePath);
   }
+
+  listFileTags = () => {
+    return seafileAPI.listFileTags(repoID, filePath);
+  }
+
+  listRepoTags = () => {
+    return seafileAPI.listRepoTags(repoID);
+  }
 }
 
 const editorUtilities = new EditorUtilities();
@@ -286,7 +300,56 @@ class MarkdownEditor extends React.Component {
       },
       collabServer: seafileCollabServer ? seafileCollabServer : null,
       relatedFiles: [],
+      fileTagList: [],
+      dirent: {},
+      showRelatedFileDialog: false,
+      showEditFileTagDialog: false,
+      showAddRelatedFileDialog: false,
+      showMarkdownEditorDialog: false,
     };
+  }
+
+  toggleCancel = () => {
+    this.setState({
+      showRelatedFileDialog: false,
+      showEditFileTagDialog: false,
+      showAddRelatedFileDialog: false,
+      showMarkdownEditorDialog: false,
+    });
+  }
+
+  closeAddRelatedFileDialog = () => {
+    this.setState({
+      showAddRelatedFileDialog: false,
+      showRelatedFileDialog: true,
+    });
+  }
+
+  addRelatedFileToggle = () => {
+    this.setState({
+      showRelatedFileDialog: false,
+      showAddRelatedFileDialog: true,
+    });
+  }
+
+  openDialogs = (option) => {
+    switch(option)
+    {
+      case 'related_files':
+        this.setState({
+          showRelatedFileDialog: true,
+          showMarkdownEditorDialog: true,
+        });
+        break;
+      case 'tags':
+        this.setState({
+          showEditFileTagDialog: true,
+          showMarkdownEditorDialog: true,
+        });
+        break;
+      default:
+        return;
+    }
   }
 
   componentDidMount() {
@@ -317,12 +380,58 @@ class MarkdownEditor extends React.Component {
         });
       });
     });
+    this.listRelatedFiles();
+    this.listFileTags();
+    this.listDirent();
+  }
 
+  listRelatedFiles = () => {
     seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
       this.setState({
         relatedFiles: res.data.related_files
-      })
+      });
     });
+  }
+
+  listFileTags = () => {
+    seafileAPI.listFileTags(repoID, filePath).then(res => {
+      let fileTagList = res.data.file_tags;
+      for (let i = 0, length = fileTagList.length; i < length; i++) {
+        fileTagList[i].id = fileTagList[i].file_tag_id;
+      }
+      this.setState({
+        fileTagList: fileTagList
+      });
+    });
+  }
+
+  listDirent = () => {
+    seafileAPI.listDir(repoID, dirPath).then(res => {
+      let direntList = [];
+      res.data.forEach(item => {
+        if (this.props.isShowFile === true) {
+          let dirent = new Dirent(item);
+          direntList.push(dirent);
+        } else {
+          if (item.type === 'dir') {
+            let dirent = new Dirent(item);
+            direntList.push(dirent);
+          }
+        }
+      });
+      direntList = Utils.sortDirents(direntList, 'name', 'asc');
+      this.setState({
+        dirent: direntList[0]
+      });
+    });
+  }
+
+  onRelatedFileChange = () => {
+    this.listRelatedFiles();
+  }
+
+  onFileTagChanged = () => {
+    this.listFileTags();
   }
 
   render() {
@@ -334,24 +443,65 @@ class MarkdownEditor extends React.Component {
       );
     } else if (this.state.mode === 'editor') {
       return (
-        <SeafileEditor
-          fileInfo={this.state.fileInfo}
-          markdownContent={this.state.markdownContent}
-          editorUtilities={editorUtilities}
-          userInfo={this.state.collabServer ? userInfo : null}
-          collabServer={this.state.collabServer}
-          showFileHistory={true}
-          mode={mode}
-          draftID={draftID}
-          reviewID={reviewID}
-          reviewStatus={reviewStatus}
-          isDraft={isDraft}
-          hasDraft={hasDraft}
-          shareLinkExpireDaysMin={shareLinkExpireDaysMin}
-          shareLinkExpireDaysMax={shareLinkExpireDaysMax}
-          relatedFiles={this.state.relatedFiles}
-          siteRoot={siteRoot}
-        />
+        <React.Fragment>
+          <SeafileEditor
+            fileInfo={this.state.fileInfo}
+            markdownContent={this.state.markdownContent}
+            editorUtilities={editorUtilities}
+            userInfo={this.state.collabServer ? userInfo : null}
+            collabServer={this.state.collabServer}
+            showFileHistory={true}
+            mode={mode}
+            draftID={draftID}
+            reviewID={reviewID}
+            reviewStatus={reviewStatus}
+            isDraft={isDraft}
+            hasDraft={hasDraft}
+            shareLinkExpireDaysMin={shareLinkExpireDaysMin}
+            shareLinkExpireDaysMax={shareLinkExpireDaysMax}
+            relatedFiles={this.state.relatedFiles}
+            siteRoot={siteRoot}
+            openDialogs={this.openDialogs}
+            fileTagList={this.state.fileTagList}
+          />
+          {this.state.showMarkdownEditorDialog && (
+            <ModalPortal>
+              <Modal isOpen={true}>
+                {
+                  this.state.showRelatedFileDialog &&
+                  <ListRelatedFileDialog
+                    repoID={repoID}
+                    filePath={filePath}
+                    relatedFiles={this.state.relatedFiles}
+                    toggleCancel={this.toggleCancel}
+                    addRelatedFileToggle={this.addRelatedFileToggle}
+                    onRelatedFileChange={this.onRelatedFileChange}
+                  />
+                }
+                {
+                  this.state.showEditFileTagDialog &&
+                  <EditFileTagDialog
+                    repoID={repoID}
+                    filePath={filePath}
+                    fileTagList={this.state.fileTagList}
+                    toggleCancel={this.toggleCancel}
+                    onFileTagChanged={this.onFileTagChanged}
+                  />
+                }
+                {
+                  this.state.showAddRelatedFileDialog &&
+                  <AddRelatedFileDialog
+                    repoID={repoID}
+                    filePath={filePath}
+                    toggleCancel={this.closeAddRelatedFileDialog}
+                    dirent={this.state.dirent}
+                    onRelatedFileChange={this.onRelatedFileChange}
+                  />
+                }
+              </Modal>
+            </ModalPortal>
+          )}
+        </React.Fragment>
       );
     }   
   }

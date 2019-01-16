@@ -1,15 +1,18 @@
 {% load render_bundle from webpack_loader %}
-{% load static seahub_tags %}
+{% load static seahub_tags i18n %}
 <!DOCTYPE html>
-<html>
+<html lang="{{ LANGUAGE_CODE }}">
     <head>
          <meta charset="UTF-8" />
          <title>{{ filename }}</title>
 
          <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+         <link rel="stylesheet" type="text/css" href="{% static "css/seafile-ui.css" %}" />
+         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
     </head>
     <body>
          <div id="root"></div>
+         <div id="modal-wrapper"></div>
          <script type="text/javascript">
            window.app = {
               config: {
@@ -43,6 +46,7 @@
              }
           }
          </script>
+         <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
          {% render_bundle 'markdownEditor' %}
     </body>
 </html>
