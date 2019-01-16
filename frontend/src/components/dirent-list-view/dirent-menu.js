@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, enableFileComment, fileAuditEnabled, folderPermEnabled} from '../../utils/constants';
-import DirentMenuItem from './dirent-menu-item';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  dirent: PropTypes.object.isRequired,
-  menuPosition: PropTypes.object.isRequired, 
-  onMenuItemClick: PropTypes.func.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
+  onMenuItemClick: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
 };
 
 class DirentMenu extends React.Component {
@@ -17,26 +17,21 @@ class DirentMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      menuList: [],
+      isItemMenuShow: false
     };
+    this.menuList = [];
   }
 
   componentDidMount() {
-    let repoInfo = this.props.currentRepoInfo;
-    let menuList = this.calculateMenuList(repoInfo);
-    this.setState({
-      menuList: menuList,
-      menuHeight: menuList.length * 30,
-    });
-
+    this.menuList = this.calculateMenuList();
   }
 
-  calculateMenuList(repoInfo) {
-    let dirent = this.props.dirent;
-    let isRepoOwner = this.props.isRepoOwner;
+  calculateMenuList() {
+    let { currentRepoInfo, dirent, isRepoOwner } = this.props;
+
     let type = dirent.type;
     let permission = dirent.permission;
-    let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && repoInfo.has_been_shared_out) || repoInfo.is_admin);
+    let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
     if (type === 'dir' && permission === 'rw') {
       let menuList = [];
       if (can_set_folder_perm) {
@@ -48,7 +43,7 @@ class DirentMenu extends React.Component {
     }
 
     if (type === 'dir' && permission === 'r') {
-      let menuList = repoInfo.encrypted ? ['Copy', 'Details'] : ['Details'];
+      let menuList = currentRepoInfo.encrypted ? ['Copy', 'Details'] : ['Details'];
       return menuList;
     }
 
@@ -85,7 +80,7 @@ class DirentMenu extends React.Component {
 
     if (type === 'file' && permission === 'r') {
       let menuList = [];
-      if (!repoInfo.encrypted) {
+      if (!currentRepoInfo.encrypted) {
         menuList.push('Copy');
       }
       if (enableFileComment) {
@@ -97,32 +92,101 @@ class DirentMenu extends React.Component {
     }
   }
 
-  onMenuItemClick = (operation) => {
+  translateMenuItem = (menuItem) => {
+    let translateResult = '';
+    switch(menuItem) {
+      case 'Rename':
+        translateResult = gettext('Rename');
+        break;
+      case 'Move':
+        translateResult = gettext('Move');
+        break;
+      case 'Copy':
+        translateResult = gettext('Copy');
+        break;
+      case 'Permission':
+        translateResult = gettext('Permission');
+        break;
+      case 'Details':
+        translateResult = gettext('Details');
+        break;
+      case 'Unlock':
+        translateResult = gettext('Unlock');
+        break;
+      case 'Lock':
+        translateResult = gettext('Lock');
+        break;
+      case 'New Draft':
+        translateResult = gettext('New Draft');
+        break;
+      case 'Comment':
+        translateResult = gettext('Comment');
+        break;
+      case 'History':
+        translateResult = gettext('History');
+        break;
+      case 'Access Log':
+        translateResult = gettext('Access Log');
+        break;
+      case 'Open via Client':
+        translateResult = gettext('Open via Client');
+        break;
+      default:
+        break;
+    }
+    return translateResult;
+  }
+
+  clickOperationMenuToggle = (e) => {
+    e.preventDefault();
+    this.toggleOperationMenu();
+  }
+
+  toggleOperationMenu = () => {
+    this.setState(
+      {isItemMenuShow: !this.state.isItemMenuShow},
+      () => {
+        if (this.state.isItemMenuShow) {
+          this.props.onFreezedItem();
+        } else {
+          this.props.onUnfreezedItem();
+        }
+      }
+    );
+  }
+
+  onMenuItemClick = (event) => {
+    let operation = event.target.dataset.toggle;
     this.props.onMenuItemClick(operation);
   }
 
-  render() {
-    if (this.state.menuList.length) {
-      let position = this.props.menuPosition;
-      let left = position.left - (8 * 16); // 8rem width;
-      let top = position.top + (1 * 16); 
-      let style = {position: 'fixed', left: left, top: top, display: 'block'};
-      let screenH = window.innerHeight;
-      if (screenH - position.top < this.state.menuHeight) {
-        top = position.top - this.state.menuHeight;
-        style = {position: 'fixed', left: left, top: top, display: 'block'};
-      }
-      return (
-        <ul className="dropdown-menu operation-menu" style={style}>
-          {this.state.menuList.map((item, index) => {
-            return (
-              <DirentMenuItem key={index} item={item} onItemClick={this.onMenuItemClick}/>
-            );
-          })}
-        </ul>
-      );
+  render() { 
+    if (!this.menuList.length) {
+      return '';
     }
-    return '';
+    return (
+      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+        <DropdownToggle
+          tag="i" 
+          className="sf-dropdown-toggle sf2-icon-caret-down" 
+          title={gettext('More Operations')}
+          data-toggle="dropdown" 
+          aria-expanded={this.state.isItemMenuShow}
+          onClick={this.clickOperationMenuToggle}
+        />
+        <DropdownMenu>
+          {this.menuList.map((menuItem, index) => {
+            if (menuItem === 'Divider') {
+              return <DropdownItem key={index} divider/>;
+            } else {
+              return (
+                <DropdownItem key={index} data-toggle={menuItem} onClick={this.onMenuItemClick}>{this.translateMenuItem(menuItem)}</DropdownItem>
+              );
+            }
+          })}
+        </DropdownMenu>
+      </Dropdown>
+    );
   }
 }
 
