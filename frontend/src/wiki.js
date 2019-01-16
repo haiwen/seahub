@@ -45,7 +45,7 @@ class Wiki extends Component {
 
   getIndexContent = (files) => {
     files.some(file => {
-      if (file.type === 'file' && file.name === 'index.md') {
+      if (file.parent_path === '/' && file.type === 'file' && file.name === 'index.md') {
         let filePath = Utils.joinPath(file.parent_path, file.name);
         editorUtilities.getWikiFileContent(slug, filePath).then((res) => {
           this.setState({
