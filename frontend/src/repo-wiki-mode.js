@@ -892,7 +892,7 @@ class Wiki extends Component {
   }
 
   isInternalMarkdownLink(url) {
-    var re = new RegExp(siteRoot + 'library/' + repoID + '.*/*.md$');
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '.*\.md$');
     return re.test(url);
   }
 
@@ -902,7 +902,7 @@ class Wiki extends Component {
   }
 
   getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug + '(.*/*.md)');
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
@@ -912,15 +912,6 @@ class Wiki extends Component {
     var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug  + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
-
-    var index = path.substring(1).indexOf('/');
-    var dirPath = path.substring(index + 1);
-    re = new RegExp('(^/.*)');
-    if (re.test(dirPath)) {
-      path = dirPath;
-    } else {
-      path = '/' + dirPath;
-    }
 
     return path;
   }
