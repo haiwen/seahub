@@ -44,8 +44,6 @@ class DirentListItem extends React.Component {
     this.state = {
       isOperationShow: false,
       highlight: false,
-      isItemMenuShow: false,
-      menuPosition: {top: 0, left: 0 },
       progress: 0,
       isProgressDialogShow: false,
       isMoveDialogShow: false,
@@ -55,14 +53,6 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
     };
     this.zipToken = null;
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.onItemMenuHide);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onItemMenuHide);
   }
 
   //UI Interactive
@@ -93,34 +83,10 @@ class DirentListItem extends React.Component {
     }
   }
 
-  onItemMenuToggle = (e) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-
-    if (!this.state.isItemMenuShow) {
-      this.onItemMenuShow(e);
-    } else {
-      this.onItemMenuHide();
-    }
-  }
-
-  onItemMenuShow = (e) => {
-    let left = e.clientX;
-    let top  = e.clientY;
-    let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
+  onUnfreezedItem = () => {
     this.setState({
-      menuPosition: position,
-      isItemMenuShow: true,
-    });
-    this.props.onFreezedItem();
-  }
-
-  onItemMenuHide = () => {
-    this.setState({
+      highlight: false,
       isOperationShow: false,
-      highlight: '',
-      isItemMenuShow: false,
-      isRenameing: false,
     });
     this.props.onUnfreezedItem();
   }
@@ -211,7 +177,6 @@ class DirentListItem extends React.Component {
     this.props.onItemRenameToggle(this.props.dirent);
     this.setState({
       isOperationShow: false,
-      isItemMenuShow: false,
       isRenameing: true,
     });
   }
@@ -239,20 +204,16 @@ class DirentListItem extends React.Component {
   }
 
   onRenameCancel = () => {
-    this.setState({
-      isRenameing: false,
-    });
+    this.setState({isRenameing: false});
     this.props.onUnfreezedItem();
   }
 
   onItemMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
-    this.onItemMenuHide();
   }
 
   onItemCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-    this.onItemMenuHide();
   }
 
   onPermissionItem = () => {
@@ -261,7 +222,6 @@ class DirentListItem extends React.Component {
 
   onDetailsItem = () => {
     this.props.onItemDetails(this.props.dirent);
-    this.onItemMenuHide();
   }
 
   onLockItem = () => {
@@ -271,7 +231,6 @@ class DirentListItem extends React.Component {
       this.props.updateDirent(this.props.dirent, 'is_locked', true);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', true);
     });
-    this.onItemMenuHide();
   }
 
   onUnlockItem = () => {
@@ -281,7 +240,6 @@ class DirentListItem extends React.Component {
       this.props.updateDirent(this.props.dirent, 'is_locked', false);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', false);
     });
-    this.onItemMenuHide();
   }
 
   onNewDraft = () => {
@@ -305,7 +263,6 @@ class DirentListItem extends React.Component {
         toaster.danger(errMessage);
       }
     });
-    this.onItemMenuHide();
   }
 
   onComnentItem = () => {
@@ -318,7 +275,6 @@ class DirentListItem extends React.Component {
     let referer = location.href;
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath, referer: referer});
     location.href = url;
-    this.onItemMenuHide();
   }
 
   onAccessLog = () => {
@@ -330,7 +286,6 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
     location.href = url;
-    this.onItemMenuHide();
   }
 
   onItemDownload = (e) => {
@@ -373,7 +328,6 @@ class DirentListItem extends React.Component {
           _this.setState({isProgressDialogShow: false});
         }, 500);
       }
-
     });
   }
 
@@ -437,7 +391,7 @@ class DirentListItem extends React.Component {
                 <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail" alt="" /> :
                 <img src={iconUrl} width="24" alt='' />
               }
-              {dirent.is_locked && <img className="locked" src={siteRoot + mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} />}
+              {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} />}
             </div>
           </td>
           <td className="name">
@@ -478,19 +432,16 @@ class DirentListItem extends React.Component {
                     <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
-                    <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operations')} onClick={this.onItemMenuToggle}></i>
+                    <DirentMenu
+                      dirent={this.props.dirent}
+                      onMenuItemClick={this.onMenuItemClick}
+                      currentRepoInfo={this.props.currentRepoInfo}
+                      isRepoOwner={this.props.isRepoOwner}
+                      onFreezedItem={this.props.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
+                    />
                   </li>
                 </ul>
-                {
-                  this.state.isItemMenuShow &&
-                  <DirentMenu
-                    dirent={this.props.dirent}
-                    menuPosition={this.state.menuPosition}
-                    onMenuItemClick={this.onMenuItemClick}
-                    currentRepoInfo={this.props.currentRepoInfo}
-                    isRepoOwner={this.props.isRepoOwner}
-                  />
-                }
               </div>
             }
           </td>

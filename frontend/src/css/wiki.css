@@ -63,7 +63,6 @@ img[src=""] {
 .cur-view-content {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .cur-view-content .wiki-page-container{
