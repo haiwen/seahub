@@ -1,4 +1,4 @@
-import { mediaUrl, gettext } from './constants';
+import { mediaUrl, gettext, siteRoot } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 
 export const Utils = {
@@ -387,6 +387,31 @@ export const Utils = {
         return false;
       }
     }
+  },
+
+  isInternalMarkdownLink: function(url, repoID) {
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '.*\.md$');
+    return re.test(url);
+  },
+
+  isInternalDirLink: function(url, repoID) {
+    var re = new RegExp(siteRoot + 'library/' + repoID + '.*');
+    return re.test(url);
+  },
+
+  getPathFromInternalMarkdownLink: function(url, repoID) {
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '(.*\.md)');
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
+    return path;
+  },
+  
+  getPathFromInternalDirLink: function(url, repoID, repoName) {
+    var re = new RegExp(siteRoot + 'library/' + repoID + '/' + repoName  + '(/.*)');
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
+
+    return path;
   },
 
   compareTwoWord: function(wordA, wordB) {

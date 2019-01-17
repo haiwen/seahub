@@ -119,11 +119,11 @@ class Wiki extends Component {
 
   onLinkClick = (link) => {
     const url = link;
-    if (this.isInternalMarkdownLink(url)) {
-      let path = this.getPathFromInternalMarkdownLink(url);
+    if (Utils.isInternalMarkdownLink(url, repoID)) {
+      let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
       this.initMainPanelData(path);
-    } else if (this.isInternalDirLink(url)) {
-      let path = this.getPathFromInternalDirLink(url);
+    } else if (Utils.isInternalDirLink(url, repoID)) {
+      let path = Utils.getPathFromInternalDirLink(url, repoID, slug);
       this.initWikiData(path);
     } else {
       window.location.href = url;
@@ -451,45 +451,6 @@ class Wiki extends Component {
       return true;
     }
     return false;
-  }
-
-  isMarkdownFile(filePath) {
-    let index = filePath.lastIndexOf('.');
-    if (index === -1) {
-      return false;
-    } else {
-      let type = filePath.substring(index).toLowerCase();
-      if (type === '.md' || type === '.markdown') {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
-  isInternalMarkdownLink(url) {
-    var re = new RegExp(siteRoot + 'lib/' + repoID + '.*\.md$');
-    return re.test(url);
-  }
-
-  isInternalDirLink(url) {
-    var re = new RegExp(siteRoot + 'library/' + repoID + '.*');
-    return re.test(url);
-  }
-
-  getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '(.*\.md)');
-    var array = re.exec(url);
-    var path = decodeURIComponent(array[1]);
-    return path;
-  }
-
-  getPathFromInternalDirLink(url) {
-    var re = new RegExp(siteRoot + 'library/' + repoID + '/' + slug + '(.*)');
-    var array = re.exec(url);
-    var path = decodeURIComponent(array[1]);
-
-    return path;
   }
 
   render() {
