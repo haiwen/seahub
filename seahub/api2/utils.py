@@ -62,7 +62,8 @@ def prepare_starred_files(files):
                  'file_name' : os.path.basename(f.path),
                  'mtime' : f.last_modified,
                  'mtime_relative': translate_seahub_time(f.last_modified),
-                 'dir' : f.is_dir
+                 'dir' : f.is_dir,
+                 'repo_encrpyted' : f.repo.encrypted
                  }
         if not f.is_dir:
             try:
