@@ -19,6 +19,7 @@ const propTypes = {
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
   onRepoDetails: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired
 };
 
 class Content extends Component {
@@ -138,6 +139,7 @@ class Content extends Component {
             onRenameRepo={this.props.onRenameRepo}
             onDeleteRepo={this.props.onDeleteRepo}
             onRepoDetails={this.props.onRepoDetails}
+            onItemClick={this.props.onItemClick}
             onTransfer={this.onTransfer}
             showDeleteItemPopup={this.showDeleteItemPopup}
             onHistorySetting={this.onHistorySetting}

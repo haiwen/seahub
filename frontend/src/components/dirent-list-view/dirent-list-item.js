@@ -32,6 +32,7 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   currentRepoInfo: PropTypes.object,
   isRepoOwner: PropTypes.bool,
@@ -108,6 +109,14 @@ class DirentListItem extends React.Component {
       seafileAPI.starFile(repoID, filePath).then(() => {
         this.props.updateDirent(this.props.dirent, 'starred', true);
       });
+    }
+  }
+
+  // on '<tr>'
+  onDirentClick = (e) => {
+    // '<td>' is clicked
+    if (e.target.tagName == 'TD') {
+      this.props.onDirentClick(this.props.dirent);
     }
   }
 
@@ -383,7 +392,7 @@ class DirentListItem extends React.Component {
 
     return (
       <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick}>
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>

@@ -103,6 +103,12 @@ class MyLibraries extends Component {
     this.setState({items: items});
   }
 
+  onItemClick = (repo) => {
+    if (this.state.isShowDetails) {
+      this.onRepoDetails(repo);
+    }
+  }
+
   onRepoDetails = (repo) => {
     this.setState({
       isShowDetails: true,
@@ -140,6 +146,7 @@ class MyLibraries extends Component {
                 onRenameRepo={this.onRenameRepo}
                 onTransferRepo={this.onTransferRepo}
                 onRepoDetails={this.onRepoDetails}
+                onItemClick={this.onItemClick}
               />
             </div>
           </div>
