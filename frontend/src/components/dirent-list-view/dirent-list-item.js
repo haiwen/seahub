@@ -387,9 +387,9 @@ class DirentListItem extends React.Component {
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
-          <td className="text-center cursor-pointer">
-            {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty" onClick={this.onItemStarred}></i>}
-            {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star" onClick={this.onItemStarred}></i>}
+          <td className="text-center">
+            {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onItemStarred}></i>}
+            {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star cursor-pointer" onClick={this.onItemStarred}></i>}
           </td>
           <td className="text-center">
             <div className="dir-icon">
