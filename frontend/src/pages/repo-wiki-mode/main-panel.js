@@ -121,6 +121,13 @@ class MainPanel extends Component {
     this.props.onMainNavBarClick(path);
   }
 
+  // on '<tr>'
+  onDirentClick = (dirent) => {
+    if (this.state.isDirentDetailShow) {
+      this.onItemDetails(dirent);
+    }
+  }
+
   onItemDetails = (dirent) => {
     this.setState({
       currentDirent: dirent,
@@ -255,6 +262,7 @@ class MainPanel extends Component {
                         onItemRename={this.props.onItemRename}
                         onItemMove={this.props.onItemMove}
                         onItemCopy={this.props.onItemCopy}
+                        onDirentClick={this.onDirentClick}
                         onItemDetails={this.onItemDetails}
                         isDirentListLoading={this.props.isDirentListLoading}
                         updateDirent={this.props.updateDirent}

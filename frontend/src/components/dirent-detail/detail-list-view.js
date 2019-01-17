@@ -86,7 +86,7 @@ class DetailListView extends React.Component {
             <tr><th>{gettext('Folder')}</th><td>{direntDetail.dir_count}</td></tr>
             <tr><th>{gettext('File')}</th><td>{direntDetail.file_count}</td></tr>
             <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
-            <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
+            <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
             <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
           </tbody>
         </table>
@@ -99,8 +99,8 @@ class DetailListView extends React.Component {
               <tr><th width="35%"></th><th width="65%"></th></tr>
             </thead>
             <tbody>
-              <tr><th>{gettext('Size')}</th><td>{direntDetail.size}</td></tr>
-              <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
+              <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
+              <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
               <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
               <tr className="file-tag-container">
                 <th>{gettext('Tags')}</th>

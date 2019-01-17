@@ -84,6 +84,13 @@ class DirPanel extends React.Component {
     this.props.onItemClick(dirent);
   }
 
+  // on '<tr>'
+  onDirentClick = (dirent) => {
+    if (this.state.isDirentDetailShow) {
+      this.onItemDetails(dirent);
+    }
+  }
+
   onItemDetails = (dirent) => {
     this.setState({
       currentDirent: dirent,
@@ -205,6 +212,7 @@ class DirPanel extends React.Component {
                           isAllItemSelected={this.props.isAllDirentSelected}
                           isRepoOwner={this.state.isRepoOwner}
                           onAddFile={this.props.onAddFile}
+                          onDirentClick={this.onDirentClick}
                           onItemDetails={this.onItemDetails}
                           onItemMove={this.props.onItemMove}
                           onItemCopy={this.props.onItemCopy}

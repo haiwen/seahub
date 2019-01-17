@@ -32,6 +32,7 @@ const propTypes = {
   onItemClick: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
 };
@@ -248,6 +249,7 @@ class DirentListView extends React.Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  onDirentClick={this.props.onDirentClick}
                   onItemDetails={this.onItemDetails}
                   showImagePopup={this.showImagePopup}
                 />
