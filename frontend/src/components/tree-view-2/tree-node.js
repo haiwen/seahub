@@ -75,7 +75,7 @@ class TreeNode {
 
   deleteChild(node) {
     this.children = this.children.filter(item => {
-      return item.path !== node.path;
+      return item !== node;
     });
   }
 

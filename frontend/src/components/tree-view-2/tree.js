@@ -71,12 +71,10 @@ class Tree {
   }
 
   moveNode(node, destNode) {
-    let nodeCopy = node.clone();
-
+    // delete
+    this.deleteNode(node);
     // add
     destNode.addChild(node);
-    // delete
-    this.deleteNode(nodeCopy);
   }
 
   copyNode(node, destNode) {

@@ -81,14 +81,17 @@ class TreeHelper {
   moveNodeListByPaths(tree, nodePaths, destPath) {
     let treeCopy = tree.clone();
     let destNode = treeCopy.getNodeByPath(destPath);
-    nodePaths.forEach(nodePath => { 
-      if (destNode) {
+    if (destNode) {
+      nodePaths.forEach(nodePath => { 
         let node = treeCopy.getNodeByPath(nodePath);
         treeCopy.moveNode(node, destNode);
-      } else {
+      })
+    } else {
+      nodePaths.forEach(nodePath=> {
+        let node = treeCopy.getNodeByPath(nodePath);
         treeCopy.delete(node);
-      }
-    });
+      });
+    }
     return treeCopy;
   }
 
@@ -105,12 +108,12 @@ class TreeHelper {
   copyNodeListByPaths(tree, nodePaths, destPath) {
     let treeCopy = tree.clone();
     let destNode = treeCopy.getNodeByPath(destPath);
-    nodePaths.forEach(nodePath => {
-      let node = treeCopy.getNodeByPath(nodePath);
-      if (destNode) {
-        treeCopy.copyNode(node, destNode);
-      }
-    });
+    if (destNode) {
+      nodePaths.forEach(nodePath => {
+        let node = treeCopy.getNodeByPath(nodePath);
+          treeCopy.copyNode(node, destNode);
+        });
+    }
     return treeCopy;
   }
 
