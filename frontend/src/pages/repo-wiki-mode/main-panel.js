@@ -62,8 +62,6 @@ const propTypes = {
   reviewID: PropTypes.any,
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
-  drafts: PropTypes.array,
-  reviews: PropTypes.array,
   draftCounts: PropTypes.number,
   reviewCounts: PropTypes.number,
 };
@@ -192,6 +190,7 @@ class MainPanel extends Component {
 
   render() {
     const ErrMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
+    const showRepoInfoBar = this.props.path === '/' && (this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null || this.props.draftCounts != 0 || this.props.reviewCounts != 0);
     
     return (
       <div className="main-panel wiki-main-panel o-hidden">
@@ -261,14 +260,12 @@ class MainPanel extends Component {
                       goReviewPage={this.props.goReviewPage}
                     /> :
                     <Fragment>
-                      {this.props.path === '/' && (this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null || this.props.draftCounts !=0 || this.props.reviewCounts != 0) && (
+                      {showRepoInfoBar && (
                         <RepoInfoBar
                           repoID={repoID}
                           currentPath={this.props.path}
                           usedRepoTags={this.props.usedRepoTags}
                           readmeMarkdown={this.props.readmeMarkdown}
-                          drafts={this.props.drafts}
-                          reviews={this.props.reviews}
                           draftCounts={this.props.draftCounts}
                           reviewCounts={this.props.reviewCounts}
                         />

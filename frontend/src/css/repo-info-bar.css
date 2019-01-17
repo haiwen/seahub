@@ -39,6 +39,7 @@
 
 .readme-file {
   margin: 8px 15px;
+  display: inline;
 }
 
 .readme-file a {

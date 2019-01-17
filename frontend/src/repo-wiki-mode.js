@@ -14,8 +14,6 @@ import LibDecryptDialog from './components/dialog/lib-decrypt-dialog';
 import ModalPortal from './components/modal-portal';
 import Dirent from './models/dirent';
 import FileTag from './models/file-tag';
-import Review from './models/review';
-import Draft from './models/draft';
 import RepoTag from './models/repo-tag';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -57,8 +55,6 @@ class Wiki extends Component {
       dirID: '',
       usedRepoTags: [],
       readmeMarkdown: null,
-      drafts: [],
-      reviews: [],
       draftCounts: 0,
       reviewCounts: 0,
     };
@@ -76,7 +72,12 @@ class Wiki extends Component {
 
   componentDidMount() {
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
-    this.listRepoDraftsReviewsInfo();
+    seafileAPI.getRepoDraftReviewCounts(repoID).then(res => {
+      this.setState({
+        draftCounts: res.data.draft_counts,
+        reviewCounts: res.data.review_counts
+      });
+    });
     seafileAPI.listRepoTags(repoID).then(res => {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
@@ -113,27 +114,6 @@ class Wiki extends Component {
 
   componentDidUpdate() {
     this.lastModifyTime = new Date();
-  }
-
-  listRepoDraftsReviewsInfo = () => {
-    seafileAPI.listRepoDraftsReviews(repoID).then(res => {
-      let drafts = res.data.drafts.map(item => {
-        let draft = new Draft(item);
-        return draft;
-      });
-
-      let reviews = res.data.reviews.map(item => {
-        let review = new Review(item);
-        return review;
-      });
-
-      this.setState({
-        drafts: drafts,
-        reviews: reviews,
-        draftCounts: res.data.draft_counts,
-        reviewCounts: res.data.review_counts
-      });
-    });
   }
 
   onRepoUpdateEvent = () => {
@@ -205,9 +185,7 @@ class Wiki extends Component {
     seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
       let name = Utils.getFileName(filePath);
       let parentPath = Utils.getDirName(filePath);
-      if (isDraft) {
-        this.listRepoDraftsReviewsInfo();
-      }
+
       this.addNodeToTree(name, parentPath, 'file');
       if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'file', res.data);
@@ -1080,8 +1058,6 @@ class Wiki extends Component {
           goReviewPage={this.goReviewPage}
           usedRepoTags={this.state.usedRepoTags}
           readmeMarkdown={this.state.readmeMarkdown}
-          drafts={this.state.drafts}
-          reviews={this.state.reviews}
           draftCounts={this.state.draftCounts}
           reviewCounts={this.state.reviewCounts}
         />

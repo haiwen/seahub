@@ -28,6 +28,11 @@ class OriginalFileConflict(Exception):
 
 
 class DraftManager(models.Manager):
+    def get_draft_counts_by_repo_id(self, repo_id):
+        num = self.filter(origin_repo_id=repo_id).count()
+
+        return num
+
     def list_draft_by_repo_id(self, repo_id):
         """list draft by repo id
         """
@@ -264,6 +269,11 @@ class DraftReviewExist(Exception):
 
 
 class DraftReviewManager(models.Manager):
+    def get_review_counts_by_repo_id(self, repo_id, status='open'):
+        num = self.filter(origin_repo_id=repo_id, status=status).count()
+
+        return num
+
     def list_review_by_repo_id(self, repo_id, status='open'):
         reviews = []
         qs = self.filter(origin_repo_id=repo_id, status=status)
