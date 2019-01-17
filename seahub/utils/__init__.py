@@ -557,32 +557,22 @@ if EVENTS_CONFIG_FILE:
         valid_events = []
         total_used = 0
         try:
-            next_start = start
-            while True:
-                events = _get_events_inner(ev_session, username, next_start,
-                                           count, org_id)
-                if not events:
-                    break
+            events = _get_events_inner(ev_session,
+                    username, start, count, org_id)
+            for e1 in events:
+                duplicate = False
+                for e2 in valid_events:
+                    if _same_events(e1, e2): duplicate = True; break
 
-                for e1 in events:
-                    duplicate = False
-                    for e2 in valid_events:
-                        if _same_events(e1, e2): duplicate = True; break
+                new_merge = False
+                if hasattr(e1, 'commit') and e1.commit and \
+                   new_merge_with_no_conflict(e1.commit):
+                    new_merge = True
 
-                    new_merge = False
-                    if hasattr(e1, 'commit') and e1.commit and \
-                       new_merge_with_no_conflict(e1.commit):
-                        new_merge = True
+                if not duplicate and not new_merge:
+                    valid_events.append(e1)
 
-                    if not duplicate and not new_merge:
-                        valid_events.append(e1)
-                    total_used = total_used + 1
-                    if len(valid_events) == count:
-                        break
-
-                if len(valid_events) == count:
-                    break
-                next_start = next_start + len(events)
+                total_used = total_used + 1
         finally:
             ev_session.close()
 
@@ -598,41 +588,25 @@ if EVENTS_CONFIG_FILE:
 
         Return 'limit' events or less than 'limit' events if no more events remain
         '''
-        valid_events = []
-        next_start = start
-        while True:
-            if org_id > 0:
-                events = seafevents.get_org_user_events(ev_session, org_id,
-                                                        username, next_start,
-                                                        limit)
-            else:
-                events = seafevents.get_user_events(ev_session, username,
-                                                    next_start, limit)
-            if not events:
-                break
+        if org_id > 0:
+            events = seafevents.get_org_user_events(ev_session, org_id,
+                    username, start, limit)
+        else:
+            events = seafevents.get_user_events(ev_session,
+                    username, start, limit)
 
-            for ev in events:
-                if ev.etype == 'repo-update':
-                    repo = seafile_api.get_repo(ev.repo_id)
-                    if not repo:
-                        # delete the update event for repo which has been deleted
-                        seafevents.delete_event(ev_session, ev.uuid)
-                        continue
-                    if repo.encrypted:
-                        repo.password_set = seafile_api.is_password_set(
-                            repo.id, username)
-                    ev.repo = repo
-                    ev.commit = seaserv.get_commit(repo.id, repo.version, ev.commit_id)
+        for ev in events:
+            if ev.etype == 'repo-update':
+                repo = seafile_api.get_repo(ev.repo_id)
+                if not repo:
+                    continue
+                if repo.encrypted:
+                    repo.password_set = seafile_api.is_password_set(
+                        repo.id, username)
+                ev.repo = repo
+                ev.commit = seaserv.get_commit(repo.id, repo.version, ev.commit_id)
 
-                valid_events.append(ev)
-                if len(valid_events) == limit:
-                    break
-
-            if len(valid_events) == limit:
-                break
-            next_start = next_start + len(valid_events)
-
-        return valid_events
+        return events
 
     def get_user_events(username, start, count):
         """Return user events list and a new start.

@@ -4101,31 +4101,28 @@ class EventsView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
+
         if not EVENTS_ENABLED:
             events = None
             return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
 
-        start = request.GET.get('start', '')
-
-        if not start:
-            start = 0
-        else:
-            try:
-                start = int(start)
-            except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Start id must be integer')
+        start = request.GET.get('start', 0)
+        try:
+            start = int(start)
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Start id must be integer')
 
         email = request.user.username
         events_count = 15
 
         if is_org_context(request):
             org_id = request.user.org.org_id
-            events, events_more_offset = get_org_user_events(org_id, email,
-                                                             start,
-                                                             events_count)
+            events, events_more_offset = get_org_user_events(org_id,
+                    email, start, events_count)
         else:
-            events, events_more_offset = get_user_events(email, start,
-                                                         events_count)
+            events, events_more_offset = get_user_events(
+                    email, start, events_count)
+
         events_more = True if len(events) == events_count else False
 
         l = []
