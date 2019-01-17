@@ -10,6 +10,7 @@ const propTypes = {
   showDeleteItemPopup: PropTypes.func.isRequired,
   onHistorySetting: PropTypes.func.isRequired,
   onRepoDetails: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired
 };
 
 class TableBody extends Component {
@@ -39,6 +40,7 @@ class TableBody extends Component {
           showDeleteItemPopup={this.props.showDeleteItemPopup}
           onHistorySetting={this.props.onHistorySetting}
           onRepoDetails={this.props.onRepoDetails}
+          onItemClick={this.props.onItemClick}
         />
       );
     });

@@ -21,6 +21,7 @@ const propTypes = {
   showDeleteItemPopup: PropTypes.func.isRequired,
   onHistorySetting: PropTypes.func.isRequired,
   onRepoDetails: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired
 }
 
 class Item extends Component {
@@ -149,6 +150,14 @@ class Item extends Component {
   folderPerm = () => {
   }
 
+  // on '<tr>'
+  onItemClick = (e) => {
+    // '<td>' is clicked
+    if (e.target.tagName == 'TD') {
+      this.props.onItemClick(this.props.data);
+    }
+  }
+
   showDetails = () => {
     let data = this.props.data;
     this.props.onRepoDetails(data);
@@ -239,7 +248,7 @@ class Item extends Component {
 
     const desktopItem = (
       <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onClick={this.onItemClick}>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td>
             {this.state.showChangeLibName && (
@@ -277,7 +286,7 @@ class Item extends Component {
 
     const mobileItem = (
       <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onClick={this.onItemClick}>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td>
             {data.repo_name ?
