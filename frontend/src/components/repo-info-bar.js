@@ -5,7 +5,7 @@ import { Modal } from 'reactstrap';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
 import ListRepoDraftsDialog from './dialog/list-repo-drafts-dialog';
 import ListRepoReviewsDialog from './dialog/list-repo-reviews-dialog';
-import { siteRoot } from '../utils/constants';
+import { siteRoot, gettext } from '../utils/constants';
 import { Utils } from '../utils/utils';
 
 import '../css/repo-info-bar.css';
@@ -26,6 +26,8 @@ class RepoInfoBar extends React.Component {
     this.state = {
       currentTag: null,
       isListTaggedFileShow: false,
+      showRepoDrafts: false,
+      showRepoReviews: false,
     };
   }
 
@@ -39,6 +41,18 @@ class RepoInfoBar extends React.Component {
   onCloseDialog = () => {
     this.setState({
       isListTaggedFileShow: false
+    });
+  }
+
+  toggleDrafts = () => {
+    this.setState({
+      showRepoDrafts: !this.state.showRepoDrafts 
+    });
+  }
+
+  toggleReviews = () => {
+    this.setState({
+      showRepoReviews: !this.state.showRepoReviews 
     });
   }
 
@@ -71,15 +85,23 @@ class RepoInfoBar extends React.Component {
         )}
 
         {this.props.draftCounts > 0 &&
-          <ListRepoDraftsDialog repoID={this.props.repoID}
-                                draftCounts={this.props.draftCounts}
-          />
+          <div className="readme-file">
+            <i className="readme-flag fa fa-pen"></i>
+            <span className="used-tag-name">{gettext('draft')}</span>
+            <span className="used-tag-files" onClick={this.toggleDrafts}>
+              {this.props.draftCounts > 1 ? this.props.draftCounts + ' files' : this.props.draftCounts + ' file'}
+            </span>
+          </div>
         }
 
         {this.props.reviewCounts > 0 &&
-          <ListRepoReviewsDialog repoID={this.props.repoID} 
-                                 reviewCounts={this.props.reviewCounts}
-          />
+          <div className="readme-file">
+            <i className="readme-flag sf2-icon-review"></i>
+            <span className="used-tag-name">{gettext('review')}</span>
+            <span className="used-tag-files" onClick={this.toggleReviews}>
+              {this.props.reviewCounts > 1 ? this.props.reviewCounts + ' files' : this.props.reviewCounts + ' file'}
+            </span>
+          </div>
         }
 
         {this.state.isListTaggedFileShow && (
@@ -94,6 +116,29 @@ class RepoInfoBar extends React.Component {
             </Modal>
           </ModalPortal>
         )}
+
+        {this.state.showRepoDrafts && (
+          <ModalPortal>
+            <Modal isOpen={true}>
+              <ListRepoDraftsDialog
+                toggle={this.toggleDrafts}
+                repoID={this.props.repoID}
+              />
+            </Modal>
+          </ModalPortal>
+        )}
+
+        {this.state.showRepoReviews && (
+          <ModalPortal>
+            <Modal isOpen={true}>
+              <ListRepoReviewsDialog
+                toggle={this.toggleReviews}
+                repoID={this.props.repoID}
+              />
+            </Modal>
+          </ModalPortal>
+        )}
+
       </div>
     );
   }

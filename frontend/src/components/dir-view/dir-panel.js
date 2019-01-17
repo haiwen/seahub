@@ -124,7 +124,9 @@ class DirPanel extends React.Component {
 
   render() {
     const errMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
-    const showRepoInfoBar = this.props.path === '/' && (this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null || this.props.draftCounts != 0 || this.props.reviewCounts != 0);
+    const showRepoInfoBar = this.props.path === '/' && (
+                            this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null ||
+                            this.props.draftCounts != 0 || this.props.reviewCounts != 0);
     return (
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-north">

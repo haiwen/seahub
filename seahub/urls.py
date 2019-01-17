@@ -375,8 +375,8 @@ urlpatterns = [
 
     url(r'^api/v2.1/file-review/$', FileReviewView.as_view(), name='api-v2.1-file-review'),
 
-    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/draft-info/$', RepoDraftInfo.as_view(), name='api-v2.1-repo-draft-info' ),
-    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/review-info/$', RepoReviewInfo.as_view(), name='api-v2.1-repo-review-info' ),
+    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/drafts/$', RepoDraftInfo.as_view(), name='api-v2.1-repo-drafts' ),
+    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/reviews/$', RepoReviewInfo.as_view(), name='api-v2.1-repo-reviews' ),
     url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/draft-review-counts/$', RepoDraftReviewCounts.as_view(), name='api-v2.1-repo-draft-review-counts' ),
 
     ## user::activities
