@@ -1,12 +1,11 @@
 class TreeNode {
 
-  constructor({id, object, isLoaded = false, isPreload = false, isExpanded = false}) {
+  constructor({path, object, isLoaded = false, isPreload = false, isExpanded = false}) {
     if (!object) {
       throw new Error("The object parameter is required.");
     }
-    this.id = id || object.name,  // The default setting is the object name, which is set to a relative path when the father is set.
+    this.path = path || object.name,  // The default setting is the object name, which is set to a relative path when the father is set.
     this.object = object;
-    this.loadUrl = this.id;
     this.isLoaded = isLoaded;
     this.isPreload = isPreload;
     this.isExpanded = isExpanded;
@@ -16,9 +15,8 @@ class TreeNode {
 
   clone() {
     let treeNode = new TreeNode({
-      id: this.id,
+      path: this.path,
       object: this.object,
-      loadUrl: this.loadUrl,
       isLoaded: this.isLoaded,
       isPreload: this.isPreload,
       isExpanded: this.isExpanded,
@@ -61,11 +59,8 @@ class TreeNode {
   }
 
   setParentNode(parentNode) {
-
-    this.id = this.generatorId(parentNode);
-    this.loadUrl = this.id;
+    this.path = this.generatorId(parentNode);
     this.parentNode = parentNode;
-
     this.isLoaded = false;  // update parentNode need loaded data again;
   }
 
@@ -80,15 +75,13 @@ class TreeNode {
 
   deleteChild(node) {
     this.children = this.children.filter(item => {
-      return item.id !== node.id;
+      return item.path !== node.path;
     });
   }
 
   rename(newName) {
     this.object.name = newName;
-    this.id = this.generatorId(this.parentNode);
-    this.loadUrl = this.id;
-    
+    this.path = this.generatorId(this.parentNode); 
     this.isLoaded = false;  // rename node need loaded children again
   }
 
@@ -103,7 +96,7 @@ class TreeNode {
   }
 
   generatorId(parentNode) {
-    return parentNode.id === '/' ? parentNode.id + this.object.name : parentNode.id + '/' + this.object.name;
+    return parentNode.path === '/' ? parentNode.path + this.object.name : parentNode.path + '/' + this.object.name;
   }
 
   serializeToJson() {
@@ -113,9 +106,8 @@ class TreeNode {
     }
 
     const treeNode = {
-      id: this.id,
+      path: this.path,
       object: this.object,
-      loadUrl: this.loadUrl,
       isLoaded: this.isLoaded,
       isPreload: this.isPreload,
       isExpanded: this.isExpanded,
@@ -127,13 +119,11 @@ class TreeNode {
   }
 
   static deserializefromJson(object) {
-    let { id, object, loadUrl, isLoaded, isExpanded, parentNode, children = [] } = object;
+    let { path, object, isLoaded, isExpanded, parentNode, children = [] } = object;
 
     const treeNode = new TreeNode({
-      id,
-      parentId,
+      path,
       object,
-      loadUrl,
       isLoaded,
       isPreload,
       isExpanded,

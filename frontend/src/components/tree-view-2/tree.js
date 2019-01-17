@@ -18,19 +18,6 @@ class Tree {
     this.root = node;
   }
 
-  getNode(node) {
-    let findNode = null;
-    function callback(currentNode) {
-      if (currentNode.id === node.id) {
-        findNode = currentNode;
-        return true;
-      }
-      return false;
-    }
-    this.traverseDF(callback);
-    return findNode;
-  }
-
   getNodeByPath(path) { 
     // id ==== path
     let id = path;
@@ -46,18 +33,7 @@ class Tree {
     return findNode;
   }
 
-  getNodeParent(node) {
-    let node = this.getNode(node);
-    return node.parentNode;
-  }
-
-  getNodeChildren(node) {
-    let node = this.getNode();
-    return node.children;
-  }
-
   getNodeChildrenObject(node) {
-    let node = this.getNode();
     let objects = node.children.map(item => {
       let object = item.object;
       return object;
@@ -66,19 +42,17 @@ class Tree {
   }
 
   addNodeToParent(node, parentNode) {
-    parentNode = this.getNode(parentNode);
     parentNode.addChild(node);
   }
 
   addNodeListToParent(nodeList, parentNode) {
-    parentNode = this.getNode(parentNode);
     nodeList.forEach(node => {
       parentNode.addCihld(node);
     });
   }
 
   deleteNode(node) {
-    let parentNode = this.getNode(node.parentNode);
+    let parentNode = node.parentNode;
     parentNode.deleteChild(node);
   }
 
@@ -89,12 +63,10 @@ class Tree {
   }
 
   renameNode(node, newName) {
-    node = this.getNode(node);
     node.rename(newName);
   }
 
   updateNode(node, keys, newValues) {
-    node = this.getNode(node);
     node.updateObjectParam(keys, newValues);
   }
 
@@ -102,17 +74,12 @@ class Tree {
     let nodeCopy = node.clone();
 
     // add
-    destNode = this.getNode(destNode);
     destNode.addChild(node);
-
     // delete
-    let parentNode = this.getNode(nodeCopy.parentNode);
-    parentNode.deleteChild(nodeCopy);
+    this.deleteNode(nodeCopy);
   }
 
   copyNode(node, destNode) {
-    // add
-    destNode = this.getNode(destNode);
     destNode.addChild(node);
   }
 
@@ -145,9 +112,7 @@ class Tree {
   }
 
   expandNode(node, isExpandedAncestor) {
-    node = this.getNode(node);
     node.setExpanded(true);
-
     if (isExpandedAncestor) { // exparent current node all ancestor
       while (node.parentNode) {
         node.parentNode.setExpanded(true);
@@ -157,15 +122,12 @@ class Tree {
   }
   
   collapseNode(node) {
-    node = this.getNode(node);
     node.setExpanded(false);
   }
 
   isNodeChild(node, parentNode) {
-    node = this.getNode(node);
-    parentNode = this.getNode(parentNode);
     return parentNode.children.some(item => {
-      return item.id === node.id;
+      return item.path === node.path;
     });
   }
 
