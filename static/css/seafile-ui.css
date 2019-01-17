@@ -10701,7 +10701,6 @@ Icon input
   bottom: 0; }
 
 .article {
-  padding: 40px 60px 40px 60px;
   font-size: 14px;
   line-height: 1.6;
   color: #333; }
@@ -10809,8 +10808,6 @@ Icon input
     padding: 6px 13px; }
   .article table p {
     margin: 0; }
-  .article table tr {
-    height: 100%; }
   .article table tr, .article table th {
     display: flex; }
   .article table td, .article table th {
