@@ -29,17 +29,19 @@ class DirentListItem extends React.Component {
     };
   }
 
-  onItemClick = () => {
+  onItemClick = (e) => {
+    e.stopPropagation();  // need prevent event popup
     if (this.props.selectedPath !== this.state.filePath) {
       this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
     } else {
       if (this.props.dirent.type === 'dir') {
-        this.onToggleClick();
+        this.onToggleClick(e);
       }
     }
   }
-
-  onToggleClick = () => {
+  
+  onToggleClick = (e) => {
+    e.stopPropagation();  // need prevent event popup
     if (!this.state.hasRequest) {
       seafileAPI.listDir(this.props.repo.repo_id, this.state.filePath).then(res => {
         let direntList = [];
@@ -53,18 +55,14 @@ class DirentListItem extends React.Component {
               direntList.push(dirent);
             }
           }
-          direntList = Utils.sortDirents(direntList, 'name', 'asc');
-          this.setState({
-            hasRequest: true,
-            direntList: direntList,
-          });
+        });
+        direntList = Utils.sortDirents(direntList, 'name', 'asc');
+        this.setState({
+          hasRequest: true,
+          direntList: direntList,
         });
         if (res.data.length === 0 || direntList.length === 0) {
-          this.setState({
-            hasRequest: true,
-            direntList: [],
-            hasChildren: false
-          });
+          this.setState({hasChildren: false});
         }
       });
     }
