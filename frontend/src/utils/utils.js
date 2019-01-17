@@ -171,7 +171,23 @@ export const Utils = {
     return filePath.slice(lastIndex+1);
   },
 
-    /**
+  /**
+   * input: '/abc/bc/cb'
+   * output: ['/abc', '/abc/bc', '/abc/bc/cb'];
+   */
+  getPaths: function(path) {
+    let paths = path.split('/').slice(1);
+    let result = [path];
+    while(paths.length) {
+      let item = paths.pop();
+      if (item) {
+        result.push('/' + paths.join('/'));
+      }
+    }
+    return result;
+  },
+
+  /**
    * input: 
    *  eg: /
    *      ../abc/abc/
