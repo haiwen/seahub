@@ -16,7 +16,6 @@ class HistoryList extends React.Component {
     super(props);
     this.perPage = 25;
     this.state = {
-      activeItem: 0,
       currentPage: 1,
       loading: false
     };
@@ -24,17 +23,7 @@ class HistoryList extends React.Component {
 
   onClick = (event, key, preCommitID, currentCommitID)=> {
     if (key === this.state.activeItem) return false;
-    this.setState({
-      activeItem: key,
-    });
-    axios.all([
-      seafileAPI.getFileRevision(draftOriginRepoID, currentCommitID, draftFilePath),
-      seafileAPI.getFileRevision(draftOriginRepoID, preCommitID, draftFilePath)
-    ]).then(axios.spread((res1, res2) => {
-      axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
-        this.props.setDiffViewerContent(content1.data, content2.data);
-      }));
-    }));
+    this.props.onHistoryItemClick(currentCommitID, preCommitID, key);
   }
 
   onScroll = (event) => {
@@ -51,8 +40,8 @@ class HistoryList extends React.Component {
         });
         seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, currentPage, this.perPage).then((res) => {
           let currentHistoryList = Object.assign([], this.props.historyList);
+          this.props.onHistoryListChange([...currentHistoryList, ...res.data.data]);
           this.setState({
-            historyList: [...currentHistoryList, ...res.data.data],
             loading : false
           });
         });
@@ -75,7 +64,7 @@ class HistoryList extends React.Component {
                   <HistoryItem
                   onClick={this.onClick}
                   ctime={item.ctime}
-                  className={this.state.activeItem === index ? 'item-active': ''}
+                  className={this.props.activeItem === index ? 'item-active': ''}
                   currentCommitId={item.commit_id}
                   name={item.creator_name}
                   index={index}

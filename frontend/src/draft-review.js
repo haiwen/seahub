@@ -31,6 +31,7 @@ import './css/initial-style.css';
 import './css/toolbar.css';
 import './css/draft-review.css';
 
+const URL = require('url-parse');
 require('@seafile/seafile-editor/dist/editor/code-hight-package');
 
 class DraftReview extends React.Component {
@@ -53,6 +54,7 @@ class DraftReview extends React.Component {
       totalReversionCount: 0,
       changedNodes: [],
       isShowCommentDialog: false,
+      activeItem: null,
     };
     this.quote = '';
     this.newIndex = null;
@@ -99,25 +101,59 @@ class DraftReview extends React.Component {
           return;
         }
 
-        axios.all([
-          seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
-          seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
-        ]).then(axios.spread((res1, res2) => {
-          axios.all([
-            seafileAPI.getFileContent(res1.data),
-            seafileAPI.getFileContent(res2.data)
-          ]).then(axios.spread((draftContent, draftOriginContent) => {
+        const hash = window.location.hash;
+        if (hash.indexOf('#history-') === 0) {
+          const currentCommitID = hash.slice(9, 49);
+          const preCommitID = hash.slice(50, 90);
+          this.setState({
+            isLoading: false,
+            activeTab: 'history',
+          });
+          seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, 1, 25).then((res) => {
+            const historyList = res.data.data;
             this.setState({
-              draftContent: draftContent.data,
-              draftOriginContent: draftOriginContent.data,
-              isLoading: false
-            }); 
-            let that = this;
-            setTimeout(() => {
-              that.getChangedNodes();
-            }, 100);
+              historyList: historyList,
+              totalReversionCount: res.data.total_count
+            });
+            for (let i = 0, length = historyList.length; i < length; i++) {
+              if (preCommitID === historyList[i].commit_id) {
+                this.setState({
+                  activeItem: i
+                });
+                break;
+              }
+            }
+          });
+          axios.all([
+            seafileAPI.getFileRevision(draftOriginRepoID, currentCommitID, draftFilePath),
+            seafileAPI.getFileRevision(draftOriginRepoID, preCommitID, draftFilePath)
+          ]).then(axios.spread((res1, res2) => {
+            axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
+              this.setDiffViewerContent(content2.data, content1.data);
+            }));
           }));
-        }));
+          return;
+        } else {
+          axios.all([
+            seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
+            seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
+          ]).then(axios.spread((res1, res2) => {
+            axios.all([
+              seafileAPI.getFileContent(res1.data),
+              seafileAPI.getFileContent(res2.data)
+            ]).then(axios.spread((draftContent, draftOriginContent) => {
+              this.setState({
+                draftContent: draftContent.data,
+                draftOriginContent: draftOriginContent.data,
+                isLoading: false
+              }); 
+              let that = this;
+              setTimeout(() => {
+                that.getChangedNodes();
+              }, 100);
+            }));
+          }));
+        }
         break;
       case "finished":  
         if (!originFileExists) {
@@ -146,6 +182,35 @@ class DraftReview extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('selectionchange', this.setBtnPosition);
+  }
+
+  onHistoryItemClick = (currentCommitID, preCommitID, activeItem) => {
+    const url = 'history-' + preCommitID + '-' + currentCommitID;
+    this.setURL(url);
+    this.setState({
+      activeItem: activeItem
+    });
+
+    axios.all([
+      seafileAPI.getFileRevision(draftOriginRepoID, currentCommitID, draftFilePath),
+      seafileAPI.getFileRevision(draftOriginRepoID, preCommitID, draftFilePath)
+    ]).then(axios.spread((res1, res2) => {
+      axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
+        this.setDiffViewerContent(content1.data, content2.data);
+      }));
+    }));
+  }
+
+  onHistoryListChange = (historyList) => {
+    this.setState({
+      historyList: historyList
+    });
+  }
+
+  setURL = (newurl) => {
+    let url = new URL(window.location.href);
+    url.set('hash', newurl);
+    window.location.href = url.toString();
   }
 
   onCloseReview = () => {
@@ -438,6 +503,9 @@ class DraftReview extends React.Component {
 
   tabItemClick = (tab) => {
     if (this.state.activeTab !== tab) {
+      if (tab !== 'history') {
+        this.setURL('#');
+      }
       if (tab == 'reviewInfo') { 
         this.initialContent();
       }
@@ -815,9 +883,13 @@ class DraftReview extends React.Component {
                   </TabPane>
                   { this.state.reviewStatus == 'finished'? '':
                     <TabPane tabId="history" className="history">
-                      <HistoryList setDiffViewerContent={this.setDiffViewerContent} 
+                      <HistoryList
+                        activeItem={this.state.activeItem}
                         historyList={this.state.historyList}
-                        totalReversionCount={this.state.totalReversionCount}/>
+                        onHistoryItemClick={this.onHistoryItemClick}
+                        onHistoryListChange={this.onHistoryListChange}
+                        totalReversionCount={this.state.totalReversionCount}
+                      />
                     </TabPane>
                   }
                 </TabContent>
