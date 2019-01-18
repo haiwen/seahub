@@ -37,12 +37,9 @@ class ListRepoReviewsDialog extends React.Component {
     let reviews = this.state.reviews;
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.toggle}>
-          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.toggle} aria-label={gettext('Back')}></span>
-          {gettext('Reviews')}
-        </ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Reviews')}</ModalHeader>
         <ModalBody className="dialog-list-container">
-          <table className="table-thead-hidden">
+          <table>
             <thead>
               <tr>
                 <th width='50%' className="ellipsis">{gettext('Name')}</th>

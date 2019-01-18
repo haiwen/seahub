@@ -77,33 +77,32 @@ class RepoInfoBar extends React.Component {
             })}
           </ul>
         )}
-        {readmeMarkdown !== null && (
-          <div className="readme-file">
-            <i className="readme-flag fa fa-flag"></i>
-            <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
-          </div>
-        )}
-
-        {this.props.draftCounts > 0 &&
-          <div className="readme-file">
-            <i className="readme-flag fa fa-pen"></i>
-            <span className="used-tag-name">{gettext('draft')}</span>
-            <span className="used-tag-files" onClick={this.toggleDrafts}>
-              {this.props.draftCounts > 1 ? this.props.draftCounts + ' files' : this.props.draftCounts + ' file'}
+        <div className="readme-files">
+          {readmeMarkdown !== null && (
+            <span className="readme-file">
+              <i className="readme-flag fa fa-flag"></i>
+              <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
             </span>
-          </div>
-        }
-
-        {this.props.reviewCounts > 0 &&
-          <div className="readme-file">
-            <i className="readme-flag sf2-icon-review"></i>
-            <span className="used-tag-name">{gettext('review')}</span>
-            <span className="used-tag-files" onClick={this.toggleReviews}>
-              {this.props.reviewCounts > 1 ? this.props.reviewCounts + ' files' : this.props.reviewCounts + ' file'}
+          )}
+          {this.props.draftCounts > 0 &&
+            <span className="readme-file">
+              <i className="readme-flag fa fa-pen"></i>
+              <span className="used-tag-name">{gettext('draft')}</span>
+              <span className="used-tag-files" onClick={this.toggleDrafts}>
+                {this.props.draftCounts > 1 ? this.props.draftCounts + ' files' : this.props.draftCounts + ' file'}
+              </span>
             </span>
-          </div>
-        }
-
+          }
+          {this.props.reviewCounts > 0 &&
+            <span className="readme-file">
+              <i className="readme-flag fa fa-clipboard"></i>
+              <span className="used-tag-name">{gettext('review')}</span>
+              <span className="used-tag-files" onClick={this.toggleReviews}>
+                {this.props.reviewCounts > 1 ? this.props.reviewCounts + ' files' : this.props.reviewCounts + ' file'}
+              </span>
+            </span>
+          }
+        </div>
         {this.state.isListTaggedFileShow && (
           <ModalPortal>
             <ListTaggedFilesDialog

@@ -45,12 +45,9 @@ class ListTaggedFilesDialog extends React.Component {
     let taggedFileList = this.state.taggedFileList;
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.props.onClose}>
-          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
-          {gettext('Tagged Files')}
-        </ModalHeader>
+        <ModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</ModalHeader>
         <ModalBody className="dialog-list-container">
-          <table className="table-thead-hidden">
+          <table>
             <thead>
               <tr>
                 <th width='50%' className="ellipsis">{gettext('Name')}</th>

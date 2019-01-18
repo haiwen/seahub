@@ -36,12 +36,9 @@ class ListRepoDraftsDialog extends React.Component {
     let drafts = this.state.drafts;
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.toggle}>
-          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.toggle} aria-label={gettext('Back')}></span>
-          {gettext('Drafts')}
-        </ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Drafts')}</ModalHeader>
         <ModalBody className="dialog-list-container">
-          <table className="table-thead-hidden">
+          <table>
             <thead>
               <tr>
                 <th width='50%' className="ellipsis">{gettext('Name')}</th>
