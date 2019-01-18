@@ -252,7 +252,7 @@ class MainPanel extends Component {
                       usedRepoTags={this.props.usedRepoTags}
                       readmeMarkdown={this.props.readmeMarkdown}
                       draftCounts={this.props.draftCounts}
-	                    reviewCounts={this.props.reviewCounts}
+                      reviewCounts={this.props.reviewCounts}
                     />
                   )}
                   <DirentListView
