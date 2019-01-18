@@ -1,5 +1,7 @@
 import json
 from mock import patch
+import os
+import pytest
 
 from seaserv import ccnet_api
 from django.core.urlresolvers import reverse
@@ -14,6 +16,8 @@ try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
 except ImportError:
     LOCAL_PRO_DEV_ENV = False
+
+TRAVIS = 'TRAVIS' in os.environ
 
 def remove_org(org_id):
     org_id = int(org_id)
@@ -88,6 +92,7 @@ class AdminOrganizationsTest(BaseTestCase):
         self.assertEqual(403, resp.status_code)
 
 
+@pytest.mark.skipif(TRAVIS, reason="pro only")
 class AdminOrganizationTest(BaseTestCase):
     def setUp(self):
         org_name = randstring(6)
