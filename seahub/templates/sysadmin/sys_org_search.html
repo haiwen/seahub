@@ -7,8 +7,10 @@
 
 <form id="search-repo-form" method="get" action="{% url "sys_org_search" %}">
     <p class="tip">{% trans "Tip: you can search by keyword in name or creator or both." %}</p>
-    <label>{% trans "Name" %}</label><input type="text" name="name" class="input" value="{{name}}"/><br />
-    <label>{% trans "Creator" %}</label><input type="text" name="creator" class="input" value="{{creator}}"/><br />
+    <label>{% trans "Name" %}</label><br />
+    <input type="text" name="name" class="input" value="{{name}}"/><br />
+    <label>{% trans "Creator" %}</label><br />
+    <input type="text" name="creator" class="input" value="{{creator}}"/><br />
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
@@ -23,11 +25,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
- addConfirmTo($('.remove-btn'), {
-    'title':"Delete org",
-    'con':"{% trans "Are you sure you want to delete %s ?" %}",
-    'post': true // post request
-});
-
+{% include "sysadmin/snippets/org_admin_js.html" %}
 </script>
 {% endblock %}

@@ -54,12 +54,6 @@ $('#add-btn').on('click', function() {
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
-addConfirmTo($('.remove-btn'), {
-    'title':"Delete org",
-    'con':"{% trans "Are you sure you want to delete %s ?" %}",
-    'post': true // post request
-});
-
 $('#add-org-form').on('submit', function() {
     var form = $(this),
         form_id = form.attr('id'),
@@ -122,5 +116,6 @@ addConfirmTo($('.unset-trial'), {
     'con':"{% trans "Are you sure you want to remove trial for %s ?" %}"
 });
 
+{% include "sysadmin/snippets/org_admin_js.html" %}
 </script>
 {% endblock %}

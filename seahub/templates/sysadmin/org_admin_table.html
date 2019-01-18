@@ -9,7 +9,7 @@
         <th width="7%">{% trans "Operations" %}</th>
     </tr>
     {% for org in orgs %}
-    <tr>
+    <tr data-orgid="{{org.org_id}}">
         <td>
             <a href="{% url 'sys_org_info_user' org.org_id %}">{{ org.org_name }}</a>
             {% if org.trial_info %}
@@ -18,21 +18,22 @@
         </td>
         <td><a href="{% url 'user_info' org.creator %}">{{ org.creator }}</a></td>
         <td>
-          <div class="user-role">
-            {% if org.is_default_role %}
-            <span class="user-role-cur-value">{% trans "Default" %}</span>
-            {% else %}
-            {{ org.role }}
-            {% endif %}
-          </div>
-
-            <select name="role" class="user-role-select hide">
-                <option value={{default_org}} {%if org.is_default_role %}selected="selected"{% endif %}>{% trans "Default" %}</option>
+            <div class="org-role">
+                <span class="org-role-cur-value">
+                    {% if org.is_default_role %}
+                    {% trans "Default" %}
+                    {% else %}
+                    {{ org.role }}
+                    {% endif %}
+                </span>
+                <span title="{% trans "Edit" %}" class="org-role-edit-icon sf2-icon-edit op-icon vh"></span>
+            </div>
+            <select name="role" class="org-role-select hide">
+                <option value="{{default_org}}" {%if org.is_default_role %}selected="selected"{% endif %}>{% trans "Default" %}</option>
                 {% for role in extra_org_roles %}
-                <option value={{role}} {%if org.role == role %}selected="selected"{% endif %}>{{ role }}</option>
+                <option value="{{role}}" {%if org.role == role %}selected="selected"{% endif %}>{{ role }}</option>
                 {% endfor %}
             </select>
-          
         </td>
         <td>
             {{ org.quota_usage|seahub_filesizeformat }} {% if org.total_quota > 0 %} / {{ org.total_quota|seahub_filesizeformat }} {% endif %}
