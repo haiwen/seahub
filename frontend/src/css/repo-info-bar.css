@@ -1,6 +1,5 @@
 .repo-info-bar {
-  margin-bottom: 5px;
-  padding: 0 10px;
+  padding: 10px;
   border: 1px solid #e6e6dd;
   border-radius: 5px;
   background: #f8f8f8;
@@ -8,7 +7,6 @@
 
 .used-tag-list {
   list-style: none;
-  margin: 8px 0;
 }
 
 .used-tag-item {
@@ -38,7 +36,8 @@
 }
 
 .readme-file {
-  margin: 8px 15px;
+  margin: 0 15px;
+  display: inline-block;
 }
 
 .readme-file a {

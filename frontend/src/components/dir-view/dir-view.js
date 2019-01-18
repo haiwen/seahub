@@ -44,6 +44,8 @@ class DirView extends React.Component {
       errorMsg: '',
       usedRepoTags: [],
       readmeMarkdown: null,
+      draftCounts: 0,
+      reviewCounts: 0,
     };
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
@@ -61,6 +63,12 @@ class DirView extends React.Component {
     let location = decodeURIComponent(window.location.href);
     let repoID = this.props.repoID;
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
+    seafileAPI.getRepoDraftReviewCounts(repoID).then(res => {
+      this.setState({
+        draftCounts: res.data.draft_counts,
+        reviewCounts: res.data.review_counts,
+      })
+    })
     seafileAPI.listRepoTags(repoID).then(res => {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
@@ -696,6 +704,8 @@ class DirView extends React.Component {
         onLibDecryptDialog={this.onLibDecryptDialog}
         usedRepoTags={this.state.usedRepoTags}
         readmeMarkdown={this.state.readmeMarkdown}
+        draftCounts={this.state.draftCounts}
+        reviewCounts={this.state.reviewCounts}
       />
     );
   }

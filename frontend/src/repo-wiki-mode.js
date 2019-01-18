@@ -56,6 +56,8 @@ class Wiki extends Component {
       dirID: '',
       usedRepoTags: [],
       readmeMarkdown: null,
+      draftCounts: 0,
+      reviewCounts: 0,
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
@@ -71,6 +73,12 @@ class Wiki extends Component {
 
   componentDidMount() {
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
+    seafileAPI.getRepoDraftReviewCounts(repoID).then(res => {
+      this.setState({
+        draftCounts: res.data.draft_counts,
+        reviewCounts: res.data.review_counts
+      });
+    });
     seafileAPI.listRepoTags(repoID).then(res => {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
@@ -1007,6 +1015,8 @@ class Wiki extends Component {
           goReviewPage={this.goReviewPage}
           usedRepoTags={this.state.usedRepoTags}
           readmeMarkdown={this.state.readmeMarkdown}
+          draftCounts={this.state.draftCounts}
+          reviewCounts={this.state.reviewCounts}
         />
       </div>
     );

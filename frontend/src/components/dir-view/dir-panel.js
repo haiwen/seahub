@@ -52,6 +52,8 @@ const propTypes = {
   onFileUploadSuccess: PropTypes.func.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
+  draftCounts: PropTypes.number,
+  reviewCounts: PropTypes.number,
 };
 
 class DirPanel extends React.Component {
@@ -129,7 +131,9 @@ class DirPanel extends React.Component {
 
   render() {
     const errMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
-
+    const showRepoInfoBar = this.props.path === '/' && (
+                            this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null ||
+                            this.props.draftCounts != 0 || this.props.reviewCounts != 0);
     return (
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-north">
@@ -191,12 +195,14 @@ class DirPanel extends React.Component {
                     {!this.props.pathExist ?
                       errMessage :
                       <Fragment>
-                        {this.props.path === '/' && !(this.props.usedRepoTags.length === 0 && this.props.readmeMarkdown === null) && (
+                        {showRepoInfoBar && (
                           <RepoInfoBar
                             repoID={this.props.repoID}
                             currentPath={this.props.path}
                             usedRepoTags={this.props.usedRepoTags}
                             readmeMarkdown={this.props.readmeMarkdown}
+                            draftCounts={this.props.draftCounts}
+                            reviewCounts={this.props.reviewCounts}
                           />
                         )}
                         <DirentListView
