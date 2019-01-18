@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -36,7 +36,7 @@ class ListRepoReviewsDialog extends React.Component {
   render() {
     let reviews = this.state.reviews;
     return (
-      <Fragment>
+      <Modal isOpen={true}>
         <ModalHeader toggle={this.toggle}>
           <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.toggle} aria-label={gettext('Back')}></span>
           {gettext('Reviews')}
@@ -70,7 +70,7 @@ class ListRepoReviewsDialog extends React.Component {
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
         </ModalFooter>
-      </Fragment>
+      </Modal>
     );
   }
 }

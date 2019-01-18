@@ -106,36 +106,30 @@ class RepoInfoBar extends React.Component {
 
         {this.state.isListTaggedFileShow && (
           <ModalPortal>
-            <Modal isOpen={true}>
-              <ListTaggedFilesDialog
-                repoID={repoID}
-                currentTag={this.state.currentTag}
-                onClose={this.onCloseDialog}
-                toggleCancel={this.onListTaggedFiles}
-              />
-            </Modal>
+            <ListTaggedFilesDialog
+              repoID={repoID}
+              currentTag={this.state.currentTag}
+              onClose={this.onCloseDialog}
+              toggleCancel={this.onListTaggedFiles}
+            />
           </ModalPortal>
         )}
 
         {this.state.showRepoDrafts && (
           <ModalPortal>
-            <Modal isOpen={true}>
-              <ListRepoDraftsDialog
-                toggle={this.toggleDrafts}
-                repoID={this.props.repoID}
-              />
-            </Modal>
+            <ListRepoDraftsDialog
+              toggle={this.toggleDrafts}
+              repoID={this.props.repoID}
+            />
           </ModalPortal>
         )}
 
         {this.state.showRepoReviews && (
           <ModalPortal>
-            <Modal isOpen={true}>
-              <ListRepoReviewsDialog
-                toggle={this.toggleReviews}
-                repoID={this.props.repoID}
-              />
-            </Modal>
+            <ListRepoReviewsDialog
+              toggle={this.toggleReviews}
+              repoID={this.props.repoID}
+            />
           </ModalPortal>
         )}
 

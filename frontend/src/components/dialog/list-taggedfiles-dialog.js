@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -44,7 +44,7 @@ class ListTaggedFilesDialog extends React.Component {
   render() {
     let taggedFileList = this.state.taggedFileList;
     return (
-      <Fragment>
+      <Modal isOpen={true}>
         <ModalHeader toggle={this.props.onClose}>
           <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('Tagged Files')}
@@ -78,7 +78,7 @@ class ListTaggedFilesDialog extends React.Component {
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Close')}</Button>
         </ModalFooter>
-      </Fragment>
+      </Modal>
     );
   }
 }
