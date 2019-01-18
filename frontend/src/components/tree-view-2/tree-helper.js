@@ -1,4 +1,5 @@
 import { Utils } from '../utils/utils';
+import Tree from './tree';
 
 class TreeHelper {
 
@@ -115,6 +116,19 @@ class TreeHelper {
         });
     }
     return treeCopy;
+  }
+
+  parseDirentListToTree(direntList) {
+    let tree = new Tree();
+    let root = new Node({object = {name: '/'}, isLoaded = true, isExpanded = true});
+    tree.setRoot(root);
+
+    let nodeList = direntList.map(dirent => {
+      let object = dirent;
+      return new Node({object});
+    });
+
+    return this.addNodeListToParent(nodeList, root);
   }
 
 }
