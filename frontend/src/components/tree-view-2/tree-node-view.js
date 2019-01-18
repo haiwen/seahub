@@ -7,10 +7,12 @@ const propTypes = {
   permission: PropTypes.bool.isRequired,
   currentPath: PropTypes.string.isRequired,
   paddingLeft: PropTypes.number.isRequired,
-  onFreezedToggle: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
   onNodeClick: PropTypes.func.isRequired,
-  onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
+  onNodeCollapse: PropTypes.func.isRequired,
+  onNodeDragStart: PropTypes.func.isRequired,
+  onFreezedToggle: PropTypes.func.isRequired,
 };
 
 function sortNode(a, b) {
@@ -57,6 +59,14 @@ class TreeNodeView extends React.Component {
     }
   }
 
+  onNodeDragStart = (e) => {
+
+  }
+
+  onMenuItemClick = (menuItem) => {
+
+  }
+
   getNodeIcon = () => {
     let { node } = this.props;
     let icon = '';
@@ -90,10 +100,10 @@ class TreeNodeView extends React.Component {
           return (
             <TreeNodeView 
               node={item}
-              paddingLeft={paddingLeft}
               permission={this.props.permission}
+              paddingLeft={paddingLeft}
               onFreezedToggle={this.props.onFreezedToggle}
-              onMenuItemClick={this.props.onMenuItemClick}
+              onMenuItemClick={this.onMenuItemClick}
               onNodeClick={this.props.onNodeClick}
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
@@ -101,10 +111,8 @@ class TreeNodeView extends React.Component {
           );
         })}
       </div>
-    )
+    );
   }
-
-  
 
   render() {
     let { node } = this.props;
