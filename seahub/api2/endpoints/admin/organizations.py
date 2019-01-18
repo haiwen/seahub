@@ -17,6 +17,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
+from seahub.role_permissions.utils import get_available_org_roles
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -33,13 +34,13 @@ except ImportError:
 
 try:
     from seahub.settings import MULTI_TENANCY
+    from seahub_extra.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
 
 def get_org_info(org):
-
     org_id = org.org_id
 
     org_info = {}
@@ -47,6 +48,7 @@ def get_org_info(org):
     org_info['org_name'] = org.org_name
     org_info['ctime'] = timestamp_to_isoformat_timestr(org.ctime)
     org_info['org_url_prefix'] = org.url_prefix
+    org_info['role'] = OrgSettings.objects.get_role_by_org(org)
 
     creator = org.creator
     org_info['creator_email'] = creator
@@ -202,6 +204,14 @@ class AdminOrganization(APIView):
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        role = request.data.get('role', None)
+        if role:
+            if role not in get_available_org_roles():
+                error_msg = 'Role %s invalid.' % role
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            OrgSettings.objects.add_or_update(org, role)
 
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)

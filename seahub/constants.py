@@ -18,6 +18,8 @@ SYSTEM_ADMIN = 'system_admin'
 DAILY_ADMIN = 'daily_admin'
 AUDIT_ADMIN = 'audit_admin'
 
+DEFAULT_ORG = 'default'
+
 HASH_URLS = {
         'GROUP_MEMBERS': settings.SITE_ROOT + '#group/%(group_id)s/members/',
         'GROUP_DISCUSS': settings.SITE_ROOT + '#group/%(group_id)s/discussions/',

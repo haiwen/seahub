@@ -1,14 +1,15 @@
 {% load seahub_tags i18n %}
 <table>
     <tr>
-        <th width="26%">{% trans "Name" %}</th>
-        <th width="25%">{% trans "Creator" %}</th>
+        <th width="21%">{% trans "Name" %}</th>
+        <th width="20%">{% trans "Creator" %}</th>
+        <th width="15%">{% trans "Role" %}</th>
         <th width="17%">{% trans "Space Used" %}</th>
         <th width="20%">{% trans "Created At / Expiration" %}</th>
-        <th width="12%">{% trans "Operations" %}</th>
+        <th width="7%">{% trans "Operations" %}</th>
     </tr>
     {% for org in orgs %}
-    <tr>
+    <tr data-orgid="{{org.org_id}}">
         <td>
             <a href="{% url 'sys_org_info_user' org.org_id %}">{{ org.org_name }}</a>
             {% if org.trial_info %}
@@ -16,6 +17,24 @@
             {% endif %}
         </td>
         <td><a href="{% url 'user_info' org.creator %}">{{ org.creator }}</a></td>
+        <td>
+            <div class="org-role">
+                <span class="org-role-cur-value">
+                    {% if org.is_default_role %}
+                    {% trans "Default" %}
+                    {% else %}
+                    {{ org.role }}
+                    {% endif %}
+                </span>
+                <span title="{% trans "Edit" %}" class="org-role-edit-icon sf2-icon-edit op-icon vh"></span>
+            </div>
+            <select name="role" class="org-role-select hide">
+                <option value="{{default_org}}" {%if org.is_default_role %}selected="selected"{% endif %}>{% trans "Default" %}</option>
+                {% for role in extra_org_roles %}
+                <option value="{{role}}" {%if org.role == role %}selected="selected"{% endif %}>{{ role }}</option>
+                {% endfor %}
+            </select>
+        </td>
         <td>
             {{ org.quota_usage|seahub_filesizeformat }} {% if org.total_quota > 0 %} / {{ org.total_quota|seahub_filesizeformat }} {% endif %}
         </td>

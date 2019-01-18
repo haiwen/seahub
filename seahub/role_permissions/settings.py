@@ -1,12 +1,26 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+from copy import deepcopy
 import logging
 
 from django.conf import settings
-from seahub.constants import DEFAULT_USER, GUEST_USER, \
+from seahub.constants import DEFAULT_USER, GUEST_USER, DEFAULT_ORG, \
         DEFAULT_ADMIN, SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+def merge_roles(default, custom):
+    """Merge custom dict into the copy of default dict, and return the copy."""
+    copy = deepcopy(default)
+    for key in custom:
+        if key in default:
+            copy[key].update(custom[key])
+        else:
+            default_copy = default['default'].copy()
+            default_copy.update(custom[key])
+            copy[key] = default_copy
+
+    return copy
 
 DEFAULT_ENABLED_ROLE_PERMISSIONS = {
     DEFAULT_USER: {
@@ -26,6 +40,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_export_files_via_mobile_client': True,
         'storage_ids': [],
         'role_quota': '',
+        'can_use_wiki': True,
     },
     GUEST_USER: {
         'can_add_repo': False,
@@ -44,35 +59,23 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_export_files_via_mobile_client': False,
         'storage_ids': [],
         'role_quota': '',
+        'can_use_wiki': False,
     },
 }
 
-role_permissions = DEFAULT_ENABLED_ROLE_PERMISSIONS.copy()
-
 try:
-    role_permissions.update(settings.ENABLED_ROLE_PERMISSIONS)  # merge outter dict
+    custom_role_permissions = settings.ENABLED_ROLE_PERMISSIONS
 except AttributeError:
-    pass  # ignore error if ENABLED_ROLE_PERMISSONS is not set in settings.py
+    custom_role_permissions = {}
 
-def get_enabled_role_permissions():
-    permissions = {}
-    for role, perms in role_permissions.iteritems():
-        default_permissions = DEFAULT_ENABLED_ROLE_PERMISSIONS[DEFAULT_USER]
-        # check role permission syntax
-        for k in perms.keys():
-            if k not in default_permissions.keys():
-                logger.warn('"%s" is not valid permission, please review the ENABLED_ROLE_PERMISSIONS setting.' % k)
+ENABLED_ROLE_PERMISSIONS = merge_roles(
+    DEFAULT_ENABLED_ROLE_PERMISSIONS, custom_role_permissions
+)
 
-        all_false_permission = {}
-        for permission in default_permissions.keys():
-            all_false_permission[permission] = False
-
-        all_false_permission.update(perms)
-        permissions[role] = all_false_permission
-
-    return permissions
-
-ENABLED_ROLE_PERMISSIONS = get_enabled_role_permissions()
+if settings.DEBUG and custom_role_permissions:
+    from pprint import pprint
+    print('=== ENABLED ROLE PERMISSIONS ===')
+    pprint(ENABLED_ROLE_PERMISSIONS)
 
 # role permission for administraror
 
@@ -141,3 +144,22 @@ def get_enabled_admin_role_permissions():
     return permissions
 
 ENABLED_ADMIN_ROLE_PERMISSIONS = get_enabled_admin_role_permissions()
+
+# role permissions for Org
+DEFAULT_ENABLED_ORG_ROLE_PERMISSIONS = {
+    DEFAULT_ORG: DEFAULT_ENABLED_ROLE_PERMISSIONS[DEFAULT_USER]
+}
+
+try:
+    custom_org_role_permissions = settings.ENABLED_ORG_ROLE_PERMISSIONS
+except AttributeError:
+    custom_org_role_permissions = {}
+
+ENABLED_ORG_ROLE_PERMISSIONS = merge_roles(
+    DEFAULT_ENABLED_ORG_ROLE_PERMISSIONS, custom_org_role_permissions
+)
+
+if settings.DEBUG and custom_org_role_permissions:
+    from pprint import pprint
+    print('=== ENABLED ORG ROLE PERMISSIONS ===')
+    pprint(ENABLED_ORG_ROLE_PERMISSIONS)

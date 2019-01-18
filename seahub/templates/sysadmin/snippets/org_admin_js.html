@@ -1,0 +1,49 @@
+{% load i18n %}
+
+addConfirmTo($('.remove-btn'), {
+    'title':"Delete org",
+    'con':"{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true // post request
+});
+
+$('.org-role-edit-icon').on('click', function() {
+    var $td = $(this).closest('td');
+    $('.org-role', $td).hide();
+    $('.org-role-select', $td).show();
+});
+$('.org-role-select').on('change', function() {
+    var $select = $(this),
+        $td = $select.closest('td'),
+        $role = $('.org-role', $td);
+    var org_id = $(this).closest('tr').attr('data-orgid');
+
+    $.ajax({
+        url: '{{SITE_ROOT}}api/v2.1/admin/organizations/' + org_id + '/',
+        type: 'PUT',
+        dataType: 'json',
+        data: {'role': $select.val()},
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            $select.hide();
+            $('.org-role-cur-value', $td).html($('option[value="' + data.role + '"]', $select).text());
+            $role.show();
+            $.modal.close();
+            feedback("{% trans "Edit succeeded" %}", 'success');
+        },
+        error: function(xhr) {
+            $select.hide();
+            $role.show();
+            $.modal.close();
+            feedback(prepareAjaxErrorMsg(xhr), 'error');
+        }
+    });
+});
+$(document).on('click', function(e) {
+    var target = e.target || event.srcElement;
+    // target can't be edit-icon
+    if (!$('.org-role-edit-icon, .org-role-select').is(target)) {
+        $('.org-role').show();
+        $('.org-role-select').hide();
+    }
+});

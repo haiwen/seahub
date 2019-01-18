@@ -1,10 +1,10 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 
-from .settings import ENABLED_ROLE_PERMISSIONS, \
+from .settings import ENABLED_ROLE_PERMISSIONS, ENABLED_ORG_ROLE_PERMISSIONS, \
         ENABLED_ADMIN_ROLE_PERMISSIONS
 
-from seahub.constants import DEFAULT_USER, DEFAULT_ADMIN
+from seahub.constants import DEFAULT_USER, DEFAULT_ADMIN, DEFAULT_ORG
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +12,11 @@ def get_available_roles():
     """Get available roles defined in `ENABLED_ROLE_PERMISSIONS`.
     """
     return ENABLED_ROLE_PERMISSIONS.keys()
+
+def get_available_org_roles():
+    """Get available roles defined in `ENABLED_ORG_ROLE_PERMISSIONS`.
+    """
+    return ENABLED_ORG_ROLE_PERMISSIONS.keys()
 
 def get_enabled_role_permissions_by_role(role):
     """Get permissions dict(perm_name: bool) of a role.
@@ -24,6 +29,16 @@ def get_enabled_role_permissions_by_role(role):
         role = DEFAULT_USER
 
     return ENABLED_ROLE_PERMISSIONS[role]
+
+def get_enabled_org_role_permissions_by_role(role):
+    if not role:
+        role = DEFAULT_ORG
+
+    if role not in ENABLED_ORG_ROLE_PERMISSIONS.keys():
+        logger.warn('%s is not a valid org role, use default role.' % role)
+        role = DEFAULT_ORG
+
+    return ENABLED_ORG_ROLE_PERMISSIONS[role]
 
 def get_available_admin_roles():
     """Get available admin roles defined in `ENABLED_ADMIN_ROLE_PERMISSIONS`.

@@ -717,7 +717,7 @@ def libraries(request):
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
-            'enable_wiki': settings.ENABLE_WIKI,
+            'enable_wiki': request.user.permissions.can_use_wiki(),
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
             'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
@@ -1219,7 +1219,7 @@ def react_fake_view(request, **kwargs):
     return render(request, "react_app.html", {
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
-        'enable_wiki': settings.ENABLE_WIKI,
+        'enable_wiki': request.user.permissions.can_use_wiki(),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
