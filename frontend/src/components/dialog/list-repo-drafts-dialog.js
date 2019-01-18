@@ -18,13 +18,18 @@ class ListRepoDraftsDialog extends React.Component {
     super(props);
     this.state = {
       drafts: [],
-    }
+    };
   }
+
   componentDidMount() { 
     seafileAPI.listRepoDrafts(this.props.repoID).then(res => {
+      let drafts = res.data.drafts.map(item => {
+        let draft = new Draft(item);
+        return draft;
+      })
       this.setState({
-        drafts: res.data.drafts 
-      })  
+        drafts: drafts 
+      }); 
     })
   }
 
@@ -47,8 +52,7 @@ class ListRepoDraftsDialog extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.drafts.map((item) => {
-                let draft = new Draft(item);
+              {this.state.drafts.map((draft) => {
                 let href = siteRoot + 'lib/' + draft.originRepoID + '/file' + Utils.encodePath(draft.draftFilePath);
                 return (
                   <tr key={draft.id}>

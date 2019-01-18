@@ -14,6 +14,7 @@ const propTypes = {
 
 
 class ListRepoReviewsDialog extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -23,8 +24,12 @@ class ListRepoReviewsDialog extends React.Component {
   
   componentDidMount() {
     seafileAPI.listRepoReviews(this.props.repoID).then(res => {
+      let reviews = res.data.reviews.map(item =>{
+        let review = new Review(item);
+        return review;
+      })
       this.setState({
-        reviews: res.data.reviews 
+        reviews: reviews 
       }); 
     });
   }
@@ -48,8 +53,7 @@ class ListRepoReviewsDialog extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.reviews.map((item) => {
-                let review = new Review(item);
+              {this.state.reviews.map((review) => {
                 let href = siteRoot + 'drafts/review/' + review.id; 
                 return (
                   <tr key={review.id}>
