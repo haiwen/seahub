@@ -1391,11 +1391,24 @@ def sys_org_search(request):
                 if creator in o.creator.lower():
                     orgs.append(o)
 
+    org_roles = OrgSettings.objects.get_by_orgs(orgs)
+    org_roles_dict = {}
+    for x in org_roles:
+        org_roles_dict[x.org_id] = x.role
+
+    for org in orgs:
+        org.role = org_roles_dict.get(org.org_id, DEFAULT_ORG)
+        org.is_default_role = True if org.role == DEFAULT_ORG else False
+
+    extra_org_roles = [x for x in get_available_org_roles() if x != DEFAULT_ORG]
+
     return render(request, 
         'sysadmin/sys_org_search.html', {
             'orgs': orgs,
             'name': org_name,
             'creator': creator,
+            'extra_org_roles': extra_org_roles,
+            'default_org': DEFAULT_ORG,
         })
 
 @login_required

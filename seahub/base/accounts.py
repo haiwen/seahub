@@ -202,20 +202,23 @@ class UserPermissions(object):
     def can_export_files_via_mobile_client(self):
         return self._get_perm_by_roles('can_export_files_via_mobile_client')
 
-    # Add default value for compatible issue when EMAILBE_ROLE_PERMISSIONS
-    # is not updated with newly added permissions.
     def role_quota(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('role_quota', '')
 
     def can_send_share_link_mail(self):
-
         if not IS_EMAIL_CONFIGURED:
             return False
 
-        return get_enabled_role_permissions_by_role(self.user.role).get('can_send_share_link_mail', True)
+        return self._get_perm_by_roles('can_send_share_link_mail')
 
     def storage_ids(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('storage_ids', [])
+
+    def can_use_wiki(self):
+        if not settings.ENABLE_WIKI:
+            return False
+
+        return self._get_perm_by_roles('can_use_wiki')
 
 class AdminPermissions(object):
     def __init__(self, user):
