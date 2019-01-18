@@ -214,83 +214,81 @@ class MainPanel extends Component {
               )}
             </div>
             <div className="cur-view-content">
-              {!this.props.pathExist ?
-                ErrMessage :
+              {!this.props.pathExist && ErrMessage }
+              {(this.props.pathExist && this.props.isViewFile) && (
+                <WikiMarkdownViewer
+                  isFileLoading={this.props.isFileLoading}
+                  markdownContent={this.props.content}
+                  latestContributor={this.props.latestContributor}
+                  lastModified = {this.props.lastModified}
+                  onLinkClick={this.props.onLinkClick}
+                >
+                  <Fragment>
+                    {this.props.reviewStatus === 'open' &&
+                      <div className='seafile-btn-view-review text-center'>
+                        <div className='tag tag-green'> 
+                          {gettext('This file is in review stage')}
+                          <a className="ml-2" onMouseDown={this.props.goReviewPage}>{gettext('View Review')}</a>
+                        </div>
+                      </div>
+                    }
+                    {(!this.props.isDraft && this.props.hasDraft && this.props.reviewStatus !== 'open') &&
+                      <div className='seafile-btn-view-review text-center'>
+                        <div className='tag tag-green'>
+                          {gettext('This file is in draft stage.')}
+                          <a className="ml-2" onMouseDown={this.props.goDraftPage}>{gettext('Edit Draft')}</a>
+                        </div>
+                      </div>
+                    }
+                  </Fragment>
+                </WikiMarkdownViewer>
+              )}
+              {(this.props.pathExist && !this.props.isViewFile) && (
                 <Fragment>
-                  {this.props.isViewFile ?
-                    <WikiMarkdownViewer
-                      isFileLoading={this.props.isFileLoading}
-                      markdownContent={this.props.content}
-                      latestContributor={this.props.latestContributor}
-                      lastModified = {this.props.lastModified}
-                      onLinkClick={this.props.onLinkClick}
-                    >
-                      <Fragment>
-                        {this.props.reviewStatus === 'open' &&
-                          <div className='seafile-btn-view-review text-center'>
-                            <div className='tag tag-green'> 
-                              {gettext('This file is in review stage')}
-                              <a className="ml-2" onMouseDown={this.props.goReviewPage}>{gettext('View Review')}</a>
-                            </div>
-                          </div>
-                        }
-                        {(!this.props.isDraft && this.props.hasDraft && this.props.reviewStatus !== 'open') &&
-                          <div className='seafile-btn-view-review text-center'>
-                            <div className='tag tag-green'>
-                              {gettext('This file is in draft stage.')}
-                              <a className="ml-2" onMouseDown={this.props.goDraftPage}>{gettext('Edit Draft')}</a>
-                            </div>
-                          </div>
-                        }
-                      </Fragment>
-                    </WikiMarkdownViewer> :
-                    <Fragment>
-                      {showRepoInfoBar && (
-                        <RepoInfoBar
-                          repoID={repoID}
-                          currentPath={this.props.path}
-                          usedRepoTags={this.props.usedRepoTags}
-                          readmeMarkdown={this.props.readmeMarkdown}
-                          draftCounts={this.props.draftCounts}
-                          reviewCounts={this.props.reviewCounts}
-                        />
-                      )}
-                      <DirentListView
-                        path={this.props.path}
-                        repoID={repoID}
-                        repoEncrypted={this.props.repoEncrypted}
-                        direntList={this.props.direntList}
-                        sortBy={this.props.sortBy}
-                        sortOrder={this.props.sortOrder}
-                        sortItems={this.props.sortItems}
-                        onAddFile={this.props.onAddFile}
-                        onItemClick={this.onItemClick}
-                        onItemDelete={this.props.onItemDelete}
-                        onItemRename={this.props.onItemRename}
-                        onItemMove={this.props.onItemMove}
-                        onItemCopy={this.props.onItemCopy}
-                        onDirentClick={this.onDirentClick}
-                        onItemDetails={this.onItemDetails}
-                        isDirentListLoading={this.props.isDirentListLoading}
-                        updateDirent={this.props.updateDirent}
-                        currentRepoInfo={this.state.currentRepoInfo}
-                        isRepoOwner={this.state.isRepoOwner}
-                        isAllItemSelected={this.props.isAllDirentSelected}
-                        onAllItemSelected={this.props.onAllDirentSelected}
-                        onItemSelected={this.props.onItemSelected}
-                      />
-                      <FileUploader
-                        ref={uploader => this.uploader = uploader}
-                        dragAndDrop={true}
-                        path={this.props.path}
-                        repoID={repoID}
-                        direntList={this.props.direntList}
-                        onFileUploadSuccess={this.onFileUploadSuccess}
-                      />
-                    </Fragment>
-                  }
+                  {showRepoInfoBar && (
+                    <RepoInfoBar
+                      repoID={repoID}
+                      currentPath={this.props.path}
+                      usedRepoTags={this.props.usedRepoTags}
+                      readmeMarkdown={this.props.readmeMarkdown}
+                      draftCounts={this.props.draftCounts}
+	                    reviewCounts={this.props.reviewCounts}
+                    />
+                  )}
+                  <DirentListView
+                    path={this.props.path}
+                    repoID={repoID}
+                    repoEncrypted={this.props.repoEncrypted}
+                    direntList={this.props.direntList}
+                    sortBy={this.props.sortBy}
+                    sortOrder={this.props.sortOrder}
+                    sortItems={this.props.sortItems}
+                    onAddFile={this.props.onAddFile}
+                    onItemClick={this.onItemClick}
+                    onItemDelete={this.props.onItemDelete}
+                    onItemRename={this.props.onItemRename}
+                    onItemMove={this.props.onItemMove}
+                    onItemCopy={this.props.onItemCopy}
+                    onDirentClick={this.onDirentClick}
+                    onItemDetails={this.onItemDetails}
+                    isDirentListLoading={this.props.isDirentListLoading}
+                    updateDirent={this.props.updateDirent}
+                    currentRepoInfo={this.state.currentRepoInfo}
+                    isRepoOwner={this.state.isRepoOwner}
+                    isAllItemSelected={this.props.isAllDirentSelected}
+                    onAllItemSelected={this.props.onAllDirentSelected}
+                    onItemSelected={this.props.onItemSelected}
+                  />
+                  <FileUploader
+                    ref={uploader => this.uploader = uploader}
+                    dragAndDrop={true}
+                    path={this.props.path}
+                    repoID={repoID}
+                    direntList={this.props.direntList}
+                    onFileUploadSuccess={this.onFileUploadSuccess}
+                  />
                 </Fragment>
-              }
+              )}
             </div>
           </div>
           {this.state.isDirentDetailShow && (
