@@ -1,14 +1,11 @@
 class TreeNode {
 
-  constructor({path, object, isLoaded = false, isPreload = false, isExpanded = false}) {
-    if (!object) {
-      throw new Error("The object parameter is required.");
-    }
+  constructor({ path, object, isLoaded, isPreload, isExpanded }) {
     this.path = path || object.name,  // The default setting is the object name, which is set to a relative path when the father is set.
     this.object = object;
-    this.isLoaded = isLoaded;
-    this.isPreload = isPreload;
-    this.isExpanded = isExpanded;
+    this.isLoaded = isLoaded || false;
+    this.isPreload = isPreload || false;
+    this.isExpanded = isExpanded || false;
     this.children = [];
     this.parentNode = null;
   }
@@ -30,7 +27,7 @@ class TreeNode {
     return treeNode;
   }
 
-  isLoaded() {
+  hasLoaded() {
     return this.isLoaded;
   }
 
@@ -38,7 +35,7 @@ class TreeNode {
     this.isLoaded = isLoaded;
   }
 
-  isPreload() {
+  hasPreload() {
     return this.isPreload;
   }
 
@@ -46,7 +43,7 @@ class TreeNode {
     this.isPreload = isPreload;
   }
 
-  isExpanded() {
+  hasExpanded() {
     return this.isExpanded;
   }
 
@@ -118,8 +115,8 @@ class TreeNode {
     return treeNode;
   }
 
-  static deserializefromJson(object) {
-    let { path, object, isLoaded, isExpanded, parentNode, children = [] } = object;
+  static deserializefromJson(json) {
+    let { path, object, isLoaded, isPreload, isExpanded, parentNode, children = [] } = json;
 
     const treeNode = new TreeNode({
       path,

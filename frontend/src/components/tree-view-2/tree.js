@@ -47,7 +47,7 @@ class Tree {
 
   addNodeListToParent(nodeList, parentNode) {
     nodeList.forEach(node => {
-      parentNode.addCihld(node);
+      parentNode.addChild(node);
     });
   }
 
@@ -81,7 +81,7 @@ class Tree {
     destNode.addChild(node);
   }
 
-  traverseDF() {
+  traverseDF(callback) {
     let stack = [];
     let found = false;
     stack.unshift(this.root);
@@ -95,7 +95,7 @@ class Tree {
     }
   }
 
-  traverseBF() {
+  traverseBF(callback) {
     let queue = [];
     let found = false;
     queue.push(this.root);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   node: PropTypes.object.isRequired,

@@ -1,5 +1,6 @@
-import { Utils } from '../utils/utils';
+import { Utils } from '../../utils/utils';
 import Tree from './tree';
+import TreeNode from './tree-node';
 
 class TreeHelper {
 
@@ -26,15 +27,13 @@ class TreeHelper {
   }
 
   addNodeToParent(tree, node, parentNode) {
-    let treeCopy = tree.clone();
-    treeCopy.addNodeToParentNode(node, parentNode);
-    return treeCopy;
+    tree.addNodeToParentNode(node, parentNode);
+    return tree;
   }
 
   addNodeListToParent(tree, nodeList, parentNode) {
-    let treeCopy = tree.clone();
-    treeCopy.addNodeListToParent(nodeList, parentNode);
-    return treeCopy;
+    tree.addNodeListToParent(nodeList, parentNode);
+    return tree;
   }
 
   deleteNodeByPath(tree, nodePath) {
@@ -120,15 +119,16 @@ class TreeHelper {
 
   parseDirentListToTree(direntList) {
     let tree = new Tree();
-    let root = new Node({object = {name: '/'}, isLoaded = true, isExpanded = true});
+    let object = {name: '/'};
+    let root = new TreeNode({object, isLoaded: true, isExpanded: true});
     tree.setRoot(root);
 
     let nodeList = direntList.map(dirent => {
       let object = dirent;
-      return new Node({object});
+      return new TreeNode({object});
     });
 
-    return this.addNodeListToParent(nodeList, root);
+    return this.addNodeListToParent(tree, nodeList, root);
   }
 
 }
