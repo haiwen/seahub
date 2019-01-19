@@ -502,7 +502,6 @@ class DirDetailView(APIView):
 
         try:
             dir_obj = seafile_api.get_dirent_by_path(repo_id, path)
-            count_info = seafile_api.get_file_count_info_by_path(repo_id, path)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -512,9 +511,6 @@ class DirDetailView(APIView):
             'repo_id': repo_id,
             'path': path,
             'name': dir_obj.obj_name,
-            'file_count': count_info.file_count,
-            'dir_count': count_info.dir_count,
-            'size': count_info.size,
             'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime),
         }
 

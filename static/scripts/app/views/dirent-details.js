@@ -49,9 +49,6 @@ define([
             if (part_data.error_msg) {
                 $('.error', $container).html(part_data.error_msg).show();
             } else {
-                this.$('.dir-folder-counts').html(part_data.dir_count);
-                this.$('.dir-file-counts').html(part_data.file_count);
-                this.$('.dir-size').html(part_data.size);
                 $('table', $container).show();
             }
         },

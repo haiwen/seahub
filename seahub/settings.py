@@ -301,6 +301,7 @@ ENABLE_UPLOAD_FOLDER = True
 
 # enable resumable fileupload or not
 ENABLE_RESUMABLE_FILEUPLOAD = False
+RESUMABLE_UPLOAD_FILE_BLOCK_SIZE = 8
 
 ## maxNumberOfFiles for fileupload
 MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD = 1000
