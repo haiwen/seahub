@@ -35,7 +35,7 @@ class Content extends Component {
       );
 
       return ( 
-        <table>
+        <table className="table-hover">
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
@@ -59,8 +59,7 @@ class TableBody extends Component {
 
   getThumbnails() {
     let items = this.state.items.filter((item) => {
-      const name = item.file_name;
-      return Utils.imageCheck(name) || Utils.videoCheck(name);
+        return Utils.imageCheck(item.file_name) && !item.repo_encrypted;
     });
     if (items.length == 0) {
       return ;
@@ -95,12 +94,10 @@ class TableBody extends Component {
       let fileIconSize = Utils.isHiDPI() ? 48 : 24;
 
       item.file_icon_url = Utils.getFileIconUrl(item.file_name, fileIconSize);
-      item.is_img = Utils.imageCheck(item.file_name);
       item.encoded_path = Utils.encodePath(item.path);
 
       item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
       item.file_view_url = `${siteRoot}lib/${item.repo_id}/file${item.encoded_path}`;
-      item.file_raw_url = `${siteRoot}repo/${item.repo_id}/raw${item.encoded_path}`;
 
       return <Item key={index} data={item} />;
     }, this);
@@ -119,25 +116,21 @@ class Item extends Component {
       showOpIcon: false,
       unstarred: false
     };
-
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleMouseOver() {
+  handleMouseOver = () => {
     this.setState({
       showOpIcon: true
     });
   }
 
-  handleMouseOut() {
+  handleMouseOut = () => {
     this.setState({
       showOpIcon: false
     });
   }
 
-  handleClick(e) {
+  handleClick = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -172,11 +165,7 @@ class Item extends Component {
           }
         </td>
         <td>
-          {
-            data.is_img ?
-              <a className="img-name-link normal" href={data.file_view_url} target="_blank" data-mfp-src={data.file_raw_url}>{data.file_name}</a> :
-              <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
-          }
+            <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
         </td>
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
@@ -196,11 +185,7 @@ class Item extends Component {
           }
         </td>
         <td>
-          {
-            data.is_img ?
-              <a className="img-name-link normal" href={data.file_view_url} target="_blank" data-mfp-src={data.file_raw_url}>{data.file_name}</a> :
-              <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
-          }
+          <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
           <br />
           <span className="dirent-meta-info">{data.repo_name}</span>
           <span className="dirent-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
