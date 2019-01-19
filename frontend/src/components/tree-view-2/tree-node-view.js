@@ -12,7 +12,8 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeDragStart: PropTypes.func.isRequired,
-  onFreezedToggle: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnFreezedItem: PropTypes.func.isRequired,
 };
 
 function sortNode(a, b) {
@@ -63,6 +64,11 @@ class TreeNodeView extends React.Component {
 
   }
 
+  onUnFreezedItem = () => {
+    this.setState({isShowOperationMenu: false});
+    this.props.onUnFreezedItem();
+  }
+
   onMenuItemClick = (menuItem) => {
     this.props.onMenuItemClick(menuItem);
   }
@@ -108,11 +114,13 @@ class TreeNodeView extends React.Component {
               node={item}
               paddingLeft={paddingLeft}
               currentPath={this.props.currentPath}
-              onFreezedToggle={this.props.onFreezedToggle}
-              onMenuItemClick={this.onMenuItemClick}
+              isItemFreezed={this.props.isItemFreezed}
               onNodeClick={this.props.onNodeClick}
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
+              onFreezedItem={this.props.onFreezedItem}
+              onMenuItemClick={this.onMenuItemClick}
+              onUnFreezedItem={this.onUnFreezedItem}
             />
           );
         })}
@@ -146,7 +154,8 @@ class TreeNodeView extends React.Component {
               <TreeNodeMenu 
                 node={this.props.node}
                 onMenuItemClick={this.onMenuItemClick}
-                onFreezedToggle={this.props.onFreezedToggle}
+                onUnFreezedItem={this.onUnFreezedItem}
+                onFreezedItem={this.props.onFreezedItem}
               />
             )}
           </div>

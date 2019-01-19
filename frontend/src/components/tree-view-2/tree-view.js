@@ -10,7 +10,6 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
 };
 
-
 const PADDING_LEFT = 12;
 
 class TreeView extends React.Component {
@@ -26,8 +25,12 @@ class TreeView extends React.Component {
 
   }
 
-  onFreezedToggle = () => {
-    this.setState({isItemFreezed: !this.state.isItemFreezed});
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnFreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   render() {
@@ -42,7 +45,8 @@ class TreeView extends React.Component {
           onNodeExpanded={this.props.onNodeExpanded}
           onNodeCollapse={this.props.onNodeCollapse}
           onNodeDragStart={this.onNodeDragStart}
-          onFreezedToggle={this.onFreezedToggle}
+          onFreezedItem={this.onFreezedItem}
+          onUnFreezedItem={this.onUnFreezedItem}
         />
       </div>
     );

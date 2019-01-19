@@ -6,7 +6,8 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   node: PropTypes.object.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
-  onFreezedToggle: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnFreezedItem: PropTypes.func.isRequired,
 };
 
 class TreeNodeMenu extends React.Component {
@@ -64,11 +65,13 @@ class TreeNodeMenu extends React.Component {
   toggleOperationMenu = (e) => {
     e.stopPropagation();
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow},
-      () => {
-        this.props.onFreezedToggle();
+      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+      if (this.state.isItemMenuShow) {
+        this.props.onFreezedItem()
+      } else {
+        this.props.onUnFreezedItem();
       }
-    );
+    });
   }
 
   onMenuItemClick = (event) => {
