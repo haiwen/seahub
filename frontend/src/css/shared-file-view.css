@@ -57,6 +57,7 @@
 
 .shared-file-view-body .md-view {
   min-height: 400px;
+  padding: 70px 75px;
   border: 1px solid #ccc;
   margin: 0 auto;
   box-shadow: 0 0 6px #ccc;
