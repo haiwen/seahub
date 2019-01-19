@@ -31,19 +31,26 @@ class TreeNodeView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlight: false,
       isShowOperationMenu: false
     };
   }
 
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
-      this.setState({isShowOperationMenu: true});
+      this.setState({
+        isShowOperationMenu: true,
+        isHighlight: true,
+      });
     }
   }
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
-      this.setState({isShowOperationMenu: false});
+      this.setState({
+        isShowOperationMenu: false,
+        isHighlight: false,
+      });
     }
   }
 
@@ -131,7 +138,7 @@ class TreeNodeView extends React.Component {
   render() {
     let { currentPath, node } = this.props;
     let { type, icon } = this.getNodeTypeAndIcon();
-    let hlClass = '';
+    let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
     if (node.path === currentPath) {
       hlClass = 'tree-node-hight-light';
     }

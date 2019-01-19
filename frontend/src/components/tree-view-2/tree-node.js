@@ -1,13 +1,13 @@
 class TreeNode {
 
-  constructor({ path, object, isLoaded, isPreload, isExpanded }) {
+  constructor({ path, object, isLoaded, isPreload, isExpanded, parentNode }) {
     this.path = path || object.name,  // The default setting is the object name, which is set to a relative path when the father is set.
     this.object = object;
     this.isLoaded = isLoaded || false;
     this.isPreload = isPreload || false;
     this.isExpanded = isExpanded || false;
     this.children = [];
-    this.parentNode = null;
+    this.parentNode = parentNode || null;
   }
 
   clone() {
@@ -56,7 +56,7 @@ class TreeNode {
   }
 
   setParentNode(parentNode) {
-    this.path = this.generatorId(parentNode);
+    this.path = this.generatorPath(parentNode);
     this.parentNode = parentNode;
     this.isLoaded = false;  // update parentNode need loaded data again;
   }
@@ -71,14 +71,15 @@ class TreeNode {
   }
 
   deleteChild(node) {
-    this.children = this.children.filter(item => {
-      return item !== node;
+    let children = this.children.filter(item => {
+      return item.path !== node.path;
     });
+    this.children = children;
   }
 
   rename(newName) {
     this.object.name = newName;
-    this.path = this.generatorId(this.parentNode); 
+    this.path = this.generatorPath(this.parentNode); 
     this.isLoaded = false;  // rename node need loaded children again
   }
 
@@ -92,7 +93,7 @@ class TreeNode {
     }
   }
 
-  generatorId(parentNode) {
+  generatorPath(parentNode) {
     return parentNode.path === '/' ? parentNode.path + this.object.name : parentNode.path + '/' + this.object.name;
   }
 

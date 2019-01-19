@@ -51,7 +51,7 @@ class Tree {
   }
 
   deleteNode(node) {
-    let parentNode = node.parentNode;
+    let parentNode = this.getNodeByPath(node.parentNode.path);
     parentNode.deleteChild(node);
   }
 
