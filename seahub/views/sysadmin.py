@@ -32,7 +32,8 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.sudo_mode import update_sudo_mode_ts
-from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname
+from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname, \
+    email2contact_email
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER, DEFAULT_ADMIN, \
@@ -226,13 +227,8 @@ def can_view_sys_admin_repo(repo):
 def populate_user_info(user):
     """Populate contact email and name to user.
     """
-    user_profile = Profile.objects.get_profile_by_user(user.email)
-    if user_profile:
-        user.contact_email = user_profile.contact_email
-        user.name = user_profile.nickname
-    else:
-        user.contact_email = ''
-        user.name = ''
+    user.contact_email = email2contact_email(user.email)
+    user.name = email2nickname(user.email)
 
 def _populate_user_quota_usage(user):
     """Populate space/share quota to user.

@@ -278,10 +278,16 @@ class User(object):
     @property
     def contact_email(self):
         if not hasattr(self, '_cached_contact_email'):
-            email = Profile.objects.get_contact_email_by_user(self.username)
-            self._cached_contact_email = email
+            self._cached_contact_email = email2contact_email(self.username)
 
         return self._cached_contact_email
+
+    @property
+    def name(self):
+        if not hasattr(self, '_cached_nickname'):
+            self._cached_nickname = email2nickname(self.username)
+
+        return self._cached_nickname
 
     class DoesNotExist(Exception):
         pass
@@ -842,3 +848,7 @@ class DetailedRegistrationForm(RegistrationForm):
     note = forms.CharField(widget=forms.TextInput(
             attrs=dict(attrs_dict, maxlength=100)), label=_("note"),
                            required=note_required)
+
+# Move here to avoid circular import
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+    email2contact_email
