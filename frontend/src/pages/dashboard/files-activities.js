@@ -82,15 +82,47 @@ class TableBody extends Component {
           details = <td>{libLink}</td>;
           break;
         }
+      } else if (item.obj_type == 'review') {
+        let fileURL = `${siteRoot}drafts/review/${item.review_id}`;
+        let fileLink = <a href={fileURL}>{item.name}</a>;
+        switch(item.op_type) {
+        case 'open':
+          op = gettext('Open review');
+          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          break;
+        case 'closed':
+          op = gettext('Close review');
+          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          break;
+        case 'finished':
+          if (!item.review_id) {
+            op = gettext('Publish draft');
+            details = <td>{item.name}<br />{smallLibLink}</td>;
+            break;
+          }
+          op = gettext('Publish review');
+          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          break;
+        }
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
         switch(item.op_type) {
         case 'create':
+          if (item.name.endsWith("(draft).md")) {
+            op = gettext('Created draft');
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
+            break;
+          }
           op = gettext('Created file');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
           break;
         case 'delete':
+          if (item.name.endsWith("(draft).md")) {
+            op = gettext('Deleted draft');
+            details = <td>{item.name}<br />{smallLibLink}</td>;
+            break;
+          }
           op = gettext('Deleted file');
           details = <td>{item.name}<br />{smallLibLink}</td>;
           break;
@@ -108,6 +140,11 @@ class TableBody extends Component {
           details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
           break;
         case 'edit': // update
+          if (item.name.endsWith("(draft).md")) {
+            op = gettext('Updated draft');
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
+            break;
+          }
           op = gettext('Updated file');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
           break;
@@ -175,6 +212,7 @@ class FilesActivities extends Component {
       currentPage: 1,
       hasMore: true,
       items: [],
+      publishFileIDList: [],
     };
     this.avatarSize = 72;
   }
@@ -184,7 +222,7 @@ class FilesActivities extends Component {
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
       this.setState({
-        items: res.data.events,
+        items: this.filterSurplusEvents(res.data.events),
         currentPage: currentPage + 1,
         isFirstLoading: false,
         hasMore: true,
@@ -199,13 +237,39 @@ class FilesActivities extends Component {
     });
   }
 
+  filterSurplusEvents = (events) => {
+    events.map((item) => {
+      let publishFileIDList = this.state.publishFileIDList;
+      if (item.op_type === "finished") {
+        publishFileIDList.push(item.obj_id);
+        this.setState({publishFileIDList: publishFileIDList,});
+      }
+    });
+    events.map((item) => {
+      if (item.obj_type === 'file' && item.op_type === 'delete' && this.state.publishFileIDList.includes(item.obj_id)) {
+        events.splice(events.indexOf(item), 1);
+      }
+    });
+    events.map((item) => {
+      if (item.obj_type === 'file' && item.op_type === 'edit' && !item.name.endsWith("(draft).md") && this.state.publishFileIDList.includes(item.obj_id)) {
+        events.splice(events.indexOf(item), 1);
+      }
+    });
+    events.map((item) => {
+      if (item.obj_type === 'file' && item.op_type === 'rename' && item.old_name.endsWith("(draft).md") && this.state.publishFileIDList.includes(item.obj_id)) {
+        events.splice(events.indexOf(item), 1);
+      }
+    });
+    return events;
+  }
+
   getMore() {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
       this.setState({
         isLoadingMore: false,
-        items: [...this.state.items, ...res.data.events],
+        items: [...this.state.items, ...this.filterSurplusEvents(res.data.events)],
         currentPage: currentPage + 1,
         hasMore: res.data.events.length === 0 ? false : true 
       });

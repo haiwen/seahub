@@ -25,6 +25,7 @@ from seahub.constants import PERMISSION_READ_WRITE
 from seahub.drafts.models import Draft, DraftFileExist, DraftFileConflict
 from seahub.views import check_folder_permission
 from seahub.utils import gen_file_get_url
+from seahub.drafts.utils import send_draft_publish_msg
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +118,10 @@ class DraftView(APIView):
         username = request.user.username
         try:
             d.publish(operator=username)
+
+            # send draft publish message
+            send_draft_publish_msg(request, d)
+
             d.delete(operator=username)
             return Response(status.HTTP_200_OK)
         except DraftFileConflict:

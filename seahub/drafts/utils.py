@@ -1,10 +1,15 @@
 import hashlib
 import os
+import logging
 
 from seaserv import seafile_api
+from seaserv import send_message
 
 from seahub.utils import normalize_file_path, check_filename_with_rename
 from seahub.tags.models import FileUUIDMap
+
+
+logger = logging.getLogger(__name__)
 
 
 def create_user_draft_repo(username, org_id=-1):
@@ -109,3 +114,50 @@ def get_file_draft_and_related_review(repo_id, file_path, is_draft=False, has_dr
         review['draft_file_path'] = d.draft_file_path
 
     return review
+
+
+def send_review_status_msg(request, review):
+    """
+    send review status change to seafevents
+    """
+    status = review.status.lower()
+    if status not in ['open', 'finished', 'closed']:
+        logger.warn('Invalid status in review status msg: %s' % status)
+        return
+
+    repo_id = review.origin_repo_id
+    creator = review.creator
+    path = review.draft_file_path
+    review_id = review.id
+    obj_id = review.publish_file_version if review.publish_file_version else review.origin_file_version
+    username = request.user.username
+
+    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % (status, repo_id, creator, "review", path, review_id, obj_id, username)
+    msg_utf8 = msg.encode('utf-8')
+
+    try:
+        send_message('seahub.review', msg_utf8)
+    except Exception as e:
+        logger.error("Error when sending %s message: %s" % (status, str(e)))
+
+
+def send_draft_publish_msg(request, draft):
+    """
+    send draft publish message to seafevents
+    """
+    repo_id = draft.origin_repo_id
+    op_user = draft.username
+    path = draft.draft_file_path
+    published_draft_path = path.replace("(draft)", "")
+
+    obj_id = seafile_api.get_file_id_by_path(repo_id, published_draft_path)
+
+    username = request.user.username
+
+    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % ("finished", repo_id, op_user, "review", path, "", obj_id, username)
+    msg_utf8 = msg.encode('utf-8')
+
+    try:
+        send_message('seahub.review', msg_utf8)
+    except Exception as e:
+        logger.error("Error when sending %s message: %s" % ("finished", str(e)))

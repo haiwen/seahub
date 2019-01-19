@@ -20,6 +20,7 @@ from seahub.views import check_folder_permission
 from seahub.drafts.models import Draft, DraftReview, DraftReviewExist, \
         DraftFileConflict, ReviewReviewer, OriginalFileConflict
 from seahub.drafts.signals import update_review_successful
+from seahub.drafts.utils import send_review_status_msg
 
 
 class DraftReviewsView(APIView):
@@ -81,6 +82,9 @@ class DraftReviewsView(APIView):
             d_r = DraftReview.objects.add(creator=username, draft=d)
         except (DraftReviewExist):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')
+
+        # send review status change message
+        send_review_status_msg(request, d_r)
 
         return Response(d_r.to_dict())
 
@@ -153,6 +157,9 @@ class DraftReviewView(APIView):
         if username != r.creator:
             update_review_successful.send(sender=None, from_user=username,
                                           to_user=r.creator, review_id=r.id, status=st)
+
+        # send review status change message
+        send_review_status_msg(request, r)
 
         result = r.to_dict()
 
