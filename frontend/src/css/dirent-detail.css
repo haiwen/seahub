@@ -33,11 +33,6 @@
   width: 0; /* prevent strut flex layout */
 }
 
-.detail-header .detail-title img{
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
 .detail-header .detail-title .name {
   margin: 0 0.5rem 0 0.25rem;
   line-height: 1.5rem;
@@ -60,11 +55,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.dirent-info .img img {
-  width: 6rem;
-  height: 6rem;
 }
 
 .dirent-table-container {
