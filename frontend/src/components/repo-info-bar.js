@@ -66,7 +66,7 @@ class RepoInfoBar extends React.Component {
   render() {
     let {repoID, currentPath, usedRepoTags, readmeMarkdown} = this.props;
     let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) : '';
-    let filePath = currentPath + 'readme.md';
+    let filePath = readmeMarkdown !== null ? currentPath + readmeMarkdown.name : '';
     return (
       <div className="repo-info-bar">
         {usedRepoTags.length > 0 && (
@@ -152,6 +152,7 @@ class RepoInfoBar extends React.Component {
               repoID={repoID}
               filePath={filePath}
               href={href}
+              fileName={readmeMarkdown.name}
             />
           </ModalPortal>
         )}

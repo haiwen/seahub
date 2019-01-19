@@ -9,6 +9,7 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   filePath: PropTypes.string.isRequired,
+  fileName: PropTypes.string.isRequired,
   href: PropTypes.string,
   toggleCancel: PropTypes.func.isRequired,
 };
@@ -37,7 +38,7 @@ class ReadmeDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} className="readme-dialog" size="lg">
-        <ModalHeader>{gettext('Readme.md')}
+        <ModalHeader>{gettext(this.props.fileName)}
           <a className="readme-dialog-edit" href={this.props.href} target='_blank'><i className="fa fa-pencil"></i></a>
         </ModalHeader>
         <ModalBody>
