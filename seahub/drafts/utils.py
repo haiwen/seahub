@@ -1,6 +1,7 @@
 import hashlib
 import os
 import logging
+import posixpath
 
 from seaserv import seafile_api
 from seaserv import send_message
@@ -126,13 +127,23 @@ def send_review_status_msg(request, review):
         return
 
     repo_id = review.origin_repo_id
-    creator = review.creator
-    path = review.draft_file_path
+    op_user = review.creator
     review_id = review.id
-    obj_id = review.publish_file_version if review.publish_file_version else review.origin_file_version
+    draft_flag = os.path.splitext(os.path.basename(review.draft_file_path))[0][-7:]
+    if draft_flag == '(draft)':
+        old_path = review.draft_file_path
+        if status == 'finished':
+            publish_path = posixpath.join(review.origin_file_uuid.parent_path, review.origin_file_uuid.filename)
+        else:
+            publish_path = None
+    else:
+        old_path = posixpath.join(review.origin_file_uuid.parent_path, review.origin_file_uuid.filename)
+        publish_path = review.draft_file_path if status == 'finished' else None
+    path = publish_path if publish_path else old_path
+
     username = request.user.username
 
-    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % (status, repo_id, creator, "review", path, review_id, obj_id, username)
+    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % (status, repo_id, op_user, "review", path, review_id, old_path, username)
     msg_utf8 = msg.encode('utf-8')
 
     try:
@@ -147,14 +158,20 @@ def send_draft_publish_msg(request, draft):
     """
     repo_id = draft.origin_repo_id
     op_user = draft.username
-    path = draft.draft_file_path
-    published_draft_path = path.replace("(draft)", "")
-
-    obj_id = seafile_api.get_file_id_by_path(repo_id, published_draft_path)
+    old_path = draft.draft_file_path
+    path = posixpath.join(draft.origin_file_uuid.parent_path, draft.origin_file_uuid.filename)
+    # remove `(draft)` from file name
+    if path == old_path:
+        draft_flag = os.path.splitext(os.path.basename(path))[0][-7:]
+        if draft_flag == '(draft)':
+            file_name = os.path.splitext(os.path.basename(path))[0][:-7]
+            file_type = os.path.splitext(os.path.basename(path))[-1]
+            new_file_name = file_name + file_type
+            path = posixpath.join(draft.origin_file_uuid.parent_path, new_file_name)
 
     username = request.user.username
 
-    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % ("finished", repo_id, op_user, "review", path, "", obj_id, username)
+    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % ("finished", repo_id, op_user, "review", path, "", old_path, username)
     msg_utf8 = msg.encode('utf-8')
 
     try:

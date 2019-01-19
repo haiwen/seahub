@@ -98,7 +98,6 @@ class TableBody extends Component {
           if (!item.review_id) {
             op = gettext('Publish draft');
             details = <td>{item.name}<br />{smallLibLink}</td>;
-            break;
           }
           op = gettext('Publish review');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
@@ -112,7 +111,6 @@ class TableBody extends Component {
           if (item.name.endsWith("(draft).md")) {
             op = gettext('Created draft');
             details = <td>{fileLink}<br />{smallLibLink}</td>;
-            break;
           }
           op = gettext('Created file');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
@@ -121,7 +119,6 @@ class TableBody extends Component {
           if (item.name.endsWith("(draft).md")) {
             op = gettext('Deleted draft');
             details = <td>{item.name}<br />{smallLibLink}</td>;
-            break;
           }
           op = gettext('Deleted file');
           details = <td>{item.name}<br />{smallLibLink}</td>;
@@ -143,7 +140,6 @@ class TableBody extends Component {
           if (item.name.endsWith("(draft).md")) {
             op = gettext('Updated draft');
             details = <td>{fileLink}<br />{smallLibLink}</td>;
-            break;
           }
           op = gettext('Updated file');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
@@ -212,7 +208,8 @@ class FilesActivities extends Component {
       currentPage: 1,
       hasMore: true,
       items: [],
-      publishFileIDList: [],
+      curPathList: [],
+      oldPathList: [],
     };
     this.avatarSize = 72;
   }
@@ -222,7 +219,7 @@ class FilesActivities extends Component {
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
       this.setState({
-        items: this.filterSurplusEvents(res.data.events),
+        items: this.filterSuperfluousEvents(res.data.events),
         currentPage: currentPage + 1,
         isFirstLoading: false,
         hasMore: true,
@@ -237,26 +234,31 @@ class FilesActivities extends Component {
     });
   }
 
-  filterSurplusEvents = (events) => {
+  filterSuperfluousEvents = (events) => {
     events.map((item) => {
-      let publishFileIDList = this.state.publishFileIDList;
+      let curPathList = this.state.curPathList;
+      let oldPathList = this.state.oldPathList;
       if (item.op_type === "finished") {
-        publishFileIDList.push(item.obj_id);
-        this.setState({publishFileIDList: publishFileIDList,});
+        curPathList.push(item.path);
+        oldPathList.push(item.old_path);
+        this.setState({
+          curPathList: curPathList,
+          oldPathList: oldPathList,
+        });
       }
     });
     events.map((item) => {
-      if (item.obj_type === 'file' && item.op_type === 'delete' && this.state.publishFileIDList.includes(item.obj_id)) {
+      if (item.obj_type === 'file' && item.op_type === 'delete' && this.state.oldPathList.includes(item.path)) {
         events.splice(events.indexOf(item), 1);
       }
     });
     events.map((item) => {
-      if (item.obj_type === 'file' && item.op_type === 'edit' && !item.name.endsWith("(draft).md") && this.state.publishFileIDList.includes(item.obj_id)) {
+      if (item.obj_type === 'file' && item.op_type === 'edit' && this.state.curPathList.includes(item.path)) {
         events.splice(events.indexOf(item), 1);
       }
     });
     events.map((item) => {
-      if (item.obj_type === 'file' && item.op_type === 'rename' && item.old_name.endsWith("(draft).md") && this.state.publishFileIDList.includes(item.obj_id)) {
+      if (item.obj_type === 'file' && item.op_type === 'rename' &&  this.state.curPathList.includes(item.path) && this.state.oldPathList.includes(item.old_path)) {
         events.splice(events.indexOf(item), 1);
       }
     });
@@ -269,7 +271,7 @@ class FilesActivities extends Component {
       // {"events":[...]}
       this.setState({
         isLoadingMore: false,
-        items: [...this.state.items, ...this.filterSurplusEvents(res.data.events)],
+        items: [...this.state.items, ...this.filterSuperfluousEvents(res.data.events)],
         currentPage: currentPage + 1,
         hasMore: res.data.events.length === 0 ? false : true 
       });
