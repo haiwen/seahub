@@ -247,21 +247,20 @@ class FilesActivities extends Component {
         });
       }
     });
-    events.map((item) => {
-      if (item.obj_type === 'file' && item.op_type === 'delete' && this.state.oldPathList.includes(item.path)) {
-        events.splice(events.indexOf(item), 1);
+    for (var i = 0; i < events.length; i++) {
+      if (events[i].obj_type === 'file') {
+        if (events[i].op_type === 'delete' && this.state.oldPathList.includes(events[i].path)) {
+          events.splice(i, 1);
+          i--;
+        } else if (events[i].op_type === 'edit' && this.state.curPathList.includes(events[i].path)) {
+          events.splice(i, 1);
+          i--;
+        } else if (events[i].op_type === 'rename' && this.state.oldPathList.includes(events[i].old_path)) {
+          events.splice(i, 1);
+          i--;
+        }
       }
-    });
-    events.map((item) => {
-      if (item.obj_type === 'file' && item.op_type === 'edit' && this.state.curPathList.includes(item.path)) {
-        events.splice(events.indexOf(item), 1);
-      }
-    });
-    events.map((item) => {
-      if (item.obj_type === 'file' && item.op_type === 'rename' &&  this.state.curPathList.includes(item.path) && this.state.oldPathList.includes(item.old_path)) {
-        events.splice(events.indexOf(item), 1);
-      }
-    });
+    }
     return events;
   }
 
