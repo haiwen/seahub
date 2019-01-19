@@ -269,6 +269,7 @@ class DirentListView extends React.Component {
           onCloseRequest={this.closeImagePopup}
           onMovePrevRequest={this.moveToPrevImage}
           onMoveNextRequest={this.moveToNextImage}
+          imagePadding={70}
           imageLoadErrorMessage={gettext('The image could not be loaded.')}
           prevLabel={gettext("Previous (Left arrow key)")}
           nextLabel={gettext("Next (Right arrow key)")}
