@@ -21,10 +21,18 @@ class LibDetail extends React.Component {
 
   componentDidMount() {
     let repo = this.props.currentRepo;
+    this.getFileCounts(repo);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentRepo.repo_id !== this.props.currentRepo.repo_id) {
+      this.getFileCounts(nextProps.currentRepo);
+    }
+  }
+
+  getFileCounts = (repo) => {
     seafileAPI.getRepoInfo(repo.repo_id).then(res => {
-      this.setState({
-        fileCount: res.data.file_count,
-      }); 
+      this.setState({fileCount: res.data.file_count});
     });
   }
 
@@ -37,7 +45,6 @@ class LibDetail extends React.Component {
     let iconUrl = Utils.getLibIconUrl({
       is_encrypted: repo.encrypted, 
       is_readonly: isReadOnly,
-      size: Utils.isHiDPI() ? 48 : 24
     });
 
     return (
@@ -45,13 +52,13 @@ class LibDetail extends React.Component {
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.closeDetails}></div>
           <div className="detail-title dirent-title">
-            <img src={iconUrl} width="24" alt="" />{'  '}
+            <img src={iconUrl} width="24" height="24" alt="" />{'  '}
             <span className="name ellipsis" title={repo.repo_name}>{repo.repo_name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={iconUrl} alt="" />
+            <img src={iconUrl} height="96"  alt="" />
           </div>
           <div className="dirent-table-container">
             <table className="table-thead-hidden">

@@ -113,13 +113,13 @@ class DirentDetail extends React.Component {
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
-            <img src={iconUrl} width="24" alt="" />
+            <img src={iconUrl} width="24" height="24" alt="" />
             <span className="name ellipsis" title={dirent.name}>{dirent.name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={iconUrl} alt="" />
+            <img src={iconUrl} width="96" alt="" />
           </div>
           {this.state.direntDetail && 
             <div className="dirent-table-container">
