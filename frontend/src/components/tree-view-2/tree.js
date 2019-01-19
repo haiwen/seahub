@@ -20,10 +20,9 @@ class Tree {
 
   getNodeByPath(path) { 
     // id ==== path
-    let id = path;
     let findNode = null;
     function callback(currentNode) {
-      if (currentNode.id === id) {
+      if (currentNode.path === path) {
         findNode = currentNode;
         return true;
       }

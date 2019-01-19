@@ -10,6 +10,7 @@ class TreeHelper {
 
   collapseNode(tree, node) {
     let treeCopy = tree.clone();
+    node = treeCopy.getNodeByPath(node.path);
     treeCopy.collapseNode(node);
     return treeCopy;
   }

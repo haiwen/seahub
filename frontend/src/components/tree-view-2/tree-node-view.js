@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TreeNodeMenu from './tree-node-menu';
+import { permission } from '../../utils/constants';
 
 const propTypes = {
   node: PropTypes.object.isRequired,
-  permission: PropTypes.bool.isRequired,
   currentPath: PropTypes.string.isRequired,
   paddingLeft: PropTypes.number.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
@@ -64,28 +64,33 @@ class TreeNodeView extends React.Component {
   }
 
   onMenuItemClick = (menuItem) => {
-    this.props.onMenuItemClick();
+    this.props.onMenuItemClick(menuItem);
   }
 
-  getNodeIcon = () => {
+  getNodeTypeAndIcon = () => {
     let { node } = this.props;
     let icon = '';
+    let type = '';
     if (node.object.type === 'dir') {
       icon = <i className="far fa-folder"></i>
+      type = 'dir';
     } else {
       let index = node.object.name.lastIndexOf('.');
       if (index === -1) {
         icon = <i className="far fa-file"></i>
+        type = 'file';
       } else {
         let suffix = node.object.name.slice(index).toLowerCase();
         if (suffix === '.png' || suffix === '.jpg') {
           icon = <i className="far fa-image"></i>
+          type = 'image';
         } else {
           icon = <i className="far fa-file"></i>
+          type = 'file';
         }
       }
     }
-    return icon;
+    return {icon, type};
   }
 
   renderChildren = () => {
@@ -99,9 +104,10 @@ class TreeNodeView extends React.Component {
         {sortedNode.map(item => {
           return (
             <TreeNodeView 
+              key={item.path}
               node={item}
-              permission={this.props.permission}
               paddingLeft={paddingLeft}
+              currentPath={this.props.currentPath}
               onFreezedToggle={this.props.onFreezedToggle}
               onMenuItemClick={this.onMenuItemClick}
               onNodeClick={this.props.onNodeClick}
@@ -115,29 +121,34 @@ class TreeNodeView extends React.Component {
   }
 
   render() {
-    let { node } = this.props;
+    let { currentPath, node } = this.props;
+    let { type, icon } = this.getNodeTypeAndIcon();
+    let hlClass = '';
+    if (node.path === currentPath) {
+      hlClass = 'tree-node-hight-light';
+    }
     return (
       <div className="tree-node">
-        <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={`tree-node-inner text-nowrap ${node.name === '/'? 'hide': ''}`}>
+        <div type={type} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''}`}>
           <div className="tree-node-text" onClick={this.onNodeClick}>{node.object.name}</div>
           <div className="left-icon">
-            {node.hasChildren() !== 0 && (
+            {type === 'dir' && (!node.hasLoaded() ||  (node.hasLoaded() && node.hasChildren() !== 0)) && (
               <i 
                 className={`folder-toggle-icon fa ${node.hasExpanded() ? 'fa-caret-down' : 'fa-caret-right'}`}
                 onMouseDown={e => e.stopPropagation()}
                 onClick={this.onLoadToggle}
               ></i>
             )}
-            <i className="tree-node-icon">{this.getNodeIcon()}</i>
+            <i className="tree-node-icon">{icon}</i>
           </div>
           <div className="right-icon">
-              {(this.props.permission && this.state.isShowOperationMenu) && (
-                <TreeNodeMenu 
-                  node={this.props.node}
-                  onMenuItemClick={this.onMenuItemClick}
-                  onFreezedToggle={this.props.onFreezedToggle}
-                />
-              )}
+            {(permission && this.state.isShowOperationMenu) && (
+              <TreeNodeMenu 
+                node={this.props.node}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedToggle={this.props.onFreezedToggle}
+              />
+            )}
           </div>
         </div>
         {node.hasExpanded() && this.renderChildren()}

@@ -14,22 +14,23 @@ class TreeNodeMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      menuList: []
     }
-    this.menuList = [];
   }
 
   componentDidMount() {
-    this.menuList = this.caculateMenuList();
+    let menuList = this.caculateMenuList();
+    this.setState({menuList: menuList});
   }
 
   caculateMenuList() {
-    let { node } = this.props.node;
+    let { node } = this.props;
     let menuList = [];
     if (node.object.type === 'dir') {
-      menuList = ['New Folder', 'New File', 'Rename File', 'Delete File'];
+      menuList = ['New Folder', 'New File', 'Rename', 'Delete'];
     } else {
-      menuList = ['Rename File', 'Delete File'];
+      menuList = ['Rename', 'Delete'];
     }
     return menuList;
   }
@@ -57,10 +58,11 @@ class TreeNodeMenu extends React.Component {
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
-    this.toggleOperationMenu();
+    this.toggleOperationMenu(e);
   }
 
-  toggleOperationMenu = () => {
+  toggleOperationMenu = (e) => {
+    e.stopPropagation();
     this.setState(
       {isItemMenuShow: !this.state.isItemMenuShow},
       () => {
@@ -86,8 +88,10 @@ class TreeNodeMenu extends React.Component {
           onClick={this.onDropdownToggleClick}
         />
         <DropdownMenu>
-          {this.menuList.map((menuItem, index) => {
-            <DropdownItem key={index} data-toggle={menuItem} onClick={this.onMenuItemClick}>{this.translateMenuItem(menuItem)}</DropdownItem>
+          {this.state.menuList.map((menuItem, index) => {
+            return (
+              <DropdownItem key={index} data-toggle={menuItem} onClick={this.onMenuItemClick}>{this.translateMenuItem(menuItem)}</DropdownItem>
+            );
           })}
         </DropdownMenu>
       </Dropdown>
