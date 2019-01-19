@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
-import { Modal } from 'reactstrap';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
 import ListRepoDraftsDialog from './dialog/list-repo-drafts-dialog';
 import ListRepoReviewsDialog from './dialog/list-repo-reviews-dialog';
+import ReadmeDialog from './dialog/readme-dialog';
 import { siteRoot, gettext } from '../utils/constants';
 import { Utils } from '../utils/utils';
 
@@ -28,6 +28,7 @@ class RepoInfoBar extends React.Component {
       isListTaggedFileShow: false,
       showRepoDrafts: false,
       showRepoReviews: false,
+      showReadmeDialog: false,
     };
   }
 
@@ -56,10 +57,16 @@ class RepoInfoBar extends React.Component {
     });
   }
 
+  toggleReadme = () => {
+    this.setState({
+      showReadmeDialog: !this.state.showReadmeDialog
+    });
+  }
+
   render() {
     let {repoID, currentPath, usedRepoTags, readmeMarkdown} = this.props;
     let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) : '';
-
+    let filePath = currentPath + 'readme.md';
     return (
       <div className="repo-info-bar">
         {usedRepoTags.length > 0 && (
@@ -78,12 +85,18 @@ class RepoInfoBar extends React.Component {
           </ul>
         )}
         <div className="readme-files">
-          {readmeMarkdown !== null && (
+          {(readmeMarkdown !== null && readmeMarkdown.size > 1) && 
+            <span className="readme-file" onClick={this.toggleReadme}>
+              <i className="readme-flag fa fa-flag"></i>
+              <span className="readme-name">{readmeMarkdown.name}</span>
+            </span>
+          }
+          {(readmeMarkdown !== null && readmeMarkdown.size < 2) && 
             <span className="readme-file">
               <i className="readme-flag fa fa-flag"></i>
               <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
             </span>
-          )}
+          }
           {this.props.draftCounts > 0 &&
             <span className="readme-file">
               <i className="readme-flag fa fa-pen"></i>
@@ -132,6 +145,16 @@ class RepoInfoBar extends React.Component {
           </ModalPortal>
         )}
 
+        {this.state.showReadmeDialog && (
+          <ModalPortal>
+            <ReadmeDialog
+              toggleCancel={this.toggleReadme}
+              repoID={repoID}
+              filePath={filePath}
+              href={href}
+            />
+          </ModalPortal>
+        )}
       </div>
     );
   }

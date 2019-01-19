@@ -19,6 +19,7 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .used-tag-name {
@@ -42,6 +43,7 @@
 .readme-file {
   margin: 0 15px;
   display: inline-block;
+  cursor: pointer;
 }
 
 .readme-file a {
@@ -56,4 +58,9 @@
 .readme-name {
   margin: 0 0.25rem;
   font-size: 14px;
+}
+
+.readme-dialog-edit {
+  position: absolute;
+  right: 16px;
 }
