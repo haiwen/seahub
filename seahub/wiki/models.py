@@ -129,9 +129,12 @@ class Wiki(models.Model):
         if self.permission == 'public':
             return True
         else:   # private
+            if not request.user.is_authenticated():
+                return False
             repo_perm = check_folder_permission(request, self.repo_id, '/')
-            is_auth = request.user.is_authenticated()
-            return True if is_auth and repo_perm is not None else False
+            if not repo_perm:
+                return False
+            return True
 
     def to_dict(self):
         return {
