@@ -275,6 +275,14 @@ class User(object):
 
         return self._cached_org_role
 
+    @property
+    def contact_email(self):
+        if not hasattr(self, '_cached_contact_email'):
+            email = Profile.objects.get_contact_email_by_user(self.username)
+            self._cached_contact_email = email
+
+        return self._cached_contact_email
+
     class DoesNotExist(Exception):
         pass
 
