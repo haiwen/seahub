@@ -5,6 +5,7 @@ import TreeNodeView from './tree-node-view';
 const propTypes = {
   treeData: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
+  onMenuItemClick: PropTypes.func.isRequired,
   onNodeClick: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
@@ -42,6 +43,7 @@ class TreeView extends React.Component {
           paddingLeft={PADDING_LEFT}
           isItemFreezed={this.state.isItemFreezed}
           onNodeClick={this.props.onNodeClick}
+          onMenuItemClick={this.props.onMenuItemClick}
           onNodeExpanded={this.props.onNodeExpanded}
           onNodeCollapse={this.props.onNodeCollapse}
           onNodeDragStart={this.onNodeDragStart}

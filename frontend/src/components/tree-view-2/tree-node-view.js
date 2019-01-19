@@ -69,8 +69,8 @@ class TreeNodeView extends React.Component {
     this.props.onUnFreezedItem();
   }
 
-  onMenuItemClick = (menuItem) => {
-    this.props.onMenuItemClick(menuItem);
+  onMenuItemClick = (operation, node) => {
+    this.props.onMenuItemClick(operation, node);
   }
 
   getNodeTypeAndIcon = () => {

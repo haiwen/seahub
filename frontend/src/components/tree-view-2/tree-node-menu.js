@@ -76,7 +76,8 @@ class TreeNodeMenu extends React.Component {
 
   onMenuItemClick = (event) => {
     let operation = event.target.dataset.toggle;
-    this.props.onMenuItemClick(operation);
+    let node = this.props.node;
+    this.props.onMenuItemClick(operation, node);
   }
 
   render() {
