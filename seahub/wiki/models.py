@@ -95,14 +95,13 @@ class Wiki(models.Model):
     PERM_CHOICES = (
         ('private', 'private'),
         ('public', 'public'),
-        ('login-user', 'login user')
     )
 
     username = LowerCaseCharField(max_length=255)
     name = models.CharField(max_length=255)
     slug = models.CharField(max_length=255, unique=True)
     repo_id = models.CharField(max_length=36, db_index=True)
-    permission = models.CharField(max_length=50)  # private, public, login
+    permission = models.CharField(max_length=50)  # private, public
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
     objects = WikiManager()
 
@@ -125,23 +124,14 @@ class Wiki(models.Model):
 
         return repo.last_modify
 
-    def has_read_perm(self, user):
+    def has_read_perm(self, request):
+        from seahub.views import check_folder_permission
         if self.permission == 'public':
             return True
-        elif self.permission == 'login-user':
-            return True if user.is_authenticated() else False
-        else:                   # private
-            return True if user.username == self.username else False
-
-    def check_access_wiki(self, request):
-        from seahub.views import check_folder_permission
-
-        if request.user.is_authenticated() and check_folder_permission(
-                request, self.repo_id, '/') is not None:
-            return True
-        else:
-            return False
-
+        else:   # private
+            repo_perm = check_folder_permission(request, self.repo_id, '/')
+            is_auth = request.user.is_authenticated()
+            return True if is_auth and repo_perm is not None else False
 
     def to_dict(self):
         return {
