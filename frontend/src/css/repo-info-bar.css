@@ -35,6 +35,10 @@
   text-decoration: underline;
 }
 
+.readme-files {
+  margin-top: 4px;
+}
+
 .readme-file {
   margin: 0 15px;
   display: inline-block;
