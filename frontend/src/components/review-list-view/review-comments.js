@@ -22,7 +22,6 @@ class ReviewComments extends React.Component {
     super(props);
     this.state = {
       commentsList: [],
-      userAvatar: '',
       inResizing: false,
       commentFooterHeight: 30,
       showResolvedComment: true,
@@ -45,15 +44,6 @@ class ReviewComments extends React.Component {
       if (scroll) {
         this.refs.commentsList.scrollTo(0, 10000);
       }
-    });
-  }
-
-  getUserAvatar = () => {
-    seafileAPI.getAccountInfo().then((res) => {
-      this.accountInfo = res.data;
-      this.setState({
-        userAvatar: res.data.avatar_url,
-      });
     });
   }
 
@@ -140,7 +130,6 @@ class ReviewComments extends React.Component {
   }
 
   componentWillMount() {
-    this.getUserAvatar();
     this.listComments();
   }
 
@@ -193,9 +182,6 @@ class ReviewComments extends React.Component {
         </div>
         <div className="seafile-comment-footer" style={{height:this.state.commentFooterHeight+'%'}}>
           <div className="seafile-comment-row-resize" onMouseDown={this.onResizeMouseDown}></div>
-          <div className="user-header">
-            <img className="avatar" src={this.state.userAvatar} alt="avatar"/>
-          </div>
           <div className="seafile-add-comment">
             <textarea className="add-comment-input" value={this.state.comment}
               placeholder={gettext('Add a comment.')} onChange={this.handleCommentChange}

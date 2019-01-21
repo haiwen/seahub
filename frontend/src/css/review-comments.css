@@ -39,7 +39,7 @@
 }
 .seafile-comment-item {
   overflow-y: hidden;
-  padding: 15px 10px;
+  padding: 15px;
 }
 .seafile-comment-item-resolved {
   background-color: #e6ffed;
@@ -84,7 +84,7 @@
   color: #555;
 }
 .seafile-comment-item .seafile-comment-content {
-  margin: 10px 0 0 42px;
+  margin-top: 10px;
 }
 .seafile-comment-item .seafile-comment-content ol,
 .seafile-comment-item .seafile-comment-content ul,
@@ -99,7 +99,7 @@
 .seafile-comment-item blockquote {
   word-wrap: break-word;
   overflow: hidden;
-  margin-right: 10px;
+  padding-left: 1rem;
   cursor: pointer;
 }
 .seafile-comment-row-resize {
@@ -114,7 +114,6 @@
 }
 .seafile-comment-footer {
   background-color: #fafaf9;
-  padding: 10px;
   border-top: 1px solid #e5e5e5;
   min-height: 170px;
   position: absolute;
@@ -122,12 +121,8 @@
   padding-top: 0;
   width: 100%;
 }
-.seafile-comment-footer .user-header {
-  margin-top: 10px;
-  position: absolute;
-}
 .seafile-comment-footer .seafile-add-comment {
-  margin: 10px 10px 5px 40px;
+  margin: 10px 20px 5px 15px;
   height: 100%;
 }
 .seafile-comment-footer .seafile-add-comment .add-comment-input {
