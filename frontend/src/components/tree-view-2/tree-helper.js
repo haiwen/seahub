@@ -37,6 +37,15 @@ class TreeHelper {
     return tree;
   }
 
+  addNodeToParentByPath(tree, node, parentPath) {
+    let treeCopy = tree.clone();
+    let parentNode = treeCopy.getNodeByPath(parentPath);
+    if (parentNode.hasExpanded()) {
+      treeCopy.addNodeToParent(node, parentNode);
+    }
+    return treeCopy;
+  }
+
   deleteNodeByPath(tree, nodePath) {
     let treeCopy = tree.clone();
     let node = treeCopy.getNodeByPath(nodePath);
@@ -71,9 +80,10 @@ class TreeHelper {
     let treeCopy = tree.clone();
     let node = treeCopy.getNodeByPath(nodePath);
     let destNode = treeCopy.getNodeByPath(destPath);
-    if (destNode) {
+    if (destNode && node) { // node has loaded
       treeCopy.moveNode(node, destNode);
-    } else {
+    }
+    if (!destNode && node){
       treeCopy.deleteNode(node);
     }
     return treeCopy;
