@@ -40,16 +40,17 @@ class Rename extends React.Component {
 
   componentWillMount() {
     this.setState({
-      newName: this.props.currentNode.name
+      newName: this.props.currentNode.object.name
     });
   }
 
   componentDidMount() {
-    this.changeState(this.props.currentNode);
+    let currentNode = this.props.currentNode;
+    this.changeState(currentNode);
     this.newInput.focus();
-    let type = this.props.currentNode.type;
+    let type = currentNode.object.type;
     if (type === 'file') {
-      var endIndex = this.props.currentNode.name.lastIndexOf('.md');
+      var endIndex = currentNode.object.name.lastIndexOf('.md');
       this.newInput.setSelectionRange(0, endIndex, 'forward');
     } else {
       this.newInput.setSelectionRange(0, -1);
@@ -61,11 +62,12 @@ class Rename extends React.Component {
   }
 
   changeState(currentNode) {
-    this.setState({newName: currentNode.name});
+    let name = currentNode.object.name;
+    this.setState({newName: name});
   }
 
   render() {
-    let type = this.props.currentNode.type;
+    let type = this.props.currentNode.object.type;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</ModalHeader>

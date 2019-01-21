@@ -368,7 +368,10 @@ class DirentListItem extends React.Component {
   render() {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
-    let dirHref = siteRoot + 'library/' + this.props.repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
+    let dirHref = '';
+    if (this.props.currentRepoInfo) {
+      dirHref = siteRoot + 'library/' + this.props.repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
+    }
     let fileHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(direntPath);
     let toolTipID = MD5(dirent.name).slice(0, 7);
     let tagTitle = '';

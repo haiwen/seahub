@@ -91,10 +91,6 @@
 }
 
 /*tree view */
-.tree-node:not([type = 'dir']):hover {
-  background-color: rgb(255,239,178);
-}
-
 .tree-view {
   padding-left: 10px;
   line-height: 1.5;
@@ -105,6 +101,10 @@
   height: 26px;
   cursor: pointer;
   line-height: 1.625;
+}
+
+.tree-node-inner-hover {
+  background-color: rgb(255,239,178);
 }
 
 .tree-node-inner .tree-node-text {
@@ -147,7 +147,7 @@
 .tree-node-inner .right-icon {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 1rem;
   bottom: 0;
   width: 1.5rem;
   color: #888;   

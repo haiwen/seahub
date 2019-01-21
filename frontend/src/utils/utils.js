@@ -177,14 +177,12 @@ export const Utils = {
    */
   getPaths: function(path) {
     let paths = path.split('/').slice(1);
-    let result = [path];
+    let result = [];
     while(paths.length) {
-      let item = paths.pop();
-      if (item) {
-        result.push('/' + paths.join('/'));
-      }
+      result.push('/' + paths.join('/'));
+      paths.pop();
     }
-    return result;
+    return result.reverse();
   },
 
   /**

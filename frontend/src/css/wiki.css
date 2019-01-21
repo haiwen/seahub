@@ -25,6 +25,7 @@
   font-size: 0.8125rem;
 }
 .wiki-pages-container {
+  flex: 1;
   overflow: hidden;
   padding-bottom: 10px;
 }
