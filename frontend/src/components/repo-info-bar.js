@@ -65,7 +65,7 @@ class RepoInfoBar extends React.Component {
 
   render() {
     let {repoID, currentPath, usedRepoTags, readmeMarkdown} = this.props;
-    let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) : '';
+    let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) +  '?mode=edit' : '';
     let filePath = readmeMarkdown !== null ? currentPath + readmeMarkdown.name : '';
     return (
       <div className="repo-info-bar">
