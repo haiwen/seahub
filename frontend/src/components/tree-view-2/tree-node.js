@@ -88,6 +88,13 @@ class TreeNode {
     }
   }
 
+  addChildren(nodeList) {
+    nodeList.forEach(node => {
+      node.setParentNode(this);
+    });
+    this.children = nodeList;
+  }
+
   deleteChild(node) {
     let children = this.children.filter(item => {
       return item.path !== node.path;

@@ -40,10 +40,7 @@ class TreeHelper {
   addNodeToParentByPath(tree, node, parentPath) {
     let treeCopy = tree.clone();
     let parentNode = treeCopy.getNodeByPath(parentPath);
-    parentNode.setLoaded(false);  // reload data
-    if (parentNode.hasExpanded()) {
-      treeCopy.addNodeToParent(node, parentNode);
-    }
+    treeCopy.addNodeToParent(node, parentNode);
     return treeCopy;
   }
 
@@ -110,6 +107,7 @@ class TreeHelper {
   copyNodeByPath(tree, nodePath, destPath) {
     let treeCopy = tree.clone();
     let node = treeCopy.getNodeByPath(nodePath);
+    node = node.clone();  // need a dup
     let destNode = treeCopy.getNodeByPath(destPath);
     if (destNode) {
       treeCopy.copyNode(node, destNode);
