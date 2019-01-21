@@ -74,7 +74,13 @@
   .shared-file-view-body .md-view {
     width: 95%;
   }
-  .shared-file-view-body .md-view .article {
+  .shared-file-view-body .md-view {
+    padding: 55px 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .shared-file-view-body .md-view {
     padding: 40px;
   }
 }
