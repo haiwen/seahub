@@ -13,6 +13,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.views import check_folder_permission
+from seahub.drafts.utils import send_review_status_msg
 from seahub.drafts.models import Draft, DraftReview, ReviewReviewer, \
         DraftFileExist, DraftReviewExist
 
@@ -56,6 +57,9 @@ class FileReviewView(APIView):
             r = DraftReview.objects.add(creator=dirent.modifier, draft=d)
         except (DraftReviewExist):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')
+
+        # send review status change message
+        send_review_status_msg(request, r)
 
         # new reviewer
         if username != d.username:

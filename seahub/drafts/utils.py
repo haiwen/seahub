@@ -1,10 +1,16 @@
 import hashlib
 import os
+import logging
+import posixpath
 
 from seaserv import seafile_api
+from seaserv import send_message
 
 from seahub.utils import normalize_file_path, check_filename_with_rename
 from seahub.tags.models import FileUUIDMap
+
+
+logger = logging.getLogger(__name__)
 
 
 def create_user_draft_repo(username, org_id=-1):
@@ -109,3 +115,38 @@ def get_file_draft_and_related_review(repo_id, file_path, is_draft=False, has_dr
         review['draft_file_path'] = d.draft_file_path
 
     return review
+
+
+def send_review_status_msg(request, review):
+    """
+    send review status change to seafevents
+    """
+    status = review.status.lower()
+    if status not in ['open', 'finished', 'closed']:
+        logger.warn('Invalid status in review status msg: %s' % status)
+        return
+
+    repo_id = review.origin_repo_id
+    op_user = review.creator
+    review_id = review.id
+    draft_flag = os.path.splitext(os.path.basename(review.draft_file_path))[0][-7:]
+    if draft_flag == '(draft)':
+        old_path = review.draft_file_path
+        if status == 'finished':
+            publish_path = posixpath.join(review.origin_file_uuid.parent_path, review.origin_file_uuid.filename)
+        else:
+            publish_path = None
+    else:
+        old_path = posixpath.join(review.origin_file_uuid.parent_path, review.origin_file_uuid.filename)
+        publish_path = review.draft_file_path if status == 'finished' else None
+    path = publish_path if publish_path else old_path
+
+    username = request.user.username
+
+    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % (status, repo_id, op_user, "review", path, review_id, old_path, username)
+    msg_utf8 = msg.encode('utf-8')
+
+    try:
+        send_message('seahub.review', msg_utf8)
+    except Exception as e:
+        logger.error("Error when sending %s message: %s" % (status, str(e)))

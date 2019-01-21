@@ -83,6 +83,9 @@ class ActivitiesView(APIView):
             elif e.op_type == 'rename' and e.obj_type in ['dir', 'file']:
                 d['old_path'] = e.old_path
                 d['old_name'] = os.path.basename(e.old_path)
+            elif e.obj_type == 'review':
+                d['old_path'] = e.old_path
+                d['review_id'] = e.review_id
 
             events_list.append(d)
 
