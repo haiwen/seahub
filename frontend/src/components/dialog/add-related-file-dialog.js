@@ -5,6 +5,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
+import '../../css/dirent-detail.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
