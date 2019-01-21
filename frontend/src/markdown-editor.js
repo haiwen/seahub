@@ -301,7 +301,6 @@ class MarkdownEditor extends React.Component {
       collabServer: seafileCollabServer ? seafileCollabServer : null,
       relatedFiles: [],
       fileTagList: [],
-      dirent: {},
       showRelatedFileDialog: false,
       showEditFileTagDialog: false,
       showAddRelatedFileDialog: false,
@@ -382,7 +381,6 @@ class MarkdownEditor extends React.Component {
     });
     this.listRelatedFiles();
     this.listFileTags();
-    this.listDirent();
   }
 
   listRelatedFiles = () => {
@@ -401,27 +399,6 @@ class MarkdownEditor extends React.Component {
       }
       this.setState({
         fileTagList: fileTagList
-      });
-    });
-  }
-
-  listDirent = () => {
-    seafileAPI.listDir(repoID, dirPath).then(res => {
-      let direntList = [];
-      res.data.forEach(item => {
-        if (this.props.isShowFile === true) {
-          let dirent = new Dirent(item);
-          direntList.push(dirent);
-        } else {
-          if (item.type === 'dir') {
-            let dirent = new Dirent(item);
-            direntList.push(dirent);
-          }
-        }
-      });
-      direntList = Utils.sortDirents(direntList, 'name', 'asc');
-      this.setState({
-        dirent: direntList[0]
       });
     });
   }
@@ -494,7 +471,7 @@ class MarkdownEditor extends React.Component {
                     repoID={repoID}
                     filePath={filePath}
                     toggleCancel={this.closeAddRelatedFileDialog}
-                    dirent={this.state.dirent}
+                    dirent={this.state.fileInfo}
                     onRelatedFileChange={this.onRelatedFileChange}
                   />
                 }
