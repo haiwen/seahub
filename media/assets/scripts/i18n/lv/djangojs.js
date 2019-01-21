@@ -19,6 +19,40 @@
 
   django.catalog = django.catalog || {};
   
+  var newcatalog = {
+    "Are you sure you want to delete %s ?": "Tie\u0161\u0101m dz\u0113st %s ?", 
+    "Are you sure you want to quit this group?": "Tie\u0161\u0101m p\u0101rtraukt", 
+    "Are you sure you want to unshare %s ?": "Tie\u0161\u0101m atcelt pieejas %s ?", 
+    "Cancel": "Atcelt", 
+    "Delete": "Dz\u0113st", 
+    "Delete Member": "Dz\u0113st biedru", 
+    "Deleted directories": "Dz\u0113st\u0101s mapes", 
+    "Dismiss Group": "Aizmirst grupu", 
+    "Failed.": "Neizdev\u0101s", 
+    "Failed. Please check the network.": "Neizdev\u0101s. L\u016bdzu p\u0101rbaudiet t\u012bkla piesl\u0113gumu.", 
+    "Just now": "Tikko", 
+    "Last Update": "Atjaunots", 
+    "Loading...": "Iel\u0101de... ", 
+    "Log out": "Iziet", 
+    "Modified files": "Main\u012bt\u0101s datnes", 
+    "Name": "Nosaukums", 
+    "New File": "Jauna datne", 
+    "New directories": "Jaunas mapes", 
+    "Passwords don't match": "Paroles nesakr\u012bt", 
+    "Please check the network.": "L\u016bdzu p\u0101rbaudiet t\u012bkla piesl\u0113gumu", 
+    "Please enter the password again": "L\u016bdzu ievad\u012bt paroli v\u0113lreiz", 
+    "Quit Group": "Pamest grupu", 
+    "Read-Only": "Tikai las\u012bt", 
+    "Read-Write": "Las\u012bt-Rakst\u012bt", 
+    "Really want to dismiss this group?": "Tie\u0161\u0101m aizmirst grupu", 
+    "Settings": "Iestat\u012bjumi", 
+    "Submit": "Pielietot", 
+    "Unshare Library": "Atcelt pieejas kr\u0101tuvei"
+  };
+  for (var key in newcatalog) {
+    django.catalog[key] = newcatalog[key];
+  }
+  
 
   if (!django.jsi18n_initialized) {
     django.gettext = function(msgid) {
