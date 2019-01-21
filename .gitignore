@@ -23,7 +23,6 @@ setenv*.sh
 
 pylintrc
 .DS_Store
-*.mo
 media/CACHE
 media/custom
 
