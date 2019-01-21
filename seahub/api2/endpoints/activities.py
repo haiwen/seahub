@@ -85,7 +85,7 @@ class ActivitiesView(APIView):
                 d['old_name'] = os.path.basename(e.old_path)
             elif e.obj_type == 'review':
                 d['old_path'] = e.old_path
-                d['review_id'] = e.review_id if e.review_id else None
+                d['review_id'] = e.review_id
 
             events_list.append(d)
 

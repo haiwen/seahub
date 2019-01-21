@@ -95,12 +95,7 @@ class TableBody extends Component {
           details = <td>{fileLink}<br />{smallLibLink}</td>;
           break;
         case 'finished':
-          if (!item.review_id) {
-            op = gettext('Publish draft');
-            details = <td>{item.name}<br />{smallLibLink}</td>;
-            break;
-          }
-          op = gettext('Publish review');
+          op = gettext('Publish draft');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
           break;
         }
@@ -249,10 +244,13 @@ class FilesActivities extends Component {
     for (var i = 0; i < events.length; i++) {
       if (events[i].obj_type === 'file') {
         if (events[i].op_type === 'delete' && this.oldPathList.includes(events[i].path)) {
+          this.oldPathList.splice(this.oldPathList.indexOf(events[i].path), 1);
           continue;
         } else if (events[i].op_type === 'edit' && this.curPathList.includes(events[i].path)) {
+          this.curPathList.splice(this.curPathList.indexOf(events[i].path), 1);
           continue;
         } else if (events[i].op_type === 'rename' && this.oldPathList.includes(events[i].old_path)) {
+          this.oldPathList.splice(this.oldPathList.indexOf(events[i].old_path), 1);
           continue;
         } else {
           actuallyEvents.push(events[i]);
@@ -261,7 +259,6 @@ class FilesActivities extends Component {
         actuallyEvents.push(events[i]);
       }
     }
-    console.log(actuallyEvents.length);
     return actuallyEvents;
   }
 

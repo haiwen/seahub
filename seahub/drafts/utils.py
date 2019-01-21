@@ -150,31 +150,3 @@ def send_review_status_msg(request, review):
         send_message('seahub.review', msg_utf8)
     except Exception as e:
         logger.error("Error when sending %s message: %s" % (status, str(e)))
-
-
-def send_draft_publish_msg(request, draft):
-    """
-    send draft publish message to seafevents
-    """
-    repo_id = draft.origin_repo_id
-    op_user = draft.username
-    old_path = draft.draft_file_path
-    path = posixpath.join(draft.origin_file_uuid.parent_path, draft.origin_file_uuid.filename)
-    # remove `(draft)` from file name
-    if path == old_path:
-        draft_flag = os.path.splitext(os.path.basename(path))[0][-7:]
-        if draft_flag == '(draft)':
-            file_name = os.path.splitext(os.path.basename(path))[0][:-7]
-            file_type = os.path.splitext(os.path.basename(path))[-1]
-            new_file_name = file_name + file_type
-            path = posixpath.join(draft.origin_file_uuid.parent_path, new_file_name)
-
-    username = request.user.username
-
-    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % ("finished", repo_id, op_user, "review", path, "", old_path, username)
-    msg_utf8 = msg.encode('utf-8')
-
-    try:
-        send_message('seahub.review', msg_utf8)
-    except Exception as e:
-        logger.error("Error when sending %s message: %s" % ("finished", str(e)))
