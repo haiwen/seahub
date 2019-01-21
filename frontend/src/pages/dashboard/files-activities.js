@@ -98,6 +98,7 @@ class TableBody extends Component {
           if (!item.review_id) {
             op = gettext('Publish draft');
             details = <td>{item.name}<br />{smallLibLink}</td>;
+            break;
           }
           op = gettext('Publish review');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
@@ -111,6 +112,7 @@ class TableBody extends Component {
           if (item.name.endsWith("(draft).md")) {
             op = gettext('Created draft');
             details = <td>{fileLink}<br />{smallLibLink}</td>;
+            break;
           }
           op = gettext('Created file');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
@@ -119,6 +121,7 @@ class TableBody extends Component {
           if (item.name.endsWith("(draft).md")) {
             op = gettext('Deleted draft');
             details = <td>{item.name}<br />{smallLibLink}</td>;
+            break;
           }
           op = gettext('Deleted file');
           details = <td>{item.name}<br />{smallLibLink}</td>;
@@ -140,6 +143,7 @@ class TableBody extends Component {
           if (item.name.endsWith("(draft).md")) {
             op = gettext('Updated draft');
             details = <td>{fileLink}<br />{smallLibLink}</td>;
+            break;
           }
           op = gettext('Updated file');
           details = <td>{fileLink}<br />{smallLibLink}</td>;
@@ -208,10 +212,10 @@ class FilesActivities extends Component {
       currentPage: 1,
       hasMore: true,
       items: [],
-      curPathList: [],
-      oldPathList: [],
     };
     this.avatarSize = 72;
+    this.curPathList = [];
+    this.oldPathList = [];
   }
 
   componentDidMount() {
@@ -236,32 +240,29 @@ class FilesActivities extends Component {
 
   filterSuperfluousEvents = (events) => {
     events.map((item) => {
-      let curPathList = this.state.curPathList;
-      let oldPathList = this.state.oldPathList;
       if (item.op_type === "finished") {
-        curPathList.push(item.path);
-        oldPathList.push(item.old_path);
-        this.setState({
-          curPathList: curPathList,
-          oldPathList: oldPathList,
-        });
+        this.curPathList.push(item.path);
+        this.oldPathList.push(item.old_path);
       }
     });
+    let actuallyEvents = [];
     for (var i = 0; i < events.length; i++) {
       if (events[i].obj_type === 'file') {
-        if (events[i].op_type === 'delete' && this.state.oldPathList.includes(events[i].path)) {
-          events.splice(i, 1);
-          i--;
-        } else if (events[i].op_type === 'edit' && this.state.curPathList.includes(events[i].path)) {
-          events.splice(i, 1);
-          i--;
-        } else if (events[i].op_type === 'rename' && this.state.oldPathList.includes(events[i].old_path)) {
-          events.splice(i, 1);
-          i--;
+        if (events[i].op_type === 'delete' && this.oldPathList.includes(events[i].path)) {
+          continue;
+        } else if (events[i].op_type === 'edit' && this.curPathList.includes(events[i].path)) {
+          continue;
+        } else if (events[i].op_type === 'rename' && this.oldPathList.includes(events[i].old_path)) {
+          continue;
+        } else {
+          actuallyEvents.push(events[i]);
         }
+      } else {
+        actuallyEvents.push(events[i]);
       }
     }
-    return events;
+    console.log(actuallyEvents.length);
+    return actuallyEvents;
   }
 
   getMore() {
