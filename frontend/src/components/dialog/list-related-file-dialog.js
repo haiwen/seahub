@@ -79,10 +79,10 @@ class ListRelatedFileDialog extends React.Component {
               <Table hover size="sm" className="list-related-file-table">
                 <thead>
                   <tr>
-                    <th width='30%'>{gettext('Name')}</th>
-                    <th width='25%'>{gettext('Library Name')}</th>
-                    <th width='20%'>{gettext('Size')}</th>
-                    <th width='20%'>{gettext('Last Update')}</th>
+                    <th width='50%'>{gettext('Name')}</th>
+                    <th width='15%'>{gettext('Library Name')}</th>
+                    <th width='15%'>{gettext('Size')}</th>
+                    <th width='15%'>{gettext('Last Update')}</th>
                     <th width='5%'></th>
                   </tr>
                 </thead>
