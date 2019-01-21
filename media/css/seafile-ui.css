@@ -10808,6 +10808,8 @@ Icon input
     padding: 6px 13px; }
   .article table p {
     margin: 0; }
+  .article table tr {
+    height: 100%; }
   .article table tr, .article table th {
     display: flex; }
   .article table td, .article table th {
