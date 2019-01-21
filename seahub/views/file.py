@@ -48,7 +48,7 @@ from seahub.base.accounts import ANONYMOUS_EMAIL
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
-from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
+from seahub.wiki.models import Wiki, WikiDoesNotExist, WikiPageMissing
 from seahub.utils import render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, is_pro_version, is_textual_file, \
@@ -2041,21 +2041,10 @@ def view_media_file_via_share_link(request):
         return render_error(request, 'File does not exist')
 
     # read file from cache, if hit
-    cache_key = normalize_cache_key(file_id, token=token)
-    file_content = cache.get(cache_key)
-    if not file_content:
-        # otherwise, read file from database and update cache
-        access_token = seafile_api.get_fileserver_access_token(repo_id,
-                file_id, 'view', '', use_onetime=False)
+    err_msg, file_content = get_file_content_from_cache(file_id, repo_id, shared_file_name)
 
-        if not access_token:
-            err_msg = 'Unable to view file'
-            return render_error(request, err_msg)
-
-        shared_file_raw_path = gen_inner_file_get_url(access_token, shared_file_name)
-
-        err, file_content, encode = repo_file_get(shared_file_raw_path, 'auto')
-        cache.set(cache_key, file_content, 24 * 60 * 60)
+    if err_msg:
+        return render_error(request, err_msg)
 
     # If the image does not exist in markdown
     serviceURL = get_service_url().rstrip('/')
@@ -2077,3 +2066,88 @@ def view_media_file_via_share_link(request):
     dl_or_raw_url = gen_file_get_url(access_token, image_file_name)
 
     return HttpResponseRedirect(dl_or_raw_url)
+
+
+def view_media_file_via_public_wiki(request):
+    image_path = request.GET.get('image_path', '')
+    file_path = request.GET.get('file_path', '')
+    slug = request.GET.get('slug', '')
+    if not image_path and not file_path:
+        return HttpResponseBadRequest('invalid params')
+
+    # get wiki object or 404
+    try:
+        wiki = Wiki.objects.get(slug=slug)
+    except Wiki.DoesNotExist:
+        err_msg = "Wiki not found."
+        return render_error(request, err_msg)
+
+    file_path = "/" + file_path
+
+    file_name = os.path.basename(file_path)
+    file_type, file_ext = get_file_type_and_ext(file_name)
+
+    if file_type != MARKDOWN:
+        err_msg = 'Invalid file type'
+        return render_error(request, err_msg)
+
+    # recourse check
+    repo_id = wiki.repo_id
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        return render_error(request, 'Repo does not exist')
+
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not file_id:
+        return render_error(request, 'File does not exist')
+
+    # read file from cache, if hit
+    err_msg, file_content = get_file_content_from_cache(file_id, repo_id, file_name)
+
+    if err_msg:
+        return render_error(request, err_msg)
+
+    # If the image does not exist in markdown
+    serviceURL = get_service_url().rstrip('/')
+    image_file_name = os.path.basename(image_path)
+    image_file_name = urlquote(image_file_name)
+    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
+    result = re.search(p, file_content)
+    if not result:
+        return render_error(request, 'Image does not exist')
+
+    # get image
+    obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)
+    if not obj_id:
+        return render_error(request, 'Image does not exist')
+
+    access_token = seafile_api.get_fileserver_access_token(repo_id,
+            obj_id, 'view', '', use_onetime=False)
+
+    dl_or_raw_url = gen_file_get_url(access_token, image_file_name)
+
+    return HttpResponseRedirect(dl_or_raw_url)
+
+
+def get_file_content_from_cache(file_id, repo_id, file_name):
+    err_msg = ''
+    file_content = ''
+
+    cache_key = normalize_cache_key(file_id)
+    # read file from cache, if hit
+    file_content = cache.get(cache_key)
+    if not file_content:
+        # otherwise, read file from database and update cache
+        access_token = seafile_api.get_fileserver_access_token(repo_id,
+                file_id, 'view', '', use_onetime=False)
+
+        if not access_token:
+            err_msg = 'Unable to view file'
+            return err_msg, file_content
+
+        file_raw_path = gen_inner_file_get_url(access_token, file_name)
+
+        err_msg, file_content, encode = repo_file_get(file_raw_path, 'auto')
+        cache.set(cache_key, file_content, 24 * 60 * 60)
+
+    return err_msg, file_content
