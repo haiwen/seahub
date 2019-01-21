@@ -40,6 +40,7 @@ class TreeHelper {
   addNodeToParentByPath(tree, node, parentPath) {
     let treeCopy = tree.clone();
     let parentNode = treeCopy.getNodeByPath(parentPath);
+    parentNode.setLoaded(false);  // reload data
     if (parentNode.hasExpanded()) {
       treeCopy.addNodeToParent(node, parentNode);
     }
@@ -128,20 +129,13 @@ class TreeHelper {
     return treeCopy;
   }
 
-  parseDirentListToTree(direntList) {
+  buildTree() {
     let tree = new Tree();
     let object = {name: '/'};
     let root = new TreeNode({object, isLoaded: true, isExpanded: true});
     tree.setRoot(root);
-
-    let nodeList = direntList.map(dirent => {
-      let object = dirent;
-      return new TreeNode({object});
-    });
-
-    return this.addNodeListToParent(tree, nodeList, root);
+    return tree;
   }
-
 }
 
 let treeHelper = new TreeHelper();

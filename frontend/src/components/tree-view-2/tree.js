@@ -108,13 +108,11 @@ class Tree {
     }
   }
 
-  expandNode(node, isExpandedAncestor) {
+  expandNode(node) {
     node.setExpanded(true);
-    if (isExpandedAncestor) { // exparent current node all ancestor
-      while (node.parentNode) {
-        node.parentNode.setExpanded(true);
-        node = node.parentNode;
-      }
+    while (node.parentNode) {
+      node.parentNode.setExpanded(true);
+      node = node.parentNode;
     }
   }
   

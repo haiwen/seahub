@@ -16,16 +16,6 @@ const propTypes = {
   onUnFreezedItem: PropTypes.func.isRequired,
 };
 
-function sortNode(a, b) {
-  if (a.object.type == 'dir' && b.object.type != 'dir') {
-    return -1;
-  } else if (a.object.type != 'dir' && b.object.type == 'dir') {
-    return 1;
-  } else {
-    return a.object.name.localeCompare(b.object.name);
-  }
-}
-
 class TreeNodeView extends React.Component {
 
   constructor(props) {
@@ -111,10 +101,9 @@ class TreeNodeView extends React.Component {
     if (!node.hasChildren()) {
       return '';
     }
-    let sortedNode = node.children.sort(sortNode);
     return (
       <div className="children" style={{paddingLeft: paddingLeft}}>
-        {sortedNode.map(item => {
+        {node.children.map(item => {
           return (
             <TreeNodeView 
               key={item.path}

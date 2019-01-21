@@ -67,7 +67,25 @@ class TreeNode {
 
   addChild(node) {
     node.setParentNode(this);
-    this.children.push(node);
+    let children = this.children;
+    if (node.object.isDir()) {
+      this.children.unshift(node);
+    } else {
+      let index = -1;
+      for (let i = 0; i < children.length; i++) {
+        if (!children[i].object.isDir()) {
+          index = i;
+          break;
+        }
+      }
+      if (index === -1) { // -1: all the node object is dir;
+        this.children.push(node);
+      } else if (index === 0) { // 0: all the node object is file
+        this.children.unshift(node);
+      } else {
+        this.children.splice(index, 0, node);
+      }
+    }
   }
 
   deleteChild(node) {
