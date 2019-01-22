@@ -151,7 +151,7 @@ class EditorUtilities {
 
   getFiles() {
     return seafileAPI.listDir(repoID, dirPath, { recursive: true} ).then((response) => {
-      var files = response.data.map((item) => {
+      var files = response.data.dirent_list.map((item) => {
         return {
           name: item.name,
           type: item.type === 'dir' ? 'dir' : 'file',

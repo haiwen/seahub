@@ -22,7 +22,7 @@ class EditorUtilities {
 
   listRepoDir() {
     return seafileAPI.listDir(repoID, '/',{recursive: true}).then(items => {
-      const files = items.data.map(item => {
+      const files = items.data.dirent_list.map(item => {
         return {
           name: item.name,
           type: item.type === 'dir' ? 'dir' : 'file',
