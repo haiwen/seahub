@@ -21,6 +21,7 @@ const propTypes = {
   errorMsg: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
   pathExist: PropTypes.bool.isRequired,
   permission: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,

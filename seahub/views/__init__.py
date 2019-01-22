@@ -1220,7 +1220,6 @@ def react_fake_view(request, **kwargs):
     return render(request, "react_app.html", {
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
-        'enable_wiki': request.user.permissions.can_use_wiki(),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,

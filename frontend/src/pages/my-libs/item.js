@@ -1,10 +1,9 @@
-
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, storages, canGenerateShareLink, canGenerateUploadLink, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
+import { gettext, siteRoot, storages, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import RenameInput from '../../components/rename-input';
@@ -144,9 +143,6 @@ class Item extends Component {
   changePassword = () => {
   }
 
-  showLinks = () => {
-  }
-
   folderPerm = () => {
   }
 
@@ -194,8 +190,6 @@ class Item extends Component {
       operationMenuToggleIconClassName += iconVisibility; 
     }
 
-    // const showShareLinks = !data.encrypted && (canGenerateShareLink || canGenerateUploadLink);
-
     const commonToggle = (
       <DropdownToggle
         tag="i" 
@@ -212,7 +206,6 @@ class Item extends Component {
         <DropdownItem onClick={this.transfer}>{gettext('Transfer')}</DropdownItem>
         <DropdownItem onClick={this.historySetting}>{gettext('History Setting')}</DropdownItem>
         {data.encrypted ? <DropdownItem onClick={this.changePassword}>{gettext('Change Password')}</DropdownItem> : ''}
-        {/* {showShareLinks ? <DropdownItem onClick={this.showLinks}>{gettext('Share Links')}</DropdownItem> : ''} */}
         {folderPermEnabled ? <DropdownItem onClick={this.folderPerm}>{gettext('Folder Permission')}</DropdownItem> : ''}
         <DropdownItem onClick={this.showDetails}>{gettext('Details')}</DropdownItem>
       </React.Fragment>
