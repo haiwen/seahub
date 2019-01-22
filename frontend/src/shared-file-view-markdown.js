@@ -62,6 +62,30 @@ class SharedFileViewMarkdown extends React.Component {
     }
   }
 
+  modifyValueBeforeRender = (value) => {
+    value.document.nodes.map(node => {
+      let innerNode = node.nodes[0];
+      if (innerNode.type == 'image') {
+        let imageUrl = innerNode.data.src;
+
+        const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+        
+        // different repo 
+        if (!re.test(imageUrl)) {
+          return;
+        }
+
+        // get image path
+        let index = imageUrl.indexOf('/file');
+        let index2 = imageUrl.indexOf('?');
+        const imagePath = imageUrl.substring(index + 5, index2);
+        // change image url
+        innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imagePath;
+      }
+    });
+    return value;
+  }
+
   render() {
     if (this.state.loading) {
       return <Loading />
@@ -102,9 +126,9 @@ class SharedFileViewMarkdown extends React.Component {
               <MarkdownViewer markdownContent={this.state.markdownContent}
                               showTOC={false}
                               serviceURL={serviceURL}
-                              isShared={true} 
                               sharedToken={sharedToken}
                               repoID={repoID}
+                              modifyValueBeforeRender={this.modifyValueBeforeRender}
               />
             </div>
           </div>

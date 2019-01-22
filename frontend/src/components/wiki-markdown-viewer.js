@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
-import { gettext } from '../utils/constants';
+import { gettext, repoID, slug } from '../utils/constants';
 import Loading from './loading';
 
 const propTypes = {
@@ -10,7 +10,8 @@ const propTypes = {
   markdownContent: PropTypes.string.isRequired,
   latestContributor: PropTypes.string.isRequired,
   lastModified: PropTypes.string.isRequired,
-  onLinkClick: PropTypes.func.isRequired
+  onLinkClick: PropTypes.func.isRequired,
+  filePath: PropTypes.string,
 };
 
 const contentClass = 'wiki-page-content';
@@ -102,6 +103,30 @@ class WikiMarkdownViewer extends React.Component {
     this.setState({activeTitleIndex: activeTitleIndex});
   }
 
+  modifyValueBeforeRender = (value) => {
+    value.document.nodes.map(node => {
+      let innerNode = node.nodes[0];
+      if (innerNode.type == 'image') {
+        let imageUrl = innerNode.data.src;
+
+        const re = new RegExp('http://192.168.49.130:8000/lib/' + repoID +'/file.*raw=1');
+        
+        // different repo 
+        if (!re.test(imageUrl)) {
+          return;
+        }
+
+        // get image path
+        let index = imageUrl.indexOf('/file');
+        let index2 = imageUrl.indexOf('?');
+        const imagePath = imageUrl.substring(index + 5, index2);
+        // change image url
+        innerNode.data.src = 'http://192.168.49.130:8000/view-image-via-public-wiki/?slug=' + slug + '&file_path=' + this.props.filePath + '&image_path=' + imagePath;
+      }
+    });
+    return value;
+  }
+
   render() {
     if (this.props.isFileLoading) {
       return <Loading />
@@ -115,6 +140,7 @@ class WikiMarkdownViewer extends React.Component {
             markdownContent={this.props.markdownContent}
             activeTitleIndex={this.state.activeTitleIndex}
             onContentRendered={this.onContentRendered}
+            modifyValueBeforeRender={this.modifyValueBeforeRender}
           />
           <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
