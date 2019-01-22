@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
-import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import DetailListView from './detail-list-view';
 import RepoInfo from '../../models/repo-info';
@@ -95,17 +94,23 @@ class DirentDetail extends React.Component {
 
   render() {
     let { dirent } = this.props;
-    let size = Utils.isHiDPI() ? 48 : 24;
-
-    let iconUrl = '';
+    
+    let titleUrl = '';
+    let contentUrl = '';
+    let titleSize = Utils.isHiDPI() ? 48 : 24;
+    let contentSize = 192;
     if (dirent.type === 'file') {
-      iconUrl = Utils.getFileIconUrl(dirent.name, size);
+      titleUrl = Utils.getFileIconUrl(dirent.name, titleSize);
+      contentUrl = Utils.getFileIconUrl(dirent.name, contentSize);
     } else {
       let isReadOnly = false;
       if (dirent.permission === 'r' || dirent.permission === 'preview') {
         isReadOnly = true;
       }
-      iconUrl = Utils.getFolderIconUrl({isReadOnly, size});
+      let options = {isReadOnly: isReadOnly, size: titleSize};
+      titleUrl = Utils.getFolderIconUrl(options);
+      options.size = contentSize;
+      contentUrl = Utils.getFolderIconUrl(options);
     }
 
     return (
@@ -113,13 +118,13 @@ class DirentDetail extends React.Component {
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
-            <div><img src={iconUrl} width="24" alt="" /></div>{' '}
+            <img src={titleUrl} width="24" height="24" alt="" />{' '}
             <span className="name ellipsis" title={dirent.name}>{dirent.name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={iconUrl} width="96" alt="" />
+            <img src={contentUrl} width="96" alt="" />
           </div>
           {this.state.direntDetail && 
             <div className="dirent-table-container">
