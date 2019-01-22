@@ -246,8 +246,14 @@ class DirView(APIView):
         # get dir/file list recursively
         username = request.user.username
         if recursive == '1':
-            dir_file_info_list = get_dir_file_recursively(username, repo_id,
-                    parent_dir, [])
+
+            try:
+                dir_file_info_list = get_dir_file_recursively(username, repo_id,
+                        parent_dir, [])
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             response_dict = {}
             response_dict['dirent_list'] = []
@@ -283,13 +289,18 @@ class DirView(APIView):
 
         all_dir_info_list = []
         all_file_info_list = []
-        for parent_dir in parent_dir_list:
-            # get dir file info list
-            dir_info_list, file_info_list = get_dir_file_info_list(username,
-                    request_type, repo, parent_dir, with_thumbnail, thumbnail_size)
 
-            all_dir_info_list.extend(dir_info_list)
-            all_file_info_list.extend(file_info_list)
+        try:
+            for parent_dir in parent_dir_list:
+                # get dir file info list
+                dir_info_list, file_info_list = get_dir_file_info_list(username,
+                        request_type, repo, parent_dir, with_thumbnail, thumbnail_size)
+                all_dir_info_list.extend(dir_info_list)
+                all_file_info_list.extend(file_info_list)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         response_dict = {}
         response_dict["user_perm"] = permission
