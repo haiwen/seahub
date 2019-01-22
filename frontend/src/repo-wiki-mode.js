@@ -820,18 +820,24 @@ class Wiki extends Component {
     if (!this.state.pathExist) {
       this.setState({pathExist: true});
     }
-    // need add a param to judge the node is update or not
+
     if (node.object.isDir()) {
-      if (node.isExpanded) {
-        let tree = treeHelper.collapseNode(this.state.treeData, node);
-        this.setState({treeData: tree});
-      } else {
-        this.onTreeNodeExpanded(node);
+      if (node.path === this.state.path) {
+        if (node.isExpanded) {
+          let tree = treeHelper.collapseNode(this.state.treeData, node);
+          this.setState({treeData: tree});
+        } else {
+          this.onTreeNodeExpanded(node);
+        }
       }
     }
 
+    if (node.path === this.state.path ) {
+      return;
+    }
+
     if (node.object.isDir()) {  // isDir
-      this.showDir(node.path);  // need add a param to judge the node is update or not
+      this.showDir(node.path);
     } else {
       if (Utils.isMarkdownFile(node.path)) {
         if (node.path !== this.state.path) {
