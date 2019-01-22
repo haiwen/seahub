@@ -27,21 +27,34 @@ class WikiMarkdownViewer extends React.Component {
     this.titlesInfo = [];
   }
 
+  componentDidMount() {
+    // Bind event when first loaded
+    this.links = document.querySelectorAll(`.${contentClass} a`);
+    this.links.forEach(link => {
+      link.addEventListener('click', this.onLinkClick);
+    });
+  }
+
+  componentWillReceiveProps() {
+    // Unbound event when updating
+    this.links.forEach(link => {
+      link.removeEventListener('click', this.onLinkClick);
+    });
+  }
+
   componentDidUpdate() {
-    if (!this.links.length) {
-      this.links = document.querySelectorAll(`.${contentClass} a`);
-      this.links.forEach(link => {
-        link.addEventListener('click', this.onLinkClick);
-      });
-    }
+    // Update completed, rebind event
+    this.links = document.querySelectorAll(`.${contentClass} a`);
+    this.links.forEach(link => {
+      link.addEventListener('click', this.onLinkClick);
+    });
   }
 
   componentWillUnmount() {
-    if (this.links) {
-      this.links.forEach(link => {
-        link.removeEventListener('click', this.onLinkClick);
-      });
-    }
+    // Rebinding events when the component is destroyed
+    this.links.forEach(link => {
+      link.removeEventListener('click', this.onLinkClick);
+    });
   }
 
   onContentRendered = (markdownViewer) => {
@@ -50,6 +63,7 @@ class WikiMarkdownViewer extends React.Component {
 
   onLinkClick = (event) => {
     event.preventDefault(); 
+    event.stopPropagation();
     let link = '';
     if (event.target.tagName !== 'A') {
       let target = event.target.parentNode;
