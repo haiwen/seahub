@@ -113,21 +113,24 @@ class DirView(APIView):
         # get dir/file list recursively
         username = request.user.username
         if recursive == '1':
-            result = []
             dir_file_info_list = get_dir_file_recursively(username, repo_id,
                     parent_dir, [])
+
+            response_dict = {}
+            response_dict['dirent_list'] = []
+
             if request_type == 'f':
                 for item in dir_file_info_list:
                     if item['type'] == 'file':
-                        result.append(item)
+                        response_dict['dirent_list'].append(item)
             elif request_type == 'd':
                 for item in dir_file_info_list:
                     if item['type'] == 'dir':
-                        result.append(item)
+                        response_dict['dirent_list'].append(item)
             else:
-                result = dir_file_info_list
+                response_dict['dirent_list'] = dir_file_info_list
 
-            return Response(result)
+            return Response(response_dict)
 
         # get dirent(folder and file) list
         try:
@@ -249,16 +252,17 @@ class DirView(APIView):
         dir_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
         file_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
 
-        if request_type == 'f':
-            result = file_info_list
-        elif request_type == 'd':
-            result = dir_info_list
-        else:
-            result = dir_info_list + file_info_list
+        response_dict = {}
+        response_dict["user_perm"] = permission
 
-        response = Response(result)
-        response["dir_perm"] = permission
-        return response
+        if request_type == 'f':
+            response_dict['dirent_list'] = file_info_list
+        elif request_type == 'd':
+            response_dict['dirent_list'] = dir_info_list
+        else:
+            response_dict['dirent_list'] = dir_info_list + file_info_list
+
+        return Response(response_dict)
 
     def post(self, request, repo_id, format=None):
         """ Create, rename, revert dir.

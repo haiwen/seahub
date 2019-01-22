@@ -26,7 +26,7 @@ class DirentListView extends React.Component {
     let repo = this.props.repo;
     seafileAPI.listDir(repo.repo_id, '/').then(res => {
       let direntList = [];
-      res.data.forEach(item => {
+      res.data.dirent_list.forEach(item => {
         if (this.props.isShowFile === true) {
           let dirent = new Dirent(item);
           direntList.push(dirent);

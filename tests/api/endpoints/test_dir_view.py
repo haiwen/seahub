@@ -66,13 +66,13 @@ class DirViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 2
+        assert len(json_resp['dirent_list']) == 2
 
-        assert json_resp[0]['type'] == 'dir'
-        assert json_resp[0]['name'] == self.folder_name
+        assert json_resp['dirent_list'][0]['type'] == 'dir'
+        assert json_resp['dirent_list'][0]['name'] == self.folder_name
 
-        assert json_resp[1]['type'] == 'file'
-        assert json_resp[1]['name'] == self.file_name
+        assert json_resp['dirent_list'][1]['type'] == 'file'
+        assert json_resp['dirent_list'][1]['name'] == self.file_name
 
     def test_can_get_with_dir_type_parameter(self):
 
@@ -81,9 +81,9 @@ class DirViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'dir'
-        assert json_resp[0]['name'] == self.folder_name
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'dir'
+        assert json_resp['dirent_list'][0]['name'] == self.folder_name
 
     def test_can_get_with_file_type_parameter(self):
 
@@ -92,9 +92,9 @@ class DirViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == self.file_name
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == self.file_name
 
     def test_can_get_with_recursive_parameter(self):
 
@@ -108,17 +108,17 @@ class DirViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 3
-        assert json_resp[0]['type'] == 'dir'
-        assert json_resp[0]['name'] == self.folder_name
-        assert json_resp[0]['parent_dir'] == '/'
+        assert len(json_resp['dirent_list']) == 3
+        assert json_resp['dirent_list'][0]['type'] == 'dir'
+        assert json_resp['dirent_list'][0]['name'] == self.folder_name
+        assert json_resp['dirent_list'][0]['parent_dir'] == '/'
 
-        assert json_resp[1]['type'] == 'dir'
-        assert json_resp[1]['name'] == new_dir_name
-        assert json_resp[1]['parent_dir'] == self.folder_path
+        assert json_resp['dirent_list'][1]['type'] == 'dir'
+        assert json_resp['dirent_list'][1]['name'] == new_dir_name
+        assert json_resp['dirent_list'][1]['parent_dir'] == self.folder_path
 
-        assert json_resp[2]['type'] == 'file'
-        assert json_resp[2]['name'] == self.file_name
+        assert json_resp['dirent_list'][2]['type'] == 'file'
+        assert json_resp['dirent_list'][2]['name'] == self.file_name
 
     def test_can_get_with_recursive_and_dir_type_parameter(self):
 
@@ -133,13 +133,13 @@ class DirViewTest(BaseTestCase):
         json_resp = json.loads(resp.content)
 
         assert len(json_resp) == 2
-        assert json_resp[0]['type'] == 'dir'
-        assert json_resp[0]['name'] == self.folder_name
-        assert json_resp[0]['parent_dir'] == '/'
+        assert json_resp['dirent_list'][0]['type'] == 'dir'
+        assert json_resp['dirent_list'][0]['name'] == self.folder_name
+        assert json_resp['dirent_list'][0]['parent_dir'] == '/'
 
-        assert json_resp[1]['type'] == 'dir'
-        assert json_resp[1]['name'] == new_dir_name
-        assert json_resp[1]['parent_dir'] == self.folder_path
+        assert json_resp['dirent_list'][1]['type'] == 'dir'
+        assert json_resp['dirent_list'][1]['name'] == new_dir_name
+        assert json_resp['dirent_list'][1]['parent_dir'] == self.folder_path
 
     def test_can_get_with_recursive_and_file_type_parameter(self):
 
@@ -153,9 +153,9 @@ class DirViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == self.file_name
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == self.file_name
 
     def test_can_get_file_with_lock_info(self):
 
@@ -168,10 +168,10 @@ class DirViewTest(BaseTestCase):
         resp = self.client.get(self.url + '?t=f')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == self.file_name
-        assert json_resp[0]['lock_owner'] == ''
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == self.file_name
+        assert json_resp['dirent_list'][0]['lock_owner'] == ''
 
         # lock file
         seafile_api.lock_file(self.repo_id, self.file_path, self.admin_name, 1)
@@ -180,10 +180,10 @@ class DirViewTest(BaseTestCase):
         resp = self.client.get(self.url + '?t=f')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == self.file_name
-        assert json_resp[0]['lock_owner'] == self.admin_name
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == self.file_name
+        assert json_resp['dirent_list'][0]['lock_owner'] == self.admin_name
 
     def test_can_get_file_with_star_info(self):
 
@@ -193,10 +193,10 @@ class DirViewTest(BaseTestCase):
         resp = self.client.get(self.url + '?t=f')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == self.file_name
-        assert json_resp[0]['starred'] == False
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == self.file_name
+        assert json_resp['dirent_list'][0]['starred'] == False
 
         # star file
         resp = self.client.post(reverse('starredfiles'), {'repo_id': self.repo.id, 'p': self.file_path})
@@ -206,10 +206,10 @@ class DirViewTest(BaseTestCase):
         resp = self.client.get(self.url + '?t=f')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == self.file_name
-        assert json_resp[0]['starred'] == True
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == self.file_name
+        assert json_resp['dirent_list'][0]['starred'] == True
 
     def test_can_get_file_with_tag_info(self):
 
@@ -219,10 +219,10 @@ class DirViewTest(BaseTestCase):
         resp = self.client.get(self.url + '?t=f')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == self.file_name
-        assert not json_resp[0].has_key('file_tags')
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == self.file_name
+        assert not json_resp['dirent_list'][0].has_key('file_tags')
 
         # add file tag
         tag_name = randstring(6)
@@ -238,12 +238,12 @@ class DirViewTest(BaseTestCase):
         resp = self.client.get(self.url + '?t=f')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == self.file_name
-        assert json_resp[0]['file_tags'][0]['repo_tag_id'] == repo_tag_id
-        assert json_resp[0]['file_tags'][0]['tag_name'] == tag_name
-        assert json_resp[0]['file_tags'][0]['tag_color'] == tag_color
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == self.file_name
+        assert json_resp['dirent_list'][0]['file_tags'][0]['repo_tag_id'] == repo_tag_id
+        assert json_resp['dirent_list'][0]['file_tags'][0]['tag_name'] == tag_name
+        assert json_resp['dirent_list'][0]['file_tags'][0]['tag_color'] == tag_color
 
     def test_can_get_file_with_thumbnail_info(self):
 
@@ -258,12 +258,12 @@ class DirViewTest(BaseTestCase):
         resp = self.client.get(self.url + '?t=f&with_thumbnail=true&p=%s' % self.folder_path)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == image_file_name
-        assert not json_resp[0].has_key('encoded_thumbnail_src')
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == image_file_name
+        assert not json_resp['dirent_list'][0].has_key('encoded_thumbnail_src')
 
-        file_id = json_resp[0]['id']
+        file_id = json_resp['dirent_list'][0]['id']
 
         # prepare thumbnail
         size = 48
@@ -281,10 +281,10 @@ class DirViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
-        assert json_resp[0]['type'] == 'file'
-        assert json_resp[0]['name'] == image_file_name
-        assert image_file_name in json_resp[0]['encoded_thumbnail_src']
+        assert len(json_resp['dirent_list']) == 1
+        assert json_resp['dirent_list'][0]['type'] == 'file'
+        assert json_resp['dirent_list'][0]['name'] == image_file_name
+        assert image_file_name in json_resp['dirent_list'][0]['encoded_thumbnail_src']
 
     def test_get_dir_with_invalid_perm(self):
         # login as admin, then get dir info in user's repo

@@ -248,7 +248,7 @@ class Wiki extends Component {
 
   loadSidePanel = (initialPath) => {
     seafileAPI.listDir(repoID, '/',{recursive: true}).then(items => {
-      const files = items.data.map(item => {
+      const files = items.data.dirent_list.map(item => {
         return {
           name: item.name,
           type: item.type === 'dir' ? 'dir' : 'file',
@@ -337,7 +337,7 @@ class Wiki extends Component {
     this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
-      res.data.forEach(item => {
+      res.data.dirent_list.forEach(item => {
         let fileName = item.name.toLowerCase();
         if (fileName === 'readme.md' || fileName === 'readme.markdown') {
           this.setState({readmeMarkdown: item});
