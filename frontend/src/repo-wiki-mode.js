@@ -780,12 +780,12 @@ class Wiki extends Component {
   loadTreeNodeByPath = (path) => {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
-    if (!node.hasLoaded()) {
-      node.setLoaded(true);
+    if (!node.isLoaded) {
       seafileAPI.listDir(repoID, node.path).then(res => {
+        node.isLoaded = true;
         this.addResponseDataToNode(res, node);
         let parentNode = tree.getNodeByPath(node.parentNode.path);
-        parentNode.setExpanded(true);
+        parentNode.isExpanded = true;
         this.setState({
           treeData: tree,
           currentNode: node
@@ -793,7 +793,7 @@ class Wiki extends Component {
       })
     } else {
       let parentNode = tree.getNodeByPath(node.parentNode.path);
-      parentNode.setExpanded(true);
+      parentNode.isExpanded = true;
       this.setState({treeData: tree, currentNode: node}); //tree
     }
   }
@@ -808,8 +808,8 @@ class Wiki extends Component {
         let parentNode = tree.getNodeByPath(paths[i]);
         this.addResponseDataToNode(res[i], parentNode);
 
-        parentNode.setLoaded(true);
-        parentNode.setExpanded(true);
+        parentNode.isLoaded = true;
+        parentNode.isExpanded = true;
       }
       this.setState({treeData: tree});
     }));
@@ -822,7 +822,7 @@ class Wiki extends Component {
     }
     // need add a param to judge the node is update or not
     if (node.object.isDir()) {
-      if (node.hasExpanded()) {
+      if (node.isExpanded) {
         let tree = treeHelper.collapseNode(this.state.treeData, node);
         this.setState({treeData: tree});
       } else {
@@ -853,9 +853,9 @@ class Wiki extends Component {
   onTreeNodeExpanded = (node) => {
     let tree = this.state.treeData.clone();
     node = tree.getNodeByPath(node.path);
-    if (!node.hasLoaded()) {
-      node.setLoaded(true);
+    if (!node.isLoaded) {
       seafileAPI.listDir(repoID, node.path).then(res => {
+        node.isLoaded = true;
         this.addResponseDataToNode(res, node);
         tree.expandNode(node);
         this.setState({treeData: tree});

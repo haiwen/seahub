@@ -27,46 +27,18 @@ class TreeNode {
     return treeNode;
   }
 
-  hasLoaded() {
-    return this.isLoaded;
-  }
-
-  setLoaded(isLoaded) {
-    this.isLoaded = isLoaded;
-  }
-
-  hasPreload() {
-    return this.isPreload;
-  }
-
-  setPreLoad(isPreload) {
-    this.isPreload = isPreload;
-  }
-
-  hasExpanded() {
-    return this.isExpanded;
-  }
-
-  setExpanded(isExpanded) {
-    this.isExpanded = isExpanded;
-  }
-
-  getParentNode() {
-    return this.parentNode;
-  }
-
-  setParentNode(parentNode) {
-    this.path = this.generatorPath(parentNode);
+  setParent(parentNode) {
+    this.path = this.generatePath(parentNode);
     this.parentNode = parentNode;
     this.isLoaded = false;  // update parentNode need loaded data again;
   }
 
   hasChildren() {
-    return this.children.length;
+    return this.children.length !== 0;
   }
 
   addChild(node) {
-    node.setParentNode(this);
+    node.setParent(this);
     let children = this.children;
     if (node.object.isDir()) {
       this.children.unshift(node);
@@ -90,7 +62,7 @@ class TreeNode {
 
   addChildren(nodeList) {
     nodeList.forEach(node => {
-      node.setParentNode(this);
+      node.setParent(this);
     });
     this.children = nodeList;
   }
@@ -104,11 +76,11 @@ class TreeNode {
 
   rename(newName) {
     this.object.name = newName;
-    this.path = this.generatorPath(this.parentNode); 
+    this.path = this.generatePath(this.parentNode); 
     this.isLoaded = false;  // rename node need loaded children again
   }
 
-  updateObjectParam(keys, newValues) {
+  updateObjectProperties(keys, newValues) {
     if (Array.isArray(keys) && Array.isArray(newValues)) {
       keys.forEach((key, index) => {
         this.object[key] = newValues[index];
@@ -118,7 +90,7 @@ class TreeNode {
     }
   }
 
-  generatorPath(parentNode) {
+  generatePath(parentNode) {
     return parentNode.path === '/' ? parentNode.path + this.object.name : parentNode.path + '/' + this.object.name;
   }
 

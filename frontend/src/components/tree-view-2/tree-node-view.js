@@ -50,7 +50,7 @@ class TreeNodeView extends React.Component {
 
   onLoadToggle = () => {
     let { node } = this.props;
-    if (node.hasExpanded()) {
+    if (node.isExpanded) {
       this.props.onNodeCollapse(node);
     } else {
       this.props.onNodeExpanded(node);
@@ -136,9 +136,9 @@ class TreeNodeView extends React.Component {
         <div type={type} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''}`}>
           <div className="tree-node-text" onClick={this.onNodeClick}>{node.object.name}</div>
           <div className="left-icon">
-            {type === 'dir' && (!node.hasLoaded() ||  (node.hasLoaded() && node.hasChildren() !== 0)) && (
+            {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
               <i 
-                className={`folder-toggle-icon fa ${node.hasExpanded() ? 'fa-caret-down' : 'fa-caret-right'}`}
+                className={`folder-toggle-icon fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`}
                 onMouseDown={e => e.stopPropagation()}
                 onClick={this.onLoadToggle}
               ></i>
@@ -156,7 +156,7 @@ class TreeNodeView extends React.Component {
             )}
           </div>
         </div>
-        {node.hasExpanded() && this.renderChildren()}
+        {node.isExpanded && this.renderChildren()}
       </div>
     );
   }

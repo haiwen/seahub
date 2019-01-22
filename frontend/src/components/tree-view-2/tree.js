@@ -109,15 +109,15 @@ class Tree {
   }
 
   expandNode(node) {
-    node.setExpanded(true);
+    node.isExpanded = true;
     while (node.parentNode) {
-      node.parentNode.setExpanded(true);
+      node.parentNode.isExpanded = true;
       node = node.parentNode;
     }
   }
   
   collapseNode(node) {
-    node.setExpanded(false);
+    node.isExpanded = false;
   }
 
   isNodeChild(node, parentNode) {
