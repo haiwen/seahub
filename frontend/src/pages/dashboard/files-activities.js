@@ -5,6 +5,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
+import Activity from '../../models/activity';
 
 moment.locale(window.app.config.lang);
 
@@ -172,20 +173,33 @@ class TableBody extends Component {
         }
       }
 
+      let isShowDate = true;
+      if (index > 0) {
+        let lastEventTime = this.props.items[index - 1].time;
+        isShowDate = moment(item.time).isSame(lastEventTime, 'day') ? false : true
+      }
+
       return (
-        <tr key={index}>
-          <td className="text-center">
-            <img src={item.avatar_url} alt="" width="36px" height="36px" className="avatar" />
-          </td>
-          <td>
-            <a href={userProfileURL}>{item.author_name}</a>
-          </td>
-          <td><span className="activity-op">{op}</span></td>
-          {details}
-          <td className="text-secondary">
-            <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
-          </td>
-        </tr>
+        <Fragment key={index}>
+          { isShowDate &&
+            <tr>
+              <td colSpan='5'>{moment(item.time).format('YYYY-MM-DD')}</td>
+            </tr>
+          }
+          <tr>
+            <td className="text-center">
+              <img src={item.avatar_url} alt="" width="36px" height="36px" className="avatar" />
+            </td>
+            <td>
+              <a href={userProfileURL}>{item.author_name}</a>
+            </td>
+            <td><span className="activity-op">{op}</span></td>
+            {details}
+            <td className="text-secondary">
+              <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
+            </td>
+          </tr>
+        </Fragment>
       );
     }, this);
 
@@ -253,10 +267,12 @@ class FilesActivities extends Component {
           this.oldPathList.splice(this.oldPathList.indexOf(events[i].old_path), 1);
           continue;
         } else {
-          actuallyEvents.push(events[i]);
+          let event = new Activity(events[i]);
+          actuallyEvents.push(event);
         }
       } else {
-        actuallyEvents.push(events[i]);
+        let event = new Activity(events[i]);
+        actuallyEvents.push(event);
       }
     }
     return actuallyEvents;
