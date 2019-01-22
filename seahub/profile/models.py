@@ -2,7 +2,7 @@
 import logging
 
 from django.conf import settings
-from django.db import models
+from django.db import models, IntegrityError
 from django.core.cache import cache
 from django.dispatch import receiver
 from django.core.exceptions import MultipleObjectsReturned
@@ -15,6 +15,10 @@ from seahub.signals import institution_deleted
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+class DuplicatedContactEmailError(Exception):
+    pass
+
 
 class ProfileManager(models.Manager):
     def add_or_update(self, username, nickname=None, intro=None, lang_code=None,
@@ -42,8 +46,12 @@ class ProfileManager(models.Manager):
         if institution is not None:
             institution = institution.strip()
             profile.institution = institution
-        profile.save(using=self._db)
-        return profile
+
+        try:
+            profile.save(using=self._db)
+            return profile
+        except IntegrityError:
+            raise DuplicatedContactEmailError
 
     def update_contact_email(self, username, contact_email):
         """
@@ -55,8 +63,12 @@ class ProfileManager(models.Manager):
         except Profile.DoesNotExist:
             logger.warn('%s profile does not exists' % username)
             return None
-        profile.save(using=self._db)
-        return profile
+
+        try:
+            profile.save(using=self._db)
+            return profile
+        except IntegrityError:
+            raise DuplicatedContactEmailError
 
     def get_profile_by_user(self, username):
         """Get a user's profile.
@@ -104,10 +116,6 @@ class ProfileManager(models.Manager):
         try:
             return super(ProfileManager, self).get(contact_email=contact_email).user
         except Profile.DoesNotExist:
-            return None
-        except MultipleObjectsReturned as e:
-            logger.warn('Failed to get username by contact email: %s' % contact_email)
-            logger.warn(e)
             return None
 
     def convert_login_str_to_username(self, login_str):

@@ -1,4 +1,4 @@
-from seahub.profile.models import Profile
+from seahub.profile.models import Profile, DuplicatedContactEmailError
 from seahub.test_utils import BaseTestCase
 
 
@@ -13,9 +13,9 @@ class ProfileManagerTest(BaseTestCase):
         Profile.objects.add_or_update(user1, contact_email='a@a.com')
         assert Profile.objects.get_username_by_contact_email('a@a.com') == user1
 
-        user2 = self.admin.username
-        Profile.objects.add_or_update(user2, contact_email='a@a.com')
-        assert Profile.objects.get_username_by_contact_email('a@a.com') is None
+        # user2 = self.admin.username
+        # Profile.objects.add_or_update(user2, contact_email='a@a.com')
+        # assert Profile.objects.get_username_by_contact_email('a@a.com') is None
 
     def test_convert_login_str_to_username(self):
         s = Profile.objects
@@ -151,3 +151,30 @@ class ProfileManagerTest(BaseTestCase):
 
         profile = Profile.objects.add_or_update(username, contact_email='')
         assert profile.contact_email == ''
+
+    def test_duplicated_contact_email(self, ):
+        profile = Profile.objects.add_or_update('test@test.com', '',
+                                                contact_email='a@a.com')
+
+        try:
+            _ = Profile.objects.add_or_update('1@1.com', '',
+                                              contact_email='a@a.com')
+        except DuplicatedContactEmailError:
+            assert True
+        else:
+            assert False
+
+    def test_updated_contact_email(self, ):
+        _ = Profile.objects.add_or_update('1@1.com', '',
+                                          contact_email='a@a.com')
+
+        username = self.user.username
+        profile = Profile.objects.add_or_update(username, '',
+                                                contact_email='b@b.com')
+
+        try:
+            Profile.objects.update_contact_email(username, contact_email='a@a.com')
+        except DuplicatedContactEmailError:
+            assert True
+        else:
+            assert False
