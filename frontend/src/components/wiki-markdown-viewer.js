@@ -12,7 +12,6 @@ const propTypes = {
   latestContributor: PropTypes.string.isRequired,
   lastModified: PropTypes.string.isRequired,
   onLinkClick: PropTypes.func.isRequired,
-  filePath: PropTypes.string,
   isPublic: PropTypes.bool,
 };
 
@@ -123,7 +122,7 @@ class WikiMarkdownViewer extends React.Component {
         let index2 = imageUrl.indexOf('?');
         const imagePath = imageUrl.substring(index + 5, index2);
         // change image url
-        innerNode.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&file_path=' + this.props.filePath + '&image_path=' + imagePath;
+        innerNode.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
       }
 
       if (innerNode.type == 'link') {

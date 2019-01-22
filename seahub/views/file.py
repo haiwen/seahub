@@ -1213,7 +1213,6 @@ def view_shared_file(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
-            'serviceUrl': get_service_url().rstrip('/'),
             })
 
 @share_link_audit
@@ -2069,10 +2068,9 @@ def view_media_file_via_share_link(request):
 
 
 def view_media_file_via_public_wiki(request):
-    image_path = request.GET.get('image_path', '')
-    file_path = request.GET.get('file_path', '')
+    image_path = request.GET.get('path', '')
     slug = request.GET.get('slug', '')
-    if not image_path and not file_path:
+    if not image_path or not slug:
         return HttpResponseBadRequest('invalid params')
 
     # get wiki object or 404
@@ -2082,14 +2080,8 @@ def view_media_file_via_public_wiki(request):
         err_msg = "Wiki not found."
         return render_error(request, err_msg)
 
-    file_path = "/" + file_path
-
-    file_name = os.path.basename(file_path)
-    file_type, file_ext = get_file_type_and_ext(file_name)
-
-    if file_type != MARKDOWN:
-        err_msg = 'Invalid file type'
-        return render_error(request, err_msg)
+    if wiki.permission != 'public':
+        return render_permission_error(request, 'Permission denied')
 
     # recourse check
     repo_id = wiki.repo_id
@@ -2097,24 +2089,7 @@ def view_media_file_via_public_wiki(request):
     if not repo:
         return render_error(request, 'Repo does not exist')
 
-    file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
-    if not file_id:
-        return render_error(request, 'File does not exist')
-
-    # read file from cache, if hit
-    err_msg, file_content = get_file_content_from_cache(file_id, repo_id, file_name)
-
-    if err_msg:
-        return render_error(request, err_msg)
-
-    # If the image does not exist in markdown
-    serviceURL = get_service_url().rstrip('/')
     image_file_name = os.path.basename(image_path)
-    image_file_name = urlquote(image_file_name)
-    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
-    result = re.search(p, file_content)
-    if not result:
-        return render_error(request, 'Image does not exist')
 
     # get image
     obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)

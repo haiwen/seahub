@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Account from './components/common/account';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { serviceURL, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
@@ -17,7 +17,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 
 let loginUser = window.app.pageOptions.name;
-const { serviceURL, repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
+const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
 
 class SharedFileViewMarkdown extends React.Component {
 
