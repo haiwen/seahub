@@ -95,22 +95,22 @@ class DirentDetail extends React.Component {
   render() {
     let { dirent } = this.props;
     
-    let titleUrl = '';
-    let contentUrl = '';
-    let titleSize = Utils.isHiDPI() ? 48 : 24;
-    let contentSize = 192;
+    let smallIconUrl = '';
+    let bigIconUrl = '';
+    let smallIconSize = Utils.isHiDPI() ? 48 : 24;
+    let bigIconSize = 192;
     if (dirent.type === 'file') {
-      titleUrl = Utils.getFileIconUrl(dirent.name, titleSize);
-      contentUrl = Utils.getFileIconUrl(dirent.name, contentSize);
+      smallIconUrl = Utils.getFileIconUrl(dirent.name, smallIconSize);
+      bigIconUrl = Utils.getFileIconUrl(dirent.name, bigIconSize);
     } else {
       let isReadOnly = false;
       if (dirent.permission === 'r' || dirent.permission === 'preview') {
         isReadOnly = true;
       }
-      let options = {isReadOnly: isReadOnly, size: titleSize};
-      titleUrl = Utils.getFolderIconUrl(options);
-      options.size = contentSize;
-      contentUrl = Utils.getFolderIconUrl(options);
+      let options = {isReadOnly: isReadOnly, size: smallIconSize};
+      smallIconUrl = Utils.getFolderIconUrl(options);
+      options.size = bigIconSize;
+      bigIconUrl = Utils.getFolderIconUrl(options);
     }
 
     return (
@@ -118,13 +118,13 @@ class DirentDetail extends React.Component {
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
-            <img src={titleUrl} width="24" height="24" alt="" />{' '}
+            <img src={smallIconUrl} width="24" height="24" alt="" />{' '}
             <span className="name ellipsis" title={dirent.name}>{dirent.name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={contentUrl} width="96" alt="" />
+            <img src={bigIconUrl} width="96" alt="" />
           </div>
           {this.state.direntDetail && 
             <div className="dirent-table-container">
