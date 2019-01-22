@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
 import { gettext, repoID, slug, serviceURL } from '../utils/constants';
 import Loading from './loading';
+import { Utils } from '../utils/utils';
 
 const propTypes = {
   children: PropTypes.object,
@@ -126,9 +127,17 @@ class WikiMarkdownViewer extends React.Component {
       }
 
       if (innerNode.type == 'link') {
-        // TODO
+        let url = innerNode.data.href;
+        if (Utils.isInternalMarkdownLink(url, repoID)) {
+          let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
+          innerNode.data.href = serviceURL + '/wikis/' + slug + path;
+        } else if (Utils.isInternalDirLink(url, repoID)) {
+          let path = Utils.getPathFromInternalDirLink(url, repoID, slug);
+          innerNode.data.href = serviceURL + '/wikis/' + slug + path;
+        } 
       }
     });
+
     return value;
   }
 
