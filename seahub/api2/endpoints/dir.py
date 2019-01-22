@@ -13,7 +13,7 @@ from django.utils.http import urlquote
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.views import get_dir_file_recursively
 
 from seahub.thumbnail.utils import get_thumbnail_src
@@ -35,6 +35,132 @@ from seaserv import seafile_api
 from pysearpc import SearpcError
 
 logger = logging.getLogger(__name__)
+
+
+def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
+        with_thumbnail, thumbnail_size):
+
+    repo_id = repo_obj.id
+    dir_info_list = []
+    file_info_list = []
+
+    # get dirent(folder and file) list
+    parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+    dir_file_list = seafile_api.list_dir_with_perm(repo_id,
+            parent_dir, parent_dir_id, username, -1, -1)
+
+    # only get dir info list
+    if not request_type or request_type == 'd':
+        dir_list = [dirent for dirent in dir_file_list if stat.S_ISDIR(dirent.mode)]
+        for dirent in dir_list:
+            dir_info = {}
+            dir_info["type"] = "dir"
+            dir_info["id"] = dirent.obj_id
+            dir_info["name"] = dirent.obj_name
+            dir_info["mtime"] = dirent.mtime
+            dir_info["permission"] = dirent.permission
+            dir_info["parent_dir"] = parent_dir
+            dir_info_list.append(dir_info)
+
+    # only get file info list
+    if not request_type or request_type == 'f':
+
+        file_list = [dirent for dirent in dir_file_list if not stat.S_ISDIR(dirent.mode)]
+
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        contact_email_dict = {}
+        modifier_set = set([x.modifier for x in file_list])
+        lock_owner_set = set([x.lock_owner for x in file_list])
+        for e in modifier_set | lock_owner_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+
+        try:
+            starred_files = get_dir_starred_files(username, repo_id, parent_dir)
+            files_tags_in_dir = get_files_tags_in_dir(repo_id, parent_dir)
+        except Exception as e:
+            logger.error(e)
+            starred_files = []
+            files_tags_in_dir = {}
+
+        for dirent in file_list:
+
+            file_name = dirent.obj_name
+            file_path = posixpath.join(parent_dir, file_name)
+            file_obj_id = dirent.obj_id
+
+            file_info = {}
+            file_info["type"] = "file"
+            file_info["id"] = file_obj_id
+            file_info["name"] = file_name
+            file_info["mtime"] = dirent.mtime
+            file_info["permission"] = dirent.permission
+            file_info["parent_dir"] = parent_dir
+            file_info["size"] = dirent.size
+
+            modifier_email = dirent.modifier
+            file_info['modifier_email'] = modifier_email
+            file_info['modifier_name'] = nickname_dict.get(modifier_email, '')
+            file_info['modifier_contact_email'] = contact_email_dict.get(modifier_email, '')
+
+            # get lock info
+            if is_pro_version():
+                file_info["is_locked"] = dirent.is_locked
+                file_info["lock_time"] = dirent.lock_time
+
+                lock_owner_email = dirent.lock_owner or ''
+                file_info["lock_owner"] = lock_owner_email
+                file_info['lock_owner_name'] = nickname_dict.get(lock_owner_email, '')
+                file_info['lock_owner_contact_email'] = contact_email_dict.get(lock_owner_email, '')
+
+                if username == lock_owner_email:
+                    file_info["locked_by_me"] = True
+                else:
+                    file_info["locked_by_me"] = False
+
+            # get star info
+            file_info['starred'] = False
+            if normalize_file_path(file_path) in starred_files:
+                file_info['starred'] = True
+
+            # get tag info
+            file_tags = files_tags_in_dir.get(file_name, [])
+            if file_tags:
+                file_info['file_tags'] = []
+                for file_tag in file_tags:
+                    file_info['file_tags'].append(file_tag)
+
+            # get thumbnail info
+            if with_thumbnail and not repo_obj.encrypted:
+
+                # used for providing a way to determine
+                # if send a request to create thumbnail.
+
+                fileExt = os.path.splitext(file_name)[1][1:].lower()
+                file_type = FILEEXT_TYPE_MAP.get(fileExt)
+
+                if file_type in (IMAGE, XMIND) or \
+                        file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+
+                    # if thumbnail has already been created, return its src.
+                    # Then web browser will use this src to get thumbnail instead of
+                    # recreating it.
+                    thumbnail_file_path = os.path.join(THUMBNAIL_ROOT,
+                            str(thumbnail_size), file_obj_id)
+                    if os.path.exists(thumbnail_file_path):
+                        src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
+                        file_info['encoded_thumbnail_src'] = urlquote(src)
+
+            file_info_list.append(file_info)
+
+    dir_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    file_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+
+    return dir_info_list, file_info_list
+
 
 class DirView(APIView):
     """
@@ -60,7 +186,7 @@ class DirView(APIView):
         return dir_info
 
     def get(self, request, repo_id, format=None):
-        """ Get dir info.
+        """ Get sub dirent list info.
 
         Permission checking:
         1. user with either 'r' or 'rw' permission.
@@ -82,13 +208,20 @@ class DirView(APIView):
             error_msg = 'with_thumbnail invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if with_thumbnail == 'true':
-            thumbnail_size = request.GET.get('thumbnail_size', 48)
-            try:
-                thumbnail_size = int(thumbnail_size)
-            except ValueError:
-                error_msg = 'thumbnail_size invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        with_thumbnail = to_python_boolean(with_thumbnail)
+        thumbnail_size = request.GET.get('thumbnail_size', 48)
+        try:
+            thumbnail_size = int(thumbnail_size)
+        except ValueError:
+            error_msg = 'thumbnail_size invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        with_parents = request.GET.get('with_parents', 'false')
+        if with_parents not in ('true', 'false'):
+            error_msg = 'with_parents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        with_parents = to_python_boolean(with_parents)
 
         # recource check
         repo = seafile_api.get_repo(repo_id)
@@ -113,8 +246,14 @@ class DirView(APIView):
         # get dir/file list recursively
         username = request.user.username
         if recursive == '1':
-            dir_file_info_list = get_dir_file_recursively(username, repo_id,
-                    parent_dir, [])
+
+            try:
+                dir_file_info_list = get_dir_file_recursively(username, repo_id,
+                        parent_dir, [])
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             response_dict = {}
             response_dict['dirent_list'] = []
@@ -132,135 +271,46 @@ class DirView(APIView):
 
             return Response(response_dict)
 
-        # get dirent(folder and file) list
+        parent_dir_list = []
+        if not with_parents:
+            # only return dirent list in current parent folder
+            parent_dir_list.append(parent_dir)
+        else:
+            # if value of 'p' parameter is '/a/b/c' add with_parents's is 'true'
+            # then return dirent list in '/', '/a', '/a/b' and '/a/b/c'.
+            if parent_dir == '/':
+                parent_dir_list.append(parent_dir)
+            else:
+                tmp_parent_dir = '/'
+                parent_dir_list.append(tmp_parent_dir)
+                for folder_name in parent_dir.strip('/').split('/'):
+                    tmp_parent_dir = posixpath.join(tmp_parent_dir, folder_name)
+                    parent_dir_list.append(tmp_parent_dir)
+
+        all_dir_info_list = []
+        all_file_info_list = []
+
         try:
-            dir_file_list = seafile_api.list_dir_with_perm(repo_id,
-                    parent_dir, dir_id, username, -1, -1)
+            for parent_dir in parent_dir_list:
+                # get dir file info list
+                dir_info_list, file_info_list = get_dir_file_info_list(username,
+                        request_type, repo, parent_dir, with_thumbnail, thumbnail_size)
+                all_dir_info_list.extend(dir_info_list)
+                all_file_info_list.extend(file_info_list)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        dir_info_list = []
-        file_info_list = []
-
-        # only get dir info list
-        if not request_type or request_type == 'd':
-            dir_list = [dirent for dirent in dir_file_list if stat.S_ISDIR(dirent.mode)]
-            for dirent in dir_list:
-                dir_info = {}
-                dir_info["type"] = "dir"
-                dir_info["id"] = dirent.obj_id
-                dir_info["name"] = dirent.obj_name
-                dir_info["mtime"] = dirent.mtime
-                dir_info["permission"] = dirent.permission
-                dir_info_list.append(dir_info)
-
-        # only get file info list
-        if not request_type or request_type == 'f':
-
-            file_list = [dirent for dirent in dir_file_list if not stat.S_ISDIR(dirent.mode)]
-
-            # Use dict to reduce memcache fetch cost in large for-loop.
-            nickname_dict = {}
-            contact_email_dict = {}
-            modifier_set = set([x.modifier for x in file_list])
-            lock_owner_set = set([x.lock_owner for x in file_list])
-            for e in modifier_set | lock_owner_set:
-                if e not in nickname_dict:
-                    nickname_dict[e] = email2nickname(e)
-                if e not in contact_email_dict:
-                    contact_email_dict[e] = email2contact_email(e)
-
-            try:
-                starred_files = get_dir_starred_files(username, repo_id, parent_dir)
-                files_tags_in_dir = get_files_tags_in_dir(repo_id, parent_dir)
-            except Exception as e:
-                logger.error(e)
-                starred_files = []
-                files_tags_in_dir = {}
-
-            for dirent in file_list:
-
-                file_name = dirent.obj_name
-                file_path = posixpath.join(parent_dir, file_name)
-                file_obj_id = dirent.obj_id
-
-                file_info = {}
-                file_info["type"] = "file"
-                file_info["id"] = file_obj_id
-                file_info["name"] = file_name
-                file_info["mtime"] = dirent.mtime
-                file_info["permission"] = dirent.permission
-                file_info["size"] = dirent.size
-
-                modifier_email = dirent.modifier
-                file_info['modifier_email'] = modifier_email
-                file_info['modifier_name'] = nickname_dict.get(modifier_email, '')
-                file_info['modifier_contact_email'] = contact_email_dict.get(modifier_email, '')
-
-                # get lock info
-                if is_pro_version():
-                    file_info["is_locked"] = dirent.is_locked
-                    file_info["lock_time"] = dirent.lock_time
-
-                    lock_owner_email = dirent.lock_owner or ''
-                    file_info["lock_owner"] = lock_owner_email
-                    file_info['lock_owner_name'] = nickname_dict.get(lock_owner_email, '')
-                    file_info['lock_owner_contact_email'] = contact_email_dict.get(lock_owner_email, '')
-
-                    if username == lock_owner_email:
-                        file_info["locked_by_me"] = True
-                    else:
-                        file_info["locked_by_me"] = False
-
-                # get star info
-                file_info['starred'] = False
-                if normalize_file_path(file_path) in starred_files:
-                    file_info['starred'] = True
-
-                # get tag info
-                file_tags = files_tags_in_dir.get(file_name, [])
-                if file_tags:
-                    file_info['file_tags'] = []
-                    for file_tag in file_tags:
-                        file_info['file_tags'].append(file_tag)
-
-                # get thumbnail info
-                if with_thumbnail == 'true' and not repo.encrypted:
-
-                    # used for providing a way to determine
-                    # if send a request to create thumbnail.
-
-                    fileExt = os.path.splitext(file_name)[1][1:].lower()
-                    file_type = FILEEXT_TYPE_MAP.get(fileExt)
-
-                    if file_type in (IMAGE, XMIND) or \
-                            file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
-
-                        # if thumbnail has already been created, return its src.
-                        # Then web browser will use this src to get thumbnail instead of
-                        # recreating it.
-                        thumbnail_file_path = os.path.join(THUMBNAIL_ROOT,
-                                str(thumbnail_size), file_obj_id)
-                        if os.path.exists(thumbnail_file_path):
-                            src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
-                            file_info['encoded_thumbnail_src'] = urlquote(src)
-
-                file_info_list.append(file_info)
-
-        dir_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-        file_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-
         response_dict = {}
         response_dict["user_perm"] = permission
 
         if request_type == 'f':
-            response_dict['dirent_list'] = file_info_list
+            response_dict['dirent_list'] = all_file_info_list
         elif request_type == 'd':
-            response_dict['dirent_list'] = dir_info_list
+            response_dict['dirent_list'] = all_dir_info_list
         else:
-            response_dict['dirent_list'] = dir_info_list + file_info_list
+            response_dict['dirent_list'] = all_dir_info_list + all_file_info_list
 
         return Response(response_dict)
 
