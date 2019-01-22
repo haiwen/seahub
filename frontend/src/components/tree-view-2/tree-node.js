@@ -97,7 +97,7 @@ class TreeNode {
 
   deleteChild(node) {
     let children = this.children.filter(item => {
-      return item.path !== node.path;
+      return item !== node;
     });
     this.children = children;
   }
