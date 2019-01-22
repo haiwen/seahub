@@ -20,3 +20,23 @@ def refresh_cache(username):
     
     contact_key = normalize_cache_key(username, CONTACT_CACHE_PREFIX)
     cache.set(contact_key, contactemail, CONTACT_CACHE_TIMEOUT)
+
+def convert_contact_emails(in_list):
+    """
+    Convert contact email to ccnet email in the `in_list`.
+    """
+    assert isinstance(in_list, list)
+    ret = []
+
+    contact_email_user_map = {}
+    for e in Profile.objects.filter(contact_email__in=in_list):
+        contact_email_user_map[e.contact_email] = e.user
+
+    for e in in_list:
+        try:
+            ccnet_email = contact_email_user_map[e]
+            ret.append(ccnet_email)
+        except KeyError:
+            ret.append(e)
+
+    return ret
