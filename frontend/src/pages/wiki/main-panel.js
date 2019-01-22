@@ -118,6 +118,7 @@ class MainPanel extends Component {
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
                 filePath={this.props.filePath}
+                isPublic={true}
               />
             }
             {!this.props.isViewFileState && 

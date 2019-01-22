@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
-import { gettext, repoID, slug } from '../utils/constants';
+import { gettext, repoID, slug, serviceURL } from '../utils/constants';
 import Loading from './loading';
 
 const propTypes = {
@@ -12,6 +12,7 @@ const propTypes = {
   lastModified: PropTypes.string.isRequired,
   onLinkClick: PropTypes.func.isRequired,
   filePath: PropTypes.string,
+  isPublic: PropTypes.bool,
 };
 
 const contentClass = 'wiki-page-content';
@@ -109,7 +110,7 @@ class WikiMarkdownViewer extends React.Component {
       if (innerNode.type == 'image') {
         let imageUrl = innerNode.data.src;
 
-        const re = new RegExp('http://192.168.49.130:8000/lib/' + repoID +'/file.*raw=1');
+        const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
         
         // different repo 
         if (!re.test(imageUrl)) {
@@ -121,10 +122,37 @@ class WikiMarkdownViewer extends React.Component {
         let index2 = imageUrl.indexOf('?');
         const imagePath = imageUrl.substring(index + 5, index2);
         // change image url
-        innerNode.data.src = 'http://192.168.49.130:8000/view-image-via-public-wiki/?slug=' + slug + '&file_path=' + this.props.filePath + '&image_path=' + imagePath;
+        innerNode.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&file_path=' + this.props.filePath + '&image_path=' + imagePath;
+      }
+
+      if (innerNode.type == 'link') {
+        // TODO
       }
     });
     return value;
+  }
+
+  renderMarkdown = () => {
+    if (this.props.isPublic) {
+      return (
+        <MarkdownViewer
+          showTOC={true}
+          markdownContent={this.props.markdownContent}
+          activeTitleIndex={this.state.activeTitleIndex}
+          onContentRendered={this.onContentRendered}
+          modifyValueBeforeRender={this.modifyValueBeforeRender}
+        />
+      )
+    }
+
+    return (
+      <MarkdownViewer
+        showTOC={true}
+        markdownContent={this.props.markdownContent}
+        activeTitleIndex={this.state.activeTitleIndex}
+        onContentRendered={this.onContentRendered}
+      />
+    )
   }
 
   render() {
@@ -135,13 +163,7 @@ class WikiMarkdownViewer extends React.Component {
       <div ref={this.markdownContainer} className="wiki-page-container" onScroll={this.onScrollHandler.bind(this)}>
         <div className={contentClass}>
           {this.props.children}
-          <MarkdownViewer
-            showTOC={true}
-            markdownContent={this.props.markdownContent}
-            activeTitleIndex={this.state.activeTitleIndex}
-            onContentRendered={this.onContentRendered}
-            modifyValueBeforeRender={this.modifyValueBeforeRender}
-          />
+          {this.renderMarkdown()}
           <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
       </div>
@@ -149,6 +171,11 @@ class WikiMarkdownViewer extends React.Component {
   }
 }
 
+const defaultProps = {
+  isPublic: false,
+}
+
 WikiMarkdownViewer.propTypes = propTypes;
+MarkdownViewer.defaultProps = defaultProps;
 
 export default WikiMarkdownViewer;

@@ -13,6 +13,7 @@ export const isPro = window.app.config.isPro === 'True';
 export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
 export const seafileVersion = window.app.config.seafileVersion;
+export const serviceURL = window.app.config.serviceURL;
 
 //pageOptions
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
