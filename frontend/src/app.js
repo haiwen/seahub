@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, navigate } from '@reach/router';
-import { siteRoot } from './utils/constants';
+import { siteRoot, canAddRepo } from './utils/constants';
 import { Utils } from './utils/utils';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
@@ -176,12 +176,17 @@ class App extends Component {
 
   render() {
     let { currentTab } = this.state;
+
+    const home = canAddRepo ?
+      <MyLibraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} /> :
+      <SharedLibrariesWrapper path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />;
+
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />
         <MainPanel>
           <Router>
-            <MyLibraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            {home}
             <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <DraftsViewWrapper path={siteRoot + 'drafts'}  
               currentTab={currentTab} 
