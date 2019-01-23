@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { siteRoot } from '../../utils/constants';
+import { siteRoot, canGenerateShareLink, canGenerateUploadLink, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
@@ -27,9 +27,14 @@ class DirView extends React.Component {
     this.state = {
       path: '/',
       pathExist: true,
+
       repoName: '',
       repoID: '',
       repoEncrypted: false,
+      isAdmin: false,
+      ownerEmail: '',
+      userPerm: '',
+
       permission: true,
       libNeedDecrypt: false,
       isDirentSelected: false,
@@ -86,6 +91,8 @@ class DirView extends React.Component {
         repoID: repoInfo.repo_id,
         repoName: repoInfo.repo_name,
         repoEncrypted: repoInfo.encrypted,
+        isAdmin: repoInfo.is_admin,
+        ownerEmail: repoInfo.owner_email,
         permission: repoInfo.permission === 'rw',
         libNeedDecrypt: res.data.lib_need_decrypt,
       });
@@ -181,6 +188,7 @@ class DirView extends React.Component {
       this.setState({
         isDirentListLoading: false,
         pathExist: true,
+        userPerm: res.data.user_perm,
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.headers.oid,
       });
@@ -661,6 +669,16 @@ class DirView extends React.Component {
   }
 
   render() {
+    let canShare = false;
+    const { repoEncrypted, isAdmin, ownerEmail, userPerm } = this.state;
+    const isRepoOwner = ownerEmail == username;
+    if (!repoEncrypted && (
+      canGenerateShareLink || canGenerateUploadLink ||
+      isRepoOwner || isAdmin) && (
+      userPerm == 'rw' || userPerm == 'r')) {
+      canShare = true;
+    }
+
     return (
       <DirPanel 
         pathPrefix={this.props.pathPrefix}
@@ -675,6 +693,7 @@ class DirView extends React.Component {
         isDirentListLoading={this.state.isDirentListLoading}
         isDirentSelected={this.state.isDirentSelected}
         isAllDirentSelected={this.state.isAllDirentSelected}
+        canShare={canShare}
         direntList={this.state.direntList}
         sortBy={this.state.sortBy}
         sortOrder={this.state.sortOrder}
