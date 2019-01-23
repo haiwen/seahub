@@ -19,7 +19,6 @@ class Tree {
   }
 
   getNodeByPath(path) { 
-    // id ==== path
     let findNode = null;
     function callback(currentNode) {
       if (currentNode.path === path) {
@@ -70,9 +69,7 @@ class Tree {
   }
 
   moveNode(node, destNode) {
-    // delete
     this.deleteNode(node);
-    // add
     destNode.addChild(node);
   }
 

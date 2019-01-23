@@ -58,7 +58,7 @@ class TreeNodeView extends React.Component {
   }
 
   onNodeDragStart = (e) => {
-
+    this.props.onNodeDragStart(e, this.props.node);
   }
 
   onUnFreezedItem = () => {
@@ -134,7 +134,7 @@ class TreeNodeView extends React.Component {
     return (
       <div className="tree-node">
         <div type={type} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''}`}>
-          <div className="tree-node-text" onClick={this.onNodeClick}>{node.object.name}</div>
+          <div className="tree-node-text" draggable="true" onDragStart={this.onNodeDragStart} onClick={this.onNodeClick}>{node.object.name}</div>
           <div className="left-icon">
             {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
               <i 
