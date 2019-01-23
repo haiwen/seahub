@@ -64,3 +64,7 @@
   position: absolute;
   right: 16px;
 }
+
+.readme-dialog .modal-body {
+  padding: 0 30px;
+}
