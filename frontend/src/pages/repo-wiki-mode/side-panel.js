@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import TreeView from '../../components/tree-view-2/tree-view';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
