@@ -669,14 +669,14 @@ class DirView extends React.Component {
   }
 
   render() {
-    let canShare = false;
+    let showShareBtn = false;
     const { repoEncrypted, isAdmin, ownerEmail, userPerm } = this.state;
     const isRepoOwner = ownerEmail == username;
     if (!repoEncrypted && (
       canGenerateShareLink || canGenerateUploadLink ||
       isRepoOwner || isAdmin) && (
       userPerm == 'rw' || userPerm == 'r')) {
-      canShare = true;
+      showShareBtn = true;
     }
 
     return (
@@ -693,7 +693,7 @@ class DirView extends React.Component {
         isDirentListLoading={this.state.isDirentListLoading}
         isDirentSelected={this.state.isDirentSelected}
         isAllDirentSelected={this.state.isAllDirentSelected}
-        canShare={canShare}
+        showShareBtn={showShareBtn}
         direntList={this.state.direntList}
         sortBy={this.state.sortBy}
         sortOrder={this.state.sortOrder}

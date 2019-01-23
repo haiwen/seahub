@@ -24,7 +24,7 @@ const propTypes = {
   hash: PropTypes.string,
   path: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
-  canShare: PropTypes.bool.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   // whether the file or dir corresponding to the path exist
   pathExist: PropTypes.bool.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
@@ -189,7 +189,7 @@ class MainPanel extends Component {
                   hasDraft={this.props.hasDraft}
                   permission={this.props.permission}
                   isViewFile={this.props.isViewFile}
-                  canShare={this.props.canShare}
+                  showShareBtn={this.props.showShareBtn}
                   onAddFile={this.props.onAddFile}
                   onAddFolder={this.props.onAddFolder}
                   onUploadFile={this.onUploadFile}

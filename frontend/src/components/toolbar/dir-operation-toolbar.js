@@ -13,7 +13,7 @@ const propTypes = {
   permission: PropTypes.string, //just for view file， and premission is file permission
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
-  canShare: PropTypes.bool.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   onAddFile: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
   onUploadFile: PropTypes.func.isRequired,
@@ -193,7 +193,7 @@ class DirOperationToolbar extends React.Component {
               <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
             </Fragment>
           )}
-          {this.props.canShare &&
+          {this.props.showShareBtn &&
           <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
           }
         </div>

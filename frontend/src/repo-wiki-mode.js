@@ -964,14 +964,14 @@ class Wiki extends Component {
       )
     }
 
-    let canShare = false;
+    let showShareBtn = false;
     const { repoEncrypted, isAdmin, ownerEmail, userPerm } = this.state;
     const isRepoOwner = ownerEmail == username;
     if (!repoEncrypted && (
       canGenerateShareLink || canGenerateUploadLink ||
       isRepoOwner || isAdmin) && (
       userPerm == 'rw' || userPerm == 'r')) {
-      canShare = true;
+      showShareBtn = true;
     }
 
     return (
@@ -1000,7 +1000,7 @@ class Wiki extends Component {
           content={this.state.content}
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
-          canShare={canShare}
+          showShareBtn={showShareBtn}
           direntList={this.state.direntList}
           sortBy={this.state.sortBy}
           sortOrder={this.state.sortOrder}
