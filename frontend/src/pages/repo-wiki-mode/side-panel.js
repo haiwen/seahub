@@ -5,6 +5,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import TreeView from '../../components/tree-view-2/tree-view';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
+import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
@@ -130,8 +131,23 @@ class SidePanel extends Component {
   }
 
   onRenameNode = (newName) => {
-    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
     let node = this.state.opNode;
+    let parentNode = node.parentNode;
+    let childrenObject = parentNode.children.map(item => {
+      return item.object;
+    });
+    let flag = childrenObject.some(object => {
+      return object.name === newName;
+    });
+    if (flag) {
+      let errMessage = gettext('The name {name} is already occupied, please choose another name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      toaster.danger(errMessage);
+      this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
+      return false;
+    }
+
+    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
     this.props.onRenameNode(node, newName);
   }
 

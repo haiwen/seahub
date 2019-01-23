@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
+import toaster from '../../components/toast';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter } from 'reactstrap';
 
 const propTypes = {
@@ -25,7 +26,10 @@ class Rename extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.onRename(this.state.newName);
+    let flag = this.validateParamsInput();
+    if (flag) {
+      this.props.onRename(this.state.newName);
+    }
   }
 
   handleKeyPress = (e) => {
@@ -61,9 +65,26 @@ class Rename extends React.Component {
     this.changeState(nextProps.currentNode);
   }
 
-  changeState(currentNode) {
+  changeState = (currentNode) => {
     let name = currentNode.object.name;
     this.setState({newName: name});
+  }
+
+  validateParamsInput = () => {
+    let newName = this.state.newName.trim();
+    if (!newName) {
+      let errMessage = gettext('Name is required.');
+      toaster.danger(errMessage);
+      return false;
+    }
+
+    if (newName.indexOf('/') > -1) {
+      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
+      toaster.danger(errMessage);
+      return false;
+    }
+
+    return true;
   }
 
   render() {
