@@ -77,7 +77,7 @@ class TreeNode {
   rename(newName) {
     this.object.name = newName;
     this.path = this.generatePath(this.parentNode); 
-    this.isLoaded = false;  // rename node need loaded children again
+    // this.isLoaded = false;  // rename node need loaded children again
   }
 
   updateObjectProperties(keys, newValues) {

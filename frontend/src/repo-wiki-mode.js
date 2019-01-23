@@ -703,7 +703,10 @@ class Wiki extends Component {
     if (direntPath === this.state.path) {
       // the renamed item is current viewed item
       // example: direntPath = /A/B/C, state.path = /A/B/C
+
       this.setState({ path: newDirentPath });
+      let url = siteRoot + 'wiki/lib/' + repoID + newDirentPath;
+      window.history.replaceState({ url: url, path: newDirentPath}, newDirentPath, url);
     } else if (Utils.isChildPath(direntPath, this.state.path)) {
       // example: direntPath = /A/B/C/D, state.path = /A/B/C
       let oldName = Utils.getFileName(direntPath);

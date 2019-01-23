@@ -4,6 +4,7 @@ import { gettext } from '../../utils/constants';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import TreeView from '../../components/tree-view-2/tree-view';
 import Logo from '../../components/logo';
+import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
@@ -170,7 +171,7 @@ class SidePanel extends Component {
           </h3>
           <div className="wiki-pages-container">
             {this.props.isTreeDataLoading ? 
-              (<div>{gettext('Loading...')}</div>) :
+              (<Loading/>) :
               (<TreeView
                 treeData={this.props.treeData}
                 currentPath={this.props.currentPath}
