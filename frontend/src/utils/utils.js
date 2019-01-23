@@ -415,6 +415,35 @@ export const Utils = {
     return path;
   },
 
+  isWikiInternalMarkdownLink: function(url, slug) {
+
+    var slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug + '.*\.md$');
+    return re.test(url);
+  },
+
+  isWikiInternalDirLink: function(url, slug) {
+    var slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug + '.*');
+    return re.test(url);
+  },
+
+  getPathFromWikiInternalMarkdownLink: function(url, slug) {
+    var slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug + '(.*\.md)');
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
+    return path;
+  },
+  
+  getPathFromWikiInternalDirLink: function(url, slug) {
+    var slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug+ '(/.*)');
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
+    return path;
+  },
+
   compareTwoWord: function(wordA, wordB) {
     // compare wordA and wordB at lower case
     // if wordA >= wordB, return 1

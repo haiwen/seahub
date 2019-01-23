@@ -117,7 +117,7 @@ class MainPanel extends Component {
                 lastModified = {this.props.lastModified}
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
-                isPublic={true}
+                isWiki={true}
               />
             }
             {!this.props.isViewFileState && 

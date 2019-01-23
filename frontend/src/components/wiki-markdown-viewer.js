@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
-import { gettext, repoID, slug, serviceURL } from '../utils/constants';
+import { gettext, repoID, slug, serviceURL, isPublicWiki } from '../utils/constants';
 import Loading from './loading';
 import { Utils } from '../utils/utils';
 
@@ -12,7 +12,7 @@ const propTypes = {
   latestContributor: PropTypes.string.isRequired,
   lastModified: PropTypes.string.isRequired,
   onLinkClick: PropTypes.func.isRequired,
-  isPublic: PropTypes.bool,
+  isWiki: PropTypes.bool
 };
 
 const contentClass = 'wiki-page-content';
@@ -107,22 +107,24 @@ class WikiMarkdownViewer extends React.Component {
   modifyValueBeforeRender = (value) => {
     value.document.nodes.map(node => {
       let innerNode = node.nodes[0];
-      if (innerNode.type == 'image') {
-        let imageUrl = innerNode.data.src;
+      if (isPublicWiki) {
+        if (innerNode.type == 'image') {
+          let imageUrl = innerNode.data.src;
 
-        const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
-        
-        // different repo 
-        if (!re.test(imageUrl)) {
-          return;
+          const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+          
+          // different repo 
+          if (!re.test(imageUrl)) {
+            return;
+          }
+
+          // get image path
+          let index = imageUrl.indexOf('/file');
+          let index2 = imageUrl.indexOf('?');
+          const imagePath = imageUrl.substring(index + 5, index2);
+          // change image url
+          innerNode.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
         }
-
-        // get image path
-        let index = imageUrl.indexOf('/file');
-        let index2 = imageUrl.indexOf('?');
-        const imagePath = imageUrl.substring(index + 5, index2);
-        // change image url
-        innerNode.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
       }
 
       if (innerNode.type == 'link') {
@@ -141,7 +143,7 @@ class WikiMarkdownViewer extends React.Component {
   }
 
   renderMarkdown = () => {
-    if (this.props.isPublic) {
+    if (this.props.isWiki) {
       return (
         <MarkdownViewer
           showTOC={true}
@@ -180,7 +182,7 @@ class WikiMarkdownViewer extends React.Component {
 }
 
 const defaultProps = {
-  isPublic: false,
+  isWiki: false,
 }
 
 WikiMarkdownViewer.propTypes = propTypes;

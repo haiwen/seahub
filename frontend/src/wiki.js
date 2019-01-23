@@ -119,11 +119,11 @@ class Wiki extends Component {
 
   onLinkClick = (link) => {
     const url = link;
-    if (Utils.isInternalMarkdownLink(url, repoID)) {
-      let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
+    if (Utils.isWikiInternalMarkdownLink(url, slug)) {
+      let path = Utils.getPathFromWikiInternalMarkdownLink(url, slug);
       this.initMainPanelData(path);
-    } else if (Utils.isInternalDirLink(url, repoID)) {
-      let path = Utils.getPathFromInternalDirLink(url, repoID, slug);
+    } else if (Utils.isWikiInternalDirLink(url, slug)) {
+      let path = Utils.getPathFromWikiInternalDirLink(url, slug);
       this.initWikiData(path);
     } else {
       window.location.href = url;
