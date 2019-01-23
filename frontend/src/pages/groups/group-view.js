@@ -29,8 +29,6 @@ const propTypes = {
   groupID: PropTypes.string,
 };
 
-const DEPARETMENT_GROUP_ONWER_NAME = 'system admin';
-
 class GroupView extends React.Component {
 
   constructor(props) {
@@ -78,7 +76,7 @@ class GroupView extends React.Component {
       let emptyTip = this.getEmptyTip(currentGroup);
       let isStaff  = currentGroup.admins.indexOf(username) > -1;  //for item operations
       let isOwner = currentGroup.owner === username ? true : false;
-      let isDepartmentGroup = currentGroup.owner === DEPARETMENT_GROUP_ONWER_NAME;
+      let isDepartmentGroup = currentGroup.parent_group_id !== 0;
       this.setState({
         emptyTip: emptyTip,
         currentGroup: currentGroup,
