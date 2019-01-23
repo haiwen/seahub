@@ -44,7 +44,8 @@ class CopyDirent extends React.Component {
   }
 
   copyItems = () => {
-    let { repo, repoID, selectedPath } = this.state;
+    let { repoID } = this.props;
+    let { repo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
     
     if (!repo || selectedPath === '') {

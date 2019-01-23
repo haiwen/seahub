@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import TreeView from '../../components/tree-view/tree-view';
-import NodeMenu from '../../components/tree-view/node-menu';
+import TreeView from '../../components/tree-view-2/tree-view';
 import Logo from '../../components/logo';
+import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
@@ -13,12 +13,14 @@ import CreateFile from '../../components/dialog/create-file-dialog';
 
 const propTypes = {
   currentNode: PropTypes.object,
+  isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
   closeSideBar: PropTypes.bool.isRequired,
   onCloseSide: PropTypes.func.isRequired,
-  onDirCollapse: PropTypes.func.isRequired,
   onNodeClick: PropTypes.func.isRequired,
+  onNodeCollapse: PropTypes.func.isRequired,
+  onNodeExpanded: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   onDeleteNode: PropTypes.func.isRequired,
   onAddFileNode: PropTypes.func.isRequired,
@@ -30,13 +32,7 @@ class SidePanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentNode: null,
-      isNodeItemFrezee: false,
-      isShowMenu: false,
-      menuPosition: {
-        left: 0,
-        top: 0
-      },
+      opNode: null,
       isLoadFailed: false,
       isMenuIconShow: false,
       isHeaderMenuShow: false,
@@ -45,6 +41,10 @@ class SidePanel extends Component {
       isAddFolderDialogShow: false,
       isRenameDialogShow: false,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({opNode: nextProps.currentNode});
   }
 
   onMouseEnter = () => {
@@ -65,56 +65,58 @@ class SidePanel extends Component {
   }
 
   onNodeClick = (node) => {
-    this.setState({currentNode: node});
+    this.setState({opNode: node});
     this.props.onNodeClick(node);
   }
 
-  onShowContextMenu = (e, node) => {
-    let left = e.clientX - 8*16;
-    let top  = e.clientY + 10;
-    let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
-    this.setState({
-      isShowMenu: !this.state.isShowMenu,
-      currentNode: node,
-      menuPosition: position,
-      isNodeItemFrezee: true
-    });
-  }
-
-  onHideContextMenu = () => {
-    if (!this.state.isShowMenu) {
-      return;
+  onMenuItemClick = (operation, node) => {
+    this.setState({opNode: node});
+    switch (operation) {
+      case 'New Folder':
+        this.onAddFolderToggle();
+        break;
+      case 'New File':
+        this.onAddFileToggle();
+        break;
+      case 'Rename':
+        this.onRenameToggle();
+        break;
+      case 'Delete':
+        this.onDeleteToggle();
+        break;
     }
-    this.setState({
-      isShowMenu: false,
-      isNodeItemFrezee: false
-    });
   }
 
-  onAddFileToggle = () => {
-    this.setState({
-      isMenuIconShow: false,
-      isAddFileDialogShow: !this.state.isAddFileDialogShow
-    });
-    this.onHideContextMenu();
+  onAddFileToggle = (type) => {
+    if (type === 'root') {
+      let root = this.props.treeData.root;
+      this.setState({
+        isAddFileDialogShow: !this.state.isAddFileDialogShow,
+        opNode: root,
+      });
+    } else {
+      this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
+    }
   }
-
-  onAddFolderToggle = () => {
-    this.setState({
-      isMenuIconShow: false,
-      isAddFolderDialogShow: !this.state.isAddFolderDialogShow
-    });
-    this.onHideContextMenu();
+  
+  onAddFolderToggle = (type) => {
+    if (type === 'root') {
+      let root = this.props.treeData.root;
+      this.setState({
+        isAddFolderDialogShow: !this.state.isAddFolderDialogShow,
+        opNode: root,
+      });
+    } else {
+      this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
+    }
   }
 
   onRenameToggle = () => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
-    this.onHideContextMenu();
   }
 
   onDeleteToggle = () => {
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-    this.onHideContextMenu();
   }
 
   onAddFolderNode = (dirPath) => {
@@ -129,42 +131,14 @@ class SidePanel extends Component {
 
   onRenameNode = (newName) => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
-    let node = this.state.currentNode;
+    let node = this.state.opNode;
     this.props.onRenameNode(node, newName);
   }
 
   onDeleteNode = () => {
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-    let node = this.state.currentNode;
+    let node = this.state.opNode;
     this.props.onDeleteNode(node);
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.onHideContextMenu);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({currentNode: nextProps.currentNode});
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onHideContextMenu);
-  }
-
-  addFolderCancel = () => {
-    this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
-  }
-
-  addFileCancel = () => {
-    this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
-  }
-
-  deleteCancel = () => {
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-  }
-
-  renameCancel = () => {
-    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
   }
 
   render() {
@@ -188,70 +162,63 @@ class SidePanel extends Component {
                     onClick={this.onDropdownToggleClick}
                   />
                   <DropdownMenu right>
-                    <DropdownItem onClick={this.onAddFolderToggle}>{gettext('New Folder')}</DropdownItem>
-                    <DropdownItem onClick={this.onAddFileToggle}>{gettext('New File')}</DropdownItem>
+                    <DropdownItem onClick={this.onAddFolderToggle.bind(this, 'root')}>{gettext('New Folder')}</DropdownItem>
+                    <DropdownItem onClick={this.onAddFileToggle.bind(this, 'root')}>{gettext('New File')}</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
               )}
             </div>
           </h3>
           <div className="wiki-pages-container">
-            {this.props.treeData && (
-              <TreeView
+            {this.props.isTreeDataLoading ? 
+              (<Loading/>) :
+              (<TreeView
                 treeData={this.props.treeData}
                 currentPath={this.props.currentPath}
-                isNodeItemFrezee={this.state.isNodeItemFrezee}
-                onShowContextMenu={this.onShowContextMenu}
                 onNodeClick={this.onNodeClick}
-                onDirCollapse={this.props.onDirCollapse}
-              />
-            )}
-            {this.state.isShowMenu && (
-              <NodeMenu
-                menuPosition={this.state.menuPosition}
-                currentNode={this.state.currentNode}
-                toggleAddFile={this.onAddFileToggle}
-                toggleAddFolder={this.onAddFolderToggle}
-                toggleRename={this.onRenameToggle}
-                toggleDelete={this.onDeleteToggle}
+                onNodeExpanded={this.props.onNodeExpanded}
+                onNodeCollapse={this.props.onNodeCollapse}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedItem={this.onFreezedItem}
+                onUnFreezedItem={this.onUnFreezedItem}
               />
             )}
           </div>
         </div>
-        {this.state.isDeleteDialogShow && (
+        {this.state.isAddFolderDialogShow && (
           <ModalPortal>
-            <Delete
-              currentNode={this.state.currentNode}
-              handleSubmit={this.onDeleteNode}
-              toggleCancel={this.deleteCancel}
-            />
+            <CreateFolder
+              parentPath={this.state.opNode.path}
+              onAddFolder={this.onAddFolderNode}
+              addFolderCancel={this.onAddFolderToggle}
+              />
           </ModalPortal>
         )}
         {this.state.isAddFileDialogShow && (
           <ModalPortal>
             <CreateFile
               fileType={'.md'}
-              parentPath={this.state.currentNode.path}
+              parentPath={this.state.opNode.path}
               onAddFile={this.onAddFileNode}
-              addFileCancel={this.addFileCancel}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isAddFolderDialogShow && (
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.state.currentNode.path}
-              onAddFolder={this.onAddFolderNode}
-              addFolderCancel={this.addFolderCancel}
-            />
+              addFileCancel={this.onAddFileToggle}
+              />
           </ModalPortal>
         )}
         {this.state.isRenameDialogShow && (
           <ModalPortal>
             <Rename
-              currentNode={this.state.currentNode}
+              currentNode={this.state.opNode}
               onRename={this.onRenameNode}
-              toggleCancel={this.renameCancel}
+              toggleCancel={this.onRenameToggle}
+              />
+          </ModalPortal>
+        )}
+        {this.state.isDeleteDialogShow && (
+          <ModalPortal>
+            <Delete
+              currentNode={this.state.opNode}
+              handleSubmit={this.onDeleteNode}
+              toggleCancel={this.onDeleteToggle}
             />
           </ModalPortal>
         )}
