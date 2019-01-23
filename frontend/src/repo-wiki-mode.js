@@ -163,7 +163,7 @@ class Wiki extends Component {
         this.setState({isLoadFailed: true});
       });
     } else {
-      this.loadSubdirectoriesNodeByPath(initialPath);
+      this.loadNodeAndParentsByPath(initialPath);
     }
   }
 
@@ -340,7 +340,7 @@ class Wiki extends Component {
       let node = this.state.treeData.getNodeByPath(path);
       this.setState({currentNode: node});
     } else {
-      this.loadSubdirectoriesNodeByPath(path);
+      this.loadNodeAndParentsByPath(path);
     }
 
     // load mainPanel
@@ -784,7 +784,7 @@ class Wiki extends Component {
     }
   }
 
-  loadSubdirectoriesNodeByPath = (path) => {
+  loadNodeAndParentsByPath = (path) => {
     let tree = this.state.treeData.clone();
     if (Utils.isMarkdownFile(path)) {
       path = Utils.getDirName(path);
