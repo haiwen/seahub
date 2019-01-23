@@ -130,7 +130,7 @@ class TreeHelper {
   buildTree() {
     let tree = new Tree();
     let object = {name: '/'};
-    let root = new TreeNode({object, isLoaded: true, isExpanded: true});
+    let root = new TreeNode({object, isLoaded: false, isExpanded: true});
     tree.setRoot(root);
     return tree;
   }

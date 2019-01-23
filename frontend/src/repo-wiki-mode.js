@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import axios from 'axios'
 import { gettext, repoID, siteRoot, initialPath, isDir, slug } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
@@ -136,6 +135,7 @@ class Wiki extends Component {
         reviewCounts: res.data.review_counts
       });
     });
+
     // load side-panel data
     this.loadSidePanel(initialPath);
 
@@ -151,27 +151,20 @@ class Wiki extends Component {
   }
 
   loadSidePanel = (initialPath) => {
-    seafileAPI.listDir(repoID, '/').then(res => {
-      let tree = this.state.treeData;
-      this.addResponseDataToNode(res, tree.root);
-
-      if (initialPath !== '/'){
-        let paths = Utils.getPaths(initialPath);
-        if (Utils.isMarkdownFile(paths[paths.length - 1])) {
-          paths.pop();
-        }
-        if (paths.length === 0) {
-          this.setState({treeData: tree});
-        } else {
-          this.loadTreeNodeByPaths(paths);
-        }
-      } else {
-        this.setState({treeData: tree});
-      }
-      this.setState({isTreeDataLoading: false});
-    }).catch(() => {
-      this.setState({isLoadFailed: true});
-    });
+    if (initialPath === '/' || isDir === 'None') {
+      seafileAPI.listDir(repoID, '/').then(res => {
+        let tree = this.state.treeData;
+        this.addResponseListToNode(res.data.dirent_list, tree.root);
+        this.setState({
+          isTreeDataLoading: false,
+          treeData: tree
+        });
+      }).catch(() => {
+        this.setState({isLoadFailed: true});
+      });
+    } else {
+      this.loadSubdirectoriesNodeByPath(initialPath);
+    }
   }
 
   showDir = (path) => {
@@ -347,13 +340,7 @@ class Wiki extends Component {
       let node = this.state.treeData.getNodeByPath(path);
       this.setState({currentNode: node});
     } else {
-      paths = paths.slice(index - 1);
-      if (Utils.isMarkdownFile(paths[paths.length - 1])) {
-        paths.pop();
-      }
-      if (paths.length) {
-        this.loadTreeNodeByPaths(paths);
-      }
+      this.loadSubdirectoriesNodeByPath(path);
     }
 
     // load mainPanel
@@ -782,8 +769,7 @@ class Wiki extends Component {
     let node = tree.getNodeByPath(path);
     if (!node.isLoaded) {
       seafileAPI.listDir(repoID, node.path).then(res => {
-        node.isLoaded = true;
-        this.addResponseDataToNode(res, node);
+        this.addResponseListToNode(res.data.dirent_list, node);
         let parentNode = tree.getNodeByPath(node.parentNode.path);
         parentNode.isExpanded = true;
         this.setState({
@@ -798,21 +784,35 @@ class Wiki extends Component {
     }
   }
 
-  loadTreeNodeByPaths = (paths) => {
+  loadSubdirectoriesNodeByPath = (path) => {
     let tree = this.state.treeData.clone();
-    let requests = paths.map(path => {
-      return seafileAPI.listDir(repoID, path);
-    });
-    axios.all(requests).then(axios.spread((...res) => {
-      for (let i = 0; i < res.length; i++) {
-        let parentNode = tree.getNodeByPath(paths[i]);
-        this.addResponseDataToNode(res[i], parentNode);
-
-        parentNode.isLoaded = true;
-        parentNode.isExpanded = true;
+    if (Utils.isMarkdownFile(path)) {
+      path = Utils.getDirName(path);
+    }
+    seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
+      let direntList = res.data.dirent_list;
+      let results = {};
+      for (let i = 0; i < direntList.length; i++) {
+        let object = direntList[i];
+        let key = object.parent_dir;
+        if (!results[key]) {
+          results[key] = [];
+        }
+        results[key].push(object);
       }
-      this.setState({treeData: tree});
-    }));
+      for (let key in results) {
+        let node = tree.getNodeByPath(key);
+        if (!node.isLoaded) {
+          this.addResponseListToNode(results[key], node);
+        }
+      }
+      this.setState({
+        isTreeDataLoading: false,
+        treeData: tree
+      });
+    }).catch(() => {
+      this.setState({isLoadFailed: true});
+    });
   }
 
   onTreeNodeClick = (node) => {
@@ -822,12 +822,24 @@ class Wiki extends Component {
     }
 
     if (node.object.isDir()) {
+      if (!node.isLoaded) {
+        let tree = this.state.treeData.clone();
+        node = tree.getNodeByPath(node.path);
+        seafileAPI.listDir(repoID, node.path).then(res => {
+          this.addResponseListToNode(res.data.dirent_list, node);
+          tree.collapseNode(node);
+          this.setState({treeData: tree});
+        });
+      }
       if (node.path === this.state.path) {
         if (node.isExpanded) {
           let tree = treeHelper.collapseNode(this.state.treeData, node);
           this.setState({treeData: tree});
         } else {
-          this.onTreeNodeExpanded(node);
+          let tree = this.state.treeData.clone();
+          node = tree.getNodeByPath(node.path);
+          tree.expandNode(node);
+          this.setState({treeData: tree});
         }
       }
     }
@@ -861,9 +873,7 @@ class Wiki extends Component {
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
       seafileAPI.listDir(repoID, node.path).then(res => {
-        node.isLoaded = true;
-        this.addResponseDataToNode(res, node);
-        tree.expandNode(node);
+        this.addResponseListToNode(res.data.dirent_list, node);
         this.setState({treeData: tree});
       });
     } else {
@@ -917,8 +927,10 @@ class Wiki extends Component {
     return dirent;
   }
 
-  addResponseDataToNode = (res, node) => {
-    let direntList = res.data.map(item => {
+  addResponseListToNode = (list, node) => {
+    node.isLoaded = true;
+    node.isExpanded = true;
+    let direntList = list.map(item => {
       return new Dirent(item);
     });
     direntList = Utils.sortDirents(direntList, 'name', 'asc');
