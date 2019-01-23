@@ -184,8 +184,11 @@
   height: 100%;
 }
 
-@media (max-width: 992px) {
-  .main .cur-view-right-part {
-    width: 80% !important;
+@media (max-width: 768px) {
+  .markdown-viewer-render-content {
+    margin: 0px;
+  }
+  .header .file-operation-btn {
+    padding: 0.1rem 0.25rem;
   }
 }

@@ -145,4 +145,16 @@
   .seafile-comment-footer .seafile-add-comment .add-comment-input {
     min-height: 30px;
   }
+  .seafile-comment-list .comment-vacant {
+    padding: 10px;
+  }
+  .seafile-comment {
+    font-size: 12px;
+  }
+  .seafile-comment-footer .seafile-add-comment .submit-comment {
+    height: 24px;
+  }
+  .seafile-comment-footer {
+    min-height: 120px;
+  }
 }
