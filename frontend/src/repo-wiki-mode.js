@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { gettext, repoID, siteRoot, initialPath, isDir, slug } from './utils/constants';
+import { gettext, repoID, siteRoot, initialPath, isDir, slug , canGenerateShareLink, canGenerateUploadLink, username } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import collabServer from './utils/collab-server';
@@ -15,6 +15,8 @@ import ModalPortal from './components/modal-portal';
 import Dirent from './models/dirent';
 import FileTag from './models/file-tag';
 import RepoTag from './models/repo-tag';
+import RepoInfo from './models/repo-info';
+
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
@@ -29,6 +31,10 @@ class Wiki extends Component {
     super(props);
     this.state = {
       repoEncrypted: false,
+      isAdmin: false,
+      ownerEmail: '',
+      userPerm: '',
+
       path: '',
       pathExist: true,
       treeData: treeHelper.buildTree(),
@@ -74,9 +80,12 @@ class Wiki extends Component {
 
   componentDidMount() {
     seafileAPI.getRepoInfo(repoID).then(res => {
+      let repoInfo = new RepoInfo(res.data);
       this.setState({
         libNeedDecrypt: res.data.lib_need_decrypt, 
-        repoEncrypted: res.data.encrypted
+        repoEncrypted: repoInfo.encrypted,
+        isAdmin: repoInfo.is_admin,
+        ownerEmail: repoInfo.owner_email
       });
 
       if (!res.data.lib_need_decrypt) {
@@ -236,6 +245,7 @@ class Wiki extends Component {
       });
 
       this.setState({
+        userPerm: res.data.user_perm,
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         isDirentListLoading: false,
         dirID: res.headers.oid,
@@ -1001,6 +1011,16 @@ class Wiki extends Component {
       )
     }
 
+    let showShareBtn = false;
+    const { repoEncrypted, isAdmin, ownerEmail, userPerm } = this.state;
+    const isRepoOwner = ownerEmail == username;
+    if (!repoEncrypted && (
+      canGenerateShareLink || canGenerateUploadLink ||
+      isRepoOwner || isAdmin) && (
+      userPerm == 'rw' || userPerm == 'r')) {
+      showShareBtn = true;
+    }
+
     return (
       <div id="main" className="wiki-main">
         <SidePanel
@@ -1029,6 +1049,7 @@ class Wiki extends Component {
           content={this.state.content}
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
+          showShareBtn={showShareBtn}
           direntList={this.state.direntList}
           sortBy={this.state.sortBy}
           sortOrder={this.state.sortOrder}

@@ -21,6 +21,8 @@ const propTypes = {
   errorMsg: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   pathExist: PropTypes.bool.isRequired,
   permission: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -154,6 +156,7 @@ class DirPanel extends React.Component {
                     isViewFile={false}
                     path={this.props.path}
                     repoID={this.props.repoID}
+                    showShareBtn={this.props.showShareBtn}
                     onAddFile={this.props.onAddFile}
                     onAddFolder={this.props.onAddFolder}
                     onUploadFile={this.onUploadFile}

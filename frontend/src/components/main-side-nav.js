@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import Group from '../models/group';
-import { gettext, siteRoot, enableWiki } from '../utils/constants';
+import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGenerateUploadLink } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Badge } from 'reactstrap';
 
@@ -101,26 +101,44 @@ class MainSideNav extends React.Component {
       height = this.adminHeight;
     }
     let style = {height: height};
+
+    let linksNavItem = null;
+    if (canGenerateShareLink) {
+      linksNavItem = (
+        <li className="nav-item">
+          <Link to={siteRoot + 'share-admin-share-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-share-links')}`} title={gettext('Links')} onClick={() => this.tabItemClick('share-admin-share-links')}>
+            <span aria-hidden="true" className="sharp">#</span>
+            <span className="nav-text">{gettext('Links')}</span>
+          </Link>
+        </li>
+      );
+    } else if (canGenerateUploadLink) {
+      linksNavItem = (
+        <li className="nav-item">
+          <Link to={siteRoot + 'share-admin-upload-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-upload-links')}`} title={gettext('Links')} onClick={() => this.tabItemClick('share-admin-upload-links')}>
+            <span aria-hidden="true" className="sharp">#</span>
+            <span className="nav-text">{gettext('Links')}</span>
+          </Link>
+        </li>
+      );
+    }
     return (
       <ul className={`nav sub-nav nav-pills flex-column ${this.state.sharedExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style} >
+        {canAddRepo && (
         <li className="nav-item">
           <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} title={gettext('Libraries')} onClick={() => this.tabItemClick('share-admin-libs')}>
             <span aria-hidden="true" className="sharp">#</span>
             <span className="nav-text">{gettext('Libraries')}</span>
           </Link>
         </li>
+        )}
         <li className="nav-item">
           <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} title={gettext('Folders')} onClick={() => this.tabItemClick('share-admin-folders')}>
             <span aria-hidden="true" className="sharp">#</span>
             <span className="nav-text">{gettext('Folders')}</span>
           </Link>
         </li>
-        <li className="nav-item">
-          <Link to={siteRoot + 'share-admin-share-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-share-links') || this.getActiveClass('share-admin-upload-links')}`} title={gettext('Links')} onClick={() => this.tabItemClick('share-admin-share-links')}>
-            <span aria-hidden="true" className="sharp">#</span>
-            <span className="nav-text">{gettext('Links')}</span>
-          </Link>
-        </li>
+        {linksNavItem}
       </ul>
     );
   }
@@ -131,12 +149,14 @@ class MainSideNav extends React.Component {
         <div className="side-nav-con">
           <h3 className="sf-heading">{gettext('Files')}</h3>
           <ul className="nav nav-pills flex-column nav-container">
+            {canAddRepo && (
             <li className="nav-item">
               <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={() => this.tabItemClick('my-libs')}>
                 <span className="sf2-icon-user" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('My Libraries')}</span>
               </Link>
             </li>
+            )}
             <li className="nav-item">
               <Link to={siteRoot + 'shared-libs/'} className={`nav-link ellipsis ${this.getActiveClass('shared-libs')}`} title={gettext('Shared with me')} onClick={() => this.tabItemClick('shared-libs')}>
                 <span className="sf2-icon-share" aria-hidden="true"></span>
