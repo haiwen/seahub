@@ -152,23 +152,11 @@ class DirOperationToolbar extends React.Component {
   }
 
   onAddFile = (filePath, isDraft) => {
-    let newName = Utils.getFileName(filePath);
-    let errMessage = this.doubleNameCheck(newName);
-    if (errMessage) {
-      toaster.danger(errMessage);
-      return false;
-    }
     this.setState({isCreateFileDialogShow: false});
     this.props.onAddFile(filePath, isDraft);
   }
 
   onAddFolder = (dirPath) => {
-    let newName = Utils.getFileName(dirPath);
-    let errMessage = this.doubleNameCheck(newName);
-    if (errMessage) {
-      toaster.danger(errMessage);
-      return false;
-    }
     this.setState({isCreateFolderDialogShow: false});
     this.props.onAddFolder(dirPath);
   }
@@ -181,17 +169,12 @@ class DirOperationToolbar extends React.Component {
     this.props.goDraftPage();
   }
 
-  doubleNameCheck = (newName) => {
+  onDoubleNameCheck = (newName) => {
     let direntList = this.props.direntList;
     let flag = direntList.some(object => {
       return object.name === newName;
     });
-    if (flag) {
-      let errMessage = gettext('The name {name} is already occupied, please choose another name.');
-      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      return errMessage;
-    }
-    return null;
+    return flag;
   }
 
   render() {
@@ -247,8 +230,9 @@ class DirOperationToolbar extends React.Component {
               parentPath={this.props.path}
               fileType={this.state.fileType}
               onAddFile={this.onAddFile}
+              onDoubleNameCheck={this.onDoubleNameCheck}
               addFileCancel={this.onCreateFileToggle}
-            />
+              />
           </ModalPortal>
         )}
         {this.state.isCreateFolderDialogShow && (
@@ -256,6 +240,7 @@ class DirOperationToolbar extends React.Component {
             <CreateFolder
               parentPath={this.props.path}
               onAddFolder={this.onAddFolder}
+              onDoubleNameCheck={this.onDoubleNameCheck}
               addFolderCancel={this.onCreateFolderToggle}
             />
           </ModalPortal>

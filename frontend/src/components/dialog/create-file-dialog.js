@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   fileType: PropTypes.string,
   parentPath: PropTypes.string.isRequired,
   onAddFile: PropTypes.func.isRequired,
+  onDoubleNameCheck: PropTypes.func.isRequired,
   addFileCancel: PropTypes.func.isRequired,
 };
 
@@ -17,8 +19,20 @@ class CreateFile extends React.Component {
       parentPath: '',
       childName: props.fileType,
       isDraft: false,
+      errMessage: '',
     };
     this.newInput = React.createRef();
+  }
+
+  componentDidMount() {
+    let parentPath = this.props.parentPath;
+    if (parentPath[parentPath.length - 1] === '/') {  // mainPanel
+      this.setState({parentPath: parentPath});
+    } else {
+      this.setState({parentPath: parentPath + '/'}); // sidePanel
+    }
+    this.newInput.focus();
+    this.newInput.setSelectionRange(0,0);
   }
 
   handleChange = (e) => {
@@ -28,9 +42,12 @@ class CreateFile extends React.Component {
   }
 
   handleSubmit = () => {
-    let path = this.state.parentPath + this.state.childName;
-    let isDraft = this.state.isDraft;
-    this.props.onAddFile(path, isDraft);
+    let flag = this.onDoubleNameCheck();
+    if (flag) {
+      let path = this.state.parentPath + this.state.childName;
+      let isDraft = this.state.isDraft;
+      this.props.onAddFile(path, isDraft);
+    }
   } 
 
   handleKeyPress = (e) => {
@@ -93,15 +110,15 @@ class CreateFile extends React.Component {
     this.props.addFileCancel();
   }
 
-  componentDidMount() {
-    let parentPath = this.props.parentPath;
-    if (parentPath[parentPath.length - 1] === '/') {  // mainPanel
-      this.setState({parentPath: parentPath});
-    } else {
-      this.setState({parentPath: parentPath + '/'}); // sidePanel
+  onDoubleNameCheck = () => {
+    let newName = this.state.childName;
+    let flag = this.props.onDoubleNameCheck(newName);
+    if (flag) {
+      let errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      this.setState({errMessage: errMessage});
     }
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0,0);
+    return !flag;
   }
 
   render() {
@@ -128,6 +145,7 @@ class CreateFile extends React.Component {
               </FormGroup>
             )}
           </Form>
+          {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem 0'}}>{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

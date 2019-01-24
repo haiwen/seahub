@@ -122,23 +122,11 @@ class SidePanel extends Component {
   }
 
   onAddFolderNode = (dirPath) => {
-    let newName = Utils.getFileName(dirPath);
-    let errMessage = this.doubleNameCheck(newName);
-    if (errMessage) {
-      toaster.danger(errMessage);
-      return false;
-    }
     this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
     this.props.onAddFolderNode(dirPath);
   }
 
   onAddFileNode = (filePath, isDraft) => {
-    let newName = Utils.getFileName(filePath);
-    let errMessage = this.doubleNameCheck(newName);
-    if (errMessage) {
-      toaster.danger(errMessage);
-      return false;
-    }
     this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
     this.props.onAddFileNode(filePath, isDraft);
   }
@@ -161,7 +149,7 @@ class SidePanel extends Component {
     this.props.onDeleteNode(node);
   }
 
-  doubleNameCheck = (newName) => {
+  onDoubleNameCheck = (newName) => {
     let node = this.state.opNode;
     // root node to new node conditions: parentNode is null, 
     let parentNode = node.parentNode ? node.parentNode : node;
@@ -171,12 +159,7 @@ class SidePanel extends Component {
     let flag = childrenObject.some(object => {
       return object.name === newName;
     });
-    if (flag) {
-      let errMessage = gettext('The name {name} is already occupied, please choose another name.');
-      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      return errMessage;
-    }
-    return null;
+    return flag;
   }
 
   render() {
@@ -228,8 +211,9 @@ class SidePanel extends Component {
             <CreateFolder
               parentPath={this.state.opNode.path}
               onAddFolder={this.onAddFolderNode}
+              onDoubleNameCheck={this.onDoubleNameCheck}
               addFolderCancel={this.onAddFolderToggle}
-              />
+            />
           </ModalPortal>
         )}
         {this.state.isAddFileDialogShow && (
@@ -238,8 +222,9 @@ class SidePanel extends Component {
               fileType={'.md'}
               parentPath={this.state.opNode.path}
               onAddFile={this.onAddFileNode}
+              onDoubleNameCheck={this.onDoubleNameCheck}
               addFileCancel={this.onAddFileToggle}
-              />
+            />
           </ModalPortal>
         )}
         {this.state.isRenameDialogShow && (

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import toaster from '../../components/toast';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
 
 const propTypes = {
   currentNode: PropTypes.object,
@@ -15,6 +14,7 @@ class Rename extends React.Component {
     super(props);
     this.state = {
       newName: '',
+      errMessage: '',
     };
     this.newInput = React.createRef();
   }
@@ -74,13 +74,13 @@ class Rename extends React.Component {
     let newName = this.state.newName.trim();
     if (!newName) {
       let errMessage = gettext('Name is required.');
-      toaster.danger(errMessage);
+      this.setState({errMessage: errMessage});
       return false;
     }
 
     if (newName.indexOf('/') > -1) {
       let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
-      toaster.danger(errMessage);
+      this.setState({errMessage: errMessage});
       return false;
     }
 
@@ -95,6 +95,7 @@ class Rename extends React.Component {
         <ModalBody>
           <p>{type === 'file' ? gettext('Enter the new file name:'): gettext('Enter the new folder name:')}</p>
           <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
+          {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem 0'}}>{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
