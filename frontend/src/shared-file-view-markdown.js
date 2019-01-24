@@ -62,27 +62,30 @@ class SharedFileViewMarkdown extends React.Component {
     }
   }
 
-  modifyValueBeforeRender = (value) => {
-    value.document.nodes.map(node => {
-      let innerNode = node.nodes[0];
-      if (innerNode.type == 'image') {
-        let imageUrl = innerNode.data.src;
+  changeImageURL = (innerNode) => {
+    if (innerNode.type == 'image') {
+      let imageUrl = innerNode.data.src;
 
-        const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
-        
-        // different repo 
-        if (!re.test(imageUrl)) {
-          return;
-        }
-
-        // get image path
-        let index = imageUrl.indexOf('/file');
-        let index2 = imageUrl.indexOf('?');
-        const imagePath = imageUrl.substring(index + 5, index2);
-        // change image url
-        innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imagePath;
+      const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+      
+      // different repo 
+      if (!re.test(imageUrl)) {
+        return;
       }
-    });
+      // get image path
+      let index = imageUrl.indexOf('/file');
+      let index2 = imageUrl.indexOf('?');
+      const imagePath = imageUrl.substring(index + 5, index2);
+      // change image url
+      innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imagePath;
+    }
+    return innerNode;
+  }
+
+  modifyValueBeforeRender = (value) => {
+    let nodes = value.document.nodes;
+    let newNodes = Utils.changeMarkdownNodes(nodes, this.changeImageURL);
+    value.document.nodes = newNodes;
     return value;
   }
 

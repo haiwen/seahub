@@ -416,7 +416,6 @@ export const Utils = {
   },
 
   isWikiInternalMarkdownLink: function(url, slug) {
-
     var slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/wikis/' + slug + '.*\.md$');
     return re.test(url);

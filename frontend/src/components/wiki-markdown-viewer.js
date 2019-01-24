@@ -17,7 +17,6 @@ const propTypes = {
 
 const contentClass = 'wiki-page-content';
 
-
 class WikiMarkdownViewer extends React.Component {
 
   constructor(props) {
@@ -105,7 +104,7 @@ class WikiMarkdownViewer extends React.Component {
     this.setState({activeTitleIndex: activeTitleIndex});
   }
 
-  chengeInlineNode = (item) => {
+  changeInlineNode = (item) => {
     if (item.object == 'inline') {
       let url;
 
@@ -147,7 +146,7 @@ class WikiMarkdownViewer extends React.Component {
 
   modifyValueBeforeRender = (value) => {
     let nodes = value.document.nodes;
-    let newNodes = Utils.changeMarkdownNodes(nodes, this.chengeInlineNode);
+    let newNodes = Utils.changeMarkdownNodes(nodes, this.changeInlineNode);
     value.document.nodes = newNodes;
     return value;
   }
