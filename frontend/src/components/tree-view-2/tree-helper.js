@@ -1,6 +1,7 @@
 import { Utils } from '../../utils/utils';
 import Tree from './tree';
 import TreeNode from './tree-node';
+import Dirent from '../../models/dirent';
 
 class TreeHelper {
 
@@ -74,11 +75,12 @@ class TreeHelper {
     return treeCopy;
   }
 
-  moveNodeByPath(tree, nodePath, destPath) {
+  moveNodeByPath(tree, nodePath, destPath, nodeName) {
     let treeCopy = tree.clone();
     let node = treeCopy.getNodeByPath(nodePath);
     let destNode = treeCopy.getNodeByPath(destPath);
-    if (destNode && node) { // node has loaded
+    if (destNode && node) {        // node has loaded
+      node.object.name = nodeName; // need not update path
       treeCopy.moveNode(node, destNode);
     }
     if (!destNode && node){
@@ -94,7 +96,7 @@ class TreeHelper {
       nodePaths.forEach(nodePath => { 
         let node = treeCopy.getNodeByPath(nodePath);
         treeCopy.moveNode(node, destNode);
-      })
+      });
     } else {
       nodePaths.forEach(nodePath=> {
         let node = treeCopy.getNodeByPath(nodePath);
@@ -104,12 +106,13 @@ class TreeHelper {
     return treeCopy;
   }
 
-  copyNodeByPath(tree, nodePath, destPath) {
+  copyNodeByPath(tree, nodePath, destPath, nodeName) {
     let treeCopy = tree.clone();
-    let node = treeCopy.getNodeByPath(nodePath);
-    node = node.clone();  // need a dup
     let destNode = treeCopy.getNodeByPath(destPath);
+    let treeNode = treeCopy.getNodeByPath(nodePath);
     if (destNode) {
+      let node = treeNode.clone();  // need a dup
+      node.object.name = nodeName;  // need not update path
       treeCopy.copyNode(node, destNode);
     }
     return treeCopy;
@@ -129,7 +132,7 @@ class TreeHelper {
 
   buildTree() {
     let tree = new Tree();
-    let object = {name: '/'};
+    let object = new Dirent({name: '/'});
     let root = new TreeNode({object, isLoaded: false, isExpanded: true});
     tree.setRoot(root);
     return tree;

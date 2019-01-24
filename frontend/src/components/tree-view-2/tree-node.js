@@ -2,7 +2,7 @@ class TreeNode {
 
   constructor({ path, object, isLoaded, isPreload, isExpanded, parentNode }) {
     this.path = path || object.name,  // The default setting is the object name, which is set to a relative path when the father is set.
-    this.object = object;
+    this.object = object.clone();
     this.isLoaded = isLoaded || false;
     this.isPreload = isPreload || false;
     this.isExpanded = isExpanded || false;
@@ -13,7 +13,7 @@ class TreeNode {
   clone() {
     let treeNode = new TreeNode({
       path: this.path,
-      object: this.object,
+      object: this.object.clone(),
       isLoaded: this.isLoaded,
       isPreload: this.isPreload,
       isExpanded: this.isExpanded,
@@ -102,7 +102,7 @@ class TreeNode {
 
     const treeNode = {
       path: this.path,
-      object: this.object,
+      object: this.object.clone(),
       isLoaded: this.isLoaded,
       isPreload: this.isPreload,
       isExpanded: this.isExpanded,
@@ -115,6 +115,7 @@ class TreeNode {
 
   static deserializefromJson(json) {
     let { path, object, isLoaded, isPreload, isExpanded, parentNode, children = [] } = json;
+    object = object.clone();
 
     const treeNode = new TreeNode({
       path,
