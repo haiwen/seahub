@@ -149,7 +149,7 @@ class SidePanel extends Component {
     this.props.onDeleteNode(node);
   }
 
-  onDoubleNameCheck = (newName) => {
+  checkDuplicatedName = (newName) => {
     let node = this.state.opNode;
     // root node to new node conditions: parentNode is null, 
     let parentNode = node.parentNode ? node.parentNode : node;
@@ -211,7 +211,7 @@ class SidePanel extends Component {
             <CreateFolder
               parentPath={this.state.opNode.path}
               onAddFolder={this.onAddFolderNode}
-              onDoubleNameCheck={this.onDoubleNameCheck}
+              checkDuplicatedName={this.checkDuplicatedName}
               addFolderCancel={this.onAddFolderToggle}
             />
           </ModalPortal>
@@ -222,7 +222,7 @@ class SidePanel extends Component {
               fileType={'.md'}
               parentPath={this.state.opNode.path}
               onAddFile={this.onAddFileNode}
-              onDoubleNameCheck={this.onDoubleNameCheck}
+              checkDuplicatedName={this.checkDuplicatedName}
               addFileCancel={this.onAddFileToggle}
             />
           </ModalPortal>

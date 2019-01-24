@@ -4,7 +4,6 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import ModalPortal from '../modal-portal';
-import toaster from '../../components/toast';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
@@ -169,7 +168,7 @@ class DirOperationToolbar extends React.Component {
     this.props.goDraftPage();
   }
 
-  onDoubleNameCheck = (newName) => {
+  checkDuplicatedName = (newName) => {
     let direntList = this.props.direntList;
     let flag = direntList.some(object => {
       return object.name === newName;
@@ -230,7 +229,7 @@ class DirOperationToolbar extends React.Component {
               parentPath={this.props.path}
               fileType={this.state.fileType}
               onAddFile={this.onAddFile}
-              onDoubleNameCheck={this.onDoubleNameCheck}
+              checkDuplicatedName={this.checkDuplicatedName}
               addFileCancel={this.onCreateFileToggle}
               />
           </ModalPortal>
@@ -240,7 +239,7 @@ class DirOperationToolbar extends React.Component {
             <CreateFolder
               parentPath={this.props.path}
               onAddFolder={this.onAddFolder}
-              onDoubleNameCheck={this.onDoubleNameCheck}
+              checkDuplicatedName={this.checkDuplicatedName}
               addFolderCancel={this.onCreateFolderToggle}
             />
           </ModalPortal>

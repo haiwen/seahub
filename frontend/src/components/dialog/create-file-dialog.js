@@ -8,7 +8,7 @@ const propTypes = {
   fileType: PropTypes.string,
   parentPath: PropTypes.string.isRequired,
   onAddFile: PropTypes.func.isRequired,
-  onDoubleNameCheck: PropTypes.func.isRequired,
+  checkDuplicatedName: PropTypes.func.isRequired,
   addFileCancel: PropTypes.func.isRequired,
 };
 
@@ -42,7 +42,7 @@ class CreateFile extends React.Component {
   }
 
   handleSubmit = () => {
-    let flag = this.onDoubleNameCheck();
+    let flag = this.onCheckDuplicatedName();
     if (flag) {
       let path = this.state.parentPath + this.state.childName;
       let isDraft = this.state.isDraft;
@@ -110,9 +110,9 @@ class CreateFile extends React.Component {
     this.props.addFileCancel();
   }
 
-  onDoubleNameCheck = () => {
+  onCheckDuplicatedName = () => {
     let newName = this.state.childName;
-    let flag = this.props.onDoubleNameCheck(newName);
+    let flag = this.props.checkDuplicatedName(newName);
     if (flag) {
       let errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
