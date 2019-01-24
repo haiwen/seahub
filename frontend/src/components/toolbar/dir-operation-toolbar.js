@@ -4,6 +4,7 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import ModalPortal from '../modal-portal';
+import toaster from '../../components/toast';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
@@ -20,6 +21,7 @@ const propTypes = {
   onUploadFolder: PropTypes.func.isRequired,
   isDraft: PropTypes.bool,
   hasDraft: PropTypes.bool,
+  direntList: PropTypes.array.isRequired,
 };
 
 class DirOperationToolbar extends React.Component {
@@ -150,11 +152,23 @@ class DirOperationToolbar extends React.Component {
   }
 
   onAddFile = (filePath, isDraft) => {
+    let newName = Utils.getFileName(filePath);
+    let errMessage = this.doubleNameCheck(newName);
+    if (errMessage) {
+      toaster.danger(errMessage);
+      return false;
+    }
     this.setState({isCreateFileDialogShow: false});
     this.props.onAddFile(filePath, isDraft);
   }
 
   onAddFolder = (dirPath) => {
+    let newName = Utils.getFileName(dirPath);
+    let errMessage = this.doubleNameCheck(newName);
+    if (errMessage) {
+      toaster.danger(errMessage);
+      return false;
+    }
     this.setState({isCreateFolderDialogShow: false});
     this.props.onAddFolder(dirPath);
   }
@@ -165,6 +179,19 @@ class DirOperationToolbar extends React.Component {
 
   onViewDraft = () => {
     this.props.goDraftPage();
+  }
+
+  doubleNameCheck = (newName) => {
+    let direntList = this.props.direntList;
+    let flag = direntList.some(object => {
+      return object.name === newName;
+    });
+    if (flag) {
+      let errMessage = gettext('The name {name} is already occupied, please choose another name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      return errMessage;
+    }
+    return null;
   }
 
   render() {

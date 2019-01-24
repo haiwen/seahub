@@ -187,6 +187,7 @@ class MainPanel extends Component {
                   repoID={repoID}
                   isDraft={this.props.isDraft}
                   hasDraft={this.props.hasDraft}
+                  direntList={this.props.direntList}
                   permission={this.props.permission}
                   isViewFile={this.props.isViewFile}
                   showShareBtn={this.props.showShareBtn}

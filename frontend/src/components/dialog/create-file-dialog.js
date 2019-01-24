@@ -36,6 +36,7 @@ class CreateFile extends React.Component {
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
+      e.preventDefault();
     }
   }
 

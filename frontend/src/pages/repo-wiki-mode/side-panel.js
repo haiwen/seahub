@@ -122,18 +122,49 @@ class SidePanel extends Component {
   }
 
   onAddFolderNode = (dirPath) => {
+    let newName = Utils.getFileName(dirPath);
+    let errMessage = this.doubleNameCheck(newName);
+    if (errMessage) {
+      toaster.danger(errMessage);
+      return false;
+    }
     this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
     this.props.onAddFolderNode(dirPath);
   }
 
   onAddFileNode = (filePath, isDraft) => {
+    let newName = Utils.getFileName(filePath);
+    let errMessage = this.doubleNameCheck(newName);
+    if (errMessage) {
+      toaster.danger(errMessage);
+      return false;
+    }
     this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
     this.props.onAddFileNode(filePath, isDraft);
   }
 
   onRenameNode = (newName) => {
+    let errMessage = this.doubleNameCheck(newName);
+    if (errMessage) {
+      toaster.danger(errMessage);
+      this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
+      return;
+    }
+    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
     let node = this.state.opNode;
-    let parentNode = node.parentNode;
+    this.props.onRenameNode(node, newName);
+  }
+
+  onDeleteNode = () => {
+    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
+    let node = this.state.opNode;
+    this.props.onDeleteNode(node);
+  }
+
+  doubleNameCheck = (newName) => {
+    let node = this.state.opNode;
+    // root node to new node conditions: parentNode is null, 
+    let parentNode = node.parentNode ? node.parentNode : node;
     let childrenObject = parentNode.children.map(item => {
       return item.object;
     });
@@ -143,19 +174,9 @@ class SidePanel extends Component {
     if (flag) {
       let errMessage = gettext('The name {name} is already occupied, please choose another name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      toaster.danger(errMessage);
-      this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
-      return false;
+      return errMessage;
     }
-
-    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
-    this.props.onRenameNode(node, newName);
-  }
-
-  onDeleteNode = () => {
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-    let node = this.state.opNode;
-    this.props.onDeleteNode(node);
+    return null;
   }
 
   render() {
