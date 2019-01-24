@@ -2073,6 +2073,13 @@ def view_media_file_via_public_wiki(request):
     if not image_path or not slug:
         return HttpResponseBadRequest('invalid params')
 
+    # check file type
+    image_file_name = os.path.basename(image_path)
+    file_type, file_ext = get_file_type_and_ext(image_file_name)
+    if file_type != IMAGE:
+        err_msg = 'Invalid file type'
+        return render_error(request, err_msg)
+
     # get wiki object or 404
     try:
         wiki = Wiki.objects.get(slug=slug)
@@ -2088,8 +2095,6 @@ def view_media_file_via_public_wiki(request):
     repo = seafile_api.get_repo(repo_id)
     if not repo:
         return render_error(request, 'Repo does not exist')
-
-    image_file_name = os.path.basename(image_path)
 
     # get image
     obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)
