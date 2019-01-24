@@ -20,16 +20,12 @@ class FileActivitiesContent extends Component {
     let {items, isLoadingMore} = this.props;
     return ( 
       <Fragment>
-        <table className="table table-hover table-vcenter">
-          <thead>
-            <tr>
-              <th width="8%">{/* avatar */}</th>
-              <th width="10%">{gettext('User')}</th>
-              <th width="25%">{gettext('Operation')}</th>
-              <th width="37%">{gettext('File')} / {gettext('Library')}</th>
-              <th width="20%">{gettext('Time')}</th>
-            </tr>
-          </thead>
+        <table width="100%" className="table table-hover table-vcenter">
+          <col width="8%" />
+          <col width="15%" />
+          <col width="20%" />
+          <col width="37%" />
+          <col width="20%" />
           <TableBody items={items} />
         </table>
         {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
