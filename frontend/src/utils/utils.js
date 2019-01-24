@@ -593,6 +593,17 @@ export const Utils = {
       }
     });
     return items;
-  }
+  },
+
+  changeMarkdownNodes: function(nodes, fn) {
+    nodes.map((item) => {
+      fn(item); 
+      if (item.nodes && item.nodes.length > 0){
+        Utils.changeMarkdownNodes(item.nodes, fn); 
+      }
+    });
+
+    return nodes;
+  },
 
 };

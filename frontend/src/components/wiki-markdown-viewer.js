@@ -18,52 +18,6 @@ const propTypes = {
 const contentClass = 'wiki-page-content';
 
 
-var changeInlineNodes = function(nodes) {
-  nodes.map((item) => {
-    if (item.object == 'inline') {
-      let url;
-
-      // change image url
-      if (item.type == 'image' && isPublicWiki) {
-        url = item.data.src;
-        const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
-        // different repo 
-        if (!re.test(url)) {
-          return;
-        }
-        // get image path
-        let index = url.indexOf('/file');
-        let index2 = url.indexOf('?');
-        const imagePath = url.substring(index + 5, index2);
-        // replace url
-        item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
-      } 
-
-      else if (item.type == 'link') {
-        url = item.data.href;
-        // change file url 
-        if (Utils.isInternalMarkdownLink(url, repoID)) {
-          let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
-          // replace url
-          item.data.href = serviceURL + '/wikis/' + slug + path;
-        } 
-        // change dir url 
-        else if (Utils.isInternalDirLink(url, repoID)) {
-          let path = Utils.getPathFromInternalDirLink(url, repoID, slug);
-          // replace url
-          item.data.href = serviceURL + '/wikis/' + slug + path;
-        } 
-      }
-    }
-    else if (item.nodes && item.nodes.length > 0){
-      changeInlineNodes(item.nodes); 
-    }
-  });
-
-  return nodes;
-};
-
-
 class WikiMarkdownViewer extends React.Component {
 
   constructor(props) {
@@ -151,10 +105,50 @@ class WikiMarkdownViewer extends React.Component {
     this.setState({activeTitleIndex: activeTitleIndex});
   }
 
+  chengeInlineNode = (item) => {
+    if (item.object == 'inline') {
+      let url;
+
+      // change image url
+      if (item.type == 'image' && isPublicWiki) {
+        url = item.data.src;
+        const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+        // different repo 
+        if (!re.test(url)) {
+          return;
+        }
+        // get image path
+        let index = url.indexOf('/file');
+        let index2 = url.indexOf('?');
+        const imagePath = url.substring(index + 5, index2);
+        // replace url
+        item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
+      } 
+
+      else if (item.type == 'link') {
+        url = item.data.href;
+        // change file url 
+        if (Utils.isInternalMarkdownLink(url, repoID)) {
+          let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
+          // replace url
+          item.data.href = serviceURL + '/wikis/' + slug + path;
+        } 
+        // change dir url 
+        else if (Utils.isInternalDirLink(url, repoID)) {
+          let path = Utils.getPathFromInternalDirLink(url, repoID, slug);
+          // replace url
+          item.data.href = serviceURL + '/wikis/' + slug + path;
+        } 
+      }
+    }
+
+    return item;
+  }
+
   modifyValueBeforeRender = (value) => {
     let nodes = value.document.nodes;
-    let newInlineNodes = changeInlineNodes(nodes);
-    value.document.nodes = newInlineNodes;
+    let newNodes = Utils.changeMarkdownNodes(nodes, this.chengeInlineNode);
+    value.document.nodes = newNodes;
     return value;
   }
 
