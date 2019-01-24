@@ -41,7 +41,7 @@ class CreateForder extends React.Component {
   }
 
   handleSubmit = () => {
-    let flag = this.onCheckDuplicatedName();
+    let flag = this.checkDuplicatedName();
     if (flag) {
       let path = this.state.parentPath + this.state.childName;
       this.props.onAddFolder(path);
@@ -59,7 +59,7 @@ class CreateForder extends React.Component {
     this.props.addFolderCancel();
   }
 
-  onCheckDuplicatedName = () => {
+  checkDuplicatedName = () => {
     let newName = this.state.childName;
     let flag = this.props.checkDuplicatedName(newName);
     if (flag) {

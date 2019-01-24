@@ -42,7 +42,7 @@ class CreateFile extends React.Component {
   }
 
   handleSubmit = () => {
-    let flag = this.onCheckDuplicatedName();
+    let flag = this.checkDuplicatedName();
     if (flag) {
       let path = this.state.parentPath + this.state.childName;
       let isDraft = this.state.isDraft;
@@ -110,7 +110,7 @@ class CreateFile extends React.Component {
     this.props.addFileCancel();
   }
 
-  onCheckDuplicatedName = () => {
+  checkDuplicatedName = () => {
     let newName = this.state.childName;
     let flag = this.props.checkDuplicatedName(newName);
     if (flag) {
