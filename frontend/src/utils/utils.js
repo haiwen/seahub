@@ -339,6 +339,28 @@ export const Utils = {
     return title;
   },
 
+  sharePermsExplanation: function(permission) {
+    var title;
+    switch(permission) {
+      case 'rw':
+        title = gettext("User can read, write, upload, download and sync files.");
+        break;
+      case 'r':
+        title = gettext("User can read, download and sync files.");
+        break;
+      case 'admin':
+        title = gettext("Besides Write permission, user can also share the library.");
+        break;
+      case 'cloud-edit':
+        title = gettext("User can only view files online via browser. Files can't be downloaded.");
+        break;
+      case 'preview':
+        title = gettext("Same as Preview on cloud. But user can also edit files online via browser.");
+        break;
+    }
+    return title;
+  },
+
   formatSize: function(options) {
     /*
      * param: {bytes, precision}

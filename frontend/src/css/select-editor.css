@@ -1,0 +1,16 @@
+.permission-editor .permission-editor-explanation {
+  user-select: none;
+  padding-left: 10px;
+  color: #9c9c9c;
+  font-size: 12px;
+  word-break: keep-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.permission-editor .select__option {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.select__control .permission-editor-explanation {
+  display: none;
+}
