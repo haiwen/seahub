@@ -12,7 +12,8 @@ from seahub.views.sso import *
 from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, download_file, view_lib_file, \
-    file_access, view_lib_file_via_smart_link, view_media_file_via_share_link
+    file_access, view_lib_file_via_smart_link, view_media_file_via_share_link, \
+    view_media_file_via_public_wiki
 from seahub.views.repo import repo_history_view, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
 from notifications.views import notification_list
@@ -362,6 +363,7 @@ urlpatterns = [
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/dir/$', WikiPagesDirView.as_view(), name='api-v2.1-wiki-pages-dir'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/content/$', WikiPageContentView.as_view(), name='api-v2.1-wiki-pages-content'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/(?P<page_name>[^/]+)/$', WikiPageView.as_view(), name='api-v2.1-wiki-page'),
+    url(r'^view-image-via-public-wiki/$', view_media_file_via_public_wiki, name='view_media_file_via_public_wiki'),
 
     ## user::drafts
     url(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),

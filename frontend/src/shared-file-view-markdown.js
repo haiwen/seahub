@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Account from './components/common/account';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { serviceURL, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
@@ -17,7 +17,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 
 let loginUser = window.app.pageOptions.name;
-const { serviceURL, repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
+const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
 
 class SharedFileViewMarkdown extends React.Component {
 
@@ -62,6 +62,33 @@ class SharedFileViewMarkdown extends React.Component {
     }
   }
 
+  changeImageURL = (innerNode) => {
+    if (innerNode.type == 'image') {
+      let imageUrl = innerNode.data.src;
+
+      const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+      
+      // different repo 
+      if (!re.test(imageUrl)) {
+        return;
+      }
+      // get image path
+      let index = imageUrl.indexOf('/file');
+      let index2 = imageUrl.indexOf('?');
+      const imagePath = imageUrl.substring(index + 5, index2);
+      // change image url
+      innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imagePath;
+    }
+    return innerNode;
+  }
+
+  modifyValueBeforeRender = (value) => {
+    let nodes = value.document.nodes;
+    let newNodes = Utils.changeMarkdownNodes(nodes, this.changeImageURL);
+    value.document.nodes = newNodes;
+    return value;
+  }
+
   render() {
     if (this.state.loading) {
       return <Loading />
@@ -102,9 +129,9 @@ class SharedFileViewMarkdown extends React.Component {
               <MarkdownViewer markdownContent={this.state.markdownContent}
                               showTOC={false}
                               serviceURL={serviceURL}
-                              isShared={true} 
                               sharedToken={sharedToken}
                               repoID={repoID}
+                              modifyValueBeforeRender={this.modifyValueBeforeRender}
               />
             </div>
           </div>

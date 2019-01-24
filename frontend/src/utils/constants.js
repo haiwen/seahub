@@ -13,6 +13,7 @@ export const isPro = window.app.config.isPro === 'True';
 export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
 export const seafileVersion = window.app.config.seafileVersion;
+export const serviceURL = window.app.config.serviceURL;
 
 //pageOptions
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
@@ -46,6 +47,7 @@ export const initialPath = window.wiki ? window.wiki.config.initial_path : '';
 export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
 export const isDir = window.wiki ? window.wiki.config.isDir : '';
 export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
+export const isPublicWiki = window.wiki ? window.wiki.config.isPublicWiki === 'True': '';
 
 // file history
 export const PER_PAGE = 25;

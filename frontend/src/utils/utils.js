@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, siteRoot } from './constants';
+import { mediaUrl, gettext, serviceURL } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 
 export const Utils = {
@@ -404,27 +404,56 @@ export const Utils = {
   },
 
   isInternalMarkdownLink: function(url, repoID) {
-    var re = new RegExp(siteRoot + 'lib/' + repoID + '.*\.md$');
+    var re = new RegExp(serviceURL + '/lib/' + repoID + '.*\.md$');
     return re.test(url);
   },
 
   isInternalDirLink: function(url, repoID) {
-    var re = new RegExp(siteRoot + 'library/' + repoID + '.*');
+    var re = new RegExp(serviceURL + '/library/' + repoID + '.*');
     return re.test(url);
   },
 
   getPathFromInternalMarkdownLink: function(url, repoID) {
-    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '(.*\.md)');
+    var re = new RegExp(serviceURL + '/lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
   },
   
   getPathFromInternalDirLink: function(url, repoID, repoName) {
-    var re = new RegExp(siteRoot + 'library/' + repoID + '/' + repoName  + '(/.*)');
+    var repoName = encodeURIComponent(repoName);
+    var re = new RegExp(serviceURL + '/library/' + repoID + '/' + repoName  + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
 
+    return path;
+  },
+
+  isWikiInternalMarkdownLink: function(url, slug) {
+    var slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug + '.*\.md$');
+    return re.test(url);
+  },
+
+  isWikiInternalDirLink: function(url, slug) {
+    var slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug + '.*');
+    return re.test(url);
+  },
+
+  getPathFromWikiInternalMarkdownLink: function(url, slug) {
+    var slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug + '(.*\.md)');
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
+    return path;
+  },
+  
+  getPathFromWikiInternalDirLink: function(url, slug) {
+    var slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug+ '(/.*)');
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
     return path;
   },
 
@@ -577,6 +606,17 @@ export const Utils = {
       }
     });
     return items;
-  }
+  },
+
+  changeMarkdownNodes: function(nodes, fn) {
+    nodes.map((item) => {
+      fn(item); 
+      if (item.nodes && item.nodes.length > 0){
+        Utils.changeMarkdownNodes(item.nodes, fn); 
+      }
+    });
+
+    return nodes;
+  },
 
 };
