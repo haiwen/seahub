@@ -719,6 +719,10 @@ ul,ol,li {
     margin: 0 10px;
 }
 
+#notice-popover .sf-popover-con {
+    max-height: 25rem;
+}
+
 
 /**** sf-popover ****/ /* e.g. top notice popup, group members popup */
 .sf-popover-container {
