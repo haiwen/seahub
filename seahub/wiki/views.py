@@ -4,6 +4,7 @@ import urllib2
 import posixpath
 
 import seaserv
+from seaserv import seafile_api
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
@@ -42,14 +43,24 @@ def wiki_list(request):
 def slug(request, slug, file_path="home.md"):
     """Show wiki page.
     """
-    # compatible with old wiki url
-    if len(file_path.split('.')) == 1:
-        new_path = file_path + '.md'
-        return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
-
     # get wiki object or 404
     wiki = get_object_or_404(Wiki, slug=slug)
     file_path = "/" + file_path
+
+    is_dir = None
+    file_id = seafile_api.get_file_id_by_path(wiki.repo_id, file_path)
+    if file_id:
+        is_dir = False
+
+    dir_id = seafile_api.get_dir_id_by_path(wiki.repo_id, file_path)
+    if dir_id:
+        is_dir = True
+
+    # compatible with old wiki url
+    if is_dir is None:
+        if len(file_path.split('.')) == 1:
+            new_path = file_path[1:] + '.md'
+            return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
 
     # perm check
     req_user = request.user.username
@@ -77,6 +88,7 @@ def slug(request, slug, file_path="home.md"):
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,
         "is_public_wiki": is_public_wiki,
+        "is_dir": is_dir,
     })
 
 
