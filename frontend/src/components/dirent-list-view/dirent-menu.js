@@ -55,7 +55,7 @@ class DirentMenu extends React.Component {
       }
       menuList.push('Copy');
       if (isPro) {
-        if (dirent.is_locked && dirent.locked_by_me) {
+        if (dirent.is_locked) {
           menuList.push('Unlock');
         } else {
           menuList.push('Lock');
