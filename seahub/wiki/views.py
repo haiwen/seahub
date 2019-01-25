@@ -76,6 +76,14 @@ def slug(request, slug, file_path="home.md"):
         file_url = reverse('view_lib_file', args=[wiki.repo_id, file_path])
         return HttpResponseRedirect(file_url + "?raw=1")
 
+    if not req_user:
+        user_can_write = False
+    elif req_user == wiki.username or check_folder_permission(
+            request, wiki.repo_id, '/') == 'rw':
+        user_can_write = True
+    else:
+        user_can_write = False
+
     is_public_wiki = False
     if wiki.permission == 'public':
         is_public_wiki = True
@@ -83,6 +91,7 @@ def slug(request, slug, file_path="home.md"):
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
         "page_name": file_path,
+        "user_can_write": user_can_write,
         "file_path": file_path,
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
