@@ -11,6 +11,7 @@ import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 
 import '../../css/tip-for-new-md.css';
+import toaster from '../toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -59,6 +60,19 @@ class DirentListView extends React.Component {
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
+  }
+
+  onItemRename = (dirent, newName) => {
+    let isDuplicated = this.props.direntList.some(item => {
+      return item.name === newName;
+    });
+    if (isDuplicated) {
+      let errMessage = gettext('The name {name} is already occupied, please choose another name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      toaster.danger(errMessage);
+      return false;
+    }
+    this.props.onItemRename(dirent, newName);
   }
 
   onItemRenameToggle = () => {
@@ -238,11 +252,12 @@ class DirentListView extends React.Component {
                   repoID={this.props.repoID}
                   currentRepoInfo={this.props.currentRepoInfo}
                   isRepoOwner={this.props.isRepoOwner}
+                  direntList={this.props.direntList}
                   onItemClick={this.props.onItemClick}
                   onItemRenameToggle={this.onItemRenameToggle}
                   onItemSelected={this.props.onItemSelected}
                   onItemDelete={this.props.onItemDelete}
-                  onItemRename={this.props.onItemRename}
+                  onItemRename={this.onItemRename}
                   onItemMove={this.props.onItemMove}
                   onItemCopy={this.props.onItemCopy}
                   updateDirent={this.props.updateDirent}

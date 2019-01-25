@@ -473,9 +473,9 @@ class Wiki extends Component {
     //just for view list state
     let dirName = dirent.name
     let direntPath = Utils.joinPath(this.state.path, dirName);
-    seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, this.state.path, dirName).then(() => {
-
-      this.moveTreeNode(direntPath, moveToDirentPath, destRepo);
+    seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, this.state.path, dirName).then(res => {
+      let nodeName = res.data[0].obj_name;
+      this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
       this.moveDirent(direntPath);
 
       let message = gettext('Successfully moved %(name)s.');
@@ -492,8 +492,9 @@ class Wiki extends Component {
     //just for view list state
     let dirName = dirent.name;
     let direntPath = Utils.joinPath(this.state.path, dirName);
-    seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, this.state.path, dirName).then(() => {
-      this.copyTreeNode(direntPath, copyToDirentPath, destRepo);
+    seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, this.state.path, dirName).then(res => {
+      let nodeName = res.data[0].obj_name;
+      this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
       toaster.success(message);
@@ -508,9 +509,12 @@ class Wiki extends Component {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
-    seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
-      direntPaths.forEach(direntPath => {
-        this.moveTreeNode(direntPath, destDirentPath, destRepo);
+    seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
+      let names = res.data.map(item => {
+        return item.obj_name;
+      });
+      direntPaths.forEach((direntPath, index) => {
+        this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
         this.moveDirent(direntPath);
       });
       let message = gettext('Successfully moved %(name)s.');
@@ -527,9 +531,12 @@ class Wiki extends Component {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
-    seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
-      direntPaths.forEach(direntPath => {
-        this.copyTreeNode(direntPath, destDirentPath, destRepo);
+    seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
+      let names = res.data.map(item => {
+        return item.obj_name;
+      });
+      direntPaths.forEach((direntPath, index) => {
+        this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
       });
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirNames);
@@ -911,21 +918,21 @@ class Wiki extends Component {
     this.setState({treeData: tree});
   }
 
-  moveTreeNode = (nodePath, moveToPath, moveToRepo) => {
+  moveTreeNode = (nodePath, moveToPath, moveToRepo, nodeName) => {
     if (repoID !== moveToRepo.repo_id) {
       let tree = treeHelper.deleteNodeByPath(this.state.treeData, nodePath);
       this.setState({treeData: tree});
       return
     }
-    let tree = treeHelper.moveNodeByPath(this.state.treeData, nodePath, moveToPath);
+    let tree = treeHelper.moveNodeByPath(this.state.treeData, nodePath, moveToPath, nodeName);
     this.setState({treeData: tree});
   }
 
-  copyTreeNode = (nodePath, copyToPath, destRepo) => {
+  copyTreeNode = (nodePath, copyToPath, destRepo, nodeName) => {
     if (repoID !== destRepo.repo_id) {
       return;
     }
-    let tree = treeHelper.copyNodeByPath(this.state.treeData, nodePath, copyToPath);
+    let tree = treeHelper.copyNodeByPath(this.state.treeData, nodePath, copyToPath, nodeName);
     this.setState({treeData: tree});
   }
 

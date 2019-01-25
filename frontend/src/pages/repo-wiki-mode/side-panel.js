@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import TreeView from '../../components/tree-view-2/tree-view';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
+import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
@@ -141,6 +143,19 @@ class SidePanel extends Component {
     this.props.onDeleteNode(node);
   }
 
+  checkDuplicatedName = (newName) => {
+    let node = this.state.opNode;
+    // root node to new node conditions: parentNode is null, 
+    let parentNode = node.parentNode ? node.parentNode : node;
+    let childrenObject = parentNode.children.map(item => {
+      return item.object;
+    });
+    let isDuplicated = childrenObject.some(object => {
+      return object.name === newName;
+    });
+    return isDuplicated;
+  }
+
   render() {
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
@@ -190,8 +205,9 @@ class SidePanel extends Component {
             <CreateFolder
               parentPath={this.state.opNode.path}
               onAddFolder={this.onAddFolderNode}
+              checkDuplicatedName={this.checkDuplicatedName}
               addFolderCancel={this.onAddFolderToggle}
-              />
+            />
           </ModalPortal>
         )}
         {this.state.isAddFileDialogShow && (
@@ -200,8 +216,9 @@ class SidePanel extends Component {
               fileType={'.md'}
               parentPath={this.state.opNode.path}
               onAddFile={this.onAddFileNode}
+              checkDuplicatedName={this.checkDuplicatedName}
               addFileCancel={this.onAddFileToggle}
-              />
+            />
           </ModalPortal>
         )}
         {this.state.isRenameDialogShow && (
@@ -209,6 +226,7 @@ class SidePanel extends Component {
             <Rename
               currentNode={this.state.opNode}
               onRename={this.onRenameNode}
+              checkDuplicatedName={this.checkDuplicatedName}
               toggleCancel={this.onRenameToggle}
               />
           </ModalPortal>

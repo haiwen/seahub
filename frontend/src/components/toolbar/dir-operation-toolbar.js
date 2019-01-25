@@ -20,6 +20,7 @@ const propTypes = {
   onUploadFolder: PropTypes.func.isRequired,
   isDraft: PropTypes.bool,
   hasDraft: PropTypes.bool,
+  direntList: PropTypes.array.isRequired,
 };
 
 class DirOperationToolbar extends React.Component {
@@ -167,6 +168,14 @@ class DirOperationToolbar extends React.Component {
     this.props.goDraftPage();
   }
 
+  checkDuplicatedName = (newName) => {
+    let direntList = this.props.direntList;
+    let isDuplicated = direntList.some(object => {
+      return object.name === newName;
+    });
+    return isDuplicated;
+  }
+
   render() {
     let { path, isViewFile } = this.props;
     let itemType = isViewFile ? 'file' : 'dir';
@@ -220,8 +229,9 @@ class DirOperationToolbar extends React.Component {
               parentPath={this.props.path}
               fileType={this.state.fileType}
               onAddFile={this.onAddFile}
+              checkDuplicatedName={this.checkDuplicatedName}
               addFileCancel={this.onCreateFileToggle}
-            />
+              />
           </ModalPortal>
         )}
         {this.state.isCreateFolderDialogShow && (
@@ -229,6 +239,7 @@ class DirOperationToolbar extends React.Component {
             <CreateFolder
               parentPath={this.props.path}
               onAddFolder={this.onAddFolder}
+              checkDuplicatedName={this.checkDuplicatedName}
               addFolderCancel={this.onCreateFolderToggle}
             />
           </ModalPortal>

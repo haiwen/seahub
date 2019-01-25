@@ -157,6 +157,7 @@ class DirPanel extends React.Component {
                     path={this.props.path}
                     repoID={this.props.repoID}
                     showShareBtn={this.props.showShareBtn}
+                    direntList={this.props.direntList}
                     onAddFile={this.props.onAddFile}
                     onAddFolder={this.props.onAddFolder}
                     onUploadFile={this.onUploadFile}

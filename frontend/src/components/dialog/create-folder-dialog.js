@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   fileType: PropTypes.string,
   parentPath: PropTypes.string.isRequired,
   onAddFolder: PropTypes.func.isRequired,
+  checkDuplicatedName: PropTypes.func.isRequired,
   addFolderCancel: PropTypes.func.isRequired,
 };
 
@@ -15,30 +17,10 @@ class CreateForder extends React.Component {
     super(props);
     this.state = {
       parentPath: '',
-      childName: ''
+      childName: '',
+      errMessage: ''
     };
     this.newInput = React.createRef();
-  }
-
-  handleChange = (e) => {
-    this.setState({
-      childName: e.target.value, 
-    });
-  }
-
-  handleSubmit = () => {
-    let path = this.state.parentPath + this.state.childName;
-    this.props.onAddFolder(path);
-  } 
-
-  handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.handleSubmit();
-    }
-  }
-
-  toggle = () => {
-    this.props.addFolderCancel();
   }
 
   componentDidMount() {
@@ -50,6 +32,39 @@ class CreateForder extends React.Component {
     }
     this.newInput.focus();
     this.newInput.setSelectionRange(0,0);
+  }
+
+  handleChange = (e) => {
+    this.setState({childName: e.target.value});
+  }
+
+  handleSubmit = () => {
+    let newName = this.state.childName;
+    let isDuplicated = this.checkDuplicatedName();
+    if (isDuplicated) {
+      let errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      this.setState({errMessage: errMessage});
+    } else {
+      let path = this.state.parentPath + newName;
+      this.props.onAddFolder(path);
+    }
+  } 
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSubmit();
+      e.preventDefault();
+    }
+  }
+
+  toggle = () => {
+    this.props.addFolderCancel();
+  }
+
+  checkDuplicatedName = () => {
+    let isDuplicated = this.props.checkDuplicatedName(this.state.childName);
+    return isDuplicated;
   }
 
   render() {
@@ -69,6 +84,7 @@ class CreateForder extends React.Component {
               />
             </FormGroup>
           </Form>
+          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

@@ -34,6 +34,10 @@ class Dirent {
     }
   }
 
+  clone() {
+    return new Dirent(this);
+  }
+
   isDir() {
     return this.type !== 'file';
   }
