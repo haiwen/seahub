@@ -170,10 +170,10 @@ class DirOperationToolbar extends React.Component {
 
   checkDuplicatedName = (newName) => {
     let direntList = this.props.direntList;
-    let flag = direntList.some(object => {
+    let isDuplicated = direntList.some(object => {
       return object.name === newName;
     });
-    return flag;
+    return isDuplicated;
   }
 
   render() {

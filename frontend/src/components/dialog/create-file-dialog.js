@@ -42,11 +42,14 @@ class CreateFile extends React.Component {
   }
 
   handleSubmit = () => {
-    let { isDuplicated, errMessage } = this.checkDuplicatedName();
+    let isDuplicated = this.checkDuplicatedName();
+    let newName = this.state.childName
     if (isDuplicated) {
+      let errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
       this.setState({errMessage: errMessage});
     } else {
-      let path = this.state.parentPath + this.state.childName;
+      let path = this.state.parentPath + newName;
       let isDraft = this.state.isDraft;
       this.props.onAddFile(path, isDraft);
     }
@@ -113,14 +116,8 @@ class CreateFile extends React.Component {
   }
 
   checkDuplicatedName = () => {
-    let newName = this.state.childName;
-    let isDuplicated = this.props.checkDuplicatedName(newName);
-    let errMessage = '';
-    if (isDuplicated) {
-      errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
-      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-    }
-    return { isDuplicated, errMessage };
+    let isDuplicated = this.props.checkDuplicatedName(this.state.childName);
+    return isDuplicated;
   }
 
   render() {

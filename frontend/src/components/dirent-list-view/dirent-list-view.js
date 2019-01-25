@@ -63,10 +63,10 @@ class DirentListView extends React.Component {
   }
 
   onItemRename = (dirent, newName) => {
-    let flag = this.props.direntList.some(item => {
+    let isDuplicated = this.props.direntList.some(item => {
       return item.name === newName;
     });
-    if (flag) {
+    if (isDuplicated) {
       let errMessage = gettext('The name {name} is already occupied, please choose another name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
       toaster.danger(errMessage);

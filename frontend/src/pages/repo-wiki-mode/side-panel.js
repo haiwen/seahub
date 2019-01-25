@@ -132,12 +132,6 @@ class SidePanel extends Component {
   }
 
   onRenameNode = (newName) => {
-    let errMessage = this.doubleNameCheck(newName);
-    if (errMessage) {
-      toaster.danger(errMessage);
-      this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
-      return;
-    }
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
     let node = this.state.opNode;
     this.props.onRenameNode(node, newName);
@@ -156,10 +150,10 @@ class SidePanel extends Component {
     let childrenObject = parentNode.children.map(item => {
       return item.object;
     });
-    let flag = childrenObject.some(object => {
+    let isDuplicated = childrenObject.some(object => {
       return object.name === newName;
     });
-    return flag;
+    return isDuplicated;
   }
 
   render() {
@@ -232,6 +226,7 @@ class SidePanel extends Component {
             <Rename
               currentNode={this.state.opNode}
               onRename={this.onRenameNode}
+              checkDuplicatedName={this.checkDuplicatedName}
               toggleCancel={this.onRenameToggle}
               />
           </ModalPortal>
