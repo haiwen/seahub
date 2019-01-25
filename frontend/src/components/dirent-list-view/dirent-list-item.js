@@ -168,9 +168,6 @@ class DirentListItem extends React.Component {
     case 'Lock':
       this.onLockItem();
       break;
-    case 'New Draft':
-      this.onNewDraft();
-      break;
     case 'Comment':
       this.onComnentItem();
       break;
@@ -254,29 +251,6 @@ class DirentListItem extends React.Component {
     seafileAPI.unlockfile(repoID, filePath).then(() => {
       this.props.updateDirent(this.props.dirent, 'is_locked', false);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', false);
-    });
-  }
-
-  onNewDraft = () => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
-    seafileAPI.createDraft(repoID, filePath).then(res => {
-      let draft_file_Path = res.data.draft_file_path;
-      let draftId = res.data.id;
-      let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId});
-      let newWindow = window.open('draft');
-      newWindow.location.href = url;
-    }).catch((error) => {
-      if (error.response) {
-        let errMessage = 'Draft already exists.';
-        if (errMessage === error.response.data.error_msg) {
-          errMessage = gettext('Draft already exists.');
-          toaster.danger(errMessage);
-        }
-      } else {
-        let errMessage = gettext('Create draft failed.');
-        toaster.danger(errMessage);
-      }
     });
   }
 
