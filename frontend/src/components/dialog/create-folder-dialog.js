@@ -35,14 +35,12 @@ class CreateForder extends React.Component {
   }
 
   handleChange = (e) => {
-    this.setState({
-      childName: e.target.value, 
-    });
+    this.setState({childName: e.target.value});
   }
 
   handleSubmit = () => {
-    let isDuplicated = this.checkDuplicatedName();
     let newName = this.state.childName;
+    let isDuplicated = this.checkDuplicatedName();
     if (isDuplicated) {
       let errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
@@ -86,7 +84,7 @@ class CreateForder extends React.Component {
               />
             </FormGroup>
           </Form>
-          {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem 0'}}>{this.state.errMessage}</Alert>}
+          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

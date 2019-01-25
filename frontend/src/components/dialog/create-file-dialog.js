@@ -144,7 +144,7 @@ class CreateFile extends React.Component {
               </FormGroup>
             )}
           </Form>
-          {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem 0'}}>{this.state.errMessage}</Alert>}
+          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
