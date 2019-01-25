@@ -127,7 +127,7 @@ def send_review_status_msg(request, review):
         return
 
     repo_id = review.origin_repo_id
-    op_user = review.creator
+    op_user = request.user.username
     review_id = review.id
     draft_flag = os.path.splitext(os.path.basename(review.draft_file_path))[0][-7:]
     if draft_flag == '(draft)':
@@ -141,9 +141,9 @@ def send_review_status_msg(request, review):
         publish_path = review.draft_file_path if status == 'finished' else None
     path = publish_path if publish_path else old_path
 
-    username = request.user.username
+    creator = review.creator
 
-    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % (status, repo_id, op_user, "review", path, review_id, old_path, username)
+    msg = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % (status, repo_id, op_user, "review", path, review_id, old_path, creator)
     msg_utf8 = msg.encode('utf-8')
 
     try:
