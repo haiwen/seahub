@@ -261,8 +261,6 @@ class FilesActivities extends Component {
     this.avatarSize = 72;
     this.curPathList = [];
     this.oldPathList = [];
-    this.createdFilesCount = 0;
-    this.createdFilesList = [];
   }
 
   componentDidMount() {
@@ -304,6 +302,7 @@ class FilesActivities extends Component {
       activities.push(event);
     });
     let actuallyEvents = [];
+    let multiFilesActivity = null;
     for (var i = 0; i < activities.length; i++) {
       if (activities[i].obj_type === 'file') {
         if (activities[i].op_type === 'delete' && this.oldPathList.includes(activities[i].path)) {
@@ -318,17 +317,20 @@ class FilesActivities extends Component {
           actuallyEvents.push(activities[i]);
         }
       } else if (activities[i].obj_type === 'files') {
-        if (activities[i + 1] && activities[i + 1].obj_type === 'files') {
-          this.createdFilesCount++;
-          this.createdFilesList.push(activities[i]);
-        } else if (!activities[i + 1] || activities[i + 1].obj_type !== 'files') {
-          this.createdFilesCount++;
-          activities[i].createdFilesCount = this.createdFilesCount;
-          activities[i].createdFilesList = this.createdFilesList;
-          // todo: filter by user and repo
-          actuallyEvents.push(activities[i]);
-          this.createdFilesCount = 0;
-          this.createdFilesList = [];
+        // todo: filter by user and repo
+        if (multiFilesActivity === null) {
+          multiFilesActivity = new Activity(activities[i]);
+          multiFilesActivity.createdFilesCount++;
+        } else {
+          if (activities[i + 1] && activities[i + 1].obj_type === 'files') {
+            multiFilesActivity.createdFilesCount++;
+            multiFilesActivity.createdFilesList.push(activities[i]);
+          } else {
+            multiFilesActivity.createdFilesCount++;
+            multiFilesActivity.createdFilesList.push(activities[i]);
+            actuallyEvents.push(multiFilesActivity);
+            multiFilesActivity = null;
+          }
         }
       } else {
         actuallyEvents.push(activities[i]);
