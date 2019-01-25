@@ -1805,7 +1805,6 @@ def user_search(request):
         trial_users = []
 
     for user in users:
-        populate_user_info(user)
         _populate_user_quota_usage(user)
 
         # check user's role

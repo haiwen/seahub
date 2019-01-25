@@ -1,7 +1,5 @@
 from django.core.urlresolvers import reverse
 
-from tests.common.utils import randstring
-
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 
@@ -56,7 +54,7 @@ class UserSearchTest(BaseTestCase):
     def test_search_invalid_user(self):
         self.login_as(self.admin)
 
-        invalid_user = randstring(20)
+        invalid_user = 'some_invalid_user@a.com'
         resp = self.client.get(reverse('user_search') + '?email=%s' % invalid_user)
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed('sysadmin/user_search.html')
