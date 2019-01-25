@@ -6,6 +6,8 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import Activity from '../../models/activity';
+import ListCreatedFileDialog from '../../components/dialog/list-created-files-dialog';
+import ModalPortal from '../../components/modal-portal';
 
 moment.locale(window.app.config.lang);
 
@@ -21,11 +23,13 @@ class FileActivitiesContent extends Component {
     return ( 
       <Fragment>
         <table width="100%" className="table table-hover table-vcenter">
-          <col width="8%" />
-          <col width="15%" />
-          <col width="20%" />
-          <col width="37%" />
-          <col width="20%" />
+          <colgroup>
+            <col width="8%" />
+            <col width="15%" />
+            <col width="20%" />
+            <col width="37%" />
+            <col width="20%" />
+          </colgroup>
           <TableBody items={items} />
         </table>
         {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
@@ -42,6 +46,21 @@ const tablePropTypes = {
 };
 
 class TableBody extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isListCreatedFiles: false,
+      activity: '',
+    };
+  }
+
+  onListCreatedFilesToggle = (activity) => {
+    this.setState({
+      isListCreatedFiles: !this.state.isListCreatedFiles,
+      activity: activity,
+    });
+  }
 
   render() {
     let listFilesActivities = this.props.items.map(function(item, index) {
@@ -96,6 +115,17 @@ class TableBody extends Component {
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
         }
+      } else if (item.obj_type == 'files') {
+        let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
+        let fileLink = <a href={fileURL}>{item.name}</a>;
+        op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
+        details =
+          <td>
+            {fileLink}
+            {gettext(' and ')}
+            <a href='#' onClick={this.onListCreatedFilesToggle.bind(this, item)}>{item.createdFilesCount - 1}</a>
+            {gettext(' other files')}
+          </td>;
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
@@ -200,7 +230,17 @@ class TableBody extends Component {
     }, this);
 
     return (
-      <tbody>{listFilesActivities}</tbody>
+      <Fragment>
+        <tbody>{listFilesActivities}</tbody>
+        {this.state.isListCreatedFiles &&
+          <ModalPortal>
+            <ListCreatedFileDialog
+              activity={this.state.activity}
+              toggleCancel={this.onListCreatedFilesToggle}
+            />
+          </ModalPortal>
+        }
+      </Fragment>
     );
   }
 }
@@ -221,6 +261,8 @@ class FilesActivities extends Component {
     this.avatarSize = 72;
     this.curPathList = [];
     this.oldPathList = [];
+    this.createdFilesCount = 0;
+    this.createdFilesList = [];
   }
 
   componentDidMount() {
@@ -244,31 +286,52 @@ class FilesActivities extends Component {
   }
 
   filterSuperfluousEvents = (events) => {
-    events.map((item) => {
-      if (item.op_type === 'finished') {
-        this.curPathList.push(item.path);
-        this.oldPathList.push(item.old_path);
+    let activities = [];
+    events.map((item, index) => {
+      let event = new Activity(item);
+      if (event.op_type === "finished") {
+        this.curPathList.push(event.path);
+        this.oldPathList.push(event.old_path);
       }
+      // change obj_type: file => files
+      if (event.op_type === 'create' && event.obj_type === 'file') {
+        if (events[index + 1] && events[index + 1].op_type === 'create' && events[index + 1].obj_type === 'file') {
+          event.obj_type = 'files';
+        } else if (index > 0 && events[index - 1].op_type === 'create' && events[index - 1].obj_type === 'file') {
+          event.obj_type = 'files';
+        }
+      }
+      activities.push(event);
     });
     let actuallyEvents = [];
-    for (var i = 0; i < events.length; i++) {
-      if (events[i].obj_type === 'file') {
-        if (events[i].op_type === 'delete' && this.oldPathList.includes(events[i].path)) {
-          this.oldPathList.splice(this.oldPathList.indexOf(events[i].path), 1);
+    for (var i = 0; i < activities.length; i++) {
+      if (activities[i].obj_type === 'file') {
+        if (activities[i].op_type === 'delete' && this.oldPathList.includes(activities[i].path)) {
+          this.oldPathList.splice(this.oldPathList.indexOf(activities[i].path), 1);
           continue;
-        } else if (events[i].op_type === 'edit' && this.curPathList.includes(events[i].path)) {
-          this.curPathList.splice(this.curPathList.indexOf(events[i].path), 1);
+        } else if (activities[i].op_type === 'edit' && this.curPathList.includes(activities[i].path)) {
+          this.curPathList.splice(this.curPathList.indexOf(activities[i].path), 1);
           continue;
-        } else if (events[i].op_type === 'rename' && this.oldPathList.includes(events[i].old_path)) {
-          this.oldPathList.splice(this.oldPathList.indexOf(events[i].old_path), 1);
-          continue;
+        } else if (activities[i].op_type === 'rename' && this.oldPathList.includes(activities[i].old_path)) {
+          this.oldPathList.splice(this.oldPathList.indexOf(activities[i].old_path), 1);
         } else {
-          let event = new Activity(events[i]);
-          actuallyEvents.push(event);
+          actuallyEvents.push(activities[i]);
+        }
+      } else if (activities[i].obj_type === 'files') {
+        if (activities[i + 1] && activities[i + 1].obj_type === 'files') {
+          this.createdFilesCount++;
+          this.createdFilesList.push(activities[i]);
+        } else if (!activities[i + 1] || activities[i + 1].obj_type !== 'files') {
+          this.createdFilesCount++;
+          activities[i].createdFilesCount = this.createdFilesCount;
+          activities[i].createdFilesList = this.createdFilesList;
+          // todo: filter by user and repo
+          actuallyEvents.push(activities[i]);
+          this.createdFilesCount = 0;
+          this.createdFilesList = [];
         }
       } else {
-        let event = new Activity(events[i]);
-        actuallyEvents.push(event);
+        actuallyEvents.push(activities[i]);
       }
     }
     return actuallyEvents;
