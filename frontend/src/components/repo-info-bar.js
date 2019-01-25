@@ -84,22 +84,22 @@ class RepoInfoBar extends React.Component {
             })}
           </ul>
         )}
-        <div className="readme-files">
-          {(readmeMarkdown !== null && readmeMarkdown.size > 1) && 
-            <span className="readme-file" onClick={this.toggleReadme}>
-              <i className="readme-flag fa fa-flag"></i>
-              <span className="readme-name">{readmeMarkdown.name}</span>
+        <div className={(usedRepoTags.length > 0 && readmeMarkdown) ? 'file-info-list mt-1' : 'file-info-list'}>
+          {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) > 1) && 
+            <span className="file-info" onClick={this.toggleReadme}>
+              <i className="file-flag fa fa-flag"></i>
+              <span className="used-tag-name">{readmeMarkdown.name}</span>
             </span>
           }
-          {(readmeMarkdown !== null && readmeMarkdown.size < 2) && 
-            <span className="readme-file">
-              <i className="readme-flag fa fa-flag"></i>
-              <a className="readme-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
+          {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) < 2) && 
+            <span className="file-info">
+              <i className="file-flag fa fa-flag"></i>
+              <a className="used-tag-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
             </span>
           }
           {this.props.draftCounts > 0 &&
-            <span className="readme-file">
-              <i className="readme-flag fa fa-pen"></i>
+            <span className="file-info">
+              <i className="file-flag fa fa-pen"></i>
               <span className="used-tag-name">{gettext('draft')}</span>
               <span className="used-tag-files" onClick={this.toggleDrafts}>
                 {this.props.draftCounts > 1 ? this.props.draftCounts + ' files' : this.props.draftCounts + ' file'}
@@ -107,8 +107,8 @@ class RepoInfoBar extends React.Component {
             </span>
           }
           {this.props.reviewCounts > 0 &&
-            <span className="readme-file">
-              <i className="readme-flag fa fa-clipboard"></i>
+            <span className="file-info">
+              <i className="file-flag fa fa-clipboard"></i>
               <span className="used-tag-name">{gettext('review')}</span>
               <span className="used-tag-files" onClick={this.toggleReviews}>
                 {this.props.reviewCounts > 1 ? this.props.reviewCounts + ' files' : this.props.reviewCounts + ' file'}
