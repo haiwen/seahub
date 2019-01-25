@@ -78,7 +78,6 @@ def useradmin(request):
         if u.username == request.user.username:
             u.is_self = True
 
-        populate_user_info(u)
         _populate_user_quota_usage(u)
 
         for e in last_logins:
@@ -114,7 +113,6 @@ def useradmin_search(request):
         if u.username == request.user.username:
             u.is_self = True
 
-        populate_user_info(u)
         _populate_user_quota_usage(u)
 
         for e in last_logins:
