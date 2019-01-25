@@ -36,28 +36,19 @@
   text-decoration: underline;
 }
 
-.readme-files {
-  margin-top: 4px;
-}
-
-.readme-file {
+.file-info {
   margin: 0 15px;
   display: inline-block;
   cursor: pointer;
 }
 
-.readme-file a {
+.file-info a {
   color: #333;
 }
 
-.readme-flag {
+.file-flag {
   font-size: 12px;
   color: #f19645;
-}
-
-.readme-name {
-  margin: 0 0.25rem;
-  font-size: 14px;
 }
 
 .readme-dialog-edit {

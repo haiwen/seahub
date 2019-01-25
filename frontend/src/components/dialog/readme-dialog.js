@@ -37,7 +37,7 @@ class ReadmeDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} className="readme-dialog" size="lg">
+      <Modal isOpen={true} toggle={this.props.toggleCancel} className="readme-dialog" size="lg">
         <ModalHeader>{gettext(this.props.fileName)}
           <a className="readme-dialog-edit" href={this.props.href} target='_blank'><i className="fa fa-pencil"></i></a>
         </ModalHeader>
