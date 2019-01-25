@@ -1,6 +1,6 @@
 .share-dialog .share-dialog-content {
     padding: 0;
-    min-height: 20rem;
+    min-height: 27rem;
     display: flex;
     flex-direction: row;
     overflow: hidden;
@@ -21,10 +21,17 @@
 .share-dialog-content .share-dialog-main .tab-content {
     flex: 1;
 }
+.share-dialog-content .share-dialog-main .tab-pane {
+    height: 100%;
+}
+.share-dialog-content .share-dialog-main .tab-content thead th {
+    font-weight: 600;
+}
 
 .share-list-container {
-    max-height: 15rem;
+    max-height: 18rem;
     overflow: auto;
+    height: 100%;
 }
 
 .share-dialog-content label {
@@ -73,3 +80,6 @@ input.expire-input {
     margin: 0 0.25rem 0 1.25rem;
 }
 
+.share-dialog-main .permission-editor .permission-editor__menu {
+  width: 240px;
+}

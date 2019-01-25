@@ -17,6 +17,10 @@ class SharePermissionEditor extends React.Component {
     return Utils.sharePerms(permission);
   }
 
+  translateExplanation = (explanation) => {
+    return Utils.sharePermsExplanation(explanation);
+  }
+
   render() {
     return (
       <SelectEditor 
@@ -26,6 +30,7 @@ class SharePermissionEditor extends React.Component {
         currentOption={this.props.currentPermission}
         onOptionChanged={this.props.onPermissionChanged}
         translateOption={this.translatePermission}
+        translateExplanation={this.translateExplanation}
       />
     );
   }
