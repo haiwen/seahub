@@ -7,10 +7,10 @@
   word-wrap: break-word;
   white-space: pre-wrap;
 }
-.permission-editor .select__option {
+.permission-editor .permission-editor__option {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-.select__control .permission-editor-explanation {
+.permission-editor .permission-editor__control .permission-editor-explanation {
   display: none;
 }

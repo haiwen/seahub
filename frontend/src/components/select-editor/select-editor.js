@@ -76,7 +76,7 @@ class SelectEditor extends React.Component {
           <Select
             options={this.options}
             className="permission-editor-select"
-            classNamePrefix="select"
+            classNamePrefix="permission-editor"
             onChange={this.onOptionChanged}
             menuPlacement="auto"
           />
