@@ -18,34 +18,9 @@ class Rename extends React.Component {
     };
     this.newInput = React.createRef();
   }
-  
-  handleChange = (e) => {
-    this.setState({
-      newName: e.target.value, 
-    }); 
-  }
-
-  handleSubmit = () => {
-    let flag = this.validateParamsInput();
-    if (flag) {
-      this.props.onRename(this.state.newName);
-    }
-  }
-
-  handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.handleSubmit();
-    } 
-  }
-
-  toggle = () => {
-    this.props.toggleCancel();
-  }
 
   componentWillMount() {
-    this.setState({
-      newName: this.props.currentNode.object.name
-    });
+    this.setState({newName: this.props.currentNode.object.name});
   }
 
   componentDidMount() {
@@ -64,6 +39,29 @@ class Rename extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.changeState(nextProps.currentNode);
   }
+  
+  handleChange = (e) => {
+    this.setState({newName: e.target.value}); 
+  }
+
+  handleSubmit = () => {
+    let {isValid, errMessage} = this.validateParamsInput();
+    if (isValid) {
+      this.props.onRename(this.state.newName);
+    } else {
+      this.setState({errMessage : errMessage});
+    }
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSubmit();
+    } 
+  }
+
+  toggle = () => {
+    this.props.toggleCancel();
+  }
 
   changeState = (currentNode) => {
     let name = currentNode.object.name;
@@ -72,19 +70,19 @@ class Rename extends React.Component {
 
   validateParamsInput = () => {
     let newName = this.state.newName.trim();
+    let isValid = true;
+    let errMessage = '';
     if (!newName) {
-      let errMessage = gettext('Name is required.');
-      this.setState({errMessage: errMessage});
-      return false;
+      isValid = false;
+      errMessage = gettext('Name is required.');
     }
 
     if (newName.indexOf('/') > -1) {
-      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
-      this.setState({errMessage: errMessage});
-      return false;
+      isValid = false;
+      errMessage = gettext('Name should not include ' + '\'/\'' + '.');
     }
 
-    return true;
+    return { isValid, errMessage };
   }
 
   render() {

@@ -41,8 +41,10 @@ class CreateForder extends React.Component {
   }
 
   handleSubmit = () => {
-    let isDuplicated = this.checkDuplicatedName();
-    if (!isDuplicated) {
+    let { isDuplicated, errMessage } = this.checkDuplicatedName();
+    if (isDuplicated) {
+      this.setState({errMessage: errMessage});
+    } else {
       let path = this.state.parentPath + this.state.childName;
       this.props.onAddFolder(path);
     }
@@ -62,12 +64,12 @@ class CreateForder extends React.Component {
   checkDuplicatedName = () => {
     let newName = this.state.childName;
     let isDuplicated = this.props.checkDuplicatedName(newName);
+    let errMessage = '';
     if (isDuplicated) {
-      let errMessage = gettext('The name {name} is already occupied, please choose another name.');
+      errMessage = gettext('The name {name} is already occupied, please choose another name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      this.setState({errMessage: errMessage});
     }
-    return isDuplicated;
+    return { isDuplicated, errMessage };
   }
 
   render() {
