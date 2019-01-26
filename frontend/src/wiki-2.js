@@ -132,6 +132,26 @@ class Wiki extends Component {
     });
   }
 
+  loadTreeNodeByPath = (path) => {
+    let tree = this.state.treeData.clone();
+    let node = tree.getNodeByPath(path);
+    if (!node.isLoaded) {
+      seafileAPI.listDir(repoID, node.path).then(res => {
+        this.addResponseListToNode(res.data.dirent_list, node);
+        let parentNode = tree.getNodeByPath(node.parentNode.path);
+        parentNode.isExpanded = true;
+        this.setState({
+          treeData: tree,
+          currentNode: node
+        });
+      })
+    } else {
+      let parentNode = tree.getNodeByPath(node.parentNode.path);
+      parentNode.isExpanded = true;
+      this.setState({treeData: tree, currentNode: node}); //tree
+    }
+  }
+
   loadNodeAndParentsByPath = (path) => {
     let tree = this.state.treeData.clone();
     if (Utils.isMarkdownFile(path)) {
