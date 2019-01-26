@@ -273,6 +273,9 @@ class FilesActivities extends Component {
         isFirstLoading: false,
         hasMore: true,
       });
+      if (this.state.items.length < 25) {
+        this.getMore();
+      }
     }).catch(error => {
       if (error.response.status == 403) {
         this.setState({
@@ -349,6 +352,9 @@ class FilesActivities extends Component {
         currentPage: currentPage + 1,
         hasMore: res.data.events.length === 0 ? false : true 
       });
+      if (this.state.items.length < 25 && this.state.hasMore) {
+        this.getMore();
+      }
     }).catch(error => {
       if (error.response.status == 403) {
         this.setState({
