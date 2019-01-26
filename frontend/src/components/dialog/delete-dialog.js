@@ -16,16 +16,21 @@ class Delete extends React.Component {
   }
   
   render() {
-    let name = this.props.currentNode.object.name;
+    let currentNode = this.props.currentNode;
+    let name = currentNode.object.name;
+    let title = gettext('Delete File');
+    if (currentNode.object.isDir()) {
+      title = gettext('Delete Folder');
+    }
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Delete Tag')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure to delete')}{' '}<b>{name}</b> ?</p>
         </ModalBody>
         <ModalFooter>
-          <Button outline color="danger" onClick={this.props.handleSubmit}>{gettext('YES')}</Button>
-          <Button outline color="secondary" onClick={this.toggle}>{gettext('NO')}</Button>
+          <Button outline color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button outline color="danger" onClick={this.props.handleSubmit}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
     );
