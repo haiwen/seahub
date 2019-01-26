@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { gettext } from '../../utils/constants';
+import WikiDirListItem from './wiki-dir-list-item';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -21,9 +23,9 @@ class WikiDirListView extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {direntList.length !== 0 && direntList.map((dirent, index) => {
+          {this.props.direntList.length !== 0 && this.props.direntList.map((dirent, index) => {
             return (
-              <TreeDirList key={index} dirent={dirent} onDirentClick={this.props.onDirentClick}/>
+              <WikiDirListItem key={index} dirent={dirent} onDirentClick={this.props.onDirentClick}/>
             );
           })}
         </tbody>

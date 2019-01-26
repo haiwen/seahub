@@ -38,7 +38,7 @@ class WikiDirListItem extends React.Component {
     let size = Utils.isHiDPI() ? 48 : 24;
     let iconUrl = '';
     if (dirent.type === 'file') {
-      iconUrl = Utils.getFileIconUrl(node.name, size);
+      iconUrl = Utils.getFileIconUrl(dirent.name, size);
     } else {
       let isReadOnly = false;
       if (dirent.permission === 'r' || dirent.permission === 'preview') {
@@ -53,10 +53,10 @@ class WikiDirListItem extends React.Component {
           <img src={iconUrl} width="24" alt="" />
         </td>
         <td className="name">
-          <a href={href} onClick={this.onDirentClick}>{node.name}</a>
+          <a href={href} onClick={this.onDirentClick}>{dirent.name}</a>
         </td>
-        <td>{node.size}</td>
-        <td title={node.last_update_time}>{node.last_update_time}</td>
+        <td>{dirent.size}</td>
+        <td title={dirent.last_update_time}>{dirent.last_update_time}</td>
       </tr>
     );
   }

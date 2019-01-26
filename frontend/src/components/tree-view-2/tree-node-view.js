@@ -7,6 +7,7 @@ const propTypes = {
   node: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
   paddingLeft: PropTypes.number.isRequired,
+  isNodeMenuShow: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onNodeClick: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
@@ -110,6 +111,7 @@ class TreeNodeView extends React.Component {
               node={item}
               paddingLeft={paddingLeft}
               currentPath={this.props.currentPath}
+              isNodeMenuShow={this.props.isNodeMenuShow}
               isItemFreezed={this.props.isItemFreezed}
               onNodeClick={this.props.onNodeClick}
               onNodeCollapse={this.props.onNodeCollapse}
@@ -125,7 +127,7 @@ class TreeNodeView extends React.Component {
   }
 
   render() {
-    let { currentPath, node } = this.props;
+    let { currentPath, node, isNodeMenuShow } = this.props;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
     if (node.path === currentPath) {
@@ -145,16 +147,18 @@ class TreeNodeView extends React.Component {
             )}
             <i className="tree-node-icon">{icon}</i>
           </div>
-          <div className="right-icon">
-            {(permission && this.state.isShowOperationMenu) && (
-              <TreeNodeMenu 
-                node={this.props.node}
-                onMenuItemClick={this.onMenuItemClick}
-                onUnFreezedItem={this.onUnFreezedItem}
-                onFreezedItem={this.props.onFreezedItem}
-              />
-            )}
-          </div>
+          {isNodeMenuShow && (
+            <div className="right-icon">
+              {(permission && this.state.isShowOperationMenu) && (
+                <TreeNodeMenu 
+                  node={this.props.node}
+                  onMenuItemClick={this.onMenuItemClick}
+                  onUnFreezedItem={this.onUnFreezedItem}
+                  onFreezedItem={this.props.onFreezedItem}
+                />
+              )}
+            </div>
+          )}
         </div>
         {node.isExpanded && this.renderChildren()}
       </div>

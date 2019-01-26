@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import TreeNodeView from './tree-node-view';
 
 const propTypes = {
+  isNodeMenuShow: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
-  onMenuItemClick: PropTypes.func.isRequired,
+  onMenuItemClick: PropTypes.func,
   onNodeClick: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
@@ -41,6 +42,7 @@ class TreeView extends React.Component {
           node={this.props.treeData.root}
           currentPath={this.props.currentPath}
           paddingLeft={PADDING_LEFT}
+          isNodeMenuShow={this.props.isNodeMenuShow}
           isItemFreezed={this.state.isItemFreezed}
           onNodeClick={this.props.onNodeClick}
           onMenuItemClick={this.props.onMenuItemClick}

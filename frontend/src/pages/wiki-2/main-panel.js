@@ -4,16 +4,18 @@ import { gettext, repoID, slug, siteRoot, username } from '../../utils/constants
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
+import Loading from '../../components/loading';
 
 const propTypes = {
-  permission: PropTypes.string,
+  path: PropTypes.string.isRequired,
+  pathExist: PropTypes.bool.isRequired,
+  isViewFile: PropTypes.bool.isRequired,
+  isDataLoading: PropTypes.bool.isRequired,
   content: PropTypes.string,
+  permission: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
-  path: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
-  isFileLoading: PropTypes.bool.isRequired,
-  isViewFileState: PropTypes.bool.isRequired,
   onMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
@@ -96,24 +98,28 @@ class MainPanel extends Component {
                 </Fragment>
               }
               <a href={siteRoot + 'wikis/' + slug} className="normal">{slug}</a>
-              {this.renderNavPath}
+              {this.renderNavPath()}
             </div>
           </div>
           <div className="cur-view-content">
-            {this.props.isViewFileState ?
+            {this.props.isDataLoading && <Loading />}
+            {(!this.props.isDataLoading && this.props.isViewFile) && (
               <WikiMarkdownViewer
                 markdownContent={this.props.content}
-                isFileLoading={this.props.isFileLoading}
+                isFileLoading={this.props.isDataLoading}
                 lastModified = {this.props.lastModified}
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
                 isWiki={true}
-              /> :
+              />
+            )}
+            {(!this.props.isDataLoading && !this.props.isViewFile) && (
               <WikiDirListView
+                path={this.props.path}
                 direntList={this.props.direntList}
                 onDirentClick={this.props.onDirentClick} 
               />
-            }
+            )}
           </div>
         </div>
       </div>
