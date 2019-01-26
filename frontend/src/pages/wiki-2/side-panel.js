@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot, repoID } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
 import TreeView from '../../components/tree-view-2/tree-view';
@@ -11,6 +10,8 @@ const propTypes = {
   closeSideBar: PropTypes.bool.isRequired,
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
+  indexNode: PropTypes.object,
+  indexContent: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
   onCloseSide: PropTypes.func.isRequired,
   onNodeClick: PropTypes.func.isRequired,
@@ -18,55 +19,21 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
 };
 
-const INDEX_PATH = '/index.md';
-
 class SidePanel extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isFileLoading: true,
-      currentNode: null,
-      indexContent: '',
-      indexNode: null,
-    };
     this.isNodeMenuShow = false;
-  }
-
-  componentDidMount() {
-    let treeData = this.props.treeData;
-    let indexNode = treeData.getNodeByPath(INDEX_PATH);
-    if (indexNode && !indexNode.object.isDir()) {
-      this.loadIndexFile(indexNode);
-    } else {
-      this.setState({isFileLoading: false});
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // todo
-  }
-
-  loadIndexFile = (indexNode) => {
-    this.setState({isFileLoading: true});
-    seafileAPI.getFileDownloadLink(repoID, indexNode.path).then(res => {
-      seafileAPI.getFileContent(res.data).then(res => {
-        this.setState({
-          isFileLoading: false,
-          indexContent: res.data,
-          indexNode: indexNode,
-        });
-      });
-    });
   }
 
   onEditClick = (e) => {
     e.preventDefault();
-    window.location.href= siteRoot + 'lib/' + repoID + '/file' + INDEX_PATH + '?mode=edit';
+    let indexNode = this.props.indexNode
+    window.location.href= siteRoot + 'lib/' + repoID + '/file' + indexNode.path + '?mode=edit';
   }
 
   renderIndexView = () => {
-    let indexNode = this.state.indexNode;
+    let indexNode = this.props.indexNode;
     return (
       <Fragment>
         <h3 className="wiki-pages-heading">
@@ -77,9 +44,8 @@ class SidePanel extends Component {
         </h3>
         <div className="wiki-pages-container">
           <IndexContentViewer
-            indexContent={this.state.indexContent}
+            indexContent={this.props.indexContent}
             onLinkClick={this.props.onLinkClick}
-            onContentRendered={this.onContentRendered}
           />
         </div>
       </Fragment>
@@ -113,9 +79,9 @@ class SidePanel extends Component {
           <Logo onCloseSidePanel={this.props.onCloseSide} />
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
-          {this.state.isFileLoading && <Loading /> }
-          {!this.state.isFileLoading && this.state.indexNode && this.renderIndexView() }
-          {!this.state.isFileLoading && !this.state.indexNode && this.renderTreeView() }
+          {this.props.isTreeDataLoading && <Loading /> }
+          {!this.props.isTreeDataLoading && this.props.indexNode && this.renderIndexView() }
+          {!this.props.isTreeDataLoading && !this.props.indexNode && this.renderTreeView() }
         </div>
       </div>
     );

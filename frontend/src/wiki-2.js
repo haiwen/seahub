@@ -37,6 +37,8 @@ class Wiki extends Component {
       isTreeDataLoading: true,
       treeData: treeHelper.buildTree(),
       currentNode: null,
+      indexNode: null,
+      indexContent: '',
     };
 
     window.onpopstate = this.onpopstate;
@@ -65,10 +67,24 @@ class Wiki extends Component {
       seafileAPI.listDir(repoID, '/').then(res => {
         let tree = this.state.treeData;
         this.addResponseListToNode(res.data.dirent_list, tree.root);
-        this.setState({
-          treeData: tree,
-          isTreeDataLoading: false,
-        });
+        let indexNode = tree.getNodeByPath(this.indexPath);
+        if (indexNode) {
+          seafileAPI.getFileDownloadLink(repoID, indexNode.path).then(res => {
+            seafileAPI.getFileContent(res.data).then(res => {
+              this.setState({
+                treeData: tree,
+                indexNode: indexNode,
+                indexContent: res.data,
+                isTreeDataLoading: false,
+              });
+            });
+          });
+        } else {
+          this.setState({
+            treeData: tree,
+            isTreeDataLoading: false,
+          });
+        }
       }).catch(() => {
         this.setState({isLoadFailed: true});
       });
@@ -86,7 +102,6 @@ class Wiki extends Component {
   }
 
   showFile = (filePath) => {
-
     this.setState({
       isDataLoading: true,
       isViewFile: true,
@@ -228,8 +243,10 @@ class Wiki extends Component {
       } 
     }
     if (index === -1) { // all the data has been loaded already.
-      let node = this.state.treeData.getNodeByPath(path);
-      this.setState({currentNode: node});
+      let tree = this.state.treeData.clone();
+      let node = tree.getNodeByPath(item.path);
+      treeHelper.expandNode(node);
+      this.setState({treeData: tree});
     } else {
       this.loadNodeAndParentsByPath(path);
     }
@@ -370,7 +387,7 @@ class Wiki extends Component {
           currentPath={this.state.path}
           treeData={this.state.treeData}
           indexNode={this.state.indexNode}
-          currentNode={this.state.currentNode}
+          indexContent={this.state.indexContent}
           onCloseSide={this.onCloseSide}
           onNodeClick={this.onNodeClick}
           onNodeCollapse={this.onNodeCollapse}
