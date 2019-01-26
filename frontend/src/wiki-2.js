@@ -177,25 +177,84 @@ class Wiki extends Component {
   }
 
   onpopstate = (event) => {
-    // todo
+    if (event.state && event.state.path) {
+      let path = event.state.path;
+      if (Utils.isMarkdownFile(path)) {
+        this.showFile(path);
+      } else {
+        this.loadDirentList(path);
+        this.setState({
+          path: path,
+          isViewFile: false
+        });
+      }
+    }
   }
   
   onSearchedClick = (item) => {
-    // todo
+    let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path; 
+    if (this.state.currentPath === path) {
+      return;
+    }
+
+    // load sidePanel
+    let index = -1;
+    let paths = Utils.getPaths(path);
+    for (let i = 0; i < paths.length; i++) {
+      let node = this.state.treeData.getNodeByPath(node);
+      if (!node) {
+        index = i;
+        break;
+      } 
+    }
+    if (index === -1) { // all the data has been loaded already.
+      let node = this.state.treeData.getNodeByPath(path);
+      this.setState({currentNode: node});
+    } else {
+      this.loadNodeAndParentsByPath(path);
+    }
+
+    // load mainPanel
+    if (item.is_dir) {
+      this.showDir(path);
+    } else {
+      if (Utils.isMarkdownFile(path)) {
+        this.showFile(path);
+      } else {
+        let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
+        let newWindow = window.open('about:blank');
+        newWindow.location.href = url;
+      }
+    }
   }
 
   onMenuClick = () => {
     this.setState({closeSideBar: !this.state.closeSideBar,});
   }
 
-  onMainNavBarClick = (path) => {
-    // update location url
-    let fileUrl = siteRoot + 'wikis/' + slug + path;
-    window.history.pushState({urlPath: fileUrl, filePath: path}, path, fileUrl);
+  onMainNavBarClick = (nodePath) => {
+    let tree = this.state.treeData.clone();
+    let node = tree.getNodeByPath(nodePath);
+    tree.expandNode(node);
+
+    this.setState({treeData: tree, currentNode: node});
+    this.showDir(node.path);
   }
 
   onDirentClick = (dirent) => {
-
+    let direntPath = Utils.joinPath(this.state.path, dirent.name);
+    if (dirent.isDir()) {  // is dir
+      this.loadTreeNodeByPath(direntPath);
+      this.showDir(direntPath);
+    } else {  // is file
+      if (Utils.isMarkdownFile(direntPath)) {
+        this.showFile(direntPath);
+      } else {
+        const w=window.open('about:blank');
+        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+        w.location.href = url;
+      }
+    }
   }
 
   onCloseSide = () => {
@@ -203,15 +262,69 @@ class Wiki extends Component {
   }
 
   onNodeClick = (node) => {
-    
-  }
+    if (!this.state.pathExist) {
+      this.setState({pathExist: true});
+    }
 
-  onNodeExpanded = (node) => {
+    if (node.object.isDir()) {
+      if (!node.isLoaded) {
+        let tree = this.state.treeData.clone();
+        node = tree.getNodeByPath(node.path);
+        seafileAPI.listDir(repoID, node.path).then(res => {
+          this.addResponseListToNode(res.data.dirent_list, node);
+          tree.collapseNode(node);
+          this.setState({treeData: tree});
+        });
+      }
+      if (node.path === this.state.path) {
+        if (node.isExpanded) {
+          let tree = treeHelper.collapseNode(this.state.treeData, node);
+          this.setState({treeData: tree});
+        } else {
+          let tree = this.state.treeData.clone();
+          node = tree.getNodeByPath(node.path);
+          tree.expandNode(node);
+          this.setState({treeData: tree});
+        }
+      }
+    }
 
+    if (node.path === this.state.path ) {
+      return;
+    }
+
+    if (node.object.isDir()) {  // isDir
+      this.showDir(node.path);
+    } else {
+      if (Utils.isMarkdownFile(node.path)) {
+        if (node.path !== this.state.path) {
+          this.showFile(node.path);
+        }
+      } else {
+        const w = window.open('about:blank');
+        const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
+        w.location.href = url;
+      }
+    }
   }
 
   onNodeCollapse = (node) => {
+    let tree = treeHelper.collapseNode(this.state.treeData, node);
+    this.setState({treeData: tree});
+  }
 
+  onNodeExpanded = (node) => {
+    let tree = this.state.treeData.clone();
+    node = tree.getNodeByPath(node.path);
+    if (!node.isLoaded) {
+      seafileAPI.listDir(repoID, node.path).then(res => {
+        this.addResponseListToNode(res.data.dirent_list, node);
+        this.setState({treeData: tree});
+      });
+    } else {
+      tree.expandNode(node);
+      this.setState({treeData: tree});
+    }
   }
 
   addResponseListToNode = (list, node) => {

@@ -25,7 +25,7 @@ class WikiDirListView extends React.Component {
         <tbody>
           {this.props.direntList.length !== 0 && this.props.direntList.map((dirent, index) => {
             return (
-              <WikiDirListItem key={index} dirent={dirent} onDirentClick={this.props.onDirentClick}/>
+              <WikiDirListItem key={index} path={this.props.path} dirent={dirent} onDirentClick={this.props.onDirentClick}/>
             );
           })}
         </tbody>

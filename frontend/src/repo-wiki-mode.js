@@ -332,7 +332,7 @@ class Wiki extends Component {
 
   onSearchedClick = (item) => {
     let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path; 
-    if (this.state.currentFilePath === path) {
+    if (this.state.currentPath === path) {
       return;
     }
 
