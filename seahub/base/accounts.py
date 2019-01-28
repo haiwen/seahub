@@ -17,17 +17,16 @@ from constance import config
 from registration import signals
 
 from seahub.auth import login
+from seahub.constants import DEFAULT_USER, DEFAULT_ORG, DEFAULT_ADMIN
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
-        get_enabled_admin_role_permissions_by_role, \
-        get_enabled_org_role_permissions_by_role
+        get_enabled_admin_role_permissions_by_role
 from seahub.utils import is_user_password_strong, get_site_name, \
     clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
-from seahub.constants import DEFAULT_ADMIN
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -127,21 +126,22 @@ class UserPermissions(object):
     def __init__(self, user):
         self.user = user
 
-    def _get_perm_by_roles(self, perm_name):
-        role = self.user.role
-        perm = get_enabled_role_permissions_by_role(role)[perm_name]
-        if perm is False:
-            return False
-
+    def _get_user_role(self):
         org_role = self.user.org_role
         if org_role is None:
-            return perm
+            return self.user.role
 
-        perm2 = get_enabled_org_role_permissions_by_role(org_role)[perm_name]
-        if perm2 is False:
-            return False
+        if self.user.role == '' or self.user.role == DEFAULT_USER:
+            if org_role == DEFAULT_ORG:
+                return DEFAULT_USER
+            else:
+                return org_role
+        else:
+            return self.user.role
 
-        return True
+    def _get_perm_by_roles(self, perm_name):
+        role = self._get_user_role()
+        return get_enabled_role_permissions_by_role(role)[perm_name]
 
     def can_add_repo(self):
         return self._get_perm_by_roles('can_add_repo')
@@ -204,7 +204,7 @@ class UserPermissions(object):
         return self._get_perm_by_roles('can_export_files_via_mobile_client')
 
     def role_quota(self):
-        return get_enabled_role_permissions_by_role(self.user.role).get('role_quota', '')
+        return self._get_perm_by_roles('role_quota')
 
     def can_send_share_link_mail(self):
         if not IS_EMAIL_CONFIGURED:
@@ -213,7 +213,7 @@ class UserPermissions(object):
         return self._get_perm_by_roles('can_send_share_link_mail')
 
     def storage_ids(self):
-        return get_enabled_role_permissions_by_role(self.user.role).get('storage_ids', [])
+        return self._get_perm_by_roles('storage_ids')
 
     def can_use_wiki(self):
         if not settings.ENABLE_WIKI:
