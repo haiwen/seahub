@@ -1,62 +1,60 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TreeNodeView from './tree-node-view';
-import editorUtilities from '../../utils/editor-utilties';
 
 const propTypes = {
-  permission: PropTypes.string,
-  isNodeItemFrezee: PropTypes.bool.isRequired,
-  currentPath: PropTypes.string.isRequired,
+  isNodeMenuShow: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
-  onShowContextMenu: PropTypes.func.isRequired,
+  currentPath: PropTypes.string.isRequired,
+  onMenuItemClick: PropTypes.func,
   onNodeClick: PropTypes.func.isRequired,
-  onDirCollapse: PropTypes.func.isRequired,
+  onNodeExpanded: PropTypes.func.isRequired,
+  onNodeCollapse: PropTypes.func.isRequired,
 };
 
-class TreeView extends React.PureComponent {
+const PADDING_LEFT = 12;
 
-  change = (tree) => {
-    /*
-    this._updated = true;
-    if (this.props.onChange) this.props.onChange(tree.obj);
-    */
+class TreeView extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false,
+    };
   }
 
-  onDragStart = (e, node) => {
-    const url = editorUtilities.getFileURL(node);
-    e.dataTransfer.setData('text/uri-list', url);
-    e.dataTransfer.setData('text/plain', url);
+  onNodeDragStart = (e, node) => {
+    // todo
   }
 
-  onNodeClick = (node) => {
-    this.props.onNodeClick(node);
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
   }
 
-  onShowContextMenu = (e, node) => {
-    this.props.onShowContextMenu(e, node);
+  onUnFreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   render() {
-    if (!this.props.treeData.root) {
-      return <div>Loading...</div>;
-    }
-
     return (
       <div className="tree-view tree">
-        <TreeNodeView
-          paddingLeft={12}
-          treeView={this}
+        <TreeNodeView 
           node={this.props.treeData.root}
-          isNodeItemFrezee={this.props.isNodeItemFrezee}
-          permission={this.props.permission}
           currentPath={this.props.currentPath}
-          onShowContextMenu={this.props.onShowContextMenu}
-          onDirCollapse={this.props.onDirCollapse}
+          paddingLeft={PADDING_LEFT}
+          isNodeMenuShow={this.props.isNodeMenuShow}
+          isItemFreezed={this.state.isItemFreezed}
+          onNodeClick={this.props.onNodeClick}
+          onMenuItemClick={this.props.onMenuItemClick}
+          onNodeExpanded={this.props.onNodeExpanded}
+          onNodeCollapse={this.props.onNodeCollapse}
+          onNodeDragStart={this.onNodeDragStart}
+          onFreezedItem={this.onFreezedItem}
+          onUnFreezedItem={this.onUnFreezedItem}
         />
       </div>
     );
   }
-
 }
 
 TreeView.propTypes = propTypes;
