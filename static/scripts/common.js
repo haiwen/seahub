@@ -195,6 +195,8 @@ define([
                 case 'admin-library': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/';
                 case 'admin-library-history-limit': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/history-limit/';
                 case 'admin-library-dirents': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/dirents/';
+                case 'admin-illegal-reports': return siteRoot + 'api/v2.1/admin/illegal-reports/';
+                case 'admin-illegal-report': return siteRoot + 'api/v2.1/admin/illegal-reports/' + options.report_id + '/';
                 case 'admin-groups': return siteRoot + 'api/v2.1/admin/groups/';
                 case 'admin-group': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/';
                 case 'admin-group-libraries': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/';

@@ -7,6 +7,7 @@ import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import Loading from './components/loading';
 import SaveSharedFileDialog from './components/dialog/save-shared-file-dialog';
+import AddIllegalReportDialog from './components/dialog/add-illegal-report-dialog';
 import toaster from './components/toast';
 import watermark from 'watermark-dom';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
@@ -27,6 +28,7 @@ class SharedFileViewMarkdown extends React.Component {
       markdownContent: '',
       loading: true,
       showSaveSharedFileDialog: false,
+      showAddIllegalReportDialog: false
     };
   }
 
@@ -36,7 +38,7 @@ class SharedFileViewMarkdown extends React.Component {
     });
   }
 
-  toggleCancel = () => {
+  toggleSaveSharedFileCancel = () => {
     this.setState({
       showSaveSharedFileDialog: false
     });
@@ -44,6 +46,24 @@ class SharedFileViewMarkdown extends React.Component {
 
   handleSaveSharedFile = () => {
     toaster.success(gettext('Successfully saved'), {
+      duration: 3
+    });
+  }
+
+  handleAddIllegalReportDialog = () => {
+    this.setState({
+      showAddIllegalReportDialog: true
+    });
+  }
+
+  toggleAddIllegalReportCancel = () => {
+    this.setState({
+      showAddIllegalReportDialog: false
+    });
+  }
+
+  handleAddIllegalReport = () => {
+    toaster.success(gettext('Successfully reported'), {
       duration: 3
     });
   }
@@ -67,8 +87,8 @@ class SharedFileViewMarkdown extends React.Component {
       let imageUrl = innerNode.data.src;
 
       const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
-      
-      // different repo 
+
+      // different repo
       if (!re.test(imageUrl)) {
         return;
       }
@@ -115,7 +135,11 @@ class SharedFileViewMarkdown extends React.Component {
                   <Button color="secondary" id="save" className="shared-file-op-btn"
                     onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
                   </Button>
+                // TODO use css to add blank between buttons
                 }{' '}
+                <Button className="shared-file-op-btn"
+                  onClick={this.handleAddIllegalReportDialog}>{gettext('Report')}
+                </Button>{' '}
                 {(trafficOverLimit === "False") &&
                   <Button color="success" className="shared-file-op-btn">
                     <a href="?dl=1">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
@@ -140,8 +164,15 @@ class SharedFileViewMarkdown extends React.Component {
           <SaveSharedFileDialog
             repoID={repoID}
             sharedToken={sharedToken}
-            toggleCancel={this.toggleCancel}
+            toggleCancel={this.toggleSaveSharedFileCancel}
             handleSaveSharedFile={this.handleSaveSharedFile}
+          />
+        }
+        {this.state.showAddIllegalReportDialog &&
+          <AddIllegalReportDialog
+            sharedToken={sharedToken}
+            toggleCancel={this.toggleAddIllegalReportCancel}
+            handleAddIllegalReport={this.handleAddIllegalReport}
           />
         }
       </div>

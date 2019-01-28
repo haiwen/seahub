@@ -107,6 +107,12 @@
         </li>
         {% endif %}
 
+        {% if is_default_admin %}
+        <li class="tab<% if (cur_tab == 'illegal-reports') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}sysadmin/#illegal-reports/"><span class="sf2-icon-monitor"></span>{% trans "Illegal Reports" %}</a>
+        </li>
+        {% endif %}
+
     </ul>
     <% if (cur_tab == 'libraries') { %>
         <% if (option == 'all') { %>
@@ -1005,4 +1011,56 @@
     <% } %>
     </td>
     <td><time title="<%- time %>"><%- time_from_now %></time></td>
+</script>
+
+<script type="text/template" id="illegal-reports-tmpl">
+    <div class="hd ovhd">
+        <h3 class="fleft">{% trans "Illegal Reports" %}</h3>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <table>
+        <thead>
+            <tr>
+                <th width="5%"><!--icon--></th>
+                <th width="15%">{% trans "Library" %}</th>
+                <th width="20%">{% trans "File" %}</th>
+                <th width="10%">{% trans "Reporter" %}</th>
+                <th width="15%">{% trans "Illegal Type" %}</th>
+                <th width="15%">{% trans "Description" %}</th>
+                <th width="10%">{% trans "Time" %}</th>
+                <th width="5%">{% trans "Handled" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No illegal reports" %}</h2>
+    </div>
+    <p class="error error-tip hide"></p>
+</script>
+
+<script type="text/template" id="illegal-report-item-tmpl">
+    <td>
+        <img src="<%= icon_url %>" width="24" />
+    </td>
+    <td><%- repo_name %></td>
+    <td><%- file_path %></td>
+    <td>
+    <% if (reporter) { %>
+        <%- reporter %>
+    <% } else { %>
+        --
+    <% } %>
+    </td>
+    <td><%- illegal_type_output %></td>
+    <td>
+    <% if (description) { %>
+        <%- description %>
+    <% } else { %>
+        --
+    <% } %>
+    </td>
+    <td><time title="<%= time %>"><%= time_from_now %></time></td>
+    <td class='illegal-report-handle cspt' ><%- handled %></td>
 </script>
