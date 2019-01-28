@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { seafileAPI } from '../utils/seafile-api.js';
-import { gettext } from '../utils/constants';
 
 const propTypes = {
   placeholder: PropTypes.string.isRequired,
@@ -57,7 +56,7 @@ class UserSelect extends React.Component {
         isMulti={this.props.isMulti}
         loadOptions={this.loadOptions}
         onChange={this.handleSelectChange}
-        placeholder={gettext(this.props.placeholder)}
+        placeholder={this.props.placeholder}
         className={this.props.className}
         ref="userSelect"
       />
