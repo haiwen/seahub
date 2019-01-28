@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 class DeleteRepoDialog extends Component {
 
@@ -20,7 +21,7 @@ class DeleteRepoDialog extends Component {
   render() {
 
     const data = this.props.data;
-    const repoName = data ? '<span class="sf-font">' + data.repoName + '</span>' : null;
+    const repoName = data ? '<span class="sf-font">' + Utils.HTMLescape(data.repoName) + '</span>' : null;
     let message = gettext("Are you sure you want to delete %s ?");
     message = message.replace('%s', repoName);
     const popup = (

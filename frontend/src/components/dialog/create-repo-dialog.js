@@ -66,12 +66,12 @@ class CreateRepoDialog extends React.Component {
     let errMessage = '';
     let repoName = this.state.repoName.trim();
     if (!repoName.length) {
-      errMessage = 'Name is required';
+      errMessage = gettext('Name is required');
       this.setState({errMessage: errMessage});
       return false;
     }
     if (repoName.indexOf('/') > -1) {
-      errMessage = 'Name should not include \'/\'.';
+      errMessage = gettext('Name should not include \'/\'.');
       this.setState({errMessage: errMessage});
       return false;
     }
@@ -79,22 +79,22 @@ class CreateRepoDialog extends React.Component {
       let password1 = this.state.password1.trim();
       let password2 = this.state.password2.trim();
       if (!password1.length) {
-        errMessage = 'Please enter password';
+        errMessage = gettext('Please enter password');
         this.setState({errMessage: errMessage});
         return false;
       }
       if (!password2.length) {
-        errMessage = 'Please enter the password again';
+        errMessage = gettext('Please enter the password again');
         this.setState({errMessage: errMessage});
         return false;
       }
       if (password1.length < 8) {
-        errMessage = 'Password is too short';
+        errMessage = gettext('Password is too short');
         this.setState({errMessage: errMessage});
         return false;
       }
       if (password1 !== password2) {
-        errMessage = 'Passwords don\'t match';
+        errMessage = gettext('Passwords don\'t match');
         this.setState({errMessage: errMessage});
         return false;
       }
@@ -201,7 +201,7 @@ class CreateRepoDialog extends React.Component {
               </div>
             }
           </Form>
-          <Label className="err-message">{gettext(this.state.errMessage)}</Label>
+          <Label className="err-message">{this.state.errMessage}</Label>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>

@@ -151,6 +151,30 @@ class SharedRepoListItem extends React.Component {
     this.setState({isShowSharedDialog: false});
   }
 
+  translateMenuItem = (menuItem) => {
+    let translateResult = '';
+    switch(menuItem) {
+      case 'Rename':
+        translateResult = gettext('Rename');
+        break;
+      case 'Folder Permission':
+        translateResult = gettext('Folder Premission');
+        break;
+      case 'Details':
+        translateResult = gettext('Details');
+        break;
+      case 'Unshare':
+        translateResult = gettext('Unshare');
+        break;
+      case 'Share':
+        translateResult = gettext('Share');
+        break;
+      default:
+        break;
+    }
+    return translateResult;
+  }
+
   generatorOperations = () => {
     let { repo, currentGroup } = this.props;
     //todo this have a bug; use current api is not return admins param;
@@ -164,7 +188,7 @@ class SharedRepoListItem extends React.Component {
         if (isStaff && repo.owner_email == currentGroup.id + '@seafile_group') { //is a member of this current group,
           this.isDeparementOnwerGroupMember = true;
           if (folderPermEnabled) {
-            operations = ['Rename', 'Folder Permission', 'deatils'];
+            operations = ['Rename', 'Folder Permission', 'Details'];
           } else {
             operations = ['Rename', 'Details']
           }
@@ -181,7 +205,7 @@ class SharedRepoListItem extends React.Component {
       }
     } else {
       if (isRepoOwner) {
-        operations.push('share');
+        operations.push('Share');
       }
       if (isStaff || isRepoOwner) {
         operations.push('Unshare');
@@ -195,13 +219,13 @@ class SharedRepoListItem extends React.Component {
     if (this.props.libraryType && this.props.libraryType === 'public') {
       let isRepoOwner = this.props.repo.owner_email === username;
       if (isSystemStaff || isRepoOwner) {
-        operations.push('unshare');
+        operations.push('Unshare');
       }
     } else {
       operations = this.generatorOperations();
       if (this.isDeparementOnwerGroupMember) {
-        operations.unshift('unshare');
-        operations.unshift('share');
+        operations.unshift('Unshare');
+        operations.unshift('Share');
       }
     }
     return (
@@ -219,7 +243,7 @@ class SharedRepoListItem extends React.Component {
           <div className="mobile-operation-menu">
             {operations.map((item, index) => {
               return (
-                <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{gettext(item)}</DropdownItem>
+                <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateMenuItem(item)}</DropdownItem>
               );
             })}
           </div>
@@ -260,7 +284,7 @@ class SharedRepoListItem extends React.Component {
             />
             <DropdownMenu>
               {operations.map((item, index) => {
-                return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{gettext(item)}</DropdownItem>
+                return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateMenuItem(item)}</DropdownItem>
               })}
             </DropdownMenu>
           </Dropdown>

@@ -164,10 +164,10 @@ class WikiListItem extends Component {
           <td className="name">
             {this.state.isRenameing ?
               <WikiRename wiki={wiki} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-              <a href={wiki.link}>{gettext(wiki.name)}</a>
+              <a href={wiki.link}>{wiki.name}</a>
             }
           </td>
-          <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
+          <td><a href={userProfileURL} target='_blank'>{wiki.owner_nickname}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
           <td>
             <WikiPermissionEditor 
