@@ -98,7 +98,7 @@ class Wiki extends Component {
 
     // update location url
     let fileUrl = siteRoot + 'wikis/' + slug + dirPath;
-    window.history.pushState({urlPath: fileUrl, filePath: dirPath}, dirPath, fileUrl);
+    window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
   }
 
   showFile = (filePath) => {
@@ -125,7 +125,7 @@ class Wiki extends Component {
 
     const hash = window.location.hash;
     let fileUrl = siteRoot + 'wikis/' + slug + filePath + hash;
-    window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+    window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
   }
 
   loadDirentList = (dirPath) => {
