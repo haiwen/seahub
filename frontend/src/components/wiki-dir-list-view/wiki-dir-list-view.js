@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import TreeDirList from './tree-dir-list';
+import WikiDirListItem from './wiki-dir-list-item';
 
 const propTypes = {
-  node: PropTypes.object.isRequired,
-  onMainNodeClick: PropTypes.func.isRequired,
+  path: PropTypes.string.isRequired,
+  direntList: PropTypes.array.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
 };
 
-class TreeDirView extends React.Component {
+class WikiDirListView extends React.Component {
 
   render() {
-    let node = this.props.node;
-    let children = node.hasChildren() ? node.children : null;
-
     return (
       <table>
         <thead>
@@ -25,9 +23,9 @@ class TreeDirView extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {children && children.map((node, index) => {
+          {this.props.direntList.length !== 0 && this.props.direntList.map((dirent, index) => {
             return (
-              <TreeDirList key={index} node={node} onMainNodeClick={this.props.onMainNodeClick}/>
+              <WikiDirListItem key={index} path={this.props.path} dirent={dirent} onDirentClick={this.props.onDirentClick}/>
             );
           })}
         </tbody>
@@ -36,6 +34,6 @@ class TreeDirView extends React.Component {
   }
 }
 
-TreeDirView.propTypes = propTypes;
+WikiDirListView.propTypes = propTypes;
 
-export default TreeDirView;
+export default WikiDirListView;

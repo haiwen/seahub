@@ -1,210 +1,169 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MenuControl from '../menu-control';
+import TreeNodeMenu from './tree-node-menu';
 import { permission } from '../../utils/constants';
 
 const propTypes = {
-  isNodeItemFrezee: PropTypes.bool.isRequired,
+  node: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
   paddingLeft: PropTypes.number.isRequired,
-  node: PropTypes.object.isRequired,
-  treeView: PropTypes.object.isRequired,
-  onDirCollapse: PropTypes.func.isRequired,
+  isNodeMenuShow: PropTypes.bool.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onNodeClick: PropTypes.func.isRequired,
+  onNodeExpanded: PropTypes.func.isRequired,
+  onNodeCollapse: PropTypes.func.isRequired,
+  onNodeDragStart: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnFreezedItem: PropTypes.func.isRequired,
 };
-
-function sortByType(a, b) {
-  if (a.type == 'dir' && b.type != 'dir') {
-    return -1;
-  } else if (a.type != 'dir' && b.type == 'dir') {
-    return 1;
-  } else {
-    return a.name.localeCompare(b.name);
-  }
-}
 
 class TreeNodeView extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isMenuIconShow: false
+      isHighlight: false,
+      isShowOperationMenu: false
     };
   }
 
-  onClick = () => {
-    // e.nativeEvent.stopImmediatePropagation();
-    let { node } = this.props;
-    this.props.treeView.onNodeClick(node);
-  }
-
   onMouseEnter = () => {
-    if (!this.props.isNodeItemFrezee) {
+    if (!this.props.isItemFreezed) {
       this.setState({
-        isMenuIconShow: true
+        isShowOperationMenu: true,
+        isHighlight: true,
       });
     }
   }
 
   onMouseLeave = () => {
-    if (!this.props.isNodeItemFrezee) {
+    if (!this.props.isItemFreezed) {
       this.setState({
-        isMenuIconShow: false
+        isShowOperationMenu: false,
+        isHighlight: false,
       });
     }
   }
 
-  handleCollapse = (e) => {
-    e.stopPropagation();
-    this.props.onDirCollapse(this.props.node);
+  onNodeClick = () => {
+    this.props.onNodeClick(this.props.node);
   }
 
-  onDragStart = (e) => {
-    const { node } = this.props;
-    this.props.treeView.onDragStart(e, node);
-  }
-
-  onMenuControlClick = (e) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    const { node } = this.props;
-    this.props.treeView.onShowContextMenu(e, node);
-  }
-
-  hideMenuIcon = () => {
-    this.setState({
-      isMenuIconShow: false
-    });
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.hideMenuIcon);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.hideMenuIcon);
-  }
-
-  renderCollapse = () => {
-    const { node } = this.props;
-
-    if (node.hasChildren()) {
-      const { isExpanded } = node;
-      return (
-        <i
-          className={isExpanded ? 'folder-toggle-icon fa fa-caret-down' : 'folder-toggle-icon fa fa-caret-right'}
-          onMouseDown={e => e.stopPropagation()}
-          onClick={this.handleCollapse}
-        />
-      );
+  onLoadToggle = () => {
+    let { node } = this.props;
+    if (node.isExpanded) {
+      this.props.onNodeCollapse(node);
+    } else {
+      this.props.onNodeExpanded(node);
     }
-
-    return null;
   }
 
-  renderChildren = () => {
-    const { node } = this.props;
-    if (node.children && node.children.length) {
-      const childrenStyles = {
-        paddingLeft: this.props.paddingLeft
-      };
-      var l = node.children.sort(sortByType);
-      /*
-        the `key` property is needed. Otherwise there is a warning in the console
-      */
-      return (
-        <div className="children" style={childrenStyles}>
-          {l.map(child => {
-            return (
-              <TreeNodeView
-                node={child}
-                key={child.path}
-                paddingLeft={this.props.paddingLeft}
-                treeView={this.props.treeView}
-                isNodeItemFrezee={this.props.isNodeItemFrezee}
-                currentPath={this.props.currentPath}
-                onDirCollapse={this.props.onDirCollapse}
-              />
-            );
-          })}
-        </div>
-      );
-    }
-
-    return null;
+  onNodeDragStart = (e) => {
+    this.props.onNodeDragStart(e, this.props.node);
   }
 
-  renderMenuController() {
-    if (permission) {
-      let isShow = (this.props.node.path === this.props.currentPath);
-      return (
-        <div className="right-icon">
-          <MenuControl
-            isShow={this.state.isMenuIconShow || isShow}
-            onClick={this.onMenuControlClick}
-          />
-        </div>
-      );
-    }
-    return;
+  onUnFreezedItem = () => {
+    this.setState({isShowOperationMenu: false});
+    this.props.onUnFreezedItem();
   }
 
-  getNodeTypeAndIcon() {
-    const node = this.props.node;
+  onMenuItemClick = (operation, node) => {
+    this.props.onMenuItemClick(operation, node);
+  }
+
+  getNodeTypeAndIcon = () => {
+    let { node } = this.props;
     let icon = '';
     let type = '';
-    if (node.type === 'dir') {
-      icon = <i className="far fa-folder"/>;
+    if (node.object.type === 'dir') {
+      icon = <i className="far fa-folder"></i>
       type = 'dir';
     } else {
-      let index = node.name.lastIndexOf('.');
-      if (index ===  -1) {
-        icon = <i className="far fa-file"/>;
+      let index = node.object.name.lastIndexOf('.');
+      if (index === -1) {
+        icon = <i className="far fa-file"></i>
         type = 'file';
       } else {
-        type = node.name.substring(index).toLowerCase();
-        if (type === '.png' || type === '.jpg') {
-          icon = <i className="far fa-image"/>;
+        let suffix = node.object.name.slice(index).toLowerCase();
+        if (suffix === '.png' || suffix === '.jpg') {
+          icon = <i className="far fa-image"></i>
           type = 'image';
         } else {
-          icon = <i className="far fa-file"/>;
+          icon = <i className="far fa-file"></i>
           type = 'file';
         }
       }
     }
-
-    return { type, icon };
+    return {icon, type};
   }
 
-  render() {
-    const styles = {};
-    let node = this.props.node;
-    let { type, icon } = this.getNodeTypeAndIcon();
-    let hlClass = '';
-    if (node.path === this.props.currentPath) {
-      hlClass = 'tree-node-hight-light';
+  renderChildren = () => {
+    let { node, paddingLeft } = this.props;
+    if (!node.hasChildren()) {
+      return '';
     }
-
     return (
-      <div type={type} className="tree-node" style={styles}>
-        <div
-          onMouseLeave={this.onMouseLeave}
-          onMouseEnter={this.onMouseEnter}
-          onClick={this.onClick}
-          type={type}
-          className={`tree-node-inner text-nowrap ${hlClass} ${node.name === '/'? 'hide': ''}`}
-        >
-          <div className="tree-node-text" type={type} draggable="true" onDragStart={this.onDragStart}>{node.name}</div>
-          <div className="left-icon">
-            {this.renderCollapse()}
-            <i type={type} className="tree-node-icon">{icon}</i>
-          </div>
-          {this.renderMenuController()}
-        </div>
-        {node.isExpanded ? this.renderChildren() : null}
+      <div className="children" style={{paddingLeft: paddingLeft}}>
+        {node.children.map(item => {
+          return (
+            <TreeNodeView 
+              key={item.path}
+              node={item}
+              paddingLeft={paddingLeft}
+              currentPath={this.props.currentPath}
+              isNodeMenuShow={this.props.isNodeMenuShow}
+              isItemFreezed={this.props.isItemFreezed}
+              onNodeClick={this.props.onNodeClick}
+              onNodeCollapse={this.props.onNodeCollapse}
+              onNodeExpanded={this.props.onNodeExpanded}
+              onFreezedItem={this.props.onFreezedItem}
+              onMenuItemClick={this.onMenuItemClick}
+              onUnFreezedItem={this.onUnFreezedItem}
+            />
+          );
+        })}
       </div>
     );
   }
 
+  render() {
+    let { currentPath, node, isNodeMenuShow } = this.props;
+    let { type, icon } = this.getNodeTypeAndIcon();
+    let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
+    if (node.path === currentPath) {
+      hlClass = 'tree-node-hight-light';
+    }
+    return (
+      <div className="tree-node">
+        <div type={type} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''}`}>
+          <div className="tree-node-text" draggable="true" onDragStart={this.onNodeDragStart} onClick={this.onNodeClick}>{node.object.name}</div>
+          <div className="left-icon">
+            {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
+              <i 
+                className={`folder-toggle-icon fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`}
+                onMouseDown={e => e.stopPropagation()}
+                onClick={this.onLoadToggle}
+              ></i>
+            )}
+            <i className="tree-node-icon">{icon}</i>
+          </div>
+          {isNodeMenuShow && (
+            <div className="right-icon">
+              {(permission && this.state.isShowOperationMenu) && (
+                <TreeNodeMenu 
+                  node={this.props.node}
+                  onMenuItemClick={this.onMenuItemClick}
+                  onUnFreezedItem={this.onUnFreezedItem}
+                  onFreezedItem={this.props.onFreezedItem}
+                />
+              )}
+            </div>
+          )}
+        </div>
+        {node.isExpanded && this.renderChildren()}
+      </div>
+    );
+  }
 }
 
 TreeNodeView.propTypes = propTypes;

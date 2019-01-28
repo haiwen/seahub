@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
 
 const viewerPropTypes = {
-  onLinkClick: PropTypes.func,
-  onContentRendered: PropTypes.func.isRequired,
-  indexContent: PropTypes.string,
+  indexContent: PropTypes.string.isRequired,
+  onLinkClick: PropTypes.func.isRequired,
 };
 
 class IndexContentViewer extends React.Component {
@@ -13,6 +12,10 @@ class IndexContentViewer extends React.Component {
   onLinkClick = (event) => {
     event.preventDefault();
     this.props.onLinkClick(event);
+  }
+
+  onContentRendered = () => {
+    // todo
   }
 
   render() {

@@ -4,17 +4,17 @@ import { siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  node: PropTypes.object.isRequired,
-  onMainNodeClick: PropTypes.func.isRequired,
+  path: PropTypes.string.isRequired,
+  dirent: PropTypes.object.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
 };
 
-class TreeDirList extends React.Component {
+class WikiDirListItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       highlight: false,
-      isOperationShow: false,
     };
   }
 
@@ -26,22 +26,22 @@ class TreeDirList extends React.Component {
     this.setState({highlight: false});
   }
 
-  onMainNodeClick = (e) => {
+  onDirentClick = (e) => {
     e.preventDefault();
-    this.props.onMainNodeClick(this.props.node);
+    this.props.onDirentClick(this.props.dirent);
   }
 
   render() {
-    let node = this.props.node;
-    let href = siteRoot + 'wikis' + node.path;
+    let { path, dirent } = this.props;
+    let href = siteRoot + 'wikis' + Utils.joinPath(path, dirent.name);
 
     let size = Utils.isHiDPI() ? 48 : 24;
     let iconUrl = '';
-    if (node.type === 'file') {
-      iconUrl = Utils.getFileIconUrl(node.name, size);
+    if (dirent.type === 'file') {
+      iconUrl = Utils.getFileIconUrl(dirent.name, size);
     } else {
       let isReadOnly = false;
-      if (node.permission === 'r' || node.permission === 'preview') {
+      if (dirent.permission === 'r' || dirent.permission === 'preview') {
         isReadOnly = true;
       }
       iconUrl = Utils.getFolderIconUrl({isReadOnly, size});
@@ -53,15 +53,15 @@ class TreeDirList extends React.Component {
           <img src={iconUrl} width="24" alt="" />
         </td>
         <td className="name">
-          <a href={href} onClick={this.onMainNodeClick}>{node.name}</a>
+          <a href={href} onClick={this.onDirentClick}>{dirent.name}</a>
         </td>
-        <td>{node.size}</td>
-        <td title={node.last_update_time}>{node.last_update_time}</td>
+        <td>{dirent.size}</td>
+        <td title={dirent.last_update_time}>{dirent.last_update_time}</td>
       </tr>
     );
   }
 }
 
-TreeDirList.propTypes = propTypes;
+WikiDirListItem.propTypes = propTypes;
 
-export default TreeDirList;
+export default WikiDirListItem;

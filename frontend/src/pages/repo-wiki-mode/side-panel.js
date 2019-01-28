@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { gettext, permission } from '../../utils/constants';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import TreeView from '../../components/tree-view-2/tree-view';
+import TreeView from '../../components/tree-view/tree-view';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
@@ -43,6 +42,7 @@ class SidePanel extends Component {
       isAddFolderDialogShow: false,
       isRenameDialogShow: false,
     };
+    this.isNodeMenuShow = true;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -166,7 +166,7 @@ class SidePanel extends Component {
           <h3 className="wiki-pages-heading" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             {gettext('Files')}
             <div className="heading-icon">
-              {this.state.isMenuIconShow && (
+              {(permission && this.state.isMenuIconShow) && (
                 <Dropdown isOpen={this.state.isHeaderMenuShow} toggle={this.toggleOperationMenu}>
                   <DropdownToggle 
                     tag="i" 
@@ -188,6 +188,7 @@ class SidePanel extends Component {
             {this.props.isTreeDataLoading ? 
               (<Loading/>) :
               (<TreeView
+                isNodeMenuShow={this.isNodeMenuShow}
                 treeData={this.props.treeData}
                 currentPath={this.props.currentPath}
                 onNodeClick={this.onNodeClick}

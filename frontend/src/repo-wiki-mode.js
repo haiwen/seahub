@@ -7,8 +7,8 @@ import { Utils } from './utils/utils';
 import collabServer from './utils/collab-server';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
-import TreeNode from './components/tree-view-2/tree-node';
-import treeHelper from './components/tree-view-2/tree-helper';
+import TreeNode from './components/tree-view/tree-node';
+import treeHelper from './components/tree-view/tree-helper';
 import toaster from './components/toast';
 import LibDecryptDialog from './components/dialog/lib-decrypt-dialog';
 import ModalPortal from './components/modal-portal';
@@ -332,7 +332,7 @@ class Wiki extends Component {
 
   onSearchedClick = (item) => {
     let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path; 
-    if (this.state.currentFilePath === path) {
+    if (this.state.currentPath === path) {
       return;
     }
 
