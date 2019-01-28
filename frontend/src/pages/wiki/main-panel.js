@@ -31,7 +31,8 @@ class MainPanel extends Component {
 
   onEditClick = (e) => {
     e.preventDefault();
-    window.location.href= siteRoot + 'lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
+    let url = siteRoot + 'lib/' + repoID + '/file' + this.props.path + '?mode=edit';
+    window.open(url);
   }
 
   onMainNavBarClick = (e) => {

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, repoID } from '../../utils/constants';
+import { gettext, siteRoot, repoID, slug } from '../../utils/constants';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
 import TreeView from '../../components/tree-view/tree-view';
@@ -27,21 +27,11 @@ class SidePanel extends Component {
     this.isNodeMenuShow = false;
   }
 
-  onEditClick = (e) => {
-    e.preventDefault();
-    let indexNode = this.props.indexNode
-    window.location.href= siteRoot + 'lib/' + repoID + '/file' + indexNode.path + '?mode=edit';
-  }
-
   renderIndexView = () => {
-    let indexNode = this.props.indexNode;
     return (
       <Fragment>
         <h3 className="wiki-pages-heading">
           {gettext('Contents')}
-          {indexNode.object.permission === 'rw' && 
-            <button className="btn btn-secondary operation-item index-edit" title="Edit Index" onClick={this.onEditClick}>{gettext('Edit')}</button>
-          }
         </h3>
         <div className="wiki-pages-container">
           <IndexContentViewer
@@ -83,6 +73,7 @@ class SidePanel extends Component {
           {this.props.isTreeDataLoading && <Loading /> }
           {!this.props.isTreeDataLoading && this.props.indexNode && this.renderIndexView() }
           {!this.props.isTreeDataLoading && !this.props.indexNode && this.renderTreeView() }
+          <div className="text-center p-2 sf-font"><a href={siteRoot + 'library/' + repoID + "/" + slug}>Goto Library</a></div>
         </div>
       </div>
     );

@@ -66,9 +66,10 @@ class Wiki extends Component {
     if (initialPath === this.homePath || isDir === 'None') {
       seafileAPI.listDir(repoID, '/').then(res => {
         let tree = this.state.treeData;
-        this.addResponseListToNode(res.data.dirent_list, tree.root);
+        this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
         let indexNode = tree.getNodeByPath(this.indexPath);
-        if (indexNode) {
+        let homeNode = tree.getNodeByPath(this.homePath);
+        if (homeNode && indexNode) {
           seafileAPI.getFileDownloadLink(repoID, indexNode.path).then(res => {
             seafileAPI.getFileContent(res.data).then(res => {
               this.setState({
@@ -362,6 +363,27 @@ class Wiki extends Component {
       tree.expandNode(node);
       this.setState({treeData: tree});
     }
+  }
+
+  addFirstResponseListToNode = (list, node) => {
+    node.isLoaded = true;
+    node.isExpanded = true;
+    let direntList = list.map(item => {
+      return new Dirent(item);
+    });
+    direntList = direntList.filter(item => {
+      if (item.type === 'dir') {
+        let name = item.name.toLowerCase();
+        return name !== 'drafts' && name !== 'images' && name !== 'downloads';
+      }
+      return true;
+    });
+    direntList = Utils.sortDirents(direntList, 'name', 'asc');
+
+    let nodeList = direntList.map(object => {
+      return new TreeNode({object});
+    });
+    node.addChildren(nodeList);
   }
 
   addResponseListToNode = (list, node) => {
