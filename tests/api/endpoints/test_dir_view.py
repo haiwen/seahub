@@ -132,7 +132,7 @@ class DirViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 2
+        assert len(json_resp['dirent_list']) == 2
         assert json_resp['dirent_list'][0]['type'] == 'dir'
         assert json_resp['dirent_list'][0]['name'] == self.folder_name
         assert json_resp['dirent_list'][0]['parent_dir'] == '/'
