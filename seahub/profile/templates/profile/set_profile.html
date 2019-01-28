@@ -31,6 +31,10 @@
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
 
+        {% if enable_wechat_work %}
+        <li class="tab"><a href="#social-auth">{% trans "Social Login" %}</a></li>
+        {% endif %}
+
         {% if ENABLE_DELETE_ACCOUNT %}
         <li class="tab" id="del-account-nav"><a href="#del-account">{% trans "Delete Account" %}</a></li>
         {% endif %}
@@ -175,11 +179,10 @@
 </div>
 {% endif %}
 
+{% if enable_wechat_work %}
 <div class="setting-item" id="social-auth">
     <h3>{% trans "Social Login" %}</h3>
-
       <ul>
-
         <li>
           {% if request.LANGUAGE_CODE == 'zh-cn' %}
           企业微信
@@ -193,10 +196,9 @@
           <a href="{% url "social:begin" 'weixin-work' %}?next={{ social_next_page }}">{% trans "Connect" %}</a>
           {% endif %}
         </li>
-
       </ul>
-
 </div>
+{% endif %}
 
 {% if ENABLE_DELETE_ACCOUNT %}
 <div class="setting-item" id="del-account">

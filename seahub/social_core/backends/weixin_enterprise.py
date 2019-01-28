@@ -20,7 +20,7 @@ if WEIXIN_WORK_SP is True:
     _USER_INFO_URL = 'https://qyapi.weixin.qq.com/cgi-bin/service/get_login_info'
 else:
     _AUTHORIZATION_URL = 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect'
-    _ACCESS_TOKEN_URL = 'https://qyapi.weixin.qq.com/cgi-bin/token'
+    _ACCESS_TOKEN_URL = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken'
     _USER_INFO_URL = 'https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo'
 
 

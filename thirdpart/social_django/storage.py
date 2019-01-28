@@ -74,8 +74,7 @@ class DjangoUserMixin(UserMixin):
         assert 'username' in kwargs
 
         user = User.objects.create_user(email=kwargs['username'],
-                                        is_active=True,
-                                        save_profile=False)
+                                        is_active=True)
 
         # try:
         #     if hasattr(transaction, 'atomic'):

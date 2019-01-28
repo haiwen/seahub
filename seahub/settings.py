@@ -277,14 +277,10 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_VERIFY_SSL = True
-SOCIAL_AUTH_METHODS = (
-    ('weixin', 'WeChat'),
-)
-
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/profile/'
 SOCIAL_AUTH_WEIXIN_WORK_AGENTID = ''
 SOCIAL_AUTH_WEIXIN_WORK_KEY = ''
 SOCIAL_AUTH_WEIXIN_WORK_SECRET = ''
-
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',

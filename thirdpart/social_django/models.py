@@ -19,7 +19,7 @@ from .managers import UserSocialAuthManager
 USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
              getattr(settings, 'AUTH_USER_MODEL', None) or \
              'auth.User'
-UID_LENGTH = getattr(settings, setting_name('UID_LENGTH'), 150)
+UID_LENGTH = getattr(settings, setting_name('UID_LENGTH'), 255)
 EMAIL_LENGTH = getattr(settings, setting_name('EMAIL_LENGTH'), 254)
 NONCE_SERVER_URL_LENGTH = getattr(
     settings, setting_name('NONCE_SERVER_URL_LENGTH'), 255)
@@ -148,3 +148,12 @@ class DjangoStorage(BaseDjangoStorage):
     @classmethod
     def is_integrity_error(cls, exception):
         return exception.__class__ is IntegrityError
+
+########## handle signals
+from django.dispatch import receiver
+from registration.signals import user_deleted
+
+@receiver(user_deleted)
+def user_deleted_cb(sender, **kwargs):
+    username = kwargs['username']
+    UserSocialAuth.objects.filter(username=username).delete()

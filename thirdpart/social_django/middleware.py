@@ -5,7 +5,6 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.messages.api import MessageFailure
-from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.utils.http import urlquote
 
@@ -52,8 +51,6 @@ class SocialAuthExceptionMiddleware(MiddlewareMixin):
 
             if url:
                 return redirect(url)
-            else:
-                return redirect(reverse('edit_profile'))
 
     def raise_exception(self, request, exception):
         strategy = getattr(request, 'social_strategy', None)
