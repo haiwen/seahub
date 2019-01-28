@@ -88,7 +88,12 @@ module.exports = {
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/shared-file-view-markdown.js",
-    ]
+    ],
+    sharedFileViewText: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-text.js",
+    ],
   },
 
   output: {

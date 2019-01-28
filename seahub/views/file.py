@@ -1189,8 +1189,9 @@ def view_shared_file(request, fileshare):
     permissions = fileshare.get_permissions()
 
     template = 'shared_file_view.html'
-    if filetype == MARKDOWN:
-        template = 'shared_file_view_react_markdown.html'
+
+    if is_textual_file(file_type=filetype):
+        template = 'shared_file_view_react.html'
 
     return render(request, template, {
             'repo': repo,

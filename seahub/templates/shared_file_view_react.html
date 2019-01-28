@@ -20,5 +20,9 @@
         }
     };
 </script>
-{% render_bundle 'sharedFileViewMarkdown' %}
+{% if filetype == 'Markdown' %}
+    {% render_bundle 'sharedFileViewMarkdown' %}
+{% elif filetype == 'Text' %}
+    {% render_bundle 'sharedFileViewText' %}
+{% endif %}
 {% endblock %}
