@@ -135,6 +135,12 @@
             </li>
             {% endif %}
 
+            {% if is_default_admin %}
+            <li class="tab">
+                <a href="{{ SITE_ROOT }}sysadmin/#illegal-reports/"><span class="sf2-icon-admin-log"></span>{% trans "Illegal Reports" %}</a>
+            </li>
+            {% endif %}
+
         </ul>
         {% endblock %}
       </div>
