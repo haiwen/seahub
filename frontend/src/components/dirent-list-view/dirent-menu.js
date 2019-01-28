@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -63,9 +62,6 @@ class DirentMenu extends React.Component {
           menuList.push('Lock');
         }
       }
-      if (Utils.isMarkdownFile(dirent.name)) {
-        menuList.push('New Draft');
-      }
       menuList.push('Divider');
       if (enableFileComment) {
         menuList.push('Comment');
@@ -117,9 +113,6 @@ class DirentMenu extends React.Component {
         break;
       case 'Lock':
         translateResult = gettext('Lock');
-        break;
-      case 'New Draft':
-        translateResult = gettext('New Draft');
         break;
       case 'Comment':
         translateResult = gettext('Comment');
