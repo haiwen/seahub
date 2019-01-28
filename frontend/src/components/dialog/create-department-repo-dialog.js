@@ -60,11 +60,7 @@ class CreateDepartmentRepoDialog extends React.Component {
       this.setState({errMessage: errMessage});
       return false;
     }
-    if (repoName.length > maxFileName) {
-      errMessage = gettext('RepoName\'s length is must little than ') + maxFileName;
-      this.setState({errMessage: errMessage});
-      return false;
-    }
+
     return true;
   }
 
