@@ -293,7 +293,7 @@ class GenerateShareLink extends React.Component {
           {this.state.isShowPasswordInput &&
             <FormGroup className="link-operation-content">
               {/* todo translate  */}
-              <Label>{gettext('Password')}</Label>{' '}<span className="tip">(at least 8 characters)</span>
+              <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{gettext('(at least 8 characters)')}</span>
               <InputGroup className="passwd">
                 <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
                 <InputGroupAddon addonType="append">
@@ -301,7 +301,7 @@ class GenerateShareLink extends React.Component {
                   <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
                 </InputGroupAddon>
               </InputGroup>
-              <Label>{gettext('Password again')}</Label>
+              <Label className="font-weight-bold">{gettext('Password again')}</Label>
               <Input className="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
           }
