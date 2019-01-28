@@ -50,7 +50,7 @@ class Wiki extends Component {
     this.loadWikiData(initialPath);
   }
 
-  loadWikiData = () => {  
+  loadWikiData = (initialPath) => {  
     this.loadSidePanel(initialPath);
 
     if (isDir === 'None') {
@@ -203,10 +203,10 @@ class Wiki extends Component {
     const url = link;
     if (Utils.isWikiInternalMarkdownLink(url, slug)) {
       let path = Utils.getPathFromWikiInternalMarkdownLink(url, slug);
-      this.initMainPanelData(path);
+      this.showFile(path);
     } else if (Utils.isWikiInternalDirLink(url, slug)) {
       let path = Utils.getPathFromWikiInternalDirLink(url, slug);
-      this.initWikiData(path);
+      this.showDir(path);
     } else {
       window.location.href = url;
     }
