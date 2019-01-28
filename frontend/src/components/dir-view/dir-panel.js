@@ -23,6 +23,10 @@ const propTypes = {
   repoName: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
   pathExist: PropTypes.bool.isRequired,
   permission: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -66,16 +70,10 @@ class DirPanel extends React.Component {
       currentDirent: null,
       currentMode: 'list',
       isDirentDetailShow: false,
-      isRepoOwner: false,
     };
   }
 
   componentDidMount() {
-    let currentRepoInfo = this.props.currentRepoInfo;
-    if (currentRepoInfo) {
-      let isRepoOwner = currentRepoInfo.owner_email === username;
-      this.setState({isRepoOwner: isRepoOwner});
-    }
   }
 
   onPathClick = (path) => {
@@ -156,7 +154,13 @@ class DirPanel extends React.Component {
                     isViewFile={false}
                     path={this.props.path}
                     repoID={this.props.repoID}
+                    repoName={this.props.repoName}
+                    repoEncrypted={this.props.repoEncrypted}
                     showShareBtn={this.props.showShareBtn}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
+                    userPerm={this.props.userPerm}
+                    isAdmin={this.props.isAdmin}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     direntList={this.props.direntList}
                     onAddFile={this.props.onAddFile}
                     onAddFolder={this.props.onAddFolder}
@@ -213,6 +217,10 @@ class DirPanel extends React.Component {
                           path={this.props.path}
                           repoID={this.props.repoID}
                           repoEncrypted={this.props.repoEncrypted}
+                          isRepoOwner={this.props.isRepoOwner}
+                          isAdmin={this.props.isAdmin}
+                          isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                          enableDirPrivateShare={this.props.enableDirPrivateShare}
                           direntList={this.props.direntList}
                           sortBy={this.props.sortBy}
                           sortOrder={this.props.sortOrder}
@@ -220,7 +228,6 @@ class DirPanel extends React.Component {
                           currentRepoInfo={this.props.currentRepoInfo}
                           isDirentListLoading={this.props.isDirentListLoading}
                           isAllItemSelected={this.props.isAllDirentSelected}
-                          isRepoOwner={this.state.isRepoOwner}
                           onAddFile={this.props.onAddFile}
                           onDirentClick={this.onDirentClick}
                           onItemDetails={this.onItemDetails}

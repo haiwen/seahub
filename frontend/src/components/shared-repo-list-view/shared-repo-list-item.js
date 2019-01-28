@@ -313,6 +313,8 @@ class SharedRepoListItem extends React.Component {
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
+
+    // TODO: enableDirPrivateShare, isGroupOwnedRepo
     let isGroupOwnedRepo = repo.owner_email.indexOf('@seafile_group') > -1;
     return (
       <Fragment>
@@ -331,6 +333,10 @@ class SharedRepoListItem extends React.Component {
               itemName={repo.repo_name}
               itemPath={'/'}
               repoID={repo.repo_id}
+              repoEncrypted={repo.encrypted}
+              enableDirPrivateShare={true}
+              userPerm={repo.permission}
+              isAdmin={repo.is_admin}
               isGroupOwnedRepo={isGroupOwnedRepo}
               toggleDialog={this.toggleShareDialog}
             />
@@ -363,6 +369,10 @@ class SharedRepoListItem extends React.Component {
               itemName={repo.repo_name}
               itemPath={'/'}
               repoID={repo.repo_id}
+              repoEncrypted={repo.encrypted}
+              enableDirPrivateShare={true}
+              userPerm={repo.permission}
+              isAdmin={repo.is_admin}
               isGroupOwnedRepo={isGroupOwnedRepo}
               toggleDialog={this.toggleShareDialog}
             />

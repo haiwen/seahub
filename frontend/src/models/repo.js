@@ -15,6 +15,9 @@ class Repo {
     this.modifier_email = object.modifier_email;
     this.modifier_name = object.modifier_name;
     this.type = object.type;
+    if (object.is_admin != undefined) {
+      this.is_admin = object.is_admin;
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap'; 
-import { gettext } from '../../utils/constants';
+import { gettext, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import GenerateShareLink from './generate-share-link';
@@ -21,8 +21,22 @@ class ShareDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 'shareLink'
+      activeTab: this.getInitialActiveTab()
     };
+  }
+
+  getInitialActiveTab = () => {
+    const {repoEncrypted, userPerm, enableDirPrivateShare} = this.props;
+    const enableShareLink = !repoEncrypted && canGenerateShareLink;
+    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
+
+    if (enableShareLink) {
+      return 'shareLink';
+    } else if (enableUploadLink) {
+      return 'uploadLink';
+    } else if (enableDirPrivateShare) {
+      return 'shareToUser';
+    }
   }
 
   toggle = (tab) => {
@@ -33,20 +47,31 @@ class ShareDialog extends React.Component {
 
   renderDirContent = () => {
     let activeTab = this.state.activeTab;
+
+    const {repoEncrypted, userPerm, enableDirPrivateShare} = this.props;
+    const enableShareLink = !repoEncrypted && canGenerateShareLink;
+    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
+
     return (
       <Fragment>
         <div className="share-dialog-side">
           <Nav pills vertical>
+            {enableShareLink &&
             <NavItem>
               <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
                 {gettext('Share Link')}
               </NavLink>
             </NavItem>
+            }
+            {enableUploadLink &&
             <NavItem>
               <NavLink className={activeTab === 'uploadLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLink')}>
                 {gettext('Upload Link')}
               </NavLink>
             </NavItem>
+            }
+            {enableDirPrivateShare &&
+            <Fragment>
             <NavItem>
               <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')}>
                 {gettext('Share to user')}
@@ -57,10 +82,13 @@ class ShareDialog extends React.Component {
                 {gettext('Share to group')}
               </NavLink>
             </NavItem>
+            </Fragment>
+            }
           </Nav>
         </div>
         <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
+            {enableShareLink &&
             <TabPane tabId="shareLink">
               <GenerateShareLink 
                 itemPath={this.props.itemPath} 
@@ -68,6 +96,8 @@ class ShareDialog extends React.Component {
                 closeShareDialog={this.props.toggleDialog} 
                 />
             </TabPane>
+            }
+            {enableUploadLink &&
             <TabPane tabId="uploadLink">
               <GenerateUploadLink 
                 itemPath={this.props.itemPath} 
@@ -75,12 +105,17 @@ class ShareDialog extends React.Component {
                 closeShareDialog={this.props.toggleDialog} 
               />
             </TabPane>
+            }
+            {enableDirPrivateShare &&
+            <Fragment>
             <TabPane tabId="shareToUser">
               <ShareToUser isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
             </TabPane>
             <TabPane tabId="shareToGroup">
               <ShareToGroup isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
             </TabPane>
+            </Fragment>
+            }
           </TabContent>
         </div>
       </Fragment>
@@ -116,14 +151,15 @@ class ShareDialog extends React.Component {
   }
 
   render() {
-    let { itemType, itemName } = this.props;
+    const { itemType, itemName, repoEncrypted } = this.props;
+    const enableShareLink = !repoEncrypted && canGenerateShareLink;
     return (
       <div>
         <Modal isOpen={true} style={{maxWidth: '720px'}} className="share-dialog">
           <ModalHeader toggle={this.props.toggleDialog}>{gettext('Share')} <span className="sf-font" title={itemName}>{itemName}</span></ModalHeader>
           <ModalBody className="dialog-list-container share-dialog-content">
             {(itemType === 'library' || itemType === 'dir') && this.renderDirContent()}
-            {itemType === 'file' && this.renderFileContent()}
+            {(itemType === 'file' && enableShareLink) && this.renderFileContent()}
           </ModalBody>
         </Modal>
       </div>

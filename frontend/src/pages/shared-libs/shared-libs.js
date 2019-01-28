@@ -177,7 +177,6 @@ class Item extends Component {
   }
 
   render() {
-
     if (this.state.unshared) {
       return null;
     }
@@ -227,6 +226,10 @@ class Item extends Component {
               itemName={data.repo_name}
               itemPath={'/'}
               repoID={data.repo_id}
+              repoEncrypted={data.encrypted}
+              enableDirPrivateShare={true}
+              userPerm={data.permission}
+              isAdmin={true}
               toggleDialog={this.toggleShareDialog}
             />
           </ModalPotal>
@@ -258,6 +261,10 @@ class Item extends Component {
                 itemName={data.repo_name}
                 itemPath={'/'}
                 repoID={data.repo_id}
+                repoEncrypted={data.encrypted}
+                enableDirPrivateShare={true}
+                userPerm={data.permission}
+                isAdmin={true}
                 toggleDialog={this.toggleShareDialog}
               />
             </ModalPotal>

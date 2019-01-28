@@ -23,8 +23,13 @@ const propTypes = {
   permission: PropTypes.string,
   hash: PropTypes.string,
   path: PropTypes.string.isRequired,
+  repoName: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
   // whether the file or dir corresponding to the path exist
   pathExist: PropTypes.bool.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
@@ -78,20 +83,14 @@ class MainPanel extends Component {
       currentDirent: null,
       direntPath: '',
       currentRepoInfo: null,
-      isRepoOwner: false,
     };
   }
 
   componentDidMount() {
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repoInfo = new RepoInfo(res.data);
-      seafileAPI.getAccountInfo().then(res => {
-        let user_email = res.data.email;
-        let isRepoOwner = repoInfo.owner_email === user_email;
-        this.setState({
-          currentRepoInfo: repoInfo,
-          isRepoOwner: isRepoOwner,
-        });
+      this.setState({
+        currentRepoInfo: repoInfo,
       });
     });
     if (this.props.hash) {
@@ -185,12 +184,18 @@ class MainPanel extends Component {
                 <DirOperationToolBar 
                   path={this.props.path}
                   repoID={repoID}
+                  repoName={this.props.repoName}
+                  repoEncrypted={this.props.repoEncrypted}
                   isDraft={this.props.isDraft}
                   hasDraft={this.props.hasDraft}
                   direntList={this.props.direntList}
                   permission={this.props.permission}
                   isViewFile={this.props.isViewFile}
                   showShareBtn={this.props.showShareBtn}
+                  enableDirPrivateShare={this.props.enableDirPrivateShare}
+                  userPerm={this.props.userPerm}
+                  isAdmin={this.props.isAdmin}
+                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                   onAddFile={this.props.onAddFile}
                   onAddFolder={this.props.onAddFolder}
                   onUploadFile={this.onUploadFile}
@@ -262,6 +267,10 @@ class MainPanel extends Component {
                     path={this.props.path}
                     repoID={repoID}
                     repoEncrypted={this.props.repoEncrypted}
+                    isRepoOwner={this.props.isRepoOwner}
+                    isAdmin={this.props.isAdmin}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
                     direntList={this.props.direntList}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
@@ -277,7 +286,6 @@ class MainPanel extends Component {
                     isDirentListLoading={this.props.isDirentListLoading}
                     updateDirent={this.props.updateDirent}
                     currentRepoInfo={this.state.currentRepoInfo}
-                    isRepoOwner={this.state.isRepoOwner}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
                     onItemSelected={this.props.onItemSelected}

@@ -270,6 +270,9 @@ class Item extends Component {
               itemName={data.repo_name}
               itemPath={'/'}
               repoID={data.repo_id}
+              repoEncrypted={data.encrypted}
+              enableDirPrivateShare={true}
+              userPerm={data.permission}
               toggleDialog={this.toggleShareDialog}
             />
           </ModalPotal>
@@ -298,6 +301,9 @@ class Item extends Component {
               itemName={data.repo_name}
               itemPath={'/'}
               repoID={data.repo_id}
+              repoEncrypted={data.encrypted}
+              enableDirPrivateShare={true}
+              userPerm={data.permission}
               toggleDialog={this.toggleShareDialog}
             />
           </ModalPotal>

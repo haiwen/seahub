@@ -267,6 +267,10 @@ class DirentListView extends React.Component {
                   onDirentClick={this.props.onDirentClick}
                   onItemDetails={this.onItemDetails}
                   showImagePopup={this.showImagePopup}
+                  repoEncrypted={this.props.repoEncrypted}
+                  enableDirPrivateShare={this.props.enableDirPrivateShare}
+                  isAdmin={this.props.isAdmin}
+                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                 />
               );
             })
