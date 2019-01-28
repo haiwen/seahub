@@ -121,8 +121,8 @@ class AdminOrganizationTest(BaseTestCase):
         assert json_resp['org_id'] == self.org.org_id
         assert json_resp['role'] == 'default'
 
-    @patch('seahub.api2.endpoints.admin.organizations.get_available_org_roles')
-    @patch('seahub_extra.organizations.models.get_available_org_roles')
+    @patch('seahub.api2.endpoints.admin.organizations.get_available_roles')
+    @patch('seahub_extra.organizations.models.get_available_roles')
     def test_can_update_role(self, mock_1, mock_2):
         mock_1.return_value = ['default', 'custom']
         mock_2.return_value = ['default', 'custom']

@@ -144,22 +144,3 @@ def get_enabled_admin_role_permissions():
     return permissions
 
 ENABLED_ADMIN_ROLE_PERMISSIONS = get_enabled_admin_role_permissions()
-
-# role permissions for Org
-DEFAULT_ENABLED_ORG_ROLE_PERMISSIONS = {
-    DEFAULT_ORG: DEFAULT_ENABLED_ROLE_PERMISSIONS[DEFAULT_USER]
-}
-
-try:
-    custom_org_role_permissions = settings.ENABLED_ORG_ROLE_PERMISSIONS
-except AttributeError:
-    custom_org_role_permissions = {}
-
-ENABLED_ORG_ROLE_PERMISSIONS = merge_roles(
-    DEFAULT_ENABLED_ORG_ROLE_PERMISSIONS, custom_org_role_permissions
-)
-
-if settings.DEBUG and custom_org_role_permissions:
-    from pprint import pprint
-    print('=== ENABLED ORG ROLE PERMISSIONS ===')
-    pprint(ENABLED_ORG_ROLE_PERMISSIONS)

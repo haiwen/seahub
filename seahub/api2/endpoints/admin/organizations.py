@@ -17,7 +17,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
-from seahub.role_permissions.utils import get_available_org_roles
+from seahub.role_permissions.utils import get_available_roles
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -207,7 +207,7 @@ class AdminOrganization(APIView):
 
         role = request.data.get('role', None)
         if role:
-            if role not in get_available_org_roles():
+            if role not in get_available_roles():
                 error_msg = 'Role %s invalid.' % role
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

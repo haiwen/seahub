@@ -43,7 +43,7 @@ from seahub.institutions.models import (Institution, InstitutionAdmin,
 from seahub.institutions.utils import get_institution_space_usage
 from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles, \
-        get_available_admin_roles, get_available_org_roles
+        get_available_admin_roles
 from seahub.role_permissions.models import AdminRole
 from seahub.two_factor.models import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
@@ -1346,7 +1346,7 @@ def sys_org_admin(request):
         org.role = org_roles_dict.get(org.org_id, DEFAULT_ORG)
         org.is_default_role = True if org.role == DEFAULT_ORG else False
 
-    extra_org_roles = [x for x in get_available_org_roles() if x != DEFAULT_ORG]
+    extra_org_roles = [x for x in get_available_roles() if x != DEFAULT_ORG]
 
     return render(request, 'sysadmin/sys_org_admin.html', {
             'orgs': orgs,
@@ -1396,7 +1396,7 @@ def sys_org_search(request):
         org.role = org_roles_dict.get(org.org_id, DEFAULT_ORG)
         org.is_default_role = True if org.role == DEFAULT_ORG else False
 
-    extra_org_roles = [x for x in get_available_org_roles() if x != DEFAULT_ORG]
+    extra_org_roles = [x for x in get_available_roles() if x != DEFAULT_ORG]
 
     return render(request, 
         'sysadmin/sys_org_search.html', {
