@@ -208,8 +208,8 @@ class DirOperationToolbar extends React.Component {
         </div>
         {this.state.isUploadMenuShow && (
           <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-            <li className="dropdown-item" onClick={this.onUploadFile}>{gettext('File Upload')}</li>
-            <li className="dropdown-item" onClick={this.onUploadFolder}>{gettext('Folder Upload')}</li>
+            <li className="dropdown-item" onClick={this.onUploadFile}>{gettext('Upload Files')}</li>
+            <li className="dropdown-item" onClick={this.onUploadFolder}>{gettext('Upload Folder')}</li>
           </ul>
         )}
         {this.state.isCreateMenuShow && (

@@ -179,7 +179,7 @@ class CreateRepoDialog extends React.Component {
                 </FormGroup>
                 <FormGroup>
                   {/* todo translate */}
-                  <Label for="passwd1">{gettext('Password')}{' '}<span className="tip">(at least 8 characters)</span></Label>
+                  <Label for="passwd1" className="font-weight-bold">{gettext('Password')}{' '}</Label><span className="tip">{gettext('(at least 8 characters)')}</span>
                   <Input 
                     id="passwd1" 
                     type="password"
@@ -189,7 +189,7 @@ class CreateRepoDialog extends React.Component {
                   />
                 </FormGroup>
                 <FormGroup>
-                  <Label for="passwd2">{gettext('Password again')}</Label>
+                  <Label for="passwd2" className="font-weight-bold">{gettext('Password again')}</Label>
                   <Input 
                     id="passwd2"
                     type="password"
