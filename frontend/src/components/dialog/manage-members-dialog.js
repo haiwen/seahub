@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import RoleEditor from '../select-editor/role-eidtor';
-import UserSelect from '../../models/user-select';
+import UserSelect from '../user-select.js';
 import '../../css/manage-members-dialog.css';
 
 const propTypes = {
