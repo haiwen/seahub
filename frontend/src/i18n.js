@@ -11,7 +11,7 @@ i18n
     ns: ['translations'],
     defaultNS: 'translations',
 
-    whitelist: ['en', 'zh-CN'],
+    whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
 
     backend: {
       loadPath: siteRoot + 'media/assets/frontend/locales/{{ lng }}/{{ ns }}.json',
