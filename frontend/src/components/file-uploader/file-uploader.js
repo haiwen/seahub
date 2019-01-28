@@ -205,7 +205,7 @@ class FileUploader extends React.Component {
       uniqueIdentifier: resumableFile.uniqueIdentifier,
       resumableFile: resumableFile,
       progress: resumableFile.progress(),
-      isSaved: false,
+      isSaved: resumableFile.progress() === 1 ? true : false, // isSaved property is not saved in resumbaleFIle
     };
   }
 
