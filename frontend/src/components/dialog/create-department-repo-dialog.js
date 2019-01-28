@@ -35,6 +35,7 @@ class CreateDepartmentRepoDialog extends React.Component {
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
+      e.preventDefault();
     }
   }
 
@@ -50,17 +51,17 @@ class CreateDepartmentRepoDialog extends React.Component {
     let errMessage = '';
     let repoName = this.state.repoName.trim();
     if (!repoName.length) {
-      errMessage = 'Name is required';
+      errMessage = gettext('Name is required');
       this.setState({errMessage: errMessage});
       return false;
     }
     if (repoName.indexOf('/') > -1) {
-      errMessage = 'Name should not include \'/\'.';
+      errMessage = gettext('Name should not include \'/\'.');
       this.setState({errMessage: errMessage});
       return false;
     }
     if (repoName.length > maxFileName) {
-      errMessage = 'RepoName\'s length is must little than ' + maxFileName;
+      errMessage = gettext('RepoName\'s length is must little than ') + maxFileName;
       this.setState({errMessage: errMessage});
       return false;
     }
@@ -90,7 +91,7 @@ class CreateDepartmentRepoDialog extends React.Component {
               />
             </FormGroup>
           </Form>
-          <Label className="err-message">{gettext(this.state.errMessage)}</Label>
+          <Label className="err-message">{this.state.errMessage}</Label>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>

@@ -316,8 +316,6 @@ class DirentListItem extends React.Component {
         this.interval = setInterval(this.addDownloadAnimation, 1000);
       }).catch(() => {
         clearInterval(this.interval);
-        // toaster.danger(gettext(''));
-        //todo;
       });
     } else {
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});

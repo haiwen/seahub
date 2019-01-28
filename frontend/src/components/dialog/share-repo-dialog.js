@@ -32,7 +32,7 @@ class ShareRepoListItem extends React.Component {
       <tr>
         <td className="text-center"><input type="checkbox" className="vam" name="repo" onChange={this.onRepoSelect} /></td>
         <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt={gettext('icon')} /></td>
-        <td className="name">{gettext(repo.repo_name)}</td>
+        <td className="name">{repo.repo_name}</td>
         <td>{moment(repo.last_modified).fromNow()}</td>
         <td>
           <Input style={{height: '1.5rem', padding: 0}} type="select" name="select" onChange={this.onPermissionChange} value={repo.sharePermission}>

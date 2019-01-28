@@ -54,7 +54,6 @@ class InternalLinkDialog extends React.Component {
   }
 
   render() {
-    let internalLinkDesc = 'An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder.';
     return (
       <span className={'file-internal-link'} title={gettext('Internal Link')}>
         <i className="fa fa-link" onClick={this.getInternalLink}></i>
@@ -62,7 +61,7 @@ class InternalLinkDialog extends React.Component {
           <ModalHeader toggle={this.toggle}>{gettext('Internal Link')}</ModalHeader>
           <ModalBody>
             <p className="tip mb-1">
-              {gettext(internalLinkDesc)}
+              {gettext('An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder.')}
             </p>
             <p>
               <a target="_blank" href={this.state.smartLink}>{this.state.smartLink}</a>
