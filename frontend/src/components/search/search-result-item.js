@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -17,8 +16,7 @@ class SearchResultItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let fileIconSize = Utils.isHiDPI() ? 48 : 24;
-    let fileIconUrl = item.is_dir ? siteRoot + 'media/img/folder-192.png' : Utils.getFileIconUrl(item.name, fileIconSize);
+    let fileIconUrl = item.is_dir ? Utils.getFolderIconUrl(false, 192) : Utils.getFileIconUrl(item.name, 192);
     return (
       <li className="search-result-item" onClick={this.onClickHandler}>
         <img className="item-img" src={fileIconUrl} alt="" />

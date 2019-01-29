@@ -125,17 +125,13 @@ class Item extends Component {
 
   getLinkParams = () => {
     let item = this.props.item;
-    let icon_size = Utils.isHiDPI() ? 48 : 24;
     let iconUrl = '';
     let linkUrl = '';
     if (item.is_dir) {
-      iconUrl = Utils.getFolderIconUrl({
-        is_readonly: false, 
-        size: icon_size
-      });
+      iconUrl = Utils.getFolderIconUrl(false);
       linkUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}${Utils.encodePath(item.path)}`;
     } else {
-      iconUrl = Utils.getFileIconUrl(item.obj_name, icon_size); 
+      iconUrl = Utils.getFileIconUrl(item.obj_name); 
       linkUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 

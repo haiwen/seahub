@@ -353,17 +353,7 @@ class DirentListItem extends React.Component {
       });
     }
 
-    let size = Utils.isHiDPI() ? 48 : 24;
-    let iconUrl = '';
-    if (dirent.type === 'file') {
-      iconUrl = Utils.getFileIconUrl(dirent.name, size);
-    } else {
-      let isReadOnly = false;
-      if (dirent.permission === 'r' || dirent.permission === 'preview') {
-        isReadOnly = true;
-      }
-      iconUrl = Utils.getFolderIconUrl({isReadOnly, size});
-    }
+    let iconUrl = Utils.getDirentIcon(dirent);
 
     const {repoEncrypted, isRepoOwner, isAdmin} = this.props;
     let showShare = false;

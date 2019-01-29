@@ -89,28 +89,6 @@ export const Utils = {
     'default' : 'file.png'
   },
 
-  getFileIconUrl: function(filename, size) {
-    if (size > 24) {
-      size = 192;
-    } else {
-      size = 24;
-    }
-
-    var file_ext;
-    if (filename.lastIndexOf('.') == -1) {
-      return mediaUrl + 'img/file/' + size + '/'
-        + this.FILEEXT_ICON_MAP['default'];
-    } else {
-      file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    }
-
-    if (this.FILEEXT_ICON_MAP[file_ext]) {
-      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP[file_ext];
-    } else {
-      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP['default'];
-    }
-  },
-
   // check if a file is an image
   imageCheck: function (filename) {
     // no file ext
@@ -242,45 +220,71 @@ export const Utils = {
       navigator.userAgent.indexOf('Chrome') > -1;
   },
 
-  getLibIconUrl: function(options) {
-    /*
-     * param: {is_encrypted, is_readonly, size}
-     */
-    // icon name
-    var icon_name = 'lib.png';
-    if (options.is_encrypted) {
+  getLibIconUrl: function(repo, isBig) {
+    let permission = repo.permission || repo.share_permission; //Compatible with regular repo and repo shared
+    let size = Utils.isHiDPI() ? 48 : 24;
+    size = isBig ? 256 : size;
+    let icon_name = 'lib.png';
+    if (repo.encrypted) {
       icon_name = 'lib-encrypted.png';
     }
-    if (options.is_readonly) {
+    if (permission === 'r' || permission === 'perview') {
       icon_name = 'lib-readonly.png';
     }
 
-    // icon size
-    var icon_size = options.size || 256; // 'size' can be 24, 48, or undefined. (2017.7.31)
-
-    return mediaUrl + 'img/lib/' + icon_size + '/' + icon_name;
+    return mediaUrl + 'img/lib/' + size + '/' + icon_name;
   },
 
-  getFolderIconUrl: function(options) {
-    /*
-     * param: {is_readonly, size}
-     */
-    const readonly = options.is_readonly;
-    const size = options.size;
-    return `${mediaUrl}img/folder${readonly ? '-read-only' : ''}${size > 24 ? '-192' : '-24'}.png`;
+  getDirentIcon: function (dirent, isBig) {
+    let size = this.isHiDPI() ? 48 : 24;
+    size = isBig ? 192 : size;
+    if (dirent.isDir()) {
+      let readonly = false;
+      if (dirent.permission && (dirent.permission === 'r' || dirent.permission === 'preview')) {
+        readonly = true;
+      }
+      return this.getFolderIconUrl(readonly, size);
+    } else {
+      return this.getFileIconUrl(dirent.name, size);
+    }
   },
 
-  getLibIconTitle: function(options) {
-    /*
-     * param: {encrypted, is_admin, permission}
-     */
+  getFolderIconUrl: function(readonly = false, size) {
+    if (!size) {
+      size = Utils.isHiDPI() ? 48 : 24;
+    }
+    size = size > 24 ? 192 : 24;
+    return `${mediaUrl}img/folder${readonly ? '-read-only-' : '-'}${size}.png`;
+  },
+
+  getFileIconUrl: function(filename, size) {
+    if (!size) {
+      size = Utils.isHiDPI() ? 48 : 24;
+    }
+    size = size > 24 ? 192 : 24;
+    let file_ext = '';
+    if (filename.lastIndexOf('.') == -1) {
+      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP['default'];
+    } else {
+      file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    }
+
+    if (this.FILEEXT_ICON_MAP[file_ext]) {
+      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP[file_ext];
+    } else {
+      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP['default'];
+    }
+  },
+
+  getLibIconTitle: function(repo) {
     var title;
-    if (options.encrypted) {
+    let permission = repo.permission || repo.share_permission; //Compatible with regular repo and repo shared
+    if (repo.encrypted) {
       title = gettext("Encrypted library");
-    } else if (options.is_admin) { // shared with 'admin' permission
+    } else if (repo.is_admin) { // shared with 'admin' permission
       title = gettext("Admin access");
     } else {
-      switch(options.permission) {
+      switch(permission) {
         case 'rw':
           title = gettext("Read-Write library");
           break;

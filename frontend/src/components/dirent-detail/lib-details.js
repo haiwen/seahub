@@ -38,32 +38,21 @@ class LibDetail extends React.Component {
 
   render() {
     let repo = this.props.currentRepo;
-    let isReadOnly = false;
-    if (repo.permission === 'r' || repo.permission === 'preview') {
-      isReadOnly = true;
-    }
-    let titleIcon = Utils.getLibIconUrl({
-      is_encrypted: repo.encrypted,
-      is_readonly: isReadOnly,
-      size: Utils.isHiDPI() ? 48 : 24
-    });
-    let iconUrl = Utils.getLibIconUrl({
-      is_encrypted: repo.encrypted, 
-      is_readonly: isReadOnly,
-    });
+    let smallIconUrl = Utils.getLibIconUrl(repo);
+    let bigIconUrl = Utils.getLibIconUrl(repo, true);
 
     return (
       <div className="detail-container">
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.closeDetails}></div>
           <div className="detail-title dirent-title">
-            <img src={titleIcon} width="24" height="24" alt="" />{'  '}
+            <img src={smallIconUrl} width="24" height="24" alt="" />{'  '}
             <span className="name ellipsis" title={repo.repo_name}>{repo.repo_name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={iconUrl} height="96"  alt="" />
+            <img src={bigIconUrl} height="96"  alt="" />
           </div>
           <div className="dirent-table-container">
             <table className="table-thead-hidden">

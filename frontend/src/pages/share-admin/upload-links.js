@@ -107,12 +107,7 @@ class Item extends Component {
 
   getUploadParams = () => {
     let item = this.props.item;
-    let icon_size = Utils.isHiDPI() ? 48 : 24;
-    let iconUrl = Utils.getFolderIconUrl({
-      is_readonly: false, 
-      size: icon_size
-    });
-
+    let iconUrl = Utils.getFolderIconUrl(false);
     let uploadUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}${Utils.encodePath(item.path)}`;
 
     return { iconUrl, uploadUrl };

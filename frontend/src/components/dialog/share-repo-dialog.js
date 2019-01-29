@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { gettext, siteRoot } from '../../utils/constants';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Alert } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
-import toaster from '../toast';
 
 const shareRepoListItemProps = {
   repo: PropTypes.object.isRequired,
@@ -28,10 +28,11 @@ class ShareRepoListItem extends React.Component {
 
   render() {
     let repo = this.props.repo;
+    let iconUrl = Utils.getLibIconUrl(repo);
     return (
       <tr>
         <td className="text-center"><input type="checkbox" className="vam" name="repo" onChange={this.onRepoSelect} /></td>
-        <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt={gettext('icon')} /></td>
+        <td className="text-center"><img src={iconUrl} width="24" alt={gettext('icon')} /></td>
         <td className="name">{repo.repo_name}</td>
         <td>{moment(repo.last_modified).fromNow()}</td>
         <td>
@@ -61,6 +62,7 @@ class ShareRepoDialog extends React.Component {
       currentRepo: null,
       permission: 'rw',
       selectedRepoList: [],
+      errMessage: '',
     };
   }
 
@@ -100,7 +102,8 @@ class ShareRepoDialog extends React.Component {
 
   handleSubmit = () => {
     if (this.state.selectedRepoList.length === 0) {
-      toaster.danger(gettext('Please select a library to share.'));
+      let errMessage = gettext('Please select a library to share.')
+      this.setState({errMessage: errMessage});
       return;
     }
 
@@ -141,6 +144,7 @@ class ShareRepoDialog extends React.Component {
             </tbody>
           </table>
         </ModalBody>
+        {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         <ModalFooter>
           <Button color="secondary" onClick={this.onCloseDialog}>{gettext('Close')}</Button>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>

@@ -91,9 +91,8 @@ class TableBody extends Component {
   render() {
 
     let listFilesActivities = this.state.items.map(function(item, index) {
-      let fileIconSize = Utils.isHiDPI() ? 48 : 24;
 
-      item.file_icon_url = Utils.getFileIconUrl(item.file_name, fileIconSize);
+      item.file_icon_url = Utils.getFileIconUrl(item.file_name);
       item.encoded_path = Utils.encodePath(item.path);
 
       item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';

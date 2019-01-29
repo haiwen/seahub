@@ -117,22 +117,9 @@ class Item extends Component {
 
   getRepoParams = () => {
     let item = this.props.item;
-    const { share_permission, is_admin } = this.state;
-
-    let is_readonly = false;
-    if (share_permission == 'r' || share_permission == 'preview') {
-      is_readonly = true;
-    }
-    let iconUrl = Utils.getLibIconUrl({
-      is_encrypted: item.encrypted,
-      is_readonly: is_readonly, 
-      size: Utils.isHiDPI() ? 48 : 24
-    }); 
-    let iconTitle = Utils.getLibIconTitle({
-      'encrypted': item.encrypted,
-      'is_admin': is_admin,
-      'permission': share_permission
-    });
+    
+    let iconUrl = Utils.getLibIconUrl(item); 
+    let iconTitle = Utils.getLibIconTitle(item);
     let repoUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}`;
 
     return { iconUrl, iconTitle, repoUrl };
