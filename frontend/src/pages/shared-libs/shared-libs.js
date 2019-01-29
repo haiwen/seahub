@@ -182,22 +182,9 @@ class Item extends Component {
     }
 
     const data = this.props.data;
-    const permission = data.permission;
 
-    let is_readonly = false;
-    if (permission == 'r' || permission == 'preview') {
-      is_readonly = true;
-    }
-    data.icon_url = Utils.getLibIconUrl({
-      is_encrypted: data.encrypted,
-      is_readonly: is_readonly, 
-      size: Utils.isHiDPI() ? 48 : 24
-    }); 
-    data.icon_title = Utils.getLibIconTitle({
-      'encrypted': data.encrypted,
-      'is_admin': data.is_admin,
-      'permission': permission
-    });
+    data.icon_url = Utils.getLibIconUrl(data); 
+    data.icon_title = Utils.getLibIconTitle(data);
     data.url = `${siteRoot}#shared-libs/lib/${data.repo_id}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';

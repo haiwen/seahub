@@ -220,23 +220,19 @@ export const Utils = {
       navigator.userAgent.indexOf('Chrome') > -1;
   },
 
-  getLibIconUrl: function(options) {
-    /*
-     * param: {is_encrypted, is_readonly, size}
-     */
-    // icon name
-    var icon_name = 'lib.png';
-    if (options.is_encrypted) {
+  getLibIconUrl: function(repo, isBig) {
+    let permission = repo.permission || repo.share_permission; //Compatible with regular repo and repo shared
+    let size = Utils.isHiDPI() ? 48 : 24;
+    size = isBig ? 256 : size;
+    let icon_name = 'lib.png';
+    if (repo.encrypted) {
       icon_name = 'lib-encrypted.png';
     }
-    if (options.is_readonly) {
+    if (permission === 'r' || permission === 'perview') {
       icon_name = 'lib-readonly.png';
     }
 
-    // icon size
-    var icon_size = options.size || 256; // 'size' can be 24, 48, or undefined. (2017.7.31)
-
-    return mediaUrl + 'img/lib/' + icon_size + '/' + icon_name;
+    return mediaUrl + 'img/lib/' + size + '/' + icon_name;
   },
 
   getDirentIcon: function (dirent, isBig) {
@@ -280,17 +276,15 @@ export const Utils = {
     }
   },
 
-  getLibIconTitle: function(options) {
-    /*
-     * param: {encrypted, is_admin, permission}
-     */
+  getLibIconTitle: function(repo) {
     var title;
-    if (options.encrypted) {
+    let permission = repo.permission || repo.share_permission; //Compatible with regular repo and repo shared
+    if (repo.encrypted) {
       title = gettext("Encrypted library");
-    } else if (options.is_admin) { // shared with 'admin' permission
+    } else if (repo.is_admin) { // shared with 'admin' permission
       title = gettext("Admin access");
     } else {
-      switch(options.permission) {
+      switch(permission) {
         case 'rw':
           title = gettext("Read-Write library");
           break;
