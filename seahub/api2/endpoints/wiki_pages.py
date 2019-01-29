@@ -3,6 +3,7 @@
 import os
 import logging
 import urllib2
+import posixpath
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -19,11 +20,11 @@ from seahub.views.file import send_file_access_msg
 from seahub.api2.views import get_dir_file_recursively
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, to_python_boolean
 from seahub.wiki.models import Wiki, WikiPageMissing
 from seahub.wiki.utils import (clean_page_name, get_wiki_pages, get_inner_file_url,
                                get_wiki_dirent, get_wiki_page_object, get_wiki_dirs_by_path)
-from seahub.utils import gen_inner_file_get_url
+from seahub.utils import gen_inner_file_get_url, normalize_dir_path
 from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
 
 logger = logging.getLogger(__name__)
@@ -219,11 +220,6 @@ class WikiPagesDirView(APIView):
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        path = request.GET.get("p", '')
-        if not path:
-            error_msg = "Folder not found."
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         # perm check
         if not wiki.has_read_perm(request):
             error_msg = "Permission denied"
@@ -238,15 +234,44 @@ class WikiPagesDirView(APIView):
             error_msg = "Internal Server Error"
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        dir_id = seafile_api.get_dir_id_by_path(repo.repo_id, path)
+        with_parents = request.GET.get('with_parents', 'false')
+        if with_parents not in ('true', 'false'):
+            error_msg = 'with_parents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        with_parents = to_python_boolean(with_parents)
+
+        parent_dir = request.GET.get("p", '/')
+        parent_dir = normalize_dir_path(parent_dir)
+
+        dir_id = seafile_api.get_dir_id_by_path(repo.repo_id, parent_dir)
         if not dir_id:
-            error_msg = 'Folder %s not found.' % path
+            error_msg = 'Folder %s not found.' % parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        all_dirs = get_wiki_dirs_by_path(repo.repo_id, path, [])
+        parent_dir_list = []
+        if not with_parents:
+            # only return dirent list in current parent folder
+            parent_dir_list.append(parent_dir)
+        else:
+            # if value of 'p' parameter is '/a/b/c' add with_parents's is 'true'
+            # then return dirent list in '/', '/a', '/a/b' and '/a/b/c'.
+            if parent_dir == '/':
+                parent_dir_list.append(parent_dir)
+            else:
+                tmp_parent_dir = '/'
+                parent_dir_list.append(tmp_parent_dir)
+                for folder_name in parent_dir.strip('/').split('/'):
+                    tmp_parent_dir = posixpath.join(tmp_parent_dir, folder_name)
+                    parent_dir_list.append(tmp_parent_dir)
+
+        all_dirs_info = []
+        for parent_dir in parent_dir_list:
+            all_dirs = get_wiki_dirs_by_path(repo.repo_id, parent_dir, [])
+            all_dirs_info += all_dirs
 
         return Response({
-            "dir_file_list": all_dirs
+            "dirent_list": all_dirs_info
         })
 
 
