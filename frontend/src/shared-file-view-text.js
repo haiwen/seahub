@@ -51,7 +51,7 @@ class SharedFileViewText extends React.Component {
       <div className="file-enc-cont">
         <label htmlFor="file-enc">{gettext('Encoding:')}</label>
         <select id="file-enc" onChange={this.changeEncode}>
-          <option value="auto">auto detect</option>
+          <option value="auto">{gettext('auto detect')}</option>
           <option value="utf-8">utf-8</option>
           <option value="gbk">gbk</option>
           <option value="ISO-8859-1">ISO-8859-1</option>
