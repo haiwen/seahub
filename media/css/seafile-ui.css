@@ -10804,6 +10804,8 @@ Icon input
     margin: 10px 0; }
   .article tr:nth-child(2n+1) {
     background-color: #F8F8F8; }
+  .article tr:first-child {
+    font-weight: bold; }
   .article th, .article td {
     padding: 6px 13px; }
   .article table p {
