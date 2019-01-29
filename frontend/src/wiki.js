@@ -70,7 +70,7 @@ class Wiki extends Component {
 
   loadSidePanel = (initialPath) => {
     if (initialPath === this.homePath || isDir === 'None') {
-      seafileAPI.listDir(repoID, '/').then(res => {
+      seafileAPI.listWikiDir(slug, '/').then(res => {
         let tree = this.state.treeData;
         this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
         let indexNode = tree.getNodeByPath(this.indexPath);
@@ -137,7 +137,7 @@ class Wiki extends Component {
 
   loadDirentList = (dirPath) => {
     this.setState({isDataLoading: true});
-    seafileAPI.listDir(repoID, dirPath).then(res => {
+    seafileAPI.listWikiDir(slug, dirPath).then(res => {
       let direntList = res.data.dirent_list.map(item => {
         let dirent = new Dirent(item);
         return dirent;
@@ -158,7 +158,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
     if (!node.isLoaded) {
-      seafileAPI.listDir(repoID, node.path).then(res => {
+      seafileAPI.listWikiDir(slug, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         let parentNode = tree.getNodeByPath(node.parentNode.path);
         parentNode.isExpanded = true;
@@ -179,7 +179,7 @@ class Wiki extends Component {
     if (Utils.isMarkdownFile(path)) {
       path = Utils.getDirName(path);
     }
-    seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
+    seafileAPI.listWikiDir(slug, path, true).then(res => {
       let direntList = res.data.dirent_list;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
@@ -314,7 +314,7 @@ class Wiki extends Component {
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
         node = tree.getNodeByPath(node.path);
-        seafileAPI.listDir(repoID, node.path).then(res => {
+        seafileAPI.listWikiDir(slug, node.path).then(res => {
           this.addResponseListToNode(res.data.dirent_list, node);
           tree.collapseNode(node);
           this.setState({treeData: tree});
@@ -361,7 +361,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
-      seafileAPI.listDir(repoID, node.path).then(res => {
+      seafileAPI.listWikiDir(slug, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         this.setState({treeData: tree});
       });
