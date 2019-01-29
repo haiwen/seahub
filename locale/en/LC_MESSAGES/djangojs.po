@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-28 18:35+0800\n"
+"POT-Creation-Date: 2019-01-29 11:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -259,7 +259,8 @@ msgstr ""
 #: frontend/src/components/dialog/create-file-dialog.js:48
 #: frontend/src/components/dialog/create-folder-dialog.js:45
 #: frontend/src/components/dialog/rename-dialog.js:56
-msgid "The name '{name}' is already occupied, please choose another name."
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:70
+msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr ""
 
 #: frontend/src/components/dialog/create-file-dialog.js:126
@@ -410,7 +411,7 @@ msgstr ""
 #: frontend/src/components/dialog/share-to-user.js:55
 #: frontend/src/components/dialog/update-tag-dialog.js:108
 #: frontend/src/components/dialog/wiki-delete-dialog.js:26
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:422
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:432
 #: frontend/src/components/draft-list-view/draft-list-menu.js:25
 #: frontend/src/components/draft-list-view/draft-list-menu.js:35
 #: frontend/src/components/review-list-view/review-comments.js:282
@@ -765,32 +766,32 @@ msgstr ""
 msgid "Select Folder"
 msgstr ""
 
-#: frontend/src/components/dialog/share-dialog.js:42
-#: frontend/src/components/dialog/share-dialog.js:98
+#: frontend/src/components/dialog/share-dialog.js:62
+#: frontend/src/components/dialog/share-dialog.js:133
 msgid "Share Link"
 msgstr ""
 
-#: frontend/src/components/dialog/share-dialog.js:47
+#: frontend/src/components/dialog/share-dialog.js:69
 msgid "Upload Link"
 msgstr ""
 
-#: frontend/src/components/dialog/share-dialog.js:52
+#: frontend/src/components/dialog/share-dialog.js:77
 msgid "Share to user"
 msgstr ""
 
-#: frontend/src/components/dialog/share-dialog.js:57
+#: frontend/src/components/dialog/share-dialog.js:82
 msgid "Share to group"
 msgstr ""
 
-#: frontend/src/components/dialog/share-dialog.js:123
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:419
+#: frontend/src/components/dialog/share-dialog.js:159
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:428
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:170
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:267
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:206
 #: frontend/src/pages/my-libs/item.js:216
 #: frontend/src/pages/my-libs/item.js:234
-#: frontend/src/pages/shared-libs/shared-libs.js:215
-#: frontend/src/pages/shared-libs/shared-libs.js:249
+#: frontend/src/pages/shared-libs/shared-libs.js:214
+#: frontend/src/pages/shared-libs/shared-libs.js:252
 msgid "Share"
 msgstr ""
 
@@ -901,23 +902,24 @@ msgstr ""
 msgid "Choose a library as Wiki"
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-panel.js:135
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:165
+#: frontend/src/components/dir-view/dir-panel.js:133
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:164
+#: frontend/src/pages/wiki/main-panel.js:73
 msgid "Folder does not exist."
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-panel.js:144
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:174
+#: frontend/src/components/dir-view/dir-panel.js:142
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:173
 msgid "Side Nav Menu"
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-panel.js:177
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:203
-#: frontend/src/pages/wiki/main-panel.js:86
+#: frontend/src/components/dir-view/dir-panel.js:181
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:208
+#: frontend/src/pages/wiki/main-panel.js:88
 msgid "Search files in this library"
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:116
+#: frontend/src/components/dir-view/dir-view.js:127
 #: frontend/src/pages/dashboard/files-activities.js:240
 #: frontend/src/pages/dashboard/files-activities.js:291
 #: frontend/src/pages/groups/group-view.js:93
@@ -929,14 +931,14 @@ msgstr ""
 #: frontend/src/pages/share-admin/libraries.js:218
 #: frontend/src/pages/share-admin/share-links.js:268
 #: frontend/src/pages/share-admin/upload-links.js:170
-#: frontend/src/pages/shared-libs/shared-libs.js:303
+#: frontend/src/pages/shared-libs/shared-libs.js:310
 #: frontend/src/pages/shared-with-all/public-shared-view.js:54
 #: frontend/src/pages/starred/starred.js:229
 #: frontend/src/pages/wikis/wikis.js:41
 msgid "Permission denied"
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:121
+#: frontend/src/components/dir-view/dir-view.js:132
 #: frontend/src/pages/groups/group-view.js:99
 #: frontend/src/pages/groups/group-view.js:133
 #: frontend/src/pages/groups/groups-view.js:124
@@ -946,7 +948,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/libraries.js:224
 #: frontend/src/pages/share-admin/share-links.js:274
 #: frontend/src/pages/share-admin/upload-links.js:176
-#: frontend/src/pages/shared-libs/shared-libs.js:309
+#: frontend/src/pages/shared-libs/shared-libs.js:316
 #: frontend/src/pages/shared-with-all/public-shared-view.js:60
 #: frontend/src/pages/starred/starred.js:235
 #: frontend/src/pages/wikis/wikis.js:47
@@ -960,7 +962,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:127
+#: frontend/src/components/dir-view/dir-view.js:138
 #: frontend/src/pages/groups/group-view.js:105
 #: frontend/src/pages/groups/group-view.js:139
 #: frontend/src/pages/groups/groups-view.js:130
@@ -970,7 +972,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/libraries.js:230
 #: frontend/src/pages/share-admin/share-links.js:281
 #: frontend/src/pages/share-admin/upload-links.js:182
-#: frontend/src/pages/shared-libs/shared-libs.js:316
+#: frontend/src/pages/shared-libs/shared-libs.js:323
 #: frontend/src/pages/shared-with-all/public-shared-view.js:66
 #: frontend/src/pages/starred/starred.js:242
 #: frontend/src/pages/wikis/wikis.js:53 static/scripts/app/views/dir.js:503
@@ -978,41 +980,41 @@ msgstr ""
 msgid "Please check the network."
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:152
-#: frontend/src/repo-wiki-mode.js:115
+#: frontend/src/components/dir-view/dir-view.js:173
+#: frontend/src/repo-wiki-mode.js:138
 msgid "This folder has been updated. "
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:153
-#: frontend/src/repo-wiki-mode.js:116
+#: frontend/src/components/dir-view/dir-view.js:174
+#: frontend/src/repo-wiki-mode.js:139
 #: static/scripts/app/views/notifications.js:63
 msgid "Refresh"
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:326
-#: frontend/src/components/dir-view/dir-view.js:397
-#: frontend/src/repo-wiki-mode.js:481 frontend/src/repo-wiki-mode.js:520
+#: frontend/src/components/dir-view/dir-view.js:347
+#: frontend/src/components/dir-view/dir-view.js:418
+#: frontend/src/repo-wiki-mode.js:504 frontend/src/repo-wiki-mode.js:543
 #: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
 msgid "Successfully moved %(name)s."
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:330
-#: frontend/src/components/dir-view/dir-view.js:401
-#: frontend/src/repo-wiki-mode.js:485 frontend/src/repo-wiki-mode.js:524
+#: frontend/src/components/dir-view/dir-view.js:351
+#: frontend/src/components/dir-view/dir-view.js:422
+#: frontend/src/repo-wiki-mode.js:508 frontend/src/repo-wiki-mode.js:547
 #: static/scripts/app/views/dir.js:1383
 msgid "Failed to move %(name)s"
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:340
-#: frontend/src/components/dir-view/dir-view.js:411
-#: frontend/src/repo-wiki-mode.js:498 frontend/src/repo-wiki-mode.js:541
+#: frontend/src/components/dir-view/dir-view.js:361
+#: frontend/src/components/dir-view/dir-view.js:432
+#: frontend/src/repo-wiki-mode.js:521 frontend/src/repo-wiki-mode.js:564
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr ""
 
-#: frontend/src/components/dir-view/dir-view.js:344
-#: frontend/src/components/dir-view/dir-view.js:415
-#: frontend/src/repo-wiki-mode.js:502 frontend/src/repo-wiki-mode.js:545
+#: frontend/src/components/dir-view/dir-view.js:365
+#: frontend/src/components/dir-view/dir-view.js:436
+#: frontend/src/repo-wiki-mode.js:525 frontend/src/repo-wiki-mode.js:568
 #: static/scripts/app/views/dir.js:1383
 msgid "Failed to copy %(name)s"
 msgstr ""
@@ -1028,19 +1030,15 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:384
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:392
 msgid "locked"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:416
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:424
 #: frontend/src/components/history-list-view/history-list-item.js:101
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:102
 #: frontend/src/shared-file-view-markdown.js:121
 msgid "Download"
-msgstr ""
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:70
-msgid "The name {name} is already occupied, please choose another name."
 msgstr ""
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:193
@@ -1067,33 +1065,33 @@ msgstr ""
 msgid "Open in New Tab"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:288
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:292
 msgid "The image could not be loaded."
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:289
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:293
 #: static/scripts/app/views/dir.js:64
 #: static/scripts/app/views/starred-file.js:110
 msgid "Previous (Left arrow key)"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:290
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:294
 #: static/scripts/app/views/dir.js:65
 #: static/scripts/app/views/starred-file.js:111
 msgid "Next (Right arrow key)"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:291
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:295
 #: static/scripts/app/views/dir.js:60
 #: static/scripts/app/views/starred-file.js:106
 msgid "Close (Esc)"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:292
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:296
 msgid "Zoom in"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:293
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:297
 msgid "Zoom out"
 msgstr ""
 
@@ -1243,7 +1241,7 @@ msgstr ""
 
 #: frontend/src/components/main-side-nav.js:161
 #: frontend/src/components/main-side-nav.js:163
-#: frontend/src/pages/shared-libs/shared-libs.js:335
+#: frontend/src/pages/shared-libs/shared-libs.js:342
 msgid "Shared with me"
 msgstr ""
 
@@ -1276,7 +1274,7 @@ msgstr ""
 
 #: frontend/src/components/main-side-nav.js:200
 #: frontend/src/components/main-side-nav.js:202
-#: frontend/src/pages/wiki/main-panel.js:96
+#: frontend/src/pages/wiki/main-panel.js:98
 #: frontend/src/pages/wikis/wikis.js:143
 msgid "Wikis"
 msgstr ""
@@ -1355,7 +1353,6 @@ msgstr ""
 
 #: frontend/src/components/select-editor/select-editor.js:89
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:188
-#: frontend/src/pages/wiki/side-panel.js:43
 msgid "Edit"
 msgstr ""
 
@@ -1800,7 +1797,7 @@ msgid "Label current state"
 msgstr ""
 
 #: frontend/src/pages/my-libs/item.js:258
-#: frontend/src/pages/my-libs/item.js:287
+#: frontend/src/pages/my-libs/item.js:290
 msgid "Broken (please contact your administrator to fix this library)"
 msgstr ""
 
@@ -1820,19 +1817,19 @@ msgstr ""
 msgid "Successfully restored the library."
 msgstr ""
 
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:233
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:238
 msgid "This file is in review stage"
 msgstr ""
 
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:234
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:239
 msgid "View Review"
 msgstr ""
 
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:241
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:246
 msgid "This file is in draft stage."
 msgstr ""
 
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:242
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:247
 msgid "Edit Draft"
 msgstr ""
 
@@ -1930,8 +1927,8 @@ msgid ""
 "libraries at \"Shared with groups\"."
 msgstr ""
 
-#: frontend/src/pages/shared-libs/shared-libs.js:217
-#: frontend/src/pages/shared-libs/shared-libs.js:251
+#: frontend/src/pages/shared-libs/shared-libs.js:216
+#: frontend/src/pages/shared-libs/shared-libs.js:254
 msgid "Leave Share"
 msgstr ""
 
@@ -1963,16 +1960,20 @@ msgstr ""
 msgid "Unstar"
 msgstr ""
 
-#: frontend/src/pages/wiki/main-panel.js:80
+#: frontend/src/pages/wiki/main-panel.js:82
 msgid "Edit Page"
 msgstr ""
 
-#: frontend/src/pages/wiki/side-panel.js:41
+#: frontend/src/pages/wiki/side-panel.js:34
 msgid "Contents"
 msgstr ""
 
-#: frontend/src/pages/wiki/side-panel.js:59
+#: frontend/src/pages/wiki/side-panel.js:49
 msgid "Pages"
+msgstr ""
+
+#: frontend/src/pages/wiki/side-panel.js:76
+msgid "Go to Library"
 msgstr ""
 
 #: frontend/src/pages/wikis/wikis.js:128
