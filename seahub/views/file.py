@@ -87,7 +87,8 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
-    SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX
+    SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, \
+    ENABLE_SHARE_LINK_REPORT_ILLEGAL
 
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
@@ -1213,6 +1214,7 @@ def view_shared_file(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
+            'enable_share_link_report_illegal': ENABLE_SHARE_LINK_REPORT_ILLEGAL,
             })
 
 @share_link_audit

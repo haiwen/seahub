@@ -107,7 +107,7 @@
         </li>
         {% endif %}
 
-        {% if is_default_admin %}
+        {% if is_default_admin and enable_share_link_report_illegal %}
         <li class="tab<% if (cur_tab == 'illegal-reports') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#illegal-reports/"><span class="sf2-icon-monitor"></span>{% trans "Illegal Reports" %}</a>
         </li>

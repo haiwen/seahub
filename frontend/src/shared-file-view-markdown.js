@@ -18,7 +18,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 
 let loginUser = window.app.pageOptions.name;
-const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
+const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download, enableShareLinkReportIllegal } = window.shared.pageOptions;
 
 class SharedFileViewMarkdown extends React.Component {
 
@@ -137,9 +137,11 @@ class SharedFileViewMarkdown extends React.Component {
                   </Button>
                 // TODO use css to add blank between buttons
                 }{' '}
-                <Button className="shared-file-op-btn"
-                  onClick={this.handleAddIllegalReportDialog}>{gettext('Report')}
-                </Button>{' '}
+                {(enableShareLinkReportIllegal) &&
+                  <Button className="shared-file-op-btn"
+                    onClick={this.handleAddIllegalReportDialog}>{gettext('Report')}
+                  </Button>
+                }{' '}
                 {(trafficOverLimit === "False") &&
                   <Button color="success" className="shared-file-op-btn">
                     <a href="?dl=1">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
