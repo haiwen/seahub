@@ -50,11 +50,17 @@ class Wiki extends Component {
     this.loadWikiData(initialPath);
   }
 
-  loadWikiData = () => {  
+  loadWikiData = (initialPath) => {  
     this.loadSidePanel(initialPath);
 
     if (isDir === 'None') {
-      this.setState({pathExist: false});
+      if (initialPath === '/home.md') {
+        this.showDir('/');
+      } else {
+        this.setState({pathExist: false});
+        let fileUrl = siteRoot + 'wikis/' + slug + initialPath;
+        window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
+      }
     } else if (isDir === 'True') {  
       this.showDir(initialPath);
     } else if (isDir === 'False') {
@@ -66,9 +72,10 @@ class Wiki extends Component {
     if (initialPath === this.homePath || isDir === 'None') {
       seafileAPI.listDir(repoID, '/').then(res => {
         let tree = this.state.treeData;
-        this.addResponseListToNode(res.data.dirent_list, tree.root);
+        this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
         let indexNode = tree.getNodeByPath(this.indexPath);
-        if (indexNode) {
+        let homeNode = tree.getNodeByPath(this.homePath);
+        if (homeNode && indexNode) {
           seafileAPI.getFileDownloadLink(repoID, indexNode.path).then(res => {
             seafileAPI.getFileContent(res.data).then(res => {
               this.setState({
@@ -202,10 +209,10 @@ class Wiki extends Component {
     const url = link;
     if (Utils.isWikiInternalMarkdownLink(url, slug)) {
       let path = Utils.getPathFromWikiInternalMarkdownLink(url, slug);
-      this.initMainPanelData(path);
+      this.showFile(path);
     } else if (Utils.isWikiInternalDirLink(url, slug)) {
       let path = Utils.getPathFromWikiInternalDirLink(url, slug);
-      this.initWikiData(path);
+      this.showDir(path);
     } else {
       window.location.href = url;
     }
@@ -362,6 +369,27 @@ class Wiki extends Component {
       tree.expandNode(node);
       this.setState({treeData: tree});
     }
+  }
+
+  addFirstResponseListToNode = (list, node) => {
+    node.isLoaded = true;
+    node.isExpanded = true;
+    let direntList = list.map(item => {
+      return new Dirent(item);
+    });
+    direntList = direntList.filter(item => {
+      if (item.type === 'dir') {
+        let name = item.name.toLowerCase();
+        return name !== 'drafts' && name !== 'images' && name !== 'downloads';
+      }
+      return true;
+    });
+    direntList = Utils.sortDirents(direntList, 'name', 'asc');
+
+    let nodeList = direntList.map(object => {
+      return new TreeNode({object});
+    });
+    node.addChildren(nodeList);
   }
 
   addResponseListToNode = (list, node) => {

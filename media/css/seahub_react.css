@@ -149,6 +149,10 @@ ul,ol,li {
     cursor: pointer;
 }
 
+.text-decoration-underline {
+    text-decoration: underline !important;
+}
+
 .sf-dropdown-toggle {
     margin-left: 0.5rem;
     vertical-align: middle;

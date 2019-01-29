@@ -56,7 +56,7 @@ class WikiDirListItem extends React.Component {
           <a href={href} onClick={this.onDirentClick}>{dirent.name}</a>
         </td>
         <td>{dirent.size}</td>
-        <td title={dirent.last_update_time}>{dirent.last_update_time}</td>
+        <td title={dirent.mtime_relative}>{dirent.mtime_relative}</td>
       </tr>
     );
   }

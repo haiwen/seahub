@@ -31,7 +31,8 @@ class MainPanel extends Component {
 
   onEditClick = (e) => {
     e.preventDefault();
-    window.location.href= siteRoot + 'lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
+    let url = siteRoot + 'lib/' + repoID + '/file' + this.props.path + '?mode=edit';
+    window.open(url);
   }
 
   onMainNavBarClick = (e) => {
@@ -69,6 +70,7 @@ class MainPanel extends Component {
 
 
   render() {
+    const errMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
     return (
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
@@ -102,8 +104,9 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className="cur-view-content">
-            {this.props.isDataLoading && <Loading />}
-            {(!this.props.isDataLoading && this.props.isViewFile) && (
+            {!this.props.pathExist && errMessage}
+            {this.props.pathExist && this.props.isDataLoading && <Loading />}
+            {(this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile) && (
               <WikiMarkdownViewer
                 markdownContent={this.props.content}
                 isFileLoading={this.props.isDataLoading}
