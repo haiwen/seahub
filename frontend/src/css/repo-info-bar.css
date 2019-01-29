@@ -2,7 +2,7 @@
   padding: 10px;
   border: 1px solid #e6e6dd;
   border-radius: 5px;
-  background: #f8f8f8;
+  /* background: #f8f8f8; */
 }
 
 .used-tag-list {
@@ -27,7 +27,7 @@
 }
 
 .used-tag-files {
-  color: #666;
+  color: #888;
   font-size: 14px;
 }
 
@@ -46,9 +46,9 @@
   color: #333;
 }
 
-.file-flag {
-  font-size: 12px;
-  color: #f19645;
+.info-icon {
+  color: #888;
+  vertical-align: middle;
 }
 
 .readme-dialog-edit {

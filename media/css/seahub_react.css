@@ -90,6 +90,8 @@
 .sf2-icon-two-columns:before { content:"\e036"; }
 .sf2-icon-tag:before {content:"\e037"}
 .sf2-icon-review:before {content:"\e038"}
+.sf2-icon-readme:before {content:"\e039"}
+.sf2-icon-drafts:before {content:"\e03a"}
 
 /* common class and element style*/
 a { color:#eb8205; }
