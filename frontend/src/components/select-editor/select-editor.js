@@ -77,6 +77,7 @@ class SelectEditor extends React.Component {
             options={this.options}
             className="permission-editor-select"
             classNamePrefix="permission-editor"
+            placeholder={gettext('Select...')}
             onChange={this.onOptionChanged}
             menuPlacement="auto"
           />
