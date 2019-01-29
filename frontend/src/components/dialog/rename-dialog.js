@@ -53,7 +53,7 @@ class Rename extends React.Component {
     } else {
       let isDuplicated = this.checkDuplicatedName();
       if (isDuplicated) {
-        let errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
+        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
         errMessage = errMessage.replace('{name}', Utils.HTMLescape(this.state.newName));
         this.setState({errMessage: errMessage});
       } else {
