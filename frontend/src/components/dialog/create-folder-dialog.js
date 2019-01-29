@@ -42,7 +42,7 @@ class CreateForder extends React.Component {
     let newName = this.state.childName;
     let isDuplicated = this.checkDuplicatedName();
     if (isDuplicated) {
-      let errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
+      let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
       this.setState({errMessage: errMessage});
     } else {
