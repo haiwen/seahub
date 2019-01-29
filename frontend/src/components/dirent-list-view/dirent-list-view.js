@@ -67,7 +67,7 @@ class DirentListView extends React.Component {
       return item.name === newName;
     });
     if (isDuplicated) {
-      let errMessage = gettext('The name {name} is already occupied, please choose another name.');
+      let errMessage = gettext('The name \'{name}\' is already occupied, please choose another name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
       toaster.danger(errMessage);
       return false;
