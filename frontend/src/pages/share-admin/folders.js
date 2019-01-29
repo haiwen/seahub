@@ -120,10 +120,7 @@ class Item extends Component {
     if (share_permission == 'r' || share_permission == 'preview') {
       is_readonly = true;
     }
-    let iconUrl = Utils.getFolderIconUrl({
-      is_readonly: is_readonly, 
-      size: Utils.isHiDPI() ? 48 : 24
-    }); 
+    let iconUrl = Utils.getFolderIconUrl(is_readonly); 
     let iconTitle = Utils.getFolderIconTitle({
       'permission': share_permission
     });

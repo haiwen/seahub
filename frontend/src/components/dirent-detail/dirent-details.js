@@ -94,24 +94,8 @@ class DirentDetail extends React.Component {
 
   render() {
     let { dirent } = this.props;
-    
-    let smallIconUrl = '';
-    let bigIconUrl = '';
-    let smallIconSize = Utils.isHiDPI() ? 48 : 24;
-    let bigIconSize = 192;
-    if (dirent.type === 'file') {
-      smallIconUrl = Utils.getFileIconUrl(dirent.name, smallIconSize);
-      bigIconUrl = Utils.getFileIconUrl(dirent.name, bigIconSize);
-    } else {
-      let isReadOnly = false;
-      if (dirent.permission === 'r' || dirent.permission === 'preview') {
-        isReadOnly = true;
-      }
-      let options = {isReadOnly: isReadOnly, size: smallIconSize};
-      smallIconUrl = Utils.getFolderIconUrl(options);
-      options.size = bigIconSize;
-      bigIconUrl = Utils.getFolderIconUrl(options);
-    }
+    let smallIconUrl = Utils.getDirentIcon(dirent);
+    let bigIconUrl = Utils.getDirentIcon(dirent, true);
 
     return (
       <div className="detail-container">

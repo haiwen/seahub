@@ -89,28 +89,6 @@ export const Utils = {
     'default' : 'file.png'
   },
 
-  getFileIconUrl: function(filename, size) {
-    if (size > 24) {
-      size = 192;
-    } else {
-      size = 24;
-    }
-
-    var file_ext;
-    if (filename.lastIndexOf('.') == -1) {
-      return mediaUrl + 'img/file/' + size + '/'
-        + this.FILEEXT_ICON_MAP['default'];
-    } else {
-      file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    }
-
-    if (this.FILEEXT_ICON_MAP[file_ext]) {
-      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP[file_ext];
-    } else {
-      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP['default'];
-    }
-  },
-
   // check if a file is an image
   imageCheck: function (filename) {
     // no file ext
@@ -261,13 +239,45 @@ export const Utils = {
     return mediaUrl + 'img/lib/' + icon_size + '/' + icon_name;
   },
 
-  getFolderIconUrl: function(options) {
-    /*
-     * param: {is_readonly, size}
-     */
-    const readonly = options.is_readonly;
-    const size = options.size;
-    return `${mediaUrl}img/folder${readonly ? '-read-only' : ''}${size > 24 ? '-192' : '-24'}.png`;
+  getDirentIcon: function (dirent, isBig) {
+    let size = this.isHiDPI() ? 48 : 24;
+    size = isBig ? 192 : size;
+    if (dirent.isDir()) {
+      let readonly = false;
+      if (dirent.permission && (dirent.permission === 'r' || dirent.permission === 'preview')) {
+        readonly = true;
+      }
+      return this.getFolderIconUrl(readonly, size);
+    } else {
+      return this.getFileIconUrl(dirent.name, size);
+    }
+  },
+
+  getFolderIconUrl: function(readonly = false, size) {
+    if (!size) {
+      size = Utils.isHiDPI() ? 48 : 24;
+    }
+    size = size > 24 ? 192 : 24;
+    return `${mediaUrl}img/folder${readonly ? '-read-only-' : '-'}${size}.png`;
+  },
+
+  getFileIconUrl: function(filename, size) {
+    if (!size) {
+      size = Utils.isHiDPI() ? 48 : 24;
+    }
+    size = size > 24 ? 192 : 24;
+    let file_ext = '';
+    if (filename.lastIndexOf('.') == -1) {
+      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP['default'];
+    } else {
+      file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    }
+
+    if (this.FILEEXT_ICON_MAP[file_ext]) {
+      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP[file_ext];
+    } else {
+      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP['default'];
+    }
   },
 
   getLibIconTitle: function(options) {

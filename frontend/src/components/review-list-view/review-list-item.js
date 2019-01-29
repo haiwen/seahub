@@ -102,8 +102,7 @@ class ReviewListItem extends React.Component {
     let localTime = moment.utc(item.updated_at).toDate();
     localTime = moment(localTime).fromNow();
 
-    let size = Utils.isHiDPI() ? 48 : 24;
-    let iconUrl = Utils.getFileIconUrl(fileName, size);
+    let iconUrl = Utils.getFileIconUrl(fileName);
 
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

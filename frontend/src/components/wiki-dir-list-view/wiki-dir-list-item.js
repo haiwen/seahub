@@ -34,18 +34,7 @@ class WikiDirListItem extends React.Component {
   render() {
     let { path, dirent } = this.props;
     let href = siteRoot + 'wikis' + Utils.joinPath(path, dirent.name);
-
-    let size = Utils.isHiDPI() ? 48 : 24;
-    let iconUrl = '';
-    if (dirent.type === 'file') {
-      iconUrl = Utils.getFileIconUrl(dirent.name, size);
-    } else {
-      let isReadOnly = false;
-      if (dirent.permission === 'r' || dirent.permission === 'preview') {
-        isReadOnly = true;
-      }
-      iconUrl = Utils.getFolderIconUrl({isReadOnly, size});
-    }
+    let iconUrl = Utils.getDirentIcon(dirent);
 
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
