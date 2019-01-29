@@ -76,14 +76,12 @@ class Wiki extends Component {
         let indexNode = tree.getNodeByPath(this.indexPath);
         let homeNode = tree.getNodeByPath(this.homePath);
         if (homeNode && indexNode) {
-          seafileAPI.getFileDownloadLink(repoID, indexNode.path).then(res => {
-            seafileAPI.getFileContent(res.data).then(res => {
-              this.setState({
-                treeData: tree,
-                indexNode: indexNode,
-                indexContent: res.data,
-                isTreeDataLoading: false,
-              });
+          seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
+            this.setState({
+              treeData: tree,
+              indexNode: indexNode,
+              indexContent: res.data.content,
+              isTreeDataLoading: false,
             });
           });
         } else {
@@ -115,18 +113,14 @@ class Wiki extends Component {
       path: filePath, 
     });
 
-    seafileAPI.getFileInfo(repoID, filePath).then(res => {
-      let { mtime, permission, last_modifier_name } = res.data;
-      seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
-        seafileAPI.getFileContent(res.data).then(res => {
-          this.setState({
-            isDataLoading: false,
-            content: res.data,
-            permission: permission,
-            lastModified: moment.unix(mtime).fromNow(),
-            latestContributor: last_modifier_name,
-          });
-        });
+    seafileAPI.getWikiFileContent(slug, filePath).then(res => {
+      let data = res.data;
+      this.setState({
+        isDataLoading: false,
+        content: data.content,
+        permission: data.permission,
+        lastModified: moment.unix(data.last_modified).fromNow(),
+        latestContributor: data.latest_contributor,
       });
     });
 
