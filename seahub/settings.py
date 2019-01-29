@@ -348,6 +348,9 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
 
+# enable or disable report illegal file on share link page
+ENABLE_SHARE_LINK_REPORT_ILLEGAL = False
+
 # share link audit code timeout
 SHARE_LINK_AUDIT_CODE_TIMEOUT = 60 * 60
 

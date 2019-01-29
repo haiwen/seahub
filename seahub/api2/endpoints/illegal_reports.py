@@ -15,6 +15,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.share.models import FileShare
 from seahub.utils import normalize_file_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.settings import ENABLE_SHARE_LINK_REPORT_ILLEGAL
 
 from seahub.illegal_reports.models import COPYRIGHT_ISSUE, \
         VIRUS_ISSUE, ILLEGAL_CONTENT_ISSUE, OTHER_ISSUE, IllegalReport
@@ -53,6 +54,10 @@ class IllegalReportsView(APIView):
         1. all user;
         """
 
+        if not ENABLE_SHARE_LINK_REPORT_ILLEGAL:
+            error_msg = 'Feature not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # argument check
         share_link_token = request.data.get('share_link_token', '')
         if not share_link_token:
@@ -69,7 +74,6 @@ class IllegalReportsView(APIView):
             error_msg = 'illegal_type invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # TODO
         reporter = request.data.get('reporter', '')
         description = request.data.get('description', '')
 

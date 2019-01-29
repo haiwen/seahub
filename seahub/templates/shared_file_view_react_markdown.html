@@ -1,0 +1,25 @@
+{% extends "base_for_react.html" %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    window.shared = {
+        pageOptions: {
+            repoID: '{{ repo.id }}',
+            path: '{{ path|escapejs }}',
+            sharedToken: '{{ shared_token }}',
+            trafficOverLimit: '{{ traffic_over_limit }}',
+            fileName: '{{ file_name|escapejs }}',
+            fileSize: '{{ file_size }}',
+            rawPath: '{{ raw_path|escapejs }}',
+            sharedBy: '{{ shared_by|email2nickname }}',
+            siteName: '{{ site_name }}',
+            enableWatermark: '{{ enable_watermark }}' == 'True',
+            download: '{{ permissions.can_download}}' == 'True',
+            enableShareLinkReportIllegal: '{{ enable_share_link_report_illegal }}' == 'True',
+        }
+    };
+</script>
+{% render_bundle 'sharedFileViewMarkdown' %}
+{% endblock %}

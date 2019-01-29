@@ -15,13 +15,13 @@ from django.conf import settings as dj_settings
 from django.utils.functional import lazy
 from constance import config
 
-from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
+from seahub.settings import SEAFILE_VERSION, \
     MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
-    CUSTOM_LOGIN_BG_PATH
+    CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ILLEGAL
 
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
@@ -143,6 +143,7 @@ def base(request):
 
     if request.user.is_staff:
         result['is_default_admin'] = request.user.admin_role == DEFAULT_ADMIN
+        result['enable_share_link_report_illegal'] = ENABLE_SHARE_LINK_REPORT_ILLEGAL
 
     return result
 

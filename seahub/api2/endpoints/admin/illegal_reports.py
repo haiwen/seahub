@@ -13,6 +13,7 @@ from seahub.api2.utils import api_error
 
 from seahub.api2.endpoints.illegal_reports import get_illegal_report_info
 from seahub.illegal_reports.models import IllegalReport
+from seahub.settings import ENABLE_SHARE_LINK_REPORT_ILLEGAL
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,10 @@ class AdminIllegalReportsView(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not ENABLE_SHARE_LINK_REPORT_ILLEGAL:
+            error_msg = 'Feature not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         illegal_type = request.GET.get('illegal_type', '')
         handled = request.GET.get('handled', '')
@@ -68,6 +73,10 @@ class AdminIllegalReportView(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not ENABLE_SHARE_LINK_REPORT_ILLEGAL:
+            error_msg = 'Feature not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # argument check
         handled = request.data.get('handled')
