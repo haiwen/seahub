@@ -93,6 +93,7 @@
 .sf2-icon-readme:before {content:"\e039"}
 .sf2-icon-drafts:before {content:"\e03a"}
 .sf2-icon-recycle:before {content:"\e03b"}
+.sf2-icon-library:before { content:"\e00d"; }
 
 /* common class and element style*/
 a { color:#eb8205; }

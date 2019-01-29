@@ -75,3 +75,6 @@ export const author = window.draftReview ? window.draftReview.config.author : ''
 export const authorAvatar = window.draftReview ? window.draftReview.config.authorAvatar : '';
 export const originFileExists = window.draftReview ? window.draftReview.config.originFileExists : '';
 export const draftFileExists = window.draftReview ? window.draftReview.config.draftFileExists : '';
+
+// org admin
+export const orgID = window.org ? window.org.pageOptions.orgID : '';
