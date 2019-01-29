@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -365,6 +365,14 @@ class DirentListItem extends React.Component {
       iconUrl = Utils.getFolderIconUrl({isReadOnly, size});
     }
 
+    const {repoEncrypted, isRepoOwner, isAdmin} = this.props;
+    let showShare = false;
+    if (!repoEncrypted &&
+      (dirent.permission == 'rw' || dirent.permission == 'r')) {
+      showShare = dirent.type == 'file' ? canGenerateShareLink :
+        (canGenerateShareLink || canGenerateUploadLink || (isRepoOwner || isAdmin));
+    }
+
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick}>
@@ -415,9 +423,11 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
+                  {showShare &&
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>
+                  }
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
@@ -476,7 +486,12 @@ class DirentListItem extends React.Component {
               itemType={dirent.type}
               itemName={dirent.name}
               itemPath={direntPath}
+              userPerm={dirent.permission}
               repoID={this.props.repoID}
+              repoEncrypted={false}
+              enableDirPrivateShare={this.props.enableDirPrivateShare}
+              isAdmin={this.props.isAdmin}
+              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.closeSharedDialog}
             />
           </ModalPortal>

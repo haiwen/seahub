@@ -30,7 +30,9 @@ class Wiki extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      repoName: '',
       repoEncrypted: false,
+      isGroupOwnedRepo: false,
       isAdmin: false,
       ownerEmail: '',
       userPerm: '',
@@ -83,10 +85,21 @@ class Wiki extends Component {
       let repoInfo = new RepoInfo(res.data);
       this.setState({
         libNeedDecrypt: res.data.lib_need_decrypt, 
+        repoName: repoInfo.repo_name,
         repoEncrypted: repoInfo.encrypted,
+        isVirtual: repoInfo.is_virtual,
         isAdmin: repoInfo.is_admin,
         ownerEmail: repoInfo.owner_email
       });
+
+      const ownerEmail = repoInfo.owner_email;
+      if (repoInfo.owner_email.indexOf('@seafile_group') != -1) {
+        const groupID = ownerEmail.substring(0, ownerEmail.indexOf('@'));
+        this.getGroupInfo(groupID);
+        this.setState({
+          isGroupOwnedRepo: true
+        });
+      }
 
       if (!res.data.lib_need_decrypt) {
         this.loadWikiData();
@@ -100,6 +113,16 @@ class Wiki extends Component {
 
   componentDidUpdate() {
     this.lastModifyTime = new Date();
+  }
+
+  getGroupInfo = (groupID) => {
+    seafileAPI.getGroup(groupID).then(res => {
+      if (res.data.admins.indexOf(username) != -1) {
+        this.setState({
+          isDepartmentAdmin: true
+        });
+      }
+    });
   }
 
   onRepoUpdateEvent = () => {
@@ -1018,14 +1041,18 @@ class Wiki extends Component {
       )
     }
 
-    let showShareBtn = false;
-    const { repoEncrypted, isAdmin, ownerEmail, userPerm } = this.state;
+    let showShareBtn = false,
+      enableDirPrivateShare = false;
+    const { repoEncrypted, isAdmin, ownerEmail, userPerm, isVirtual, isDepartmentAdmin } = this.state;
     const isRepoOwner = ownerEmail == username;
     if (!repoEncrypted && (
       canGenerateShareLink || canGenerateUploadLink ||
       isRepoOwner || isAdmin) && (
       userPerm == 'rw' || userPerm == 'r')) {
       showShareBtn = true;
+      if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
+        enableDirPrivateShare = true;
+      }
     }
 
     return (
@@ -1047,6 +1074,7 @@ class Wiki extends Component {
         />
         <MainPanel
           path={this.state.path}
+          repoName={this.state.repoName}
           repoEncrypted={this.state.repoEncrypted}
           isViewFile={this.state.isViewFile}
           pathExist={this.state.pathExist}
@@ -1057,6 +1085,11 @@ class Wiki extends Component {
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
           showShareBtn={showShareBtn}
+          enableDirPrivateShare={enableDirPrivateShare}
+          userPerm={userPerm}
+          isRepoOwner={isRepoOwner}
+          isAdmin={isAdmin}
+          isGroupOwnedRepo={this.state.isGroupOwnedRepo}
           direntList={this.state.direntList}
           sortBy={this.state.sortBy}
           sortOrder={this.state.sortOrder}

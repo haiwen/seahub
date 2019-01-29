@@ -177,9 +177,9 @@ class DirOperationToolbar extends React.Component {
   }
 
   render() {
-    let { path, isViewFile } = this.props;
+    let { path, isViewFile, repoName } = this.props;
     let itemType = isViewFile ? 'file' : 'dir';
-    let itemName = isViewFile ? Utils.getFileName(path) : Utils.getFolderName(path);
+    let itemName = isViewFile ? Utils.getFileName(path) : (path == '/' ? repoName : Utils.getFolderName(path));
     return (
       <Fragment>
         <div className="operation">
@@ -251,6 +251,11 @@ class DirOperationToolbar extends React.Component {
               itemName={itemName}
               itemPath={this.props.path}
               repoID={this.props.repoID}
+              repoEncrypted={this.props.repoEncrypted}
+              enableDirPrivateShare={this.props.enableDirPrivateShare}
+              userPerm={this.props.userPerm}
+              isAdmin={this.props.isAdmin}
+              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.onShareClick}
             />
           </ModalPortal>

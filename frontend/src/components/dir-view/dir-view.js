@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { siteRoot, canGenerateShareLink, canGenerateUploadLink, username } from '../../utils/constants';
+import { isPro, siteRoot, canGenerateShareLink, canGenerateUploadLink, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
@@ -31,6 +31,7 @@ class DirView extends React.Component {
       repoName: '',
       repoID: '',
       repoEncrypted: false,
+      isGroupOwnedRepo: false,
       isAdmin: false,
       ownerEmail: '',
       userPerm: '',
@@ -91,11 +92,21 @@ class DirView extends React.Component {
         repoID: repoInfo.repo_id,
         repoName: repoInfo.repo_name,
         repoEncrypted: repoInfo.encrypted,
+        isVirtual: repoInfo.is_virtual,
         isAdmin: repoInfo.is_admin,
         ownerEmail: repoInfo.owner_email,
         permission: repoInfo.permission === 'rw',
         libNeedDecrypt: res.data.lib_need_decrypt,
       });
+
+      const ownerEmail = repoInfo.owner_email;
+      if (repoInfo.owner_email.indexOf('@seafile_group') != -1) {
+        const groupID = ownerEmail.substring(0, ownerEmail.indexOf('@'));
+        this.getGroupInfo(groupID);
+        this.setState({
+          isGroupOwnedRepo: true
+        });
+      }
 
       let repoName = repoInfo.repo_name;
       let repoID = repoInfo.repo_id;
@@ -136,6 +147,16 @@ class DirView extends React.Component {
 
   componentDidUpdate() {
     this.lastModifyTime = new Date();
+  }
+
+  getGroupInfo = (groupID) => {
+    seafileAPI.getGroup(groupID).then(res => {
+      if (res.data.admins.indexOf(username) != -1) {
+        this.setState({
+          isDepartmentAdmin: true
+        });
+      }
+    });
   }
 
   onRepoUpdateEvent = () => {
@@ -669,14 +690,18 @@ class DirView extends React.Component {
   }
 
   render() {
-    let showShareBtn = false;
-    const { repoEncrypted, isAdmin, ownerEmail, userPerm } = this.state;
+    let showShareBtn = false,
+        enableDirPrivateShare = false;
+    const { repoEncrypted, isAdmin, ownerEmail, userPerm, isVirtual, isDepartmentAdmin } = this.state;
     const isRepoOwner = ownerEmail == username;
     if (!repoEncrypted && (
       canGenerateShareLink || canGenerateUploadLink ||
       isRepoOwner || isAdmin) && (
       userPerm == 'rw' || userPerm == 'r')) {
       showShareBtn = true;
+      if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
+        enableDirPrivateShare = true;
+      }
     }
 
     return (
@@ -694,6 +719,11 @@ class DirView extends React.Component {
         isDirentSelected={this.state.isDirentSelected}
         isAllDirentSelected={this.state.isAllDirentSelected}
         showShareBtn={showShareBtn}
+        enableDirPrivateShare={enableDirPrivateShare}
+        userPerm={userPerm}
+        isRepoOwner={isRepoOwner}
+        isAdmin={isAdmin}
+        isGroupOwnedRepo={this.state.isGroupOwnedRepo}
         direntList={this.state.direntList}
         sortBy={this.state.sortBy}
         sortOrder={this.state.sortOrder}
