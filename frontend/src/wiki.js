@@ -54,7 +54,13 @@ class Wiki extends Component {
     this.loadSidePanel(initialPath);
 
     if (isDir === 'None') {
-      this.setState({pathExist: false});
+      if (initialPath === '/home.md') {
+        this.showDir('/');
+      } else {
+        this.setState({pathExist: false});
+        let fileUrl = siteRoot + 'wikis/' + slug + initialPath;
+        window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
+      }
     } else if (isDir === 'True') {  
       this.showDir(initialPath);
     } else if (isDir === 'False') {
