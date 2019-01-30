@@ -8,7 +8,7 @@ import WikiPermissionEditor from '../select-editor/wiki-permission-editor.js';
 import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
-import WikiRename from './wiki-rename';
+import Rename from '../rename';
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
@@ -100,22 +100,6 @@ class WikiListItem extends Component {
   }
 
   onRenameConfirm = (newName) => {
-    let wiki = this.props.wiki;
-
-    if (newName === wiki.name) {
-      this.onRenameCancel();
-      return false;
-    }
-    if (!newName) {
-      let errMessage = gettext('Name is required.');
-      Toast.error(errMessage);
-      return false;
-    }
-    if (newName.indexOf('/') > -1) {
-      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
-      Toast.error(errMessage);
-      return false;
-    }
     this.renameWiki(newName);
     this.onRenameCancel();
   }
@@ -163,7 +147,7 @@ class WikiListItem extends Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td className="name">
             {this.state.isRenameing ?
-              <WikiRename wiki={wiki} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+              <Rename wiki={wiki} name={wiki.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
               <a href={wiki.link}>{wiki.name}</a>
             }
           </td>

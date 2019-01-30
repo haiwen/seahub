@@ -6,7 +6,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext, siteRoot, storages, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import RenameInput from '../../components/rename-input';
+import Rename from '../../components/rename';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 
@@ -232,7 +232,7 @@ class Item extends Component {
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td>
             {this.state.showChangeLibName && (
-              <RenameInput 
+              <Rename 
                 name={data.repo_name} 
                 onRenameConfirm={this.onRenameConfirm} 
                 onRenameCancel={this.onRenameCancel}
