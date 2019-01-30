@@ -7,7 +7,6 @@ import { gettext, siteRoot, storages, folderPermEnabled, enableRepoSnapshotLabel
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import Rename from '../../components/rename';
-import toaster from '../../components/toast';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 
@@ -115,23 +114,6 @@ class Item extends Component {
 
   onRenameConfirm = (newName) => {
     let repo = this.props.data;
-    if (newName === repo.repo_name) {
-      this.onRenameCancel();
-      return false;
-    }
-
-    if (!newName) {
-      let errMessage = gettext('Name is required.');
-      toaster.danger(errMessage);
-      return false;
-    }
-
-    if (newName.indexOf('/') > -1) {
-      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
-      toaster.danger(errMessage);
-      return false;
-    }
-
     let repoID = repo.repo_id;
     seafileAPI.renameRepo(repoID, newName).then(() => {
       this.props.onRenameRepo(repo, newName);

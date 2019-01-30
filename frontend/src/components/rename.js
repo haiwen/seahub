@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { gettext } from '../utils/constants'
+import toaster from './toast';
 
 const propTypes = {
   hasSuffix: PropTypes.bool,
@@ -43,12 +45,42 @@ class Rename extends React.Component {
 
   onRenameConfirm = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    this.props.onRenameConfirm(this.state.name);
+    let newName = this.state.name.trim();
+    if (newName === this.props.name) {
+      this.props.onRenameCancel();
+      return;
+    }
+
+    let { isValid, errMessage } = this.validateInput();
+    if (!isValid) {
+      toaster.danger(errMessage);
+    } else {
+      this.props.onRenameConfirm(newName);
+    }
   }
 
   onRenameCancel = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.onRenameCancel();
+  }
+
+  validateInput = () => {
+    let newName = this.state.name.trim();
+    let isValid = true;
+    let errMessage = '';
+    if (!newName) {
+      isValid = false;
+      errMessage = gettext('Name is required.');
+      return { isValid, errMessage };
+    }
+
+    if (newName.indexOf('/') > -1) {
+      isValid = false;
+      errMessage = gettext('Name should not include ' + '\'/\'' + '.');
+      return { isValid, errMessage };
+    }
+
+    return { isValid, errMessage };
   }
 
   render() {

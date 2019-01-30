@@ -100,22 +100,6 @@ class WikiListItem extends Component {
   }
 
   onRenameConfirm = (newName) => {
-    let wiki = this.props.wiki;
-
-    if (newName === wiki.name) {
-      this.onRenameCancel();
-      return false;
-    }
-    if (!newName) {
-      let errMessage = gettext('Name is required.');
-      Toast.danger(errMessage);
-      return false;
-    }
-    if (newName.indexOf('/') > -1) {
-      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
-      Toast.danger(errMessage);
-      return false;
-    }
     this.renameWiki(newName);
     this.onRenameCancel();
   }

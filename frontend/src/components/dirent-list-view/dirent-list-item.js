@@ -6,7 +6,6 @@ import { gettext, siteRoot, mediaUrl, canGenerateShareLink, canGenerateUploadLin
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import toaster from '../toast';
 import DirentMenu from './dirent-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
@@ -194,23 +193,6 @@ class DirentListItem extends React.Component {
   }
 
   onRenameConfirm = (newName) => {
-    if (newName === this.props.dirent.name) {
-      this.onRenameCancel();
-      return false;
-    }
-
-    if (!newName) {
-      let errMessage = gettext('Name is required.');
-      toaster.danger(errMessage);
-      return false;
-    }
-
-    if (newName.indexOf('/') > -1) {
-      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
-      toaster.danger(errMessage);
-      return false;
-    }
-
     this.props.onItemRename(this.props.dirent, newName);
     this.onRenameCancel();
   }
