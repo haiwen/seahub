@@ -730,6 +730,14 @@ ENABLE_REPO_SNAPSHOT_LABEL = False
 #  Repo wiki mode
 ENABLE_REPO_WIKI_MODE = True
 
+############################
+# Settings for SeafileDocs #
+############################
+if os.environ.get('SEAFILE_DOCS', None):
+    LOGO_PATH = 'img/seafile-docs-logo.png'
+    LOGO_WIDTH = ''
+    ENABLE_WIKI = True
+
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
     'EVENTS_CONFIG_FILE',
