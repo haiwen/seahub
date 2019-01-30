@@ -15,11 +15,12 @@
          <div id="root"></div>
          <div id="modal-wrapper"></div>
          <script type="text/javascript">
-           window.text = {
+           window.app = {
               config: {
                   mediaUrl: '{{ MEDIA_URL }}',
                   siteRoot: '{{ SITE_ROOT }}',
                   serviceUrl: '{{ serviceUrl }}',
+                  serviceURL: '{{ service_url }}',
                   seafileCollabServer: '{{ seafile_collab_server}}',
               },
               pageOptions: {
@@ -29,9 +30,16 @@
                   fileName: '{{ filename|escapejs }}',
                   lastCommitId: '{{ last_commit_id }}',
                   fileEnc: '{{ file_enc }}',
-                  fileExt: '{{ fileext }}',
+                  fileExt: '{{ fileext|escapejs }}',
                   shareLinkExpireDaysMin: '{{ share_link_expire_days_min }}',
                   shareLinkExpireDaysMax: '{{ share_link_expire_days_max }}',
+                  siteName: '{{ site_name }}',
+                  enableWatermark: '{{ enable_watermark }}' == 'True',
+                  download: '{{ permissions.can_download }}' == 'True',
+                  fileEncodingList: '{{ file_encoding_list|escapejs }}',
+                  encoding: '{{ encoding }}',
+                  fileContent: '{{ file_content|escapejs }}',
+                  err: '{{ err }}',
               },
              userInfo: {
                username: '{{ user.username }}',
