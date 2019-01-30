@@ -86,7 +86,7 @@ class AddRelatedFileDialog extends React.Component {
     let subtitle = gettext('Select related file for {placeholder}');
     subtitle = subtitle.replace('{placeholder}', '<span class="sf-font">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     return (
-      <Modal isOpen={true} className="sf-add-related-file">
+      <Modal isOpen={true} className="sf-add-related-file" toggle={this.toggle} >
         <ModalHeader toggle={this.toggle}>{gettext('Select File')}</ModalHeader>
         <ModalBody>
           <div className="related-file-subtitle" dangerouslySetInnerHTML={{__html: subtitle}}></div>

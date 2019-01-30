@@ -112,7 +112,7 @@ class AddReviewerDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={this.props.showReviewerDialog}>
+      <Modal isOpen={true} toggle={this.props.toggleAddReviewerDialog}>
         <ModalHeader>{gettext('Request a review')}</ModalHeader>
         <ModalBody >
           <p>{gettext('Add new reviewer')}</p>

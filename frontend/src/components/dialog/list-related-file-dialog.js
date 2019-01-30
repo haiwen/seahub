@@ -71,7 +71,7 @@ class ListRelatedFileDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} size={this.state.direntList.length > 0 ? 'lg' : 'sm'}>
+      <Modal isOpen={true} toggle={this.toggle} size={this.state.direntList.length > 0 ? 'lg' : 'sm'}>
         <ModalHeader toggle={this.toggle}>{gettext('Related Files')}</ModalHeader>
         <ModalBody className={this.state.direntList.length > 0 ? 'list-related-file-body' : ''}>
           {
