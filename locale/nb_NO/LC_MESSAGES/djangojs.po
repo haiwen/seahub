@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-29 14:09+0800\n"
-"PO-Revision-Date: 2018-11-29 06:13+0000\n"
+"POT-Creation-Date: 2019-01-29 16:18+0800\n"
+"PO-Revision-Date: 2019-01-29 08:19+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Norwegian Bokmål (Norway) (http://www.transifex.com/haiwen/seahub/language/nb_NO/)\n"
 "MIME-Version: 1.0\n"
@@ -19,160 +19,2087 @@ msgstr ""
 "Language: nb_NO\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: frontend/src/components/account.js:91
+#: frontend/src/components/common/account.js:92
 msgid "System Admin"
 msgstr "Systemadministrator"
 
-#: frontend/src/components/account.js:127
-msgid "Used"
-msgstr "Forbrukt"
+#: frontend/src/components/common/account.js:97
+msgid "Organization Admin"
+msgstr ""
 
-#: frontend/src/components/account.js:133
+#: frontend/src/components/common/account.js:105
+#: frontend/src/components/common/account.js:109
+#: frontend/src/components/common/account.js:117
+msgid "Avatar"
+msgstr "Profilbilde"
+
+#: frontend/src/components/common/account.js:132
+msgid "Used:"
+msgstr "Forbrukt: "
+
+#: frontend/src/components/common/account.js:136
+#: frontend/src/pages/groups/group-view.js:364
 msgid "Settings"
 msgstr "Innstillinger"
 
-#: frontend/src/components/account.js:135
+#: frontend/src/components/common/account.js:138
 msgid "Log out"
 msgstr "Logg ut"
 
-#: frontend/src/components/markdown-viewer.js:186
-msgid "Last modified by"
+#: frontend/src/components/common/notification.js:54
+msgid "Notifications"
+msgstr "Påminnelser"
+
+#: frontend/src/components/common/notification.js:55
+#: frontend/src/components/dialog/add-reviewer-dialog.js:155
+#: frontend/src/components/dialog/edit-filetag-dialog.js:155
+#: frontend/src/components/dialog/list-related-file-dialog.js:106
+#: frontend/src/components/dialog/list-repo-drafts-dialog.js:71
+#: frontend/src/components/dialog/list-repo-reviews-dialog.js:72
+#: frontend/src/components/dialog/list-tag-dialog.js:124
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:76
+#: frontend/src/components/dialog/manage-members-dialog.js:133
+#: frontend/src/components/dialog/readme-dialog.js:51
+#: frontend/src/components/dialog/share-repo-dialog.js:149
+#: frontend/src/components/dialog/transfer-group-dialog.js:90
+#: frontend/src/draft-review.js:821
+msgid "Close"
+msgstr "Lukk"
+
+#: frontend/src/components/common/notification.js:59
+msgid "See All Notifications"
+msgstr "Se alle påminnelser"
+
+#: frontend/src/components/cur-dir-path/dir-path.js:68
+#: frontend/src/components/cur-dir-path/dir-path.js:75
+#: frontend/src/components/main-side-nav.js:129
+#: frontend/src/components/main-side-nav.js:131
+#: frontend/src/pages/share-admin/libraries.js:270
+msgid "Libraries"
+msgstr "Biblioteker"
+
+#: frontend/src/components/cur-dir-path/dir-tool.js:91
+#: frontend/src/components/dialog/list-tag-dialog.js:107
+#: frontend/src/components/dirent-detail/detail-list-view.js:103
+msgid "Tags"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
-#: frontend/src/components/menu-component/node-menu.js:29
-#: frontend/src/components/menu-component/node-menu.js:37
-#: static/scripts/app/views/dir.js:771
-msgid "New File"
-msgstr "Ny fil"
+#: frontend/src/components/cur-dir-path/dir-tool.js:92
+#: frontend/src/components/cur-dir-path/dir-tool.js:142
+msgid "Trash"
+msgstr "Papirkurv"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
-#: frontend/src/components/menu-component/node-menu.js:28
-#: frontend/src/components/menu-component/node-menu.js:36
-msgid "New Folder"
-msgstr "New mappe"
+#: frontend/src/components/cur-dir-path/dir-tool.js:93
+#: frontend/src/components/cur-dir-path/dir-tool.js:149
+#: frontend/src/components/dirent-list-view/dirent-menu.js:121
+msgid "History"
+msgstr "Historikk"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/tree-dir-view/tree-dir-view.js:16
-msgid "Name"
-msgstr "Navn"
-
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
-msgid "newName"
+#: frontend/src/components/dialog/add-related-file-dialog.js:42
+msgid "Can not select self as a related file."
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
-msgid "Submit"
-msgstr "Send inn"
+#: frontend/src/components/dialog/add-related-file-dialog.js:86
+msgid "Select related file for {placeholder}"
+msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
+#: frontend/src/components/dialog/add-related-file-dialog.js:90
+msgid "Select File"
+msgstr ""
+
+#: frontend/src/components/dialog/add-related-file-dialog.js:102
+#: frontend/src/components/dialog/copy-dirent-dialog.js:171
+#: frontend/src/components/dialog/create-file-dialog.js:150
+#: frontend/src/components/dialog/create-folder-dialog.js:90
+#: frontend/src/components/dialog/create-group-dialog.js:64
+#: frontend/src/components/dialog/create-tag-dialog.js:97
+#: frontend/src/components/dialog/delete-dialog.js:32
+#: frontend/src/components/dialog/delete-repo-dialog.js:35
+#: frontend/src/components/dialog/dismiss-group-dialog.js:28
+#: frontend/src/components/dialog/generate-share-link.js:280
+#: frontend/src/components/dialog/internal-link-dialog.js:72
+#: frontend/src/components/dialog/move-dirent-dialog.js:171
+#: frontend/src/components/dialog/new-wiki-dialog.js:59
+#: frontend/src/components/dialog/rename-dialog.js:115
+#: frontend/src/components/dialog/rename-group-dialog.js:54
+#: frontend/src/components/dialog/save-shared-file-dialog.js:66
+#: frontend/src/components/dialog/upload-remind-dialog.js:44
+#: frontend/src/components/dialog/wiki-delete-dialog.js:25
+#: frontend/src/components/dialog/wiki-select-dialog.js:84
+#: frontend/src/components/review-list-view/review-comment-dialog.js:91
 #: static/scripts/app/views/fileupload.js:22
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
-#: frontend/src/components/menu-component/node-menu.js:39
-#: frontend/src/components/menu-component/node-menu.js:47
+#: frontend/src/components/dialog/add-related-file-dialog.js:104
+#: frontend/src/components/dialog/add-related-file-dialog.js:106
+#: frontend/src/components/dialog/add-reviewer-dialog.js:152
+#: frontend/src/components/dialog/copy-dirent-dialog.js:172
+#: frontend/src/components/dialog/create-department-repo-dialog.js:93
+#: frontend/src/components/dialog/create-file-dialog.js:151
+#: frontend/src/components/dialog/create-folder-dialog.js:91
+#: frontend/src/components/dialog/create-group-dialog.js:65
+#: frontend/src/components/dialog/create-repo-dialog.js:207
+#: frontend/src/components/dialog/lib-decrypt-dialog.js:67
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:130
+#: frontend/src/components/dialog/manage-members-dialog.js:90
+#: frontend/src/components/dialog/manage-members-dialog.js:91
+#: frontend/src/components/dialog/move-dirent-dialog.js:172
+#: frontend/src/components/dialog/new-wiki-dialog.js:60
+#: frontend/src/components/dialog/rename-dialog.js:116
+#: frontend/src/components/dialog/rename-group-dialog.js:55
+#: frontend/src/components/dialog/save-shared-file-dialog.js:68
+#: frontend/src/components/dialog/save-shared-file-dialog.js:70
+#: frontend/src/components/dialog/share-repo-dialog.js:150
+#: frontend/src/components/dialog/share-to-group.js:282
+#: frontend/src/components/dialog/share-to-user.js:304
+#: frontend/src/components/dialog/transfer-dialog.js:86
+#: frontend/src/components/dialog/transfer-group-dialog.js:91
+#: frontend/src/components/dialog/wiki-select-dialog.js:85
+#: frontend/src/components/review-list-view/review-comment-dialog.js:90
+#: frontend/src/components/review-list-view/review-comments.js:191
+msgid "Submit"
+msgstr "Send inn"
+
+#: frontend/src/components/dialog/add-reviewer-dialog.js:116
+msgid "Request a review"
+msgstr ""
+
+#: frontend/src/components/dialog/add-reviewer-dialog.js:118
+msgid "Add new reviewer"
+msgstr ""
+
+#: frontend/src/components/dialog/add-reviewer-dialog.js:122
+#: frontend/src/components/dialog/transfer-dialog.js:81
+#: frontend/src/components/dialog/transfer-group-dialog.js:85
+#: static/scripts/common.js:733 static/scripts/common.js:804
+msgid "Please enter 1 or more character"
+msgstr "Vennligst skriv inn 1 eller flere bokstaver"
+
+#: frontend/src/components/dialog/copy-dirent-dialog.js:49
+#: frontend/src/components/dialog/move-dirent-dialog.js:49
+#: frontend/src/components/dialog/move-dirent-dialog.js:100
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:188
+#: static/scripts/app/views/dir.js:1229
+msgid "Invalid destination path"
+msgstr "Ugyldig destinasjonsbane"
+
+#: frontend/src/components/dialog/copy-dirent-dialog.js:86
+#: frontend/src/components/dialog/move-dirent-dialog.js:86
+#: frontend/src/components/dialog/move-dirent-dialog.js:121
+msgid "Can not move directory %(src)s to its subdirectory %(des)s"
+msgstr "Kan ikke flytte mappen %(src)s til undermappen %(des)s"
+
+#: frontend/src/components/dialog/copy-dirent-dialog.js:121
+msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
+msgstr "Kan ikke kopiere mappen %(src)s til undermappen %(des)s"
+
+#: frontend/src/components/dialog/copy-dirent-dialog.js:153
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:54
+msgid "Copy {placeholder} to:"
+msgstr "Kopiere {placeholder} til:"
+
+#: frontend/src/components/dialog/copy-dirent-dialog.js:157
+#: static/scripts/app/views/dir.js:1173
+msgid "Copy selected item(s) to:"
+msgstr "Kopiere valgte element(er) til:"
+
+#: frontend/src/components/dialog/create-department-repo-dialog.js:54
+#: frontend/src/components/dialog/create-repo-dialog.js:69
+#: static/scripts/app/models/repo.js:34
+msgid "Name is required"
+msgstr "Navn er påkrevd"
+
+#: frontend/src/components/dialog/create-department-repo-dialog.js:59
+#: frontend/src/components/dialog/create-repo-dialog.js:74
+#: frontend/src/components/dialog/rename-dialog.js:92
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:209
+#: frontend/src/components/wiki-list-view/wiki-list-item.js:115
+#: static/scripts/app/models/repo.js:37
+#: static/scripts/app/views/dialogs/dirent-rename.js:65
+#: static/scripts/app/views/dir.js:703 static/scripts/app/views/dir.js:763
+#: static/scripts/app/views/dirent.js:533
+#: static/scripts/app/views/group-repo.js:131
+#: static/scripts/app/views/repo.js:187
+msgid "Name should not include '/'."
+msgstr "Navn kan ikke inneholde '/'."
+
+#: frontend/src/components/dialog/create-department-repo-dialog.js:75
+msgid "New Department Library"
+msgstr ""
+
+#: frontend/src/components/dialog/create-department-repo-dialog.js:79
+#: frontend/src/components/dialog/create-file-dialog.js:130
+#: frontend/src/components/dialog/create-folder-dialog.js:77
+#: frontend/src/components/dialog/create-group-dialog.js:58
+#: frontend/src/components/dialog/create-repo-dialog.js:156
+#: frontend/src/components/dialog/create-tag-dialog.js:71
+#: frontend/src/components/dialog/list-related-file-dialog.js:82
+#: frontend/src/components/dialog/list-repo-drafts-dialog.js:49
+#: frontend/src/components/dialog/list-repo-reviews-dialog.js:50
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:53
+#: frontend/src/components/dialog/manage-members-dialog.js:107
+#: frontend/src/components/dialog/new-wiki-dialog.js:55
+#: frontend/src/components/dialog/share-repo-dialog.js:128
+#: frontend/src/components/dialog/update-tag-dialog.js:84
+#: frontend/src/components/dialog/wiki-select-dialog.js:65
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:237
+#: frontend/src/components/draft-list-view/draft-list-view.js:21
+#: frontend/src/components/review-list-view/review-list-view.js:62
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:88
+#: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:20
+#: frontend/src/components/wiki-list-view/wiki-list-view.js:41
+#: frontend/src/pages/my-libs/content.js:110
+#: frontend/src/pages/my-libs/my-libs-deleted.js:86
+#: frontend/src/pages/share-admin/folders.js:42
+#: frontend/src/pages/share-admin/libraries.js:42
+#: frontend/src/pages/share-admin/share-links.js:72
+#: frontend/src/pages/share-admin/upload-links.js:54
+msgid "Name"
+msgstr "Navn"
+
+#: frontend/src/components/dialog/create-file-dialog.js:48
+#: frontend/src/components/dialog/create-folder-dialog.js:45
+#: frontend/src/components/dialog/rename-dialog.js:56
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:70
+msgid "The name \"{name}\" is already taken. Please choose a different name."
+msgstr ""
+
+#: frontend/src/components/dialog/create-file-dialog.js:126
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:218
+#: frontend/src/components/tree-view/tree-node-menu.js:46
+#: frontend/src/pages/repo-wiki-mode/side-panel.js:181
+#: static/scripts/app/views/dir.js:807
+msgid "New File"
+msgstr "Ny fil"
+
+#: frontend/src/components/dialog/create-file-dialog.js:142
+msgid "This is a draft"
+msgstr ""
+
+#: frontend/src/components/dialog/create-folder-dialog.js:73
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:217
+#: frontend/src/components/tree-view/tree-node-menu.js:43
+#: frontend/src/pages/repo-wiki-mode/side-panel.js:180
+msgid "New Folder"
+msgstr "New mappe"
+
+#: frontend/src/components/dialog/create-group-dialog.js:56
+#: frontend/src/components/toolbar/groups-toolbar.js:27
+msgid "New Group"
+msgstr "Opprett gruppe"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:82
+#: frontend/src/components/dialog/generate-upload-link.js:84
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:350
+msgid "Please enter password"
+msgstr "Vennligst oppgi passord"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:87
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:358
+msgid "Please enter the password again"
+msgstr "Vennligst skriv inn passordet på nytt."
+
+#: frontend/src/components/dialog/create-repo-dialog.js:92
+#: frontend/src/components/dialog/generate-upload-link.js:89
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:354
+msgid "Password is too short"
+msgstr "Passordet er for kort"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:97
+#: frontend/src/components/dialog/generate-upload-link.js:94
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:362
+msgid "Passwords don't match"
+msgstr "Passordene stemmer ikke overens"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:152
+#: frontend/src/components/toolbar/repo-view-toobar.js:44
+#: frontend/src/components/toolbar/repo-view-toobar.js:45
+#: frontend/src/pages/groups/group-view.js:335
+#: frontend/src/pages/groups/group-view.js:336
+#: frontend/src/pages/shared-with-all/public-shared-view.js:178
+msgid "New Library"
+msgstr "Nytt bibliotek"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:167
+#: frontend/src/components/dialog/share-repo-dialog.js:130
+#: frontend/src/components/dialog/share-to-group.js:254
+#: frontend/src/components/dialog/share-to-group.js:302
+#: frontend/src/components/dialog/share-to-user.js:273
+#: frontend/src/components/dialog/share-to-user.js:329
+#: frontend/src/components/dirent-list-view/dirent-menu.js:106
+#: frontend/src/components/wiki-list-view/wiki-list-view.js:44
+#: frontend/src/pages/share-admin/folders.js:44
+#: frontend/src/pages/share-admin/libraries.js:44
+msgid "Permission"
+msgstr "Tillatelse"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:169
+#: frontend/src/components/dialog/share-repo-dialog.js:40
+#: frontend/src/utils/utils.js:328
+#: static/scripts/app/views/share-admin-folder.js:109
+#: static/scripts/app/views/share-admin-repo.js:123
+msgid "Read-Write"
+msgstr "Skrivbar"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:170
+#: frontend/src/components/dialog/share-repo-dialog.js:41
+#: frontend/src/utils/utils.js:331
+#: static/scripts/app/views/share-admin-folder.js:112
+#: static/scripts/app/views/share-admin-repo.js:126
+msgid "Read-Only"
+msgstr "Lesbar"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:178
+msgid "Encrypt"
+msgstr "Kryptere"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:182
+#: frontend/src/components/dialog/generate-share-link.js:296
+#: frontend/src/components/dialog/generate-upload-link.js:154
+#: frontend/src/components/dialog/lib-decrypt-dialog.js:66
+msgid "Password"
+msgstr "Passord"
+
+#: frontend/src/components/dialog/create-repo-dialog.js:182
+#: frontend/src/components/dialog/generate-share-link.js:296
+#: frontend/src/components/dialog/generate-upload-link.js:154
+msgid "(at least 8 characters)"
+msgstr ""
+
+#: frontend/src/components/dialog/create-repo-dialog.js:192
+#: frontend/src/components/dialog/generate-share-link.js:304
+#: frontend/src/components/dialog/generate-upload-link.js:162
+msgid "Password again"
+msgstr "Passord på nytt"
+
+#: frontend/src/components/dialog/create-tag-dialog.js:65
+#: frontend/src/components/dialog/update-tag-dialog.js:78
+msgid "Back"
+msgstr "Tilbake"
+
+#: frontend/src/components/dialog/create-tag-dialog.js:66
+msgid "New Tag"
+msgstr ""
+
+#: frontend/src/components/dialog/create-tag-dialog.js:75
+#: frontend/src/components/dialog/update-tag-dialog.js:88
+msgid "Select a color"
+msgstr ""
+
+#: frontend/src/components/dialog/create-tag-dialog.js:96
+#: frontend/src/components/dialog/update-tag-dialog.js:109
+msgid "Save"
+msgstr ""
+
+#: frontend/src/components/dialog/delete-dialog.js:21
+msgid "Delete File"
+msgstr ""
+
+#: frontend/src/components/dialog/delete-dialog.js:23
+msgid "Delete Folder"
+msgstr ""
+
+#: frontend/src/components/dialog/delete-dialog.js:29
+msgid "Are you sure to delete"
+msgstr ""
+
+#: frontend/src/components/dialog/delete-dialog.js:33
+#: frontend/src/components/dialog/delete-repo-dialog.js:34
+#: frontend/src/components/dialog/generate-share-link.js:275
+#: frontend/src/components/dialog/generate-share-link.js:279
+#: frontend/src/components/dialog/generate-upload-link.js:137
+#: frontend/src/components/dialog/share-to-group.js:55
+#: frontend/src/components/dialog/share-to-user.js:55
+#: frontend/src/components/dialog/update-tag-dialog.js:108
+#: frontend/src/components/dialog/wiki-delete-dialog.js:26
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:422
+#: frontend/src/components/draft-list-view/draft-list-menu.js:25
+#: frontend/src/components/draft-list-view/draft-list-menu.js:35
+#: frontend/src/components/review-list-view/review-comments.js:282
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:257
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:101
+#: frontend/src/components/tree-view/tree-node-menu.js:52
+#: frontend/src/pages/my-libs/item.js:204
+#: frontend/src/pages/my-libs/item.js:222
 #: static/scripts/app/views/fileupload.js:23
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
 msgstr "Slett"
 
-#: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:18
-msgid "Are you sure to delete"
+#: frontend/src/components/dialog/delete-repo-dialog.js:25
+#: static/scripts/app/views/repo.js:96
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:47
+#: static/scripts/sysadmin-app/views/address-book-group-library.js:31
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:28
+#: static/scripts/sysadmin-app/views/group-member.js:91
+#: static/scripts/sysadmin-app/views/group.js:31
+#: static/scripts/sysadmin-app/views/repo.js:67
+#, javascript-format
+msgid "Are you sure you want to delete %s ?"
+msgstr "Er du sikker på at du vil slette %s ?"
+
+#: frontend/src/components/dialog/delete-repo-dialog.js:29
+#: static/scripts/app/views/repo.js:95
+#: static/scripts/sysadmin-app/views/address-book-group-library.js:30
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:53
+#: static/scripts/sysadmin-app/views/repo.js:66
+#: static/scripts/sysadmin-app/views/trash-repo.js:28
+msgid "Delete Library"
+msgstr "Slett bibliotek"
+
+#: frontend/src/components/dialog/dismiss-group-dialog.js:23
+#: static/scripts/app/views/group-settings.js:292
+msgid "Dismiss Group"
+msgstr "Forkaste gruppen"
+
+#: frontend/src/components/dialog/dismiss-group-dialog.js:25
+#: static/scripts/app/views/group-settings.js:293
+msgid "Really want to dismiss this group?"
+msgstr "Ønsker du virkelig å slette denne gruppen?"
+
+#: frontend/src/components/dialog/dismiss-group-dialog.js:29
+#: frontend/src/pages/groups/group-view.js:383
+msgid "Dismiss"
+msgstr "Forkaste"
+
+#: frontend/src/components/dialog/edit-filetag-dialog.js:135
+msgid "Select Tags"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:21
-msgid "YES"
+#: frontend/src/components/dialog/generate-share-link.js:120
+#: static/scripts/app/views/share.js:492
+msgid "Share link is copied to the clipboard."
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:22
-msgid "NO"
+#: frontend/src/components/dialog/generate-share-link.js:127
+msgid "Direct download link is copied to the clipboard."
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
+#: frontend/src/components/dialog/generate-share-link.js:246
+msgid "Link:"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:250
+#: frontend/src/components/dialog/generate-share-link.js:261
+#: static/scripts/app/views/share.js:189
+msgid "Expired"
+msgstr "Utgått"
+
+#: frontend/src/components/dialog/generate-share-link.js:257
+msgid "Direct Download Link:"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:269
+msgid "Expiration Date:"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:277
+msgid "Are you sure you want to delete the share link?"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:278
+msgid ""
+"If the share link is deleted, no one will be able to access it any more."
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:290
+#: frontend/src/components/dialog/generate-upload-link.js:148
+msgid "Add password protection"
+msgstr "Legg til passordbeskyttelse"
+
+#: frontend/src/components/dialog/generate-share-link.js:311
+#: frontend/src/components/dialog/generate-share-link.js:319
+msgid "Add auto expiration"
+msgstr "Legg til automatisk utløpsdato"
+
+#: frontend/src/components/dialog/generate-share-link.js:312
+#: frontend/src/components/dialog/generate-share-link.js:320
+#: frontend/src/components/dialog/generate-share-link.js:322
+#: frontend/src/components/dialog/generate-share-link.js:325
+#: frontend/src/components/dialog/generate-share-link.js:328
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:127
+msgid "days"
+msgstr "dager"
+
+#: frontend/src/components/dialog/generate-share-link.js:325
+msgid "Greater than or equal to"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:328
+msgid "Less than or equal to"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:335
+msgid "Set permission"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:340
+msgid "Preview and download"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:345
+msgid "Preview only"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-share-link.js:349
+#: frontend/src/components/dialog/generate-upload-link.js:167
+msgid "Generate"
+msgstr "Generere"
+
+#: frontend/src/components/dialog/generate-upload-link.js:107
+msgid "Upload link is copied to the clipboard."
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:130
+msgid "Upload Link:"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:144
+msgid ""
+"You can share the generated link to others and then they can upload files to"
+" this directory via the link."
+msgstr "Du kan dele den genererte lenken med andre og de kan laste opp filer til denne mappen via lenken."
+
+#: frontend/src/components/dialog/internal-link-dialog.js:50
+msgid "Copy internal link"
+msgstr ""
+
+#: frontend/src/components/dialog/internal-link-dialog.js:58
+#: frontend/src/components/dialog/internal-link-dialog.js:61
+msgid "Internal Link"
+msgstr ""
+
+#: frontend/src/components/dialog/internal-link-dialog.js:64
+msgid ""
+"An internal link is a link to a file or folder that can be accessed by users"
+" with read permission to the file or folder."
+msgstr ""
+
+#: frontend/src/components/dialog/internal-link-dialog.js:71
+#: frontend/src/components/dirent-list-view/dirent-menu.js:103
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:100
+msgid "Copy"
+msgstr "Kopiere"
+
+#: frontend/src/components/dialog/lib-decrypt-dialog.js:62
+msgid "This library is password protected"
+msgstr "Dette biblioteket er passordbeskyttet"
+
+#: frontend/src/components/dialog/lib-decrypt-dialog.js:64
+msgid "Wrong password"
+msgstr "Feil passord"
+
+#: frontend/src/components/dialog/lib-decrypt-dialog.js:68
+msgid "The password will be kept in the server for only 1 hour."
+msgstr "Passordet blir bare lagret i 1 time på serveren."
+
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:51
+#: static/scripts/app/views/dialogs/repo-history-settings.js:131
+msgid "Successfully set library history."
+msgstr ""
+
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:59
+msgid "Please enter a non-negative integer"
+msgstr ""
+
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:100
+#: frontend/src/pages/my-libs/item.js:194
+msgid "History Setting"
+msgstr ""
+
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:106
+msgid "Setting library history is disabled by Admin."
+msgstr ""
+
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:111
+msgid "Keep full history"
+msgstr "Behold full historikk"
+
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:115
+msgid "Don't keep history"
+msgstr "Ikke behold historikk"
+
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:119
+msgid "Only keep a period of history:"
+msgstr "Bare behold historikk for en periode: "
+
+#: frontend/src/components/dialog/list-related-file-dialog.js:75
+#: frontend/src/components/dirent-detail/detail-list-view.js:119
+msgid "Related Files"
+msgstr ""
+
+#: frontend/src/components/dialog/list-related-file-dialog.js:83
+msgid "Library Name"
+msgstr ""
+
+#: frontend/src/components/dialog/list-related-file-dialog.js:84
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:54
+#: frontend/src/components/dirent-detail/detail-list-view.js:99
+#: frontend/src/components/dirent-detail/lib-details.js:64
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:240
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:90
+#: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:21
+#: frontend/src/pages/my-libs/content.js:113
+msgid "Size"
+msgstr "Størrelse"
+
+#: frontend/src/components/dialog/list-related-file-dialog.js:85
+#: frontend/src/components/dialog/list-repo-drafts-dialog.js:51
+#: frontend/src/components/dialog/list-repo-reviews-dialog.js:52
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:55
+#: frontend/src/components/dialog/share-repo-dialog.js:129
+#: frontend/src/components/dialog/wiki-select-dialog.js:66
+#: frontend/src/components/dirent-detail/detail-list-view.js:87
+#: frontend/src/components/dirent-detail/detail-list-view.js:101
+#: frontend/src/components/dirent-detail/lib-details.js:65
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:241
+#: frontend/src/components/draft-list-view/draft-list-view.js:24
+#: frontend/src/components/review-list-view/review-list-view.js:64
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:91
+#: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:22
+#: frontend/src/components/wiki-list-view/wiki-list-view.js:43
+#: frontend/src/pages/my-libs/content.js:115
+#: frontend/src/pages/shared-libs/shared-libs.js:56
+#: frontend/src/pages/starred/starred.js:22
+msgid "Last Update"
+msgstr "Siste oppdatering"
+
+#: frontend/src/components/dialog/list-related-file-dialog.js:102
+msgid "No related file yet."
+msgstr ""
+
+#: frontend/src/components/dialog/list-related-file-dialog.js:107
+msgid "Add File"
+msgstr ""
+
+#: frontend/src/components/dialog/list-repo-drafts-dialog.js:44
+#: frontend/src/components/main-side-nav.js:213
+#: frontend/src/components/main-side-nav.js:216
+#: frontend/src/pages/drafts/drafts-view.js:28
+msgid "Drafts"
+msgstr ""
+
+#: frontend/src/components/dialog/list-repo-drafts-dialog.js:50
+#: frontend/src/components/dialog/list-repo-reviews-dialog.js:51
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:92
+#: frontend/src/components/wiki-list-view/wiki-list-view.js:42
+#: frontend/src/pages/shared-libs/shared-libs.js:57
+msgid "Owner"
+msgstr "Eier"
+
+#: frontend/src/components/dialog/list-repo-reviews-dialog.js:45
+#: frontend/src/pages/drafts/drafts-view.js:31
+msgid "Reviews"
+msgstr ""
+
+#: frontend/src/components/dialog/list-tag-dialog.js:121
+msgid "Create a new tag"
+msgstr ""
+
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:48
+msgid "Tagged Files"
+msgstr ""
+
+#: frontend/src/components/dialog/manage-members-dialog.js:78
+msgid "Manage group members"
+msgstr ""
+
+#: frontend/src/components/dialog/manage-members-dialog.js:80
+msgid "Add group member"
+msgstr ""
+
+#: frontend/src/components/dialog/manage-members-dialog.js:108
+msgid "Role"
+msgstr "Rolle"
+
+#: frontend/src/components/dialog/move-dirent-dialog.js:153
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:54
+msgid "Move {placeholder} to:"
+msgstr "Flytt {placeholder} til:"
+
+#: frontend/src/components/dialog/move-dirent-dialog.js:157
+#: static/scripts/app/views/dir.js:1173
+msgid "Move selected item(s) to:"
+msgstr "Flytt valgte element(er) til:"
+
+#: frontend/src/components/dialog/new-wiki-dialog.js:53
+#: frontend/src/pages/wikis/wikis.js:131
+msgid "New Wiki"
+msgstr ""
+
+#: frontend/src/components/dialog/rename-dialog.js:86
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:203
+#: frontend/src/components/wiki-list-view/wiki-list-item.js:110
+#: static/scripts/sysadmin-app/views/address-book-group.js:114
+#: static/scripts/sysadmin-app/views/address-book.js:64
+#: static/scripts/sysadmin-app/views/groups.js:79
+#: static/scripts/sysadmin-app/views/repos.js:69
+msgid "Name is required."
+msgstr "Navn er obligatorisk."
+
+#: frontend/src/components/dialog/rename-dialog.js:108
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
 msgstr "Gi nytt navn til fil"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
+#: frontend/src/components/dialog/rename-dialog.js:108
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
 msgstr "Gi nytt navn til mappe"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
-msgid "Enter the new file name:"
+#: frontend/src/components/dialog/rename-dialog.js:110
+msgid "New file name"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
-msgid "Enter the new folder name:"
+#: frontend/src/components/dialog/rename-dialog.js:110
+msgid "New folder name"
 msgstr ""
 
-#: frontend/src/components/menu-component/node-menu.js:38
-#: frontend/src/components/menu-component/node-menu.js:46
+#: frontend/src/components/dialog/rename-group-dialog.js:47
+msgid "Rename Group"
+msgstr ""
+
+#: frontend/src/components/dialog/rename-group-dialog.js:49
+msgid "Rename group to"
+msgstr ""
+
+#: frontend/src/components/dialog/save-shared-file-dialog.js:57
+msgid "Select Folder"
+msgstr ""
+
+#: frontend/src/components/dialog/share-dialog.js:62
+#: frontend/src/components/dialog/share-dialog.js:133
+msgid "Share Link"
+msgstr ""
+
+#: frontend/src/components/dialog/share-dialog.js:69
+msgid "Upload Link"
+msgstr "Opplastingslenke"
+
+#: frontend/src/components/dialog/share-dialog.js:77
+msgid "Share to user"
+msgstr "Del til bruker"
+
+#: frontend/src/components/dialog/share-dialog.js:82
+msgid "Share to group"
+msgstr "Dele til gruppe"
+
+#: frontend/src/components/dialog/share-dialog.js:159
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:418
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:158
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:255
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:206
+#: frontend/src/pages/my-libs/item.js:203
+#: frontend/src/pages/my-libs/item.js:221
+#: frontend/src/pages/shared-libs/shared-libs.js:201
+#: frontend/src/pages/shared-libs/shared-libs.js:239
+msgid "Share"
+msgstr "Dele"
+
+#: frontend/src/components/dialog/share-repo-dialog.js:35
+#: frontend/src/components/dialog/wiki-select-dialog.js:74
+#: frontend/src/pages/starred/starred.js:163
+#: frontend/src/pages/starred/starred.js:183
+msgid "icon"
+msgstr "ikon"
+
+#: frontend/src/components/dialog/share-repo-dialog.js:105
+msgid "Please select a library to share."
+msgstr ""
+
+#: frontend/src/components/dialog/share-repo-dialog.js:121
+msgid "Select libraries to share"
+msgstr "Velg biblioteker for deling"
+
+#: frontend/src/components/dialog/share-to-group.js:253
+#: frontend/src/components/dialog/share-to-group.js:301
+msgid "Group"
+msgstr "Gruppe"
+
+#: frontend/src/components/dialog/share-to-group.js:265
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:141
+msgid "Select a group"
+msgstr "Velg en gruppe"
+
+#: frontend/src/components/dialog/share-to-user.js:182
+#: frontend/src/components/dialog/share-to-user.js:207
+msgid "Library can not be shared to owner."
+msgstr ""
+
+#: frontend/src/components/dialog/share-to-user.js:272
+#: frontend/src/components/dialog/share-to-user.js:328
+msgid "User"
+msgstr "Bruker"
+
+#: frontend/src/components/dialog/share-to-user.js:283
+msgid "Select users..."
+msgstr ""
+
+#: frontend/src/components/dialog/transfer-dialog.js:56
+#: static/scripts/app/views/repo.js:276
+#: static/scripts/sysadmin-app/views/repo.js:136
+msgid "Successfully transferred the library."
+msgstr ""
+
+#: frontend/src/components/dialog/transfer-dialog.js:61
+#: frontend/src/pages/my-libs/my-libs-deleted.js:142
+#: static/scripts/app/views/folder-share-item.js:127
+#: static/scripts/app/views/folder-share-item.js:188
+#: static/scripts/common.js:484
+#: static/scripts/sysadmin-app/views/dashboard.js:84
+msgid "Failed. Please check the network."
+msgstr "Feilet. Vennligst sjekk nettverkstilkoblingen."
+
+#: frontend/src/components/dialog/transfer-dialog.js:70
+#: static/scripts/app/views/repo.js:237
+#: static/scripts/sysadmin-app/views/repo.js:98
+msgid "Transfer Library {library_name} To"
+msgstr ""
+
+#: frontend/src/components/dialog/transfer-group-dialog.js:77
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:76
+msgid "Transfer Group"
+msgstr "Overfør gruppe"
+
+#: frontend/src/components/dialog/transfer-group-dialog.js:79
+msgid "Transfer group to"
+msgstr ""
+
+#: frontend/src/components/dialog/update-tag-dialog.js:79
+msgid "Edit Tag"
+msgstr ""
+
+#: frontend/src/components/dialog/upload-remind-dialog.js:32
+#: static/scripts/app/views/fileupload.js:282
+msgid "Replace file {filename}?"
+msgstr "Erstatt fil {filename}?"
+
+#: frontend/src/components/dialog/upload-remind-dialog.js:38
+msgid "A file with the same name already exists in this folder."
+msgstr "En fil med samme navn eksistererer allerede i denne mappen."
+
+#: frontend/src/components/dialog/upload-remind-dialog.js:39
+msgid "Replacing it will overwrite its content."
+msgstr "Erstatter du den vil innholdet bli overskrevet."
+
+#: frontend/src/components/dialog/upload-remind-dialog.js:42
+msgid "Replace"
+msgstr "Erstatt"
+
+#: frontend/src/components/dialog/upload-remind-dialog.js:43
+msgid "Don't replace"
+msgstr "Ikke erstatt"
+
+#: frontend/src/components/dialog/wiki-delete-dialog.js:20
+msgid "Delete Wiki"
+msgstr ""
+
+#: frontend/src/components/dialog/wiki-delete-dialog.js:22
+msgid "Are you sure you want to delete this wiki?"
+msgstr ""
+
+#: frontend/src/components/dialog/wiki-select-dialog.js:58
+#: frontend/src/pages/wikis/wikis.js:132
+msgid "Choose a library as Wiki"
+msgstr ""
+
+#: frontend/src/components/dir-view/dir-panel.js:133
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:164
+#: frontend/src/pages/wiki/main-panel.js:73
+msgid "Folder does not exist."
+msgstr ""
+
+#: frontend/src/components/dir-view/dir-panel.js:142
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:173
+msgid "Side Nav Menu"
+msgstr ""
+
+#: frontend/src/components/dir-view/dir-panel.js:181
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:208
+#: frontend/src/pages/wiki/main-panel.js:88
+msgid "Search files in this library"
+msgstr "Søk filer i dette biblioteket"
+
+#: frontend/src/components/dir-view/dir-view.js:127
+#: frontend/src/pages/dashboard/files-activities.js:240
+#: frontend/src/pages/dashboard/files-activities.js:291
+#: frontend/src/pages/groups/group-view.js:93
+#: frontend/src/pages/groups/group-view.js:127
+#: frontend/src/pages/groups/groups-view.js:118
+#: frontend/src/pages/linked-devices/linked-devices.js:176
+#: frontend/src/pages/my-libs/my-libs.js:39
+#: frontend/src/pages/share-admin/folders.js:225
+#: frontend/src/pages/share-admin/libraries.js:205
+#: frontend/src/pages/share-admin/share-links.js:264
+#: frontend/src/pages/share-admin/upload-links.js:165
+#: frontend/src/pages/shared-libs/shared-libs.js:297
+#: frontend/src/pages/shared-with-all/public-shared-view.js:54
+#: frontend/src/pages/starred/starred.js:228
+#: frontend/src/pages/wikis/wikis.js:41
+msgid "Permission denied"
+msgstr "Tilgang avvist"
+
+#: frontend/src/components/dir-view/dir-view.js:132
+#: frontend/src/pages/groups/group-view.js:99
+#: frontend/src/pages/groups/group-view.js:133
+#: frontend/src/pages/groups/groups-view.js:124
+#: frontend/src/pages/linked-devices/linked-devices.js:182
+#: frontend/src/pages/my-libs/my-libs.js:45
+#: frontend/src/pages/share-admin/folders.js:231
+#: frontend/src/pages/share-admin/libraries.js:211
+#: frontend/src/pages/share-admin/share-links.js:270
+#: frontend/src/pages/share-admin/upload-links.js:171
+#: frontend/src/pages/shared-libs/shared-libs.js:303
+#: frontend/src/pages/shared-with-all/public-shared-view.js:60
+#: frontend/src/pages/starred/starred.js:234
+#: frontend/src/pages/wikis/wikis.js:47
+#: static/scripts/app/views/fileupload.js:18
+#: static/scripts/app/views/fileupload.js:228
+#: static/scripts/app/views/fileupload.js:268
+#: static/scripts/app/views/repo-details.js:37
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:145
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:152
+#: static/scripts/sysadmin-app/views/system-repo.js:52
+msgid "Error"
+msgstr "Feil"
+
+#: frontend/src/components/dir-view/dir-view.js:138
+#: frontend/src/pages/groups/group-view.js:105
+#: frontend/src/pages/groups/group-view.js:139
+#: frontend/src/pages/groups/groups-view.js:130
+#: frontend/src/pages/linked-devices/linked-devices.js:189
+#: frontend/src/pages/my-libs/my-libs.js:51
+#: frontend/src/pages/share-admin/folders.js:238
+#: frontend/src/pages/share-admin/libraries.js:217
+#: frontend/src/pages/share-admin/share-links.js:277
+#: frontend/src/pages/share-admin/upload-links.js:177
+#: frontend/src/pages/shared-libs/shared-libs.js:310
+#: frontend/src/pages/shared-with-all/public-shared-view.js:66
+#: frontend/src/pages/starred/starred.js:241
+#: frontend/src/pages/wikis/wikis.js:53 static/scripts/app/views/dir.js:503
+#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:507
+msgid "Please check the network."
+msgstr "Vennligst sjekk nettverkstilkoblingen."
+
+#: frontend/src/components/dir-view/dir-view.js:173
+#: frontend/src/repo-wiki-mode.js:138
+msgid "This folder has been updated. "
+msgstr ""
+
+#: frontend/src/components/dir-view/dir-view.js:174
+#: frontend/src/repo-wiki-mode.js:139
+#: static/scripts/app/views/notifications.js:63
+msgid "Refresh"
+msgstr "Oppdater"
+
+#: frontend/src/components/dir-view/dir-view.js:347
+#: frontend/src/components/dir-view/dir-view.js:418
+#: frontend/src/repo-wiki-mode.js:504 frontend/src/repo-wiki-mode.js:543
+#: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
+msgid "Successfully moved %(name)s."
+msgstr "Vellykket flytting av %(name)s."
+
+#: frontend/src/components/dir-view/dir-view.js:351
+#: frontend/src/components/dir-view/dir-view.js:422
+#: frontend/src/repo-wiki-mode.js:508 frontend/src/repo-wiki-mode.js:547
+#: static/scripts/app/views/dir.js:1383
+msgid "Failed to move %(name)s"
+msgstr "Kunne ikke flytte %(name)s"
+
+#: frontend/src/components/dir-view/dir-view.js:361
+#: frontend/src/components/dir-view/dir-view.js:432
+#: frontend/src/repo-wiki-mode.js:521 frontend/src/repo-wiki-mode.js:564
+#: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
+msgid "Successfully copied %(name)s."
+msgstr "Vellykket kopiering av %(name)s."
+
+#: frontend/src/components/dir-view/dir-view.js:365
+#: frontend/src/components/dir-view/dir-view.js:436
+#: frontend/src/repo-wiki-mode.js:525 frontend/src/repo-wiki-mode.js:568
+#: static/scripts/app/views/dir.js:1383
+msgid "Failed to copy %(name)s"
+msgstr "Kunne ikke kopiere %(name)s"
+
+#: frontend/src/components/dirent-detail/detail-list-view.js:86
+#: frontend/src/components/dirent-detail/detail-list-view.js:100
+msgid "Location"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/lib-details.js:63
+#: frontend/src/components/main-side-nav.js:150
+#: frontend/src/pages/repo-wiki-mode/side-panel.js:167
+msgid "Files"
+msgstr "Filer"
+
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:382
+msgid "locked"
+msgstr "låst"
+
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:414
+#: frontend/src/components/history-list-view/history-list-item.js:101
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:102
+#: frontend/src/shared-file-view-markdown.js:121
+msgid "Download"
+msgstr "Nedlasting"
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:193
+msgid "Markdown Document"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:194
+msgid ""
+"You can create online document using Markdown format easily. When creating a"
+" document, you can mark it as draft. After finishing the draft, you can ask "
+"others to review it. They can view the document history in the review page "
+"and leave comments on the document."
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:221
+#: static/scripts/app/views/dir.js:66
+#: static/scripts/app/views/starred-file.js:112
+msgid "%curr% of %total%"
+msgstr "%curr% av %total%"
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:223
+#: static/scripts/app/views/dir.js:71
+#: static/scripts/app/views/starred-file.js:118
+msgid "Open in New Tab"
+msgstr "Åpne i ny fane"
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:292
+msgid "The image could not be loaded."
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:293
+#: static/scripts/app/views/dir.js:64
+#: static/scripts/app/views/starred-file.js:110
+msgid "Previous (Left arrow key)"
+msgstr "Forrige (Venstre piltast)"
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:294
+#: static/scripts/app/views/dir.js:65
+#: static/scripts/app/views/starred-file.js:111
+msgid "Next (Right arrow key)"
+msgstr "Neste (Høyre piltast)"
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:295
+#: static/scripts/app/views/dir.js:60
+#: static/scripts/app/views/starred-file.js:106
+msgid "Close (Esc)"
+msgstr "Lukk (Esc)"
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:296
+msgid "Zoom in"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:297
+msgid "Zoom out"
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-menu.js:97
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:146
+#: frontend/src/components/tree-view/tree-node-menu.js:49
+#: frontend/src/components/wiki-list-view/wiki-list-item.js:193
+#: frontend/src/pages/groups/group-view.js:370
+#: frontend/src/pages/my-libs/item.js:192
 msgid "Rename"
 msgstr "Omdøpe"
 
-#: frontend/src/components/search.js:199
-msgid "Search files in this wiki"
-msgstr "Søk etter filer i denne wikien."
+#: frontend/src/components/dirent-list-view/dirent-menu.js:100
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:99
+msgid "Move"
+msgstr "Flytte"
 
-#: frontend/src/components/tree-dir-view/tree-dir-view.js:17
-msgid "Size"
-msgstr "Størrelse"
+#: frontend/src/components/dirent-list-view/dirent-menu.js:109
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:152
+#: frontend/src/pages/my-libs/item.js:197
+msgid "Details"
+msgstr "Detaljer"
 
-#: frontend/src/components/tree-dir-view/tree-dir-view.js:18
-msgid "Last Update"
-msgstr "Siste oppdatering"
+#: frontend/src/components/dirent-list-view/dirent-menu.js:112
+msgid "Unlock"
+msgstr "Lås opp"
 
-#: frontend/src/pages/wiki/main-panel.js:50
-msgid "Edit Page"
-msgstr "Rediger side"
+#: frontend/src/components/dirent-list-view/dirent-menu.js:115
+msgid "Lock"
+msgstr "Lås"
 
-#: frontend/src/pages/wiki/main-panel.js:60
+#: frontend/src/components/dirent-list-view/dirent-menu.js:118
+msgid "Comment"
+msgstr "Kommenter"
+
+#: frontend/src/components/dirent-list-view/dirent-menu.js:124
+msgid "Access Log"
+msgstr "Tilgangslogg"
+
+#: frontend/src/components/dirent-list-view/dirent-menu.js:127
+msgid "Open via Client"
+msgstr "Åpne via klient"
+
+#: frontend/src/components/dirent-list-view/dirent-menu.js:167
+#: frontend/src/components/history-list-view/history-list-item.js:97
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:224
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:268
+#: frontend/src/components/tree-view/tree-node-menu.js:89
+#: frontend/src/pages/my-libs/item.js:184
+#: frontend/src/pages/repo-wiki-mode/side-panel.js:174
+msgid "More Operations"
+msgstr "Flere operasjoner"
+
+#: frontend/src/components/draft-list-view/draft-list-menu.js:27
+#: frontend/src/components/draft-list-view/draft-list-menu.js:36
+msgid "Ask for review"
+msgstr ""
+
+#: frontend/src/components/draft-list-view/draft-list-view.js:22
+#: frontend/src/components/review-list-view/review-list-view.js:63
+#: frontend/src/pages/share-admin/share-links.js:73
+#: frontend/src/pages/share-admin/upload-links.js:55
+#: frontend/src/pages/starred/starred.js:21
+msgid "Library"
+msgstr "Bibliotek"
+
+#: frontend/src/components/draft-list-view/draft-list-view.js:23
+msgid "Review"
+msgstr ""
+
+#: frontend/src/components/file-chooser/file-chooser.js:109
+msgid "Current Library"
+msgstr "Nåværende bibliotek"
+
+#: frontend/src/components/file-chooser/file-chooser.js:128
+msgid "Other Libraries"
+msgstr "Andre biblioteker"
+
+#: frontend/src/components/file-uploader/upload-list-item.js:49
+msgid "cancel"
+msgstr ""
+
+#: frontend/src/components/file-uploader/upload-list-item.js:52
+msgid "saving..."
+msgstr ""
+
+#: frontend/src/components/file-uploader/upload-list-item.js:55
+#: static/scripts/app/views/fileupload.js:19
+msgid "uploaded"
+msgstr "opplastet"
+
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:39
+msgid "File Upload"
+msgstr "Filopplasting"
+
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:40
+#: static/scripts/app/views/fileupload.js:47
+msgid "File Uploading..."
+msgstr "Filen lastes opp..."
+
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:67
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:114
+#: frontend/src/pages/my-libs/content.js:126
+msgid "name"
+msgstr "navn"
+
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:68
+msgid "progress"
+msgstr ""
+
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:69
+msgid "state"
+msgstr ""
+
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:74
+msgid "Cancel All"
+msgstr "Avbryt alle"
+
+#: frontend/src/components/history-list-view/history-list-item.js:100
+#: frontend/src/pages/my-libs/my-libs-deleted.js:158
+msgid "Restore"
+msgstr "Gjenopprett"
+
+#: frontend/src/components/main-side-nav.js:78
+msgid "All Groups"
+msgstr "Alle grupper"
+
+#: frontend/src/components/main-side-nav.js:109
+#: frontend/src/components/main-side-nav.js:111
+#: frontend/src/components/main-side-nav.js:118
+#: frontend/src/components/main-side-nav.js:120
+msgid "Links"
+msgstr "Lenker"
+
+#: frontend/src/components/main-side-nav.js:136
+#: frontend/src/components/main-side-nav.js:138
+#: frontend/src/pages/share-admin/folders.js:275
+msgid "Folders"
+msgstr "Mapper"
+
+#: frontend/src/components/main-side-nav.js:154
+#: frontend/src/components/main-side-nav.js:156
+#: frontend/src/pages/my-libs/my-libs-deleted.js:48
+#: frontend/src/pages/my-libs/my-libs.js:135
+msgid "My Libraries"
+msgstr "Mine bibliotek"
+
+#: frontend/src/components/main-side-nav.js:161
+#: frontend/src/components/main-side-nav.js:163
+#: frontend/src/pages/shared-libs/shared-libs.js:329
+msgid "Shared with me"
+msgstr "Delt med meg"
+
+#: frontend/src/components/main-side-nav.js:168
+#: frontend/src/components/main-side-nav.js:170
+#: frontend/src/pages/shared-with-all/public-shared-view.js:188
+msgid "Shared with all"
+msgstr "Delt med alle"
+
+#: frontend/src/components/main-side-nav.js:175
+#: frontend/src/components/main-side-nav.js:178
+msgid "Shared with groups"
+msgstr "Delt med grupper"
+
+#: frontend/src/components/main-side-nav.js:184
+msgid "Tools"
+msgstr "Verktøy"
+
+#: frontend/src/components/main-side-nav.js:187
+#: frontend/src/components/main-side-nav.js:189
+#: frontend/src/pages/starred/starred.js:252
+msgid "Favorites"
+msgstr "Favoritter"
+
+#: frontend/src/components/main-side-nav.js:193
+#: frontend/src/components/main-side-nav.js:195
+#: frontend/src/pages/dashboard/files-activities.js:316
+msgid "Activities"
+msgstr "Aktiviteter"
+
+#: frontend/src/components/main-side-nav.js:200
+#: frontend/src/components/main-side-nav.js:202
+#: frontend/src/pages/wiki/main-panel.js:98
+#: frontend/src/pages/wikis/wikis.js:143
 msgid "Wikis"
 msgstr ""
 
-#: frontend/src/pages/wiki/side-panel.js:176
+#: frontend/src/components/main-side-nav.js:207
+#: frontend/src/components/main-side-nav.js:209
+#: frontend/src/pages/linked-devices/linked-devices.js:200
+msgid "Linked Devices"
+msgstr "Lenkede enheter"
+
+#: frontend/src/components/main-side-nav.js:222
+#: frontend/src/components/main-side-nav.js:225
+msgid "Share Admin"
+msgstr "Delingsadministrator"
+
+#: frontend/src/components/more.js:14
+msgid "show more"
+msgstr ""
+
+#: frontend/src/components/repo-info-bar.js:103
+msgid "draft"
+msgstr ""
+
+#: frontend/src/components/repo-info-bar.js:112
+#: frontend/src/draft-review.js:810
+msgid "review"
+msgstr ""
+
+#: frontend/src/components/review-list-view/review-comments.js:149
+msgid "Show resolved comments"
+msgstr ""
+
+#: frontend/src/components/review-list-view/review-comments.js:163
+msgid "No comment yet."
+msgstr "Ingen kommentarer."
+
+#: frontend/src/components/review-list-view/review-comments.js:187
+msgid "Add a comment."
+msgstr ""
+
+#: frontend/src/components/review-list-view/review-comments.js:284
+msgid "Mark as resolved"
+msgstr ""
+
+#: frontend/src/components/review-list-view/review-list-view.js:38
+msgid "Open"
+msgstr ""
+
+#: frontend/src/components/review-list-view/review-list-view.js:46
+msgid "Published"
+msgstr ""
+
+#: frontend/src/components/review-list-view/review-list-view.js:54
+#: frontend/src/draft-review.js:838
+msgid "Closed"
+msgstr ""
+
+#: frontend/src/components/review-list-view/review-list-view.js:65
+#: frontend/src/draft-review.js:962
+msgid "Author"
+msgstr ""
+
+#: frontend/src/components/review-list-view/review-list-view.js:66
+#: frontend/src/draft-review.js:931
+msgid "Reviewers"
+msgstr ""
+
+#: frontend/src/components/select-editor/role-eidtor.js:18
+#: frontend/src/utils/utils.js:334
+msgid "Admin"
+msgstr "Administrator"
+
+#: frontend/src/components/select-editor/role-eidtor.js:22
+msgid "Member"
+msgstr "Medlem"
+
+#: frontend/src/components/select-editor/select-editor.js:80
+msgid "Select..."
+msgstr ""
+
+#: frontend/src/components/select-editor/select-editor.js:90
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:188
+msgid "Edit"
+msgstr "Rediger"
+
+#: frontend/src/components/select-editor/wiki-permission-editor.js:18
+msgid "Private"
+msgstr ""
+
+#: frontend/src/components/select-editor/wiki-permission-editor.js:22
+msgid "Public"
+msgstr ""
+
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:149
+msgid "Folder Premission"
+msgstr ""
+
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:155
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:256
+#: frontend/src/pages/share-admin/folders.js:161
+#: frontend/src/pages/share-admin/libraries.js:171
+msgid "Unshare"
+msgstr "Opphev deling"
+
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:87
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:111
+#: frontend/src/pages/my-libs/content.js:109
+#: frontend/src/pages/my-libs/content.js:123
+msgid "Library Type"
+msgstr ""
+
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:89
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:117
+#: frontend/src/pages/my-libs/content.js:111
+#: frontend/src/pages/my-libs/content.js:129
+#: frontend/src/pages/shared-libs/shared-libs.js:71
+msgid "Actions"
+msgstr ""
+
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:113
+#: frontend/src/pages/my-libs/content.js:125
+msgid "Sort:"
+msgstr "Sorter"
+
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:115
+#: frontend/src/pages/my-libs/content.js:127
+#: frontend/src/pages/shared-libs/shared-libs.js:69
+msgid "last update"
+msgstr "sist oppdatert"
+
+#: frontend/src/components/side-nav-footer.js:37
+msgid "About"
+msgstr ""
+
+#: frontend/src/components/side-nav-footer.js:43
+msgid "Server Version: "
+msgstr "Serverversjon: "
+
+#: frontend/src/components/side-nav-footer.js:43
+msgid "Seafile"
+msgstr "Seafile"
+
+#: frontend/src/components/side-nav-footer.js:44
+msgid "About Us"
+msgstr "Om oss"
+
+#: frontend/src/components/side-nav-footer.js:59
+msgid "Help"
+msgstr "Hjelp"
+
+#: frontend/src/components/side-nav-footer.js:63
+msgid "Clients"
+msgstr "Klienter"
+
+#: frontend/src/components/toolbar/common-toolbar.js:16
+msgid "Search Files"
+msgstr "Søk etter filer"
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:188
+msgid "Edit File"
+msgstr ""
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:193
+msgid "New Draft"
+msgstr ""
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:199
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:200
+msgid "Upload"
+msgstr "Opplasting"
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:202
+msgid "New"
+msgstr "Ny"
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:211
+msgid "Upload Files"
+msgstr "Laste opp filer"
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:212
+msgid "Upload Folder"
+msgstr "Opplastingsmappe"
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:220
+#: static/scripts/app/views/dir.js:815
+msgid "New Markdown File"
+msgstr ""
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:221
+#: static/scripts/app/views/dir.js:823
+msgid "New Excel File"
+msgstr "Ny Excel fil"
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:222
+#: static/scripts/app/views/dir.js:831
+msgid "New PowerPoint File"
+msgstr "Ny Powerpoint fil"
+
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:223
+#: static/scripts/app/views/dir.js:839
+msgid "New Word File"
+msgstr "Ny Word fil"
+
+#: frontend/src/components/toolbar/repo-view-toobar.js:50
+msgid "More"
+msgstr "Mer"
+
+#: frontend/src/components/toolbar/repo-view-toobar.js:54
+#: frontend/src/pages/my-libs/my-libs-deleted.js:50
+msgid "Deleted Libraries"
+msgstr ""
+
+#: frontend/src/components/toolbar/view-mode-toolbar.js:25
+msgid "List"
+msgstr "Liste"
+
+#: frontend/src/components/toolbar/view-mode-toolbar.js:27
+msgid "Wiki"
+msgstr "Wiki"
+
+#: frontend/src/components/wiki-markdown-viewer.js:186
+msgid "Last modified by"
+msgstr ""
+
+#: frontend/src/draft-review.js:219
+msgid "Successfully closed review %(reviewID)s."
+msgstr ""
+
+#: frontend/src/draft-review.js:223
+msgid "Failed to close review %(reviewID)s"
+msgstr ""
+
+#: frontend/src/draft-review.js:232
+msgid "Successfully published draft."
+msgstr ""
+
+#: frontend/src/draft-review.js:235
+msgid "Failed to publish draft."
+msgstr ""
+
+#: frontend/src/draft-review.js:644
+msgid "The review has been closed."
+msgstr ""
+
+#: frontend/src/draft-review.js:647
+msgid "Draft has been deleted."
+msgstr ""
+
+#: frontend/src/draft-review.js:652
+msgid "Original file has been deleted."
+msgstr ""
+
+#: frontend/src/draft-review.js:669
+msgid "View diff"
+msgstr ""
+
+#: frontend/src/draft-review.js:696
+msgid "View File"
+msgstr ""
+
+#: frontend/src/draft-review.js:697
+msgid "Edit draft"
+msgstr ""
+
+#: frontend/src/draft-review.js:820
+#: frontend/src/pages/dashboard/files-activities.js:91
+msgid "Close review"
+msgstr ""
+
+#: frontend/src/draft-review.js:822
+#: frontend/src/pages/dashboard/files-activities.js:95
+msgid "Publish draft"
+msgstr ""
+
+#: frontend/src/draft-review.js:823
+msgid "Publish"
+msgstr ""
+
+#: frontend/src/draft-review.js:831
+msgid "Finished"
+msgstr ""
+
+#: frontend/src/draft-review.js:944
+msgid "No reviewer yet."
+msgstr ""
+
+#: frontend/src/draft-review.js:981
+msgid "Changes"
+msgstr ""
+
+#: frontend/src/draft-review.js:983
+msgid "Number of changes:"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:58
+msgid "Created library"
+msgstr "Opprettet bibliotek"
+
+#: frontend/src/pages/dashboard/files-activities.js:62
+msgid "Renamed library"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:66
+msgid "Deleted library"
+msgstr "Slettet bibliotek"
+
+#: frontend/src/pages/dashboard/files-activities.js:70
+msgid "Restored library"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:75
+#: static/scripts/app/views/activity-item.js:25
+msgid "Removed all items from trash."
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:77
+#: static/scripts/app/views/activity-item.js:27
+msgid "Removed items older than {n} days from trash."
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:87
+msgid "Open review"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:105
+msgid "Created draft"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:109
+msgid "Created file"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:114
+msgid "Deleted draft"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:118
+msgid "Deleted file"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:122
+msgid "Restored file"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:126
+msgid "Renamed file"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:131
+msgid "Moved file"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:136
+msgid "Updated draft"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:140
+msgid "Updated file"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:149
+msgid "Created folder"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:153
+msgid "Deleted folder"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:157
+msgid "Restored folder"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:161
+msgid "Renamed folder"
+msgstr ""
+
+#: frontend/src/pages/dashboard/files-activities.js:166
+msgid "Moved folder"
+msgstr ""
+
+#: frontend/src/pages/drafts/draft-content.js:44
+msgid "Successfully deleted draft %(draft)s."
+msgstr ""
+
+#: frontend/src/pages/drafts/draft-content.js:48
+msgid "Failed to delete draft %(draft)s."
+msgstr ""
+
+#: frontend/src/pages/drafts/draft-content.js:59
+msgid "Successfully published draft %(draft)s."
+msgstr ""
+
+#: frontend/src/pages/drafts/draft-content.js:63
+msgid "Failed to publish draft %(draft)s."
+msgstr ""
+
+#: frontend/src/pages/drafts/draft-content.js:77
+msgid "Review already exists."
+msgstr ""
+
+#: frontend/src/pages/drafts/draft-content.js:123
+msgid "No draft yet"
+msgstr ""
+
+#: frontend/src/pages/drafts/draft-content.js:124
+msgid ""
+"Draft is a way to let you collaborate with others on files. You can create a"
+" draft from a file, edit the draft and then ask for a review. The original "
+"file will be updated only after the draft be reviewed."
+msgstr ""
+
+#: frontend/src/pages/file-history/side-panel.js:102
+msgid "History Versions"
+msgstr ""
+
+#: frontend/src/pages/groups/group-view.js:151
+msgid "No library is shared to this group"
+msgstr "Ingen bibliotek er delt med denne gruppen"
+
+#: frontend/src/pages/groups/group-view.js:152
+msgid ""
+"You can share libraries by clicking the \"New Library\" button above or the "
+"\"Share\" icon on your libraries list."
+msgstr "Du kan dele biblioteker ved å klikke på \"lage nytt bibliotek\"-knappen ovenfor eller \"dele\"-ikonet på bibliotekslisten din."
+
+#: frontend/src/pages/groups/group-view.js:153
+msgid ""
+"Libraries shared as writable can be downloaded and synced by other group "
+"members. Read only libraries can only be downloaded, updates by others will "
+"not be uploaded."
+msgstr "Bibliotek som er delt som redigerbare kan lastes ned og synkroniseres med andre gruppemedlemmer. Bibliotek som bare er lesbare kan kun lastes ned, oppdateringer via andre vil ikke bli lastet opp."
+
+#: frontend/src/pages/groups/group-view.js:160
+#: frontend/src/pages/groups/group-view.js:166
+#: frontend/src/pages/groups/groups-view.js:62
+msgid "No libraries"
+msgstr "Ingen bibliotek"
+
+#: frontend/src/pages/groups/group-view.js:167
+msgid "You can create libraries by clicking the \"New Library\" button above."
+msgstr ""
+
+#: frontend/src/pages/groups/group-view.js:349
+msgid "Groups"
+msgstr "Grupper"
+
+#: frontend/src/pages/groups/group-view.js:353
+msgid "This is a special group representing a department."
+msgstr ""
+
+#: frontend/src/pages/groups/group-view.js:373
+#: frontend/src/pages/my-libs/item.js:193
+msgid "Transfer"
+msgstr "Overføre"
+
+#: frontend/src/pages/groups/group-view.js:378
+msgid "Manage Members"
+msgstr "Behandle medlemmer"
+
+#: frontend/src/pages/groups/group-view.js:392
+#: frontend/src/pages/groups/group-view.js:398
+msgid "Members"
+msgstr "Medlemmer"
+
+#: frontend/src/pages/groups/groups-view.js:177
+msgid "My Groups"
+msgstr "Mine grupper"
+
+#: frontend/src/pages/linked-devices/linked-devices.js:20
+#: frontend/src/pages/linked-devices/linked-devices.js:31
+msgid "Platform"
+msgstr "Plattform"
+
+#: frontend/src/pages/linked-devices/linked-devices.js:21
+#: frontend/src/pages/linked-devices/linked-devices.js:32
+msgid "Device Name"
+msgstr "Enhetsnavn"
+
+#: frontend/src/pages/linked-devices/linked-devices.js:22
+msgid "IP"
+msgstr "IP"
+
+#: frontend/src/pages/linked-devices/linked-devices.js:23
+msgid "Last Access"
+msgstr "Siste tilgang"
+
+#: frontend/src/pages/linked-devices/linked-devices.js:104
+#: static/scripts/app/views/device.js:53 static/scripts/app/views/device.js:73
+#: static/scripts/sysadmin-app/views/device.js:53
+#: static/scripts/sysadmin-app/views/device.js:73
+msgid "Successfully unlink %(name)s."
+msgstr ""
+
+#: frontend/src/pages/linked-devices/linked-devices.js:108
+msgid "Failed to unlink %(name)s"
+msgstr ""
+
+#: frontend/src/pages/linked-devices/linked-devices.js:131
+#: frontend/src/pages/linked-devices/linked-devices.js:141
+msgid "Unlink"
+msgstr "Koble fra"
+
+#: frontend/src/pages/my-libs/content.js:95
+msgid ""
+"You can create a library to organize your files. For example, you can create"
+" one for each of your projects. Each library can be synchronized and shared "
+"separately."
+msgstr "Du kan opprette et bibliotek for å organisere filene dine. Du kan for eksempel opprette ett for hvert av prosjektene dine. Hvert bibliotek kan synkroniseres og deles uavhengig av hverandre."
+
+#: frontend/src/pages/my-libs/content.js:114
+msgid "Storage backend"
+msgstr ""
+
+#: frontend/src/pages/my-libs/item.js:195
+msgid "Change Password"
+msgstr "Endre passord"
+
+#: frontend/src/pages/my-libs/item.js:196
+msgid "Folder Permission"
+msgstr "Mappetillatelse"
+
+#: frontend/src/pages/my-libs/item.js:209
+msgid "Label current state"
+msgstr ""
+
+#: frontend/src/pages/my-libs/item.js:245
+#: frontend/src/pages/my-libs/item.js:277
+msgid "Broken (please contact your administrator to fix this library)"
+msgstr ""
+
+#: frontend/src/pages/my-libs/my-libs-deleted.js:57
+msgid "No deleted libraries."
+msgstr ""
+
+#: frontend/src/pages/my-libs/my-libs-deleted.js:62
+msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
+msgstr ""
+
+#: frontend/src/pages/my-libs/my-libs-deleted.js:87
+msgid "Deleted Time"
+msgstr "Tidspunkt for sletting"
+
+#: frontend/src/pages/my-libs/my-libs-deleted.js:138
+msgid "Successfully restored the library."
+msgstr ""
+
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:238
+msgid "This file is in review stage"
+msgstr ""
+
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:239
+msgid "View Review"
+msgstr ""
+
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:246
+msgid "This file is in draft stage."
+msgstr ""
+
+#: frontend/src/pages/repo-wiki-mode/main-panel.js:247
+msgid "Edit Draft"
+msgstr ""
+
+#: frontend/src/pages/share-admin/folders.js:28
+msgid "You have not shared any folders"
+msgstr ""
+
+#: frontend/src/pages/share-admin/folders.js:29
+msgid ""
+"You can share a single folder with a registered user if you don't want to "
+"share a whole library."
+msgstr "Du kan dele en enkeltmappe med en registrert bruker, dersom du ikke ønsker å dele et helt bibliotek."
+
+#: frontend/src/pages/share-admin/folders.js:43
+#: frontend/src/pages/share-admin/libraries.js:43
+msgid "Share To"
+msgstr "Dele med"
+
+#: frontend/src/pages/share-admin/libraries.js:28
+msgid "You have not shared any libraries"
+msgstr ""
+
+#: frontend/src/pages/share-admin/libraries.js:29
+msgid ""
+"You can share libraries with your friends and colleagues by clicking the "
+"share icon of your own libraries in your home page or creating a new library"
+" in groups you are in."
+msgstr ""
+
+#: frontend/src/pages/share-admin/libraries.js:141
+msgid "all members"
+msgstr "alle medlemmene"
+
+#: frontend/src/pages/share-admin/share-links.js:56
+msgid "You don't have any share links"
+msgstr ""
+
+#: frontend/src/pages/share-admin/share-links.js:57
+msgid ""
+"You can generate a share link for a folder or a file. Anyone who receives "
+"this link can view the folder or the file online."
+msgstr ""
+
+#: frontend/src/pages/share-admin/share-links.js:74
+#: frontend/src/pages/share-admin/upload-links.js:56
+msgid "Visits"
+msgstr "Besøkende"
+
+#: frontend/src/pages/share-admin/share-links.js:75
+msgid "Expiration"
+msgstr "Utløpsdato"
+
+#: frontend/src/pages/share-admin/share-links.js:86
+#: frontend/src/pages/share-admin/upload-links.js:68
+msgid "Link"
+msgstr "Lenke"
+
+#: frontend/src/pages/share-admin/share-links.js:180
+#: frontend/src/pages/share-admin/upload-links.js:131
+msgid "View"
+msgstr "Vis"
+
+#: frontend/src/pages/share-admin/share-links.js:181
+#: frontend/src/pages/share-admin/upload-links.js:132
+msgid "Remove"
+msgstr "Fjerne"
+
+#: frontend/src/pages/share-admin/share-links.js:303
+#: frontend/src/pages/share-admin/upload-links.js:203
+msgid "Share Links"
+msgstr ""
+
+#: frontend/src/pages/share-admin/share-links.js:306
+#: frontend/src/pages/share-admin/upload-links.js:205
+msgid "Upload Links"
+msgstr "Opplastingslenker"
+
+#: frontend/src/pages/share-admin/upload-links.js:43
+msgid "You don't have any upload links"
+msgstr ""
+
+#: frontend/src/pages/share-admin/upload-links.js:44
+msgid ""
+"You can generate an upload link from any folder. Anyone who receives this "
+"link can upload files to this folder."
+msgstr ""
+
+#: frontend/src/pages/shared-libs/shared-libs.js:34
+msgid "No libraries have been shared with you"
+msgstr ""
+
+#: frontend/src/pages/shared-libs/shared-libs.js:35
+msgid ""
+"No libraries have been shared directly with you. You can find more shared "
+"libraries at \"Shared with groups\"."
+msgstr ""
+
+#: frontend/src/pages/shared-libs/shared-libs.js:203
+#: frontend/src/pages/shared-libs/shared-libs.js:241
+msgid "Leave Share"
+msgstr "Forlate delt resurss"
+
+#: frontend/src/pages/shared-with-all/public-shared-view.js:162
+msgid "No public libraries"
+msgstr ""
+
+#: frontend/src/pages/shared-with-all/public-shared-view.js:163
+msgid ""
+"You can create a public library by clicking the \"New Library\" button, "
+"others can view and download this library."
+msgstr ""
+
+#: frontend/src/pages/shared-with-all/public-shared-view.js:174
+msgid "Add Library"
+msgstr "Legg til bibliotek"
+
+#: frontend/src/pages/shared-with-all/public-shared-view.js:177
+msgid "Share existing libraries"
+msgstr "Del eksiterende biblioteker"
+
+#: frontend/src/pages/starred/starred.js:20
+#: frontend/src/pages/starred/starred.js:31
+msgid "File Name"
+msgstr "Filnavn"
+
+#: frontend/src/pages/starred/starred.js:172
+#: frontend/src/pages/starred/starred.js:193
+msgid "Unstar"
+msgstr "Fjerne favorittmarkering"
+
+#: frontend/src/pages/wiki/main-panel.js:82
+msgid "Edit Page"
+msgstr "Rediger side"
+
+#: frontend/src/pages/wiki/side-panel.js:34
+msgid "Contents"
+msgstr ""
+
+#: frontend/src/pages/wiki/side-panel.js:49
 msgid "Pages"
 msgstr "Sider"
 
-#: seahub/templates/priv/ali.js:8
-msgid "Preview-Edit-on-Cloud library"
+#: frontend/src/pages/wiki/side-panel.js:76
+msgid "Go to Library"
 msgstr ""
 
-#: seahub/templates/priv/ali.js:9
-msgid "Preview-on-Cloud library"
+#: frontend/src/pages/wikis/wikis.js:128
+msgid "Add Wiki"
 msgstr ""
 
-#: seahub/templates/priv/ali.js:10
+#: frontend/src/pages/wikis/wikis.js:156
+msgid "You do not have any wiki"
+msgstr ""
+
+#: frontend/src/pages/wikis/wikis.js:157
+msgid ""
+"Seafile Wiki enables you to organize your knowledge in a simple way. The "
+"contents of wiki is stored in a normal library with pre-defined file/folder "
+"structure. This enables you to edit your wiki in your desktop and then sync "
+"back to the server."
+msgstr "Seafile Wiki lar deg organisere din kunnskap på en enkel måte. Innholdet i wiki er lagret i et vanlig bibliotek med en forhåndsdefinert fil-/ mappestruktur. Dette gjør at du kan redigere din wiki på PCen og deretter synkronisere den tilbake til serveren."
+
+#: frontend/src/shared-file-view-markdown.js:46
+msgid "Successfully saved"
+msgstr ""
+
+#: frontend/src/shared-file-view-markdown.js:59
+msgid "File download is disabled: the share link traffic of owner is used up."
+msgstr "Nedlasting av fil er slått av: Brukeren har brukt opp sin kvote av delingslenker."
+
+#: frontend/src/shared-file-view-markdown.js:110
+msgid "Shared by:"
+msgstr ""
+
+#: frontend/src/shared-file-view-markdown.js:116
+msgid "Save as ..."
+msgstr ""
+
+#: frontend/src/shared-file-view-markdown.js:157
+msgid "Anonymous User"
+msgstr "Anonym bruker"
+
+#: frontend/src/utils/utils.js:283
+#: static/scripts/app/models/deleted-repo.js:19 static/scripts/common.js:349
+msgid "Encrypted library"
+msgstr "Kryptert bibilotek"
+
+#: frontend/src/utils/utils.js:285 seahub/templates/priv/ali.js:10
+#: static/scripts/common.js:351
 msgid "Admin access"
 msgstr ""
 
-#: seahub/templates/priv/ali.js:12
+#: frontend/src/utils/utils.js:289
+#: static/scripts/app/models/deleted-repo.js:21 static/scripts/common.js:355
+#: static/scripts/sysadmin-app/models/trash-repo.js:14
+msgid "Read-Write library"
+msgstr "Skrivbart bibliotek"
+
+#: frontend/src/utils/utils.js:292 static/scripts/common.js:358
+msgid "Read-Only library"
+msgstr "Lesbart bibliotek"
+
+#: frontend/src/utils/utils.js:295 seahub/templates/priv/ali.js:8
+#: static/scripts/common.js:361
+msgid "Preview-Edit-on-Cloud library"
+msgstr ""
+
+#: frontend/src/utils/utils.js:298 seahub/templates/priv/ali.js:9
+#: static/scripts/common.js:364
+msgid "Preview-on-Cloud library"
+msgstr ""
+
+#: frontend/src/utils/utils.js:309 seahub/templates/priv/ali.js:12
+#: static/scripts/common.js:375
 msgid "Read-Write folder"
 msgstr ""
 
-#: seahub/templates/priv/ali.js:13
+#: frontend/src/utils/utils.js:312 seahub/templates/priv/ali.js:13
+#: static/scripts/common.js:378
 msgid "Read-Only folder"
 msgstr ""
 
-#: seahub/templates/priv/ali.js:14
+#: frontend/src/utils/utils.js:315 seahub/templates/priv/ali.js:14
+#: static/scripts/common.js:381
 msgid "Preview-Edit-on-Cloud folder"
 msgstr ""
 
-#: seahub/templates/priv/ali.js:15
+#: frontend/src/utils/utils.js:318 seahub/templates/priv/ali.js:15
+#: static/scripts/common.js:384
 msgid "Preview-on-Cloud folder"
 msgstr ""
 
-#: seahub/templates/priv/ali.js:17
+#: frontend/src/utils/utils.js:337 seahub/templates/priv/ali.js:17
+#: static/scripts/app/views/share-admin-folder.js:115
+#: static/scripts/app/views/share-admin-repo.js:129
 msgid "Preview-Edit-on-Cloud"
 msgstr ""
 
-#: seahub/templates/priv/ali.js:18
+#: frontend/src/utils/utils.js:340 seahub/templates/priv/ali.js:18
+#: static/scripts/app/views/share-admin-folder.js:118
+#: static/scripts/app/views/share-admin-repo.js:132
 msgid "Preview-on-Cloud"
+msgstr ""
+
+#: frontend/src/utils/utils.js:350
+msgid "User can read, write, upload, download and sync files."
+msgstr ""
+
+#: frontend/src/utils/utils.js:353
+msgid "User can read, download and sync files."
+msgstr ""
+
+#: frontend/src/utils/utils.js:356
+msgid "Besides Write permission, user can also share the library."
+msgstr ""
+
+#: frontend/src/utils/utils.js:359
+msgid ""
+"Same as Preview on cloud. But user can also edit files online via browser."
+msgstr ""
+
+#: frontend/src/utils/utils.js:362
+msgid ""
+"User can only view files online via browser. Files can't be downloaded."
 msgstr ""
 
 #: seahub/templates/priv/ali.js:21
@@ -195,76 +2122,18 @@ msgstr ""
 msgid "View-on-Cloud"
 msgstr ""
 
-#: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:345
-msgid "Encrypted library"
-msgstr "Kryptert bibilotek"
-
-#: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:349
-#: static/scripts/sysadmin-app/models/trash-repo.js:14
-msgid "Read-Write library"
-msgstr "Skrivbart bibliotek"
-
-#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:682
-#: static/scripts/app/views/dir.js:752
-#: static/scripts/app/views/fileupload.js:394
-#: static/scripts/app/views/fileupload.js:408
-#: static/scripts/app/views/fileupload.js:420
-#: static/scripts/app/views/fileupload.js:432
-#: static/scripts/app/views/group.js:65 static/scripts/common.js:645
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:718
+#: static/scripts/app/views/dir.js:788
+#: static/scripts/app/views/fileupload.js:396
+#: static/scripts/app/views/fileupload.js:410
+#: static/scripts/app/views/fileupload.js:422
+#: static/scripts/app/views/fileupload.js:434
+#: static/scripts/app/views/group.js:65 static/scripts/common.js:683
 msgid "Just now"
 msgstr "Nettopp"
 
-#: static/scripts/app/models/repo.js:34
-msgid "Name is required"
-msgstr "Navn er påkrevd"
-
-#: static/scripts/app/models/repo.js:37
-#: static/scripts/app/views/dialogs/dirent-rename.js:65
-#: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:513
-#: static/scripts/app/views/group-repo.js:131
-#: static/scripts/app/views/repo.js:187
-msgid "Name should not include '/'."
-msgstr "Navn kan ikke inneholde '/'."
-
-#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:350
-msgid "Please enter password"
-msgstr "Vennligst oppgi passord"
-
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:358
-msgid "Please enter the password again"
-msgstr "Vennligst skriv inn passordet på nytt."
-
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:354
-msgid "Password is too short"
-msgstr "Passordet er for kort"
-
-#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:362
-msgid "Passwords don't match"
-msgstr "Passordene stemmer ikke overens"
-
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:347
-msgid "Read-Only library"
-msgstr "Lesbart bibliotek"
-
-#: static/scripts/app/models/share-admin-folder.js:25
-#: static/scripts/app/models/share-admin-repo.js:22
-msgid "Read-Write"
-msgstr "Skrivbar"
-
-#: static/scripts/app/models/share-admin-folder.js:27
-#: static/scripts/app/models/share-admin-repo.js:24
-msgid "Read-Only"
-msgstr "Lesbar"
-
-#: static/scripts/app/views/activity-item.js:25
-msgid "Removed all items from trash."
-msgstr ""
-
-#: static/scripts/app/views/activity-item.js:27
-msgid "Removed items older than {n} days from trash."
+#: static/scripts/app/router.js:136
+msgid "A file is being uploaded. Are you sure you want to leave this page?"
 msgstr ""
 
 #: static/scripts/app/views/deleted-repo.js:58
@@ -310,20 +2179,6 @@ msgstr ""
 msgid "Delete files from this device the next time it comes online."
 msgstr ""
 
-#: static/scripts/app/views/device.js:53 static/scripts/app/views/device.js:73
-#: static/scripts/sysadmin-app/views/device.js:53
-#: static/scripts/sysadmin-app/views/device.js:73
-msgid "Successfully unlink %(name)s."
-msgstr ""
-
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:54
-msgid "Move {placeholder} to:"
-msgstr "Flytt {placeholder} til:"
-
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:54
-msgid "Copy {placeholder} to:"
-msgstr "Kopiere {placeholder} til:"
-
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Moving %(name)s"
 msgstr "Flytter %(name)s"
@@ -342,17 +2197,12 @@ msgstr "Mislyktes."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:159
-#: static/scripts/app/views/dir.js:1423
+#: static/scripts/app/views/dir.js:1479
 msgid "Canceled."
 msgstr "Avbrutt."
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:188
-#: static/scripts/app/views/dir.js:1173
-msgid "Invalid destination path"
-msgstr "Ugyldig destinasjonsbane"
-
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:207
-#: static/scripts/app/views/dirent.js:296
+#: static/scripts/app/views/dirent.js:316
 msgid "Successfully moved %(name)s"
 msgstr "Vellykket flytting av %(name)s"
 
@@ -361,8 +2211,8 @@ msgid "Successfully copied %(name)s"
 msgstr "Vellykket kopiering av %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
-#: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:507
+#: static/scripts/app/views/dir.js:698 static/scripts/app/views/dir.js:758
+#: static/scripts/app/views/dirent.js:527
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -422,10 +2272,6 @@ msgstr ""
 msgid "Search user or enter email and press Enter"
 msgstr ""
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:141
-msgid "Select a group"
-msgstr "Velg en gruppe"
-
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:143
 msgid "You can only select 1 item"
 msgstr "Du kan bare velge 1 element"
@@ -438,196 +2284,126 @@ msgstr "Vennligst trykk og velg en mappe"
 msgid "{placeholder} History Setting"
 msgstr ""
 
-#: static/scripts/app/views/dialogs/repo-history-settings.js:131
-msgid "Successfully set library history."
-msgstr ""
-
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:65
 msgid "{placeholder} Share Links"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:58
-#: static/scripts/app/views/starred-file.js:106
-msgid "Close (Esc)"
-msgstr "Lukk (Esc)"
-
-#: static/scripts/app/views/dir.js:59
+#: static/scripts/app/views/dir.js:61
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
 msgstr "Laster..."
 
-#: static/scripts/app/views/dir.js:62
-#: static/scripts/app/views/starred-file.js:110
-msgid "Previous (Left arrow key)"
-msgstr "Forrige (Venstre piltast)"
-
-#: static/scripts/app/views/dir.js:63
-#: static/scripts/app/views/starred-file.js:111
-msgid "Next (Right arrow key)"
-msgstr "Neste (Høyre piltast)"
-
-#: static/scripts/app/views/dir.js:64
-#: static/scripts/app/views/starred-file.js:112
-msgid "%curr% of %total%"
-msgstr "%curr% av %total%"
-
-#: static/scripts/app/views/dir.js:69
-#: static/scripts/app/views/starred-file.js:118
-msgid "Open in New Tab"
-msgstr "Åpne i ny fane"
-
-#: static/scripts/app/views/dir.js:72
+#: static/scripts/app/views/dir.js:74
 #: static/scripts/app/views/starred-file.js:121
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
 msgstr "<a href=\"%url%\" target=\"_blank\">Bildet</a> kunne ikke lastes inn."
 
-#: static/scripts/app/views/dir.js:409
+#: static/scripts/app/views/dir.js:433
 msgid "Password is required."
 msgstr "Passord er påkrevd."
 
-#: static/scripts/app/views/dir.js:479
-#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:469
-msgid "Please check the network."
-msgstr "Vennligst sjekk nettverkstilkoblingen."
-
-#: static/scripts/app/views/dir.js:733
+#: static/scripts/app/views/dir.js:769
 msgid "Only an extension there, please input a name."
 msgstr "Dette er bare en endelse - vennligst tast inn et navn."
 
-#: static/scripts/app/views/dir.js:779
-msgid "New Markdown File"
-msgstr ""
-
-#: static/scripts/app/views/dir.js:787
-msgid "New Excel File"
-msgstr "Ny Excel fil"
-
-#: static/scripts/app/views/dir.js:795
-msgid "New PowerPoint File"
-msgstr "Ny Powerpoint fil"
-
-#: static/scripts/app/views/dir.js:803
-msgid "New Word File"
-msgstr "Ny Word fil"
-
-#: static/scripts/app/views/dir.js:1035 static/scripts/app/views/dir.js:1178
+#: static/scripts/app/views/dir.js:1091 static/scripts/app/views/dir.js:1234
 msgid "Processing..."
 msgstr "Behandler..."
 
-#: static/scripts/app/views/dir.js:1072
+#: static/scripts/app/views/dir.js:1128
 msgid "Successfully deleted %(name)s."
 msgstr "Vellykket sletting av %(name)s."
 
-#: static/scripts/app/views/dir.js:1074
+#: static/scripts/app/views/dir.js:1130
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "Vellykket sletting av %(name)s og 1 annet element."
 
-#: static/scripts/app/views/dir.js:1076
+#: static/scripts/app/views/dir.js:1132
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "Vellykket sletting av  %(name)s og %(amount)s andre elementer."
 
-#: static/scripts/app/views/dir.js:1085
+#: static/scripts/app/views/dir.js:1141
 msgid "Failed to delete %(name)s."
 msgstr "Kunne ikke slette %(name)s."
 
-#: static/scripts/app/views/dir.js:1087
+#: static/scripts/app/views/dir.js:1143
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "Mislykket sletting av %(name)s og 1 annet element."
 
-#: static/scripts/app/views/dir.js:1089
+#: static/scripts/app/views/dir.js:1145
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "Mislykket sletting av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:1102
+#: static/scripts/app/views/dir.js:1158
 msgid "Delete Items"
 msgstr "Slett elementer"
 
-#: static/scripts/app/views/dir.js:1103
+#: static/scripts/app/views/dir.js:1159
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Er du sikker på at du ønsker å slette de valgte elementene?"
 
-#: static/scripts/app/views/dir.js:1117
-msgid "Move selected item(s) to:"
-msgstr "Flytt valgte element(er) til:"
-
-#: static/scripts/app/views/dir.js:1117
-msgid "Copy selected item(s) to:"
-msgstr "Kopiere valgte element(er) til:"
-
-#: static/scripts/app/views/dir.js:1222 static/scripts/app/views/dir.js:1384
-msgid "Successfully moved %(name)s."
-msgstr "Vellykket flytting av %(name)s."
-
-#: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1386
+#: static/scripts/app/views/dir.js:1280 static/scripts/app/views/dir.js:1442
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Vellykket sletting av %(name)s samt 1 annet element."
 
-#: static/scripts/app/views/dir.js:1226 static/scripts/app/views/dir.js:1388
+#: static/scripts/app/views/dir.js:1282 static/scripts/app/views/dir.js:1444
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Vellykket flytting av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:1231 static/scripts/app/views/dir.js:1392
-msgid "Successfully copied %(name)s."
-msgstr "Vellykket kopiering av %(name)s."
-
-#: static/scripts/app/views/dir.js:1233 static/scripts/app/views/dir.js:1394
+#: static/scripts/app/views/dir.js:1289 static/scripts/app/views/dir.js:1450
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Vellykket kopiering av %(name)s og 1 øvrig element."
 
-#: static/scripts/app/views/dir.js:1235 static/scripts/app/views/dir.js:1396
+#: static/scripts/app/views/dir.js:1291 static/scripts/app/views/dir.js:1452
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Vellykket kopiering av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:1251
+#: static/scripts/app/views/dir.js:1307
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Intern feil. Mislykket flytting av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:1253
+#: static/scripts/app/views/dir.js:1309
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Intern feil. Mislykket forsøk på flytting av %(name)s."
 
-#: static/scripts/app/views/dir.js:1257
+#: static/scripts/app/views/dir.js:1313
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Intern feil. Mislykket forsøk på kopiering av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:1259
+#: static/scripts/app/views/dir.js:1315
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Intern feil. Mislykket forsøk på kopiering av %(name)s."
 
-#: static/scripts/app/views/dir.js:1301
+#: static/scripts/app/views/dir.js:1357
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Flytter fil %(index)s av %(total)s"
 
-#: static/scripts/app/views/dir.js:1301
+#: static/scripts/app/views/dir.js:1357
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Kopierer fil %(index)s av %(total)s"
 
-#: static/scripts/app/views/dir.js:1327
-msgid "Failed to move %(name)s"
-msgstr "Kunne ikke flytte %(name)s"
-
-#: static/scripts/app/views/dir.js:1327
-msgid "Failed to copy %(name)s"
-msgstr "Kunne ikke kopiere %(name)s"
-
-#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:696
-#: static/scripts/common.js:767
+#: static/scripts/app/views/dirent-details.js:92 static/scripts/common.js:734
+#: static/scripts/common.js:805
 msgid "No matches"
 msgstr "Ingen treff"
 
-#: static/scripts/app/views/dirent-details.js:112
+#: static/scripts/app/views/dirent-details.js:109
 msgid "Tag should not include ','."
 msgstr ""
 
 #: static/scripts/app/views/dirent-grid.js:59
-#: static/scripts/app/views/dirent.js:79
+#: static/scripts/app/views/dirent.js:98
 msgid "locked by {placeholder}"
 msgstr "låst av {placeholder}"
 
-#: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:414
+#: static/scripts/app/views/dirent-grid.js:208
+#: static/scripts/app/views/dirent.js:434
 msgid "Successfully deleted %(name)s"
 msgstr "Vellykket sletting av %(name)s"
+
+#: static/scripts/app/views/dirent.js:651
+msgid "The draft already exists."
+msgstr ""
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too big"
@@ -653,20 +2429,6 @@ msgstr "Opplastet antall byte overskrider filstørrelsen"
 msgid "Empty file upload result"
 msgstr "Resultatet er en tom filopplasting"
 
-#: static/scripts/app/views/fileupload.js:18
-#: static/scripts/app/views/fileupload.js:226
-#: static/scripts/app/views/fileupload.js:266
-#: static/scripts/app/views/repo-details.js:37
-#: static/scripts/sysadmin-app/views/address-book-group-item.js:145
-#: static/scripts/sysadmin-app/views/address-book-group-item.js:152
-#: static/scripts/sysadmin-app/views/system-repo.js:52
-msgid "Error"
-msgstr "Feil"
-
-#: static/scripts/app/views/fileupload.js:19
-msgid "uploaded"
-msgstr "opplastet"
-
 #: static/scripts/app/views/fileupload.js:20
 msgid "canceled"
 msgstr "avbrutt"
@@ -674,10 +2436,6 @@ msgstr "avbrutt"
 #: static/scripts/app/views/fileupload.js:21
 msgid "Start"
 msgstr "Start"
-
-#: static/scripts/app/views/fileupload.js:47
-msgid "File Uploading..."
-msgstr "Filen lastes opp..."
 
 #: static/scripts/app/views/fileupload.js:48
 msgid "File Upload complete"
@@ -691,15 +2449,11 @@ msgstr "Filoppastingen ble avbrutt"
 msgid "File Upload failed"
 msgstr "Mislykket filopplasting"
 
-#: static/scripts/app/views/fileupload.js:280
-msgid "Replace file {filename}?"
-msgstr "Erstatt fil {filename}?"
-
-#: static/scripts/app/views/fileupload.js:306
+#: static/scripts/app/views/fileupload.js:308
 msgid "File is locked"
 msgstr "Filen er låst"
 
-#: static/scripts/app/views/fileupload.js:442
+#: static/scripts/app/views/fileupload.js:444
 msgid "Network error"
 msgstr ""
 
@@ -715,13 +2469,6 @@ msgstr "Velg frupper"
 #: static/scripts/app/views/folder-share-item.js:125
 msgid "Edit failed"
 msgstr "Redigering feilet"
-
-#: static/scripts/app/views/folder-share-item.js:127
-#: static/scripts/app/views/folder-share-item.js:188
-#: static/scripts/common.js:446
-#: static/scripts/sysadmin-app/views/dashboard.js:84
-msgid "Failed. Please check the network."
-msgstr "Feilet. Vennligst sjekk nettverkstilkoblingen."
 
 #: static/scripts/app/views/folder-share-item.js:186
 msgid "Delete failed"
@@ -764,14 +2511,6 @@ msgstr "Velg en CSV-fil"
 msgid "Successfully imported."
 msgstr ""
 
-#: static/scripts/app/views/group-settings.js:292
-msgid "Dismiss Group"
-msgstr "Forkaste gruppen"
-
-#: static/scripts/app/views/group-settings.js:293
-msgid "Really want to dismiss this group?"
-msgstr "Ønsker du virkelig å slette denne gruppen?"
-
 #: static/scripts/app/views/group-settings.js:321
 msgid "Quit Group"
 msgstr "Forlat gruppe"
@@ -803,43 +2542,10 @@ msgstr "Du har logget ut."
 msgid "Log in"
 msgstr "Logg inn"
 
-#: static/scripts/app/views/notifications.js:63
-msgid "Refresh"
-msgstr "Oppdater"
-
-#: static/scripts/app/views/repo.js:95
-#: static/scripts/sysadmin-app/views/address-book-group-library.js:30
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:53
-#: static/scripts/sysadmin-app/views/repo.js:66
-#: static/scripts/sysadmin-app/views/trash-repo.js:28
-msgid "Delete Library"
-msgstr "Slett bibliotek"
-
-#: static/scripts/app/views/repo.js:96
-#: static/scripts/sysadmin-app/views/address-book-group-item.js:47
-#: static/scripts/sysadmin-app/views/address-book-group-library.js:31
-#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:28
-#: static/scripts/sysadmin-app/views/group-member.js:91
-#: static/scripts/sysadmin-app/views/group.js:31
-#: static/scripts/sysadmin-app/views/repo.js:67
-#, javascript-format
-msgid "Are you sure you want to delete %s ?"
-msgstr "Er du sikker på at du vil slette %s ?"
-
 #: static/scripts/app/views/repo.js:106
 #: static/scripts/sysadmin-app/views/repo.js:80
 msgid "Successfully deleted."
 msgstr "Vellykket sletting."
-
-#: static/scripts/app/views/repo.js:237
-#: static/scripts/sysadmin-app/views/repo.js:98
-msgid "Transfer Library {library_name} To"
-msgstr ""
-
-#: static/scripts/app/views/repo.js:276
-#: static/scripts/sysadmin-app/views/repo.js:136
-msgid "Successfully transferred the library."
-msgstr ""
 
 #: static/scripts/app/views/repo.js:424
 msgid "Successfully added label(s) for library {placeholder}"
@@ -871,10 +2577,6 @@ msgstr ""
 msgid "Share {placeholder}"
 msgstr "Dele {placeholder}"
 
-#: static/scripts/app/views/share.js:189
-msgid "Expired"
-msgstr "Utgått"
-
 #: static/scripts/app/views/share.js:303 static/scripts/app/views/share.js:304
 #: static/scripts/app/views/share.js:325 static/scripts/app/views/share.js:326
 msgid "Hide"
@@ -891,10 +2593,6 @@ msgstr "Tast inn antall dager."
 #: static/scripts/app/views/share.js:381
 msgid "Please enter valid days"
 msgstr "Vennligst tast inn gyldige dager"
-
-#: static/scripts/app/views/share.js:492
-msgid "Share link is copied to the clipboard."
-msgstr ""
 
 #: static/scripts/app/views/share.js:509
 msgid "Please input at least an email."
@@ -921,34 +2619,30 @@ msgstr "Vellykket"
 msgid "Successfully unstared {placeholder}"
 msgstr "Vellykket fjerning av stjernemarkering av {placeholder}"
 
-#: static/scripts/common.js:460 static/scripts/common.js:462
+#: static/scripts/common.js:498 static/scripts/common.js:500
 #: static/scripts/sysadmin-app/views/dashboard.js:79
 msgid "Permission error"
 msgstr "Tilgangsfeil"
 
-#: static/scripts/common.js:687
+#: static/scripts/common.js:725
 #: static/scripts/sysadmin-app/views/address-book-group.js:172
 #: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
 msgstr ""
 
-#: static/scripts/common.js:695 static/scripts/common.js:766
-msgid "Please enter 1 or more character"
-msgstr "Vennligst skriv inn 1 eller flere bokstaver"
-
-#: static/scripts/common.js:697 static/scripts/common.js:768
+#: static/scripts/common.js:735 static/scripts/common.js:806
 msgid "Searching..."
 msgstr "Søker..."
 
-#: static/scripts/common.js:698 static/scripts/common.js:769
+#: static/scripts/common.js:736 static/scripts/common.js:807
 msgid "Loading failed"
 msgstr "Innlasting feilet"
 
-#: static/scripts/common.js:758
+#: static/scripts/common.js:796
 msgid "Search groups"
 msgstr "Søk grupper"
 
-#: static/scripts/common.js:1093
+#: static/scripts/common.js:1131
 msgid "Packaging..."
 msgstr ""
 
@@ -963,13 +2657,6 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/address-book-group.js:101
 msgid "New Sub-department"
 msgstr ""
-
-#: static/scripts/sysadmin-app/views/address-book-group.js:114
-#: static/scripts/sysadmin-app/views/address-book.js:64
-#: static/scripts/sysadmin-app/views/groups.js:79
-#: static/scripts/sysadmin-app/views/repos.js:69
-msgid "Name is required."
-msgstr "Navn er obligatorisk."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -1002,10 +2689,6 @@ msgstr "Opprett gruppe"
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:72
 msgid "Created group {group_name}"
 msgstr ""
-
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:76
-msgid "Transfer Group"
-msgstr "Overfør gruppe"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:77
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
