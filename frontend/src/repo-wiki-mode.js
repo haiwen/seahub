@@ -318,7 +318,7 @@ class Wiki extends Component {
       let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
       this.showFile(path);
     } else if (Utils.isInternalDirLink(url, repoID)) {
-      let path = Utils.getPathFromInternalDirLink(url, repoID, slug);
+      let path = Utils.getPathFromInternalDirLink(url, repoID);
       this.showDir(path);
     } else {
       window.open(url);
