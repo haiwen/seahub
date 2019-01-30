@@ -58,7 +58,7 @@ class Wiki extends Component {
         this.showDir('/');
       } else {
         this.setState({pathExist: false});
-        let fileUrl = siteRoot + 'wikis/' + slug + initialPath;
+        let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(initialPath);
         window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
       }
     } else if (isDir === 'True') {  
@@ -70,20 +70,18 @@ class Wiki extends Component {
 
   loadSidePanel = (initialPath) => {
     if (initialPath === this.homePath || isDir === 'None') {
-      seafileAPI.listDir(repoID, '/').then(res => {
+      seafileAPI.listWikiDir(slug, '/').then(res => {
         let tree = this.state.treeData;
         this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
         let indexNode = tree.getNodeByPath(this.indexPath);
         let homeNode = tree.getNodeByPath(this.homePath);
         if (homeNode && indexNode) {
-          seafileAPI.getFileDownloadLink(repoID, indexNode.path).then(res => {
-            seafileAPI.getFileContent(res.data).then(res => {
-              this.setState({
-                treeData: tree,
-                indexNode: indexNode,
-                indexContent: res.data,
-                isTreeDataLoading: false,
-              });
+          seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
+            this.setState({
+              treeData: tree,
+              indexNode: indexNode,
+              indexContent: res.data.content,
+              isTreeDataLoading: false,
             });
           });
         } else {
@@ -104,7 +102,7 @@ class Wiki extends Component {
     this.loadDirentList(dirPath);
 
     // update location url
-    let fileUrl = siteRoot + 'wikis/' + slug + dirPath;
+    let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(dirPath);
     window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
   }
 
@@ -115,29 +113,25 @@ class Wiki extends Component {
       path: filePath, 
     });
 
-    seafileAPI.getFileInfo(repoID, filePath).then(res => {
-      let { mtime, permission, last_modifier_name } = res.data;
-      seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
-        seafileAPI.getFileContent(res.data).then(res => {
-          this.setState({
-            isDataLoading: false,
-            content: res.data,
-            permission: permission,
-            lastModified: moment.unix(mtime).fromNow(),
-            latestContributor: last_modifier_name,
-          });
-        });
+    seafileAPI.getWikiFileContent(slug, filePath).then(res => {
+      let data = res.data;
+      this.setState({
+        isDataLoading: false,
+        content: data.content,
+        permission: data.permission,
+        lastModified: moment.unix(data.last_modified).fromNow(),
+        latestContributor: data.latest_contributor,
       });
     });
 
     const hash = window.location.hash;
-    let fileUrl = siteRoot + 'wikis/' + slug + filePath + hash;
+    let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(filePath) + hash;
     window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
   }
 
   loadDirentList = (dirPath) => {
     this.setState({isDataLoading: true});
-    seafileAPI.listDir(repoID, dirPath).then(res => {
+    seafileAPI.listWikiDir(slug, dirPath).then(res => {
       let direntList = res.data.dirent_list.map(item => {
         let dirent = new Dirent(item);
         return dirent;
@@ -158,7 +152,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
     if (!node.isLoaded) {
-      seafileAPI.listDir(repoID, node.path).then(res => {
+      seafileAPI.listWikiDir(slug, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         let parentNode = tree.getNodeByPath(node.parentNode.path);
         parentNode.isExpanded = true;
@@ -179,7 +173,7 @@ class Wiki extends Component {
     if (Utils.isMarkdownFile(path)) {
       path = Utils.getDirName(path);
     }
-    seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
+    seafileAPI.listWikiDir(slug, path, true).then(res => {
       let direntList = res.data.dirent_list;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
@@ -314,7 +308,7 @@ class Wiki extends Component {
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
         node = tree.getNodeByPath(node.path);
-        seafileAPI.listDir(repoID, node.path).then(res => {
+        seafileAPI.listWikiDir(slug, node.path).then(res => {
           this.addResponseListToNode(res.data.dirent_list, node);
           tree.collapseNode(node);
           this.setState({treeData: tree});
@@ -346,7 +340,7 @@ class Wiki extends Component {
         }
       } else {
         const w = window.open('about:blank');
-        const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
+        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
         w.location.href = url;
       }
     }
@@ -361,7 +355,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
-      seafileAPI.listDir(repoID, node.path).then(res => {
+      seafileAPI.listWikiDir(slug, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         this.setState({treeData: tree});
       });

@@ -238,14 +238,11 @@ def get_wiki_dirs_by_path(repo_id, path, all_dirs):
             entry["type"] = 'file'
 
         entry["parent_dir"] = path
+        entry["id"] = dirent.obj_id
         entry["name"] = dirent.obj_name
         entry["size"] = dirent.size
-        entry["last_update_time"] = dirent.mtime
+        entry["mtime"] = dirent.mtime
 
         all_dirs.append(entry)
-
-        if stat.S_ISDIR(dirent.mode):
-            sub_path = posixpath.join(path, dirent.obj_name)
-            get_wiki_dirs_by_path(repo_id, sub_path, all_dirs)
 
     return all_dirs

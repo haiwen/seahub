@@ -10,7 +10,7 @@
         config: {
             repoId: "{{ repo_id }}",
             serviceUrl: "{{ service_url}}",
-            initial_path: "{{ initial_path }}",
+            initial_path: "{{ initial_path|escapejs }}",
             slug: "{{ repo_name }}",
             isDir: "{{ is_dir }}",
             permission: "{{ permission }}"

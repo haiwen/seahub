@@ -183,6 +183,7 @@ class Wiki extends Component {
   }
 
   loadSidePanel = (initialPath) => {
+    
     if (initialPath === '/' || isDir === 'None') {
       seafileAPI.listDir(repoID, '/').then(res => {
         let tree = this.state.treeData;
@@ -207,7 +208,7 @@ class Wiki extends Component {
     });
 
     // update location url
-    let url = siteRoot + 'wiki/lib/' + repoID + path;
+    let url = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(path);
     window.history.pushState({ url: url, path: path}, path, url);
   }
 
@@ -239,7 +240,7 @@ class Wiki extends Component {
       });
     });
 
-    let fileUrl = siteRoot + 'wiki/lib/' + repoID + filePath;
+    let fileUrl = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(filePath);
     window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
   }
 
@@ -317,7 +318,7 @@ class Wiki extends Component {
       let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
       this.showFile(path);
     } else if (Utils.isInternalDirLink(url, repoID)) {
-      let path = Utils.getPathFromInternalDirLink(url, repoID, slug);
+      let path = Utils.getPathFromInternalDirLink(url, repoID);
       this.showDir(path);
     } else {
       window.open(url);
@@ -900,7 +901,7 @@ class Wiki extends Component {
         }
       } else {
         const w = window.open('about:blank');
-        const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
+        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
         w.location.href = url;
       }
     }

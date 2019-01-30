@@ -446,12 +446,12 @@ export const Utils = {
     return path;
   },
   
-  getPathFromInternalDirLink: function(url, repoID, repoName) {
-    var repoName = encodeURIComponent(repoName);
-    var re = new RegExp(serviceURL + '/library/' + repoID + '/' + repoName  + '(/.*)');
+  getPathFromInternalDirLink: function(url, repoID) {
+    var re = new RegExp(serviceURL + '/library/' + repoID + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
-
+    path = path.slice(1);
+    path = path.slice(path.indexOf('/'));
     return path;
   },
 
@@ -471,7 +471,13 @@ export const Utils = {
     var slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/wikis/' + slug + '(.*\.md)');
     var array = re.exec(url);
-    var path = decodeURIComponent(array[1]);
+    var path = array[1];
+    try {
+      path = decodeURIComponent(path);
+    } catch(err) {
+      path = path.replace(/%/g, '%25');
+      path = decodeURIComponent(path);
+    }
     return path;
   },
   
@@ -479,7 +485,13 @@ export const Utils = {
     var slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/wikis/' + slug+ '(/.*)');
     var array = re.exec(url);
-    var path = decodeURIComponent(array[1]);
+    var path = array[1];
+    try {
+      path = decodeURIComponent(path);
+    } catch(err) {
+      path = path.replace(/%/g, '%25');
+      path = decodeURIComponent(path);
+    }
     return path;
   },
 
