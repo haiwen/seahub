@@ -10,7 +10,7 @@
         config: {
             slug: "{{ wiki.slug }}",
             repoId: "{{ wiki.repo_id }}",
-            initial_path: "{{ file_path }}",
+            initial_path: "{{ file_path|escapejs }}",
             permission: "{{ user_can_write }}",
             isPublicWiki: "{{ is_public_wiki }}",
             isDir: "{{ is_dir }}",

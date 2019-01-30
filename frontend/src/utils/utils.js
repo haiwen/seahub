@@ -471,7 +471,7 @@ export const Utils = {
     var slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/wikis/' + slug + '(.*\.md)');
     var array = re.exec(url);
-    var path = decodeURIComponent(array[1]);
+    var path = array[1];
     return path;
   },
   
@@ -479,7 +479,7 @@ export const Utils = {
     var slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/wikis/' + slug+ '(/.*)');
     var array = re.exec(url);
-    var path = decodeURIComponent(array[1]);
+    var path = array[1];
     return path;
   },
 

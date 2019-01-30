@@ -168,17 +168,16 @@ class Wiki extends Component {
       });
     });
 
-    let path = decodeURIComponent(initialPath);
     // load side-panel data
-    this.loadSidePanel(path);
+    this.loadSidePanel(initialPath);
 
     // load main-panel data
     if (isDir === 'None') {
       this.setState({pathExist: false});
     } else if (isDir === 'True') {
-      this.showDir(path);
+      this.showDir(initialPath);
     } else if (isDir === 'False') {
-      this.showFile(path);
+      this.showFile(initialPath);
     }
     
   }
