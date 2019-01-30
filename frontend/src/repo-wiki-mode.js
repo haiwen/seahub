@@ -168,21 +168,23 @@ class Wiki extends Component {
       });
     });
 
+    let path = decodeURIComponent(initialPath);
     // load side-panel data
-    this.loadSidePanel(initialPath);
+    this.loadSidePanel(path);
 
     // load main-panel data
     if (isDir === 'None') {
       this.setState({pathExist: false});
     } else if (isDir === 'True') {
-      this.showDir(initialPath);
+      this.showDir(path);
     } else if (isDir === 'False') {
-      this.showFile(initialPath);
+      this.showFile(path);
     }
     
   }
 
   loadSidePanel = (initialPath) => {
+    
     if (initialPath === '/' || isDir === 'None') {
       seafileAPI.listDir(repoID, '/').then(res => {
         let tree = this.state.treeData;
@@ -207,7 +209,7 @@ class Wiki extends Component {
     });
 
     // update location url
-    let url = siteRoot + 'wiki/lib/' + repoID + path;
+    let url = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(path);
     window.history.pushState({ url: url, path: path}, path, url);
   }
 
@@ -239,7 +241,7 @@ class Wiki extends Component {
       });
     });
 
-    let fileUrl = siteRoot + 'wiki/lib/' + repoID + filePath;
+    let fileUrl = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(filePath);
     window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
   }
 
@@ -900,7 +902,7 @@ class Wiki extends Component {
         }
       } else {
         const w = window.open('about:blank');
-        const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
+        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
         w.location.href = url;
       }
     }
