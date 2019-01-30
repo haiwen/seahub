@@ -23,7 +23,7 @@ from seahub.invitations.models import Invitation
 from seahub.utils.repo import get_repo_shared_users
 from seahub.utils import normalize_cache_key
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.constants import HASH_URLS 
+from seahub.constants import HASH_URLS
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -333,7 +333,7 @@ class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
     msg_type = models.CharField(db_index=True, max_length=30)
     detail = models.TextField()
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
+    timestamp = models.DateTimeField(db_index=True, default=datetime.datetime.now)
     seen = models.BooleanField('seen', default=False)
     objects = UserNotificationManager()
 
@@ -487,6 +487,32 @@ class UserNotification(models.Model):
             return {'message': message, 'msg_from': msg_from}
 
     ########## functions used in templates
+    def format_msg(self):
+        if self.is_group_msg():
+            return self.format_group_message_title()
+        elif self.is_file_uploaded_msg():
+            return self.format_file_uploaded_msg()
+        elif self.is_repo_share_msg():
+            return self.format_repo_share_msg()
+        elif self.is_repo_share_to_group_msg():
+            return self.format_repo_share_to_group_msg()
+        elif self.is_group_join_request():
+            return self.format_group_join_request()
+        elif self.is_file_comment_msg():
+            return self.format_file_comment_msg()
+        elif self.is_review_comment_msg():
+            return self.format_review_comment_msg()
+        elif self.is_update_review_msg():
+            return self.format_update_review_msg()
+        elif self.is_request_reviewer_msg():
+            return self.format_request_reviewer_msg()
+        elif self.is_guest_invitation_accepted_msg():
+            return self.format_guest_invitation_accepted_msg()
+        elif self.is_add_user_to_group():
+            return self.format_add_user_to_group()
+        else:
+            return ''
+
     def format_file_uploaded_msg(self):
         """
 

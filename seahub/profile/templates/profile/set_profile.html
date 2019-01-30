@@ -31,6 +31,10 @@
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
 
+        {% if enable_wechat_work %}
+        <li class="tab"><a href="#social-auth">{% trans "Social Login" %}</a></li>
+        {% endif %}
+
         {% if ENABLE_DELETE_ACCOUNT %}
         <li class="tab" id="del-account-nav"><a href="#del-account">{% trans "Delete Account" %}</a></li>
         {% endif %}
@@ -172,6 +176,27 @@
       {% trans "Enable Two-Factor Authentication" %}</a>
     </p>
     {% endif %}
+</div>
+{% endif %}
+
+{% if enable_wechat_work %}
+<div class="setting-item" id="social-auth">
+    <h3>{% trans "Social Login" %}</h3>
+      <ul>
+        <li>
+          {% if request.LANGUAGE_CODE == 'zh-cn' %}
+          企业微信
+          {% else %}
+          WeChat Work
+          {% endif %}
+
+          {% if social_connected %}
+          <a class="social-disconnect" href="#" data-url="{% url "social:disconnect" 'weixin-work' %}?next={{ social_next_page }}">{% trans "Disconnect" %}</a>
+          {% else %}
+          <a href="{% url "social:begin" 'weixin-work' %}?next={{ social_next_page }}">{% trans "Connect" %}</a>
+          {% endif %}
+        </li>
+      </ul>
 </div>
 {% endif %}
 
@@ -378,6 +403,12 @@ $('#set-email-notice-interval-form').on('submit', function() {
         error: ajaxErrorHandler
     });
     return false;
+});
+
+addConfirmTo($('.social-disconnect'), {
+    'title':"{% trans "Disconnect" %}",
+    'con':"{% trans "Are you sure you want to disconnect?" %}",
+    'post':true
 });
 </script>
 {% endblock %}

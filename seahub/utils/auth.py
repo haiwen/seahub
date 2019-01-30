@@ -1,5 +1,6 @@
 import os
 from seahub.settings import LOGIN_BG_IMAGE_PATH, MEDIA_ROOT
+from seahub.utils import gen_token
 
 def get_login_bg_image_path():
     """ Return custom background image path if it exists, otherwise return default background image path.
@@ -15,3 +16,6 @@ def get_custom_login_bg_image_path():
     """ Ensure consistency between utils and api.
     """
     return 'custom/login-bg.jpg'
+
+def gen_user_virtual_id():
+    return gen_token(max_length=32) + '@auth.local'

@@ -20,3 +20,4 @@ gunicorn==19.8.1
 django-webpack-loader==0.6.0
 git+git://github.com/haiwen/python-cas.git@ffc49235fd7cc32c4fdda5acfa3707e1405881df#egg=python_cas
 futures==3.2.0
+social-auth-core==1.7.0

@@ -86,6 +86,12 @@ def edit_profile(request):
     email_inverval = UserOptions.objects.get_file_updates_email_interval(username)
     email_inverval = email_inverval if email_inverval is not None else 0
 
+    from social_django.models import UserSocialAuth
+    social_connected = UserSocialAuth.objects.filter(
+        username=request.user.username, provider='weixin-work').count() > 0
+
+    enable_wechat_work = True if settings.SOCIAL_AUTH_WEIXIN_WORK_KEY else False
+
     resp_dict = {
             'form': form,
             'server_crypto': server_crypto,
@@ -102,6 +108,9 @@ def edit_profile(request):
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'webdav_passwd': webdav_passwd,
             'email_notification_interval': email_inverval,
+            'social_connected': social_connected,
+            'social_next_page': reverse('edit_profile'),
+            'enable_wechat_work': enable_wechat_work,
     }
 
     if has_two_factor_auth():

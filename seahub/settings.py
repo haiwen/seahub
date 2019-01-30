@@ -125,6 +125,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 
 
@@ -151,6 +152,9 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
 
                 'seahub.auth.context_processors.auth',
                 'seahub.base.context_processors.base',
@@ -223,6 +227,7 @@ INSTALLED_APPS = (
     'post_office',
     'termsandconditions',
     'webpack_loader',
+    'social_django',
 
     'seahub.api2',
     'seahub.avatar',
@@ -264,8 +269,29 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
+    'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2',
+
     'seahub.base.accounts.AuthBackend',
     'seahub.oauth.backends.OauthRemoteUserBackend',
+)
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_VERIFY_SSL = True
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/profile/'
+SOCIAL_AUTH_WEIXIN_WORK_AGENTID = ''
+SOCIAL_AUTH_WEIXIN_WORK_KEY = ''
+SOCIAL_AUTH_WEIXIN_WORK_SECRET = ''
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'seahub.social_core.pipeline.social_auth.social_user',
+    'seahub.social_core.pipeline.user.get_username',
+    'seahub.social_core.pipeline.user.create_user',
+    'seahub.social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    # 'social_core.pipeline.user.user_details',
+    'seahub.social_core.pipeline.user.save_profile',
 )
 
 ENABLE_OAUTH = False
@@ -274,7 +300,7 @@ ENABLE_WATERMARK = False
 # allow user to clean library trash
 ENABLE_USER_CLEAN_TRASH = True
 
-LOGIN_REDIRECT_URL = '/profile/'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
 LOGOUT_REDIRECT_URL = None
