@@ -8,7 +8,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import toaster from '../toast';
 import DirentMenu from './dirent-menu';
-import DirentRename from './dirent-rename';
+import Rename from '../rename';
 import ModalPortal from '../modal-portal';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
@@ -384,7 +384,7 @@ class DirentListItem extends React.Component {
           </td>
           <td className="name">
             {this.state.isRenameing ?
-              <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+              <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
               <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
             }
           </td>

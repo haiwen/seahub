@@ -6,7 +6,8 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext, siteRoot, storages, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import RenameInput from '../../components/rename-input';
+import Rename from '../../components/rename';
+import toaster from '../../components/toast';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 
@@ -114,6 +115,23 @@ class Item extends Component {
 
   onRenameConfirm = (newName) => {
     let repo = this.props.data;
+    if (newName === repo.repo_name) {
+      this.onRenameCancel();
+      return false;
+    }
+
+    if (!newName) {
+      let errMessage = gettext('Name is required.');
+      toaster.danger(errMessage);
+      return false;
+    }
+
+    if (newName.indexOf('/') > -1) {
+      let errMessage = gettext('Name should not include ' + '\'/\'' + '.');
+      toaster.danger(errMessage);
+      return false;
+    }
+
     let repoID = repo.repo_id;
     seafileAPI.renameRepo(repoID, newName).then(() => {
       this.props.onRenameRepo(repo, newName);
@@ -232,7 +250,7 @@ class Item extends Component {
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td>
             {this.state.showChangeLibName && (
-              <RenameInput 
+              <Rename 
                 name={data.repo_name} 
                 onRenameConfirm={this.onRenameConfirm} 
                 onRenameCancel={this.onRenameCancel}

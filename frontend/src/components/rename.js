@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-  type: PropTypes.string,
+  hasSuffix: PropTypes.bool,
   name: PropTypes.string.isRequired,
   onRenameConfirm: PropTypes.func.isRequired,
   onRenameCancel: PropTypes.func.isRequired,
 };
-class RenameInput extends React.Component {
+
+class Rename extends React.Component {
 
   constructor(props) {
     super(props);
@@ -18,7 +19,7 @@ class RenameInput extends React.Component {
 
   componentDidMount() {
     this.refs.renameInput.focus();
-    if (this.props.type === 'file') {
+    if (this.props.hasSuffix) {
       var endIndex = this.props.name.lastIndexOf('.');
       this.refs.renameInput.setSelectionRange(0, endIndex, 'forward');
     } else {
@@ -67,6 +68,6 @@ class RenameInput extends React.Component {
   }
 }
 
-RenameInput.propTypes = propTypes;
+Rename.propTypes = propTypes;
 
-export default RenameInput;
+export default Rename;
