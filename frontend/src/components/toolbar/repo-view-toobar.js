@@ -10,6 +10,7 @@ const propTypes = {
   // isOwnLibrary: PropTypes.bool.isRequired,
   libraryType: PropTypes.string.isRequired,
   onCreateRepo: PropTypes.func.isRequired,
+  onShowSidePanel: PropTypes.func.isRequired,
 };
 
 class RepoViewToolbar extends React.Component {

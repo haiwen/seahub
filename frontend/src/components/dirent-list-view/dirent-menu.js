@@ -4,6 +4,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 
 const propTypes = {
+  dirent: PropTypes.object.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
@@ -55,7 +56,7 @@ class DirentMenu extends React.Component {
       menuList.push('Copy');
       if (isPro) {
         if (dirent.is_locked) {
-          if (dirent.locked_by_me || (dirent.lock_owner === "OnlineOffice" && permission === 'rw')) {
+          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
             menuList.push('Unlock');
           }
         } else {

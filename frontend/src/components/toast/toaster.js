@@ -19,9 +19,9 @@ export default class Toaster {
 
     ReactDOM.render(
       <ToastManager
-          bindNotify={this._bindNotify}
-          bindGetToasts={this._bindGetToasts}
-          bindCloseAll={this._bindCloseAll}
+        bindNotify={this._bindNotify}
+        bindGetToasts={this._bindGetToasts}
+        bindCloseAll={this._bindCloseAll}
       />,
       container
     );

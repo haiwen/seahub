@@ -22,7 +22,7 @@ class CreateGroupDialog extends React.Component {
     if (this.state.errorMsg) {
       this.setState({
         errorMsg: ''
-      })
+      });
     }
   }
 

@@ -71,14 +71,14 @@ class Alert extends React.PureComponent {
 
   getContainerStyle(intent) {
     switch (intent) {
-    case 'success':
-      return { borderStyle: this.containerBorderSuccess, iconColor: css({color: 'rgb(71, 184, 129)'}), iconClass: 'fa fa-check-circle' };
-    case 'warning':
-      return { borderStyle: this.containerBorderWarn, iconColor: css({color: 'rgb(217, 130, 43)'}) , iconClass: 'fa fa-exclamation-triangle' };
-    case 'none':
-      return { borderStyle: this.containerBorderNotify, iconColor: css({color: 'rgb(16, 112, 202)'}), iconClass: 'fa fa-exclamation-circle' };
-    case  'danger':
-      return { borderStyle: this.containerBorderDanger, iconColor: css({color: 'rgb(236, 76, 71)'}), iconClass: 'fa fa-exclamation-circle' };
+      case 'success':
+        return { borderStyle: this.containerBorderSuccess, iconColor: css({color: 'rgb(71, 184, 129)'}), iconClass: 'fa fa-check-circle' };
+      case 'warning':
+        return { borderStyle: this.containerBorderWarn, iconColor: css({color: 'rgb(217, 130, 43)'}) , iconClass: 'fa fa-exclamation-triangle' };
+      case 'none':
+        return { borderStyle: this.containerBorderNotify, iconColor: css({color: 'rgb(16, 112, 202)'}), iconClass: 'fa fa-exclamation-circle' };
+      case  'danger':
+        return { borderStyle: this.containerBorderDanger, iconColor: css({color: 'rgb(236, 76, 71)'}), iconClass: 'fa fa-exclamation-circle' };
     }
   }
 

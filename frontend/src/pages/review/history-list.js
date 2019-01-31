@@ -51,7 +51,7 @@ class HistoryList extends React.Component {
 
   render() {
     return (
-      <div className="history-body" style={{ "height": "500px"}}>
+      <div className="history-body" style={{ 'height': '500px'}}>
         <ul onScroll={this.onScroll} className={'history-list-container'}>
           {
             this.props.historyList ?
@@ -62,15 +62,15 @@ class HistoryList extends React.Component {
                 }
                 return (
                   <HistoryItem
-                  onClick={this.onClick}
-                  ctime={item.ctime}
-                  className={this.props.activeItem === index ? 'item-active': ''}
-                  currentCommitId={item.commit_id}
-                  name={item.creator_name}
-                  index={index}
-                  key={index}
-                  preCommitId={arr[preItemIndex].commit_id}
-                />
+                    onClick={this.onClick}
+                    ctime={item.ctime}
+                    className={this.props.activeItem === index ? 'item-active': ''}
+                    currentCommitId={item.commit_id}
+                    name={item.creator_name}
+                    index={index}
+                    key={index}
+                    preCommitId={arr[preItemIndex].commit_id}
+                  />
                 );
               }) : <Loading/>
           }

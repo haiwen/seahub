@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -33,7 +33,7 @@ class PublicSharedView extends React.Component {
       isCreateMenuShow: false,
       isCreateRepoDialogShow: false,
       isSelectRepoDialpgShow: false,
-    }
+    };
   }
 
   componentDidMount() {
@@ -51,19 +51,19 @@ class PublicSharedView extends React.Component {
         if (error.response.status == 403) {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Permission denied")
+            errMessage: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Error")
+            errMessage: gettext('Error')
           });
         }
       } else {
         this.setState({
           isLoading: false,
-          errMessage: gettext("Please check the network.")
+          errMessage: gettext('Please check the network.')
         });
       }
     });
@@ -80,14 +80,14 @@ class PublicSharedView extends React.Component {
         owner_email: res.data.owner,
         mtime: res.data.mtime,
         encrypted: res.data.encrypted,
-      }
+      };
       let repo = new Repo(object);
       let repoList = this.addRepoItem(repo);
       this.setState({repoList: repoList});
       this.onCreateRepoToggle();
     }).catch(() => {
       // todo
-    })
+    });
   }
 
   onRepoSelectedHandler = (selectedRepoList) => {
@@ -98,7 +98,7 @@ class PublicSharedView extends React.Component {
       }).catch(() => {
         // todo
       });
-    })
+    });
   }
 
   onItemUnshare = (repo) => {
@@ -185,7 +185,7 @@ class PublicSharedView extends React.Component {
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext("Shared with all")}</h3>
+              <h3 className="sf-heading">{gettext('Shared with all')}</h3>
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}

@@ -8,7 +8,7 @@ import SharedUploadInfo from '../../models/shared-upload-info';
 
 class Content extends Component {
 
-   constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       modalOpen: false,
@@ -40,8 +40,8 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <div className="empty-tip">
-          <h2>{gettext("You don't have any upload links")}</h2>
-          <p>{gettext("You can generate an upload link from any folder. Anyone who receives this link can upload files to this folder.")}</p>
+          <h2>{gettext('You don\'t have any upload links')}</h2>
+          <p>{gettext('You can generate an upload link from any folder. Anyone who receives this link can upload files to this folder.')}</p>
         </div>
       );
 
@@ -51,9 +51,9 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="4%">{/*icon*/}</th>
-                <th width="42%">{gettext("Name")}</th>
-                <th width="30%">{gettext("Library")}</th>
-                <th width="14%">{gettext("Visits")}</th>
+                <th width="42%">{gettext('Name')}</th>
+                <th width="30%">{gettext('Library')}</th>
+                <th width="14%">{gettext('Visits')}</th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
@@ -162,19 +162,19 @@ class ShareAdminUploadLinks extends Component {
         if (error.response.status == 403) {
           this.setState({
             loading: false,
-            errorMsg: gettext("Permission denied")
+            errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,
-            errorMsg: gettext("Error")
+            errorMsg: gettext('Error')
           });
         }
       } else {
         this.setState({
           loading: false,
-          errorMsg: gettext("Please check the network.")
+          errorMsg: gettext('Please check the network.')
         });
       }
     });

@@ -57,64 +57,64 @@ class ShareDialog extends React.Component {
         <div className="share-dialog-side">
           <Nav pills vertical>
             {enableShareLink &&
-            <NavItem>
-              <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
-                {gettext('Share Link')}
-              </NavLink>
-            </NavItem>
+              <NavItem>
+                <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
+                  {gettext('Share Link')}
+                </NavLink>
+              </NavItem>
             }
             {enableUploadLink &&
-            <NavItem>
-              <NavLink className={activeTab === 'uploadLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLink')}>
-                {gettext('Upload Link')}
-              </NavLink>
-            </NavItem>
+              <NavItem>
+                <NavLink className={activeTab === 'uploadLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLink')}>
+                  {gettext('Upload Link')}
+                </NavLink>
+              </NavItem>
             }
             {enableDirPrivateShare &&
-            <Fragment>
-            <NavItem>
-              <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')}>
-                {gettext('Share to user')}
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
-                {gettext('Share to group')}
-              </NavLink>
-            </NavItem>
-            </Fragment>
+              <Fragment>
+                <NavItem>
+                  <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')}>
+                    {gettext('Share to user')}
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
+                    {gettext('Share to group')}
+                  </NavLink>
+                </NavItem>
+              </Fragment>
             }
           </Nav>
         </div>
         <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
             {enableShareLink &&
-            <TabPane tabId="shareLink">
-              <GenerateShareLink 
-                itemPath={this.props.itemPath} 
-                repoID={this.props.repoID}
-                closeShareDialog={this.props.toggleDialog} 
-                />
-            </TabPane>
+              <TabPane tabId="shareLink">
+                <GenerateShareLink 
+                  itemPath={this.props.itemPath} 
+                  repoID={this.props.repoID}
+                  closeShareDialog={this.props.toggleDialog} 
+                  />
+              </TabPane>
             }
             {enableUploadLink &&
-            <TabPane tabId="uploadLink">
-              <GenerateUploadLink 
-                itemPath={this.props.itemPath} 
-                repoID={this.props.repoID} 
-                closeShareDialog={this.props.toggleDialog} 
-              />
-            </TabPane>
+              <TabPane tabId="uploadLink">
+                <GenerateUploadLink 
+                  itemPath={this.props.itemPath} 
+                  repoID={this.props.repoID} 
+                  closeShareDialog={this.props.toggleDialog} 
+                />
+              </TabPane>
             }
             {enableDirPrivateShare &&
-            <Fragment>
-            <TabPane tabId="shareToUser">
-              <ShareToUser isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
-            </TabPane>
-            <TabPane tabId="shareToGroup">
-              <ShareToGroup isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
-            </TabPane>
-            </Fragment>
+              <Fragment>
+                <TabPane tabId="shareToUser">
+                  <ShareToUser isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
+                </TabPane>
+                <TabPane tabId="shareToGroup">
+                  <ShareToGroup isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
+                </TabPane>
+              </Fragment>
             }
           </TabContent>
         </div>

@@ -82,7 +82,7 @@ class MyLibraries extends Component {
   onTransferRepo = (repoID) => {
     let items = this.state.items.filter(item => {
       return item.repo_id !== repoID;
-    })
+    });
     this.setState({items: items});
   }
 
@@ -113,7 +113,7 @@ class MyLibraries extends Component {
     this.setState({
       isShowDetails: true,
       currentRepo: repo
-    })
+    });
   }
 
   closeDetails = () => {

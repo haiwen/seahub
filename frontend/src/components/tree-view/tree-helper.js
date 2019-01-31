@@ -124,8 +124,8 @@ class TreeHelper {
     if (destNode) {
       nodePaths.forEach(nodePath => {
         let node = treeCopy.getNodeByPath(nodePath);
-          treeCopy.copyNode(node, destNode);
-        });
+        treeCopy.copyNode(node, destNode);
+      });
     }
     return treeCopy;
   }

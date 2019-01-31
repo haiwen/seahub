@@ -17,10 +17,10 @@ class Content extends Component {
       const desktopThead = (
         <thead>
           <tr>
-            <th width="13%">{gettext("Platform")}</th>
-            <th width="30%">{gettext("Device Name")}</th>
-            <th width="30%">{gettext("IP")}</th>
-            <th width="17%">{gettext("Last Access")}</th>
+            <th width="13%">{gettext('Platform')}</th>
+            <th width="30%">{gettext('Device Name')}</th>
+            <th width="30%">{gettext('IP')}</th>
+            <th width="17%">{gettext('Last Access')}</th>
             <th width="10%"></th>
           </tr>
         </thead>
@@ -28,7 +28,7 @@ class Content extends Component {
       const mobileThead = (
         <thead>
           <tr>
-            <th width="25%">{gettext("Platform")}</th>
+            <th width="25%">{gettext('Platform')}</th>
             <th width="70%">{gettext('Device Name')}</th>
             <th width="5%"></th>
           </tr>
@@ -101,11 +101,11 @@ class Item extends Component {
       this.setState({
         unlinked: true
       });
-      let msg_s = gettext("Successfully unlink %(name)s.");
+      let msg_s = gettext('Successfully unlink %(name)s.');
       msg_s = msg_s.replace('%(name)s', data.device_name);
       toaster.success(msg_s);
     }).catch((error) => {
-      let message = gettext("Failed to unlink %(name)s");
+      let message = gettext('Failed to unlink %(name)s');
       message = message.replace('%(name)s', data.device_name);
       toaster.danger(message);
     });

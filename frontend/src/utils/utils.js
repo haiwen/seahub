@@ -280,22 +280,22 @@ export const Utils = {
     var title;
     let permission = repo.permission || repo.share_permission; //Compatible with regular repo and repo shared
     if (repo.encrypted) {
-      title = gettext("Encrypted library");
+      title = gettext('Encrypted library');
     } else if (repo.is_admin) { // shared with 'admin' permission
-      title = gettext("Admin access");
+      title = gettext('Admin access');
     } else {
       switch(permission) {
         case 'rw':
-          title = gettext("Read-Write library");
+          title = gettext('Read-Write library');
           break;
         case 'r':
-          title = gettext("Read-Only library");
+          title = gettext('Read-Only library');
           break;
         case 'cloud-edit':
-          title = gettext("Preview-Edit-on-Cloud library");
+          title = gettext('Preview-Edit-on-Cloud library');
           break;
         case 'preview':
-          title = gettext("Preview-on-Cloud library");
+          title = gettext('Preview-on-Cloud library');
           break;
       }
     }
@@ -306,16 +306,16 @@ export const Utils = {
     var title;
     switch(options.permission) {
       case 'rw':
-        title = gettext("Read-Write folder");
+        title = gettext('Read-Write folder');
         break;
       case 'r':
-        title = gettext("Read-Only folder");
+        title = gettext('Read-Only folder');
         break;
       case 'cloud-edit':
-        title = gettext("Preview-Edit-on-Cloud folder");
+        title = gettext('Preview-Edit-on-Cloud folder');
         break;
       case 'preview':
-        title = gettext("Preview-on-Cloud folder");
+        title = gettext('Preview-on-Cloud folder');
         break;
     }
     return title;
@@ -325,19 +325,19 @@ export const Utils = {
     var title;
     switch(permission) {
       case 'rw':
-        title = gettext("Read-Write");
+        title = gettext('Read-Write');
         break;
       case 'r':
-        title = gettext("Read-Only");
+        title = gettext('Read-Only');
         break;
       case 'admin':
-        title = gettext("Admin");
+        title = gettext('Admin');
         break;
       case 'cloud-edit':
-        title = gettext("Preview-Edit-on-Cloud");
+        title = gettext('Preview-Edit-on-Cloud');
         break;
       case 'preview':
-        title = gettext("Preview-on-Cloud");
+        title = gettext('Preview-on-Cloud');
         break;
     }
     return title;
@@ -347,19 +347,19 @@ export const Utils = {
     var title;
     switch(permission) {
       case 'rw':
-        title = gettext("User can read, write, upload, download and sync files.");
+        title = gettext('User can read, write, upload, download and sync files.');
         break;
       case 'r':
-        title = gettext("User can read, download and sync files.");
+        title = gettext('User can read, download and sync files.');
         break;
       case 'admin':
-        title = gettext("Besides Write permission, user can also share the library.");
+        title = gettext('Besides Write permission, user can also share the library.');
         break;
       case 'cloud-edit':
-        title = gettext("Same as Preview on cloud. But user can also edit files online via browser.");
+        title = gettext('Same as Preview on cloud. But user can also edit files online via browser.');
         break;
       case 'preview':
-        title = gettext("User can only view files online via browser. Files can't be downloaded.");
+        title = gettext('User can only view files online via browser. Files can\'t be downloaded.');
         break;
     }
     return title;
@@ -400,17 +400,17 @@ export const Utils = {
   formatBitRate: function(bits) {
     var Bs;
     if (typeof bits !== 'number') {
-        return '';
+      return '';
     }
     Bs = bits / 8;
     if (Bs >= 1000000000) {
-        return (Bs / 1000000000).toFixed(2) + ' GB/s';
+      return (Bs / 1000000000).toFixed(2) + ' GB/s';
     }
     if (Bs >= 1000000) {
-        return (Bs / 1000000).toFixed(2) + ' MB/s';
+      return (Bs / 1000000).toFixed(2) + ' MB/s';
     }
     if (Bs >= 1000) {
-        return (Bs / 1000).toFixed(2) + ' kB/s';
+      return (Bs / 1000).toFixed(2) + ' kB/s';
     }
     return Bs.toFixed(2) + ' B/s';
   },
@@ -456,19 +456,19 @@ export const Utils = {
   },
 
   isWikiInternalMarkdownLink: function(url, slug) {
-    var slug = encodeURIComponent(slug);
+    slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/wikis/' + slug + '.*\.md$');
     return re.test(url);
   },
 
   isWikiInternalDirLink: function(url, slug) {
-    var slug = encodeURIComponent(slug);
+    slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/wikis/' + slug + '.*');
     return re.test(url);
   },
 
   getPathFromWikiInternalMarkdownLink: function(url, slug) {
-    var slug = encodeURIComponent(slug);
+    slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/wikis/' + slug + '(.*\.md)');
     var array = re.exec(url);
     var path = array[1];
@@ -482,8 +482,8 @@ export const Utils = {
   },
   
   getPathFromWikiInternalDirLink: function(url, slug) {
-    var slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug+ '(/.*)');
+    slug = encodeURIComponent(slug);
+    var re = new RegExp(serviceURL + '/wikis/' + slug + '(/.*)');
     var array = re.exec(url);
     var path = array[1];
     try {

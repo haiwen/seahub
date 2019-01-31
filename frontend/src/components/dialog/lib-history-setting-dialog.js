@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, enableRepoHistorySetting } from '../../utils/constants';
 import toaster from '../toast';
@@ -57,7 +57,7 @@ class LibHistorySetting extends React.Component {
     } else {
       this.setState({
         errorInfo: gettext('Please enter a non-negative integer'),
-      })
+      });
     }
   }
 
@@ -107,15 +107,15 @@ class LibHistorySetting extends React.Component {
               </FormGroup>
             }
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.allHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('allHistory')}}/>{' '}
+              <Input type="radio" name="radio1" checked={this.state.allHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('allHistory');}}/>{' '}
               <Label>{gettext('Keep full history')}</Label>
             </FormGroup>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.noHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('noHistory')}}/>{' '}
+              <Input type="radio" name="radio1" checked={this.state.noHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('noHistory');}}/>{' '}
               <Label>{gettext('Don\'t keep history')}</Label>
             </FormGroup>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.autoHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('autoHistory')}}/>{' '}
+              <Input type="radio" name="radio1" checked={this.state.autoHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('autoHistory');}}/>{' '}
               <Label>{gettext('Only keep a period of history:')}</Label>
               <Input 
                 type="text" 

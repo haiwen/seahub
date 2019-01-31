@@ -53,9 +53,9 @@ class MyLibsDeleted extends Component {
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
               {(!this.state.isLoading && this.state.deletedRepoList.length === 0) &&
-               <div className="message empty-tip">
-                 <h2>{gettext('No deleted libraries.')}</h2>
-               </div>
+                <div className="message empty-tip">
+                  <h2>{gettext('No deleted libraries.')}</h2>
+                </div>
               }
               {this.state.deletedRepoList.length !== 0 && 
                 <div>

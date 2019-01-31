@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Utils } from '../../utils/utils';
-import { siteRoot, gettext } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import '../../css/dirent-detail.css';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
-  currentRepo: PropTypes.object.isRequired
+  currentRepo: PropTypes.object.isRequired,
+  closeDetails: PropTypes.func.isRequired,
 };
 
 class LibDetail extends React.Component {

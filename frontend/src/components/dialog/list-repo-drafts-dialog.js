@@ -26,11 +26,11 @@ class ListRepoDraftsDialog extends React.Component {
       let drafts = res.data.drafts.map(item => {
         let draft = new Draft(item);
         return draft;
-      })
+      });
       this.setState({
         drafts: drafts 
       }); 
-    })
+    });
   }
 
   toggle = () => {

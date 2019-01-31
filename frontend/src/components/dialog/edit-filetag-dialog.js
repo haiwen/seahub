@@ -7,7 +7,9 @@ import RepoTag from '../../models/repo-tag';
 require('../../css/repo-tag.css');
 
 const TagItemPropTypes = {
+  repoID: PropTypes.string.isRequired,
   repoTag: PropTypes.object.isRequired,
+  filePath: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
   onEditFileTag: PropTypes.func.isRequired,
 };
@@ -80,7 +82,7 @@ class TagItem extends React.Component {
           }
         </div>
       </li>
-    )
+    );
   }
 
 }

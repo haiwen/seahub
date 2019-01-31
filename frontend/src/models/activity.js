@@ -1,7 +1,5 @@
-import moment from 'moment';
-
 class Acticity {
- constructor(json) {
+  constructor(json) {
     this.repo_id = json.repo_id;
     this.repo_name = json.repo_name;
     this.obj_type = json.obj_type;
@@ -27,7 +25,7 @@ class Acticity {
       this.old_path = json.old_path;
       this.review_id = json.review_id;
     }
- }
+  }
 }
 
 export default Acticity;

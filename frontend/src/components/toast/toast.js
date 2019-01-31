@@ -40,9 +40,7 @@ const animationStyles = css({
   height: 0,
   transition: `all ${ANIMATION_DURATION}ms ${animationEasing.deceleration}`,
   '&[data-state="entering"], &[data-state="entered"]': {
-    animation: `${openAnimation} ${ANIMATION_DURATION}ms ${
-            animationEasing.spring
-            } both`
+    animation: `${openAnimation} ${ANIMATION_DURATION}ms ${animationEasing.spring} both`
   },
   '&[data-state="exiting"]': {
     animation: `${closeAnimation} 120ms ${animationEasing.acceleration} both`
@@ -51,45 +49,44 @@ const animationStyles = css({
 
 export default class Toast extends React.PureComponent {
   static propTypes = {
-        /**
-         * The z-index of the toast.
-         */
+    /**
+     * The z-index of the toast.
+     */
     zIndex: PropTypes.number,
 
-        /**
-         * Duration of the toast.
-         */
+    /**
+     * Duration of the toast.
+     */
     duration: PropTypes.number,
 
-        /**
-         * Function called when the toast is all the way closed.
-         */
+    /**
+     * Function called when the toast is all the way closed.
+     */
     onRemove: PropTypes.func,
 
-        /**
-         * The type of the alert.
-         */
-    intent: PropTypes.oneOf(['none', 'success', 'warning', 'danger'])
-            .isRequired,
+    /**
+     * The type of the alert.
+     */
+    intent: PropTypes.oneOf(['none', 'success', 'warning', 'danger']).isRequired,
 
-        /**
-         * The title of the alert.
-         */
+    /**
+     * The title of the alert.
+     */
     title: PropTypes.node,
 
-        /**
-         * Description of the alert.
-         */
+    /**
+     * Description of the alert.
+     */
     children: PropTypes.node,
 
-        /**
-         * When true, show a close icon button inside of the toast.
-         */
+    /**
+     * When true, show a close icon button inside of the toast.
+     */
     hasCloseButton: PropTypes.bool,
 
-        /**
-         * When false, will close the Toast and call onRemove when finished.
-         */
+    /**
+     * When false, will close the Toast and call onRemove when finished.
+     */
     isShown: PropTypes.bool
   }
 
@@ -104,7 +101,7 @@ export default class Toast extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     if (prevProps.isShown !== this.props.isShown) {
-            // eslint-disable-next-line react/no-did-update-set-state
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         isShown: this.props.isShown
       });
@@ -162,23 +159,23 @@ export default class Toast extends React.PureComponent {
   render() {
     return (
       <Transition
-          appear
-          unmountOnExit
-          timeout={ANIMATION_DURATION}
-          in={this.state.isShown}
-          onExited={this.props.onRemove}
+        appear
+        unmountOnExit
+        timeout={ANIMATION_DURATION}
+        in={this.state.isShown}
+        onExited={this.props.onRemove}
       >
         {state => (
           <div
-              data-state={state}
-              className={animationStyles}
-              onMouseEnter={this.handleMouseEnter}
-              onMouseLeave={this.handleMouseLeave}
-              style={{
-                height: this.state.height,
-                zIndex: this.props.zIndex,
-                marginBottom: this.state.isShown ? 0 : -this.state.height
-              }}
+            data-state={state}
+            className={animationStyles}
+            onMouseEnter={this.handleMouseEnter}
+            onMouseLeave={this.handleMouseLeave}
+            style={{
+              height: this.state.height,
+              zIndex: this.props.zIndex,
+              marginBottom: this.state.isShown ? 0 : -this.state.height
+            }}
           >
             <div ref={this.onRef} style={{ padding: 8 }}>
               <Alert
@@ -190,7 +187,7 @@ export default class Toast extends React.PureComponent {
               />
             </div>
           </div>
-                )}
+        )}
       </Transition>
     );
   }

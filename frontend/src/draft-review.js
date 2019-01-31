@@ -73,14 +73,14 @@ class DraftReview extends React.Component {
         this.setState({
           isLoading: false,
           isShowDiff: false
-        })
+        });
         break;
-      case "open":
+      case 'open':
         if (!draftFileExists) {
           this.setState({
             isLoading: false,
             isShowDiff: false
-          })
+          });
           return;
         }
 
@@ -95,8 +95,8 @@ class DraftReview extends React.Component {
                     isLoading: false,
                     isShowDiff: false
                   }); 
-                })
-            })
+                });
+            });
           return;
         }
 
@@ -154,12 +154,12 @@ class DraftReview extends React.Component {
           }));
         }
         break;
-      case "finished":  
+      case 'finished':  
         if (!originFileExists) {
           this.setState({
             isLoading: false,
             isShowDiff: false
-          }) 
+          });
           return;
         }
 
@@ -322,8 +322,8 @@ class DraftReview extends React.Component {
     if (nativeSelection.isCollapsed === false) {
       const nativeRange = nativeSelection.getRangeAt(0);
       const focusNode = nativeSelection.focusNode;
-      if ((focusNode.tagName === "I") ||
-          (focusNode.nodeType !== 3 && focusNode.getAttribute("class") === "language-type")) {
+      if ((focusNode.tagName === 'I') ||
+          (focusNode.nodeType !== 3 && focusNode.getAttribute('class') === 'language-type')) {
         // fix select last paragraph
         let fragment = nativeRange.cloneContents();
         let startNode = fragment.firstChild.firstChild;
@@ -487,7 +487,7 @@ class DraftReview extends React.Component {
     if (typeof(key) === 'string') {
       const win = window;
       let element = win.document.querySelector(`[data-key="${key}"]`);
-      while (element.tagName === "CODE") {
+      while (element.tagName === 'CODE') {
         element = element.parentNode;
       }
       const scroller = this.findScrollContainer(element, win);
@@ -556,7 +556,7 @@ class DraftReview extends React.Component {
     let key = this.state.changedNodes[this.changeIndex];
     let element = win.document.querySelector(`[data-key="${key}"]`);
     // fix code-block or tables
-    while (element.className.indexOf('diff-') === -1 && element.tagName !== "BODY") {
+    while (element.className.indexOf('diff-') === -1 && element.tagName !== 'BODY') {
       element = element.parentNode;
     }
     const scroller = this.findScrollContainer(element, win);
@@ -624,8 +624,7 @@ class DraftReview extends React.Component {
             newMarkdownContent={this.state.draftContent}
             oldMarkdownContent={this.state.draftOriginContent}
             ref="diffViewer"
-          />
-        :
+          /> :
           <DiffViewer
             newMarkdownContent={this.state.draftContent}
             oldMarkdownContent={this.state.draftContent}
@@ -634,21 +633,21 @@ class DraftReview extends React.Component {
         }
         <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>
       </div>
-    )  
+    );
   }
 
   renderContent = () => {
     switch(this.state.reviewStatus) {
-      case "closed":
+      case 'closed':
         return <p className="error">{gettext('The review has been closed.')}</p>;
-      case "open":
+      case 'open':
         if (!draftFileExists) {
           return <p className="error">{gettext('Draft has been deleted.')}</p>;
         }
         return this.showDiffViewer();
-      case "finished":
+      case 'finished':
         if (!originFileExists) {
-          return <p className="error">{gettext('Original file has been deleted.')}</p>
+          return <p className="error">{gettext('Original file has been deleted.')}</p>;
         }
         return this.showDiffViewer();
     }
@@ -667,14 +666,14 @@ class DraftReview extends React.Component {
           target="toggle-diff" toggle={this.toggleDiffTip}>
           {gettext('View diff')}</Tooltip>
       </div>
-    )  
+    );
   }
 
   renderDiffButton = () => {
     switch(this.state.reviewStatus) {
-      case "closed":
+      case 'closed':
         return;
-      case "open":
+      case 'open':
         if (!draftFileExists) {
           return;
         }
@@ -683,7 +682,7 @@ class DraftReview extends React.Component {
           return;
         }
         return this.showDiffButton();
-      case "finished":
+      case 'finished':
         if (!originFileExists) {
           return;
         } 
@@ -695,15 +694,15 @@ class DraftReview extends React.Component {
     let viewFile = <a href={OriginFileLink} className="view-file-link">{gettext('View File')}</a>;
     let editDraft = <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>;
     switch(this.state.reviewStatus) {
-      case "closed":
+      case 'closed':
         return viewFile;
-      case "open": 
+      case 'open': 
         if (!draftFileExists) {
           return viewFile;
         }
 
         return editDraft; 
-      case "finished":
+      case 'finished':
         if (!originFileExists) {
           return;
         }
@@ -713,18 +712,18 @@ class DraftReview extends React.Component {
 
   showNavItem = (showTab) => {
     switch(showTab) {
-      case "info":
+      case 'info':
         return (
           <NavItem className="nav-item">
-           <NavLink
-             className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
-             onClick={() => { this.tabItemClick('reviewInfo');}}
-           >
-             <i className="fas fa-info-circle"></i>
-           </NavLink>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
+              onClick={() => { this.tabItemClick('reviewInfo');}}
+            >
+              <i className="fas fa-info-circle"></i>
+            </NavLink>
           </NavItem>
         );
-      case "comments":
+      case 'comments':
         return (
           <NavItem className="nav-item">
             <NavLink
@@ -732,12 +731,11 @@ class DraftReview extends React.Component {
               onClick={() => {this.tabItemClick('comments');}}
             >
               <i className="fa fa-comments"></i>
-              { this.state.commentsNumber > 0 &&
-                <div className='comments-number'>{this.state.commentsNumber}</div>}
+              {this.state.commentsNumber > 0 && <div className='comments-number'>{this.state.commentsNumber}</div>}
             </NavLink>
           </NavItem>
         );
-      case "history":
+      case 'history':
         return (
           <NavItem className="nav-item">
             <NavLink
@@ -753,42 +751,42 @@ class DraftReview extends React.Component {
 
   renderNavItems = () => {
     switch(this.state.reviewStatus) {
-      case "closed":
+      case 'closed':
         return (
           <Nav tabs className="review-side-panel-nav">
-            {this.showNavItem("info")}
+            {this.showNavItem('info')}
           </Nav>
         );
-      case "open":
+      case 'open':
         if (!draftFileExists) {
           return (
             <Nav tabs className="review-side-panel-nav">
-              {this.showNavItem("info")}
+              {this.showNavItem('info')}
             </Nav>
           );
         }
 
         return (
           <Nav tabs className="review-side-panel-nav">
-           {this.showNavItem('info')}
-           {this.showNavItem('comments')}
-           {this.showNavItem('history')}
+            {this.showNavItem('info')}
+            {this.showNavItem('comments')}
+            {this.showNavItem('history')}
           </Nav>
         );
-    case "finished":
-      if (!originFileExists) {
+      case 'finished':
+        if (!originFileExists) {
+          return (
+            <Nav tabs className="review-side-panel-nav">
+              {this.showNavItem('info')}
+            </Nav>
+          );
+        }
         return (
           <Nav tabs className="review-side-panel-nav">
-            {this.showNavItem("info")}
+            {this.showNavItem('info')}
+            {this.showNavItem('comments')}
           </Nav>
         );
-      }
-      return (
-        <Nav tabs className="review-side-panel-nav">
-           {this.showNavItem('info')}
-           {this.showNavItem('comments')}
-        </Nav>
-      )
     } 
   }
 
@@ -813,14 +811,18 @@ class DraftReview extends React.Component {
           </div>
           <div className="button-group">
             {this.renderDiffButton()}
-            {
-              this.state.reviewStatus === 'open' &&
+            {this.state.reviewStatus === 'open' &&
               <div className="cur-file-operation">
-                <button className='btn btn-secondary file-operation-btn' title={gettext('Close review')}
-                  onClick={this.onCloseReview}>{gettext('Close')}</button>
-                  { draftFileExists && <button className='btn btn-success file-operation-btn' title={gettext('Publish draft')}
-                  onClick={this.onPublishReview}>{gettext('Publish')}</button>
-                  }
+                <button className='btn btn-secondary file-operation-btn' title={gettext('Close review')} onClick={this.onCloseReview}>{gettext('Close')}</button>
+                {draftFileExists && 
+                  <button 
+                    className='btn btn-success file-operation-btn' 
+                    title={gettext('Publish draft')}
+                    onClick={this.onPublishReview}
+                  >
+                    {gettext('Publish')}
+                  </button>
+                }
               </div>
             }
             {
@@ -880,7 +882,7 @@ class DraftReview extends React.Component {
                       inResizing={this.state.inResizing}
                     />
                   </TabPane>
-                  { this.state.reviewStatus == 'finished'? '':
+                  {this.state.reviewStatus == 'finished' ? '' :
                     <TabPane tabId="history" className="history">
                       <HistoryList
                         activeItem={this.state.activeItem}

@@ -9,6 +9,7 @@ const propTypes = {
   historyList: PropTypes.array.isRequired,
   reloadMore: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
+  onItemRestore: PropTypes.func.isRequired,
 };
 
 class HistoryListView extends React.Component {

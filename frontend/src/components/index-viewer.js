@@ -120,7 +120,7 @@ class IndexContentViewer extends React.Component {
       <div className={contentClass}>
         <MarkdownViewer
           markdownContent={this.props.indexContent}
-          onContentRendered={this.props.onContentRendered}
+          onContentRendered={this.onContentRendered}
           modifyValueBeforeRender={this.modifyValueBeforeRender}
         />
       </div>

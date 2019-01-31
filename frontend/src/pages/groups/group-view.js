@@ -26,6 +26,7 @@ const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onGroupChanged: PropTypes.func.isRequired,
+  onTabNavClick: PropTypes.func.isRequired,
   groupID: PropTypes.string,
 };
 
@@ -90,19 +91,19 @@ class GroupView extends React.Component {
         if (error.response.status == 403) {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Permission denied")
+            errMessage: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Error")
+            errMessage: gettext('Error')
           });
         }
       } else {
         this.setState({
           isLoading: false,
-          errMessage: gettext("Please check the network.")
+          errMessage: gettext('Please check the network.')
         });
       }
     });
@@ -124,19 +125,19 @@ class GroupView extends React.Component {
         if (error.response.status == 403) {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Permission denied")
+            errMessage: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Error")
+            errMessage: gettext('Error')
           });
         }
       } else {
         this.setState({
           isLoading: false,
-          errMessage: gettext("Please check the network.")
+          errMessage: gettext('Please check the network.')
         });
       }
     });
@@ -332,9 +333,9 @@ class GroupView extends React.Component {
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
               {canAddRepo && (
-              <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
-                <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
-              </button>
+                <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
+                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+                </button>
               )}
             </div>
           </div>
@@ -346,11 +347,11 @@ class GroupView extends React.Component {
               {currentGroup && (
                 <Fragment>
                   <div className="path-container">
-                    <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext("Groups")}</Link>
+                    <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext('Groups')}</Link>
                     <span className="path-split">/</span>
                     <span>{currentGroup.name}</span>
                     {currentGroup.parent_group_id !== 0 && (
-                      <span className="department-group-icon fas fa-building" title={gettext("This is a special group representing a department.")}></span>
+                      <span className="department-group-icon fas fa-building" title={gettext('This is a special group representing a department.')}></span>
                     )}
                   </div>
                   <div className="path-tool">

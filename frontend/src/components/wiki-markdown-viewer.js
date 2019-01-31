@@ -161,7 +161,7 @@ class WikiMarkdownViewer extends React.Component {
           onContentRendered={this.onContentRendered}
           modifyValueBeforeRender={this.modifyValueBeforeRender}
         />
-      )
+      );
     }
 
     return (
@@ -171,12 +171,12 @@ class WikiMarkdownViewer extends React.Component {
         activeTitleIndex={this.state.activeTitleIndex}
         onContentRendered={this.onContentRendered}
       />
-    )
+    );
   }
 
   render() {
     if (this.props.isFileLoading) {
-      return <Loading />
+      return <Loading />;
     }
     return (
       <div ref={this.markdownContainer} className="wiki-page-container" onScroll={this.onScrollHandler.bind(this)}>
@@ -192,7 +192,7 @@ class WikiMarkdownViewer extends React.Component {
 
 const defaultProps = {
   isWiki: false,
-}
+};
 
 WikiMarkdownViewer.propTypes = propTypes;
 MarkdownViewer.defaultProps = defaultProps;

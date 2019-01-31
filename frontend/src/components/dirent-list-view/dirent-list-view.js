@@ -143,7 +143,7 @@ class DirentListView extends React.Component {
         'url': `${siteRoot}lib/${repoID}/file${path}`,
         'src': src
       };
-    }
+    };
 
     return items.map((item) => { return prepareItem(item); });
   }
@@ -227,85 +227,85 @@ class DirentListView extends React.Component {
     const imageItemsLength = imageItems.length;
     const imageCaption = imageItemsLength && (
       <Fragment>
-        <span>{gettext("%curr% of %total%").replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
+        <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
         <br />
-        <a href={imageItems[imageIndex].url} target="_blank">{gettext("Open in New Tab")}</a>
+        <a href={imageItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
       </Fragment>
     );
 
     return (
       <Fragment>
-      <table>
-        <thead>
-          <tr>
-            <th width="3%" className="text-center">
-              <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
-            </th>
-            <th width="3%">{/*icon */}</th>
-            <th width="5%">{/*star */}</th>
-            <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-            <th width="6%">{/*tag */}</th>
-            <th width="20%">{/*operation */}</th>
-            <th width="11%">{gettext('Size')}</th>
-            <th width="13%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            direntList.length !== 0 && direntList.map((dirent, index) => {
-              return (
-                <DirentListItem
-                  key={index}
-                  dirent={dirent}
-                  path={this.props.path}
-                  repoID={this.props.repoID}
-                  currentRepoInfo={this.props.currentRepoInfo}
-                  isRepoOwner={this.props.isRepoOwner}
-                  direntList={this.props.direntList}
-                  onItemClick={this.props.onItemClick}
-                  onItemRenameToggle={this.onItemRenameToggle}
-                  onItemSelected={this.props.onItemSelected}
-                  onItemDelete={this.props.onItemDelete}
-                  onItemRename={this.onItemRename}
-                  onItemMove={this.props.onItemMove}
-                  onItemCopy={this.props.onItemCopy}
-                  updateDirent={this.props.updateDirent}
-                  isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem}
-                  onUnfreezedItem={this.onUnfreezedItem}
-                  onDirentClick={this.props.onDirentClick}
-                  onItemDetails={this.onItemDetails}
-                  showImagePopup={this.showImagePopup}
-                  repoEncrypted={this.props.repoEncrypted}
-                  enableDirPrivateShare={this.props.enableDirPrivateShare}
-                  isAdmin={this.props.isAdmin}
-                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                />
-              );
-            })
-          }
-        </tbody>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th width="3%" className="text-center">
+                <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
+              </th>
+              <th width="3%">{/*icon */}</th>
+              <th width="5%">{/*star */}</th>
+              <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+              <th width="6%">{/*tag */}</th>
+              <th width="20%">{/*operation */}</th>
+              <th width="11%">{gettext('Size')}</th>
+              <th width="13%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              direntList.length !== 0 && direntList.map((dirent, index) => {
+                return (
+                  <DirentListItem
+                    key={index}
+                    dirent={dirent}
+                    path={this.props.path}
+                    repoID={this.props.repoID}
+                    currentRepoInfo={this.props.currentRepoInfo}
+                    isRepoOwner={this.props.isRepoOwner}
+                    direntList={this.props.direntList}
+                    onItemClick={this.props.onItemClick}
+                    onItemRenameToggle={this.onItemRenameToggle}
+                    onItemSelected={this.props.onItemSelected}
+                    onItemDelete={this.props.onItemDelete}
+                    onItemRename={this.onItemRename}
+                    onItemMove={this.props.onItemMove}
+                    onItemCopy={this.props.onItemCopy}
+                    updateDirent={this.props.updateDirent}
+                    isItemFreezed={this.state.isItemFreezed}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
+                    onDirentClick={this.props.onDirentClick}
+                    onItemDetails={this.onItemDetails}
+                    showImagePopup={this.showImagePopup}
+                    repoEncrypted={this.props.repoEncrypted}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
+                    isAdmin={this.props.isAdmin}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                  />
+                );
+              })
+            }
+          </tbody>
+        </table>
 
-      {this.state.isImagePopupOpen && (
-        <Lightbox
-          mainSrc={imageItems[imageIndex].src}
-          imageTitle={imageItems[imageIndex].name}
-          imageCaption={imageCaption}
-          nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
-          prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
-          onCloseRequest={this.closeImagePopup}
-          onMovePrevRequest={this.moveToPrevImage}
-          onMoveNextRequest={this.moveToNextImage}
-          imagePadding={70}
-          imageLoadErrorMessage={gettext('The image could not be loaded.')}
-          prevLabel={gettext("Previous (Left arrow key)")}
-          nextLabel={gettext("Next (Right arrow key)")}
-          closeLabel={gettext("Close (Esc)")}
-          zoomInLabel={gettext('Zoom in')}
-          zoomOutLabel={gettext('Zoom out')}
-        />
-      )}
+        {this.state.isImagePopupOpen && (
+          <Lightbox
+            mainSrc={imageItems[imageIndex].src}
+            imageTitle={imageItems[imageIndex].name}
+            imageCaption={imageCaption}
+            nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
+            prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
+            onCloseRequest={this.closeImagePopup}
+            onMovePrevRequest={this.moveToPrevImage}
+            onMoveNextRequest={this.moveToNextImage}
+            imagePadding={70}
+            imageLoadErrorMessage={gettext('The image could not be loaded.')}
+            prevLabel={gettext('Previous (Left arrow key)')}
+            nextLabel={gettext('Next (Right arrow key)')}
+            closeLabel={gettext('Close (Esc)')}
+            zoomInLabel={gettext('Zoom in')}
+            zoomOutLabel={gettext('Zoom out')}
+          />
+        )}
       </Fragment>
     );
   }

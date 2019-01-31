@@ -24,7 +24,7 @@ class GroupsToolbar extends React.Component {
         <div className="cur-view-toolbar border-left-show">
           <div className="operation">
             <Button color="btn btn-secondary operation-item" onClick={this.props.toggleAddGroupModal}>
-              <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext("New Group")}
+              <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Group')}
             </Button>
           </div>
           <span title="Side Nav Menu" onClick={onShowSidePanel}

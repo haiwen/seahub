@@ -53,8 +53,8 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <div className="empty-tip">
-          <h2>{gettext("You don't have any share links")}</h2>
-          <p>{gettext("You can generate a share link for a folder or a file. Anyone who receives this link can view the folder or the file online.")}</p>
+          <h2>{gettext('You don\'t have any share links')}</h2>
+          <p>{gettext('You can generate a share link for a folder or a file. Anyone who receives this link can view the folder or the file online.')}</p>
         </div>
       );
 
@@ -70,8 +70,8 @@ class Content extends Component {
               <tr>
                 <th width="4%">{/*icon*/}</th>
                 <th width="36%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th width="24%">{gettext("Library")}</th>
-                <th width="12%">{gettext("Visits")}</th>
+                <th width="24%">{gettext('Library')}</th>
+                <th width="12%">{gettext('Visits')}</th>
                 <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
@@ -261,20 +261,20 @@ class ShareAdminShareLinks extends Component {
         if (error.response.status == 403) {
           this.setState({
             loading: false,
-            errorMsg: gettext("Permission denied")
+            errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,
-            errorMsg: gettext("Error")
+            errorMsg: gettext('Error')
           });
         }
 
       } else {
         this.setState({
           loading: false,
-          errorMsg: gettext("Please check the network.")
+          errorMsg: gettext('Please check the network.')
         });
       }
     });

@@ -185,7 +185,7 @@ class DirOperationToolbar extends React.Component {
         <div className="operation">
           {(this.props.isViewFile && this.props.permission === 'rw' && !this.props.hasDraft ) && (
             <Fragment>
-            <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
+              <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
             </Fragment>
           )}
 
@@ -231,7 +231,7 @@ class DirOperationToolbar extends React.Component {
               onAddFile={this.onAddFile}
               checkDuplicatedName={this.checkDuplicatedName}
               addFileCancel={this.onCreateFileToggle}
-              />
+            />
           </ModalPortal>
         )}
         {this.state.isCreateFolderDialogShow && (

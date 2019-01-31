@@ -33,11 +33,11 @@ class ListTaggedFilesDialog extends React.Component {
       res.data.tagged_files !== undefined &&
       res.data.tagged_files.forEach(file => {
         let taggedFile = file;
-        taggedFileList.push(taggedFile)
+        taggedFileList.push(taggedFile);
       });
       this.setState({
         taggedFileList: taggedFileList,
-      })
+      });
     });
   }
 

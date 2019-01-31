@@ -14,6 +14,7 @@ import '../../css/groups.css';
 
 const propTypes = {
   group: PropTypes.object.isRequired,
+  onItemDetails: PropTypes.func.isRequired,
 };
 
 
@@ -80,7 +81,7 @@ class RepoListViewPanel extends React.Component {
       </div>
     );
   }
- }
+}
 
 RepoListViewPanel.propTypes = propTypes;
 
@@ -95,7 +96,7 @@ class GroupsView extends React.Component {
       showAddGroupModal: false,
       isShowDetails: false,
       currentRepo: null,
-    }
+    };
   }
 
   listGroups = () => {
@@ -105,7 +106,7 @@ class GroupsView extends React.Component {
       let groupList = res.data.map(item => {
         let group = new Group(item);
         return group;
-      })
+      });
       this.setState({
         isLoading: false,
         groupList: groupList,
@@ -115,19 +116,19 @@ class GroupsView extends React.Component {
         if (error.response.status == 403) {
           this.setState({
             isLoading: false,
-            errorMsg: gettext("Permission denied")
+            errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
-            errorMsg: gettext("Error")
+            errorMsg: gettext('Error')
           });
         }
       } else {
         this.setState({
           isLoading: false,
-          errorMsg: gettext("Please check the network.")
+          errorMsg: gettext('Please check the network.')
         });
       }
     });
@@ -174,7 +175,7 @@ class GroupsView extends React.Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext("My Groups")}</h3>
+              <h3 className="sf-heading">{gettext('My Groups')}</h3>
             </div>
             <div className="cur-view-content cur-view-content-groups">
               {this.state.isLoading && <Loading />}

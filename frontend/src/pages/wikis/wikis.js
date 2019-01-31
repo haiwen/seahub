@@ -123,15 +123,15 @@ class Wikis extends Component {
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-                <Dropdown tag="div" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
-                  <DropdownToggle className="btn btn-secondary operation-item">
-                    <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Add Wiki')}
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem onClick={this.onCreateToggle}>{gettext('New Wiki')}</DropdownItem>
-                    <DropdownItem onClick={this.onSelectToggle}>{gettext('Choose a library as Wiki')}</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+              <Dropdown tag="div" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
+                <DropdownToggle className="btn btn-secondary operation-item">
+                  <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Add Wiki')}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={this.onCreateToggle}>{gettext('New Wiki')}</DropdownItem>
+                  <DropdownItem onClick={this.onSelectToggle}>{gettext('Choose a library as Wiki')}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />

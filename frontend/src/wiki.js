@@ -153,7 +153,7 @@ class Wiki extends Component {
         isDataLoading: false,
       });
     }).catch(() => {
-      this.setState({isLoadFailed: true})
+      this.setState({isLoadFailed: true});
     });
   }
 
@@ -169,7 +169,7 @@ class Wiki extends Component {
           treeData: tree,
           currentNode: node
         });
-      })
+      });
     } else {
       let parentNode = tree.getNodeByPath(node.parentNode.path);
       parentNode.isExpanded = true;

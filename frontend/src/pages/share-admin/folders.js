@@ -26,7 +26,7 @@ class Content extends Component {
       const emptyTip = (
         <div className="empty-tip">
           <h2>{gettext('You have not shared any folders')}</h2>
-          <p>{gettext("You can share a single folder with a registered user if you don't want to share a whole library.")}</p>
+          <p>{gettext('You can share a single folder with a registered user if you don\'t want to share a whole library.')}</p>
         </div>
       );
 
@@ -40,8 +40,8 @@ class Content extends Component {
             <tr>
               <th width="4%">{/*icon*/}</th>
               <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-              <th width="30%">{gettext("Share To")}</th>
-              <th width="24%">{gettext("Permission")}</th>
+              <th width="30%">{gettext('Share To')}</th>
+              <th width="24%">{gettext('Permission')}</th>
               <th width="8%"></th>
             </tr>
           </thead>
@@ -222,20 +222,20 @@ class ShareAdminFolders extends Component {
         if (error.response.status == 403) {
           this.setState({
             loading: false,
-            errorMsg: gettext("Permission denied")
+            errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,
-            errorMsg: gettext("Error")
+            errorMsg: gettext('Error')
           });
         }
 
       } else {
         this.setState({
           loading: false,
-          errorMsg: gettext("Please check the network.")
+          errorMsg: gettext('Please check the network.')
         });
       }
     });
@@ -272,7 +272,7 @@ class ShareAdminFolders extends Component {
       <div className="main-panel-center">
         <div className="cur-view-container" id="share-admin-libs">
           <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext("Folders")}</h3>
+            <h3 className="sf-heading">{gettext('Folders')}</h3>
           </div>
           <div className="cur-view-content">
             <Content 

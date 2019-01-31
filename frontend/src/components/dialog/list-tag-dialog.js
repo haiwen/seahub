@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import RepoTag from '../../models/repo-tag';
@@ -39,7 +39,7 @@ class TagListItem extends React.Component {
   }
 
   onListTaggedFiles = () => {
-    this.props.onListTaggedFiles(this.props.item)
+    this.props.onListTaggedFiles(this.props.item);
   }
 
   render() {

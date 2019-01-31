@@ -73,8 +73,8 @@ class DirView extends React.Component {
       this.setState({
         draftCounts: res.data.draft_counts,
         reviewCounts: res.data.review_counts,
-      })
-    })
+      });
+    });
     seafileAPI.listRepoTags(repoID).then(res => {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {

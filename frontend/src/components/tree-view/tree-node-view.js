@@ -15,6 +15,7 @@ const propTypes = {
   onNodeDragStart: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnFreezedItem: PropTypes.func.isRequired,
+  onMenuItemClick: PropTypes.func,
 };
 
 class TreeNodeView extends React.Component {
@@ -76,20 +77,20 @@ class TreeNodeView extends React.Component {
     let icon = '';
     let type = '';
     if (node.object.type === 'dir') {
-      icon = <i className="far fa-folder"></i>
+      icon = <i className="far fa-folder"></i>;
       type = 'dir';
     } else {
       let index = node.object.name.lastIndexOf('.');
       if (index === -1) {
-        icon = <i className="far fa-file"></i>
+        icon = <i className="far fa-file"></i>;
         type = 'file';
       } else {
         let suffix = node.object.name.slice(index).toLowerCase();
         if (suffix === '.png' || suffix === '.jpg') {
-          icon = <i className="far fa-image"></i>
+          icon = <i className="far fa-image"></i>;
           type = 'image';
         } else {
-          icon = <i className="far fa-file"></i>
+          icon = <i className="far fa-file"></i>;
           type = 'file';
         }
       }

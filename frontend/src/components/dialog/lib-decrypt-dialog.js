@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Input, ModalBody, Form, FormGroup } from 'reactstrap';
+import { Modal, ModalBody, Form } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 
