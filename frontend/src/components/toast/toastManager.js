@@ -19,19 +19,19 @@ const hasCustomId = settings => Object.hasOwnProperty.call(settings, 'id');
 
 export default class ToastManager extends React.PureComponent {
   static propTypes = {
-        /**
-         * Function called with the `this.notify` function.
-         */
+    /**
+     * Function called with the `this.notify` function.
+     */
     bindNotify: PropTypes.func.isRequired,
 
-        /**
-         * Function called with the `this.getToasts` function.
-         */
+    /**
+     * Function called with the `this.getToasts` function.
+     */
     bindGetToasts: PropTypes.func.isRequired,
 
-        /**
-         * Function called with the `this.closeAll` function.
-         */
+    /**
+     * Function called with the `this.closeAll` function.
+     */
     bindCloseAll: PropTypes.func.isRequired
   }
 
@@ -58,10 +58,10 @@ export default class ToastManager extends React.PureComponent {
   }
 
   notify = (title, settings) => {
-        // If there's a custom toast ID passed, close existing toasts with the same custom ID
+    // If there's a custom toast ID passed, close existing toasts with the same custom ID
     if (hasCustomId(settings)) {
       for (const toast of this.state.toasts) {
-                // Since unique ID is still appended to a custom ID, skip the unique ID and check only prefix
+        // Since unique ID is still appended to a custom ID, skip the unique ID and check only prefix
         if (String(toast.id).startsWith(settings.id)) {
           this.closeToast(toast.id);
         }
@@ -94,10 +94,10 @@ export default class ToastManager extends React.PureComponent {
     };
   }
 
-    /**
-     * This will set isShown on the Toast which will close the toast.
-     * It won't remove the toast until onExited triggers onRemove.
-     */
+  /**
+   * This will set isShown on the Toast which will close the toast.
+   * It won't remove the toast until onExited triggers onRemove.
+   */
   closeToast = id => {
     this.setState(previousState => {
       return {

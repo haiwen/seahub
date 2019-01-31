@@ -80,7 +80,7 @@ class RepoListViewPanel extends React.Component {
       </div>
     );
   }
- }
+}
 
 RepoListViewPanel.propTypes = propTypes;
 

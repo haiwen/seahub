@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+
+const propTypes = {
+  toggle: PropTypes.func.isRequired,
+}
 
 class DeleteRepoDialog extends Component {
 
@@ -40,5 +45,7 @@ class DeleteRepoDialog extends Component {
     return popup;
   }
 }
+
+DeleteRepoDialog.propTypes = propTypes;
 
 export default DeleteRepoDialog;

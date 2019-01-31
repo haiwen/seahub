@@ -241,21 +241,21 @@ class Item extends Component {
             <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
           </td>
         </tr>
-          {this.state.isShowSharedDialog && (
-            <ModalPotal>
-              <ShareDialog 
-                itemType={'library'}
-                itemName={data.repo_name}
-                itemPath={'/'}
-                repoID={data.repo_id}
-                repoEncrypted={data.encrypted}
-                enableDirPrivateShare={true}
-                userPerm={data.permission}
-                isAdmin={true}
-                toggleDialog={this.toggleShareDialog}
-              />
-            </ModalPotal>
-          )}
+        {this.state.isShowSharedDialog && (
+          <ModalPotal>
+            <ShareDialog 
+              itemType={'library'}
+              itemName={data.repo_name}
+              itemPath={'/'}
+              repoID={data.repo_id}
+              repoEncrypted={data.encrypted}
+              enableDirPrivateShare={true}
+              userPerm={data.permission}
+              isAdmin={true}
+              toggleDialog={this.toggleShareDialog}
+            />
+          </ModalPotal>
+        )}
       </Fragment>
     );
 

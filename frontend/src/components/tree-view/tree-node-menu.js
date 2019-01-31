@@ -66,12 +66,13 @@ class TreeNodeMenu extends React.Component {
     e.stopPropagation();
     this.setState(
       {isItemMenuShow: !this.state.isItemMenuShow }, () => {
-      if (this.state.isItemMenuShow) {
-        this.props.onFreezedItem()
-      } else {
-        this.props.onUnFreezedItem();
+        if (this.state.isItemMenuShow) {
+          this.props.onFreezedItem()
+        } else {
+          this.props.onUnFreezedItem();
+        }
       }
-    });
+    );
   }
 
   onMenuItemClick = (event) => {

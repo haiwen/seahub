@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, siteRoot, username } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import CommonToolbar from '../toolbar/common-toolbar';
 import ViewModeToolbar from '../toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../toolbar/dir-operation-toolbar';
@@ -198,7 +198,7 @@ class DirPanel extends React.Component {
               </div>
               <div className="cur-view-content">
                 {this.props.errorMsg ?
-                 <p className="error text-center">{this.props.errorMsg}</p> :
+                  <p className="error text-center">{this.props.errorMsg}</p> :
                   <Fragment>
                     {!this.props.pathExist ?
                       errMessage :

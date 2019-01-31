@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { gettext, repoID, siteRoot, initialPath, isDir, slug , canGenerateShareLink, canGenerateUploadLink, username } from './utils/constants';
+import { gettext, repoID, siteRoot, initialPath, isDir, canGenerateShareLink, canGenerateUploadLink, username } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import collabServer from './utils/collab-server';

@@ -146,41 +146,41 @@ class DirentListItem extends React.Component {
 
   onMenuItemClick = (operation) => {
     switch(operation) {
-    case 'Rename':
-      this.onItemRenameToggle();
-      break;
-    case 'Move':
-      this.onItemMoveToggle();
-      break;
-    case 'Copy':
-      this.onItemCopyToggle();
-      break;
-    case 'Permission':
-      this.onPermissionItem();
-      break;
-    case 'Details':
-      this.onDetailsItem();
-      break;
-    case 'Unlock':
-      this.onUnlockItem();
-      break;
-    case 'Lock':
-      this.onLockItem();
-      break;
-    case 'Comment':
-      this.onComnentItem();
-      break;
-    case 'History':
-      this.onHistory();
-      break;
-    case 'Access Log':
-      this.onAccessLog();
-      break;
-    case 'Open via Client':
-      this.onOpenViaClient();
-      break;
-    default:
-      break;
+      case 'Rename':
+        this.onItemRenameToggle();
+        break;
+      case 'Move':
+        this.onItemMoveToggle();
+        break;
+      case 'Copy':
+        this.onItemCopyToggle();
+        break;
+      case 'Permission':
+        this.onPermissionItem();
+        break;
+      case 'Details':
+        this.onDetailsItem();
+        break;
+      case 'Unlock':
+        this.onUnlockItem();
+        break;
+      case 'Lock':
+        this.onLockItem();
+        break;
+      case 'Comment':
+        this.onComnentItem();
+        break;
+      case 'History':
+        this.onHistory();
+        break;
+      case 'Access Log':
+        this.onAccessLog();
+        break;
+      case 'Open via Client':
+        this.onOpenViaClient();
+        break;
+      default:
+        break;
     }
   }
 

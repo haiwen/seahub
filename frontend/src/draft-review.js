@@ -625,8 +625,7 @@ class DraftReview extends React.Component {
             newMarkdownContent={this.state.draftContent}
             oldMarkdownContent={this.state.draftOriginContent}
             ref="diffViewer"
-          />
-        :
+          /> :
           <DiffViewer
             newMarkdownContent={this.state.draftContent}
             oldMarkdownContent={this.state.draftContent}
@@ -717,12 +716,12 @@ class DraftReview extends React.Component {
       case "info":
         return (
           <NavItem className="nav-item">
-           <NavLink
-             className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
-             onClick={() => { this.tabItemClick('reviewInfo');}}
-           >
-             <i className="fas fa-info-circle"></i>
-           </NavLink>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
+              onClick={() => { this.tabItemClick('reviewInfo');}}
+            >
+              <i className="fas fa-info-circle"></i>
+            </NavLink>
           </NavItem>
         );
       case "comments":
@@ -733,8 +732,7 @@ class DraftReview extends React.Component {
               onClick={() => {this.tabItemClick('comments');}}
             >
               <i className="fa fa-comments"></i>
-              { this.state.commentsNumber > 0 &&
-                <div className='comments-number'>{this.state.commentsNumber}</div>}
+              {this.state.commentsNumber > 0 && <div className='comments-number'>{this.state.commentsNumber}</div>}
             </NavLink>
           </NavItem>
         );
@@ -771,25 +769,25 @@ class DraftReview extends React.Component {
 
         return (
           <Nav tabs className="review-side-panel-nav">
-           {this.showNavItem('info')}
-           {this.showNavItem('comments')}
-           {this.showNavItem('history')}
+            {this.showNavItem('info')}
+            {this.showNavItem('comments')}
+            {this.showNavItem('history')}
           </Nav>
         );
-    case "finished":
-      if (!originFileExists) {
+      case "finished":
+        if (!originFileExists) {
+          return (
+            <Nav tabs className="review-side-panel-nav">
+              {this.showNavItem("info")}
+            </Nav>
+          );
+        }
         return (
           <Nav tabs className="review-side-panel-nav">
-            {this.showNavItem("info")}
+            {this.showNavItem('info')}
+            {this.showNavItem('comments')}
           </Nav>
-        );
-      }
-      return (
-        <Nav tabs className="review-side-panel-nav">
-           {this.showNavItem('info')}
-           {this.showNavItem('comments')}
-        </Nav>
-      )
+        )
     } 
   }
 
@@ -814,14 +812,18 @@ class DraftReview extends React.Component {
           </div>
           <div className="button-group">
             {this.renderDiffButton()}
-            {
-              this.state.reviewStatus === 'open' &&
+            {this.state.reviewStatus === 'open' &&
               <div className="cur-file-operation">
-                <button className='btn btn-secondary file-operation-btn' title={gettext('Close review')}
-                  onClick={this.onCloseReview}>{gettext('Close')}</button>
-                  { draftFileExists && <button className='btn btn-success file-operation-btn' title={gettext('Publish draft')}
-                  onClick={this.onPublishReview}>{gettext('Publish')}</button>
-                  }
+                <button className='btn btn-secondary file-operation-btn' title={gettext('Close review')} onClick={this.onCloseReview}>{gettext('Close')}</button>
+                {draftFileExists && 
+                  <button 
+                    className='btn btn-success file-operation-btn' 
+                    title={gettext('Publish draft')}
+                    onClick={this.onPublishReview}
+                  >
+                    {gettext('Publish')}
+                  </button>
+                }
               </div>
             }
             {

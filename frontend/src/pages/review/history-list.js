@@ -62,15 +62,15 @@ class HistoryList extends React.Component {
                 }
                 return (
                   <HistoryItem
-                  onClick={this.onClick}
-                  ctime={item.ctime}
-                  className={this.props.activeItem === index ? 'item-active': ''}
-                  currentCommitId={item.commit_id}
-                  name={item.creator_name}
-                  index={index}
-                  key={index}
-                  preCommitId={arr[preItemIndex].commit_id}
-                />
+                    onClick={this.onClick}
+                    ctime={item.ctime}
+                    className={this.props.activeItem === index ? 'item-active': ''}
+                    currentCommitId={item.commit_id}
+                    name={item.creator_name}
+                    index={index}
+                    key={index}
+                    preCommitId={arr[preItemIndex].commit_id}
+                  />
                 );
               }) : <Loading/>
           }

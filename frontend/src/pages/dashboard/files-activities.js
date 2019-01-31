@@ -54,118 +54,118 @@ class TableBody extends Component {
 
       if (item.obj_type == 'repo') {
         switch(item.op_type) {
-        case 'create':
-          op = gettext('Created library');
-          details = <td>{libLink}</td>;
-          break;
-        case 'rename':
-          op = gettext('Renamed library');
-          details = <td>{item.old_repo_name} => {libLink}</td>;
-          break;
-        case 'delete':
-          op = gettext('Deleted library');
-          details = <td>{item.repo_name}</td>;
-          break;
-        case 'recover':
-          op = gettext('Restored library');
-          details = <td>{libLink}</td>;
-          break;
-        case 'clean-up-trash':
-          if (item.days == 0) {
-            op = gettext('Removed all items from trash.');
-          } else {
-            op = gettext('Removed items older than {n} days from trash.').replace('{n}', item.days);
-          }
-          details = <td>{libLink}</td>;
-          break;
+          case 'create':
+            op = gettext('Created library');
+            details = <td>{libLink}</td>;
+            break;
+          case 'rename':
+            op = gettext('Renamed library');
+            details = <td>{item.old_repo_name} => {libLink}</td>;
+            break;
+          case 'delete':
+            op = gettext('Deleted library');
+            details = <td>{item.repo_name}</td>;
+            break;
+          case 'recover':
+            op = gettext('Restored library');
+            details = <td>{libLink}</td>;
+            break;
+          case 'clean-up-trash':
+            if (item.days == 0) {
+              op = gettext('Removed all items from trash.');
+            } else {
+              op = gettext('Removed items older than {n} days from trash.').replace('{n}', item.days);
+            }
+            details = <td>{libLink}</td>;
+            break;
         }
       } else if (item.obj_type == 'review') {
         let fileURL = `${siteRoot}drafts/review/${item.review_id}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
         switch(item.op_type) {
-        case 'open':
-          op = gettext('Open review');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
-        case 'closed':
-          op = gettext('Close review');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
-        case 'finished':
-          op = gettext('Publish draft');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
+          case 'open':
+            op = gettext('Open review');
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
+            break;
+          case 'closed':
+            op = gettext('Close review');
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
+            break;
+          case 'finished':
+            op = gettext('Publish draft');
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
+            break;
         }
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
         switch(item.op_type) {
-        case 'create':
-          if (item.name.endsWith("(draft).md")) {
-            op = gettext('Created draft');
+          case 'create':
+            if (item.name.endsWith("(draft).md")) {
+              op = gettext('Created draft');
+              details = <td>{fileLink}<br />{smallLibLink}</td>;
+              break;
+            }
+            op = gettext('Created file');
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
-          }
-          op = gettext('Created file');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
-        case 'delete':
-          if (item.name.endsWith("(draft).md")) {
-            op = gettext('Deleted draft');
+          case 'delete':
+            if (item.name.endsWith("(draft).md")) {
+              op = gettext('Deleted draft');
+              details = <td>{item.name}<br />{smallLibLink}</td>;
+              break;
+            }
+            op = gettext('Deleted file');
             details = <td>{item.name}<br />{smallLibLink}</td>;
             break;
-          }
-          op = gettext('Deleted file');
-          details = <td>{item.name}<br />{smallLibLink}</td>;
-          break;
-        case 'recover':
-          op = gettext('Restored file');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
-        case 'rename':
-          op = gettext('Renamed file');
-          details = <td>{item.old_name} => {fileLink}<br />{smallLibLink}</td>;
-          break;
-        case 'move':
-          var filePathLink = <a href={fileURL}>{item.path}</a>;
-          op = gettext('Moved file');
-          details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
-          break;
-        case 'edit': // update
-          if (item.name.endsWith("(draft).md")) {
-            op = gettext('Updated draft');
+          case 'recover':
+            op = gettext('Restored file');
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
+            break;
+          case 'rename':
+            op = gettext('Renamed file');
+            details = <td>{item.old_name} => {fileLink}<br />{smallLibLink}</td>;
+            break;
+          case 'move':
+            var filePathLink = <a href={fileURL}>{item.path}</a>;
+            op = gettext('Moved file');
+            details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
+            break;
+          case 'edit': // update
+            if (item.name.endsWith("(draft).md")) {
+              op = gettext('Updated draft');
+              details = <td>{fileLink}<br />{smallLibLink}</td>;
+              break;
+            }
+            op = gettext('Updated file');
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
           }
-          op = gettext('Updated file');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
-        }
-      } else { // dir
-        let dirURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + Utils.encodePath(item.path);
-        let dirLink = <a href={dirURL}>{item.name}</a>;
-        switch(item.op_type) {
-        case 'create':
-          op = gettext('Created folder');
-          details = <td>{dirLink}<br />{smallLibLink}</td>;
-          break;
-        case 'delete':
-          op = gettext('Deleted folder');
-          details = <td>{item.name}<br />{smallLibLink}</td>;
-          break;
-        case 'recover':
-          op = gettext('Restored folder');
-          details = <td>{dirLink}<br />{smallLibLink}</td>;
-          break;
-        case 'rename':
-          op = gettext('Renamed folder');
-          details = <td>{item.old_name} => {dirLink}<br />{smallLibLink}</td>;
-          break;
-        case 'move':
-          var dirPathLink = <a href={dirURL}>{item.path}</a>;
-          op = gettext('Moved folder');
-          details = <td>{item.old_path} => {dirPathLink}<br />{smallLibLink}</td>;
-          break;
+        } else { // dir
+          let dirURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + Utils.encodePath(item.path);
+          let dirLink = <a href={dirURL}>{item.name}</a>;
+          switch(item.op_type) {
+          case 'create':
+            op = gettext('Created folder');
+            details = <td>{dirLink}<br />{smallLibLink}</td>;
+            break;
+          case 'delete':
+            op = gettext('Deleted folder');
+            details = <td>{item.name}<br />{smallLibLink}</td>;
+            break;
+          case 'recover':
+            op = gettext('Restored folder');
+            details = <td>{dirLink}<br />{smallLibLink}</td>;
+            break;
+          case 'rename':
+            op = gettext('Renamed folder');
+            details = <td>{item.old_name} => {dirLink}<br />{smallLibLink}</td>;
+            break;
+          case 'move':
+            var dirPathLink = <a href={dirURL}>{item.path}</a>;
+            op = gettext('Moved folder');
+            details = <td>{item.old_path} => {dirPathLink}<br />{smallLibLink}</td>;
+            break;
         }
       }
 

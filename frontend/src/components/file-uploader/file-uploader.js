@@ -501,26 +501,24 @@ class FileUploader extends React.Component {
             <input className="upload-input" type="file" ref={this.uploadInput} onClick={this.onClick}/>
           </div>
         </div>
-          {
-            this.state.isUploadRemindDialogShow &&
-            <UploadRemindDialog
-              currentResumableFile={this.state.currentResumableFile}
-              replaceRepetitionFile={this.replaceRepetitionFile}
-              uploadFile={this.uploadFile}
-              cancelFileUpload={this.cancelFileUpload}
-            />
-          }
-          {
-            this.state.isUploadProgressDialogShow &&
-            <UploadProgressDialog
-              uploadFileList={this.state.uploadFileList}
-              totalProgress={this.state.totalProgress}
-              onCloseUploadDialog={this.onCloseUploadDialog}
-              onCancelAllUploading={this.onCancelAllUploading}
-              onUploadCancel={this.onUploadCancel}
-              uploadBitrate={this.state.uploadBitrate}
-            />
-          }
+        {this.state.isUploadRemindDialogShow &&
+          <UploadRemindDialog
+            currentResumableFile={this.state.currentResumableFile}
+            replaceRepetitionFile={this.replaceRepetitionFile}
+            uploadFile={this.uploadFile}
+            cancelFileUpload={this.cancelFileUpload}
+          />
+        }
+        {this.state.isUploadProgressDialogShow &&
+          <UploadProgressDialog
+            uploadFileList={this.state.uploadFileList}
+            totalProgress={this.state.totalProgress}
+            onCloseUploadDialog={this.onCloseUploadDialog}
+            onCancelAllUploading={this.onCancelAllUploading}
+            onUploadCancel={this.onUploadCancel}
+            uploadBitrate={this.state.uploadBitrate}
+          />
+        }
       </Fragment>
     );
   }

@@ -126,12 +126,13 @@ class SharedFileViewMarkdown extends React.Component {
           </div>
           <div className="shared-file-view-body">
             <div className="md-view">
-              <MarkdownViewer markdownContent={this.state.markdownContent}
-                              showTOC={false}
-                              serviceURL={serviceURL}
-                              sharedToken={sharedToken}
-                              repoID={repoID}
-                              modifyValueBeforeRender={this.modifyValueBeforeRender}
+              <MarkdownViewer 
+                markdownContent={this.state.markdownContent}
+                showTOC={false}
+                serviceURL={serviceURL}
+                sharedToken={sharedToken}
+                repoID={repoID}
+                modifyValueBeforeRender={this.modifyValueBeforeRender}
               />
             </div>
           </div>
