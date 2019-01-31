@@ -60,7 +60,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.drafts.models import Draft
 from seahub.drafts.utils import get_file_draft_and_related_review, \
     is_draft_file, has_draft_file
-from seahub.signals import (repo_created, repo_deleted)
+from seahub.signals import (repo_created, repo_deleted, repo_transfer)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
@@ -1638,6 +1638,14 @@ class RepoOwner(APIView):
                         repo_id, pub_repo.permission)
 
             break
+
+        # send a signal when successfully transfered repo
+        try:
+            repo_transfer.send(sender=None, org_id=org_id,
+                    repo_owner=repo_owner, to_user=new_owner, repo_id=repo_id,
+                    repo_name=repo.name)
+        except Exception as e:
+            logger.error(e)
 
         return HttpResponse(json.dumps({'success': True}),
                 content_type=json_content_type)
