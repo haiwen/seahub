@@ -36,7 +36,7 @@ class RepoSetPassword(APIView):
         """
 
         # argument check
-        password = request.POST.get('password', None)
+        password = request.data.get('password', None)
         if not password:
             error_msg = 'password invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -86,7 +86,7 @@ class RepoSetPassword(APIView):
         """
 
         # argument check
-        operation = request.POST.get('operation', 'change-password')
+        operation = request.data.get('operation', 'change-password')
         operation = operation.lower()
         if operation not in ('change-password', 'reset-password', 'can-reset-password'):
             error_msg = 'operation invalid.'
@@ -110,12 +110,12 @@ class RepoSetPassword(APIView):
 
         if operation == 'change-password':
 
-            old_password = request.POST.get('old_password', None)
+            old_password = request.data.get('old_password', None)
             if not old_password:
                 error_msg = 'old_password invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            new_password = request.POST.get('new_password', None)
+            new_password = request.data.get('new_password', None)
             if not new_password:
                 error_msg = 'new_password invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -150,7 +150,7 @@ class RepoSetPassword(APIView):
                 error_msg = 'Feature disabled.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            new_password = request.POST.get('new_password', None)
+            new_password = request.data.get('new_password', None)
             if not new_password:
                 error_msg = 'new_password invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
