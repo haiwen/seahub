@@ -6,6 +6,7 @@ import TableBody from './table-body';
 import ModalPortal from '../../components/modal-portal';
 import LibHistorySetting from '../../components/dialog/lib-history-setting-dialog';
 import TransferDialog from '../../components/dialog/transfer-dialog';
+import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 
 const propTypes = {
@@ -29,6 +30,7 @@ class Content extends Component {
     this.state = {
       deleteItemPopupOpen: false,
       showTransfer: false,
+      showResetEncryptedRepoPassword: false,
       itemName: '',
       showHistorySetting: false,
       showDetails: false,
@@ -66,6 +68,14 @@ class Content extends Component {
       libID: itemID
     });
   } 
+
+  onResetEncryptedRepoPassword = (itemName, itemID) => {
+    this.setState({
+      showResetEncryptedRepoPassword: !this.state.showResetEncryptedRepoPassword,
+      itemName: itemName,
+      libID: itemID
+    });
+  }
 
   sortByName = (e) => {
     e.preventDefault();
@@ -143,6 +153,7 @@ class Content extends Component {
             onTransfer={this.onTransfer}
             showDeleteItemPopup={this.showDeleteItemPopup}
             onHistorySetting={this.onHistorySetting}
+            onResetEncryptedRepoPassword={this.onResetEncryptedRepoPassword}
           />
         </table>
       );
@@ -174,6 +185,15 @@ class Content extends Component {
                 toggleDialog={this.onHistorySetting} 
                 itemName={this.state.itemName}
                 repoID={this.state.libID}
+              />
+            </ModalPortal>
+          }
+          {this.state.showResetEncryptedRepoPassword &&
+            <ModalPortal>
+              <ResetEncryptedRepoPasswordDialog
+                repoID={this.state.libID}
+                itemName={this.state.itemName}
+                toggleDialog={this.onResetEncryptedRepoPassword}
               />
             </ModalPortal>
           }

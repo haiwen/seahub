@@ -157,7 +157,7 @@ class RepoSetPassword(APIView):
 
             secret_key =  RepoSecretKey.objects.get_secret_key(repo_id)
             if not secret_key:
-                error_msg = 'repo_id invalid.'
+                error_msg = _(u"Can not reset this library's password.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             try:
