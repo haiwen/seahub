@@ -122,9 +122,9 @@ class Content extends Component {
           <tr>
             <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="76%">
-              {gettext("Sort:")}
-              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext("name")} {sortByName && sortIcon}</a>
-              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext("last update")} {sortByTime && sortIcon}</a>
+              {gettext('Sort:')}
+              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext('name')} {sortByName && sortIcon}</a>
+              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext('last update')} {sortByTime && sortIcon}</a>
             </th>
             <th width="6%"><span className="sr-only">{gettext('Actions')}</span></th>
           </tr>

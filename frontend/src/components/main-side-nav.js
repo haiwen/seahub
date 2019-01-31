@@ -48,7 +48,7 @@ class MainSideNav extends React.Component {
       let groupList = res.data.map(item => {
         let group = new Group(item);
         return group;
-      })
+      });
 
       this.groupsHeight = (groupList.length + 1) * _this.listHeight;
       _this.setState({

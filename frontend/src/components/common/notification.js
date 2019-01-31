@@ -24,7 +24,7 @@ class Notification extends React.Component {
       this.setState({
         showNotice: false,
         unseenCount: 0
-      })
+      });
     } else {
       this.loadNotices();
       this.setState({showNotice: true});

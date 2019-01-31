@@ -141,7 +141,7 @@ class App extends Component {
         showName: 'Groups',
         name: 'groups',
         id: null,
-      }
+      };
       let navTab2 = {
         url: siteRoot + 'group/' + groupID + '/',
         showName: tabName,
@@ -220,7 +220,7 @@ class App extends Component {
               onSearchedClick={this.onSearchedClick}
               onTabNavClick={this.tabItemClick}
               onGroupChanged={this.onGroupChanged}
-              />
+            />
             <Wikis path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
             <PublicSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
           </Router>

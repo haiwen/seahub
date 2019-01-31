@@ -49,12 +49,12 @@ class Content extends Component {
       const desktopThead = (
         <thead>
           <tr>
-            <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
+            <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="38%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-            <th width="10%"><span className="sr-only">{gettext("Actions")}</span></th>
-            <th width="14%">{gettext("Size")}</th>
+            <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width="14%">{gettext('Size')}</th>
             <th width="18%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-            <th width="16%">{gettext("Owner")}</th>
+            <th width="16%">{gettext('Owner')}</th>
           </tr>
         </thead>
       );
@@ -62,13 +62,13 @@ class Content extends Component {
       const mobileThead = (
         <thead>
           <tr>
-            <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
+            <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="76%">
-              {gettext("Sort:")}
-              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext("name")} {sortByName && sortIcon}</a>
-              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext("last update")} {sortByTime && sortIcon}</a>
+              {gettext('Sort:')}
+              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext('name')} {sortByName && sortIcon}</a>
+              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext('last update')} {sortByTime && sortIcon}</a>
             </th>
-            <th width="6%"><span className="sr-only">{gettext("Actions")}</span></th>
+            <th width="6%"><span className="sr-only">{gettext('Actions')}</span></th>
           </tr>
         </thead>
       );
@@ -198,9 +198,9 @@ class Item extends Component {
           <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link></td>
           <td>
             {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>
+              <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
             }
-            <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
+            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} onClick={this.leaveShare}></a>
           </td>
           <td>{data.size}</td>
           <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
@@ -236,7 +236,7 @@ class Item extends Component {
           </td>
           <td>
             {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>
+              <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
             }
             <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
           </td>
@@ -294,20 +294,20 @@ class SharedLibraries extends Component {
         if (error.response.status == 403) {
           this.setState({
             loading: false,
-            errorMsg: gettext("Permission denied")
+            errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,
-            errorMsg: gettext("Error")
+            errorMsg: gettext('Error')
           });
         }
 
       } else {
         this.setState({
           loading: false,
-          errorMsg: gettext("Please check the network.")
+          errorMsg: gettext('Please check the network.')
         });
       }
     });
@@ -326,7 +326,7 @@ class SharedLibraries extends Component {
       <div className="main-panel-center">
         <div className="cur-view-container">
           <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext("Shared with me")}</h3>
+            <h3 className="sf-heading">{gettext('Shared with me')}</h3>
           </div>
           <div className="cur-view-content">
             <Content

@@ -316,7 +316,7 @@ class DirentListItem extends React.Component {
 
   onTagTooltipToggle = (e) => {
     e.stopPropagation();
-    this.setState({isShowTagTooltip: !this.state.isShowTagTooltip})
+    this.setState({isShowTagTooltip: !this.state.isShowTagTooltip});
   }
 
   render() {

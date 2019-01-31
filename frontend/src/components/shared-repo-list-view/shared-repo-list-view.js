@@ -84,12 +84,12 @@ class SharedRepoListView extends React.Component {
       <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
         <thead>
           <tr>
-            <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
+            <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="40%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-            <th width="12%"><span className="sr-only">{gettext("Actions")}</span></th>
-            <th width={'14%'}>{gettext("Size")}</th>
+            <th width="12%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width={'14%'}>{gettext('Size')}</th>
             <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-            <th width="16%">{gettext("Owner")}</th>
+            <th width="16%">{gettext('Owner')}</th>
           </tr>
         </thead>
         <tbody>
@@ -108,13 +108,13 @@ class SharedRepoListView extends React.Component {
       <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
         <thead>
           <tr>
-            <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
+            <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="68%">
-              {gettext("Sort:")}
-              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext("name")} {sortByName && sortIcon}</a>
-              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext("last update")} {sortByTime && sortIcon}</a>
+              {gettext('Sort:')}
+              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext('name')} {sortByName && sortIcon}</a>
+              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext('last update')} {sortByTime && sortIcon}</a>
             </th>
-            <th width="14%"><span className="sr-only">{gettext("Actions")}</span></th>
+            <th width="14%"><span className="sr-only">{gettext('Actions')}</span></th>
           </tr>
         </thead>
         <tbody>

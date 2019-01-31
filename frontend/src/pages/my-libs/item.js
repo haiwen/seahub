@@ -21,7 +21,7 @@ const propTypes = {
   onHistorySetting: PropTypes.func.isRequired,
   onRepoDetails: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired
-}
+};
 
 class Item extends Component {
 

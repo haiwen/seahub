@@ -109,7 +109,7 @@ class GenerateUploadLink extends React.Component {
   }
 
   deleteUploadLink = () => {
-    let sharedUploadInfo = this.state.sharedUploadInfo
+    let sharedUploadInfo = this.state.sharedUploadInfo;
     seafileAPI.deleteUploadLink(sharedUploadInfo.token).then(() => {
       this.setState({
         showPasswordInput: false,

@@ -6,7 +6,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-}
+};
 
 class DeleteRepoDialog extends Component {
 
@@ -27,17 +27,17 @@ class DeleteRepoDialog extends Component {
 
     const data = this.props.data;
     const repoName = data ? '<span class="sf-font">' + Utils.HTMLescape(data.repoName) + '</span>' : null;
-    let message = gettext("Are you sure you want to delete %s ?");
+    let message = gettext('Are you sure you want to delete %s ?');
     message = message.replace('%s', repoName);
     const popup = (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext("Delete Library")}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Delete Library')}</ModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{__html: message}}></p>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.clickYes}>{gettext("Delete")}</Button>
-          <Button color="secondary" onClick={this.toggle}>{gettext("Cancel")}</Button>
+          <Button color="primary" onClick={this.clickYes}>{gettext('Delete')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
     );

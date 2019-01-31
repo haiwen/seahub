@@ -141,7 +141,7 @@ class Wiki extends Component {
           {id: 'repo_updated', duration: 3600}
         );
       }
-    })
+    });
   }
 
   loadWikiData = () => {
@@ -495,7 +495,7 @@ class Wiki extends Component {
 
   onMoveItem = (destRepo, dirent, moveToDirentPath) => {
     //just for view list state
-    let dirName = dirent.name
+    let dirName = dirent.name;
     let direntPath = Utils.joinPath(this.state.path, dirName);
     seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, this.state.path, dirName).then(res => {
       let nodeName = res.data[0].obj_name;
@@ -720,7 +720,7 @@ class Wiki extends Component {
       // first: direntList.length === 0;
       // second: all the direntList's items are dir;
       // third: direntList has dir and file;
-      let length = direntList.length
+      let length = direntList.length;
       if (length === 0 || direntList[length - 1].type === 'dir') {
         direntList.push(item);
       } else {
@@ -820,7 +820,7 @@ class Wiki extends Component {
           treeData: tree,
           currentNode: node
         });
-      })
+      });
     } else {
       let parentNode = tree.getNodeByPath(node.parentNode.path);
       parentNode.isExpanded = true;
@@ -946,7 +946,7 @@ class Wiki extends Component {
     if (repoID !== moveToRepo.repo_id) {
       let tree = treeHelper.deleteNodeByPath(this.state.treeData, nodePath);
       this.setState({treeData: tree});
-      return
+      return;
     }
     let tree = treeHelper.moveNodeByPath(this.state.treeData, nodePath, moveToPath, nodeName);
     this.setState({treeData: tree});
@@ -1026,7 +1026,7 @@ class Wiki extends Component {
       sortBy: sortBy,
       sortOrder: sortOrder,
       items: Utils.sortDirents(this.state.direntList, sortBy, sortOrder)
-    })
+    });
   }
 
   render() {
@@ -1039,7 +1039,7 @@ class Wiki extends Component {
             onLibDecryptDialog={this.onLibDecryptDialog}
           />
         </ModalPortal>
-      )
+      );
     }
 
     let showShareBtn = false,

@@ -27,7 +27,7 @@ class ListRepoReviewsDialog extends React.Component {
       let reviews = res.data.reviews.map(item =>{
         let review = new Review(item);
         return review;
-      })
+      });
       this.setState({
         reviews: reviews 
       }); 

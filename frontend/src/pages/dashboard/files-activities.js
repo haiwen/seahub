@@ -101,7 +101,7 @@ class TableBody extends Component {
         let fileLink = <a href={fileURL}>{item.name}</a>;
         switch(item.op_type) {
           case 'create':
-            if (item.name.endsWith("(draft).md")) {
+            if (item.name.endsWith('(draft).md')) {
               op = gettext('Created draft');
               details = <td>{fileLink}<br />{smallLibLink}</td>;
               break;
@@ -110,7 +110,7 @@ class TableBody extends Component {
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
           case 'delete':
-            if (item.name.endsWith("(draft).md")) {
+            if (item.name.endsWith('(draft).md')) {
               op = gettext('Deleted draft');
               details = <td>{item.name}<br />{smallLibLink}</td>;
               break;
@@ -132,7 +132,7 @@ class TableBody extends Component {
             details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
             break;
           case 'edit': // update
-            if (item.name.endsWith("(draft).md")) {
+            if (item.name.endsWith('(draft).md')) {
               op = gettext('Updated draft');
               details = <td>{fileLink}<br />{smallLibLink}</td>;
               break;
@@ -140,11 +140,11 @@ class TableBody extends Component {
             op = gettext('Updated file');
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
-          }
-        } else { // dir
-          let dirURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + Utils.encodePath(item.path);
-          let dirLink = <a href={dirURL}>{item.name}</a>;
-          switch(item.op_type) {
+        }
+      } else { // dir
+        let dirURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + Utils.encodePath(item.path);
+        let dirLink = <a href={dirURL}>{item.name}</a>;
+        switch(item.op_type) {
           case 'create':
             op = gettext('Created folder');
             details = <td>{dirLink}<br />{smallLibLink}</td>;
@@ -172,7 +172,7 @@ class TableBody extends Component {
       let isShowDate = true;
       if (index > 0) {
         let lastEventTime = this.props.items[index - 1].time;
-        isShowDate = moment(item.time).isSame(lastEventTime, 'day') ? false : true
+        isShowDate = moment(item.time).isSame(lastEventTime, 'day') ? false : true;
       }
 
       return (
@@ -245,7 +245,7 @@ class FilesActivities extends Component {
 
   filterSuperfluousEvents = (events) => {
     events.map((item) => {
-      if (item.op_type === "finished") {
+      if (item.op_type === 'finished') {
         this.curPathList.push(item.path);
         this.oldPathList.push(item.old_path);
       }

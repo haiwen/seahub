@@ -108,7 +108,7 @@ class TreeNode {
       isExpanded: this.isExpanded,
       parentNode: this.parentNode,
       children: children,
-    }
+    };
 
     return treeNode;
   }

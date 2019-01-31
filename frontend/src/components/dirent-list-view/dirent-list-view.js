@@ -143,7 +143,7 @@ class DirentListView extends React.Component {
         'url': `${siteRoot}lib/${repoID}/file${path}`,
         'src': src
       };
-    }
+    };
 
     return items.map((item) => { return prepareItem(item); });
   }
@@ -227,9 +227,9 @@ class DirentListView extends React.Component {
     const imageItemsLength = imageItems.length;
     const imageCaption = imageItemsLength && (
       <Fragment>
-        <span>{gettext("%curr% of %total%").replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
+        <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
         <br />
-        <a href={imageItems[imageIndex].url} target="_blank">{gettext("Open in New Tab")}</a>
+        <a href={imageItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
       </Fragment>
     );
 
@@ -299,9 +299,9 @@ class DirentListView extends React.Component {
             onMoveNextRequest={this.moveToNextImage}
             imagePadding={70}
             imageLoadErrorMessage={gettext('The image could not be loaded.')}
-            prevLabel={gettext("Previous (Left arrow key)")}
-            nextLabel={gettext("Next (Right arrow key)")}
-            closeLabel={gettext("Close (Esc)")}
+            prevLabel={gettext('Previous (Left arrow key)')}
+            nextLabel={gettext('Next (Right arrow key)')}
+            closeLabel={gettext('Close (Esc)')}
             zoomInLabel={gettext('Zoom in')}
             zoomOutLabel={gettext('Zoom out')}
           />

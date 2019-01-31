@@ -55,7 +55,7 @@ class SharedFileViewMarkdown extends React.Component {
         loading: false
       });
     });
-    if (trafficOverLimit == "True") {
+    if (trafficOverLimit == 'True') {
       toaster.danger(gettext('File download is disabled: the share link traffic of owner is used up.'), {
         duration: 3
       });
@@ -91,7 +91,7 @@ class SharedFileViewMarkdown extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <Loading />
+      return <Loading />;
     }
     return (
       <div className="shared-file-view-md">
@@ -116,7 +116,7 @@ class SharedFileViewMarkdown extends React.Component {
                     onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
                   </Button>
                 }{' '}
-                {(trafficOverLimit === "False") &&
+                {(trafficOverLimit === 'False') &&
                   <Button color="success" className="shared-file-op-btn">
                     <a href="?dl=1">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
                   </Button>
@@ -153,9 +153,9 @@ class SharedFileViewMarkdown extends React.Component {
 if (enableWatermark) {
   let watermark_txt;
   if (loginUser) {
-    watermark_txt = siteName + "  " + loginUser;
+    watermark_txt = siteName + '  ' + loginUser;
   } else {
-    watermark_txt = gettext("Anonymous User");
+    watermark_txt = gettext('Anonymous User');
   }
   watermark.init({
     watermark_txt: watermark_txt,

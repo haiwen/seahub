@@ -178,7 +178,7 @@ class SharedRepoListItem extends React.Component {
           if (folderPermEnabled) {
             operations = ['Rename', 'Folder Permission', 'Details'];
           } else {
-            operations = ['Rename', 'Details']
+            operations = ['Rename', 'Details'];
           }
         } else {
           operations.push('Unshare');
@@ -252,8 +252,8 @@ class SharedRepoListItem extends React.Component {
       // scene two: (share, unshare), (share), (unshare)
       operations = this.generatorOperations();
     }
-    const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext("Share")} onClick={this.onItemShare}></a>;
-    const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext("Unshare")} onClick={this.onItemUnshare}></a>
+    const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></a>;
+    const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
     const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
     
     if (this.isDeparementOnwerGroupMember) {
@@ -272,7 +272,7 @@ class SharedRepoListItem extends React.Component {
             />
             <DropdownMenu>
               {operations.map((item, index) => {
-                return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateMenuItem(item)}</DropdownItem>
+                return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateMenuItem(item)}</DropdownItem>;
               })}
             </DropdownMenu>
           </Dropdown>

@@ -224,7 +224,7 @@ class ShareToGroup extends React.Component {
     if (this.props.isGroupOwnedRepo) {
       seafileAPI.modifyGroupOwnedRepoGroupSharedPermission(repoID, permission, groupID).then(() => {
         this.updateSharedItems(item, permission);
-      })
+      });
     } else {
       seafileAPI.updateShareToGroupItemPermission(repoID, path, 'group', groupID, permission).then(() => {
         this.updateSharedItems(item, permission);

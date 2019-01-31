@@ -11,7 +11,7 @@ const shareRepoListItemProps = {
   repo: PropTypes.object.isRequired,
   onRepoSelect: PropTypes.func.isRequired,
   onPermissionChange: PropTypes.func.isRequired,
-}
+};
 
 class ShareRepoListItem extends React.Component {
 
@@ -102,7 +102,7 @@ class ShareRepoDialog extends React.Component {
 
   handleSubmit = () => {
     if (this.state.selectedRepoList.length === 0) {
-      let errMessage = gettext('Please select a library to share.')
+      let errMessage = gettext('Please select a library to share.');
       this.setState({errMessage: errMessage});
       return;
     }

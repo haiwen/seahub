@@ -26,6 +26,7 @@ const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onGroupChanged: PropTypes.func.isRequired,
+  onTabNavClick: PropTypes.func.isRequired,
   groupID: PropTypes.string,
 };
 
@@ -90,19 +91,19 @@ class GroupView extends React.Component {
         if (error.response.status == 403) {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Permission denied")
+            errMessage: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Error")
+            errMessage: gettext('Error')
           });
         }
       } else {
         this.setState({
           isLoading: false,
-          errMessage: gettext("Please check the network.")
+          errMessage: gettext('Please check the network.')
         });
       }
     });
@@ -124,19 +125,19 @@ class GroupView extends React.Component {
         if (error.response.status == 403) {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Permission denied")
+            errMessage: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
-            errMessage: gettext("Error")
+            errMessage: gettext('Error')
           });
         }
       } else {
         this.setState({
           isLoading: false,
-          errMessage: gettext("Please check the network.")
+          errMessage: gettext('Please check the network.')
         });
       }
     });
@@ -346,11 +347,11 @@ class GroupView extends React.Component {
               {currentGroup && (
                 <Fragment>
                   <div className="path-container">
-                    <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext("Groups")}</Link>
+                    <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext('Groups')}</Link>
                     <span className="path-split">/</span>
                     <span>{currentGroup.name}</span>
                     {currentGroup.parent_group_id !== 0 && (
-                      <span className="department-group-icon fas fa-building" title={gettext("This is a special group representing a department.")}></span>
+                      <span className="department-group-icon fas fa-building" title={gettext('This is a special group representing a department.')}></span>
                     )}
                   </div>
                   <div className="path-tool">

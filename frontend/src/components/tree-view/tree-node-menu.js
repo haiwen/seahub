@@ -17,7 +17,7 @@ class TreeNodeMenu extends React.Component {
     this.state = {
       isItemMenuShow: false,
       menuList: []
-    }
+    };
   }
 
   componentDidMount() {
@@ -67,7 +67,7 @@ class TreeNodeMenu extends React.Component {
     this.setState(
       {isItemMenuShow: !this.state.isItemMenuShow }, () => {
         if (this.state.isItemMenuShow) {
-          this.props.onFreezedItem()
+          this.props.onFreezedItem();
         } else {
           this.props.onUnFreezedItem();
         }

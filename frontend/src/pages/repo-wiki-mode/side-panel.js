@@ -5,7 +5,6 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import TreeView from '../../components/tree-view/tree-view';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
-import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
@@ -197,8 +196,8 @@ class SidePanel extends Component {
                 onMenuItemClick={this.onMenuItemClick}
                 onFreezedItem={this.onFreezedItem}
                 onUnFreezedItem={this.onUnFreezedItem}
-              />
-            )}
+              />)
+            }
           </div>
         </div>
         {this.state.isAddFolderDialogShow && (
@@ -229,7 +228,7 @@ class SidePanel extends Component {
               onRename={this.onRenameNode}
               checkDuplicatedName={this.checkDuplicatedName}
               toggleCancel={this.onRenameToggle}
-              />
+            />
           </ModalPortal>
         )}
         {this.state.isDeleteDialogShow && (
