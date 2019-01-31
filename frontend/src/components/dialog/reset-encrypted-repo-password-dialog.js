@@ -7,7 +7,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  itemName: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
 };
 
@@ -24,7 +23,7 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
   onResetEncryptedRepoPasswordSubmit = () => {
     seafileAPI.resetEncryptedRepoPassword(this.props.repoID, this.state.newPassword).then((res) => {
       this.props.toggleDialog();
-      toaster.success('Successfully reset password.');
+      toaster.success(gettext('Successfully reset password.'));
     }).catch((error) => {
       if (error.response) {
         this.setState({
@@ -42,7 +41,7 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Please input new password')}</ModalHeader>
+        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Reset library password')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

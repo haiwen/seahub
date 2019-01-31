@@ -192,7 +192,6 @@ class Content extends Component {
             <ModalPortal>
               <ResetEncryptedRepoPasswordDialog
                 repoID={this.state.libID}
-                itemName={this.state.itemName}
                 toggleDialog={this.onResetEncryptedRepoPassword}
               />
             </ModalPortal>

@@ -152,9 +152,9 @@ class Item extends Component {
   }
 
   resetEncryptedRepoPassword = () => {
-    const itemName = this.props.data.repo_name;
-    const itemID = this.props.data.repo_id;
-    this.props.onResetEncryptedRepoPassword(itemName, itemID);
+    const repoName = this.props.data.repo_name;
+    const repoID = this.props.data.repo_id;
+    this.props.onResetEncryptedRepoPassword(repoName, repoID);
   }
 
   folderPerm = () => {
@@ -178,7 +178,7 @@ class Item extends Component {
 
   render() {
     const data = this.props.data;
-    const showResetPasswordButton = data.encrypted && enableResetEncryptedRepoPassword;
+    const showResetPasswordMenuItem = data.encrypted && enableResetEncryptedRepoPassword;
 
     data.icon_url = Utils.getLibIconUrl(data); 
     data.icon_title = Utils.getLibIconTitle(data);
@@ -208,7 +208,7 @@ class Item extends Component {
         <DropdownItem onClick={this.transfer}>{gettext('Transfer')}</DropdownItem>
         <DropdownItem onClick={this.historySetting}>{gettext('History Setting')}</DropdownItem>
         {data.encrypted ? <DropdownItem onClick={this.changePassword}>{gettext('Change Password')}</DropdownItem> : ''}
-        {showResetPasswordButton ? <DropdownItem onClick={this.resetEncryptedRepoPassword}>{gettext('Reset Password')}</DropdownItem> : ''}
+        {showResetPasswordMenuItem ? <DropdownItem onClick={this.resetEncryptedRepoPassword}>{gettext('Reset Password')}</DropdownItem> : ''}
         {folderPermEnabled ? <DropdownItem onClick={this.folderPerm}>{gettext('Folder Permission')}</DropdownItem> : ''}
         <DropdownItem onClick={this.showDetails}>{gettext('Details')}</DropdownItem>
       </React.Fragment>
