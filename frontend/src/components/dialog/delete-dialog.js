@@ -29,8 +29,8 @@ class Delete extends React.Component {
           <p>{gettext('Are you sure to delete')}{' '}<b>{name}</b> ?</p>
         </ModalBody>
         <ModalFooter>
-          <Button outline color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button outline color="danger" onClick={this.props.handleSubmit}>{gettext('Delete')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.props.handleSubmit}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
     );
