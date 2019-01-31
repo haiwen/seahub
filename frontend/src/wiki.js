@@ -136,13 +136,15 @@ class Wiki extends Component {
         let dirent = new Dirent(item);
         return dirent;
       });
-      direntList = direntList.filter(item => {
-        if (item.type === 'dir') {
-          let name = item.name.toLowerCase();
-          return name !== 'drafts' && name !== 'images' && name !== 'downloads';
-        }
-        return true;
-      });
+      if (dirPath === '/') {
+        direntList = direntList.filter(item => {
+          if (item.type === 'dir') {
+            let name = item.name.toLowerCase();
+            return name !== 'drafts' && name !== 'images' && name !== 'downloads';
+          }
+          return true;
+        });
+      }
       direntList = Utils.sortDirents(direntList, 'name', 'asc');
       this.setState({
         path: dirPath,
