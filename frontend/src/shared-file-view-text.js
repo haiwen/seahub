@@ -13,14 +13,24 @@ import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/shared-file-view.css';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/css/css';
+import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/php/php';
+import 'codemirror/mode/sql/sql';
+import 'codemirror/mode/vue/vue';
+import 'codemirror/mode/xml/xml';
+import 'codemirror/mode/go/go';
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/htmlmixed/htmlmixed';
 
 const loginUser = window.app.pageOptions.name;
-const { trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, download, encoding, fileContent, sharedToken, fileEncodingList, err } = window.shared.pageOptions;
+const { trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, download, encoding, fileContent, sharedToken, fileEncodingList, err, fileext } = window.shared.pageOptions;
 const URL = require('url-parse');
 
 const options={
   lineNumbers: false,
-  mode: 'txt',
+  mode: Utils.chooseLanguage(fileext),
   extraKeys: {'Ctrl': 'autocomplete'},
   theme: 'default',
   autoMatchParens: true,
