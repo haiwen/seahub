@@ -129,6 +129,10 @@
   position: relative;
 }
 
+.markdown-viewer-render-content tr:nth-child(2n) {
+  background-color: #fff;
+}
+
 .review-comment-btn {
   position: absolute;
   top: -1000px;

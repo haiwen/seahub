@@ -27,7 +27,6 @@ import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/layout.css';
-import './css/initial-style.css';
 import './css/toolbar.css';
 import './css/draft-review.css';
 
@@ -841,7 +840,7 @@ class DraftReview extends React.Component {
           </div>
         </div>
         <div id="main" className="main" ref="main">
-          <div className="cur-view-container content-container"
+          <div className="cur-view-container"
             onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
             <div style={{width:(100-this.state.commentWidth)+'%'}}
               className='cur-view-content' ref="viewContent">
