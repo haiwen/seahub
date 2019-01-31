@@ -117,7 +117,7 @@ def guest_invitation_accepted_msg_to_json(invitation_id):
     return json.dumps({'invitation_id': invitation_id})
 
 def repo_transfer_msg_to_json(org_id, repo_owner, repo_id, repo_name):
-    """Encode file uploaded message to json string.
+    """Encode repo transfer message to json string.
     """
     return json.dumps({'org_id': org_id, 'repo_owner': repo_owner,
         'repo_id': repo_id, 'repo_name': repo_name})
@@ -336,7 +336,7 @@ class UserNotificationManager(models.Manager):
             to_user, MSG_TYPE_GUEST_INVITATION_ACCEPTED, detail)
 
     def add_repo_transfer_msg(self, to_user, detail):
-        """Nofity ``to_user`` that a guest has accpeted an invitation.
+        """Nofity ``to_user`` that a library has been transfered to him/her.
         """
         return self._add_user_notification(
             to_user, MSG_TYPE_REPO_TRANSFER, detail)
