@@ -16,7 +16,11 @@
             sharedBy: '{{ shared_by|email2nickname }}',
             siteName: '{{ site_name }}',
             enableWatermark: '{{ enable_watermark }}' == 'True',
-            download: '{{ permissions.can_download}}' == 'True',
+            download: '{{ permissions.can_download }}' == 'True',
+            fileEncodingList: '{{ file_encoding_list|escapejs }}',
+            encoding: '{{ encoding }}',
+            fileContent: '{{ file_content|escapejs }}',
+            err: '{{ err }}',
         }
     };
 </script>

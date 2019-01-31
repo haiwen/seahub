@@ -67,7 +67,8 @@
   overflow: auto;
 }
 
-.shared-file-view-body .txt-view .CodeMirror {
+.shared-file-view-body .txt-view .CodeMirror,
+.shared-file-view-body .txt-view .file-view-tip {
   height: auto;
   min-height: 400px;
   border: 1px solid #ccc;
@@ -76,6 +77,12 @@
   width: 816px;
   padding: 40px 96px;
   line-height: 1.5em;
+  background-color: #fff;
+}
+
+.shared-file-view-body .txt-view .file-view-tip {
+  min-height: 100px;
+  text-align: center;
 }
 
 .shared-file-view-body .txt-view .CodeMirror-scroll {
