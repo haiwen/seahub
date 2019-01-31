@@ -179,6 +179,14 @@ class DirentListView extends React.Component {
     });
   }
 
+  checkDuplicatedName = (newName) => {
+    let direntList = this.props.direntList;
+    let isDuplicated = direntList.some(object => {
+      return object.name === newName;
+    });
+    return isDuplicated;
+  }
+
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
 
@@ -199,6 +207,7 @@ class DirentListView extends React.Component {
                 parentPath={this.props.path}
                 fileType={this.state.fileType}
                 onAddFile={this.onAddFile}
+                checkDuplicatedName={this.checkDuplicatedName}
                 addFileCancel={this.onCreateFileToggle}
               />
             </ModalPortal>
