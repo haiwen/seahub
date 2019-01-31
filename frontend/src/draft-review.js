@@ -883,7 +883,7 @@ class DraftReview extends React.Component {
                       inResizing={this.state.inResizing}
                     />
                   </TabPane>
-                  { this.state.reviewStatus == 'finished'? '':
+                  {this.state.reviewStatus == 'finished' ? '' :
                     <TabPane tabId="history" className="history">
                       <HistoryList
                         activeItem={this.state.activeItem}

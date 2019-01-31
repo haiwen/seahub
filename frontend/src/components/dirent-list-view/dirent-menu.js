@@ -4,6 +4,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 
 const propTypes = {
+  dirent: PropTypes.object.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
