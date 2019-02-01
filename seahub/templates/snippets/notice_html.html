@@ -48,9 +48,11 @@
 
     {% elif notice.is_guest_invitation_accepted_msg %}
         <p class="brief">{{ notice.format_guest_invitation_accepted_msg|safe }}</p>
-        
-    {% endif %}
 
+    {% elif notice.is_repo_transfer_msg %}
+        <p class="brief">{{ notice.format_repo_transfer_msg|safe }}</p>
+
+    {% endif %}
         <p class="time">{{ notice.timestamp|translate_seahub_time }}</p>
     </li>
 {% endfor %}

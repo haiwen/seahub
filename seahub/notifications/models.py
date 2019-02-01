@@ -58,6 +58,7 @@ MSG_TYPE_REVIEW_COMMENT = 'review_comment'
 MSG_TYPE_UPDATE_REVIEW = 'update_review'
 MSG_TYPE_REQUEST_REVIEWER = 'request_reviewer'
 MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
+MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
@@ -114,6 +115,12 @@ def update_review_msg_to_json(review_id, from_user, to_user, status):
 
 def guest_invitation_accepted_msg_to_json(invitation_id):
     return json.dumps({'invitation_id': invitation_id})
+
+def repo_transfer_msg_to_json(org_id, repo_owner, repo_id, repo_name):
+    """Encode repo transfer message to json string.
+    """
+    return json.dumps({'org_id': org_id, 'repo_owner': repo_owner,
+        'repo_id': repo_id, 'repo_name': repo_name})
 
 def get_cache_key_of_unseen_notifications(username):
     return normalize_cache_key(username,
@@ -328,6 +335,12 @@ class UserNotificationManager(models.Manager):
         return self._add_user_notification(
             to_user, MSG_TYPE_GUEST_INVITATION_ACCEPTED, detail)
 
+    def add_repo_transfer_msg(self, to_user, detail):
+        """Nofity ``to_user`` that a library has been transfered to him/her.
+        """
+        return self._add_user_notification(
+            to_user, MSG_TYPE_REPO_TRANSFER, detail)
+
 
 class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
@@ -432,6 +445,9 @@ class UserNotification(models.Model):
     def is_guest_invitation_accepted_msg(self):
         return self.msg_type == MSG_TYPE_GUEST_INVITATION_ACCEPTED
 
+    def is_repo_transfer_msg(self):
+        return self.msg_type == MSG_TYPE_REPO_TRANSFER
+
     def group_message_detail_to_dict(self):
         """Parse group message detail, returns dict contains ``group_id`` and
         ``msg_from``.
@@ -510,6 +526,8 @@ class UserNotification(models.Model):
             return self.format_guest_invitation_accepted_msg()
         elif self.is_add_user_to_group():
             return self.format_add_user_to_group()
+        elif self.is_repo_transfer_msg():
+            return self.format_repo_transfer_msg()
         else:
             return ''
 
@@ -878,11 +896,34 @@ class UserNotification(models.Model):
         }
         return msg
 
+    def format_repo_transfer_msg(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
+        repo_owner_name = email2nickname(d['repo_owner'])
+        repo_id = d['repo_id']
+        repo_name = d['repo_name']
+        repo_url = reverse('lib_view', args=[repo_id, repo_name, ''])
+        msg = _('%(user)s has transfered a library named <a href="%(repo_url)s">%(repo_name)s</a> to you.') % {
+            'user': repo_owner_name,
+            'repo_url': repo_url,
+            'repo_name': repo_name,
+        }
+        return msg
+
 
 ########## handle signals
 from django.dispatch import receiver
 
-from seahub.signals import upload_file_successful, comment_file_successful
+from seahub.signals import upload_file_successful, comment_file_successful, repo_transfer
 from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful
@@ -1030,3 +1071,15 @@ def accept_guest_invitation_successful_cb(sender, **kwargs):
     detail = guest_invitation_accepted_msg_to_json(inv_obj.pk)
     UserNotification.objects.add_guest_invitation_accepted_msg(
         inv_obj.inviter, detail)
+
+@receiver(repo_transfer)
+def repo_transfer_cb(sender, **kwargs):
+
+    org_id = kwargs['org_id']
+    repo_owner = kwargs['repo_owner']
+    to_user = kwargs['to_user']
+    repo_id = kwargs['repo_id']
+    repo_name = kwargs['repo_name']
+
+    detail = repo_transfer_msg_to_json(org_id, repo_owner, repo_id, repo_name)
+    UserNotification.objects.add_repo_transfer_msg(to_user, detail)
