@@ -73,6 +73,7 @@
             enableRepoHistorySetting: '{{ enable_repo_history_setting }}',
             isSystemStaff: {% if request.user.is_staff %} true {% else %} false {% endif %},
             thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
+            repoPasswordMinLength: {{repo_password_min_length}},
         }
      };
 </script>
