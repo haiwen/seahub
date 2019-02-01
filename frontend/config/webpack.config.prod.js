@@ -66,6 +66,7 @@ module.exports = {
     draftReview: [require.resolve('./polyfills'), paths.appSrc + "/draft-review.js"],
     draw: [require.resolve('./polyfills'), paths.appSrc + "/draw/draw.js"],
     sharedFileViewMarkdown: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-markdown.js"],
+    sharedFileViewText: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-text.js"],
   },
 
   output: {

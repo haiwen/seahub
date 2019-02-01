@@ -666,4 +666,37 @@ export const Utils = {
     return nodes;
   },
 
+  chooseLanguage: function(suffix) {
+    let mode;
+    switch(suffix) {
+      case 'py':
+        mode = 'python';
+        break;
+      case 'js':
+        mode = 'javascript';
+        break;
+      case 'c':
+        mode = 'text/x-csrc';
+        break;
+      case 'cpp':
+        mode = 'text/x-c++src';
+        break;
+      case 'java':
+        mode = 'text/x-java';
+        break;
+      case 'cs':
+        mode = 'text/x-csharp';
+        break;
+      case 'mdf':
+        mode = 'text/x-sql';
+        break;
+      case 'html':
+        mode = 'htmlmixed';
+        break;
+      default:
+        mode = suffix;
+    }
+    return mode;
+  },
+
 };

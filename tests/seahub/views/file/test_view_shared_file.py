@@ -34,11 +34,8 @@ class ViewSharedFileTest(TestCase, Fixtures):
     def test_can_render(self):
         resp = self.client.get(reverse('view_shared_file', args=[self.fs.token]))
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'shared_file_view.html')
-
+        self.assertTemplateUsed(resp, 'shared_file_view_react.html')
         self.assertContains(resp, os.path.basename(self.file))
-        dl_url_tag = 'href="?dl=1"'
-        self.assertContains(resp, dl_url_tag)
 
     def test_can_download(self):
         dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?dl=1'
@@ -134,15 +131,13 @@ class ViewSharedFileTest(TestCase, Fixtures):
             'password': '12345678',
         })
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'shared_file_view.html')
+        self.assertTemplateUsed(resp, 'shared_file_view_react.html')
         self.assertContains(resp, os.path.basename(self.file))
-        dl_url_tag = 'href="?dl=1"'
-        self.assertContains(resp, dl_url_tag)
 
     def _assert_render_file_page_without_passwd(self, fs):
         resp = self.client.get(reverse('view_shared_file', args=[fs.token]))
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'shared_file_view.html')
+        self.assertTemplateUsed(resp, 'shared_file_view_react.html')
 
     def test_can_view_enc(self):
         self._assert_redirect_to_password_page(self.enc_fs)
