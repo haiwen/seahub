@@ -9,6 +9,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Rename from '../../components/rename';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
+import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
 
 const propTypes = {
   data: PropTypes.object.isRequired,
@@ -33,6 +34,7 @@ class Item extends Component {
       showChangeLibName: false, 
       isShowSharedDialog: false,
       highlight: false,
+      isChangeRepoPasswordDialogOpen: false
     };
   }
 
@@ -141,6 +143,11 @@ class Item extends Component {
   }
 
   changePassword = () => {
+    this.setState({isChangeRepoPasswordDialogOpen: true});
+  }
+
+  toggleChangePasswordDialog = () => {
+    this.setState({isChangeRepoPasswordDialogOpen: !this.state.isChangeRepoPasswordDialogOpen});
   }
 
   folderPerm = () => {
@@ -264,6 +271,15 @@ class Item extends Component {
             />
           </ModalPotal>
         )}
+        {this.state.isChangeRepoPasswordDialogOpen && (
+          <ModalPotal>
+            <ChangeRepoPasswordDialog
+              repoID={data.repo_id}
+              repoName={data.repo_name}
+              toggleDialog={this.toggleChangePasswordDialog}
+            />
+          </ModalPotal>
+        )}
       </Fragment>
     );
 
@@ -292,6 +308,15 @@ class Item extends Component {
               enableDirPrivateShare={true}
               userPerm={data.permission}
               toggleDialog={this.toggleShareDialog}
+            />
+          </ModalPotal>
+        )}
+        {this.state.isChangeRepoPasswordDialogOpen && (
+          <ModalPotal>
+            <ChangeRepoPasswordDialog
+              repoID={data.repo_id}
+              repoName={data.repo_name}
+              toggleDialog={this.toggleChangePasswordDialog}
             />
           </ModalPotal>
         )}

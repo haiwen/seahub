@@ -111,6 +111,10 @@ a:hover { color:#eb8205; }
     overflow:hidden;
     text-overflow:ellipsis;
 }
+.op-target {
+    color: #ee8204;
+    word-wrap: break-word;
+}
 .left-zero {
     left: 0px !important;
 }
