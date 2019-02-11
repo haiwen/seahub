@@ -243,8 +243,7 @@ class DirentListItem extends React.Component {
   onHistory = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
-    let referer = location.href;
-    let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath, referer: referer});
+    let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath});
     location.href = url;
   }
 

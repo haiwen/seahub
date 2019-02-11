@@ -35,6 +35,10 @@
   border: 1px solid #e6e6dd;
 }
 
+.markdown-viewer-render-content .diff-view {
+  padding: 40px 60px;
+}
+
 .panel-header {
   position: relative;
   padding: .5rem 0;

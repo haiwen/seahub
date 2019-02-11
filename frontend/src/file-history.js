@@ -40,10 +40,10 @@ class FileHistory extends React.Component {
     }
   }
 
-  setDiffContent = (newmarkdownContent, oldMarkdownContent)=> {
+  setDiffContent = (newMarkdownContent, oldMarkdownContent)=> {
     this.setState({
       renderingContent: false,
-      newmarkdownContent: newmarkdownContent,
+      newMarkdownContent: newMarkdownContent,
       oldMarkdownContent: oldMarkdownContent,
     });
   }
