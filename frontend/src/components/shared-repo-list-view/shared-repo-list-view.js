@@ -1,7 +1,9 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import SharedRepoListItem from './shared-repo-list-item';
+import toaster from '../toast';
 
 const propTypes = {
   libraryType: PropTypes.string,
@@ -14,6 +16,7 @@ const propTypes = {
   onItemUnshare: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func,
+  onItemRename: PropTypes.func,
 };
 
 class SharedRepoListView extends React.Component {
@@ -48,9 +51,24 @@ class SharedRepoListView extends React.Component {
   }
 
   onFreezedItem = () => {
-    this.setState({
-      isItemFreezed: !this.state.isItemFreezed,
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
+  }
+
+  onItemRename = (repo, newName) => {
+    let isDuplicated = this.props.repoList.some(item => {
+      return item.name === newName;
     });
+    if (isDuplicated) {
+      let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      toaster.danger(errMessage);
+      return false;
+    }
+    this.props.onItemRename(repo, newName);
   }
 
   renderRepoListView = () => {
@@ -65,9 +83,11 @@ class SharedRepoListView extends React.Component {
               currentGroup={this.props.currentGroup}
               isItemFreezed={this.state.isItemFreezed}
               onFreezedItem={this.onFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
               onItemDetails={this.props.onItemDetails}
+              onItemRename={this.props.onItemRename}
             />
           );
         })}

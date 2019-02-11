@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff } from '../../utils/constants';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
+import Rename from '../rename';
 
 const propTypes = {
   currentGroup: PropTypes.object,
@@ -14,8 +15,10 @@ const propTypes = {
   repo: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
   onItmeDetails: PropTypes.func,
+  onItemRename: PropTypes.func,
 };
 
 class SharedRepoListItem extends React.Component {
@@ -27,6 +30,7 @@ class SharedRepoListItem extends React.Component {
       isOperationShow: false,
       isItemMenuShow: false,
       isShowSharedDialog: false,
+      isRenaming: false,
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -59,23 +63,30 @@ class SharedRepoListItem extends React.Component {
   }
 
   clickOperationMenuToggle = (e) => {
-    e.preventDefault();
-    this.toggleOperationMenu();
+    this.toggleOperationMenu(e);
   }
 
-  toggleOperationMenu = () => {
-    if (this.props.isItemFreezed) {
-      this.setState({
-        highlight: false,
-        isOperationShow: false,
-        isItemMenuShow: !this.state.isItemMenuShow
-      });
-    } else {
-      this.setState({
-        isItemMenuShow: !this.state.isItemMenuShow
-      });
+  toggleOperationMenu = (e) => {
+    let dataset = e.target ? e.target.dataset : null;
+    if (dataset && dataset.toggle && dataset.toggle === 'Rename') {
+      this.setState({isItemMenuShow: !this.state.isItemMenuShow});
+      return;
     }
-    this.props.onFreezedItem();
+    
+    this.setState(
+      {isItemMenuShow: !this.state.isItemMenuShow},
+      () => {
+        if (this.state.isItemMenuShow) {
+          this.props.onFreezedItem();
+        } else {
+          this.props.onUnfreezedItem();
+          this.setState({
+            highlight: false,
+            isOperationShow: false,
+          });
+        }
+      }
+    );
   }
 
   getRepoComputeParams = () => {
@@ -92,7 +103,7 @@ class SharedRepoListItem extends React.Component {
     let operation = e.target.dataset.toggle;
     switch(operation) {
       case 'Rename':
-        this.onItemRename();
+        this.onItemRenameToggle();
         break;
       case 'Folder Permission':
         this.onItemPermisionChanged();
@@ -111,8 +122,22 @@ class SharedRepoListItem extends React.Component {
     }
   }
 
-  onItemRename = () => {
-    // todo
+  onItemRenameToggle = () => {
+    this.props.onFreezedItem();
+    this.setState({
+      isRenaming: !this.state.isRenaming,
+      isOperationShow: !this.state.isOperationShow
+    });
+  }
+
+  onRenameConfirm = (name) => {
+    this.props.onItemRename(this.props.repo, name);
+    this.onRenameCancel();
+  }
+  
+  onRenameCancel = () => {
+    this.props.onUnfreezedItem();
+    this.setState({isRenaming: !this.state.isRenaming});
   }
 
   onItemPermisionChanged = () => {
@@ -308,7 +333,12 @@ class SharedRepoListItem extends React.Component {
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
           <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
-          <td><Link to={libPath}>{repo.repo_name}</Link></td>
+          <td>
+            {this.state.isRenaming ? 
+              <Rename  name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> : 
+              <Link to={libPath}>{repo.repo_name}</Link>
+            }
+          </td>
           <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
           <td>{repo.size}</td>
           <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
@@ -343,7 +373,11 @@ class SharedRepoListItem extends React.Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
           <td><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
           <td>
-            <Link to={libPath}>{repo.repo_name}</Link><br />
+            {this.state.isRenaming ? 
+              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
+              <Link to={libPath}>{repo.repo_name}</Link>  
+            }
+            <br />
             <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
             <span className="item-meta-info">{repo.size}</span>
             <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
