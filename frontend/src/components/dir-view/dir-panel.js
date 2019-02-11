@@ -130,7 +130,7 @@ class DirPanel extends React.Component {
   }
 
   render() {
-    const errMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
+    const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     const showRepoInfoBar = this.props.path === '/' && (
                             this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null ||
                             this.props.draftCounts != 0 || this.props.reviewCounts != 0);
