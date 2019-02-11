@@ -51,7 +51,11 @@ class SharedRepoListView extends React.Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: !this.state.isItemFreezed});
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   onItemRename = (repo, newName) => {
@@ -79,6 +83,7 @@ class SharedRepoListView extends React.Component {
               currentGroup={this.props.currentGroup}
               isItemFreezed={this.state.isItemFreezed}
               onFreezedItem={this.onFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
               onItemDetails={this.props.onItemDetails}

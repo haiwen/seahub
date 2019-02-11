@@ -15,6 +15,7 @@ const propTypes = {
   repo: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
   onItmeDetails: PropTypes.func,
   onItemRename: PropTypes.func,
@@ -62,23 +63,30 @@ class SharedRepoListItem extends React.Component {
   }
 
   clickOperationMenuToggle = (e) => {
-    e.preventDefault();
-    this.toggleOperationMenu();
+    this.toggleOperationMenu(e);
   }
 
-  toggleOperationMenu = () => {
-    if (this.props.isItemFreezed) {
-      this.setState({
-        highlight: false,
-        isOperationShow: false,
-        isItemMenuShow: !this.state.isItemMenuShow
-      });
-    } else {
-      this.setState({
-        isItemMenuShow: !this.state.isItemMenuShow
-      });
+  toggleOperationMenu = (e) => {
+    let dataset = e.target ? e.target.dataset : null;
+    if (dataset && dataset.toggle && dataset.toggle === 'Rename') {
+      this.setState({isItemMenuShow: !this.state.isItemMenuShow});
+      return;
     }
-    this.props.onFreezedItem();
+    
+    this.setState(
+      {isItemMenuShow: !this.state.isItemMenuShow},
+      () => {
+        if (this.state.isItemMenuShow) {
+          this.props.onFreezedItem();
+        } else {
+          this.props.onUnfreezedItem();
+          this.setState({
+            highlight: false,
+            isOperationShow: false,
+          });
+        }
+      }
+    );
   }
 
   getRepoComputeParams = () => {
@@ -126,8 +134,9 @@ class SharedRepoListItem extends React.Component {
     this.props.onItemRename(this.props.repo, name);
     this.onRenameCancel();
   }
-
+  
   onRenameCancel = () => {
+    this.props.onUnfreezedItem();
     this.setState({isRenaming: !this.state.isRenaming});
   }
 
