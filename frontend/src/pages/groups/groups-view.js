@@ -57,6 +57,21 @@ class RepoListViewPanel extends React.Component {
       // todo;
     });
   }
+  
+  onItemRename = (repo, newName) => {
+    let group = this.props.group;
+    seafileAPI.renameGroupOwnedLibrary(group.id, repo.repo_id, newName).then(res => {
+      let repoList = this.state.repoList.map(item => {
+        if (item.repo_id === repo.repo_id) {
+          item.repo_name = newName;
+        }
+        return item;
+      });
+      this.setState({repoList: repoList});
+    }).catch(() => {
+      // todo
+    });
+  }
 
   render() {
     let group = this.props.group;
@@ -76,6 +91,7 @@ class RepoListViewPanel extends React.Component {
             onItemUnshare={this.onItemUnshare}
             onItemDelete={this.onItemDelete}
             onItemDetails={this.props.onItemDetails}
+            onItemRename={this.onItemRename}
           />
         }
       </div>

@@ -239,6 +239,20 @@ class GroupView extends React.Component {
     });
   }
 
+  onItemRename = (repo, newName) => {
+    seafileAPI.renameGroupOwnedLibrary(this.props.groupID, repo.repo_id, newName).then(res => {
+      let repoList = this.state.repoList.map(item => {
+        if (item.repo_id === repo.repo_id) {
+          item.repo_name = newName;
+        }
+        return item;
+      });
+      this.setState({repoList: repoList});
+    }).catch(() => {
+      // todo
+    });
+  }
+
   onTabNavClick = (tabName) => {
     this.props.onTabNavClick(tabName);
   }
@@ -436,6 +450,7 @@ class GroupView extends React.Component {
                   onItemUnshare={this.onItemUnshare}
                   onItemDelete={this.onItemDelete}
                   onItemDetails={this.onItemDetails}
+                  onItemRename={this.onItemRename}
                 />
               }
             </div>

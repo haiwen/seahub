@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff } from '../../utils/constants';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
+import Rename from '../rename';
 
 const propTypes = {
   currentGroup: PropTypes.object,
@@ -16,6 +17,7 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
   onItmeDetails: PropTypes.func,
+  onItemRename: PropTypes.func,
 };
 
 class SharedRepoListItem extends React.Component {
@@ -27,6 +29,7 @@ class SharedRepoListItem extends React.Component {
       isOperationShow: false,
       isItemMenuShow: false,
       isShowSharedDialog: false,
+      isRenaming: false,
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -92,7 +95,7 @@ class SharedRepoListItem extends React.Component {
     let operation = e.target.dataset.toggle;
     switch(operation) {
       case 'Rename':
-        this.onItemRename();
+        this.onItemRenameToggle();
         break;
       case 'Folder Permission':
         this.onItemPermisionChanged();
@@ -111,8 +114,21 @@ class SharedRepoListItem extends React.Component {
     }
   }
 
-  onItemRename = () => {
-    // todo
+  onItemRenameToggle = () => {
+    this.props.onFreezedItem();
+    this.setState({
+      isRenaming: !this.state.isRenaming,
+      isOperationShow: !this.state.isOperationShow
+    });
+  }
+
+  onRenameConfirm = (name) => {
+    this.props.onItemRename(this.props.repo, name);
+    this.onRenameCancel();
+  }
+
+  onRenameCancel = () => {
+    this.setState({isRenaming: !this.state.isRenaming});
   }
 
   onItemPermisionChanged = () => {
@@ -308,7 +324,12 @@ class SharedRepoListItem extends React.Component {
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
           <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
-          <td><Link to={libPath}>{repo.repo_name}</Link></td>
+          <td>
+            {this.state.isRenaming ? 
+              <Rename  name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> : 
+              <Link to={libPath}>{repo.repo_name}</Link>
+            }
+          </td>
           <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
           <td>{repo.size}</td>
           <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
