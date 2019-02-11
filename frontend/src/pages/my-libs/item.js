@@ -177,9 +177,9 @@ class Item extends Component {
     data.url = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'op-icon sf2-icon-share' + iconVisibility; 
-    let deleteIconClassName = 'op-icon sf2-icon-delete' + iconVisibility;
-    let operationMenuToggleIconClassName = 'sf-dropdown-toggle sf2-icon-caret-down'; 
+    let shareIconClassName = 'op-icon op-target-share' + iconVisibility; 
+    let deleteIconClassName = 'op-icon op-target-delete' + iconVisibility;
+    let operationMenuToggleIconClassName = 'sf-dropdown-toggle op-target-caret-down'; 
     if (window.innerWidth >= 768) {
       operationMenuToggleIconClassName += iconVisibility; 
     }

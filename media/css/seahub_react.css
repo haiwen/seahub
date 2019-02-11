@@ -2,7 +2,7 @@
  * CONTENTS
  *
  * Font Icons
- * sf2-icon-xx ...........seafile-font2
+ * op-target-xx ...........seafile-font2
  *
  *
  * Helper
@@ -31,7 +31,7 @@
  * file-tag
  * mobile-menu
  */
-/****** sf2-icon-xx ********/
+/****** op-target-xx ********/
 @font-face {
     font-family: 'seafile-font2';
     src:url('sf_font2/seafile-font2.eot');
@@ -42,8 +42,8 @@
     font-weight: normal;
     font-style: normal;
 }
-[class^="sf2-icon-"],
-[class*=" sf2-icon-"] {
+[class^="op-target-"],
+[class*=" op-target-"] {
     font-family: 'seafile-font2';
     speak: none;
     font-weight: normal;
@@ -52,46 +52,46 @@
     -webkit-font-smoothing: antialiased;
 }
 
-.sf2-icon-wrench:before { content:"\e001"; }
-.sf2-icon-clock:before { content:"\e002"; }
-.sf2-icon-bell:before { content:"\e003"; }
-.sf2-icon-delete:before { content:"\e006"; }
-.sf2-icon-monitor:before { content:"\e007"; }
-.sf2-icon-download:before { content:"\e008"; }
-.sf2-icon-group:before { content:"\e00c"; }
-.sf2-icon-link:before { content:"\e00e"; }
-.sf2-icon-user:before { content:"\e00f"; }
-.sf2-icon-organization:before { content:"\e010"; }
-.sf2-icon-share:before { content:"\e011"; }
-.sf2-icon-star:before { content:"\e012"; }
-.sf2-icon-wiki-view:before { content:"\e013"; }
-.sf2-icon-history:before { content:"\e014"; }
-.sf2-icon-cog1:before { content:"\e015"; }
-.sf2-icon-trash:before { content:"\e016"; }
-.sf2-icon-tick:before { content:"\e01e"; }
-.sf2-icon-x2:before { content:"\e01f"; }
-.sf2-icon-edit:before { content:"\e018"; }
-.sf2-icon-caret-down:before { content:"\e01a"; }
-.sf2-icon-x1:before { content:"\e01d"; }
-.sf2-icon-minus:before {content:"\e01c"}
-.sf2-icon-confirm:before {content:"\e01e"}
-.sf2-icon-cancel:before {content:"\e01f"}
-.sf2-icon-user2:before { content:"\e020"; }
-.sf2-icon-grid-view:before { content:"\e025"; }
-.sf2-icon-list-view:before { content:"\e026"; }
-.sf2-icon-plus:before { content: "\e027"; }
-.sf2-icon-copy:before {content:"\e028"}
-.sf2-icon-move:before {content:"\e029"}
-.sf2-icon-reply:before { content:"\e02a"; }
-.sf2-icon-menu:before { content: "\e031"; }
-.sf2-icon-more:before { content: "\e032"; }
-.sf2-icon-x3:before {content:"\e035";}
-.sf2-icon-close:before { content:"\e035"; }
-.sf2-icon-two-columns:before { content:"\e036"; }
-.sf2-icon-tag:before {content:"\e037"}
-.sf2-icon-review:before {content:"\e038"}
-.sf2-icon-readme:before {content:"\e039"}
-.sf2-icon-drafts:before {content:"\e03a"}
+.op-target-wrench:before { content:"\e001"; }
+.op-target-clock:before { content:"\e002"; }
+.op-target-bell:before { content:"\e003"; }
+.op-target-delete:before { content:"\e006"; }
+.op-target-monitor:before { content:"\e007"; }
+.op-target-download:before { content:"\e008"; }
+.op-target-group:before { content:"\e00c"; }
+.op-target-link:before { content:"\e00e"; }
+.op-target-user:before { content:"\e00f"; }
+.op-target-organization:before { content:"\e010"; }
+.op-target-share:before { content:"\e011"; }
+.op-target-star:before { content:"\e012"; }
+.op-target-wiki-view:before { content:"\e013"; }
+.op-target-history:before { content:"\e014"; }
+.op-target-cog1:before { content:"\e015"; }
+.op-target-trash:before { content:"\e016"; }
+.op-target-tick:before { content:"\e01e"; }
+.op-target-x2:before { content:"\e01f"; }
+.op-target-edit:before { content:"\e018"; }
+.op-target-caret-down:before { content:"\e01a"; }
+.op-target-x1:before { content:"\e01d"; }
+.op-target-minus:before {content:"\e01c"}
+.op-target-confirm:before {content:"\e01e"}
+.op-target-cancel:before {content:"\e01f"}
+.op-target-user2:before { content:"\e020"; }
+.op-target-grid-view:before { content:"\e025"; }
+.op-target-list-view:before { content:"\e026"; }
+.op-target-plus:before { content: "\e027"; }
+.op-target-copy:before {content:"\e028"}
+.op-target-move:before {content:"\e029"}
+.op-target-reply:before { content:"\e02a"; }
+.op-target-menu:before { content: "\e031"; }
+.op-target-more:before { content: "\e032"; }
+.op-target-x3:before {content:"\e035";}
+.op-target-close:before { content:"\e035"; }
+.op-target-two-columns:before { content:"\e036"; }
+.op-target-tag:before {content:"\e037"}
+.op-target-review:before {content:"\e038"}
+.op-target-readme:before {content:"\e039"}
+.op-target-drafts:before {content:"\e03a"}
 
 /* common class and element style*/
 a { color:#eb8205; }
@@ -448,7 +448,7 @@ ul,ol,li {
     background:#ddd;
 }
 
-#notifications .sf2-icon-bell {
+#notifications .op-target-bell {
     font-size:24px;
     line-height:1;
     color:#999;
@@ -561,12 +561,12 @@ ul,ol,li {
     font-weight: bold;
 }
 
-.side-nav-con .active [class^="sf2-icon-"],
+.side-nav-con .active [class^="op-target-"],
 .side-nav-con .active .sharp {
     color: #fff;
 }
 
-.side-nav-con [class^="sf2-icon-"] {
+.side-nav-con [class^="op-target-"] {
     display:inline-block;
     width:2.625rem;
     margin-right:0.325rem;
@@ -634,7 +634,7 @@ ul,ol,li {
     width: 100%;
     height: 100%;
 }
-#notifications .sf2-icon-bell {
+#notifications .op-target-bell {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -660,7 +660,7 @@ ul,ol,li {
     color: #322;
     font-weight: normal;
 }
-#notifications .sf2-icon-bell {
+#notifications .op-target-bell {
     font-size:24px;
     line-height:1;
     color:#999;

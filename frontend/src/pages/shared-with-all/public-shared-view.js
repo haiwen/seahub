@@ -167,7 +167,7 @@ class PublicSharedView extends React.Component {
       <Fragment>
         <div className="main-panel-north">
           <div className="cur-view-toolbar border-left-show">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+            <span className="op-target-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
               <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
                 <DropdownToggle className='btn btn-secondary operation-item'>

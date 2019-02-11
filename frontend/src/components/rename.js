@@ -93,8 +93,8 @@ class Rename extends React.Component {
           onKeyPress={this.onKeyPress} 
           onClick={this.onClick} 
         />
-        <button className="btn btn-secondary sf2-icon-confirm confirm" onClick={this.onRenameConfirm}></button>
-        <button className="btn btn-secondary sf2-icon-cancel cancel" onClick={this.onRenameCancel}></button>
+        <button className="btn btn-secondary op-target-confirm confirm" onClick={this.onRenameConfirm}></button>
+        <button className="btn btn-secondary op-target-cancel cancel" onClick={this.onRenameCancel}></button>
       </div>
     );
   }

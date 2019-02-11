@@ -799,7 +799,7 @@ class DraftReview extends React.Component {
         <div id="header" className="header review">
           <div className="cur-file-info">
             <div className="info-item file-feature">
-              <span className="sf2-icon-review"></span>
+              <span className="op-target-review"></span>
             </div>
             <div className="info-item file-info">
               <React.Fragment>

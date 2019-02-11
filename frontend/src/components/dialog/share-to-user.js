@@ -50,7 +50,7 @@ class UserItem extends React.Component {
         </td>
         <td>
           <span
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`op-target-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteShareItem} 
             title={gettext('Delete')}
           >

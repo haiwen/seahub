@@ -170,7 +170,7 @@ class MainPanel extends Component {
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-north">
           <div className="cur-view-toolbar border-left-show">
-            <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
+            <span className="op-target-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
             <div className="dir-operation">
               {this.props.isDirentSelected ?
                 <MutipleDirOperationToolbar

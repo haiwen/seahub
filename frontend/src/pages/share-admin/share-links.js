@@ -161,8 +161,8 @@ class Item extends Component {
     let { iconUrl, linkUrl } = this.getLinkParams();
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let linkIconClassName = 'sf2-icon-link action-icon' + iconVisibility; 
-    let deleteIconClassName = 'sf2-icon-delete action-icon' + iconVisibility;
+    let linkIconClassName = 'op-target-link action-icon' + iconVisibility; 
+    let deleteIconClassName = 'op-target-delete action-icon' + iconVisibility;
 
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>

@@ -40,7 +40,7 @@ class RepoViewToolbar extends React.Component {
     return (
       <Fragment>
         <div className="cur-view-toolbar border-left-show">
-          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+          <span className="op-target-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
           <div className="operation">
             <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateToggle}>
               <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}

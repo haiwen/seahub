@@ -148,7 +148,7 @@ class Item extends Component {
     }
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let unshareIconClassName = 'unshare action-icon sf2-icon-x3' + iconVisibility;
+    let unshareIconClassName = 'unshare action-icon op-target-x3' + iconVisibility;
 
     if (showAdmin && this.permissions.indexOf('admin') === -1) {
       this.permissions.splice(2, 0, 'admin'); // add a item after 'r' permission;

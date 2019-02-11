@@ -392,15 +392,15 @@ class DirentListItem extends React.Component {
               <div className="operations">
                 <ul className="operation-group">
                   <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    <i className="op-icon op-target-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
                   {showShare &&
                   <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                    <i className="op-icon op-target-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>
                   }
                   <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    <i className="op-icon op-target-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
                     <DirentMenu

@@ -245,7 +245,7 @@ class SharedRepoListItem extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 
           tag="i" 
-          className="sf-dropdown-toggle sf2-icon-caret-down" 
+          className="sf-dropdown-toggle op-target-caret-down" 
           title={gettext('More Operations')} 
           data-toggle="dropdown" 
           aria-expanded={this.state.isItemMenuShow}
@@ -277,9 +277,9 @@ class SharedRepoListItem extends React.Component {
       // scene two: (share, unshare), (share), (unshare)
       operations = this.generatorOperations();
     }
-    const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></a>;
-    const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
-    const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
+    const shareOperation   = <a href="#" className="op-icon op-target-share" title={gettext('Share')} onClick={this.onItemShare}></a>;
+    const unshareOperation = <a href="#" className="op-icon op-target-x3" title={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
+    const deleteOperation  = <a href="#" className="op-icon op-target-delete" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
     
     if (this.isDeparementOnwerGroupMember) {
       return (
@@ -289,7 +289,7 @@ class SharedRepoListItem extends React.Component {
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle 
               tag="i" 
-              className="sf-dropdown-toggle sf2-icon-caret-down" 
+              className="sf-dropdown-toggle op-target-caret-down" 
               title={gettext('More Operations')}
               data-toggle="dropdown" 
               aria-expanded={this.state.isItemMenuShow}

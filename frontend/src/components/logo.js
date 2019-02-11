@@ -19,7 +19,7 @@ class Logo extends React.Component {
           <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
         </a>
         <a 
-          className="sf2-icon-x1 sf-popover-close side-panel-close action-icon d-md-none"
+          className="op-target-x1 sf-popover-close side-panel-close action-icon d-md-none"
           onClick={this.closeSide} 
           title="Close" 
           aria-label="Close" 

@@ -139,7 +139,7 @@ class DirPanel extends React.Component {
         <div className="main-panel-north">
           {!this.props.libNeedDecrypt &&
             <div className="cur-view-toolbar border-left-show">
-              <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onMenuClick}></span>
+              <span className="op-target-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onMenuClick}></span>
               <div className="dir-operation">
                 {this.props.isDirentSelected ?
                   <MutipleDirOperationToolbar

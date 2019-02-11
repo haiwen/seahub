@@ -117,7 +117,7 @@ class Account extends Component {
           <span><img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} /></span>
           <span className="fas fa-caret-down vam"></span>
         </a>
-        <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>
+        <span className="account-toggle op-target-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>
         <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo? '':'hide'}`}>
           <div className="outer-caret up-outer-caret">
             <div className="inner-caret"></div>

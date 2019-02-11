@@ -188,8 +188,8 @@ class Item extends Component {
     data.url = `${siteRoot}#shared-libs/lib/${data.repo_id}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility; 
-    let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
+    let shareIconClassName = 'op-icon op-target-share repo-share-btn' + iconVisibility; 
+    let leaveShareIconClassName = 'op-icon op-target-x3' + iconVisibility;
 
     const desktopItem = (
       <Fragment>

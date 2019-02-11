@@ -140,7 +140,7 @@ class RelatedFile extends React.Component {
   }
 
   render() {
-    let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
+    let className = this.state.active ? 'action-icon op-target-x3' : 'action-icon vh op-target-x3';
     const relatedFile = this.props.relatedFile;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

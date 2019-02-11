@@ -142,7 +142,7 @@ class Item extends Component {
     }
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let unshareIconClassName = 'unshare action-icon sf2-icon-x3' + iconVisibility;
+    let unshareIconClassName = 'unshare action-icon op-target-x3' + iconVisibility;
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

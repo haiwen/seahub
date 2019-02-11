@@ -198,7 +198,7 @@ class DirentListView extends React.Component {
       return (
         <Fragment>
           <div className="tip-for-new-md d-flex">
-            <button className="big-new-md-button" onClick={this.onCreateMarkdownToggle}><span className="sf2-icon-plus add-md-icon"></span><br />{gettext('Markdown Document')}</button>
+            <button className="big-new-md-button" onClick={this.onCreateMarkdownToggle}><span className="op-target-plus add-md-icon"></span><br />{gettext('Markdown Document')}</button>
             <p>{gettext('You can create online document using Markdown format easily. When creating a document, you can mark it as draft. After finishing the draft, you can ask others to review it. They can view the document history in the review page and leave comments on the document.')}</p>
           </div>
           {this.state.isCreateFileDialogShow && (

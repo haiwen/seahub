@@ -96,10 +96,10 @@ class MutipleDirOperationToolbar extends React.Component {
     return (
       <Fragment>
         <div className="operation multiple-dirents-operation">
-          <button className="btn btn-secondary operation-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></button>
-          <button className="btn btn-secondary operation-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></button>
-          <button className="btn btn-secondary operation-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onItemsDelete}></button>
-          <button className="btn btn-secondary operation-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></button>
+          <button className="btn btn-secondary operation-item action-icon op-target-move" title={gettext('Move')} onClick={this.onMoveToggle}></button>
+          <button className="btn btn-secondary operation-item action-icon op-target-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></button>
+          <button className="btn btn-secondary operation-item action-icon op-target-delete" title={gettext('Delete')} onClick={this.props.onItemsDelete}></button>
+          <button className="btn btn-secondary operation-item action-icon op-target-download" title={gettext('Download')} onClick={this.onItemsDownload}></button>
         </div>
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 

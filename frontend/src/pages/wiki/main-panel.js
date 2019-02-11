@@ -77,7 +77,7 @@ class MainPanel extends Component {
           {username && (
             <Fragment>
               <div className="cur-view-toolbar border-left-show">
-                <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+                <span className="op-target-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
                 {this.props.permission === 'rw' && (
                   <button className="btn btn-secondary operation-item" title="Edit File" onClick={this.onEditClick}>{gettext('Edit Page')}</button>
                 )}

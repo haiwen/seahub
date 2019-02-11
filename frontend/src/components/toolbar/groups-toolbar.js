@@ -28,7 +28,7 @@ class GroupsToolbar extends React.Component {
             </Button>
           </div>
           <span title="Side Nav Menu" onClick={onShowSidePanel}
-            className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
+            className="op-target-menu side-nav-toggle hidden-md-up d-md-none">
           </span>
         </div>
         <CommonToolbar searchPlaceholder={this.props.searchPlaceholder} onSearchedClick={onSearchedClick}/>

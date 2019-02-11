@@ -151,7 +151,7 @@ class Item extends Component {
 
     const data = this.props.data;
 
-    let opClasses = 'sf2-icon-x3 unstar action-icon';
+    let opClasses = 'op-target-x3 unstar action-icon';
     opClasses += this.state.showOpIcon ? '' : ' invisible';
 
     const desktopItem = (
@@ -190,7 +190,7 @@ class Item extends Component {
           <span className="dirent-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
         </td>
         <td>
-          <a href="#" className="sf2-icon-delete unstar action-icon" title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.handleClick}></a>
+          <a href="#" className="op-target-delete unstar action-icon" title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.handleClick}></a>
         </td>
       </tr>
     );
