@@ -17,7 +17,7 @@ class URLDecorator {
         url = siteRoot + 'lib/' + options.repoID + '/file' + Utils.encodePath(options.filePath) + '?dl=1';
         break;
       case 'file_revisions':
-        params = 'p=' + Utils.encodePath(options.filePath) + '&referer=' + Utils.encodePath(options.referer);
+        params = 'p=' + Utils.encodePath(options.filePath);
         url = siteRoot + 'repo/file_revisions/' + options.repoID + '/?' + params;
         break;
       case 'open_via_client':

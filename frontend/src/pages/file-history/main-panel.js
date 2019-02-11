@@ -28,16 +28,18 @@ class MainPanel extends React.Component {
     return (
       <div className="main-panel">
         <div className="main-panel-center content-viewer">
-          { 
-            this.props.renderingContent ? 
-              (<div className={contentClass + ' article'}><Loading /></div>) : 
-              (<div className={contentClass + ' article'}>
-                <DiffViewer 
-                  newMarkdownContent={this.props.newMarkdownContent} 
-                  oldMarkdownContent={this.props.oldMarkdownContent}
-                />
-              </div>)
-          }
+          <div className={contentClass}>
+            { 
+              this.props.renderingContent ? 
+                (<Loading />) : 
+                (<div className="diff-view article">
+                  <DiffViewer 
+                    newMarkdownContent={this.props.newMarkdownContent} 
+                    oldMarkdownContent={this.props.oldMarkdownContent}
+                  />
+                </div>)
+            }
+          </div>
         </div>
       </div>
     );
