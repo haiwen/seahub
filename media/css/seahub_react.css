@@ -533,9 +533,13 @@ ul,ol,li {
 }
 
 .side-nav-footer .item {
-    color:#666;
+    color: #666 !important;
     font-weight: normal;
-    margin-right:10px;
+    margin-right: 10px;
+}
+
+.side-nav-footer .item:hover {
+    text-decoration: underline !important;
 }
 
 .side-nav-footer .last-item {
