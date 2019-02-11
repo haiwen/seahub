@@ -970,8 +970,16 @@ a.table-sort-op:focus {
     color: #222;
     font-weight: bold;
 }
-.err-message,
-.err-message h2{
+
+.err-tip {
+    margin: 2rem auto;
+    padding: 30px 40px;
+    font-size: 1rem;
+    color: #808080;
+    text-align: center;
+}
+
+.err-message {
     color: red;
 }
 
