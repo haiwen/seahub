@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, storages, folderPermEnabled, enableResetEncryptedRepoPassword, enableRepoSnapshotLabel } from '../../utils/constants';
+import { gettext, siteRoot, storages, folderPermEnabled, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoSnapshotLabel } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import Rename from '../../components/rename';
@@ -178,7 +178,7 @@ class Item extends Component {
 
   render() {
     const data = this.props.data;
-    const showResetPasswordMenuItem = data.encrypted && enableResetEncryptedRepoPassword;
+    const showResetPasswordMenuItem = data.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
 
     data.icon_url = Utils.getLibIconUrl(data); 
     data.icon_title = Utils.getLibIconTitle(data);

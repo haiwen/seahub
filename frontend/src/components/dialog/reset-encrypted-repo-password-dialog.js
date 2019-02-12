@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import toaster from '../../components/toast';
 import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, contactEmail } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
@@ -15,45 +16,45 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newPassword: '',
       errMessage: '',
+      showLoading: true,
+      showSuccess: false,
+      showError: false,
     };
   }
 
-  onResetEncryptedRepoPasswordSubmit = () => {
-    seafileAPI.resetEncryptedRepoPassword(this.props.repoID, this.state.newPassword).then((res) => {
-      this.props.toggleDialog();
-      toaster.success(gettext('Successfully reset password.'));
+  componentDidMount() {
+    seafileAPI.resetEncryptedRepoPassword(this.props.repoID).then((res) => {
+      this.setState({showLoading: false});
+      this.setState({showSuccess: true});
     }).catch((error) => {
       if (error.response) {
         this.setState({
           errMessage: error.response.data.error_msg
         });
+        this.setState({showLoading: false});
+        this.setState({showError: true});
       }
     });
   }
 
-  setNewPassword = (event) => {
-    let password = event.target.value;
-    this.state.newPassword = password;
-  }
-
   render() {
     return (
-      <Modal isOpen={true}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Reset library password')}</ModalHeader>
+      <Modal isOpen={true}  centered={true}>
+        <ModalHeader toggle={this.props.toggleDialog}>
+          {gettext('Reset library password')}
+        </ModalHeader>
         <ModalBody>
-          <Form>
-            <FormGroup>
-              <Input type="password" onChange={(event) => this.setNewPassword(event)}/>
-            </FormGroup>
-          </Form>
-          {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
+        {this.state.showLoading && (
+          <span>{gettext('Sending new password to your mailbox.')}</span>
+        )}
+        {this.state.showSuccess && (
+          <span>{gettext('New password has been sent to your mailbox {mail}, please note to check. If you have not received the email, please check your email configuration.').replace('{mail}', contactEmail)}</span>
+        )}
+        {this.state.showError && (
+          <span className="err-message">{this.state.errMessage}</span>
+        )}
         </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.onResetEncryptedRepoPasswordSubmit}>{gettext('Submit')}</Button>
-        </ModalFooter>
       </Modal>
     );
   }

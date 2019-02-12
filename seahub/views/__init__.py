@@ -43,7 +43,7 @@ from seahub.utils import render_permission_error, render_error, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
-    is_windows_operating_system, get_service_url, seafevents_api
+    is_windows_operating_system, seafevents_api, IS_EMAIL_CONFIGURED
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
@@ -1227,6 +1227,7 @@ def react_fake_view(request, **kwargs):
         'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
+        'is_email_configured': IS_EMAIL_CONFIGURED,
     })
 
 @login_required
