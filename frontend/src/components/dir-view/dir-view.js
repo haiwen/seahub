@@ -108,10 +108,9 @@ class DirView extends React.Component {
         });
       }
 
-      let repoName = repoInfo.repo_name;
       let repoID = repoInfo.repo_id;
-      let path = location.slice(location.indexOf(repoID) + repoID.length); // get the string after repoID
-      path = path.slice(path.indexOf(repoName.toLowerCase()) + repoName.length); // get current path
+      let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
+      path = path.slice(path.indexOf('/')); // get current path
       this.setState({path: path});
       if (!res.data.lib_need_decrypt) {
         this.updateDirentList(path);
