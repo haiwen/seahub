@@ -8,7 +8,7 @@ class SharedLinkInfo {
     this.is_dir = object.is_dir;
     this.permissions = object.permissions;
     this.username = object.username;
-    this.is_expired = object.is_expired;
+    this.is_expired = true;
     this.expire_date = object.expire_date;
     this.token = object.token;
     this.link = object.link;
