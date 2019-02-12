@@ -119,13 +119,9 @@ class TableBody extends Component {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
         op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
-        details =
-          <td>
-            {fileLink}
-            {gettext(' and ')}
-            <a href='#' onClick={this.onListCreatedFilesToggle.bind(this, item)}>{item.createdFilesCount - 1}</a>
-            {gettext(' other files')}
-          </td>;
+        details = <td>{fileLink}{gettext(' and ')}
+        <a href='#' onClick={this.onListCreatedFilesToggle.bind(this, item)}>{item.createdFilesCount - 1}</a>
+        {gettext(' other files')}<br />{smallLibLink}</td>;
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
@@ -320,12 +316,17 @@ class FilesActivities extends Component {
           actuallyEvents.push(activities[i]);
         }
       } else if (activities[i].obj_type === 'files') {
-        // todo: filter by user and repo
-        if (multiFilesActivity === null) {
+        let isUserRepoEqual = activities[i + 1] &&
+                              activities[i].author_email === activities[i + 1].author_email &&
+                              activities[i].repo_name === activities[i + 1].repo_name;
+        if (multiFilesActivity === null && isUserRepoEqual) {
           multiFilesActivity = new Activity(activities[i]);
           multiFilesActivity.createdFilesCount++;
+        } else if (multiFilesActivity === null && !isUserRepoEqual) {
+          activities[i].obj_type = 'file';
+          actuallyEvents.push(activities[i]);
         } else {
-          if (activities[i + 1] && activities[i + 1].obj_type === 'files') {
+          if (isUserRepoEqual && activities[i + 1].obj_type === 'files') {
             multiFilesActivity.createdFilesCount++;
             multiFilesActivity.createdFilesList.push(activities[i]);
           } else {
