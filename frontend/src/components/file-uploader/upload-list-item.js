@@ -49,10 +49,10 @@ class UploadListItem extends React.Component {
             <a href="#" onClick={this.onUploadCancel}>{gettext('cancel')}</a>
           )}
           {(!item.isSaved && progress === 100) && (
-            <span className="sf-font">{gettext('saving...')}</span>
+            <span className="saving">{gettext('saving...')}</span>
           )}
           {item.isSaved && (
-            <span>{gettext('uploaded')}</span>
+            <span className="uploaded">{gettext('uploaded')}</span>
           )}
         </td>
       </tr>

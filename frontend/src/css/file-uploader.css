@@ -55,3 +55,8 @@
 .file-upload-item .progress .progress-bar {
   color: #e83;
 }
+
+.file-upload-item .saving {
+  color: #ee8204;
+  word-wrap: break-word;
+}

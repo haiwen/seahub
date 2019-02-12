@@ -152,7 +152,7 @@ class CopyDirent extends React.Component {
   render() {
     let title = gettext('Copy {placeholder} to:');
     if (!this.props.isMutipleOperation) {
-      title = title.replace('{placeholder}', '<span class="sf-font">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
+      title = title.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     } else {
       title = gettext('Copy selected item(s) to:');
     }
