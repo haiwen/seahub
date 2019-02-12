@@ -62,7 +62,7 @@ class RepoSendNewPassword(APIView):
 
         secret_key =  RepoSecretKey.objects.get_secret_key(repo_id)
         if not secret_key:
-            error_msg = _(u"Failed to reset library's password.")
+            error_msg = _(u"Can not reset this library's password.")
             return api_error(HTTP_520_OPERATION_FAILED, error_msg)
 
         new_password = get_random_string(10)
