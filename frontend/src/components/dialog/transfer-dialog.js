@@ -66,7 +66,7 @@ class TransferDialog extends React.Component {
 
   render() {
     const itemName = this.props.itemName;
-    const innerSpan = '<span class="sf-font" title=' + itemName + '>' + itemName +'</span>';
+    const innerSpan = '<span class="op-target" title=' + itemName + '>' + itemName +'</span>';
     let msg = gettext('Transfer Library {library_name} To');
     let message = msg.replace('{library_name}', innerSpan);
     return (

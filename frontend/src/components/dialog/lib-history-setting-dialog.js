@@ -96,7 +96,7 @@ class LibHistorySetting extends React.Component {
     return (
       <Modal isOpen={true} centered={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          <span className="sf-font" title={itemName}>{itemName}</span>{' '}
+          <span className="op-target" title={itemName}>{itemName}</span>{' '}
           {gettext('History Setting')}
         </ModalHeader>
         <ModalBody>

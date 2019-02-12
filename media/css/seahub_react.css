@@ -145,12 +145,6 @@ ul,ol,li {
     text-decoration: underline;
 }
 
-.sf-font {
-    color: #eb8205 !important;
-    text-decoration: none;
-    font-weight: normal;
-}
-
 .cursor-pointer {
     cursor: pointer;
 }
