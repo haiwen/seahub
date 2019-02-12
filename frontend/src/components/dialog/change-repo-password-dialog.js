@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap'; 
 import { gettext, repoPasswordMinLength } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -117,7 +117,7 @@ class ChangeRepoPasswordDialog extends React.Component {
             <input type="password" name="new_passwd" className="form-control" id="new-passwd" value={this.state.newPassword} onChange={this.handleNewPasswordInputChange} /><br />
             <label htmlFor="new-passwd-again">{gettext('New Password Again')}</label><br />
             <input type="password" name="new_passwd_again" className="form-control" id="new-passwd-again" value={this.state.newPasswordAgain} onChange={this.handleNewPasswordAgainInputChange} /><br />
-            {this.state.errorMsg && <p className="alert alert-danger" role="alert">{this.state.errorMsg}</p>}
+            {this.state.errorMsg && <Alert color="danger">{this.state.errorMsg}</Alert>}
           </form>
         </ModalBody>
         <ModalFooter>

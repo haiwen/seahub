@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
-import { Button, Form, FormGroup, FormText, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Form, FormGroup, FormText, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SharedUploadInfo from '../../models/shared-upload-info';
@@ -163,7 +163,7 @@ class GenerateUploadLink extends React.Component {
             <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
           </FormGroup>
         }
-        <Label className="err-message">{this.state.errorInfo}</Label><br/>
+        {this.state.errorInfo && <Alert color="danger" className="mt-2">{this.state.errorInfo}</Alert>}
         <Button className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
       </Form>
     );

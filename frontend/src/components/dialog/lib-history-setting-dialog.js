@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, enableRepoHistorySetting } from '../../utils/constants';
 import toaster from '../toast';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 const propTypes = {
@@ -126,7 +126,7 @@ class LibHistorySetting extends React.Component {
               />{' '}
               <Label><span>{gettext('days')}</span></Label>
             </FormGroup>
-            <Label className="err-message">{this.state.errorInfo}</Label><br />
+            {this.state.errorInfo && <Alert color="danger">{this.state.errorInfo}</Alert>}
             <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
           </Form>
         </ModalBody>

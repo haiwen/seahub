@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext, maxFileName } from '../../utils/constants';
 
 const propTypes = {
@@ -87,7 +87,7 @@ class CreateDepartmentRepoDialog extends React.Component {
               />
             </FormGroup>
           </Form>
-          <Label className="err-message">{this.state.errMessage}</Label>
+          {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>

@@ -974,6 +974,7 @@ a.table-sort-op:focus {
 }
 
 .err-message {
+    margin-left: 0.5rem;
     color: red;
 }
 
