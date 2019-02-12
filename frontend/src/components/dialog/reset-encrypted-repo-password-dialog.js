@@ -24,7 +24,7 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.resetEncryptedRepoPassword(this.props.repoID).then((res) => {
+    seafileAPI.resetAndSendEncryptedRepoPassword(this.props.repoID).then((res) => {
       this.setState({showLoading: false});
       this.setState({showSuccess: true});
     }).catch((error) => {
