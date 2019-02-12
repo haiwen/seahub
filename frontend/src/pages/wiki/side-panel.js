@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, repoID, slug } from '../../utils/constants';
+import { gettext, siteRoot, repoID, slug, username, permission } from '../../utils/constants';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
 import TreeView from '../../components/tree-view/tree-view';
@@ -73,7 +73,7 @@ class SidePanel extends Component {
           {this.props.isTreeDataLoading && <Loading /> }
           {!this.props.isTreeDataLoading && this.props.indexNode && this.renderIndexView() }
           {!this.props.isTreeDataLoading && !this.props.indexNode && this.renderTreeView() }
-          <div className="text-left p-2"><a href={siteRoot + 'library/' + repoID + '/' + slug} className="text-dark text-decoration-underline">{gettext('Go to Library')}</a></div>
+          {(username && permission) && <div className="text-left p-2"><a href={siteRoot + 'library/' + repoID + '/' + slug + '/'} className="text-dark text-decoration-underline">{gettext('Go to Library')}</a></div>}
         </div>
       </div>
     );
