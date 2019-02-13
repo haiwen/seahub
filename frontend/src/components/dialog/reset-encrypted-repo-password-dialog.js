@@ -39,6 +39,10 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
   }
 
   render() {
+
+    let user_email = '<strong>' + contactEmail + '</strong>';
+    let message = gettext('New password has been sent to your email {mail}. Please check your mailbox. If you don’t receive the password, please check if your email address is properly configured.').replace('{mail}', user_email);
+
     return (
       <Modal isOpen={true}  centered={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
@@ -49,7 +53,7 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
           <span>{gettext('Sending new password...')}</span>
         )}
         {this.state.showSuccess && (
-          <span>{gettext('New password has been sent to your email {mail}. Please check your mailbox. If you don’t receive the password, please check if your email address is properly configured.').replace('{mail}', contactEmail)}</span>
+          <div dangerouslySetInnerHTML={{__html:message}} />
         )}
         {this.state.showError && (
           <span className="err-message">{this.state.errMessage}</span>
