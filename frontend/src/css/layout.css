@@ -53,6 +53,16 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
+@media (max-width: 767px) {
+  .side-panel-north {
+      border-right: 1px solid #eee;
+  }
+
+  .main-panel-north {
+    padding-bottom: 0.25rem;
+  }
+}
+
 .side-panel-center,
 .main-panel-center {
   display: flex;

@@ -140,7 +140,7 @@ class MylibRepoMenu extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 
           tag="i"
-          className="sf-dropdown-toggle sf2-icon-caret-down"
+          className="sf-dropdown-toggle sf2-icon-caret-down ml-0"
           title={gettext('More Operations')}
           // onClick={this.clickOperationMenuToggle}
           data-toggle="dropdown" 
@@ -150,7 +150,7 @@ class MylibRepoMenu extends React.Component {
           <div className="mobile-operation-menu-bg-layer"></div>
           <div className="mobile-operation-menu">
             {operations.map((item, index) => {
-              return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
+              return (<DropdownItem key={index} className="mobile-menu-item" data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
             })}
           </div>
         </div>

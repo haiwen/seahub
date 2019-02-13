@@ -85,3 +85,45 @@
 .item-content .item-text b {
   font-weight: bold;
 }
+
+@media (max-width: 767px) {
+  .common-toolbar .search {
+    margin: 0;
+  }
+  
+  .search-icon-container {
+    display: flex;
+    width: 2rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+    color: #999;
+  }
+
+  .search-container {
+    position: fixed;
+    z-index: 2;
+    top: 5rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .search-input {
+    height: 2.5rem;
+    width: 20rem !important;
+    box-shadow: 5px 5px 5px #888888;
+  }
+
+  .search-result-container {
+    position: absolute;
+    top: 2.5rem;
+    left: auto;
+    width: 20rem;
+  }
+}

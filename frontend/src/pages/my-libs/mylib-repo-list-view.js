@@ -98,8 +98,8 @@ class MylibRepoListView extends React.Component {
       <table>
         <thead>
           <tr>
-            <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="76%">
+            <th width="10%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width="84%">
               {gettext('Sort:')}
               <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext('name')} {this.props.sortBy === 'name' && sortIcon}</a>
               <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext('last update')} {this.props.sortBy === 'time' && sortIcon}</a>
@@ -117,10 +117,10 @@ class MylibRepoListView extends React.Component {
   render() {
     return (
       <Fragment>
-        <MediaQuery query="(min-device-width: 768px)">
+        <MediaQuery query="(min-width: 768px)">
           {this.renderPCUI()}
         </MediaQuery>
-        <MediaQuery query="(max-device-width: 768px)">
+        <MediaQuery query="(max-width: 768px)">
           {this.renderMobileUI()}
         </MediaQuery>
       </Fragment>

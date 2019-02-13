@@ -241,11 +241,11 @@ class MylibRepoListItem extends React.Component {
             />
           )}
           {!this.state.isRenaming && repo.repo_name && (
-            <Link to={repoURL}>{repo.repo_name}</Link>
+            <div><Link to={repoURL}>{repo.repo_name}</Link></div>
           )}
           {!this.state.isRenaming && !repo.repo_name && 
-            (gettext('Broken (please contact your administrator to fix this library)'))
-          }<br />
+            <div>(gettext('Broken (please contact your administrator to fix this library)'))</div>
+          }
           <span className="item-meta-info">{repo.size}</span>
           <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
         </td>
@@ -267,10 +267,10 @@ class MylibRepoListItem extends React.Component {
     let repo = this.props.repo;
     return (
       <Fragment>
-        <MediaQuery query="(min-device-width: 768px)">
+        <MediaQuery query="(min-width: 768px)">
           {this.renderPCUI()}
         </MediaQuery>
-        <MediaQuery query="(max-device-width: 768px)">
+        <MediaQuery query="(max-width: 768px)">
           {this.renderMobileUI()}
         </MediaQuery>
         {this.state.isShareDialogShow && (
