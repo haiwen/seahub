@@ -117,11 +117,13 @@ class TableBody extends Component {
         }
       } else if (item.obj_type == 'files') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-        let fileLink = <a href={fileURL}>{item.name}</a>;
+        let fileLink = `<a href=${fileURL}>${item.name}</a>`;
+        let fileCount = `<a href='#'>${item.createdFilesCount - 1}</a>`;
+        let firstLine = gettext('{file} and {n} other files');
+        firstLine = firstLine.replace('{file}', fileLink);
+        firstLine = firstLine.replace('{n}', fileCount);
         op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
-        details = <td>{fileLink}{gettext(' and ')}
-        <a href='#' onClick={this.onListCreatedFilesToggle.bind(this, item)}>{item.createdFilesCount - 1}</a>
-        {gettext(' other files')}<br />{smallLibLink}</td>;
+        details = <td><div dangerouslySetInnerHTML={{__html: firstLine}} onClick={this.onListCreatedFilesToggle.bind(this, item)}></div>{smallLibLink}</td>;
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
@@ -263,8 +265,10 @@ class FilesActivities extends Component {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
+      let events = this.mergeReviewEvents(res.data.events);
+      events = this.mergeFileCreateEvents(events);
       this.setState({
-        items: this.filterSuperfluousEvents(res.data.events),
+        items: events,
         currentPage: currentPage + 1,
         isFirstLoading: false,
         hasMore: true,
@@ -282,62 +286,58 @@ class FilesActivities extends Component {
     });
   }
 
-  filterSuperfluousEvents = (events) => {
-    let activities = [];
-    events.map((item, index) => {
-      let event = new Activity(item);
-      if (event.op_type === "finished") {
-        this.curPathList.push(event.path);
-        this.oldPathList.push(event.old_path);
+  mergeReviewEvents = (events) => {
+    events.map((item) => {
+      if (item.op_type === 'finished') {
+        this.curPathList.push(item.path);
+        this.oldPathList.push(item.old_path);
       }
-      // change obj_type: file => files
-      if (event.op_type === 'create' && event.obj_type === 'file') {
-        if (events[index + 1] && events[index + 1].op_type === 'create' && events[index + 1].obj_type === 'file') {
-          event.obj_type = 'files';
-        } else if (index > 0 && events[index - 1].op_type === 'create' && events[index - 1].obj_type === 'file') {
-          event.obj_type = 'files';
-        }
-      }
-      activities.push(event);
     });
     let actuallyEvents = [];
-    let multiFilesActivity = null;
-    for (var i = 0; i < activities.length; i++) {
-      if (activities[i].obj_type === 'file') {
-        if (activities[i].op_type === 'delete' && this.oldPathList.includes(activities[i].path)) {
-          this.oldPathList.splice(this.oldPathList.indexOf(activities[i].path), 1);
-          continue;
-        } else if (activities[i].op_type === 'edit' && this.curPathList.includes(activities[i].path)) {
-          this.curPathList.splice(this.curPathList.indexOf(activities[i].path), 1);
-          continue;
-        } else if (activities[i].op_type === 'rename' && this.oldPathList.includes(activities[i].old_path)) {
-          this.oldPathList.splice(this.oldPathList.indexOf(activities[i].old_path), 1);
+    for (var i = 0; i < events.length; i++) {
+      if (events[i].obj_type === 'file') {
+        if (events[i].op_type === 'delete' && this.oldPathList.includes(events[i].path)) {
+          this.oldPathList.splice(this.oldPathList.indexOf(events[i].path), 1);
+        } else if (events[i].op_type === 'edit' && this.curPathList.includes(events[i].path)) {
+          this.curPathList.splice(this.curPathList.indexOf(events[i].path), 1);
+        } else if (events[i].op_type === 'rename' && this.oldPathList.includes(events[i].old_path)) {
+          this.oldPathList.splice(this.oldPathList.indexOf(events[i].old_path), 1);
         } else {
-          actuallyEvents.push(activities[i]);
-        }
-      } else if (activities[i].obj_type === 'files') {
-        let isUserRepoEqual = activities[i + 1] &&
-                              activities[i].author_email === activities[i + 1].author_email &&
-                              activities[i].repo_name === activities[i + 1].repo_name;
-        if (multiFilesActivity === null && isUserRepoEqual) {
-          multiFilesActivity = new Activity(activities[i]);
-          multiFilesActivity.createdFilesCount++;
-        } else if (multiFilesActivity === null && !isUserRepoEqual) {
-          activities[i].obj_type = 'file';
-          actuallyEvents.push(activities[i]);
-        } else {
-          if (isUserRepoEqual && activities[i + 1].obj_type === 'files') {
-            multiFilesActivity.createdFilesCount++;
-            multiFilesActivity.createdFilesList.push(activities[i]);
-          } else {
-            multiFilesActivity.createdFilesCount++;
-            multiFilesActivity.createdFilesList.push(activities[i]);
-            actuallyEvents.push(multiFilesActivity);
-            multiFilesActivity = null;
-          }
+          actuallyEvents.push(events[i]);
         }
       } else {
-        actuallyEvents.push(activities[i]);
+        actuallyEvents.push(events[i]);
+      }
+    }
+    return actuallyEvents;
+  }
+
+  mergeFileCreateEvents = (events) => {
+    let actuallyEvents = [];
+    let multiFilesActivity = null;
+    for (var i = 0; i < events.length; i++) {
+      let isFulfilCondition = events[i + 1] &&
+                              events[i + 1].obj_type === 'file' &&
+                              events[i + 1].op_type === 'create' &&
+                              events[i + 1].repo_name === events[i].repo_name &&
+                              events[i + 1].author_email === events[i].author_email;
+      if (multiFilesActivity != null) {
+        multiFilesActivity.createdFilesCount++;
+        multiFilesActivity.createdFilesList.push(events[i]);
+        if (isFulfilCondition) {
+          continue;
+        } else {
+          actuallyEvents.push(multiFilesActivity);
+          multiFilesActivity = null;
+        }
+      } else {
+        if (events[i].op_type === 'create' && events[i].obj_type === 'file' && isFulfilCondition) {
+          multiFilesActivity = new Activity(events[i]);
+          multiFilesActivity.obj_type = 'files';
+          multiFilesActivity.createdFilesCount++;
+        } else {
+          actuallyEvents.push(events[i]);
+        }
       }
     }
     return actuallyEvents;
@@ -347,9 +347,11 @@ class FilesActivities extends Component {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
+      let events = this.mergeReviewEvents(res.data.events);
+      events = this.mergeFileCreateEvents(events);
       this.setState({
         isLoadingMore: false,
-        items: [...this.state.items, ...this.filterSuperfluousEvents(res.data.events)],
+        items: [...this.state.items, ...events],
         currentPage: currentPage + 1,
         hasMore: res.data.events.length === 0 ? false : true 
       });
