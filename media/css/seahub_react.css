@@ -210,8 +210,6 @@ ul,ol,li {
 
 .side-nav-toggle { /* just for control side-panel */
     margin-right:0.9375rem;
-    height: 1.875rem;
-    line-height: 1.875rem;
     font-size:1.5rem;
     color:#999;
     cursor: pointer;
@@ -905,6 +903,12 @@ table td {
     color: green;
 }
 
+@media (max-width: 767px) {
+    .rename-container input {
+        width: 10rem;
+    }
+}
+
 /* table-item loading-more-data */
 .list-show-more {
     padding: 0.25rem 0.75rem;
@@ -1025,39 +1029,56 @@ a.table-sort-op:focus {
     margin-left: 0.5rem;
 }
 
-/* mobile menu */
-.item-meta-info {
-  display: inline-block;
-  margin-right: 8px;
-  font-size: 12px;
-  color: #666;
-}
-
-.mobile-operation-menu-bg-layer {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: #000;
-  opacity: 0.1;
-  z-index: 3;
-}
-
-.mobile-operation-menu {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: .5em 0;
-  background: #fff;
-  text-align: center;
-  z-index: 4;
-}
-
 /* thumbnail */
 .thumbnail {
     max-width: 24px;
     max-height: 24px;
+}
+
+@media (max-width: 767px) {
+    /* mobile menu */
+    .item-meta-info {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .mobile-operation-menu-bg-layer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: #000;
+      opacity: 0.1;
+      z-index: 3;
+    }
+    
+    .mobile-operation-menu {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: .5em 0;
+      background: #fff;
+      text-align: center;
+      z-index: 4;
+    }
+
+    /* toolbar icon */
+    .mobile-toolbar-icon {
+        color: #999;
+        font-size: 1.375rem;
+        margin-right: 0.5rem;
+    }
+
+    .mobile-menu-item {
+        color: #000;
+        line-height: 2rem;
+        font-size: 0.875rem;
+        
+    }
+    
 }
 

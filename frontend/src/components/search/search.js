@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import MediaQuery from 'react-responsive';
 import { siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
@@ -22,7 +23,8 @@ class Search extends Component {
       isMaskShow: false,
       isResultShow: false,
       isResultGetted: false,
-      isCloseShow: false
+      isCloseShow: false,
+      isSearchInputShow: false, // for mobile
     };
     this.inputValue = '';
     this.source = null; // used to cancel request;
@@ -161,7 +163,8 @@ class Search extends Component {
       isCloseShow: false,
       isResultShow: false,
       isResultGetted: false,
-      resultItems: []
+      resultItems: [],
+      isSearchInputShow: false,
     });
   }
 
@@ -212,33 +215,74 @@ class Search extends Component {
     );
   }
 
+  onSearchedToggle = () => {
+    this.setState({
+      isSearchInputShow: !this.state.isSearchInputShow,
+      isMaskShow: !this.state.isMaskShow,
+    });
+  }
+
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
     return (
-      <div className="search">
-        <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
-        <div className="search-container">
-          <div className="input-icon">
-            <i className="search-icon-left input-icon-addon fas fa-search"></i>
-            <input 
-              type="text" 
-              className="form-control search-input" 
-              name="query"
-              placeholder={this.props.placeholder}
-              style={style}
-              value={this.state.value}
-              onFocus={this.onFocusHandler}
-              onChange={this.onChangeHandler}
-              autoComplete="off"
-            />
-            {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+      <Fragment>
+        <MediaQuery query="(min-width: 768px)">
+          <div className="search">
+            <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
+            <div className="search-container">
+              <div className="input-icon">
+                <i className="search-icon-left input-icon-addon fas fa-search"></i>
+                <input 
+                  type="text" 
+                  className="form-control search-input" 
+                  name="query"
+                  placeholder={this.props.placeholder}
+                  style={style}
+                  value={this.state.value}
+                  onFocus={this.onFocusHandler}
+                  onChange={this.onChangeHandler}
+                  autoComplete="off"
+                />
+                {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+              </div>
+              <div className="search-result-container">
+                {this.renderSearchResult()}
+              </div>
+            </div>
           </div>
-          <div className="search-result-container">
-            {this.renderSearchResult()}
+        </MediaQuery>
+        <MediaQuery query="(max-width: 768px)">
+          <div className="search-icon-container">
+            <i className="search-icon fas fa-search" onClick={this.onSearchedToggle}></i>
           </div>
-        </div>
-      </div>
+          {this.state.isSearchInputShow && 
+            <div className="search">
+              <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
+              <div className="search-container">
+                <div className="input-icon">
+                  <i className="search-icon-left input-icon-addon fas fa-search"></i>
+                  <input 
+                    type="text" 
+                    className="form-control search-input" 
+                    name="query"
+                    placeholder={this.props.placeholder}
+                    style={style}
+                    value={this.state.value}
+                    onFocus={this.onFocusHandler}
+                    onChange={this.onChangeHandler}
+                    autoComplete="off"
+                  />
+                  {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+                </div>
+                <div className="search-result-container">
+                  {this.renderSearchResult()}
+                </div>
+              </div>
+            </div>
+          }
+        </MediaQuery>
+      </Fragment>
     );
   }
 }
