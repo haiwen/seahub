@@ -56,7 +56,6 @@ class TransferDialog extends React.Component {
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);
       this.props.submit(repoID);
-      this.props.toggleDialog();
     }).catch(res => {
       let message = gettext('Failed. Please check the network.');
       this.props.toggleDialog();

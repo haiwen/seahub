@@ -5,7 +5,9 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
+  repo: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
 };
 
 class DeleteRepoDialog extends Component {
@@ -14,35 +16,29 @@ class DeleteRepoDialog extends Component {
     this.props.toggle();
   }
 
-  clickYes = () => {
-    this.toggle();
-    
-    const data = this.props.data;
-    if (data) {
-      data.yesCallback.bind(data._this)();
-    }
+  onDeleteRepo = () => {
+    this.props.onDeleteRepo(this.props.repo);
   }
 
   render() {
 
-    const data = this.props.data;
-    const repoName = data ? '<span class="op-target">' + Utils.HTMLescape(data.repoName) + '</span>' : null;
+    const repo = this.props.repo;
+    const repoName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name) + '</span>';
     let message = gettext('Are you sure you want to delete %s ?');
     message = message.replace('%s', repoName);
-    const popup = (
+
+    return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Delete Library')}</ModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{__html: message}}></p>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.clickYes}>{gettext('Delete')}</Button>
+          <Button color="primary" onClick={this.onDeleteRepo}>{gettext('Delete')}</Button>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
     );
-
-    return popup;
   }
 }
 
