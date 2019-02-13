@@ -21,7 +21,6 @@
 .txt-file-view-body {
   height: calc(100% - 60px);
   width: 100%;
-  padding-bottom: 15px;
   background: #f4f4f4;
   border: 1px solid #ededed;
   overflow: auto;
@@ -34,22 +33,6 @@
   margin: 0 auto;
   width: 950px;
   background: #fff;
-}
-
-.txt-file-view-body .txt-view-comment {
-  min-height: 400px;
-  margin: 0;
-  width: 100%;
-  background: #fff;
-  display: flex;
-}
-
-.txt-file-view-body .txt-view-comment .CodeMirror {
-  width: 900px;
-}
-
-.txt-file-view-body .comment {
-  width: 300px;
 }
 
 .txt-file-view-body .txt-view .CodeMirror, 
@@ -65,9 +48,9 @@
 
 .txt-file-view-body .txt-view .CodeMirror-scroll {
   min-height: 400px;
+  margin-right: 0;
 }
 
-/* file encode */
 .file-enc-cont {
   width: 950px;
   height: 24px;
@@ -75,21 +58,26 @@
   text-align: right;
 }
 
-/* file info */
-.file-view-hd {
-  font-size: 18px;
+.file-title {
   margin-bottom: 0px;
   align-items: center;
-}
-
-.file-star {
-  vertical-align: middle;
-  margin-left: 3px;
-  color: #a4a4a4;
-  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .file-state {
   font-size: 13px;
   margin-top: 5px;
+}
+
+.file-title .file-internal-link,
+.file-title .file-star {
+  font-size: .875rem;
+  cursor: pointer;
+  margin-left: .5rem;
+  vertical-align: text-bottom;
+}
+
+.file-internal-link {
+  color: #585858;
 }

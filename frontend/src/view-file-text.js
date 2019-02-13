@@ -1,20 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import Account from './components/common/account';
 import CodeMirror from 'react-codemirror';
 import moment from 'moment';
-import { Button, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
+import watermark from 'watermark-dom';
+import { ButtonGroup, Tooltip } from 'reactstrap';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import Loading from './components/loading';
-import watermark from 'watermark-dom';
-import { serviceURL, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
-import ReviewComments from './components/review-list-view/review-comments';
-
+import { serviceURL, gettext, mediaUrl } from './utils/constants';
+import InternalLinkDialog from './components/dialog/internal-link-dialog';
 import 'codemirror/lib/codemirror.css';
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/clike/clike';
@@ -25,11 +20,12 @@ import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/go/go';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/htmlmixed/htmlmixed';
+import './assets/css/fa-solid.css';
+import './assets/css/fa-regular.css';
+import './assets/css/fontawesome.css';
 import './css/view-file-text.css';
 
-const { repoID, repoName, filePath, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, download, encoding, fileContent, sharedToken, fileEncodingList, err, fileExt } = window.app.pageOptions;
-
-const URL = require('url-parse');
+const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred } = window.app.pageOptions;
 const options = {
   lineNumbers: true,
   mode: Utils.chooseLanguage(fileExt.slice(3, fileExt.length -3)),
@@ -46,32 +42,28 @@ class ViewFileText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      txtContent: '',
-      loading: true,
-      fileInfo: {},
-      showReviewComment: false,
-      commentsNumber: null,
+      isLocked: isLocked,
+      star: isStarred,
     };
   }
 
   changeEncode = (e) => {
-    let url = new URL(serviceURL) + '/lib/' + repoID + '/file/' + fileName +'/?file_enc=' + e.target.value;
-    window.location.href = url.toString();
+    window.location.href = serviceURL + '/lib/' + repoID + '/file/' + fileName +'/?file_enc=' + e.target.value;
   }
 
   fileEncode = () => {
-    const list = fileEncodingList.substring(1, fileEncodingList.length - 1).replace(/\'*/g,"").replace(/\s*/g,"").split(',');
+    const list = fileEncodingList.substring(1, fileEncodingList.length - 1).replace(/\'*/g,'').replace(/\s*/g,'').split(',');
     return (
       <div className="file-enc-cont">
         <label htmlFor="file-enc">{gettext('Encoding:')}</label>
         <select id="file-enc" onChange={this.changeEncode} defaultValue={encoding}>
           { list && list.map((value, index) => {
-              if (value === 'auto') {
-                return (<option value={value} key={index}>{gettext('auto detect')}</option>)
-              } else {
-                return (<option value={value} key={index}>{value}</option>)
-              }
-            })
+            if (value === 'auto') {
+              return (<option value={value} key={index}>{gettext('auto detect')}</option>);
+            } else {
+              return (<option value={value} key={index}>{value}</option>);
+            }
+          })
           }
         </select>
       </div>
@@ -81,29 +73,19 @@ class ViewFileText extends React.Component {
   handleMouseDown = (option) => {
     switch(option) {
       case 'back':
-        let url = new URL(serviceURL) + '/library/' + repoID + '/' + repoName + '/';
-        window.location.href = url.toString();
+        window.location.href = serviceURL + '/library/' + repoID + '/' + repoName + '/';
         break;
       case 'lock':
         this.toggleLockFile();
         break;
       case 'history':
-        // let urlHistory = new URL(serviceURL) + '/repo/file_revisions/' + repoID + '/?p=' + filePath;
-        // window.location.href = urlHistory.toString();
-        this.getFileHistory();
-        // /?p=/test.c
-        // &referer=https%3A%2F%2Fdev.seafile.com%2Fseahub%2Flib%2F26988bea-92db-4a97-8ff5-64d6a9223e26%2Ffile%2Ftest.c
+        window.location.href = serviceURL + '/repo/file_revisions/' + repoID + '/?p=' + filePath;
         break;
       case 'edit':
-        let urlEdit = new URL(serviceURL) + '/repo/' + repoID + '/file/edit/?p=/' + filePath + '&file_enc=' + encoding;
-        window.location.href = urlEdit.toString();
+        window.location.href = serviceURL + '/repo/' + repoID + '/file/edit/?p=' + filePath + '&file_enc=' + encoding;
         break;
       case 'download':
-        let urlDownload = new URL(window.location.href) + '?dl=1';
-        window.location.href = urlDownload.toString();
-        break;
-      case 'comment':
-        this.toggleComment();
+        window.location.href = serviceURL + '/lib/' + repoID + '/file/' + filePath +'?dl=1';
         break;
     }
   }
@@ -113,146 +95,108 @@ class ViewFileText extends React.Component {
       <div className='txt-view-button-group' role={'group'}>
         <ButtonGroup>
           <IconButton
-            text={gettext('back_to_parent_directory')}
+            text={gettext('Back to parent directory')}
             id={'parentDirectory'}
             icon={'fa fa-folder-open'}
             onMouseDown={() => this.handleMouseDown('back')}
           />
-          <IconButton
-            id={'lockButton'}
-            text={gettext('lock_file')}
-            onMouseDown={() => this.handleMouseDown('lock')}
-            icon={'fa fa-lock sf2-icon-lock'}
-          />
-          <IconButton
-            id={'historyButton'}
-            text={gettext('file_history')}
-            onMouseDown={() => this.handleMouseDown('history')}
-            icon={'fa fa-history'}
-          />
+          {isPro === 'True' &&
+            <IconButton
+              id={'lockButton'}
+              text={gettext('Lock File')}
+              onMouseDown={() => this.handleMouseDown('lock')}
+              icon={'fa fa-lock'}
+            />
+          }
+          {isPro === 'True' &&
+            <IconButton
+              id={'historyButton'}
+              text={gettext('File History')}
+              onMouseDown={() => this.handleMouseDown('history')}
+              icon={'fa fa-history'}
+            />
+          }
           <IconButton
             id={'shareBtn'}
-            text={gettext('edit')}
+            text={gettext('Edit')}
             icon={'fa fa-edit'}
             onMouseDown={() => this.handleMouseDown('edit')}
           />
           <IconButton
             id={'downloadButton'}
-            text={gettext('download_file')}
+            text={gettext('Download File')}
             onMouseDown={() => this.handleMouseDown('download')}
             icon={'fa fa-download'}
           />
-          <IconButton
-            id={'commentButton'}
-            text={gettext('comment')}
-            onMouseDown={() => this.handleMouseDown('comment')}
-            icon={'fa fa-comment'}
-          />
+          {/*
+            <IconButton
+              id={'commentButton'}
+              text={gettext('Comment')}
+              onMouseDown={() => this.handleMouseDown('comment')}
+              icon={'sf-btn-group-btn op-icon sf2-icon-msgs sf-btn-group-btn-last'}
+            />
+          */}
         </ButtonGroup>
       </div>
     );
   }
 
   toggleStar = () => {
-    if (this.state.fileInfo.starred) {
+    if (this.state.star) {
       seafileAPI.unStarFile(repoID, filePath).then((res) => {
-        this.getFileInfo();
+        if (res.data === 'success') {
+          this.setState({
+            star: false,
+          });
+        }
       });
     } else {
       seafileAPI.starFile(repoID, filePath).then((res) => {
-        this.getFileInfo();
+        if (res.data === 'success') {
+          this.setState({
+            star: true,
+          });
+        }
       });
     }
   }
 
-  toggleComment = () => {
-    this.setState({
-      showReviewComment: !this.state.showReviewComment
-    });
-  }
-
-  getFileHistory = () => {
-    // const folderPath = filePath.replace(fileName, '')
-    // seafileAPI.getFileHistory(repoID, folderPath).then(res => {
-    //   console.log(res.data);
-    // })
-  }
-
   toggleLockFile = () => {
-    seafileAPI.lockfile(repoID, filePath).then((res) => {
-      this.getFileInfo();
-    });
-    // seafileAPI.unlockfile(repoID, filePath).then((res) => {
-    //   this.getFileInfo();
-    // });
-  }
-
-  getFileInfo = () => {
-    seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      this.setState({
-        fileInfo: res.data
-      });
-    });
-  }
-
-  getFileContent = () => {
-    seafileAPI.getFileDownloadLink(repoID, filePath).then((response) => {
-      const downloadLink = response.data;
-      seafileAPI.getFileContent(downloadLink).then((res) => {
+    if (this.state.isLocked) {
+      seafileAPI.unlockfile(repoID, filePath).then((res) => {
         this.setState({
-          txtContent: res.data,
-          loading: false
+          isLocked: res.data.is_locked
         });
       });
-    });
-  }
-
-  scrollToQuote() {
-    //
-  }
-
-  getCommentsNumber() {
-    //
-  }
-
-  componentDidMount() {
-    this.getFileInfo();
-    this.getFileContent();
+    } else {
+      seafileAPI.lockfile(repoID, filePath).then((res) => {
+        this.setState({
+          isLocked: res.data.is_locked
+        });
+      });
+    }    
   }
 
   render() {
-    let txtView = this.state.showReviewComment ? 'txt-view-comment' : 'txt-view';
     return (
       <div className="txt-file-view d-flex">
         <div className="txt-file-view-header d-flex">
           <FileInfo
             toggleStar={this.toggleStar}
-            editorUtilities={this.props.editorUtilities}
-            fileInfo={this.state.fileInfo}
+            star={this.state.star}
             serviceURL={serviceURL}
+            isLocked={this.state.isLocked}
           />
           {this.renderToolbar()}
         </div>
         <div className="txt-file-view-body d-flex">
           {this.fileEncode()}
-          <div className={txtView}>
-            {(this.state.loading && !this.state.txtContent) ? <Loading/> :
-              <React.Fragment>
-                <CodeMirror
-                  ref="code-mirror-editor"
-                  value={this.state.txtContent}
-                  options={options}
-                />
-                { this.state.showReviewComment &&
-                  <ReviewComments
-                    scrollToQuote={this.scrollToQuote}
-                    getCommentsNumber={this.getCommentsNumber}
-                    commentsNumber={this.state.commentsNumber}
-                    inResizing={false}
-                  />
-                }
-              </React.Fragment>
-            }
+          <div className={'txt-view'}>
+            <CodeMirror
+              ref="code-mirror-editor"
+              value={fileContent}
+              options={options}
+            />
           </div>
         </div>
       </div>
@@ -271,7 +215,9 @@ class IconButton extends React.Component {
   }
 
   toggle = () => {
-    this.setState({ tooltipOpen: !this.state.tooltipOpen });
+    this.setState({
+      tooltipOpen: !this.state.tooltipOpen
+    });
   }
 
   render() {
@@ -280,10 +226,9 @@ class IconButton extends React.Component {
       <button
         id={this.props.id}
         type={'button'}
-        onMouseDown={this.props.disabled? null : this.props.onMouseDown}
+        onMouseDown={this.props.onMouseDown}
         className={className}
-        data-active={ this.props.isActive || false }
-        disabled={this.props.disabled}>
+        data-active={ this.props.isActive || false }>
         <i className={this.props.icon}/>
         <Tooltip
           toggle={this.toggle}
@@ -298,6 +243,17 @@ class IconButton extends React.Component {
   }
 }
 
+const IconButtonPropTypes = {
+  icon: PropTypes.string,
+  id: PropTypes.string,
+  onMouseDown: PropTypes.func,
+  isActive: PropTypes.bool,
+  disabled: PropTypes.bool,
+  text: PropTypes.string,
+};
+
+IconButton.propTypes = IconButtonPropTypes;
+
 
 class FileInfo extends React.PureComponent {
 
@@ -306,22 +262,26 @@ class FileInfo extends React.PureComponent {
   }
 
   render() {
-    let fileInfo = this.props.fileInfo;
-    let modifyTime = moment(fileInfo.mtime*1000).format('YYYY-MM-DD HH:mm');
-    const url = this.props.serviceURL + '/profile/' + fileInfo.last_modifier_email + '/';
+    let modifyTime = moment(lastModified*1000).format('YYYY-MM-DD HH:mm');
+    const modifierUrl = this.props.serviceURL + '/profile/' + latestContributor + '/';
     return (
       <div className={'file-info-wrapper'}>
         <div className="topbar-file-info">
-          <h2 className="file-view-hd d-flex">
-            <span className='file-name'>{fileInfo.name}</span>
-            <span className='file-star' title={fileInfo.starred ? gettext('unstar'): ('star')}>
-              <i onClick={this.props.toggleStar} className={fileInfo.starred? 'fa fa-star star': 'far fa-star'}/>
+          <h2 className="file-title d-flex">
+            <span className='file-name'>{fileName}</span>
+            <span className='file-star' title={this.props.star ? gettext('unstar'): ('star')}>
+              <i onClick={this.props.toggleStar} className={this.props.star ? 'fa fa-star star': 'far fa-star'}/>
             </span>
+            <InternalLinkDialog repoID={repoID} path={filePath}/>
+            {this.props.isLocked &&
+              <img className="vam" width="16" src={ mediaUrl + 'img/file-locked-32.png' } alt="locked" title="locked"/>
+            }
           </h2>
           <div className="file-state">
-            <span className={'file-modifier-name'}><a href={url}>{fileInfo.last_modifier_name}</a></span>{' '}
-            <span className={'file-modifier-time'}>{modifyTime}</span>{' '}
-            <span className={'file-edit'}>{gettext('updated this file.')}</span>
+            <span className={'file-modifier-name'}>
+              <a href={modifierUrl}>{latestContributor}</a>
+            </span>{' '}
+            <span className={'file-modifier-time'}>{modifyTime}</span>
           </div>
         </div>
       </div>
@@ -329,14 +289,22 @@ class FileInfo extends React.PureComponent {
   }
 }
 
+const FileInfoPropTypes = {
+  serviceURL: PropTypes.string.isRequired,
+  toggleStar: PropTypes.func.isRequired,
+  isLocked: PropTypes.bool,
+  star: PropTypes.bool,
+};
+
+FileInfo.propTypes = FileInfoPropTypes;
 
 if (enableWatermark) {
   const loginUser = window.app.userInfo.name;
   let watermark_txt;
   if (loginUser) {
-    watermark_txt = siteName + "  " + loginUser;
+    watermark_txt = siteName + '  ' + loginUser;
   } else {
-    watermark_txt = gettext("Anonymous User");
+    watermark_txt = gettext('Anonymous User');
   }
   watermark.init({
     watermark_txt: watermark_txt,

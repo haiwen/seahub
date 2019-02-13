@@ -47,7 +47,7 @@
                   isLocked: '{{ file_locked }}' == 'True',
                   lockedByMe: '{{ locked_by_me }}' == 'True',
                   canLockUnlockFile: '{{ can_lock_unlock_file }}' == 'True',
-                  isStarred: '{{ is_starred }}',
+                  isStarred: '{{ is_starred }}' == 'True',
               },
              userInfo: {
                username: '{{ user.username }}',
