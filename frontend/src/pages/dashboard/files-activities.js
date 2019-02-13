@@ -6,6 +6,8 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import Activity from '../../models/activity';
+import ListCreatedFileDialog from '../../components/dialog/list-created-files-dialog';
+import ModalPortal from '../../components/modal-portal';
 
 moment.locale(window.app.config.lang);
 
@@ -21,11 +23,13 @@ class FileActivitiesContent extends Component {
     return ( 
       <Fragment>
         <table width="100%" className="table table-hover table-vcenter">
-          <col width="8%" />
-          <col width="15%" />
-          <col width="20%" />
-          <col width="37%" />
-          <col width="20%" />
+          <colgroup>
+            <col width="8%" />
+            <col width="15%" />
+            <col width="20%" />
+            <col width="37%" />
+            <col width="20%" />
+          </colgroup>
           <TableBody items={items} />
         </table>
         {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
@@ -42,6 +46,21 @@ const tablePropTypes = {
 };
 
 class TableBody extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isListCreatedFiles: false,
+      activity: '',
+    };
+  }
+
+  onListCreatedFilesToggle = (activity) => {
+    this.setState({
+      isListCreatedFiles: !this.state.isListCreatedFiles,
+      activity: activity,
+    });
+  }
 
   render() {
     let listFilesActivities = this.props.items.map(function(item, index) {
@@ -96,6 +115,15 @@ class TableBody extends Component {
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
         }
+      } else if (item.obj_type == 'files') {
+        let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
+        let fileLink = `<a href=${fileURL}>${item.name}</a>`;
+        let fileCount = `<a href='#'>${item.createdFilesCount - 1}</a>`;
+        let firstLine = gettext('{file} and {n} other files');
+        firstLine = firstLine.replace('{file}', fileLink);
+        firstLine = firstLine.replace('{n}', fileCount);
+        op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
+        details = <td><div dangerouslySetInnerHTML={{__html: firstLine}} onClick={this.onListCreatedFilesToggle.bind(this, item)}></div>{smallLibLink}</td>;
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
@@ -200,7 +228,17 @@ class TableBody extends Component {
     }, this);
 
     return (
-      <tbody>{listFilesActivities}</tbody>
+      <Fragment>
+        <tbody>{listFilesActivities}</tbody>
+        {this.state.isListCreatedFiles &&
+          <ModalPortal>
+            <ListCreatedFileDialog
+              activity={this.state.activity}
+              toggleCancel={this.onListCreatedFilesToggle}
+            />
+          </ModalPortal>
+        }
+      </Fragment>
     );
   }
 }
@@ -227,12 +265,17 @@ class FilesActivities extends Component {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
+      let events = this.mergeReviewEvents(res.data.events);
+      events = this.mergeFileCreateEvents(events);
       this.setState({
-        items: this.filterSuperfluousEvents(res.data.events),
+        items: events,
         currentPage: currentPage + 1,
         isFirstLoading: false,
         hasMore: true,
       });
+      if (this.state.items.length < 25) {
+        this.getMore();
+      }
     }).catch(error => {
       if (error.response.status == 403) {
         this.setState({
@@ -243,7 +286,7 @@ class FilesActivities extends Component {
     });
   }
 
-  filterSuperfluousEvents = (events) => {
+  mergeReviewEvents = (events) => {
     events.map((item) => {
       if (item.op_type === 'finished') {
         this.curPathList.push(item.path);
@@ -255,20 +298,48 @@ class FilesActivities extends Component {
       if (events[i].obj_type === 'file') {
         if (events[i].op_type === 'delete' && this.oldPathList.includes(events[i].path)) {
           this.oldPathList.splice(this.oldPathList.indexOf(events[i].path), 1);
-          continue;
         } else if (events[i].op_type === 'edit' && this.curPathList.includes(events[i].path)) {
           this.curPathList.splice(this.curPathList.indexOf(events[i].path), 1);
-          continue;
         } else if (events[i].op_type === 'rename' && this.oldPathList.includes(events[i].old_path)) {
           this.oldPathList.splice(this.oldPathList.indexOf(events[i].old_path), 1);
-          continue;
         } else {
-          let event = new Activity(events[i]);
-          actuallyEvents.push(event);
+          actuallyEvents.push(events[i]);
         }
       } else {
-        let event = new Activity(events[i]);
-        actuallyEvents.push(event);
+        actuallyEvents.push(events[i]);
+      }
+    }
+    return actuallyEvents;
+  }
+
+  mergeFileCreateEvents = (events) => {
+    let actuallyEvents = [];
+    let multiFilesActivity = null;
+    for (var i = 0; i < events.length; i++) {
+      let isFulfilCondition = events[i].obj_type === 'file' &&
+                              events[i].op_type === 'create' &&
+                              events[i + 1] &&
+                              events[i + 1].obj_type === 'file' &&
+                              events[i + 1].op_type === 'create' &&
+                              events[i + 1].repo_name === events[i].repo_name &&
+                              events[i + 1].author_email === events[i].author_email;
+      if (multiFilesActivity != null) {
+        multiFilesActivity.createdFilesCount++;
+        multiFilesActivity.createdFilesList.push(events[i]);
+        if (isFulfilCondition) {
+          continue;
+        } else {
+          actuallyEvents.push(multiFilesActivity);
+          multiFilesActivity = null;
+        }
+      } else {
+        if (isFulfilCondition) {
+          multiFilesActivity = new Activity(events[i]);
+          multiFilesActivity.obj_type = 'files';
+          multiFilesActivity.createdFilesCount++;
+        } else {
+          actuallyEvents.push(events[i]);
+        }
       }
     }
     return actuallyEvents;
@@ -278,12 +349,17 @@ class FilesActivities extends Component {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
+      let events = this.mergeReviewEvents(res.data.events);
+      events = this.mergeFileCreateEvents(events);
       this.setState({
         isLoadingMore: false,
-        items: [...this.state.items, ...this.filterSuperfluousEvents(res.data.events)],
+        items: [...this.state.items, ...events],
         currentPage: currentPage + 1,
         hasMore: res.data.events.length === 0 ? false : true 
       });
+      if (this.state.items.length < 25 && this.state.hasMore) {
+        this.getMore();
+      }
     }).catch(error => {
       if (error.response.status == 403) {
         this.setState({
