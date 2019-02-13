@@ -316,7 +316,9 @@ class FilesActivities extends Component {
     let actuallyEvents = [];
     let multiFilesActivity = null;
     for (var i = 0; i < events.length; i++) {
-      let isFulfilCondition = events[i + 1] &&
+      let isFulfilCondition = events[i].obj_type === 'file' &&
+                              events[i].op_type === 'create' &&
+                              events[i + 1] &&
                               events[i + 1].obj_type === 'file' &&
                               events[i + 1].op_type === 'create' &&
                               events[i + 1].repo_name === events[i].repo_name &&
@@ -331,7 +333,7 @@ class FilesActivities extends Component {
           multiFilesActivity = null;
         }
       } else {
-        if (events[i].op_type === 'create' && events[i].obj_type === 'file' && isFulfilCondition) {
+        if (isFulfilCondition) {
           multiFilesActivity = new Activity(events[i]);
           multiFilesActivity.obj_type = 'files';
           multiFilesActivity.createdFilesCount++;
