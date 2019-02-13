@@ -323,14 +323,14 @@ ul,ol,li {
 
 .action-icon,
 .attr-action-icon {
-    color:#888;
+    color:#888 !important;
 }
 
 .action-icon:focus,
 .action-icon:hover,
 .attr-action-icon:focus,
 .attr-action-icon:hover {
-    color: #333;
+    color: #333 !important;
     text-decoration: none;
 }
 
@@ -783,11 +783,6 @@ a.sf-popover-item:hover {
 .side-panel-top {
     padding: .5rem 1rem;
 }
-@media (max-width: 767px) {
-    .side-panel-top {
-        border-right: 1px solid #eee;
-    }
-}
 .side-panel-close {
     margin:10px 0 0 auto;
 }
@@ -1077,7 +1072,6 @@ a.table-sort-op:focus {
         color: #000;
         line-height: 2rem;
         font-size: 0.875rem;
-        
     }
     
 }
