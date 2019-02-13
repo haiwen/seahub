@@ -215,7 +215,7 @@ class Search extends Component {
     );
   }
 
-  onSearchedToggle = () => {
+  onSearchToggle = () => {
     this.setState({
       isSearchInputShow: !this.state.isSearchInputShow,
       isMaskShow: !this.state.isMaskShow,
@@ -254,7 +254,7 @@ class Search extends Component {
         </MediaQuery>
         <MediaQuery query="(max-width: 768px)">
           <div className="search-icon-container">
-            <i className="search-icon fas fa-search" onClick={this.onSearchedToggle}></i>
+            <i className="search-icon fas fa-search" onClick={this.onSearchToggle}></i>
           </div>
           {this.state.isSearchInputShow && 
             <div className="search">
