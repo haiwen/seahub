@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, storages, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
+import { gettext, siteRoot, storages, folderPermEnabled, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoSnapshotLabel } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import Rename from '../../components/rename';
@@ -20,6 +20,7 @@ const propTypes = {
   onTransfer: PropTypes.func.isRequired,
   showDeleteItemPopup: PropTypes.func.isRequired,
   onHistorySetting: PropTypes.func.isRequired,
+  onResetEncryptedRepoPassword: PropTypes.func.isRequired,
   onRepoDetails: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired
 };
@@ -150,6 +151,12 @@ class Item extends Component {
     this.setState({isChangeRepoPasswordDialogOpen: !this.state.isChangeRepoPasswordDialogOpen});
   }
 
+  resetEncryptedRepoPassword = () => {
+    const repoName = this.props.data.repo_name;
+    const repoID = this.props.data.repo_id;
+    this.props.onResetEncryptedRepoPassword(repoName, repoID);
+  }
+
   folderPerm = () => {
   }
 
@@ -171,7 +178,8 @@ class Item extends Component {
 
   render() {
     const data = this.props.data;
-    
+    const showResetPasswordMenuItem = data.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
+
     data.icon_url = Utils.getLibIconUrl(data); 
     data.icon_title = Utils.getLibIconTitle(data);
     data.url = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
@@ -200,6 +208,7 @@ class Item extends Component {
         <DropdownItem onClick={this.transfer}>{gettext('Transfer')}</DropdownItem>
         <DropdownItem onClick={this.historySetting}>{gettext('History Setting')}</DropdownItem>
         {data.encrypted ? <DropdownItem onClick={this.changePassword}>{gettext('Change Password')}</DropdownItem> : ''}
+        {showResetPasswordMenuItem ? <DropdownItem onClick={this.resetEncryptedRepoPassword}>{gettext('Reset Password')}</DropdownItem> : ''}
         {folderPermEnabled ? <DropdownItem onClick={this.folderPerm}>{gettext('Folder Permission')}</DropdownItem> : ''}
         <DropdownItem onClick={this.showDetails}>{gettext('Details')}</DropdownItem>
       </React.Fragment>

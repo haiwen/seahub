@@ -54,6 +54,7 @@ from seahub.api2.endpoints.repo_trash import RepoTrash
 from seahub.api2.endpoints.deleted_repos import DeletedRepos
 from seahub.api2.endpoints.repo_history import RepoHistory
 from seahub.api2.endpoints.repo_set_password import RepoSetPassword
+from seahub.api2.endpoints.repo_send_new_password import RepoSendNewPassword
 from seahub.api2.endpoints.zip_task import ZipTaskView
 from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
@@ -317,6 +318,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash/$', RepoTrash.as_view(), name='api-v2.1-repo-trash'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/history/$', RepoHistory.as_view(), name='api-v2.1-repo-history'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/set-password/$', RepoSetPassword.as_view(), name="api-v2.1-repo-set-password"),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/send-new-password/$', RepoSendNewPassword.as_view(), name="api-v2.1-repo-send-new-password"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tags/$', RepoTagsView.as_view(), name='api-v2.1-repo-tags'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tags/(?P<repo_tag_id>\d+)/$', RepoTagView.as_view(), name='api-v2.1-repo-tag'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-tags/$', RepoFileTagsView.as_view(), name='api-v2.1-file-tags'),

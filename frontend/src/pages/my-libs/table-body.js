@@ -7,6 +7,7 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransfer: PropTypes.func.isRequired,
+  onResetEncryptedRepoPassword: PropTypes.func.isRequired,
   showDeleteItemPopup: PropTypes.func.isRequired,
   onHistorySetting: PropTypes.func.isRequired,
   onRepoDetails: PropTypes.func.isRequired,
@@ -37,6 +38,7 @@ class TableBody extends Component {
           onRenameRepo={this.props.onRenameRepo}
           onDeleteRepo={this.props.onDeleteRepo}
           onTransfer={this.props.onTransfer}
+          onResetEncryptedRepoPassword={this.props.onResetEncryptedRepoPassword}
           showDeleteItemPopup={this.props.showDeleteItemPopup}
           onHistorySetting={this.props.onHistorySetting}
           onRepoDetails={this.props.onRepoDetails}
