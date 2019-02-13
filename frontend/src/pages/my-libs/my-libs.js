@@ -3,22 +3,30 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
+import Loading from '../../components/loading';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
-import Content from './content';
+import MylibRepoListView from './mylib-repo-list-view/mylib-repo-list-view';
 
 class MyLibraries extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowDetails: false,
-      loading: true,
       errorMsg: '',
-      items: [],
+      isLoading: true,
+      repoList: [],
+      isShowDetails: false,
       sortBy: 'name', // 'name' or 'time'
       sortOrder: 'asc' // 'asc' or 'desc'
     };
+
+    this.emptyMessage = (
+      <div className="empty-tip">
+        <h2>{gettext('You have not created any libraries')}</h2>
+        <p>{gettext('You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately.')}</p>
+      </div>
+    );
   }
 
   componentDidMount() {
@@ -28,26 +36,26 @@ class MyLibraries extends Component {
         return new Repo(item);
       });
       this.setState({
-        loading: false,
-        items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+        isLoading: false,
+        repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       if (error.response) {
         if (error.response.status == 403) {
           this.setState({
-            loading: false,
+            isLoading: false,
             errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
-            loading: false,
+            isLoading: false,
             errorMsg: gettext('Error')
           });
         }
       } else {
         this.setState({
-          loading: false,
+          isLoading: false,
           errorMsg: gettext('Please check the network.')
         });
       }
@@ -66,44 +74,44 @@ class MyLibraries extends Component {
         encrypted: res.data.encrypted,
         permission: permission,
       };
-      this.state.items.unshift(repo);
-      this.setState({items: this.state.items});
+      this.state.repoList.unshift(repo);
+      this.setState({repoList: this.state.repoList});
     });
   }
 
-  sortItems = (sortBy, sortOrder) => {
+  sortRepoList = (sortBy, sortOrder) => {
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
-      items: Utils.sortRepos(this.state.items, sortBy, sortOrder)
+      repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
     });
   }
 
   onTransferRepo = (repoID) => {
-    let items = this.state.items.filter(item => {
+    let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repoID;
     });
-    this.setState({items: items});
+    this.setState({repoList: repoList});
   }
 
   onRenameRepo = (repo, newName) => {
-    let items = this.state.items.map(item => {
+    let repoList = this.state.repoList.map(item => {
       if (item.repo_id === repo.repo_id) {
         item.repo_name = newName;
       }
       return item;
     });
-    this.setState({items: items});
+    this.setState({repoList: repoList});
   }
   
   onDeleteRepo = (repo) => {
-    let items = this.state.items.filter(item => {
+    let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
-    this.setState({items: items});
+    this.setState({repoList: repoList});
   }
 
-  onItemClick = (repo) => {
+  onRepoClick = (repo) => {
     if (this.state.isShowDetails) {
       this.onRepoDetails(repo);
     }
@@ -111,15 +119,13 @@ class MyLibraries extends Component {
 
   onRepoDetails = (repo) => {
     this.setState({
+      currentRepo: repo,
       isShowDetails: true,
-      currentRepo: repo
     });
   }
 
   closeDetails = () => {
-    this.setState({
-      isShowDetails: !this.state.isShowDetails
-    });
+    this.setState({isShowDetails: !this.state.isShowDetails});
   }
 
   render() {
@@ -135,19 +141,22 @@ class MyLibraries extends Component {
               <h3 className="sf-heading">{gettext('My Libraries')}</h3>
             </div>
             <div className="cur-view-content">
-              <Content 
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.items}
-                sortBy={this.state.sortBy}
-                sortOrder={this.state.sortOrder}
-                sortItems={this.sortItems}
-                onDeleteRepo={this.onDeleteRepo}
-                onRenameRepo={this.onRenameRepo}
-                onTransferRepo={this.onTransferRepo}
-                onRepoDetails={this.onRepoDetails}
-                onItemClick={this.onItemClick}
-              />
+              {this.state.isLoading && <Loading />}
+              {!this.state.isLoading && this.state.errorMsg &&  <p className="error text-center">{this.state.errorMsg}</p>}
+              {!this.state.isLoading && this.state.repoList.length === 0 && this.emptyMessage}
+              {!this.state.isLoading && this.state.repoList.length > 0 && 
+                <MylibRepoListView
+                  sortBy={this.state.sortBy}
+                  sortOrder={this.state.sortOrder}
+                  repoList={this.state.repoList}
+                  onRenameRepo={this.onRenameRepo}
+                  onDeleteRepo={this.onDeleteRepo}
+                  onTransferRepo={this.onTransferRepo}
+                  onRepoDetails={this.onRepoDetails}
+                  onRepoClick={this.onRepoClick}
+                  sortRepoList={this.sortRepoList}
+                />
+              }
             </div>
           </div>
           {this.state.isShowDetails && (
