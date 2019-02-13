@@ -12,6 +12,7 @@ import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import TransferDialog from '../../components/dialog/transfer-dialog';
 import LibHistorySettingDialog from '../../components/dialog/lib-history-setting-dialog';
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
+import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
 import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 
@@ -39,6 +40,7 @@ class MylibRepoListItem extends React.Component {
       isTransferDialogShow: false,
       isHistorySettingDialogShow: false,
       isChangePasswordDialogShow: false,
+      isResetPasswordDialogShow: false,
     };
   }
 
@@ -79,6 +81,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'Change Password':
         this.onChangePasswordToggle();
+        break;
+      case 'Reset Password':
+        this.onResetPasswordToggle();
         break;
       case 'Folder Permission':
         // todo
@@ -121,6 +126,10 @@ class MylibRepoListItem extends React.Component {
 
   onChangePasswordToggle = () => {
     this.setState({isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow});
+  }
+
+  onResetPasswordToggle = () => {
+    this.setState({isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow});
   }
 
   onRepoDetails = () => {
@@ -312,6 +321,14 @@ class MylibRepoListItem extends React.Component {
               repoID={repo.repo_id}
               repoName={repo.repo_name}
               toggleDialog={this.onChangePasswordToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isResetPasswordDialogShow && (
+          <ModalPortal>
+            <ResetEncryptedRepoPasswordDialog 
+              repoID={repo.repo_id}
+              toggleDialog={this.onResetPasswordToggle}
             />
           </ModalPortal>
         )}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
+import { gettext, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -17,7 +17,7 @@ class MylibRepoMenu extends React.Component {
     super(props);
     this.state = {
       isItemMenuShow: false,
-    }
+    };
   }
 
   onMenuItemClick = (e) => {
@@ -50,9 +50,13 @@ class MylibRepoMenu extends React.Component {
 
   generatorOperations = () => {
     let repo = this.props.repo;
+    let showResetPasswordMenuItem = repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
     let operations = ['Rename', 'Transfer', 'History Setting'];
     if (repo.encrypted) {
       operations.push('Change Password');
+    }
+    if (showResetPasswordMenuItem) {
+      operations.push('Reset Password')
     }
     if (folderPermEnabled) {
       operations.push('Folder Permission');
@@ -84,6 +88,9 @@ class MylibRepoMenu extends React.Component {
         break;
       case 'Change Password':
         translateResult = gettext('Change Password');
+        break;
+      case 'Reset Password':
+        translateResult = gettext('Reset Password');
         break;
       case 'Folder Permission':
         translateResult = gettext('Folder Permission');
