@@ -7,7 +7,7 @@ import Loading from '../../components/loading';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
-import MylibRepoListView from './mylib-repo-list-view/mylib-repo-list-view';
+import MylibRepoListView from './mylib-repo-list-view';
 
 class MyLibraries extends Component {
   constructor(props) {

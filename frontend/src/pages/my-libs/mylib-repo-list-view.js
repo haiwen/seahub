@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import { gettext, storages } from '../../../utils/constants';
+import { gettext, storages } from '../../utils/constants';
 import MylibRepoListItem from './mylib-repo-list-item';
 
 const propTypes = {

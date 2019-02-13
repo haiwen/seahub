@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import moment from 'moment';
 import { Link } from '@reach/router';
-import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot, storages } from '../../../utils/constants';
-import ModalPortal from '../../../components/modal-portal';
-import ShareDialog from '../../../components/dialog/share-dialog';
-import DeleteRepoDialog from '../../../components/dialog/delete-repo-dialog';
-import TransferDialog from '../../../components/dialog/transfer-dialog';
-import LibHistorySettingDialog from '../../../components/dialog/lib-history-setting-dialog';
-import ChangeRepoPasswordDialog from '../../../components/dialog/change-repo-password-dialog';
-import Rename from '../../../components/rename';
+import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
+import { gettext, siteRoot, storages } from '../../utils/constants';
+import ModalPortal from '../../components/modal-portal';
+import ShareDialog from '../../components/dialog/share-dialog';
+import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
+import TransferDialog from '../../components/dialog/transfer-dialog';
+import LibHistorySettingDialog from '../../components/dialog/lib-history-setting-dialog';
+import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
+import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 
 const propTypes = {
