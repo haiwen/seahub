@@ -46,7 +46,7 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
         </ModalHeader>
         <ModalBody>
         {this.state.showLoading && (
-          <span>{gettext('Sending new password.')}</span>
+          <span>{gettext('Sending new password...')}</span>
         )}
         {this.state.showSuccess && (
           <span>{gettext('New password has been sent to your email {mail}. Please check your mailbox. If you don’t receive the password, please check if your email address is properly configured.').replace('{mail}', contactEmail)}</span>
