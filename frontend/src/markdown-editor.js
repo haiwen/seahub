@@ -1,7 +1,7 @@
 import React from 'react';
 import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
-import { SeafileAPI } from 'seafile-js';
+import { SeafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import cookie from 'react-cookies';
 import ModalPortal from './components/modal-portal';
@@ -32,10 +32,6 @@ let dirPath = '/';
 const serviceUrl = window.app.config.serviceUrl;
 const seafileCollabServer = window.app.config.seafileCollabServer;
 const userInfo = window.app.userInfo;
-// init seafileAPI
-let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
-seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
