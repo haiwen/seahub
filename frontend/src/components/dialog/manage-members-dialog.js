@@ -1,5 +1,4 @@
 import React from 'react';
-import AsyncSelect from 'react-select/lib/Async';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';

@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Account from './components/common/account';
 import CodeMirror from 'react-codemirror';
 import { Button } from 'reactstrap';
-import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import watermark from 'watermark-dom';
 import { serviceURL, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
@@ -51,18 +50,18 @@ class SharedFileViewText extends React.Component {
   }
 
   fileEncode = () => {
-    const list = fileEncodingList.substring(1, fileEncodingList.length - 1).replace(/\'*/g,"").replace(/\s*/g,"").split(',');
+    const list = fileEncodingList.substring(1, fileEncodingList.length - 1).replace(/\'*/g,'').replace(/\s*/g,'').split(',');
     return (
       <div className="file-enc-cont">
         <label htmlFor="file-enc">{gettext('Encoding:')}</label>
         <select id="file-enc" onChange={this.changeEncode} defaultValue={encoding}>
           { list && list.map((value, index) => {
-              if (value === 'auto') {
-                return (<option value={value} key={index}>{gettext('auto detect')}</option>)
-              } else {
-                return (<option value={value} key={index}>{value}</option>)
-              }
-            })
+            if (value === 'auto') {
+              return (<option value={value} key={index}>{gettext('auto detect')}</option>);
+            } else {
+              return (<option value={value} key={index}>{value}</option>);
+            }
+          })
           }
         </select>
       </div>
@@ -117,9 +116,9 @@ class SharedFileViewText extends React.Component {
 if (enableWatermark) {
   let watermark_txt;
   if (loginUser) {
-    watermark_txt = siteName + "  " + loginUser;
+    watermark_txt = siteName + '  ' + loginUser;
   } else {
-    watermark_txt = gettext("Anonymous User");
+    watermark_txt = gettext('Anonymous User');
   }
   watermark.init({
     watermark_txt: watermark_txt,
