@@ -90,9 +90,15 @@
 .review-side-panel-body {
   padding: 1rem 2rem;
 }
+.review-side-panel-body .dirent-table-container {
+  padding-left: 0;
+}
 .review-side-panel-item {
   border-bottom: 1px solid #e6e6dd;
   padding: 1em 0;
+}
+.review-side-panel-item:last-child {
+  border: 0;
 }
 .reviewer-info, .author-info {
   display: flex;

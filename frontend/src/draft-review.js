@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
@@ -28,6 +29,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/toolbar.css';
+import './css/dirent-detail.css';
 import './css/draft-review.css';
 
 const URL = require('url-parse');
@@ -42,6 +44,7 @@ class DraftReview extends React.Component {
       reviewStatus: opStatus,
       isLoading: true,
       commentsNumber: null,
+      unresolvedComments: 0,
       inResizing: false,
       commentWidth: 30,
       isShowDiff: true,
@@ -54,6 +57,7 @@ class DraftReview extends React.Component {
       changedNodes: [],
       isShowCommentDialog: false,
       activeItem: null,
+      originRepoName: '',
     };
     this.quote = '';
     this.newIndex = null;
@@ -245,8 +249,16 @@ class DraftReview extends React.Component {
   getCommentsNumber = () => {
     seafileAPI.listReviewComments(reviewID).then((res) => {
       let number = res.data.total_count;
+      let comments = res.data.comments;
+      let unresolvedComments = 0;
+      for (let i = 0; i < res.data.total_count; i++) {
+        if (comments[i].resolved === false) {
+          unresolvedComments++;
+        }
+      }
       this.setState({
         commentsNumber: number,
+        unresolvedComments: unresolvedComments,
       });
     });
   }
@@ -379,8 +391,6 @@ class DraftReview extends React.Component {
     const focusText = document.getNode(focus.key);
     const anchorInline = document.getClosestInline(anchor.key);
     const focusInline = document.getClosestInline(focus.key);
-    const focusBlock = document.getClosestBlock(focus.key);
-    const anchorBlock = document.getClosestBlock(anchor.key);
     // COMPAT: If the selection is at the end of a non-void inline node, and
     // there is a node after it, put it in the node after instead. This
     // standardizes the behavior, since it's indistinguishable to the user.
@@ -571,6 +581,15 @@ class DraftReview extends React.Component {
   componentWillMount() {
     this.getCommentsNumber();
     this.listReviewers();
+    this.getOriginRepoInfo();
+  }
+
+  getOriginRepoInfo = () => {
+    seafileAPI.getRepoInfo(draftOriginRepoID).then((res) => {
+      this.setState({
+        originRepoName: res.data.repo_name
+      });
+    });
   }
 
   initialDiffViewerContent = () => {
@@ -867,11 +886,18 @@ class DraftReview extends React.Component {
                         reviewers={this.state.reviewers}
                         toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>                        
                       <SidePanelAuthor/>
+                      <UnresolvedComments number={this.state.unresolvedComments}/>
                       { this.state.isShowDiff &&
                       <SidePanelChanges
                         changedNumber={this.state.changedNodes.length}
                         scrollToChangedNode={this.scrollToChangedNode}/>
                       }
+                      <SidePanelOrigin originRepoName={this.state.originRepoName}/>
+                      <div className="review-side-panel-item">
+                        <a href={draftLink}>
+                          <Button color="secondary" size="sm">{gettext('Edit Draft')}</Button>
+                        </a>
+                      </div>
                     </div>
                   </TabPane>
                   <TabPane tabId="comments" className="comments">
@@ -969,6 +995,61 @@ class SidePanelAuthor extends React.Component {
     );
   }
 }
+
+class SidePanelOrigin extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="dirent-table-container">
+        <table className="table-thead-hidden">
+          <thead>
+            <tr><th width="25%"></th><th width="75%"></th></tr>
+          </thead>
+          <tbody>
+            <tr><th>{gettext('Library')}</th><td>{this.props.originRepoName}</td></tr>
+            <tr><th>{gettext('Position')}</th><td>{draftOriginFilePath}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
+const SidePanelOriginPropTypes = {
+  originRepoName: PropTypes.string.isRequired
+};
+
+SidePanelOrigin.propTypes = SidePanelOriginPropTypes;
+
+
+class UnresolvedComments extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="review-side-panel-item">
+        <div className="review-side-panel-header">{gettext('Comments')}</div>
+        <div className="changes-info">
+          <span>{gettext('Unresolved comments:')}{' '}{this.props.number}</span>
+        </div>
+      </div>
+    );
+  }
+}
+
+const UnresolvedCommentsPropTypes = {
+  number: PropTypes.number.isRequired
+};
+
+UnresolvedComments.propTypes = UnresolvedCommentsPropTypes;
+
 
 class SidePanelChanges extends React.Component {
 
