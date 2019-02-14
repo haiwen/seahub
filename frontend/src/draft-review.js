@@ -893,11 +893,7 @@ class DraftReview extends React.Component {
                         scrollToChangedNode={this.scrollToChangedNode}/>
                       }
                       <SidePanelOrigin originRepoName={this.state.originRepoName}/>
-                      <div className="review-side-panel-item">
-                        <a href={draftLink}>
-                          <Button color="secondary" size="sm">{gettext('Edit Draft')}</Button>
-                        </a>
-                      </div>
+                      <a href={draftLink}><Button color="secondary">{gettext('Edit Draft')}</Button></a>
                     </div>
                   </TabPane>
                   <TabPane tabId="comments" className="comments">
