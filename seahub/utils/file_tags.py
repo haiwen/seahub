@@ -39,7 +39,7 @@ def get_tagged_files(repo, repo_tag_id):
 
     tagged_files = defaultdict(list)
     for tagged_file_obj in tagged_file_objs:
-        file_tag_id = tagged_file_obj.pk
+        # file_tag_id = tagged_file_obj.pk
         parent_path = tagged_file_obj.file_uuid.parent_path
         filename = tagged_file_obj.file_uuid.filename
         file_path = posixpath.join(parent_path, filename)
@@ -49,10 +49,10 @@ def get_tagged_files(repo, repo_tag_id):
         if not file_obj:
             exception = "Can't find tagged file. Repo_id: %s, Path: %s." % (repo.id, file_path)
             logger.warning(exception)
-            tagged_file["file_deleted"] = True
-            tagged_file["file_tag_id"] = file_tag_id
-            tagged_file["filename"] = filename
-            tagged_files["tagged_files"].append(tagged_file)
+            # tagged_file["file_deleted"] = True
+            # tagged_file["file_tag_id"] = file_tag_id
+            # tagged_file["filename"] = filename
+            # tagged_files["tagged_files"].append(tagged_file)
             continue
 
         tagged_file["parent_path"] = parent_path
