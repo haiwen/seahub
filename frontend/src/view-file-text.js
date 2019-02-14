@@ -92,7 +92,7 @@ class ViewFileText extends React.Component {
 
   renderToolbar() {
     return (
-      <div className='txt-view-button-group' role={'group'}>
+      <div className="txt-view-button-group" role="group">
         <ButtonGroup>
           <IconButton
             text={gettext('Back to parent directory')}
@@ -204,6 +204,14 @@ class ViewFileText extends React.Component {
   }
 }
 
+const IconButtonPropTypes = {
+  icon: PropTypes.string,
+  id: PropTypes.string,
+  onMouseDown: PropTypes.func,
+  isActive: PropTypes.bool,
+  disabled: PropTypes.bool,
+  text: PropTypes.string,
+};
 
 class IconButton extends React.Component {
 
@@ -243,17 +251,14 @@ class IconButton extends React.Component {
   }
 }
 
-const IconButtonPropTypes = {
-  icon: PropTypes.string,
-  id: PropTypes.string,
-  onMouseDown: PropTypes.func,
-  isActive: PropTypes.bool,
-  disabled: PropTypes.bool,
-  text: PropTypes.string,
-};
-
 IconButton.propTypes = IconButtonPropTypes;
 
+const FileInfoPropTypes = {
+  serviceURL: PropTypes.string.isRequired,
+  toggleStar: PropTypes.func.isRequired,
+  isLocked: PropTypes.bool,
+  star: PropTypes.bool,
+};
 
 class FileInfo extends React.PureComponent {
 
@@ -262,14 +267,14 @@ class FileInfo extends React.PureComponent {
   }
 
   render() {
-    let modifyTime = moment(lastModified*1000).format('YYYY-MM-DD HH:mm');
+    let modifyTime = moment(lastModified * 1000).format('YYYY-MM-DD HH:mm');
     const modifierUrl = this.props.serviceURL + '/profile/' + latestContributor + '/';
     return (
       <div className={'file-info-wrapper'}>
         <div className="topbar-file-info">
           <h2 className="file-title d-flex">
             <span className='file-name'>{fileName}</span>
-            <span className='file-star' title={this.props.star ? gettext('unstar'): ('star')}>
+            <span className='file-star' title={this.props.star ? 'unstar' : 'star'}>
               <i onClick={this.props.toggleStar} className={this.props.star ? 'fa fa-star star': 'far fa-star'}/>
             </span>
             <InternalLinkDialog repoID={repoID} path={filePath}/>
@@ -278,23 +283,16 @@ class FileInfo extends React.PureComponent {
             }
           </h2>
           <div className="file-state">
-            <span className={'file-modifier-name'}>
+            <span className="file-modifier-name">
               <a href={modifierUrl}>{latestContributor}</a>
             </span>{' '}
-            <span className={'file-modifier-time'}>{modifyTime}</span>
+            <span className="file-modifier-time">{modifyTime}</span>
           </div>
         </div>
       </div>
     );
   }
 }
-
-const FileInfoPropTypes = {
-  serviceURL: PropTypes.string.isRequired,
-  toggleStar: PropTypes.func.isRequired,
-  isLocked: PropTypes.bool,
-  star: PropTypes.bool,
-};
 
 FileInfo.propTypes = FileInfoPropTypes;
 
