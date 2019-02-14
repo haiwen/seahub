@@ -9,6 +9,7 @@ import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import { serviceURL, gettext, mediaUrl } from './utils/constants';
 import InternalLinkDialog from './components/dialog/internal-link-dialog';
+import CommentsList from './components/comments-list';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
@@ -87,6 +88,9 @@ class ViewFileText extends React.Component {
       case 'download':
         window.location.href = serviceURL + '/lib/' + repoID + '/file/' + filePath +'?dl=1';
         break;
+      case 'comment':
+        this.toggleCommentsList();
+        break;
     }
   }
 
@@ -128,17 +132,21 @@ class ViewFileText extends React.Component {
             onMouseDown={() => this.handleMouseDown('download')}
             icon={'fa fa-download'}
           />
-          {/*
-            <IconButton
-              id={'commentButton'}
-              text={gettext('Comment')}
-              onMouseDown={() => this.handleMouseDown('comment')}
-              icon={'sf-btn-group-btn op-icon sf2-icon-msgs sf-btn-group-btn-last'}
-            />
-          */}
+          <IconButton
+            id={'commentButton'}
+            text={gettext('Comment')}
+            onMouseDown={() => this.handleMouseDown('comment')}
+            icon={'fa fa-comment'}
+          />
         </ButtonGroup>
       </div>
     );
+  }
+
+  toggleCommentsList = () => {
+    this.setState({
+      showCommentsList: !this.state.showCommentsList
+    });
   }
 
   toggleStar = () => {
@@ -190,13 +198,16 @@ class ViewFileText extends React.Component {
           {this.renderToolbar()}
         </div>
         <div className="txt-file-view-body d-flex">
-          {this.fileEncode()}
-          <div className={'txt-view'}>
+          {!this.state.showCommentsList && this.fileEncode()}
+          <div className={this.state.showCommentsList ? 'txt-view-comment' : 'txt-view'}>
             <CodeMirror
               ref="code-mirror-editor"
               value={fileContent}
               options={options}
             />
+            { this.state.showCommentsList &&
+              <CommentsList toggleCommentsList={this.toggleCommentsList}/>
+            }
           </div>
         </div>
       </div>

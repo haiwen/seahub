@@ -81,3 +81,19 @@
 .file-internal-link {
   color: #585858;
 }
+
+.txt-file-view-body .txt-view-comment {
+  background: #fff;
+  display: flex;
+  height: 100%;
+} 
+
+.txt-file-view-body .txt-view-comment .ReactCodeMirror {
+  width: 70%;
+  margin: 5px 20px;
+  overflow-y: auto;
+}
+
+.txt-file-view-body .txt-view-comment .seafile-comment {
+  width: 30%;
+}
