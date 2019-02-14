@@ -2005,7 +2005,9 @@ def batch_add_user(request):
         # remove first row(head field).
         rows.next()
         for row in rows:
-            records.append([c.value for c in row])
+            # value of email and password is not None
+            if row[0].value and row[1].value:
+                records.append([c.value for c in row])
 
         if user_number_over_limit(new_users=len(records)):
             messages.error(request, _(u'The number of users exceeds the limit.'))
