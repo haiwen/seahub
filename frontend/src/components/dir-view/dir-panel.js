@@ -60,6 +60,7 @@ const propTypes = {
   readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
   reviewCounts: PropTypes.number,
+  updateUsedRepoTags: PropTypes.func.isRequired,
 };
 
 class DirPanel extends React.Component {
@@ -211,6 +212,7 @@ class DirPanel extends React.Component {
                             readmeMarkdown={this.props.readmeMarkdown}
                             draftCounts={this.props.draftCounts}
                             reviewCounts={this.props.reviewCounts}
+                            updateUsedRepoTags={this.props.updateUsedRepoTags}
                           />
                         )}
                         <DirentListView

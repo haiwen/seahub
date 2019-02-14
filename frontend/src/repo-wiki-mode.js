@@ -149,16 +149,7 @@ class Wiki extends Component {
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
 
     // list used FileTags
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let usedRepoTags = [];
-      res.data.repo_tags.forEach(item => {
-        let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount > 0) {
-          usedRepoTags.push(usedRepoTag);
-        }
-      });
-      this.setState({usedRepoTags: usedRepoTags});
-    });
+    this.updateUsedRepoTags();
 
     // list draft counts and revierw counts
     seafileAPI.getRepoDraftReviewCounts(repoID).then(res => {
@@ -325,8 +316,17 @@ class Wiki extends Component {
     }
   }
 
-  updateUsedRepoTags = (newUsedRepoTags) => {
-    this.setState({usedRepoTags: newUsedRepoTags});
+  updateUsedRepoTags = () => {
+    seafileAPI.listRepoTags(repoID).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount > 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.setState({usedRepoTags: usedRepoTags});
+    });
   }
 
   updateDirent = (dirent, paramKey, paramValue) => {
@@ -671,16 +671,7 @@ class Wiki extends Component {
       this.updateDirent(dirent, 'file_tags', fileTags);
     });
 
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let usedRepoTags = [];
-      res.data.repo_tags.forEach(item => {
-        let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount > 0) {
-          usedRepoTags.push(usedRepoTag);
-        }
-      });
-      this.updateUsedRepoTags(usedRepoTags);
-    });
+    this.updateUsedRepoTags();
   }
 
   onFileUploadSuccess = (direntObject) => {
@@ -1128,6 +1119,7 @@ class Wiki extends Component {
           readmeMarkdown={this.state.readmeMarkdown}
           draftCounts={this.state.draftCounts}
           reviewCounts={this.state.reviewCounts}
+          updateUsedRepoTags={this.updateUsedRepoTags}
         />
       </div>
     );

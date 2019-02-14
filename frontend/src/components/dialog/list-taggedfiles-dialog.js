@@ -10,7 +10,8 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentTag: PropTypes.object.isRequired,
   toggleCancel: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  updateUsedRepoTags: PropTypes.func.isRequired,
 };
 
 class ListTaggedFilesDialog extends React.Component {
@@ -20,6 +21,15 @@ class ListTaggedFilesDialog extends React.Component {
     this.state = {
       taggedFileList: [],
     };
+  }
+
+  onDeleteTaggedFile = (taggedFile) => {
+    let repoID = this.props.repoID;
+    let fileTagID = taggedFile.file_tag_id;
+    seafileAPI.deleteFileTag(repoID, fileTagID).then(res => {
+      this.getTaggedFiles();
+      this.props.updateUsedRepoTags();
+    });
   }
 
   componentDidMount() {
@@ -50,23 +60,21 @@ class ListTaggedFilesDialog extends React.Component {
           <table>
             <thead>
               <tr>
-                <th width='50%' className="ellipsis">{gettext('Name')}</th>
-                <th width='25%'>{gettext('Size')}</th>
-                <th width='25%'>{gettext('Last Update')}</th>
+                <th width='45%' className="ellipsis">{gettext('Name')}</th>
+                <th width='27%'>{gettext('Size')}</th>
+                <th width='18%'>{gettext('Last Update')}</th>
+                <th width='10%'></th>
               </tr>
             </thead>
             <tbody>
               {taggedFileList.map((taggedFile, index) => {
-                let path = Utils.joinPath(taggedFile.parent_path, taggedFile.filename);
-                let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
                 return (
-                  <tr key={index}>
-                    <td className="name">
-                      <a href={href} target='_blank'>{taggedFile.filename}</a>
-                    </td>
-                    <td>{Utils.bytesToSize(taggedFile.size)}</td>
-                    <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
-                  </tr>
+                  <TaggedFile
+                    key={index}
+                    repoID={this.props.repoID}
+                    taggedFile={taggedFile}
+                    onDeleteTaggedFile={this.onDeleteTaggedFile}
+                  />
                 );
               })}
             </tbody>
@@ -83,3 +91,54 @@ class ListTaggedFilesDialog extends React.Component {
 ListTaggedFilesDialog.propTypes = propTypes;
 
 export default ListTaggedFilesDialog;
+
+const TaggedFilePropTypes = {
+  repoID: PropTypes.string.isRequired,
+  taggedFile: PropTypes.object,
+  onDeleteTaggedFile: PropTypes.func.isRequired,
+};
+
+class TaggedFile extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = ({
+      active: false,
+    });
+  }
+
+  onMouseEnter = () => {
+    this.setState({
+      active: true
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      active: false
+    });
+  }
+
+  render() {
+    const taggedFile = this.props.taggedFile;
+    let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
+    let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
+    let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
+    return ( taggedFile.file_deleted ?
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td colSpan='3' className="name">{taggedFile.filename}{' '}
+          <span style={{color:"red"}}>{gettext('deleted')}</span>
+        </td>
+        <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
+      </tr>
+      :
+      <tr>
+        <td className="name"><a href={href} target='_blank'>{taggedFile.filename}</a></td>
+        <td>{Utils.bytesToSize(taggedFile.size)}</td>
+        <td colSpan='2'>{moment.unix(taggedFile.mtime).fromNow()}</td>
+      </tr>
+    );
+  }
+}
+
+TaggedFile.propTypes = TaggedFilePropTypes;

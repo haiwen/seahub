@@ -75,16 +75,7 @@ class DirView extends React.Component {
         reviewCounts: res.data.review_counts,
       });
     });
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let usedRepoTags = [];
-      res.data.repo_tags.forEach(item => {
-        let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount > 0) {
-          usedRepoTags.push(usedRepoTag);
-        }
-      });
-      this.setState({usedRepoTags: usedRepoTags});
-    });
+    this.updateUsedRepoTags();
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repoInfo = new RepoInfo(res.data);
       this.setState({
@@ -178,8 +169,17 @@ class DirView extends React.Component {
     });
   }
 
-  updateUsedRepoTags = (newUsedRepoTags) => {
-    this.setState({usedRepoTags: newUsedRepoTags});
+  updateUsedRepoTags = () => {
+    seafileAPI.listRepoTags(this.props.repoID).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount > 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.setState({usedRepoTags: usedRepoTags});
+    });
   }
 
   updateReadmeMarkdown = (direntList) => {
@@ -487,16 +487,7 @@ class DirView extends React.Component {
       this.updateDirent(dirent, 'file_tags', fileTags);
     });
 
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let usedRepoTags = [];
-      res.data.repo_tags.forEach(item => {
-        let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount > 0) {
-          usedRepoTags.push(usedRepoTag);
-        }
-      });
-      this.updateUsedRepoTags(usedRepoTags);
-    });
+    this.updateUsedRepoTags();
   }
 
   onMenuClick = () => {
@@ -754,6 +745,7 @@ class DirView extends React.Component {
         readmeMarkdown={this.state.readmeMarkdown}
         draftCounts={this.state.draftCounts}
         reviewCounts={this.state.reviewCounts}
+        updateUsedRepoTags={this.updateUsedRepoTags}
       />
     );
   }
