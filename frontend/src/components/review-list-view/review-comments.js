@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { reviewID, gettext } from '../../utils/constants';
 import Loading from '../../components/loading.js';
 import reviewComment from '../../models/review-comment.js';
+import { username } from '../../utils/constants.js';
 
 import '../../css/review-comments.css';
 
@@ -27,7 +28,6 @@ class ReviewComments extends React.Component {
       showResolvedComment: true,
       comment: '',
     };
-    this.accountInfo = {};
   }
 
   listComments = (scroll) => {
@@ -68,6 +68,7 @@ class ReviewComments extends React.Component {
 
   resolveComment = (event) => {
     seafileAPI.updateReviewComment(reviewID, event.target.id, 'true').then((res) => {
+      this.props.getCommentsNumber();
       this.listComments();
     });
   }
@@ -172,7 +173,7 @@ class ReviewComments extends React.Component {
                 this.state.commentsList.map((item, index) => {
                   return (
                     <CommentItem item={item} showResolvedComment={this.state.showResolvedComment}
-                      resolveComment={this.resolveComment} accountInfo={this.accountInfo} key={index}
+                      resolveComment={this.resolveComment} key={index}
                       scrollToQuote={this.scrollToQuote} deleteComment={this.deleteComment}/>
                   );
                 })
@@ -202,7 +203,6 @@ const commentItemPropTypes = {
   item: PropTypes.object.isRequired,
   deleteComment: PropTypes.func.isRequired,
   resolveComment: PropTypes.func.isRequired,
-  accountInfo: PropTypes.object.isRequired,
   showResolvedComment: PropTypes.bool.isRequired,
   scrollToQuote: PropTypes.func.isRequired
 };
@@ -277,7 +277,7 @@ class CommentItem extends React.Component {
                 <i className="fas fa-ellipsis-v"></i>
               </DropdownToggle>
               <DropdownMenu>
-                { (item.userEmail === this.props.accountInfo.email) &&
+                { (item.userEmail === username) &&
                   <DropdownItem onClick={this.props.deleteComment}
                     className="delete-comment" id={item.id}>{gettext('Delete')}</DropdownItem>}
                 <DropdownItem onClick={this.props.resolveComment}
