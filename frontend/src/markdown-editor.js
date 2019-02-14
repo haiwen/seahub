@@ -1,7 +1,7 @@
 import React from 'react';
 import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
-import { SeafileAPI } from './utils/seafile-api';
+import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import cookie from 'react-cookies';
 import ModalPortal from './components/modal-portal';
