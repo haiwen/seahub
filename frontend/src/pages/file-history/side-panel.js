@@ -97,9 +97,9 @@ class SidePanel extends React.Component {
 
   render() {
     return (
-      <div className="side-panel">
+      <div className="side-panel history-side-panel">
         <div className="side-panel-center">
-          <div className="panel-header">{gettext('History Versions')}</div>
+          <div className="history-side-panel-title">{gettext('History Versions')}</div>
           <div className="history-body">
             {this.state.isLoading && <Loading />}
             {this.state.historyInfo &&
