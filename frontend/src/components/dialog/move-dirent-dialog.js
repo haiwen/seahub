@@ -164,6 +164,7 @@ class MoveDirent extends React.Component {
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
+            mode="current_repo_and_other_repos"
           />
           {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>}
         </ModalBody>

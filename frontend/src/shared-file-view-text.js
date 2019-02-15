@@ -5,6 +5,8 @@ import CodeMirror from 'react-codemirror';
 import { Button } from 'reactstrap';
 import { Utils } from './utils/utils';
 import watermark from 'watermark-dom';
+import SaveSharedFileDialog from './components/dialog/save-shared-file-dialog';
+import toaster from './components/toast';
 import { serviceURL, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 
 import 'codemirror/lib/codemirror.css';
@@ -42,6 +44,9 @@ class SharedFileViewText extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      showSaveSharedFileDialog: false,
+    };
   }
 
   changeEncode = (e) => {
@@ -66,6 +71,18 @@ class SharedFileViewText extends React.Component {
         </select>
       </div>
     );
+  }
+
+  handleSaveSharedFileDialog = () => {
+    this.setState({
+      showSaveSharedFileDialog: !this.state.showSaveSharedFileDialog
+    });
+  }
+
+  saveFileSuccess = () => {
+    let msg = gettext('Successfully saved {fileName}.');
+    msg = msg.replace('{fileName}', fileName);
+    toaster.success(msg);
   }
 
   render() {
@@ -94,7 +111,7 @@ class SharedFileViewText extends React.Component {
                 }{' '}
                 {(trafficOverLimit === 'False') &&
                   <Button color="success" className="shared-file-op-btn">
-                    <a href="?dl=1">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
+                    <a href="?dl=1">{gettext('Download')}{' '}({Utils.bytesToSize(parseInt(fileSize))})</a>
                   </Button>
                 }
               </div>
@@ -104,7 +121,14 @@ class SharedFileViewText extends React.Component {
             {this.fileEncode()}
             <div className="txt-view">
               { err ? <div className="file-view-tip error">{err}</div> :
-                <CodeMirror ref="editor-sql" value={fileContent} options={options}/>}
+              <CodeMirror ref="editor-sql" value={fileContent} options={options}/>}
+              { this.state.showSaveSharedFileDialog &&
+                <SaveSharedFileDialog
+                  sharedToken={sharedToken}
+                  toggleCancel={this.handleSaveSharedFileDialog}
+                  handleSaveSharedFile={this.saveFileSuccess}
+                />
+              }
             </div>
           </div>
         </div>
