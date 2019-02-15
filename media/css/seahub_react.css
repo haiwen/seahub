@@ -1076,3 +1076,37 @@ a.table-sort-op:focus {
     
 }
 
+#image-view {
+    padding: 1px;
+    background: #fff;
+    border: 1px solid #eee;
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 4px);
+    max-height: calc(100% - 4px);
+    font-size: 0;
+    line-height: 0;
+}
+.image-file-view:before {
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+    font-size: 0;
+    line-height: 0;
+}
+.file-view-tip {
+    min-height: 130px;
+    padding: 30px 10px 10px;
+    margin: 0 20px;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 6px #ccc;
+    text-align: center;
+}
+@media (min-width: 992px) {
+    .file-view-tip {
+        width: 950px;
+        margin: 0 auto;
+    }
+}
