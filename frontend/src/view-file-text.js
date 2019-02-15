@@ -26,7 +26,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/view-file-text.css';
 
-const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred } = window.app.pageOptions;
+const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred, starItemID } = window.app.pageOptions;
 const options = {
   lineNumbers: true,
   mode: Utils.chooseLanguage(fileExt.slice(3, fileExt.length -3)),
@@ -45,6 +45,7 @@ class ViewFileText extends React.Component {
     this.state = {
       isLocked: isLocked,
       star: isStarred,
+      starItemID: starItemID,
     };
   }
 
@@ -151,20 +152,18 @@ class ViewFileText extends React.Component {
 
   toggleStar = () => {
     if (this.state.star) {
-      seafileAPI.unStarFile(repoID, filePath).then((res) => {
-        if (res.data === 'success') {
-          this.setState({
-            star: false,
-          });
-        }
+      seafileAPI.unStarItem(this.state.starItemID).then((res) => {
+        this.setState({
+          star: false,
+          starItemID: '',
+        });
       });
     } else {
-      seafileAPI.starFile(repoID, filePath).then((res) => {
-        if (res.data === 'success') {
-          this.setState({
-            star: true,
-          });
-        }
+      seafileAPI.starItem(repoID, filePath, 'false').then((res) => {
+        this.setState({
+          star: true,
+          starItemID: res.data.id
+        });
       });
     }
   }

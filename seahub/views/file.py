@@ -43,6 +43,7 @@ from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.auth.decorators import login_required
+from seahub.base.models import UserStarredFiles
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
 from seahub.share.models import FileShare, check_share_link_common
@@ -517,8 +518,14 @@ def view_lib_file(request, repo_id, path):
     }
 
     # check whether file is starred
-    is_starred = is_file_starred(username, repo_id, path.encode('utf-8'), org_id)
-    return_dict['is_starred'] = is_starred
+    star_item = UserStarredFiles.objects.filter(email=username,
+            repo_id=repo_id, path=path, org_id=org_id)
+    if not star_item:
+        return_dict['is_starred'] = False
+        return_dict['star_item_id'] = ''
+    else:
+        return_dict['is_starred'] = True
+        return_dict['star_item_id'] = star_item[0].id
 
     # check file lock info
     try:

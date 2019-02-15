@@ -1,5 +1,5 @@
 import React from 'react';
-import SeafileEditor from '@seafile/seafile-editor';
+import SeafileEditor from './seafile-editor/src/editor/seafile-editor';
 import 'whatwg-fetch';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
@@ -58,15 +58,15 @@ class EditorUtilities {
     );
   }
 
-  unStarFile () {
+  unStarItem (starItemID) {
     return (
-      seafileAPI.unStarFile(repoID, this.filePath)
+      seafileAPI.unStarItem(starItemID)
     );
   }
 
-  starFile() {
+  starItem() {
     return (
-      seafileAPI.starFile(this.repoID, this.filePath)
+      seafileAPI.starItem(this.repoID, this.filePath, 'false')
     );
   }
 
@@ -290,6 +290,7 @@ class MarkdownEditor extends React.Component {
         mtime: null,
         size: 0,
         starred: false,
+        starItemID: '',
         permission: '',
         lastModifier: '',
         id: '',
@@ -350,8 +351,9 @@ class MarkdownEditor extends React.Component {
   componentDidMount() {
 
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, size, starred, permission, last_modifier_name, id } = res.data;
+      let { mtime, size, starred, star_item_id, permission, last_modifier_name, id } = res.data;
       let lastModifier = last_modifier_name;
+      let starItemID = star_item_id;
 
       this.setState((prevState, props) => ({
         fileInfo: {
@@ -359,6 +361,7 @@ class MarkdownEditor extends React.Component {
           mtime,
           size,
           starred,
+          starItemID,
           permission,
           lastModifier,
           id

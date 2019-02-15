@@ -11,9 +11,10 @@ class Dirent {
     this.mtime_relative = moment.unix(json.mtime).fromNow();
     this.permission = json.permission || 'rw';
     this.isSelected = false; // is check or not
+    this.starred = json.starred || false;
+    this.starItemID = json.star_item_id;
     if (json.type === 'file') {
       this.size = Utils.bytesToSize(json.size);
-      this.starred = json.starred || false;
       this.is_locked = json.is_locked || false;
       this.lock_time = json.lock_time || '';
       this.lock_owner= json.lock_owner || null;

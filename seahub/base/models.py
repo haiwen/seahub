@@ -147,6 +147,19 @@ class StarredFile(object):
             self.name = path.split('/')[-1]
 
 class UserStarredFilesManager(models.Manager):
+
+    def add(self, email, repo_id, path, is_dir, org_id=-1):
+
+        starred_item = UserStarredFiles.objects.create(email=email,
+            repo_id=repo_id, path=path, is_dir=is_dir, org_id=org_id)
+
+        return starred_item
+
+    def delete(self, email, repo_id, path):
+
+        UserStarredFiles.objects.filter(email=email,
+                repo_id=repo_id, path=path).delete()
+
     def get_starred_files_by_username(self, username):
         """Get a user's starred files.
 

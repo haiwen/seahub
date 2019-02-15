@@ -3117,9 +3117,18 @@ class FileDetailView(APIView):
             logger.error(e)
             entry["size"] = 0
 
-        starred_files = UserStarredFiles.objects.filter(repo_id=repo_id,
-                path=path)
-        entry["starred"] = True if len(starred_files) > 0 else False
+        # check whether file is starred
+        username = request.user.username
+        org_id = request.user.org.org_id if is_org_context(request) else -1
+        star_item = UserStarredFiles.objects.filter(email=username,
+                repo_id=repo_id, path=path, org_id=org_id)
+        if not star_item:
+            entry['starred'] = False
+            entry['star_item_id'] = ''
+        else:
+            entry['starred'] = True
+            entry['star_item_id'] = star_item[0].id
+
         file_comments = FileComment.objects.get_by_file_path(repo_id, path)
         comment_total = file_comments.count()
         entry["comment_total"] = comment_total
