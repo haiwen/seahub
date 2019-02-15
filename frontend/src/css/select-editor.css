@@ -11,6 +11,10 @@
   padding-top: 2px;
   padding-bottom: 2px;
 }
+.permission-editor-select .permission-editor__control {
+  height: 24px;
+  min-height: 24px;
+}
 .permission-editor .permission-editor__control .permission-editor-explanation {
   display: none;
 }

@@ -66,7 +66,7 @@ class SelectEditor extends React.Component {
   }
 
   render() {
-    let { currentOption, options, isTextMode } = this.props;
+    let { currentOption, isTextMode } = this.props;
 
     // scence1: isTextMode (text)editor-icon --> select
     // scence2: !isTextMode select
