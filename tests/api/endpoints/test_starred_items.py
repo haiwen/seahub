@@ -40,7 +40,7 @@ class StarredItemsTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 2
+        assert len(json_resp['star_item_list']) == 2
 
     def test_can_star_file(self):
         self.login_as(self.user)
