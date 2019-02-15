@@ -88,12 +88,12 @@ class FileHistory extends React.Component {
           </div>
         </div>
         <div id="main" className="history-content">
-          <SidePanel onItemClick={this.onHistoryItemClick}/>
           <MainPanel 
             newMarkdownContent={this.state.newMarkdownContent}
             oldMarkdownContent={this.state.oldMarkdownContent}
             renderingContent={this.state.renderingContent}
           />
+          <SidePanel onItemClick={this.onHistoryItemClick}/>
         </div>
       </Fragment>
     );
