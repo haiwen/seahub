@@ -1,0 +1,19 @@
+.image-file-view:before {
+    content: ' '; 
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+    font-size: 0;
+    line-height: 0;
+}
+#image-view {
+    padding: 1px; 
+    background: #fff;
+    border: 1px solid #eee;
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 4px);
+    max-height: calc(100% - 4px);
+    font-size: 0;
+    line-height: 0;
+}

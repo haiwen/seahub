@@ -8,10 +8,11 @@ import SaveSharedFileDialog from './components/dialog/save-shared-file-dialog';
 import toaster from './components/toast';
 import watermark from 'watermark-dom';
 
-import './css/shared-file-view.css';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
+import './css/shared-file-view.css';
+import './css/image-file-view.css';
 
 let loginUser = window.app.pageOptions.name;
 const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, rawPath, sharedBy, siteName, enableWatermark, download, err } = window.shared.pageOptions;
