@@ -884,10 +884,10 @@ class DraftReview extends React.Component {
                     <div className="review-side-panel-body">
                       <SidePanelReviewers
                         reviewers={this.state.reviewers}
-                        toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>                        
+                        toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>
                       <SidePanelAuthor/>
                       <UnresolvedComments number={this.state.unresolvedComments}/>
-                      { this.state.isShowDiff &&
+                      {(this.state.isShowDiff === true && this.state.changedNodes.length > 0) &&
                       <SidePanelChanges
                         changedNumber={this.state.changedNodes.length}
                         scrollToChangedNode={this.scrollToChangedNode}/>
