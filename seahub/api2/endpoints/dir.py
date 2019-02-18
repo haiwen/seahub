@@ -19,12 +19,11 @@ from seahub.api2.views import get_dir_file_recursively
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
-        normalize_dir_path, normalize_file_path, is_pro_version, \
-        FILEEXT_TYPE_MAP
+        normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
+from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 
@@ -49,6 +48,14 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
     dir_file_list = seafile_api.list_dir_with_perm(repo_id,
             parent_dir, parent_dir_id, username, -1, -1)
 
+    try:
+        starred_items = UserStarredFiles.objects.filter(email=username,
+                repo_id=repo_id, path__startswith=parent_dir, org_id=-1)
+        starred_item_path_list = [f.path.rstrip('/') for f in starred_items]
+    except Exception as e:
+        logger.error(e)
+        starred_item_path_list = []
+
     # only get dir info list
     if not request_type or request_type == 'd':
         dir_list = [dirent for dirent in dir_file_list if stat.S_ISDIR(dirent.mode)]
@@ -61,6 +68,12 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             dir_info["permission"] = dirent.permission
             dir_info["parent_dir"] = parent_dir
             dir_info_list.append(dir_info)
+
+            # get star info
+            dir_info['starred'] = False
+            dir_path = posixpath.join(parent_dir, dirent.obj_name)
+            if dir_path.rstrip('/') in starred_item_path_list:
+                dir_info['starred'] = True
 
     # only get file info list
     if not request_type or request_type == 'f':
@@ -79,11 +92,9 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                 contact_email_dict[e] = email2contact_email(e)
 
         try:
-            starred_files = get_dir_starred_files(username, repo_id, parent_dir)
             files_tags_in_dir = get_files_tags_in_dir(repo_id, parent_dir)
         except Exception as e:
             logger.error(e)
-            starred_files = []
             files_tags_in_dir = {}
 
         for dirent in file_list:
@@ -123,7 +134,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
             # get star info
             file_info['starred'] = False
-            if normalize_file_path(file_path) in starred_files:
+            if file_path.rstrip('/') in starred_item_path_list:
                 file_info['starred'] = True
 
             # get tag info

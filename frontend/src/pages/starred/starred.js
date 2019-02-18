@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl } from '../../utils/constants';
@@ -59,7 +60,7 @@ class TableBody extends Component {
 
   getThumbnails() {
     let items = this.state.items.filter((item) => {
-        return Utils.imageCheck(item.file_name) && !item.repo_encrypted;
+        return Utils.imageCheck(item.obj_name) && !item.repo_encrypted;
     });
     if (items.length == 0) {
       return ;
@@ -92,11 +93,14 @@ class TableBody extends Component {
 
     let listFilesActivities = this.state.items.map(function(item, index) {
 
-      item.file_icon_url = Utils.getFileIconUrl(item.file_name);
+      item.file_icon_url = item.is_dir ? Utils.getFolderIconUrl(false) : Utils.getFileIconUrl(item.obj_name);
       item.encoded_path = Utils.encodePath(item.path);
 
       item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
-      item.file_view_url = `${siteRoot}lib/${item.repo_id}/file${item.encoded_path}`;
+      item.dirent_view_url = item.is_dir ? `${siteRoot}library/${item.repo_id}/${item.repo_name}${item.encoded_path}` : `${siteRoot}lib/${item.repo_id}/file${item.encoded_path}`;
+
+      item.mtime_relative = moment(item.mtime).fromNow();
+
 
       return <Item key={index} data={item} />;
     }, this);
@@ -133,7 +137,7 @@ class Item extends Component {
     e.preventDefault();
 
     const data = this.props.data;
-    seafileAPI.unStarFile(data.repo_id, data.path).then((res) => {
+    seafileAPI.unStarItem(data.repo_id, data.path).then((res) => {
       this.setState({
         unstarred: true
       });
@@ -164,7 +168,7 @@ class Item extends Component {
           }
         </td>
         <td>
-            <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
+            <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
         </td>
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
@@ -184,7 +188,7 @@ class Item extends Component {
           }
         </td>
         <td>
-          <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
+          <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
           <br />
           <span className="dirent-meta-info">{data.repo_name}</span>
           <span className="dirent-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
@@ -214,11 +218,11 @@ class Starred extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listStarred().then((res) => {
+    seafileAPI.listStarredItems().then((res) => {
       //res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         loading: false,
-        items: res.data
+        items: res.data.starred_item_list
       });
     }).catch((error) => {
       if (error.response) {

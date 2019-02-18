@@ -3,9 +3,10 @@
 import logging
 
 from django.db import IntegrityError
+from django.db.models import Q
 
 from seahub.base.models import UserStarredFiles
-from seahub.utils import normalize_file_path
+from seahub.utils import normalize_file_path, normalize_dir_path
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -32,14 +33,15 @@ def unstar_file(email, repo_id, path):
                                              path=path)
     for r in result:
         r.delete()
-            
+
 def is_file_starred(email, repo_id, path, org_id=-1):
     # Should use "get", but here we use "filter" to fix the bug caused by no
     # unique constraint in the table
+
+    path_list = [normalize_file_path(path), normalize_dir_path(path)]
     result = UserStarredFiles.objects.filter(email=email,
-                                             repo_id=repo_id,
-                                             path=path,
-                                             org_id=org_id)
+            repo_id=repo_id).filter(Q(path__in=path_list))
+
     n = len(result)
     if n == 0:
         return False
