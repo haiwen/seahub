@@ -141,12 +141,103 @@ class DirContentList extends React.Component {
     this.props.onFileUploadSuccess(direntObject);
   }
 
+  renderListView = () => {
+    let repoID = this.props.repoID;
+    const showRepoInfoBar = this.props.path === '/' && (
+      this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null ||
+      this.props.draftCounts != 0 || this.props.reviewCounts != 0);
+    return (
+      <Fragment>
+        {showRepoInfoBar && (
+          <RepoInfoBar
+            repoID={repoID}
+            currentPath={this.props.path}
+            usedRepoTags={this.props.usedRepoTags}
+            readmeMarkdown={this.props.readmeMarkdown}
+            draftCounts={this.props.draftCounts}
+            reviewCounts={this.props.reviewCounts}
+            updateUsedRepoTags={this.props.updateUsedRepoTags}
+          />
+        )}
+        <DirentListView
+          path={this.props.path}
+          repoID={repoID}
+          repoEncrypted={this.props.repoEncrypted}
+          isRepoOwner={this.props.isRepoOwner}
+          isAdmin={this.props.isAdmin}
+          isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+          enableDirPrivateShare={this.props.enableDirPrivateShare}
+          direntList={this.props.direntList}
+          sortBy={this.props.sortBy}
+          sortOrder={this.props.sortOrder}
+          sortItems={this.props.sortItems}
+          onAddFile={this.props.onAddFile}
+          onItemClick={this.onItemClick}
+          onItemDelete={this.props.onItemDelete}
+          onItemRename={this.props.onItemRename}
+          onItemMove={this.props.onItemMove}
+          onItemCopy={this.props.onItemCopy}
+          onDirentClick={this.onDirentClick}
+          onItemDetails={this.onItemDetails}
+          isDirentListLoading={this.props.isDirentListLoading}
+          updateDirent={this.props.updateDirent}
+          currentRepoInfo={this.props.currentRepoInfo}
+          isAllItemSelected={this.props.isAllDirentSelected}
+          onAllItemSelected={this.props.onAllDirentSelected}
+          onItemSelected={this.props.onItemSelected}
+        />
+      </Fragment>
+    );
+  }
+
+  renderGridView = () => {
+    // todo
+    return (
+      <div>grid-mode</div>
+    )
+  }
+
+  renderColumnView = () => {
+    return (
+      <Fragment>
+        {this.props.isViewFile && (
+          <WikiMarkdownViewer
+            isFileLoading={this.props.isFileLoading}
+            markdownContent={this.props.content}
+            latestContributor={this.props.latestContributor}
+            lastModified = {this.props.lastModified}
+            onLinkClick={this.props.onLinkClick}
+          >
+            <Fragment>
+              {this.props.reviewStatus === 'open' &&
+                <div className='seafile-btn-view-review text-center'>
+                  <div className='tag tag-green'> 
+                    {gettext('This file is in review stage')}
+                    <a className="ml-2" onMouseDown={this.props.goReviewPage}>{gettext('View Review')}</a>
+                  </div>
+                </div>
+              }
+              {(!this.props.isDraft && this.props.hasDraft && this.props.reviewStatus !== 'open') &&
+                <div className='seafile-btn-view-review text-center'>
+                  <div className='tag tag-green'>
+                    {gettext('This file is in draft stage.')}
+                    <a className="ml-2" onMouseDown={this.props.goDraftPage}>{gettext('Edit Draft')}</a>
+                  </div>
+                </div>
+              }
+            </Fragment>
+          </WikiMarkdownViewer>
+        )}
+        {!this.props.isViewFile && (
+          this.renderListView()
+        )}
+      </Fragment>
+    )
+  }
+
   render() {
     let repoID = this.props.repoID;
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
-    const showRepoInfoBar = this.props.path === '/' && (
-                            this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null ||
-                            this.props.draftCounts != 0 || this.props.reviewCounts != 0);
     return (
       <div className="main-panel dir-main-content o-hidden">
         <div className="main-panel-north">
@@ -206,74 +297,11 @@ class DirContentList extends React.Component {
             </div>
             <div className="cur-view-content">
               {!this.props.pathExist && errMessage }
-              {(this.props.pathExist && this.props.isViewFile) && (
-                <WikiMarkdownViewer
-                  isFileLoading={this.props.isFileLoading}
-                  markdownContent={this.props.content}
-                  latestContributor={this.props.latestContributor}
-                  lastModified = {this.props.lastModified}
-                  onLinkClick={this.props.onLinkClick}
-                >
-                  <Fragment>
-                    {this.props.reviewStatus === 'open' &&
-                      <div className='seafile-btn-view-review text-center'>
-                        <div className='tag tag-green'> 
-                          {gettext('This file is in review stage')}
-                          <a className="ml-2" onMouseDown={this.props.goReviewPage}>{gettext('View Review')}</a>
-                        </div>
-                      </div>
-                    }
-                    {(!this.props.isDraft && this.props.hasDraft && this.props.reviewStatus !== 'open') &&
-                      <div className='seafile-btn-view-review text-center'>
-                        <div className='tag tag-green'>
-                          {gettext('This file is in draft stage.')}
-                          <a className="ml-2" onMouseDown={this.props.goDraftPage}>{gettext('Edit Draft')}</a>
-                        </div>
-                      </div>
-                    }
-                  </Fragment>
-                </WikiMarkdownViewer>
-              )}
-              {(this.props.pathExist && !this.props.isViewFile) && (
+              {(this.props.pathExist && (
                 <Fragment>
-                  {showRepoInfoBar && (
-                    <RepoInfoBar
-                      repoID={repoID}
-                      currentPath={this.props.path}
-                      usedRepoTags={this.props.usedRepoTags}
-                      readmeMarkdown={this.props.readmeMarkdown}
-                      draftCounts={this.props.draftCounts}
-                      reviewCounts={this.props.reviewCounts}
-                      updateUsedRepoTags={this.props.updateUsedRepoTags}
-                    />
-                  )}
-                  <DirentListView
-                    path={this.props.path}
-                    repoID={repoID}
-                    repoEncrypted={this.props.repoEncrypted}
-                    isRepoOwner={this.props.isRepoOwner}
-                    isAdmin={this.props.isAdmin}
-                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                    enableDirPrivateShare={this.props.enableDirPrivateShare}
-                    direntList={this.props.direntList}
-                    sortBy={this.props.sortBy}
-                    sortOrder={this.props.sortOrder}
-                    sortItems={this.props.sortItems}
-                    onAddFile={this.props.onAddFile}
-                    onItemClick={this.onItemClick}
-                    onItemDelete={this.props.onItemDelete}
-                    onItemRename={this.props.onItemRename}
-                    onItemMove={this.props.onItemMove}
-                    onItemCopy={this.props.onItemCopy}
-                    onDirentClick={this.onDirentClick}
-                    onItemDetails={this.onItemDetails}
-                    isDirentListLoading={this.props.isDirentListLoading}
-                    updateDirent={this.props.updateDirent}
-                    currentRepoInfo={this.props.currentRepoInfo}
-                    isAllItemSelected={this.props.isAllDirentSelected}
-                    onAllItemSelected={this.props.onAllDirentSelected}
-                    onItemSelected={this.props.onItemSelected}
-                  />
+                  {this.props.currentMode === 'list' && this.renderListView()}
+                  {this.props.currentMode === 'grid' && this.renderGridView()}
+                  {this.props.currentMode === 'column' && this.renderColumnView()}
                   <FileUploader
                     ref={uploader => this.uploader = uploader}
                     dragAndDrop={true}
@@ -283,7 +311,7 @@ class DirContentList extends React.Component {
                     onFileUploadSuccess={this.onFileUploadSuccess}
                   />
                 </Fragment>
-              )}
+              ))}
             </div>
           </div>
           {this.state.isDirentDetailShow && (

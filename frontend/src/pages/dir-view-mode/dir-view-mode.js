@@ -16,7 +16,7 @@ import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import DirContentNav from './dir-content-nav';
-import DirContentList from './dir-content-list';
+import DirContentContainer from './dir-content-container';
 
 import '../../css/wiki.css';
 import '../../css/dir-view-mode.css';
@@ -494,8 +494,24 @@ class DirViewMode extends React.Component {
   }
 
   switchViewMode = (mode) => {
+    if (mode === this.state.currentMode) {
+      return;
+    }
     cookie.save('seafile-view-mode', mode);
-    this.loadSidePanel(this.state.path);
+    let path = this.state.path;
+    if (this.state.currentMode === 'column' && this.state.isViewFile) {
+      path = Utils.getDirName(path);
+      this.setState({path: path});
+      let repoInfo = this.state.currentRepoInfo;
+      
+      let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
+      window.history.pushState({url: url, path: path}, path, url);
+    }
+
+    if (mode === 'column') {
+      this.loadSidePanel(this.state.path);
+    }
+    
     this.setState({currentMode: mode});
   }
 
@@ -1169,7 +1185,7 @@ class DirViewMode extends React.Component {
             onDeleteNode={this.onDeleteTreeNode}
           />
         }
-        <DirContentList 
+        <DirContentContainer 
           pathPrefix={this.props.pathPrefix}
           currentMode={this.state.currentMode}
           path={this.state.path}
