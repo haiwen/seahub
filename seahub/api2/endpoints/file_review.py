@@ -54,7 +54,7 @@ class FileReviewView(APIView):
 
         # new review
         try:
-            r = DraftReview.objects.add(creator=username, draft=d)
+            r = DraftReview.objects.add(creator=username, draft=d, author=dirent.modifier)
         except (DraftReviewExist):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')
 

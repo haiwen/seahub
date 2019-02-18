@@ -288,7 +288,7 @@ class DraftReviewManager(models.Manager):
 
         return reviews
 
-    def add(self, creator, draft):
+    def add(self, creator, draft, author=None):
         try:
             d_r = self.get(creator=creator, draft_id=draft)
             if d_r.status == 'closed':
@@ -298,8 +298,12 @@ class DraftReviewManager(models.Manager):
         except DraftReview.DoesNotExist:
             pass
 
+        author = draft.username
+        if author:
+            author = author
+
         draft_review = self.model(creator=creator,
-                                  author=draft.username,
+                                  author=author,
                                   status='open',
                                   draft_id=draft,
                                   origin_repo_id=draft.origin_repo_id,
