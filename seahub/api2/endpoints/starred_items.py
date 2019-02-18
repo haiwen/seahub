@@ -88,7 +88,7 @@ class StarredItems(APIView):
                 if not seafile_api.get_file_id_by_path(repo_id, path):
                     continue
 
-            repo = repo_dict['repo_id']
+            repo = repo_dict[repo_id]
             item_info = self.get_starred_item_info(repo, starred_item)
 
             email = starred_item.email
