@@ -128,9 +128,6 @@ class DirContentList extends React.Component {
   }
 
   switchViewMode = (mode) => {
-    if (mode === this.state.currentMode) {
-      return;
-    }
     this.props.switchViewMode(mode);
   }
 
@@ -188,13 +185,14 @@ class DirContentList extends React.Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              {this.state.currentRepoInfo && (
+              {this.props.currentRepoInfo && (
                 <CurDirPath 
                   repoID={repoID}
-                  repoName={this.state.currentRepoInfo.repo_name}
+                  repoName={this.props.currentRepoInfo.repo_name}
+                  pathPrefix={this.props.pathPrefix}
                   currentPath={this.props.path} 
                   permission={this.props.repoPermission} 
-                  onPathClick={this.onMainNavBarClick}
+                  onPathClick={this.props.onMainNavBarClick}
                   isViewFile={this.props.isViewFile}
                 />
               )}

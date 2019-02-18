@@ -118,9 +118,7 @@ class Wiki extends Component {
   getGroupInfo = (groupID) => {
     seafileAPI.getGroup(groupID).then(res => {
       if (res.data.admins.indexOf(username) != -1) {
-        this.setState({
-          isDepartmentAdmin: true
-        });
+        this.setState({isDepartmentAdmin: true});
       }
     });
   }

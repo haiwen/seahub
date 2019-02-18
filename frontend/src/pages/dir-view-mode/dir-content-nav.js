@@ -11,6 +11,7 @@ import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 
 const propTypes = {
+  repoPermission: PropTypes.bool.isRequired,
   currentPath: PropTypes.string,
   currentRepoInfo: PropTypes.object,  // Initially not loaded
   isTreeDataLoading: PropTypes.bool.isRequired,
@@ -33,6 +34,7 @@ class DirContentNav extends React.Component {
       isLoadFailed: false,
       isMenuIconShow: false,
       isHeaderMenuShow: false,
+      isHeaderMenuFreezed: false,
       isDeleteDialogShow: false,
       isAddFileDialogShow: false,
       isAddFolderDialogShow: false,
@@ -149,14 +151,13 @@ class DirContentNav extends React.Component {
   }
 
   render() {
-    let permission = this.props.currentRepoInfo ? this.props.currentRepoInfo.permission : false;
     return (
       <Fragment>
         <div id="side-nav" className="wiki-side-nav dir-side-nav" role="navigation">
           <h3 className="wiki-pages-heading" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             {gettext('Files')}
             <div className="heading-icon">
-              {(permission && this.state.isMenuIconShow) && (
+              {(this.props.repoPermission && this.state.isMenuIconShow) && (
                 <Dropdown isOpen={this.state.isHeaderMenuShow} toggle={this.toggleOperationMenu}>
                   <DropdownToggle 
                     tag="i" 
@@ -178,6 +179,7 @@ class DirContentNav extends React.Component {
             {this.props.isTreeDataLoading ? 
               (<Loading/>) :
               (<TreeView
+                repoPermission={this.props.repoPermission}
                 isNodeMenuShow={this.isNodeMenuShow}
                 treeData={this.props.treeData}
                 currentPath={this.props.currentPath}
