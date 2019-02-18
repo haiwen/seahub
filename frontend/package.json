@@ -32,7 +32,7 @@
     "react-image-lightbox": "^5.1.0",
     "react-moment": "^0.7.9",
     "react-responsive": "^6.1.1",
-    "react-select": "^2.1.1",
+    "react-select": "^2.4.1",
     "reactstrap": "^6.4.0",
     "seafile-js": "^0.2.63",
     "socket.io-client": "^2.2.0",

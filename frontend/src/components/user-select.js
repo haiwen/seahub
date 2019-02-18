@@ -2,12 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { seafileAPI } from '../utils/seafile-api.js';
+import gettext from '../utils/constants';
 
 const propTypes = {
   placeholder: PropTypes.string.isRequired,
   onSelectChange: PropTypes.func.isRequired,
   isMulti: PropTypes.bool.isRequired,
   className: PropTypes.string.isRequired,
+};
+
+const NoOptionsMessage = (props) => {
+  return (
+    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('No Options.')}</div>
+  );
 };
 
 class UserSelect extends React.Component {
@@ -53,6 +60,7 @@ class UserSelect extends React.Component {
       <AsyncSelect
         isClearable
         classNamePrefix
+        components={{ NoOptionsMessage }}
         isMulti={this.props.isMulti}
         loadOptions={this.loadOptions}
         onChange={this.handleSelectChange}

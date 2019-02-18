@@ -89,6 +89,12 @@ const propTypes = {
   repoID: PropTypes.string.isRequired
 };
 
+const NoOptionsMessage = (props) => {
+  return (
+    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
+  );
+};
+
 class ShareToGroup extends React.Component {
 
   constructor(props) {
@@ -267,6 +273,7 @@ class ShareToGroup extends React.Component {
                   maxMenuHeight={200}
                   inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
+                  components={{ NoOptionsMessage }}
                 />
               </td>
               <td>
