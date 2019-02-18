@@ -1190,7 +1190,7 @@ def view_shared_file(request, fileshare):
 
     template = 'shared_file_view.html'
 
-    if is_textual_file(file_type=filetype):
+    if is_textual_file(file_type=filetype) or filetype == IMAGE:
         template = 'shared_file_view_react.html'
 
     return render(request, template, {

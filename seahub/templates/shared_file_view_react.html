@@ -29,5 +29,7 @@
     {% render_bundle 'sharedFileViewMarkdown' %}
 {% elif filetype == 'Text' %}
     {% render_bundle 'sharedFileViewText' %}
+{% elif filetype == 'Image' %}
+    {% render_bundle 'sharedFileViewImage' %}
 {% endif %}
 {% endblock %}
