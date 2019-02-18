@@ -159,15 +159,17 @@ class DirViewMode extends React.Component {
   onpopstate = (event) => {
     if (event.state && event.state.path) {
       let path = event.state.path;
-      if (Utils.isMarkdownFile(path)) {
-        this.showFile(path);
-      } else {
-        this.loadDirentList(path);
-        this.setState({
-          path: path,
-          isViewFile: false
-        });
+      if (this.state.currentMode === 'column') {
+        if (Utils.isMarkdownFile(path)) { // Judging not strict
+          this.showFile(path);
+          return;
+        }
       }
+      this.loadDirentList(path);
+      this.setState({
+        path: path,
+        isViewFile: false
+      });
     }
   }
 
@@ -401,7 +403,9 @@ class DirViewMode extends React.Component {
         return item.obj_name;
       });
       direntPaths.forEach((direntPath, index) => {
-        this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
+        if (this.state.currentMode === 'column') {
+          this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
+        }
         this.moveDirent(direntPath);
       });
       let message = gettext('Successfully moved %(name)s.');
@@ -423,9 +427,11 @@ class DirViewMode extends React.Component {
       let names = res.data.map(item => {
         return item.obj_name;
       });
-      direntPaths.forEach((direntPath, index) => {
-        this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
-      });
+      if (this.state.currentMode === 'column') {
+        direntPaths.forEach((direntPath, index) => {
+          this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
+        });
+      }
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirNames);
       toaster.success(message);
@@ -443,7 +449,9 @@ class DirViewMode extends React.Component {
 
     seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
       direntPaths.forEach(direntPath => {
-        this.deleteTreeNode(direntPath);
+        if (this.state.currentMode === 'column') {
+          this.deleteTreeNode(direntPath);
+        }
         this.deleteDirent(direntPath);
       });
     });
@@ -455,7 +463,10 @@ class DirViewMode extends React.Component {
       let name = Utils.getFileName(dirPath);
       let parentPath = Utils.getDirName(dirPath);
 
-      this.addNodeToTree(name, parentPath, 'dir');
+      if (this.state.currentMode === 'column') {
+        this.addNodeToTree(name, parentPath, 'dir');
+      }
+
       if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'dir');
       }
@@ -469,8 +480,9 @@ class DirViewMode extends React.Component {
     seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
       let name = Utils.getFileName(filePath);
       let parentPath = Utils.getDirName(filePath);
-
-      this.addNodeToTree(name, parentPath, 'file');
+      if (this.state.currentMode === 'column') {
+        this.addNodeToTree(name, parentPath, 'file');
+      }
       if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'file', res.data.size);
       }
@@ -493,22 +505,23 @@ class DirViewMode extends React.Component {
     if (this.state.currentPath === path) {
       return;
     }
-
-    // load sidePanel
-    let index = -1;
-    let paths = Utils.getPaths(path);
-    for (let i = 0; i < paths.length; i++) {
-      let node = this.state.treeData.getNodeByPath(node);
-      if (!node) {
-        index = i;
-        break;
-      } 
-    }
-    if (index === -1) { // all the data has been loaded already.
-      let node = this.state.treeData.getNodeByPath(path);
-      this.setState({currentNode: node});
-    } else {
-      this.loadNodeAndParentsByPath(path);
+    if (this.state.currentMode === 'column') {
+      // load sidePanel
+      let index = -1;
+      let paths = Utils.getPaths(path);
+      for (let i = 0; i < paths.length; i++) {
+        let node = this.state.treeData.getNodeByPath(node);
+        if (!node) {
+          index = i;
+          break;
+        } 
+      }
+      if (index === -1) { // all the data has been loaded already.
+        let node = this.state.treeData.getNodeByPath(path);
+        this.setState({currentNode: node});
+      } else {
+        this.loadNodeAndParentsByPath(path);
+      }
     }
 
     // load mainPanel
@@ -528,12 +541,14 @@ class DirViewMode extends React.Component {
   onMainNavBarClick = (nodePath) => {
     //just for dir
     this.resetSelected();
-    let tree = this.state.treeData.clone();
-    let node = tree.getNodeByPath(nodePath);
-    tree.expandNode(node);
+    if (this.state.currentMode === 'column') {
+      let tree = this.state.treeData.clone();
+      let node = tree.getNodeByPath(nodePath);
+      tree.expandNode(node);
+      this.setState({treeData: tree, currentNode: node});
+    }
 
-    this.setState({treeData: tree, currentNode: node});
-    this.showDir(node.path);
+    this.showDir(nodePath);
   }
 
   onLinkClick = (link) => {
@@ -587,7 +602,9 @@ class DirViewMode extends React.Component {
   }
 
   renameItemAjaxCallback(path, newName) {
-    this.renameTreeNode(path, newName);
+    if (this.state.currentMode === 'column') {
+      this.renameTreeNode(path, newName);
+    }
     this.renameDirent(path, newName);
   }
 
@@ -609,7 +626,9 @@ class DirViewMode extends React.Component {
   }
 
   deleteItemAjaxCallback(path) {
-    this.deleteTreeNode(path);
+    if (this.state.currentMode === 'column') {
+      this.deleteTreeNode(path);
+    }
     this.deleteDirent(path);
   }
 
@@ -621,7 +640,9 @@ class DirViewMode extends React.Component {
     let direntPath = Utils.joinPath(this.state.path, dirName);
     seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, this.state.path, dirName).then(res => {
       let nodeName = res.data[0].obj_name;
-      this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
+      if (this.state.currentMode === 'column') {
+        this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
+      }
       this.moveDirent(direntPath);
 
       let message = gettext('Successfully moved %(name)s.');
@@ -641,7 +662,9 @@ class DirViewMode extends React.Component {
     let direntPath = Utils.joinPath(this.state.path, dirName);
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, this.state.path, dirName).then(res => {
       let nodeName = res.data[0].obj_name;
-      this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);
+      if (this.state.currentMode === 'column') {
+        this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);
+      }
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
       toaster.success(message);
@@ -657,10 +680,12 @@ class DirViewMode extends React.Component {
     let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
     if (dirent.isDir()) {  // is dir
-      this.loadTreeNodeByPath(direntPath);
+      if (this.state.currentMode === 'column') {
+        this.loadTreeNodeByPath(direntPath);
+      }
       this.showDir(direntPath);
     } else {  // is file
-      if (Utils.isMarkdownFile(direntPath)) {
+      if (this.state.currentMode === 'column' && Utils.isMarkdownFile(direntPath)) {
         this.showFile(direntPath);
       } else {
         const w=window.open('about:blank');
@@ -761,7 +786,9 @@ class DirViewMode extends React.Component {
     } else {
       direntObject.permission = 'rw';
       let dirent = new Dirent(direntObject);
-      this.addNodeToTree(dirent.name, this.state.path, dirent.type);
+      if (this.state.currentMode === 'column') {
+        this.addNodeToTree(dirent.name, this.state.path, dirent.type);
+      }
       if (direntObject.type === 'dir') {
         this.setState({direntList: [dirent, ...this.state.direntList]});
       } else {

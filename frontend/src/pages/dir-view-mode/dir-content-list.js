@@ -287,7 +287,7 @@ class DirContentList extends React.Component {
                 dirent={this.state.currentDirent}
                 direntPath={this.state.direntPath}
                 onItemDetailsClose={this.onItemDetailsClose}
-                onFileTagChanged={this.onFileTagChanged}
+                onFileTagChanged={this.props.onFileTagChanged}
               />
             </div>
           )}
