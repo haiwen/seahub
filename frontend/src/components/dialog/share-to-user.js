@@ -89,6 +89,12 @@ const propTypes = {
   repoID: PropTypes.string.isRequired
 };
 
+const NoOptionsMessage = (props) => {
+  return (
+    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('User not found')}</div>
+  );
+};
+
 class ShareToUser extends React.Component {
 
   constructor(props) {
@@ -284,6 +290,7 @@ class ShareToUser extends React.Component {
                   loadOptions={this.loadOptions}
                   onChange={this.handleSelectChange}
                   value={this.state.selectedOption}
+                  components={{ NoOptionsMessage }}
                   maxMenuHeight={200}
                   isMulti 
                   isFocused
