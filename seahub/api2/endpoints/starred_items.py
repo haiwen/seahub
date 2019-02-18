@@ -92,9 +92,9 @@ class StarredItems(APIView):
             item_info = self.get_starred_item_info(repo, starred_item)
 
             email = starred_item.email
-            result['user_email'] = email
-            result['user_name'] = email2nickname(email)
-            result['user_contact_email'] = email2contact_email(email)
+            item_info['user_email'] = email
+            item_info['user_name'] = email2nickname(email)
+            item_info['user_contact_email'] = email2contact_email(email)
 
             result.append(item_info)
 
