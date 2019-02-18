@@ -158,8 +158,16 @@ class DirViewMode extends React.Component {
 
   onpopstate = (event) => {
     if (event.state && event.state.path) {
-      this.updateDirentList(event.state.path);
-      this.setState({path: event.state.path});
+      let path = event.state.path;
+      if (Utils.isMarkdownFile(path)) {
+        this.showFile(path);
+      } else {
+        this.loadDirentList(path);
+        this.setState({
+          path: path,
+          isViewFile: false
+        });
+      }
     }
   }
 
@@ -183,8 +191,18 @@ class DirViewMode extends React.Component {
     });
   }
 
-  updateUsedRepoTags = (newUsedRepoTags) => {
-    this.setState({usedRepoTags: newUsedRepoTags});
+  updateUsedRepoTags = () => {
+    let repoID = this.props.repoID;
+    seafileAPI.listRepoTags(repoID).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount > 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.setState({usedRepoTags: usedRepoTags});
+    });
   }
 
   updateReadmeMarkdown = (direntList) => {
@@ -201,20 +219,12 @@ class DirViewMode extends React.Component {
   // load data
   loadDirData = (path) => {
     let repoID = this.props.repoID;
+
     // listen current repo
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
 
     // list used FileTags
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let usedRepoTags = [];
-      res.data.repo_tags.forEach(item => {
-        let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount > 0) {
-          usedRepoTags.push(usedRepoTag);
-        }
-      });
-      this.setState({usedRepoTags: usedRepoTags});
-    });
+    this.updateUsedRepoTags();
 
     // list draft counts and revierw counts
     seafileAPI.getRepoDraftReviewCounts(repoID).then(res => {
@@ -254,7 +264,8 @@ class DirViewMode extends React.Component {
           treeData: tree
         });
       }).catch(() => {
-        this.setState({isLoadFailed: true});
+        this.setState({isTreeDataLoading: false});
+        // todo show error message
       });
     } else {
       this.loadNodeAndParentsByPath(path);
@@ -263,25 +274,33 @@ class DirViewMode extends React.Component {
 
   showDir = (path) => {
     let repoID = this.props.repoID;
-    this.loadDirentList(path);
+
+    // update stste
     this.setState({
+      isDirentListLoading: true,
       path: path,
       isViewFile: false
     });
 
-    // update location url
+    // update data
+    this.loadDirentList(repoID, path);
+    
+    // update location
     let url = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(path);
     window.history.pushState({ url: url, path: path}, path, url);
   }
 
   showFile = (filePath) => {
     let repoID = this.props.repoID;
+
+    // update state
     this.setState({
+      isFileLoading: true,
       path: filePath,
       isViewFile: true
     });
 
-    this.setState({isFileLoading: true});
+    // update data
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
       let { mtime, permission, last_modifier_name, is_draft, has_draft,
             review_status, review_id, draft_file_path } = res.data;
@@ -303,19 +322,18 @@ class DirViewMode extends React.Component {
       });
     });
 
+    // update location
     let fileUrl = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(filePath);
     window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
   } 
 
-  loadDirentList = (path) => {
-    let repoID = this.props.repoID;
-    this.setState({isDirentListLoading: true});
+  loadDirentList = (repoID, path) => {
     seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
+      let markdownItem = null;
       res.data.dirent_list.forEach(item => {
-        let fileName = item.name.toLowerCase();
-        if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-          this.setState({readmeMarkdown: item});
+        if (Utils.isMarkdownFile(item.name)) {
+          markdownItem = item;
         }
         let dirent = new Dirent(item);
         direntList.push(dirent);
@@ -324,9 +342,10 @@ class DirViewMode extends React.Component {
       this.setState({
         pathExist: true,
         userPerm: res.data.user_perm,
-        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         isDirentListLoading: false,
+        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.headers.oid,
+        readmeMarkdown: markdownItem,
       });
 
       if (!this.state.repoEncrypted && direntList.length) {
@@ -430,19 +449,8 @@ class DirViewMode extends React.Component {
     });
   }
 
-  onUploadFile = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    this.uploader.onFileUpload();
-  }
-
-  onUploadFolder = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    this.uploader.onFolderUpload();
-  }
-
   onAddFolder = (dirPath) => {
     let repoID = this.props.repoID;
-    // todo Double name check
     seafileAPI.createDir(repoID, dirPath).then(() => {
       let name = Utils.getFileName(dirPath);
       let parentPath = Utils.getDirName(dirPath);
@@ -458,7 +466,6 @@ class DirViewMode extends React.Component {
 
   onAddFile = (filePath, isDraft) => {
     let repoID = this.props.repoID;
-    // Double name check
     seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
       let name = Utils.getFileName(filePath);
       let parentPath = Utils.getDirName(filePath);
@@ -482,7 +489,6 @@ class DirViewMode extends React.Component {
   }
 
   onSearchedClick = (item) => {
-    let repoID = this.props.repoID;
     let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path; 
     if (this.state.currentPath === path) {
       return;
@@ -544,24 +550,6 @@ class DirViewMode extends React.Component {
     }
   }
 
-  renameItem = (path, isDir, newName) => {
-    let repoID = this.props.repoID;
-    //validate task
-    if (isDir) {
-      seafileAPI.renameDir(repoID, path, newName).then(() => {
-        this.renameItemAjaxCallback(path, newName);
-      }).catch(() => {
-        //todos;
-      });
-    } else {
-      seafileAPI.renameFile(repoID, path, newName).then(() => {
-        this.renameItemAjaxCallback(path, newName);
-      }).catch(() => {
-        //todos;
-      });
-    }
-  }
-
   // list&tree operations
   onMainPanelItemRename = (dirent, newName) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
@@ -581,6 +569,23 @@ class DirViewMode extends React.Component {
     this.deleteItem(node.path, node.object.isDir());
   }
 
+  renameItem = (path, isDir, newName) => {
+    let repoID = this.props.repoID;
+    if (isDir) {
+      seafileAPI.renameDir(repoID, path, newName).then(() => {
+        this.renameItemAjaxCallback(path, newName);
+      }).catch(() => {
+        // todo
+      });
+    } else {
+      seafileAPI.renameFile(repoID, path, newName).then(() => {
+        this.renameItemAjaxCallback(path, newName);
+      }).catch(() => {
+        // todo
+      });
+    }
+  }
+
   renameItemAjaxCallback(path, newName) {
     this.renameTreeNode(path, newName);
     this.renameDirent(path, newName);
@@ -592,13 +597,13 @@ class DirViewMode extends React.Component {
       seafileAPI.deleteDir(repoID, path).then(() => {
         this.deleteItemAjaxCallback(path, isDir);
       }).catch(() => {
-        //todos;
+        // todo
       });
     } else {
       seafileAPI.deleteFile(repoID, path).then(() => {
         this.deleteItemAjaxCallback(path, isDir);
       }).catch(() => {
-        //todos;
+        // todo
       });
     }
   }
@@ -736,16 +741,7 @@ class DirViewMode extends React.Component {
       this.updateDirent(dirent, 'file_tags', fileTags);
     });
 
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let usedRepoTags = [];
-      res.data.repo_tags.forEach(item => {
-        let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount > 0) {
-          usedRepoTags.push(usedRepoTag);
-        }
-      });
-      this.updateUsedRepoTags(usedRepoTags);
-    });
+    this.updateUsedRepoTags();
   }
 
   onFileUploadSuccess = (direntObject) => {
@@ -829,6 +825,9 @@ class DirViewMode extends React.Component {
       // example: direntPath = /A/B, state.path = /A/B/C
       let newPath = Utils.renameAncestorPath(this.state.path, direntPath, newDirentPath);
       this.setState({ path: newPath });
+
+      let url = siteRoot + 'wiki/lib/' + repoID + newPath;
+      window.history.replaceState({ url: url, path: newPath}, newPath, url);
     }
   }
 
