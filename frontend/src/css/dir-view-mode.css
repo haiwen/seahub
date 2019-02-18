@@ -9,22 +9,33 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  overflow: hidden;
+  border-right: 1px solid #eee;
 }
 
 .dir-main-content {
-  flex: 1 0 75%;
+  flex: 1 0 75% !important;
   display: flex;
   flex-direction: column;
 }
 
 .dir-nav-heading {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #f4f4f7;
   border-bottom: solid 1px #e8e8e8;
   border-left: solid 1px #e8e8e8;
+  font-size: 1rem;
+  font-weight: normal;
   height: 49px;
+}
+
+.dir-nav-container {
+  flex: 1 1;
+  overflow: hidden;
+  padding-bottom: 10px;
 }
 
 .heading-icon {

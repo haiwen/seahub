@@ -18,7 +18,6 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import DirContentNav from './dir-content-nav';
 import DirContentContainer from './dir-content-container';
 
-import '../../css/wiki.css';
 import '../../css/dir-view-mode.css';
 
 const propTypes = {

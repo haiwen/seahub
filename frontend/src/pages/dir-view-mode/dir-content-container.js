@@ -239,7 +239,7 @@ class DirContentList extends React.Component {
     let repoID = this.props.repoID;
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     return (
-      <div className="main-panel dir-main-content o-hidden">
+      <div className={`main-panel o-hidden ${this.props.currentMode === 'column' ? 'dir-main-content' : ''}`}>
         <div className="main-panel-north">
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>

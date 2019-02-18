@@ -145,8 +145,8 @@ class DirContentNav extends React.Component {
   render() {
     return (
       <Fragment>
-        <div id="side-nav" className="wiki-side-nav dir-side-nav" role="navigation">
-          <h3 className="wiki-pages-heading dir-nav-heading" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <div id="side-nav" className="dir-side-nav" role="navigation">
+          <h3 className="dir-nav-heading" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             <div className="heading-title">{gettext('Files')}</div>
             <div className="heading-icon">
               {(this.props.repoPermission) && (
@@ -167,7 +167,7 @@ class DirContentNav extends React.Component {
               )}
             </div>
           </h3>
-          <div className="wiki-pages-container">
+          <div className="dir-nav-container">
             {this.props.isTreeDataLoading ? 
               (<Loading/>) :
               (<TreeView
