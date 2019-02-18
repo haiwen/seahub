@@ -112,14 +112,12 @@ class ViewFileText extends React.Component {
               icon={'fa fa-lock'}
             />
           }
-          {isPro === 'True' &&
-            <IconButton
-              id={'historyButton'}
-              text={gettext('File History')}
-              onMouseDown={() => this.handleMouseDown('history')}
-              icon={'fa fa-history'}
-            />
-          }
+          <IconButton
+            id={'historyButton'}
+            text={gettext('File History')}
+            onMouseDown={() => this.handleMouseDown('history')}
+            icon={'fa fa-history'}
+          />
           <IconButton
             id={'shareBtn'}
             text={gettext('Edit')}
