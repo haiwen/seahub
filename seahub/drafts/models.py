@@ -298,9 +298,10 @@ class DraftReviewManager(models.Manager):
         except DraftReview.DoesNotExist:
             pass
 
-        author = draft.username
         if author:
             author = author
+        else:
+            author = draft.username
 
         draft_review = self.model(creator=creator,
                                   author=author,
