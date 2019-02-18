@@ -31,6 +31,8 @@ const propTypes = {
   isRepoOwner: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   // toolbar
+  onTabNavClick: PropTypes.func.isRequired,
+  onSideNavMenuClick: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
@@ -87,6 +89,10 @@ class DirContentList extends React.Component {
       currentDirent: null,
       isDirentDetailShow: false,
     };
+  }
+
+  onSideNavMenuClick = () => {
+    this.props.onSideNavMenuClick();
   }
 
   onPathClick = (path) => {
@@ -193,6 +199,7 @@ class DirContentList extends React.Component {
                   currentPath={this.props.path} 
                   permission={this.props.repoPermission} 
                   onPathClick={this.props.onMainNavBarClick}
+                  onTabNavClick={this.props.onMainNavBarClick}
                   isViewFile={this.props.isViewFile}
                 />
               )}

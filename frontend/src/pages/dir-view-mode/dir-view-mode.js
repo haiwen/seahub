@@ -32,7 +32,7 @@ class DirViewMode extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMode: 'column',
+      currentMode: cookie.load('seafile-view-mode'),
       path: '',
       pathExist: true,
       isViewFile: false,
@@ -286,10 +286,11 @@ class DirViewMode extends React.Component {
 
     // update data
     this.loadDirentList(repoID, path);
-    
+
     // update location
-    let url = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(path);
-    window.history.pushState({ url: url, path: path}, path, url);
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
+    window.history.pushState({url: url, path: path}, path, url);
   }
 
   showFile = (filePath) => {
@@ -325,8 +326,9 @@ class DirViewMode extends React.Component {
     });
 
     // update location
-    let fileUrl = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(filePath);
-    window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(filePath);
+    window.history.pushState({url: url, path: filePath}, filePath, url);
   } 
 
   loadDirentList = (repoID, path) => {
@@ -491,12 +493,9 @@ class DirViewMode extends React.Component {
     });
   }
 
-  onMenuClick = () => {
-    // todo
-  }
-
   switchViewMode = (mode) => {
     cookie.save('seafile-view-mode', mode);
+    this.loadSidePanel(this.state.path);
     this.setState({currentMode: mode});
   }
 
@@ -1188,6 +1187,8 @@ class DirViewMode extends React.Component {
           isRepoOwner={isRepoOwner}
           isAdmin={isAdmin}
           isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+          onTabNavClick={this.props.onTabNavClick}
+          onSideNavMenuClick={this.props.onMenuClick}
           selectedDirentList={this.state.selectedDirentList}
           onItemsMove={this.onMoveItems}
           onItemsCopy={this.onCopyItems}
