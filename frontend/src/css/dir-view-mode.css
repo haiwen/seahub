@@ -8,6 +8,7 @@
   flex: 0 0 25%;
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 }
 
 .dir-main-content {
@@ -16,8 +17,22 @@
   flex-direction: column;
 }
 
-.wiki-pages-heading {
+.dir-nav-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f4f7;
+  border-bottom: solid 1px #e8e8e8;
+  border-left: solid 1px #e8e8e8;
   height: 49px;
+}
+
+.heading-icon {
+  position: absolute;
+  right: 1rem;
+  top: 30%;
+  color: #888;  
+  font-size: 0.8125rem;
 }
 
 /*tree view */
@@ -58,7 +73,7 @@
 
 .folder-toggle-icon {
   position: absolute;
-  left: 0;
+  left: 0.5rem;
   color: #c0c0c0;
   line-height: 1.625;
   width: 1.5rem;

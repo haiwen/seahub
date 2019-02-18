@@ -43,14 +43,6 @@ class DirContentNav extends React.Component {
     this.isNodeMenuShow = true;
   }
 
-  onMouseEnter = () => {
-    this.setState({isMenuIconShow: true});
-  }
-
-  onMouseLeave = () => {
-    this.setState({isMenuIconShow: false});
-  }
-
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu();
@@ -154,14 +146,14 @@ class DirContentNav extends React.Component {
     return (
       <Fragment>
         <div id="side-nav" className="wiki-side-nav dir-side-nav" role="navigation">
-          <h3 className="wiki-pages-heading" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-            {gettext('Files')}
+          <h3 className="wiki-pages-heading dir-nav-heading" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div className="heading-title">{gettext('Files')}</div>
             <div className="heading-icon">
-              {(this.props.repoPermission && this.state.isMenuIconShow) && (
+              {(this.props.repoPermission) && (
                 <Dropdown isOpen={this.state.isHeaderMenuShow} toggle={this.toggleOperationMenu}>
                   <DropdownToggle 
-                    tag="i" 
-                    className="fas fa-ellipsis-v" 
+                    tag="span" 
+                    className="action-icon sf2-icon-plus" 
                     title={gettext('More Operations')}
                     data-toggle="dropdown" 
                     aria-expanded={this.state.isHeaderMenuShow}

@@ -501,9 +501,12 @@ class DirViewMode extends React.Component {
     let path = this.state.path;
     if (this.state.currentMode === 'column' && this.state.isViewFile) {
       path = Utils.getDirName(path);
-      this.setState({path: path});
+      this.setState({
+        path: path,
+        isViewFile: false,
+      });
       let repoInfo = this.state.currentRepoInfo;
-      
+
       let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
       window.history.pushState({url: url, path: path}, path, url);
     }
