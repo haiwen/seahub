@@ -96,7 +96,7 @@ class ViewFileText extends React.Component {
 
   renderToolbar() {
     return (
-      <div className="txt-view-button-group" role="group">
+      <div className="txt-view-button-group d-flex" role="group">
         <ButtonGroup>
           <IconButton
             text={gettext('Back to parent directory')}
@@ -284,7 +284,9 @@ class FileInfo extends React.PureComponent {
             </span>
             <InternalLinkDialog repoID={repoID} path={filePath}/>
             {this.props.isLocked &&
-              <img className="vam" width="16" src={ mediaUrl + 'img/file-locked-32.png' } alt="locked" title="locked"/>
+              <span className="file-lock">
+                <img className="vam" width="16" src={ mediaUrl + 'img/file-locked-32.png' } alt="locked" title="locked"/>
+              </span>
             }
           </h2>
           <div className="file-state">
