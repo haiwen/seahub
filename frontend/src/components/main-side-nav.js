@@ -203,12 +203,6 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
             }
-            <li className="nav-item">
-              <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={() => this.tabItemClick('linked-devices')}>
-                <span className="sf2-icon-monitor" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Linked Devices')}</span>
-              </Link>
-            </li>
             <li className="nav-item" onClick={() => this.tabItemClick('drafts')}>
               <Link className={`nav-link ellipsis ${this.getActiveClass('drafts') || this.getActiveClass('reviews')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                 <span className="sf2-icon-edit" aria-hidden="true"></span>
@@ -216,6 +210,12 @@ class MainSideNav extends React.Component {
                   {gettext('Drafts')}  
                   {this.props.draftCounts === 0 ? '' : <Badge color="info" pill>{this.props.draftCounts}</Badge>}
                 </span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={() => this.tabItemClick('linked-devices')}>
+                <span className="sf2-icon-monitor" aria-hidden="true"></span>
+                <span className="nav-text">{gettext('Linked Devices')}</span>
               </Link>
             </li>
             <li className="nav-item flex-column" id="share-admin-nav">
