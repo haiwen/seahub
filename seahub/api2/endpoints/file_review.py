@@ -48,13 +48,13 @@ class FileReviewView(APIView):
         dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
 
         try:
-            d = Draft.objects.add(dirent.modifier, repo, file_path, file_id)
+            d = Draft.objects.add(username, repo, file_path, file_id)
         except (DraftFileExist, IntegrityError):
             return api_error(status.HTTP_409_CONFLICT, 'Draft already exists.')
 
         # new review
         try:
-            r = DraftReview.objects.add(creator=dirent.modifier, draft=d)
+            r = DraftReview.objects.add(creator=username, draft=d)
         except (DraftReviewExist):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')
 
