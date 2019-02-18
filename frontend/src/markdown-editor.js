@@ -58,15 +58,15 @@ class EditorUtilities {
     );
   }
 
-  unStarFile () {
+  unStarItem () {
     return (
-      seafileAPI.unStarFile(repoID, this.filePath)
+      seafileAPI.unStarItem(this.repoID, this.filePath)
     );
   }
 
-  starFile() {
+  starItem() {
     return (
-      seafileAPI.starFile(this.repoID, this.filePath)
+      seafileAPI.starItem(this.repoID, this.filePath)
     );
   }
 

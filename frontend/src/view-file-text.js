@@ -151,20 +151,16 @@ class ViewFileText extends React.Component {
 
   toggleStar = () => {
     if (this.state.star) {
-      seafileAPI.unStarFile(repoID, filePath).then((res) => {
-        if (res.data === 'success') {
-          this.setState({
-            star: false,
-          });
-        }
+      seafileAPI.unStarItem(repoID, filePath).then((res) => {
+        this.setState({
+          star: false,
+        });
       });
     } else {
-      seafileAPI.starFile(repoID, filePath).then((res) => {
-        if (res.data === 'success') {
-          this.setState({
-            star: true,
-          });
-        }
+      seafileAPI.starItem(repoID, filePath).then((res) => {
+        this.setState({
+          star: true,
+        });
       });
     }
   }

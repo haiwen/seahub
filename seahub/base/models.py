@@ -1,9 +1,9 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import datetime
-import hashlib
 import logging
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 
 from pysearpc import SearpcError
@@ -11,7 +11,8 @@ from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.group.models import GroupMessage
-from seahub.utils import calc_file_path_hash, within_time_range
+from seahub.utils import calc_file_path_hash, within_time_range, \
+        normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.tags.models import FileUUIDMap
 from fields import LowerCaseCharField
@@ -147,6 +148,31 @@ class StarredFile(object):
             self.name = path.split('/')[-1]
 
 class UserStarredFilesManager(models.Manager):
+
+    def get_starred_item(self, email, repo_id, path):
+
+        path_list = [normalize_file_path(path), normalize_dir_path(path)]
+        starred_items = UserStarredFiles.objects.filter(email=email,
+                repo_id=repo_id).filter(Q(path__in=path_list))
+
+        return starred_items[0] if len(starred_items) > 0 else None
+
+    def add_starred_item(self, email, repo_id, path, is_dir, org_id=-1):
+
+        starred_item = UserStarredFiles.objects.create(email=email,
+                repo_id=repo_id, path=path, is_dir=is_dir, org_id=org_id)
+
+        return starred_item
+
+    def delete_starred_item(self, email, repo_id, path):
+
+        path_list = [normalize_file_path(path), normalize_dir_path(path)]
+        starred_items = UserStarredFiles.objects.filter(email=email,
+                repo_id=repo_id).filter(Q(path__in=path_list))
+
+        for item in starred_items:
+            item.delete()
+
     def get_starred_files_by_username(self, username):
         """Get a user's starred files.
 
@@ -176,7 +202,7 @@ class UserStarredFilesManager(models.Manager):
 
             # file still exists?
             file_id = ''
-            size = -1
+            # size = -1
             if sfile.path != "/":
                 try:
                     file_id = seafile_api.get_file_id_by_path(sfile.repo_id,

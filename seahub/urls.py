@@ -84,6 +84,7 @@ from seahub.api2.endpoints.file_tag import RepoFileTagsView, RepoFileTagView
 from seahub.api2.endpoints.tag_filter_file import TaggedFilesView
 from seahub.api2.endpoints.related_files import RelatedFilesView, RelatedFileView
 from seahub.api2.endpoints.webdav_secret import WebdavSecretView
+from seahub.api2.endpoints.starred_items import StarredItems
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -358,6 +359,9 @@ urlpatterns = [
 
     ## user:webdav
     url(r'^api/v2.1/webdav-secret/$', WebdavSecretView.as_view(), name='api-v2.1-webdav-secret'),
+
+    ## user::starred-item
+    url(r'^api/v2.1/starred-items/$', StarredItems.as_view(), name='api-v2.1-starred-items'),
 
     ## user::wiki
     url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
