@@ -11,7 +11,7 @@ from seaserv import seafile_api
 
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.throttling import AnonRateThrottle
 from seahub.share.models import FileShare
 from seahub.utils import normalize_file_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -45,7 +45,7 @@ def get_illegal_report_info(report):
 class IllegalReportsView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    throttle_classes = (UserRateThrottle,)
+    throttle_classes = (AnonRateThrottle, )
 
     def post(self, request):
         """ Create illegal report.
