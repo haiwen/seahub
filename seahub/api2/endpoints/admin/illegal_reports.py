@@ -9,7 +9,7 @@ from rest_framework import status
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, to_python_boolean
 
 from seahub.api2.endpoints.illegal_reports import get_illegal_report_info
 from seahub.illegal_reports.models import IllegalReport
@@ -43,7 +43,7 @@ class AdminIllegalReportsView(APIView):
                 error_msg = 'handled invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            handled = handled=='true'
+            handled = to_python_boolean(handled)
 
         try:
             reports = IllegalReport.objects.get_illegal_reports(illegal_type=illegal_type,
@@ -94,7 +94,7 @@ class AdminIllegalReportView(APIView):
             error_msg = 'Illegal report  %d not found.' % pk
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        report.handled = handled == 'true'
+        report.handled = to_python_boolean(handled)
         report.save()
 
         info = get_illegal_report_info(report)
