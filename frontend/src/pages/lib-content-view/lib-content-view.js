@@ -15,8 +15,8 @@ import treeHelper from '../../components/tree-view/tree-helper';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
-import DirContentNav from './lib-content-nav';
-import DirContentContainer from './lib-content-main';
+import LibContentNav from './lib-content-nav';
+import LibContentMain from './lib-content-main';
 
 import '../../css/lib-content-view.css';
 
@@ -1173,7 +1173,7 @@ class LibContentView extends React.Component {
     return (
       <div className="main-panel o-hidden view-mode-container">
         {this.state.currentMode === 'column' && 
-          <DirContentNav 
+          <LibContentNav 
             repoPermission={this.state.repoPermission}
             currentPath={this.state.path}
             currentRepoInfo={this.state.currentRepoInfo}
@@ -1189,7 +1189,7 @@ class LibContentView extends React.Component {
             onDeleteNode={this.onDeleteTreeNode}
           />
         }
-        <DirContentContainer 
+        <LibContentMain 
           pathPrefix={this.props.pathPrefix}
           currentMode={this.state.currentMode}
           path={this.state.path}
