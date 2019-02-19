@@ -10,7 +10,6 @@
   flex-direction: column;
   background-color: #fff;
   overflow: hidden;
-  border-right: 1px solid #eee;
 }
 
 .dir-main-content {
@@ -29,12 +28,14 @@
   font-size: 1rem;
   font-weight: normal;
   height: 49px;
+  margin: 0;
 }
 
 .dir-nav-container {
   flex: 1 1;
   overflow: hidden;
-  padding-bottom: 10px;
+  padding: 12px 0;
+  border-right: 1px solid #eee;
 }
 
 .dir-nav-container:hover {
@@ -125,6 +126,7 @@
 
 .tree-node-hight-light {
   color: #fff;
+  border-radius: 4px;
   background-color: #feac74 !important;
 }
 

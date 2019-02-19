@@ -92,7 +92,7 @@
 
 /*tree view */
 .tree-view {
-  padding-left: 10px;
+  padding: 0 12px;
   line-height: 1.5;
 }
 
@@ -166,6 +166,7 @@
 
 .tree-node-hight-light {
   color: #fff;
+  border-radius: 4px;
   background-color: #feac74 !important;
 }
 
