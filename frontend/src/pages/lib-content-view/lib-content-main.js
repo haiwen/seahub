@@ -300,7 +300,7 @@ class LibContentMain extends React.Component {
                   currentPath={this.props.path} 
                   permission={this.props.repoPermission} 
                   onPathClick={this.props.onMainNavBarClick}
-                  onTabNavClick={this.props.onMainNavBarClick}
+                  onTabNavClick={this.props.onTabNavClick}
                   isViewFile={this.props.isViewFile}
                 />
               )}
