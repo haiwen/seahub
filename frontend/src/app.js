@@ -20,7 +20,6 @@ import SharedLibraries from './pages/shared-libs/shared-libs';
 import MyLibraries from './pages/my-libs/my-libs';
 import MyLibDeleted from './pages/my-libs/my-libs-deleted';
 import PublicSharedView from './pages/shared-with-all/public-shared-view';
-// import DirView from './components/dir-view/dir-view';
 import DirViewMode from './pages/dir-view-mode/dir-view-mode';
 import Group from './pages/groups/group-view';
 import Groups from './pages/groups/groups-view';
