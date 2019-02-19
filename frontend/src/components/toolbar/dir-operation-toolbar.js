@@ -183,7 +183,7 @@ class DirOperationToolbar extends React.Component {
     return (
       <Fragment>
         <div className="operation">
-          {(this.props.isViewFile && this.props.permission === 'rw' && !this.props.hasDraft ) && (
+          {(this.props.isViewFile && this.props.permission && !this.props.hasDraft ) && (
             <Fragment>
               <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
             </Fragment>
