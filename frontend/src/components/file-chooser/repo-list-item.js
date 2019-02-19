@@ -61,6 +61,7 @@ class RepoListItem extends React.Component {
             repo={this.props.repo} 
             isShowChildren={this.state.isShowChildren} 
             onDirentItemClick={this.onDirentItemClick}
+            selectedRepo={this.props.selectedRepo}
             selectedPath={this.props.selectedPath}
             isShowFile={this.props.isShowFile}
           />
