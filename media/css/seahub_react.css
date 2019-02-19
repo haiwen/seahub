@@ -828,11 +828,11 @@ table {
 }
 
 table tr {
-    height: 2.1875rem;
+    height: 2.5625rem;
 }
 
 table th, table td {
-    padding: 0.3125rem 0.1875rem;
+    padding: 0.5rem 0.1875rem;
     border-bottom: 1px solid #eee;
 }
 
