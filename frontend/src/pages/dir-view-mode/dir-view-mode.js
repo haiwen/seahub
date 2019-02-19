@@ -1124,13 +1124,13 @@ class DirViewMode extends React.Component {
 
   onLibDecryptDialog = () => {
     this.setState({libNeedDecrypt: false});
-    this.loadWikiData();
+    this.loadDirData(this.state.path);
   }
 
   goReviewPage = () => {
     window.location.href = siteRoot + 'drafts/review/' + this.state.reviewID;
   }
-
+  
   goDraftPage = () => {
     let repoID = this.props.repoID;
     window.location.href = siteRoot + 'lib/' + repoID + '/file' + this.state.draftFilePath + '?mode=edit';
@@ -1160,11 +1160,12 @@ class DirViewMode extends React.Component {
     let enableDirPrivateShare = false;
     const { repoEncrypted, isAdmin, ownerEmail, userPerm, isVirtual, isDepartmentAdmin } = this.state;
     let isRepoOwner = ownerEmail === username;
-    let canShare = (canGenerateShareLink || canGenerateUploadLink || isRepoOwner || isAdmin);
-    if (!repoEncrypted && canShare && (userPerm == 'rw' || userPerm == 'r')) {
-      showShareBtn = true;
-      if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
-        enableDirPrivateShare = true;
+    if (!repoEncrypted) {
+      if ((canGenerateShareLink || canGenerateUploadLink || isRepoOwner || isAdmin) && (userPerm == 'rw' || userPerm == 'r')) {
+        showShareBtn = true;
+        if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
+          enableDirPrivateShare = true;
+        }
       }
     }
 

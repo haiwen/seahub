@@ -149,3 +149,12 @@
   margin-left: 0.25rem;
   font-size: 0.9375rem;
 }
+
+.dir-main-content .wiki-page-content .ml-2 {
+  text-decoration: underline;
+}
+
+.dir-main-content .wiki-page-content .ml-2:hover {
+  text-decoration: underline;
+  color:#eb8205;
+}

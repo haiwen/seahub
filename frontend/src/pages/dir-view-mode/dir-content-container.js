@@ -137,6 +137,16 @@ class DirContentList extends React.Component {
     this.props.switchViewMode(mode);
   }
 
+  goDraftPage = (e) => {
+    e.preventDefault();
+    this.props.goDraftPage();
+  }
+  
+  goReviewPage = (e) => {
+    e.preventDefault();
+    this.props.goReviewPage();
+  }
+
   onFileUploadSuccess = (direntObject) => {
     this.props.onFileUploadSuccess(direntObject);
   }
@@ -213,7 +223,7 @@ class DirContentList extends React.Component {
                 <div className='seafile-btn-view-review text-center'>
                   <div className='tag tag-green'> 
                     {gettext('This file is in review stage')}
-                    <a className="ml-2" onMouseDown={this.props.goReviewPage}>{gettext('View Review')}</a>
+                    <span className="ml-2" onClick={this.goReviewPage}>{gettext('View Review')}</span>
                   </div>
                 </div>
               }
@@ -221,7 +231,7 @@ class DirContentList extends React.Component {
                 <div className='seafile-btn-view-review text-center'>
                   <div className='tag tag-green'>
                     {gettext('This file is in draft stage.')}
-                    <a className="ml-2" onMouseDown={this.props.goDraftPage}>{gettext('Edit Draft')}</a>
+                    <span className="ml-2" onClick={this.goDraftPage}>{gettext('Edit Draft')}</span>
                   </div>
                 </div>
               }
