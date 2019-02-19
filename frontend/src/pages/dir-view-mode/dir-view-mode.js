@@ -335,7 +335,8 @@ class DirViewMode extends React.Component {
       let direntList = [];
       let markdownItem = null;
       res.data.dirent_list.forEach(item => {
-        if (Utils.isMarkdownFile(item.name)) {
+        let fileName = item.name.toLowerCase();
+        if (fileName === 'readme.md' || fileName === 'readme.markdown') {
           markdownItem = item;
         }
         let dirent = new Dirent(item);
