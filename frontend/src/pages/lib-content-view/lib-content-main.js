@@ -7,7 +7,6 @@ import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar'
 import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
 import CurDirPath from '../../components/cur-dir-path';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
-import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import RepoInfoBar from '../../components/repo-info-bar';
@@ -17,8 +16,6 @@ const propTypes = {
   currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
-  hash: PropTypes.string,
-  isViewFile: PropTypes.bool.isRequired,
   // repo
   currentRepoInfo: PropTypes.object,  // Initially not loaded
   repoID: PropTypes.string.isRequired,
@@ -52,13 +49,6 @@ const propTypes = {
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
   updateUsedRepoTags: PropTypes.func.isRequired,
-  // file 
-  isFileLoading: PropTypes.bool.isRequired,
-  filePermission: PropTypes.bool,
-  content: PropTypes.string,
-  lastModified: PropTypes.string,
-  latestContributor: PropTypes.string,
-  onLinkClick: PropTypes.func.isRequired,
   // dirent list
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
@@ -209,39 +199,7 @@ class LibContentMain extends React.Component {
 
   renderColumnView = () => {
     return (
-      <Fragment>
-        {this.props.isViewFile && (
-          <WikiMarkdownViewer
-            isFileLoading={this.props.isFileLoading}
-            markdownContent={this.props.content}
-            latestContributor={this.props.latestContributor}
-            lastModified = {this.props.lastModified}
-            onLinkClick={this.props.onLinkClick}
-          >
-            <Fragment>
-              {this.props.reviewStatus === 'open' &&
-                <div className='seafile-btn-view-review text-center'>
-                  <div className='tag tag-green'> 
-                    {gettext('This file is in review stage')}
-                    <span className="ml-2" onClick={this.goReviewPage}>{gettext('View Review')}</span>
-                  </div>
-                </div>
-              }
-              {(!this.props.isDraft && this.props.hasDraft && this.props.reviewStatus !== 'open') &&
-                <div className='seafile-btn-view-review text-center'>
-                  <div className='tag tag-green'>
-                    {gettext('This file is in draft stage.')}
-                    <span className="ml-2" onClick={this.goDraftPage}>{gettext('Edit Draft')}</span>
-                  </div>
-                </div>
-              }
-            </Fragment>
-          </WikiMarkdownViewer>
-        )}
-        {!this.props.isViewFile && (
-          this.renderListView()
-        )}
-      </Fragment>
+      this.renderListView()
     )
   }
 
@@ -272,7 +230,6 @@ class LibContentMain extends React.Component {
                   hasDraft={this.props.hasDraft}
                   direntList={this.props.direntList}
                   permission={this.props.filePermission}
-                  isViewFile={this.props.isViewFile}
                   showShareBtn={this.props.showShareBtn}
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
                   userPerm={this.props.userPerm}
@@ -301,7 +258,6 @@ class LibContentMain extends React.Component {
                   permission={this.props.repoPermission} 
                   onPathClick={this.props.onMainNavBarClick}
                   onTabNavClick={this.props.onTabNavClick}
-                  isViewFile={this.props.isViewFile}
                 />
               )}
             </div>

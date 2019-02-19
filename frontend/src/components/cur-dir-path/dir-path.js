@@ -11,7 +11,7 @@ const propTypes = {
   onTabNavClick: PropTypes.func,
   pathPrefix: PropTypes.array,
   repoID: PropTypes.string.isRequired,
-  isViewFile: PropTypes.bool.isRequired,
+  isViewFile: PropTypes.bool,
 };
 
 class DirPath extends React.Component {

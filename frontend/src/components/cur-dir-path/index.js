@@ -11,7 +11,7 @@ const propTypes = {
   onPathClick: PropTypes.func.isRequired,
   onTabNavClick: PropTypes.func,
   pathPrefix: PropTypes.array,
-  isViewFile: PropTypes.bool.isRequired,
+  isViewFile: PropTypes.bool,
 };
 
 class CurDirPath extends React.Component {

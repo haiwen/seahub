@@ -15,6 +15,7 @@ import treeHelper from '../../components/tree-view/tree-helper';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
+import FileContentView from '../../components/file-content-view';
 import LibContentNav from './lib-content-nav';
 import LibContentMain from './lib-content-main';
 
@@ -1189,69 +1190,91 @@ class LibContentView extends React.Component {
             onDeleteNode={this.onDeleteTreeNode}
           />
         }
-        <LibContentMain 
-          pathPrefix={this.props.pathPrefix}
-          currentMode={this.state.currentMode}
-          path={this.state.path}
-          pathExist={this.state.pathExist}
-          hash={this.hash}
-          isViewFile={this.state.isViewFile}
-          currentRepoInfo={this.state.currentRepoInfo}
-          repoID={this.props.repoID}
-          repoName={this.state.repoName}
-          repoPermission={this.state.repoPermission}
-          repoEncrypted={this.state.repoEncrypted}
-          showShareBtn={showShareBtn}
-          enableDirPrivateShare={enableDirPrivateShare}
-          userPerm={userPerm}
-          isRepoOwner={isRepoOwner}
-          isAdmin={isAdmin}
-          isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-          onTabNavClick={this.props.onTabNavClick}
-          onSideNavMenuClick={this.props.onMenuClick}
-          selectedDirentList={this.state.selectedDirentList}
-          onItemsMove={this.onMoveItems}
-          onItemsCopy={this.onCopyItems}
-          onItemsDelete={this.onDeleteItems}
-          switchViewMode={this.switchViewMode}
-          onSearchedClick={this.onSearchedClick}
-          onMainNavBarClick={this.onMainNavBarClick}
-          isDraft={this.state.isDraft}
-          hasDraft={this.state.hasDraft}
-          draftCounts={this.state.draftCounts}
-          goDraftPage={this.goDraftPage} 
-          reviewStatus={this.state.reviewStatus}
-          reviewCounts={this.state.reviewCounts}
-          goReviewPage={this.goReviewPage}
-          usedRepoTags={this.state.usedRepoTags}
-          readmeMarkdown={this.state.readmeMarkdown}
-          updateUsedRepoTags={this.updateUsedRepoTags}
-          isFileLoading={this.state.isFileLoading}
-          filePermission={this.state.filePermission}
-          content={this.state.content}
-          lastModified={this.state.lastModified}
-          latestContributor={this.state.latestContributor}
-          onLinkClick={this.onLinkClick}
-          isDirentListLoading={this.state.isDirentListLoading}
-          direntList={this.state.direntList}
-          sortBy={this.state.sortBy}
-          sortOrder={this.state.sortOrder}
-          sortItems={this.sortItems}
-          updateDirent={this.updateDirent}
-          onItemClick={this.onDirentClick}
-          onItemSelected={this.onDirentSelected}
-          onItemDelete={this.onMainPanelItemDelete}
-          onItemRename={this.onMainPanelItemRename}
-          onItemMove={this.onMoveItem}
-          onItemCopy={this.onCopyItem}
-          onAddFolder={this.onAddFolder}
-          onAddFile={this.onAddFile}
-          onFileTagChanged={this.onFileTagChanged}
-          isDirentSelected={this.state.isDirentSelected}
-          isAllDirentSelected={this.state.isAllDirentSelected}
-          onAllDirentSelected={this.onAllDirentSelected}
-          onFileUploadSuccess={this.onFileUploadSuccess}
-        />
+        {this.state.isViewFile && 
+          <FileContentView 
+            pathPrefix={this.props.pathPrefix}
+            currentMode={this.state.currentMode}
+            path={this.state.path}
+            hash={this.hast}
+            onTabNavClick={this.props.onTabNavClick}
+            onSideNavMenuClick={this.props.onMenuClick}
+            switchViewMode={this.switchViewMode}
+            onSearchedClick={this.onSearchedClick}
+            onMainNavBarClick={this.onMainNavBarClick}
+            repoID={this.props.repoID}
+            currentRepoInfo={this.state.currentRepoInfo}
+            repoPermission={this.state.repoPermission}
+            isDraft={this.state.isDraft}
+            hasDraft={this.state.hasDraft}
+            goDraftPage={this.goDraftPage}
+            reviewStatus={this.state.reviewStatus}
+            goReviewPage={this.goReviewPage}
+            isFileLoading={this.state.isFileLoading}
+            filePermission={this.state.filePermission}
+            content={this.state.content}
+            lastModified={this.state.lastModified}
+            latestContributor={this.state.latestContributor}
+            onLinkClick={this.onLinkClick}
+          />
+        }
+        {!this.state.isViewFile && (
+          <LibContentMain 
+            pathPrefix={this.props.pathPrefix}
+            currentMode={this.state.currentMode}
+            path={this.state.path}
+            pathExist={this.state.pathExist}
+            hash={this.hash}
+            currentRepoInfo={this.state.currentRepoInfo}
+            repoID={this.props.repoID}
+            repoName={this.state.repoName}
+            repoPermission={this.state.repoPermission}
+            repoEncrypted={this.state.repoEncrypted}
+            showShareBtn={showShareBtn}
+            enableDirPrivateShare={enableDirPrivateShare}
+            userPerm={userPerm}
+            isRepoOwner={isRepoOwner}
+            isAdmin={isAdmin}
+            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+            onTabNavClick={this.props.onTabNavClick}
+            onSideNavMenuClick={this.props.onMenuClick}
+            selectedDirentList={this.state.selectedDirentList}
+            onItemsMove={this.onMoveItems}
+            onItemsCopy={this.onCopyItems}
+            onItemsDelete={this.onDeleteItems}
+            switchViewMode={this.switchViewMode}
+            onSearchedClick={this.onSearchedClick}
+            onMainNavBarClick={this.onMainNavBarClick}
+            isDraft={this.state.isDraft}
+            hasDraft={this.state.hasDraft}
+            draftCounts={this.state.draftCounts}
+            goDraftPage={this.goDraftPage} 
+            reviewStatus={this.state.reviewStatus}
+            reviewCounts={this.state.reviewCounts}
+            goReviewPage={this.goReviewPage}
+            usedRepoTags={this.state.usedRepoTags}
+            readmeMarkdown={this.state.readmeMarkdown}
+            updateUsedRepoTags={this.updateUsedRepoTags}
+            isDirentListLoading={this.state.isDirentListLoading}
+            direntList={this.state.direntList}
+            sortBy={this.state.sortBy}
+            sortOrder={this.state.sortOrder}
+            sortItems={this.sortItems}
+            updateDirent={this.updateDirent}
+            onItemClick={this.onDirentClick}
+            onItemSelected={this.onDirentSelected}
+            onItemDelete={this.onMainPanelItemDelete}
+            onItemRename={this.onMainPanelItemRename}
+            onItemMove={this.onMoveItem}
+            onItemCopy={this.onCopyItem}
+            onAddFolder={this.onAddFolder}
+            onAddFile={this.onAddFile}
+            onFileTagChanged={this.onFileTagChanged}
+            isDirentSelected={this.state.isDirentSelected}
+            isAllDirentSelected={this.state.isAllDirentSelected}
+            onAllDirentSelected={this.onAllDirentSelected}
+            onFileUploadSuccess={this.onFileUploadSuccess}
+          />
+        )}
       </div>
     );
   }
