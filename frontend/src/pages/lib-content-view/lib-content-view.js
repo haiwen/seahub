@@ -1219,8 +1219,7 @@ class LibContentView extends React.Component {
           isDraft={this.state.isDraft}
           hasDraft={this.state.hasDraft}
           draftCounts={this.state.draftCounts}
-          goDraftPage={this.goDraftPage}
-          reviewID={this.state.reviewID}
+          goDraftPage={this.goDraftPage} 
           reviewStatus={this.state.reviewStatus}
           reviewCounts={this.state.reviewCounts}
           goReviewPage={this.goReviewPage}

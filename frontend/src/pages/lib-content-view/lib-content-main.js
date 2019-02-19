@@ -13,6 +13,7 @@ import FileUploader from '../../components/file-uploader/file-uploader';
 import RepoInfoBar from '../../components/repo-info-bar';
 
 const propTypes = {
+  pathPrefix: PropTypes.array.isRequired,
   currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
@@ -45,7 +46,6 @@ const propTypes = {
   hasDraft: PropTypes.bool,
   draftCounts: PropTypes.number,
   goDraftPage: PropTypes.func.isRequired,
-  reviewID: PropTypes.any,
   reviewStatus: PropTypes.any,
   reviewCounts: PropTypes.number,
   goReviewPage: PropTypes.func.isRequired,
@@ -271,7 +271,7 @@ class LibContentMain extends React.Component {
                   isDraft={this.props.isDraft}
                   hasDraft={this.props.hasDraft}
                   direntList={this.props.direntList}
-                  permission={this.props.permission}
+                  permission={this.props.filePermission}
                   isViewFile={this.props.isViewFile}
                   showShareBtn={this.props.showShareBtn}
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
