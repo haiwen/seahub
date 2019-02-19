@@ -13,6 +13,7 @@ const propTypes = {
   repoID: PropTypes.string,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
+  mode: PropTypes.oneOf(['current_repo_and_other_repos', 'only_all_repos', 'only_current_library']),
 };
 
 class FileChooser extends React.Component {
@@ -99,10 +100,11 @@ class FileChooser extends React.Component {
   }
 
   render() {
+    const mode = this.props.mode;
+    let libName = mode === 'current_repo_and_other_repos' ? gettext('Other Libraries') : gettext('Libraries');
     return (
       <div className="file-chooser-container">
-        {
-          this.props.repoID &&
+        {(mode === 'current_repo_and_other_repos' || mode === 'only_current_library') &&
           <div className="list-view">
             <div className="list-view-header">
               <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
@@ -122,24 +124,26 @@ class FileChooser extends React.Component {
             }
           </div>
         }
-        <div className="list-view">
-          <div className="list-view-header">
-            <span className={`item-toggle fa ${this.state.isOtherRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>
-            <span className="library">{gettext('Other Libraries')}</span>
+        {mode !== 'only_current_library' &&
+          <div className="list-view">
+            <div className="list-view-header">
+              <span className={`item-toggle fa ${this.state.isOtherRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>
+              <span className="library">{libName}</span>
+            </div>
+            {
+              this.state.isOtherRepoShow && 
+              <RepoListView 
+                initToShowChildren={false}
+                repoList={this.state.repoList}
+                selectedRepo={this.state.selectedRepo}
+                selectedPath={this.state.selectedPath}
+                onRepoItemClick={this.onRepoItemClick} 
+                onDirentItemClick={this.onDirentItemClick}
+                isShowFile={this.props.isShowFile}
+              /> 
+            }
           </div>
-          {
-            this.state.isOtherRepoShow && 
-            <RepoListView 
-              initToShowChildren={false}
-              repoList={this.state.repoList}
-              selectedRepo={this.state.selectedRepo}
-              selectedPath={this.state.selectedPath}
-              onRepoItemClick={this.onRepoItemClick} 
-              onDirentItemClick={this.onDirentItemClick}
-              isShowFile={this.props.isShowFile}
-            /> 
-          }
-        </div>
+        }
       </div>
     );
   }

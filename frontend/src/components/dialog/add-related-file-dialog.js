@@ -95,6 +95,7 @@ class AddRelatedFileDialog extends React.Component {
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
+            mode="current_repo_and_other_repos"
           />
           {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
         </ModalBody>

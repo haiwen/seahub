@@ -6,7 +6,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
-  repoID: PropTypes.string.isRequired,
   sharedToken: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   handleSaveSharedFile: PropTypes.func.isRequired,
@@ -51,14 +50,23 @@ class SaveSharedFileDialog extends React.Component {
     }
   }
 
+  onRepoItemClick = (repo) => {
+    this.setState({
+      repo: repo,
+      selectedPath: '/',
+    });
+  }
+
   render() {
     return (
       <Modal isOpen={true} className="sf-save-file">
-        <ModalHeader toggle={this.props.toggleCancel}>{gettext('Select Folder')}</ModalHeader>
+        <ModalHeader toggle={this.props.toggleCancel}>{gettext('Save to:')}</ModalHeader>
         <ModalBody>
           <FileChooser
             isShowFile={false}
             onDirentItemClick={this.onDirentItemClick}
+            onRepoItemClick={this.onRepoItemClick}
+            mode="only_all_repos"
           />
           {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
         </ModalBody>
