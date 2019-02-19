@@ -12,10 +12,14 @@
 
 .txt-file-view-header {
   width: 100%;
-  padding: 12px 15px;
+  padding: 4px 10px;
   border-bottom: 1px solid #c9c9c9;
   justify-content: space-between;
   flex-shrink: 0;
+}
+
+.txt-view-button-group {
+  align-items: center;
 }
 
 .txt-file-view-body {
@@ -71,11 +75,16 @@
 }
 
 .file-title .file-internal-link,
-.file-title .file-star {
+.file-title .file-star,
+.file-title .file-lock {
   font-size: .875rem;
   cursor: pointer;
   margin-left: .5rem;
   vertical-align: text-bottom;
+}
+
+.file-title .file-star .star {
+  color: #f89a68;
 }
 
 .file-internal-link {
@@ -83,7 +92,6 @@
 }
 
 .txt-file-view-body .txt-view-comment {
-  background: #fff;
   display: flex;
   height: 100%;
 } 
@@ -96,4 +104,5 @@
 
 .txt-file-view-body .txt-view-comment .seafile-comment {
   width: 30%;
+  background: #fff;
 }

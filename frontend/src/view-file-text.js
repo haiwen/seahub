@@ -11,6 +11,10 @@ import { serviceURL, gettext, mediaUrl } from './utils/constants';
 import InternalLinkDialog from './components/dialog/internal-link-dialog';
 import CommentsList from './components/comments-list';
 import 'codemirror/lib/codemirror.css';
+import './assets/css/fa-solid.css';
+import './assets/css/fa-regular.css';
+import './assets/css/fontawesome.css';
+import './css/view-file-text.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/clike/clike';
@@ -21,10 +25,6 @@ import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/go/go';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/htmlmixed/htmlmixed';
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
-import './css/view-file-text.css';
 
 const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred } = window.app.pageOptions;
 const options = {
@@ -96,7 +96,7 @@ class ViewFileText extends React.Component {
 
   renderToolbar() {
     return (
-      <div className="txt-view-button-group" role="group">
+      <div className="txt-view-button-group d-flex" role="group">
         <ButtonGroup>
           <IconButton
             text={gettext('Back to parent directory')}
@@ -284,7 +284,9 @@ class FileInfo extends React.PureComponent {
             </span>
             <InternalLinkDialog repoID={repoID} path={filePath}/>
             {this.props.isLocked &&
-              <img className="vam" width="16" src={ mediaUrl + 'img/file-locked-32.png' } alt="locked" title="locked"/>
+              <span className="file-lock">
+                <img className="vam" width="16" src={ mediaUrl + 'img/file-locked-32.png' } alt="locked" title="locked"/>
+              </span>
             }
           </h2>
           <div className="file-state">
