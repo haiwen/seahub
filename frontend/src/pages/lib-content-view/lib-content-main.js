@@ -81,7 +81,7 @@ const propTypes = {
   onFileUploadSuccess: PropTypes.func.isRequired,
 };
 
-class DirContentList extends React.Component {
+class LibContentMain extends React.Component {
 
   constructor(props) {
     super(props);
@@ -342,6 +342,6 @@ class DirContentList extends React.Component {
   }
 }
 
-DirContentList.propTypes = propTypes;
+LibContentMain.propTypes = propTypes;
 
-export default DirContentList;
+export default LibContentMain;

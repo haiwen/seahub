@@ -15,10 +15,10 @@ import treeHelper from '../../components/tree-view/tree-helper';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
-import DirContentNav from './dir-content-nav';
-import DirContentContainer from './dir-content-container';
+import DirContentNav from './lib-content-nav';
+import DirContentContainer from './lib-content-main';
 
-import '../../css/dir-view-mode.css';
+import '../../css/lib-content-view.css';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -26,7 +26,7 @@ const propTypes = {
   onMenuClick: PropTypes.func.isRequired,
 };
 
-class DirViewMode extends React.Component {
+class LibContentView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -1258,6 +1258,6 @@ class DirViewMode extends React.Component {
   }
 }
 
-DirViewMode.propTypes = propTypes;
+LibContentView.propTypes = propTypes;
 
-export default DirViewMode;
+export default LibContentView;

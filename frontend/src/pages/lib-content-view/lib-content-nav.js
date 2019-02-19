@@ -25,7 +25,7 @@ const propTypes = {
   onAddFolderNode: PropTypes.func.isRequired,
 };
 
-class DirContentNav extends React.Component {
+class LibContentNav extends React.Component {
 
   constructor(props) {
     super(props);
@@ -230,6 +230,6 @@ class DirContentNav extends React.Component {
   }
 }
 
-DirContentNav.propTypes = propTypes;
+LibContentNav.propTypes = propTypes;
 
-export default DirContentNav;
+export default LibContentNav;
