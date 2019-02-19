@@ -8,6 +8,7 @@ const propTypes = {
   isShowFile: PropTypes.bool,
   filePath: PropTypes.string,
   selectedPath: PropTypes.string,
+  selectedRepo: PropTypes.object,
   dirent: PropTypes.object.isRequired,
   repo: PropTypes.object.isRequired,
   onDirentItemClick: PropTypes.func.isRequired,
@@ -31,12 +32,17 @@ class DirentListItem extends React.Component {
 
   onItemClick = (e) => {
     e.stopPropagation();  // need prevent event popup
-    if (this.props.selectedPath !== this.state.filePath) {
-      this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
-    } else {
-      if (this.props.dirent.type === 'dir') {
-        this.onToggleClick(e);
+    let isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
+    if (isCurrentRepo) {
+      if (this.props.selectedPath !== this.state.filePath) {
+        this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
+      } else {
+        if (this.props.dirent.type === 'dir') {
+          this.onToggleClick(e);
+        }
       }
+    } else {
+      this.props.onDirentItemClick(this.state.filePath, this.props.dirent);
     }
   }
   
@@ -92,13 +98,19 @@ class DirentListItem extends React.Component {
   }
 
   render() {
+    let isCurrentRepo = false;
+    if (this.props.selectedRepo) {
+      isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
+    }
+    let isCurrentPath = this.props.selectedPath === this.state.filePath;
+
     return (
       <li className="file-chooser-item">
         {
           this.state.hasChildren && this.props.dirent.type !== 'file' &&
           <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         }
-        <span className={`item-info ${this.state.filePath === this.props.selectedPath ? 'item-active' : ''}`} onClick={this.onItemClick}>
+        <span className={`item-info ${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''}`} onClick={this.onItemClick}>
           <span className={`icon far ${this.props.dirent.type === 'dir' ? 'fa-folder' : 'fa-file'}`}></span>
           <span className="name user-select-none ellipsis">{this.props.dirent && this.props.dirent.name}</span>
         </span>

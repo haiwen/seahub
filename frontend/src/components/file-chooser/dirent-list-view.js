@@ -8,6 +8,7 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   isShowFile: PropTypes.bool,
   selectedPath: PropTypes.string,
+  selectedRepo: PropTypes.object,
   repo: PropTypes.object.isRequired,
   isShowChildren: PropTypes.bool.isRequired,
   onDirentItemClick: PropTypes.func.isRequired
@@ -52,6 +53,7 @@ class DirentListView extends React.Component {
               key={index} 
               repo={this.props.repo} 
               dirent={dirent}
+              selectedRepo={this.props.selectedRepo}
               onDirentItemClick={this.props.onDirentItemClick}
               selectedPath={this.props.selectedPath}
               isShowFile={this.props.isShowFile}
