@@ -11,6 +11,10 @@ import { serviceURL, gettext, mediaUrl } from './utils/constants';
 import InternalLinkDialog from './components/dialog/internal-link-dialog';
 import CommentsList from './components/comments-list';
 import 'codemirror/lib/codemirror.css';
+import './assets/css/fa-solid.css';
+import './assets/css/fa-regular.css';
+import './assets/css/fontawesome.css';
+import './css/view-file-text.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/clike/clike';
@@ -21,10 +25,6 @@ import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/go/go';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/htmlmixed/htmlmixed';
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
-import './css/view-file-text.css';
 
 const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred } = window.app.pageOptions;
 const options = {

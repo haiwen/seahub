@@ -77,7 +77,7 @@ class CommentsList extends React.Component {
           <div onClick={this.props.toggleCommentsList} className={'seafile-comment-title-close'}>
             <i className={'fa fa-times-circle'}/>
           </div>
-          <div className={'seafile-comment-title-text'}>{gettext('comments')}</div>
+          <div className={'seafile-comment-title-text'}>{gettext('Comments')}</div>
         </div>
         <div className="seafile-comment-toggle-resolved">
           <div className={'seafile-comment-title-text'}>{gettext('Show resolved comments')}</div>
@@ -109,7 +109,7 @@ class CommentsList extends React.Component {
             })
           }
           {(this.state.commentsList.length == 0 ) &&
-            <li className="comment-vacant">{gettext('no_comment_yet')}</li>}
+            <li className="comment-vacant">{gettext('No comment yet.')}</li>}
         </ul>
         <div className="seafile-comment-footer">
             <textarea
@@ -119,7 +119,7 @@ class CommentsList extends React.Component {
             <Button
               className="submit-comment" color="success"
               size="sm" onClick={this.submitComment} >
-              {gettext('submit')}</Button>
+              {gettext('Submit')}</Button>
         </div>
       </div>
     );
