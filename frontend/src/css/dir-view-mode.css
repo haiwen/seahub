@@ -26,7 +26,6 @@
   justify-content: center;
   background: #f4f4f7;
   border-bottom: solid 1px #e8e8e8;
-  border-left: solid 1px #e8e8e8;
   font-size: 1rem;
   font-weight: normal;
   height: 49px;
@@ -52,7 +51,7 @@
 
 /*tree view */
 .tree-view {
-  padding-left: 10px;
+  padding: 0 12px 0 0;
   line-height: 1.5;
 }
 

@@ -20,8 +20,8 @@ class GroupsToolbar extends React.Component {
   render() {
     let { onShowSidePanel, onSearchedClick } = this.props;
     return (
-      <div className="main-panel-north">
-        <div className="cur-view-toolbar border-left-show">
+      <div className="main-panel-north border-left-show">
+        <div className="cur-view-toolbar">
           <div className="operation">
             <Button color="btn btn-secondary operation-item" onClick={this.props.toggleAddGroupModal}>
               <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Group')}

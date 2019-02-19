@@ -146,7 +146,7 @@ class DirContentNav extends React.Component {
     return (
       <Fragment>
         <div id="side-nav" className="dir-side-nav" role="navigation">
-          <h3 className="dir-nav-heading" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <h3 className="dir-nav-heading border-left-show" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             <div className="heading-title">{gettext('Files')}</div>
             <div className="heading-icon">
               {(this.props.repoPermission) && (

@@ -119,8 +119,8 @@ class Wikis extends Component {
   render() {
     return (
       <Fragment>
-        <div className="main-panel-north">
-          <div className="cur-view-toolbar border-left-show">
+        <div className="main-panel-north border-left-show">
+          <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
               <Dropdown tag="div" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>

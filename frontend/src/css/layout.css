@@ -46,6 +46,7 @@
 
 .side-panel-north,
 .main-panel-north {
+  position: relative;
   padding: .5rem 1rem;
   display: flex;
   flex-shrink: 0;

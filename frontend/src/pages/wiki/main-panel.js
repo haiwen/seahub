@@ -73,10 +73,10 @@ class MainPanel extends Component {
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     return (
       <div className="main-panel wiki-main-panel o-hidden">
-        <div className="main-panel-top panel-top">
+        <div className="main-panel-north panel-top border-left-show">
           {username && (
             <Fragment>
-              <div className="cur-view-toolbar border-left-show">
+              <div className="cur-view-toolbar">
                 <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
                 {this.props.permission === 'rw' && (
                   <button className="btn btn-secondary operation-item" title="Edit File" onClick={this.onEditClick}>{gettext('Edit Page')}</button>
@@ -90,7 +90,7 @@ class MainPanel extends Component {
             </Fragment>
           )}
         </div>
-        <div className="cur-view-container">
+        <div className="main-panel-center">
           <div className="cur-view-path">
             <div className="path-containter">
               {username &&
