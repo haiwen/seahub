@@ -159,3 +159,10 @@
   text-decoration: underline;
   color:#eb8205;
 }
+
+/* todo optimized */
+#wiki-page-last-modified {
+  padding: 40px 10px;
+  font-size:12px;
+  color: #666;
+}
