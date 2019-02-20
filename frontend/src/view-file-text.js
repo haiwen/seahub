@@ -28,7 +28,7 @@ import 'codemirror/mode/htmlmixed/htmlmixed';
 
 const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred } = window.app.pageOptions;
 const options = {
-  lineNumbers: true,
+  lineNumbers: false,
   mode: Utils.chooseLanguage(fileExt.slice(3, fileExt.length -3)),
   extraKeys: {'Ctrl': 'autocomplete'},
   theme: 'default',
