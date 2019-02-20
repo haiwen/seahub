@@ -32,6 +32,8 @@ def sso(request):
     if getattr(settings, 'ENABLE_CAS', False):
         return HttpResponseRedirect(reverse('cas_ng_login') + next_param)
 
+    return HttpResponseRedirect(next_page)
+
 def shib_login(request):
     if REDIRECT_FIELD_NAME in request.GET:
         next_page = request.GET[REDIRECT_FIELD_NAME]

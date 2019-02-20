@@ -39,9 +39,14 @@ class RemoteUserMiddleware(object):
     # Name of request header to grab username from.  This will be the key as
     # used in the request.META dictionary, i.e. the normalization of headers to
     # all uppercase and the addition of "HTTP_" prefix apply.
-    header = getattr(settings, 'PROXY_AUTH_HEADER', "HTTP_REMOTE_USER")
+    header = getattr(settings, 'PROXY_AUTH_HEADER', "REMOTE_USER")
+
+    trust_endpoints = getattr(settings, 'TRUST_PROXY_ENDPOINTS', [])
 
     def process_request(self, request):
+        if request.path not in self.trust_endpoints:
+            return
+
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
             raise ImproperlyConfigured(
