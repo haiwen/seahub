@@ -12,7 +12,8 @@ const propTypes = {
   latestContributor: PropTypes.string.isRequired,
   lastModified: PropTypes.string.isRequired,
   onLinkClick: PropTypes.func.isRequired,
-  isWiki: PropTypes.bool
+  isWiki: PropTypes.bool,
+  isTOCShow: PropTypes.bool,
 };
 
 const contentClass = 'wiki-page-content';
@@ -152,10 +153,14 @@ class WikiMarkdownViewer extends React.Component {
   }
 
   renderMarkdown = () => {
+    let isTOCShow = true;
+    if (this.props.isTOCShow === false) {
+      isTOCShow = false;
+    }
     if (this.props.isWiki) {
       return (
         <MarkdownViewer
-          showTOC={true}
+          showTOC={isTOCShow}
           markdownContent={this.props.markdownContent}
           activeTitleIndex={this.state.activeTitleIndex}
           onContentRendered={this.onContentRendered}
@@ -166,7 +171,7 @@ class WikiMarkdownViewer extends React.Component {
 
     return (
       <MarkdownViewer
-        showTOC={true}
+        showTOC={isTOCShow}
         markdownContent={this.props.markdownContent}
         activeTitleIndex={this.state.activeTitleIndex}
         onContentRendered={this.onContentRendered}
