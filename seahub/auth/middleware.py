@@ -1,7 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from django.contrib import auth
+from seahub import auth
 from django.core.exceptions import ImproperlyConfigured
 
+from django.conf import settings
 
 class LazyUser(object):
     def __get__(self, request, obj_type=None):
@@ -30,17 +31,22 @@ class RemoteUserMiddleware(object):
     If authentication is successful, the user is automatically logged in to
     persist the user in the session.
 
-    The header used is configurable and defaults to ``REMOTE_USER``.  Subclass
-    this class and change the ``header`` attribute if you need to use a
-    different header.
+    The header used is configurable and defaults to ``REMOTE_USER``. Set the
+    ``PROXY_AUTH_HEADER`` environment variable if you need to use a different
+    header.
     """
 
     # Name of request header to grab username from.  This will be the key as
     # used in the request.META dictionary, i.e. the normalization of headers to
     # all uppercase and the addition of "HTTP_" prefix apply.
-    header = "REMOTE_USER"
+    header = getattr(settings, 'PROXY_AUTH_HEADER', "REMOTE_USER")
+
+    trust_endpoints = getattr(settings, 'TRUST_PROXY_ENDPOINTS', [])
 
     def process_request(self, request):
+        if request.path not in self.trust_endpoints:
+            return
+
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
             raise ImproperlyConfigured(
