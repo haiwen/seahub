@@ -85,6 +85,7 @@ from seahub.api2.endpoints.tag_filter_file import TaggedFilesView
 from seahub.api2.endpoints.related_files import RelatedFilesView, RelatedFileView
 from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 from seahub.api2.endpoints.starred_items import StarredItems
+from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -329,6 +330,9 @@ urlpatterns = [
     # user::related-files
     url(r'^api/v2.1/related-files/$', RelatedFilesView.as_view(), name='api-v2.1-related-files'),
     url(r'^api/v2.1/related-files/(?P<related_id>\d+)/$', RelatedFileView.as_view(), name='api-v2.1-related-file'),
+
+    # user: markdown-lint
+    url(r'^api/v2.1/markdown-lint/$', MarkdownLintView.as_view(), name='api-v2.1-markdown-lint'),
 
     # Deprecated
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
