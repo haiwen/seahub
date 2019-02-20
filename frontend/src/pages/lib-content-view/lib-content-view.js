@@ -36,6 +36,7 @@ class LibContentView extends React.Component {
       path: '',
       pathExist: true,
       isViewFile: false,
+      hash: '',
       currentRepoInfo: null,
       repoName: '',
       repoPermission: true,
@@ -76,21 +77,21 @@ class LibContentView extends React.Component {
     };
 
     window.onpopstate = this.onpopstate;
-    this.hash = '';
     this.lastModifyTime = new Date();
   }
 
   componentWillMount() {
     const hash = window.location.hash;
     if (hash.slice(0, 1) === '#') {
-      this.hash = hash;
+      this.state.hash = hash;
     }
   }
 
   componentDidMount() {
     // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
     let repoID = this.props.repoID;
-    let location = decodeURIComponent(window.location.href);
+    let location = window.location.href.split('#')[0];
+    location = decodeURIComponent(location);
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repoInfo = new RepoInfo(res.data);
       this.setState({
@@ -1195,7 +1196,7 @@ class LibContentView extends React.Component {
             pathPrefix={this.props.pathPrefix}
             currentMode={this.state.currentMode}
             path={this.state.path}
-            hash={this.hast}
+            hash={this.state.hash}
             onTabNavClick={this.props.onTabNavClick}
             onSideNavMenuClick={this.props.onMenuClick}
             onSearchedClick={this.onSearchedClick}
