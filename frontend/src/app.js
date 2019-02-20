@@ -26,9 +26,6 @@ import Groups from './pages/groups/groups-view';
 import Wikis from './pages/wikis/wikis';
 import MainContentWrapper from './components/main-content-wrapper';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/toolbar.css';
 import './css/search.css';

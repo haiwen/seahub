@@ -245,9 +245,9 @@ class DirentListView extends React.Component {
               <th width="5%">{/*star */}</th>
               <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
               <th width="6%">{/*tag */}</th>
-              <th width="20%">{/*operation */}</th>
+              <th width="18%">{/*operation */}</th>
               <th width="11%">{gettext('Size')}</th>
-              <th width="13%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+              <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             </tr>
           </thead>
           <tbody>
