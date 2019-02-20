@@ -39,13 +39,8 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
   // repo content
-  isDraft: PropTypes.bool,
-  hasDraft: PropTypes.bool,
   draftCounts: PropTypes.number,
-  goDraftPage: PropTypes.func.isRequired,
-  reviewStatus: PropTypes.any,
   reviewCounts: PropTypes.number,
-  goReviewPage: PropTypes.func.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
   updateUsedRepoTags: PropTypes.func.isRequired,
@@ -125,16 +120,6 @@ class LibContentMain extends React.Component {
 
   switchViewMode = (mode) => {
     this.props.switchViewMode(mode);
-  }
-
-  goDraftPage = (e) => {
-    e.preventDefault();
-    this.props.goDraftPage();
-  }
-  
-  goReviewPage = (e) => {
-    e.preventDefault();
-    this.props.goReviewPage();
   }
 
   onFileUploadSuccess = (direntObject) => {
@@ -226,10 +211,7 @@ class LibContentMain extends React.Component {
                   repoID={repoID}
                   repoName={this.props.repoName}
                   repoEncrypted={this.props.repoEncrypted}
-                  isDraft={this.props.isDraft}
-                  hasDraft={this.props.hasDraft}
                   direntList={this.props.direntList}
-                  permission={this.props.filePermission}
                   showShareBtn={this.props.showShareBtn}
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
                   userPerm={this.props.userPerm}

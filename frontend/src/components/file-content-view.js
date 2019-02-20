@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../utils/constants';
+import { Utils } from '../utils/utils';
+import { gettext, siteRoot } from '../utils/constants';
+import { seafileAPI } from '../utils/seafile-api';
 import CommonToolbar from './toolbar/common-toolbar';
-import ViewModeToolbar from './toolbar/view-mode-toolbar';
 import CurDirPath from './cur-dir-path';
 import WikiMarkdownViewer from './wiki-markdown-viewer';
 
@@ -13,7 +14,6 @@ const propTypes = {
   hash: PropTypes.string,
   onTabNavClick: PropTypes.func.isRequired,
   onSideNavMenuClick: PropTypes.func.isRequired,
-  switchViewMode: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -43,13 +43,33 @@ class FileContentView extends React.Component {
     }
   }
 
-  switchViewMode = (mode) => {
-    this.props.switchViewMode(mode);
+  onEditClick = (e) => {
+    e.preventDefault();
+    let { path, repoID } = this.props;
+    let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
+    window.open(url);
   }
 
+  onNewDraft = (e) => {
+    e.preventDefault();
+    let { path, repoID } = this.props;
+    seafileAPI.createDraft(repoID, path).then(res => {
+      window.location.href = siteRoot + 'lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
+    });
+  }
+
+  goDraftPage = (e) => {
+    e.preventDefault();
+    this.props.goDraftPage();
+  }
+  
+  goReviewPage = (e) => {
+    e.preventDefault();
+    this.props.goReviewPage();
+  }
+  
   render() {
     let repoID = this.props.repoID;
-    console.log(this.props.filePermission);
     return (
       <div className={`main-panel o-hidden ${this.props.currentMode === 'column' ? 'dir-main-content' : ''}`}>
         <div className="main-panel-north border-left-show">
@@ -61,13 +81,11 @@ class FileContentView extends React.Component {
                   <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
                 </Fragment>
               )}
-
-              {(this.props.filePermission && !this.props.isDraft && !this.props.hasDraft) && (
+              {/* default have read priv */}
+              {(!this.props.isDraft && !this.props.hasDraft) && (
                 <button className="btn btn-secondary operation-item" title={gettext('New Draft')} onClick={this.onNewDraft}>{gettext('New Draft')}</button>
               )}
-
             </div>
-            <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.switchViewMode}/>
           </div>
           <CommonToolbar repoID={repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
         </div>

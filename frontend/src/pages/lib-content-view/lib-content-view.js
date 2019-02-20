@@ -1198,7 +1198,6 @@ class LibContentView extends React.Component {
             hash={this.hast}
             onTabNavClick={this.props.onTabNavClick}
             onSideNavMenuClick={this.props.onMenuClick}
-            switchViewMode={this.switchViewMode}
             onSearchedClick={this.onSearchedClick}
             onMainNavBarClick={this.onMainNavBarClick}
             repoID={this.props.repoID}
@@ -1223,7 +1222,6 @@ class LibContentView extends React.Component {
             currentMode={this.state.currentMode}
             path={this.state.path}
             pathExist={this.state.pathExist}
-            hash={this.hash}
             currentRepoInfo={this.state.currentRepoInfo}
             repoID={this.props.repoID}
             repoName={this.state.repoName}
@@ -1244,13 +1242,8 @@ class LibContentView extends React.Component {
             switchViewMode={this.switchViewMode}
             onSearchedClick={this.onSearchedClick}
             onMainNavBarClick={this.onMainNavBarClick}
-            isDraft={this.state.isDraft}
-            hasDraft={this.state.hasDraft}
             draftCounts={this.state.draftCounts}
-            goDraftPage={this.goDraftPage} 
-            reviewStatus={this.state.reviewStatus}
             reviewCounts={this.state.reviewCounts}
-            goReviewPage={this.goReviewPage}
             usedRepoTags={this.state.usedRepoTags}
             readmeMarkdown={this.state.readmeMarkdown}
             updateUsedRepoTags={this.updateUsedRepoTags}

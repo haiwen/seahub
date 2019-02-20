@@ -1,16 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
 
 const propTypes = {
-  isViewFile: PropTypes.bool,   // just for view file,
-  permission: PropTypes.string, //just for view file， and premission is file permission
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
@@ -18,8 +15,6 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
-  isDraft: PropTypes.bool,
-  hasDraft: PropTypes.bool,
   direntList: PropTypes.array.isRequired,
 };
 
@@ -62,21 +57,6 @@ class DirOperationToolbar extends React.Component {
     this.setState({operationMenuStyle: style});
   }
 
-  onEditClick = (e) => {
-    e.preventDefault();
-    let { path, repoID } = this.props;
-    let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
-    window.open(url);
-  }
-
-  onNewDraft = (e) => {
-    e.preventDefault();
-    let { path, repoID } = this.props;
-    seafileAPI.createDraft(repoID, path).then(res => {
-      window.location.href = siteRoot + 'lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
-    });
-  }
-
   onUploadClick = (e) => {
     this.toggleOperationMenu(e);
     this.setState({
@@ -108,7 +88,6 @@ class DirOperationToolbar extends React.Component {
     this.setState({
       isShareDialogShow: !this.state.isShareDialogShow
     });
-
   }
 
   onCreateFolderToggle = () => {
@@ -177,31 +156,17 @@ class DirOperationToolbar extends React.Component {
   }
 
   render() {
-    let { path, isViewFile, repoName } = this.props;
-    let itemType = isViewFile ? 'file' : 'dir';
-    let itemName = isViewFile ? Utils.getFileName(path) : (path == '/' ? repoName : Utils.getFolderName(path));
+    let { path, repoName } = this.props;
+    let itemType = 'dir';
+    let itemName = path == '/' ? repoName : Utils.getFolderName(path);
     return (
       <Fragment>
         <div className="operation">
-          {(this.props.isViewFile && this.props.permission && !this.props.hasDraft ) && (
-            <Fragment>
-              <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
-            </Fragment>
-          )}
-
-          {(this.props.isViewFile && !this.props.isDraft && !this.props.hasDraft) && (
-            <button className="btn btn-secondary operation-item" title={gettext('New Draft')} onClick={this.onNewDraft}>{gettext('New Draft')}</button>
-          )}
-
-          {!this.props.isViewFile && (
-            <Fragment>
-              {Utils.isSupportUploadFolder() ?
-                <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-                <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
-              }
-              <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
-            </Fragment>
-          )}
+          {Utils.isSupportUploadFolder() ?
+            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
+            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
+          }
+          <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
           {this.props.showShareBtn &&
           <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
           }
