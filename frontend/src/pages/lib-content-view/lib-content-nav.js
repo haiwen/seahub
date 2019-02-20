@@ -146,7 +146,7 @@ class LibContentNav extends React.Component {
     return (
       <Fragment>
         <div id="side-nav" className="dir-side-nav" role="navigation">
-          <h3 className="dir-nav-heading border-left-show" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <div className="dir-nav-heading border-left-show" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             <div className="heading-title">{gettext('Files')}</div>
             <div className="heading-icon">
               {(this.props.repoPermission) && (
@@ -166,7 +166,7 @@ class LibContentNav extends React.Component {
                 </Dropdown>
               )}
             </div>
-          </h3>
+          </div>
           <div className="dir-nav-container">
             {this.props.isTreeDataLoading ? 
               (<Loading/>) :
@@ -198,7 +198,6 @@ class LibContentNav extends React.Component {
         {this.state.isAddFileDialogShow && (
           <ModalPortal>
             <CreateFile
-              fileType={'.md'}
               parentPath={this.state.opNode.path}
               onAddFile={this.onAddFileNode}
               checkDuplicatedName={this.checkDuplicatedName}
