@@ -26,7 +26,7 @@ import 'codemirror/mode/go/go';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 
-const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred } = window.app.pageOptions;
+const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred, err } = window.app.pageOptions;
 const options = {
   lineNumbers: false,
   mode: Utils.chooseLanguage(fileExt.slice(3, fileExt.length -3)),
@@ -118,12 +118,14 @@ class ViewFileText extends React.Component {
             onMouseDown={() => this.handleMouseDown('history')}
             icon={'fa fa-history'}
           />
-          <IconButton
-            id={'shareBtn'}
-            text={gettext('Edit')}
-            icon={'fa fa-edit'}
-            onMouseDown={() => this.handleMouseDown('edit')}
-          />
+          { !err &&
+            <IconButton
+              id={'editButton'}
+              text={gettext('Edit')}
+              icon={'fa fa-edit'}
+              onMouseDown={() => this.handleMouseDown('edit')}
+            />
+          }
           <IconButton
             id={'downloadButton'}
             text={gettext('Download File')}

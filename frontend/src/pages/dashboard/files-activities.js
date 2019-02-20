@@ -8,6 +8,7 @@ import Loading from '../../components/loading';
 import Activity from '../../models/activity';
 import ListCreatedFileDialog from '../../components/dialog/list-created-files-dialog';
 import ModalPortal from '../../components/modal-portal';
+import '../../css/files-activities.css';
 
 moment.locale(window.app.config.lang);
 
@@ -207,7 +208,7 @@ class TableBody extends Component {
         <Fragment key={index}>
           { isShowDate &&
             <tr>
-              <td colSpan='5'>{moment(item.time).format('YYYY-MM-DD')}</td>
+              <td colSpan='5' className="activity-date">{moment(item.time).format('YYYY-MM-DD')}</td>
             </tr>
           }
           <tr>
