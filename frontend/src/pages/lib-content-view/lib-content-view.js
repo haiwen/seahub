@@ -32,7 +32,7 @@ class LibContentView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMode: cookie.load('seafile-view-mode'),
+      currentMode: cookie.load('seafile-view-mode') || 'list',
       path: '',
       pathExist: true,
       isViewFile: false,

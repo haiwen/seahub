@@ -107,6 +107,7 @@ class FileContentView extends React.Component {
             </div>
             <div className="cur-view-content">
               <WikiMarkdownViewer
+                isTOCShow={false}
                 isFileLoading={this.props.isFileLoading}
                 markdownContent={this.props.content}
                 lastModified = {this.props.lastModified}
