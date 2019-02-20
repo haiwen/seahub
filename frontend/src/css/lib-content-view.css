@@ -50,6 +50,10 @@
   font-size: 0.8125rem;
 }
 
+.heading-icon .action-icon {
+  font-size: 1.125rem;
+}
+
 /*tree view */
 .tree-view {
   padding: 0 12px 0 0;
