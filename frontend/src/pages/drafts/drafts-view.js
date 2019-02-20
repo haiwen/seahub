@@ -22,7 +22,7 @@ class DraftsView extends React.Component {
     return (
       <div className="main-panel-center">
         <div className="cur-view-container">
-          <div className="cur-view-path">
+          <div className="cur-view-path draft-review-nav">
             <ul className="nav">
               <li className="nav-item"  onClick={() => this.tabItemClick('drafts')}>
                 <Link className={`nav-link ${this.props.currentTab === 'drafts' ? 'active': ''}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>{gettext('Drafts')}</Link>
