@@ -827,11 +827,20 @@ table {
     table-layout: fixed;
 }
 
-table tr {
+table thead tr {
+    height: 2.1875rem;
+}
+
+table th {
+    padding: 0.3125rem 0.1875rem;
+    border-bottom: 1px solid #eee;
+}
+
+table tbody tr {
     height: 2.5625rem;
 }
 
-table th, table td {
+table td {
     padding: 0.5rem 0.1875rem;
     border-bottom: 1px solid #eee;
 }

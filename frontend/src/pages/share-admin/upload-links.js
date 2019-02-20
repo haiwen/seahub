@@ -197,7 +197,7 @@ class ShareAdminUploadLinks extends Component {
     return (
       <div className="main-panel-center">
         <div className="cur-view-container">
-          <div className="cur-view-path">
+          <div className="cur-view-path share-upload-nav">
             <ul className="nav">
               { canGenerateShareLink && (
                 <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>

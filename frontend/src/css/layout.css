@@ -232,3 +232,9 @@
 img[src=""],img:not([src]){ /* for first loading img*/
   opacity:0;
 }
+
+.cur-view-path.draft-review-nav,
+.cur-view-path.share-upload-nav {
+  padding: 0 1rem;
+}
+
