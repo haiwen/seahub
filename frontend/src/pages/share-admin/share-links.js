@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, canGenerateUploadLink } from '../../utils/constants';
 import SharedLinkInfo from '../../models/shared-link-info';
+import copy from '@seafile/seafile-editor/dist//utils/copy-to-clipboard';
+import toaster from '../../components/toast';
 
 class Content extends Component {
 
@@ -41,6 +43,17 @@ class Content extends Component {
   showModal = (options) => {
     this.toggleModal();
     this.setState({modalContent: options.content});
+  }
+
+  copyToClipboard = () => {
+    copy(this.state.modalContent);
+    this.setState({
+      modalOpen: false
+    });
+    let message = gettext('Share link is copied to the clipboard.');
+    toaster.success(message), {
+      duration: 2
+    };
   }
 
   render() {
@@ -85,8 +98,12 @@ class Content extends Component {
           <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal} centered={true}>
             <ModalHeader toggle={this.toggleModal}>{gettext('Link')}</ModalHeader>
             <ModalBody>
-              {this.state.modalContent}
+              <a href={this.state.modalContent}>{this.state.modalContent}</a>
             </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={this.copyToClipboard}>{gettext('Copy')}</Button>{' '}
+              <Button color="secondary" onClick={this.toggleModal}>{gettext('Close')}</Button>
+            </ModalFooter>
           </Modal>
         </React.Fragment>
       );
