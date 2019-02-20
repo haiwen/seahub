@@ -213,7 +213,7 @@ export const Utils = {
   },
 
   renameAncestorPath: function(path, ancestor, newAncestor) {
-    return newAncestor + '/' + path.replace(ancestor, '');
+    return path.replace(ancestor, newAncestor);
   },
 
   joinPath: function(pathA, pathB) {

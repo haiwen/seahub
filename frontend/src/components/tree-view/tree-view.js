@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TreeNodeView from './tree-node-view';
 
 const propTypes = {
+  repoPermission: PropTypes.bool,
   isNodeMenuShow: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
@@ -39,6 +40,7 @@ class TreeView extends React.Component {
     return (
       <div className="tree-view tree">
         <TreeNodeView 
+          repoPermission={this.props.repoPermission}
           node={this.props.treeData.root}
           currentPath={this.props.currentPath}
           paddingLeft={PADDING_LEFT}

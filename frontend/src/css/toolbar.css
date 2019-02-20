@@ -8,11 +8,12 @@
 
 .border-left-show:before {
   position: absolute;
-  top: 3px;
-  bottom: 3px;
-  left: -16px;
-  border-left: 1px solid #ddd;
+  top: 10px;
+  left: 0;
+  width: 1px;
+  height: 30px;
   content: '';
+  background-color: #ddd;
 }
 
 /* end toolbar-container */

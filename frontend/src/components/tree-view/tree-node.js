@@ -10,17 +10,17 @@ class TreeNode {
     this.parentNode = parentNode || null;
   }
 
-  clone() {
+  clone(parentNode) {
     let treeNode = new TreeNode({
       path: this.path,
       object: this.object.clone(),
       isLoaded: this.isLoaded,
       isPreload: this.isPreload,
       isExpanded: this.isExpanded,
-      parentNode: this.parentNode,
+      parentNode: parentNode || null,
     });
     treeNode.children = this.children.map(child => {
-      let newChild = child.clone();
+      let newChild = child.clone(treeNode);
       return newChild;
     });
 
@@ -77,7 +77,22 @@ class TreeNode {
   rename(newName) {
     this.object.name = newName;
     this.path = this.generatePath(this.parentNode); 
+    if (this.isExpanded) {
+      this.updateChildrenPath(this);
+    }
     // this.isLoaded = false;
+  }
+
+  updateChildrenPath(node) {
+    let children = node.children;
+    children.forEach(child => {
+      child.path = child.generatePath(child.parentNode);
+      if (child.isExpanded) {
+        child.updateChildrenPath(child);
+      } else {
+        child.isLoaded = false;
+      }
+    });
   }
 
   updateObjectProperties(keys, newValues) {

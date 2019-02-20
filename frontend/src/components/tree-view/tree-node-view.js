@@ -4,6 +4,7 @@ import TreeNodeMenu from './tree-node-menu';
 import { permission } from '../../utils/constants';
 
 const propTypes = {
+  repoPermission: PropTypes.bool,
   node: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
   paddingLeft: PropTypes.number.isRequired,
@@ -111,6 +112,7 @@ class TreeNodeView extends React.Component {
               key={item.path}
               node={item}
               paddingLeft={paddingLeft}
+              repoPermission={this.props.repoPermission}
               currentPath={this.props.currentPath}
               isNodeMenuShow={this.props.isNodeMenuShow}
               isItemFreezed={this.props.isItemFreezed}
@@ -150,7 +152,7 @@ class TreeNodeView extends React.Component {
           </div>
           {isNodeMenuShow && (
             <div className="right-icon">
-              {(permission && this.state.isShowOperationMenu) && (
+              {((this.props.repoPermission || permission) && this.state.isShowOperationMenu) && (
                 <TreeNodeMenu 
                   node={this.props.node}
                   onMenuItemClick={this.onMenuItemClick}

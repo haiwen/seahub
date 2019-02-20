@@ -1,126 +1,177 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
+import PropTypes from 'prop-types';
+import cookie from 'react-cookies';
 import moment from 'moment';
-import { gettext, repoID, siteRoot, initialPath, isDir, canGenerateShareLink, canGenerateUploadLink, username } from './utils/constants';
-import { seafileAPI } from './utils/seafile-api';
-import { Utils } from './utils/utils';
-import collabServer from './utils/collab-server';
-import SidePanel from './pages/repo-wiki-mode/side-panel';
-import MainPanel from './pages/repo-wiki-mode/main-panel';
-import TreeNode from './components/tree-view/tree-node';
-import treeHelper from './components/tree-view/tree-helper';
-import toaster from './components/toast';
-import LibDecryptDialog from './components/dialog/lib-decrypt-dialog';
-import ModalPortal from './components/modal-portal';
-import Dirent from './models/dirent';
-import FileTag from './models/file-tag';
-import RepoTag from './models/repo-tag';
-import RepoInfo from './models/repo-info';
+import { gettext, siteRoot, username, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import collabServer from '../../utils/collab-server';
+import Dirent from '../../models/dirent';
+import FileTag from '../../models/file-tag';
+import RepoTag from '../../models/repo-tag';
+import RepoInfo from '../../models/repo-info';
+import TreeNode from '../../components/tree-view/tree-node';
+import treeHelper from '../../components/tree-view/tree-helper';
+import toaster from '../../components/toast';
+import ModalPortal from '../../components/modal-portal';
+import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
+import FileContentView from '../../components/file-content-view';
+import LibContentNav from './lib-content-nav';
+import LibContentMain from './lib-content-main';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
-import './css/layout.css';
-import './css/side-panel.css';
-import './css/wiki.css';
-import './css/toolbar.css';
-import './css/search.css';
+import '../../css/lib-content-view.css';
 
-class Wiki extends Component {
+const propTypes = {
+  pathPrefix: PropTypes.array.isRequired,
+  onTabNavClick: PropTypes.func.isRequired,
+  onMenuClick: PropTypes.func.isRequired,
+};
+
+class LibContentView extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
+      currentMode: cookie.load('seafile-view-mode'),
+      path: '',
+      pathExist: true,
+      isViewFile: false,
+      hash: '',
+      currentRepoInfo: null,
       repoName: '',
+      repoPermission: true,
       repoEncrypted: false,
+      libNeedDecrypt: false,
       isGroupOwnedRepo: false,
+      isDepartmentAdmin: false,
       isAdmin: false,
       ownerEmail: '',
       userPerm: '',
-
-      path: '',
-      pathExist: true,
-      treeData: treeHelper.buildTree(),
-      closeSideBar: false,
-      currentNode: null,
+      isVirtual: false,
+      selectedDirentList: [],
+      isDraft: false,
+      hasDraft: false,
+      draftFilePath: '',
+      draftCounts: 0,
+      reviewID: '',
+      reviewStatus: '',
+      reviewCounts: 0,
+      usedRepoTags: [],
+      readmeMarkdown: null,
       isTreeDataLoading: true,
-      isDirentListLoading: true,
-      isViewFile: false,
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc', // 'asc' or 'desc'
-      direntList: [],
+      treeData: treeHelper.buildTree(),
+      currentNode: null,
       isFileLoading: true,
+      filePermission: true,
       content: '',
       lastModified: '',
       latestContributor: '',
-      permission: '',
+      isDirentListLoading: true,
+      direntList: [],
       isDirentSelected: false,
+      sortBy: 'name', // 'name' or 'time'
+      sortOrder: 'asc', // 'asc' or 'desc'
       isAllDirentSelected: false,
-      selectedDirentList: [],
-      libNeedDecrypt: false,
-      isDraft: false,
-      hasDraft: false,
-      reviewStatus: '',
-      reviewID: '',
-      draftFilePath: '',
       dirID: '',
-      usedRepoTags: [],
-      readmeMarkdown: null,
-      draftCounts: 0,
-      reviewCounts: 0,
+      errorMsg: '',
     };
+
     window.onpopstate = this.onpopstate;
-    this.hash = '';
     this.lastModifyTime = new Date();
   }
 
   componentWillMount() {
     const hash = window.location.hash;
     if (hash.slice(0, 1) === '#') {
-      this.hash = hash;
+      this.state.hash = hash;
     }
   }
 
   componentDidMount() {
+    // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
+    let repoID = this.props.repoID;
+    let location = window.location.href.split('#')[0];
+    location = decodeURIComponent(location);
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repoInfo = new RepoInfo(res.data);
       this.setState({
-        libNeedDecrypt: res.data.lib_need_decrypt, 
+        currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
+        libNeedDecrypt: res.data.lib_need_decrypt, 
         repoEncrypted: repoInfo.encrypted,
         isVirtual: repoInfo.is_virtual,
         isAdmin: repoInfo.is_admin,
-        ownerEmail: repoInfo.owner_email
+        ownerEmail: repoInfo.owner_email,
+        repoPermission: repoInfo.permission === 'rw'
       });
 
       const ownerEmail = repoInfo.owner_email;
       if (repoInfo.owner_email.indexOf('@seafile_group') != -1) {
+
         const groupID = ownerEmail.substring(0, ownerEmail.indexOf('@'));
-        this.getGroupInfo(groupID);
-        this.setState({
-          isGroupOwnedRepo: true
+        this.setState({isGroupOwnedRepo: true});
+
+        seafileAPI.getGroup(groupID).then(res => {
+          if (res.data.admins.indexOf(username) != -1) {
+            this.setState({isDepartmentAdmin: true});
+          }
         });
       }
 
+      let repoID = repoInfo.repo_id;
+      let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
+      path = path.slice(path.indexOf('/')); // get current path
+
+      this.setState({path: path});
+
       if (!res.data.lib_need_decrypt) {
-        this.loadWikiData();
+        this.loadDirData(path);
+      }
+    }).catch(error => {
+      if (error.response) {
+        if (error.response.status == 403) {
+          this.setState({
+            isDirentListLoading: false,
+            errorMsg: gettext('Permission denied')
+          });
+        } else {
+          this.setState({
+            isDirentListLoading: false,
+            errorMsg: gettext('Error')
+          });
+        }
+      } else {
+        this.setState({
+          isDirentListLoading: false,
+          errorMsg: gettext('Please check the network.')
+        });
       }
     });
   }
 
   componentWillUnmount() {
-    collabServer.unwatchRepo(repoID, this.onRepoUpdateEvent);
+    collabServer.unwatchRepo(this.props.repoID, this.onRepoUpdateEvent);
   }
 
   componentDidUpdate() {
     this.lastModifyTime = new Date();
   }
 
-  getGroupInfo = (groupID) => {
-    seafileAPI.getGroup(groupID).then(res => {
-      if (res.data.admins.indexOf(username) != -1) {
-        this.setState({isDepartmentAdmin: true});
+  onpopstate = (event) => {
+    if (event.state && event.state.path) {
+      let path = event.state.path;
+      if (this.state.currentMode === 'column') {
+        if (Utils.isMarkdownFile(path)) { // Judging not strict
+          this.showFile(path);
+          return;
+        }
       }
-    });
+      this.loadDirentList(path);
+      this.setState({
+        path: path,
+        isViewFile: false
+      });
+    }
   }
 
   onRepoUpdateEvent = () => {
@@ -128,6 +179,7 @@ class Wiki extends Component {
     if ((parseFloat(currentTime - this.lastModifyTime)/1000) <= 5) {
       return;
     }
+    let repoID = this.props.repoID;
     let { path, dirID } = this.state;
     seafileAPI.dirMetaData(repoID, path).then((res) => {
       if (res.data.id !== dirID) {
@@ -142,7 +194,35 @@ class Wiki extends Component {
     });
   }
 
-  loadWikiData = () => {
+  updateUsedRepoTags = () => {
+    let repoID = this.props.repoID;
+    seafileAPI.listRepoTags(repoID).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount > 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.setState({usedRepoTags: usedRepoTags});
+    });
+  }
+
+  updateReadmeMarkdown = (direntList) => {
+    this.setState({readmeMarkdown: null});
+    direntList.some(item => {
+      let fileName = item.name.toLowerCase();
+      if (fileName === 'readme.md' || fileName === 'readme.markdown') {
+        this.setState({readmeMarkdown: item});
+        return true;
+      }
+    });
+  }
+
+  // load data
+  loadDirData = (path) => {
+    let repoID = this.props.repoID;
+
     // listen current repo
     collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
 
@@ -157,23 +237,28 @@ class Wiki extends Component {
       });
     });
 
-    // load side-panel data
-    this.loadSidePanel(initialPath);
+    if (this.state.currentMode === 'column') {
+      // there will be only two constence. path is file or path is dir.
+      if (Utils.isMarkdownFile(path)) {
+        seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
+          this.showFile(path);
+        }).catch(() => {
+          this.showDir(path); // After an error occurs, follow dir
+        });
+      } else {
+        this.showDir(path);
+      }
+      // load side-panel data
+      this.loadSidePanel(path);
 
-    // load main-panel data
-    if (isDir === 'None') {
-      this.setState({pathExist: false});
-    } else if (isDir === 'True') {
-      this.showDir(initialPath);
-    } else if (isDir === 'False') {
-      this.showFile(initialPath);
+    } else {
+      this.showDir(path);
     }
-    
   }
 
-  loadSidePanel = (initialPath) => {
-    
-    if (initialPath === '/' || isDir === 'None') {
+  loadSidePanel = (path) => {
+    let repoID = this.props.repoID;
+    if (path === '/') {
       seafileAPI.listDir(repoID, '/').then(res => {
         let tree = this.state.treeData;
         this.addResponseListToNode(res.data.dirent_list, tree.root);
@@ -182,32 +267,44 @@ class Wiki extends Component {
           treeData: tree
         });
       }).catch(() => {
-        this.setState({isLoadFailed: true});
+        this.setState({isTreeDataLoading: false});
+        // todo show error message
       });
     } else {
-      this.loadNodeAndParentsByPath(initialPath);
+      this.loadNodeAndParentsByPath(path);
     }
   }
 
   showDir = (path) => {
-    this.loadDirentList(path);
+    let repoID = this.props.repoID;
+
+    // update stste
     this.setState({
+      isDirentListLoading: true,
       path: path,
       isViewFile: false
     });
 
-    // update location url
-    let url = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(path);
-    window.history.pushState({ url: url, path: path}, path, url);
+    // update data
+    this.loadDirentList(repoID, path);
+
+    // update location
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
+    window.history.pushState({url: url, path: path}, path, url);
   }
 
   showFile = (filePath) => {
+    let repoID = this.props.repoID;
+
+    // update state
     this.setState({
+      isFileLoading: true,
       path: filePath,
       isViewFile: true
     });
 
-    this.setState({isFileLoading: true});
+    // update data
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
       let { mtime, permission, last_modifier_name, is_draft, has_draft,
             review_status, review_id, draft_file_path } = res.data;
@@ -215,7 +312,7 @@ class Wiki extends Component {
         seafileAPI.getFileContent(res.data).then((res) => {
           this.setState({
             content: res.data,
-            permission: permission,
+            filePermission: permission === 'rw',
             latestContributor: last_modifier_name,
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,
@@ -229,44 +326,42 @@ class Wiki extends Component {
       });
     });
 
-    let fileUrl = siteRoot + 'wiki/lib/' + repoID + Utils.encodePath(filePath);
-    window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
-  }
+    // update location
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(filePath);
+    window.history.pushState({url: url, path: filePath}, filePath, url);
+  } 
 
-  updateReadmeMarkdown = (direntList) => {
-    this.setState({readmeMarkdown: null});
-    direntList.some(item => {
-      let fileName = item.name.toLowerCase();
-      if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-        this.setState({readmeMarkdown: item});
-        return true;
-      }
-    });
-  }
-
-  loadDirentList = (path) => {
-    this.setState({isDirentListLoading: true});
+  loadDirentList = (repoID, path) => {
     seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
+      let markdownItem = null;
       res.data.dirent_list.forEach(item => {
         let fileName = item.name.toLowerCase();
         if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-          this.setState({readmeMarkdown: item});
+          markdownItem = item;
         }
         let dirent = new Dirent(item);
         direntList.push(dirent);
       });
 
       this.setState({
+        pathExist: true,
         userPerm: res.data.user_perm,
-        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         isDirentListLoading: false,
+        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.headers.oid,
+        readmeMarkdown: markdownItem,
       });
 
       if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
+    }).catch(() => {
+      this.setState({
+        isDirentListLoading: false,
+        pathExist: false,
+      });
     });
   }
 
@@ -301,55 +396,128 @@ class Wiki extends Component {
     getThumbnail(0);
   }
 
-  onLinkClick = (link) => {
-    const url = link;
-    if (Utils.isInternalMarkdownLink(url, repoID)) {
-      let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
-      this.showFile(path);
-    } else if (Utils.isInternalDirLink(url, repoID)) {
-      let path = Utils.getPathFromInternalDirLink(url, repoID);
-      this.showDir(path);
-    } else {
-      window.open(url);
-    }
-  }
+  // toolbar operations
+  onMoveItems = (destRepo, destDirentPath) => {
+    let repoID = this.props.repoID;
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentNames();
 
-  updateUsedRepoTags = () => {
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let usedRepoTags = [];
-      res.data.repo_tags.forEach(item => {
-        let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount > 0) {
-          usedRepoTags.push(usedRepoTag);
-        }
+    seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
+      let names = res.data.map(item => {
+        return item.obj_name;
       });
-      this.setState({usedRepoTags: usedRepoTags});
+      direntPaths.forEach((direntPath, index) => {
+        if (this.state.currentMode === 'column') {
+          this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
+        }
+        this.moveDirent(direntPath);
+      });
+      let message = gettext('Successfully moved %(name)s.');
+      message = message.replace('%(name)s', dirNames);
+      toaster.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to move %(name)s');
+      message = message.replace('%(name)s', dirNames);
+      toaster.danger(message);
     });
   }
 
-  updateDirent = (dirent, paramKey, paramValue) => {
-    let newDirentList = this.state.direntList.map(item => {
-      if (item.name === dirent.name) {
-        item[paramKey] = paramValue;
-      }
-      return item;
-    });
-    this.setState({direntList: newDirentList});
-  }
+  onCopyItems = (destRepo, destDirentPath) => {
+    let repoID = this.props.repoID;
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentNames();
 
-  onpopstate = (event) => {
-    if (event.state && event.state.path) {
-      let path = event.state.path;
-      if (Utils.isMarkdownFile(path)) {
-        this.showFile(path);
-      } else {
-        this.loadDirentList(path);
-        this.setState({
-          path: path,
-          isViewFile: false
+    seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
+      let names = res.data.map(item => {
+        return item.obj_name;
+      });
+      if (this.state.currentMode === 'column') {
+        direntPaths.forEach((direntPath, index) => {
+          this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
         });
       }
+      let message = gettext('Successfully copied %(name)s.');
+      message = message.replace('%(name)s', dirNames);
+      toaster.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to copy %(name)s');
+      message = message.replace('%(name)s', dirNames);
+      toaster.danger(message);
+    });
+  }
+
+  onDeleteItems = () => {
+    let repoID = this.props.repoID;
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentNames();
+
+    seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
+      direntPaths.forEach(direntPath => {
+        if (this.state.currentMode === 'column') {
+          this.deleteTreeNode(direntPath);
+        }
+        this.deleteDirent(direntPath);
+      });
+    });
+  }
+
+  onAddFolder = (dirPath) => {
+    let repoID = this.props.repoID;
+    seafileAPI.createDir(repoID, dirPath).then(() => {
+      let name = Utils.getFileName(dirPath);
+      let parentPath = Utils.getDirName(dirPath);
+
+      if (this.state.currentMode === 'column') {
+        this.addNodeToTree(name, parentPath, 'dir');
+      }
+
+      if (parentPath === this.state.path && !this.state.isViewFile) {
+        this.addDirent(name, 'dir');
+      }
+    }).catch(() => {
+      // return error message
+    });
+  }
+
+  onAddFile = (filePath, isDraft) => {
+    let repoID = this.props.repoID;
+    seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
+      let name = Utils.getFileName(filePath);
+      let parentPath = Utils.getDirName(filePath);
+      if (this.state.currentMode === 'column') {
+        this.addNodeToTree(name, parentPath, 'file');
+      }
+      if (parentPath === this.state.path && !this.state.isViewFile) {
+        this.addDirent(name, 'file', res.data.size);
+      }
+    }).catch(() => {
+      // todo
+    });
+  }
+
+  switchViewMode = (mode) => {
+    if (mode === this.state.currentMode) {
+      return;
     }
+    cookie.save('seafile-view-mode', mode);
+    let path = this.state.path;
+    if (this.state.currentMode === 'column' && this.state.isViewFile) {
+      path = Utils.getDirName(path);
+      this.setState({
+        path: path,
+        isViewFile: false,
+      });
+      let repoInfo = this.state.currentRepoInfo;
+
+      let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
+      window.history.pushState({url: url, path: path}, path, url);
+    }
+
+    if (mode === 'column') {
+      this.loadSidePanel(this.state.path);
+    }
+    
+    this.setState({currentMode: mode});
   }
 
   onSearchedClick = (item) => {
@@ -357,22 +525,23 @@ class Wiki extends Component {
     if (this.state.currentPath === path) {
       return;
     }
-
-    // load sidePanel
-    let index = -1;
-    let paths = Utils.getPaths(path);
-    for (let i = 0; i < paths.length; i++) {
-      let node = this.state.treeData.getNodeByPath(node);
-      if (!node) {
-        index = i;
-        break;
-      } 
-    }
-    if (index === -1) { // all the data has been loaded already.
-      let node = this.state.treeData.getNodeByPath(path);
-      this.setState({currentNode: node});
-    } else {
-      this.loadNodeAndParentsByPath(path);
+    if (this.state.currentMode === 'column') {
+      // load sidePanel
+      let index = -1;
+      let paths = Utils.getPaths(path);
+      for (let i = 0; i < paths.length; i++) {
+        let node = this.state.treeData.getNodeByPath(node);
+        if (!node) {
+          index = i;
+          break;
+        } 
+      }
+      if (index === -1) { // all the data has been loaded already.
+        let node = this.state.treeData.getNodeByPath(path);
+        this.setState({currentNode: node});
+      } else {
+        this.loadNodeAndParentsByPath(path);
+      }
     }
 
     // load mainPanel
@@ -392,52 +561,31 @@ class Wiki extends Component {
   onMainNavBarClick = (nodePath) => {
     //just for dir
     this.resetSelected();
-    let tree = this.state.treeData.clone();
-    let node = tree.getNodeByPath(nodePath);
-    tree.expandNode(node);
+    if (this.state.currentMode === 'column') {
+      let tree = this.state.treeData.clone();
+      let node = tree.getNodeByPath(nodePath);
+      tree.expandNode(node);
+      this.setState({treeData: tree, currentNode: node});
+    }
 
-    this.setState({treeData: tree, currentNode: node});
-    this.showDir(node.path);
+    this.showDir(nodePath);
   }
 
-  onAddFolder = (dirPath) => {
-    // todo Double name check
-    seafileAPI.createDir(repoID, dirPath).then(() => {
-      let name = Utils.getFileName(dirPath);
-      let parentPath = Utils.getDirName(dirPath);
-
-      this.addNodeToTree(name, parentPath, 'dir');
-      if (parentPath === this.state.path && !this.state.isViewFile) {
-        this.addDirent(name, 'dir');
-      }
-    }).catch(() => {
-      // return error message
-    });
+  onLinkClick = (link) => {
+    const url = link;
+    let repoID = this.props.repoID;
+    if (Utils.isInternalMarkdownLink(url, repoID)) {
+      let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
+      this.showFile(path);
+    } else if (Utils.isInternalDirLink(url, repoID)) {
+      let path = Utils.getPathFromInternalDirLink(url, repoID);
+      this.showDir(path);
+    } else {
+      window.open(url);
+    }
   }
 
-  onAddFile = (filePath, isDraft) => {
-    // Double name check
-    seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
-      let name = Utils.getFileName(filePath);
-      let parentPath = Utils.getDirName(filePath);
-
-      this.addNodeToTree(name, parentPath, 'file');
-      if (parentPath === this.state.path && !this.state.isViewFile) {
-        this.addDirent(name, 'file', res.data.size);
-      }
-    }).catch(() => {
-      // todo
-    });
-  }
-
-  onRenameTreeNode = (node, newName) => {
-    this.renameItem(node.path, node.object.isDir(), newName);
-  }
-
-  onDeleteTreeNode = (node) => {
-    this.deleteItem(node.path, node.object.isDir());
-  }
-
+  // list&tree operations
   onMainPanelItemRename = (dirent, newName) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
     this.renameItem(path, dirent.isDir(), newName);
@@ -448,56 +596,73 @@ class Wiki extends Component {
     this.deleteItem(path, dirent.isDir());
   }
 
+  onRenameTreeNode = (node, newName) => {
+    this.renameItem(node.path, node.object.isDir(), newName);
+  }
+
+  onDeleteTreeNode = (node) => {
+    this.deleteItem(node.path, node.object.isDir());
+  }
+
   renameItem = (path, isDir, newName) => {
-    //validate task
+    let repoID = this.props.repoID;
     if (isDir) {
       seafileAPI.renameDir(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
       }).catch(() => {
-        //todos;
+        // todo
       });
     } else {
       seafileAPI.renameFile(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
       }).catch(() => {
-        //todos;
+        // todo
       });
     }
   }
 
   renameItemAjaxCallback(path, newName) {
-    this.renameTreeNode(path, newName);
+    if (this.state.currentMode === 'column') {
+      this.renameTreeNode(path, newName);
+    }
     this.renameDirent(path, newName);
   }
 
   deleteItem(path, isDir) {
+    let repoID = this.props.repoID;
     if (isDir) {
       seafileAPI.deleteDir(repoID, path).then(() => {
         this.deleteItemAjaxCallback(path, isDir);
       }).catch(() => {
-        //todos;
+        // todo
       });
     } else {
       seafileAPI.deleteFile(repoID, path).then(() => {
         this.deleteItemAjaxCallback(path, isDir);
       }).catch(() => {
-        //todos;
+        // todo
       });
     }
   }
 
   deleteItemAjaxCallback(path) {
-    this.deleteTreeNode(path);
+    if (this.state.currentMode === 'column') {
+      this.deleteTreeNode(path);
+    }
     this.deleteDirent(path);
   }
 
+  // list operations
   onMoveItem = (destRepo, dirent, moveToDirentPath) => {
+    let repoID = this.props.repoID;
     //just for view list state
     let dirName = dirent.name;
     let direntPath = Utils.joinPath(this.state.path, dirName);
     seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, this.state.path, dirName).then(res => {
       let nodeName = res.data[0].obj_name;
-      this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
+      if (this.state.currentMode === 'column') {
+        this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
+      }
       this.moveDirent(direntPath);
 
       let message = gettext('Successfully moved %(name)s.');
@@ -511,12 +676,15 @@ class Wiki extends Component {
   }
 
   onCopyItem = (destRepo, dirent, copyToDirentPath) => {
+    let repoID = this.props.repoID;
     //just for view list state
     let dirName = dirent.name;
     let direntPath = Utils.joinPath(this.state.path, dirName);
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, this.state.path, dirName).then(res => {
       let nodeName = res.data[0].obj_name;
-      this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);
+      if (this.state.currentMode === 'column') {
+        this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);
+      }
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
       toaster.success(message);
@@ -524,72 +692,20 @@ class Wiki extends Component {
       let message = gettext('Failed to copy %(name)s');
       message = message.replace('%(name)s', dirName);
       toaster.danger(message);
-    });
-  }
-
-  onMoveItems = (destRepo, destDirentPath) => {
-    let direntPaths = this.getSelectedDirentPaths();
-    let dirNames = this.getSelectedDirentNames();
-
-    seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
-      let names = res.data.map(item => {
-        return item.obj_name;
-      });
-      direntPaths.forEach((direntPath, index) => {
-        this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
-        this.moveDirent(direntPath);
-      });
-      let message = gettext('Successfully moved %(name)s.');
-      message = message.replace('%(name)s', dirNames);
-      toaster.success(message);
-    }).catch(() => {
-      let message = gettext('Failed to move %(name)s');
-      message = message.replace('%(name)s', dirNames);
-      toaster.danger(message);
-    });
-  }
-
-  onCopyItems = (destRepo, destDirentPath) => {
-    let direntPaths = this.getSelectedDirentPaths();
-    let dirNames = this.getSelectedDirentNames();
-
-    seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
-      let names = res.data.map(item => {
-        return item.obj_name;
-      });
-      direntPaths.forEach((direntPath, index) => {
-        this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
-      });
-      let message = gettext('Successfully copied %(name)s.');
-      message = message.replace('%(name)s', dirNames);
-      toaster.success(message);
-    }).catch(() => {
-      let message = gettext('Failed to copy %(name)s');
-      message = message.replace('%(name)s', dirNames);
-      toaster.danger(message);
-    });
-  }
-
-  onDeleteItems = () => {
-    let direntPaths = this.getSelectedDirentPaths();
-    let dirNames = this.getSelectedDirentNames();
-
-    seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
-      direntPaths.forEach(direntPath => {
-        this.deleteTreeNode(direntPath);
-        this.deleteDirent(direntPath);
-      });
     });
   }
 
   onDirentClick = (dirent) => {
     this.resetSelected();
+    let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
     if (dirent.isDir()) {  // is dir
-      this.loadTreeNodeByPath(direntPath);
+      if (this.state.currentMode === 'column') {
+        this.loadTreeNodeByPath(direntPath);
+      }
       this.showDir(direntPath);
     } else {  // is file
-      if (Utils.isMarkdownFile(direntPath)) {
+      if (this.state.currentMode === 'column' && Utils.isMarkdownFile(direntPath)) {
         this.showFile(direntPath);
       } else {
         const w=window.open('about:blank');
@@ -662,6 +778,7 @@ class Wiki extends Component {
   }
 
   onFileTagChanged = (dirent, direntPath) => {
+    let repoID = this.props.repoID;
     seafileAPI.listFileTags(repoID, direntPath).then(res => {
       let fileTags = res.data.file_tags.map(item => {
         return new FileTag(item);
@@ -689,7 +806,9 @@ class Wiki extends Component {
     } else {
       direntObject.permission = 'rw';
       let dirent = new Dirent(direntObject);
-      this.addNodeToTree(dirent.name, this.state.path, dirent.type);
+      if (this.state.currentMode === 'column') {
+        this.addNodeToTree(dirent.name, this.state.path, dirent.type);
+      }
       if (direntObject.type === 'dir') {
         this.setState({direntList: [dirent, ...this.state.direntList]});
       } else {
@@ -728,6 +847,7 @@ class Wiki extends Component {
   }
 
   renameDirent = (direntPath, newName) => {
+    let repoID = this.props.repoID;
     let parentPath = Utils.getDirName(direntPath);
     let newDirentPath = Utils.joinPath(parentPath, newName);
     if (direntPath === this.state.path) {
@@ -752,6 +872,9 @@ class Wiki extends Component {
       // example: direntPath = /A/B, state.path = /A/B/C
       let newPath = Utils.renameAncestorPath(this.state.path, direntPath, newDirentPath);
       this.setState({ path: newPath });
+
+      let url = siteRoot + 'wiki/lib/' + repoID + newPath;
+      window.history.replaceState({ url: url, path: newPath}, newPath, url);
     }
   }
 
@@ -785,19 +908,19 @@ class Wiki extends Component {
     this.updateReadmeMarkdown(direntList);
   }
 
-  onSideNavMenuClick = () => {
-    this.setState({
-      closeSideBar: !this.state.closeSideBar,
+  updateDirent = (dirent, paramKey, paramValue) => {
+    let newDirentList = this.state.direntList.map(item => {
+      if (item.name === dirent.name) {
+        item[paramKey] = paramValue;
+      }
+      return item;
     });
+    this.setState({direntList: newDirentList});
   }
 
-  onCloseSide = () => {
-    this.setState({
-      closeSideBar: !this.state.closeSideBar,
-    });
-  }
-
+  // tree operations
   loadTreeNodeByPath = (path) => {
+    let repoID = this.props.repoID;
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
     if (!node.isLoaded) {
@@ -818,6 +941,7 @@ class Wiki extends Component {
   }
 
   loadNodeAndParentsByPath = (path) => {
+    let repoID = this.props.repoID;
     let tree = this.state.treeData.clone();
     if (Utils.isMarkdownFile(path)) {
       path = Utils.getDirName(path);
@@ -850,6 +974,7 @@ class Wiki extends Component {
 
   onTreeNodeClick = (node) => {
     this.resetSelected();
+    let repoID = this.props.repoID;
     if (!this.state.pathExist) {
       this.setState({pathExist: true});
     }
@@ -902,6 +1027,7 @@ class Wiki extends Component {
   }
 
   onTreeNodeExpanded = (node) => {
+    let repoID = this.props.repoID;
     let tree = this.state.treeData.clone();
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
@@ -932,6 +1058,7 @@ class Wiki extends Component {
   }
 
   moveTreeNode = (nodePath, moveToPath, moveToRepo, nodeName) => {
+    let repoID = this.props.repoID;
     if (repoID !== moveToRepo.repo_id) {
       let tree = treeHelper.deleteNodeByPath(this.state.treeData, nodePath);
       this.setState({treeData: tree});
@@ -942,6 +1069,7 @@ class Wiki extends Component {
   }
 
   copyTreeNode = (nodePath, copyToPath, destRepo, nodeName) => {
+    let repoID = this.props.repoID;
     if (repoID !== destRepo.repo_id) {
       return;
     }
@@ -999,14 +1127,15 @@ class Wiki extends Component {
 
   onLibDecryptDialog = () => {
     this.setState({libNeedDecrypt: false});
-    this.loadWikiData();
+    this.loadDirData(this.state.path);
   }
 
   goReviewPage = () => {
     window.location.href = siteRoot + 'drafts/review/' + this.state.reviewID;
   }
-
+  
   goDraftPage = () => {
+    let repoID = this.props.repoID;
     window.location.href = siteRoot + 'lib/' + repoID + '/file' + this.state.draftFilePath + '?mode=edit';
   }
 
@@ -1019,112 +1148,132 @@ class Wiki extends Component {
   }
 
   render() {
-    let { libNeedDecrypt } = this.state;
-    if (libNeedDecrypt) {
+    if (this.state.libNeedDecrypt) {
       return (
         <ModalPortal>
           <LibDecryptDialog 
-            repoID={repoID}
+            repoID={this.props.repoID}
             onLibDecryptDialog={this.onLibDecryptDialog}
           />
         </ModalPortal>
       );
     }
 
-    let showShareBtn = false,
-      enableDirPrivateShare = false;
+    let showShareBtn = false;
+    let enableDirPrivateShare = false;
     const { repoEncrypted, isAdmin, ownerEmail, userPerm, isVirtual, isDepartmentAdmin } = this.state;
-    const isRepoOwner = ownerEmail == username;
-    if (!repoEncrypted && (
-      canGenerateShareLink || canGenerateUploadLink ||
-      isRepoOwner || isAdmin) && (
-      userPerm == 'rw' || userPerm == 'r')) {
-      showShareBtn = true;
-      if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
-        enableDirPrivateShare = true;
+    let isRepoOwner = ownerEmail === username;
+    if (!repoEncrypted) {
+      if ((canGenerateShareLink || canGenerateUploadLink || isRepoOwner || isAdmin) && (userPerm == 'rw' || userPerm == 'r')) {
+        showShareBtn = true;
+        if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
+          enableDirPrivateShare = true;
+        }
       }
     }
 
     return (
-      <div id="main" className="wiki-main">
-        <SidePanel
-          isTreeDataLoading={this.state.isTreeDataLoading}
-          onNodeClick={this.onTreeNodeClick}
-          onNodeCollapse={this.onTreeNodeCollapse}
-          onNodeExpanded={this.onTreeNodeExpanded}
-          closeSideBar={this.state.closeSideBar}
-          onCloseSide ={this.onCloseSide}
-          treeData={this.state.treeData}
-          currentPath={this.state.path}
-          currentNode={this.state.currentNode}
-          onAddFolderNode={this.onAddFolder}
-          onAddFileNode={this.onAddFile}
-          onRenameNode={this.onRenameTreeNode}
-          onDeleteNode={this.onDeleteTreeNode}
-        />
-        <MainPanel
-          path={this.state.path}
-          repoName={this.state.repoName}
-          repoEncrypted={this.state.repoEncrypted}
-          isViewFile={this.state.isViewFile}
-          pathExist={this.state.pathExist}
-          isDirentListLoading={this.state.isDirentListLoading}
-          isFileLoading={this.state.isFileLoading}
-          permission={this.state.permission}
-          content={this.state.content}
-          lastModified={this.state.lastModified}
-          latestContributor={this.state.latestContributor}
-          showShareBtn={showShareBtn}
-          enableDirPrivateShare={enableDirPrivateShare}
-          userPerm={userPerm}
-          isRepoOwner={isRepoOwner}
-          isAdmin={isAdmin}
-          isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-          direntList={this.state.direntList}
-          sortBy={this.state.sortBy}
-          sortOrder={this.state.sortOrder}
-          sortItems={this.sortItems}
-          selectedDirentList={this.state.selectedDirentList}
-          updateDirent={this.updateDirent}
-          onSideNavMenuClick={this.onSideNavMenuClick}
-          onSearchedClick={this.onSearchedClick}
-          onMainNavBarClick={this.onMainNavBarClick}
-          onItemClick={this.onDirentClick}
-          onItemSelected={this.onDirentSelected}
-          onItemDelete={this.onMainPanelItemDelete}
-          onItemRename={this.onMainPanelItemRename}
-          onLinkClick={this.onLinkClick}
-          onItemMove={this.onMoveItem}
-          onItemCopy={this.onCopyItem}
-          onAddFile={this.onAddFile}
-          onAddFolder={this.onAddFolder}
-          onFileTagChanged={this.onFileTagChanged}
-          isDirentSelected={this.state.isDirentSelected}
-          isAllDirentSelected={this.state.isAllDirentSelected}
-          onAllDirentSelected={this.onAllDirentSelected}
-          onItemsMove={this.onMoveItems}
-          onItemsCopy={this.onCopyItems}
-          onItemsDelete={this.onDeleteItems}
-          onFileUploadSuccess={this.onFileUploadSuccess}
-          hash={this.hash}
-          isDraft={this.state.isDraft}
-          hasDraft={this.state.hasDraft}
-          reviewStatus={this.state.reviewStatus}
-          reviewID={this.state.reviewID}
-          goDraftPage={this.goDraftPage}
-          goReviewPage={this.goReviewPage}
-          usedRepoTags={this.state.usedRepoTags}
-          readmeMarkdown={this.state.readmeMarkdown}
-          draftCounts={this.state.draftCounts}
-          reviewCounts={this.state.reviewCounts}
-          updateUsedRepoTags={this.updateUsedRepoTags}
-        />
+      <div className="main-panel o-hidden view-mode-container">
+        {this.state.currentMode === 'column' && 
+          <LibContentNav 
+            repoPermission={this.state.repoPermission}
+            currentPath={this.state.path}
+            currentRepoInfo={this.state.currentRepoInfo}
+            isTreeDataLoading={this.state.isTreeDataLoading}
+            treeData={this.state.treeData}
+            currentNode={this.state.currentNode}
+            onNodeClick={this.onTreeNodeClick}
+            onNodeCollapse={this.onTreeNodeCollapse}
+            onNodeExpanded={this.onTreeNodeExpanded}
+            onAddFolderNode={this.onAddFolder}
+            onAddFileNode={this.onAddFile}
+            onRenameNode={this.onRenameTreeNode}
+            onDeleteNode={this.onDeleteTreeNode}
+          />
+        }
+        {this.state.isViewFile && 
+          <FileContentView 
+            pathPrefix={this.props.pathPrefix}
+            currentMode={this.state.currentMode}
+            path={this.state.path}
+            hash={this.state.hash}
+            onTabNavClick={this.props.onTabNavClick}
+            onSideNavMenuClick={this.props.onMenuClick}
+            onSearchedClick={this.onSearchedClick}
+            onMainNavBarClick={this.onMainNavBarClick}
+            repoID={this.props.repoID}
+            currentRepoInfo={this.state.currentRepoInfo}
+            repoPermission={this.state.repoPermission}
+            isDraft={this.state.isDraft}
+            hasDraft={this.state.hasDraft}
+            goDraftPage={this.goDraftPage}
+            reviewStatus={this.state.reviewStatus}
+            goReviewPage={this.goReviewPage}
+            isFileLoading={this.state.isFileLoading}
+            filePermission={this.state.filePermission}
+            content={this.state.content}
+            lastModified={this.state.lastModified}
+            latestContributor={this.state.latestContributor}
+            onLinkClick={this.onLinkClick}
+          />
+        }
+        {!this.state.isViewFile && (
+          <LibContentMain 
+            pathPrefix={this.props.pathPrefix}
+            currentMode={this.state.currentMode}
+            path={this.state.path}
+            pathExist={this.state.pathExist}
+            currentRepoInfo={this.state.currentRepoInfo}
+            repoID={this.props.repoID}
+            repoName={this.state.repoName}
+            repoPermission={this.state.repoPermission}
+            repoEncrypted={this.state.repoEncrypted}
+            showShareBtn={showShareBtn}
+            enableDirPrivateShare={enableDirPrivateShare}
+            userPerm={userPerm}
+            isRepoOwner={isRepoOwner}
+            isAdmin={isAdmin}
+            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+            onTabNavClick={this.props.onTabNavClick}
+            onSideNavMenuClick={this.props.onMenuClick}
+            selectedDirentList={this.state.selectedDirentList}
+            onItemsMove={this.onMoveItems}
+            onItemsCopy={this.onCopyItems}
+            onItemsDelete={this.onDeleteItems}
+            switchViewMode={this.switchViewMode}
+            onSearchedClick={this.onSearchedClick}
+            onMainNavBarClick={this.onMainNavBarClick}
+            draftCounts={this.state.draftCounts}
+            reviewCounts={this.state.reviewCounts}
+            usedRepoTags={this.state.usedRepoTags}
+            readmeMarkdown={this.state.readmeMarkdown}
+            updateUsedRepoTags={this.updateUsedRepoTags}
+            isDirentListLoading={this.state.isDirentListLoading}
+            direntList={this.state.direntList}
+            sortBy={this.state.sortBy}
+            sortOrder={this.state.sortOrder}
+            sortItems={this.sortItems}
+            updateDirent={this.updateDirent}
+            onItemClick={this.onDirentClick}
+            onItemSelected={this.onDirentSelected}
+            onItemDelete={this.onMainPanelItemDelete}
+            onItemRename={this.onMainPanelItemRename}
+            onItemMove={this.onMoveItem}
+            onItemCopy={this.onCopyItem}
+            onAddFolder={this.onAddFolder}
+            onAddFile={this.onAddFile}
+            onFileTagChanged={this.onFileTagChanged}
+            isDirentSelected={this.state.isDirentSelected}
+            isAllDirentSelected={this.state.isAllDirentSelected}
+            onAllDirentSelected={this.onAllDirentSelected}
+            onFileUploadSuccess={this.onFileUploadSuccess}
+          />
+        )}
       </div>
     );
   }
 }
 
-ReactDOM.render (
-  <Wiki />,
-  document.getElementById('wrapper')
-);
+LibContentView.propTypes = propTypes;
+
+export default LibContentView;

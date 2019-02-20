@@ -131,7 +131,7 @@ class MyLibraries extends Component {
   render() {
     return (
       <Fragment>
-        <div className="main-panel-north">
+        <div className="main-panel-north border-left-show">
           <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} libraryType={'mine'}/>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>

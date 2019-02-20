@@ -1,6 +1,6 @@
 .file-uploader-container {
   display: flex;
-  flex: 1;
+  /* flex: 1; */
 }
 
 .file-uploader {

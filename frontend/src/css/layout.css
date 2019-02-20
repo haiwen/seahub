@@ -18,14 +18,14 @@
 }
 
 .side-panel {
-  flex: 0 0 25%;
+  flex: 0 0 22%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .main-panel {
-  flex: 1 0 75%;
+  flex: 1 0 78%;
   display: flex;
   flex-direction: column;
 }
@@ -46,6 +46,7 @@
 
 .side-panel-north,
 .main-panel-north {
+  position: relative;
   padding: .5rem 1rem;
   display: flex;
   flex-shrink: 0;
