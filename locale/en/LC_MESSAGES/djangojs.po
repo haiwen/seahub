@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 14:05+0800\n"
+"POT-Creation-Date: 2019-02-20 17:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1189,7 +1189,7 @@ msgid "Lock"
 msgstr ""
 
 #: frontend/src/components/dirent-list-view/dirent-menu.js:119
-#: frontend/src/view-file-text.js:135
+#: frontend/src/view-file-text.js:137
 msgid "Comment"
 msgstr ""
 
@@ -1250,7 +1250,7 @@ msgstr ""
 
 #: frontend/src/components/file-content-view.js:81
 #: frontend/src/components/select-editor/select-editor.js:90
-#: frontend/src/view-file-text.js:123
+#: frontend/src/view-file-text.js:124
 msgid "Edit"
 msgstr ""
 
@@ -1265,22 +1265,22 @@ msgstr ""
 msgid "Search files in this library"
 msgstr ""
 
-#: frontend/src/components/file-content-view.js:120
+#: frontend/src/components/file-content-view.js:121
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:239
 msgid "This file is in review stage"
 msgstr ""
 
-#: frontend/src/components/file-content-view.js:121
+#: frontend/src/components/file-content-view.js:122
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:240
 msgid "View Review"
 msgstr ""
 
-#: frontend/src/components/file-content-view.js:128
+#: frontend/src/components/file-content-view.js:129
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:247
 msgid "This file is in draft stage."
 msgstr ""
 
-#: frontend/src/components/file-content-view.js:129
+#: frontend/src/components/file-content-view.js:130
 #: frontend/src/draft-review.js:896
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:248
 msgid "Edit Draft"
@@ -1384,7 +1384,7 @@ msgstr ""
 
 #: frontend/src/components/main-side-nav.js:193
 #: frontend/src/components/main-side-nav.js:195
-#: frontend/src/pages/dashboard/files-activities.js:392
+#: frontend/src/pages/dashboard/files-activities.js:393
 msgid "Activities"
 msgstr ""
 
@@ -1567,14 +1567,14 @@ msgid "List"
 msgstr ""
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:27
-msgid "column"
+msgid "Column"
 msgstr ""
 
 #: frontend/src/components/user-select.js:16
 msgid "No Options."
 msgstr ""
 
-#: frontend/src/components/wiki-markdown-viewer.js:186
+#: frontend/src/components/wiki-markdown-viewer.js:191
 msgid "Last modified by"
 msgstr ""
 
@@ -1619,12 +1619,12 @@ msgid "Edit draft"
 msgstr ""
 
 #: frontend/src/draft-review.js:835
-#: frontend/src/pages/dashboard/files-activities.js:110
+#: frontend/src/pages/dashboard/files-activities.js:111
 msgid "Close review"
 msgstr ""
 
 #: frontend/src/draft-review.js:839
-#: frontend/src/pages/dashboard/files-activities.js:114
+#: frontend/src/pages/dashboard/files-activities.js:115
 msgid "Publish draft"
 msgstr ""
 
@@ -1652,102 +1652,102 @@ msgstr ""
 msgid "Number of changes:"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:77
+#: frontend/src/pages/dashboard/files-activities.js:78
 msgid "Created library"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:81
+#: frontend/src/pages/dashboard/files-activities.js:82
 msgid "Renamed library"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:85
+#: frontend/src/pages/dashboard/files-activities.js:86
 msgid "Deleted library"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:89
+#: frontend/src/pages/dashboard/files-activities.js:90
 msgid "Restored library"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:94
+#: frontend/src/pages/dashboard/files-activities.js:95
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:96
+#: frontend/src/pages/dashboard/files-activities.js:97
 #: static/scripts/app/views/activity-item.js:27
 msgid "Removed items older than {n} days from trash."
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:106
+#: frontend/src/pages/dashboard/files-activities.js:107
 msgid "Open review"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:122
+#: frontend/src/pages/dashboard/files-activities.js:123
 msgid "{file} and {n} other files"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:125
+#: frontend/src/pages/dashboard/files-activities.js:126
 msgid "Created {n} files"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:133
+#: frontend/src/pages/dashboard/files-activities.js:134
 msgid "Created draft"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:137
+#: frontend/src/pages/dashboard/files-activities.js:138
 msgid "Created file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:142
+#: frontend/src/pages/dashboard/files-activities.js:143
 msgid "Deleted draft"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:146
+#: frontend/src/pages/dashboard/files-activities.js:147
 msgid "Deleted file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:150
+#: frontend/src/pages/dashboard/files-activities.js:151
 msgid "Restored file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:154
+#: frontend/src/pages/dashboard/files-activities.js:155
 msgid "Renamed file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:159
+#: frontend/src/pages/dashboard/files-activities.js:160
 msgid "Moved file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:164
+#: frontend/src/pages/dashboard/files-activities.js:165
 msgid "Updated draft"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:168
+#: frontend/src/pages/dashboard/files-activities.js:169
 msgid "Updated file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:177
+#: frontend/src/pages/dashboard/files-activities.js:178
 msgid "Created folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:181
+#: frontend/src/pages/dashboard/files-activities.js:182
 msgid "Deleted folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:185
+#: frontend/src/pages/dashboard/files-activities.js:186
 msgid "Restored folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:189
+#: frontend/src/pages/dashboard/files-activities.js:190
 msgid "Renamed folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:194
+#: frontend/src/pages/dashboard/files-activities.js:195
 msgid "Moved folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:283
-#: frontend/src/pages/dashboard/files-activities.js:367
+#: frontend/src/pages/dashboard/files-activities.js:284
+#: frontend/src/pages/dashboard/files-activities.js:368
 #: frontend/src/pages/groups/group-view.js:94
 #: frontend/src/pages/groups/group-view.js:128
 #: frontend/src/pages/groups/groups-view.js:135
@@ -2171,7 +2171,7 @@ msgstr ""
 
 #: frontend/src/shared-file-view-image.js:133
 #: frontend/src/shared-file-view-markdown.js:158
-#: frontend/src/shared-file-view-text.js:145 frontend/src/view-file-text.js:312
+#: frontend/src/shared-file-view-text.js:145 frontend/src/view-file-text.js:314
 msgid "Anonymous User"
 msgstr ""
 
@@ -2282,7 +2282,7 @@ msgstr ""
 msgid "File History"
 msgstr ""
 
-#: frontend/src/view-file-text.js:129
+#: frontend/src/view-file-text.js:131
 msgid "Download File"
 msgstr ""
 
