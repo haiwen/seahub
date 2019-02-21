@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import CodeMirror from 'react-codemirror';
 import moment from 'moment';
 import watermark from 'watermark-dom';
 import { ButtonGroup, Tooltip } from 'reactstrap';
 import { seafileAPI } from './utils/seafile-api';
+import CodeMirror from './utils/code-mirror';
 import { Utils } from './utils/utils';
 import { serviceURL, gettext, mediaUrl } from './utils/constants';
 import InternalLinkDialog from './components/dialog/internal-link-dialog';
 import CommentsList from './components/comments-list';
-import 'codemirror/lib/codemirror.css';
+
+import './css/codemirror.css';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
@@ -36,6 +37,7 @@ const options = {
   textWrapping: true,
   lineWrapping: true,
   readOnly: 'nocursor',
+  scrollbarStyle: null,
 };
 
 class ViewFileText extends React.Component {

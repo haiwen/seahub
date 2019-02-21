@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Account from './components/common/account';
-import CodeMirror from 'react-codemirror';
 import { Button } from 'reactstrap';
 import { Utils } from './utils/utils';
 import watermark from 'watermark-dom';
 import SaveSharedFileDialog from './components/dialog/save-shared-file-dialog';
 import toaster from './components/toast';
+import CodeMirror from './utils/code-mirror';
 import { serviceURL, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 
-import 'codemirror/lib/codemirror.css';
+import './css/codemirror.css';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
