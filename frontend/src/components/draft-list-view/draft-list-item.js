@@ -74,6 +74,14 @@ class DraftListItem extends React.Component {
     this.props.onReviewHandler(this.props.draft);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isItemFreezed === false && this.props.isItemFreezed === true) {
+      this.setState({
+        highlight: ''
+      });
+    }
+  }
+
   render() {
     let draft = this.props.draft;
     let repoID = draft.origin_repo_id;

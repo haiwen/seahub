@@ -112,6 +112,14 @@
   overflow: auto;
 }
 
+.menu-control {
+  color: #999;
+}
+
+.menu-control:hover {
+  color: #666;
+}
+
 .cur-view-content .article {
   padding: 40px;
 }
