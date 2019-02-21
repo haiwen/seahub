@@ -54,7 +54,7 @@ class TagListItem extends React.Component {
             {this.props.item.fileCount}{' '}{'files'}
           </span>
         </div>
-        <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
+        <i className="tag-edit fa fa-pencil-alt" onClick={this.onTagUpdate}></i>
       </li>
     );
   }

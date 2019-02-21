@@ -112,7 +112,7 @@ class DetailListView extends React.Component {
                       );
                     })}
                   </ul>
-                  <i className='fa fa-pencil attr-action-icon' onClick={this.onEditFileTagToggle}></i>
+                  <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
                 </td>
               </tr>
               <tr className="file-related-files">
@@ -128,7 +128,7 @@ class DetailListView extends React.Component {
                       );
                     })}
                   </ul>
-                  <i className='fa fa-pencil attr-action-icon' onClick={this.onListRelatedFileToggle}></i>
+                  <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onListRelatedFileToggle}></i>
                 </td>
               </tr>
             </tbody>
