@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from '@reach/router';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -168,7 +169,10 @@ class Item extends Component {
           }
         </td>
         <td>
-            <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+          { data.is_dir ?
+              <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
+              <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+          }
         </td>
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
@@ -188,7 +192,10 @@ class Item extends Component {
           }
         </td>
         <td>
-          <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+          { data.is_dir ?
+              <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
+              <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+          }
           <br />
           <span className="dirent-meta-info">{data.repo_name}</span>
           <span className="dirent-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
