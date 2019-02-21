@@ -5,7 +5,7 @@ const propTypes = {
 
 };
 
-class DirGridMode extends React.Component {
+class DirGridView extends React.Component {
 
   render() {
     return (
@@ -14,6 +14,6 @@ class DirGridMode extends React.Component {
   }
 }
 
-DirGridMode.propTypes = propTypes;
+DirGridView.propTypes = propTypes;
 
-export default DirGridMode;
+export default DirGridView;

@@ -37,7 +37,7 @@ const propTypes = {
   onAllItemSelected: PropTypes.func.isRequired,
 };
 
-class DirListMode extends React.Component {
+class DirListView extends React.Component {
 
   render() {
     return (
@@ -85,6 +85,6 @@ class DirListMode extends React.Component {
   }
 }
 
-DirListMode.propTypes = propTypes;
+DirListView.propTypes = propTypes;
 
-export default DirListMode;
+export default DirListView;

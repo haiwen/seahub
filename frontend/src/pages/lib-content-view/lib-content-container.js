@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
-import DirListMode from '../../components/dir-view-mode/dir-list-mode';
-import DirGridMode from '../../components/dir-view-mode/dir-grid-mode';
-import DirColumnMode from '../../components/dir-view-mode/dir-column-mode';
+import DirListView from '../../components/dir-view-mode/dir-list-view';
+import DirGridView from '../../components/dir-view-mode/dir-grid-view';
+import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -147,7 +147,7 @@ class LibContentContainer extends React.Component {
             {this.props.pathExist && (
               <Fragment>
                 {this.props.currentMode === 'list' && (
-                  <DirListMode 
+                  <DirListView 
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
@@ -182,11 +182,11 @@ class LibContentContainer extends React.Component {
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
-                  <DirGridMode 
+                  <DirGridView 
                   />
                 )}
                 {this.props.currentMode === 'column' && (
-                  <DirColumnMode 
+                  <DirColumnView 
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}

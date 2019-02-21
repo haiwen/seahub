@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
 import DirColumnFile from './dir-column-file';
-import DirListMode from './dir-list-mode';
+import DirListMode from './dir-list-view';
 
 import '../../css/lib-content-view.css';
 
@@ -71,7 +71,7 @@ const propTypes = {
   onAllItemSelected: PropTypes.func.isRequired,
 };
 
-class DirColumnMode extends React.Component {
+class DirColumnView extends React.Component {
 
   render() {
     return (
@@ -150,6 +150,6 @@ class DirColumnMode extends React.Component {
   }
 }
 
-DirColumnMode.propTypes = propTypes;
+DirColumnView.propTypes = propTypes;
 
-export default DirColumnMode;
+export default DirColumnView;
