@@ -524,6 +524,7 @@ class LibContentView extends React.Component {
     }
     
     this.setState({currentMode: mode});
+    this.showDir(path);
   }
 
   onSearchedClick = (item) => {

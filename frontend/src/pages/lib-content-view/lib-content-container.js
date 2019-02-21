@@ -142,7 +142,7 @@ class LibContentContainer extends React.Component {
               onPathClick={this.onPathClick}
             />
           </div>
-          <div className="cur-view-content view-mode-container">
+          <div className={`cur-view-content ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
               <Fragment>
