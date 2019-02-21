@@ -1,15 +1,22 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { gettext, siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
 
 const propTypes = {
+  isViewFile: PropTypes.bool.isRequired,
+  filePermission: PropTypes.bool.isRequired, // ture = 'rw'
+  isDraft: PropTypes.bool.isRequired,
+  hasDraft: PropTypes.bool.isRequired,
   // side-panel
   onSideNavMenuClick: PropTypes.func.isRequired,
   // mutiple-dir
+  isDirentSelected: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
@@ -38,7 +45,46 @@ const propTypes = {
 
 class LibContentToolbar extends React.Component {
 
+  onEditClick = (e) => {
+    e.preventDefault();
+    let { path, repoID } = this.props;
+    let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
+    window.open(url);
+  }
+
+  onNewDraft = (e) => {
+    e.preventDefault();
+    let { path, repoID } = this.props;
+    seafileAPI.createDraft(repoID, path).then(res => {
+      window.location.href = siteRoot + 'lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
+    });
+  }
+
   render() {
+
+    if (this.props.isViewFile) {
+      return (
+        <Fragment>
+          <div className="cur-view-toolbar">
+            <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onSideNavMenuClick}></span>
+            <div className="dir-operation">
+              {(this.props.filePermission && !this.props.hasDraft) && (
+                <Fragment>
+                  <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
+                </Fragment>
+              )}
+              {/* default have read priv */}
+              {(!this.props.isDraft && !this.props.hasDraft) && (
+                <button className="btn btn-secondary operation-item" title={gettext('New Draft')} onClick={this.onNewDraft}>{gettext('New Draft')}</button>
+              )}
+            </div>
+            <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
+          </div>
+          <CommonToolbar repoID={this.props.repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
+        </Fragment>
+      );
+    }
+
     return (
       <Fragment>
         <div className="cur-view-toolbar">

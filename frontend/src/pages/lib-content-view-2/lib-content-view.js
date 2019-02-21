@@ -1187,10 +1187,15 @@ class LibContentView extends React.Component {
     return (
       <div className={`main-panel o-hidden ${this.props.currentMode === 'column' ? 'dir-main-content' : ''}`}>
         <div className="main-panel-north border-left-show">
-          <LibContentToolbar 
+          <LibContentToolbar
+            isViewFile={this.state.isViewFile}
+            filePermission={this.state.filePermission}
+            isDraft={this.state.isDraft}
+            hasDraft={this.state.hasDraft}
             onSideNavMenuClick={this.props.onMenuClick}
             repoID={this.props.repoID}
             path={this.state.path}
+            isDirentSelected={this.state.isDirentSelected}
             selectedDirentList={this.state.selectedDirentList}
             onItemsMove={this.onMoveItems}
             onItemsCopy={this.onCopyItems}

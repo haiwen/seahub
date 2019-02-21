@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { gettext, siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import WikiMarkdownViewer from '../wiki-markdown-viewer';
 
 const propTypes = {
@@ -21,6 +23,40 @@ const propTypes = {
 };
 
 class DirColumnFile extends React.Component {
+
+  componentDidMount() {
+    if (this.props.hash) {
+      let hash = this.props.hash;
+      setTimeout(function() {
+        window.location.hash = hash;
+      }, 500);
+    }
+  }
+
+  onEditClick = (e) => {
+    e.preventDefault();
+    let { path, repoID } = this.props;
+    let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
+    window.open(url);
+  }
+
+  onNewDraft = (e) => {
+    e.preventDefault();
+    let { path, repoID } = this.props;
+    seafileAPI.createDraft(repoID, path).then(res => {
+      window.location.href = siteRoot + 'lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
+    });
+  }
+
+  goDraftPage = (e) => {
+    e.preventDefault();
+    this.props.goDraftPage();
+  }
+  
+  goReviewPage = (e) => {
+    e.preventDefault();
+    this.props.goReviewPage();
+  }
 
   render() {
     return (
