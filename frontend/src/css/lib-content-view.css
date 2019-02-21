@@ -24,7 +24,7 @@
   flex: 1 0 75% !important;
   display: flex;
   flex-direction: column;
-  margin-right: -0.75rem;
+  margin-right: -1.75rem;
   padding:0 0.75rem;
   overflow: auto;
 }
