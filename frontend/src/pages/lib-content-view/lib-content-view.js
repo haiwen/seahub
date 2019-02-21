@@ -15,16 +15,15 @@ import treeHelper from '../../components/tree-view/tree-helper';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
-import FileContentView from '../../components/file-content-view';
-import LibContentNav from './lib-content-nav';
-import LibContentMain from './lib-content-main';
-
-import '../../css/lib-content-view.css';
+import LibContentToolbar from './lib-content-toolbar';
+import LibContentContainer from './lib-content-container';
+import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
   onTabNavClick: PropTypes.func.isRequired,
   onMenuClick: PropTypes.func.isRequired,
+  repoID: PropTypes.string,
 };
 
 class LibContentView extends React.Component {
@@ -62,6 +61,7 @@ class LibContentView extends React.Component {
       treeData: treeHelper.buildTree(),
       currentNode: null,
       isFileLoading: true,
+      isFileLoadedErr: false,
       filePermission: true,
       content: '',
       lastModified: '',
@@ -72,7 +72,7 @@ class LibContentView extends React.Component {
       sortBy: 'name', // 'name' or 'time'
       sortOrder: 'asc', // 'asc' or 'desc'
       isAllDirentSelected: false,
-      dirID: '',
+      dirID: '',  // for update dir list
       errorMsg: '',
     };
 
@@ -83,7 +83,7 @@ class LibContentView extends React.Component {
   componentWillMount() {
     const hash = window.location.hash;
     if (hash.slice(0, 1) === '#') {
-      this.state.hash = hash;
+      this.setState({hash: hash});
     }
   }
 
@@ -316,6 +316,7 @@ class LibContentView extends React.Component {
             latestContributor: last_modifier_name,
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,
+            isFileLoadedErr: false,
             isDraft: is_draft,
             hasDraft: has_draft,
             reviewStatus: review_status,
@@ -323,6 +324,11 @@ class LibContentView extends React.Component {
             draftFilePath: draft_file_path
           });
         });
+      });
+    }).catch(() => {
+      this.setState({
+        isFileLoading: false,
+        isFileLoadedErr: true,
       });
     });
 
@@ -980,6 +986,7 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) {
+      let isLoaded = node.isLoaded;
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
         node = tree.getNodeByPath(node.path);
@@ -989,7 +996,7 @@ class LibContentView extends React.Component {
           this.setState({treeData: tree});
         });
       }
-      if (node.path === this.state.path) {
+      if (isLoaded && node.path === this.state.path) {
         if (node.isExpanded) {
           let tree = treeHelper.collapseNode(this.state.treeData, node);
           this.setState({treeData: tree});
@@ -1147,7 +1154,18 @@ class LibContentView extends React.Component {
     });
   }
 
+  onUploadFile = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.uploader.onFileUpload();
+  }
+
+  onUploadFolder = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.uploader.onFolderUpload();
+  }
+
   render() {
+
     if (this.state.libNeedDecrypt) {
       return (
         <ModalPortal>
@@ -1157,6 +1175,10 @@ class LibContentView extends React.Component {
           />
         </ModalPortal>
       );
+    }
+
+    if (!this.state.currentRepoInfo) {
+      return '';
     }
 
     let showShareBtn = false;
@@ -1173,12 +1195,70 @@ class LibContentView extends React.Component {
     }
 
     return (
-      <div className="main-panel o-hidden view-mode-container">
-        {this.state.currentMode === 'column' && 
-          <LibContentNav 
-            repoPermission={this.state.repoPermission}
-            currentPath={this.state.path}
+      <div className="main-panel o-hidden">
+        <div className="main-panel-north border-left-show">
+          <LibContentToolbar
+            isViewFile={this.state.isViewFile}
+            filePermission={this.state.filePermission}
+            isDraft={this.state.isDraft}
+            hasDraft={this.state.hasDraft}
+            onSideNavMenuClick={this.props.onMenuClick}
+            repoID={this.props.repoID}
+            path={this.state.path}
+            isDirentSelected={this.state.isDirentSelected}
+            selectedDirentList={this.state.selectedDirentList}
+            onItemsMove={this.onMoveItems}
+            onItemsCopy={this.onCopyItems}
+            onItemsDelete={this.onDeleteItems}
+            direntList={this.state.direntList}
+            repoName={this.state.repoName}
+            repoEncrypted={this.state.repoEncrypted}
+            isAdmin={this.state.isAdmin}
+            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+            userPerm={this.state.userPerm}
+            showShareBtn={showShareBtn}
+            enableDirPrivateShare={enableDirPrivateShare}
+            onAddFile={this.onAddFile}
+            onAddFolder={this.onAddFolder}
+            onUploadFile={this.onUploadFile}
+            onUploadFolder={this.onUploadFolder}
+            currentMode={this.state.currentMode}
+            switchViewMode={this.switchViewMode}
+            onSearchedClick={this.onSearchedClick}
+          />
+        </div>
+        <div className="main-panel-center flex-row">
+          <LibContentContainer 
+            pathPrefix={this.props.pathPrefix}
+            currentMode={this.state.currentMode}
+            path={this.state.path}
+            pathExist={this.state.pathExist}
             currentRepoInfo={this.state.currentRepoInfo}
+            repoID={this.props.repoID}
+            repoName={this.state.repoName}
+            repoPermission={this.state.repoPermission}
+            repoEncrypted={this.state.repoEncrypted}
+            enableDirPrivateShare={enableDirPrivateShare}
+            userPerm={userPerm}
+            isAdmin={isAdmin}
+            isRepoOwner={isRepoOwner}
+            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+            onTabNavClick={this.props.onTabNavClick}
+            onMainNavBarClick={this.onMainNavBarClick}
+            isViewFile={this.state.isViewFile}
+            hash={this.state.hash}
+            isDraft={this.state.isDraft}
+            hasDraft={this.state.hasDraft}
+            goDraftPage={this.goDraftPage}
+            reviewStatus={this.state.reviewStatus}
+            goReviewPage={this.goReviewPage}
+            isFileLoading={this.state.isFileLoading}
+            isFileLoadedErr={this.state.isFileLoadedErr}
+            filePermission={this.state.filePermission}
+            content={this.state.content}
+            lastModified={this.state.lastModified}
+            latestContributor={this.state.latestContributor}
+            onLinkClick={this.onLinkClick}
             isTreeDataLoading={this.state.isTreeDataLoading}
             treeData={this.state.treeData}
             currentNode={this.state.currentNode}
@@ -1189,60 +1269,6 @@ class LibContentView extends React.Component {
             onAddFileNode={this.onAddFile}
             onRenameNode={this.onRenameTreeNode}
             onDeleteNode={this.onDeleteTreeNode}
-          />
-        }
-        {this.state.isViewFile && 
-          <FileContentView 
-            pathPrefix={this.props.pathPrefix}
-            currentMode={this.state.currentMode}
-            path={this.state.path}
-            hash={this.state.hash}
-            onTabNavClick={this.props.onTabNavClick}
-            onSideNavMenuClick={this.props.onMenuClick}
-            onSearchedClick={this.onSearchedClick}
-            onMainNavBarClick={this.onMainNavBarClick}
-            repoID={this.props.repoID}
-            currentRepoInfo={this.state.currentRepoInfo}
-            repoPermission={this.state.repoPermission}
-            isDraft={this.state.isDraft}
-            hasDraft={this.state.hasDraft}
-            goDraftPage={this.goDraftPage}
-            reviewStatus={this.state.reviewStatus}
-            goReviewPage={this.goReviewPage}
-            isFileLoading={this.state.isFileLoading}
-            filePermission={this.state.filePermission}
-            content={this.state.content}
-            lastModified={this.state.lastModified}
-            latestContributor={this.state.latestContributor}
-            onLinkClick={this.onLinkClick}
-          />
-        }
-        {!this.state.isViewFile && (
-          <LibContentMain 
-            pathPrefix={this.props.pathPrefix}
-            currentMode={this.state.currentMode}
-            path={this.state.path}
-            pathExist={this.state.pathExist}
-            currentRepoInfo={this.state.currentRepoInfo}
-            repoID={this.props.repoID}
-            repoName={this.state.repoName}
-            repoPermission={this.state.repoPermission}
-            repoEncrypted={this.state.repoEncrypted}
-            showShareBtn={showShareBtn}
-            enableDirPrivateShare={enableDirPrivateShare}
-            userPerm={userPerm}
-            isRepoOwner={isRepoOwner}
-            isAdmin={isAdmin}
-            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-            onTabNavClick={this.props.onTabNavClick}
-            onSideNavMenuClick={this.props.onMenuClick}
-            selectedDirentList={this.state.selectedDirentList}
-            onItemsMove={this.onMoveItems}
-            onItemsCopy={this.onCopyItems}
-            onItemsDelete={this.onDeleteItems}
-            switchViewMode={this.switchViewMode}
-            onSearchedClick={this.onSearchedClick}
-            onMainNavBarClick={this.onMainNavBarClick}
             draftCounts={this.state.draftCounts}
             reviewCounts={this.state.reviewCounts}
             usedRepoTags={this.state.usedRepoTags}
@@ -1266,9 +1292,18 @@ class LibContentView extends React.Component {
             isDirentSelected={this.state.isDirentSelected}
             isAllDirentSelected={this.state.isAllDirentSelected}
             onAllDirentSelected={this.onAllDirentSelected}
-            onFileUploadSuccess={this.onFileUploadSuccess}
           />
-        )}
+          {this.state.pathExist && !this.state.isViewFile && (
+            <FileUploader
+              ref={uploader => this.uploader = uploader}
+              dragAndDrop={true}
+              path={this.state.path}
+              repoID={this.props.repoID}
+              direntList={this.state.direntList}
+              onFileUploadSuccess={this.onFileUploadSuccess}
+            />
+          )}
+        </div>
       </div>
     );
   }

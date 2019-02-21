@@ -88,6 +88,7 @@ class DirentListItem extends React.Component {
               filePath={this.state.filePath}
               onItemClick={this.onItemClick}
               selectedPath={this.props.selectedPath}
+              selectedRepo={this.props.selectedRepo}
               onDirentItemClick={this.props.onDirentItemClick}
               isShowFile={this.props.isShowFile}
             />
@@ -98,10 +99,7 @@ class DirentListItem extends React.Component {
   }
 
   render() {
-    let isCurrentRepo = false;
-    if (this.props.selectedRepo) {
-      isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
-    }
+    let isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
     let isCurrentPath = this.props.selectedPath === this.state.filePath;
 
     return (

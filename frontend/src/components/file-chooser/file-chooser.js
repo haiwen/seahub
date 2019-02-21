@@ -39,6 +39,7 @@ class FileChooser extends React.Component {
         let repoInfo = new RepoInfo(res.data);
         this.setState({
           currentRepoInfo: repoInfo,
+          selectedRepo: repoInfo
         });
       });
     }
@@ -100,6 +101,9 @@ class FileChooser extends React.Component {
   }
 
   render() {
+    if (!this.state.selectedRepo) {
+      return '';
+    }
     const mode = this.props.mode;
     let libName = mode === 'current_repo_and_other_repos' ? gettext('Other Libraries') : gettext('Libraries');
     return (

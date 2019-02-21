@@ -79,8 +79,9 @@ class TreeNode {
     this.path = this.generatePath(this.parentNode); 
     if (this.isExpanded) {
       this.updateChildrenPath(this);
+    } else {
+      this.isLoaded = false;
     }
-    // this.isLoaded = false;
   }
 
   updateChildrenPath(node) {
