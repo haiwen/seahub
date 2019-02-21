@@ -22,6 +22,7 @@ const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
   onTabNavClick: PropTypes.func.isRequired,
   onMenuClick: PropTypes.func.isRequired,
+  repoID: PropTypes.string.isRequired,
 };
 
 class LibContentView extends React.Component {
@@ -80,7 +81,7 @@ class LibContentView extends React.Component {
   componentWillMount() {
     const hash = window.location.hash;
     if (hash.slice(0, 1) === '#') {
-      this.state.hash = hash;
+      this.setState({hash: hash});
     }
   }
 
@@ -1162,7 +1163,7 @@ class LibContentView extends React.Component {
           <LibDecryptDialog 
             repoID={this.props.repoID}
             onLibDecryptDialog={this.onLibDecryptDialog}
-            />
+          />
         </ModalPortal>
       );
     }
@@ -1185,7 +1186,7 @@ class LibContentView extends React.Component {
     }
 
     return (
-      <div className={`main-panel o-hidden ${this.props.currentMode === 'column' ? 'dir-main-content' : ''}`}>
+      <div className="main-panel o-hidden">
         <div className="main-panel-north border-left-show">
           <LibContentToolbar
             isViewFile={this.state.isViewFile}

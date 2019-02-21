@@ -43,6 +43,7 @@ const propTypes = {
   // tree
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
+  currentNode: PropTypes.object.isRequired,
   onNodeClick: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,

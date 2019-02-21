@@ -10,6 +10,12 @@ import ShareDialog from '../../components/dialog/share-dialog';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoName: PropTypes.string.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
   onAddFile: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
@@ -137,14 +143,6 @@ class DirOperationToolbar extends React.Component {
   onAddFolder = (dirPath) => {
     this.setState({isCreateFolderDialogShow: false});
     this.props.onAddFolder(dirPath);
-  }
-
-  onViewReview = () => {
-    this.props.goReviewPage();
-  }
-
-  onViewDraft = () => {
-    this.props.goDraftPage();
   }
 
   checkDuplicatedName = (newName) => {

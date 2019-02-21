@@ -21,6 +21,7 @@ const propTypes = {
   // tree
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
+  currentNode: PropTypes.object.isRequired,
   onNodeClick: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
@@ -63,6 +64,8 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
+  onItemDetails: PropTypes.func.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
 };
