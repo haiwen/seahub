@@ -589,7 +589,7 @@ class ProxyRemoteUserBackend(AuthBackend):
     # Create a User object if not already in the database?
     create_unknown_user = True
 
-    trust_proxy = getattr(settings, 'TRUST_PROXY_AUTHTENTICATION', False)
+    trust_proxy = getattr(settings, 'TRUST_PROXY_AUTHENTICATION', False)
 
     def authenticate(self, remote_user):
         """
