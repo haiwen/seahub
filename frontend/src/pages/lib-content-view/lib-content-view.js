@@ -17,6 +17,7 @@ import ModalPortal from '../../components/modal-portal';
 import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
+import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -1292,7 +1293,16 @@ class LibContentView extends React.Component {
             isAllDirentSelected={this.state.isAllDirentSelected}
             onAllDirentSelected={this.onAllDirentSelected}
           />
-          {/* uploader */}
+          {this.state.pathExist && !this.state.isViewFile && (
+            <FileUploader
+              ref={uploader => this.uploader = uploader}
+              dragAndDrop={true}
+              path={this.state.path}
+              repoID={this.props.repoID}
+              direntList={this.state.direntList}
+              onFileUploadSuccess={this.onFileUploadSuccess}
+            />
+          )}
         </div>
       </div>
     );
