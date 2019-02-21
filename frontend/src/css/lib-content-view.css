@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: row !important;
   overflow: hidden !important;
+  padding-left: 0 !important;
   min-height: 0;
 }
 
@@ -13,7 +14,6 @@
   overflow: hidden;
   background-color: #fff;
   border-right: 1px solid #eee;
-  margin-left: -0.75rem;
 }
 
 .dir-content-nav:hover {
@@ -24,14 +24,14 @@
   flex: 1 0 75% !important;
   display: flex;
   flex-direction: column;
-  margin-right: -1.75rem;
+  margin-right: -1rem;
   padding:0 0.75rem;
   overflow: auto;
 }
 
 /*tree view */
 .tree-view {
-  padding: 0 12px 0 0;
+  padding: 12px 12px 0 0;
   line-height: 1.5;
 }
 
@@ -86,7 +86,7 @@
 .tree-node-inner .right-icon {
   position: absolute;
   top: 0;
-  right: 0.5rem;
+  right: 0;
   bottom: 0;
   width: 1.5rem;
   color: #888;   
