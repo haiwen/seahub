@@ -13,6 +13,7 @@ const propTypes = {
   repoPermission: PropTypes.bool.isRequired,
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
+  currentNode: PropTypes.object,
   onNodeClick: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
@@ -34,6 +35,10 @@ class DirColumnNav extends React.Component {
       isRenameDialogShow: false,
     };
     this.isNodeMenuShow = true;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({opNode: nextProps.currentNode});
   }
 
   onNodeClick = (node) => {

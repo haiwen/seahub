@@ -28,6 +28,7 @@ const propTypes = {
   onMainNavBarClick: PropTypes.func.isRequired,
   // file
   isViewFile: PropTypes.bool.isRequired,
+  isFileLoadedErr: PropTypes.bool.isRequired,
   hash: PropTypes.string,
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
@@ -43,7 +44,7 @@ const propTypes = {
   // tree
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
-  currentNode: PropTypes.object.isRequired,
+  currentNode: PropTypes.object,
   onNodeClick: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
@@ -119,7 +120,7 @@ class LibContentContainer extends React.Component {
   }
 
   render() {
-    let {path, repoID, usedRepoTags, readmeMarkdown, draftCounts, reviewCounts } = this.props;
+    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts, reviewCounts } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
       if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0 || reviewCounts !== 0) {
@@ -207,6 +208,7 @@ class LibContentContainer extends React.Component {
                     onDeleteNode={this.props.onDeleteNode}
                     isViewFile={this.props.isViewFile}
                     isFileLoading={this.props.isFileLoading}
+                    isFileLoadedErr={this.props.isFileLoadedErr}
                     hash={this.props.hash}
                     isDraft={this.props.isDraft}
                     hasDraft={this.props.hasDraft}

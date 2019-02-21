@@ -21,7 +21,7 @@ const propTypes = {
   // tree
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
-  currentNode: PropTypes.object.isRequired,
+  currentNode: PropTypes.object,
   onNodeClick: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
@@ -32,6 +32,7 @@ const propTypes = {
   // file
   isViewFile: PropTypes.bool.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
+  isFileLoadedErr: PropTypes.bool.isRequired,
   hash: PropTypes.string,
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
@@ -101,6 +102,7 @@ class DirColumnMode extends React.Component {
               reviewStatus={this.props.reviewStatus}
               goReviewPage={this.props.goReviewPage}
               isFileLoading={this.props.isFileLoading}
+              isFileLoadedErr={this.props.isFileLoadedErr}
               filePermission={this.props.filePermission}
               content={this.props.content}
               lastModified={this.props.lastModified}

@@ -15,6 +15,7 @@ const propTypes = {
   reviewStatus: PropTypes.any,
   goReviewPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
+  isFileLoadedErr: PropTypes.bool.isRequired,
   filePermission: PropTypes.bool,
   content: PropTypes.string,
   lastModified: PropTypes.string,
@@ -59,6 +60,11 @@ class DirColumnFile extends React.Component {
   }
 
   render() {
+    if (this.props.isFileLoadedErr) {
+      return (
+        <div className="message err-tip">{gettext('File does not exist.')}</div>
+      );
+    }
     return (
       <div className="cur-view-content">
         <WikiMarkdownViewer

@@ -22,7 +22,7 @@ const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
   onTabNavClick: PropTypes.func.isRequired,
   onMenuClick: PropTypes.func.isRequired,
-  repoID: PropTypes.string.isRequired,
+  repoID: PropTypes.string,
 };
 
 class LibContentView extends React.Component {
@@ -60,6 +60,7 @@ class LibContentView extends React.Component {
       treeData: treeHelper.buildTree(),
       currentNode: null,
       isFileLoading: true,
+      isFileLoadedErr: false,
       filePermission: true,
       content: '',
       lastModified: '',
@@ -314,6 +315,7 @@ class LibContentView extends React.Component {
             latestContributor: last_modifier_name,
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,
+            isFileLoadedErr: false,
             isDraft: is_draft,
             hasDraft: has_draft,
             reviewStatus: review_status,
@@ -321,6 +323,11 @@ class LibContentView extends React.Component {
             draftFilePath: draft_file_path
           });
         });
+      });
+    }).catch(() => {
+      this.setState({
+        isFileLoading: false,
+        isFileLoadedErr: true,
       });
     });
 
@@ -978,6 +985,7 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) {
+      let isLoaded = node.isLoaded;
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
         node = tree.getNodeByPath(node.path);
@@ -987,7 +995,7 @@ class LibContentView extends React.Component {
           this.setState({treeData: tree});
         });
       }
-      if (node.path === this.state.path) {
+      if (isLoaded && node.path === this.state.path) {
         if (node.isExpanded) {
           let tree = treeHelper.collapseNode(this.state.treeData, node);
           this.setState({treeData: tree});
@@ -1244,6 +1252,7 @@ class LibContentView extends React.Component {
             reviewStatus={this.state.reviewStatus}
             goReviewPage={this.goReviewPage}
             isFileLoading={this.state.isFileLoading}
+            isFileLoadedErr={this.state.isFileLoadedErr}
             filePermission={this.state.filePermission}
             content={this.state.content}
             lastModified={this.state.lastModified}
