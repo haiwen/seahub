@@ -4,7 +4,7 @@ import DirColumnNav from './dir-column-nav';
 import DirColumnFile from './dir-column-file';
 import DirListMode from './dir-list-mode';
 
-import '../../css/lib-content-view-2.css';
+import '../../css/lib-content-view.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

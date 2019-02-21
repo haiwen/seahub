@@ -20,7 +20,7 @@ import SharedLibraries from './pages/shared-libs/shared-libs';
 import MyLibraries from './pages/my-libs/my-libs';
 import MyLibDeleted from './pages/my-libs/my-libs-deleted';
 import PublicSharedView from './pages/shared-with-all/public-shared-view';
-import LibContentView from './pages/lib-content-view-2/lib-content-view';
+import LibContentView from './pages/lib-content-view/lib-content-view';
 import Group from './pages/groups/group-view';
 import Groups from './pages/groups/groups-view';
 import Wikis from './pages/wikis/wikis';
