@@ -1,3 +1,7 @@
+.image-file-view {
+  position: relative;
+  text-align: center;
+}
 .image-file-view:before {
     content: ' '; 
     display: inline-block;
@@ -16,4 +20,26 @@
     max-height: calc(100% - 4px);
     font-size: 0;
     line-height: 0;
+}
+#img-prev,
+#img-next {
+    position:absolute;
+    top:48%;
+    text-decoration:none;
+    color:#888;
+    width:50px;
+    height:50px;
+    background:#fff;
+    border-radius:100%;
+    line-height:50px;
+}
+#img-prev {
+    left:15px;
+}
+#img-next {
+    right:15px;
+}
+#img-prev:hover,
+#img-next:hover {
+    color:#333;
 }

@@ -685,12 +685,13 @@ def view_lib_file(request, repo_id, path):
         return render(request, 'view_file_image.html', return_dict)
 
     elif filetype == IMAGE:
+        template = 'image_file_view_react.html'
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _(u'File size surpasses %s, can not be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
 
             return_dict['err'] = error_msg
-            return render(request, 'view_file_base.html', return_dict)
+            return render(request, template, return_dict)
 
         img_prev = None
         img_next = None
