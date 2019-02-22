@@ -1,9 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { isPro, gettext, mediaUrl, siteRoot, siteName } from './utils/constants';
+import { gettext, siteRoot, siteName } from './utils/constants';
 import FileInfo from './components/file-view/file-info';
 import FileToolbar from './components/file-view/file-toolbar';
 import FileViewTip from './components/file-view/file-view-tip';
@@ -17,8 +16,7 @@ import './css/file-view.css';
 import './css/image-file-view.css';
 
 const { fileName, isStarred, isLocked, lockedByMe,
-  repoID, repoName, filePath,
-  err, enableWatermark, userNickName,
+  repoID, filePath, err, enableWatermark, userNickName,
   previousImage, nextImage, rawPath // only for image file
 } = window.app.pageOptions;
 
@@ -43,7 +41,7 @@ class ViewFileImage extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener('keydown', (e) => {
       if (previousImage && e.keyCode == 37) { // press '<-'
         location.href = previousImageUrl;
       }
@@ -125,19 +123,18 @@ class FileContent extends React.Component {
   render() {
     if (err) {
       return <FileViewTip />;
-    } else {
-      return (
-          <div className="file-view-content flex-1 image-file-view">
-            {previousImage && (
-              <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}><span className="fas fa-chevron-left"></span></a>
-            )}
-            {nextImage && (
-              <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="fas fa-chevron-right"></span></a>
-            )}
-            <img src={rawPath} alt={fileName} id="image-view" />
-          </div>
-      );
     }
+    return (
+      <div className="file-view-content flex-1 image-file-view">
+        {previousImage && (
+          <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}><span className="fas fa-chevron-left"></span></a>
+        )}
+        {nextImage && (
+          <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="fas fa-chevron-right"></span></a>
+        )}
+        <img src={rawPath} alt={fileName} id="image-view" />
+      </div>
+    );
   }
 }
 

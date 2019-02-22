@@ -47,7 +47,7 @@ class IconButton extends React.Component {
           className={className}
           tag="a"
           href={this.props.href}
-          >
+        >
           {btnContent}
         </Button>
       );
@@ -57,7 +57,7 @@ class IconButton extends React.Component {
           id={this.props.id}
           className={className}
           onClick={this.props.onClick}
-          >
+        >
           {btnContent}
         </Button>
       );

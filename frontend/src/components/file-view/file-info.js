@@ -31,28 +31,28 @@ class FileInfo extends React.PureComponent {
     const lockedText = gettext('locked');
     return (
       <div>
-          <h2 className="file-title d-flex align-items-center">
-            <span className="file-name">{fileName}</span>
-            <a className={`file-star ${isStarred ? 'fa' : 'far'} fa-star`}
-              href="#"
-              title={starredText}
-              aria-label={starredText}
-              onClick={this.toggleStar}>
-            </a>
-            <InternalLinkDialog repoID={repoID} path={filePath} />
-            {(isPro && isLocked) &&
-              <img className="file-locked-icon" width="16"
-                src={`${mediaUrl}img/file-locked-32.png`}
-                alt={lockedText}
-                title={lockedText}
-                aria-label={lockedText}
-              />
-            }
-          </h2>
-          <div className="last-modification">
-            <a href={`${siteRoot}profile/${encodeURIComponent(latestContributor)}/`}>{latestContributorName}</a>
-            <span className="last-modification-time">{moment(lastModificationTime * 1000).format('YYYY-MM-DD HH:mm')}</span>
-          </div>
+        <h2 className="file-title d-flex align-items-center">
+          <span className="file-name">{fileName}</span>
+          <a className={`file-star ${isStarred ? 'fa' : 'far'} fa-star`}
+            href="#"
+            title={starredText}
+            aria-label={starredText}
+            onClick={this.toggleStar}>
+          </a>
+          <InternalLinkDialog repoID={repoID} path={filePath} />
+          {(isPro && isLocked) &&
+            <img className="file-locked-icon" width="16"
+              src={`${mediaUrl}img/file-locked-32.png`}
+              alt={lockedText}
+              title={lockedText}
+              aria-label={lockedText}
+            />
+          }
+        </h2>
+        <div className="last-modification">
+          <a href={`${siteRoot}profile/${encodeURIComponent(latestContributor)}/`}>{latestContributorName}</a>
+          <span className="last-modification-time">{moment(lastModificationTime * 1000).format('YYYY-MM-DD HH:mm')}</span>
+        </div>
       </div>
     );
   }
