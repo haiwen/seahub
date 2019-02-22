@@ -48,6 +48,7 @@
   margin: 0 auto;
   line-height: 1.5em;
   overflow: auto;
+  padding: 40px;
 }
 
 .txt-file-view-body .txt-view .CodeMirror-scroll {
