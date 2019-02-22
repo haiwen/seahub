@@ -95,9 +95,9 @@ class TableBody extends Component {
     let listFilesActivities = this.state.items.map(function(item, index) {
 
       if (item.path === '/') {
-        item.file_icon_url = Utils.getDefaultLibIconUrl(false);
+        item.item_icon_url = Utils.getDefaultLibIconUrl(false);
       } else {
-        item.file_icon_url = item.is_dir ? Utils.getFolderIconUrl(false) : Utils.getFileIconUrl(item.obj_name);
+        item.item_icon_url = item.is_dir ? Utils.getFolderIconUrl(false) : Utils.getFileIconUrl(item.obj_name);
       }
 
       item.encoded_path = Utils.encodePath(item.path);
@@ -170,7 +170,7 @@ class Item extends Component {
           {
             data.thumbnail_url ?
               <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
-              <img src={data.file_icon_url} alt={gettext('icon')} width="24" />
+              <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
         <td>
@@ -193,7 +193,7 @@ class Item extends Component {
           {
             data.thumbnail_url ?
               <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
-              <img src={data.file_icon_url} alt={gettext('icon')} width="24" />
+              <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
         <td>
