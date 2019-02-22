@@ -1,0 +1,41 @@
+body {
+  overflow: hidden;
+}
+#wrapper {
+  height: 100%;
+}
+.file-view-header {
+  padding: 10px 15px;
+  border-bottom: 1px solid #c9c9c9;
+  flex-shrink: 0;
+}
+.file-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.file-star,
+.file-internal-link {
+  font-size: .875rem;
+  color: #585858; 
+  margin-left: .5rem;
+}
+.file-star:hover,
+.file-star:focus {
+  text-decoration: none;
+  color: inherit;
+}
+.file-locked-icon {
+  margin-left: .5rem;
+}
+.last-modification {
+  font-size: .8125rem;
+}
+.last-modification-time {
+  margin-left: .5rem;
+}
+.file-view-content {
+  padding: 30px 0;
+  background: #f4f4f4;
+  border-right: 4px solid transparent;
+}
