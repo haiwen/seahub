@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2018 Seafile Ltd.
 # -*- coding: utf-8 -*-
+import re
 import json
 import logging
 
@@ -26,10 +27,6 @@ class MarkdownLintView(APIView):
     def post(self, request):
         """return a markdown lint issue list.
         """
-        LEVEL_ERROR = "Error"
-        LEVEL_WARNING = "Warning"
-        LEVEL_HINT = "Hint"
-
         slate = request.data.get('slate')
         if not slate:
             error_msg = 'slate invalid.'
@@ -39,19 +36,43 @@ class MarkdownLintView(APIView):
         issue_list = []
         document_nodes = slate["document"]["nodes"]
 
-        # check header_one
-        position = 0
-        has_header_one = False
+        # check h1
+        issue_count = 0
+        position = []
         for index, node in enumerate(document_nodes):
             if node["type"] == "header_one":
-                position = index
-                has_header_one = True
+                issue_count += 1  # issue < 1: missing h1; issue > 1: multiple h1.
+                position.append(index)
 
-        if not has_header_one:
+        if issue_count < 1:
             issue = dict()
-            issue["position"] = position
-            issue["level"] = LEVEL_HINT
             issue["issue"] = "Missing h1."
+            issue["issue_code"] = "missing_h1"
+            issue_list.append(issue)
+        # if issue_count > 1:
+            # TODO
+
+        # check heading_end_with
+        issue_count = 0
+        position = []
+        for index, node in enumerate(document_nodes):
+            if node["type"].startswith("header_") and (
+                    node["nodes"][0]["leaves"][0]["text"].endswith(":") or
+                    node["nodes"][0]["leaves"][0]["text"].endswith("：")):
+                issue_count += 1
+                position.append(index)
+                print node["nodes"][0]["leaves"][0]["text"]
+
+        if issue_count > 0:
+            issue = dict()
+            issue["issue"] = "Heading end with colon."
+            issue["issue_code"] = "heading_end_with_colon"
+            issue["detail"] = []
+            for index in position:
+                detail = dict()
+                detail["position"] = index
+                detail["description"] = "Trailing punctuation in heading should not be a colon."
+                issue["detail"].append(detail)
             issue_list.append(issue)
 
         return Response({"issue_list": issue_list}, status=status.HTTP_200_OK)
