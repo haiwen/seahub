@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Button , ButtonGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -95,12 +96,12 @@ class MutipleDirOperationToolbar extends React.Component {
   render() {
     return (
       <Fragment>
-        <div className="operation multiple-dirents-operation">
-          <button className="btn btn-secondary operation-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></button>
-          <button className="btn btn-secondary operation-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></button>
-          <button className="btn btn-secondary operation-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onItemsDelete}></button>
-          <button className="btn btn-secondary operation-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></button>
-        </div>
+        <ButtonGroup className="flex-row group-operations">
+          <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
+          <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onMoveToggle}></Button>
+          <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onMoveToggle}></Button>
+          <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onMoveToggle}></Button>
+        </ButtonGroup>
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
             path={this.props.path}

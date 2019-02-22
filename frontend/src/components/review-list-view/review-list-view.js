@@ -30,7 +30,7 @@ class ReviewListView extends React.Component {
     return (
       <Fragment>
         <Nav pills>
-          <NavItem>
+          <NavItem className="pt-4">
             <NavLink
               className={classnames({ active: this.props.activeTab === 'open' })}
               onClick={() => { this.toggle('open');}}
@@ -38,7 +38,7 @@ class ReviewListView extends React.Component {
               {gettext('Open')}
             </NavLink>
           </NavItem>
-          <NavItem>
+          <NavItem className="pt-4">
             <NavLink
               className={classnames({ active: this.props.activeTab === 'finished' })}
               onClick={() => { this.toggle('finished');}}
@@ -46,7 +46,7 @@ class ReviewListView extends React.Component {
               {gettext('Published')}
             </NavLink>
           </NavItem>
-          <NavItem>
+          <NavItem className="pt-4">
             <NavLink
               className={classnames({ active: this.props.activeTab === 'closed' })}
               onClick={() => { this.toggle('closed');}}

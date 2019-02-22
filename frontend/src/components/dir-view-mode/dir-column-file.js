@@ -66,35 +66,33 @@ class DirColumnFile extends React.Component {
       );
     }
     return (
-      <div className="cur-view-content">
-        <WikiMarkdownViewer
-          isTOCShow={false}
-          isFileLoading={this.props.isFileLoading}
-          markdownContent={this.props.content}
-          lastModified = {this.props.lastModified}
-          latestContributor={this.props.latestContributor}
-          onLinkClick={this.props.onLinkClick}
-        >
-          <Fragment>
-            {this.props.reviewStatus === 'open' &&
-              <div className='seafile-btn-view-review text-center'>
-                <div className='tag tag-green'> 
-                  {gettext('This file is in review stage')}
-                  <span className="ml-2" onClick={this.goReviewPage}>{gettext('View Review')}</span>
-                </div>
+      <WikiMarkdownViewer
+        isTOCShow={false}
+        isFileLoading={this.props.isFileLoading}
+        markdownContent={this.props.content}
+        lastModified = {this.props.lastModified}
+        latestContributor={this.props.latestContributor}
+        onLinkClick={this.props.onLinkClick}
+      >
+        <Fragment>
+          {this.props.reviewStatus === 'open' &&
+            <div className='seafile-btn-view-review text-center'>
+              <div className='tag tag-green'> 
+                {gettext('This file is in review stage')}
+                <span className="ml-2" onClick={this.goReviewPage}>{gettext('View Review')}</span>
               </div>
-            }
-            {(this.props.reviewStatus !== 'open' && !this.props.isDraft && this.props.hasDraft) &&
-              <div className='seafile-btn-view-review text-center'>
-                <div className='tag tag-green'>
-                  {gettext('This file is in draft stage.')}
-                  <span className="ml-2" onClick={this.goDraftPage}>{gettext('Edit Draft')}</span>
-                </div>
+            </div>
+          }
+          {(this.props.reviewStatus !== 'open' && !this.props.isDraft && this.props.hasDraft) &&
+            <div className='seafile-btn-view-review text-center'>
+              <div className='tag tag-green'>
+                {gettext('This file is in draft stage.')}
+                <span className="ml-2" onClick={this.goDraftPage}>{gettext('Edit Draft')}</span>
               </div>
-            }
-          </Fragment>
-        </WikiMarkdownViewer>
-      </div>
+            </div>
+          }
+        </Fragment>
+      </WikiMarkdownViewer>
     );
   }
 }
