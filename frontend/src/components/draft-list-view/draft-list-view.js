@@ -4,12 +4,27 @@ import { gettext } from '../../utils/constants';
 import DraftListItem from './draft-list-item';
 
 const propTypes = {
-  isItemFreezed: PropTypes.bool.isRequired,
   draftList: PropTypes.array.isRequired,
-  onMenuToggleClick: PropTypes.func.isRequired,
+  onDeleteHandler: PropTypes.func.isRequired,
+  onReviewHandler: PropTypes.func.isRequired,
 };
 
 class DraftListView extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false,
+    };
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
+  }
 
   render() {
     let drafts = this.props.draftList;
@@ -31,8 +46,11 @@ class DraftListView extends React.Component {
               <DraftListItem 
                 key={draft.id} 
                 draft={draft} 
-                onMenuToggleClick={this.props.onMenuToggleClick} 
-                isItemFreezed={this.props.isItemFreezed}
+                isItemFreezed={this.state.isItemFreezed}
+                onFreezedItem={this.onFreezedItem}
+                onUnfreezedItem={this.onUnfreezedItem}
+                onDeleteHandler={this.props.onDeleteHandler}
+                onReviewHandler={this.props.onReviewHandler}
               />
             );
           })}

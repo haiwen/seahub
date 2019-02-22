@@ -1,15 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { siteRoot, lang } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import MenuControl from '../menu-control';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { gettext, siteRoot, lang } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 moment.locale(lang);
 const propTypes = {
-  isItemFreezed: PropTypes.bool.isRequired,
-  onMenuToggleClick: PropTypes.func.isRequired,
   draft: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onDeleteHandler: PropTypes.func.isRequired,
+  onReviewHandler: PropTypes.func.isRequired,
 };
 
 class DraftListItem extends React.Component {
@@ -17,16 +20,17 @@ class DraftListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMenuControlShow: false,
-      highlight: '',
+      isMenuIconShow: false,
+      isItemMenuShow: false,
+      highlight: false,
     };
   }
 
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        isMenuControlShow: true,
-        highlight: 'tr-highlight'
+        isMenuIconShow: true,
+        highlight: true,
       });
     }
   }
@@ -34,16 +38,40 @@ class DraftListItem extends React.Component {
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        isMenuControlShow: false,
-        highlight: ''
+        isMenuIconShow: false,
+        highlight: false,
       });
     }
   }
 
-  onMenuToggleClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    let draft = this.props.draft;
-    this.props.onMenuToggleClick(e, draft);
+  onDropdownToggleClick = (e) => {
+    e.preventDefault();
+    this.toggleOperationMenu(e);
+  }
+
+  toggleOperationMenu = (e) => {
+    e.stopPropagation();
+    this.setState(
+      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+        if (this.state.isItemMenuShow) {
+          this.props.onFreezedItem();
+        } else {
+          this.setState({
+            highlight: false,
+            isMenuIconShow: false,
+          });
+          this.props.onUnfreezedItem();
+        }
+      }
+    );
+  }
+
+  onDeleteHandler = () => {
+    this.props.onDeleteHandler(this.props.draft);
+  }
+
+  onReviewHandler = () => {
+    this.props.onReviewHandler(this.props.draft);
   }
 
   render() {
@@ -59,7 +87,7 @@ class DraftListItem extends React.Component {
 
     let iconUrl = Utils.getFileIconUrl(fileName);
     return (
-      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-hightlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="text-center"><img src={iconUrl} width="24" alt='' /></td>
         <td className="name" >
           <a href={draftUrl} target="_blank">{fileName}</a>
@@ -75,13 +103,22 @@ class DraftListItem extends React.Component {
         </td>
         <td className="update">{localTime}</td>
         <td className="text-center cursor-pointer">
-          { 
-            this.props.draft.review_status !== 'open' &&
-            <MenuControl
-              isShow={this.state.isMenuControlShow}
-              onClick={this.onMenuToggleClick}
-            />
-          }
+          {(this.props.draft.review_status !== 'open' && this.state.isMenuIconShow) && (
+            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+              <DropdownToggle 
+                tag="i" 
+                className="fas fa-ellipsis-v" 
+                title={gettext('More Operations')}
+                onClick={this.onDropdownToggleClick}
+                data-toggle="dropdown" 
+                aria-expanded={this.state.isItemMenuShow}
+              />
+              <DropdownMenu>
+                <DropdownItem onClick={this.onDeleteHandler}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.onReviewHandler}>{gettext('Ask for review')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          )}
         </td>
       </tr>
     );
