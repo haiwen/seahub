@@ -229,6 +229,13 @@ export const Utils = {
       navigator.userAgent.indexOf('Chrome') > -1;
   },
 
+  getDefaultLibIconUrl: function(isBig) {
+    let size = Utils.isHiDPI() ? 48 : 24;
+    size = isBig ? 256 : size;
+    let icon_name = 'lib.png';
+    return mediaUrl + 'img/lib/' + size + '/' + icon_name;
+  },
+
   getLibIconUrl: function(repo, isBig) {
     let permission = repo.permission || repo.share_permission; //Compatible with regular repo and repo shared
     let size = Utils.isHiDPI() ? 48 : 24;

@@ -14,6 +14,7 @@ from seahub.api2.utils import api_error
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
+from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
@@ -71,8 +72,17 @@ class ReposView(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
 
+        try:
+            starred_repos = UserStarredFiles.objects.filter(email=email,
+                    path='/')
+            starred_repo_id_list = [item.repo_id for item in starred_repos]
+        except Exception as e:
+            logger.error(e)
+            starred_repo_id_list = []
+
         repo_info_list = []
         if filter_by['mine']:
+
             if org_id:
                 owned_repos = seafile_api.get_org_owned_repo_list(org_id,
                         email, ret_corrupted=True)
@@ -109,6 +119,7 @@ class ReposView(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
+                    "starred": r.repo_id in starred_repo_id_list,
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -169,6 +180,7 @@ class ReposView(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
+                    "starred": r.repo_id in starred_repo_id_list,
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
@@ -210,6 +222,7 @@ class ReposView(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
+                    "starred": r.repo_id in starred_repo_id_list,
                 }
                 repo_info_list.append(repo_info)
 
@@ -252,6 +265,7 @@ class ReposView(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
+                    "starred": r.repo_id in starred_repo_id_list,
                 }
                 repo_info_list.append(repo_info)
 

@@ -28,6 +28,7 @@ from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
     group_id_to_name
 from seahub.group.views import remove_group_common
+from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, email2contact_email
 from seahub.views.modules import is_wiki_mod_enabled_for_group, \
@@ -111,6 +112,14 @@ class Groups(APIView):
             gids = [g.id for g in user_groups]
             admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
 
+            try:
+                starred_repos = UserStarredFiles.objects.filter(email=username,
+                        path='/')
+                starred_repo_id_list = [item.repo_id for item in starred_repos]
+            except Exception as e:
+                logger.error(e)
+                starred_repo_id_list = []
+
         for g in user_groups:
             group_info = get_group_info(request, g.id, avatar_size)
 
@@ -170,7 +179,8 @@ class Groups(APIView):
                         "owner_email": repo_owner,
                         "owner_name": name_dict.get(repo_owner, ''),
                         "owner_contact_email": contact_email_dict.get(repo_owner, ''),
-                        "is_admin": (r.id, g.id) in admin_info
+                        "is_admin": (r.id, g.id) in admin_info,
+                        "starred": r.repo_id in starred_repo_id_list,
                     }
                     repos.append(repo)
 

@@ -94,7 +94,12 @@ class TableBody extends Component {
 
     let listFilesActivities = this.state.items.map(function(item, index) {
 
-      item.file_icon_url = item.is_dir ? Utils.getFolderIconUrl(false) : Utils.getFileIconUrl(item.obj_name);
+      if (item.path === '/') {
+        item.file_icon_url = Utils.getDefaultLibIconUrl(false);
+      } else {
+        item.file_icon_url = item.is_dir ? Utils.getFolderIconUrl(false) : Utils.getFileIconUrl(item.obj_name);
+      }
+
       item.encoded_path = Utils.encodePath(item.path);
 
       item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
