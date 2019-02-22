@@ -31,7 +31,19 @@
   border-radius: 2px;
 }
 
-.multiple-dirents-operation .operation-item {
+.group-operations {
+  margin-right: 0.5rem;
+}
+
+.group-operations .group-op-item {
+  padding: 0 0.5rem;
+  height: 30px;
+  min-width: 46px;
+  background-color: #fff;
+  line-height: 29px;
+  font-weight: normal;
+  border: 1px solid #ccc;
+  border-radius: 2px;
   font-size: 1.125rem;
 }
 /* end file-operation toolbar */

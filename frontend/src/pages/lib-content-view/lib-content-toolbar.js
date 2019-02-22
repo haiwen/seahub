@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Tooltip } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -45,6 +46,13 @@ const propTypes = {
 
 class LibContentToolbar extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDraftMessageShow: false,
+    };
+  }
+
   onEditClick = (e) => {
     e.preventDefault();
     let { path, repoID } = this.props;
@@ -60,8 +68,11 @@ class LibContentToolbar extends React.Component {
     });
   }
 
-  render() {
+  onDraftHover = () => {
+    this.setState({isDraftMessageShow: !this.state.isDraftMessageShow});
+  }
 
+  render() {
     if (this.props.isViewFile) {
       return (
         <Fragment>
@@ -75,7 +86,10 @@ class LibContentToolbar extends React.Component {
               )}
               {/* default have read priv */}
               {(!this.props.isDraft && !this.props.hasDraft) && (
-                <button className="btn btn-secondary operation-item" title={gettext('New Draft')} onClick={this.onNewDraft}>{gettext('New Draft')}</button>
+                <Fragment>
+                  <button id="new-draft" className="btn btn-secondary operation-item" onClick={this.onNewDraft}>{gettext('New Draft')}</button>
+                  <Tooltip target="new-draft" placement="bottom" isOpen={this.state.isDraftMessageShow} toggle={this.onDraftHover}>{gettext('Create a draft from this file, instead of editing it directly.')}</Tooltip>
+                </Fragment>
               )}
             </div>
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
