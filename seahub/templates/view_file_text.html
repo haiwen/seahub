@@ -42,7 +42,7 @@
                   encoding: '{{ encoding }}',
                   fileContent: '{{ file_content|escapejs }}',
                   err: '{{ err }}',
-                  latestContributor: '{{ latest_contributor }}',
+                  latestContributor: '{{ latest_contributor|email2nickname }}',
                   lastModified: '{{ last_modified }}',
                   isLocked: '{{ file_locked }}' == 'True',
                   lockedByMe: '{{ locked_by_me }}' == 'True',
