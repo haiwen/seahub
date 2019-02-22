@@ -102,12 +102,12 @@ class DraftListItem extends React.Component {
           }
         </td>
         <td className="update">{localTime}</td>
-        <td className="text-center cursor-pointer">
+        <td className="text-center">
           {(this.props.draft.review_status !== 'open' && this.state.isMenuIconShow) && (
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle 
                 tag="i" 
-                className="fas fa-ellipsis-v" 
+                className="fas fa-ellipsis-v attr-action-icon" 
                 title={gettext('More Operations')}
                 onClick={this.onDropdownToggleClick}
                 data-toggle="dropdown" 
