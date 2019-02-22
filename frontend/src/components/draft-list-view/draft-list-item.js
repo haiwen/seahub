@@ -87,7 +87,7 @@ class DraftListItem extends React.Component {
 
     let iconUrl = Utils.getFileIconUrl(fileName);
     return (
-      <tr className={this.state.highlight ? 'tr-hightlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="text-center"><img src={iconUrl} width="24" alt='' /></td>
         <td className="name" >
           <a href={draftUrl} target="_blank">{fileName}</a>
