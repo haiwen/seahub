@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import RepoInfoBar from '../../components/repo-info-bar';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
@@ -41,7 +41,7 @@ class DirListView extends React.Component {
 
   render() {
     return (
-      <div className="main-panel">
+      <Fragment>
         {this.props.isRepoInfoBarShow && (
           <RepoInfoBar 
             repoID={this.props.repoID}
@@ -80,7 +80,7 @@ class DirListView extends React.Component {
           isAllItemSelected={this.props.isAllItemSelected}
           onAllItemSelected={this.props.onAllItemSelected}
         />
-      </div>
+      </Fragment>
     );
   }
 }
