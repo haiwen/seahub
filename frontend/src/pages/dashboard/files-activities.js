@@ -101,7 +101,7 @@ class TableBody extends Component {
         }
       } else if (item.obj_type == 'review') {
         let fileURL = `${siteRoot}drafts/review/${item.review_id}`;
-        let fileLink = <a href={fileURL}>{item.name}</a>;
+        let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
         switch(item.op_type) {
           case 'open':
             op = gettext('Open review');
@@ -118,7 +118,7 @@ class TableBody extends Component {
         }
       } else if (item.obj_type == 'files') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-        let fileLink = `<a href=${fileURL}>${item.name}</a>`;
+        let fileLink = `<a href=${fileURL} target="_blank">${item.name}</a>`;
         let fileCount = `<a href='#'>${item.createdFilesCount - 1}</a>`;
         let firstLine = gettext('{file} and {n} other files');
         firstLine = firstLine.replace('{file}', fileLink);
@@ -127,7 +127,7 @@ class TableBody extends Component {
         details = <td><div dangerouslySetInnerHTML={{__html: firstLine}} onClick={this.onListCreatedFilesToggle.bind(this, item)}></div>{smallLibLink}</td>;
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-        let fileLink = <a href={fileURL}>{item.name}</a>;
+        let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
         switch(item.op_type) {
           case 'create':
             if (item.name.endsWith('(draft).md')) {
@@ -172,7 +172,7 @@ class TableBody extends Component {
         }
       } else { // dir
         let dirURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + Utils.encodePath(item.path);
-        let dirLink = <a href={dirURL}>{item.name}</a>;
+        let dirLink = <a href={dirURL} target="_blank">{item.name}</a>;
         switch(item.op_type) {
           case 'create':
             op = gettext('Created folder');
