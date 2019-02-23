@@ -78,7 +78,7 @@ class LibContentView extends React.Component {
 
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
-    this.isNeedUpdateHistoryState = true;
+    this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
   }
 
   componentWillMount() {
