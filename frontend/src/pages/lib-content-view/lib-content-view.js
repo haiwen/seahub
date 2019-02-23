@@ -286,7 +286,7 @@ class LibContentView extends React.Component {
     });
 
     // update data
-    this.loadDirentList(repoID, path);
+    this.loadDirentList(path);
 
     // update location
     let repoInfo = this.state.currentRepoInfo;
@@ -338,7 +338,8 @@ class LibContentView extends React.Component {
     window.history.pushState({url: url, path: filePath}, filePath, url);
   } 
 
-  loadDirentList = (repoID, path) => {
+  loadDirentList = (path) => {
+    let repoID = this.props.repoID
     seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
       let markdownItem = null;
