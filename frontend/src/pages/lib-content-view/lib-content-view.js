@@ -78,6 +78,7 @@ class LibContentView extends React.Component {
 
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
+    this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
   }
 
   componentWillMount() {
@@ -121,6 +122,8 @@ class LibContentView extends React.Component {
       let repoID = repoInfo.repo_id;
       let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
       path = path.slice(path.indexOf('/')); // get current path
+
+      this.isNeedUpdateHistoryState = false;
 
       this.setState({path: path});
 
@@ -286,8 +289,12 @@ class LibContentView extends React.Component {
     });
 
     // update data
-    this.loadDirentList(repoID, path);
+    this.loadDirentList(path);
 
+    if (!this.isNeedUpdateHistoryState) {
+      this.isNeedUpdateHistoryState = true;
+      return;
+    }
     // update location
     let repoInfo = this.state.currentRepoInfo;
     let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
@@ -338,7 +345,8 @@ class LibContentView extends React.Component {
     window.history.pushState({url: url, path: filePath}, filePath, url);
   } 
 
-  loadDirentList = (repoID, path) => {
+  loadDirentList = (path) => {
+    let repoID = this.props.repoID
     seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
       let markdownItem = null;
@@ -522,7 +530,7 @@ class LibContentView extends React.Component {
     if (mode === 'column') {
       this.loadSidePanel(this.state.path);
     }
-    
+    this.isNeedUpdateHistoryState = false;
     this.setState({currentMode: mode});
     this.showDir(path);
   }
