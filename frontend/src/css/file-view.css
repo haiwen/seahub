@@ -5,7 +5,7 @@ body {
   height: 100%;
 }
 .file-view-header {
-  padding: 10px 15px;
+  padding: 4px 10px;
   border-bottom: 1px solid #c9c9c9;
   flex-shrink: 0;
 }

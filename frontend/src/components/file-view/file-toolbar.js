@@ -39,60 +39,58 @@ class FileToolbar extends React.Component {
       }   
     }   
     return (
-      <div>
-        <ButtonGroup>
+      <ButtonGroup className="align-self-center">
+        <IconButton
+          id="open-parent-folder"
+          icon="fa fa-folder-open"
+          text={gettext('Open parent folder')}
+          tag="a"
+          href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}
+        />
+        {showLockUnlockBtn && (
           <IconButton
-            id="open-parent-folder"
-            icon="fa fa-folder-open"
-            text={gettext('Open parent folder')}
+            id="lock-unlock-file"
+            icon={lockUnlockIcon}
+            text={lockUnlockText}
+            onClick={this.props.toggleLockFile}
+          />
+        )}
+        {filePerm == 'rw' && (
+          <IconButton
+            id="history"
+            icon="fa fa-history"
+            text={gettext('History')}
             tag="a"
-            href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}
-          />  
-          {showLockUnlockBtn && (
-            <IconButton
-              id="lock-unlock-file"
-              icon={lockUnlockIcon}
-              text={lockUnlockText}
-              onClick={this.props.toggleLockFile}
-            />
-          )}
-          {filePerm == 'rw' && (
-            <IconButton
-              id="history"
-              icon="fa fa-history"
-              text={gettext('History')}
-              tag="a"
-              href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`}
-            />
-          )}
-          {(canEditFile && !err) && (
-            <IconButton
-              id="edit"
-              icon="fa fa-edit"
-              text={gettext('Edit')}
-              tag="a"
-              href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(encoding)}`}
-            />
-          )}
-          {canDownloadFile && (
-            <IconButton
-              id="download-file"
-              icon="fa fa-download"
-              text={gettext('Download')}
-              tag="a"
-              href="?dl=1"
-            />
-          )}
-          {enableComment && (
-            <IconButton
-              id="comment"
-              icon="fa fa-comment"
-              text={gettext('Comment')}
-              onClick={this.props.toggleCommentPanel}
-            />
-          )}
-        </ButtonGroup>
-      </div>
+            href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`}
+          />
+        )}
+        {(canEditFile && !err) && (
+          <IconButton
+            id="edit"
+            icon="fa fa-edit"
+            text={gettext('Edit')}
+            tag="a"
+            href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(encoding)}`}
+          />
+        )}
+        {canDownloadFile && (
+          <IconButton
+            id="download-file"
+            icon="fa fa-download"
+            text={gettext('Download')}
+            tag="a"
+            href="?dl=1"
+          />
+        )}
+        {enableComment && (
+          <IconButton
+            id="comment"
+            icon="fa fa-comment"
+            text={gettext('Comment')}
+            onClick={this.props.toggleCommentPanel}
+          />
+        )}
+      </ButtonGroup>
     );
   }
 }
