@@ -152,7 +152,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_image.html')
+        self.assertTemplateUsed(resp, 'image_file_view_react.html')
         assert resp.context['filetype'].lower() == 'image'
         assert resp.context['img_next'] == '/foo2.jpg'
         assert resp.context['img_prev'] is None
