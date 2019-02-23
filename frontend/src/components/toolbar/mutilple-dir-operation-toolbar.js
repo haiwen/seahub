@@ -98,9 +98,9 @@ class MutipleDirOperationToolbar extends React.Component {
       <Fragment>
         <ButtonGroup className="flex-row group-operations">
           <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onMoveToggle}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onMoveToggle}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onMoveToggle}></Button>
+          <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
+          <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
+          <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
         </ButtonGroup>
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
