@@ -1,0 +1,14 @@
+/* custom select2 */
+.select2-container-multi .select2-choices {
+    border-color: #ddd;
+    border-radius: 2px;
+    background-image: none; /* rm the shadow */
+}
+.select2-container-multi .select2-choices .select2-search-field input {
+    padding:2px 2px 2px 5px;
+}
+.select2-container-multi .select2-choices .select2-search-choice {
+    border:none;
+    border-radius:0;
+    background:#eee;
+}
