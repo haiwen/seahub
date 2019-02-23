@@ -1221,7 +1221,6 @@ class LibContentView extends React.Component {
         showGenerateUploadLinkTab = true;
       }
 
-      let enableDirPrivateShare = false;
       if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
         enableDirPrivateShare = true;
       }

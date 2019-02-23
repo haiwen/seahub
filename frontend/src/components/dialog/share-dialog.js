@@ -54,7 +54,7 @@ class ShareDialog extends React.Component {
     const {repoEncrypted, userPerm, enableDirPrivateShare} = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
     const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
-
+    
     return (
       <Fragment>
         <div className="share-dialog-side">
@@ -112,10 +112,10 @@ class ShareDialog extends React.Component {
             {enableDirPrivateShare &&
               <Fragment>
                 <TabPane tabId="shareToUser">
-                  <ShareToUser isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
+                  <ShareToUser itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
                 </TabPane>
                 <TabPane tabId="shareToGroup">
-                  <ShareToGroup isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
+                  <ShareToGroup itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
                 </TabPane>
               </Fragment>
             }
