@@ -25,8 +25,7 @@ class ListCreatedFileDialog extends React.Component {
           <Table>
             <thead>
               <tr>
-                <th width='50%'>{gettext('Name')}</th>
-                <th width='25%'>{gettext('Library Name')}</th>
+                <th width='75%'>{gettext('Name')}</th>
                 <th width='25%'>{gettext('Time')}</th>
               </tr>
             </thead>
@@ -37,7 +36,6 @@ class ListCreatedFileDialog extends React.Component {
                   return (
                     <tr key={index}>
                       <td><a href={fileURL} target='_blank'>{item.name}</a></td>
-                      <td>{item.repo_name}</td>
                       <td>{moment(item.time).fromNow()}</td>
                     </tr>
                   );
