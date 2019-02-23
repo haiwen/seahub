@@ -1194,27 +1194,42 @@ class LibContentView extends React.Component {
     // unencrypted repo
     
     // first operation:judgement has generator shareLink or uploadLink priv? 
-    // ((canGenerateShareLink || canGenerateUploadLink) && （userPrem === 'rw' || userPerm === 'r)
+    // (canGenerateShareLink && （userPrem === 'rw' || userPerm === 'r))
+    // (canGenerateUploadLink && （userPrem === 'rw')
     
     // second operation   : Get results according to the judgment conditions of different scenarios
     // 1 my-library       : isRepoOwner
     // 2 share-with-me    : isAdmin
     // 3 share with all   : isRepoOwner
-    // 4 group            : isRepoOwner || （isAdmin && isGroupAdmin）
+    // 4 group            : isRepoOwner || isAdmin (sharedAsAdmin and current user is admin of this group)
     // 5 department group : isDepartMentAdmin
 
     let showShareBtn = false;
     let enableDirPrivateShare = false;
     let { currentRepoInfo, repoEncrypted, userPerm, isDepartmentAdmin } = this.state;
     let isAdmin = currentRepoInfo.is_admin;
+    let isVirtual = currentRepoInfo.is_virtual;
     let isRepoOwner = currentRepoInfo.owner_email === username;
+
     if (!repoEncrypted) {
-      if ((canGenerateShareLink || canGenerateUploadLink || isRepoOwner || isAdmin) && (userPerm == 'rw' || userPerm == 'r')) {
-        showShareBtn = true;
-        if (!currentRepoInfo.is_virtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
-          enableDirPrivateShare = true;
-        }
+      let showGenerateShareLinkTab = false;
+      if (canGenerateShareLink && (userPerm == 'rw' || userPerm == 'r')) {
+        showGenerateShareLinkTab = true;
       }
+      let showGenerateUploadLinkTab = false;
+      if (canGenerateUploadLink && (userPerm == 'rw')) {
+        showGenerateUploadLinkTab = true;
+      }
+
+      let enableDirPrivateShare = false;
+      if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
+        enableDirPrivateShare = true;
+      }
+
+      if (showGenerateShareLinkTab || showGenerateUploadLinkTab || enableDirPrivateShare) {
+        showShareBtn = true;
+      }
+
     }
 
     return (
