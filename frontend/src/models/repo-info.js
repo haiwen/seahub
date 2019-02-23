@@ -15,6 +15,7 @@ class RepoInfo {
     this.no_quota = object.no_quota;
     this.has_been_shared_out = object.has_been_shared_out;
     this.encrypted = object.encrypted;
+    this.lib_need_decrypt = object.lib_need_decrypt;
   }
 }
 

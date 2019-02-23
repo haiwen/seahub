@@ -462,7 +462,6 @@ class DirentListItem extends React.Component {
               repoID={this.props.repoID}
               repoEncrypted={false}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
-              isAdmin={this.props.isAdmin}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.closeSharedDialog}
             />

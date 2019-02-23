@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
 import DirColumnFile from './dir-column-file';
-import DirListMode from './dir-list-view';
+import DirListView from './dir-list-view';
 
 import '../../css/lib-content-view.css';
 
@@ -15,8 +15,6 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPrem: PropTypes.bool,
-  isAdmin: PropTypes.bool.isRequired,
-  isRepoOwner: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   // tree
   isTreeDataLoading: PropTypes.bool.isRequired,
@@ -110,13 +108,11 @@ class DirColumnView extends React.Component {
               onLinkClick={this.props.onLinkClick}
             />
           ) : (
-            <DirListMode 
+            <DirListView 
               path={this.props.path}
               repoID={this.props.repoID}
               currentRepoInfo={this.props.currentRepoInfo}
               repoEncrypted={this.props.repoEncrypted}
-              isRepoOwner={this.props.isRepoOwner}
-              isAdmin={this.props.isAdmin}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isRepoInfoBarShow={this.props.isRepoInfoBarShow}

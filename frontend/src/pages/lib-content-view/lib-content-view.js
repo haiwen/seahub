@@ -44,9 +44,7 @@ class LibContentView extends React.Component {
       isGroupOwnedRepo: false,
       isDepartmentAdmin: false,
       isAdmin: false,
-      ownerEmail: '',
       userPerm: '',
-      isVirtual: false,
       selectedDirentList: [],
       isDraft: false,
       hasDraft: false,
@@ -98,11 +96,9 @@ class LibContentView extends React.Component {
       this.setState({
         currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
-        libNeedDecrypt: res.data.lib_need_decrypt, 
+        libNeedDecrypt: repoInfo.lib_need_decrypt, 
         repoEncrypted: repoInfo.encrypted,
-        isVirtual: repoInfo.is_virtual,
         isAdmin: repoInfo.is_admin,
-        ownerEmail: repoInfo.owner_email,
         repoPermission: repoInfo.permission === 'rw'
       });
 
@@ -127,7 +123,7 @@ class LibContentView extends React.Component {
 
       this.setState({path: path});
 
-      if (!res.data.lib_need_decrypt) {
+      if (!repoInfo.lib_need_decrypt) {
         this.loadDirData(path);
       }
     }).catch(error => {
@@ -1190,14 +1186,33 @@ class LibContentView extends React.Component {
       return '';
     }
 
+    // share btn is show or not, is current repo(dir) can share to user(group) or not;
+    // encrypted repo & unencrypted repo
+
+    // encrypted repo (unnecessary handler)
+    // first : encrypted repo(In order to handle the simplicity, the sharing function is not displayed here.)
+    // second: encrypted dir（Sharing is not supported）
+
+    // unencrypted repo
+    
+    // first operation:judgement has generator shareLink or uploadLink priv? 
+    // ((canGenerateShareLink || canGenerateUploadLink) && （userPrem === 'rw' || userPerm === 'r)
+    
+    // second operation   : Get results according to the judgment conditions of different scenarios
+    // 1 my-library       : isRepoOwner
+    // 2 share-with-me    : isAdmin
+    // 3 share with all   : isRepoOwner
+    // 4 group            : isRepoOwner || （isAdmin && isGroupAdmin）
+    // 5 department group : isDepartMentAdmin
+
     let showShareBtn = false;
     let enableDirPrivateShare = false;
-    const { repoEncrypted, isAdmin, ownerEmail, userPerm, isVirtual, isDepartmentAdmin } = this.state;
-    let isRepoOwner = ownerEmail === username;
+    let { currentRepoInfo, repoEncrypted, isAdmin, userPerm, isDepartmentAdmin } = this.state;
+    let isRepoOwner = currentRepoInfo.owner_email === username;
     if (!repoEncrypted) {
       if ((canGenerateShareLink || canGenerateUploadLink || isRepoOwner || isAdmin) && (userPerm == 'rw' || userPerm == 'r')) {
         showShareBtn = true;
-        if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
+        if (!currentRepoInfo.is_virtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
           enableDirPrivateShare = true;
         }
       }
@@ -1222,7 +1237,6 @@ class LibContentView extends React.Component {
             direntList={this.state.direntList}
             repoName={this.state.repoName}
             repoEncrypted={this.state.repoEncrypted}
-            isAdmin={this.state.isAdmin}
             isGroupOwnedRepo={this.state.isGroupOwnedRepo}
             userPerm={this.state.userPerm}
             showShareBtn={showShareBtn}
@@ -1249,8 +1263,6 @@ class LibContentView extends React.Component {
             repoEncrypted={this.state.repoEncrypted}
             enableDirPrivateShare={enableDirPrivateShare}
             userPerm={userPerm}
-            isAdmin={isAdmin}
-            isRepoOwner={isRepoOwner}
             isGroupOwnedRepo={this.state.isGroupOwnedRepo}
             onTabNavClick={this.props.onTabNavClick}
             onMainNavBarClick={this.onMainNavBarClick}

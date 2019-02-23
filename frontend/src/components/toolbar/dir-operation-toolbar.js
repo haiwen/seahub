@@ -14,7 +14,6 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPerm: PropTypes.string.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
   onAddFile: PropTypes.func.isRequired,
@@ -217,7 +216,6 @@ class DirOperationToolbar extends React.Component {
               repoEncrypted={this.props.repoEncrypted}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               userPerm={this.props.userPerm}
-              isAdmin={this.props.isAdmin}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.onShareClick}
             />

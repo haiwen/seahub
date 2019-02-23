@@ -20,8 +20,6 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPrem: PropTypes.bool,
-  isAdmin: PropTypes.bool.isRequired,
-  isRepoOwner: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   // path func
   onTabNavClick: PropTypes.func.isRequired,
@@ -152,8 +150,6 @@ class LibContentContainer extends React.Component {
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
                     repoEncrypted={this.props.repoEncrypted}
-                    isRepoOwner={this.props.isRepoOwner}
-                    isAdmin={this.props.isAdmin}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isRepoInfoBarShow={isRepoInfoBarShow}
@@ -192,8 +188,6 @@ class LibContentContainer extends React.Component {
                     currentRepoInfo={this.props.currentRepoInfo}
                     repoPermission={this.props.repoPermission}
                     repoEncrypted={this.props.repoEncrypted}
-                    isRepoOwner={this.props.isRepoOwner}
-                    isAdmin={this.props.isAdmin}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isTreeDataLoading={this.props.isTreeDataLoading}
