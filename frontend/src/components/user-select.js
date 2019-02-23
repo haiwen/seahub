@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { seafileAPI } from '../utils/seafile-api.js';
-import gettext from '../utils/constants';
+import { gettext } from '../utils/constants';
 
 const propTypes = {
   placeholder: PropTypes.string.isRequired,
@@ -13,7 +13,7 @@ const propTypes = {
 
 const NoOptionsMessage = (props) => {
   return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('No Options.')}</div>
+    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('User not found')}</div>
   );
 };
 
