@@ -15,7 +15,6 @@ const propTypes = {
   // repoinfo
   currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
-  repoName: PropTypes.string.isRequired,
   repoPermission: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
@@ -131,10 +130,10 @@ class LibContentContainer extends React.Component {
         <div className="cur-view-container">
           <div className="cur-view-path">
             <CurDirPath 
-              pathPrefix={this.props.pathPrefix}
-              currentPath={this.props.path} 
               repoID={repoID}
               repoName={this.props.currentRepoInfo.repo_name}
+              pathPrefix={this.props.pathPrefix}
+              currentPath={this.props.path} 
               permission={this.props.repoPermission} 
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}

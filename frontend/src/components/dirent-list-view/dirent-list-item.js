@@ -337,7 +337,7 @@ class DirentListItem extends React.Component {
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
-    const {repoEncrypted, isRepoOwner, isAdmin} = this.props;
+    const { repoEncrypted, isRepoOwner, isAdmin } = this.props;
     let showShare = false;
     if (!repoEncrypted &&
       (dirent.permission == 'rw' || dirent.permission == 'r')) {

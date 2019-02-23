@@ -43,7 +43,6 @@ class LibContentView extends React.Component {
       libNeedDecrypt: false,
       isGroupOwnedRepo: false,
       isDepartmentAdmin: false,
-      isAdmin: false,
       userPerm: '',
       selectedDirentList: [],
       isDraft: false,
@@ -98,7 +97,6 @@ class LibContentView extends React.Component {
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt, 
         repoEncrypted: repoInfo.encrypted,
-        isAdmin: repoInfo.is_admin,
         repoPermission: repoInfo.permission === 'rw'
       });
 
@@ -1207,7 +1205,8 @@ class LibContentView extends React.Component {
 
     let showShareBtn = false;
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, repoEncrypted, isAdmin, userPerm, isDepartmentAdmin } = this.state;
+    let { currentRepoInfo, repoEncrypted, userPerm, isDepartmentAdmin } = this.state;
+    let isAdmin = currentRepoInfo.is_admin;
     let isRepoOwner = currentRepoInfo.owner_email === username;
     if (!repoEncrypted) {
       if ((canGenerateShareLink || canGenerateUploadLink || isRepoOwner || isAdmin) && (userPerm == 'rw' || userPerm == 'r')) {
@@ -1258,7 +1257,6 @@ class LibContentView extends React.Component {
             pathExist={this.state.pathExist}
             currentRepoInfo={this.state.currentRepoInfo}
             repoID={this.props.repoID}
-            repoName={this.state.repoName}
             repoPermission={this.state.repoPermission}
             repoEncrypted={this.state.repoEncrypted}
             enableDirPrivateShare={enableDirPrivateShare}
