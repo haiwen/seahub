@@ -16,7 +16,6 @@ const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
   repoPermission: PropTypes.bool.isRequired,
-  repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPrem: PropTypes.bool,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
@@ -148,7 +147,6 @@ class LibContentContainer extends React.Component {
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
-                    repoEncrypted={this.props.repoEncrypted}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isRepoInfoBarShow={isRepoInfoBarShow}
@@ -186,7 +184,6 @@ class LibContentContainer extends React.Component {
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
                     repoPermission={this.props.repoPermission}
-                    repoEncrypted={this.props.repoEncrypted}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isTreeDataLoading={this.props.isTreeDataLoading}

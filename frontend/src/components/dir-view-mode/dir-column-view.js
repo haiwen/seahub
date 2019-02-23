@@ -12,7 +12,6 @@ const propTypes = {
   // repoinfo
   currentRepoInfo: PropTypes.object.isRequired,
   repoPermission: PropTypes.bool.isRequired,
-  repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPrem: PropTypes.bool,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
@@ -112,7 +111,6 @@ class DirColumnView extends React.Component {
               path={this.props.path}
               repoID={this.props.repoID}
               currentRepoInfo={this.props.currentRepoInfo}
-              repoEncrypted={this.props.repoEncrypted}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isRepoInfoBarShow={this.props.isRepoInfoBarShow}

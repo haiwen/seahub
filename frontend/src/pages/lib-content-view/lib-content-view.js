@@ -1258,7 +1258,6 @@ class LibContentView extends React.Component {
             currentRepoInfo={this.state.currentRepoInfo}
             repoID={this.props.repoID}
             repoPermission={this.state.repoPermission}
-            repoEncrypted={this.state.repoEncrypted}
             enableDirPrivateShare={enableDirPrivateShare}
             userPerm={userPerm}
             isGroupOwnedRepo={this.state.isGroupOwnedRepo}

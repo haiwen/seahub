@@ -16,7 +16,6 @@ import toaster from '../toast';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
-  repoEncrypted: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -54,6 +53,7 @@ class DirentListView extends React.Component {
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
     this.isAdmin = props.currentRepoInfo.is_admin;
+    this.repoEncrypted = props.currentRepoInfo.encrypted;
   }
 
   onFreezedItem = () => {
@@ -124,7 +124,7 @@ class DirentListView extends React.Component {
       return Utils.imageCheck(item.name);
     });
 
-    const useThumbnail = !this.props.repoEncrypted;
+    const useThumbnail = !this.repoEncrypted;
     let prepareItem = (item) => {
       const name = item.name;
 
@@ -264,6 +264,8 @@ class DirentListView extends React.Component {
                     currentRepoInfo={this.props.currentRepoInfo}
                     isAdmin={this.isAdmin}
                     isRepoOwner={this.isRepoOwner}
+                    repoEncrypted={this.repoEncrypted}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     direntList={this.props.direntList}
                     onItemClick={this.props.onItemClick}
@@ -280,8 +282,6 @@ class DirentListView extends React.Component {
                     onDirentClick={this.props.onDirentClick}
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
-                    repoEncrypted={this.props.repoEncrypted}
-                    enableDirPrivateShare={this.props.enableDirPrivateShare}
                   />
                 );
               })
