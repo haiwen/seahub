@@ -9,7 +9,7 @@ import toaster from './components/toast';
 import CodeMirror from './utils/code-mirror';
 import { serviceURL, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 
-import './css/codemirror.css';
+import 'codemirror/lib/codemirror.css';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';

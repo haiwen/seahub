@@ -11,7 +11,7 @@ import { serviceURL, gettext, mediaUrl } from './utils/constants';
 import InternalLinkDialog from './components/dialog/internal-link-dialog';
 import CommentsList from './components/comments-list';
 
-import './css/codemirror.css';
+import 'codemirror/lib/codemirror.css';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
