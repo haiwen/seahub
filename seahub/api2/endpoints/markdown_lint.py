@@ -31,7 +31,12 @@ class MarkdownLintView(APIView):
         if not slate:
             error_msg = 'slate invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        slate = json.loads(slate)
+        try:
+            slate = json.loads(slate)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'slate invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         issue_list = []
         document_nodes = slate["document"]["nodes"]
