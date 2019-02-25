@@ -134,6 +134,13 @@ class DirOperationToolbar extends React.Component {
     });
   }
 
+  onCreateUmindToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: '.umind'
+    });
+  }
+
   onAddFile = (filePath, isDraft) => {
     this.setState({isCreateFileDialogShow: false});
     this.props.onAddFile(filePath, isDraft);
@@ -183,6 +190,7 @@ class DirOperationToolbar extends React.Component {
             <li className="dropdown-item" onClick={this.onCreateExcelToggle}>{gettext('New Excel File')}</li>
             <li className="dropdown-item" onClick={this.onCreatePPTToggle}>{gettext('New PowerPoint File')}</li>
             <li className="dropdown-item" onClick={this.onCreateWordToggle}>{gettext('New Word File')}</li>
+            <li className="dropdown-item" onClick={this.onCreateUmindToggle}>{gettext('New Umind File')}</li>
           </ul>
         )}
         {this.state.isCreateFileDialogShow && (

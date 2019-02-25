@@ -1,0 +1,29 @@
+#wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+.umind-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.umind-container .umind-header {
+  height: 49px;
+}
+
+.umind-container .umind-main {
+  display: flex;
+  flex: 1;
+}
+
+.umind-main .umind-editor {
+  display: flex;
+  flex: 1 0 80%;
+}
+
+.umind-main .umind-detail {
+  display: flex;
+  flex: 0 0 20%;
+}
