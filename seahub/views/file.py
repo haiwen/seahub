@@ -588,7 +588,48 @@ def view_lib_file(request, repo_id, path):
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
     template = 'view_file_%s.html' % filetype.lower()
 
-    if filetype in (TEXT, MARKDOWN) or fileext in get_conf_text_ext():
+    if filetype == TEXT or fileext in get_conf_text_ext():
+        template = '%s_file_view_react.html' % filetype.lower()
+
+        # get file size
+        if file_size > FILE_PREVIEW_MAX_SIZE:
+            error_msg = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(FILE_PREVIEW_MAX_SIZE)
+
+            return_dict['err'] = error_msg
+            return render(request, template, return_dict)
+
+        file_enc = request.GET.get('file_enc', 'auto')
+        if file_enc not in FILE_ENCODING_LIST:
+            file_enc = 'auto'
+
+        error_msg, file_content, encoding = get_file_content(filetype,
+                inner_path, file_enc)
+        if error_msg:
+            return_dict['err'] = error_msg
+            return render(request, template, return_dict)
+
+        file_encoding_list = FILE_ENCODING_LIST
+        if encoding and encoding not in FILE_ENCODING_LIST:
+            file_encoding_list.append(encoding)
+
+        return_dict['file_enc'] = file_enc
+        #return_dict['encoding'] = encoding
+        #return_dict['file_encoding_list'] = file_encoding_list
+        return_dict['file_content'] = file_content
+
+        can_edit_file = True
+        if parse_repo_perm(permission).can_edit_on_web is False:
+            can_edit_file = False
+        elif is_locked and not locked_by_me:
+            can_edit_file = False
+
+        return_dict['can_edit_file'] = can_edit_file
+
+        send_file_access_msg(request, repo, path, 'web')
+        return render(request, template, return_dict)
+
+    if filetype == MARKDOWN:
 
         # get file size
         if file_size > FILE_PREVIEW_MAX_SIZE:
@@ -626,23 +667,20 @@ def view_lib_file(request, repo_id, path):
 
         review = get_file_draft_and_related_review(repo.id, path, is_draft, has_draft)
 
-        if filetype == MARKDOWN:
-            return_dict['protocol'] = request.is_secure() and 'https' or 'http'
-            return_dict['domain'] = get_current_site(request).domain
-            return_dict['file_content'] = convert_md_link(file_content, repo_id, username)
-            return_dict['serviceUrl'] = get_service_url().rstrip('/')
-            return_dict['language_code'] = get_language()
-            return_dict['mode'] = 'edit' if mode else 'viewer'
-            return_dict['is_draft'] = is_draft
-            return_dict['has_draft'] = has_draft
-            return_dict['draft_id'] = review['draft_id']
-            return_dict['review_id'] = review['review_id']
-            return_dict['review_status'] = review['review_status']
-            return_dict['draft_file_path'] = review['draft_file_path']
-            return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
-            return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
-        else:
-            return_dict['file_content'] = file_content
+        return_dict['protocol'] = request.is_secure() and 'https' or 'http'
+        return_dict['domain'] = get_current_site(request).domain
+        return_dict['file_content'] = convert_md_link(file_content, repo_id, username)
+        return_dict['serviceUrl'] = get_service_url().rstrip('/')
+        return_dict['language_code'] = get_language()
+        return_dict['mode'] = 'edit' if mode else 'viewer'
+        return_dict['is_draft'] = is_draft
+        return_dict['has_draft'] = has_draft
+        return_dict['draft_id'] = review['draft_id']
+        return_dict['review_id'] = review['review_id']
+        return_dict['review_status'] = review['review_status']
+        return_dict['draft_file_path'] = review['draft_file_path']
+        return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
+        return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
 
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:
@@ -685,7 +723,8 @@ def view_lib_file(request, repo_id, path):
         return render(request, 'view_file_image.html', return_dict)
 
     elif filetype == IMAGE:
-        template = 'image_file_view_react.html'
+        template = '%s_file_view_react.html' % filetype.lower()
+
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _(u'File size surpasses %s, can not be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)

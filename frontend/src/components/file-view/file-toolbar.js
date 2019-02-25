@@ -16,7 +16,7 @@ const {
   canLockUnlockFile,
   repoID, repoName, parentDir, filePerm, filePath,
   canEditFile, err,
-  encoding, // for 'edit', not undefined only for some kinds of files
+  fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
   canDownloadFile, enableComment
 } = window.app.pageOptions;
 
@@ -70,7 +70,7 @@ class FileToolbar extends React.Component {
             icon="fa fa-edit"
             text={gettext('Edit')}
             tag="a"
-            href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(encoding)}`}
+            href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(fileEnc)}`}
           />
         )}
         {canDownloadFile && (

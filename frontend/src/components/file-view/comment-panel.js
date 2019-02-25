@@ -3,18 +3,17 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { gettext } from '../utils/constants';
-import { seafileAPI } from '../utils/seafile-api';
-import '../css/comments-list.css';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import '../../css/comments-list.css';
 
-const { repoID, filePath } = window.app.pageOptions;
-const { username } = window.app.userInfo;
+const { username, repoID, filePath } = window.app.pageOptions;
 
-const CommentsListPropTypes = {
-  toggleCommentsList: PropTypes.func.isRequired
+const CommentPanelPropTypes = {
+  toggleCommentPanel: PropTypes.func.isRequired
 };
 
-class CommentsList extends React.Component {
+class CommentPanel extends React.Component {
 
   constructor(props) {
     super(props);
@@ -74,7 +73,7 @@ class CommentsList extends React.Component {
     return (
       <div className="seafile-comment">
         <div className="seafile-comment-title">
-          <div onClick={this.props.toggleCommentsList} className={'seafile-comment-title-close'}>
+          <div onClick={this.props.toggleCommentPanel} className={'seafile-comment-title-close'}>
             <i className={'fa fa-times-circle'}/>
           </div>
           <div className={'seafile-comment-title-text'}>{gettext('Comments')}</div>
@@ -126,7 +125,7 @@ class CommentsList extends React.Component {
   }
 }
 
-CommentsList.propTypes = CommentsListPropTypes;
+CommentPanel.propTypes = CommentPanelPropTypes;
 
 
 const commentItemPropTypes = {
@@ -212,4 +211,4 @@ class CommentItem extends React.Component {
 
 CommentItem.propTypes = commentItemPropTypes;
 
-export default CommentsList;
+export default CommentPanel;

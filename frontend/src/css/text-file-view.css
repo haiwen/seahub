@@ -1,0 +1,14 @@
+.text-file-view {
+    overflow: auto;
+}
+.ReactCodeMirror {
+    box-shadow: 0 0 6px #ccc;
+    border: 1px solid #ccc;
+    width: calc(100% - 40px);
+    max-width: 950px;
+    margin: 0 auto;
+}
+.CodeMirror {
+    height: auto;
+    min-height: 300px;
+}

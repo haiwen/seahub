@@ -1088,15 +1088,11 @@ a.table-sort-op:focus {
 .file-view-tip {
     min-height: 130px;
     padding: 30px 10px 10px;
-    margin: 0 20px;
+    width: calc(100% - 40px);
+    max-width: 950px;
+    margin: 0 auto;
     background: #fff;
     border: 1px solid #ccc;
     box-shadow: 0 0 6px #ccc;
     text-align: center;
-}
-@media (min-width: 992px) {
-    .file-view-tip {
-        width: 950px;
-        margin: 0 auto;
-    }
 }
