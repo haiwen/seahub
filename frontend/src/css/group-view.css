@@ -1,5 +1,7 @@
 .group-member-list {
   box-sizing: border-box;
+  max-height: 400px;
+  overflow-y: auto;
 }
 .group-member-list .user-item {
   margin: 0px -10px;
