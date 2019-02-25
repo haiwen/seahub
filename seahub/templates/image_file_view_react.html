@@ -1,48 +1,14 @@
-{% extends 'base_for_react.html' %}
+{% extends 'file_view_react.html' %}
 {% load render_bundle from webpack_loader %}
-{% load static seahub_tags i18n %}
+{% load seahub_tags %}
 
-{% block sub_title %}{{filename}} - {% endblock %}
-
-{% block extra_script %}
-<script type="text/javascript">
-// overwrite the one in base_for_react.html
-window.app.pageOptions = {
-  userNickName: '{{request.user.username|email2nickname|escapejs}}',
-
-  // for all types of files
-  fileName: '{{ filename|escapejs }}',
-  isStarred: {% if is_starred %}true{% else %}false{% endif %},
-  isLocked: {% if file_locked %}true{% else %}false{% endif %},
-  latestContributor: '{{ latest_contributor|escapejs }}',
-  latestContributorName: '{{ latest_contributor|email2nickname|escapejs }}',
-  lastModificationTime: '{{ last_modified }}',
-  repoID: '{{ repo.id }}',
-  repoName: '{{ repo.name|escapejs }}',
-  filePath: '{{ path|escapejs }}',
-  filePerm: '{{ file_perm }}',
-  parentDir: '{{ parent_dir|escapejs }}',
-  err: '{{ err }}',
-  lockedByMe: {% if locked_by_me %}true{% else %}false{% endif %},
-  canLockUnlockFile: {% if can_lock_unlock_file %}true{% else %}false{% endif %},
-  canEditFile: {% if can_edit_file %}true{% else %}false{% endif %}, // only for some file types 
-  canDownloadFile: {% if can_download_file %}true{% else %}false{% endif %},
-  enableComment: {% if enable_file_comment %}true{% else %}false{% endif %},
-  enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
-
-  // for image file
+{% block extra_data %}
   // img_prev && img_next can be path or None
   previousImage: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}false{% endif %},
   nextImage: {% if img_next %}'{{ img_next|escapejs }}'{% else %}false{% endif %},
   rawPath: '{{ raw_path|escapejs }}'
-};
+{% endblock %}
 
-// for 'comment' panel
-window.app.userInfo = {
-    username: '{{ user.username }}',
-    name: '{{ user.username|email2nickname|escapejs }}',
-    contact_email: '{{ user.username|email2contact_email }}',
-};
-</script>
+{% block render_bundle %}
 {% render_bundle 'viewFileImage' %}
 {% endblock %}

@@ -1,20 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import CodeMirror from 'react-codemirror';
-import moment from 'moment';
 import watermark from 'watermark-dom';
-import { ButtonGroup, Tooltip } from 'reactstrap';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { serviceURL, gettext, mediaUrl } from './utils/constants';
-import InternalLinkDialog from './components/dialog/internal-link-dialog';
-import CommentsList from './components/comments-list';
-import 'codemirror/lib/codemirror.css';
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
-import './css/view-file-text.css';
+import { siteName } from './utils/constants';
+import FileInfo from './components/file-view/file-info';
+import FileToolbar from './components/file-view/file-toolbar';
+import FileViewTip from './components/file-view/file-view-tip';
+import CommentPanel from './components/file-view/comment-panel';
+
+import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/clike/clike';
@@ -25,8 +20,21 @@ import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/go/go';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/lib/codemirror.css';
 
-const { isPro, repoID, repoName, filePath, fileName, siteName, enableWatermark, encoding, fileEncodingList, fileExt, isLocked, fileContent, latestContributor, lastModified, isStarred, err } = window.app.pageOptions;
+import './assets/css/fa-solid.css';
+import './assets/css/fa-regular.css';
+import './assets/css/fontawesome.css';
+
+import './css/file-view.css';
+import './css/text-file-view.css';
+
+const { isStarred, isLocked, lockedByMe,
+  repoID, filePath, err, enableWatermark, userNickName,
+  // the following are only for text file view
+  fileExt, fileContent
+} = window.app.pageOptions;
+
 const options = {
   lineNumbers: false,
   mode: Utils.chooseLanguage(fileExt.slice(3, fileExt.length -3)),
@@ -35,7 +43,7 @@ const options = {
   autoMatchParens: true,
   textWrapping: true,
   lineWrapping: true,
-  readOnly: 'nocursor',
+  readOnly: 'nocursor'
 };
 
 class ViewFileText extends React.Component {
@@ -43,123 +51,30 @@ class ViewFileText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isStarred: isStarred,
       isLocked: isLocked,
-      star: isStarred,
+      lockedByMe: lockedByMe,
+      isCommentPanelOpen: false
     };
   }
 
-  changeEncode = (e) => {
-    window.location.href = serviceURL + '/lib/' + repoID + '/file/' + fileName +'/?file_enc=' + e.target.value;
-  }
-
-  fileEncode = () => {
-    const list = fileEncodingList.substring(1, fileEncodingList.length - 1).replace(/\'*/g,'').replace(/\s*/g,'').split(',');
-    return (
-      <div className="file-enc-cont">
-        <label htmlFor="file-enc">{gettext('Encoding:')}</label>
-        <select id="file-enc" onChange={this.changeEncode} defaultValue={encoding}>
-          { list && list.map((value, index) => {
-            if (value === 'auto') {
-              return (<option value={value} key={index}>{gettext('auto detect')}</option>);
-            } else {
-              return (<option value={value} key={index}>{value}</option>);
-            }
-          })
-          }
-        </select>
-      </div>
-    );
-  }
-
-  handleMouseDown = (option) => {
-    switch(option) {
-      case 'back':
-        window.location.href = serviceURL + '/library/' + repoID + '/' + repoName + '/';
-        break;
-      case 'lock':
-        this.toggleLockFile();
-        break;
-      case 'history':
-        window.location.href = serviceURL + '/repo/file_revisions/' + repoID + '/?p=' + filePath;
-        break;
-      case 'edit':
-        window.location.href = serviceURL + '/repo/' + repoID + '/file/edit/?p=' + filePath + '&file_enc=' + encoding;
-        break;
-      case 'download':
-        window.location.href = serviceURL + '/lib/' + repoID + '/file/' + filePath +'?dl=1';
-        break;
-      case 'comment':
-        this.toggleCommentsList();
-        break;
-    }
-  }
-
-  renderToolbar() {
-    return (
-      <div className="txt-view-button-group d-flex" role="group">
-        <ButtonGroup>
-          <IconButton
-            text={gettext('Back to parent directory')}
-            id={'parentDirectory'}
-            icon={'fa fa-folder-open'}
-            onMouseDown={() => this.handleMouseDown('back')}
-          />
-          {isPro === 'True' &&
-            <IconButton
-              id={'lockButton'}
-              text={gettext('Lock File')}
-              onMouseDown={() => this.handleMouseDown('lock')}
-              icon={'fa fa-lock'}
-            />
-          }
-          <IconButton
-            id={'historyButton'}
-            text={gettext('File History')}
-            onMouseDown={() => this.handleMouseDown('history')}
-            icon={'fa fa-history'}
-          />
-          { !err &&
-            <IconButton
-              id={'editButton'}
-              text={gettext('Edit')}
-              icon={'fa fa-edit'}
-              onMouseDown={() => this.handleMouseDown('edit')}
-            />
-          }
-          <IconButton
-            id={'downloadButton'}
-            text={gettext('Download File')}
-            onMouseDown={() => this.handleMouseDown('download')}
-            icon={'fa fa-download'}
-          />
-          <IconButton
-            id={'commentButton'}
-            text={gettext('Comment')}
-            onMouseDown={() => this.handleMouseDown('comment')}
-            icon={'fa fa-comment'}
-          />
-        </ButtonGroup>
-      </div>
-    );
-  }
-
-  toggleCommentsList = () => {
+  toggleCommentPanel = () => {
     this.setState({
-      showCommentsList: !this.state.showCommentsList
+      isCommentPanelOpen: !this.state.isCommentPanelOpen
     });
   }
 
   toggleStar = () => {
-    if (this.state.star) {
-      seafileAPI.unStarItem(repoID, filePath).then((res) => {
+    if (this.state.isStarred) {
+      seafileAPI.unStarFile(repoID, filePath).then((res) => {
         this.setState({
-          star: false,
+          isStarred: false
         });
       });
     } else {
-      seafileAPI.starItem(repoID, filePath).then((res) => {
+      seafileAPI.starFile(repoID, filePath).then((res) => {
         this.setState({
-          star: true,
+          isStarred: true
         });
       });
     }
@@ -169,13 +84,15 @@ class ViewFileText extends React.Component {
     if (this.state.isLocked) {
       seafileAPI.unlockfile(repoID, filePath).then((res) => {
         this.setState({
-          isLocked: res.data.is_locked
+          isLocked: false,
+          lockedByMe: false
         });
       });
     } else {
       seafileAPI.lockfile(repoID, filePath).then((res) => {
         this.setState({
-          isLocked: res.data.is_locked
+          isLocked: true,
+          lockedByMe: true
         });
       });
     }    
@@ -183,143 +100,58 @@ class ViewFileText extends React.Component {
 
   render() {
     return (
-      <div className="txt-file-view d-flex">
-        <div className="txt-file-view-header d-flex">
+      <div className="h-100 d-flex flex-column">
+        <div className="file-view-header d-flex justify-content-between">
           <FileInfo
-            toggleStar={this.toggleStar}
-            star={this.state.star}
-            serviceURL={serviceURL}
+            isStarred={this.state.isStarred}
             isLocked={this.state.isLocked}
+            toggleStar={this.toggleStar}
           />
-          {this.renderToolbar()}
+          <FileToolbar
+            isLocked={this.state.isLocked}
+            lockedByMe={this.state.lockedByMe}
+            toggleLockFile={this.toggleLockFile}
+            toggleCommentPanel={this.toggleCommentPanel}
+          />
         </div>
-        <div className="txt-file-view-body d-flex">
-          {!this.state.showCommentsList && this.fileEncode()}
-          <div className={this.state.showCommentsList ? 'txt-view-comment' : 'txt-view'}>
-            <CodeMirror
-              ref="code-mirror-editor"
-              value={fileContent}
-              options={options}
-            />
-            { this.state.showCommentsList &&
-              <CommentsList toggleCommentsList={this.toggleCommentsList}/>
-            }
-          </div>
+        <div className="file-view-body flex-auto d-flex">
+          <FileContent />
+          {this.state.isCommentPanelOpen &&
+            <CommentPanel toggleCommentPanel={this.toggleCommentPanel} />
+          }
         </div>
       </div>
     );
   }
 }
 
-const IconButtonPropTypes = {
-  icon: PropTypes.string,
-  id: PropTypes.string,
-  onMouseDown: PropTypes.func,
-  isActive: PropTypes.bool,
-  disabled: PropTypes.bool,
-  text: PropTypes.string,
-};
-
-class IconButton extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      tooltipOpen: false
-    };
-  }
-
-  toggle = () => {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen
-    });
-  }
+class FileContent extends React.Component {
 
   render() {
-    let className = 'btn btn-icon btn-secondary btn-active';
+
+    if (err) {
+      return <FileViewTip />;
+    }
     return (
-      <button
-        id={this.props.id}
-        type={'button'}
-        onMouseDown={this.props.onMouseDown}
-        className={className}
-        data-active={ this.props.isActive || false }>
-        <i className={this.props.icon}/>
-        <Tooltip
-          toggle={this.toggle}
-          delay={{show: 0, hide: 0}}
-          target={this.props.id}
-          placement='bottom'
-          isOpen={this.state.tooltipOpen}>
-          {this.props.text}
-        </Tooltip>
-      </button>
-    );
-  }
-}
-
-IconButton.propTypes = IconButtonPropTypes;
-
-const FileInfoPropTypes = {
-  serviceURL: PropTypes.string.isRequired,
-  toggleStar: PropTypes.func.isRequired,
-  isLocked: PropTypes.bool,
-  star: PropTypes.bool,
-};
-
-class FileInfo extends React.PureComponent {
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    let modifyTime = moment(lastModified * 1000).format('YYYY-MM-DD HH:mm');
-    const modifierUrl = this.props.serviceURL + '/profile/' + latestContributor + '/';
-    return (
-      <div className={'file-info-wrapper'}>
-        <div className="topbar-file-info">
-          <h2 className="file-title d-flex">
-            <span className='file-name'>{fileName}</span>
-            <span className='file-star' title={this.props.star ? 'unstar' : 'star'}>
-              <i onClick={this.props.toggleStar} className={this.props.star ? 'fa fa-star star': 'far fa-star'}/>
-            </span>
-            <InternalLinkDialog repoID={repoID} path={filePath}/>
-            {this.props.isLocked &&
-              <span className="file-lock">
-                <img className="vam" width="16" src={ mediaUrl + 'img/file-locked-32.png' } alt="locked" title="locked"/>
-              </span>
-            }
-          </h2>
-          <div className="file-state">
-            <span className="file-modifier-name">
-              <a href={modifierUrl}>{latestContributor}</a>
-            </span>{' '}
-            <span className="file-modifier-time">{modifyTime}</span>
-          </div>
-        </div>
+      <div className="file-view-content flex-1 text-file-view">
+        <CodeMirror
+          ref="code-mirror-editor"
+          value={fileContent}
+          options={options}
+        />
       </div>
     );
   }
 }
-
-FileInfo.propTypes = FileInfoPropTypes;
 
 if (enableWatermark) {
-  const loginUser = window.app.userInfo.name;
-  let watermark_txt;
-  if (loginUser) {
-    watermark_txt = siteName + '  ' + loginUser;
-  } else {
-    watermark_txt = gettext('Anonymous User');
-  }
   watermark.init({
-    watermark_txt: watermark_txt,
+    watermark_txt: `${siteName} ${userNickName}`,
     watermark_alpha: 0.075
   });
 }
 
 ReactDOM.render (
   <ViewFileText />,
-  document.getElementById('root')
+  document.getElementById('wrapper')
 );

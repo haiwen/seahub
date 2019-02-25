@@ -1,0 +1,13 @@
+{% extends 'file_view_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+
+{% block extra_data %}
+  fileExt: '{{ fileext|escapejs }}',
+  fileEnc: '{{ file_enc|escapejs }}',
+  fileContent: '{{ file_content|escapejs }}'
+{% endblock %}
+
+{% block render_bundle %}
+{% render_bundle 'viewFileText' %}
+{% endblock %}

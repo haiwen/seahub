@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import watermark from 'watermark-dom';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, siteName } from './utils/constants';
 import FileInfo from './components/file-view/file-info';
 import FileToolbar from './components/file-view/file-toolbar';
 import FileViewTip from './components/file-view/file-view-tip';
-import CommentsList from './components/comments-list';
-import watermark from 'watermark-dom';
+import CommentPanel from './components/file-view/comment-panel';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -15,9 +15,10 @@ import './assets/css/fontawesome.css';
 import './css/file-view.css';
 import './css/image-file-view.css';
 
-const { fileName, isStarred, isLocked, lockedByMe,
+const { isStarred, isLocked, lockedByMe,
   repoID, filePath, err, enableWatermark, userNickName,
-  previousImage, nextImage, rawPath // only for image file
+  // the following are only for image file view
+  fileName, previousImage, nextImage, rawPath
 } = window.app.pageOptions;
 
 let previousImageUrl, nextImageUrl; 
@@ -110,7 +111,7 @@ class ViewFileImage extends React.Component {
         <div className="file-view-body flex-auto d-flex">
           <FileContent />
           {this.state.isCommentPanelOpen &&
-            <CommentsList toggleCommentsList={this.toggleCommentPanel} />
+            <CommentPanel toggleCommentPanel={this.toggleCommentPanel} />
           }
         </div>
       </div>
