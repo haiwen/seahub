@@ -3,35 +3,17 @@ import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import cookie from 'react-cookies';
 import ModalPortal from './components/modal-portal';
-import { Modal } from 'reactstrap';
 import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
 import ListRelatedFileDialog from './components/dialog/list-related-file-dialog';
 import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
-import Dirent from './models/dirent';
-let repoID = window.app.pageOptions.repoID;
-let repoName = window.app.pageOptions.repoName;
-let filePath = window.app.pageOptions.filePath;
-let fileName = window.app.pageOptions.fileName;
-let siteRoot = window.app.config.siteRoot;
-let domain = window.app.pageOptions.domain;
-let protocol = window.app.pageOptions.protocol;
-let mode = window.app.pageOptions.mode;
-let draftID = window.app.pageOptions.draftID;
-let reviewID = window.app.pageOptions.reviewID;
-let reviewStatus = window.app.pageOptions.reviewStatus;
-let isDraft = window.app.pageOptions.isDraft;
-let hasDraft = window.app.pageOptions.hasDraft;
-let draftFilePath = window.app.pageOptions.draftFilePath;
-let shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
-let shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
-let userName = window.app.userInfo.username;
-let dirPath = '/';
+import ShareDialog from './components/dialog/share-dialog';
 
-const serviceUrl = window.app.config.serviceUrl;
-const seafileCollabServer = window.app.config.seafileCollabServer;
+const { repoID, repoName, filePath, fileName, mode, draftID, reviewID, reviewStatus, draftFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
+const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
+const userName = userInfo.username;
+let dirPath = '/';
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
@@ -301,6 +283,7 @@ class MarkdownEditor extends React.Component {
       showEditFileTagDialog: false,
       showAddRelatedFileDialog: false,
       showMarkdownEditorDialog: false,
+      showShareLinkDialog: false,
     };
   }
 
@@ -310,6 +293,7 @@ class MarkdownEditor extends React.Component {
       showEditFileTagDialog: false,
       showAddRelatedFileDialog: false,
       showMarkdownEditorDialog: false,
+      showShareLinkDialog: false,
     });
   }
 
@@ -340,6 +324,12 @@ class MarkdownEditor extends React.Component {
         this.setState({
           showEditFileTagDialog: true,
           showMarkdownEditorDialog: true,
+        });
+        break;
+      case 'share_link':
+        this.setState({
+          showMarkdownEditorDialog: true,
+          showShareLinkDialog: true,
         });
         break;
       default:
@@ -438,10 +428,9 @@ class MarkdownEditor extends React.Component {
             fileTagList={this.state.fileTagList}
           />
           {this.state.showMarkdownEditorDialog && (
-            <ModalPortal>
-              <Modal isOpen={true}>
-                {
-                  this.state.showRelatedFileDialog &&
+            <React.Fragment>
+              {this.state.showRelatedFileDialog &&
+                <ModalPortal>
                   <ListRelatedFileDialog
                     repoID={repoID}
                     filePath={filePath}
@@ -450,9 +439,10 @@ class MarkdownEditor extends React.Component {
                     addRelatedFileToggle={this.addRelatedFileToggle}
                     onRelatedFileChange={this.onRelatedFileChange}
                   />
-                }
-                {
-                  this.state.showEditFileTagDialog &&
+                </ModalPortal>
+              }
+              {this.state.showEditFileTagDialog &&
+                <ModalPortal>
                   <EditFileTagDialog
                     repoID={repoID}
                     filePath={filePath}
@@ -460,9 +450,10 @@ class MarkdownEditor extends React.Component {
                     toggleCancel={this.toggleCancel}
                     onFileTagChanged={this.onFileTagChanged}
                   />
-                }
-                {
-                  this.state.showAddRelatedFileDialog &&
+                </ModalPortal>
+              }
+              {this.state.showAddRelatedFileDialog &&
+                <ModalPortal>
                   <AddRelatedFileDialog
                     repoID={repoID}
                     filePath={filePath}
@@ -470,9 +461,22 @@ class MarkdownEditor extends React.Component {
                     dirent={this.state.fileInfo}
                     onRelatedFileChange={this.onRelatedFileChange}
                   />
-                }
-              </Modal>
-            </ModalPortal>
+                </ModalPortal>
+              }
+              {this.state.showShareLinkDialog &&
+                <ModalPortal>
+                  <ShareDialog
+                    itemType="file"
+                    itemName={this.state.fileInfo.name}
+                    itemPath={filePath}
+                    repoID={repoID}
+                    toggleDialog={this.toggleCancel}
+                    isGroupOwnedRepo={false}
+                    repoEncrypted={false}
+                  />
+                </ModalPortal>
+              }
+            </React.Fragment>
           )}
         </React.Fragment>
       );

@@ -14,7 +14,10 @@ const propTypes = {
   itemName: PropTypes.string.isRequired,
   itemPath: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
-  repoID: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  repoEncrypted: PropTypes.bool,
+  userPerm: PropTypes.string,
+  enableDirPrivateShare: PropTypes.bool,
 };
 
 class ShareDialog extends React.Component {
@@ -94,7 +97,7 @@ class ShareDialog extends React.Component {
                   itemPath={this.props.itemPath} 
                   repoID={this.props.repoID}
                   closeShareDialog={this.props.toggleDialog} 
-                  />
+                />
               </TabPane>
             }
             {enableUploadLink &&
