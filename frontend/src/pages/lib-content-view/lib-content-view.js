@@ -100,19 +100,6 @@ class LibContentView extends React.Component {
         repoPermission: repoInfo.permission === 'rw'
       });
 
-      const ownerEmail = repoInfo.owner_email;
-      if (repoInfo.owner_email.indexOf('@seafile_group') != -1) {
-
-        const groupID = ownerEmail.substring(0, ownerEmail.indexOf('@'));
-        this.setState({isGroupOwnedRepo: true});
-
-        seafileAPI.getGroup(groupID).then(res => {
-          if (res.data.admins.indexOf(username) != -1) {
-            this.setState({isDepartmentAdmin: true});
-          }
-        });
-      }
-
       let repoID = repoInfo.repo_id;
       let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
       path = path.slice(path.indexOf('/')); // get current path
@@ -1202,7 +1189,7 @@ class LibContentView extends React.Component {
     // 2 share-with-me    : isAdmin
     // 3 share with all   : isRepoOwner
     // 4 group            : isRepoOwner || isAdmin (sharedAsAdmin and current user is admin of this group)
-    // 5 department group : isDepartMentAdmin
+    // 5 department group : isAdmin
 
     let showShareBtn = false;
     let enableDirPrivateShare = false;
@@ -1221,7 +1208,7 @@ class LibContentView extends React.Component {
         showGenerateUploadLinkTab = true;
       }
 
-      if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
+      if (!isVirtual && (isRepoOwner || isAdmin)) {
         enableDirPrivateShare = true;
       }
 
