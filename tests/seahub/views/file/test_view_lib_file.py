@@ -67,7 +67,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_base.html')
+        self.assertTemplateUsed(resp, 'text_file_view_react.html')
         assert 'File size surpasses -1' in resp.context['err'] and \
             'can not be opened online.' in resp.context['err']
 
@@ -78,7 +78,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_text.html')
+        self.assertTemplateUsed(resp, 'text_file_view_react.html')
         assert resp.context['filetype'].lower() == 'text'
         assert resp.context['file_content'] == ''
         assert resp.context['encoding'] == 'utf-8'
