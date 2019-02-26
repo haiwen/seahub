@@ -44,11 +44,11 @@ class MarkdownLintView(APIView):
         # check h1
         header_one_issue_list = check_header_one(document_nodes)
         if len(header_one_issue_list) > 0:
-            issue_list.append(header_one_issue_list)
+            issue_list.extend(header_one_issue_list)
 
         # check heading_end_with
         heading_end_issue_list = check_heading_end_with(document_nodes)
         if len(heading_end_issue_list) > 0:
-            issue_list.append(heading_end_issue_list)
+            issue_list.extend(heading_end_issue_list)
 
         return Response({"issue_list": issue_list}, status=status.HTTP_200_OK)
