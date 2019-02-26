@@ -707,10 +707,12 @@ def view_lib_file(request, repo_id, path):
             return render(request, template, return_dict)
 
     elif filetype == XMIND:
-
         xmind_dir = os.path.join(THUMBNAIL_ROOT, str(XMIND_IMAGE_SIZE))
         xmind_image = os.path.join(xmind_dir, file_id)
-        if not os.path.exists(xmind_image):
+        if os.path.exists(xmind_image):
+            return_dict['xmind_image_src'] = get_thumbnail_src(repo_id,
+                    XMIND_IMAGE_SIZE, path)
+        else:
             try:
                 extract_xmind_image(repo_id, path)
                 return_dict['xmind_image_src'] = get_thumbnail_src(repo_id,
@@ -720,7 +722,8 @@ def view_lib_file(request, repo_id, path):
                 error_msg = _(u'Unable to view file')
                 return_dict['err'] = error_msg
 
-        return render(request, 'view_file_image.html', return_dict)
+        template = '%s_file_view_react.html' % filetype.lower()
+        return render(request, template, return_dict)
 
     elif filetype == IMAGE:
         template = '%s_file_view_react.html' % filetype.lower()
