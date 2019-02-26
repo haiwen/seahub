@@ -49,8 +49,9 @@ class Content extends Component {
       const desktopThead = (
         <thead>
           <tr>
+            <th width="4%"></th>
             <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="38%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+            <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
             <th width="14%">{gettext('Size')}</th>
             <th width="18%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
@@ -120,6 +121,7 @@ class Item extends Component {
       showOpIcon: false,
       unshared: false,
       isShowSharedDialog: false,
+      isStarred: this.props.data.starred,
     };
 
     this.handleMouseOver = this.handleMouseOver.bind(this);
@@ -176,6 +178,18 @@ class Item extends Component {
     this.setState({isShowSharedDialog: false});
   }
 
+  onStarRepo = () => {
+    if (this.state.isStarred) {
+      seafileAPI.unStarItem(this.props.data.repo_id, '/').then(() => {
+        this.setState({isStarred: !this.state.isStarred});
+      });
+    } else {
+      seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
+        this.setState({isStarred: !this.state.isStarred});
+      })
+    }
+  }
+
   render() {
     if (this.state.unshared) {
       return null;
@@ -194,6 +208,10 @@ class Item extends Component {
     const desktopItem = (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <td className="text-center">
+            {!this.state.isStarred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onStarRepo}></i>}
+            {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
+          </td>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link></td>
           <td>

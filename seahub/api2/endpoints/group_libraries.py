@@ -29,6 +29,7 @@ from seahub.share.signals import share_repo_to_group_successful
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission, \
         share_dir_to_group
 from seahub.constants import PERMISSION_READ
+from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 
@@ -69,6 +70,7 @@ class GroupLibraries(APIView):
         """
 
         # only group member can get group libraries
+        username = request.user.username
         if not is_group_member(group_id, request.user.username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -113,6 +115,13 @@ class GroupLibraries(APIView):
                 else:
                     contact_email_dict[email] = email2contact_email(email)
 
+        try:
+            starred_repos = UserStarredFiles.objects.get_starred_repos_by_user(username)
+            starred_repo_id_list = [item.repo_id for item in starred_repos]
+        except Exception as e:
+            logger.error(e)
+            starred_repo_id_list = []
+
         result = []
         for group_repo in group_repos:
             group_repo_info = get_group_repo_info(request, group_repo)
@@ -126,6 +135,8 @@ class GroupLibraries(APIView):
             group_repo_info['modifier_email'] = modifier
             group_repo_info['modifier_name'] = name_dict.get(modifier, '')
             group_repo_info['modifier_contact_email'] = contact_email_dict.get(modifier, '')
+
+            group_repo_info['starred'] = group_repo.id in starred_repo_id_list
 
             result.append(group_repo_info)
 

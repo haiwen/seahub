@@ -8,6 +8,7 @@ import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff } 
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import Rename from '../rename';
+import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   currentGroup: PropTypes.object,
@@ -31,6 +32,7 @@ class SharedRepoListItem extends React.Component {
       isItemMenuShow: false,
       isShowSharedDialog: false,
       isRenaming: false,
+      isStarred: this.props.repo.starred,
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -323,6 +325,18 @@ class SharedRepoListItem extends React.Component {
     return null;
   }
 
+  onStarRepo = () => {
+    if (this.state.isStarred) {
+      seafileAPI.unStarItem(this.props.repo.repo_id, '/').then(() => {
+        this.setState({isStarred: !this.state.isStarred});
+      });
+    } else {
+      seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
+        this.setState({isStarred: !this.state.isStarred});
+      })
+    }
+  }
+
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
@@ -332,6 +346,10 @@ class SharedRepoListItem extends React.Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+          <td className="text-center">
+            {!this.state.isStarred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onStarRepo}></i>}
+            {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
+          </td>
           <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
           <td>
             {this.state.isRenaming ? 

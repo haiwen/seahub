@@ -57,9 +57,9 @@ class FileDiscuss(models.Model):
 
 class FileCommentManager(models.Manager):
     def add(self, repo_id, parent_path, item_name, author, comment, detail=''):
-        fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, 
-                                                                    parent_path, 
-                                                                    item_name, 
+        fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
+                                                                    parent_path,
+                                                                    item_name,
                                                                     False)
         c = self.model(uuid=fileuuidmap, author=author, comment=comment, detail=detail)
         c.save(using=self._db)
@@ -75,7 +75,7 @@ class FileCommentManager(models.Manager):
     def get_by_file_path(self, repo_id, file_path):
         parent_path = os.path.dirname(file_path)
         item_name = os.path.basename(file_path)
-        uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path, 
+        uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path,
                                                            item_name, False)
 
         objs = super(FileCommentManager, self).filter(
@@ -84,7 +84,7 @@ class FileCommentManager(models.Manager):
         return objs
 
     def get_by_parent_path(self, repo_id, parent_path):
-        uuids = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id, 
+        uuids = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id,
                                                                    parent_path)
         objs = super(FileCommentManager, self).filter(uuid__in=uuids)
         return objs
@@ -148,6 +148,11 @@ class StarredFile(object):
             self.name = path.split('/')[-1]
 
 class UserStarredFilesManager(models.Manager):
+
+    def get_starred_repos_by_user(self, email):
+
+        starred_repos = UserStarredFiles.objects.filter(email=email, path='/')
+        return starred_repos
 
     def get_starred_item(self, email, repo_id, path):
 
