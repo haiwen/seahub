@@ -36,7 +36,17 @@
   flex: 1;
 }
 
-.umind-main .umind-propty-container {
+.umind-main .umind-property-container {
   display: flex;
   flex: 0 0 20%;
+  flex-direction: column;
+}
+
+.detail-panel {
+  flex: 1;
+  display: flex;
+}
+
+.editor-minimap {
+  height: 200px;
 }

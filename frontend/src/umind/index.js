@@ -4,6 +4,7 @@ import GGEditor, { Mind } from 'gg-editor';
 import data from './mock';
 import UMindToolbar from './umind-toolbar';
 import UMindDetailPanel from './umind-detail-panel';
+import UMindEditorMinimap from './umind-editor/umind-editor-minimap';
 
 import '../css/umind.css';
 
@@ -23,8 +24,9 @@ class UMind extends React.Component {
           <div className="umind-editor-container">
             <Mind data={data} className="umind-editor" />
           </div>
-          <div className="umind-propty-container">
-            属性栏
+          <div className="umind-property-container">
+            <UMindDetailPanel />
+            <UMindEditorMinimap />
           </div>
         </div>
       </GGEditor>
