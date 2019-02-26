@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UMind from './umind/umind';
+import UMind from './umind';
 
-class ViewFileUmind extends React.Component {
+class ViewFileUMind extends React.Component {
 
   render() {
     return (
@@ -12,6 +12,6 @@ class ViewFileUmind extends React.Component {
 }
 
 ReactDOM.render(
-  <ViewFileUmind />,
+  <ViewFileUMind />,
   document.getElementById('wrapper')
 );

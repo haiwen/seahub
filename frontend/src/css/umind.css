@@ -2,7 +2,9 @@
   width: 100%;
   height: 100%;
   display: flex;
+  overflow: hidden;
 }
+
 .umind-container {
   display: flex;
   flex: 1;
@@ -11,6 +13,12 @@
 
 .umind-container .umind-header {
   height: 49px;
+  display: flex;
+}
+
+.umind-header .umind-toolbar {
+  display: flex;
+  flex: 1;
 }
 
 .umind-container .umind-main {
@@ -18,12 +26,17 @@
   flex: 1;
 }
 
-.umind-main .umind-editor {
+.umind-main .umind-editor-container {
   display: flex;
   flex: 1 0 80%;
 }
 
-.umind-main .umind-detail {
+.umind-editor {
+  display: flex;
+  flex: 1;
+}
+
+.umind-main .umind-propty-container {
   display: flex;
   flex: 0 0 20%;
 }
