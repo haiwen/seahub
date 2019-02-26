@@ -75,7 +75,7 @@ class RepoInfoBar extends React.Component {
             {usedRepoTags.map((usedRepoTag) => {
               return (
                 <li key={usedRepoTag.id} className="used-tag-item">
-                  <span className={`used-tag bg-${usedRepoTag.color}`}></span>
+                  <span className="used-tag" style={{backgroundColor:usedRepoTag.color}}></span>
                   <span className="used-tag-name" title={usedRepoTag.name}>{usedRepoTag.name}</span>
                   <span className="used-tag-files" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
                     {usedRepoTag.fileCount > 1 ? usedRepoTag.fileCount + ' files' : usedRepoTag.fileCount + ' file'}

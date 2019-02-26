@@ -377,7 +377,7 @@ class DirentListItem extends React.Component {
                   {dirent.file_tags.map((fileTag, index) => {
                     let length = dirent.file_tags.length;
                     return (
-                      <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} style={{zIndex: length - index }}></span>
+                      <span className="file-tag" key={fileTag.id} style={{zIndex:length - index, backgroundColor:fileTag.color}}></span>
                     );
                   })}
                 </div>
