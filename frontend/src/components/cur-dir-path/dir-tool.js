@@ -89,7 +89,7 @@ class DirTool extends React.Component {
         <Fragment>
           <ul className="path-toolbar">
             <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
-            <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
+            <li className="toolbar-item"><a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
           </ul>
 
@@ -139,7 +139,7 @@ class DirTool extends React.Component {
     } else if (!isFile && permission) {
       return (
         <ul className="path-toolbar">
-          <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
+          <li className="toolbar-item"><a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
         </ul>
       );
     } else if (permission) {
