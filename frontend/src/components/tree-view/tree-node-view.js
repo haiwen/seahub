@@ -87,10 +87,15 @@ class TreeNodeView extends React.Component {
         type = 'file';
       } else {
         let suffix = node.object.name.slice(index).toLowerCase();
-        if (suffix === '.png' || suffix === '.jpg') {
+        if (suffix === '.png' || suffix === '.jpg' || suffix === '.jpeg' || suffix === '.gif' || suffix === '.bmp') {
           icon = <i className="far fa-image"></i>;
           type = 'image';
-        } else {
+        } 
+        else if (suffix === '.md' || suffix === '.markdown') {
+          icon = <i className="far fa-file-alt"></i>;
+          type = 'file';
+        }
+        else {
           icon = <i className="far fa-file"></i>;
           type = 'file';
         }
