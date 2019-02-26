@@ -73,8 +73,7 @@ class ReposView(APIView):
             org_id = request.user.org.org_id
 
         try:
-            starred_repos = UserStarredFiles.objects.filter(email=email,
-                    path='/')
+            starred_repos = UserStarredFiles.objects.get_starred_repos_by_user(email)
             starred_repo_id_list = [item.repo_id for item in starred_repos]
         except Exception as e:
             logger.error(e)

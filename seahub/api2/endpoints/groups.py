@@ -113,8 +113,7 @@ class Groups(APIView):
             admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
 
             try:
-                starred_repos = UserStarredFiles.objects.filter(email=username,
-                        path='/')
+                starred_repos = UserStarredFiles.objects.get_starred_repos_by_user(username)
                 starred_repo_id_list = [item.repo_id for item in starred_repos]
             except Exception as e:
                 logger.error(e)

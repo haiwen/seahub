@@ -116,8 +116,7 @@ class GroupLibraries(APIView):
                     contact_email_dict[email] = email2contact_email(email)
 
         try:
-            starred_repos = UserStarredFiles.objects.filter(email=username,
-                    path='/')
+            starred_repos = UserStarredFiles.objects.get_starred_repos_by_user(username)
             starred_repo_id_list = [item.repo_id for item in starred_repos]
         except Exception as e:
             logger.error(e)
