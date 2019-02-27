@@ -29,6 +29,8 @@ class EditorUtilities {
     this.serviceUrl = serviceUrl;
     this.name = userName;
     this.contact_email = userInfo.contact_email;
+    this.fileName = fileName;
+    this.userName = userName;
   }
   
   saveContent(content) {
@@ -204,7 +206,7 @@ class EditorUtilities {
   }
 
   getCommentsNumber() {
-    return seafileAPI.getCommentsNumber(this.repoID, dirPath);
+    return seafileAPI.getCommentsNumber(this.repoID, filePath);
   }
 
   postComment(comment, detail) {
