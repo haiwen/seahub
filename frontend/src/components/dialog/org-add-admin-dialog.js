@@ -2,14 +2,13 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { gettext, orgID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
   addOrgAdmin: PropTypes.func.isRequired,
 };
-
 
 class AddOrgAdminDialog extends React.Component {
   constructor(props) {

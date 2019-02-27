@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalHeader, ModalBody, Label, Form, InputGroup, InputGroupAddon, FormGroup } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
-
 
 class AddOrgUserDialog extends React.Component {
   constructor(props) {

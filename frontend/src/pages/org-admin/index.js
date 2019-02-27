@@ -2,22 +2,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
-
+import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import OrgUsers from './org-users';
 import OrgUsersList from './org-users-list';
 import OrgAdminList from './org-admin-list';
 
-import { siteRoot } from '../../utils/constants';
-
-// style
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
 import '../../assets/css/fontawesome.css';
 import '../../css/layout.css';
 import '../../css/toolbar.css';
-
 
 class Org extends React.Component {
   constructor(props) {
@@ -40,27 +36,19 @@ class Org extends React.Component {
   }
 
   onCloseSidePanel = () => {
-    this.setState({
-      isSidePanelClosed: !this.state.isSidePanelClosed
-    });
+    this.setState({isSidePanelClosed: !this.state.isSidePanelClosed});
   }
 
   tabItemClick = (param) => {
-    this.setState({
-      currentTab: param
-    });          
+    this.setState({currentTab: param});          
   }  
 
   toggleAddOrgUser = () => {
-    this.setState({
-      isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog
-    });
+    this.setState({isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog});
   } 
 
   toggleAddOrgAdmin = () => {
-    this.setState({
-      isShowAddOrgAdminDialog: !this.state.isShowAddOrgAdminDialog
-    });
+    this.setState({isShowAddOrgAdminDialog: !this.state.isShowAddOrgAdminDialog});
   } 
 
   render() {
