@@ -1,12 +1,10 @@
-import React, { Fragment } from 'react';
-
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import { gettext, siteRoot, orgID, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Toast from '../../components/toast';
-import { Utils } from '../../utils/utils';
 import UserStatusEditor from '../../components/select-editor/user-status-editor';
 
 

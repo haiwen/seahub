@@ -1,14 +1,12 @@
-import React, { Fragment } from 'react';
-
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Toast from '../../components/toast';
-import UserItem from './org-user-item';
 import OrgUserInfo from '../../models/org-user';
-
-import AddOrgAdminDialog from '../../components/dialog/org-add-admin-dialog';
 import ModalPortal from '../../components/modal-portal';
+import AddOrgAdminDialog from '../../components/dialog/org-add-admin-dialog';
+import UserItem from './org-user-item';
 
 import '../../css/org-admin-paginator.css';
 
@@ -17,7 +15,6 @@ const propTypes = {
   currentTab: PropTypes.string.isRequired,
   isShowAddOrgAdminDialog: PropTypes.bool.isRequired,
 };
-
 
 class OrgAdminList extends React.Component {
 
@@ -30,17 +27,12 @@ class OrgAdminList extends React.Component {
 
   componentDidMount() {
     seafileAPI.listOrgUsers(orgID, true).then(res => {
-      let userList = [];
-      res.data.user_list.map(item => {
-        let userInfo = new OrgUserInfo(item);
-        userList.push(userInfo);
+      let userList = res.data.user_list.map(item => {
+        return new OrgUserInfo(item);
       });
-      this.setState({
-        orgAdminUsers: userList,
-      });
+      this.setState({orgAdminUsers: userList});
     });
   }
-
 
   toggleDelete = (email) => {
     seafileAPI.deleteOrgUser(orgID, email).then(res => {
@@ -50,7 +42,7 @@ class OrgAdminList extends React.Component {
       let msg = gettext('Successfully deleted %s');
       msg = msg.replace('%s', email);
       Toast.success(msg);
-    })
+    });
   } 
 
   toggleRevokeAdmin = (email) => {
@@ -95,20 +87,20 @@ class OrgAdminList extends React.Component {
            </thead>
            <tbody>
             {orgAdminUsers.map(item => {
-              return <UserItem key={item.id}
-                               user={item}
-                               toggleDelete={this.toggleDelete}
-                               toggleRevokeAdmin={this.toggleRevokeAdmin}
-                               currentTab={this.props.currentTab}
-                     />
-             })}
+              return (
+                <UserItem 
+                  key={item.id}
+                  user={item}
+                  toggleDelete={this.toggleDelete}
+                  toggleRevokeAdmin={this.toggleRevokeAdmin}
+                  currentTab={this.props.currentTab}
+                />
+            )})}
            </tbody>
          </table>
          {this.props.isShowAddOrgAdminDialog && (
            <ModalPortal>
-             <AddOrgAdminDialog toggle={this.props.toggleAddOrgAdmin}
-                                addOrgAdmin={this.addOrgAdmin}
-             />
+             <AddOrgAdminDialog toggle={this.props.toggleAddOrgAdmin} addOrgAdmin={this.addOrgAdmin} />
            </ModalPortal>
          )}
       </div>

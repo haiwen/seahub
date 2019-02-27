@@ -42,13 +42,13 @@ class Org extends React.Component {
   onCloseSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
-    })
+    });
   }
 
   tabItemClick = (param) => {
     this.setState({
       currentTab: param
-    })           
+    });          
   }  
 
   toggleAddOrgUser = () => {
@@ -64,32 +64,27 @@ class Org extends React.Component {
   } 
 
   render() {
+
+    let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog } = this.state;
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={this.state.isSidePanelClosed}
-                   onCloseSidePanel={this.onCloseSidePanel}
-        />
+        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} />
         <MainPanel>
           <Router>
-            <OrgUsers path={siteRoot + "org/useradmin"}
-                      currentTab={this.state.currentTab} 
-                      tabItemClick={this.tabItemClick}
-                      toggleAddOrgAdmin={this.toggleAddOrgAdmin} 
-                      toggleAddOrgUser={this.toggleAddOrgUser} 
-                      >
-              <OrgUsersList path="/" currentTab={this.state.currentTab} 
-                                     isShowAddOrgUserDialog={this.state.isShowAddOrgUserDialog}
-                                     toggleAddOrgUser={this.toggleAddOrgUser} 
-              />
-              <OrgAdminList path="admins" currentTab={this.state.currentTab}
-                                          isShowAddOrgAdminDialog={this.state.isShowAddOrgAdminDialog}
-                                          toggleAddOrgAdmin={this.toggleAddOrgAdmin}
-              />
+            <OrgUsers 
+              path={siteRoot + "org/useradmin"}
+              currentTab={currentTab} 
+              tabItemClick={this.tabItemClick}
+              toggleAddOrgAdmin={this.toggleAddOrgAdmin} 
+              toggleAddOrgUser={this.toggleAddOrgUser} 
+            >
+              <OrgUsersList path="/" currentTab={currentTab} isShowAddOrgUserDialog={isShowAddOrgUserDialog} toggleAddOrgUser={this.toggleAddOrgUser} />
+              <OrgAdminList path="admins" currentTab={currentTab} isShowAddOrgAdminDialog={isShowAddOrgAdminDialog} toggleAddOrgAdmin={this.toggleAddOrgAdmin} />
             </OrgUsers>
           </Router>
         </MainPanel>
       </div>
-    ) 
+    );
   }
 }
 

@@ -26,9 +26,7 @@ class AddOrgUserDialog extends React.Component {
   handleSubmit = () => {
     let isValid = this.validateInputParams();
     if (isValid) {
-      let email = this.state.email;
-      let name = this.state.name;
-      let password = this.state.password;
+      let { email, name, password } = this.state;
       this.props.handleSubmit(email, name, password);
     }
   } 

@@ -1,15 +1,12 @@
-import React, { Fragment } from 'react';
-
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import Toast from '../../components/toast';
-import UserItem from './org-user-item';
 import OrgUserInfo from '../../models/org-user';
-
-import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog'; 
+import Toast from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
-
+import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog'; 
+import UserItem from './org-user-item';
 
 const propTypes = {
   toggleAddOrgUser: PropTypes.func.isRequired,
@@ -34,10 +31,8 @@ class OrgUsersList extends React.Component {
 
   initData = (page) => {
     seafileAPI.listOrgUsers(orgID, '', page).then(res => {
-      let userList = [];
-      res.data.user_list.map(item => {
-        let userInfo = new OrgUserInfo(item);
-        userList.push(userInfo);
+      let userList = res.data.user_list.map(item => {
+        return new OrgUserInfo(item);
       });
       this.setState({
         orgUsers: userList,
@@ -50,9 +45,7 @@ class OrgUsersList extends React.Component {
   toggleDelete = (email) => {
     seafileAPI.deleteOrgUser(orgID, email).then(res => {
       let users = this.state.orgUsers.filter(item => item.email != email);
-      this.setState({
-        orgUsers: users
-      });
+      this.setState({orgUsers: users});
       let msg = gettext('Successfully deleted %s');
       msg = msg.replace('%s', email);
       Toast.success(msg);
@@ -94,40 +87,39 @@ class OrgUsersList extends React.Component {
     let orgUsers = this.state.orgUsers;
 
     return (
-       <div className="cur-view-content">
-         <table>
-           <thead>
-             <tr>
-               <th width="30%">{gettext('Name')}</th>
-               <th width="10%">{gettext('Status')}</th>
-               <th width="20%">{gettext('Space Used')}</th>
-               <th width="20%">{gettext('Create At / Last Login')}</th>
-               <th width="20%" className="text-center">{gettext('Operations')}</th>
-             </tr>
-           </thead>
-           <tbody>
-            {orgUsers.map(item => {
-              return <UserItem key={item.id}
-                               user={item}
-                               toggleDelete={this.toggleDelete}
-                               currentTab={this.props.currentTab}
-                     />
-             })}
-           </tbody>
-         </table>
-         <div className="paginator">
-           {this.state.page !=1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext("Previous")}{' | '}</a>}
-           {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext("Next")}</a>}
-         </div>
-
-          {this.props.isShowAddOrgUserDialog && (
-            <ModalPortal>
-              <AddOrgUserDialog toggle={this.props.toggleAddOrgUser}
-                                handleSubmit={this.handleSubmit}
+      <div className="cur-view-content">
+        <table>
+          <thead>
+            <tr>
+              <th width="30%">{gettext('Name')}</th>
+              <th width="10%">{gettext('Status')}</th>
+              <th width="20%">{gettext('Space Used')}</th>
+              <th width="20%">{gettext('Create At / Last Login')}</th>
+              <th width="20%" className="text-center">{gettext('Operations')}</th>
+            </tr>
+          </thead>
+          <tbody>
+          {orgUsers.map(item => {
+            return (
+              <UserItem 
+                key={item.id}
+                user={item}
+                toggleDelete={this.toggleDelete}
+                currentTab={this.props.currentTab}
               />
-            </ModalPortal>
-          )}
-       </div>
+          )})}
+          </tbody>
+        </table>
+        <div className="paginator">
+          {this.state.page !=1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext("Previous")}{' | '}</a>}
+          {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext("Next")}</a>}
+        </div>
+        {this.props.isShowAddOrgUserDialog && (
+          <ModalPortal>
+            <AddOrgUserDialog toggle={this.props.toggleAddOrgUser} handleSubmit={this.handleSubmit} />
+          </ModalPortal>
+        )}
+      </div>
     );
   }
 }
