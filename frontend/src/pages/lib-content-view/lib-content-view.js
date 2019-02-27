@@ -42,7 +42,6 @@ class LibContentView extends React.Component {
       repoEncrypted: false,
       libNeedDecrypt: false,
       isGroupOwnedRepo: false,
-      isDepartmentAdmin: false,
       userPerm: '',
       selectedDirentList: [],
       isDraft: false,
@@ -1171,29 +1170,9 @@ class LibContentView extends React.Component {
       return '';
     }
 
-    // share btn is show or not, is current repo(dir) can share to user(group) or not;
-    // encrypted repo & unencrypted repo
-
-    // encrypted repo (unnecessary handler)
-    // first : encrypted repo(In order to handle the simplicity, the sharing function is not displayed here.)
-    // second: encrypted dir（Sharing is not supported）
-
-    // unencrypted repo
-    
-    // first operation:judgement has generator shareLink or uploadLink priv? 
-    // (canGenerateShareLink && （userPrem === 'rw' || userPerm === 'r))
-    // (canGenerateUploadLink && （userPrem === 'rw')
-    
-    // second operation   : Get results according to the judgment conditions of different scenarios
-    // 1 my-library       : isRepoOwner
-    // 2 share-with-me    : isAdmin
-    // 3 share with all   : isRepoOwner
-    // 4 group            : isRepoOwner || isAdmin (sharedAsAdmin and current user is admin of this group)
-    // 5 department group : isAdmin
-
     let showShareBtn = false;
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, repoEncrypted, userPerm, isDepartmentAdmin } = this.state;
+    let { currentRepoInfo, repoEncrypted, userPerm } = this.state;
     let isAdmin = currentRepoInfo.is_admin;
     let isVirtual = currentRepoInfo.is_virtual;
     let isRepoOwner = currentRepoInfo.owner_email === username;
