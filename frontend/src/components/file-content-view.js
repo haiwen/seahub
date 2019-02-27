@@ -102,6 +102,7 @@ class FileContentView extends React.Component {
                   onPathClick={this.props.onMainNavBarClick}
                   onTabNavClick={this.props.onTabNavClick}
                   isViewFile={true}
+                  updateUsedRepoTags={this.props.updateUsedRepoTags}
                 />
               )}
             </div>

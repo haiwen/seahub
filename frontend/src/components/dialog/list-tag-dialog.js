@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import RepoTag from '../../models/repo-tag';
 
 import '../../css/repo-tag.css';
@@ -44,10 +45,11 @@ class TagListItem extends React.Component {
 
   render() {
     let color = this.props.item.color;
+    let drakColor = Utils.getDarkColor(color);
     return (
       <li className="tag-list-item">
-        <div className={`tag-demo bg-${color}`} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-          <span className={`bg-${color}-dark ${this.state.showSelectedTag ? 'show-tag-selected': ''}`}></span>
+        <div className="tag-demo" style={{backgroundColor:color}} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+          <span className={`${this.state.showSelectedTag ? 'show-tag-selected': ''}`} style={{backgroundColor: drakColor}}></span>
           <span className="tag-name">{this.props.item.name}</span>
           <span className="tag-files" onClick={this.onListTaggedFiles}>
             {/* todo 0 file 2 files  */}

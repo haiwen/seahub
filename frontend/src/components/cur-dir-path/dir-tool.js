@@ -14,6 +14,7 @@ const propTypes = {
   repoName: PropTypes.string.isRequired,
   permission: PropTypes.bool.isRequired,
   currentPath: PropTypes.string.isRequired,
+  updateUsedRepoTags: PropTypes.func.isRequired,
 };
 
 class DirTool extends React.Component {
@@ -129,6 +130,7 @@ class DirTool extends React.Component {
                     currentTag={this.state.currentTag}
                     onClose={this.onCloseRepoTagDialog}
                     toggleCancel={this.onListTaggedFileToggle}
+                    updateUsedRepoTags={this.props.updateUsedRepoTags}
                   />
                 )}
               </Modal>

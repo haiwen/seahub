@@ -106,7 +106,7 @@ class DetailListView extends React.Component {
                     {fileTagList.map((fileTag) => {
                       return (
                         <li key={fileTag.id} className="file-tag-item">
-                          <span className={`file-tag bg-${fileTag.color}`}></span>
+                          <span className="file-tag" style={{backgroundColor:fileTag.color}}></span>
                           <span className="tag-name" title={fileTag.name}>{fileTag.name}</span>
                         </li>
                       );

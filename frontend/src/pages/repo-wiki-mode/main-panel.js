@@ -219,6 +219,7 @@ class MainPanel extends Component {
                   permission={permission} 
                   onPathClick={this.onMainNavBarClick}
                   isViewFile={this.props.isViewFile}
+                  updateUsedRepoTags={this.props.updateUsedRepoTags}
                 />
               )}
             </div>

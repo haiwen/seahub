@@ -12,6 +12,7 @@ const propTypes = {
   onTabNavClick: PropTypes.func,
   pathPrefix: PropTypes.array,
   isViewFile: PropTypes.bool,
+  updateUsedRepoTags: PropTypes.func.isRequired,
 };
 
 class CurDirPath extends React.Component {
@@ -33,6 +34,7 @@ class CurDirPath extends React.Component {
           repoName={this.props.repoName} 
           permission={this.props.permission}
           currentPath={this.props.currentPath} 
+          updateUsedRepoTags={this.props.updateUsedRepoTags}
         />
       </Fragment>
     );

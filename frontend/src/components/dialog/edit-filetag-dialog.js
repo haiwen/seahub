@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import RepoTag from '../../models/repo-tag';
 require('../../css/repo-tag.css');
 
@@ -72,10 +73,11 @@ class TagItem extends React.Component {
   render() {
     let repoTag = this.props.repoTag;
     let repoTagIdList = this.getRepoTagIdList();
+    let drakColor = Utils.getDarkColor(repoTag.color);
     return (
       <li key={repoTag.id} className="tag-list-item" onClick={this.onEditFileTag} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <div className={`tag-demo bg-${repoTag.color}`}>
-          <span className={`bg-${repoTag.color}-dark ${this.state.showSelectedTag ? 'show-tag-selected': ''}`}></span>
+        <div className="tag-demo" style={{backgroundColor:repoTag.color}}>
+          <span className={`${this.state.showSelectedTag ? 'show-tag-selected': ''}`} style={{backgroundColor: drakColor}}></span>
           <span className="tag-name">{repoTag.name}</span>
           {repoTagIdList.indexOf(repoTag.id) > -1 &&
             <i className="fas fa-check tag-operation"></i>

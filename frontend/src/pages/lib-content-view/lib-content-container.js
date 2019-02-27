@@ -136,6 +136,7 @@ class LibContentContainer extends React.Component {
               permission={this.props.repoPermission} 
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
+              updateUsedRepoTags={this.props.updateUsedRepoTags}
             />
           </div>
           <div className={`cur-view-content ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>
