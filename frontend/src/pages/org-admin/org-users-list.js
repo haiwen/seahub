@@ -20,8 +20,9 @@ class OrgUsersList extends React.Component {
     super(props);
     this.state = {
       orgUsers: [],
-      page: 1,
       isItemFreezed: false,
+      page: 1,
+      pageNext: 2,
     };
   }
 
