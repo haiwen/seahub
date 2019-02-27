@@ -21,6 +21,7 @@ class OrgUsersList extends React.Component {
     this.state = {
       orgUsers: [],
       page: 1,
+      isItemFreezed: false,
     };
   }
 
@@ -40,6 +41,14 @@ class OrgUsersList extends React.Component {
         page: res.data.page,
       });
     });
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   toggleDelete = (email) => {
@@ -92,8 +101,8 @@ class OrgUsersList extends React.Component {
           <thead>
             <tr>
               <th width="30%">{gettext('Name')}</th>
-              <th width="10%">{gettext('Status')}</th>
-              <th width="20%">{gettext('Space Used')}</th>
+              <th width="15%">{gettext('Status')}</th>
+              <th width="15%">{gettext('Space Used')}</th>
               <th width="20%">{gettext('Create At / Last Login')}</th>
               <th width="20%" className="text-center">{gettext('Operations')}</th>
             </tr>
@@ -104,8 +113,11 @@ class OrgUsersList extends React.Component {
               <UserItem 
                 key={item.id}
                 user={item}
-                toggleDelete={this.toggleDelete}
                 currentTab={this.props.currentTab}
+                isItemFreezed={this.state.isItemFreezed}
+                toggleDelete={this.toggleDelete}
+                onFreezedItem={this.onFreezedItem}
+                onUnfreezedItem={this.onUnfreezedItem}
               />
           )})}
           </tbody>

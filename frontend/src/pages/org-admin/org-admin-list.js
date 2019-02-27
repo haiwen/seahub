@@ -22,6 +22,7 @@ class OrgAdminList extends React.Component {
     super(props);
     this.state = {
       orgAdminUsers: [],
+      isItemFreezed: false,
     };
   }
 
@@ -32,6 +33,14 @@ class OrgAdminList extends React.Component {
       });
       this.setState({orgAdminUsers: userList});
     });
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   toggleDelete = (email) => {
@@ -79,8 +88,8 @@ class OrgAdminList extends React.Component {
            <thead>
              <tr>
                <th width="30%">{gettext('Name')}</th>
-               <th width="10%">{gettext('Status')}</th>
-               <th width="20%">{gettext('Space Used')}</th>
+               <th width="15%">{gettext('Status')}</th>
+               <th width="15%">{gettext('Space Used')}</th>
                <th width="20%">{gettext('Create At / Last Login')}</th>
                <th width="20%" className="text-center">{gettext('Operations')}</th>
              </tr>
@@ -91,9 +100,12 @@ class OrgAdminList extends React.Component {
                 <UserItem 
                   key={item.id}
                   user={item}
+                  currentTab={this.props.currentTab}
+                  isItemFreezed={this.state.isItemFreezed}
                   toggleDelete={this.toggleDelete}
                   toggleRevokeAdmin={this.toggleRevokeAdmin}
-                  currentTab={this.props.currentTab}
+                  onFreezedItem={this.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
                 />
             )})}
            </tbody>

@@ -1,46 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
 import { gettext, siteRoot, orgID, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Toast from '../../components/toast';
 import UserStatusEditor from '../../components/select-editor/user-status-editor';
 
-
 const propTypes = {
   currentTab: PropTypes.string,
   toggleRevokeAdmin: PropTypes.func,
+  isItemFreezed: PropTypes.bool.isRequired,
   toggleDelete: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
 };
-
 
 class UserItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      highlight: '',
+      highlight: false,
       showMenu: false,
       currentStatus: this.props.user.is_active ? 'active' : 'inactive',
-      isShowOpMenu: false
+      isItemMenuShow: false
     };
 
     this.statusArray = ['active', 'inactive'];
   }
 
   onMouseEnter = () => {
-    this.setState({
-      showMenu: true,
-      highlight: 'tr-highlight'
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        showMenu: true,
+        highlight: true,
+      });
+    }
   }
 
   onMouseLeave = () => {
-    this.setState({
-      showMenu: false,
-      highlight: ''
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        showMenu: false,
+        highlight: false
+      });
+    }
   } 
 
   toggleDelete = () => {
@@ -82,65 +86,68 @@ class UserItem extends React.Component {
     });
   }
 
-  clickMenuToggle = (e) => {
+  onDropdownToggleClick = (e) => {
     e.preventDefault();
-    this.onMenuToggle(e);
+    this.toggleOperationMenu(e);
   }
 
-  onMenuToggle = (e) => {
-    let targetType = e.target.dataset.toggle;
-    if (targetType !== 'item') {
-      this.setState({
-        highlight: '',
-        isShowMenu: false,
-        isShowOpMenu: !this.state.isShowOpMenu
-      });
-    }
-  } 
+  toggleOperationMenu = (e) => {
+    e.stopPropagation();
+    this.setState(
+      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+        if (this.state.isItemMenuShow) {
+          this.props.onFreezedItem();
+        } else {
+          this.setState({
+            highlight: false,
+            showMenu: false,
+          });
+          this.props.onUnfreezedItem();
+        }
+      }
+    );
+  }
 
   render() {
-    let showMenu = (this.props.user.email !== username)  && this.state.showMenu;
+    let { user, currentTab } = this.props;
+    let href = siteRoot + 'org/useradmin/info/' + encodeURIComponent(user.email) + '/';
+    let isOperationMenuShow = (user.email !== username)  && this.state.showMenu;
+    let isEditIconShow = isOperationMenuShow;
     return (
-      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>
-          <a className="font-weight-normal" href={siteRoot + 'org/useradmin/info/' + encodeURIComponent(this.props.user.email) + '/'}>
-            {this.props.user.name}
-          </a>
+          <a href={href} className="font-weight-normal">{user.name}</a>
         </td>
         <td>
           <UserStatusEditor 
             isTextMode={true}
-            isEditIconShow={showMenu}
+            isEditIconShow={isEditIconShow}
             currentStatus={this.state.currentStatus}
             statusArray={this.statusArray}
             onStatusChanged={this.changeStatus}
           />
         </td>
-        <td>{this.props.user.quota ? this.props.user.self_usage + ' / ' + this.props.user.quota : this.props.user.self_usage}</td>
-        <td style={{ 'fontSize': '11px'}}>{this.props.user.ctime} / {this.props.user.last_login ? this.props.user.last_login : '--'}</td>
-        {(this.state.showMenu) ?
-          <td className="text-center cursor-pointer">
-            {showMenu && (
-              <Dropdown isOpen={this.state.isShowOpMenu} toggle={this.onMenuToggle}>
-                <DropdownToggle
-                  tag="a"
-                  className="fas fa-ellipsis-v"
-                  title={gettext('More Operations')}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isShowOpMenu}
-                  onClick={this.clickMenuToggle}
-                />
-                <DropdownMenu>
-                   <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-                   <DropdownItem onClick={this.toggleResetPW}>{gettext('ResetPwd')}</DropdownItem>
-                   {this.props.currentTab == 'admins' &&
-                     <DropdownItem onClick={this.toggleRevokeAdmin}>{gettext('Revoke Admin')}</DropdownItem>
-                   }
-                 </DropdownMenu>
-               </Dropdown>
-            )}
-          </td> : <td></td>
-        }
+        <td>{user.quota ? user.self_usage + ' / ' + user.quota : user.self_usage}</td>
+        <td style={{'fontSize': '11px'}}>{user.ctime} / {user.last_login ? user.last_login : '--'}</td>
+        <td className="text-center cursor-pointer">
+          {isOperationMenuShow && (
+            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+              <DropdownToggle
+                tag="a"
+                className="fas fa-ellipsis-v"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isItemMenuShow}
+                onClick={this.onDropdownToggleClick}
+              />
+              <DropdownMenu>
+                <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.toggleResetPW}>{gettext('ResetPwd')}</DropdownItem>
+                {currentTab == 'admins' && <DropdownItem onClick={this.toggleRevokeAdmin}>{gettext('Revoke Admin')}</DropdownItem>}
+              </DropdownMenu>
+            </Dropdown>
+          )}
+        </td>
       </tr>
     );
   }
