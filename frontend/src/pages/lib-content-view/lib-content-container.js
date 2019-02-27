@@ -15,13 +15,9 @@ const propTypes = {
   // repoinfo
   currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
-  repoName: PropTypes.string.isRequired,
   repoPermission: PropTypes.bool.isRequired,
-  repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPrem: PropTypes.bool,
-  isAdmin: PropTypes.bool.isRequired,
-  isRepoOwner: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   // path func
   onTabNavClick: PropTypes.func.isRequired,
@@ -133,10 +129,10 @@ class LibContentContainer extends React.Component {
         <div className="cur-view-container">
           <div className="cur-view-path">
             <CurDirPath 
-              pathPrefix={this.props.pathPrefix}
-              currentPath={this.props.path} 
               repoID={repoID}
               repoName={this.props.currentRepoInfo.repo_name}
+              pathPrefix={this.props.pathPrefix}
+              currentPath={this.props.path} 
               permission={this.props.repoPermission} 
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
@@ -151,9 +147,6 @@ class LibContentContainer extends React.Component {
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
-                    repoEncrypted={this.props.repoEncrypted}
-                    isRepoOwner={this.props.isRepoOwner}
-                    isAdmin={this.props.isAdmin}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isRepoInfoBarShow={isRepoInfoBarShow}
@@ -191,9 +184,6 @@ class LibContentContainer extends React.Component {
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
                     repoPermission={this.props.repoPermission}
-                    repoEncrypted={this.props.repoEncrypted}
-                    isRepoOwner={this.props.isRepoOwner}
-                    isAdmin={this.props.isAdmin}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isTreeDataLoading={this.props.isTreeDataLoading}

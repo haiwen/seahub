@@ -42,11 +42,7 @@ class LibContentView extends React.Component {
       repoEncrypted: false,
       libNeedDecrypt: false,
       isGroupOwnedRepo: false,
-      isDepartmentAdmin: false,
-      isAdmin: false,
-      ownerEmail: '',
       userPerm: '',
-      isVirtual: false,
       selectedDirentList: [],
       isDraft: false,
       hasDraft: false,
@@ -98,26 +94,10 @@ class LibContentView extends React.Component {
       this.setState({
         currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
-        libNeedDecrypt: res.data.lib_need_decrypt, 
+        libNeedDecrypt: repoInfo.lib_need_decrypt, 
         repoEncrypted: repoInfo.encrypted,
-        isVirtual: repoInfo.is_virtual,
-        isAdmin: repoInfo.is_admin,
-        ownerEmail: repoInfo.owner_email,
         repoPermission: repoInfo.permission === 'rw'
       });
-
-      const ownerEmail = repoInfo.owner_email;
-      if (repoInfo.owner_email.indexOf('@seafile_group') != -1) {
-
-        const groupID = ownerEmail.substring(0, ownerEmail.indexOf('@'));
-        this.setState({isGroupOwnedRepo: true});
-
-        seafileAPI.getGroup(groupID).then(res => {
-          if (res.data.admins.indexOf(username) != -1) {
-            this.setState({isDepartmentAdmin: true});
-          }
-        });
-      }
 
       let repoID = repoInfo.repo_id;
       let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
@@ -127,7 +107,7 @@ class LibContentView extends React.Component {
 
       this.setState({path: path});
 
-      if (!res.data.lib_need_decrypt) {
+      if (!repoInfo.lib_need_decrypt) {
         this.loadDirData(path);
       }
     }).catch(error => {
@@ -1192,15 +1172,29 @@ class LibContentView extends React.Component {
 
     let showShareBtn = false;
     let enableDirPrivateShare = false;
-    const { repoEncrypted, isAdmin, ownerEmail, userPerm, isVirtual, isDepartmentAdmin } = this.state;
-    let isRepoOwner = ownerEmail === username;
+    let { currentRepoInfo, repoEncrypted, userPerm } = this.state;
+    let isAdmin = currentRepoInfo.is_admin;
+    let isVirtual = currentRepoInfo.is_virtual;
+    let isRepoOwner = currentRepoInfo.owner_email === username;
+
     if (!repoEncrypted) {
-      if ((canGenerateShareLink || canGenerateUploadLink || isRepoOwner || isAdmin) && (userPerm == 'rw' || userPerm == 'r')) {
-        showShareBtn = true;
-        if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
-          enableDirPrivateShare = true;
-        }
+      let showGenerateShareLinkTab = false;
+      if (canGenerateShareLink && (userPerm == 'rw' || userPerm == 'r')) {
+        showGenerateShareLinkTab = true;
       }
+      let showGenerateUploadLinkTab = false;
+      if (canGenerateUploadLink && (userPerm == 'rw')) {
+        showGenerateUploadLinkTab = true;
+      }
+
+      if (!isVirtual && (isRepoOwner || isAdmin)) {
+        enableDirPrivateShare = true;
+      }
+
+      if (showGenerateShareLinkTab || showGenerateUploadLinkTab || enableDirPrivateShare) {
+        showShareBtn = true;
+      }
+
     }
 
     return (
@@ -1222,7 +1216,6 @@ class LibContentView extends React.Component {
             direntList={this.state.direntList}
             repoName={this.state.repoName}
             repoEncrypted={this.state.repoEncrypted}
-            isAdmin={this.state.isAdmin}
             isGroupOwnedRepo={this.state.isGroupOwnedRepo}
             userPerm={this.state.userPerm}
             showShareBtn={showShareBtn}
@@ -1244,13 +1237,9 @@ class LibContentView extends React.Component {
             pathExist={this.state.pathExist}
             currentRepoInfo={this.state.currentRepoInfo}
             repoID={this.props.repoID}
-            repoName={this.state.repoName}
             repoPermission={this.state.repoPermission}
-            repoEncrypted={this.state.repoEncrypted}
             enableDirPrivateShare={enableDirPrivateShare}
             userPerm={userPerm}
-            isAdmin={isAdmin}
-            isRepoOwner={isRepoOwner}
             isGroupOwnedRepo={this.state.isGroupOwnedRepo}
             onTabNavClick={this.props.onTabNavClick}
             onMainNavBarClick={this.onMainNavBarClick}

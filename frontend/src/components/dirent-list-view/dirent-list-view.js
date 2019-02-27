@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
+import { siteRoot, gettext, thumbnailSizeForOriginal, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import DirentListItem from './dirent-list-item';
@@ -16,8 +16,6 @@ import toaster from '../toast';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
-  repoEncrypted: PropTypes.bool.isRequired,
-  isRepoOwner: PropTypes.bool,
   currentRepoInfo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -52,6 +50,10 @@ class DirentListView extends React.Component {
       isCreateFileDialogShow: false,
       fileType: ''
     };
+
+    this.isRepoOwner = props.currentRepoInfo.owner_email === username;
+    this.isAdmin = props.currentRepoInfo.is_admin;
+    this.repoEncrypted = props.currentRepoInfo.encrypted;
   }
 
   onFreezedItem = () => {
@@ -122,7 +124,7 @@ class DirentListView extends React.Component {
       return Utils.imageCheck(item.name);
     });
 
-    const useThumbnail = !this.props.repoEncrypted;
+    const useThumbnail = !this.repoEncrypted;
     let prepareItem = (item) => {
       const name = item.name;
 
@@ -260,7 +262,11 @@ class DirentListView extends React.Component {
                     path={this.props.path}
                     repoID={this.props.repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
-                    isRepoOwner={this.props.isRepoOwner}
+                    isAdmin={this.isAdmin}
+                    isRepoOwner={this.isRepoOwner}
+                    repoEncrypted={this.repoEncrypted}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     direntList={this.props.direntList}
                     onItemClick={this.props.onItemClick}
                     onItemRenameToggle={this.onItemRenameToggle}
@@ -276,10 +282,6 @@ class DirentListView extends React.Component {
                     onDirentClick={this.props.onDirentClick}
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
-                    repoEncrypted={this.props.repoEncrypted}
-                    enableDirPrivateShare={this.props.enableDirPrivateShare}
-                    isAdmin={this.props.isAdmin}
-                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                   />
                 );
               })

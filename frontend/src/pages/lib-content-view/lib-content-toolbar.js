@@ -28,7 +28,6 @@ const propTypes = {
   direntList: PropTypes.array.isRequired,
   repoName: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
@@ -122,7 +121,6 @@ class LibContentToolbar extends React.Component {
                 showShareBtn={this.props.showShareBtn}
                 enableDirPrivateShare={this.props.enableDirPrivateShare}
                 userPerm={this.props.userPerm}
-                isAdmin={this.props.isAdmin}
                 isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                 onAddFile={this.props.onAddFile}
                 onAddFolder={this.props.onAddFolder}

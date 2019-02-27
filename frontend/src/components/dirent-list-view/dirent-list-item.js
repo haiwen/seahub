@@ -337,7 +337,7 @@ class DirentListItem extends React.Component {
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
-    const {repoEncrypted, isRepoOwner, isAdmin} = this.props;
+    const { repoEncrypted, isRepoOwner, isAdmin } = this.props;
     let showShare = false;
     if (!repoEncrypted &&
       (dirent.permission == 'rw' || dirent.permission == 'r')) {
@@ -462,7 +462,6 @@ class DirentListItem extends React.Component {
               repoID={this.props.repoID}
               repoEncrypted={false}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
-              isAdmin={this.props.isAdmin}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.closeSharedDialog}
             />
