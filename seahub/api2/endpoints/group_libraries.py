@@ -235,9 +235,9 @@ class GroupLibrary(APIView):
         """ Delete a group library.
 
         Permission checking:
-        1. is group admin;
         1. is repo owner;
-        1. repo is shared to group with `admin` permission;
+        2. is repo admin;
+        3. is group admin;
         """
 
         group_id = int(group_id)
