@@ -86,6 +86,7 @@ class DirColumnView extends React.Component {
           onAddFileNode={this.props.onAddFileNode}
           onRenameNode={this.props.onRenameNode}
           onDeleteNode={this.props.onDeleteNode}
+          repoID={this.props.repoID}
         />
         <div className="dir-content-main">
           {this.props.isViewFile ? (

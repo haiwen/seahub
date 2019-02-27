@@ -7,6 +7,8 @@ import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import { siteRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -21,6 +23,7 @@ const propTypes = {
   onDeleteNode: PropTypes.func.isRequired,
   onAddFileNode: PropTypes.func.isRequired,
   onAddFolderNode: PropTypes.func.isRequired,
+  repoID: PropTypes.string.isRequired,
 };
 
 class DirColumnNav extends React.Component {
@@ -60,6 +63,9 @@ class DirColumnNav extends React.Component {
         break;
       case 'Delete':
         this.onDeleteToggle();
+        break;
+      case 'Open in New Tab':
+        this.onOpenFile(node);
         break;
     }
   }
@@ -116,6 +122,11 @@ class DirColumnNav extends React.Component {
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
     let node = this.state.opNode;
     this.props.onDeleteNode(node);
+  }
+
+  onOpenFile = (node) => {
+    let newUrl = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(node.path);
+    window.open(newUrl, '_blank');
   }
 
   checkDuplicatedName = (newName) => {
