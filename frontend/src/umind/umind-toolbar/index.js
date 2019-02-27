@@ -10,7 +10,7 @@ class UMindToolBar extends React.Component {
 
   render() {
     return (
-      <Toolbar className="umind-toolbar">
+      <Toolbar className="umind-common-toolbar">
         <Command name="undo">撤销</Command>
         <Command name="redo">恢复</Command>
         <Command name="zoomIn">缩小</Command>

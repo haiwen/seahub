@@ -14,11 +14,17 @@
 .umind-container .umind-header {
   height: 49px;
   display: flex;
+  background-color: green;
+  justify-content: space-around;
 }
 
-.umind-header .umind-toolbar {
+.umind-header .umind-common-toolbar {
   display: flex;
   flex: 1;
+}
+
+.umind-header .umind-custom-toolbar {
+  width: auto;
 }
 
 .umind-container .umind-main {
@@ -34,12 +40,14 @@
 .umind-editor {
   display: flex;
   flex: 1;
+  background-color: #eee;
 }
 
 .umind-main .umind-property-container {
   display: flex;
   flex: 0 0 20%;
   flex-direction: column;
+  background-color: #ffbbcc;
 }
 
 .detail-panel {
