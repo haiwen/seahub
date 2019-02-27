@@ -49,6 +49,13 @@ class DirColumnFile extends React.Component {
     });
   }
 
+  onOpenFile = (e) => {
+    e.preventDefault();
+    let { path, repoID } = this.props;
+    let newUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path);
+    window.open(newUrl, '_blank');
+  }
+
   goDraftPage = (e) => {
     e.preventDefault();
     this.props.goDraftPage();
@@ -75,6 +82,9 @@ class DirColumnFile extends React.Component {
         onLinkClick={this.props.onLinkClick}
       >
         <Fragment>
+          <span className='wiki-open-file position-fixed' onClick={this.onOpenFile}>
+            <i className="fas fa-expand-arrows-alt"></i>
+          </span>
           {this.props.reviewStatus === 'open' &&
             <div className='seafile-btn-view-review text-center'>
               <div className='tag tag-green'> 

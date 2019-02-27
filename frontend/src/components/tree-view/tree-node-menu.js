@@ -31,7 +31,7 @@ class TreeNodeMenu extends React.Component {
     if (node.object.type === 'dir') {
       menuList = ['New Folder', 'New File', 'Rename', 'Delete'];
     } else {
-      menuList = ['Rename', 'Delete'];
+      menuList = ['Rename', 'Delete', 'Open in New Tab'];
     }
     return menuList;
   }
@@ -50,6 +50,9 @@ class TreeNodeMenu extends React.Component {
         break;
       case 'Delete':
         translateResult = gettext('Delete');
+        break;
+      case 'Open in New Tab':
+        translateResult = gettext('Open in New Tab');
         break;
       default:
         break;
