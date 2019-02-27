@@ -23,6 +23,7 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
 import { Value, Document, Block } from 'slate';
+import ModalPortal from './components/modal-portal';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -58,6 +59,7 @@ class DraftReview extends React.Component {
       isShowCommentDialog: false,
       activeItem: null,
       originRepoName: '',
+      showDraftReviewDialog: false,
     };
     this.quote = '';
     this.newIndex = null;
@@ -313,7 +315,8 @@ class DraftReview extends React.Component {
       this.listReviewers();
     }
     this.setState({
-      showReviewerDialog: !this.state.showReviewerDialog
+      showReviewerDialog: !this.state.showReviewerDialog,
+      showDraftReviewDialog: !this.state.showDraftReviewDialog,
     });
   }
 
@@ -920,22 +923,30 @@ class DraftReview extends React.Component {
             </div>
           </div>
         </div>
-        { this.state.showReviewerDialog &&
-          <AddReviewerDialog
-            showReviewerDialog={this.state.showReviewerDialog}
-            toggleAddReviewerDialog={this.toggleAddReviewerDialog}
-            reviewID={reviewID}
-            reviewers={this.state.reviewers}
-          />
+        {this.state.showDraftReviewDialog &&
+          <React.Fragment>
+            {this.state.showReviewerDialog &&
+              <ModalPortal>
+                <AddReviewerDialog
+                  showReviewerDialog={this.state.showReviewerDialog}
+                  toggleAddReviewerDialog={this.toggleAddReviewerDialog}
+                  reviewID={reviewID}
+                  reviewers={this.state.reviewers}
+                />
+              </ModalPortal>
+            }
+          </React.Fragment>
         }
         {this.state.isShowCommentDialog &&
-          <ReviewCommentDialog
-            toggleCommentDialog={this.toggleCommentDialog}
-            onCommentAdded={this.onCommentAdded}
-            quote={this.quote}
-            newIndex={this.newIndex}
-            oldIndex={this.oldIndex}
-          />
+          <ModalPortal>
+            <ReviewCommentDialog
+              toggleCommentDialog={this.toggleCommentDialog}
+              onCommentAdded={this.onCommentAdded}
+              quote={this.quote}
+              newIndex={this.newIndex}
+              oldIndex={this.oldIndex}
+            />
+          </ModalPortal>
         }
       </div>
     );
