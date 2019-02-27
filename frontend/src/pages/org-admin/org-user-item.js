@@ -78,7 +78,9 @@ class UserItem extends React.Component {
 
     seafileAPI.changeOrgUserStatus(this.props.user.id, statusCode).then(res => {
       this.setState({
-        currentStatus: statusCode == 1 ? 'active' : 'inactive' 
+        currentStatus: statusCode == 1 ? 'active' : 'inactive',
+        highlight: false,
+        showMenu: false,
       });
       Toast.success(gettext('Edit succeeded.'));
     }).catch(err => {

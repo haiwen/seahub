@@ -14,3 +14,20 @@
 .permission-editor .permission-editor__control .permission-editor-explanation {
   display: none;
 }
+
+.cur-view-content .permission-editor-select .permission-editor__control,
+.cur-view-content .permission-editor-select .permission-editor__control div,
+.cur-view-content .permission-editor-select .permission-editor__control .permission-editor__input,
+.cur-view-content .permission-editor-select .permission-editor__indicators  {
+  height: 1.5rem;
+  min-height: 1.5rem;
+}
+
+.cur-view-content .permission-editor-select .permission-editor__value-container div:nth-child(2) {
+  margin: 0;
+  padding: 0;
+}
+
+.cur-view-content .permission-editor-select .permission-editor__indicators .permission-editor__indicator {
+  padding: 0 0.5rem;
+}
