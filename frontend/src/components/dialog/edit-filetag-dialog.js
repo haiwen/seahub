@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import RepoTag from '../../models/repo-tag';
 require('../../css/repo-tag.css');
 
@@ -21,12 +22,6 @@ class TagItem extends React.Component {
     this.state = {
       showSelectedTag: false
     };
-    this.darkColorDict = {'red': '#D11507', 'orange': '#FF8C00', 'yellow': '#EDEF00', 'green': '#006400', 'cyan': '#00E0E1',
-                          'blue': '#2510A3', 'indigo': '#350C56', 'purple': '#551054', 'pink': '#E3A5B0', 'azure': '#C4D0D0',
-                          'lime': '#00E100', 'teal': '#006A6B', 'gray': '#545454', '#FFA8A8': '#E49090', '#FFA94D': '#E39136',
-                          '#FFD43B': '#E0B815', '#A0EC50': '#83CF32', '#A9E34B': '#8DC72E', '#63E6BE': '#43CAA4',
-                          '#4FD2C9': '#2DB9B0', '#72C3FC': '#57ABE3', '#91A7FF': '#7A91E7', '#E599F7': '#CC82DE',
-                          '#B197FC': '#9B82E5', '#F783AC': '#DF6D97', '#CED4DA': '#A8ADB2'};
   }
 
   onMouseEnter = () => {
@@ -78,10 +73,11 @@ class TagItem extends React.Component {
   render() {
     let repoTag = this.props.repoTag;
     let repoTagIdList = this.getRepoTagIdList();
+    let drakColor = Utils.getDarkColor(repoTag.color);
     return (
       <li key={repoTag.id} className="tag-list-item" onClick={this.onEditFileTag} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <div className="tag-demo" style={{backgroundColor:repoTag.color}}>
-          <span className={`${this.state.showSelectedTag ? 'show-tag-selected': ''}`} style={{backgroundColor: this.darkColorDict[repoTag.color]}}></span>
+          <span className={`${this.state.showSelectedTag ? 'show-tag-selected': ''}`} style={{backgroundColor: drakColor}}></span>
           <span className="tag-name">{repoTag.name}</span>
           {repoTagIdList.indexOf(repoTag.id) > -1 &&
             <i className="fas fa-check tag-operation"></i>

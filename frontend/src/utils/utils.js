@@ -706,4 +706,42 @@ export const Utils = {
     return mode;
   },
 
+  DARK_COLOR_MAP: {
+    // old color
+    'red': '#D11507',
+    'orange': '#FF8C00',
+    'yellow': '#EDEF00',
+    'green': '#006400',
+    'cyan': '#00E0E1',
+    'blue': '#2510A3',
+    'indigo': '#350C56',
+    'purple': '#551054',
+    'pink': '#E3A5B0',
+    'azure': '#C4D0D0',
+    'lime': '#00E100',
+    'teal': '#006A6B',
+    'gray': '#545454',
+
+    // new color
+    '#FFA8A8': '#E49090',
+    '#FFA94D': '#E39136',
+    '#FFD43B': '#E0B815',
+    '#A0EC50': '#83CF32',
+    '#A9E34B': '#8DC72E',
+    '#63E6BE': '#43CAA4',
+    '#4FD2C9': '#2DB9B0',
+    '#72C3FC': '#57ABE3',
+    '#91A7FF': '#7A91E7',
+    '#E599F7': '#CC82DE',
+    '#B197FC': '#9B82E5',
+    '#F783AC': '#DF6D97',
+    '#CED4DA': '#A8ADB2',
+  },
+
+  getDarkColor: function(color) {
+    let darkColor;
+    darkColor = this.DARK_COLOR_MAP[color];
+    return darkColor;
+  },
+
 };
