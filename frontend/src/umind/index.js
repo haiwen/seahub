@@ -17,25 +17,15 @@ class UMind extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
-    this.ggEditor = React.createRef();
-  }
-
-  onSaveClick = () => {
-    let currentPage = this.ggEditor.getCurrentPage();
-    let { data } = currentPage.config;
-    console.log(data);
   }
 
   render() {
-    
+    console.log(data);
     return (
-      <GGEditor ref={ggEditor => { this.ggEditor = ggEditor; }} className="umind-container">
+      <GGEditor className="umind-container">
         <div className="umind-header">
           <UMindToolbar />
-          <UMindCustomToolbar onSaveClick={this.onSaveClick} />
+          <UMindCustomToolbar />
         </div>
         <div className="umind-main">
           <div className="umind-editor-container">

@@ -1,16 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import withGGEditorContext from 'gg-editor/es/common/context/GGEditorContext/withGGEditorContext';
 
 const propTypes = {
-  onSaveClick: PropTypes.func.isRequired,
 };
 
 class CustomToolbar extends React.Component {
 
+  onSaveClick = () => {
+    let { editor } = this.props;
+    let page = editor.getCurrentPage();
+    let { data } = page._cfg;
+    console.log(data);
+
+  }
+
   render() {
     return (
       <div className="umind-custom-toolbar">
-        <div onClick={this.props.onSaveClick}>保存</div>
+        <div onClick={this.onSaveClick}>保存</div>
       </div>
     );
   }
@@ -18,4 +26,4 @@ class CustomToolbar extends React.Component {
 
 CustomToolbar.propTypes = propTypes;
 
-export default CustomToolbar;
+export default withGGEditorContext(CustomToolbar);
