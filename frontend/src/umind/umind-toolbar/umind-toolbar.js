@@ -6,7 +6,7 @@ const propTypes = {
 
 };
 
-class UMindToolBar extends React.Component {
+class UMindToolbar extends React.Component {
 
   render() {
     return (
@@ -26,6 +26,6 @@ class UMindToolBar extends React.Component {
   }
 }
 
-UMindToolBar.propTypes = propTypes;
+UMindToolbar.propTypes = propTypes;
 
-export default UMindToolBar;
+export default UMindToolbar;
