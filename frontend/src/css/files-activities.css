@@ -1,6 +1,6 @@
 table tr .activity-date {
   border-top: 0;
 }
-table td .created-files-detail {
-  display: inline-block;
+table td .activity-detail {
+  display: inline;
 }

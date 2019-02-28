@@ -126,8 +126,8 @@ class TableBody extends Component {
         op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
         details =
           <td>
-            <div className="created-files-detail" dangerouslySetInnerHTML={{__html: firstLine}}></div>
-            {' '}<i className="fas fa-eye" onClick={this.onListCreatedFilesToggle.bind(this, item)}></i>
+            <div className="activity-detail" dangerouslySetInnerHTML={{__html: firstLine}}></div>
+            {' '}<i className="attr-action-icon fas fa-eye" onClick={this.onListCreatedFilesToggle.bind(this, item)}></i>
             <br />{smallLibLink}
           </td>;
       } else if (item.obj_type == 'file') {
