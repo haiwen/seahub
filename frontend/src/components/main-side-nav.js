@@ -204,7 +204,7 @@ class MainSideNav extends React.Component {
               </li>
             }
             <li className="nav-item" onClick={() => this.tabItemClick('drafts')}>
-              <Link className={`nav-link ellipsis ${this.getActiveClass('drafts') || this.getActiveClass('reviews')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
+              <Link className={`nav-link ellipsis ${this.getActiveClass('drafts')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                 <span className="sf2-icon-edit" aria-hidden="true"></span>
                 <span className="draft-info nav-text">
                   {gettext('Drafts')}  

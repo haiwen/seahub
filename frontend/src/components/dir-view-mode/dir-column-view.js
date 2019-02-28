@@ -34,8 +34,6 @@ const propTypes = {
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   goDraftPage: PropTypes.func.isRequired,
-  reviewStatus: PropTypes.string,
-  goReviewPage: PropTypes.func.isRequired,
   filePermission: PropTypes.bool.isRequired,
   content: PropTypes.string,
   lastModified: PropTypes.string,
@@ -44,7 +42,6 @@ const propTypes = {
   // repo content
   isRepoInfoBarShow: PropTypes.bool.isRequired,
   draftCounts: PropTypes.number.isRequired,
-  reviewCounts: PropTypes.number.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
   updateUsedRepoTags: PropTypes.func.isRequired,
@@ -176,8 +173,6 @@ class DirColumnView extends React.Component {
               isDraft={this.props.isDraft}
               hasDraft={this.props.hasDraft}
               goDraftPage={this.props.goDraftPage}
-              reviewStatus={this.props.reviewStatus}
-              goReviewPage={this.props.goReviewPage}
               isFileLoading={this.props.isFileLoading}
               isFileLoadedErr={this.props.isFileLoadedErr}
               filePermission={this.props.filePermission}
@@ -197,7 +192,6 @@ class DirColumnView extends React.Component {
               usedRepoTags={this.props.usedRepoTags}
               readmeMarkdown={this.props.readmeMarkdown}
               draftCounts={this.props.draftCounts}
-              reviewCounts={this.props.draftCounts}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               isDirentListLoading={this.props.isDirentListLoading}
               direntList={this.props.direntList}

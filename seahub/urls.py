@@ -70,11 +70,8 @@ from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytes
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
 from seahub.api2.endpoints.drafts import DraftsView, DraftView
-from seahub.api2.endpoints.draft_reviews import DraftReviewsView, DraftReviewView
-from seahub.api2.endpoints.draft_review_reviewer import DraftReviewReviewerView
-from seahub.api2.endpoints.repo_draft_review_info import RepoDraftInfo, \
-        RepoReviewInfo, RepoDraftReviewCounts
-from seahub.api2.endpoints.file_review import FileReviewView
+from seahub.api2.endpoints.draft_reviewer import DraftReviewerView
+from seahub.api2.endpoints.repo_draft_info import RepoDraftInfo, RepoDraftCounts
 from seahub.api2.endpoints.activities import ActivitiesView
 from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
@@ -380,17 +377,9 @@ urlpatterns = [
     url(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),
     url(r'^api/v2.1/drafts/(?P<pk>\d+)/$', DraftView.as_view(), name='api-v2.1-draft'),
 
-
-    ## user::reviews
-    url(r'^api/v2.1/reviews/$', DraftReviewsView.as_view(), name='api-v2.1-draft-reviews'),
-    url(r'^api/v2.1/review/(?P<pk>\d+)/$', DraftReviewView.as_view(), name='api-v2.1-draft-review'),
-    url(r'^api/v2.1/review/(?P<pk>\d+)/reviewer/$', DraftReviewReviewerView.as_view(), name='api-v2.1-draft-review-reviewer'),
-
-    url(r'^api/v2.1/file-review/$', FileReviewView.as_view(), name='api-v2.1-file-review'),
-
-    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/drafts/$', RepoDraftInfo.as_view(), name='api-v2.1-repo-drafts' ),
-    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/reviews/$', RepoReviewInfo.as_view(), name='api-v2.1-repo-reviews' ),
-    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/draft-review-counts/$', RepoDraftReviewCounts.as_view(), name='api-v2.1-repo-draft-review-counts' ),
+    url(r'^api/v2.1/drafts/(?P<pk>\d+)/reviewer/$', DraftReviewerView.as_view(), name='api-v2.1-draft-reviewer'),
+    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/drafts/$', RepoDraftInfo.as_view(), name='api-v2.1-repo-drafts'),
+    url(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/draft-counts/$', RepoDraftCounts.as_view(), name='api-v2.1-repo-draft-counts'),
 
     ## user::activities
     url(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),

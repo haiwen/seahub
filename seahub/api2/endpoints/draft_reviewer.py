@@ -18,21 +18,21 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
 from seahub.views import check_folder_permission
 from seahub.utils import is_valid_username
-from seahub.drafts.models import DraftReview, ReviewReviewer
+from seahub.drafts.models import Draft, DraftReviewer
 from seahub.drafts.signals import request_reviewer_successful
 
 
-class DraftReviewReviewerView(APIView):
+class DraftReviewerView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, pk, format=None):
         try:
-            r = DraftReview.objects.get(pk=pk)
-        except DraftReview.DoesNotExist:
+            d = Draft.objects.get(pk=pk)
+        except Draft.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND,
-                             'Review %s not found' % pk)
+                             'Draft %s not found' % pk)
 
         # format user result
         try:
@@ -42,20 +42,20 @@ class DraftReviewReviewerView(APIView):
 
         # get reviewer list
         reviewers = []
-        for x in r.reviewreviewer_set.all():
+        for x in d.reviewreviewer_set.all():
             reviewer = user_to_dict(x.reviewer, request=request, avatar_size=avatar_size)
             reviewers.append(reviewer)
 
         return Response({'reviewers': reviewers})
 
     def post(self, request, pk, format=None):
-        """Create a draft review
+        """add draft reviewer
         """
         try:
-            r = DraftReview.objects.get(pk=pk)
-        except DraftReview.DoesNotExist:
+            d = Draft.objects.get(pk=pk)
+        except Draft.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND,
-                             'Review %s not found' % pk)
+                             'Draft %s not found' % pk)
 
         result = {}
         result['failed'] = []
@@ -80,18 +80,18 @@ class DraftReviewReviewerView(APIView):
                 continue
 
             # can't share to owner
-            if reviewer == r.creator:
-                error_msg = 'Draft review can not be asked owner to review.'
+            if reviewer == d.username:
+                error_msg = 'Draft can not be asked owner to review.'
                 result['failed'].append({
                     'email': reviewer,
                     'error_msg': error_msg
                 })
                 continue
 
-            uuid = r.origin_file_uuid
+            uuid = d.origin_file_uuid
             origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
             # check perm
-            if seafile_api.check_permission_by_path(r.origin_repo_id, origin_file_path, reviewer) != 'rw':
+            if seafile_api.check_permission_by_path(d.origin_repo_id, origin_file_path, reviewer) != 'rw':
                 error_msg = _(u'Permission denied.')
                 result['failed'].append({
                     'email': reviewer,
@@ -99,7 +99,7 @@ class DraftReviewReviewerView(APIView):
                 })
                 continue
 
-            if ReviewReviewer.objects.filter(review_id=r, reviewer=reviewer):
+            if DraftReviewer.objects.filter(draft=d, reviewer=reviewer):
                 error_msg = u'Reviewer %s has existed.' % reviewer
                 result['failed'].append({
                     'email': reviewer,
@@ -114,10 +114,11 @@ class DraftReviewReviewerView(APIView):
                 }
             })
 
-            ReviewReviewer.objects.add(reviewer, r)
+            DraftReviewer.objects.add(reviewer, d)
 
-            request_reviewer_successful.send(sender=None, from_user=r.creator,
-                                             to_user=reviewer, review_id=r.id)
+            # TODO
+            # request_reviewer_successful.send(sender=None, from_user=request.user.username,
+            #                                 to_user=reviewer, review_id=r.id)
 
         return Response(result)
 
@@ -125,12 +126,12 @@ class DraftReviewReviewerView(APIView):
         """Delete a reviewer 
         """
         try:
-            r = DraftReview.objects.get(pk=pk)
-        except DraftReview.DoesNotExist:
+            d = Draft.objects.get(pk=pk)
+        except Draft.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND,
-                             'Review %s not found' % pk)
+                             'Draft %s not found' % pk)
 
-        perm = check_folder_permission(request, r.origin_repo_id, '/')
+        perm = check_folder_permission(request, d.origin_repo_id, '/')
 
         if perm is None:
             error_msg = 'Permission denied.'
@@ -142,10 +143,10 @@ class DraftReviewReviewerView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % reviewer)
 
         try:
-            reviewer_obj = ReviewReviewer.objects.get(reviewer=reviewer, review_id=r)
-        except ReviewReviewer.DoesNotExist:
+            reviewer = DraftReviewer.objects.get(reviewer=reviewer, draft=d)
+        except DraftReviewer.DoesNotExist:
             return Response(status.HTTP_200_OK)
 
-        reviewer_obj.delete()
+        reviewer.delete()
 
         return Response(status.HTTP_200_OK)

@@ -1,5 +1,5 @@
 import React from 'react';
-import SeafileEditor from '@seafile/seafile-editor';
+import SeafileEditor from './seafile-editor/src/editor/seafile-editor';
 import 'whatwg-fetch';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
@@ -9,7 +9,7 @@ import ListRelatedFileDialog from './components/dialog/list-related-file-dialog'
 import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
 import ShareDialog from './components/dialog/share-dialog';
 
-const { repoID, repoName, filePath, fileName, mode, draftID, reviewID, reviewStatus, draftFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
+const { repoID, repoName, filePath, fileName, mode, draftID, draftFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
@@ -194,17 +194,6 @@ class EditorUtilities {
     return seafileAPI.getFileRevision(repoID, commitID, filePath);
   }
 
-  createDraftReview() {
-    return seafileAPI.createDraftReview(draftID).then(res => {
-      let url = serviceUrl + '/drafts/review/' + res.data.id;
-      return url;
-    });
-  }
-
-  goReviewPage() {
-    window.location.href = serviceUrl + '/drafts/review/' + reviewID;
-  }
-
   getCommentsNumber() {
     return seafileAPI.getCommentsNumber(this.repoID, filePath);
   }
@@ -236,12 +225,6 @@ class EditorUtilities {
   createDraftFile() {
     return seafileAPI.createDraft(repoID, filePath).then(res => {
       window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
-    });
-  }
-
-  createFileReview() {
-    return seafileAPI.createFileReview(repoID, filePath).then(res => {
-      window.location.href = serviceUrl + '/drafts/review/' + res.data.id;
     });
   }
 
@@ -422,8 +405,6 @@ class MarkdownEditor extends React.Component {
             showFileHistory={true}
             mode={mode}
             draftID={draftID}
-            reviewID={reviewID}
-            reviewStatus={reviewStatus}
             isDraft={isDraft}
             hasDraft={hasDraft}
             shareLinkExpireDaysMin={shareLinkExpireDaysMin}

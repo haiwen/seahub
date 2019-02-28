@@ -59,14 +59,11 @@ class Wiki extends Component {
       libNeedDecrypt: false,
       isDraft: false,
       hasDraft: false,
-      reviewStatus: '',
-      reviewID: '',
       draftFilePath: '',
       dirID: '',
       usedRepoTags: [],
       readmeMarkdown: null,
       draftCounts: 0,
-      reviewCounts: 0,
     };
     window.onpopstate = this.onpopstate;
     this.hash = '';
@@ -150,10 +147,9 @@ class Wiki extends Component {
     this.updateUsedRepoTags();
 
     // list draft counts and revierw counts
-    seafileAPI.getRepoDraftReviewCounts(repoID).then(res => {
+    seafileAPI.getRepoDraftCounts(repoID).then(res => {
       this.setState({
         draftCounts: res.data.draft_counts,
-        reviewCounts: res.data.review_counts
       });
     });
 
@@ -209,8 +205,7 @@ class Wiki extends Component {
 
     this.setState({isFileLoading: true});
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, permission, last_modifier_name, is_draft, has_draft,
-            review_status, review_id, draft_file_path } = res.data;
+      let { mtime, permission, last_modifier_name, is_draft, has_draft, draft_file_path } = res.data;
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         seafileAPI.getFileContent(res.data).then((res) => {
           this.setState({
@@ -221,8 +216,6 @@ class Wiki extends Component {
             isFileLoading: false,
             isDraft: is_draft,
             hasDraft: has_draft,
-            reviewStatus: review_status,
-            reviewID: review_id,
             draftFilePath: draft_file_path
           });
         });
@@ -1002,10 +995,6 @@ class Wiki extends Component {
     this.loadWikiData();
   }
 
-  goReviewPage = () => {
-    window.location.href = siteRoot + 'drafts/review/' + this.state.reviewID;
-  }
-
   goDraftPage = () => {
     window.location.href = siteRoot + 'lib/' + repoID + '/file' + this.state.draftFilePath + '?mode=edit';
   }
@@ -1109,14 +1098,10 @@ class Wiki extends Component {
           hash={this.hash}
           isDraft={this.state.isDraft}
           hasDraft={this.state.hasDraft}
-          reviewStatus={this.state.reviewStatus}
-          reviewID={this.state.reviewID}
           goDraftPage={this.goDraftPage}
-          goReviewPage={this.goReviewPage}
           usedRepoTags={this.state.usedRepoTags}
           readmeMarkdown={this.state.readmeMarkdown}
           draftCounts={this.state.draftCounts}
-          reviewCounts={this.state.reviewCounts}
           updateUsedRepoTags={this.updateUsedRepoTags}
         />
       </div>

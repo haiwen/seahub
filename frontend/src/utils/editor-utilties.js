@@ -118,11 +118,6 @@ class EditorUtilities {
   cancelZipTask(zip_token) {
     return seafileAPI.cancelZipTask(zip_token);
   }
-
-  createDraftReview(id) {
-    return seafileAPI.createDraftReview(id);
-  }
-
 }
 
 const editorUtilities = new EditorUtilities();

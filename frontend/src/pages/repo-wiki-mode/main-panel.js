@@ -63,14 +63,10 @@ const propTypes = {
   onFileUploadSuccess: PropTypes.func.isRequired,
   isDraft: PropTypes.bool,
   hasDraft: PropTypes.bool,
-  reviewStatus: PropTypes.any,
-  goReviewPage: PropTypes.func,
   goDraftPage: PropTypes.func,
-  reviewID: PropTypes.any,
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
-  reviewCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func.isRequired,
 };
 
@@ -165,7 +161,7 @@ class MainPanel extends Component {
     const ErrMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     const showRepoInfoBar = this.props.path === '/' && (
                             this.props.usedRepoTags.length != 0 || this.props.readmeMarkdown != null ||
-                            this.props.draftCounts != 0 || this.props.reviewCounts != 0);
+                            this.props.draftCounts != 0);
     
     return (
       <div className="main-panel wiki-main-panel o-hidden">
@@ -234,15 +230,7 @@ class MainPanel extends Component {
                   onLinkClick={this.props.onLinkClick}
                 >
                   <Fragment>
-                    {this.props.reviewStatus === 'open' &&
-                      <div className='seafile-btn-view-review text-center'>
-                        <div className='tag tag-green'> 
-                          {gettext('This file is in review stage')}
-                          <a className="ml-2" onMouseDown={this.props.goReviewPage}>{gettext('View Review')}</a>
-                        </div>
-                      </div>
-                    }
-                    {(!this.props.isDraft && this.props.hasDraft && this.props.reviewStatus !== 'open') &&
+                    {(!this.props.isDraft && this.props.hasDraft) &&
                       <div className='seafile-btn-view-review text-center'>
                         <div className='tag tag-green'>
                           {gettext('This file is in draft stage.')}
@@ -262,7 +250,6 @@ class MainPanel extends Component {
                       usedRepoTags={this.props.usedRepoTags}
                       readmeMarkdown={this.props.readmeMarkdown}
                       draftCounts={this.props.draftCounts}
-                      reviewCounts={this.props.reviewCounts}
                       updateUsedRepoTags={this.props.updateUsedRepoTags}
                     />
                   )}

@@ -73,7 +73,7 @@ from seahub.utils.repo import is_repo_owner, parse_repo_perm
 from seahub.group.utils import is_group_member
 from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, THUMBNAIL_ROOT
-from seahub.drafts.utils import get_file_draft_and_related_review, \
+from seahub.drafts.utils import get_file_draft, \
         is_draft_file, has_draft_file
 
 from seahub.constants import HASH_URLS
@@ -665,7 +665,7 @@ def view_lib_file(request, repo_id, path):
         if not is_draft:
             has_draft = has_draft_file(repo.id, path)
 
-        review = get_file_draft_and_related_review(repo.id, path, is_draft, has_draft)
+        draft = get_file_draft(repo.id, path, is_draft, has_draft)
 
         return_dict['protocol'] = request.is_secure() and 'https' or 'http'
         return_dict['domain'] = get_current_site(request).domain
@@ -675,10 +675,8 @@ def view_lib_file(request, repo_id, path):
         return_dict['mode'] = 'edit' if mode else 'viewer'
         return_dict['is_draft'] = is_draft
         return_dict['has_draft'] = has_draft
-        return_dict['draft_id'] = review['draft_id']
-        return_dict['review_id'] = review['review_id']
-        return_dict['review_status'] = review['review_status']
-        return_dict['draft_file_path'] = review['draft_file_path']
+        return_dict['draft_id'] = draft['draft_id']
+        return_dict['draft_file_path'] = draft['draft_file_path']
         return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
 

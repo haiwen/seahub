@@ -35,19 +35,8 @@ class DraftContent extends React.Component {
     });
   }
 
-  onReviewHandler = (draft) => {
-    editUtilties.createDraftReview(draft.id).then(res => {
-      const w = window.open();
-      w.location = siteRoot + 'drafts/review/' + res.data.id;
-    }).catch((error) => { 
-      if (error.response.status == '409') {
-        toaster.danger(gettext('Review already exists.'));
-      }    
-    });
-  }
-
-  onPublishHandler = () => {
-    let draft = this.state.currentDraft;
+  onPublishHandler = (draft) => {
+    // let draft = this.state.currentDraft;
     let draft_name = Utils.getFileName(draft.draft_file_path);
     editUtilties.publishDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
@@ -77,7 +66,7 @@ class DraftContent extends React.Component {
               <DraftListView
                 draftList={this.props.draftList} 
                 onDeleteHandler={this.onDeleteHandler}
-                onReviewHandler={this.onReviewHandler}
+                onPublishHandler={this.onPublishHandler}
               />
             )}
           </Fragment>

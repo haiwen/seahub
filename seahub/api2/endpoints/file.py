@@ -30,8 +30,8 @@ from seahub.utils.file_types import MARKDOWN, TEXT
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
 
-from seahub.drafts.models import Draft, DraftReview
-from seahub.drafts.utils import is_draft_file, get_file_draft_and_related_review
+from seahub.drafts.models import Draft
+from seahub.drafts.utils import is_draft_file, get_file_draft
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -308,8 +308,7 @@ class FileView(APIView):
             filetype, fileext = get_file_type_and_ext(new_file_name)
             if filetype == MARKDOWN or filetype == TEXT:
                 is_draft = is_draft_file(repo.id, path)
-                review = get_file_draft_and_related_review(repo.id, path, is_draft)
-                review_id = review['review_id']
+                review = get_file_draft(repo.id, path, is_draft)
                 draft_id = review['draft_id']
                 if is_draft:
                     try:
@@ -318,14 +317,6 @@ class FileView(APIView):
                         draft.save()
                     except Draft.DoesNotExist:
                         pass
-
-                    if review_id is not None:
-                        try:
-                            review = DraftReview.objects.get(pk=review_id, draft_id=draft)
-                            review.draft_file_path = new_file_path
-                            review.save()
-                        except DraftReview.DoesNotExist:
-                            pass
 
             file_info = self.get_file_info(username, repo_id, new_file_path)
             return Response(file_info)

@@ -60,7 +60,7 @@ def has_draft_file(repo_id, file_path):
     from .models import Draft
     if file_uuid:
         try:
-            d = Draft.objects.get(origin_file_uuid=file_uuid)
+            d = Draft.objects.get(origin_file_uuid=file_uuid.uuid)
             file_id = seafile_api.get_file_id_by_path(repo_id, d.draft_file_path)
             if file_id:
                 has_draft = True
@@ -71,27 +71,17 @@ def has_draft_file(repo_id, file_path):
     return has_draft
 
 
-def get_file_draft_and_related_review(repo_id, file_path, is_draft=False, has_draft=False):
-    review = {}
-    review['review_id'] = None
-    review['review_status'] = None
-    review['draft_id'] = None
-    review['draft_file_path'] = ''
+def get_file_draft(repo_id, file_path, is_draft=False, has_draft=False):
+    draft = {}
+    draft['draft_id'] = None
+    draft['draft_file_path'] = ''
 
-    from .models import Draft, DraftReview
+    from .models import Draft
 
     if is_draft:
         d = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
-        review['draft_id'] = d.id
-        review['draft_file_path'] = d.draft_file_path
-
-        # return review (closed / open)
-        try:
-            d_r = DraftReview.objects.get(origin_repo_id=repo_id, draft_file_path=file_path, draft_id=d)
-            review['review_id'] = d_r.id
-            review['review_status'] = d_r.status
-        except DraftReview.DoesNotExist:
-            pass
+        draft['draft_id'] = d.id
+        draft['draft_file_path'] = d.draft_file_path
 
     if has_draft:
         file_path = normalize_file_path(file_path)
@@ -101,20 +91,12 @@ def get_file_draft_and_related_review(repo_id, file_path, is_draft=False, has_dr
         file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(
                 repo_id, parent_path, filename, is_dir=False)
 
-        d = Draft.objects.get(origin_file_uuid=file_uuid)
-        # return review (closed / open)
-        if file_uuid:
-            try:
-                d_r = DraftReview.objects.get(origin_file_uuid=file_uuid, draft_id=d)
-                review['review_id'] = d_r.id
-                review['review_status'] = d_r.status
-            except DraftReview.DoesNotExist:
-                pass
+        d = Draft.objects.get(origin_file_uuid=file_uuid.uuid)
 
-        review['draft_id'] = d.id
-        review['draft_file_path'] = d.draft_file_path
+        draft['draft_id'] = d.id
+        draft['draft_file_path'] = d.draft_file_path
 
-    return review
+    return draft
 
 
 def send_review_status_msg(request, review):
