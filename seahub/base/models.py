@@ -186,7 +186,7 @@ class UserStarredFilesManager(models.Manager):
         - `username`:
         """
         starred_files = super(UserStarredFilesManager, self).filter(
-            email=username, org_id=-1)
+            email=username, is_dir=False, org_id=-1)
 
         ret = []
         repo_cache = {}
