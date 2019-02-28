@@ -233,3 +233,7 @@ img[src=""],img:not([src]){ /* for first loading img*/
   padding: 0 1rem;
 }
 
+.cur-view-container .fa-star.fas {
+  color: #999;
+}
+

@@ -17,13 +17,13 @@ body {
 .file-star,
 .file-internal-link {
   font-size: .875rem;
-  color: #585858; 
+  color: #999; 
   margin-left: .5rem;
 }
 .file-star:hover,
 .file-star:focus {
   text-decoration: none;
-  color: inherit;
+  color: #999;
 }
 .file-locked-icon {
   margin-left: .5rem;
