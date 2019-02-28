@@ -103,10 +103,10 @@ class DirColumnView extends React.Component {
         navRate: 0.12,
       });
     }
-    else if (rate > 0.9) {
+    else if (rate > 0.4) {
       this.setState({
         inResizing: false,
-        navRate: 0.88,
+        navRate: 0.38,
       });
     }
     else {
@@ -140,12 +140,13 @@ class DirColumnView extends React.Component {
       this.setState({
         navRate: rate,
       });
-    } 
+    }
   }
 
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const select = this.state.inResizing ? 'none' : '';
+    const mainFlex = '1 0 ' + (1 - this.state.navRate) * 100 + '%';
     return (
       <div className="cur-view-content view-mode-container" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
         <DirColumnNav 
@@ -166,7 +167,7 @@ class DirColumnView extends React.Component {
           inResizing={this.state.inResizing}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
-        <div className="dir-content-main" style={{userSelect: select}}>
+        <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
           {this.props.isViewFile ? (
             <DirColumnFile 
               path={this.props.path}
