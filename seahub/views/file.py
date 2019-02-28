@@ -550,7 +550,7 @@ def view_lib_file(request, repo_id, path):
 
     # get file type and extention
     filetype, fileext = get_file_type_and_ext(filename)
-    return_dict['fileext'] = fileext,
+    return_dict['fileext'] = fileext
     return_dict['filetype'] = filetype
 
     # get file raw url
