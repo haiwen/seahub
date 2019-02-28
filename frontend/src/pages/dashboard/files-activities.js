@@ -119,12 +119,17 @@ class TableBody extends Component {
       } else if (item.obj_type == 'files') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = `<a href=${fileURL} target="_blank">${item.name}</a>`;
-        let fileCount = `<a href='#'>${item.createdFilesCount - 1}</a>`;
+        let fileCount = item.createdFilesCount - 1;
         let firstLine = gettext('{file} and {n} other files');
         firstLine = firstLine.replace('{file}', fileLink);
         firstLine = firstLine.replace('{n}', fileCount);
         op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
-        details = <td><div dangerouslySetInnerHTML={{__html: firstLine}} onClick={this.onListCreatedFilesToggle.bind(this, item)}></div>{smallLibLink}</td>;
+        details =
+          <td>
+            <div className="created-files-detail" dangerouslySetInnerHTML={{__html: firstLine}}></div>
+            {' '}<i className="fas fa-eye" onClick={this.onListCreatedFilesToggle.bind(this, item)}></i>
+            <br />{smallLibLink}
+          </td>;
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
         let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
@@ -338,6 +343,7 @@ class FilesActivities extends Component {
           multiFilesActivity = new Activity(events[i]);
           multiFilesActivity.obj_type = 'files';
           multiFilesActivity.createdFilesCount++;
+          multiFilesActivity.createdFilesList.push(events[i]);
         } else {
           actuallyEvents.push(events[i]);
         }
