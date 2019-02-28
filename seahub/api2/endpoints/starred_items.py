@@ -45,7 +45,7 @@ class StarredItems(APIView):
         item_info['path'] = path
         if path == '/':
             item_info['obj_name'] = repo.repo_name if repo else ''
-            item_info['mtime'] = timestamp_to_isoformat_timestr(repo.mtime) if \
+            item_info['mtime'] = timestamp_to_isoformat_timestr(repo.last_modified) if \
                     repo else ''
         else:
             item_info['obj_name'] = os.path.basename(path.rstrip('/'))
@@ -62,7 +62,6 @@ class StarredItems(APIView):
         1. all authenticated user can perform this action.
         """
 
-        result = []
         email = request.user.username
         all_starred_items = UserStarredFiles.objects.filter(email=email)
 
@@ -74,6 +73,9 @@ class StarredItems(APIView):
                 if repo:
                     repo_dict[repo_id] = repo
 
+        starred_repos = []
+        starred_folders = []
+        starred_files = []
         for starred_item in all_starred_items:
 
             repo_id = starred_item.repo_id
@@ -96,10 +98,19 @@ class StarredItems(APIView):
             item_info['user_name'] = email2nickname(email)
             item_info['user_contact_email'] = email2contact_email(email)
 
-            result.append(item_info)
+            if path == '/':
+                starred_repos.append(item_info)
+            elif starred_item.is_dir:
+                starred_folders.append(item_info)
+            else:
+                starred_files.append(item_info)
 
-        result.sort(lambda x, y: cmp(y['mtime'], x['mtime']))
-        return Response({'starred_item_list': result})
+        starred_repos.sort(lambda x, y: cmp(y['mtime'], x['mtime']))
+        starred_folders.sort(lambda x, y: cmp(y['mtime'], x['mtime']))
+        starred_files.sort(lambda x, y: cmp(y['mtime'], x['mtime']))
+
+        return Response({'starred_item_list': starred_repos + \
+                starred_folders + starred_files})
 
     def post(self, request):
         """ Star a file/folder.
