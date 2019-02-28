@@ -571,7 +571,7 @@ def view_lib_file(request, repo_id, path):
 
     # get file type and extention
     filetype, fileext = get_file_type_and_ext(filename)
-    return_dict['fileext'] = fileext,
+    return_dict['fileext'] = fileext
     return_dict['filetype'] = filetype
 
     # get file raw url
@@ -696,6 +696,9 @@ def view_lib_file(request, repo_id, path):
     elif filetype in (VIDEO, AUDIO, PDF, SVG):
         return_dict['raw_path'] = raw_path
         send_file_access_msg(request, repo, path, 'web')
+
+        if filetype == VIDEO:
+            template = '%s_file_view_react.html' % filetype.lower()
         return render(request, template, return_dict)
 
     elif filetype == DRAW:
@@ -1233,7 +1236,7 @@ def view_shared_file(request, fileshare):
 
     template = 'shared_file_view.html'
 
-    if is_textual_file(file_type=filetype) or filetype == IMAGE:
+    if is_textual_file(file_type=filetype) or filetype in (IMAGE, VIDEO):
         template = 'shared_file_view_react.html'
 
     return render(request, template, {

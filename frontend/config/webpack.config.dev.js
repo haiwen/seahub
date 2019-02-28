@@ -99,6 +99,11 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/shared-file-view-image.js",
     ],
+    sharedFileViewVideo: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-video.js",
+    ],
     viewFileText: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
@@ -113,6 +118,11 @@ module.exports = {
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/view-file-xmind.js",
+    ],
+    viewFileVideo: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/view-file-video.js",
     ],
     orgAdmin: [
       require.resolve('./polyfills'),
