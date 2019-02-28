@@ -219,3 +219,8 @@
   font-size:12px;
   color: #666;
 }
+
+.dir-content-resize {
+  flex: 0 0 .5%;
+  cursor: ew-resize;
+}

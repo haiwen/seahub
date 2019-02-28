@@ -24,6 +24,8 @@ const propTypes = {
   onAddFileNode: PropTypes.func.isRequired,
   onAddFolderNode: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
+  navRate: PropTypes.number,
+  inResizing: PropTypes.bool.isRequired,
 };
 
 class DirColumnNav extends React.Component {
@@ -143,9 +145,11 @@ class DirColumnNav extends React.Component {
   }
 
   render() {
+    let flex = this.props.navRate ? '0 0 ' + this.props.navRate * 100 + '%' : '0 0 25%';
+    const select = this.props.inResizing ? 'none' : '';
     return (
       <Fragment>
-        <div className="dir-content-nav" role="navigation">
+        <div className="dir-content-nav" role="navigation" style={{flex: (flex), userSelect: select}}>
           {this.props.isTreeDataLoading ? 
             (<Loading/>) :
             (<TreeView
@@ -205,6 +209,10 @@ class DirColumnNav extends React.Component {
     );
   }
 }
+
+DirColumnNav.defaultProps={
+  navRate: 0.25
+};
 
 DirColumnNav.propTypes = propTypes;
 
