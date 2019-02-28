@@ -256,6 +256,10 @@ class EditorUtilities {
   listRepoTags = () => {
     return seafileAPI.listRepoTags(repoID);
   }
+  
+  markdownLint(slateValue) {
+    return seafileAPI.markdownLint(slateValue);
+  }
 }
 
 const editorUtilities = new EditorUtilities();
