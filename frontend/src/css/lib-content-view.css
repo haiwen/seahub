@@ -21,7 +21,7 @@
 }
 
 .dir-content-main {
-  flex: 1 0 75% !important;
+  flex: 1 0 75%;
   display: flex;
   flex-direction: column;
   margin-right: -1rem;
