@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
 import DirColumnFile from './dir-column-file';
@@ -69,10 +69,85 @@ const propTypes = {
 };
 
 class DirColumnView extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      inResizing: false,
+      navRate: 0.25,
+    };
+    this.containerWidth = null;
+  }
+
+  onResizeMouseUp = () => {
+    if (this.state.inResizing) {
+      this.setState({
+        inResizing: false
+      });
+    }
+    this.setCookie('navRate', this.state.navRate);
+  }
+
+  onResizeMouseDown = () => {
+    this.setState({
+      inResizing: true
+    });
+  };
+
+  onResizeMouseMove = (e) => {
+    let sizeNavWidth = this.containerWidth / 0.78 * 0.22 + 3;
+    let rate = (e.nativeEvent.clientX - sizeNavWidth) / this.containerWidth;
+    if (rate < 0.1) {
+      this.setState({
+        inResizing: false,
+        navRate: 0.12,
+      });
+    }
+    else if (rate > 0.9) {
+      this.setState({
+        inResizing: false,
+        navRate: 0.88,
+      });
+    }
+    else {
+      this.setState({
+        navRate: rate
+      });
+    }
+  };
+
+  setCookie = (name, value) => {
+    let cookie = name + '=' + value + ';';
+    document.cookie = cookie;
+  }
+
+  getCookie = (cookiename) => {
+    let name = cookiename + '=';
+    let cookie = document.cookie.split(';');
+    for (let i = 0, len = cookie.length; i < len; i++) {
+      let c = cookie[i].trim();
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length) * 1;
+      }
+    }
+    return '';
+  }
+
+  componentDidMount() {
+    this.containerWidth = this.refs.viewModeContainer.clientWidth;
+    let rate = this.getCookie('navRate');
+    if (rate) {
+      this.setState({
+        navRate: rate,
+      });
+    } 
+  }
 
   render() {
+    const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
+    const select = this.state.inResizing ? 'none' : '';
     return (
-      <Fragment>
+      <div className="cur-view-content view-mode-container" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
         <DirColumnNav 
           currentPath={this.props.path}
           repoPermission={this.props.repoPermission}
@@ -87,8 +162,11 @@ class DirColumnView extends React.Component {
           onRenameNode={this.props.onRenameNode}
           onDeleteNode={this.props.onDeleteNode}
           repoID={this.props.repoID}
+          navRate={this.state.navRate}
+          inResizing={this.state.inResizing}
         />
-        <div className="dir-content-main">
+        <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
+        <div className="dir-content-main" style={{userSelect: select}}>
           {this.props.isViewFile ? (
             <DirColumnFile 
               path={this.props.path}
@@ -140,7 +218,7 @@ class DirColumnView extends React.Component {
             />
           )}
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
