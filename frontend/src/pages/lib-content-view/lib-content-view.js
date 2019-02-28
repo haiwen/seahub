@@ -220,22 +220,29 @@ class LibContentView extends React.Component {
       });
     });
 
-    if (this.state.currentMode === 'column') {
-      // there will be only two constence. path is file or path is dir.
-      if (Utils.isMarkdownFile(path)) {
-        seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
-          this.showFile(path);
-        }).catch(() => {
-          this.showDir(path); // After an error occurs, follow dir
-        });
+    if (Utils.isMarkdownFile(path)) {
+      seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
+        if (this.state.currentMode !== 'column') {
+          cookie.save('seafile-view-mode', 'column');
+          this.setState({currentMode: 'column'});
+        }
+        this.loadSidePanel(path);
+        this.showFile(path);
+      }).catch(() => {
+        if (this.state.currentMode === 'column') { // After an error occurs, follow dir
+          this.loadSidePanel(path);
+          this.showDir(path);
+        } else {
+          this.showDir(path);
+        }
+      });
+    } else {
+      if (this.state.currentMode === 'column') {
+        this.loadSidePanel(path);
+        this.showDir(path);
       } else {
         this.showDir(path);
       }
-      // load side-panel data
-      this.loadSidePanel(path);
-
-    } else {
-      this.showDir(path);
     }
   }
 
