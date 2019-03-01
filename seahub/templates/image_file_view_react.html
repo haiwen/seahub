@@ -2,6 +2,10 @@
 {% load render_bundle from webpack_loader %}
 {% load seahub_tags %}
 
+{% block extra_style %}
+{% render_bundle 'viewFileImage' 'css' %}
+{% endblock %}
+
 {% block extra_data %}
   // img_prev && img_next can be path or None
   previousImage: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}false{% endif %},
@@ -10,5 +14,5 @@
 {% endblock %}
 
 {% block render_bundle %}
-{% render_bundle 'viewFileImage' %}
+{% render_bundle 'viewFileImage' 'js' %}
 {% endblock %}
