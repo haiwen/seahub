@@ -32,11 +32,10 @@ const { isStarred, isLocked, lockedByMe,
 } = window.app.pageOptions;
 
 const options = {
-  lineNumbers: false,
+  lineNumbers: true,
   mode: Utils.chooseLanguage(fileExt),
   extraKeys: {'Ctrl': 'autocomplete'},
   theme: 'default',
-  autoMatchParens: true,
   textWrapping: true,
   lineWrapping: true,
   readOnly: 'nocursor'

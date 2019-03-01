@@ -2,10 +2,14 @@
 {% load render_bundle from webpack_loader %}
 {% load seahub_tags %}
 
+{% block extra_style %}
+{% render_bundle 'viewFileVideo' 'css' %}
+{% endblock %}
+
 {% block extra_data %}
   rawPath: '{{ raw_path|escapejs }}'
 {% endblock %}
 
 {% block render_bundle %}
-{% render_bundle 'viewFileVideo' %}
+{% render_bundle 'viewFileVideo' 'js' %}
 {% endblock %}
