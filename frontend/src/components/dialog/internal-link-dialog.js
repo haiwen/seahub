@@ -47,7 +47,7 @@ class InternalLinkDialog extends React.Component {
     this.setState({
       isOpen: false
     });
-    let message = gettext('Copy internal link');
+    let message = gettext('Internal link has been copied to clipboard');
     toaster.success(message), {
       duration: 2
     };
