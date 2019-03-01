@@ -29,8 +29,6 @@ const propTypes = {
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   goDraftPage: PropTypes.func.isRequired,
-  reviewStatus: PropTypes.string,
-  goReviewPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.bool.isRequired,
   content: PropTypes.string,
@@ -50,7 +48,6 @@ const propTypes = {
   onAddFolderNode: PropTypes.func.isRequired,
   // repo content
   draftCounts: PropTypes.number,
-  reviewCounts: PropTypes.number,
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
   updateUsedRepoTags: PropTypes.func.isRequired,
@@ -116,10 +113,10 @@ class LibContentContainer extends React.Component {
   }
 
   render() {
-    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts, reviewCounts } = this.props;
+    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
-      if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0 || reviewCounts !== 0) {
+      if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0) {
         isRepoInfoBarShow = true;
       }
     } 
@@ -154,7 +151,6 @@ class LibContentContainer extends React.Component {
                     usedRepoTags={this.props.usedRepoTags}
                     readmeMarkdown={this.props.readmeMarkdown}
                     draftCounts={this.props.draftCounts}
-                    reviewCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
@@ -204,8 +200,6 @@ class LibContentContainer extends React.Component {
                     isDraft={this.props.isDraft}
                     hasDraft={this.props.hasDraft}
                     goDraftPage={this.props.goDraftPage}
-                    reviewStatus={this.props.reviewStatus}
-                    goReviewPage={this.props.goReviewPage}
                     filePermission={this.props.filePermission}
                     content={this.props.content}
                     lastModified={this.props.lastModified}
@@ -215,7 +209,6 @@ class LibContentContainer extends React.Component {
                     usedRepoTags={this.props.usedRepoTags}
                     readmeMarkdown={this.props.readmeMarkdown}
                     draftCounts={this.props.draftCounts}
-                    reviewCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}

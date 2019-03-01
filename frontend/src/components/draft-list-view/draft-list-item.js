@@ -12,7 +12,7 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onDeleteHandler: PropTypes.func.isRequired,
-  onReviewHandler: PropTypes.func.isRequired,
+  onPublishHandler: PropTypes.func.isRequired,
 };
 
 class DraftListItem extends React.Component {
@@ -70,8 +70,8 @@ class DraftListItem extends React.Component {
     this.props.onDeleteHandler(this.props.draft);
   }
 
-  onReviewHandler = () => {
-    this.props.onReviewHandler(this.props.draft);
+  onPublishHandler = () => {
+    this.props.onPublishHandler(this.props.draft);
   }
 
   render() {
@@ -79,7 +79,7 @@ class DraftListItem extends React.Component {
     let repoID = draft.origin_repo_id;
     let filePath = draft.draft_file_path;
     let fileName = Utils.getFileName(filePath);
-    let draftUrl = siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
+    let draftUrl = siteRoot + 'drafts/' + draft.id + '/';
     let libraryUrl = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(draft.repo_name) + '/' ;
     let reviewUrl = siteRoot + 'drafts/review/' + draft.review_id + '/';
     let localTime = moment.utc(draft.updated_at).toDate();
@@ -95,15 +95,9 @@ class DraftListItem extends React.Component {
         <td className="library">
           <a href={libraryUrl} target="_blank">{draft.repo_name}</a>
         </td>
-        <td className="review">
-          {(draft.review_id && draft.review_status === 'open') ? 
-            <a href={reviewUrl} target="_blank">#{draft.review_id}</a> : 
-            <span>--</span> 
-          }
-        </td>
         <td className="update">{localTime}</td>
         <td className="text-center">
-          {(this.props.draft.review_status !== 'open' && this.state.isMenuIconShow) && (
+          {this.state.isMenuIconShow && (
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle 
                 tag="i" 
@@ -115,7 +109,7 @@ class DraftListItem extends React.Component {
               />
               <DropdownMenu>
                 <DropdownItem onClick={this.onDeleteHandler}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.onReviewHandler}>{gettext('Ask for review')}</DropdownItem>
+                <DropdownItem onClick={this.onPublishHandler}>{gettext('Publish')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           )}

@@ -7,7 +7,6 @@ import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
 import DraftContent from './pages/drafts/draft-content';
-import ReviewContent from './pages/drafts/review-content';
 import FilesActivities from './pages/dashboard/files-activities';
 import Starred from './pages/starred/starred';
 import LinkedDevices from './pages/linked-devices/linked-devices';
@@ -198,7 +197,6 @@ class App extends Component {
                 draftList={this.state.draftList}
                 updateDraftsList={this.updateDraftsList}
               />
-              <ReviewContent path='reviews' />
             </DraftsViewWrapper>
             <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <LinkedDevicesWrapper path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />

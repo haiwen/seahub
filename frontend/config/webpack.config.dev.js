@@ -74,10 +74,10 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/app.js",
     ],
-    draftReview: [
+    draft: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/draft-review.js",
+      paths.appSrc + "/draft.js",
     ],
     draw: [
       require.resolve('./polyfills'),

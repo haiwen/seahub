@@ -1,8 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import os
-import json
 import logging
-import posixpath
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -23,6 +20,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.drafts.models import Draft, DraftFileExist, DraftFileConflict
+from seahub.tags.models import FileUUIDMap
 from seahub.views import check_folder_permission
 from seahub.utils import gen_file_get_url
 
@@ -107,7 +105,11 @@ class DraftView(APIView):
 
         # perm check
         repo_id = d.origin_repo_id
-        uuid = d.origin_file_uuid
+        uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(d.origin_file_uuid)
+
+        if not uuid:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Origin file uuid not found.')
+
         perm = check_folder_permission(request, repo_id, uuid.parent_path)
 
         if perm != PERMISSION_READ_WRITE:
@@ -117,7 +119,6 @@ class DraftView(APIView):
         username = request.user.username
         try:
             d.publish(operator=username)
-            d.delete(operator=username)
             return Response(status.HTTP_200_OK)
         except DraftFileConflict:
             return api_error(status.HTTP_409_CONFLICT,

@@ -63,7 +63,7 @@ module.exports = {
     repoview: [require.resolve('./polyfills'), paths.appSrc + "/repo-wiki-mode.js"],
     fileHistory: [require.resolve('./polyfills'), paths.appSrc + "/file-history.js"],
     app: [require.resolve('./polyfills'), paths.appSrc + "/app.js"],
-    draftReview: [require.resolve('./polyfills'), paths.appSrc + "/draft-review.js"],
+    draft: [require.resolve('./polyfills'), paths.appSrc + "/draft.js"],
     draw: [require.resolve('./polyfills'), paths.appSrc + "/draw/draw.js"],
     sharedFileViewMarkdown: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-markdown.js"],
     sharedFileViewText: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-text.js"],

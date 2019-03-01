@@ -1,6 +1,5 @@
 from django.core.urlresolvers import reverse
-from seahub.drafts.models import Draft, DraftReview, ReviewReviewer, \
-        DraftFileExist
+from seahub.drafts.models import Draft, DraftFileExist
 from seahub.test_utils import BaseTestCase
 
 from seaserv import seafile_api
@@ -108,56 +107,3 @@ class DraftTest(BaseTestCase):
 
         # file is updated in origin repo
         assert len(seafile_api.list_dir_by_path(self.repo.id, '/')) == 2
-
-
-class DraftReviewManagerTest(BaseTestCase):
-    def setUp(self):
-        self.draft = Draft.objects.add(self.user.username, self.repo, self.file)
-
-    def test_add(self):
-        assert len(DraftReview.objects.all()) == 0
-        review = DraftReview.objects.add(self.user.username, self.draft)
-
-        assert review is not None
-        assert len(DraftReview.objects.all()) == 1
-
-        r = review.to_dict()
-        assert r['draft_origin_repo_id'] == self.repo.id
-        assert len(r['draft_file_path']) > 0
-
-    def test_get_reviews_by_creator_and_status(self):
-        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 0)
-        DraftReview.objects.add(self.user.username, self.draft)
-        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 1)
-
-    def test_get_reviews_by_creator_and_status_with_invalid_repo(self):
-        self.login_as(self.user)
-        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 0)
-        DraftReview.objects.add(self.user.username, self.draft)
-
-        resp = self.client.delete(
-            reverse('api2-repo', args=[self.repo.id])
-        )
-        self.assertEqual(200, resp.status_code)
-
-        assert(len(DraftReview.objects.all()) == 1)
-        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 0)
-
-    def test_get_reviews_by_creator_and_status_with_invalid_origin_file(self):
-        self.login_as(self.user)
-        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 0)
-
-        DraftReview.objects.add(self.user.username, self.draft)
-        url = reverse('api-v2.1-file-view', args=[self.repo.id])
-        d_resp = self.client.delete(url + '?p=' + self.file,
-                {}, 'application/x-www-form-urlencoded')
-        self.assertEqual(200, d_resp.status_code)
-
-        assert(len(DraftReview.objects.all()) == 1)
-        assert(len(DraftReview.objects.get_reviews_by_creator_and_status(self.user.username, 'open')) == 1)
-
-    def test_get_reviews_by_reviewer_and_status(self):
-        assert(len(DraftReview.objects.get_reviews_by_reviewer_and_status('foo@foo.com', 'open')) == 0)
-        review = DraftReview.objects.add(self.user.username, self.draft)
-        ReviewReviewer.objects.add('foo@foo.com', review)
-        assert(len(DraftReview.objects.get_reviews_by_reviewer_and_status('foo@foo.com', 'open')) == 1)

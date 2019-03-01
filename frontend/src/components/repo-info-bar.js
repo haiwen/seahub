@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
 import ListRepoDraftsDialog from './dialog/list-repo-drafts-dialog';
-import ListRepoReviewsDialog from './dialog/list-repo-reviews-dialog';
 import ReadmeDialog from './dialog/readme-dialog';
 import { siteRoot, gettext } from '../utils/constants';
 import { Utils } from '../utils/utils';
@@ -16,7 +15,6 @@ const propTypes = {
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
-  reviewCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func.isRequired,
 };
 
@@ -28,7 +26,6 @@ class RepoInfoBar extends React.Component {
       currentTag: null,
       isListTaggedFileShow: false,
       showRepoDrafts: false,
-      showRepoReviews: false,
       showReadmeDialog: false,
     };
   }
@@ -49,12 +46,6 @@ class RepoInfoBar extends React.Component {
   toggleDrafts = () => {
     this.setState({
       showRepoDrafts: !this.state.showRepoDrafts 
-    });
-  }
-
-  toggleReviews = () => {
-    this.setState({
-      showRepoReviews: !this.state.showRepoReviews 
     });
   }
 
@@ -107,15 +98,6 @@ class RepoInfoBar extends React.Component {
               </span>
             </span>
           }
-          {this.props.reviewCounts > 0 &&
-            <span className="file-info">
-              <span className="info-icon sf2-icon-review"></span>
-              <span className="used-tag-name">{gettext('review')}</span>
-              <span className="used-tag-files" onClick={this.toggleReviews}>
-                {this.props.reviewCounts > 1 ? this.props.reviewCounts + ' files' : this.props.reviewCounts + ' file'}
-              </span>
-            </span>
-          }
         </div>
         {this.state.isListTaggedFileShow && (
           <ModalPortal>
@@ -133,15 +115,6 @@ class RepoInfoBar extends React.Component {
           <ModalPortal>
             <ListRepoDraftsDialog
               toggle={this.toggleDrafts}
-              repoID={this.props.repoID}
-            />
-          </ModalPortal>
-        )}
-
-        {this.state.showRepoReviews && (
-          <ModalPortal>
-            <ListRepoReviewsDialog
-              toggle={this.toggleReviews}
               repoID={this.props.repoID}
             />
           </ModalPortal>

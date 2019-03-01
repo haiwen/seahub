@@ -22,8 +22,6 @@ const propTypes = {
   isDraft: PropTypes.bool,
   hasDraft: PropTypes.bool,
   goDraftPage: PropTypes.func.isRequired,
-  reviewStatus: PropTypes.any,
-  goReviewPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.bool,
   content: PropTypes.string,
@@ -61,11 +59,6 @@ class FileContentView extends React.Component {
   goDraftPage = (e) => {
     e.preventDefault();
     this.props.goDraftPage();
-  }
-  
-  goReviewPage = (e) => {
-    e.preventDefault();
-    this.props.goReviewPage();
   }
   
   render() {
@@ -116,15 +109,7 @@ class FileContentView extends React.Component {
                 onLinkClick={this.props.onLinkClick}
               >
                 <Fragment>
-                  {this.props.reviewStatus === 'open' &&
-                    <div className='seafile-btn-view-review text-center'>
-                      <div className='tag tag-green'> 
-                        {gettext('This file is in review stage')}
-                        <span className="ml-2" onClick={this.goReviewPage}>{gettext('View Review')}</span>
-                      </div>
-                    </div>
-                  }
-                  {(this.props.reviewStatus !== 'open' && !this.props.isDraft && this.props.hasDraft) &&
+                  {(!this.props.isDraft && this.props.hasDraft) &&
                     <div className='seafile-btn-view-review text-center'>
                       <div className='tag tag-green'>
                         {gettext('This file is in draft stage.')}

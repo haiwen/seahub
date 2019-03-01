@@ -48,9 +48,6 @@ class LibContentView extends React.Component {
       hasDraft: false,
       draftFilePath: '',
       draftCounts: 0,
-      reviewID: '',
-      reviewStatus: '',
-      reviewCounts: 0,
       usedRepoTags: [],
       readmeMarkdown: null,
       isTreeDataLoading: true,
@@ -213,10 +210,9 @@ class LibContentView extends React.Component {
     this.updateUsedRepoTags();
 
     // list draft counts and revierw counts
-    seafileAPI.getRepoDraftReviewCounts(repoID).then(res => {
+    seafileAPI.getRepoDraftCounts(repoID).then(res => {
       this.setState({
         draftCounts: res.data.draft_counts,
-        reviewCounts: res.data.review_counts
       });
     });
 
@@ -300,8 +296,7 @@ class LibContentView extends React.Component {
 
     // update data
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, permission, last_modifier_name, is_draft, has_draft,
-            review_status, review_id, draft_file_path } = res.data;
+      let { mtime, permission, last_modifier_name, is_draft, has_draft, draft_file_path } = res.data;
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         seafileAPI.getFileContent(res.data).then((res) => {
           this.setState({
@@ -313,8 +308,6 @@ class LibContentView extends React.Component {
             isFileLoadedErr: false,
             isDraft: is_draft,
             hasDraft: has_draft,
-            reviewStatus: review_status,
-            reviewID: review_id,
             draftFilePath: draft_file_path
           });
         });
@@ -1132,10 +1125,6 @@ class LibContentView extends React.Component {
     this.setState({libNeedDecrypt: false});
     this.loadDirData(this.state.path);
   }
-
-  goReviewPage = () => {
-    window.location.href = siteRoot + 'drafts/review/' + this.state.reviewID;
-  }
   
   goDraftPage = () => {
     let repoID = this.props.repoID;
@@ -1255,8 +1244,6 @@ class LibContentView extends React.Component {
             isDraft={this.state.isDraft}
             hasDraft={this.state.hasDraft}
             goDraftPage={this.goDraftPage}
-            reviewStatus={this.state.reviewStatus}
-            goReviewPage={this.goReviewPage}
             isFileLoading={this.state.isFileLoading}
             isFileLoadedErr={this.state.isFileLoadedErr}
             filePermission={this.state.filePermission}
@@ -1275,7 +1262,6 @@ class LibContentView extends React.Component {
             onRenameNode={this.onRenameTreeNode}
             onDeleteNode={this.onDeleteTreeNode}
             draftCounts={this.state.draftCounts}
-            reviewCounts={this.state.reviewCounts}
             usedRepoTags={this.state.usedRepoTags}
             readmeMarkdown={this.state.readmeMarkdown}
             updateUsedRepoTags={this.updateUsedRepoTags}

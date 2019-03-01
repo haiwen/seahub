@@ -13,7 +13,6 @@ const propTypes = {
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
-  reviewCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
@@ -45,7 +44,6 @@ class DirListView extends React.Component {
             currentPath={this.props.path}
             readmeMarkdown={this.props.readmeMarkdown}
             draftCounts={this.props.draftCounts}
-            reviewCounts={this.props.reviewCounts}
             usedRepoTags={this.props.usedRepoTags}
             updateUsedRepoTags={this.props.updateUsedRepoTags}
           />
