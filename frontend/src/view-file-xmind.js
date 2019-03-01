@@ -40,13 +40,13 @@ class ViewFileXmind extends React.Component {
 
   toggleStar = () => {
     if (this.state.isStarred) {
-      seafileAPI.unStarFile(repoID, filePath).then((res) => {
+      seafileAPI.unStarItem(repoID, filePath).then((res) => {
         this.setState({
           isStarred: false
         });
       });
     } else {
-      seafileAPI.starFile(repoID, filePath).then((res) => {
+      seafileAPI.starItem(repoID, filePath).then((res) => {
         this.setState({
           isStarred: true
         });
