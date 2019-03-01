@@ -41,6 +41,7 @@ class FileChooser extends React.Component {
           currentRepoInfo: repoInfo,
           selectedRepo: repoInfo
         });
+        this.props.onRepoItemClick(repoInfo);
       });
     }
   }
