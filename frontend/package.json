@@ -97,6 +97,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "antd": "^3.13.6",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "7.2.3",

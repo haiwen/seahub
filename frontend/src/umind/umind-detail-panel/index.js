@@ -1,29 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Card } from 'antd';
 import { NodePanel, CanvasPanel, DetailPanel } from 'gg-editor';
-import ItemDetail from './item-detail';
-
-const propTypes = {
-
-};
+import NodeDetail from './node-detail';
 
 class UMindDetails extends React.Component {
 
   render() {
     return (
       <DetailPanel className="detail-panel">
-        <NodePanel>
-          <div>节点属性</div>
-          <ItemDetail />
+        <NodePanel className="node-detail">
+          <NodeDetail />
         </NodePanel>
-        <CanvasPanel>
-          <div>画布属性</div>
+        <CanvasPanel className="node-detail">
+          <Card type="inner" title="画布属性" bordered={true} />
         </CanvasPanel>
       </DetailPanel>
     );
   }
 }
-
-UMindDetails.propTypes = propTypes;
 
 export default UMindDetails;

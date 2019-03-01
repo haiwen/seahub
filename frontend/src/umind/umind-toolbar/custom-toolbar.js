@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Tooltip } from 'antd';
 import withGGEditorContext from 'gg-editor/es/common/context/GGEditorContext/withGGEditorContext';
 
 const propTypes = {
@@ -12,7 +13,6 @@ class CustomToolbar extends React.Component {
     let page = editor.getCurrentPage();
     let { data } = page._cfg;
     console.log(data);
-
   }
 
   render() {

@@ -12,10 +12,13 @@
 }
 
 .umind-container .umind-header {
-  height: 49px;
+  padding: 8px;
+  border: 1px solid #E6E9ED;
+}
+
+.umind-container .umind-body {
   display: flex;
-  background-color: green;
-  justify-content: space-around;
+  flex: 1;
 }
 
 .umind-header .umind-common-toolbar {
@@ -27,34 +30,37 @@
   width: auto;
 }
 
-.umind-container .umind-main {
+.umind-body .umind-editor-content,
+.umind-body .umind-editor-sidebar {
   display: flex;
-  flex: 1;
+  flex-direction: column;
 }
 
-.umind-main .umind-editor-container {
-  display: flex;
-  flex: 1 0 80%;
-}
-
-.umind-editor {
+.umind-editor-content .umind-editor {
   display: flex;
   flex: 1;
   background-color: #eee;
 }
 
-.umind-main .umind-property-container {
-  display: flex;
-  flex: 0 0 20%;
-  flex-direction: column;
-  background-color: #ffbbcc;
+.umind-editor-sidebar {
+  background: #FAFAFA;
 }
 
-.detail-panel {
+.umind-editor-sidebar:first-child {
+  border-right: 1px solid #E6E9ED;
+}
+
+.umind-editor-sidebar:last-child {
+  border-left: 1px solid #E6E9ED;
+}
+
+.umind-editor-sidebar .detail-panel {
   flex: 1;
   display: flex;
+  background: #FAFAFA;
 }
 
-.editor-minimap {
-  height: 200px;
+.detail-panel .node-detail {
+ flex: 1;
+ background: #FAFAFA;
 }
