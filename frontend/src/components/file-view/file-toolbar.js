@@ -85,7 +85,7 @@ class FileToolbar extends React.Component {
         {enableComment && (
           <IconButton
             id="comment"
-            icon="fa fa-comment"
+            icon="fa fa-comments"
             text={gettext('Comment')}
             onClick={this.props.toggleCommentPanel}
           />
