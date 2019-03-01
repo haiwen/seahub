@@ -102,6 +102,17 @@
   "no_tags": "没有标签",
   "no_related_files": "没有相关文件",
   "Please_use_Chrome_to_get_best_editing_experience": "为了获得更好的编辑体验，请使用 Chrome 浏览器",
+  "no_document_improvement_suggestion": "没有文档改进建议",
+  "markdownLint": {
+    "missing_h1": {
+      "description": "文档中缺少 h1",
+      "issue" : "缺少 h1"
+    },
+    "heading_end_with_colon": {
+      "description": "标题末尾的标点符号不应该是冒号",
+      "issue": "标题末尾是冒号"
+    }
+  },
   "userHelp": {
     "title": "键盘快捷键",
     "userHelpData": [

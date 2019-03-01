@@ -102,6 +102,17 @@
   "no_tags": "No tags",
   "no_related_files": "No related files",
   "Please_use_Chrome_to_get_best_editing_experience": "Please use Chrome to get best editing experience.",
+  "no_document_improvement_suggestion": "No document improvement suggestion",
+  "markdownLint": {
+    "missing_h1": {
+      "description": "There is no h1 in the article",
+      "issue" : "Missing h1"
+    },
+    "heading_end_with_colon": {
+      "description": "Trailing punctuation in heading should not be a colon.",
+      "issue": "Heading ends width colon"
+    }
+  },
   "userHelp": {
     "title": "Keyboard shortcuts",
     "userHelpData": [
