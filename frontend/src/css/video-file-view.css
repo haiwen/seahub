@@ -1,0 +1,8 @@
+.video-file-view {
+    overflow: auto;
+}
+.video-js {
+    width: calc(100% - 40px);
+    max-width: 800px;
+    margin: 0 auto;
+}

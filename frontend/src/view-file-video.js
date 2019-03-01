@@ -2,51 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import watermark from 'watermark-dom';
 import { seafileAPI } from './utils/seafile-api';
-import { Utils } from './utils/utils';
 import { siteName } from './utils/constants';
 import FileInfo from './components/file-view/file-info';
 import FileToolbar from './components/file-view/file-toolbar';
 import FileViewTip from './components/file-view/file-view-tip';
 import CommentPanel from './components/file-view/comment-panel';
-
-import CodeMirror from 'react-codemirror';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/css/css';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/php/php';
-import 'codemirror/mode/sql/sql';
-import 'codemirror/mode/vue/vue';
-import 'codemirror/mode/xml/xml';
-import 'codemirror/mode/go/go';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/lib/codemirror.css';
-
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
+import VideoPlayer from './components/video-player';
 
 import './css/file-view.css';
-import './css/text-file-view.css';
+import './css/video-file-view.css';
 
 const { isStarred, isLocked, lockedByMe,
   repoID, filePath, err, enableWatermark, userNickName,
-  // the following are only for text file view
-  fileExt, fileContent
+  // the following are only for this type of file view
+  rawPath
 } = window.app.pageOptions;
 
-const options = {
-  lineNumbers: false,
-  mode: Utils.chooseLanguage(fileExt),
-  extraKeys: {'Ctrl': 'autocomplete'},
-  theme: 'default',
-  autoMatchParens: true,
-  textWrapping: true,
-  lineWrapping: true,
-  readOnly: 'nocursor'
-};
-
-class ViewFileText extends React.Component {
+class ViewFileVideo extends React.Component {
 
   constructor(props) {
     super(props);
@@ -84,8 +56,8 @@ class ViewFileText extends React.Component {
     if (this.state.isLocked) {
       seafileAPI.unlockfile(repoID, filePath).then((res) => {
         this.setState({
-          isLocked: false,
-          lockedByMe: false
+          isLocked: false, 
+          lockedByMe: false 
         });
       });
     } else {
@@ -107,7 +79,7 @@ class ViewFileText extends React.Component {
             isLocked={this.state.isLocked}
             toggleStar={this.toggleStar}
           />
-          <FileToolbar
+          <FileToolbar 
             isLocked={this.state.isLocked}
             lockedByMe={this.state.lockedByMe}
             toggleLockFile={this.toggleLockFile}
@@ -128,17 +100,20 @@ class ViewFileText extends React.Component {
 class FileContent extends React.Component {
 
   render() {
-
     if (err) {
       return <FileViewTip />;
     }
+
+    const videoJsOptions = {
+      autoplay: false,
+      controls: true,
+      sources: [{
+        src: rawPath
+      }]
+    };
     return (
-      <div className="file-view-content flex-1 text-file-view">
-        <CodeMirror
-          ref="code-mirror-editor"
-          value={fileContent}
-          options={options}
-        />
+      <div className="file-view-content flex-1 video-file-view">
+        <VideoPlayer { ...videoJsOptions } />
       </div>
     );
   }
@@ -152,6 +127,6 @@ if (enableWatermark) {
 }
 
 ReactDOM.render (
-  <ViewFileText />,
+  <ViewFileVideo />,
   document.getElementById('wrapper')
 );

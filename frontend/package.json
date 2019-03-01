@@ -41,6 +41,7 @@
     "url-loader": "0.6.2",
     "url-parse": "^1.4.3",
     "vfile": "^3.0.0",
+    "video.js": "^7.4.1",
     "watermark-dom": "^1.0.0",
     "whatwg-fetch": "2.0.3"
   },
@@ -94,7 +95,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "7.2.3",
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.2",
