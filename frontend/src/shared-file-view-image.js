@@ -8,9 +8,6 @@ import SaveSharedFileDialog from './components/dialog/save-shared-file-dialog';
 import toaster from './components/toast';
 import watermark from 'watermark-dom';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/shared-file-view.css';
 import './css/image-file-view.css';
 

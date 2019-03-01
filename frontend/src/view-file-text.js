@@ -22,10 +22,6 @@ import 'codemirror/mode/python/python';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/lib/codemirror.css';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
-
 import './css/file-view.css';
 import './css/text-file-view.css';
 

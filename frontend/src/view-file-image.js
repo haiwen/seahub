@@ -9,9 +9,6 @@ import FileToolbar from './components/file-view/file-toolbar';
 import FileViewTip from './components/file-view/file-view-tip';
 import CommentPanel from './components/file-view/comment-panel';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/file-view.css';
 import './css/image-file-view.css';
 
