@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip } from 'antd';
 import withGGEditorContext from 'gg-editor/es/common/context/GGEditorContext/withGGEditorContext';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
 };
+
+const { repoID, filePath, fileName } = window.app.pageOptions;
 
 class CustomToolbar extends React.Component {
 
@@ -12,7 +17,17 @@ class CustomToolbar extends React.Component {
     let { editor } = this.props;
     let page = editor.getCurrentPage();
     let { data } = page._cfg;
-    console.log(data);
+    let dirPath = Utils.getDirName(filePath);
+    seafileAPI.getUpdateLink(repoID, dirPath).then(res => {
+      let updateLink = res.data;
+      let updateData = JSON.stringify(data);
+      seafileAPI.updateFile(updateLink, filePath, fileName, updateData).then(res => {
+        console.log(res);
+        toaster.success(gettext('saved file success.'));
+      }).catch(() => {
+        toaster.success(gettext('saved file failed.'));
+      });
+    })
   }
 
   render() {

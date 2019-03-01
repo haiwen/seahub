@@ -1,10 +1,6 @@
-{% extends "base_for_react.html" %}
+{% extends 'file_view_react.html' %}
 {% load render_bundle from webpack_loader %}
-{% block extra_style %}
-{% render_bundle 'viewFileUMind' 'css' %}
-{% endblock %}
 
-{% block extra_script %}
-
-{% render_bundle 'viewFileUMind' 'js' %}
+{% block render_bundle %}
+{% render_bundle 'viewFileUMind' %}
 {% endblock %}
