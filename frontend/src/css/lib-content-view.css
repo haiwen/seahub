@@ -7,6 +7,11 @@
   min-height: 0;
 }
 
+.dir-colunm-view {
+  display: flex;
+  width: 100%;
+}
+
 .dir-content-nav {
   flex: 0 0 25%;
   display: flex;

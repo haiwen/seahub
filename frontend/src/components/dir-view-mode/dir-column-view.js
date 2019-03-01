@@ -134,7 +134,7 @@ class DirColumnView extends React.Component {
     return '';
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let rate = this.getCookie('navRate');
     if (rate) {
       this.setState({
@@ -148,7 +148,7 @@ class DirColumnView extends React.Component {
     const select = this.state.inResizing ? 'none' : '';
     const mainFlex = '1 0 ' + (1 - this.state.navRate) * 100 + '%';
     return (
-      <div className="d-flex" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
+      <div className="dir-colunm-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
         <DirColumnNav 
           currentPath={this.props.path}
           repoPermission={this.props.repoPermission}
