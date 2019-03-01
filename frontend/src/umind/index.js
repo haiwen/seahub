@@ -4,7 +4,6 @@ import { Row, Col } from 'antd';
 import GGEditor, { Mind } from 'gg-editor';
 import { seafileAPI } from '../utils/seafile-api';
 import UMindToolbar from './umind-toolbar/umind-toolbar';
-import UMindCustomToolbar from './umind-toolbar/custom-toolbar';
 import UMindDetailPanel from './umind-detail-panel';
 import UMindEditorMinimap from './umind-editor/umind-editor-minimap';
 import UMindContextMenu from './umind-editor/umind-context-menu';
@@ -50,11 +49,8 @@ class UMind extends React.Component {
     return (
       <GGEditor className="umind-container">
         <Row type="flex" className="umind-header">
-          <Col span={20}>
+          <Col span={24} className="toolbar-container">
             <UMindToolbar />
-          </Col>
-          <Col span={4}>
-            <UMindCustomToolbar />
           </Col>
         </Row>
         <Row type="flex" className="umind-body">

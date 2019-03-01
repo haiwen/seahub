@@ -21,14 +21,19 @@
   flex: 1;
 }
 
-.umind-header .umind-common-toolbar {
+.toolbar-container {
+  display: flex;
+}
+
+.toolbar-container .custom-toolbar {
+  width: auto;
+}
+
+.toolbar-container .common-toolbar {
   display: flex;
   flex: 1;
 }
 
-.umind-header .umind-custom-toolbar {
-  width: auto;
-}
 
 .umind-body .umind-editor-content,
 .umind-body .umind-editor-sidebar {

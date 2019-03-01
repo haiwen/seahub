@@ -1,9 +1,9 @@
-.toolbar {
+.common-toolbar {
   display: flex;
   align-items: center;
 }
 
-.toolbar .command i {
+.common-toolbar .command i {
   cursor: pointer;
   display: inline-block;
   margin: 0 6px;
@@ -13,20 +13,26 @@
   border: 1px solid #FFFFFF;
 }
 
-.toolbar .command i:hover {
+.common-toolbar .command i:hover {
   border: 1px solid #E6E9ED;
 }
 
-.toolbar .disable i {
+.common-toolbar .disable i {
   cursor: auto;
   color: rgba(0, 0, 0, 0.25);
 }
 
-.toolbar .disable i:hover {
+.common-toolbar .disable i:hover {
   border: 1px solid #FFFFFF;
 }
 
 .tooltip .ant-tooltip-inner {
   font-size: 12px;
   border-radius: 0;
+}
+
+.common-toolbar .anticon.custom-save {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
