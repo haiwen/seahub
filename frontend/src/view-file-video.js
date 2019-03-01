@@ -9,9 +9,6 @@ import FileViewTip from './components/file-view/file-view-tip';
 import CommentPanel from './components/file-view/comment-panel';
 import VideoPlayer from './components/video-player';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/file-view.css';
 import './css/video-file-view.css';
 

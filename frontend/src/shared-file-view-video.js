@@ -9,9 +9,6 @@ import toaster from './components/toast';
 import VideoPlayer from './components/video-player';
 import watermark from 'watermark-dom';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/shared-file-view.css';
 import './css/video-file-view.css';
 
