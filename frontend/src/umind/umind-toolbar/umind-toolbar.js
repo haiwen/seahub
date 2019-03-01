@@ -22,7 +22,6 @@ class UMindToolbar extends React.Component {
       let updateLink = res.data;
       let updateData = JSON.stringify(data);
       seafileAPI.updateFile(updateLink, filePath, fileName, updateData).then(res => {
-        console.log(res);
         toaster.success(gettext('saved file success.'));
       }).catch(() => {
         toaster.success(gettext('saved file failed.'));
