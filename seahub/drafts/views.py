@@ -12,6 +12,7 @@ from seahub.views import check_folder_permission
 from seahub.utils import render_permission_error, render_error
 from seahub.drafts.models import Draft
 from seahub.api2.utils import user_to_dict
+from seahub.tags.models import FileUUIDMap
 
 
 @login_required
@@ -24,7 +25,7 @@ def draft(request, pk):
     d = get_object_or_404(Draft, pk=pk)
 
     # check perm
-    uuid = d.origin_file_uuid
+    uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(d.origin_file_uuid)
     origin_repo_id = d.origin_repo_id
     permission = check_folder_permission(request, origin_repo_id, '/')
     if not permission:

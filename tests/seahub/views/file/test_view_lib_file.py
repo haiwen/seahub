@@ -173,7 +173,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_video.html')
+        self.assertTemplateUsed(resp, 'video_file_view_react.html')
         assert resp.context['filetype'].lower() == 'video'
 
         raw_path = resp.context['raw_path']
