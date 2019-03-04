@@ -190,7 +190,7 @@
   width: 1rem;
 }
 .review-side-panel .tab-content {
-  height: 100%;
+  height: calc(100% - 38px);
 }
 .review-side-panel .tab-content .comments,
 .review-side-panel .tab-content .tab-pane {

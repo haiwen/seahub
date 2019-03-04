@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { processor } from '../../utils/seafile-markdown2html';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { reviewID, gettext, draftFilePath, draftOriginRepoID, draftRepoID } from '../../utils/constants';
+import { gettext, draftFilePath, draftRepoID } from '../../utils/constants';
 import Loading from '../../components/loading.js';
 import reviewComment from '../../models/review-comment.js';
 import { username } from '../../utils/constants.js';
@@ -24,7 +24,7 @@ class ReviewComments extends React.Component {
     this.state = {
       commentsList: [],
       inResizing: false,
-      commentFooterHeight: 30,
+      commentFooterHeight: 25,
       showResolvedComment: true,
       comment: '',
     };

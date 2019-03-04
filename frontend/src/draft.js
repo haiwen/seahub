@@ -5,15 +5,12 @@ import { Button } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, draftOriginFilePath, draftFilePath, draftOriginRepoID,
-  opStatus, publishFileVersion, originFileVersion, author, authorAvatar, 
-  draftFileExists, originFileExists, draftID, draftFileName, draftRepoID } from './utils/constants';
+import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftID, draftFileName, draftRepoID } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import { serialize } from '@seafile/seafile-editor/dist/utils/slate2markdown/serialize';
 import Loading from './components/loading';
-import toaster from './components/toast';
 import ReviewComments from './components/review-list-view/review-comments';
 import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js';
 import { Tooltip } from 'reactstrap';
@@ -34,6 +31,7 @@ import './css/dirent-detail.css';
 import './css/draft.css';
 
 require('@seafile/seafile-editor/dist/editor/code-hight-package');
+const URL = require('url-parse');
 
 class Draft extends React.Component {
   constructor(props) {
@@ -54,6 +52,8 @@ class Draft extends React.Component {
       historyList: [],
       showReviewerDialog: false,
       reviewers: [],
+      inResizing: false,
+      rightPartWidth: 30,
     };
     this.quote = '';
     this.newIndex = null;
@@ -62,12 +62,7 @@ class Draft extends React.Component {
     this.range = null;
   }
 
-  componentDidMount() {
-    this.initialContent();
-  }
-
   initialContent = () => {
-
     if (!originFileExists) {
       seafileAPI.getFileDownloadLink(draftRepoID, draftFilePath)
         .then(res => { 
@@ -92,7 +87,7 @@ class Draft extends React.Component {
         isLoading: false,
         activeTab: 'history',
       });
-      seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, 1, 25).then((res) => {
+      seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, 1, 25).then((res) => {
         const historyList = res.data.data;
         this.setState({
           historyList: historyList,
@@ -108,8 +103,8 @@ class Draft extends React.Component {
         }
       });
       axios.all([
-        seafileAPI.getFileRevision(draftOriginRepoID, currentCommitID, draftFilePath),
-        seafileAPI.getFileRevision(draftOriginRepoID, preCommitID, draftFilePath)
+        seafileAPI.getFileRevision(draftRepoID, currentCommitID, draftFilePath),
+        seafileAPI.getFileRevision(draftRepoID, preCommitID, draftFilePath)
       ]).then(axios.spread((res1, res2) => {
         axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
           this.setDiffViewerContent(content2.data, content1.data);
@@ -137,7 +132,6 @@ class Draft extends React.Component {
         }));
       }));
     }
-
   }
 
   onHistoryItemClick = (currentCommitID, preCommitID, activeItem) => {
@@ -146,10 +140,9 @@ class Draft extends React.Component {
     this.setState({
       activeItem: activeItem
     });
-
     axios.all([
-      seafileAPI.getFileRevision(draftOriginRepoID, currentCommitID, draftFilePath),
-      seafileAPI.getFileRevision(draftOriginRepoID, preCommitID, draftFilePath)
+      seafileAPI.getFileRevision(draftRepoID, currentCommitID, draftFilePath),
+      seafileAPI.getFileRevision(draftRepoID, preCommitID, draftFilePath)
     ]).then(axios.spread((res1, res2) => {
       axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
         this.setDiffViewerContent(content1.data, content2.data);
@@ -161,11 +154,6 @@ class Draft extends React.Component {
     this.setState({
       historyList: historyList
     });
-  }
-
-  componentWillMount() {
-    this.getCommentsNumber();
-    this.getOriginRepoInfo();
   }
 
   getCommentsNumber = () => {
@@ -184,27 +172,6 @@ class Draft extends React.Component {
       });
     });
   }
-
-  // new comment APIs
-  // getCommentsNumber() {
-  //   return seafileAPI.getCommentsNumber(draftRepoID, draftFilePath);
-  // }
-
-  // postComment(comment, detail) {
-  //   return seafileAPI.postComment(draftRepoID, draftFilePath, comment, detail);
-  // }
-
-  // listComments() {
-  //   return seafileAPI.listComments(draftRepoID, draftFilePath);
-  // }
-
-  // updateComment(commentID, resolved, detail) {
-  //   return seafileAPI.updateComment(draftRepoID, commentID, resolved, detail);
-  // }
-
-  // deleteComment(commentID) {
-  //   return seafileAPI.deleteComment(draftRepoID, commentID);
-  // }
 
   addComment = (e) => {
     e.stopPropagation();
@@ -229,7 +196,7 @@ class Draft extends React.Component {
   }
 
   getOriginRepoInfo = () => {
-    seafileAPI.getRepoInfo(draftOriginRepoID).then((res) => {
+    seafileAPI.getRepoInfo(draftRepoID).then((res) => {
       this.setState({
         originRepoName: res.data.repo_name
       });
@@ -346,6 +313,7 @@ class Draft extends React.Component {
             ref="diffViewer"
           />
         }
+        <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>
       </div>
     );
   }
@@ -385,7 +353,6 @@ class Draft extends React.Component {
     });
   }
 
-
   showDiffButton = () => {
     return (
       <div className={'seafile-toggle-diff'}>
@@ -406,19 +373,19 @@ class Draft extends React.Component {
     const OriginFileLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftOriginFilePath + '/';
     seafileAPI.publishDraft(draftID).then(res => {
       window.location.href = OriginFileLink; 
-    })
+    });
   }
 
   initialDiffViewerContent = () => {
-    seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, 1, 25).then((res) => {
+    seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, 1, 25).then((res) => {
       this.setState({
         historyList: res.data.data,
         totalReversionCount: res.data.total_count
       });
       if (res.data.data.length > 1) {
         axios.all([
-          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath),
-          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[1].commit_id, draftFilePath)
+          seafileAPI.getFileRevision(draftRepoID, res.data.data[0].commit_id, draftFilePath),
+          seafileAPI.getFileRevision(draftRepoID, res.data.data[1].commit_id, draftFilePath)
         ]).then(axios.spread((res1, res2) => {
           axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
             this.setState({
@@ -428,7 +395,7 @@ class Draft extends React.Component {
           }));
         }));
       } else {
-        seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath).then((res) => {
+        seafileAPI.getFileRevision(draftRepoID, res.data.data[0].commit_id, draftFilePath).then((res) => {
           seafileAPI.getFileContent(res.data).then((content) => {
             this.setState({
               draftContent: content.data,
@@ -440,22 +407,28 @@ class Draft extends React.Component {
     });
   }
 
+  setDiffViewerContent = (newContent, prevContent) => {
+    this.setState({
+      draftContent: newContent,
+      draftOriginContent: prevContent  
+    });
+  }
+
   setURL = (newurl) => {
     let url = new URL(window.location.href);
-    // bug
     url.set('hash', newurl);
     window.location.href = url.toString();
   }
 
   tabItemClick = (tab) => {
     if (this.state.activeTab !== tab) {
-      if (tab !== 'history') {
-        // this.setURL('#');
+      if (tab !== 'history' && window.location.hash) {
+        this.setURL('#');
       }
       if (tab == 'reviewInfo') { 
         this.initialContent();
       }
-      else if (tab == 'history'){
+      else if (tab == 'history') {
         this.initialDiffViewerContent();
       }
       this.setState({
@@ -463,7 +436,6 @@ class Draft extends React.Component {
       });
     }
   }
-
 
   showNavItem = (showTab) => {
     switch(showTab) {
@@ -512,12 +484,176 @@ class Draft extends React.Component {
         {this.showNavItem('history')}
       </Nav>
     );
-  }  
+  }
 
-  // add inResizing
+  setBtnPosition = (e) => {
+    const nativeSelection = window.getSelection();
+    if (!nativeSelection.rangeCount) {
+      this.range = null;
+      return;
+    }
+    if (nativeSelection.isCollapsed === false) {
+      const nativeRange = nativeSelection.getRangeAt(0);
+      const focusNode = nativeSelection.focusNode;
+      if ((focusNode.tagName === 'I') ||
+          (focusNode.nodeType !== 3 && focusNode.getAttribute('class') === 'language-type')) {
+        // fix select last paragraph
+        let fragment = nativeRange.cloneContents();
+        let startNode = fragment.firstChild.firstChild;
+        if (!startNode) {
+          return;
+        }
+        let newNativeRange = document.createRange();
+        newNativeRange.setStartBefore(startNode);
+        newNativeRange.setEndAfter(startNode);
+        this.range =  findRange(newNativeRange, this.refs.diffViewer.value);
+      }
+      else {
+        this.range = findRange(nativeRange, this.refs.diffViewer.value);
+      }
+      if (!this.range) {
+        return;
+      }
+      let rect = nativeRange.getBoundingClientRect();
+      // fix Safari bug
+      if (navigator.userAgent.indexOf('Chrome') < 0 && navigator.userAgent.indexOf('Safari') > 0) {
+        if (nativeRange.collapsed && rect.top == 0 && rect.height == 0) {
+          if (nativeRange.startOffset == 0) {
+            nativeRange.setEnd(nativeRange.endContainer, 1);
+          } else {
+            nativeRange.setStart(nativeRange.startContainer, nativeRange.startOffset - 1);
+          }
+          rect = nativeRange.getBoundingClientRect();
+          if (rect.top == 0 && rect.height == 0) {
+            if (nativeRange.getClientRects().length) {
+              rect = nativeRange.getClientRects()[0];
+            }
+          }
+        }
+      }
+      let style = this.refs.commentbtn.style;
+      style.top = `${rect.top - 100 + this.refs.viewContent.scrollTop}px`;
+    }
+    else {
+      let style = this.refs.commentbtn.style;
+      style.top = '-1000px';
+    }
+  }
+
+  getQuote = () => {
+    let range = this.range;
+    if (!range) {
+      return;
+    }
+    this.quote = '';
+    const { document } = this.refs.diffViewer.value;
+    let { anchor, focus } = range;
+    const anchorText = document.getNode(anchor.key);
+    const focusText = document.getNode(focus.key);
+    const anchorInline = document.getClosestInline(anchor.key);
+    const focusInline = document.getClosestInline(focus.key);
+    // COMPAT: If the selection is at the end of a non-void inline node, and
+    // there is a node after it, put it in the node after instead. This
+    // standardizes the behavior, since it's indistinguishable to the user.
+    if (anchorInline && anchor.offset == anchorText.text.length) {
+      const block = document.getClosestBlock(anchor.key);
+      const nextText = block.getNextText(anchor.key);
+      if (nextText) {
+        range = range.moveAnchorTo(nextText.key, 0);
+      }
+    }
+    if (focusInline && focus.offset == focusText.text.length) {
+      const block = document.getClosestBlock(focus.key);
+      const nextText = block.getNextText(focus.key);
+      if (nextText) {
+        range = range.moveFocusTo(nextText.key, 0); 
+      }
+    }
+    let fragment = document.getFragmentAtRange(range);
+    let nodes = this.removeNullNode(fragment.nodes);
+    let newFragment = Document.create({
+      nodes: nodes
+    });
+    let newValue = Value.create({
+      document: newFragment
+    });
+    this.quote = serialize(newValue.toJSON());
+    let blockPath = document.createSelection(range).anchor.path.slice(0, 1);
+    let node = document.getNode(blockPath);
+    this.newIndex = node.data.get('new_index');
+    this.oldIndex = node.data.get('old_index');
+  }
+
+  removeNullNode = (oldNodes) => {
+    let newNodes = [];
+    oldNodes.map((node) => {
+      const text = node.text.trim();
+      const childNodes = node.nodes;
+      if (!text) {
+        return;
+      }
+      if ((childNodes && childNodes.size === 1) || (!childNodes)) {
+        newNodes.push(node);
+      }
+      else if (childNodes.size > 1) {
+        let nodes = this.removeNullNode(childNodes);
+        let newNode = Block.create({
+          nodes: nodes,
+          data: node.data,
+          key: node.key,
+          type: node.type
+        });
+        newNodes.push(newNode);
+      }
+    });
+    return newNodes;
+  }
+
+  onResizeMouseUp = () => {
+    if (this.state.inResizing) {
+      this.setState({
+        inResizing: false
+      });
+    }
+  }
+
+  onResizeMouseDown = () => {
+    this.setState({
+      inResizing: true
+    });
+  };
+
+  onResizeMouseMove = (e) => {
+    let rate = 100 - e.nativeEvent.clientX / this.refs.main.clientWidth * 100;
+    if (rate < 20 || rate > 60) {
+      this.setState({
+        inResizing: false
+      });
+      return null;
+    }
+    this.setState({
+      rightPartWidth: rate
+    });
+  };
+
+  componentWillMount() {
+    this.getCommentsNumber();
+    this.listReviewers();
+    this.getOriginRepoInfo();
+  }
+
+  componentDidMount() {
+    this.initialContent();
+    document.addEventListener('selectionchange', this.setBtnPosition);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('selectionchange', this.setBtnPosition);
+  }
+
   render() {
+    const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
-    const OriginFileLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftOriginFilePath + '/';
     return(
       <div className="wrapper">
         <div id="header" className="header review">
@@ -543,10 +679,9 @@ class Draft extends React.Component {
             </button>
           </div>
         </div>
-
-        <div id="main" className="main">
-          <div className="cur-view-container">
-            <div className='cur-view-content'>
+        <div id="main" className="main" ref="main">
+          <div className="cur-view-container" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} >
+            <div className='cur-view-content' ref="viewContent" style={{width:(100 - this.state.rightPartWidth) + '%'}}>
               {this.state.isLoading ?
                 <div className="markdown-viewer-render-content article">
                   <Loading /> 
@@ -557,46 +692,46 @@ class Draft extends React.Component {
                 </div>
               }
             </div>
-          </div>
-          <div className="cur-view-right-part">
-            <div className="seafile-comment-resize"></div>
-            <div className="review-side-panel">
-              {this.renderNavItems()}
-              <TabContent activeTab={this.state.activeTab}>
-                <TabPane tabId="reviewInfo">
-                  <div className="review-side-panel-body">
-                    <SidePanelReviewers
-                      reviewers={this.state.reviewers}
-                      toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>
-                    <SidePanelAuthor/>
-                    <UnresolvedComments number={this.state.unresolvedComments}/>
-                    {(this.state.isShowDiff === true && this.state.changedNodes.length > 0) &&
-                    <SidePanelChanges
-                      changedNumber={this.state.changedNodes.length}
-                      scrollToChangedNode={this.scrollToChangedNode}/>
-                    }
-                    <SidePanelOrigin originRepoName={this.state.originRepoName}/>
-                    <a href={draftLink}><Button color="secondary">{gettext('Edit Draft')}</Button></a>
-                  </div>
-                </TabPane>
-                <TabPane tabId="comments" className="comments">
-                  <ReviewComments
-                    scrollToQuote={this.scrollToQuote}
-                    getCommentsNumber={this.getCommentsNumber}
-                    commentsNumber={this.state.commentsNumber}
-                    inResizing={false}
-                  />
-                </TabPane>
-                <TabPane tabId="history" className="history">
-                  <HistoryList
-                    activeItem={this.state.activeItem}
-                    historyList={this.state.historyList}
-                    totalReversionCount={this.state.totalReversionCount}
-                    onHistoryItemClick={this.onHistoryItemClick}
-                    onHistoryListChange={this.onHistoryListChange}
-                  />
-                </TabPane>
-              </TabContent>
+            <div className="cur-view-right-part" style={{width:(this.state.rightPartWidth) + '%'}}>
+              <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
+              <div className="review-side-panel">
+                {this.renderNavItems()}
+                <TabContent activeTab={this.state.activeTab}>
+                  <TabPane tabId="reviewInfo">
+                    <div className="review-side-panel-body">
+                      <SidePanelReviewers
+                        reviewers={this.state.reviewers}
+                        toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>
+                      <SidePanelAuthor/>
+                      <UnresolvedComments number={this.state.unresolvedComments}/>
+                      {(this.state.isShowDiff === true && this.state.changedNodes.length > 0) &&
+                      <SidePanelChanges
+                        changedNumber={this.state.changedNodes.length}
+                        scrollToChangedNode={this.scrollToChangedNode}/>
+                      }
+                      <SidePanelOrigin originRepoName={this.state.originRepoName}/>
+                      <a href={draftLink}><Button color="secondary">{gettext('Edit Draft')}</Button></a>
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="comments" className="comments">
+                    <ReviewComments
+                      scrollToQuote={this.scrollToQuote}
+                      getCommentsNumber={this.getCommentsNumber}
+                      commentsNumber={this.state.commentsNumber}
+                      inResizing={false}
+                    />
+                  </TabPane>
+                  <TabPane tabId="history" className="history">
+                    <HistoryList
+                      activeItem={this.state.activeItem}
+                      historyList={this.state.historyList}
+                      totalReversionCount={this.state.totalReversionCount}
+                      onHistoryItemClick={this.onHistoryItemClick}
+                      onHistoryListChange={this.onHistoryListChange}
+                    />
+                  </TabPane>
+                </TabContent>
+              </div>
             </div>
           </div>
         </div>
