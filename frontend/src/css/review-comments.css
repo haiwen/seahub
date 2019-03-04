@@ -84,7 +84,7 @@
   color: #555;
 }
 .seafile-comment-item .seafile-comment-content {
-  margin-top: 10px;
+  margin: 10px 0 0 40px;
 }
 .seafile-comment-item .seafile-comment-content ol,
 .seafile-comment-item .seafile-comment-content ul,
@@ -115,7 +115,7 @@
 .seafile-comment-footer {
   background-color: #fafaf9;
   border-top: 1px solid #e5e5e5;
-  min-height: 170px;
+  min-height: 120px;
   position: absolute;
   bottom: 0;
   padding-top: 0;
@@ -130,7 +130,7 @@
   background-color: #fff;
   border: 1px solid #e6e6dd;
   padding: 5px;
-  height: calc(100% - 100px);
+  height: calc(100% - 50px);
   min-height: 70px;
   width: 100%;
   resize: none;
