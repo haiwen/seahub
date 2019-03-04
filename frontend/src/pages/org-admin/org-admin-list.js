@@ -65,8 +65,8 @@ class OrgAdminList extends React.Component {
     });
   }
 
-  addOrgAdmin = (users) => {
-    seafileAPI.setOrgAdmin(orgID, users, true).then(res => {
+  addOrgAdmin = (userEmail) => {
+    seafileAPI.setOrgAdmin(orgID, userEmail, true).then(res => {
       let userInfo = new OrgUserInfo(res.data);
       this.state.orgAdminUsers.unshift(userInfo);
       this.setState({

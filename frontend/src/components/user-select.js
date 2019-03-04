@@ -8,7 +8,7 @@ const propTypes = {
   placeholder: PropTypes.string.isRequired,
   onSelectChange: PropTypes.func.isRequired,
   isMulti: PropTypes.bool.isRequired,
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 const NoOptionsMessage = (props) => {
@@ -65,7 +65,7 @@ class UserSelect extends React.Component {
         loadOptions={this.loadOptions}
         onChange={this.handleSelectChange}
         placeholder={this.props.placeholder}
-        className={this.props.className}
+        className={`user-select ${this.props.className}`}
         ref="userSelect"
       />
     );
