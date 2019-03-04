@@ -13,7 +13,7 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
 };
 
-const PADDING_LEFT = 10;
+const PADDING_LEFT = 20;
 
 class TreeView extends React.Component {
 

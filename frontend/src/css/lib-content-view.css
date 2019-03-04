@@ -36,7 +36,8 @@
 
 /*tree view */
 .tree-view {
-  padding: 12px 12px 0 0;
+  margin-left: -10px;
+  padding: 12px 12px 12px 0;
   line-height: 1.5;
 }
 

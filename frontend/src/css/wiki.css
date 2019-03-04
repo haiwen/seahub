@@ -33,6 +33,7 @@
   overflow: auto;
 }
 .wiki-pages-container .tree-view {
+  margin-left: -10px;
   padding-left:0;
 }
 .wiki-pages-container .article {
