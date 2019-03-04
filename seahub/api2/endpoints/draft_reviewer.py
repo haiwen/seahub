@@ -16,6 +16,7 @@ from seahub.api2.utils import api_error, user_to_dict
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
+from seahub.tags.models import FileUUIDMap
 from seahub.views import check_folder_permission
 from seahub.utils import is_valid_username
 from seahub.drafts.models import Draft, DraftReviewer
@@ -42,7 +43,7 @@ class DraftReviewerView(APIView):
 
         # get reviewer list
         reviewers = []
-        for x in d.reviewreviewer_set.all():
+        for x in d.draftreviewer_set.all():
             reviewer = user_to_dict(x.reviewer, request=request, avatar_size=avatar_size)
             reviewers.append(reviewer)
 
@@ -88,7 +89,7 @@ class DraftReviewerView(APIView):
                 })
                 continue
 
-            uuid = d.origin_file_uuid
+            uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(d.origin_file_uuid)
             origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
             # check perm
             if seafile_api.check_permission_by_path(d.origin_repo_id, origin_file_path, reviewer) != 'rw':
