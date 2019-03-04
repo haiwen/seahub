@@ -190,7 +190,7 @@ class EditorUtilities {
     );
   }
 
-  getFileHistoryVersion(commitID) {
+  getFileHistoryVersion(commitID, filePath) {
     return seafileAPI.getFileRevision(repoID, commitID, filePath);
   }
 
