@@ -409,8 +409,55 @@ class Draft extends React.Component {
     })
   }
 
+  initialDiffViewerContent = () => {
+    seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, 1, 25).then((res) => {
+      this.setState({
+        historyList: res.data.data,
+        totalReversionCount: res.data.total_count
+      });
+      if (res.data.data.length > 1) {
+        axios.all([
+          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath),
+          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[1].commit_id, draftFilePath)
+        ]).then(axios.spread((res1, res2) => {
+          axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
+            this.setState({
+              draftContent: content1.data,
+              draftOriginContent: content2.data
+            });
+          }));
+        }));
+      } else {
+        seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath).then((res) => {
+          seafileAPI.getFileContent(res.data).then((content) => {
+            this.setState({
+              draftContent: content.data,
+              draftOriginContent: ''
+            });
+          });
+        });
+      }
+    });
+  }
+
+  setURL = (newurl) => {
+    let url = new URL(window.location.href);
+    // bug
+    url.set('hash', newurl);
+    window.location.href = url.toString();
+  }
+
   tabItemClick = (tab) => {
     if (this.state.activeTab !== tab) {
+      if (tab !== 'history') {
+        // this.setURL('#');
+      }
+      if (tab == 'reviewInfo') { 
+        this.initialContent();
+      }
+      else if (tab == 'history'){
+        this.initialDiffViewerContent();
+      }
       this.setState({
         activeTab: tab
       });
