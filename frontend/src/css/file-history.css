@@ -56,6 +56,7 @@
   flex: 1;
   overflow: hidden;
   min-height: 0;
+  height: 500px;
 }
 
 .history-list-container {

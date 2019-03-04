@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { reviewID, gettext, name } from '../../utils/constants';
+import { gettext, name, draftRepoID, draftFilePath } from '../../utils/constants';
 import { processor } from '../../utils/seafile-markdown2html';
 
 import '../../css/review-comment-dialog.css';
@@ -13,6 +13,7 @@ const commentDialogPropTypes = {
   quote: PropTypes.string,
   newIndex: PropTypes.number,
   oldIndex: PropTypes.number,
+  draftID: PropTypes.string,
 };
 
 class ReviewCommentDialog extends React.Component {
@@ -42,12 +43,12 @@ class ReviewCommentDialog extends React.Component {
           oldIndex: this.props.oldIndex
         };
         let detailJSON = JSON.stringify(detail);
-        seafileAPI.addReviewComment(reviewID, comment, detailJSON).then((response) => {
+        seafileAPI.postComment(draftRepoID, draftFilePath, comment, detailJSON).then((response) => {
           this.props.onCommentAdded();
         });
       }
       else {
-        seafileAPI.addReviewComment(reviewID, comment).then((response) => {
+        seafileAPI.postComment(draftRepoID, draftFilePath, comment).then((response) => {
           this.props.onCommentAdded();
         });
       }

@@ -61,20 +61,19 @@ export const filePath = window.fileHistory ? window.fileHistory.pageOptions.file
 export const fileName = window.fileHistory ? window.fileHistory.pageOptions.fileName : '';
 
 // Draft review
-export const draftFilePath = window.draftReview ? window.draftReview.config.draftFilePath: '';
-export const draftOriginFilePath = window.draftReview ? window.draftReview.config.draftOriginFilePath: '';
-export const draftOriginRepoID = window.draftReview ? window.draftReview.config.draftOriginRepoID: '';
-export const draftFileName = window.draftReview ? window.draftReview.config.draftFileName: '';
-export const reviewID = window.draftReview ? window.draftReview.config.reviewID : '';
-export const draftID = window.draftReview ? window.draftReview.config.draftID : '';
-export const opStatus = window.draftReview ? window.draftReview.config.opStatus : '';
-export const reviewPerm = window.draftReview ? window.draftReview.config.perm : '';
-export const publishFileVersion = window.draftReview ? window.draftReview.config.publishFileVersion : '';
-export const originFileVersion = window.draftReview ? window.draftReview.config.originFileVersion : '';
-export const author = window.draftReview ? window.draftReview.config.author : '';
-export const authorAvatar = window.draftReview ? window.draftReview.config.authorAvatar : '';
-export const originFileExists = window.draftReview ? window.draftReview.config.originFileExists : '';
-export const draftFileExists = window.draftReview ? window.draftReview.config.draftFileExists : '';
+export const draftFilePath = window.draft ? window.draft.config.draftFilePath: '';
+export const draftOriginFilePath = window.draft ? window.draft.config.draftOriginFilePath: '';
+export const draftOriginRepoID = window.draft ? window.draft.config.draftOriginRepoID: '';
+export const draftFileName = window.draft ? window.draft.config.draftFileName: '';
+export const draftID = window.draft ? window.draft.config.draftID : '';
+export const draftRepoID = window.draft ? window.draft.config.draftRepoID : '';
+export const opStatus = window.draft ? window.draft.config.opStatus : '';
+export const publishFileVersion = window.draft ? window.draft.config.publishFileVersion : '';
+export const originFileVersion = window.draft ? window.draft.config.originFileVersion : '';
+export const author = window.draft ? window.draft.config.author : '';
+export const authorAvatar = window.draft ? window.draft.config.authorAvatar : '';
+export const originFileExists = window.draft ? window.draft.config.originFileExists : '';
+export const draftFileExists = window.draft ? window.draft.config.draftFileExists : '';
 
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';

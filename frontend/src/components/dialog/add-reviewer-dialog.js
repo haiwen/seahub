@@ -8,7 +8,7 @@ import '../../css/add-reviewer-dialog.css';
 
 const propTypes = {
   showReviewerDialog: PropTypes.bool.isRequired,
-  reviewID: PropTypes.string.isRequired,
+  draftID: PropTypes.string.isRequired,
   toggleAddReviewerDialog: PropTypes.func.isRequired,
   reviewers: PropTypes.array.isRequired
 };
@@ -27,7 +27,7 @@ class AddReviewerDialog extends React.Component {
   }
 
   listReviewers = () => {
-    seafileAPI.listReviewers(this.props.reviewID).then((res) => {
+    seafileAPI.listDraftReviewers(this.props.draftID).then((res) => {
       this.setState({
         reviewers: res.data.reviewers
       });
@@ -72,7 +72,7 @@ class AddReviewerDialog extends React.Component {
         loading: true,
         errorMsg: [],
       });
-      seafileAPI.addReviewers(this.props.reviewID, reviewers).then((res) => {
+      seafileAPI.addDraftReviewers(this.props.draftID, reviewers).then((res) => {
         if (res.data.failed.length > 0) {
           let errorMsg = [];
           for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -95,7 +95,7 @@ class AddReviewerDialog extends React.Component {
 
   deleteReviewer = (event) => {
     let reviewer = event.target.getAttribute('name');
-    seafileAPI.deleteReviewer(this.props.reviewID, reviewer).then((res) => {
+    seafileAPI.deleteDraftReviewer(this.props.draftID, reviewer).then((res) => {
       if (res.data === 200) {
         let newReviewers = [];
         for (let i = 0; i < this.state.reviewers.length; i ++) {

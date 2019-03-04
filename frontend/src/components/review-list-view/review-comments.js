@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { processor } from '../../utils/seafile-markdown2html';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { reviewID, gettext } from '../../utils/constants';
+import { reviewID, gettext, draftFilePath, draftOriginRepoID, draftRepoID } from '../../utils/constants';
 import Loading from '../../components/loading.js';
 import reviewComment from '../../models/review-comment.js';
 import { username } from '../../utils/constants.js';
@@ -31,7 +31,7 @@ class ReviewComments extends React.Component {
   }
 
   listComments = (scroll) => {
-    seafileAPI.listReviewComments(reviewID).then((response) => {
+    seafileAPI.listComments(draftRepoID, draftFilePath).then((response) => {
       response.data.comments.reverse();
       let commentList = [];
       response.data.comments.forEach(item => {
@@ -56,7 +56,7 @@ class ReviewComments extends React.Component {
   submitComment = () => {
     let comment = this.state.comment.trim();
     if (comment.length > 0) {
-      seafileAPI.addReviewComment(reviewID, comment).then((response) => {
+      seafileAPI.postComment(draftRepoID, draftFilePath, comment).then((response) => {
         this.listComments(true);
         this.props.getCommentsNumber();
       });
@@ -67,7 +67,7 @@ class ReviewComments extends React.Component {
   }
 
   resolveComment = (event) => {
-    seafileAPI.updateReviewComment(reviewID, event.target.id, 'true').then((res) => {
+    seafileAPI.updateComment(draftRepoID, event.target.id, 'true').then((res) => {
       this.props.getCommentsNumber();
       this.listComments();
     });
@@ -80,7 +80,7 @@ class ReviewComments extends React.Component {
   }
 
   deleteComment = (event) => {
-    seafileAPI.deleteReviewComment(reviewID, event.target.id).then((res) => {
+    seafileAPI.deleteComment(draftRepoID, event.target.id).then((res) => {
       this.props.getCommentsNumber();
       this.listComments();
     });
