@@ -83,12 +83,13 @@ class Draft extends React.Component {
     if (hash.indexOf('#history-') === 0) {
       const currentCommitID = hash.slice(9, 49);
       const preCommitID = hash.slice(50, 90);
+      let preItemFilePath, currentItemFilePath;
       this.setState({
         isLoading: false,
         activeTab: 'history',
       });
       seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, 1, 25).then((res) => {
-        const historyList = res.data.data;
+        const historyList = res.data.data;        
         this.setState({
           historyList: historyList,
           totalReversionCount: res.data.total_count
@@ -98,19 +99,23 @@ class Draft extends React.Component {
             this.setState({
               activeItem: i
             });
-            break;
+            preItemFilePath = historyList[i].path;
           }
+          if (currentCommitID === historyList[i].commit_id) {
+            currentItemFilePath = historyList[i].path;
+          }
+          if (preItemFilePath && currentItemFilePath) break;
         }
-      });
-      axios.all([
-        seafileAPI.getFileRevision(draftRepoID, currentCommitID, draftFilePath),
-        seafileAPI.getFileRevision(draftRepoID, preCommitID, draftFilePath)
-      ]).then(axios.spread((res1, res2) => {
-        axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
-          this.setDiffViewerContent(content2.data, content1.data);
+        axios.all([
+          seafileAPI.getFileRevision(draftRepoID, currentCommitID, currentItemFilePath),
+          seafileAPI.getFileRevision(draftRepoID, preCommitID, preItemFilePath)
+        ]).then(axios.spread((res1, res2) => {
+          axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1, content2) => {
+            this.setDiffViewerContent(content2.data, content1.data);
+          }));
         }));
-      }));
-      return;
+        return;
+      });
     } else {
       axios.all([
         seafileAPI.getFileDownloadLink(draftRepoID, draftFilePath),
@@ -134,15 +139,17 @@ class Draft extends React.Component {
     }
   }
 
-  onHistoryItemClick = (currentCommitID, preCommitID, activeItem) => {
+  onHistoryItemClick = (currentItem, preItem, activeItem) => {
+    const preCommitID = preItem.commit_id;
+    const currentCommitID = currentItem.commit_id;
     const url = 'history-' + preCommitID + '-' + currentCommitID;
     this.setURL(url);
     this.setState({
       activeItem: activeItem
     });
     axios.all([
-      seafileAPI.getFileRevision(draftRepoID, currentCommitID, draftFilePath),
-      seafileAPI.getFileRevision(draftRepoID, preCommitID, draftFilePath)
+      seafileAPI.getFileRevision(draftRepoID, currentCommitID, currentItem.path),
+      seafileAPI.getFileRevision(draftRepoID, preCommitID, preItem.path)
     ]).then(axios.spread((res1, res2) => {
       axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
         this.setDiffViewerContent(content1.data, content2.data);
