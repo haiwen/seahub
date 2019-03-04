@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import AsyncSelect from 'react-select/lib/Async';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import toaster from '../toast';
 import { gettext } from '../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import UserSelect from '../user-select';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
@@ -27,26 +27,6 @@ class TransferDialog extends React.Component {
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
     this.options = [];
-  }
-
-  loadOptions = (value, callback) => {
-    if (value.trim().length > 0) {
-      seafileAPI.searchUsers(value.trim()).then((res) => {
-        this.options = [];
-        for (let i = 0 ; i < res.data.users.length; i++) {
-          let obj = {};
-          obj.value = res.data.users[i].name;
-          obj.email = res.data.users[i].email;
-          obj.label =
-            <Fragment>
-              <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
-              <span className='reviewer-select-name'>{res.data.users[i].name}</span>
-            </Fragment>;
-          this.options.push(obj);
-        }
-        callback(this.options);
-      });
-    }
   }
 
   submit = () => {
@@ -74,16 +54,17 @@ class TransferDialog extends React.Component {
           <div dangerouslySetInnerHTML={{__html:message}} />
         </ModalHeader>
         <ModalBody>
-          <AsyncSelect
-            className='reviewer-select' isFocused
-            loadOptions={this.loadOptions}
+          <UserSelect
+            ref="userSelect"
+            isMulti={false}
+            className="reviewer-select"
             placeholder={gettext('Please enter 1 or more character')}
-            onChange={this.handleSelectChange}
-            isClearable classNamePrefix
-            inputId={'react-select-transfer-input'}
-          /><br />
-          <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
+            onSelectChange={this.handleSelectChange}
+          />
         </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
+        </ModalFooter>
       </Modal>
     );
   }

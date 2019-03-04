@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import AsyncSelect from 'react-select/lib/Async';
 import { gettext, isPro } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 
 class UserItem extends React.Component {
@@ -90,12 +90,6 @@ const propTypes = {
   repoID: PropTypes.string.isRequired
 };
 
-const NoOptionsMessage = (props) => {
-  return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('User not found')}</div>
-  );
-};
-
 class ShareToUser extends React.Component {
 
   constructor(props) {
@@ -135,26 +129,6 @@ class ShareToUser extends React.Component {
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
-
-  loadOptions = (value, callback) => {
-    if (value.trim().length > 0) {
-      seafileAPI.searchUsers(value.trim()).then((res) => {
-        this.options = [];
-        for (let i = 0 ; i < res.data.users.length; i++) {
-          let obj = {};
-          obj.value = res.data.users[i].name;
-          obj.email = res.data.users[i].email;
-          obj.label =
-            <Fragment>
-              <img src={res.data.users[i].avatar_url} className="select-module select-module-icon avatar" alt="Avatar"/>
-              <span className='select-module select-module-name'>{res.data.users[i].name}</span>
-            </Fragment>;
-          this.options.push(obj);
-        }
-        callback(this.options);
-      });
-    }
   }
 
   shareToUser = () => {
@@ -289,19 +263,12 @@ class ShareToUser extends React.Component {
           <tbody>
             <tr>
               <td>
-                <AsyncSelect
-                  inputId={'react-select-1-input'}
-                  className='reviewer-select' 
+                <UserSelect
+                  ref="userSelect"
+                  isMulti={true}
+                  className="reviewer-select"
                   placeholder={gettext('Select users...')}
-                  loadOptions={this.loadOptions}
-                  onChange={this.handleSelectChange}
-                  value={this.state.selectedOption}
-                  components={{ NoOptionsMessage }}
-                  maxMenuHeight={200}
-                  isMulti 
-                  isFocused
-                  isClearable 
-                  classNamePrefix
+                  onSelectChange={this.handleSelectChange}
                 />
               </td>
               <td>
