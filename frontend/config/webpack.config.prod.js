@@ -74,6 +74,7 @@ module.exports = {
     viewFileXmind: [require.resolve('./polyfills'), paths.appSrc + "/view-file-xmind.js"],
     viewFileVideo: [require.resolve('./polyfills'), paths.appSrc + "/view-file-video.js"],
     orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
+    viewFileUMind: [require.resolve('./polyfills'), paths.appSrc + "/view-file-umind.js"],
   },
 
   output: {
