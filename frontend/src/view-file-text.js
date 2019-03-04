@@ -38,7 +38,8 @@ const options = {
   theme: 'default',
   textWrapping: true,
   lineWrapping: true,
-  readOnly: 'nocursor'
+  readOnly: true,
+  cursorBlinkRate: -1 // hide the cursor
 };
 
 class ViewFileText extends React.Component {
