@@ -16,11 +16,14 @@ class UMindToolbar extends React.Component {
     e.preventDefault();
     let { editor } = this.props;
     let page = editor.getCurrentPage();
-    let { data } = page._cfg;
+    let { data, defaultData } = page._cfg;
     let dirPath = Utils.getDirName(filePath);
     seafileAPI.getUpdateLink(repoID, dirPath).then(res => {
       let updateLink = res.data;
-      let updateData = JSON.stringify(data);
+      let updateData = JSON.stringify(data);  // need optimized
+      if (!updateData) {
+        updateData = JSON.stringify(defaultData);
+      }
       seafileAPI.updateFile(updateLink, filePath, fileName, updateData).then(res => {
         toaster.success(gettext('File saved.'));
       }).catch(() => {
