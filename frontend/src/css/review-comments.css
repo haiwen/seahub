@@ -39,7 +39,7 @@
 }
 .seafile-comment-item {
   overflow-y: hidden;
-  padding: 15px;
+  padding: 15px 10px;
 }
 .seafile-comment-item-resolved {
   background-color: #e6ffed;

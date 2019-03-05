@@ -29,7 +29,6 @@
 .main .cur-view-container .seafile-comment {
   height: 100%;
   position: relative;
-  width: calc(100% - 5px);
 }
 .main .cur-view-right-part {
   height: 100%;
