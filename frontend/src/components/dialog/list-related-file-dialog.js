@@ -5,6 +5,7 @@ import Dirent from '../../models/dirent';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
+import '../../css/list-related-file-dialog.css';
 
 const propTypes = {
   relatedFiles: PropTypes.array.isRequired,
@@ -71,40 +72,35 @@ class ListRelatedFileDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle} size={this.state.direntList.length > 0 ? 'lg' : 'sm'}>
+      <Modal isOpen={true} toggle={this.toggle} size='lg'>
         <ModalHeader toggle={this.toggle}>{gettext('Related Files')}</ModalHeader>
         <ModalBody className={this.state.direntList.length > 0 ? 'list-related-file-body' : ''}>
-          {
-            this.state.direntList.length > 0 ?
-              <Table hover size="sm" className="list-related-file-table">
-                <thead>
-                  <tr>
-                    <th width='50%'>{gettext('Name')}</th>
-                    <th width='15%'>{gettext('Library Name')}</th>
-                    <th width='15%'>{gettext('Size')}</th>
-                    <th width='15%'>{gettext('Last Update')}</th>
-                    <th width='5%'></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    this.state.direntList.map((relatedFile, index) => {
-                      return (
-                        <React.Fragment key={index}>
-                          <RelatedFile relatedFile={relatedFile} onDeleteRelatedFile={this.onDeleteRelatedFile}/>
-                        </React.Fragment>
-                      );
-                    })
-                  }
-                </tbody>
-              </Table>
-              :
-              <div className="no-related-file">{gettext('No related file yet.')}</div>
-          }
+          <Table hover size="sm" className="list-related-file-table">
+            <thead>
+              <tr>
+                <th width='50%'>{gettext('Name')}</th>
+                <th width='15%'>{gettext('Library Name')}</th>
+                <th width='15%'>{gettext('Size')}</th>
+                <th width='15%'>{gettext('Last Update')}</th>
+                <th width='5%'></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                this.state.direntList.map((relatedFile, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <RelatedFile relatedFile={relatedFile} onDeleteRelatedFile={this.onDeleteRelatedFile}/>
+                    </React.Fragment>
+                  );
+                })
+              }
+            </tbody>
+          </Table>
+          <a href="#" className="add-related-file-link" onClick={this.props.addRelatedFileToggle}>{gettext('Add File')}</a>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
-          <Button color="primary" onClick={this.props.addRelatedFileToggle}>{gettext('Add File')}</Button>
         </ModalFooter>
       </Modal>
     );
