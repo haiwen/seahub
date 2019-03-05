@@ -88,6 +88,10 @@ try:
     from seahub_extra.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
+try:
+    from seahub.settings import ENABLE_SYSADMIN_EXTRA
+except ImportError:
+    ENABLE_SYSADMIN_EXTRA = False
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from termsandconditions.models import TermsAndConditions
 
@@ -123,6 +127,21 @@ def sysadmin(request):
             'enable_limit_ipaddress': ENABLE_LIMIT_IPADDRESS,
             'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
             })
+
+
+@login_required
+@sys_staff_required
+def sys_file_scan_records(request):
+
+    return render(request, 'sysadmin/sys_file_scan_records_react.html', {
+            'constance_enabled': dj_settings.CONSTANCE_ENABLED,
+            'multi_tenancy': MULTI_TENANCY,
+            'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
+            'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
+            'enable_guest_invitation': ENABLE_GUEST_INVITATION,
+            'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
+            })
+
 
 @login_required
 @sys_staff_required

@@ -130,6 +130,7 @@ from seahub.api2.endpoints.admin.address_book.groups import AdminAddressBookGrou
         AdminAddressBookGroup
 from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLibraries, \
         AdminGroupOwnedLibrary
+from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
@@ -500,6 +501,12 @@ urlpatterns = [
     ## admin::address book
     url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),
     url(r'^api/v2.1/admin/address-book/groups/(?P<group_id>\d+)/$', AdminAddressBookGroup.as_view(), name='api-v2.1-admin-address-book-group'),
+
+    ## admin::file-scan-records
+    url(r'^api/v2.1/admin/file-scan-records/$', AdminFileScanRecords.as_view(), name='api-v2.1-admin-file-scan-records'),
+
+    ## React::file-scan-records
+    url(r'^sys/file-scan-records/$', sys_file_scan_records, name="sys_file_scan_records"),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),

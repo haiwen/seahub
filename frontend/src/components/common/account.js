@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
 import editorUtilities from '../../utils/editor-utilties';
 import { siteRoot, gettext } from '../../utils/constants';
+
+const propTypes = {
+  isAdminPanel: PropTypes.bool,
+};
 
 class Account extends Component {
   constructor(props) {
@@ -87,9 +92,14 @@ class Account extends Component {
   }
 
   renderMenu = () => {
-    if(this.state.isStaff){
+    if(this.state.isStaff && !this.props.isAdminPanel){
       return (
         <a href={siteRoot + 'sys/useradmin/'} title={gettext('System Admin')} className="item">{gettext('System Admin')}</a>
+      );
+    }
+    if (this.props.isAdminPanel) {
+      return (
+        <a href={siteRoot} title={gettext('Exit Admin Panel')} className="item">{gettext('Exit Admin Panel')}</a>
       );
     }
     if (this.state.isOrgStaff) {
@@ -142,5 +152,7 @@ class Account extends Component {
     );
   }
 }
+
+Account.propTypes = propTypes;
 
 export default Account;
