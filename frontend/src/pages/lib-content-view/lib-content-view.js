@@ -850,7 +850,8 @@ class LibContentView extends React.Component {
       // example: direntPath = /A/B/C, state.path = /A/B/C
 
       this.setState({ path: newDirentPath });
-      let url = siteRoot + 'wiki/lib/' + repoID + newDirentPath;
+      let repoInfo = this.state.currentRepoInfo;
+      let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + newDirentPath;
       window.history.replaceState({ url: url, path: newDirentPath}, newDirentPath, url);
     } else if (Utils.isChildPath(direntPath, this.state.path)) {
       // example: direntPath = /A/B/C/D, state.path = /A/B/C
@@ -868,7 +869,8 @@ class LibContentView extends React.Component {
       let newPath = Utils.renameAncestorPath(this.state.path, direntPath, newDirentPath);
       this.setState({ path: newPath });
 
-      let url = siteRoot + 'wiki/lib/' + repoID + newPath;
+      let repoInfo = this.state.currentRepoInfo;
+      let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + newPath;
       window.history.replaceState({ url: url, path: newPath}, newPath, url);
     }
   }
