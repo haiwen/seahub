@@ -145,7 +145,7 @@ class DirTool extends React.Component {
         </ul>
       );
     } else if (permission) {
-      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(currentPath) + '&referer=' + encodeURIComponent(location.href);
+      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(currentPath);
       return (
         <ul className="path-toolbar">
           <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
