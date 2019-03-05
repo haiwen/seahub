@@ -27,7 +27,7 @@ class EditorUtilities {
     this.repoID = repoID;
     this.filePath = filePath;
     this.serviceUrl = serviceUrl;
-    this.name = userName;
+    this.name = userInfo.name;
     this.contact_email = userInfo.contact_email;
     this.fileName = fileName;
     this.userName = userName;
@@ -304,10 +304,18 @@ class MarkdownEditor extends React.Component {
     switch(option)
     {
       case 'related_files':
-        this.setState({
-          showRelatedFileDialog: true,
-          showMarkdownEditorDialog: true,
-        });
+        if (this.state.relatedFiles.length > 0) {
+          this.setState({
+            showRelatedFileDialog: true,
+            showMarkdownEditorDialog: true,
+          });
+        }
+        else {
+          this.setState({
+            showAddRelatedFileDialog: true,
+            showMarkdownEditorDialog: true,
+          });
+        }
         break;
       case 'tags':
         this.setState({
