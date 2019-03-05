@@ -185,8 +185,6 @@ class App extends Component {
             {home}
             <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <DraftsViewWrapper path={siteRoot + 'drafts'}  
-              currentTab={currentTab} 
-              tabItemClick={this.tabItemClick} 
               onShowSidePanel={this.onShowSidePanel} 
               onSearchedClick={this.onSearchedClick} 
             >

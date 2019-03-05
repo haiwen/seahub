@@ -53,7 +53,7 @@ class ListRepoDraftsDialog extends React.Component {
             </thead>
             <tbody>
               {this.state.drafts.map((draft) => {
-                let href = siteRoot + 'lib/' + draft.originRepoID + '/file' + Utils.encodePath(draft.draftFilePath);
+                let href = siteRoot + 'drafts/' + draft.id + '/';
                 return (
                   <tr key={draft.id}>
                     <td className="name">

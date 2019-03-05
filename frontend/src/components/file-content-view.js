@@ -113,7 +113,7 @@ class FileContentView extends React.Component {
                     <div className='seafile-btn-view-review text-center'>
                       <div className='tag tag-green'>
                         {gettext('This file is in draft stage.')}
-                        <span className="ml-2" onClick={this.goDraftPage}>{gettext('Edit Draft')}</span>
+                        <span className="ml-2" onClick={this.goDraftPage}>{gettext('View Draft')}</span>
                       </div>
                     </div>
                   }

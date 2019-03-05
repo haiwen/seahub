@@ -75,13 +75,17 @@ def get_file_draft(repo_id, file_path, is_draft=False, has_draft=False):
     draft = {}
     draft['draft_id'] = None
     draft['draft_file_path'] = ''
+    draft['draft_origin_file_path'] = ''
 
     from .models import Draft
 
     if is_draft:
         d = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
+        uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(d.origin_file_uuid)
+        file_path = posixpath.join(uuid.parent_path, uuid.filename)
         draft['draft_id'] = d.id
         draft['draft_file_path'] = d.draft_file_path
+        draft['draft_origin_file_path'] = file_path
 
     if has_draft:
         file_path = normalize_file_path(file_path)
