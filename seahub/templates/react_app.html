@@ -1,7 +1,12 @@
 {% extends "base_for_react.html" %}
 {% load render_bundle from webpack_loader %}
 
+{% block extra_style %}
+{% render_bundle 'app' 'css' %}
+{% endblock %}
+
+
 {% block extra_script %}
 
-{% render_bundle 'app' %}
+{% render_bundle 'app' 'js' %}
 {% endblock %}
