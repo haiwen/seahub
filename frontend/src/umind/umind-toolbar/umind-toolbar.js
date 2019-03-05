@@ -20,10 +20,8 @@ class UMindToolbar extends React.Component {
     let dirPath = Utils.getDirName(filePath);
     seafileAPI.getUpdateLink(repoID, dirPath).then(res => {
       let updateLink = res.data;
-      let updateData = JSON.stringify(data);  // need optimized
-      if (!updateData) {
-        updateData = JSON.stringify(defaultData);
-      }
+      // need optimized
+      let updateData = data ? JSON.stringify(data) : JSON.stringify(defaultData);
       seafileAPI.updateFile(updateLink, filePath, fileName, updateData).then(res => {
         toaster.success(gettext('File saved.'));
       }).catch(() => {
