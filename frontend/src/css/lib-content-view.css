@@ -138,7 +138,7 @@
 
 /* file layout */
 .dir-content-main .wiki-page-container {
-  padding: 0 0 1.25rem;
+  padding: 0 1rem 1.25rem;
   display: flex;
   flex: 1;
 }
