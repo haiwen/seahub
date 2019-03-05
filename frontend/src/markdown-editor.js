@@ -9,7 +9,7 @@ import ListRelatedFileDialog from './components/dialog/list-related-file-dialog'
 import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
 import ShareDialog from './components/dialog/share-dialog';
 
-const { repoID, repoName, filePath, fileName, mode, draftID, draftFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
+const { repoID, repoName, filePath, fileName, mode, draftID, draftFilePath, draftOriginFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
@@ -219,12 +219,18 @@ class EditorUtilities {
   }
 
   goDraftPage() {
-    window.location.href = serviceUrl + '/lib/' + repoID + '/file' + draftFilePath + '?mode=edit';
+    window.location.href = serviceUrl + '/drafts/' + draftID + '/'; 
   }
 
   createDraftFile() {
     return seafileAPI.createDraft(repoID, filePath).then(res => {
       window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
+    });
+  }
+
+  publishDraftFile() {
+    return seafileAPI.publishDraft(draftID).then(res => {
+      window.location.href = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(draftOriginFilePath);
     });
   }
 

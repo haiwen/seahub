@@ -3091,6 +3091,7 @@ class FileDetailView(APIView):
             entry['is_draft'] = is_draft
             entry['has_draft'] = has_draft
             entry['draft_file_path'] = draft['draft_file_path']
+            entry['draft_id'] = draft['draft_id']
 
         # fetch file contributors and latest contributor
         try:

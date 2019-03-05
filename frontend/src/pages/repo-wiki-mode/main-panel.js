@@ -234,7 +234,7 @@ class MainPanel extends Component {
                       <div className='seafile-btn-view-review text-center'>
                         <div className='tag tag-green'>
                           {gettext('This file is in draft stage.')}
-                          <a className="ml-2" onMouseDown={this.props.goDraftPage}>{gettext('Edit Draft')}</a>
+                          <a className="ml-2" onMouseDown={this.props.goDraftPage}>{gettext('View Draft')}</a>
                         </div>
                       </div>
                     }

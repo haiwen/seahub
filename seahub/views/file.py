@@ -677,6 +677,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['has_draft'] = has_draft
         return_dict['draft_id'] = draft['draft_id']
         return_dict['draft_file_path'] = draft['draft_file_path']
+        return_dict['draft_origin_file_path'] = draft['draft_origin_file_path']
         return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
 

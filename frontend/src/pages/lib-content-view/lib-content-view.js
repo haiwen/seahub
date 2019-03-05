@@ -46,7 +46,7 @@ class LibContentView extends React.Component {
       selectedDirentList: [],
       isDraft: false,
       hasDraft: false,
-      draftFilePath: '',
+      draftID: '',
       draftCounts: 0,
       usedRepoTags: [],
       readmeMarkdown: null,
@@ -296,7 +296,7 @@ class LibContentView extends React.Component {
 
     // update data
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, permission, last_modifier_name, is_draft, has_draft, draft_file_path } = res.data;
+      let { mtime, permission, last_modifier_name, is_draft, has_draft, draft_id } = res.data;
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         seafileAPI.getFileContent(res.data).then((res) => {
           this.setState({
@@ -308,7 +308,7 @@ class LibContentView extends React.Component {
             isFileLoadedErr: false,
             isDraft: is_draft,
             hasDraft: has_draft,
-            draftFilePath: draft_file_path
+            draftID: draft_id
           });
         });
       });
@@ -1130,7 +1130,7 @@ class LibContentView extends React.Component {
   
   goDraftPage = () => {
     let repoID = this.props.repoID;
-    window.location.href = siteRoot + 'lib/' + repoID + '/file' + this.state.draftFilePath + '?mode=edit';
+    window.location.href = siteRoot + 'drafts/' + this.state.draftID + '/';
   }
 
   sortItems = (sortBy, sortOrder) => {
