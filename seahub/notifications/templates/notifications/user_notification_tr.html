@@ -35,8 +35,8 @@
                 {% elif notice.is_file_comment_msg %}
                 <p class="brief">{{ notice.format_file_comment_msg|safe }}</p>
 
-                {% elif notice.is_review_comment_msg %}
-                <p class="brief">{{ notice.format_review_comment_msg|safe }}</p>
+                {% elif notice.is_draft_comment_msg %}
+                <p class="brief">{{ notice.format_draft_comment_msg|safe }}</p>
 
                 {% elif notice.is_update_review_msg %}
                 <p class="brief">{{ notice.format_update_review_msg|safe }}</p>

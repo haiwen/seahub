@@ -117,9 +117,8 @@ class DraftReviewerView(APIView):
 
             DraftReviewer.objects.add(reviewer, d)
 
-            # TODO
-            # request_reviewer_successful.send(sender=None, from_user=request.user.username,
-            #                                 to_user=reviewer, review_id=r.id)
+            request_reviewer_successful.send(sender=None, from_user=request.user.username,
+                                             to_user=reviewer, draft_id=d.id)
 
         return Response(result)
 
