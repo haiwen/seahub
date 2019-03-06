@@ -192,7 +192,7 @@ def add_notice_from_info(notices):
             except Exception as e:
                 logger.error(e)
 
-        elif notice.is_request_reviewer_msg():
+        elif notice.is_draft_reviewer_msg():
             try:
                 d = json.loads(notice.detail)
                 notice.msg_from = d['from_user']
