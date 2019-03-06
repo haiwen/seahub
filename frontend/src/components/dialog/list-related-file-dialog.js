@@ -78,11 +78,12 @@ class ListRelatedFileDialog extends React.Component {
           <Table hover size="sm" className="list-related-file-table">
             <thead>
               <tr>
-                <th width='50%'>{gettext('Name')}</th>
-                <th width='15%'>{gettext('Library Name')}</th>
-                <th width='15%'>{gettext('Size')}</th>
-                <th width='15%'>{gettext('Last Update')}</th>
+                <th width='40%'>{gettext('Name')}</th>
+                <th width='20%'>{gettext('Library Name')}</th>
+                <th width='13%'>{gettext('Size')}</th>
+                <th width='20%'>{gettext('Last Update')}</th>
                 <th width='5%'></th>
+                <th width='2%'></th>
               </tr>
             </thead>
             <tbody>
@@ -145,6 +146,7 @@ class RelatedFile extends React.Component {
         <td>{relatedFile.size}</td>
         <td>{relatedFile.mtime_relative}</td>
         <td><i className={className} onClick={this.props.onDeleteRelatedFile.bind(this, relatedFile)}></i></td>
+        <td></td>
       </tr>
     );
   }
