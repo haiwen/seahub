@@ -84,7 +84,7 @@ class UserItem extends React.Component {
       });
       Toast.success(gettext('Edit succeeded.'));
     }).catch(err => {
-      Toast.danger(gettext('Edit falied.'));
+      Toast.danger(gettext('Edit failed.'));
     });
   }
 

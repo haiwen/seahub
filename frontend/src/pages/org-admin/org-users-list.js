@@ -71,7 +71,7 @@ class OrgUsersList extends React.Component {
       });
       this.props.toggleAddOrgUser();
       let msg;
-      msg = gettext('successfully added user %s.');
+      msg = gettext('successfully added user %s');
       msg = msg.replace('%s', email);
       Toast.success(msg);
     }).catch(err => {
