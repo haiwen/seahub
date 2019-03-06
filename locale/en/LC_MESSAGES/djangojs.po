@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-06 13:21+0800\n"
+"POT-Creation-Date: 2019-03-06 18:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,7 @@ msgstr ""
 #: frontend/src/components/dialog/add-reviewer-dialog.js:135
 #: frontend/src/components/dialog/edit-filetag-dialog.js:159
 #: frontend/src/components/dialog/list-created-files-dialog.js:48
-#: frontend/src/components/dialog/list-related-file-dialog.js:103
+#: frontend/src/components/dialog/list-related-file-dialog.js:104
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:71
 #: frontend/src/components/dialog/list-tag-dialog.js:126
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:84
@@ -790,7 +790,7 @@ msgstr ""
 msgid "Last Update"
 msgstr ""
 
-#: frontend/src/components/dialog/list-related-file-dialog.js:100
+#: frontend/src/components/dialog/list-related-file-dialog.js:101
 msgid "Add File"
 msgstr ""
 
@@ -2019,7 +2019,7 @@ msgid "Edit succeeded."
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-user-item.js:87
-msgid "Edit falied."
+msgid "Edit failed."
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-user-item.js:147
