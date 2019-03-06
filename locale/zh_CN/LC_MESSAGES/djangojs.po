@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-06 13:21+0800\n"
-"PO-Revision-Date: 2019-03-06 06:35+0000\n"
+"POT-Creation-Date: 2019-03-06 18:00+0800\n"
+"PO-Revision-Date: 2019-03-06 10:09+0000\n"
 "Last-Translator: 顺强 杨 <ysq9207@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -63,7 +63,7 @@ msgstr "通知"
 #: frontend/src/components/dialog/add-reviewer-dialog.js:135
 #: frontend/src/components/dialog/edit-filetag-dialog.js:159
 #: frontend/src/components/dialog/list-created-files-dialog.js:48
-#: frontend/src/components/dialog/list-related-file-dialog.js:103
+#: frontend/src/components/dialog/list-related-file-dialog.js:104
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:71
 #: frontend/src/components/dialog/list-tag-dialog.js:126
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:84
@@ -801,7 +801,7 @@ msgstr "大小"
 msgid "Last Update"
 msgstr "更新时间"
 
-#: frontend/src/components/dialog/list-related-file-dialog.js:100
+#: frontend/src/components/dialog/list-related-file-dialog.js:101
 msgid "Add File"
 msgstr "添加文档"
 
@@ -2027,11 +2027,11 @@ msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
 #: frontend/src/pages/org-admin/org-user-item.js:85
 msgid "Edit succeeded."
-msgstr "权限修改成功"
+msgstr "权限修改成功。"
 
 #: frontend/src/pages/org-admin/org-user-item.js:87
-msgid "Edit falied."
-msgstr "权限修改失败"
+msgid "Edit failed."
+msgstr "权限修改失败。"
 
 #: frontend/src/pages/org-admin/org-user-item.js:147
 msgid "ResetPwd"
