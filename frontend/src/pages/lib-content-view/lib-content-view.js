@@ -344,7 +344,7 @@ class LibContentView extends React.Component {
         userPerm: res.data.user_perm,
         isDirentListLoading: false,
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
-        dirID: res.headers.oid,
+        dirID: res.data.dir_id,
         readmeMarkdown: markdownItem,
       });
 
