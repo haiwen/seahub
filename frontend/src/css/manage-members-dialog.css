@@ -1,8 +1,6 @@
 .manage-members {
   max-height: 300px;
   overflow-y: scroll;
-}
-.manage-members-table {
   margin: 1rem 0 2rem;
 }
 .manage-members-table th,
@@ -31,19 +29,19 @@
   color: #333;
 }
 
-.group-transfer-select .true__indicator-separator {
+.add-members-select .true__indicator-separator {
   display: none;
 }
 
-.group-transfer {
+.add-members {
   display: flex;
   justify-content: space-between;
 }
 
-.group-transfer .group-transfer-select {
+.add-members .add-members-select {
   width: 385px;
 }
-.group-transfer .btn {
+.add-members .btn {
   width: 75px;
 }
 .group-error {
