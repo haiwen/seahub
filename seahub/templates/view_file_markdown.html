@@ -10,6 +10,7 @@
          <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
          <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
          <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
+         {% render_bundle 'markdownEditor' 'css' %}
     </head>
     <body>
          <div id="root"></div>
@@ -48,6 +49,6 @@
           }
          </script>
          <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
-         {% render_bundle 'markdownEditor' %}
+         {% render_bundle 'markdownEditor' 'js' %}
     </body>
 </html>

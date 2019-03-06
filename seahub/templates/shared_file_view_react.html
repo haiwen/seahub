@@ -2,6 +2,18 @@
 {% load seahub_tags i18n %}
 {% load render_bundle from webpack_loader %}
 
+{% block extra_style %}
+{% if filetype == 'Markdown' %}
+    {% render_bundle 'sharedFileViewMarkdown' 'css' %}
+{% elif filetype == 'Text' %}
+    {% render_bundle 'sharedFileViewText' 'css' %}
+{% elif filetype == 'Image' %}
+    {% render_bundle 'sharedFileViewImage' 'css' %}
+{% elif filetype == 'Video' %}
+    {% render_bundle 'sharedFileViewVideo' 'css' %}
+{% endif %}
+{% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
     window.shared = {
@@ -26,12 +38,12 @@
     };
 </script>
 {% if filetype == 'Markdown' %}
-    {% render_bundle 'sharedFileViewMarkdown' %}
+    {% render_bundle 'sharedFileViewMarkdown' 'js' %}
 {% elif filetype == 'Text' %}
-    {% render_bundle 'sharedFileViewText' %}
+    {% render_bundle 'sharedFileViewText' 'js' %}
 {% elif filetype == 'Image' %}
-    {% render_bundle 'sharedFileViewImage' %}
+    {% render_bundle 'sharedFileViewImage' 'js' %}
 {% elif filetype == 'Video' %}
-    {% render_bundle 'sharedFileViewVideo' %}
+    {% render_bundle 'sharedFileViewVideo' 'js' %}
 {% endif %}
 {% endblock %}
