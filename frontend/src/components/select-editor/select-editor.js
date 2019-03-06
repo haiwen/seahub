@@ -12,6 +12,7 @@ const propTypes = {
   translateOption: PropTypes.func.isRequired,
   translateExplanation: PropTypes.func,
   onOptionChanged: PropTypes.func.isRequired,
+  toggleItemFreezed: PropTypes.func,
 };
 
 class SelectEditor extends React.Component {
@@ -47,6 +48,7 @@ class SelectEditor extends React.Component {
   onEditPermission = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({isEditing: true});
+    this.props.toggleItemFreezed && this.props.toggleItemFreezed(true);
   }
 
   onOptionChanged = (e) => {
@@ -55,6 +57,7 @@ class SelectEditor extends React.Component {
       this.props.onOptionChanged(permission);
     }
     this.setState({isEditing: false});
+    this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
   }
 
   onSelectHandler = (e) => {
@@ -63,6 +66,7 @@ class SelectEditor extends React.Component {
 
   onHideSelect = () => {
     this.setState({isEditing: false});
+    this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
   }
 
   render() {

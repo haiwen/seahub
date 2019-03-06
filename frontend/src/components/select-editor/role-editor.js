@@ -9,6 +9,7 @@ const propTypes = {
   roles: PropTypes.array.isRequired,
   currentRole: PropTypes.string.isRequired,
   onRoleChanged: PropTypes.func.isRequired,
+  toggleItemFreezed: PropTypes.func,
 };
 
 class RoleEditor extends React.Component {
@@ -32,6 +33,7 @@ class RoleEditor extends React.Component {
         currentOption={this.props.currentRole}
         onOptionChanged={this.props.onRoleChanged}
         translateOption={this.translateRole}
+        toggleItemFreezed={this.props.toggleItemFreezed}
       />
     );
   }
