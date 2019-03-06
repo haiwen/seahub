@@ -213,8 +213,8 @@ class EditorUtilities {
     return seafileAPI.listComments(this.repoID, this.filePath);
   }
 
-  updateComment(commentID, resolved, detail) {
-    return seafileAPI.updateComment(this.repoID, commentID, resolved, detail);
+  updateComment(commentID, resolved, detail, newComment) {
+    return seafileAPI.updateComment(this.repoID, commentID, resolved, detail, newComment);
   }
 
   deleteComment(commentID) {
