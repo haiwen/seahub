@@ -84,13 +84,13 @@ class ManageMembersDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('Manage group members')}</ModalHeader>
         <ModalBody>
           <p>{gettext('Add group member')}</p>
-          <div className='group-transfer'>
+          <div className='add-members'>
             <UserSelect
               placeholder='Search users...'
               onSelectChange={this.onSelectChange}
               ref="userSelect"
               isMulti={true}
-              className="group-transfer-select"
+              className="add-members-select"
             />
             {this.state.selectedOption ?
               <Button color="secondary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
