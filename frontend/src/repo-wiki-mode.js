@@ -254,7 +254,7 @@ class Wiki extends Component {
         userPerm: res.data.user_perm,
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         isDirentListLoading: false,
-        dirID: res.headers.oid,
+        dirID: res.data.dir_id,
       });
 
       if (!this.state.repoEncrypted && direntList.length) {

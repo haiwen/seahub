@@ -315,6 +315,7 @@ class DirView(APIView):
 
         response_dict = {}
         response_dict["user_perm"] = permission
+        response_dict["dir_id"] = dir_id
 
         if request_type == 'f':
             response_dict['dirent_list'] = all_file_info_list
