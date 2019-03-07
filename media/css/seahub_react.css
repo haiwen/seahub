@@ -599,6 +599,7 @@ ul,ol,li {
     margin-top: 0.3rem;
     background-color: #EDEDEE;
     color: #5B5F65;
+    padding: .2rem .4rem;
 }
 
 .side-nav-con .sub-nav {
