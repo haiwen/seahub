@@ -153,7 +153,12 @@ class DirOperationToolbar extends React.Component {
   }
 
   render() {
-    let { path, repoName } = this.props;
+    let { path, repoName, userPerm } = this.props;
+    
+    if (userPerm !== 'rw' && userPerm !== 'admin') {
+      return '';
+    }
+
     let itemType = path === '/' ? 'library' : 'dir';
     let itemName = path == '/' ? repoName : Utils.getFolderName(path);
     return (
