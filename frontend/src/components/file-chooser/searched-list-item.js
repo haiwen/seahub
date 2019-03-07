@@ -34,7 +34,7 @@ class SearchedListItem extends React.Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="text-center"><img className="item-img" src={fileIconUrl} alt="" width="24"/></td>
-        <td><span className="item-link ellipsis">{item.repo_name}/{item.link_content}</span></td>
+        <td><span className="item-link">{item.repo_name}/{item.link_content}</span></td>
       </tr>
     );
   }

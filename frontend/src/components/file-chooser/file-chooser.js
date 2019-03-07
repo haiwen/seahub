@@ -130,10 +130,12 @@ class FileChooser extends React.Component {
   }
 
   onSearchInfoFocus = () => {
-    this.setState({
-      isSearching: true,
-      isResultGetted: false,
-    });
+    if (!this.state.searchedResult.length) {
+      this.setState({
+        isSearching: true,
+        isResultGetted: false,
+      });
+    }
   }
 
   onCloseSearching = () => {
@@ -254,7 +256,9 @@ class FileChooser extends React.Component {
   }
 
   onSearchedItemClick = (item) => {
-    this.setState({isResultGetted: true});
+    item['type'] = item.is_dir ? 'dir' : 'file';
+    let repo = new RepoInfo(item);
+    this.props.onDirentItemClick(repo, item.path, item);
   }
 
   renderSearchedView = () => {
@@ -263,7 +267,7 @@ class FileChooser extends React.Component {
     }
 
     if (this.state.isResultGetted && this.state.searchedResult.length === 0) {
-      return (<div className="search-result-none">{gettext('No results matching.')}</div>);
+      return (<div className="search-result-none text-center">{gettext('No results matching.')}</div>);
     }
 
     if (this.state.isResultGetted && this.state.searchedResult.length > 0) {
