@@ -11,6 +11,9 @@
     {% render_bundle 'sharedFileViewImage' 'css' %}
 {% elif filetype == 'Video' %}
     {% render_bundle 'sharedFileViewVideo' 'css' %}
+{% elif filetype == 'PDF' %}
+    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+    {% render_bundle 'sharedFileViewPDF' 'css' %}
 {% endif %}
 {% endblock %}
 
@@ -45,5 +48,13 @@
     {% render_bundle 'sharedFileViewImage' 'js' %}
 {% elif filetype == 'Video' %}
     {% render_bundle 'sharedFileViewVideo' 'js' %}
+{% elif filetype == 'PDF' %}
+    {% render_bundle 'sharedFileViewPDF' 'js' %}
+    <script type="text/javascript">
+    var sf_file_url = '{{ raw_path|escapejs }}';
+    var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
+    </script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
 {% endif %}
 {% endblock %}

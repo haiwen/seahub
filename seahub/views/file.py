@@ -1238,7 +1238,7 @@ def view_shared_file(request, fileshare):
 
     template = 'shared_file_view.html'
 
-    if is_textual_file(file_type=filetype) or filetype in (IMAGE, VIDEO):
+    if is_textual_file(file_type=filetype) or filetype in (IMAGE, VIDEO, PDF):
         template = 'shared_file_view_react.html'
 
     return render(request, template, {

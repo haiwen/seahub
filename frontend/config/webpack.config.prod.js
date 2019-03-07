@@ -69,6 +69,7 @@ module.exports = {
     sharedFileViewText: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-text.js"],
     sharedFileViewImage: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-image.js"],
     sharedFileViewVideo: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-video.js"],
+    sharedFileViewPDF: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-pdf.js"],
     viewFileText: [require.resolve('./polyfills'), paths.appSrc + "/view-file-text.js"],
     viewFileImage: [require.resolve('./polyfills'), paths.appSrc + "/view-file-image.js"],
     viewFileXmind: [require.resolve('./polyfills'), paths.appSrc + "/view-file-xmind.js"],
