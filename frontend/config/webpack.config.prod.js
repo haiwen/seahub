@@ -73,6 +73,7 @@ module.exports = {
     viewFileImage: [require.resolve('./polyfills'), paths.appSrc + "/view-file-image.js"],
     viewFileXmind: [require.resolve('./polyfills'), paths.appSrc + "/view-file-xmind.js"],
     viewFileVideo: [require.resolve('./polyfills'), paths.appSrc + "/view-file-video.js"],
+    viewFilePDF: [require.resolve('./polyfills'), paths.appSrc + "/view-file-pdf.js"],
     orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
     viewFileUMind: [require.resolve('./polyfills'), paths.appSrc + "/view-file-umind.js"],
   },
