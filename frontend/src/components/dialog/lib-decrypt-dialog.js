@@ -54,7 +54,7 @@ class LibDecryptDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} centered={true}>
+      <Modal isOpen={true}>
         <ModalBody>
           <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button> 
           <Form className="lib-decrypt-form text-center">
