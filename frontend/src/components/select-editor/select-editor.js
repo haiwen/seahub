@@ -81,9 +81,9 @@ class SelectEditor extends React.Component {
             options={this.options}
             className="permission-editor-select"
             classNamePrefix="permission-editor"
-            placeholder={gettext('Select...')}
+            placeholder={this.props.translateOption(currentOption)}
             onChange={this.onOptionChanged}
-            menuPlacement="auto"
+            captureMenuScroll={false}
           />
         }
         {(isTextMode && !this.state.isEditing) &&

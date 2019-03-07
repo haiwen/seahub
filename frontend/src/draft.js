@@ -145,7 +145,8 @@ class Draft extends React.Component {
     const url = 'history-' + preCommitID + '-' + currentCommitID;
     this.setURL(url);
     this.setState({
-      activeItem: activeItem
+      activeItem: activeItem,
+      isLoading: true,
     });
     axios.all([
       seafileAPI.getFileRevision(draftRepoID, currentCommitID, currentItem.path),
@@ -417,7 +418,8 @@ class Draft extends React.Component {
   setDiffViewerContent = (newContent, prevContent) => {
     this.setState({
       draftContent: newContent,
-      draftOriginContent: prevContent  
+      draftOriginContent: prevContent,
+      isLoading: false,
     });
   }
 
