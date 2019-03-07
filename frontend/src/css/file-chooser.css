@@ -74,5 +74,32 @@
   flex: 1;
 }
 
+.file-chooser-search-container {
+  min-height: 20rem;
+  position: relative;
+  border: 1px solid #eee;
+}
+
+.file-chooser-search-close {
+  position: absolute;
+  right: -0.5rem;
+  top: -0.5rem;
+}
+
+.file-chooser-search-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.file-chooser-search-item {
+  display: flex;
+  padding: 0.25rem 0.5rem;
+  border-left: 2px solid #fff;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+
 
 

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import { siteRoot } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
@@ -195,7 +195,7 @@ class Search extends Component {
     }
     if (!this.state.resultItems.length) {
       return (
-        <div className="search-result-none">No results matching.</div>
+        <div className="search-result-none">{gettext('No results matching.')}</div>
       );
     }
     let isShowMore = this.state.resultItems.length >= 5 ? true : false;
