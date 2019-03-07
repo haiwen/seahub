@@ -596,9 +596,16 @@ ul,ol,li {
 .side-nav-con .draft-info .badge {
     position: relative;
     float:right;
-    margin-top: 0.3rem;
+    margin-top: 0.2rem;
     background-color: #EDEDEE;
     color: #5B5F65;
+    display: flex;
+    align-items: center;
+    border-radius:50%;
+    justify-content: center;
+    min-width: 1.3rem;
+    min-height: 1.3rem;
+    padding: 0 .3rem;
 }
 
 .side-nav-con .sub-nav {
