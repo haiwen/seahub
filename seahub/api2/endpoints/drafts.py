@@ -118,8 +118,8 @@ class DraftView(APIView):
 
         username = request.user.username
         try:
-            d.publish(operator=username)
-            return Response(status.HTTP_200_OK)
+            published_file_path = d.publish(operator=username)
+            return Response({'published_file_path': published_file_path})
         except DraftFileConflict:
             return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
