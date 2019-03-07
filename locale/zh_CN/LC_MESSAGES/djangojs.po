@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-06 18:00+0800\n"
-"PO-Revision-Date: 2019-03-07 03:47+0000\n"
+"PO-Revision-Date: 2019-03-07 10:43+0000\n"
 "Last-Translator: 顺强 杨 <ysq9207@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -1486,7 +1486,7 @@ msgstr "私有"
 
 #: frontend/src/components/select-editor/wiki-permission-editor.js:22
 msgid "Public"
-msgstr "公有"
+msgstr "公开"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:176
 msgid "Folder Premission"
