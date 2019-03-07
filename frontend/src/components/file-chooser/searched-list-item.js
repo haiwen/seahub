@@ -7,6 +7,21 @@ const propTypes = {
 };
 
 class SearchedListItem extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      highlight: false,
+    };
+  }
+
+  onMouseEnter = () => {
+    this.setState({highlight: true});
+  }
+
+  onMouseLeave = () => {
+    this.setState({highlight: false});
+  }
 
   onClick = () => {
     let item = this.props.item;
@@ -17,10 +32,10 @@ class SearchedListItem extends React.Component {
     let item = this.props.item;
     let fileIconUrl = item.is_dir ? Utils.getFolderIconUrl(false, 24) : Utils.getFileIconUrl(item.name, 24);
     return (
-      <li className='file-chooser-search-item' onClick={this.onClick}>
-        <img className="item-img" src={fileIconUrl} alt="" />
-        <span className="item-link ellipsis">{item.repo_name}/{item.link_content}</span>
-      </li>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td className="text-center"><img className="item-img" src={fileIconUrl} alt="" width="24"/></td>
+        <td><span className="item-link ellipsis">{item.repo_name}/{item.link_content}</span></td>
+      </tr>
     );
   }
 }

@@ -11,11 +11,19 @@ class SearchedListView extends React.Component {
 
   render() {
     return (
-      <ul className="file-chooser-search-list">
-        {this.props.searchedResult.map((item, index) => {
-          return (<SearchedListItem key={index} item={item} onItemClick={this.props.onItemClick} />);
-        })}
-      </ul>
+      <table className="table-thead-hidden">
+        <thead>
+          <tr>
+            <th width="8%"></th>
+            <th width="92%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.searchedResult.map((item, index) => {
+            return (<SearchedListItem key={index} item={item} onItemClick={this.props.onItemClick} />);
+          })}
+        </tbody>
+      </table>
     );
   }
 }

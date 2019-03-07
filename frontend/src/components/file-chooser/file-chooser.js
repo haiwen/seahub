@@ -254,7 +254,7 @@ class FileChooser extends React.Component {
   }
 
   onSearchedItemClick = (item) => {
-
+    this.setState({isResultGetted: true});
   }
 
   renderSearchedView = () => {
