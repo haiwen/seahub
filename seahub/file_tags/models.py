@@ -17,7 +17,7 @@ class FileTagsManager(models.Manager):
         filename = os.path.basename(file_path)
         parent_path = os.path.dirname(file_path)
 
-        file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path, filename, is_dir=False)
+        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_path, filename, is_dir=False)
         file_uuid = str(file_uuid.uuid).replace('-', '')
 
         cursor = connection.cursor()
@@ -49,7 +49,7 @@ class FileTagsManager(models.Manager):
         filename = os.path.basename(file_path)
         parent_path = os.path.dirname(file_path)
 
-        file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path, filename, is_dir=False)
+        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_path, filename, is_dir=False)
         file_uuid = str(file_uuid.uuid).replace('-', '')
         try:
             return super(FileTagsManager, self).get(repo_tag_id=repo_tag_id, file_uuid=file_uuid)
