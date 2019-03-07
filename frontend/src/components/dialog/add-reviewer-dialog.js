@@ -96,13 +96,19 @@ class AddReviewerDialog extends React.Component {
         <ModalHeader>{gettext('Request a review')}</ModalHeader>
         <ModalBody >
           <p>{gettext('Add new reviewer')}</p>
-          <UserSelect
-            placeholder={gettext('Please enter 1 or more character')}
-            onSelectChange={this.handleSelectChange}
-            ref="reviewSelect"
-            isMulti={true}
-            className='reviewer-select'
-          />
+          <div className='add-reviewer'>
+            <UserSelect
+              placeholder={gettext('Please enter 1 or more character')}
+              onSelectChange={this.handleSelectChange}
+              ref="reviewSelect"
+              isMulti={true}
+              className='reviewer-select'
+            />
+            {(this.state.selectedOption && !this.state.loading)?
+              <Button color="secondary" onClick={this.addReviewers}>{gettext('Submit')}</Button> :
+              <Button color="secondary" disabled>{gettext('Submit')}</Button>
+            }
+          </div>
           {this.state.errorMsg.length > 0 &&
             this.state.errorMsg.map((item, index = 0, arr) => {
               return (
@@ -126,11 +132,6 @@ class AddReviewerDialog extends React.Component {
           }
         </ModalBody>
         <ModalFooter>
-          { this.state.loading ?
-            <Button disabled><i className="fa fa-spinner" aria-hidden="true"></i></Button>
-            :
-            <Button color="primary" onClick={this.addReviewers}>{gettext('Submit')}</Button>
-          }
           <Button color="secondary" onClick={this.props.toggleAddReviewerDialog}>
             {gettext('Close')}</Button>
         </ModalFooter>

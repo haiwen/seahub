@@ -86,7 +86,7 @@ class ManageMembersDialog extends React.Component {
           <p>{gettext('Add group member')}</p>
           <div className='add-members'>
             <UserSelect
-              placeholder={gettext('Search users...')}
+              placeholder={gettext('Select users...')}
               onSelectChange={this.onSelectChange}
               ref="userSelect"
               isMulti={true}
