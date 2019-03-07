@@ -79,7 +79,7 @@ class DirColumnFile extends React.Component {
             <i className="fas fa-expand-arrows-alt"></i>
           </span>
           {(!this.props.isDraft && this.props.hasDraft) &&
-            <div className='seafile-btn-view-review text-center'>
+            <div className='seafile-btn-view-review text-center mt-2'>
               <div className='tag tag-green'>
                 {gettext('This file is in draft stage.')}
                 <span className="ml-2" onClick={this.goDraftPage}>{gettext('View Draft')}</span>
