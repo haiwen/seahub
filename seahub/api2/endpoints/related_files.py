@@ -31,16 +31,17 @@ class RelatedFilesView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def get_related_file(self, r_repo_id, r_file_path, r_uuid):
+    def get_related_file(self, repo_id, file_name, file_path):
         related_file = dict()
-        related_file["name"] = r_uuid.filename
-        related_file["repo_id"] = r_repo_id
-        r_repo = seafile_api.get_repo(r_repo_id)
+        related_file["name"] = file_name
+        related_file["repo_id"] = repo_id
+        r_repo = seafile_api.get_repo(repo_id)
         if not r_repo:
             related_file["repo_name"] = ""
-        related_file["repo_name"] = r_repo.name
-        related_file["path"] = r_file_path
-        file_obj = seafile_api.get_dirent_by_path(r_repo_id, r_file_path)
+        else:
+            related_file["repo_name"] = r_repo.name
+        related_file["path"] = file_path
+        file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
         related_file["size"] = file_obj.size
         related_file["last_modified"] = timestamp_to_isoformat_timestr(file_obj.mtime)
         return related_file
@@ -79,32 +80,52 @@ class RelatedFilesView(APIView):
         filename = os.path.basename(file_path)
         parent_path = os.path.dirname(file_path)
         uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_path, filename, is_dir=False)
+        uuid = str(uuid.uuid).replace('-', '')
         try:
-            file_uuid_list = RelatedFiles.objects.get_related_files_uuid(uuid)
+            related_file_list = RelatedFiles.objects.get_related_files(uuid)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         related_files = list()
-        for file_uuid in file_uuid_list:
-            if file_uuid.o_uuid == uuid:
-                r_path = posixpath.join(file_uuid.r_uuid.parent_path, file_uuid.r_uuid.filename)
-                r_repo_id = file_uuid.r_uuid.repo_id
+        for file_obj in related_file_list:
+            related_id = file_obj[0]
+            o_uuid = file_obj[1]
+            r_uuid = file_obj[2]
+            o_repo_id = file_obj[3]
+            o_parent_path = file_obj[4]
+            o_file_name = file_obj[5]
+            r_repo_id = file_obj[6]
+            r_parent_path = file_obj[7]
+            r_file_name = file_obj[8]
+            if o_uuid == uuid:
+                r_path = posixpath.join(r_parent_path, r_file_name)
                 r_file_id = seafile_api.get_file_id_by_path(r_repo_id, r_path)
                 if not r_file_id:
+                    try:
+                        RelatedFiles.objects.delete_related_file_uuid(related_id)
+                    except Exception as e:
+                        logger.error(e)
+                        error_msg = 'Internal Server Error.'
+                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
                     continue
-                related_file = self.get_related_file(r_repo_id, r_path, file_uuid.r_uuid)
-                related_file["related_id"] = file_uuid.pk
+                related_file = self.get_related_file(r_repo_id, r_file_name, r_path)
+                related_file["related_id"] = related_id
                 related_files.append(related_file)
-            else:
-                r_path = posixpath.join(file_uuid.o_uuid.parent_path, file_uuid.o_uuid.filename)
-                r_repo_id = file_uuid.o_uuid.repo_id
-                r_file_id = seafile_api.get_file_id_by_path(r_repo_id, r_path)
-                if not r_file_id:
+            if r_uuid == uuid:
+                o_path = posixpath.join(o_parent_path, o_file_name)
+                o_file_id = seafile_api.get_file_id_by_path(r_repo_id, o_path)
+                if not o_file_id:
+                    try:
+                        RelatedFiles.objects.delete_related_file_uuid(related_id)
+                    except Exception as e:
+                        logger.error(e)
+                        error_msg = 'Internal Server Error.'
+                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
                     continue
-                related_file = self.get_related_file(r_repo_id, r_path, file_uuid.o_uuid)
-                related_file["related_id"] = file_uuid.pk
+                related_file = self.get_related_file(o_repo_id, o_file_name, o_path)
+                related_file["related_id"] = related_id
                 related_files.append(related_file)
 
         return Response({"related_files": related_files}, status=status.HTTP_200_OK)
@@ -175,7 +196,8 @@ class RelatedFilesView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        related_file = self.get_related_file(r_repo_id, r_path, related_file_uuid.r_uuid)
+        r_file_name = os.path.basename(r_path)
+        related_file = self.get_related_file(r_repo_id, r_file_name, r_path)
         related_file["related_id"] = related_file_uuid.pk
 
         return Response({"related_file": related_file}, status.HTTP_201_CREATED)
@@ -215,7 +237,6 @@ class RelatedFileView(APIView):
 
         # permission check
         if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
-            print check_folder_permission(request, repo_id, file_path)
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
