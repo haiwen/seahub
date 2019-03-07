@@ -378,8 +378,8 @@ class Draft extends React.Component {
   }
 
   onPublishDraft = () => {
-    const OriginFileLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftOriginFilePath + '/';
     seafileAPI.publishDraft(draftID).then(res => {
+      const OriginFileLink = siteRoot + 'lib/' + draftRepoID + '/file' + encodeURIComponent(res.data.published_file_path) + '/';
       window.location.href = OriginFileLink; 
     });
   }

@@ -230,7 +230,7 @@ class EditorUtilities {
 
   publishDraftFile() {
     return seafileAPI.publishDraft(draftID).then(res => {
-      window.location.href = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(draftOriginFilePath);
+      window.location.href = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(res.data.published_file_path);
     });
   }
 

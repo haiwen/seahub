@@ -243,6 +243,10 @@ class Draft(TimestampedModel):
             )
 
         self.delete(operator)
+
+        published_file_path = posixpath.join(file_uuid.parent_path, file_name)
+
+        return published_file_path
         # get draft published version
         # file_id = seafile_api.get_file_id_by_path(self.origin_repo_id, origin_file_path)
 
