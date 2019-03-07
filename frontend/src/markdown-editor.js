@@ -224,13 +224,13 @@ class EditorUtilities {
 
   createDraftFile() {
     return seafileAPI.createDraft(repoID, filePath).then(res => {
-      window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
+      window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + Utils.encodePath(res.data.draft_file_path) + '?mode=edit';
     });
   }
 
   publishDraftFile() {
     return seafileAPI.publishDraft(draftID).then(res => {
-      window.location.href = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(res.data.published_file_path);
+      window.location.href = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(res.data.published_file_path);
     });
   }
 
