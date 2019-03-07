@@ -21,6 +21,7 @@ import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
 import { Value, Document, Block } from 'slate';
 import ModalPortal from './components/modal-portal';
+import { Utils } from './utils/utils';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -379,7 +380,7 @@ class Draft extends React.Component {
 
   onPublishDraft = () => {
     seafileAPI.publishDraft(draftID).then(res => {
-      const OriginFileLink = siteRoot + 'lib/' + draftRepoID + '/file' + encodeURIComponent(res.data.published_file_path) + '/';
+      const OriginFileLink = siteRoot + 'lib/' + draftRepoID + '/file' + Utils.encodePath(res.data.published_file_path);
       window.location.href = OriginFileLink; 
     });
   }
