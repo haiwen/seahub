@@ -337,9 +337,22 @@ class GroupView extends React.Component {
     });
   }
 
+  translateRole = (role) => {
+    if (role === 'Admin') {
+      return gettext('Admin');
+    }  
+    else if (role === 'Member') {
+      return gettext('Member');
+    }
+    else if (role === 'Owner') {
+      return gettext('Owner');
+    }
+  }
+
   render() {
     let { errMessage, emptyTip, currentGroup } = this.state;
     let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
+    let that = this;
     return (
       <Fragment>
         <div className="main-panel-north border-left-show">
@@ -409,7 +422,7 @@ class GroupView extends React.Component {
                     </a>
                     <Popover placement="bottom" isOpen={this.state.showGroupMembersPopover} target="groupMembers"
                       toggle={this.toggleGroupMembersPopover} hideArrow={true} className="sf-popover">
-                      <div className="sf-popover-hd sf-popover-title">
+                      <div className="sf-popover-hd sf-popover-title group-member-list-header">
                         <span>{gettext('Members')}</span>
                         <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
                           onClick={this.toggleGroupMembersPopover}></a>
@@ -419,12 +432,14 @@ class GroupView extends React.Component {
                           {
                             this.state.groupMembers.map(function(item, index) {
                               return (
-                                <li className="user-item sf-popover-item" key={index}>
-                                  <img src={item.avatar_url} alt="" className="group-member-avatar avatar"/>
-                                  <span className="txt-item ellipsis">
-                                    <span className="group-member-name">{item.name}</span>
-                                    <span className="group-member-admin">{item.role}</span>
-                                  </span>
+                                <li key={index}>
+                                  <a href="#" className="sf-popover-item user-item">
+                                    <img src={item.avatar_url} alt="" className="group-member-avatar avatar"/>
+                                    <span className="txt-item ellipsis">
+                                      <span className="group-member-name">{item.name}</span>
+                                      <span className="group-member-admin">{that.translateRole(item.role)}</span>
+                                    </span>
+                                  </a>
                                 </li>
                               );
                             })

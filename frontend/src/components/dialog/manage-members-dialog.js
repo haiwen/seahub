@@ -86,7 +86,7 @@ class ManageMembersDialog extends React.Component {
           <p>{gettext('Add group member')}</p>
           <div className='add-members'>
             <UserSelect
-              placeholder='Search users...'
+              placeholder={gettext('Search users...')}
               onSelectChange={this.onSelectChange}
               ref="userSelect"
               isMulti={true}
@@ -194,6 +194,18 @@ class Member extends React.PureComponent {
     });
   }
 
+  translateRole = (role) => {
+    if (role === 'Admin') {
+      return gettext('Admin');
+    }  
+    else if (role === 'Member') {
+      return gettext('Member');
+    }
+    else if (role === 'Owner') {
+      return gettext('Owner');
+    }
+  }
+
   render() {
     const { item, isOwner } = this.props;
     const deleteAuthority = (item.role !== 'Owner' && isOwner === true) || (item.role === 'Member' && isOwner === false);
@@ -203,7 +215,7 @@ class Member extends React.PureComponent {
         <td>{item.name}</td>
         <td>
           {((isOwner === false) || (isOwner === true && item.role === 'Owner')) && 
-            <span className="group-admin">{item.role}</span>
+            <span className="group-admin">{this.translateRole(item.role)}</span>
           }
           {(isOwner === true && item.role !== 'Owner') &&
             <RoleEditor 
