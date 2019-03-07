@@ -1,0 +1,192 @@
+{% load seahub_tags i18n staticfiles %}
+{% load render_bundle from webpack_loader %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+  {% block viewport %}
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  {% endblock %}
+  <title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
+  <link rel="stylesheet" href="https://g.alicdn.com/code/lib/antd/3.10.7/antd.min.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://g.alicdn.com/code/lib/react/16.6.1/umd/react.production.min.js"></script>
+  <script src="https://g.alicdn.com/code/lib/react-dom/16.6.1/umd/react-dom.production.min.js"></script>
+  <script src="https://g.alicdn.com/code/lib/moment.js/2.22.2/moment.min.js"></script>
+  <script src="https://g.alicdn.com/code/lib/antd/3.10.7/antd.min.js"></script>
+  <script src="https://g.alicdn.com/code/lib/socket.io/2.1.1/socket.io.js"></script>
+  <script src="https://g.alicdn.com/UMind/UMind/1.0.0/bundle.js"></script>
+  <script type="text/javascript">
+    // overwrite the one in base_for_react.html
+    window.app = {
+        config: {
+            mediaUrl: '{{ MEDIA_URL }}',
+            logoPath: '{{ logo_path }}',
+            logoWidth: '{{ logo_width }}',
+            logoHeight: '{{ logo_height }}',
+            siteTitle: '{{ site_title }}',
+            siteName: '{{ site_name }}',
+            siteRoot: '{{ SITE_ROOT }}',
+            loginUrl: '{{ LOGIN_URL }}',
+            isPro: '{{ is_pro }}',
+            lang: '{{ LANGUAGE_CODE }}',
+            fileServerRoot: '{{ FILE_SERVER_ROOT }}',
+            serviceURL: '{{ service_url }}',
+            seafileVersion: '{{ seafile_version }}',
+        },
+        pageOptions: {
+            seafileCollabServer: '{{seafile_collab_server}}',
+            name: "{{request.user.username|email2nickname|escapejs}}",
+            contactEmail: "{{request.user.username|email2contact_email|escapejs}}",
+            username: "{{request.user.username|escapejs}}",
+            canAddRepo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
+            canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
+            canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
+            canViewOrg:'{{ user.permissions.can_view_org }}',
+            fileAuditEnabled: '{{ file_audit_enabled }}',
+            enableFileComment: '{{ enable_file_comment }}',
+            folderPermEnabled: '{{ folder_perm_enabled }}',
+            enableResetEncryptedRepoPassword: '{{ enable_reset_encrypted_repo_password }}',
+            isEmailConfigured: '{{ is_email_configured }}',
+            enableUploadFolder: '{{ enable_upload_folder }}',
+            enableResumableFileUpload: '{{ enable_resumable_fileupload }}',
+            // storage backends
+            storages: (function () {
+              // for 'create repo' & 'storage backend' column in 'my libs'
+              var storages = [];
+              {% for storage in storages %}
+              storages.push({
+                'id': '{{storage.storage_id|escapejs}}',
+                'name': '{{storage.storage_name|escapejs}}'
+              });
+              {% endfor %}
+              return storages;
+            })(),
+            enableRepoSnapshotLabel: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
+            shareLinkExpireDaysMin: "{{ share_link_expire_days_min }}",
+            shareLinkExpireDaysMax: "{{ share_link_expire_days_max }}",
+            maxFileName: "{{ max_file_name }}",
+            enableWiki: {% if user.permissions.can_use_wiki %} true {% else %} false {% endif %},
+            enableEncryptedLibrary: '{{ enable_encrypted_library }}',
+            enableRepoHistorySetting: '{{ enable_repo_history_setting }}',
+            isSystemStaff: {% if request.user.is_staff %} true {% else %} false {% endif %},
+            thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
+            repoPasswordMinLength: {{repo_password_min_length}},
+        }
+     };
+    window.app.pageOptions = {
+      username: '{{ user.username|escapejs }}',
+      userNickName: '{{request.user.username|email2nickname|escapejs}}',
+
+      // for all types of files
+      fileName: '{{ filename|escapejs }}',
+      isStarred: {% if is_starred %}true{% else %}false{% endif %},
+      isLocked: {% if file_locked %}true{% else %}false{% endif %},
+      latestContributor: '{{ latest_contributor|escapejs }}',
+      latestContributorName: '{{ latest_contributor|email2nickname|escapejs }}',
+      lastModificationTime: '{{ last_modified }}',
+      repoID: '{{ repo.id }}',
+      repoName: '{{ repo.name|escapejs }}',
+      filePath: '{{ path|escapejs }}',
+      filePerm: '{{ file_perm }}',
+      parentDir: '{{ parent_dir|escapejs }}',
+      err: '{{ err }}',
+      lockedByMe: {% if locked_by_me %}true{% else %}false{% endif %},
+      canLockUnlockFile: {% if can_lock_unlock_file %}true{% else %}false{% endif %},
+      canEditFile: {% if can_edit_file %}true{% else %}false{% endif %}, // only for some file types 
+      canDownloadFile: {% if can_download_file %}true{% else %}false{% endif %},
+      enableComment: {% if enable_file_comment %}true{% else %}false{% endif %},
+      enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
+    };
+  </script>
+  {% block render_bundle %}
+  {% render_bundle 'viewFileUMind' 'js'%}
+  {% endblock %}
+  <script>
+    const { UMind, React, ReactDOM, seafileAPI, utils, toaster } = window;
+    const { repoID, filePath, fileName, username } = window.app.pageOptions;
+    const DEFAULT_DATA = {
+      roots: [{
+        label: '中心主题',
+        children: [{
+          label: '分支主题 1',
+        }, {
+          label: '分支主题 2',
+        }, {
+          label: '分支主题 3',
+        }],
+      }],
+    };
+
+    // 语言环境
+    // 中文: zh-CN（默认）
+    // 英文: en-US
+    const locale = 'zh-CN';
+
+    // 配置数据
+    const config = {
+      file: {
+        id: repoID + filePath,
+      },
+      user: {
+        id: username,
+      },
+      socket: {
+        url: 'https://umind.alibaba-inc.com',
+        events: {
+          user: 'user',
+          operation: 'operation',
+        },
+        onUserListChange: () => {},
+      },
+    };
+
+    // 读取数据
+    const handleRead = () => {
+      seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
+        let url = res.data;
+        seafileAPI.getFileContent(url).then(res => {
+          return res.data;
+        }).catch(() => {
+          return DEFAULT_DATA;
+        });
+      });
+      return DEFAULT_DATA;
+    };
+
+    // 保存数据
+    // 回调函数触发时机：
+    // 1. 用户主动保存
+    // 2. 每次命令操作
+    const handleSave = (data) => {
+      let dirPath = utils.getDirName(filePath);
+      seafileAPI.getUpdateLink(repoID, dirPath).then(res => {
+        let updateLink = res.data;
+        let updateData = JSON.stringify(data);
+        seafileAPI.updateFile(updateLink, filePath, fileName, updateData).then(res => {
+          toaster.success('{%trans "File saved." %}');
+        }).catch(() => {
+          toaster.success('{%trans "File save failed." %}');
+        });
+      });
+    };
+
+    ReactDOM.render(
+      React.createElement(UMind.default,
+        {
+          locale,
+          config,
+          data: handleRead(),
+          save: handleSave,
+        }),
+      document.getElementById('root'),
+    );
+
+  </script>
+</body>
+</html>

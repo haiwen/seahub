@@ -1,17 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import UMind from './umind';
+import { seafileAPI } from './utils/seafile-api';
+import { Utils } from './utils/utils';
+import toaster from './components/toast';
 
-class ViewFileUMind extends React.Component {
-
-  render() {
-    return (
-      <UMind />
-    );
-  }
-}
-
-ReactDOM.render(
-  <ViewFileUMind />,
-  document.getElementById('wrapper')
-);
+window.seafileAPI = seafileAPI;
+window.utils = Utils;
+window.toaster =toaster;
