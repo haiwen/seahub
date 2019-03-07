@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-06 18:00+0800\n"
-"PO-Revision-Date: 2019-03-07 02:58+0000\n"
+"PO-Revision-Date: 2019-03-07 03:47+0000\n"
 "Last-Translator: 顺强 杨 <ysq9207@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -1084,7 +1084,7 @@ msgstr "文件不存在。"
 #: frontend/src/components/file-content-view.js:115
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:236
 msgid "This file is in draft stage."
-msgstr "该文件处于草稿状态"
+msgstr "该文件处于草稿阶段。"
 
 #: frontend/src/components/dir-view-mode/dir-column-file.js:85
 #: frontend/src/components/file-content-view.js:116
