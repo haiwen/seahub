@@ -129,7 +129,7 @@ class FileChooser extends React.Component {
             }
           </div>
         }
-        {mode !== 'only_current_library' && 
+        {mode !== 'only_current_library' &&
           <div className="list-view">
             <div className="list-view-header">
               <span className={`item-toggle fa ${this.state.isOtherRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>

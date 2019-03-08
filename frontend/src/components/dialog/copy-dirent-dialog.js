@@ -26,7 +26,6 @@ class CopyDirent extends React.Component {
       repo: null,
       selectedPath: '',
       errMessage: '',
-      mode:'',
     };
   }
 
@@ -150,12 +149,6 @@ class CopyDirent extends React.Component {
       errMessage: ''
     });
   }
-  componentWillMount(){
-    let mode = this.props.currentRepoInfo.encrypted ? 'only_current_library':'current_repo_and_other_repos'
-    this.setState({
-      mode:mode
-    })
-  }
   render() {
     let title = gettext('Copy {placeholder} to:');
     if (!this.props.isMutipleOperation) {
@@ -163,6 +156,7 @@ class CopyDirent extends React.Component {
     } else {
       title = gettext('Copy selected item(s) to:');
     }
+    let mode = this.props.currentRepoInfo.encrypted ? 'only_current_library':'current_repo_and_other_repos'
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
@@ -171,7 +165,7 @@ class CopyDirent extends React.Component {
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
-            mode={this.state.mode}
+            mode={mode}
           />
           {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>}
         </ModalBody>
