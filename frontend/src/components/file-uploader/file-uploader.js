@@ -331,8 +331,9 @@ class FileUploader extends React.Component {
     this.setState({uploadFileList: uploadFileList});
   }
 
-  onFileError = (file) => {
-
+  onFileError = (file, message) => {
+    console.log(file);
+    console.log(message);
   }
 
   onComplete = () => {
