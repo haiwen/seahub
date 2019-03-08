@@ -149,6 +149,7 @@ class CopyDirent extends React.Component {
       errMessage: ''
     });
   }
+
   render() {
     let title = gettext('Copy {placeholder} to:');
     if (!this.props.isMutipleOperation) {

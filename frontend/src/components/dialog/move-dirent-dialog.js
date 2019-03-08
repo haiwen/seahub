@@ -149,6 +149,7 @@ class MoveDirent extends React.Component {
       errMessage: ''
     });
   }
+
   render() {
     let title = gettext('Move {placeholder} to:');
     if (!this.props.isMutipleOperation) {
