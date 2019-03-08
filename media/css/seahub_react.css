@@ -96,6 +96,7 @@
 .sf2-icon-library:before { content:"\e00d"; }
 
 /* common class and element style*/
+body { overflow-y: auto; }
 a { color:#eb8205; }
 a:hover { color:#eb8205; }
 .vam { vertical-align:middle; }
