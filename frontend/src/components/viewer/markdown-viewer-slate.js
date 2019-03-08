@@ -309,7 +309,6 @@ class MarkdownViewerSlate extends React.PureComponent {
   }
 
   onEdit = (event) => {
-      console.log('on edit');
     event.preventDefault();
     this.switchToEditor();
   }
@@ -453,7 +452,6 @@ class MarkdownViewerSlate extends React.PureComponent {
   }
 
   render() {
-    console.log('render viewer');
     const { relatedFiles, fileTagList } = this.props;
     const openDialogs = this.props.openDialogs;
     let relatedFileString = '';
