@@ -1,0 +1,169 @@
+{
+  "bold": "Fett",
+  "italic": "Kursiv",
+  "inline_code": "Code",
+  "header_one": "Überschrift 1",
+  "header_two": "Überschrift 2",
+  "header_three": "Überschrift 3",
+  "header_four": "Überschrift 4",
+  "header_five": "Überschrift 5",
+  "header_six": "Überschrift 6",
+  "paragraph": "Absatz",
+  "quote": "Zitat",
+  "ordered_list": "Nummerierte Liste",
+  "unordered_list": "Ungeordnete Liste",
+  "check_list_item": "Listeneintrag überprüfen",
+  "insert_image": "Bild einfügen",
+  "code": "Inline-Code",
+  "code_block": "Codeblock",
+  "insert_link": "Link einfügen",
+  "insert_table": "Tabelle einfügen",
+  "save": "Speichern",
+  "more": "Mehr",
+  "invalid_url": "Ungültige Adresse",
+  "link_address": "Adresse des Links",
+  "image_address": "Adresse des Bildes",
+  "submit": "Absenden",
+  "cancel": "Abbrechen",
+  "switch_to_plain_text_editor": "Zum reinen Texteditor wechseln",
+  "switch_to_rich_text_editor": "Zum Editor mit Formatierungen wechseln",
+  "switch_to_viewer": "Zur Markdown-Vorschau wechseln",
+  "help": "Hilfe",
+  "remove_table": "Tabelle entfernen",
+  "column": "Spalte",
+  "row": "Zeile",
+  "set_align": "Ausrichtung festlegen",
+  "left": "Links",
+  "center": "Zentrieren",
+  "right": "Rechts",
+  "file_saved": "Datei gespeichert.",
+  "file_failed_to_save": "Datei konnte nicht gespeichert werden.",
+  "star": "Stern hinzufügen",
+  "unstar": "Stern entfernen",
+  "back_to_parent_directory":"Zurück zum übergeordneten Verzeichnis",
+  "edit":"Bearbeiten",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "internal_link": "Interner Link",
+  "copy_internal_link": "Der interne Link ist in den Zwischenspeicher kopiert",
+  "internal_link_desc": "Ein interner Link ist eine Verlinkung auf eine Datei oder einen Ordner, die von Anderen genutzt werden kann, soweit sie die entsprechenden Leserechte haben.",
+  "share": "Freigeben",
+  "share_link": "Link freigeben",
+  "generate": "Erstellen",
+  "add_password_protection": "Passwort hinzufügen",
+  "password": "Passwort",
+  "at_least_8_characters": "mindestens 8 Zeichen",
+  "password_again": "Passwort erneut eingeben",
+  "add_auto_expiration": "Befristung hinzufügen",
+  "days": "Tage",
+  "please_enter_password": "Bitte geben Sie ein Passwort ein",
+  "greater_than_or_equal_to": "Größer oder gleich",
+  "less_than_or_equal_to": "Weniger oder gleich",
+  "set_permission": "Rechte festlegen",
+  "preview_and_download": "Vorschau und Herunterladen",
+  "preview_only": "Nur Vorschau erlaubt",
+  "please_enter_valid_days": "Bitte geben Sie eine gültige Anzahl von Tagen ein",
+  "please_enter_a_non-negative_integer": "Bitte geben Sie eine Zahl größer oder gleich Null ein",
+  "please_enter_days": "Bitte geben Sie Tage ein",
+  "password_is_too_short": "Passwort ist zu kurz",
+  "passwords_do_not_match": "Passwörter stimmen nicht überein",
+  "return_to_wiki_page": "Zurück zur Wiki-Seite",
+  "insert_network_image": "Bild aus dem Netzwerk einfügen",
+  "upload_local_image": "Lokales Bild hochladen",
+  "add_link": "Link hinzufügen",
+  "file_history": "Dateiversionen",
+  "history_version": "Versionen",
+  "back_to_viewer": "Zurück zur Vorschau",
+  "link_title": "Titel des Links",
+  "local_draft": "Lokaler Entwurf",
+  "use_draft": "Entwurf verwenden",
+  "delete_draft": "Entwurf löschen",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "Es gibt einen ungespeicherten Entwurf. Möchten Sie ihn verwenden?",
+  "local_draft_saved": "Lokaler Entwurf gespeichert",
+  "new_draft": "Neuer Entwurf",
+  "edit_draft": "Entwurf bearbeiten",
+  "this_file_has_a_draft": "Zu dieser Datei gibt es einen Entwurf.", 
+  "delete": "Löschen",
+  "comments": "Kommentare",
+  "add_a_comment": "Kommentieren …",
+  "no_comment_yet": "Noch nicht kommentiert.",
+  "mark_as_resolved": "Als erledigt markieren",
+  "ask_for_review": "Um ein Review bitten",
+  "review_already_exists": "Es gibt bereits ein Review.",
+  "view_review": "Review anzeigen",
+  "there_is_an_associated_review_with_this_file": "Es gibt ein Review zu dieser Datei.",
+  "start_review": "Review schreiben",
+  "this_file_is_in_draft_stage": "Die Datei hat den Status Entwurf",
+  "this_file_is_in_review_stage": "Die Datei hat den Status Review.",
+  "this_file_has_been_updated": "Die Datei wurde aktualisiert.",
+  "refresh": "Aktualisieren",
+  "related_files": "Zugehörige Dateien",
+  "related_file": "Zugehörige Datei",
+  "no_tags": "Keine Tags",
+  "no_related_files": "Keine zugehörigen Dateien",
+  "Please_use_Chrome_to_get_best_editing_experience": "Die Bearbeitungsfunktion ist für den Chrome-Browser optimiert.",
+  "userHelp": {
+    "title": "Tastaturkürzel",
+    "userHelpData": [
+      {
+        "shortcutType":"Kürzel für Listen",
+        "shortcutData": {
+          "Make_list": "Liste anlegen",
+          "Make_ordered_list": "Nummerierte Liste anlegen",
+          "Insert_new_item": "Neues Objekt einfügen",
+          "Insert_child_in_item": "Unterobjekt einfügen",
+          "Increase_depth": "Tiefe erhöhen"
+        }
+      }, {
+        "shortcutType": "Kürzel für Überschriften",
+        "shortcutData": {
+          "Heading_1": "Überschrift 1",
+          "Heading_2": "Überschrift 2",
+          "Heading_3": "Überschrift 3",
+          "Heading_4": "Überschrift 4",
+          "Heading_5": "Überschrift 5",
+          "Heading_6": "Überschrift 6"
+        }
+      }, {
+        "shortcutType": "Kürzel für Code",
+        "shortcutData": {
+          "Make_code_block": "Codeblock anlegen",
+          "Insert_new_line": "Neue Zeile einfügen",
+          "Escape_code_block": "Codeblock beenden",
+          "Insert_indent": "Einzug einfügen"
+        }
+      }, {
+        "shortcutType": "Kürzel für Blockzitat",
+        "shortcutData": {
+          "Make_Block_quote": "Blockzitat anlegen",
+          "Escape_Block_quote": "Blockzitat beenden"
+        }
+      }, {
+        "shortcutType": "Kürzel für Tabellen",
+        "shortcutData": {
+          "Insert_Table_Row": "Tabellenzeile einfügen",
+          "Escape_table": "Tabelle beenden"
+        }
+      }, {
+        "shortcutType":"Kürzel für Inline-Text",
+        "shortcutData": {
+          "Bold": "Fett",
+          "Italic": "Kursiv",
+          "Italic_Bold": "Kursiv fett",
+          "Inline_code": "Inline-Code"
+        }
+      }, {
+        "shortcutType": "Kürzel speichern",
+        "shortcutData": {
+          "Save_file": "Datei speichern"
+        }
+      }, {
+        "shortcutType": "Kürzel für Bilder",
+        "shortcutData": {
+          "Paste_screen_shot": "Bildschirmfoto einfügen",
+          "Drag_image_from_anywhere_to_upload_it": "Datei zum Hochladen hierher ziehen"
+        }
+      }
+    ]
+  }
+}
