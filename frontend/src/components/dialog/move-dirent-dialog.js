@@ -151,18 +151,11 @@ class MoveDirent extends React.Component {
     });
   }
   componentWillMount(){
-    let encrypted = this.props.currentRepoInfo.encrypted
-    if(encrypted){
-      this.setState({
-        mode:'only_current_library'
-      })
-    }else{
-      this.setState({
-        mode:'current_repo_and_other_repos'
-      })
-    }
+    let mode = this.props.currentRepoInfo.encrypted ? 'only_current_library':'current_repo_and_other_repos'
+    this.setState({
+      mode:mode
+    })
   }
-
   render() {
     let title = gettext('Move {placeholder} to:');
     if (!this.props.isMutipleOperation) {
