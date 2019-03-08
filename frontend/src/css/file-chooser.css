@@ -85,10 +85,11 @@
 }
 
 .file-chooser-search-container {
-  min-height: 20rem;
+  height: 20rem;
   position: relative;
   border: 1px solid #eee;
   padding: 10px;
+  overflow: auto;
 }
 
 .file-chooser-search-close {

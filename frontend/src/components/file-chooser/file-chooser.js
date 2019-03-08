@@ -237,7 +237,7 @@ class FileChooser extends React.Component {
 
   formatResultItems = (data) => {
     let items = [];
-    let length = data.length > 5 ? 5 : data.length;
+    let length = data.length > 10 ? 10 : data.length;
     for (let i = 0; i < length; i++) {
       items[i] = {};
       items[i]['index'] = [i];
