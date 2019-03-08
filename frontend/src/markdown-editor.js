@@ -8,8 +8,13 @@ import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
 import ListRelatedFileDialog from './components/dialog/list-related-file-dialog';
 import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
 import ShareDialog from './components/dialog/share-dialog';
-
 const { repoID, repoName, filePath, fileName, mode, draftID, draftFilePath, draftOriginFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
+import MarkdownViewerSlate from './components/viewer/markdown-viewer-slate'
+import io from "socket.io-client";
+import toaster from "@seafile/seafile-editor/dist/components/toast";
+import { serialize } from "@seafile/seafile-editor/dist/utils/slate2markdown";
+import LocalDraftDialog from "@seafile/seafile-editor/dist/components/local-draft-dialog";
+const CryptoJS = require('crypto-js');
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
@@ -256,6 +261,11 @@ const editorUtilities = new EditorUtilities();
 class MarkdownEditor extends React.Component {
   constructor(props) {
     super(props);
+    this.timer = null;
+    this.localDraft = '';
+    this.autoSave = false;
+    this.draftRichValue = '';
+    this.draftPlainValue = '';
     this.state = {
       markdownContent: '',
       loading: true,
@@ -271,15 +281,95 @@ class MarkdownEditor extends React.Component {
         lastModifier: '',
         id: '',
       },
+      editorMode: 'viewer',
       collabServer: seafileCollabServer ? seafileCollabServer : null,
       relatedFiles: [],
       fileTagList: [],
+      localDraftDialog: false,
       showRelatedFileDialog: false,
       showEditFileTagDialog: false,
       showAddRelatedFileDialog: false,
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
+      showDraftSaved: false,
+      collabUsers: userInfo ?
+        [{user: userInfo, is_editing: false}] : [],
     };
+
+    if (this.state.collabServer) {
+      const socket = io(this.state.collabServer);
+      this.socket = socket;
+      socket.on('presence', (data) => this.receivePresenceData(data));
+      socket.on('repo_update', (data) => this.receiveUpdateData(data));
+      socket.on('connect', () => {
+        this.socket_id = socket.id;
+      });
+    }
+  }
+
+  emitSwitchEditor = (is_editing=false) => {
+    if (userInfo && this.state.collabServer) {
+      const { repoID, path } = this.state.fileInfo;
+      this.socket.emit('presence', {
+        request: 'editing',
+          doc_id: CryptoJS.MD5(repoID+path).toString(),
+          user: userInfo,
+          is_editing,
+      });
+    }
+  }
+
+  receiveUpdateData (data) {
+    let currentTime = new Date();
+    if ((parseFloat(currentTime - this.lastModifyTime)/1000) <= 5) {
+      return;
+    }
+    editorUtilities.fileMetaData().then((res) => {
+      if (res.data.id !== this.state.fileInfo.id) {
+        toaster.notify(
+          <span>
+            {this.props.t('this_file_has_been_updated')}
+            <a href='' >{' '}{this.props.t('refresh')}</a>
+          </span>,
+          {id: 'repo_updated', duration: 3600});
+      }
+    });
+  }
+
+
+  receivePresenceData(data) {
+    switch(data.response) {
+      case 'user_join':
+        toaster.notify(`user ${data.user.name} joined`, {
+          duration: 3
+        });
+        return;
+
+      case 'user_left':
+        toaster.notify(`user ${data.user.name} left`, {
+          duration: 3
+        });
+        return;
+      case 'update_users':
+        for (var prop in data.users) {
+          if (data.users.hasOwnProperty(prop)) {
+            if (prop === this.socket_id) {
+              data.users[prop]['myself'] = true;
+              break;
+            }
+          }
+        }
+        this.setState({collabUsers: Object.values(data.users)});
+        return;
+      case 'user_editing':
+        toaster.danger(`user ${data.user.name} is editing this file!`, {
+          duration: 3
+        });
+        return;
+      default:
+        console.log('unknown response type: ' + data.response);
+        return;
+    }
   }
 
   toggleCancel = () => {
@@ -290,6 +380,65 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
     });
+  }
+
+  setEditorMode = (type) => {
+    this.setState({
+      editorMode: type
+    })
+  }
+
+  setDraftValue = (type, value) => {
+    if (type === 'rich') {
+      this.draftRichValue = value
+    } else {
+      this.draftPlainValue = value;
+    }
+  }
+  setContent = (str) => {
+    this.setState({
+      markdownContent: str
+    });
+  }
+
+  checkDraft = () => {
+    let draftKey = editorUtilities.getDraftKey();
+    let draft = localStorage.getItem(draftKey);
+    let that = this;
+    if (draft) {
+      that.setState({
+        localDraftDialog: true,
+      });
+      that.localDraft = draft;
+      localStorage.removeItem(draftKey);
+    }
+  }
+
+  useDraft = () => {
+    this.setState({
+      localDraftDialog: false,
+      loading: false,
+      markdownContent: this.localDraft,
+      editorMode: 'rich',
+    });
+    this.emitSwitchEditor(true);
+  }
+
+  deleteDraft = () => {
+    if (this.state.localDraftDialog) {
+      this.setState({
+        localDraftDialog: false,
+        loading: false,
+      });
+    } else {
+      let draftKey = editorUtilities.getDraftKey();
+      localStorage.removeItem(draftKey);
+    }
+  }
+
+  clearTimer = () => {
+    clearTimeout(this.timer);
+    this.timer = null;
   }
 
   closeAddRelatedFileDialog = () => {
@@ -340,6 +489,18 @@ class MarkdownEditor extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.socket.emit('repo_update', {
+      request: 'unwatch_update',
+        repo_id: this.props.editorUtilities.repoID,
+        user: {
+        name: this.props.editorUtilities.name,
+          username: this.props.editorUtilities.username,
+          contact_email: this.props.editorUtilities.contact_email,
+        },
+    });
+  }
+
   componentDidMount() {
 
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
@@ -361,13 +522,43 @@ class MarkdownEditor extends React.Component {
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         const downLoadUrl = res.data;
         seafileAPI.getFileContent(downLoadUrl).then((res) => {
-          this.setState({
+          const contentLength = res.data.length;
+          let isBlankFile =  (contentLength === 0 || contentLength === 1);
+          let hasPermission = (this.state.fileInfo.permission === 'rw');
+          let isEditMode = this.state.mode;
+            this.setState({
             markdownContent: res.data,
-            loading: false
+            loading: false,
+            // Goto rich edit page
+            // First, the user has the relevant permissions, otherwise he can only enter the viewer interface or cannot access
+            // case1: If file is draft file
+            // case2: If mode == 'edit' and the file has no draft
+            // case3: The length of markDownContent is 1 when clear all content in editor and the file has no draft
+            editorMode: (hasPermission && (isDraft || (isEditMode && !hasDraft) || (isBlankFile && !hasDraft))) ? 'rich' : 'viewer',
           });
         });
       });
     });
+    if (userInfo && this.socket) {
+      const { repoID, path } = this.state.fileInfo;
+      this.socket.emit('presence', {
+        request: 'join_room',
+          doc_id: CryptoJS.MD5(repoID+path).toString(),
+          user: userInfo
+      });
+
+      this.socket.emit('repo_update', {
+        request: 'watch_update',
+          repo_id: editorUtilities.repoID,
+          user: {
+          name: editorUtilities.name,
+            username: editorUtilities.username,
+            contact_email: editorUtilities.contact_email,
+          },
+      });
+    }
+
+    this.checkDraft();
     this.listRelatedFiles();
     this.listFileTags();
   }
@@ -400,7 +591,60 @@ class MarkdownEditor extends React.Component {
     this.listFileTags();
   }
 
+  setFileInfoMtime = (fileInfo) => {
+    this.setState({
+      fileInfo: Object.assign({}, this.state.fileInfo, { mtime: fileInfo.mtime, id: fileInfo.id, lastModifier: fileInfo.last_modifier_name })
+    });
+  };
+
+  toggleStar = () => {
+    let starrd = this.state.fileInfo.starred;
+    if (starrd) {
+      editorUtilities.unStarItem().then((response) => {
+        this.setState({
+          fileInfo: Object.assign({}, this.state.fileInfo, {starred: !starrd})
+        });
+      });
+    } else if (!starrd) {
+      editorUtilities.starItem().then((response) => {
+        this.setState({
+          fileInfo: Object.assign({}, this.state.fileInfo, {starred: !starrd})
+        });
+      });
+    }
+  }
+
+  autoSaveDraft = () => {
+    let that = this;
+    if (that.timer) {
+      return;
+    } else {
+      that.timer = setTimeout(() => {
+        let str = '';
+        if (this.state.editorMode == 'rich') {
+          let value = this.draftRichValue;
+          str = serialize(value.toJSON());
+        }
+        else if (this.state.editorMode == 'plain') {
+          str = this.draftPlainValue;
+        }
+        let draftKey = editorUtilities.getDraftKey();
+        localStorage.setItem(draftKey, str);
+        that.setState({
+            showDraftSaved: true
+        });
+        setTimeout(() => {
+          that.setState({
+              showDraftSaved: false
+          });
+          }, 3000);
+        that.timer = null;
+        }, 60000);
+    }
+  }
+
   render() {
+    let component;
     if (this.state.loading) {
       return (
         <div className="empty-loading-page">
@@ -408,26 +652,68 @@ class MarkdownEditor extends React.Component {
         </div>
       );
     } else if (this.state.mode === 'editor') {
-      return (
-        <React.Fragment>
-          <SeafileEditor
+        if (this.state.editorMode === 'viewer') {
+          component = (
+            <MarkdownViewerSlate
+              fileInfo={this.state.fileInfo}
+              markdownContent={this.state.markdownContent}
+              editorUtilities={editorUtilities}
+              collabUsers={this.state.collabUsers}
+              showFileHistory={true}
+              setFileInfoMtime={this.setFileInfoMtime}
+              toggleStar={this.toggleStar}
+              setEditorMode={this.setEditorMode}
+              draftID={draftID}
+              isDraft={isDraft}
+              emitSwitchEditor={this.emitSwitchEditor}
+              hasDraft={hasDraft}
+              shareLinkExpireDaysMin={shareLinkExpireDaysMin}
+              shareLinkExpireDaysMax={shareLinkExpireDaysMax}
+              relatedFiles={this.state.relatedFiles}
+              siteRoot={siteRoot}
+              openDialogs={this.openDialogs}
+              fileTagList={this.state.fileTagList}
+              showDraftSaved={this.state.showDraftSaved}
+            />
+          )
+        } else {
+          component = <SeafileEditor
             fileInfo={this.state.fileInfo}
             markdownContent={this.state.markdownContent}
             editorUtilities={editorUtilities}
-            userInfo={this.state.collabServer ? userInfo : null}
-            collabServer={this.state.collabServer}
+            collabUsers={this.state.collabUsers}
+            setFileInfoMtime={this.setFileInfoMtime}
+            toggleStar={this.toggleStar}
             showFileHistory={true}
-            mode={mode}
+            setEditorMode={this.setEditorMode}
+            setContent={this.setContent}
             draftID={draftID}
             isDraft={isDraft}
+            mode={this.state.mode}
+            emitSwitchEditor={this.emitSwitchEditor}
             hasDraft={hasDraft}
-            shareLinkExpireDaysMin={shareLinkExpireDaysMin}
-            shareLinkExpireDaysMax={shareLinkExpireDaysMax}
+            editorMode={this.state.editorMode}
             relatedFiles={this.state.relatedFiles}
             siteRoot={siteRoot}
+            autoSaveDraft={this.autoSaveDraft}
+            setDraftValue={this.setDraftValue}
+            clearTimer={this.clearTimer}
             openDialogs={this.openDialogs}
             fileTagList={this.state.fileTagList}
+            deleteDraft={this.deleteDraft}
+            showDraftSaved={this.state.showDraftSaved}
           />
+        }
+
+      return (
+        <React.Fragment>
+          {this.state.localDraftDialog?
+            <LocalDraftDialog
+              localDraftDialog={this.state.localDraftDialog}
+              deleteDraft={this.deleteDraft}
+              useDraft={this.useDraft}/>:
+          null}
+          {component}
           {this.state.showMarkdownEditorDialog && (
             <React.Fragment>
               {this.state.showRelatedFileDialog &&
@@ -485,4 +771,4 @@ class MarkdownEditor extends React.Component {
   }
 }
 
-export default MarkdownEditor;
+export default  MarkdownEditor;
