@@ -157,7 +157,6 @@ class MoveDirent extends React.Component {
       title = gettext('Move selected item(s) to:');
     }
     let mode = this.props.currentRepoInfo.encrypted ? 'only_current_library':'current_repo_and_other_repos'
-
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
