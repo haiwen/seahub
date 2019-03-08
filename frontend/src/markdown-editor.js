@@ -526,7 +526,7 @@ class MarkdownEditor extends React.Component {
           let isBlankFile =  (contentLength === 0 || contentLength === 1);
           let hasPermission = (this.state.fileInfo.permission === 'rw');
           let isEditMode = this.state.mode;
-            this.setState({
+          this.setState({
             markdownContent: res.data,
             loading: false,
             // Goto rich edit page
