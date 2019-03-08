@@ -87,6 +87,12 @@
   top: -0.5rem;
 }
 
+.searched-active {
+  background: #beebff !important;
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px #999;
+}
+
 
 
 

@@ -9,6 +9,18 @@ const propTypes = {
 
 class SearchedListView extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentItem: null,
+    };
+  }
+
+  onItemClick = (item) => {
+    this.setState({currentItem: item});
+    this.props.onItemClick(item);
+  }
+
   render() {
     return (
       <table className="table-thead-hidden">
@@ -20,7 +32,7 @@ class SearchedListView extends React.Component {
         </thead>
         <tbody>
           {this.props.searchedResult.map((item, index) => {
-            return (<SearchedListItem key={index} item={item} onItemClick={this.props.onItemClick} />);
+            return (<SearchedListItem key={index} item={item} currentItem={this.state.currentItem} onItemClick={this.onItemClick} />);
           })}
         </tbody>
       </table>
