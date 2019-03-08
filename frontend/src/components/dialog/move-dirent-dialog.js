@@ -14,6 +14,7 @@ const propTypes = {
   onItemMove: PropTypes.func,
   onItemsMove: PropTypes.func,
   onCancelMove: PropTypes.func.isRequired,
+  currentRepoInfo:PropTypes.object.isRequired,
 };
 
 // need dirent file Path；
@@ -156,6 +157,7 @@ class MoveDirent extends React.Component {
     } else {
       title = gettext('Move selected item(s) to:');
     }
+    let mode = this.props.currentRepoInfo.encrypted ? 'only_current_library':'current_repo_and_other_repos'
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
@@ -164,7 +166,7 @@ class MoveDirent extends React.Component {
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
-            mode="current_repo_and_other_repos"
+            mode={mode}
           />
           {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>}
         </ModalBody>

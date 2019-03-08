@@ -429,6 +429,7 @@ class DirentListItem extends React.Component {
               isMutipleOperation={this.state.isMutipleOperation}
               onItemMove={this.props.onItemMove}
               onCancelMove={this.onItemMoveToggle}
+              currentRepoInfo={this.props.currentRepoInfo}
             />
           </ModalPortal>
         }
@@ -441,6 +442,7 @@ class DirentListItem extends React.Component {
               isMutipleOperation={this.state.isMutipleOperation}
               onItemCopy={this.props.onItemCopy}
               onCancelCopy={this.onItemCopyToggle}
+              currentRepoInfo={this.props.currentRepoInfo}
             />
           </ModalPortal>
         }
