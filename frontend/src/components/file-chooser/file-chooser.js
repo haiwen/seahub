@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Input } from 'reactstrap';
+import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -129,15 +129,6 @@ class FileChooser extends React.Component {
     });
   }
 
-  onSearchInfoFocus = () => {
-    if (!this.state.searchedResult.length) {
-      this.setState({
-        isSearching: true,
-        isResultGetted: false,
-      });
-    }
-  }
-
   onCloseSearching = () => {
     this.setState({
       isSearching: false,
@@ -152,6 +143,12 @@ class FileChooser extends React.Component {
 
   onSearchInfoChanged = (event) => {
     let searchInfo = event.target.value.trim();
+    if (!this.state.searchedResult.length && searchInfo.length > 0) {
+      this.setState({
+        isSearching: true,
+        isResultGetted: false,
+      });
+    }
     this.setState({searchInfo: searchInfo});
     if (this.inputValue === searchInfo) {
       return false;
@@ -370,10 +367,14 @@ class FileChooser extends React.Component {
 
     return (
       <Fragment>
-        <Input placeholder={gettext('Search...')} className="mb-2" type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged} onFocus={this.onSearchInfoFocus}></Input>
+        <div className="file-chooser-search-input">
+          <Input className="search-input" placeholder={gettext('Search...')} className="mb-2" type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
+          {this.state.searchInfo.length !== 0 && (
+            <span className="search-control attr-action-icon fas fa-times" onClick={this.onCloseSearching}></span>
+          )}
+        </div>
         {this.state.isSearching && (
           <div className="file-chooser-search-container">
-            <span className="file-chooser-search-close sf2-icon-x1 action-icon" onClick={this.onCloseSearching}></span>
             {this.renderSearchedView()}
           </div>
         )}

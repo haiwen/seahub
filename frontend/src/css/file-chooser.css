@@ -74,6 +74,16 @@
   flex: 1;
 }
 
+.file-chooser-search-input {
+  position: relative;
+}
+
+.file-chooser-search-input .search-control {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+}
+
 .file-chooser-search-container {
   min-height: 20rem;
   position: relative;
