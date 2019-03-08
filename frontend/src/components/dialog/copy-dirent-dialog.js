@@ -14,6 +14,7 @@ const propTypes = {
   onItemCopy: PropTypes.func,
   onItemsCopy: PropTypes.func,
   onCancelCopy: PropTypes.func.isRequired,
+  currentRepoInfo:PropTypes.object.isRequired,
 };
 
 // need dirent file Path；
@@ -25,6 +26,7 @@ class CopyDirent extends React.Component {
       repo: null,
       selectedPath: '',
       errMessage: '',
+      mode:'',
     };
   }
 
@@ -148,7 +150,18 @@ class CopyDirent extends React.Component {
       errMessage: ''
     });
   }
-
+  componentWillMount(){
+    let encrypted = this.props.currentRepoInfo.encrypted
+    if(encrypted){
+      this.setState({
+        mode:'only_current_library'
+      })
+    }else{
+      this.setState({
+        mode:'current_repo_and_other_repos'
+      })
+    }
+  }
   render() {
     let title = gettext('Copy {placeholder} to:');
     if (!this.props.isMutipleOperation) {
@@ -164,7 +177,7 @@ class CopyDirent extends React.Component {
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
-            mode="current_repo_and_other_repos"
+            mode={this.state.mode}
           />
           {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>}
         </ModalBody>

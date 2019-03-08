@@ -107,7 +107,6 @@ class FileChooser extends React.Component {
     }
     const mode = this.props.mode;
     let libName = mode === 'current_repo_and_other_repos' ? gettext('Other Libraries') : gettext('Libraries');
-    let encrypted = this.state.currentRepoInfo.encrypted;
     return (
       <div className="file-chooser-container">
         {(mode === 'current_repo_and_other_repos' || mode === 'only_current_library') &&
@@ -130,7 +129,7 @@ class FileChooser extends React.Component {
             }
           </div>
         }
-        {mode !== 'only_current_library' && encrypted === false &&
+        {mode !== 'only_current_library' && 
           <div className="list-view">
             <div className="list-view-header">
               <span className={`item-toggle fa ${this.state.isOtherRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>
