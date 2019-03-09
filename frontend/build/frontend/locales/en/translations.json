@@ -41,7 +41,7 @@
   "star": "Add star",
   "unstar": "Remove star",
   "back_to_parent_directory":"Back to parent directory",
-  "edit":"edit",
+  "edit": "Edit",
   "copy": "Copy",
   "copied": "Copied",
   "internal_link": "Internal Link",
@@ -81,7 +81,8 @@
   "you_have_an_unsaved_draft_do_you_like_to_use_it": "You have an unsaved draft. Do you like to use it?",
   "local_draft_saved": "Local draft saved",
   "new_draft": "New Draft",
-  "edit_draft": "Edit Draft",
+  "view_draft": "View Draft",
+  "publish": "Publish",
   "this_file_has_a_draft": "This file has a draft.", 
   "delete": "Delete",
   "comments": "Comments",
@@ -101,11 +102,12 @@
   "related_file": "related file",
   "no_tags": "No tags",
   "no_related_files": "No related files",
+  "no_out_line": "No outline",
   "Please_use_Chrome_to_get_best_editing_experience": "Please use Chrome to get best editing experience.",
   "no_document_improvement_suggestion": "No document improvement suggestion",
   "markdownLint": {
     "missing_h1": {
-      "description": "There is no h1 in the article",
+      "description": "There is no h1 in the document",
       "issue" : "Missing h1"
     },
     "heading_end_with_colon": {

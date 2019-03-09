@@ -81,8 +81,9 @@
   "you_have_an_unsaved_draft_do_you_like_to_use_it": "有未保存的草稿，使用草稿吗？",
   "local_draft_saved": "本地草稿已保存",
   "new_draft": "创建草稿",
-  "edit_draft": "编辑草稿",
-  "this_file_has_a_draft": "这个文件有一个草稿.", 
+  "view_draft": "查看草稿",
+  "publish": "发布",
+  "this_file_has_a_draft": "这个文件有一个草稿.",
   "delete": "删除",
   "comments": "评论",
   "add_a_comment": "增加评论",
@@ -101,12 +102,13 @@
   "related_file": "相关文件",
   "no_tags": "没有标签",
   "no_related_files": "没有相关文件",
+  "no_out_line": "没有大纲",
   "Please_use_Chrome_to_get_best_editing_experience": "为了获得更好的编辑体验，请使用 Chrome 浏览器",
   "no_document_improvement_suggestion": "没有文档改进建议",
   "markdownLint": {
     "missing_h1": {
-      "description": "文档中缺少 h1",
-      "issue" : "缺少 h1"
+      "description": "文档缺少一级标题",
+      "issue" : "缺少一级标题"
     },
     "heading_end_with_colon": {
       "description": "标题末尾的标点符号不应该是冒号",
