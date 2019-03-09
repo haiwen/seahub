@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import RepoInfo from '../../models/repo-info';
 import RepoListView from './repo-list-view';
@@ -164,10 +164,12 @@ class FileChooser extends React.Component {
 
     let repoID = this.props.repoID;
     let isShowFile = this.props.isShowFile;
+    let mode = this.props.mode;
+    let searchRepo = mode === 'only_current_library' ? repoID : 'all';
 
     let queryData = {
       q: searchInfo,
-      search_repo: repoID ? repoID : 'all',
+      search_repo: searchRepo,
       search_ftypes: 'all',
       obj_type: isShowFile ? 'file' : 'dir',
     };
@@ -367,12 +369,14 @@ class FileChooser extends React.Component {
 
     return (
       <Fragment>
-        <div className="file-chooser-search-input">
-          <Input className="search-input" placeholder={gettext('Search...')} className="mb-2" type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
-          {this.state.searchInfo.length !== 0 && (
-            <span className="search-control attr-action-icon fas fa-times" onClick={this.onCloseSearching}></span>
-          )}
-        </div>
+        {isPro && (
+          <div className="file-chooser-search-input">
+            <Input className="search-input" placeholder={gettext('Search...')} className="mb-2" type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
+            {this.state.searchInfo.length !== 0 && (
+              <span className="search-control attr-action-icon fas fa-times" onClick={this.onCloseSearching}></span>
+            )}
+          </div>
+        )}
         {this.state.isSearching && (
           <div className="file-chooser-search-container">
             {this.renderSearchedView()}
