@@ -107,6 +107,7 @@ class FileContent extends React.Component {
     const videoJsOptions = {
       autoplay: false,
       controls: true,
+      preload: 'auto',
       sources: [{
         src: rawPath
       }]
