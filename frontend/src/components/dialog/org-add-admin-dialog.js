@@ -48,8 +48,8 @@ class AddOrgAdminDialog extends React.Component {
           />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.addOrgAdmin}>{gettext('Submit')}</Button>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
+          <Button color="primary" onClick={this.addOrgAdmin}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

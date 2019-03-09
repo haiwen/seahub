@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Input, ModalHeader, ModalBody, Label, Form, InputGroup, InputGroupAddon, FormGroup } from 'reactstrap';
+import { Button, Modal, Input, ModalHeader, ModalBody, ModalFooter, Label, Form, InputGroup, InputGroupAddon, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -132,9 +132,11 @@ class AddOrgUserDialog extends React.Component {
               <Label>{gettext('Confirm Password')}</Label>
               <Input className="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
-            <Button onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           </Form>
           <Label className="err-message">{gettext(this.state.errMessage)}</Label>
+          <ModalFooter>
+            <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          </ModalFooter>
         </ModalBody>
       </Modal>
     );
