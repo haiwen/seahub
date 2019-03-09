@@ -8,7 +8,7 @@ import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
 import ListRelatedFileDialog from './components/dialog/list-related-file-dialog';
 import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
 import ShareDialog from './components/dialog/share-dialog';
-import MarkdownViewerSlate from './components/viewer/markdown-viewer-slate'
+import MarkdownViewerSlate from '@seafile/seafile-editor/dist/viewer/markdown-viewer-slate';
 import io from "socket.io-client";
 import toaster from "@seafile/seafile-editor/dist/components/toast";
 import { serialize } from "@seafile/seafile-editor/dist/utils/slate2markdown";
