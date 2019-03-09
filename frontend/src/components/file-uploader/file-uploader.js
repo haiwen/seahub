@@ -5,6 +5,7 @@ import MD5 from 'MD5';
 import { enableResumableFileUpload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import { gettext } from '../../utils/constants';
 import UploadProgressDialog from './upload-progress-dialog';
 import UploadRemindDialog from '../dialog/upload-remind-dialog';
 import '../../css/file-uploader.css';
@@ -40,7 +41,8 @@ class FileUploader extends React.Component {
       isUploadProgressDialogShow: false,
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
-      uploadBitrate: '0'
+      uploadBitrate: '0',
+      allFilesUploaded: false,
     };
 
     this.uploadInput = React.createRef();
@@ -68,6 +70,7 @@ class FileUploader extends React.Component {
       fileParameterName: this.props.fileParameterName,
       generateUniqueIdentifier: this.generateUniqueIdentifier,
       forceChunkSize: true,
+      maxChunkRetries: 3,
     });
 
     this.resumable.assignBrowse(this.uploadInput.current, true);
@@ -331,19 +334,34 @@ class FileUploader extends React.Component {
     this.setState({uploadFileList: uploadFileList});
   }
 
-  onFileError = (file) => {
+  onFileError = (resumableFile, message) => {
+    let error = '';
+    if (!message) {
+      error = gettext('Network error');
+    } else {
+      error = message;
+    }
+
+    let uploadFileList = this.state.uploadFileList.map(item => {
+      if (item.resumableFile.uniqueIdentifier === resumableFile.uniqueIdentifier) {
+        item.resumableFile.error = error;
+      }
+      return item;
+    });
+    this.setState({uploadFileList: uploadFileList});
 
   }
 
   onComplete = () => {
     this.notifiedFolders = [];
+    this.setState({allFilesUploaded: true});
   }
 
   onPause = () => {
 
   }
 
-  onError = () => {
+  onError = (message) => {
 
   }
 
@@ -513,10 +531,11 @@ class FileUploader extends React.Component {
           <UploadProgressDialog
             uploadFileList={this.state.uploadFileList}
             totalProgress={this.state.totalProgress}
+            uploadBitrate={this.state.uploadBitrate}
+            allFilesUploaded={this.state.allFilesUploaded}
             onCloseUploadDialog={this.onCloseUploadDialog}
             onCancelAllUploading={this.onCancelAllUploading}
             onUploadCancel={this.onUploadCancel}
-            uploadBitrate={this.state.uploadBitrate}
           />
         }
       </Fragment>
