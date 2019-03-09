@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import RepoListView from './repo-list-view';
+import { Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import RepoInfo from '../../models/repo-info';
+import RepoListView from './repo-list-view';
+import Loading from '../loading';
+import SearchedListView from './searched-list-view';
 
 import '../../css/file-chooser.css';
 
@@ -28,11 +31,18 @@ class FileChooser extends React.Component {
       currentRepoInfo: null,
       selectedRepo: null,
       selectedPath: '',
+      isSearching: false,
+      isResultGot: false,
+      searchInfo: '',
+      searchResults: [],
     };
+    this.inputValue = '';
+    this.timer = null;
+    this.source = null;
   }
 
   componentDidMount() {
-    if (this.props.repoID) {
+    if (this.props.repoID) {  // current_repo_and_other_repos, only_current_library
       let repoID = this.props.repoID;
       seafileAPI.getRepoInfo(repoID).then(res => {
         // need to optimized
@@ -42,6 +52,24 @@ class FileChooser extends React.Component {
           selectedRepo: repoInfo
         });
         this.props.onRepoItemClick(repoInfo);
+      });
+    } else { // only_all_repos
+      seafileAPI.listRepos().then(res => {
+        let repos = res.data.repos;
+        let repoList = [];
+        let repoIdList = [];
+        for(let i = 0; i < repos.length; i++) {
+          if (repos[i].permission !== 'rw') {
+            continue;
+          }
+          if (repoIdList.indexOf(repos[i].repo_id) > -1) {
+            continue;
+          }
+          repoList.push(repos[i]);
+          repoIdList.push(repos[i].repo_id);
+        }
+        repoList = Utils.sortRepos(repoList, 'name', 'asc');
+        this.setState({repoList: repoList});
       });
     }
   }
@@ -101,55 +129,261 @@ class FileChooser extends React.Component {
     });
   }
 
-  render() {
-    if (!this.state.selectedRepo) {
-      return '';
+  onCloseSearching = () => {
+    this.setState({
+      isSearching: false,
+      isResultGot: false,
+      searchInfo: '',
+      searchResults: [],
+    });
+    this.inputValue = '';
+    this.timer = null;
+    this.source = null;
+  }
+
+  onSearchInfoChanged = (event) => {
+    let searchInfo = event.target.value.trim();
+    if (!this.state.searchResults.length && searchInfo.length > 0) {
+      this.setState({
+        isSearching: true,
+        isResultGot: false,
+      });
     }
-    const mode = this.props.mode;
-    let libName = mode === 'current_repo_and_other_repos' ? gettext('Other Libraries') : gettext('Libraries');
+    this.setState({searchInfo: searchInfo});
+    if (this.inputValue === searchInfo) {
+      return false;
+    }
+    this.inputValue = searchInfo;
+
+    if (this.inputValue === '' || this.getValueLength(this.inputValue) < 3) {
+      this.setState({
+        isResultGot: false,
+      });
+      return false;
+    }
+
+    let repoID = this.props.repoID;
+    let isShowFile = this.props.isShowFile;
+    let mode = this.props.mode;
+    let searchRepo = mode === 'only_current_library' ? repoID : 'all';
+
+    let queryData = {
+      q: searchInfo,
+      search_repo: searchRepo,
+      search_ftypes: 'all',
+      obj_type: isShowFile ? 'file' : 'dir',
+    };
+
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.timer = setTimeout(this.getSearchResult(queryData), 500);
+  }
+
+  getSearchResult = (queryData) => {
+    if (this.source) {
+      this.cancelRequest();
+    }
+
+    this.setState({isResultGot: false});
+
+    this.source = seafileAPI.getSource();
+    this.sendRequest(queryData, this.source.token);
+  }
+
+  sendRequest = (queryData, cancelToken) => {
+    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+      if (!res.data.total) {
+        this.setState({
+          searchResults: [],
+          isResultGot: true
+        });
+        this.source = null;
+        return;
+      }
+
+      let items = this.formatResultItems(res.data.results);
+      this.setState({
+        searchResults: items,
+        isResultGot: true
+      });
+      this.source = null;
+    }).catch(res => {
+      /* eslint-disable */
+      console.log(res);
+      /* eslint-enable */
+    });
+  }
+
+  cancelRequest = () => {
+    this.source.cancel('prev request is cancelled');
+  }
+
+  getValueLength = (str) => {
+    var i = 0, code, len = 0;
+    for (; i < str.length; i++) {
+      code = str.charCodeAt(i);
+      if (code == 10) { //solve enter problem
+        len += 2;
+      } else if (code < 0x007f) {
+        len += 1;
+      } else if (code >= 0x0080 && code <= 0x07ff) {
+        len += 2;
+      } else if (code >= 0x0800 && code <= 0xffff) {
+        len += 3;
+      }
+    }
+    return len;
+  }
+
+  formatResultItems = (data) => {
+    let items = [];
+    let length = data.length > 10 ? 10 : data.length;
+    for (let i = 0; i < length; i++) {
+      items[i] = {};
+      items[i]['index'] = [i];
+      items[i]['name'] = data[i].name;
+      items[i]['path'] = data[i].fullpath;
+      items[i]['repo_id'] = data[i].repo_id;
+      items[i]['repo_name'] = data[i].repo_name;
+      items[i]['is_dir'] = data[i].is_dir;
+      items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
+      items[i]['content'] = data[i].content_highlight;
+    }
+    return items;
+  }
+
+  onSearchedItemClick = (item) => {
+    item['type'] = item.is_dir ? 'dir' : 'file';
+    let repo = new RepoInfo(item);
+    this.props.onDirentItemClick(repo, item.path, item);
+  }
+
+  renderSearchedView = () => {
+    if (!this.state.isResultGot || this.getValueLength(this.inputValue) < 3) {
+      return (<Loading />);
+    }
+
+    if (this.state.isResultGot && this.state.searchResults.length === 0) {
+      return (<div className="search-result-none text-center">{gettext('No results matching.')}</div>);
+    }
+
+    if (this.state.isResultGot && this.state.searchResults.length > 0) {
+      return (<SearchedListView searchResults={this.state.searchResults} onItemClick={this.onSearchedItemClick}/>);
+    }
+  }
+ 
+  renderRepoListView = () => {
     return (
       <div className="file-chooser-container">
-        {(mode === 'current_repo_and_other_repos' || mode === 'only_current_library') &&
-          <div className="list-view">
-            <div className="list-view-header">
-              <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
-              <span className="library">{gettext('Current Library')}</span>
+        {this.props.mode === 'current_repo_and_other_repos' && (
+          <Fragment>
+            <div className="list-view">
+              <div className="list-view-header">
+                <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
+                <span className="library">{gettext('Current Library')}</span>
+              </div>
+              {
+                this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
+                <RepoListView 
+                  initToShowChildren={true}
+                  currentRepoInfo={this.state.currentRepoInfo}
+                  selectedRepo={this.state.selectedRepo}
+                  selectedPath={this.state.selectedPath}
+                  onRepoItemClick={this.onRepoItemClick} 
+                  onDirentItemClick={this.onDirentItemClick}
+                  isShowFile={this.props.isShowFile}
+                />
+              }
             </div>
-            {
-              this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
-              <RepoListView 
-                initToShowChildren={true}
-                currentRepoInfo={this.state.currentRepoInfo}
-                selectedRepo={this.state.selectedRepo}
-                selectedPath={this.state.selectedPath}
-                onRepoItemClick={this.onRepoItemClick} 
-                onDirentItemClick={this.onDirentItemClick}
-                isShowFile={this.props.isShowFile}
-              />
-            }
-          </div>
-        }
-        {mode !== 'only_current_library' &&
-          <div className="list-view">
-            <div className="list-view-header">
-              <span className={`item-toggle fa ${this.state.isOtherRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>
-              <span className="library">{libName}</span>
+            <div className="list-view">
+              <div className="list-view-header">
+                <span className={`item-toggle fa ${this.state.isOtherRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>
+                <span className="library">{gettext('Other Libraries')}</span>
+              </div>
+              {
+                this.state.isOtherRepoShow && 
+                <RepoListView 
+                  initToShowChildren={false}
+                  repoList={this.state.repoList}
+                  selectedRepo={this.state.selectedRepo}
+                  selectedPath={this.state.selectedPath}
+                  onRepoItemClick={this.onRepoItemClick} 
+                  onDirentItemClick={this.onDirentItemClick}
+                  isShowFile={this.props.isShowFile}
+                /> 
+              }
             </div>
-            {
-              this.state.isOtherRepoShow && 
-              <RepoListView 
-                initToShowChildren={false}
-                repoList={this.state.repoList}
-                selectedRepo={this.state.selectedRepo}
-                selectedPath={this.state.selectedPath}
-                onRepoItemClick={this.onRepoItemClick} 
-                onDirentItemClick={this.onDirentItemClick}
-                isShowFile={this.props.isShowFile}
-              /> 
-            }
+          </Fragment>
+        )}
+        {this.props.mode === 'only_current_library' && (
+          <div className="file-chooser-container">
+            <div className="list-view">
+              <div className="list-view-header">
+                <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
+                <span className="library">{gettext('Current Library')}</span>
+              </div>
+              {
+                this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
+                <RepoListView 
+                  initToShowChildren={true}
+                  currentRepoInfo={this.state.currentRepoInfo}
+                  selectedRepo={this.state.selectedRepo}
+                  selectedPath={this.state.selectedPath}
+                  onRepoItemClick={this.onRepoItemClick} 
+                  onDirentItemClick={this.onDirentItemClick}
+                  isShowFile={this.props.isShowFile}
+                />
+              }
+            </div>
           </div>
-        }
+        )}
+        {this.props.mode === 'only_all_repos' && (
+          <div className="file-chooser-container">
+            <div className="list-view">
+              <div className="list-view-header">
+                <span className="item-toggle fa fa-caret-down"></span>
+                <span className="library">{gettext('Libraries')}</span>
+              </div>
+                <RepoListView 
+                  initToShowChildren={false}
+                  repoList={this.state.repoList}
+                  selectedRepo={this.state.selectedRepo}
+                  selectedPath={this.state.selectedPath}
+                  onRepoItemClick={this.onRepoItemClick} 
+                  onDirentItemClick={this.onDirentItemClick}
+                  isShowFile={this.props.isShowFile}
+                /> 
+            </div>
+          </div>
+        )}
       </div>
+    );
+  }
+
+  render() {
+    if (!this.state.selectedRepo && this.props.repoID) {
+      return '';
+    }
+
+    return (
+      <Fragment>
+        {isPro && (
+          <div className="file-chooser-search-input">
+            <Input className="search-input" placeholder={gettext('Search...')} className="mb-2" type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
+            {this.state.searchInfo.length !== 0 && (
+              <span className="search-control attr-action-icon fas fa-times" onClick={this.onCloseSearching}></span>
+            )}
+          </div>
+        )}
+        {this.state.isSearching && (
+          <div className="file-chooser-search-container">
+            {this.renderSearchedView()}
+          </div>
+        )}
+        {!this.state.isSearching && this.renderRepoListView()}
+      </Fragment>
     );
   }
 }
