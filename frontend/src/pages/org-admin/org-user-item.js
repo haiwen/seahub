@@ -136,7 +136,7 @@ class UserItem extends React.Component {
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
                 tag="a"
-                className="fas fa-ellipsis-v"
+                className="attr-action-icon fas fa-ellipsis-v"
                 title={gettext('More Operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isItemMenuShow}
