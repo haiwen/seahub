@@ -696,7 +696,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['raw_path'] = raw_path
         send_file_access_msg(request, repo, path, 'web')
 
-        if filetype == VIDEO:
+        if filetype in (VIDEO, PDF):
             template = '%s_file_view_react.html' % filetype.lower()
         return render(request, template, return_dict)
 
@@ -1238,7 +1238,7 @@ def view_shared_file(request, fileshare):
 
     template = 'shared_file_view.html'
 
-    if is_textual_file(file_type=filetype) or filetype in (IMAGE, VIDEO):
+    if is_textual_file(file_type=filetype) or filetype in (IMAGE, VIDEO, PDF):
         template = 'shared_file_view_react.html'
 
     return render(request, template, {

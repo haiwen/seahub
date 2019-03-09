@@ -175,12 +175,14 @@ function getViewerConfiguration() {
       spreadEvenButton: document.getElementById('spreadEven'),
       documentPropertiesButton: document.getElementById('documentProperties')
     },
+    /*
     fullscreen: {
       contextFirstPage: document.getElementById('contextFirstPage'),
       contextLastPage: document.getElementById('contextLastPage'),
       contextPageRotateCw: document.getElementById('contextPageRotateCw'),
       contextPageRotateCcw: document.getElementById('contextPageRotateCcw')
     },
+    */
     sidebar: {
       outerContainer: document.getElementById('outerContainer'),
       viewerContainer: document.getElementById('viewerContainer'),
