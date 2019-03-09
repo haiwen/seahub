@@ -10,6 +10,7 @@ const propTypes = {
   onCloseUploadDialog: PropTypes.func.isRequired,
   onCancelAllUploading: PropTypes.func.isRequired,
   onUploadCancel: PropTypes.func.isRequired,
+  allFilesUploaded: PropTypes.bool.isRequired,
 };
 
 class UploadProgressDialog extends React.Component {
@@ -70,7 +71,7 @@ class UploadProgressDialog extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {(this.props.totalProgress !== 100) && 
+              {(!this.props.allFilesUploaded) && 
                 <tr><td className="text-right" colSpan={3}><span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span></td></tr>
               }
               {
