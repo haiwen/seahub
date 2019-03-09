@@ -47,6 +47,9 @@
                 {% elif notice.is_add_user_to_group %}
                 <p class="brief">{{ notice.format_add_user_to_group|safe }}</p>
 
+                {% elif notice.is_repo_transfer_msg %}
+                <p class="brief">{{ notice.format_repo_transfer_msg|safe }}</p>
+
                 {% endif %}
             </td>
             <td>{{ notice.timestamp|translate_seahub_time }}</td>

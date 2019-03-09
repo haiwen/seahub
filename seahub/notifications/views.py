@@ -199,4 +199,14 @@ def add_notice_from_info(notices):
             except Exception as e:
                 logger.error(e)
 
+        elif notice.is_repo_transfer_msg():
+            try:
+                d = json.loads(notice.detail)
+                notice.msg_from = d['repo_owner']
+            except Exception as e:
+                logger.error(e)
+
+        elif notice.is_file_uploaded_msg():
+            notice.msg_from = ''
+
     return notices
