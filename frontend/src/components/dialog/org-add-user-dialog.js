@@ -18,7 +18,8 @@ class AddOrgUserDialog extends React.Component {
       name: '',
       password: '',
       passwdnew: '',
-      errMessage: ''
+      errMessage: '',
+      isAddingUser: false,
     };
   }
 
@@ -26,7 +27,8 @@ class AddOrgUserDialog extends React.Component {
     let isValid = this.validateInputParams();
     if (isValid) {
       let { email, name, password } = this.state;
-      this.props.handleSubmit(email, name, password);
+      this.setState({isAddingUser: true});
+      // this.props.handleSubmit(email, name, password);
     }
   } 
 
@@ -138,10 +140,10 @@ class AddOrgUserDialog extends React.Component {
             </FormGroup>
           </Form>
           <Label className="err-message">{gettext(this.state.errMessage)}</Label>
-          <ModalFooter>
-            <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
-          </ModalFooter>
         </ModalBody>
+        <ModalFooter>
+          <Button color="primary" disabled={this.state.isAddingUser} onClick={this.handleSubmit} className={this.state.isAddingUser ? 'btn-loading' : ''}>{gettext('Submit')}</Button>
+        </ModalFooter>
       </Modal>
     );
   }
