@@ -22,6 +22,7 @@ from seahub.base.accounts import User, ANONYMOUS_EMAIL
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import gen_inner_file_get_url, \
     gen_inner_file_upload_url, is_pro_version
+from seahub.utils.file_op import ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.settings import SITE_ROOT
 
 from seahub.wopi.utils import get_file_info_by_token
@@ -55,19 +56,49 @@ def generate_file_lock_key_value(request):
     return lock_cache_key, x_wopi_lock
 
 def lock_file(request):
+
+    token = request.GET.get('access_token', None)
+    info_dict = get_file_info_by_token(token)
+    repo_id = info_dict['repo_id']
+    file_path= info_dict['file_path']
+
+    seafile_api.lock_file(repo_id, file_path, ONLINE_OFFICE_LOCK_OWNER, 0)
+
     key, value = generate_file_lock_key_value(request)
     cache.set(key, value, WOPI_LOCK_EXPIRATION)
 
 def unlock_file(request):
+
+    token = request.GET.get('access_token', None)
+    info_dict = get_file_info_by_token(token)
+    repo_id = info_dict['repo_id']
+    file_path= info_dict['file_path']
+
+    seafile_api.unlock_file(repo_id, file_path)
+
     key, value = generate_file_lock_key_value(request)
     cache.delete(key)
 
 def refresh_file_lock(request):
-    lock_file(request)
+
+    token = request.GET.get('access_token', None)
+    info_dict = get_file_info_by_token(token)
+    repo_id = info_dict['repo_id']
+    file_path= info_dict['file_path']
+
+    seafile_api.refresh_file_lock(repo_id, file_path)
+
+    key, value = generate_file_lock_key_value(request)
+    cache.set(key, value, WOPI_LOCK_EXPIRATION)
 
 def file_is_locked(request):
-    key, value = generate_file_lock_key_value(request)
-    return True if cache.get(key, '') else False
+
+    token = request.GET.get('access_token', None)
+    info_dict = get_file_info_by_token(token)
+    repo_id = info_dict['repo_id']
+    file_path= info_dict['file_path']
+
+    return if_locked_by_online_office(repo_id, file_path)
 
 def get_current_lock_id(request):
     key, value = generate_file_lock_key_value(request)

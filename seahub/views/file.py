@@ -791,15 +791,6 @@ def view_lib_file(request, repo_id, path):
                     can_download=parse_repo_perm(permission).can_download)
 
             if wopi_dict:
-                if is_pro_version() and action_name == 'edit':
-                    try:
-                        if not is_locked:
-                            seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
-                        elif locked_by_online_office:
-                            seafile_api.refresh_file_lock(repo_id, path)
-                    except Exception as e:
-                        logger.error(e)
-
                 send_file_access_msg(request, repo, path, 'web')
                 return render(request, 'view_file_wopi.html', wopi_dict)
             else:
