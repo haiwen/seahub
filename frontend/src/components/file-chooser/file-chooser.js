@@ -143,22 +143,32 @@ class FileChooser extends React.Component {
 
   onSearchInfoChanged = (event) => {
     let searchInfo = event.target.value.trim();
+
+    this.setState({searchInfo: searchInfo});
+
+    if (this.inputValue === searchInfo) {
+      return false;
+    }
+
+    this.inputValue = searchInfo;
+
+    if (searchInfo.length === 0) {
+      this.setState({
+        isSearching: false,
+        searchResults: [],
+      });
+      return false;
+    }
+
     if (!this.state.searchResults.length && searchInfo.length > 0) {
       this.setState({
         isSearching: true,
         isResultGot: false,
       });
     }
-    this.setState({searchInfo: searchInfo});
-    if (this.inputValue === searchInfo) {
-      return false;
-    }
-    this.inputValue = searchInfo;
 
     if (this.inputValue === '' || this.getValueLength(this.inputValue) < 3) {
-      this.setState({
-        isResultGot: false,
-      });
+      this.setState({isResultGot: false});
       return false;
     }
 
