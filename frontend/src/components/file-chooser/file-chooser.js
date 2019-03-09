@@ -32,9 +32,9 @@ class FileChooser extends React.Component {
       selectedRepo: null,
       selectedPath: '',
       isSearching: false,
-      isResultGetted: false,
+      isResultGot: false,
       searchInfo: '',
-      searchedResult: [],
+      searchResults: [],
     };
     this.inputValue = '';
     this.timer = null;
@@ -132,9 +132,9 @@ class FileChooser extends React.Component {
   onCloseSearching = () => {
     this.setState({
       isSearching: false,
-      isResultGetted: false,
+      isResultGot: false,
       searchInfo: '',
-      searchedResult: [],
+      searchResults: [],
     });
     this.inputValue = '';
     this.timer = null;
@@ -143,10 +143,10 @@ class FileChooser extends React.Component {
 
   onSearchInfoChanged = (event) => {
     let searchInfo = event.target.value.trim();
-    if (!this.state.searchedResult.length && searchInfo.length > 0) {
+    if (!this.state.searchResults.length && searchInfo.length > 0) {
       this.setState({
         isSearching: true,
-        isResultGetted: false,
+        isResultGot: false,
       });
     }
     this.setState({searchInfo: searchInfo});
@@ -157,7 +157,7 @@ class FileChooser extends React.Component {
 
     if (this.inputValue === '' || this.getValueLength(this.inputValue) < 3) {
       this.setState({
-        isResultGetted: false,
+        isResultGot: false,
       });
       return false;
     }
@@ -182,11 +182,11 @@ class FileChooser extends React.Component {
   }
 
   getSearchResult = (queryData) => {
-    if(this.source){
+    if (this.source) {
       this.cancelRequest();
     }
 
-    this.setState({isResultGetted: false});
+    this.setState({isResultGot: false});
 
     this.source = seafileAPI.getSource();
     this.sendRequest(queryData, this.source.token);
@@ -196,8 +196,8 @@ class FileChooser extends React.Component {
     seafileAPI.searchFiles(queryData, cancelToken).then(res => {
       if (!res.data.total) {
         this.setState({
-          searchedResult: [],
-          isResultGetted: true
+          searchResults: [],
+          isResultGot: true
         });
         this.source = null;
         return;
@@ -205,8 +205,8 @@ class FileChooser extends React.Component {
 
       let items = this.formatResultItems(res.data.results);
       this.setState({
-        searchedResult: items,
-        isResultGetted: true
+        searchResults: items,
+        isResultGot: true
       });
       this.source = null;
     }).catch(res => {
@@ -261,16 +261,16 @@ class FileChooser extends React.Component {
   }
 
   renderSearchedView = () => {
-    if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
+    if (!this.state.isResultGot || this.getValueLength(this.inputValue) < 3) {
       return (<Loading />);
     }
 
-    if (this.state.isResultGetted && this.state.searchedResult.length === 0) {
+    if (this.state.isResultGot && this.state.searchResults.length === 0) {
       return (<div className="search-result-none text-center">{gettext('No results matching.')}</div>);
     }
 
-    if (this.state.isResultGetted && this.state.searchedResult.length > 0) {
-      return (<SearchedListView searchedResult={this.state.searchedResult} onItemClick={this.onSearchedItemClick}/>);
+    if (this.state.isResultGot && this.state.searchResults.length > 0) {
+      return (<SearchedListView searchResults={this.state.searchResults} onItemClick={this.onSearchedItemClick}/>);
     }
   }
  

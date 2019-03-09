@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SearchedListItem from './searched-list-item';
 
 const propTypes = {
-  searchedResult: PropTypes.array.isRequired,
+  searchResults: PropTypes.array.isRequired,
   onItemClick: PropTypes.func.isRequired,
 };
 
@@ -31,7 +31,7 @@ class SearchedListView extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {this.props.searchedResult.map((item, index) => {
+          {this.props.searchResults.map((item, index) => {
             return (<SearchedListItem key={index} item={item} currentItem={this.state.currentItem} onItemClick={this.onItemClick} />);
           })}
         </tbody>
