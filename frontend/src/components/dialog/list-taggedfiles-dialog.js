@@ -139,7 +139,6 @@ class TaggedFile extends React.Component {
   }
 
   render() {
-    console.log(this)
     const taggedFile = this.props.taggedFile;
     let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
     let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
