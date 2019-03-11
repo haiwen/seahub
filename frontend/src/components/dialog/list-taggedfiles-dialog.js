@@ -28,7 +28,7 @@ class ListTaggedFilesDialog extends React.Component {
     let tagName = this.props.currentTag.name;
     let fileTagID = taggedFile.file_tag_id;
     let filePath = `${taggedFile.parent_path}/${taggedFile.filename}`;
-    if (fileTagID === undefined || fileTagID === null) {
+    if (!fileTagID) {
       seafileAPI.listFileTags(repoID, filePath).then(res => {
         let repoTagName = [];
         res.data.file_tags.map((fileTag) => {
@@ -39,8 +39,7 @@ class ListTaggedFilesDialog extends React.Component {
         fileTagID = repoTagName[0].file_tag_id;
         this.deleteTagFile(repoID, fileTagID);
       })
-    }
-    else {
+    } else {
       this.deleteTagFile(repoID, fileTagID);
     }
   }
