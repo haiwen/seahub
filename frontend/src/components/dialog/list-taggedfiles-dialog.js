@@ -31,10 +31,8 @@ class ListTaggedFilesDialog extends React.Component {
     if (!fileTagID) {
       seafileAPI.listFileTags(repoID, filePath).then(res => {
         let repoTagName = [];
-        res.data.file_tags.filter((fileTag) => {
-          if (tagName === fileTag.tag_name) {
-            repoTagName.push(fileTag);
-          }
+        repoTagName = res.data.file_tags.filter((fileTag) => {
+          return tagName === fileTag.tag_name;
         });
         fileTagID = repoTagName[0].file_tag_id;
         this.deleteTagFile(repoID, fileTagID);
