@@ -131,6 +131,7 @@ class LibContentContainer extends React.Component {
               pathPrefix={this.props.pathPrefix}
               currentPath={this.props.path} 
               permission={this.props.repoPermission} 
+              isViewFile={this.props.isViewFile}
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
               updateUsedRepoTags={this.props.updateUsedRepoTags}

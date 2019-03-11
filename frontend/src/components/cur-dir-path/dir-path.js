@@ -81,7 +81,7 @@ class DirPath extends React.Component {
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}
-        { this.props.isViewFile && 
+        {this.props.isViewFile && 
           <InternalLinkDialog 
             repoID={this.props.repoID}
             path={this.props.currentPath}
