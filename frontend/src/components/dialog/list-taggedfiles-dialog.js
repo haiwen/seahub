@@ -132,10 +132,11 @@ class TaggedFile extends React.Component {
         <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
       </tr>
       :
-      <tr>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="name"><a href={href} target='_blank'>{taggedFile.filename}</a></td>
         <td>{Utils.bytesToSize(taggedFile.size)}</td>
-        <td colSpan='2'>{moment.unix(taggedFile.mtime).fromNow()}</td>
+        <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
+        <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
       </tr>
     );
   }
