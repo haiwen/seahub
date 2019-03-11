@@ -25,11 +25,26 @@ class ListTaggedFilesDialog extends React.Component {
 
   onDeleteTaggedFile = (taggedFile) => {
     let repoID = this.props.repoID;
+    let tagName = this.props.currentTag.name;
     let fileTagID = taggedFile.file_tag_id;
-    seafileAPI.deleteFileTag(repoID, fileTagID).then(res => {
-      this.getTaggedFiles();
-      this.props.updateUsedRepoTags();
-    });
+    let filePath = `${taggedFile.parent_path}${taggedFile.filename}`;
+    if(fileTagID === undefined || fileTagID === null){
+      seafileAPI.listFileTags(repoID,filePath).then(res => {
+        let repoTagList = [];
+        let repoTagName=[];
+        repoTagList=res.data.file_tags;
+        repoTagList.map((fileTag) => {
+          if(tagName === fileTag.tag_name){
+            repoTagName.push(fileTag)
+          }
+        });
+        fileTagID = repoTagName[0].file_tag_id;
+        seafileAPI.deleteFileTag(repoID, fileTagID).then(res => {
+          this.getTaggedFiles();
+          this.props.updateUsedRepoTags();
+        });
+      })
+    }
   }
 
   componentDidMount() {
@@ -121,14 +136,15 @@ class TaggedFile extends React.Component {
 
   render() {
     const taggedFile = this.props.taggedFile;
+    taggedFile.file_deleted=true;
     let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
     let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
     let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
     return ( taggedFile.file_deleted ?
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td colSpan='3' className="name">{taggedFile.filename}{' '}
-          <span style={{color:"red"}}>{gettext('deleted')}</span>
-        </td>
+       <td className="name"><a href={href} target='_blank'>{taggedFile.filename}</a></td>
+        <td>{Utils.bytesToSize(taggedFile.size)}</td>
+        <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
         <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
       </tr>
       :
