@@ -24,7 +24,7 @@ class MainPanel extends Component {
         <div className="main-panel-north border-left-show">
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
-            <div className="operation mt-1">
+            <div className="operation">
               {this.props.currentTab === 'users' &&
               <button className="btn btn-secondary operation-item" title={gettext('Add user')} onClick={this.toggleAddOrgUser}>
                 <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add user')}
