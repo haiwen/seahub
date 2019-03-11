@@ -10,9 +10,11 @@ import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
 import ShareDialog from './components/dialog/share-dialog';
 import MarkdownViewerSlate from '@seafile/seafile-editor/dist/viewer/markdown-viewer-slate';
 import io from "socket.io-client";
-import toaster from "@seafile/seafile-editor/dist/components/toast";
+import toaster from "./components/toast";
 import { serialize } from "@seafile/seafile-editor/dist/utils/slate2markdown";
 import LocalDraftDialog from "@seafile/seafile-editor/dist/components/local-draft-dialog";
+import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
+
 const CryptoJS = require('crypto-js');
 const { repoID, repoName, filePath, fileName, mode, draftID, draftFilePath, draftOriginFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
@@ -294,6 +296,9 @@ class MarkdownEditor extends React.Component {
       showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
+      isShowHistory: false,
+      isShowComments: false,
+      commentsNumber: null,
     };
 
     if (this.state.collabServer) {
@@ -561,6 +566,7 @@ class MarkdownEditor extends React.Component {
     this.checkDraft();
     this.listRelatedFiles();
     this.listFileTags();
+    this.getCommentsNumber();
   }
 
   listRelatedFiles = () => {
@@ -643,6 +649,45 @@ class MarkdownEditor extends React.Component {
     }
   }
 
+  backToParentDirectory = () => {
+    window.location.href = editorUtilities.getParentDectionaryUrl();
+  }
+
+  onEdit = (event) => {
+    event.preventDefault();
+    this.setEditorMode('rich');
+  }
+
+  toggleShareLinkDialog = () => {
+    this.openDialogs('share_link');
+  }
+
+  toggleHistory = () => {
+    this.setState({ isShowHistory: !this.state.isShowHistory });
+  }
+
+  toggleCommentList = () => {
+    if (this.state.isShowHistory) {
+      this.setState({ isShowHistory: false, isShowComments: true });
+    }
+    else {
+      this.setState({ isShowComments: !this.state.isShowComments });
+    }
+  }
+
+  getCommentsNumber = () => {
+    editorUtilities.getCommentsNumber().then((res) => {
+      let commentsNumber = res.data[Object.getOwnPropertyNames(res.data)[0]];
+      this.setState({
+        commentsNumber: commentsNumber
+      });
+    });
+  }
+
+  onCommentAdded = () => {
+    this.getCommentsNumber();
+  }
+
   render() {
     let component;
     if (this.state.loading) {
@@ -654,27 +699,55 @@ class MarkdownEditor extends React.Component {
     } else if (this.state.mode === 'editor') {
         if (this.state.editorMode === 'viewer') {
           component = (
-            <MarkdownViewerSlate
-              fileInfo={this.state.fileInfo}
-              markdownContent={this.state.markdownContent}
-              editorUtilities={editorUtilities}
-              collabUsers={this.state.collabUsers}
-              showFileHistory={true}
-              setFileInfoMtime={this.setFileInfoMtime}
-              toggleStar={this.toggleStar}
-              setEditorMode={this.setEditorMode}
-              draftID={draftID}
-              isDraft={isDraft}
-              emitSwitchEditor={this.emitSwitchEditor}
-              hasDraft={hasDraft}
-              shareLinkExpireDaysMin={shareLinkExpireDaysMin}
-              shareLinkExpireDaysMax={shareLinkExpireDaysMax}
-              relatedFiles={this.state.relatedFiles}
-              siteRoot={siteRoot}
-              openDialogs={this.openDialogs}
-              fileTagList={this.state.fileTagList}
-              showDraftSaved={this.state.showDraftSaved}
-            />
+            <div className="seafile-md-viewer d-flex flex-column">
+              <MarkdownViewerToolbar
+                hasDraft={hasDraft}
+                isDraft={isDraft}
+                editorUtilities={editorUtilities}
+                collabUsers={this.state.collabUsers}
+                fileInfo={this.state.fileInfo}
+                toggleStar={this.toggleStar}
+                backToParentDirectory={this.backToParentDirectory}
+                openDialogs={this.openDialogs}
+                fileTagList={this.state.fileTagList}
+                relatedFiles={this.state.relatedFiles}
+                commentsNumber={this.state.commentsNumber}
+                toggleCommentList={this.toggleCommentList}
+                toggleShareLinkDialog={this.toggleShareLinkDialog}
+                onEdit={this.onEdit}
+                showFileHistory={true}
+                toggleHistory={this.toggleHistory}
+                toggleNewDraft={editorUtilities.createDraftFile}
+              />
+              <MarkdownViewerSlate
+                fileInfo={this.state.fileInfo}
+                markdownContent={this.state.markdownContent}
+                editorUtilities={editorUtilities}
+                collabUsers={this.state.collabUsers}
+                showFileHistory={true}
+                setFileInfoMtime={this.setFileInfoMtime}
+                toggleStar={this.toggleStar}
+                setEditorMode={this.setEditorMode}
+                draftID={draftID}
+                isDraft={isDraft}
+                emitSwitchEditor={this.emitSwitchEditor}
+                hasDraft={hasDraft}
+                shareLinkExpireDaysMin={shareLinkExpireDaysMin}
+                shareLinkExpireDaysMax={shareLinkExpireDaysMax}
+                relatedFiles={this.state.relatedFiles}
+                siteRoot={siteRoot}
+                openDialogs={this.openDialogs}
+                fileTagList={this.state.fileTagList}
+                showDraftSaved={this.state.showDraftSaved}
+                isShowHistory={this.state.isShowHistory}
+                isShowComments={this.state.isShowComments}
+                onCommentAdded={this.onCommentAdded}
+                commentsNumber={this.state.commentsNumber}
+                getCommentsNumber={this.getCommentsNumber}
+                toggleHistory={this.toggleHistory}
+                toggleCommentList={this.toggleCommentList}
+              />
+            </div>
           )
         } else {
           component = <SeafileEditor
