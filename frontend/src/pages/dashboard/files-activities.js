@@ -122,6 +122,11 @@ class ActivityItem extends Component {
           details = <td>{libLink}</td>;
           break;
       }
+    } else if (item.obj_type == 'draft') {
+      let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
+      let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
+      op = gettext('Publish draft');
+      details = <td>{fileLink}<br />{smallLibLink}</td>;
     } else if (item.obj_type == 'files') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
       let fileLink = `<a href=${fileURL} target="_blank">${item.name}</a>`;
@@ -262,13 +267,16 @@ class FilesActivities extends Component {
       items: [],
     };
     this.avatarSize = 72;
+    this.curPathList = [];
+    this.oldPathList = [];
   }
 
   componentDidMount() {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
-      let events = this.mergeFileCreateEvents(res.data.events);
+      let events = this.mergePublishEvents(res.data.events);
+      events = this.mergeFileCreateEvents(events);
       this.setState({
         items: events,
         currentPage: currentPage + 1,
@@ -286,6 +294,32 @@ class FilesActivities extends Component {
         });
       }
     });
+  }
+
+  mergePublishEvents = (events) => {
+    events.map((item) => {
+      if (item.op_type === 'publish') {
+        this.curPathList.push(item.path);
+        this.oldPathList.push(item.old_path);
+      }
+    });
+    let actuallyEvents = [];
+    for (var i = 0; i < events.length; i++) {
+      if (events[i].obj_type === 'file') {
+        if (events[i].op_type === 'delete' && this.oldPathList.includes(events[i].path)) {
+          this.oldPathList.splice(this.oldPathList.indexOf(events[i].path), 1);
+        } else if (events[i].op_type === 'edit' && this.curPathList.includes(events[i].path)) {
+          this.curPathList.splice(this.curPathList.indexOf(events[i].path), 1);
+        } else if (events[i].op_type === 'rename' && this.oldPathList.includes(events[i].old_path)) {
+          this.oldPathList.splice(this.oldPathList.indexOf(events[i].old_path), 1);
+        } else {
+          actuallyEvents.push(events[i]);
+        }
+      } else {
+        actuallyEvents.push(events[i]);
+      }
+    }
+    return actuallyEvents;
   }
 
   mergeFileCreateEvents = (events) => {
@@ -326,7 +360,8 @@ class FilesActivities extends Component {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
-      let events = this.mergeFileCreateEvents(res.data.events);
+      let events = this.mergePublishEvents(res.data.events);
+      events = this.mergeFileCreateEvents(events);
       this.setState({
         isLoadingMore: false,
         items: [...this.state.items, ...events],

@@ -4,6 +4,7 @@ import logging
 import posixpath
 
 from seaserv import seafile_api
+from seaserv import send_message
 
 from seahub.utils import normalize_file_path, check_filename_with_rename
 from seahub.tags.models import FileUUIDMap
@@ -100,3 +101,20 @@ def get_file_draft(repo_id, file_path, is_draft=False, has_draft=False):
         draft['draft_file_path'] = d.draft_file_path
 
     return draft
+
+
+def send_draft_publish_msg(draft, username, path):
+    """
+    send draft publish msg to seafevents
+    """
+
+    repo_id = draft.origin_repo_id
+    old_path = draft.draft_file_path
+
+    msg = '%s\t%s\t%s\t%s\t%s\t%s' % ("publish", "draft", repo_id, username, path, old_path)
+    msg_utf8 = msg.encode('utf-8')
+
+    try:
+        send_message('seahub.draft', msg_utf8)
+    except Exception as e:
+        logger.error("Error when sending draft publish message: %s" % str(e))
