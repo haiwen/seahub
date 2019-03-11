@@ -33,8 +33,12 @@ const propTypes = {
   onItemDetails: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
+  showImagePopup: PropTypes.func.isRequired,
   currentRepoInfo: PropTypes.object,
   isRepoOwner: PropTypes.bool,
+  isAdmin: PropTypes.bool.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -429,7 +433,7 @@ class DirentListItem extends React.Component {
               isMutipleOperation={this.state.isMutipleOperation}
               onItemMove={this.props.onItemMove}
               onCancelMove={this.onItemMoveToggle}
-              currentRepoInfo={this.props.currentRepoInfo}
+              repoEncrypted={this.props.repoEncrypted}
             />
           </ModalPortal>
         }
@@ -442,7 +446,7 @@ class DirentListItem extends React.Component {
               isMutipleOperation={this.state.isMutipleOperation}
               onItemCopy={this.props.onItemCopy}
               onCancelCopy={this.onItemCopyToggle}
-              currentRepoInfo={this.props.currentRepoInfo}
+              repoEncrypted={this.props.repoEncrypted}
             />
           </ModalPortal>
         }

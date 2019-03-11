@@ -14,7 +14,7 @@ const propTypes = {
   onItemMove: PropTypes.func,
   onItemsMove: PropTypes.func,
   onCancelMove: PropTypes.func.isRequired,
-  currentRepoInfo:PropTypes.object.isRequired,
+  repoEncrypted: PropTypes.object.isRequired,
 };
 
 // need dirent file Path；
@@ -157,7 +157,7 @@ class MoveDirent extends React.Component {
     } else {
       title = gettext('Move selected item(s) to:');
     }
-    let mode = this.props.currentRepoInfo.encrypted ? 'only_current_library':'current_repo_and_other_repos'
+    let mode = this.props.repoEncrypted ? 'only_current_library':'current_repo_and_other_repos'
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>

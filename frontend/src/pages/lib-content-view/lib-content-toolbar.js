@@ -107,6 +107,7 @@ class LibContentToolbar extends React.Component {
               <MutipleDirOperationToolbar
                 repoID={this.props.repoID} 
                 path={this.props.path}
+                repoEncrypted={this.props.repoEncrypted}
                 selectedDirentList={this.props.selectedDirentList}
                 onItemsMove={this.props.onItemsMove}
                 onItemsCopy={this.props.onItemsCopy}

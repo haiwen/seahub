@@ -12,6 +12,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
@@ -106,6 +107,7 @@ class MutipleDirOperationToolbar extends React.Component {
           <MoveDirentDialog 
             path={this.props.path}
             repoID={this.props.repoID}
+            repoEncrypted={this.props.repoEncrypted}
             isMutipleOperation={this.state.isMutipleOperation}
             selectedDirentList={this.props.selectedDirentList}
             onItemsMove={this.props.onItemsMove}
@@ -116,6 +118,7 @@ class MutipleDirOperationToolbar extends React.Component {
           <CopyDirentDialog
             path={this.props.path}
             repoID={this.props.repoID}
+            repoEncrypted={this.props.repoEncrypted}
             selectedDirentList={this.props.selectedDirentList}
             isMutipleOperation={this.state.isMutipleOperation}
             onItemsCopy={this.props.onItemsCopy}
