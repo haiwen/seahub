@@ -130,7 +130,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_pdf.html')
+        self.assertTemplateUsed(resp, 'pdf_file_view_react.html')
         assert resp.context['filetype'].lower() == 'pdf'
 
         # token for doc file is one time only
