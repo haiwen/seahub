@@ -28,7 +28,7 @@ class AddOrgUserDialog extends React.Component {
     if (isValid) {
       let { email, name, password } = this.state;
       this.setState({isAddingUser: true});
-      // this.props.handleSubmit(email, name, password);
+      this.props.handleSubmit(email, name, password);
     }
   } 
 
@@ -127,7 +127,7 @@ class AddOrgUserDialog extends React.Component {
             <FormGroup>
               <Label for="userPwd">{gettext('Password')}</Label>
               <InputGroup className="passwd">
-                <Input id="userPwd" type={this.state.isPasswordVisible ? 'text' : 'password'} onClick={this.onInputTypeChange} value={this.state.password || ''} onChange={this.inputPassword} autoComplete="off" />
+                <Input id="userPwd" type={this.state.isPasswordVisible ? 'text' : 'password'} onFocus={this.onInputTypeChange} value={this.state.password || ''} onChange={this.inputPassword} autoComplete="off" />
                 <InputGroupAddon addonType="append">
                   <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
                   <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
