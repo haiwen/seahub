@@ -163,6 +163,7 @@ class ShareToUser extends React.Component {
           selectedOption: null,
           permission: 'rw',
         });
+        this.refs.userSelect.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -188,6 +189,7 @@ class ShareToUser extends React.Component {
           selectedOption: null,
           permission: 'rw',
         });
+        this.refs.userSelect.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
