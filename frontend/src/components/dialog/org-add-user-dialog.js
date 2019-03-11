@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Input, ModalHeader, ModalBody, Label, Form, InputGroup, InputGroupAddon, FormGroup } from 'reactstrap';
+import { Button, Modal, Input, ModalHeader, ModalBody, ModalFooter, Label, Form, InputGroup, InputGroupAddon, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -9,6 +9,7 @@ const propTypes = {
 };
 
 class AddOrgUserDialog extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +18,8 @@ class AddOrgUserDialog extends React.Component {
       name: '',
       password: '',
       passwdnew: '',
-      errMessage: ''
+      errMessage: '',
+      isAddingUser: false,
     };
   }
 
@@ -25,6 +27,7 @@ class AddOrgUserDialog extends React.Component {
     let isValid = this.validateInputParams();
     if (isValid) {
       let { email, name, password } = this.state;
+      this.setState({isAddingUser: true});
       this.props.handleSubmit(email, name, password);
     }
   } 
@@ -60,7 +63,6 @@ class AddOrgUserDialog extends React.Component {
     this.setState({name: name});
   }
 
-
   inputPassword = (e) => {
     let passwd = e.target.value.trim();
     this.setState({password: passwd});
@@ -74,6 +76,10 @@ class AddOrgUserDialog extends React.Component {
   toggle = () => {
     this.props.toggle();
   };
+
+  onInputTypeChange = () => {
+    this.setState({isPasswordVisible: false});
+  }
 
   validateInputParams() {
     let errMessage = '';
@@ -111,17 +117,17 @@ class AddOrgUserDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label>{gettext('Email')}</Label>
-              <Input value={this.state.email || ''} onChange={this.inputEmail} />
+              <Label for="userEmail">{gettext('Email')}</Label>
+              <Input id="userEmail"  value={this.state.email || ''} onChange={this.inputEmail} autoComplete="off" />
             </FormGroup>
             <FormGroup>
-              <Label>{gettext('Name(optional)')}</Label>
-              <Input value={this.state.name || ''} onChange={this.inputName} />
+              <Label for="userName">{gettext('Name(optional)')}</Label>
+              <Input id="userName" value={this.state.name || ''} onChange={this.inputName} autoComplete="off" />
             </FormGroup>
             <FormGroup>
-              <Label>{gettext('Password')}</Label>
+              <Label for="userPwd">{gettext('Password')}</Label>
               <InputGroup className="passwd">
-                <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
+                <Input id="userPwd" type={this.state.isPasswordVisible ? 'text' : 'password'} onFocus={this.onInputTypeChange} value={this.state.password || ''} onChange={this.inputPassword} autoComplete="off" />
                 <InputGroupAddon addonType="append">
                   <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
                   <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
@@ -129,13 +135,15 @@ class AddOrgUserDialog extends React.Component {
               </InputGroup>
             </FormGroup>
             <FormGroup>
-              <Label>{gettext('Confirm Password')}</Label>
-              <Input className="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
+              <Label for="userPwdNew">{gettext('Confirm Password')}</Label>
+              <Input id="userPwdNew" id="user" className="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} autoComplete="off" />
             </FormGroup>
-            <Button onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           </Form>
           <Label className="err-message">{gettext(this.state.errMessage)}</Label>
         </ModalBody>
+        <ModalFooter>
+          <Button color="primary" disabled={this.state.isAddingUser} onClick={this.handleSubmit} className={this.state.isAddingUser ? 'btn-loading' : ''}>{gettext('Submit')}</Button>
+        </ModalFooter>
       </Modal>
     );
   }
