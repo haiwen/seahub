@@ -122,23 +122,11 @@ class ActivityItem extends Component {
           details = <td>{libLink}</td>;
           break;
       }
-    } else if (item.obj_type == 'review') {
-      let fileURL = `${siteRoot}drafts/review/${item.review_id}`;
+    } else if (item.obj_type == 'draft') {
+      let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
       let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
-      switch(item.op_type) {
-        case 'open':
-          op = gettext('Open review');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
-        case 'closed':
-          op = gettext('Close review');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
-        case 'finished':
-          op = gettext('Publish draft');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
-          break;
-      }
+      op = gettext('Publish draft');
+      details = <td>{fileLink}<br />{smallLibLink}</td>;
     } else if (item.obj_type == 'files') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
       let fileLink = `<a href=${fileURL} target="_blank">${item.name}</a>`;
@@ -287,7 +275,7 @@ class FilesActivities extends Component {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
-      let events = this.mergeReviewEvents(res.data.events);
+      let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
       this.setState({
         items: events,
@@ -308,9 +296,9 @@ class FilesActivities extends Component {
     });
   }
 
-  mergeReviewEvents = (events) => {
+  mergePublishEvents = (events) => {
     events.map((item) => {
-      if (item.op_type === 'finished') {
+      if (item.op_type === 'publish') {
         this.curPathList.push(item.path);
         this.oldPathList.push(item.old_path);
       }
@@ -372,7 +360,7 @@ class FilesActivities extends Component {
     let currentPage = this.state.currentPage;
     seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
       // {"events":[...]}
-      let events = this.mergeReviewEvents(res.data.events);
+      let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
       this.setState({
         isLoadingMore: false,

@@ -23,6 +23,7 @@ from seahub.drafts.models import Draft, DraftFileExist, DraftFileConflict
 from seahub.tags.models import FileUUIDMap
 from seahub.views import check_folder_permission
 from seahub.utils import gen_file_get_url
+from seahub.drafts.utils import send_draft_publish_msg
 
 logger = logging.getLogger(__name__)
 
@@ -119,6 +120,7 @@ class DraftView(APIView):
         username = request.user.username
         try:
             published_file_path = d.publish(operator=username)
+            send_draft_publish_msg(d, username, published_file_path)
             return Response({'published_file_path': published_file_path})
         except DraftFileConflict:
             return api_error(status.HTTP_409_CONFLICT,
