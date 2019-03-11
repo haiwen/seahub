@@ -67,10 +67,8 @@ class SharedFileViewImage extends React.Component {
       );
     } else {
       return (
-        <div className="shared-file-view-body d-flex text-center">
-          <div className="pdf-file-view flex-1">
-            <PDFViewer />
-          </div>
+        <div className="shared-file-view-body pdf-file-view">
+          <PDFViewer />
         </div>
       );
     }
