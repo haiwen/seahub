@@ -55,6 +55,7 @@ def get_tagged_files(repo, repo_tag_id):
             tagged_files["tagged_files"].append(tagged_file)
             continue
 
+        tagged_file["file_tag_id"] = file_tag_id
         tagged_file["parent_path"] = parent_path
         tagged_file["filename"] = filename
         tagged_file["size"] = file_obj.size
