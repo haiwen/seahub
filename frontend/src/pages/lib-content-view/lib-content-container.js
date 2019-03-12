@@ -28,6 +28,7 @@ const propTypes = {
   hash: PropTypes.string,
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
+  fileTags: PropTypes.array.isRequired,
   goDraftPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.bool.isRequired,
@@ -70,7 +71,6 @@ const propTypes = {
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
   onAllDirentSelected: PropTypes.func.isRequired,
-  isFileTagChanged: PropTypes.bool.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -136,7 +136,7 @@ class LibContentContainer extends React.Component {
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
-              isFileTagChanged={this.props.isFileTagChanged}
+              fileTags={this.props.fileTags}
             />
           </div>
           <div className={`cur-view-content ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>

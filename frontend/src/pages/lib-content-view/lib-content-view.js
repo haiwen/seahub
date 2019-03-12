@@ -46,6 +46,8 @@ class LibContentView extends React.Component {
       selectedDirentList: [],
       isDraft: false,
       hasDraft: false,
+      fileTags: [],
+      relatedFiles: [],
       draftID: '',
       draftCounts: 0,
       usedRepoTags: [],
@@ -67,7 +69,6 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '',  // for update dir list
       errorMsg: '',
-      isFileTagChanged: false,  // A variable is used to control the display and hiding of labels in column-mode
     };
 
     window.onpopstate = this.onpopstate;
@@ -287,6 +288,27 @@ class LibContentView extends React.Component {
 
   showFile = (filePath) => {
     let repoID = this.props.repoID;
+
+    if (this.state.currentMode === 'column') {
+      seafileAPI.listFileTags(repoID, filePath).then(res => {
+        let fileTags = res.data.file_tags.map(item => {
+          return new FileTag(item);
+        });
+
+        this.setState({fileTags: fileTags});
+      });
+      
+      seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
+        let relatedFiles = res.data.related_files.map((relatedFile) => {
+          return relatedFile;
+        });
+        this.setState({relatedFiles: relatedFiles});
+      }).catch((error) => {
+        if (error.response.status === 500) {
+          this.setState({relatedFiles: []});
+        }
+      });
+    }
 
     // update state
     this.setState({
@@ -1152,8 +1174,32 @@ class LibContentView extends React.Component {
     this.uploader.onFolderUpload();
   }
 
-  onColumnFileTagChanged = () => {
-    this.setState({isFileTagChanged: !this.state.isFileTagChanged});
+  onToolbarFileTagChanged = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.state.path;
+    seafileAPI.listFileTags(repoID, filePath).then(res => {
+      let fileTags = res.data.file_tags.map(item => {
+        return new FileTag(item);
+      });
+
+      this.setState({fileTags: fileTags});
+    });
+  }
+
+  onToolbarRelatedFileChange = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.state.path;
+
+    seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
+      let relatedFiles = res.data.related_files.map((relatedFile) => {
+        return relatedFile;
+      });
+      this.setState({relatedFiles: relatedFiles});
+    }).catch((error) => {
+      if (error.response.status === 500) {
+        this.setState({relatedFiles: []});
+      }
+    });
   }
 
   render() {
@@ -1208,6 +1254,10 @@ class LibContentView extends React.Component {
             filePermission={this.state.filePermission}
             isDraft={this.state.isDraft}
             hasDraft={this.state.hasDraft}
+            fileTags={this.state.fileTags}
+            relatedFiles={this.state.relatedFiles}
+            onFileTagChanged={this.onToolbarFileTagChanged}
+            onRelatedFileChange={this.onToolbarRelatedFileChange}
             onSideNavMenuClick={this.props.onMenuClick}
             repoID={this.props.repoID}
             path={this.state.path}
@@ -1230,7 +1280,6 @@ class LibContentView extends React.Component {
             currentMode={this.state.currentMode}
             switchViewMode={this.switchViewMode}
             onSearchedClick={this.onSearchedClick}
-            onColumnFileTagChanged={this.onColumnFileTagChanged}
           />
         </div>
         <div className="main-panel-center flex-row">
@@ -1248,10 +1297,11 @@ class LibContentView extends React.Component {
             onTabNavClick={this.props.onTabNavClick}
             onMainNavBarClick={this.onMainNavBarClick}
             isViewFile={this.state.isViewFile}
-            isFileTagChanged={this.state.isFileTagChanged}
             hash={this.state.hash}
             isDraft={this.state.isDraft}
             hasDraft={this.state.hasDraft}
+            fileTags={this.state.fileTags}
+            relatedFiles={this.state.relatedFiles}
             goDraftPage={this.goDraftPage}
             isFileLoading={this.state.isFileLoading}
             isFileLoadedErr={this.state.isFileLoadedErr}

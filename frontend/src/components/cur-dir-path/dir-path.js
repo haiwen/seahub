@@ -15,33 +15,10 @@ const propTypes = {
   pathPrefix: PropTypes.array,
   repoID: PropTypes.string.isRequired,
   isViewFile: PropTypes.bool,
-  isFileTagChanged: PropTypes.bool.isRequired,
+  fileTags: PropTypes.array.isRequired,
 };
 
 class DirPath extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      fileTags: [],
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let { isViewFile, isFileTagChanged } = nextProps;
-    let { currentPath, repoID } = this.props;
-    if (isViewFile && currentPath) {
-      if (this.props.isFileTagChanged !== isFileTagChanged) {
-        seafileAPI.listFileTags(repoID, currentPath).then(res => {
-          let fileTags = res.data.file_tags.map(item => {
-            return new FileTag(item);
-          });
-  
-          this.setState({fileTags: fileTags});
-        });
-      }
-    }
-  }
 
   onPathClick = (e) => {
     let path = e.target.dataset.path;
@@ -78,12 +55,12 @@ class DirPath extends React.Component {
   }
 
   render() {
-    let { currentPath, repoName } = this.props;
+    let { currentPath, repoName, fileTags } = this.props;
     let pathElem = this.turnPathToLink(currentPath);
 
     let tagTitle = '';
-    if (this.state.fileTags.length > 0) {
-      this.state.fileTags.forEach(item => {
+    if (fileTags.length > 0) {
+      fileTags.forEach(item => {
         tagTitle += item.name + ' ';
       });
     }
@@ -121,9 +98,9 @@ class DirPath extends React.Component {
             path={this.props.currentPath}
           />
         }
-        {(this.props.isViewFile && this.state.fileTags.length !== 0) && 
+        {(this.props.isViewFile && fileTags.length !== 0) && 
           <span id='column-mode-file-tags' className="tag-list tag-list-stacked align-middle ml-1">
-            {this.state.fileTags.map((fileTag, index) => {
+            {fileTags.map((fileTag, index) => {
               return (<span className="file-tag" key={fileTag.id} style={{zIndex: index, backgroundColor: fileTag.color}}></span>)
             })}
             <UncontrolledTooltip target="column-mode-file-tags" placement="bottom">
