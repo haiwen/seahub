@@ -49,6 +49,7 @@ class OrgGroups extends Component {
     } else {
       page = page - 1;
     }
+    this.initData(page);
   } 
 
   onFreezedItem = () => {
@@ -180,7 +181,7 @@ class GroupItem extends React.Component {
   }
 
   renderGroupCreator = (group) => {
-    let userInfoHref = siteRoot + 'org/useradmin/info/' + encodeURIComponent(group.creatorEmail) + '/';
+    let userInfoHref = siteRoot + 'org/useradmin/info/' + group.creatorEmail + '/';
     if (group.creatorName == 'system admin') {
       return (
         <td> -- </td>
@@ -209,7 +210,7 @@ class GroupItem extends React.Component {
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle
               tag="a"
-              className="fas fa-ellipsis-v"
+              className="attr-action-icon fas fa-ellipsis-v"
               title={gettext('More Operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.isItemMenuShow}
