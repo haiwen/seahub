@@ -11,6 +11,7 @@ import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-op
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import EditFileTagDialog from '../../components/dialog/edit-filetag-dialog';
+import ListRelatedFileDialog from '../../components/dialog/list-related-file-dialog';
 import AddRelatedFileDialog from '../../components/dialog/add-related-file-dialog';
 import FileTag from '../../models/file-tag';
 
@@ -58,8 +59,10 @@ class LibContentToolbar extends React.Component {
       isMoreMenuShow: false,
       isShareDialogShow: false,
       isEditTagDialogShow: false,
-      isFileRelativeDialogShow: false,
+      isListRelativeFileDialogShow: false,
+      isAddRelatedFileDialogShow: false,
       fileTags: [],
+      relatedFiles: [],
     };
   }
 
@@ -73,6 +76,17 @@ class LibContentToolbar extends React.Component {
         });
 
         this.setState({fileTags: fileTags});
+      });
+      
+      seafileAPI.listRelatedFiles(repoID, path).then(res => {
+        let relatedFiles = res.data.related_files.map((relatedFile) => {
+          return relatedFile;
+        });
+        this.setState({relatedFiles: relatedFiles});
+      }).catch((error) => {
+        if (error.response.status === 500) {
+          this.setState({relatedFiles: []});
+        }
       });
     }
   }
@@ -108,8 +122,15 @@ class LibContentToolbar extends React.Component {
     this.setState({isEditTagDialogShow: !this.state.isEditTagDialogShow});
   }
 
-  onEditRelativeFileToggle = () => {
-    this.setState({isFileRelativeDialogShow: !this.state.isFileRelativeDialogShow});
+  onListRelatedFileToggle = () => {
+    this.setState({isListRelativeFileDialogShow: !this.state.isListRelativeFileDialogShow})
+  }
+
+  onAddRelatedFileToggle = () => {
+    this.setState({
+      isListRelativeFileDialogShow: !this.state.isListRelativeFileDialogShow,
+      isAddRelatedFileDialogShow: !this.state.isAddRelatedFileDialogShow,
+    });
   }
 
   onFileTagChanged = () => {
@@ -121,6 +142,20 @@ class LibContentToolbar extends React.Component {
 
       this.setState({fileTags: fileTags});
       this.props.onColumnFileTagChanged();
+    });
+  }
+
+  onRelatedFileChange = () => {
+    let { repoID, path } = this.props;
+    seafileAPI.listRelatedFiles(repoID, path).then(res => {
+      let relatedFiles = res.data.related_files.map((relatedFile) => {
+        return relatedFile;
+      });
+      this.setState({relatedFiles: relatedFiles});
+    }).catch((error) => {
+      if (error.response.status === 500) {
+        this.setState({relatedFiles: []});
+      }
     });
   }
 
@@ -153,7 +188,7 @@ class LibContentToolbar extends React.Component {
                   <DropdownMenu>
                     <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
                     <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Edit File Tag')}</DropdownItem>
-                    <DropdownItem onClick={this.onEditRelativeFileToggle}>{gettext('Edit Relative File')}</DropdownItem>
+                    <DropdownItem onClick={this.onListRelatedFileToggle}>{gettext('Add Relative File')}</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
               )}
@@ -187,17 +222,29 @@ class LibContentToolbar extends React.Component {
               />
             </ModalPotal>
           )}
-          {this.state.isFileRelativeDialogShow &&
+          {this.state.isListRelativeFileDialogShow &&
+            <ModalPotal>
+              <ListRelatedFileDialog
+                repoID={this.props.repoID}
+                filePath={this.props.path}
+                relatedFiles={this.state.relatedFiles}
+                toggleCancel={this.onListRelatedFileToggle}
+                addRelatedFileToggle={this.onAddRelatedFileToggle}
+                onRelatedFileChange={this.onRelatedFileChange}
+              />
+            </ModalPotal>
+          }
+          {this.state.isAddRelatedFileDialogShow && (
             <ModalPotal>
               <AddRelatedFileDialog
                 dirent={dirent}
                 repoID={this.props.repoID}
                 filePath={this.props.path}
-                onRelatedFileChange={this.props.onRelatedFileChange}
-                toggleCancel={this.onEditRelativeFileToggle}
+                onRelatedFileChange={this.onRelatedFileChange}
+                toggleCancel={this.onAddRelatedFileToggle}
               />
             </ModalPotal>
-          }
+          )}
         </Fragment>
       );
     }
