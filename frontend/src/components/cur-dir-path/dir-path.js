@@ -31,7 +31,7 @@ class DirPath extends React.Component {
     let { isViewFile, isFileTagChanged } = nextProps;
     let { currentPath, repoID } = this.props;
     if (isViewFile && currentPath) {
-      if (this.props.isFileTagChanged === isFileTagChanged) {
+      if (this.props.isFileTagChanged !== isFileTagChanged) {
         seafileAPI.listFileTags(repoID, currentPath).then(res => {
           let fileTags = res.data.file_tags.map(item => {
             return new FileTag(item);
