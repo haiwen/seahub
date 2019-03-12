@@ -67,6 +67,7 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '',  // for update dir list
       errorMsg: '',
+      isFileTagChanged: false,  // A variable is used to control the display and hiding of labels in column-mode
     };
 
     window.onpopstate = this.onpopstate;
@@ -1151,6 +1152,10 @@ class LibContentView extends React.Component {
     this.uploader.onFolderUpload();
   }
 
+  onColumnFileTagChanged = () => {
+    this.setState({isFileTagChanged: !this.state.isFileTagChanged});
+  }
+
   render() {
 
     if (this.state.libNeedDecrypt) {
@@ -1225,6 +1230,7 @@ class LibContentView extends React.Component {
             currentMode={this.state.currentMode}
             switchViewMode={this.switchViewMode}
             onSearchedClick={this.onSearchedClick}
+            onColumnFileTagChanged={this.onColumnFileTagChanged}
           />
         </div>
         <div className="main-panel-center flex-row">
@@ -1242,6 +1248,7 @@ class LibContentView extends React.Component {
             onTabNavClick={this.props.onTabNavClick}
             onMainNavBarClick={this.onMainNavBarClick}
             isViewFile={this.state.isViewFile}
+            isFileTagChanged={this.state.isFileTagChanged}
             hash={this.state.hash}
             isDraft={this.state.isDraft}
             hasDraft={this.state.hasDraft}

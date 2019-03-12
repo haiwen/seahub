@@ -70,6 +70,7 @@ const propTypes = {
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
   onAllDirentSelected: PropTypes.func.isRequired,
+  isFileTagChanged: PropTypes.bool.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -135,6 +136,7 @@ class LibContentContainer extends React.Component {
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
+              isFileTagChanged={this.props.isFileTagChanged}
             />
           </div>
           <div className={`cur-view-content ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>

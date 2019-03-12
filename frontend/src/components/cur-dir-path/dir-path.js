@@ -15,6 +15,7 @@ const propTypes = {
   pathPrefix: PropTypes.array,
   repoID: PropTypes.string.isRequired,
   isViewFile: PropTypes.bool,
+  isFileTagChanged: PropTypes.bool.isRequired,
 };
 
 class DirPath extends React.Component {
@@ -27,16 +28,18 @@ class DirPath extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let isViewFile = nextProps;
+    let { isViewFile, isFileTagChanged } = nextProps;
     let { currentPath, repoID } = this.props;
-    if (isViewFile) {
-      seafileAPI.listFileTags(repoID, currentPath).then(res => {
-        let fileTags = res.data.file_tags.map(item => {
-          return new FileTag(item);
+    if (isViewFile && currentPath) {
+      if (this.props.isFileTagChanged === isFileTagChanged) {
+        seafileAPI.listFileTags(repoID, currentPath).then(res => {
+          let fileTags = res.data.file_tags.map(item => {
+            return new FileTag(item);
+          });
+  
+          this.setState({fileTags: fileTags});
         });
-
-        this.setState({fileTags: fileTags});
-      });
+      }
     }
   }
 

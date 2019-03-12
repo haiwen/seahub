@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip } from 'reactstrap';
+import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -8,6 +8,11 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
+import ModalPotal from '../../components/modal-portal';
+import ShareDialog from '../../components/dialog/share-dialog';
+import EditFileTagDialog from '../../components/dialog/edit-filetag-dialog';
+import AddRelatedFileDialog from '../../components/dialog/add-related-file-dialog';
+import FileTag from '../../models/file-tag';
 
 const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
@@ -41,6 +46,7 @@ const propTypes = {
   switchViewMode: PropTypes.func.isRequired,
   // search
   onSearchedClick: PropTypes.func.isRequired,
+  onColumnFileTagChanged: PropTypes.func.isRequired,
 };
 
 class LibContentToolbar extends React.Component {
@@ -49,7 +55,26 @@ class LibContentToolbar extends React.Component {
     super(props);
     this.state = {
       isDraftMessageShow: false,
+      isMoreMenuShow: false,
+      isShareDialogShow: false,
+      isEditTagDialogShow: false,
+      isFileRelativeDialogShow: false,
+      fileTags: [],
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let { isViewFile } = nextProps;
+    let { path, repoID } = this.props;
+    if (isViewFile && path) {
+      seafileAPI.listFileTags(repoID, path).then(res => {
+        let fileTags = res.data.file_tags.map(item => {
+          return new FileTag(item);
+        });
+
+        this.setState({fileTags: fileTags});
+      });
+    }
   }
 
   onEditClick = (e) => {
@@ -71,8 +96,38 @@ class LibContentToolbar extends React.Component {
     this.setState({isDraftMessageShow: !this.state.isDraftMessageShow});
   }
 
+  toggleMore = () => {
+    this.setState({isMoreMenuShow: !this.state.isMoreMenuShow});
+  }
+
+  onShareToggle = () => {
+    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+  }
+
+  onEditFileTagToggle = () => {
+    this.setState({isEditTagDialogShow: !this.state.isEditTagDialogShow});
+  }
+
+  onEditRelativeFileToggle = () => {
+    this.setState({isFileRelativeDialogShow: !this.state.isFileRelativeDialogShow});
+  }
+
+  onFileTagChanged = () => {
+    let { repoID, path } = this.props;
+    seafileAPI.listFileTags(repoID, path).then(res => {
+      let fileTags = res.data.file_tags.map(item => {
+        return new FileTag(item);
+      });
+
+      this.setState({fileTags: fileTags});
+      this.props.onColumnFileTagChanged();
+    });
+  }
+
   render() {
     if (this.props.isViewFile) {
+      let name = Utils.getFileName(this.props.path);
+      let dirent = { name: name };
       return (
         <Fragment>
           <div className="cur-view-toolbar">
@@ -90,10 +145,59 @@ class LibContentToolbar extends React.Component {
                   <Tooltip target="new-draft" placement="bottom" isOpen={this.state.isDraftMessageShow} toggle={this.onDraftHover}>{gettext('Create a draft from this file, instead of editing it directly.')}</Tooltip>
                 </Fragment>
               )}
+              {this.props.filePermission && (
+                <Dropdown isOpen={this.state.isMoreMenuShow} toggle={this.toggleMore}>
+                  <DropdownToggle className='btn btn-secondary operation-item'>
+                    {gettext('More')}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
+                    <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Edit File Tag')}</DropdownItem>
+                    <DropdownItem onClick={this.onEditRelativeFileToggle}>{gettext('Edit Relative File')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
             </div>
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
           </div>
           <CommonToolbar repoID={this.props.repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
+          {this.state.isShareDialogShow && (
+            <ModalPotal>
+              <ShareDialog 
+                itemType={'file'}
+                itemName={Utils.getFileName(this.props.path)}
+                itemPath={this.props.path}
+                repoID={this.props.repoID}
+                repoEncrypted={this.props.repoEncrypted}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                userPerm={this.props.userPerm}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                toggleDialog={this.onShareToggle}
+              />
+            </ModalPotal>
+          )}
+          {this.state.isEditTagDialogShow && (
+            <ModalPotal>
+              <EditFileTagDialog
+                filePath={this.props.path}
+                repoID={this.props.repoID}
+                fileTagList={this.state.fileTags}
+                toggleCancel={this.onEditFileTagToggle}
+                onFileTagChanged={this.onFileTagChanged}
+              />
+            </ModalPotal>
+          )}
+          {this.state.isFileRelativeDialogShow &&
+            <ModalPotal>
+              <AddRelatedFileDialog
+                dirent={dirent}
+                repoID={this.props.repoID}
+                filePath={this.props.path}
+                onRelatedFileChange={this.props.onRelatedFileChange}
+                toggleCancel={this.onEditRelativeFileToggle}
+              />
+            </ModalPotal>
+          }
         </Fragment>
       );
     }
