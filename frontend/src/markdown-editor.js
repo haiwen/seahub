@@ -1,19 +1,28 @@
 import React from 'react';
 import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
+import { Value, Document, Block } from 'slate';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
+import { gettext } from './utils/constants';
 import ModalPortal from './components/modal-portal';
 import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
 import ListRelatedFileDialog from './components/dialog/list-related-file-dialog';
 import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
 import ShareDialog from './components/dialog/share-dialog';
+import CommentDialog from './components/markdown-view/comment-dialog';
 import MarkdownViewerSlate from '@seafile/seafile-editor/dist/viewer/markdown-viewer-slate';
 import io from "socket.io-client";
 import toaster from "./components/toast";
-import { serialize } from "@seafile/seafile-editor/dist/utils/slate2markdown";
+import { serialize, deserialize } from "@seafile/seafile-editor/dist/utils/slate2markdown";
 import LocalDraftDialog from "@seafile/seafile-editor/dist/components/local-draft-dialog";
+import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
+import MarkdownViewerSidePanel from './components/markdown-view/markdown-viewer-side-panel';
+import Loading from './components/loading';
+import { Editor, findRange } from '@seafile/slate-react';
+
+import './css/markdown-viewer/markdown-editor.css';
 
 const CryptoJS = require('crypto-js');
 const { repoID, repoName, filePath, fileName, mode, draftID, draftFilePath, draftOriginFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
@@ -150,21 +159,15 @@ class EditorUtilities {
   }
 
   getFileHistory() {
-    return (
-      seafileAPI.getFileHistory(repoID, filePath)
-    );
+    return seafileAPI.getFileHistory(repoID, filePath);
   }
 
   getFileInfo() {
-    return (
-      seafileAPI.getFileInfo(repoID, filePath)
-    );
+    return seafileAPI.getFileInfo(repoID, filePath);
   }
 
   getRepoInfo(newRepoID) {
-    return (
-      seafileAPI.getRepoInfo(newRepoID)
-    );
+    return seafileAPI.getRepoInfo(newRepoID);
   }
 
   getInternalLink() {
@@ -192,9 +195,7 @@ class EditorUtilities {
   }
 
   listFileHistoryRecords(page, perPage) {
-    return (
-      seafileAPI.listFileHistoryRecords(repoID, filePath, page, perPage)
-    );
+    return seafileAPI.listFileHistoryRecords(repoID, filePath, page, perPage);
   }
 
   getFileHistoryVersion(commitID, filePath) {
@@ -270,6 +271,7 @@ class MarkdownEditor extends React.Component {
     this.draftPlainValue = '';
     this.state = {
       markdownContent: '',
+      oldMarkdownContent: '',
       loading: true,
       mode: 'editor',
       fileInfo: {
@@ -293,12 +295,14 @@ class MarkdownEditor extends React.Component {
       showAddRelatedFileDialog: false,
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
+      showCommentDialog: false,
       showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
-      isShowHistory: false,
-      isShowComments: false,
       commentsNumber: null,
+      activeTab: 'outline',
+      loadingDiff: false,
+      value: null,
     };
 
     if (this.state.collabServer) {
@@ -333,8 +337,8 @@ class MarkdownEditor extends React.Component {
       if (res.data.id !== this.state.fileInfo.id) {
         toaster.notify(
           <span>
-            {this.props.t('this_file_has_been_updated')}
-            <a href='' >{' '}{this.props.t('refresh')}</a>
+            {gettext('This file has been updated.')}
+            <a href='' >{' '}{gettext('Refresh')}</a>
           </span>,
           {id: 'repo_updated', duration: 3600});
       }
@@ -384,6 +388,7 @@ class MarkdownEditor extends React.Component {
       showAddRelatedFileDialog: false,
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
+      showCommentDialog: false,
     });
   }
 
@@ -400,9 +405,12 @@ class MarkdownEditor extends React.Component {
       this.draftPlainValue = value;
     }
   }
+
   setContent = (str) => {
+    let value = deserialize(str);
     this.setState({
-      markdownContent: str
+      markdownContent: str,
+      value: value,
     });
   }
 
@@ -489,6 +497,12 @@ class MarkdownEditor extends React.Component {
           showShareLinkDialog: true,
         });
         break;
+      case 'comment':
+        this.setState({
+          showMarkdownEditorDialog: true,
+          showCommentDialog: true,
+        });
+        break;
       default:
         return;
     }
@@ -504,6 +518,7 @@ class MarkdownEditor extends React.Component {
           contact_email: this.props.editorUtilities.contact_email,
         },
     });
+    document.removeEventListener('selectionchange', this.setBtnPosition);
   }
 
   componentDidMount() {
@@ -531,6 +546,7 @@ class MarkdownEditor extends React.Component {
           let isBlankFile =  (contentLength === 0 || contentLength === 1);
           let hasPermission = (this.state.fileInfo.permission === 'rw');
           let isEditMode = mode === 'edit' ? true : false;
+          let value = deserialize(res.data);
           this.setState({
             markdownContent: res.data,
             loading: false,
@@ -540,6 +556,7 @@ class MarkdownEditor extends React.Component {
             // case2: If mode == 'edit' and the file has no draft
             // case3: The length of markDownContent is 1 when clear all content in editor and the file has no draft
             editorMode: (hasPermission && (isDraft || (isEditMode && !hasDraft) || (isBlankFile && !hasDraft))) ? 'rich' : 'viewer',
+            value: value,
           });
         });
       });
@@ -562,11 +579,18 @@ class MarkdownEditor extends React.Component {
           },
       });
     }
-
     this.checkDraft();
     this.listRelatedFiles();
     this.listFileTags();
     this.getCommentsNumber();
+
+    document.addEventListener('selectionchange', this.setBtnPosition);
+    setTimeout(() => {
+      let url = new URL(window.location.href);
+      if (url.hash) {
+        window.location.href = window.location.href;
+      }
+    }, 100);
   }
 
   listRelatedFiles = () => {
@@ -662,19 +686,6 @@ class MarkdownEditor extends React.Component {
     this.openDialogs('share_link');
   }
 
-  toggleHistory = () => {
-    this.setState({ isShowHistory: !this.state.isShowHistory });
-  }
-
-  toggleCommentList = () => {
-    if (this.state.isShowHistory) {
-      this.setState({ isShowHistory: false, isShowComments: true });
-    }
-    else {
-      this.setState({ isShowComments: !this.state.isShowComments });
-    }
-  }
-
   getCommentsNumber = () => {
     editorUtilities.getCommentsNumber().then((res) => {
       let commentsNumber = res.data[Object.getOwnPropertyNames(res.data)[0]];
@@ -686,10 +697,166 @@ class MarkdownEditor extends React.Component {
 
   onCommentAdded = () => {
     this.getCommentsNumber();
+    this.toggleCancel();
+  }
+
+  showDiffViewer = () => {
+    this.setState({
+      loadingDiff: false,
+    });
+  }
+
+  setDiffViewerContent = (markdownContent, oldMarkdownContent) => {
+    this.setState({
+      markdownContent: markdownContent,
+      oldMarkdownContent: oldMarkdownContent
+    });
+    this.showDiffViewer();
+  }
+
+  reloadDiffContent = () =>{
+    this.setState({
+      loadingDiff: true,
+    });
+  }
+
+  tabItemClick = (tab) => {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
+    }
+  }
+
+  setBtnPosition = (e) => {
+    let isShowComments = this.state.activeTab === 'comments' ? true : false;
+    if (!isShowComments) return;
+    const nativeSelection = window.getSelection();
+    if (!nativeSelection.rangeCount) {
+      this.range = null;
+      return;
+    }
+    if (nativeSelection.isCollapsed === false) {
+      const nativeRange = nativeSelection.getRangeAt(0);
+      const focusNode = nativeSelection.focusNode;
+      if ((focusNode.tagName === 'I') ||
+          (focusNode.nodeType !== 3 && focusNode.getAttribute('class') === 'language-type')) {
+        // fix select last paragraph
+        let fragment = nativeRange.cloneContents();
+        let startNode = fragment.firstChild.firstChild;
+        if (!startNode) return;
+        let newNativeRange = document.createRange();
+        newNativeRange.setStartBefore(startNode);
+        newNativeRange.setEndAfter(startNode);
+
+        this.range =  findRange(newNativeRange, this.state.value);
+      }
+
+      else {
+        this.range = findRange(nativeRange, this.state.value);
+      }
+      if (!this.range) return;
+      let rect = nativeRange.getBoundingClientRect();
+      // fix Safari bug
+      if (navigator.userAgent.indexOf('Chrome') < 0 && navigator.userAgent.indexOf('Safari') > 0) {
+        if (nativeRange.collapsed && rect.top == 0 && rect.height == 0) {
+          if (nativeRange.startOffset == 0) {
+            nativeRange.setEnd(nativeRange.endContainer, 1);
+          } else {
+            nativeRange.setStart(nativeRange.startContainer, nativeRange.startOffset - 1);
+          }
+          rect = nativeRange.getBoundingClientRect();
+          if (rect.top == 0 && rect.height == 0) {
+            if (nativeRange.getClientRects().length) {
+              rect = nativeRange.getClientRects()[0];
+            }
+          }
+        }
+      }
+      let style = this.refs.commentbtn.style;
+      style.top = `${rect.top - 63 + this.refs.markdownContainer.scrollTop}px`;
+      style.right = '0px';
+    }
+    else {
+      let style = this.refs.commentbtn.style;
+      style.top = '-1000px';
+    }
+  }
+
+  addComment = (e) => {
+    e.stopPropagation();
+    this.getQuote();
+    this.openDialogs('comment');
+  }
+
+  getQuote = () => {
+    let range = this.range;
+    if (!range) return;
+    const { document } = this.state.value;
+    let { anchor, focus } = range;
+    const anchorText = document.getNode(anchor.key);
+    const focusText = document.getNode(focus.key);
+    const anchorInline = document.getClosestInline(anchor.key);
+    const focusInline = document.getClosestInline(focus.key);
+    // COMPAT: If the selection is at the end of a non-void inline node, and
+    // there is a node after it, put it in the node after instead. This
+    // standardizes the behavior, since it's indistinguishable to the user.
+    if (anchorInline && anchor.offset == anchorText.text.length) {
+      const block = document.getClosestBlock(anchor.key);
+      const nextText = block.getNextText(anchor.key);
+      if (nextText) {
+        range = range.moveAnchorTo(nextText.key, 0);
+      }
+    }
+    if (focusInline && focus.offset == focusText.text.length) {
+      const block = document.getClosestBlock(focus.key);
+      const nextText = block.getNextText(focus.key);
+      if (nextText) {
+        range = range.moveFocusTo(nextText.key, 0); 
+      }
+    }
+    let fragment = document.getFragmentAtRange(range);
+    let nodes = this.removeNullNode(fragment.nodes);
+    let newFragment = Document.create({
+      nodes: nodes
+    });
+    let newValue = Value.create({
+      document: newFragment
+    });
+    this.quote = serialize(newValue.toJSON());
+    let selection = document.createSelection(range);
+    selection = selection.setIsFocused(true);
+    this.setState({
+      commentPosition: selection.anchor.path
+    });
+  }
+
+  removeNullNode = (oldNodes) => {
+    let newNodes = [];
+    oldNodes.map((node) => {
+      const text = node.text.trim();
+      const childNodes = node.nodes;
+      if (!text) return;
+      if ((childNodes && childNodes.size === 1) || (!childNodes)) {
+        newNodes.push(node);
+      }
+      else if (childNodes.size > 1) {
+        let nodes = this.removeNullNode(childNodes);
+        let newNode = Block.create({
+          nodes: nodes,
+          data: node.data,
+          key: node.key,
+          type: node.type
+        });
+        newNodes.push(newNode);
+      }
+    });
+    return newNodes;
   }
 
   render() {
     let component;
+    let isShowComments = this.state.activeTab === 'comments' ? true : false;
     if (this.state.loading) {
       return (
         <div className="empty-loading-page">
@@ -711,42 +878,51 @@ class MarkdownEditor extends React.Component {
                 openDialogs={this.openDialogs}
                 fileTagList={this.state.fileTagList}
                 relatedFiles={this.state.relatedFiles}
-                commentsNumber={this.state.commentsNumber}
-                toggleCommentList={this.toggleCommentList}
                 toggleShareLinkDialog={this.toggleShareLinkDialog}
                 onEdit={this.onEdit}
-                showFileHistory={true}
-                toggleHistory={this.toggleHistory}
                 toggleNewDraft={editorUtilities.createDraftFile}
               />
-              <MarkdownViewerSlate
-                fileInfo={this.state.fileInfo}
-                markdownContent={this.state.markdownContent}
-                editorUtilities={editorUtilities}
-                collabUsers={this.state.collabUsers}
-                showFileHistory={true}
-                setFileInfoMtime={this.setFileInfoMtime}
-                toggleStar={this.toggleStar}
-                setEditorMode={this.setEditorMode}
-                draftID={draftID}
-                isDraft={isDraft}
-                emitSwitchEditor={this.emitSwitchEditor}
-                hasDraft={hasDraft}
-                shareLinkExpireDaysMin={shareLinkExpireDaysMin}
-                shareLinkExpireDaysMax={shareLinkExpireDaysMax}
-                relatedFiles={this.state.relatedFiles}
-                siteRoot={siteRoot}
-                openDialogs={this.openDialogs}
-                fileTagList={this.state.fileTagList}
-                showDraftSaved={this.state.showDraftSaved}
-                isShowHistory={this.state.isShowHistory}
-                isShowComments={this.state.isShowComments}
-                onCommentAdded={this.onCommentAdded}
-                commentsNumber={this.state.commentsNumber}
-                getCommentsNumber={this.getCommentsNumber}
-                toggleHistory={this.toggleHistory}
-                toggleCommentList={this.toggleCommentList}
-              />
+              <div className="seafile-md-viewer d-flex">
+                <div className="seafile-md-viewer-container d-flex" ref="markdownContainer">
+                  {
+                    this.state.activeTab === "history" ?
+                      <div className="diff-container">
+                        <div className="diff-wrapper article">
+                          { this.state.loadingDiff ?
+                            <Loading/> :
+                            <DiffViewer
+                              newMarkdownContent={this.state.markdownContent}
+                              oldMarkdownContent={this.state.oldMarkdownContent}
+                            />
+                          }
+                        </div>
+                      </div>
+                    :
+                    <div className='seafile-md-viewer-slate'>
+                      <MarkdownViewerSlate
+                        relatedFiles={this.state.relatedFiles}
+                        siteRoot={siteRoot}
+                        value={this.state.value}
+                      />
+                    {isShowComments &&
+                      <i className="fa fa-plus-square seafile-viewer-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>}
+                    </div>
+                  }
+                </div>
+                <MarkdownViewerSidePanel
+                  viewer={this}
+                  value={this.state.value}
+                  markdownContent={this.state.markdownContent}
+                  editorUtilities={editorUtilities}
+                  commentsNumber={this.state.commentsNumber}
+                  getCommentsNumber={this.getCommentsNumber}
+                  showDiffViewer={this.showDiffViewer}
+                  setDiffViewerContent={this.setDiffViewerContent}
+                  reloadDiffContent={this.reloadDiffContent}
+                  activeTab={this.state.activeTab}
+                  tabItemClick={this.tabItemClick}
+                />
+              </div>
             </div>
           )
         } else {
@@ -833,6 +1009,17 @@ class MarkdownEditor extends React.Component {
                     toggleDialog={this.toggleCancel}
                     isGroupOwnedRepo={false}
                     repoEncrypted={false}
+                  />
+                </ModalPortal>
+              }
+              {this.state.showCommentDialog &&
+                <ModalPortal>
+                  <CommentDialog
+                    toggleCommentDialog={this.toggleCancel}
+                    editorUtilities={editorUtilities}
+                    onCommentAdded={this.onCommentAdded}
+                    commentPosition={this.state.commentPosition}
+                    quote={this.quote}
                   />
                 </ModalPortal>
               }
