@@ -21,6 +21,7 @@ class FileOperationsInfoText(BaseTestCase):
             (datetime.datetime(2017, 6, 2, 4, 2), u'Added', 2L),
             (datetime.datetime(2017, 6, 2, 4, 2), u'Deleted', 2L),
             (datetime.datetime(2017, 6, 2, 4, 2), u'Visited', 2L),
+            (datetime.datetime(2017, 6, 2, 4, 2), u'Modified', 2L),
         ]
         mock_is_pro.return_value = True
         mock_events_enabled = True
@@ -30,7 +31,7 @@ class FileOperationsInfoText(BaseTestCase):
         json_resp = json.loads(resp.content)
         self.assertEqual(200, resp.status_code)
         data = {'datetime': datetime_to_isoformat_timestr(datetime.datetime(2017, 6, 2, 4, 2)), 
-                'added': 2, 'deleted': 2, 'visited': 2}
+                'added': 2, 'deleted': 2, 'visited': 2, 'modified': 2}
         assert data in json_resp
 
     @patch("seahub.api2.endpoints.admin.statistics.EVENTS_ENABLED")
