@@ -5,7 +5,7 @@ import Logo from '../../components/logo';
 import { gettext, siteRoot, isPro, isDefaultAdmin, canViewSystemInfo, canViewStatistic,
         canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
         canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
-        enableGuestInvitation, enableTermsAndConditions } from '../../utils/constants';
+        enableGuestInvitation, enableTermsAndConditions, enableFileScan } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -129,7 +129,7 @@ class SidePanel extends React.Component {
                     </a>
                   </li>
                 }
-                {isPro && isDefaultAdmin &&
+                {isPro && isDefaultAdmin && enableFileScan &&
                   <li className="nav-item">
                     <Link className='nav-link ellipsis' to={siteRoot + "sys/file-scan-records/"}>
                       <span className="sf2-icon-security" aria-hidden="true"></span>

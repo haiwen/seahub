@@ -94,7 +94,7 @@
             </li>
             {% endif %}
 
-            {% if is_pro and is_default_admin %}
+            {% if is_pro and is_default_admin and enable_file_scan %}
             <li class="tab {% block cur_file_scan %}{% endblock %}">
                 <a href="{{ SITE_ROOT }}sys/file-scan-records/"><span class="sf2-icon-security"></span>{% trans "File Scan" %}</a>
             </li>

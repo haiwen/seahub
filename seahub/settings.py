@@ -258,6 +258,9 @@ INSTALLED_APPS = (
     'seahub.related_files',
 )
 
+# Enable or disable view File Scan
+# ENABLE_FILE_SCAN = True
+
 # Enable or disable multiple storage backends.
 ENABLE_STORAGE_CLASSES = False
 
