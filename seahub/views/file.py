@@ -672,7 +672,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['file_content'] = convert_md_link(file_content, repo_id, username)
         return_dict['serviceUrl'] = get_service_url().rstrip('/')
         return_dict['language_code'] = get_language()
-        return_dict['mode'] = 'edit' if mode else 'viewer'
+        return_dict['mode'] = 'edit' if mode == 'edit' else 'viewer'
         return_dict['is_draft'] = is_draft
         return_dict['has_draft'] = has_draft
         return_dict['draft_id'] = draft['draft_id']
