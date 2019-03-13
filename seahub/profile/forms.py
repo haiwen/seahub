@@ -4,8 +4,8 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from seahub.profile.models import Profile, DetailedProfile
-
 from seahub.settings import ENABLE_UPDATE_USER_INFO
+
 
 class ProfileForm(forms.Form):
     nickname = forms.CharField(max_length=64, required=False)
@@ -29,11 +29,23 @@ class ProfileForm(forms.Form):
         Profile.objects.add_or_update(username, nickname, intro)
 
 class DetailedProfileForm(ProfileForm):
+    request_username = forms.CharField(max_length=256, required=False)
+    contact_email = forms.CharField(max_length=256, required=False)
     department = forms.CharField(max_length=512, required=False)
     telephone = forms.CharField(max_length=100, required=False)
+
+    def clean_contact_email(self, ):
+        username = Profile.objects.get_username_by_contact_email(self.cleaned_data['contact_email'])
+        req_username = self.cleaned_data['request_username']
+        if req_username and username is not None and username != req_username:
+            raise forms.ValidationError(_('A user with this email already exists.'))
+        return self.cleaned_data['contact_email']
 
     def save(self, username):
         super(DetailedProfileForm, self).save(username)
         department = self.cleaned_data['department']
         telephone = self.cleaned_data['telephone']
         DetailedProfile.objects.add_or_update(username, department, telephone)
+
+        contact_email = self.cleaned_data['contact_email']
+        Profile.objects.update_contact_email(username, contact_email)

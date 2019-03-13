@@ -34,7 +34,9 @@ def edit_profile(request):
     form_class = DetailedProfileForm
 
     if request.method == 'POST':
-        form = form_class(request.POST)
+        copy = request.POST.copy()
+        copy.update({'request_username': username})
+        form = form_class(copy)
         if form.is_valid():
             form.save(username=username)
             messages.success(request, _(u'Successfully edited profile.'))
@@ -115,6 +117,7 @@ def edit_profile(request):
             'social_connected': social_connected,
             'social_next_page': reverse('edit_profile'),
             'enable_wechat_work': enable_wechat_work,
+            'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
     }
 
     if has_two_factor_auth():

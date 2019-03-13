@@ -26,7 +26,7 @@ from seahub.auth.tokens import default_token_generator
 from seahub.auth.utils import (
     get_login_failed_attempts, incr_login_failed_attempts,
     clear_login_failed_attempts)
-from seahub.base.accounts import User
+from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
@@ -366,6 +366,15 @@ def password_change(request, template_name='registration/password_change_form.ht
 
     if is_ldap_user(request.user):
         messages.error(request, _("Can not update password, please contact LDAP admin."))
+
+    if request.user.enc_password == UNUSABLE_PASSWORD:
+        user_profile = Profile.objects.get_profile_by_user(request.user.username)
+        if user_profile is None or not user_profile.contact_email:
+            messages.error(request, _("Can not update password, please set contact email first."))
+            return HttpResponseRedirect(reverse('edit_profile'))
+        else:
+            password_change_form = SetPasswordForm
+            template_name = 'registration/password_set_form.html'
 
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
