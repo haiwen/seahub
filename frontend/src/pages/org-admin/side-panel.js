@@ -7,9 +7,19 @@ import { gettext, siteRoot } from '../../utils/constants';
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
   onCloseSidePanel: PropTypes.func.isRequired,
+  currentTab: PropTypes.string.isRequired,
+  tabItemClick: PropTypes.func.isRequired
 };
 
 class SidePanel extends React.Component {
+
+  getActiveClass = (tab) => {
+    return this.props.currentTab == tab ? 'active' : '';
+  }
+
+  tabItemClick = (tab) => {
+    this.props.tabItemClick(tab);
+  }
 
   render() {
     return (
@@ -35,21 +45,21 @@ class SidePanel extends React.Component {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <Link className='nav-link ellipsis active' to={siteRoot + "org/useradmin/"}>
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('users') || this.getActiveClass('admins')}`} to={siteRoot + "org/useradmin/"} onClick={() => this.tabItemClick('users')} >
                     <span className="sf2-icon-user"></span>
                     <span className="nav-text">{gettext('Users')}</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('groupadmin')}`} to={siteRoot + "org/groupadmin/"} onClick={() => this.tabItemClick('groupadmin')}>
+                    <span className="sf2-icon-group"></span>
+                    <span className="nav-text">{gettext('Groups')}</span>
                   </Link>
                 </li>
                 <li className="nav-item">
                   <a href="/org/admin/#address-book/" className="nav-link ellipsis">
                     <span className="sf2-icon-organization"></span>
                     <span className="nav-text">{gettext('Departments')}</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="/org/groupadmin/" className="nav-link ellipsis">
-                    <span className="sf2-icon-group"></span>
-                    <span className="nav-text">{gettext('Groups')}</span>
                   </a>
                 </li>
                 <li className="nav-item">

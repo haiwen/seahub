@@ -8,6 +8,7 @@ import MainPanel from './main-panel';
 import OrgUsers from './org-users';
 import OrgUsersList from './org-users-list';
 import OrgAdminList from './org-admin-list';
+import OrgGroups from './org-groups';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -56,7 +57,7 @@ class Org extends React.Component {
     let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog } = this.state;
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} />
+        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
         <MainPanel currentTab={currentTab} toggleAddOrgAdmin={this.toggleAddOrgAdmin} toggleAddOrgUser={this.toggleAddOrgUser}>
           <Router>
             <OrgUsers 
@@ -69,6 +70,8 @@ class Org extends React.Component {
               <OrgUsersList path="/" currentTab={currentTab} isShowAddOrgUserDialog={isShowAddOrgUserDialog} toggleAddOrgUser={this.toggleAddOrgUser} />
               <OrgAdminList path="admins" currentTab={currentTab} isShowAddOrgAdminDialog={isShowAddOrgAdminDialog} toggleAddOrgAdmin={this.toggleAddOrgAdmin} />
             </OrgUsers>
+            <OrgGroups path={siteRoot + "org/groupadmin"}>
+            </OrgGroups>
           </Router>
         </MainPanel>
       </div>
