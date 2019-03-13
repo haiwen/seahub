@@ -77,6 +77,7 @@ module.exports = {
     viewFilePDF: [require.resolve('./polyfills'), paths.appSrc + "/view-file-pdf.js"],
     orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
     viewFileUMind: [require.resolve('./polyfills'), paths.appSrc + "/view-file-umind.js"],
+    sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
   },
 
   output: {

@@ -92,7 +92,7 @@ class Account extends Component {
   }
 
   renderMenu = () => {
-    if(this.state.isStaff && !this.props.isAdminPanel){
+    if (this.state.isStaff && !this.props.isAdminPanel) {
       return (
         <a href={siteRoot + 'sys/useradmin/'} title={gettext('System Admin')} className="item">{gettext('System Admin')}</a>
       );
