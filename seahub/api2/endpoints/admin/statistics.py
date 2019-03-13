@@ -85,6 +85,7 @@ class FileOperationsView(APIView):
         ops_added_dict = get_init_data(start_time, end_time)
         ops_visited_dict = get_init_data(start_time, end_time)
         ops_deleted_dict = get_init_data(start_time, end_time)
+        ops_modified_dict = get_init_data(start_time, end_time)
 
         for e in data:
             if e[1] == 'Added':
@@ -93,13 +94,16 @@ class FileOperationsView(APIView):
                 ops_visited_dict[e[0]] = e[2]
             elif e[1] == 'Deleted':
                 ops_deleted_dict[e[0]] = e[2]
+            elif e[1] == 'Modified':
+                ops_modified_dict[e[0]] = e[2]
 
         res_data = []
         for k, v in ops_added_dict.items():
             res_data.append({'datetime': datetime_to_isoformat_timestr(k), 
                          'added': v, 
                          'visited': ops_visited_dict[k], 
-                         'deleted': ops_deleted_dict[k]})
+                         'deleted': ops_deleted_dict[k],
+                         'modified': ops_modified_dict[k]})
         return Response(sorted(res_data, key=lambda x: x['datetime']))
 
 

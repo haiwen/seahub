@@ -140,7 +140,8 @@ function renderChart(data, group_by) {
     var labels = [],
         added = [],
         deleted = [],
-        visited = [];
+        visited = [],
+        modified = [];
 
     var item;
     var datetime_ms, datetime_str;
@@ -161,6 +162,7 @@ function renderChart(data, group_by) {
         added.push(item.added);
         deleted.push(item.deleted);
         visited.push(item.visited);
+        modified.push(item.modified);
     }
 
     var config = {
@@ -179,6 +181,12 @@ function renderChart(data, group_by) {
                     data: added,
                     borderColor: '#57cd6b',
                     backgroundColor: '#57cd6b'
+                },
+                {
+                    label: "{% trans "Modified" context "files modified" %}",
+                    data: modified,
+                    borderColor: '#72c3fc',
+                    backgroundColor: '#72c3fc'
                 },
                 {
                     label: "{% trans "Deleted" context "files deleted" %}",
