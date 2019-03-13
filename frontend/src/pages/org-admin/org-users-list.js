@@ -25,7 +25,7 @@ class OrgUsersList extends React.Component {
       orgUsers: [],
       isItemFreezed: false,
       page: 1,
-      pageNext: 2,
+      pageNext: false,
     };
   }
 

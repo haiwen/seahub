@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-import OrgGroupInfo from '../../models/org-group';
+import OrgAdminRepo from '../../models/org-admin-repo';
 import Toast from '../../components/toast';
 
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext, orgID } from '../../utils/constants';
+import { mediaUrl, siteRoot, gettext, orgID } from '../../utils/constants';
 
-class OrgGroups extends Component {
+class OrgLibraries extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       page: 1,
       pageNext: false,
-      orgGroups: [],
+      orgRepos: [],
       isItemFreezed: false  
-    }
+    };
   }
 
   componentDidMount() {
@@ -26,13 +25,13 @@ class OrgGroups extends Component {
   }
 
   initData = (page) => {
-    seafileAPI.listOrgGroups(orgID, page).then(res => {
-      let orgGroups = res.data.groups.map(item => {
-        return new OrgGroupInfo(item);
+    seafileAPI.listOrgLibraries(orgID, page).then(res => {
+      let orgRepos = res.data.repos.map(item => {
+        return new OrgAdminRepo(item);
       });
 
       this.setState({
-        orgGroups: orgGroups,
+        orgRepos: orgRepos,
         pageNext: res.data.page_next,
         page: res.data.page,
       });
@@ -60,45 +59,49 @@ class OrgGroups extends Component {
     this.setState({isItemFreezed: false});
   }
 
-  deleteGroupItem = (group) => {
-    seafileAPI.deleteOrgGroup(orgID, group.id).then(res => {
-      this.setState({
-        orgGroups: this.state.orgGroups.filter(item => item.id != group.id)
-      }); 
+  deleteRepoItem = (repo) => {
       let msg = gettext('Successfully deleted {name}');
-      msg = msg.replace('{name}', group.groupName);
+      msg = msg.replace('{name}', repo.repoName);
       Toast.success(msg);
-    })
   }
 
+  transferRepoItem = (repo) => {
+      let msg = gettext('Successfully transfer {name}');
+      msg = msg.replace('{name}', repo.repoName);
+      Toast.success(msg);
+  }
+
+
   render() {
-    let groups = this.state.orgGroups;
+    let repos = this.state.orgRepos;
     return (
       <div className="main-panel-center flex-row">
         <div className="cur-view-container">
           <div className="cur-view-path">
-           <h3 className="sf-heading">{gettext('All Groups')}</h3>
+           <h3 className="sf-heading">{gettext('All Libraries')}</h3>
           </div>
           <div className="cur-view-content">
             <table>
               <thead>
                 <tr>
-                  <th width="30%">{gettext('Name')}</th>
-                  <th width="35%">{gettext('Creator')}</th>
-                  <th width="23%">{gettext('Created At')}</th>
-                  <th width="12%" className="text-center">{gettext('Operations')}</th>
+                  <th width="4%"></th>
+                  <th width="31%">{gettext('Name')}</th>
+                  <th width="26%">{gettext('ID')}</th>
+                  <th width="24%">{gettext('Owner')}</th>
+                  <th width="15%" className="text-center">{gettext('Operations')}</th>
                 </tr>
               </thead>
               <tbody>
-                {groups.map(item => {
+                {repos.map(item => {
                   return (
-                    <GroupItem
+                    <RepoItem
                       key={item.id}
-                      group={item}
+                      repo={item}
                       isItemFreezed={this.state.isItemFreezed}
                       onFreezedItem={this.onFreezedItem} 
                       onUnfreezedItem={this.onUnfreezedItem}
-                      deleteGroupItem={this.deleteGroupItem}
+                      deleteRepoItem={this.deleteRepoItem}
+                      transferRepoItem={this.transferRepoItem}
                     />
                 )})}
               </tbody>
@@ -114,7 +117,7 @@ class OrgGroups extends Component {
   }
 }
 
-class GroupItem extends React.Component {
+class RepoItem extends React.Component {
 
   constructor(props) {
     super(props);
@@ -166,45 +169,47 @@ class GroupItem extends React.Component {
   }
 
   toggleDelete = () => {
-    this.props.deleteGroupItem(this.props.group);
+    this.props.deleteRepoItem(this.props.repo);
   }
 
-  renderGroupHref = (group) => {
-    let groupInfoHref;
-    if (group.creatorName == 'system admin') {
-      groupInfoHref = siteRoot + 'org/admin/#address-book/groups/' + group.id + '/'
+  toggleTransfer = () => {
+    this.props.transferRepoItem(this.props.repo);
+  }
+
+  renderLibIcon = (repo) => {
+    let href;
+    let iconTitle;
+    if (repo.encrypted) {
+      href = mediaUrl + 'img/lib/48/lib-encrypted.png';
+      iconTitle = gettext('Encrypted library'); 
     } else {
-      groupInfoHref = siteRoot + 'org/groupadmin/' + group.id + '/'
+      href = mediaUrl + 'img/lib/48/lib.png';
+      iconTitle = gettext('Read-Write  library');
     } 
-                                                         
-    return groupInfoHref; 
+    return <img src={href} title={iconTitle} alt={iconTitle} width="24" />
   }
 
-  renderGroupCreator = (group) => {
-    let userInfoHref = siteRoot + 'org/useradmin/info/' + group.creatorEmail + '/';
-    if (group.creatorName == 'system admin') {
-      return (
-        <td> -- </td>
-      )
+  renderRepoOwnerHref = (repo) => {
+    let href;
+    if (repo.isDepartmentRepo) {
+      href = siteRoot + 'org/admin/#address-book/groups/' + repo.groupID + '/';
     } else {
-      return(
-        <td>
-          <a href={userInfoHref} className="font-weight-normal">{group.creatorName}</a>
-        </td>
-      )
-    }     
+      href = siteRoot + 'org/useradmin/info/' + repo.owner + '/';
+    }
+    return href;
   }
+
 
   render() {
-    let { group } = this.props;
-    let isOperationMenuShow = (group.creatorName != 'system admin') && this.state.showMenu;
+    let { repo } = this.props;
+    
+    let isOperationMenuShow = this.state.showMenu && !repo.isDepartmentRepo;
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>
-          <a href={this.renderGroupHref(group)} className="font-weight-normal">{group.groupName}</a>
-        </td>
-        {this.renderGroupCreator(group)}
-        <td>{group.ctime}</td>
+        <td>{this.renderLibIcon(repo)}</td>
+        <td>{repo.repoName}</td>
+        <td style={{'fontSize': '11px'}}>{repo.repoID}</td>
+        <td><a href={this.renderRepoOwnerHref(repo)}>{repo.ownerName}</a></td>
         <td className="text-center cursor-pointer">
         {isOperationMenuShow &&
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
@@ -218,6 +223,7 @@ class GroupItem extends React.Component {
             />
             <DropdownMenu>
               <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
+              <DropdownItem onClick={this.toggleTransfer}>{gettext('Transfer')}</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         }
@@ -228,4 +234,4 @@ class GroupItem extends React.Component {
 
 }
 
-export default OrgGroups;
+export default OrgLibraries;
