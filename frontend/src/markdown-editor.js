@@ -530,7 +530,7 @@ class MarkdownEditor extends React.Component {
           const contentLength = res.data.length;
           let isBlankFile =  (contentLength === 0 || contentLength === 1);
           let hasPermission = (this.state.fileInfo.permission === 'rw');
-          let isEditMode = this.state.mode;
+          let isEditMode = mode === 'edit' ? true : false;
           this.setState({
             markdownContent: res.data,
             loading: false,
