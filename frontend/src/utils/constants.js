@@ -72,3 +72,4 @@ export const originFileExists = window.draft ? window.draft.config.originFileExi
 
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';
+export const invitationLink = window.org ? window.org.pageOptions.invitationLink : '';
