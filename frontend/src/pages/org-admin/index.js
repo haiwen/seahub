@@ -23,6 +23,7 @@ class Org extends React.Component {
       isSidePanelClosed: false,
       isShowAddOrgUserDialog: false,
       isShowAddOrgAdminDialog: false,
+      isInviteUserDialogOpen: false,
       currentTab: 'users',
     };
   }
@@ -52,22 +53,26 @@ class Org extends React.Component {
     this.setState({isShowAddOrgAdminDialog: !this.state.isShowAddOrgAdminDialog});
   } 
 
+  toggleInviteUserDialog = () => {
+    this.setState({isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen});
+  }
+
   render() {
 
-    let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog } = this.state;
+    let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog, isInviteUserDialogOpen } = this.state;
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
-        <MainPanel currentTab={currentTab} toggleAddOrgAdmin={this.toggleAddOrgAdmin} toggleAddOrgUser={this.toggleAddOrgUser}>
+        <MainPanel currentTab={currentTab} toggleAddOrgAdmin={this.toggleAddOrgAdmin} toggleAddOrgUser={this.toggleAddOrgUser} toggleInviteUserDialog={this.toggleInviteUserDialog}>
           <Router>
             <OrgUsers 
-              path={siteRoot + "org/useradmin"}
+              path={siteRoot + 'org/useradmin'}
               currentTab={currentTab} 
               tabItemClick={this.tabItemClick}
               toggleAddOrgAdmin={this.toggleAddOrgAdmin} 
               toggleAddOrgUser={this.toggleAddOrgUser} 
             >
-              <OrgUsersList path="/" currentTab={currentTab} isShowAddOrgUserDialog={isShowAddOrgUserDialog} toggleAddOrgUser={this.toggleAddOrgUser} />
+              <OrgUsersList path="/" currentTab={currentTab} isShowAddOrgUserDialog={isShowAddOrgUserDialog} isInviteUserDialogOpen={isInviteUserDialogOpen} toggleAddOrgUser={this.toggleAddOrgUser} toggleInviteUserDialog={this.toggleInviteUserDialog} />
               <OrgAdminList path="admins" currentTab={currentTab} isShowAddOrgAdminDialog={isShowAddOrgAdminDialog} toggleAddOrgAdmin={this.toggleAddOrgAdmin} />
             </OrgUsers>
             <OrgGroups path={siteRoot + "org/groupadmin"}>
@@ -80,6 +85,6 @@ class Org extends React.Component {
 }
 
 ReactDOM.render(
-    <Org />,
+  <Org />,
   document.getElementById('wrapper')
 );

@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, orgID } from '../../utils/constants';
+import { gettext, orgID, invitationLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';
 import Toast from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog'; 
+import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dialog';
 import UserItem from './org-user-item';
 
 const propTypes = {
-  toggleAddOrgUser: PropTypes.func.isRequired,
   currentTab: PropTypes.string.isRequired,
+  toggleAddOrgUser: PropTypes.func.isRequired,
   isShowAddOrgUserDialog: PropTypes.bool.isRequired,
+  toggleInviteUserDialog: PropTypes.func.isRequired,
+  isInviteUserDialogOpen: PropTypes.bool.isRequired
 };
 
 class OrgUsersList extends React.Component {
@@ -59,7 +62,7 @@ class OrgUsersList extends React.Component {
       let msg = gettext('Successfully deleted %s');
       msg = msg.replace('%s', email);
       Toast.success(msg);
-    })
+    });
   } 
 
   handleSubmit = (email, name, password) => {
@@ -109,27 +112,32 @@ class OrgUsersList extends React.Component {
             </tr>
           </thead>
           <tbody>
-          {orgUsers.map(item => {
-            return (
-              <UserItem 
-                key={item.id}
-                user={item}
-                currentTab={this.props.currentTab}
-                isItemFreezed={this.state.isItemFreezed}
-                toggleDelete={this.toggleDelete}
-                onFreezedItem={this.onFreezedItem}
-                onUnfreezedItem={this.onUnfreezedItem}
-              />
-          )})}
+            {orgUsers.map(item => {
+              return (
+                <UserItem 
+                  key={item.id}
+                  user={item}
+                  currentTab={this.props.currentTab}
+                  isItemFreezed={this.state.isItemFreezed}
+                  toggleDelete={this.toggleDelete}
+                  onFreezedItem={this.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
+                />
+              );})}
           </tbody>
         </table>
         <div className="paginator">
-          {this.state.page !=1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext("Previous")}{' | '}</a>}
-          {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext("Next")}</a>}
+          {this.state.page !=1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}{' | '}</a>}
+          {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
         </div>
         {this.props.isShowAddOrgUserDialog && (
           <ModalPortal>
             <AddOrgUserDialog toggle={this.props.toggleAddOrgUser} handleSubmit={this.handleSubmit} />
+          </ModalPortal>
+        )}
+        {this.props.isInviteUserDialogOpen && (
+          <ModalPortal>
+            <InviteUserDialog invitationLink={invitationLink} toggle={this.props.toggleInviteUserDialog} />
           </ModalPortal>
         )}
       </div>
