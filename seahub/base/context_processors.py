@@ -44,6 +44,11 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
+try:
+    from seahub.settings import ENABLE_FILE_SCAN
+except ImportError:
+    ENABLE_FILE_SCAN = False
+
 
 def base(request):
     """
@@ -120,6 +125,7 @@ def base(request):
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
         'service_url': get_service_url().rstrip('/'),
+        'enable_file_scan': ENABLE_FILE_SCAN,
     }
 
     if request.user.is_staff:

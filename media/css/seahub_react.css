@@ -52,6 +52,7 @@
     -webkit-font-smoothing: antialiased;
 }
 
+.sf2-icon-histogram:before { content:"\e000"; }
 .sf2-icon-wrench:before { content:"\e001"; }
 .sf2-icon-clock:before { content:"\e002"; }
 .sf2-icon-bell:before { content:"\e003"; }
@@ -68,21 +69,26 @@
 .sf2-icon-history:before { content:"\e014"; }
 .sf2-icon-cog1:before { content:"\e015"; }
 .sf2-icon-trash:before { content:"\e016"; }
+.sf2-icon-security:before { content:"\e017"; }
 .sf2-icon-tick:before { content:"\e01e"; }
 .sf2-icon-x2:before { content:"\e01f"; }
 .sf2-icon-edit:before { content:"\e018"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
+.sf2-icon-cog2:before { content:"\e01b"; }
 .sf2-icon-x1:before { content:"\e01d"; }
 .sf2-icon-minus:before {content:"\e01c"}
 .sf2-icon-confirm:before {content:"\e01e"}
 .sf2-icon-cancel:before {content:"\e01f"}
 .sf2-icon-user2:before { content:"\e020"; }
+.sf2-icon-msgs:before { content:"\e021"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
 .sf2-icon-plus:before { content: "\e027"; }
 .sf2-icon-copy:before {content:"\e028"}
 .sf2-icon-move:before {content:"\e029"}
 .sf2-icon-reply:before { content:"\e02a"; }
+.sf2-icon-admin-log:before { content:"\e02e"; }
+.sf2-icon-info:before { content:"\e02f"; }
 .sf2-icon-menu:before { content: "\e031"; }
 .sf2-icon-more:before { content: "\e032"; }
 .sf2-icon-x3:before {content:"\e035";}
