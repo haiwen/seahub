@@ -4,21 +4,3 @@ table tr .activity-date {
 table td .activity-detail {
   display: inline;
 }
-td .op-color-orange {
-  background-color: #FFA94D;
-  padding: 5px 8px;
-  border-radius: 5px;
-  color: #FFF;
-}
-td .op-color-red {
-  background-color: #DC143C;
-  padding: 5px 8px;
-  border-radius: 5px;
-  color: #FFF;
-}
-td .op-color-green {
-  background-color: #8DC72E;
-  padding: 5px 8px;
-  border-radius: 5px;
-  color: #FFF;
-}
