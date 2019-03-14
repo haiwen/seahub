@@ -2,6 +2,7 @@
   border-left: 1px solid #e6e6dd;
   display: flex;
   flex-direction: column;
+  width: 29%;
 }
 .seafile-comment-title {
   border-bottom: 1px solid #e5e5e5;
@@ -43,7 +44,6 @@
   text-align: center;
 }
 .seafile-comment-item {
-  overflow-y: hidden;
   padding: 15px 10px;
   margin-bottom: 0;
 }
@@ -105,14 +105,19 @@
   flex-direction: column;
   min-height: 150px;
 }
-.seafile-comment-footer .add-comment-input {
+.seafile-comment-footer .add-comment-input,
+.seafile-edit-comment .edit-comment-input {
   border: 1px solid #e6e6dd;
   padding: 5px;
   width: 23em;
   min-height: 90px;
+  border-radius: 5px;
 }
 .seafile-comment-footer .submit-comment {
   margin-top: 5px;
   width: 60px;
+  height: 28px;
+}
+.seafile-edit-comment .comment-btn {
   height: 28px;
 }

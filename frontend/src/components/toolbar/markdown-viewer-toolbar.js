@@ -7,17 +7,13 @@ import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/fi
 const propTypes = {
   hasDraft: PropTypes.bool.isRequired,
   isDraft: PropTypes.bool.isRequired,
-  showFileHistory: PropTypes.bool.isRequired,
   editorUtilities: PropTypes.object.isRequired,
   collabUsers: PropTypes.array.isRequired,
   fileInfo: PropTypes.object.isRequired,
   fileTagList: PropTypes.array.isRequired,
   relatedFiles: PropTypes.array.isRequired,
-  commentsNumber: PropTypes.number.isRequired,
-  toggleCommentList: PropTypes.func.isRequired,
   toggleShareLinkDialog: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
-  toggleHistory: PropTypes.func.isRequired,
   toggleNewDraft: PropTypes.func.isRequired,
   toggleStar: PropTypes.func.isRequired,
   backToParentDirectory: PropTypes.func.isRequired,
@@ -51,29 +47,15 @@ class MarkdownViewerToolbar extends React.Component {
           <ButtonGroup>
             <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
               onMouseDown={this.props.toggleShareLinkDialog}/>
-            {
-              this.props.commentsNumber > 0 ?
-                <button className="btn btn-icon btn-secondary btn-active" id="commentsNumber"
-                  type="button" data-active="false" onMouseDown={this.props.toggleCommentList}>
-                  <i className="fa fa-comments"></i>{' '}<span>{this.props.commentsNumber}</span>
-                </button>
-                :
-                <IconButton id={'commentsNumber'} text={gettext('Comments')} icon={'fa fa-comments'}
-                  onMouseDown={this.props.toggleCommentList}/>
-            }
             <IconButton text={gettext('Back to parent directory')} id={'parentDirectory'}
               icon={'fa fa-folder-open'} onMouseDown={this.props.backToParentDirectory}/>
             {
               (!this.props.hasDraft && this.props.fileInfo.permission === 'rw')? <IconButton text={gettext('Edit')}
                 id={'editButton'} icon={'fa fa-edit'} onMouseDown={this.props.onEdit}/>: null
             }
-            {
-              (this.props.showFileHistory) && (!this.props.isShowHistory && <IconButton id={'historyButton'}
-                text={gettext('File history')} onMouseDown={this.props.toggleHistory} icon={'fa fa-history'}/>)
-            }
           </ButtonGroup>
         </div>
-     </div>
+      </div>
     );
   }
 

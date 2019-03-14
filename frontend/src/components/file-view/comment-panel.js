@@ -65,6 +65,12 @@ class CommentPanel extends React.Component {
     });
   }
 
+  editComment = (commentID, newComment) => {
+    seafileAPI.updateComment(repoID, commentID, null, null, newComment).then((res) => {
+      this.listComments();
+    });
+  }
+
   componentDidMount() {
     this.listComments();
   }
@@ -101,6 +107,7 @@ class CommentPanel extends React.Component {
                     item={item} time={time}
                     deleteComment={this.deleteComment}
                     resolveComment={this.resolveComment}
+                    editComment={this.editComment}
                     showResolvedComment={this.state.showResolvedComment}
                   />
                 </React.Fragment>
@@ -111,14 +118,14 @@ class CommentPanel extends React.Component {
             <li className="comment-vacant">{gettext('No comment yet.')}</li>}
         </ul>
         <div className="seafile-comment-footer">
-            <textarea
-              className="add-comment-input" ref="commentTextarea"
-              placeholder={gettext('Add a comment.')}
-              clos="100" rows="3" warp="virtual"></textarea>
-            <Button
-              className="submit-comment" color="success"
-              size="sm" onClick={this.submitComment} >
-              {gettext('Submit')}</Button>
+          <textarea
+            className="add-comment-input" ref="commentTextarea"
+            placeholder={gettext('Add a comment.')}
+            clos="100" rows="3" warp="virtual"></textarea>
+          <Button
+            className="submit-comment" color="success"
+            size="sm" onClick={this.submitComment} >
+            {gettext('Submit')}</Button>
         </div>
       </div>
     );
@@ -134,6 +141,7 @@ const commentItemPropTypes = {
   deleteComment: PropTypes.func.isRequired,
   resolveComment: PropTypes.func.isRequired,
   showResolvedComment: PropTypes.bool.isRequired,
+  editComment: PropTypes.func.isRequired,
 };
 
 class CommentItem extends React.Component {
@@ -143,6 +151,8 @@ class CommentItem extends React.Component {
     this.state = {
       dropdownOpen: false,
       html: '',
+      newComment: this.props.item.comment,
+      editable: false,
     };
   }
 
@@ -163,6 +173,26 @@ class CommentItem extends React.Component {
     );
   }
 
+  toggleEditComment = () => {
+    this.setState({
+      editable: !this.state.editable
+    });
+  }
+
+  updateComment = (event) => {
+    const newComment = this.state.newComment;
+    if (this.props.item.comment !== newComment) {
+      this.props.editComment(event.target.id, newComment);
+    }
+    this.toggleEditComment();
+  }
+
+  handleCommentChange = (event) => {
+    this.setState({
+      newComment: event.target.value,
+    });
+  }
+
   componentWillMount() {
     this.convertComment(this.props.item.comment);
   }
@@ -175,6 +205,24 @@ class CommentItem extends React.Component {
     const item = this.props.item;
     if (item.resolved && !this.props.showResolvedComment) {
       return null;
+    }
+    if (this.state.editable) {
+      return(
+        <li className="seafile-comment-item" id={item.id}>
+          <div className="seafile-comment-info">
+            <img className="avatar" src={item.avatar_url} alt=""/>
+            <div className="reviewer-info">
+              <div className="reviewer-name">{item.user_name}</div>
+              <div className="review-time">{this.props.time}</div>
+            </div>
+          </div>
+          <div className="seafile-edit-comment">
+            <textarea className="edit-comment-input" value={this.state.newComment} onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"></textarea>
+            <Button className="comment-btn" color="success" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
+            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}> {gettext('Cancle')}</Button>
+          </div>
+        </li>
+      );
     }
     return (
       <li className={item.resolved ? 'seafile-comment-item seafile-comment-item-resolved'
@@ -195,6 +243,11 @@ class CommentItem extends React.Component {
                 (item.user_email === username) &&
                 <DropdownItem onClick={this.props.deleteComment} className="delete-comment"
                   id={item.id}>{gettext('Delete')}</DropdownItem>}
+              {
+                (item.user_email === username) &&
+                  <DropdownItem onClick={this.toggleEditComment}
+                    className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>
+              }
               {
                 !item.resolved &&
                 <DropdownItem onClick={this.props.resolveComment} className="seafile-comment-resolved"

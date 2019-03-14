@@ -1,89 +1,79 @@
 .seafile-comment {
+  border-left: 1px solid #e6e6dd;
   background-color: #fff;
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;
-  height: 100%;
-}
-.seafile-comment-resizing {
-  user-select: none;
+  min-height: 18.5em;
+  z-index: 3;
+  width: 380px;
 }
 .seafile-comment-title {
   border-bottom: 1px solid #e5e5e5;
+  min-height: 2em;
   line-height: 2em;
-  padding: 2px 1em;
+  padding: 0 1em;
   display: flex;
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  background-color: #fff;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #fafaf9;
 }
-.seafile-comment-title .seafile-comment-title-text {
-  width: 100%;
+.seafile-comment-title .seafile-comment-title-close {
+  color: #b9b9b9;
 }
-.seafile-comment-title .seafile-comment-title-toggle {
-  display: flex;
+.seafile-comment-title .seafile-comment-title-close:hover {
+  color: #888;
 }
 .seafile-comment-list {
-  padding-top: 35px;
-  box-sizing: border-box;
-  height: 100%;
+  height: calc(100% - 40px);
   overflow-y: auto;
-}
-.seafile-comment .loading-icon {
-  margin-top: 20px;
+  margin-bottom: 120px;
 }
 .seafile-comment-list .comment-vacant {
-  padding: 15px;
+  padding: 1em;
   text-align: center;
 }
 .seafile-comment-item {
   padding: 15px 10px;
-}
-.seafile-comment-item-resolved {
-  background-color: #e6ffed;
+  margin-bottom: 0;
 }
 .seafile-comment-item .seafile-comment-info {
+  padding-bottom: 0.5em;
+  height: 3em;
   display: flex;
+  justify-content: flex-start;
 }
 .seafile-comment-item .seafile-comment-info .reviewer-info {
   padding-left: 10px;
-  height: 2rem;
-  display: block;
-}
-.seafile-comment-item .seafile-comment-info .reviewer-name {
-  font-size: 1rem;
-  height: 1rem;
-  line-height: 1rem;
 }
 .seafile-comment-item .seafile-comment-info .review-time {
-  margin-top: 2px;
-  font-size: .6rem;
+  font-size: 10px;
   color: #777;
 }
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown {
   margin-left: auto;
 }
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button,
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:hover,
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:focus
- {
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button {
   border: none;
   box-shadow: none;
   background-color: #fff;
-  height: 100%;
-}
-.seafile-comment-dropdown button:hover i {
-  color: #555;
 }
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .seafile-comment-dropdown-btn {
   color: #999;
+  background-color: transparent;
 }
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown:hover .seafile-comment-dropdown-btn {
   color: #555;
+  background-color: transparent;
+}
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:hover,
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:focus {
+  border: none;
+  box-shadow: none;
+  background-color: #eee;
 }
 .seafile-comment-item .seafile-comment-content {
-  margin: 10px 0 0 40px;
+  margin-left: 42px;
 }
 .seafile-comment-item .seafile-comment-content ol,
 .seafile-comment-item .seafile-comment-content ul,
@@ -96,20 +86,7 @@
   border: 1px solid #333;
 }
 .seafile-comment-item blockquote {
-  word-wrap: break-word;
-  overflow: hidden;
-  padding-left: 1rem;
   cursor: pointer;
-}
-.seafile-comment-row-resize {
-  height: 5px;
-  width: 100%;
-  background-color: transparent;
-  position: absolute;
-  left: 0;
-  top: 0;
-  cursor: row-resize;
-  z-index: 1;
 }
 .seafile-comment-footer {
   background-color: #fafaf9;
@@ -117,24 +94,34 @@
   min-height: 120px;
   position: absolute;
   bottom: 0;
-  padding-top: 0;
-  width: 100%;
+  padding: 0;
+  width: inherit;
 }
 .seafile-comment-footer .seafile-add-comment {
   margin: 10px 20px 5px 15px;
   height: 100%;
+  width: 100%;
 }
 .seafile-add-comment .add-comment-input,
 .seafile-edit-comment .edit-comment-input {
-  box-sizing: border-box;
   background-color: #fff;
   border: 1px solid #e6e6dd;
   padding: 5px;
-  height: calc(100% - 50px);
   min-height: 70px;
-  width: 100%;
-  resize: none;
   border-radius: 5px;
+  width: 100%;
+}
+.seafile-add-comment .add-comment-input {
+  height: calc(100% - 50px);
+  width:  calc(100% - 40px);
+}
+.seafile-comment-footer .seafile-add-comment .submit-comment {
+  margin-top: 5px;
+  width: 60px;
+  height: 28px;
+}
+.seafile-comment-item-resolved {
+  background-color: #e6ffed;
 }
 .seafile-comment-footer .seafile-add-comment .comment-btn,
 .seafile-edit-comment .comment-btn {
@@ -142,24 +129,4 @@
 }
 .seafile-edit-comment {
   margin-top: 10px;
-}
-@media (max-width: 992px) {
-  .seafile-comment-footer {
-    min-height: 80px;
-  }
-  .seafile-comment-footer .seafile-add-comment .add-comment-input {
-    min-height: 30px;
-  }
-  .seafile-comment-list .comment-vacant {
-    padding: 10px;
-  }
-  .seafile-comment {
-    font-size: 12px;
-  }
-  .seafile-comment-footer .seafile-add-comment .comment-btn {
-    height: 24px;
-  }
-  .seafile-comment-footer {
-    min-height: 120px;
-  }
 }
