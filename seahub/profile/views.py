@@ -15,7 +15,7 @@ from forms import DetailedProfileForm
 from models import Profile, DetailedProfile
 from seahub.auth.decorators import login_required
 from seahub.utils import is_org_context, is_pro_version, is_valid_username
-from seahub.base.accounts import User
+from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
@@ -116,6 +116,7 @@ def edit_profile(request):
             'social_next_page': reverse('edit_profile'),
             'enable_wechat_work': enable_wechat_work,
             'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
+            'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
     }
 
     if has_two_factor_auth():

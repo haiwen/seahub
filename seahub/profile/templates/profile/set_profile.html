@@ -96,7 +96,7 @@
 {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
 <div id="update-user-passwd" class="setting-item">
     <h3>{% trans "Password" %}</h3>
-    <a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a>
+    <a href="{{ SITE_ROOT }}accounts/password/change/">{% if user_unusable_password %}{% trans "Set Password" %}{% else %}{% trans "Update" %}{% endif %}</a>
 </div>
 {% endif %}
 
