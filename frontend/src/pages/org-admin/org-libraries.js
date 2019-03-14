@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import OrgAdminRepo from '../../models/org-admin-repo';
-import Toast from '../../components/toast';
-
+import toaster from '../../components/toast';
+import TransferDialog from '../../components/dialog/transfer-dialog';
+import ModalPortal from '../../components/modal-portal';
 import { seafileAPI } from '../../utils/seafile-api';
 import { mediaUrl, siteRoot, gettext, orgID } from '../../utils/constants';
 
@@ -60,17 +61,27 @@ class OrgLibraries extends Component {
   }
 
   deleteRepoItem = (repo) => {
+    seafileAPI.deleteOrgLibrary(orgID, repo.repoID).then(res => {
+      this.setState({
+        orgRepos: this.state.orgRepos.filter(item => item.repoID != repo.repoID)
+      });
       let msg = gettext('Successfully deleted {name}');
       msg = msg.replace('{name}', repo.repoName);
-      Toast.success(msg);
+      toaster.success(msg);
+    })
   }
 
-  transferRepoItem = (repo) => {
-      let msg = gettext('Successfully transfer {name}');
-      msg = msg.replace('{name}', repo.repoName);
-      Toast.success(msg);
+  transferRepoItem = (repoID, user) => {
+    this.setState({
+      orgRepos: this.state.orgRepos.map(item =>{
+        if (item.repoID == repoID) {
+          item.owner = user.email;
+          item.ownerName = user.value;
+        }
+        return item;
+      })
+    });
   }
-
 
   render() {
     let repos = this.state.orgRepos;
@@ -95,7 +106,7 @@ class OrgLibraries extends Component {
                 {repos.map(item => {
                   return (
                     <RepoItem
-                      key={item.id}
+                      key={item.repoID}
                       repo={item}
                       isItemFreezed={this.state.isItemFreezed}
                       onFreezedItem={this.onFreezedItem} 
@@ -108,6 +119,7 @@ class OrgLibraries extends Component {
             </table>
             <div className="paginator">
               {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext("Previous")}</a>}
+              {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
               {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext("Next")}</a>}
             </div>
           </div>
@@ -124,7 +136,8 @@ class RepoItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      isTransferDialogShow: false
     };
   }
 
@@ -199,39 +212,66 @@ class RepoItem extends React.Component {
     return href;
   }
 
+  toggleTransfer = () => {
+    this.setState({isTransferDialogShow: !this.state.isTransferDialogShow});
+  }
+
+  onTransferRepo = (user) => {
+    let repo = this.props.repo;
+    seafileAPI.transferOrgLibrary(orgID, repo.repoID, user.email).then(res => {
+      this.props.transferRepoItem(repo.repoID, user);
+      let msg = gettext('Successfully transferred the library.');
+      toaster.success(msg);
+    }).catch(res => {
+      let msg = gettext('Failed. Please check the network.');
+      toaster.danger(msg);
+    });
+    this.toggleTransfer();
+  }
+
 
   render() {
     let { repo } = this.props;
     
     let isOperationMenuShow = this.state.showMenu && !repo.isDepartmentRepo;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{this.renderLibIcon(repo)}</td>
-        <td>{repo.repoName}</td>
-        <td style={{'fontSize': '11px'}}>{repo.repoID}</td>
-        <td><a href={this.renderRepoOwnerHref(repo)}>{repo.ownerName}</a></td>
-        <td className="text-center cursor-pointer">
-        {isOperationMenuShow &&
-          <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-            <DropdownToggle
-              tag="a"
-              className="attr-action-icon fas fa-ellipsis-v"
-              title={gettext('More Operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isItemMenuShow}
-              onClick={this.onDropdownToggleClick}
+      <Fragment>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td>{this.renderLibIcon(repo)}</td>
+          <td>{repo.repoName}</td>
+          <td style={{'fontSize': '11px'}}>{repo.repoID}</td>
+          <td><a href={this.renderRepoOwnerHref(repo)}>{repo.ownerName}</a></td>
+          <td className="text-center cursor-pointer">
+          {isOperationMenuShow &&
+            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+              <DropdownToggle
+                tag="a"
+                className="attr-action-icon fas fa-ellipsis-v"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isItemMenuShow}
+                onClick={this.onDropdownToggleClick}
+              />
+              <DropdownMenu>
+                <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.toggleTransfer}>{gettext('Transfer')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          }
+          </td>
+        </tr>
+        {this.state.isTransferDialogShow && (
+          <ModalPortal>
+              <TransferDialog
+              itemName={repo.repoName}
+              submit={this.onTransferRepo}
+              toggleDialog={this.toggleTransfer}
             />
-            <DropdownMenu>
-              <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-              <DropdownItem onClick={this.toggleTransfer}>{gettext('Transfer')}</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        }
-        </td>
-      </tr>
+          </ModalPortal>
+        )}
+      </Fragment>
     );
   }
-
 }
 
 export default OrgLibraries;

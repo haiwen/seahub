@@ -8,6 +8,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, storages } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
+import toaster from '../../components/toast';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import TransferDialog from '../../components/dialog/transfer-dialog';
 import LibHistorySettingDialog from '../../components/dialog/lib-history-setting-dialog';
@@ -175,9 +176,18 @@ class MylibRepoListItem extends React.Component {
     this.setState({isRenaming: !this.state.isRenaming});
   }
 
-  onTransferRepo = (repoID) => {
+  onTransferRepo = (user) => {
+    let repoID = this.props.repo.repo_id;
+    seafileAPI.transferRepo(repoID, user.email).then(res => {
+      this.props.onTransferRepo(repoID);
+      let message = gettext('Successfully transferred the library.');
+      toaster.success(message);
+    }).catch(res => {
+      let message = gettext('Failed. Please check the network.');
+      toaster.danger(message);
+    });
+
     this.onTransferToggle();
-    this.props.onTransferRepo(repoID);
   }
 
   onDeleteRepo = (repo) => {
@@ -316,7 +326,6 @@ class MylibRepoListItem extends React.Component {
         {this.state.isTransferDialogShow && (
           <ModalPortal>
             <TransferDialog
-              repoID={repo.repo_id}
               itemName={repo.repo_name}
               submit={this.onTransferRepo}
               toggleDialog={this.onTransferToggle}

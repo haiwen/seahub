@@ -127,7 +127,8 @@ class OrgUsersList extends React.Component {
           </tbody>
         </table>
         <div className="paginator">
-          {this.state.page !=1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}{' | '}</a>}
+          {this.state.page !=1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+          {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
           {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
         </div>
         {this.props.isShowAddOrgUserDialog && (
