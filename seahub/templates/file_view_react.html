@@ -10,6 +10,10 @@ window.app.pageOptions = {
   username: '{{ user.username|escapejs }}',
   userNickName: '{{request.user.username|email2nickname|escapejs}}',
 
+  canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
+  shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
+  shareLinkExpireDaysMax: {{ share_link_expire_days_max }},
+
   // for all types of files
   fileName: '{{ filename|escapejs }}',
   isStarred: {% if is_starred %}true{% else %}false{% endif %},
@@ -19,6 +23,7 @@ window.app.pageOptions = {
   lastModificationTime: '{{ last_modified }}',
   repoID: '{{ repo.id }}',
   repoName: '{{ repo.name|escapejs }}',
+  repoEncrypted: {% if repo.encrypted %}true{% else %}false{% endif %},
   filePath: '{{ path|escapejs }}',
   filePerm: '{{ file_perm }}',
   parentDir: '{{ parent_dir|escapejs }}',
