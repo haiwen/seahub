@@ -89,7 +89,6 @@ class ActivityItem extends Component {
   render() {
     let {item, index, items} = this.props;
     let op, details;
-    let opColor = '';
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.author_email)}/`;
 
     let libURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + '/';
@@ -127,7 +126,6 @@ class ActivityItem extends Component {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
       let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
       op = gettext('Publish draft');
-      opColor = 'orange';
       details = <td>{fileLink}<br />{smallLibLink}</td>;
     } else if (item.obj_type == 'files') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
@@ -150,23 +148,19 @@ class ActivityItem extends Component {
         case 'create':
           if (item.name.endsWith('(draft).md')) {
             op = gettext('Created draft');
-            opColor = 'green';
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
           }
           op = gettext('Created file');
-          opColor = 'green';
           details = <td>{fileLink}<br />{smallLibLink}</td>;
           break;
         case 'delete':
           if (item.name.endsWith('(draft).md')) {
             op = gettext('Deleted draft');
-            opColor = 'red';
             details = <td>{item.name}<br />{smallLibLink}</td>;
             break;
           }
           op = gettext('Deleted file');
-          opColor = 'red';
           details = <td>{item.name}<br />{smallLibLink}</td>;
           break;
         case 'recover':
@@ -185,12 +179,10 @@ class ActivityItem extends Component {
         case 'edit': // update
           if (item.name.endsWith('(draft).md')) {
             op = gettext('Updated draft');
-            opColor = 'orange';
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
           }
           op = gettext('Updated file');
-          opColor = 'orange';
           details = <td>{fileLink}<br />{smallLibLink}</td>;
           break;
       }
@@ -242,7 +234,7 @@ class ActivityItem extends Component {
           <td>
             <a href={userProfileURL}>{item.author_name}</a>
           </td>
-          <td><span className={`activity-op op-color-${opColor}`}>{op}</span></td>
+          <td><span className="activity-op">{op}</span></td>
           {details}
           <td className="text-secondary">
             <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
