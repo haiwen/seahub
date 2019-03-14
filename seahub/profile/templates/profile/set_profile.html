@@ -72,7 +72,7 @@
         {% endif %}
 
         {% if form.data.contact_email or ENABLE_USER_SET_CONTACT_EMAIL %}
-        <label>{% trans "Contact Email:" %}</label><input type="text" name="contact_email" value="{{form.data.contact_email}}" class="input" {% if not ENABLE_USER_SET_CONTACT_EMAIL%}disabled{% endif %}/>
+        <label>{% trans "Contact Email:" %}</label><input type="text" name="contact_email" value="{{form.data.contact_email}}" class="input" {% if not ENABLE_USER_SET_CONTACT_EMAIL%}disabled{% endif %} />
         {% for error in form.contact_email.errors %}
         <span class="error">{{ error|escape }}</span>
         {% endfor %}
