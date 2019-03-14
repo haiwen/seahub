@@ -70,8 +70,8 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '',  // for update dir list
       errorMsg: '',
-      isImagePopupOpen:false,
-      imageItems:[],
+      isNodeImagePopupOpen:false,
+      imageNodeItems:[],
       imageIndex:0,
     };
 
@@ -1018,7 +1018,7 @@ class LibContentView extends React.Component {
           this.showFile(node.path);
         }
       } else if (Utils.imageCheck(node.object.name)) {
-          this.showImagePopup(node)
+          this.showNodeImagePopup(node)
       } else {
         const w = window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
@@ -1027,7 +1027,7 @@ class LibContentView extends React.Component {
     }
   }
 
-showImagePopup = (node) => {
+  showNodeImagePopup = (node) => {
     let childrenNode = node.parentNode.children;
     let items = childrenNode.filter((item) => {
       return Utils.imageCheck(item.object.name);
@@ -1037,8 +1037,8 @@ showImagePopup = (node) => {
       imageName.push(item.object.name)
     })
     this.setState({
-      isImagePopupOpen: true,
-      imageItems: this.prepareImageItems(node),
+      isNodeImagePopupOpen: true,
+      imageNodeItems: this.prepareImageItems(node),
       imageIndex: imageName.indexOf(node.object.name)
     });
   }
@@ -1074,21 +1074,21 @@ showImagePopup = (node) => {
     return items.map((item) => { return prepareItem(item); });
   }
 
-  closeImagePopup = () => {
+  closeNodeImagePopup = () => {
     this.setState({
-      isImagePopupOpen: false
+      isNodeImagePopupOpen: false
     });
   }
 
   moveToPrevImage = () => {
-    const imageItemsLength = this.state.imageItems.length;
+    const imageItemsLength = this.state.imageNodeItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
     }));
   }
 
   moveToNextImage = () => {
-    const imageItemsLength = this.state.imageItems.length;
+    const imageItemsLength = this.state.imageNodeItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + 1) % imageItemsLength
     }));
@@ -1269,14 +1269,14 @@ showImagePopup = (node) => {
       }
 
     }
-    const imageItems = this.state.imageItems;
+    const imageNodeItems = this.state.imageNodeItems;
     const imageIndex = this.state.imageIndex;
-    const imageItemsLength = imageItems.length; 
+    const imageItemsLength = imageNodeItems.length; 
     const imageCaption = imageItemsLength && (
       <Fragment>
         <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
         <br />
-        <a href={imageItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
+        <a href={imageNodeItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
       </Fragment>
     );
 
@@ -1381,14 +1381,14 @@ showImagePopup = (node) => {
               onFileUploadSuccess={this.onFileUploadSuccess}
             />
           )}
-          {this.state.isImagePopupOpen && (
+          {this.state.isNodeImagePopupOpen && (
             <Lightbox
-              mainSrc={imageItems[imageIndex].src}
+              mainSrc={imageNodeItems[imageIndex].src}
               imageCaption={imageCaption}
-              imageTitle={imageItems[imageIndex].name}
-              nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
-              prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
-              onCloseRequest={this.closeImagePopup}
+              imageTitle={imageNodeItems[imageIndex].name}
+              nextSrc={imageNodeItems[(imageIndex + 1) % imageItemsLength].src}
+              prevSrc={imageNodeItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
+              onCloseRequest={this.closeNodeImagePopup}
               onMovePrevRequest={this.moveToPrevImage}
               onMoveNextRequest={this.moveToNextImage}
               imagePadding={70}
