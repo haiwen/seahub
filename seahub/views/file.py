@@ -512,6 +512,8 @@ def view_lib_file(request, repo_id, path):
         'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
         'enable_file_comment': settings.ENABLE_FILE_COMMENT,
         'enable_watermark': ENABLE_WATERMARK,
+        'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
+        'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
         'can_download_file': parse_repo_perm(permission).can_download,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
     }
