@@ -1269,16 +1269,16 @@ showImagePopup = (node) => {
       }
 
     }
-      const imageItems = this.state.imageItems;
-      const imageIndex = this.state.imageIndex;
-      const imageItemsLength = imageItems.length; 
-      const imageCaption = imageItemsLength && (
-        <Fragment>
-          <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
-          <br />
-          <a href={imageItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
-        </Fragment>
-      );
+    const imageItems = this.state.imageItems;
+    const imageIndex = this.state.imageIndex;
+    const imageItemsLength = imageItems.length; 
+    const imageCaption = imageItemsLength && (
+      <Fragment>
+        <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
+        <br />
+        <a href={imageItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
+      </Fragment>
+    );
 
     return (
       <div className="main-panel o-hidden">
