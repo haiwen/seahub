@@ -288,6 +288,7 @@ class CommentItem extends React.Component {
 
   render() {
     const item = this.props.item;
+    const showMenu = item.userEmail === username;
     if (item.resolved && !this.props.showResolvedComment) {
       return null;
     }
@@ -318,21 +319,19 @@ class CommentItem extends React.Component {
             <div className="reviewer-name">{item.name}</div>
             <div className="review-time">{item.time}</div>
           </div>
-          { !item.resolved &&
+          { showMenu &&
             <Dropdown isOpen={this.state.dropdownOpen} size="sm"
               className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
               <DropdownToggle className="seafile-comment-dropdown-btn">
                 <i className="fas fa-ellipsis-v"></i>
               </DropdownToggle>
               <DropdownMenu>
-                { (item.userEmail === username) &&
-                  <DropdownItem onClick={this.props.deleteComment}
-                    className="delete-comment" id={item.id}>{gettext('Delete')}</DropdownItem>}
-                { (item.userEmail === username) &&
-                  <DropdownItem onClick={this.toggleEditComment}
-                    className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>}
-                <DropdownItem onClick={this.props.resolveComment}
-                  className="seafile-comment-resolved" id={item.id}>{gettext('Mark as resolved')}</DropdownItem>
+                <DropdownItem onClick={this.props.deleteComment} className="delete-comment" id={item.id}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.toggleEditComment} className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>
+                {!item.resolved &&
+                  <DropdownItem onClick={this.props.resolveComment}
+                    className="seafile-comment-resolved" id={item.id}>{gettext('Mark as resolved')}</DropdownItem>
+                }
               </DropdownMenu>
             </Dropdown>
           }

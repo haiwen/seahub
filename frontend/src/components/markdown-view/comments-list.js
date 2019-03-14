@@ -239,6 +239,7 @@ class CommentItem extends React.Component {
   render() {
     const item = this.props.item;
     const { id, user_email, avatar_url, user_name, resolved } = item;
+    const showMenu = user_email === this.props.editorUtilities.userName;
     if (item.resolved && !this.props.showResolvedComment) {
       return null;
     }
@@ -268,26 +269,23 @@ class CommentItem extends React.Component {
             <div className="reviewer-name">{user_name}</div>
             <div className="review-time">{this.props.time}</div>
           </div>          
-          <Dropdown isOpen={this.state.dropdownOpen} size="sm"
-            className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
-            <DropdownToggle className="seafile-comment-dropdown-btn">
-              <i className="fas fa-ellipsis-v"></i>
-            </DropdownToggle>
-            <DropdownMenu>
-              {(user_email === this.props.editorUtilities.userName) &&
-                <DropdownItem onClick={this.props.deleteComment}
-                  className="delete-comment" id={item.id}>{gettext('Delete')}</DropdownItem>
+          {
+            showMenu &&
+            <Dropdown isOpen={this.state.dropdownOpen} size="sm"
+              className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
+              <DropdownToggle className="seafile-comment-dropdown-btn">
+                <i className="fas fa-ellipsis-v"></i>
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem onClick={this.props.deleteComment} className="delete-comment" id={item.id}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.toggleEditComment} className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>
+                {!resolved &&
+                  <DropdownItem onClick={this.props.resolveComment} className="seafile-comment-resolved"
+                    id={item.id}>{gettext('Mark as resolved')}</DropdownItem>
                 }
-              {(user_email === this.props.editorUtilities.userName) &&
-                <DropdownItem onClick={this.toggleEditComment}
-                  className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>
-              }
-              {!resolved &&
-                <DropdownItem onClick={this.props.resolveComment} className="seafile-comment-resolved"
-                  id={item.id}>{gettext('Mark as resolved')}</DropdownItem>
-              }
-            </DropdownMenu>
-          </Dropdown>
+              </DropdownMenu>
+            </Dropdown>
+          }
         </div>       
         {item.detail &&
           <blockquote className="seafile-comment-content">

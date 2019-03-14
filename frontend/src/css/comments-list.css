@@ -81,6 +81,13 @@
   box-shadow: none;
   background-color: #eee;
 }
+.seafile-comment-item-resolved {
+  background-color: #e6ffed;
+}
+.seafile-comment-item-resolved .seafile-comment-info .seafile-comment-dropdown button:hover,
+.seafile-comment-item-resolved .seafile-comment-info .seafile-comment-dropdown button:focus {
+  background-color: #e6ffed;
+}
 .seafile-comment-item .seafile-comment-content {
   margin-left: 42px;
 }
@@ -93,9 +100,6 @@
 .seafile-comment-item .seafile-comment-content th,
 .seafile-comment-item .seafile-comment-content td {
   border: 1px solid #333;
-}
-.seafile-comment-item-resolved {
-  background-color: #e6ffed;
 }
 .seafile-comment-footer {
   background-color: #fafaf9;

@@ -203,6 +203,7 @@ class CommentItem extends React.Component {
 
   render() {
     const item = this.props.item;
+    const showMenu = item.user_email === username;
     if (item.resolved && !this.props.showResolvedComment) {
       return null;
     }
@@ -233,28 +234,22 @@ class CommentItem extends React.Component {
             <div className="reviewer-name">{item.user_name}</div>
             <div className="review-time">{this.props.time}</div>
           </div>
-          <Dropdown isOpen={this.state.dropdownOpen} size="sm"
-            className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
-            <DropdownToggle className="seafile-comment-dropdown-btn">
-              <i className="fas fa-ellipsis-v"></i>
-            </DropdownToggle>
-            <DropdownMenu>
-              {
-                (item.user_email === username) &&
-                <DropdownItem onClick={this.props.deleteComment} className="delete-comment"
-                  id={item.id}>{gettext('Delete')}</DropdownItem>}
-              {
-                (item.user_email === username) &&
-                  <DropdownItem onClick={this.toggleEditComment}
-                    className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>
-              }
-              {
-                !item.resolved &&
-                <DropdownItem onClick={this.props.resolveComment} className="seafile-comment-resolved"
-                  id={item.id}>{gettext('Mark as resolved')}</DropdownItem>
-              }
-            </DropdownMenu>
-          </Dropdown>
+          {showMenu &&
+            <Dropdown isOpen={this.state.dropdownOpen} size="sm"
+              className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
+              <DropdownToggle className="seafile-comment-dropdown-btn">
+                <i className="fas fa-ellipsis-v"></i>
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem onClick={this.props.deleteComment} className="delete-comment" id={item.id}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.toggleEditComment} className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>
+                {!item.resolved &&
+                  <DropdownItem onClick={this.props.resolveComment} className="seafile-comment-resolved"
+                    id={item.id}>{gettext('Mark as resolved')}</DropdownItem>
+                }
+              </DropdownMenu>
+            </Dropdown>
+          }
         </div>
         <div className="seafile-comment-content" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
       </li>

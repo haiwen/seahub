@@ -82,6 +82,10 @@
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown:hover .seafile-comment-dropdown-btn {
   color: #555;
 }
+.seafile-comment-item-resolved .seafile-comment-info .seafile-comment-dropdown .seafile-comment-dropdown-btn,
+.seafile-comment-item-resolved .seafile-comment-info .seafile-comment-dropdown:hover .seafile-comment-dropdown-btn {
+  background-color: #e6ffed;
+}
 .seafile-comment-item .seafile-comment-content {
   margin: 10px 0 0 40px;
 }
