@@ -83,18 +83,18 @@ class OrgAdminList extends React.Component {
     let orgAdminUsers = this.state.orgAdminUsers;
 
     return (
-       <div className="cur-view-content">
-         <table>
-           <thead>
-             <tr>
-               <th width="30%">{gettext('Name')}</th>
-               <th width="15%">{gettext('Status')}</th>
-               <th width="15%">{gettext('Space Used')}</th>
-               <th width="20%">{gettext('Create At / Last Login')}</th>
-               <th width="20%" className="text-center">{gettext('Operations')}</th>
-             </tr>
-           </thead>
-           <tbody>
+      <div className="cur-view-content">
+        <table>
+          <thead>
+            <tr>
+              <th width="30%">{gettext('Name')}</th>
+              <th width="15%">{gettext('Status')}</th>
+              <th width="15%">{gettext('Space Used')}</th>
+              <th width="20%">{gettext('Create At / Last Login')}</th>
+              <th width="20%" className="text-center">{gettext('Operations')}</th>
+            </tr>
+          </thead>
+          <tbody>
             {orgAdminUsers.map(item => {
               return (
                 <UserItem 
@@ -108,13 +108,13 @@ class OrgAdminList extends React.Component {
                   onUnfreezedItem={this.onUnfreezedItem}
                 />
             )})}
-           </tbody>
-         </table>
-         {this.props.isShowAddOrgAdminDialog && (
-           <ModalPortal>
-             <AddOrgAdminDialog toggle={this.props.toggleAddOrgAdmin} addOrgAdmin={this.addOrgAdmin} />
-           </ModalPortal>
-         )}
+          </tbody>
+        </table>
+        {this.props.isShowAddOrgAdminDialog && (
+          <ModalPortal>
+            <AddOrgAdminDialog toggle={this.props.toggleAddOrgAdmin} addOrgAdmin={this.addOrgAdmin} />
+          </ModalPortal>
+        )}
       </div>
     );
   }

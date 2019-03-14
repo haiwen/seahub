@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import OrgGroupInfo from '../../models/org-group';
@@ -17,7 +16,7 @@ class OrgGroups extends Component {
       pageNext: false,
       orgGroups: [],
       isItemFreezed: false  
-    }
+    };
   }
 
   componentDidMount() {
@@ -68,7 +67,7 @@ class OrgGroups extends Component {
       let msg = gettext('Successfully deleted {name}');
       msg = msg.replace('{name}', group.groupName);
       Toast.success(msg);
-    })
+    });
   }
 
   render() {
@@ -77,7 +76,7 @@ class OrgGroups extends Component {
       <div className="main-panel-center flex-row">
         <div className="cur-view-container">
           <div className="cur-view-path">
-           <h3 className="sf-heading">{gettext('All Groups')}</h3>
+            <h3 className="sf-heading">{gettext('All Groups')}</h3>
           </div>
           <div className="cur-view-content">
             <table>
@@ -104,9 +103,9 @@ class OrgGroups extends Component {
               </tbody>
             </table>
             <div className="paginator">
-              {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext("Previous")}</a>}
+              {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
               {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
-              {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext("Next")}</a>}
+              {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
             </div>
           </div>
         </div>
@@ -173,9 +172,9 @@ class GroupItem extends React.Component {
   renderGroupHref = (group) => {
     let groupInfoHref;
     if (group.creatorName == 'system admin') {
-      groupInfoHref = siteRoot + 'org/admin/#address-book/groups/' + group.id + '/'
+      groupInfoHref = siteRoot + 'org/admin/#address-book/groups/' + group.id + '/';
     } else {
-      groupInfoHref = siteRoot + 'org/groupadmin/' + group.id + '/'
+      groupInfoHref = siteRoot + 'org/groupadmin/' + group.id + '/';
     } 
                                                          
     return groupInfoHref; 
@@ -186,13 +185,13 @@ class GroupItem extends React.Component {
     if (group.creatorName == 'system admin') {
       return (
         <td> -- </td>
-      )
+      );
     } else {
       return(
         <td>
           <a href={userInfoHref} className="font-weight-normal">{group.creatorName}</a>
         </td>
-      )
+      );
     }     
   }
 
@@ -207,21 +206,21 @@ class GroupItem extends React.Component {
         {this.renderGroupCreator(group)}
         <td>{group.ctime}</td>
         <td className="text-center cursor-pointer">
-        {isOperationMenuShow &&
-          <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-            <DropdownToggle
-              tag="a"
-              className="attr-action-icon fas fa-ellipsis-v"
-              title={gettext('More Operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isItemMenuShow}
-              onClick={this.onDropdownToggleClick}
-            />
-            <DropdownMenu>
-              <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        }
+          {isOperationMenuShow &&
+            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+              <DropdownToggle
+                tag="a"
+                className="attr-action-icon fas fa-ellipsis-v"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isItemMenuShow}
+                onClick={this.onDropdownToggleClick}
+              />
+              <DropdownMenu>
+                <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          }
         </td>
       </tr>
     );

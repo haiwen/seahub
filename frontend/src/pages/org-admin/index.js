@@ -76,8 +76,8 @@ class Org extends React.Component {
               <OrgUsersList path="/" currentTab={currentTab} isShowAddOrgUserDialog={isShowAddOrgUserDialog} isInviteUserDialogOpen={isInviteUserDialogOpen} toggleAddOrgUser={this.toggleAddOrgUser} toggleInviteUserDialog={this.toggleInviteUserDialog} />
               <OrgAdminList path="admins" currentTab={currentTab} isShowAddOrgAdminDialog={isShowAddOrgAdminDialog} toggleAddOrgAdmin={this.toggleAddOrgAdmin} />
             </OrgUsers>
-            <OrgGroups path={siteRoot + "org/groupadmin"} />
-            <OrgLibraries path={siteRoot + "org/repoadmin"} />
+            <OrgGroups path={siteRoot + 'org/groupadmin'} />
+            <OrgLibraries path={siteRoot + 'org/repoadmin'} />
           </Router>
         </MainPanel>
       </div>

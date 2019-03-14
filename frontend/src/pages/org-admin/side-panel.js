@@ -33,25 +33,25 @@ class SidePanel extends React.Component {
               <h3 className="sf-heading" style={{ 'color': '#f7941d' }}>{gettext('Admin')}</h3>
               <ul className="nav nav-pills flex-column nav-container">
                 <li className="nav-item">
-                  <a className='nav-link ellipsis' href={siteRoot + "org/orgmanage/"}>
+                  <a className='nav-link ellipsis' href={siteRoot + 'org/orgmanage/'}>
                     <span className="sf2-icon-monitor" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('Info')}</span>
                   </a>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('repoadmin')}`} to={siteRoot + "org/repoadmin/"} onClick={() => this.tabItemClick('repoadmin')} >
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('repoadmin')}`} to={siteRoot + 'org/repoadmin/'} onClick={() => this.tabItemClick('repoadmin')} >
                     <span className="sf2-icon-library"></span>
                     <span className="nav-text">{gettext('Libraries')}</span>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('users') || this.getActiveClass('admins')}`} to={siteRoot + "org/useradmin/"} onClick={() => this.tabItemClick('users')} >
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('users') || this.getActiveClass('admins')}`} to={siteRoot + 'org/useradmin/'} onClick={() => this.tabItemClick('users')} >
                     <span className="sf2-icon-user"></span>
                     <span className="nav-text">{gettext('Users')}</span>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('groupadmin')}`} to={siteRoot + "org/groupadmin/"} onClick={() => this.tabItemClick('groupadmin')}>
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('groupadmin')}`} to={siteRoot + 'org/groupadmin/'} onClick={() => this.tabItemClick('groupadmin')}>
                     <span className="sf2-icon-group"></span>
                     <span className="nav-text">{gettext('Groups')}</span>
                   </Link>

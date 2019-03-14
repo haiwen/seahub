@@ -68,7 +68,7 @@ class OrgLibraries extends Component {
       let msg = gettext('Successfully deleted {name}');
       msg = msg.replace('{name}', repo.repoName);
       toaster.success(msg);
-    })
+    });
   }
 
   transferRepoItem = (repoID, user) => {
@@ -89,7 +89,7 @@ class OrgLibraries extends Component {
       <div className="main-panel-center flex-row">
         <div className="cur-view-container">
           <div className="cur-view-path">
-           <h3 className="sf-heading">{gettext('All Libraries')}</h3>
+            <h3 className="sf-heading">{gettext('All Libraries')}</h3>
           </div>
           <div className="cur-view-content">
             <table>
@@ -118,9 +118,9 @@ class OrgLibraries extends Component {
               </tbody>
             </table>
             <div className="paginator">
-              {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext("Previous")}</a>}
+              {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
               {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
-              {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext("Next")}</a>}
+              {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
             </div>
           </div>
         </div>
@@ -199,7 +199,7 @@ class RepoItem extends React.Component {
       href = mediaUrl + 'img/lib/48/lib.png';
       iconTitle = gettext('Read-Write  library');
     } 
-    return <img src={href} title={iconTitle} alt={iconTitle} width="24" />
+    return <img src={href} title={iconTitle} alt={iconTitle} width="24" />;
   }
 
   renderRepoOwnerHref = (repo) => {
@@ -229,7 +229,6 @@ class RepoItem extends React.Component {
     this.toggleTransfer();
   }
 
-
   render() {
     let { repo } = this.props;
     
@@ -242,31 +241,31 @@ class RepoItem extends React.Component {
           <td style={{'fontSize': '11px'}}>{repo.repoID}</td>
           <td><a href={this.renderRepoOwnerHref(repo)}>{repo.ownerName}</a></td>
           <td className="text-center cursor-pointer">
-          {isOperationMenuShow &&
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownToggle
-                tag="a"
-                className="attr-action-icon fas fa-ellipsis-v"
-                title={gettext('More Operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-                onClick={this.onDropdownToggleClick}
-              />
-              <DropdownMenu>
-                <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.toggleTransfer}>{gettext('Transfer')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          }
+            {isOperationMenuShow &&
+              <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+                <DropdownToggle
+                  tag="a"
+                  className="attr-action-icon fas fa-ellipsis-v"
+                  title={gettext('More Operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isItemMenuShow}
+                  onClick={this.onDropdownToggleClick}
+                />
+                <DropdownMenu>
+                  <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
+                  <DropdownItem onClick={this.toggleTransfer}>{gettext('Transfer')}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            }
           </td>
         </tr>
         {this.state.isTransferDialogShow && (
           <ModalPortal>
-              <TransferDialog
+            <TransferDialog
               itemName={repo.repoName}
               submit={this.onTransferRepo}
               toggleDialog={this.toggleTransfer}
-            />
+          />
           </ModalPortal>
         )}
       </Fragment>

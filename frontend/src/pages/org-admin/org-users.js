@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
-
 import { siteRoot, gettext } from '../../utils/constants';
 
 class OrgUsers extends Component {
@@ -21,10 +19,10 @@ class OrgUsers extends Component {
           <div className="cur-view-path org-user-nav">
             <ul className="nav">
               <li className="nav-item" onClick={() => this.tabItemClick('users')}>
-                <Link className={`nav-link ${this.props.currentTab === 'users' ? 'active': ''}`} to={siteRoot + "org/useradmin/"} title={gettext('All')}>{gettext('All')}</Link>
+                <Link className={`nav-link ${this.props.currentTab === 'users' ? 'active': ''}`} to={siteRoot + 'org/useradmin/'} title={gettext('All')}>{gettext('All')}</Link>
               </li>
               <li className="nav-item" onClick={() => this.tabItemClick('admins')}>
-                <Link className={`nav-link ${this.props.currentTab === 'admins' ? 'active': ''}`} to={siteRoot + "org/useradmin/admins/"} title={gettext('Admin')}>{gettext('Admin')}</Link>
+                <Link className={`nav-link ${this.props.currentTab === 'admins' ? 'active': ''}`} to={siteRoot + 'org/useradmin/admins/'} title={gettext('Admin')}>{gettext('Admin')}</Link>
               </li>
             </ul>
           </div>

@@ -81,7 +81,6 @@ class DraftListItem extends React.Component {
     let fileName = Utils.getFileName(filePath);
     let draftUrl = siteRoot + 'drafts/' + draft.id + '/';
     let libraryUrl = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(draft.repo_name) + '/' ;
-    let reviewUrl = siteRoot + 'drafts/review/' + draft.review_id + '/';
     let localTime = moment.utc(draft.updated_at).toDate();
     localTime = moment(localTime).fromNow();
 
