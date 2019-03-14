@@ -71,8 +71,11 @@
         <br/>
         {% endif %}
 
-        {% if form.data.contact_email %}
-        <label>{% trans "Contact Email:" %}</label><input type="text" name="contact_email" value="{{form.data.contact_email}}" class="input" disabled />
+        {% if form.data.contact_email or ENABLE_USER_SET_CONTACT_EMAIL %}
+        <label>{% trans "Contact Email:" %}</label><input type="text" name="contact_email" value="{{form.data.contact_email|default_if_none:""}}" class="input" {% if not ENABLE_USER_SET_CONTACT_EMAIL%}disabled{% endif %} />
+        {% for error in form.contact_email.errors %}
+        <span class="error">{{ error|escape }}</span>
+        {% endfor %}
         <span>{% trans "Your notifications will be sent to this email." %}</span>
         <br/>
         {% endif %}
@@ -93,7 +96,7 @@
 {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
 <div id="update-user-passwd" class="setting-item">
     <h3>{% trans "Password" %}</h3>
-    <a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a>
+    <a href="{{ SITE_ROOT }}accounts/password/change/">{% if user_unusable_password %}{% trans "Set Password" %}{% else %}{% trans "Update" %}{% endif %}</a>
 </div>
 {% endif %}
 
@@ -110,7 +113,6 @@
     <button class="delete submit">{% trans "Delete" %}</button>
 </div>
 {% endif %}
-
 
 {% if ENABLE_ADDRESSBOOK_OPT_IN %}
 <div class="setting-item" id="list-in-address-book">
@@ -410,5 +412,6 @@ addConfirmTo($('.social-disconnect'), {
     'con':"{% trans "Are you sure you want to disconnect?" %}",
     'post':true
 });
+
 </script>
 {% endblock %}
