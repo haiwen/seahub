@@ -5,6 +5,8 @@ import { Value, Document, Block } from 'slate';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import { gettext } from './utils/constants';
+import io from 'socket.io-client';
+import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
 import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
 import ListRelatedFileDialog from './components/dialog/list-related-file-dialog';
@@ -12,20 +14,18 @@ import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
 import ShareDialog from './components/dialog/share-dialog';
 import CommentDialog from './components/markdown-view/comment-dialog';
 import MarkdownViewerSlate from '@seafile/seafile-editor/dist/viewer/markdown-viewer-slate';
-import io from "socket.io-client";
-import toaster from "./components/toast";
-import { serialize, deserialize } from "@seafile/seafile-editor/dist/utils/slate2markdown";
-import LocalDraftDialog from "@seafile/seafile-editor/dist/components/local-draft-dialog";
+import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
+import LocalDraftDialog from '@seafile/seafile-editor/dist/components/local-draft-dialog';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
 import MarkdownViewerSidePanel from './components/markdown-view/markdown-viewer-side-panel';
 import Loading from './components/loading';
-import { Editor, findRange } from '@seafile/slate-react';
+import { findRange } from '@seafile/slate-react';
 
 import './css/markdown-viewer/markdown-editor.css';
 
 const CryptoJS = require('crypto-js');
-const { repoID, repoName, filePath, fileName, mode, draftID, draftFilePath, draftOriginFilePath, isDraft, hasDraft, shareLinkExpireDaysMin, shareLinkExpireDaysMax } = window.app.pageOptions;
+const { repoID, repoName, filePath, fileName, mode, draftID, isDraft, hasDraft } = window.app.pageOptions;
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
@@ -321,9 +321,9 @@ class MarkdownEditor extends React.Component {
       const { repoID, path } = this.state.fileInfo;
       this.socket.emit('presence', {
         request: 'editing',
-          doc_id: CryptoJS.MD5(repoID+path).toString(),
-          user: userInfo,
-          is_editing,
+        doc_id: CryptoJS.MD5(repoID+path).toString(),
+        user: userInfo,
+        is_editing,
       });
     }
   }
@@ -395,12 +395,12 @@ class MarkdownEditor extends React.Component {
   setEditorMode = (type) => {
     this.setState({
       editorMode: type
-    })
+    });
   }
 
   setDraftValue = (type, value) => {
     if (type === 'rich') {
-      this.draftRichValue = value
+      this.draftRichValue = value;
     } else {
       this.draftPlainValue = value;
     }
@@ -511,12 +511,12 @@ class MarkdownEditor extends React.Component {
   componentWillUnmount() {
     this.socket.emit('repo_update', {
       request: 'unwatch_update',
-        repo_id: this.props.editorUtilities.repoID,
-        user: {
-        name: this.props.editorUtilities.name,
-          username: this.props.editorUtilities.username,
-          contact_email: this.props.editorUtilities.contact_email,
-        },
+      repo_id: this.props.c.repoID,
+      user: {
+      name: editorUtilities.name,
+        username: editorUtilities.username,
+        contact_email: editorUtilities.contact_email,
+      },
     });
     document.removeEventListener('selectionchange', this.setBtnPosition);
   }
@@ -565,18 +565,18 @@ class MarkdownEditor extends React.Component {
       const { repoID, path } = this.state.fileInfo;
       this.socket.emit('presence', {
         request: 'join_room',
-          doc_id: CryptoJS.MD5(repoID+path).toString(),
-          user: userInfo
+        doc_id: CryptoJS.MD5(repoID+path).toString(),
+        user: userInfo
       });
 
       this.socket.emit('repo_update', {
         request: 'watch_update',
-          repo_id: editorUtilities.repoID,
-          user: {
-          name: editorUtilities.name,
-            username: editorUtilities.username,
-            contact_email: editorUtilities.contact_email,
-          },
+        repo_id: editorUtilities.repoID,
+        user: {
+        name: editorUtilities.name,
+          username: editorUtilities.username,
+          contact_email: editorUtilities.contact_email,
+        },
       });
     }
     this.checkDraft();
@@ -648,7 +648,8 @@ class MarkdownEditor extends React.Component {
     let that = this;
     if (that.timer) {
       return;
-    } else {
+    }
+    else {
       that.timer = setTimeout(() => {
         let str = '';
         if (this.state.editorMode == 'rich') {
@@ -661,16 +662,16 @@ class MarkdownEditor extends React.Component {
         let draftKey = editorUtilities.getDraftKey();
         localStorage.setItem(draftKey, str);
         that.setState({
-            showDraftSaved: true
+          showDraftSaved: true
         });
         setTimeout(() => {
           that.setState({
-              showDraftSaved: false
+            showDraftSaved: false
           });
-          }, 3000);
+        }, 3000);
         that.timer = null;
-        }, 60000);
-    }
+          }, 60000);
+        }
   }
 
   backToParentDirectory = () => {
@@ -864,39 +865,39 @@ class MarkdownEditor extends React.Component {
         </div>
       );
     } else if (this.state.mode === 'editor') {
-        if (this.state.editorMode === 'viewer') {
-          component = (
-            <div className="seafile-md-viewer d-flex flex-column">
-              <MarkdownViewerToolbar
-                hasDraft={hasDraft}
-                isDraft={isDraft}
-                editorUtilities={editorUtilities}
-                collabUsers={this.state.collabUsers}
-                fileInfo={this.state.fileInfo}
-                toggleStar={this.toggleStar}
-                backToParentDirectory={this.backToParentDirectory}
-                openDialogs={this.openDialogs}
-                fileTagList={this.state.fileTagList}
-                relatedFiles={this.state.relatedFiles}
-                toggleShareLinkDialog={this.toggleShareLinkDialog}
-                onEdit={this.onEdit}
-                toggleNewDraft={editorUtilities.createDraftFile}
-              />
-              <div className="seafile-md-viewer d-flex">
-                <div className="seafile-md-viewer-container d-flex" ref="markdownContainer">
-                  {
-                    this.state.activeTab === "history" ?
-                      <div className="diff-container">
-                        <div className="diff-wrapper article">
-                          { this.state.loadingDiff ?
-                            <Loading/> :
-                            <DiffViewer
-                              newMarkdownContent={this.state.markdownContent}
-                              oldMarkdownContent={this.state.oldMarkdownContent}
-                            />
-                          }
-                        </div>
+      if (this.state.editorMode === 'viewer') {
+        component = (
+          <div className="seafile-md-viewer d-flex flex-column">
+            <MarkdownViewerToolbar
+              hasDraft={hasDraft}
+              isDraft={isDraft}
+              editorUtilities={editorUtilities}
+              collabUsers={this.state.collabUsers}
+              fileInfo={this.state.fileInfo}
+              toggleStar={this.toggleStar}
+              backToParentDirectory={this.backToParentDirectory}
+              openDialogs={this.openDialogs}
+              fileTagList={this.state.fileTagList}
+              relatedFiles={this.state.relatedFiles}
+              toggleShareLinkDialog={this.toggleShareLinkDialog}
+              onEdit={this.onEdit}
+              toggleNewDraft={editorUtilities.createDraftFile}
+            />
+            <div className="seafile-md-viewer d-flex">
+              <div className="seafile-md-viewer-container" ref="markdownContainer">
+                {
+                  this.state.activeTab === 'history' ?
+                    <div className="diff-container">
+                      <div className="diff-wrapper article">
+                        { this.state.loadingDiff ?
+                          <Loading/> :
+                          <DiffViewer
+                            newMarkdownContent={this.state.markdownContent}
+                            oldMarkdownContent={this.state.oldMarkdownContent}
+                          />
+                        }
                       </div>
+                    </div>
                     :
                     <div className='seafile-md-viewer-slate'>
                       <MarkdownViewerSlate
@@ -907,52 +908,52 @@ class MarkdownEditor extends React.Component {
                     {isShowComments &&
                       <i className="fa fa-plus-square seafile-viewer-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>}
                     </div>
-                  }
-                </div>
-                <MarkdownViewerSidePanel
-                  viewer={this}
-                  value={this.state.value}
-                  markdownContent={this.state.markdownContent}
-                  editorUtilities={editorUtilities}
-                  commentsNumber={this.state.commentsNumber}
-                  getCommentsNumber={this.getCommentsNumber}
-                  showDiffViewer={this.showDiffViewer}
-                  setDiffViewerContent={this.setDiffViewerContent}
-                  reloadDiffContent={this.reloadDiffContent}
-                  activeTab={this.state.activeTab}
-                  tabItemClick={this.tabItemClick}
-                />
+                }
               </div>
+              <MarkdownViewerSidePanel
+                viewer={this}
+                value={this.state.value}
+                markdownContent={this.state.markdownContent}
+                editorUtilities={editorUtilities}
+                commentsNumber={this.state.commentsNumber}
+                getCommentsNumber={this.getCommentsNumber}
+                showDiffViewer={this.showDiffViewer}
+                setDiffViewerContent={this.setDiffViewerContent}
+                reloadDiffContent={this.reloadDiffContent}
+                activeTab={this.state.activeTab}
+                tabItemClick={this.tabItemClick}
+              />
             </div>
-          )
-        } else {
-          component = <SeafileEditor
-            fileInfo={this.state.fileInfo}
-            markdownContent={this.state.markdownContent}
-            editorUtilities={editorUtilities}
-            collabUsers={this.state.collabUsers}
-            setFileInfoMtime={this.setFileInfoMtime}
-            toggleStar={this.toggleStar}
-            showFileHistory={true}
-            setEditorMode={this.setEditorMode}
-            setContent={this.setContent}
-            draftID={draftID}
-            isDraft={isDraft}
-            mode={this.state.mode}
-            emitSwitchEditor={this.emitSwitchEditor}
-            hasDraft={hasDraft}
-            editorMode={this.state.editorMode}
-            relatedFiles={this.state.relatedFiles}
-            siteRoot={siteRoot}
-            autoSaveDraft={this.autoSaveDraft}
-            setDraftValue={this.setDraftValue}
-            clearTimer={this.clearTimer}
-            openDialogs={this.openDialogs}
-            fileTagList={this.state.fileTagList}
-            deleteDraft={this.deleteDraft}
-            showDraftSaved={this.state.showDraftSaved}
-          />
-        }
+          </div>
+        );
+      } else {
+        component = <SeafileEditor
+          fileInfo={this.state.fileInfo}
+          markdownContent={this.state.markdownContent}
+          editorUtilities={editorUtilities}
+          collabUsers={this.state.collabUsers}
+          setFileInfoMtime={this.setFileInfoMtime}
+          toggleStar={this.toggleStar}
+          showFileHistory={true}
+          setEditorMode={this.setEditorMode}
+          setContent={this.setContent}
+          draftID={draftID}
+          isDraft={isDraft}
+          mode={this.state.mode}
+          emitSwitchEditor={this.emitSwitchEditor}
+          hasDraft={hasDraft}
+          editorMode={this.state.editorMode}
+          relatedFiles={this.state.relatedFiles}
+          siteRoot={siteRoot}
+          autoSaveDraft={this.autoSaveDraft}
+          setDraftValue={this.setDraftValue}
+          clearTimer={this.clearTimer}
+          openDialogs={this.openDialogs}
+          fileTagList={this.state.fileTagList}
+          deleteDraft={this.deleteDraft}
+          showDraftSaved={this.state.showDraftSaved}
+        />;
+      }
 
       return (
         <React.Fragment>
@@ -961,7 +962,7 @@ class MarkdownEditor extends React.Component {
               localDraftDialog={this.state.localDraftDialog}
               deleteDraft={this.deleteDraft}
               useDraft={this.useDraft}/>:
-          null}
+            null}
           {component}
           {this.state.showMarkdownEditorDialog && (
             <React.Fragment>

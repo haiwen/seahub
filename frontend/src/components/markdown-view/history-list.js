@@ -20,7 +20,7 @@ class HistoryList extends React.Component {
     this.perPage = 25;
     this.state = {
       historyList: [],
-      activeItem: -1,
+      activeItem: 0,
       currentPage: 1,
       totalReversionCount: 0,
       loading: false
@@ -114,7 +114,7 @@ class HistoryList extends React.Component {
                   index={index}
                   key={index}
                   preItem={arr[preItemIndex]}
-              />
+                />
               );
             }) : <Loading/>
           }
@@ -132,12 +132,13 @@ HistoryList.propTypes = propTypes;
 
 
 const HistoryItempropTypes = {
-  ctime: PropTypes.number,
+  ctime: PropTypes.string,
   onClick: PropTypes.func,
   index: PropTypes.number,
-  preItem: PropTypes.string,
-  currewntItem: PropTypes.string,
+  preItem: PropTypes.object,
+  currewntItem: PropTypes.object,
   name: PropTypes.string,
+  className: PropTypes.string,
 };
 
 class HistoryItem extends React.Component {
@@ -152,7 +153,7 @@ class HistoryItem extends React.Component {
   }
 }
 
-HistoryList.propTypes = HistoryItempropTypes;
+HistoryItem.propTypes = HistoryItempropTypes;
 
 
 export default HistoryList;
