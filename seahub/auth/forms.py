@@ -228,3 +228,20 @@ class AdminPasswordChangeForm(forms.Form):
         if commit:
             self.user.save()
         return self.user
+
+
+class SetContactEmailPasswordForm(SetPasswordForm):
+    contact_email = forms.EmailField(label=_("Contact Email"), max_length=255)
+
+    def clean_contact_email(self, ):
+        username = Profile.objects.get_username_by_contact_email(self.cleaned_data['contact_email'])
+        req_username = self.user.username
+        if username is not None and username != req_username:
+            raise forms.ValidationError(_('A user with this email already exists.'))
+        return self.cleaned_data['contact_email']
+
+    def save(self):
+        super(SetContactEmailPasswordForm, self).save()
+
+        contact_email = self.cleaned_data['contact_email']
+        Profile.objects.update_contact_email(self.user.username, contact_email)

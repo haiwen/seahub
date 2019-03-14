@@ -34,11 +34,9 @@ def edit_profile(request):
     form_class = DetailedProfileForm
 
     if request.method == 'POST':
-        copy = request.POST.copy()
-        copy.update({'request_username': username})
-        form = form_class(copy)
+        form = form_class(user=request.user, data=request.POST)
         if form.is_valid():
-            form.save(username=username)
+            form.save()
             messages.success(request, _(u'Successfully edited profile.'))
 
             return HttpResponseRedirect(reverse('edit_profile'))
@@ -59,7 +57,7 @@ def edit_profile(request):
             init_dict['department'] = d_profile.department
             init_dict['telephone'] = d_profile.telephone
 
-        form = form_class(init_dict)
+        form = form_class(user=request.user, data=init_dict)
 
     # common logic
     try:
