@@ -154,7 +154,6 @@ const CommentItempropTypes = {
   editorUtilities: PropTypes.object.isRequired,
   item: PropTypes.object,
   time: PropTypes.string,
-  key: PropTypes.number,
   editComment: PropTypes.func,
   showResolvedComment: PropTypes.bool,
   deleteComment: PropTypes.func,
@@ -301,6 +300,6 @@ class CommentItem extends React.Component {
   }
 }
 
-CommentsList.propTypes = CommentItempropTypes;
+CommentItem.propTypes = CommentItempropTypes;
 
 export default CommentsList;

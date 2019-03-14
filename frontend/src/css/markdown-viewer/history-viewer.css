@@ -1,6 +1,5 @@
 .seafile-history-side-panel {
   user-select: none;
-  border-left: 1px solid #e5e5e5;
   background-color: #fff;
   display: flex;
   flex-direction: column;
