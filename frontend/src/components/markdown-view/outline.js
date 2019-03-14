@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
-
 const OutlineItempropTypes = {
   scrollToNode: PropTypes.func.isRequired,
   node: PropTypes.object.isRequired,
@@ -41,7 +40,6 @@ const propTypes = {
   scrollToNode: PropTypes.func.isRequired,
   isViewer: PropTypes.bool.isRequired,
   document: PropTypes.object.isRequired,
-  editor: PropTypes.object.isRequired,
   activeTitleIndex: PropTypes.number,
   value: PropTypes.object,
 };
@@ -56,13 +54,13 @@ class OutlineView extends React.PureComponent {
 
     return (
       <div className="seafile-editor-outline">
+        <div className="seafile-editor-outline-heading">{gettext('Contents')}</div>
         {headerList.size > 0 ?
           headerList.map((node, index) => {
             let active = (index === this.props.activeTitleIndex) ? ' active' : ''; 
             return (
               <OutlineItem
                 key={node.key}
-                editor={this.props.editor}
                 value={this.props.value}
                 node={node}
                 active={active}
