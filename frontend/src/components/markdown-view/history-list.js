@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Loading from '../loading';
 import moment from 'moment';
+import { gettext } from '../../utils/constants';
 import '../../css/markdown-viewer/history-viewer.css';
 
 const propTypes = {
@@ -97,6 +98,12 @@ class HistoryList extends React.Component {
   render() {
     return (
       <div className="seafile-history-side-panel">
+        <div className="seafile-history-title">
+          <div onClick={this.props.toggleHistoryPanel} className={'seafile-history-title-close'}>
+            <i className={'fa fa-times-circle'}/>
+          </div>
+          <div className={'seafile-history-title-text'}>{gettext('History Versions')}</div>
+        </div>
         <ul onScroll={this.onScroll} className={'history-list-container'}>
           {this.state.historyList ?
             this.state.historyList.map((item, index = 0, arr) => {
