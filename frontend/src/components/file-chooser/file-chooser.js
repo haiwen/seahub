@@ -328,7 +328,6 @@ class FileChooser extends React.Component {
           </Fragment>
         )}
         {this.props.mode === 'only_current_library' && (
-          <div className="file-chooser-container">
             <div className="list-view">
               <div className="list-view-header">
                 <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
@@ -347,7 +346,6 @@ class FileChooser extends React.Component {
                 />
               }
             </div>
-          </div>
         )}
         {this.props.mode === 'only_all_repos' && (
           <div className="file-chooser-container">
