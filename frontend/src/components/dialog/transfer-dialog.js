@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import toaster from '../toast';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api.js';
 import UserSelect from '../user-select';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
-  repoID: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
 };
@@ -30,17 +27,8 @@ class TransferDialog extends React.Component {
   }
 
   submit = () => {
-    let repoID = this.props.repoID;
-    let user = this.state.selectedOption.email;
-    seafileAPI.transferRepo(repoID, user).then(res => {
-      let message = gettext('Successfully transferred the library.');
-      toaster.success(message);
-      this.props.submit(repoID);
-    }).catch(res => {
-      let message = gettext('Failed. Please check the network.');
-      this.props.toggleDialog();
-      toaster.danger(message);
-    });
+    let user = this.state.selectedOption;
+    this.props.submit(user);
   } 
 
   render() {

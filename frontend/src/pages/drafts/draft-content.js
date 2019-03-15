@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { siteRoot, gettext } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';

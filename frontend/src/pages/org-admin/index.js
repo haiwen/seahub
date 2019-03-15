@@ -9,6 +9,7 @@ import OrgUsers from './org-users';
 import OrgUsersList from './org-users-list';
 import OrgAdminList from './org-admin-list';
 import OrgGroups from './org-groups';
+import OrgLibraries from './org-libraries';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -75,8 +76,8 @@ class Org extends React.Component {
               <OrgUsersList path="/" currentTab={currentTab} isShowAddOrgUserDialog={isShowAddOrgUserDialog} isInviteUserDialogOpen={isInviteUserDialogOpen} toggleAddOrgUser={this.toggleAddOrgUser} toggleInviteUserDialog={this.toggleInviteUserDialog} />
               <OrgAdminList path="admins" currentTab={currentTab} isShowAddOrgAdminDialog={isShowAddOrgAdminDialog} toggleAddOrgAdmin={this.toggleAddOrgAdmin} />
             </OrgUsers>
-            <OrgGroups path={siteRoot + "org/groupadmin"}>
-            </OrgGroups>
+            <OrgGroups path={siteRoot + 'org/groupadmin'} />
+            <OrgLibraries path={siteRoot + 'org/repoadmin'} />
           </Router>
         </MainPanel>
       </div>
