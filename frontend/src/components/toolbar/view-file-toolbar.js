@@ -110,7 +110,7 @@ class ViewFileToolbar extends React.Component {
               <DropdownMenu>
                 <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
                 <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Edit File Tag')}</DropdownItem>
-                <DropdownItem onClick={this.onListRelatedFileToggle}>{gettext('Add Relative File')}</DropdownItem>
+                <DropdownItem onClick={this.onListRelatedFileToggle}>{gettext('Add Related Files')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           )}
