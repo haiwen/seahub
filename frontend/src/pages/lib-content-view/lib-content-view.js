@@ -19,7 +19,6 @@ import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 
-
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
   onTabNavClick: PropTypes.func.isRequired,
