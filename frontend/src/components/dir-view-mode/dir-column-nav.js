@@ -159,13 +159,13 @@ class DirColumnNav extends React.Component {
     let items = childrenNode.filter((item) => {
       return Utils.imageCheck(item.object.name);
     });
-    let imagesName = items.map((item) => {
+    let imageNames = items.map((item) => {
       return item.object.name;
     })
     this.setState({
       isNodeImagePopupOpen: true,
       imageNodeItems: this.prepareImageItems(node),
-      imageIndex: imagesName.indexOf(node.object.name)
+      imageIndex: imageNames.indexOf(node.object.name)
     });
   }
 
