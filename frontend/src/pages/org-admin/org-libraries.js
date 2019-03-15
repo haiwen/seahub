@@ -26,7 +26,7 @@ class OrgLibraries extends Component {
   }
 
   initData = (page) => {
-    seafileAPI.listOrgLibraries(orgID, page).then(res => {
+    seafileAPI.listOrgRepos(orgID, page).then(res => {
       let orgRepos = res.data.repo_list.map(item => {
         return new OrgAdminRepo(item);
       });
@@ -61,7 +61,7 @@ class OrgLibraries extends Component {
   }
 
   deleteRepoItem = (repo) => {
-    seafileAPI.deleteOrgLibrary(orgID, repo.repoID).then(res => {
+    seafileAPI.deleteOrgRepo(orgID, repo.repoID).then(res => {
       this.setState({
         orgRepos: this.state.orgRepos.filter(item => item.repoID != repo.repoID)
       });
@@ -218,7 +218,7 @@ class RepoItem extends React.Component {
 
   onTransferRepo = (user) => {
     let repo = this.props.repo;
-    seafileAPI.transferOrgLibrary(orgID, repo.repoID, user.email).then(res => {
+    seafileAPI.transferOrgRepo(orgID, repo.repoID, user.email).then(res => {
       this.props.transferRepoItem(repo.repoID, user);
       let msg = gettext('Successfully transferred the library.');
       toaster.success(msg);
