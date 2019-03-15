@@ -29,6 +29,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   navRate: PropTypes.number,
   inResizing: PropTypes.bool.isRequired,
+  currentRepoInfo: PropTypes.object.isRequired,
 };
 
 class DirColumnNav extends React.Component {
