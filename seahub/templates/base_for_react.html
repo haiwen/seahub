@@ -79,6 +79,11 @@
             isSystemStaff: {% if request.user.is_staff %} true {% else %} false {% endif %},
             thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
             repoPasswordMinLength: {{repo_password_min_length}},
+
+            {% if request.user.is_authenticated and request.cur_note %}
+            curNoteMsg: '{{ request.cur_note.message|urlize }}',
+            curNoteID: '{{ request.cur_note.id }}',
+            {% endif %}
         }
      };
 </script>
