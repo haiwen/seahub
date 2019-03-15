@@ -27,7 +27,7 @@ class OrgLibraries extends Component {
 
   initData = (page) => {
     seafileAPI.listOrgLibraries(orgID, page).then(res => {
-      let orgRepos = res.data.repos.map(item => {
+      let orgRepos = res.data.repo_list.map(item => {
         return new OrgAdminRepo(item);
       });
 
@@ -75,7 +75,7 @@ class OrgLibraries extends Component {
     this.setState({
       orgRepos: this.state.orgRepos.map(item =>{
         if (item.repoID == repoID) {
-          item.owner = user.email;
+          item.ownerEmail = user.email;
           item.ownerName = user.value;
         }
         return item;
@@ -207,7 +207,7 @@ class RepoItem extends React.Component {
     if (repo.isDepartmentRepo) {
       href = siteRoot + 'org/admin/#address-book/groups/' + repo.groupID + '/';
     } else {
-      href = siteRoot + 'org/useradmin/info/' + repo.owner + '/';
+      href = siteRoot + 'org/useradmin/info/' + repo.ownerEmail + '/';
     }
     return href;
   }
