@@ -1,19 +1,21 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip } from 'reactstrap';
-import { Utils } from '../../utils/utils';
-import { gettext, siteRoot } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { gettext } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
+import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
 
 const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
   filePermission: PropTypes.bool.isRequired, // ture = 'rw'
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
+  fileTags: PropTypes.array.isRequired,
+  relatedFiles: PropTypes.array.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
+  onRelatedFileChange: PropTypes.func.isRequired,
   // side-panel
   onSideNavMenuClick: PropTypes.func.isRequired,
   // mutiple-dir
@@ -45,52 +47,27 @@ const propTypes = {
 
 class LibContentToolbar extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDraftMessageShow: false,
-    };
-  }
-
-  onEditClick = (e) => {
-    e.preventDefault();
-    let { path, repoID } = this.props;
-    let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
-    window.open(url);
-  }
-
-  onNewDraft = (e) => {
-    e.preventDefault();
-    let { path, repoID } = this.props;
-    seafileAPI.createDraft(repoID, path).then(res => {
-      window.location.href = siteRoot + 'lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
-    });
-  }
-
-  onDraftHover = () => {
-    this.setState({isDraftMessageShow: !this.state.isDraftMessageShow});
-  }
-
   render() {
     if (this.props.isViewFile) {
       return (
         <Fragment>
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onSideNavMenuClick}></span>
-            <div className="dir-operation">
-              {(this.props.filePermission && !this.props.hasDraft) && (
-                <Fragment>
-                  <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
-                </Fragment>
-              )}
-              {/* default have read priv */}
-              {(!this.props.isDraft && !this.props.hasDraft) && (
-                <Fragment>
-                  <button id="new-draft" className="btn btn-secondary operation-item" onClick={this.onNewDraft}>{gettext('New Draft')}</button>
-                  <Tooltip target="new-draft" placement="bottom" isOpen={this.state.isDraftMessageShow} toggle={this.onDraftHover}>{gettext('Create a draft from this file, instead of editing it directly.')}</Tooltip>
-                </Fragment>
-              )}
-            </div>
+            <ViewFileToolbar 
+              path={this.props.path}
+              repoID={this.props.repoID}
+              userPerm={this.props.userPerm}
+              repoEncrypted={this.props.repoEncrypted}
+              enableDirPrivateShare={this.props.enableDirPrivateShare}
+              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+              filePermission={this.props.filePermission}
+              isDraft={this.props.isDraft}
+              hasDraft={this.props.hasDraft}
+              fileTags={this.props.fileTags}
+              relatedFiles={this.props.relatedFiles}
+              onFileTagChanged={this.props.onFileTagChanged}
+              onRelatedFileChange={this.props.onRelatedFileChange}
+            />
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
           </div>
           <CommonToolbar repoID={this.props.repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>

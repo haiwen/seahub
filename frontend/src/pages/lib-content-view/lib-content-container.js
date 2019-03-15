@@ -28,6 +28,7 @@ const propTypes = {
   hash: PropTypes.string,
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
+  fileTags: PropTypes.array.isRequired,
   goDraftPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.bool.isRequired,
@@ -131,9 +132,11 @@ class LibContentContainer extends React.Component {
               pathPrefix={this.props.pathPrefix}
               currentPath={this.props.path} 
               permission={this.props.repoPermission} 
+              isViewFile={this.props.isViewFile}
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
+              fileTags={this.props.fileTags}
             />
           </div>
           <div className={`cur-view-content ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>

@@ -1,7 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
+import { UncontrolledTooltip } from 'reactstrap';
 import { siteRoot, gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import FileTag from '../../models/file-tag';
 import InternalLinkDialog from '../dialog/internal-link-dialog';
 
 const propTypes = {
@@ -12,6 +15,7 @@ const propTypes = {
   pathPrefix: PropTypes.array,
   repoID: PropTypes.string.isRequired,
   isViewFile: PropTypes.bool,
+  fileTags: PropTypes.array.isRequired,
 };
 
 class DirPath extends React.Component {
@@ -51,8 +55,16 @@ class DirPath extends React.Component {
   }
 
   render() {
-    let { currentPath, repoName } = this.props;
+    let { currentPath, repoName, fileTags } = this.props;
     let pathElem = this.turnPathToLink(currentPath);
+
+    let tagTitle = '';
+    if (fileTags.length > 0) {
+      fileTags.forEach(item => {
+        tagTitle += item.name + ' ';
+      });
+    }
+
     return (
       <div className="path-container">
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
@@ -68,8 +80,7 @@ class DirPath extends React.Component {
             <Link to={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick.bind(this, 'my-libs')}>{gettext('Libraries')}</Link>
             <span className="path-split">/</span>
           </Fragment>
-        )
-        }
+        )}
         {!this.props.pathPrefix && (
           <Fragment>
             <a href={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick.bind(this, 'my-libs')}>{gettext('Libraries')}</a>
@@ -81,11 +92,21 @@ class DirPath extends React.Component {
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}
-        { this.props.isViewFile && 
+        {this.props.isViewFile && 
           <InternalLinkDialog 
             repoID={this.props.repoID}
             path={this.props.currentPath}
           />
+        }
+        {(this.props.isViewFile && fileTags.length !== 0) && 
+          <span id='column-mode-file-tags' className="tag-list tag-list-stacked align-middle ml-1">
+            {fileTags.map((fileTag, index) => {
+              return (<span className="file-tag" key={fileTag.id} style={{zIndex: index, backgroundColor: fileTag.color}}></span>)
+            })}
+            <UncontrolledTooltip target="column-mode-file-tags" placement="bottom">
+              {tagTitle}
+            </UncontrolledTooltip>
+          </span>
         }
       </div>
     );

@@ -86,6 +86,11 @@ class DirentDetail extends React.Component {
     }
   }
 
+  onFileTagChanged = (dirent, direntPath) => {
+    this.updateDetailView(dirent, direntPath);
+    this.props.onFileTagChanged(dirent, direntPath);
+  }
+
   onRelatedFileChange = () => {
     let { dirent, path } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
@@ -121,7 +126,7 @@ class DirentDetail extends React.Component {
                 direntDetail={this.state.direntDetail} 
                 fileTagList={this.state.fileTagList}
                 relatedFiles={this.state.relatedFiles}
-                onFileTagChanged={this.props.onFileTagChanged}
+                onFileTagChanged={this.onFileTagChanged}
                 onRelatedFileChange={this.onRelatedFileChange}
               />
             </div>
