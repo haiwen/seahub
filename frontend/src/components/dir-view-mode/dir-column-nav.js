@@ -41,12 +41,11 @@ class DirColumnNav extends React.Component {
       isAddFileDialogShow: false,
       isAddFolderDialogShow: false,
       isRenameDialogShow: false,
-      isNodeImagePopupOpen:false,
-      imageNodeItems:[],
-      imageIndex:0,
+      isNodeImagePopupOpen: false,
+      imageNodeItems: [],
+      imageIndex: 0,
     };
     this.isNodeMenuShow = true;
-    this.repoEncrypted = props.currentRepoInfo.encrypted;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,7 +55,8 @@ class DirColumnNav extends React.Component {
   onNodeClick = (node) => {
     this.setState({opNode: node});
     if (Utils.imageCheck(node.object.name)) {
-      this.showNodeImagePopup(node)
+      this.showNodeImagePopup(node);
+      return;
     }
     this.props.onNodeClick(node);
   }
@@ -159,9 +159,8 @@ class DirColumnNav extends React.Component {
     let items = childrenNode.filter((item) => {
       return Utils.imageCheck(item.object.name);
     });
-    let imageName = [];
-    items.map((item) => {
-      imageName.push(item.object.name)
+    let imageName = items.map((item) => {
+      return item.object.name;
     })
     this.setState({
       isNodeImagePopupOpen: true,
@@ -176,7 +175,7 @@ class DirColumnNav extends React.Component {
       return Utils.imageCheck(item.object.name);
     });
 
-    const useThumbnail = !this.repoEncrypted;
+    const useThumbnail = !this.props.currentRepoInfo.encrypted;
     let prepareItem = (item) => {
       const name = item.object.name;
 
@@ -185,7 +184,7 @@ class DirColumnNav extends React.Component {
       const isGIF = fileExt == 'gif';
 
       const repoID = this.props.repoID;
-      let src;
+      let src = '';
       if (useThumbnail && !isGIF) {
         src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
       } else {

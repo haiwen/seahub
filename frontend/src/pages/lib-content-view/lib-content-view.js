@@ -1011,8 +1011,6 @@ class LibContentView extends React.Component {
         if (node.path !== this.state.path) {
           this.showFile(node.path);
         }
-      } else if (Utils.imageCheck(node.object.name)) {
-          // Open the current image viewer
       } else {
         const w = window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
