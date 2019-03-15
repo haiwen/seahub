@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
-import { gettext, siteRoot, username, canGenerateShareLink, canGenerateUploadLink, thumbnailSizeForOriginal } from '../../utils/constants';
+import { gettext, siteRoot, username, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -19,8 +19,6 @@ import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -70,9 +68,6 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '',  // for update dir list
       errorMsg: '',
-      isNodeImagePopupOpen:false,
-      imageNodeItems:[],
-      imageIndex:0,
     };
 
     window.onpopstate = this.onpopstate;
@@ -1018,80 +1013,13 @@ class LibContentView extends React.Component {
           this.showFile(node.path);
         }
       } else if (Utils.imageCheck(node.object.name)) {
-          this.showNodeImagePopup(node)
+          // Open the current image viewer
       } else {
         const w = window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
         w.location.href = url;
       }
     }
-  }
-
-  showNodeImagePopup = (node) => {
-    let childrenNode = node.parentNode.children;
-    let items = childrenNode.filter((item) => {
-      return Utils.imageCheck(item.object.name);
-    });
-    let imageName = [];
-    items.map((item) => {
-      imageName.push(item.object.name)
-    })
-    this.setState({
-      isNodeImagePopupOpen: true,
-      imageNodeItems: this.prepareImageItems(node),
-      imageIndex: imageName.indexOf(node.object.name)
-    });
-  }
-
-  prepareImageItems = (node) => {
-    let childrenNode = node.parentNode.children;
-    let items = childrenNode.filter((item) => {
-      return Utils.imageCheck(item.object.name);
-    });
-    const useThumbnail = !this.state.currentRepoInfo.encrypted;
-    let prepareItem = (item) => {
-      const name = item.object.name;
-
-      const path = Utils.encodePath(Utils.joinPath(node.parentNode.path, name));
-      const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
-      const isGIF = fileExt == 'gif';
-
-      const repoID = this.props.repoID;
-      let src;
-      if (useThumbnail && !isGIF) {
-        src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
-      } else {
-        src = `${siteRoot}repo/${repoID}/raw${path}`;
-      }
-
-      return {
-        'name': name,
-        'url': `${siteRoot}lib/${repoID}/file${path}`,
-        'src': src
-      };
-    };
-
-    return items.map((item) => { return prepareItem(item); });
-  }
-
-  closeNodeImagePopup = () => {
-    this.setState({
-      isNodeImagePopupOpen: false
-    });
-  }
-
-  moveToPrevImage = () => {
-    const imageItemsLength = this.state.imageNodeItems.length;
-    this.setState((prevState) => ({
-      imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
-    }));
-  }
-
-  moveToNextImage = () => {
-    const imageItemsLength = this.state.imageNodeItems.length;
-    this.setState((prevState) => ({
-      imageIndex: (prevState.imageIndex + 1) % imageItemsLength
-    }));
   }
 
   onTreeNodeCollapse = (node) => {
@@ -1269,16 +1197,6 @@ class LibContentView extends React.Component {
       }
 
     }
-    const imageNodeItems = this.state.imageNodeItems;
-    const imageIndex = this.state.imageIndex;
-    const imageItemsLength = imageNodeItems.length; 
-    const imageCaption = imageItemsLength && (
-      <Fragment>
-        <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
-        <br />
-        <a href={imageNodeItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
-      </Fragment>
-    );
 
     return (
       <div className="main-panel o-hidden">
@@ -1381,25 +1299,6 @@ class LibContentView extends React.Component {
               onFileUploadSuccess={this.onFileUploadSuccess}
             />
           )}
-          {this.state.isNodeImagePopupOpen && (
-            <Lightbox
-              mainSrc={imageNodeItems[imageIndex].src}
-              imageCaption={imageCaption}
-              imageTitle={imageNodeItems[imageIndex].name}
-              nextSrc={imageNodeItems[(imageIndex + 1) % imageItemsLength].src}
-              prevSrc={imageNodeItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
-              onCloseRequest={this.closeNodeImagePopup}
-              onMovePrevRequest={this.moveToPrevImage}
-              onMoveNextRequest={this.moveToNextImage}
-              imagePadding={70}
-              imageLoadErrorMessage={gettext('The image could not be loaded.')}
-              prevLabel={gettext('Previous (Left arrow key)')}
-              nextLabel={gettext('Next (Right arrow key)')}
-              closeLabel={gettext('Close (Esc)')}
-              zoomInLabel={gettext('Zoom in')}
-              zoomOutLabel={gettext('Zoom out')}
-            />
-        )}
         </div>
       </div>
     );
