@@ -939,7 +939,9 @@ class MarkdownEditor extends React.Component {
 
   render() {
     let component;
-    let sidePanel = (this.state.isShowHistory || this.state.isShowComments) ? true : false;
+    let sidePanel = this.state.isShowHistory ? true : false;
+    let markdownViewer = sidePanel ? "seafile-md-viewer-slate side-panel-on" :
+      (this.state.isShowComments ? "seafile-md-viewer-slate comment-on" : "seafile-md-viewer-slate");
     if (this.state.loading) {
       return (
         <div className="empty-loading-page">
@@ -966,7 +968,7 @@ class MarkdownEditor extends React.Component {
               toggleNewDraft={editorUtilities.createDraftFile}
               commentsNumber={this.state.commentsNumber}
               toggleCommentList={this.toggleCommentList}
-              showFileHistory={true}
+              showFileHistory={this.state.isShowHistory ? false : true }
               toggleHistory={this.toggleHistory}
             />
             <div className="seafile-md-viewer d-flex">
@@ -985,7 +987,7 @@ class MarkdownEditor extends React.Component {
                       </div>
                     </div>
                     :
-                    <div className={sidePanel ? "seafile-md-viewer-slate side-panel-on" : "seafile-md-viewer-slate"}>
+                    <div className={markdownViewer}>
                       <MarkdownViewerSlate
                         relatedFiles={this.state.relatedFiles}
                         siteRoot={siteRoot}
@@ -1003,9 +1005,9 @@ class MarkdownEditor extends React.Component {
                     scrollToNode={this.scrollToNode}
                   />
                 }
+                {this.state.isShowComments && <CommentPanel toggleCommentPanel={this.toggleCommentList}/>}
               </div>
               <div className="seafile-md-viewer-side-panel">
-                {this.state.isShowComments && <CommentPanel toggleCommentPanel={this.toggleCommentList}/>}
                 {
                   this.state.isShowHistory &&
                   <HistoryList
