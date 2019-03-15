@@ -159,13 +159,13 @@ class DirColumnNav extends React.Component {
     let items = childrenNode.filter((item) => {
       return Utils.imageCheck(item.object.name);
     });
-    let imageName = items.map((item) => {
+    let imagesName = items.map((item) => {
       return item.object.name;
     })
     this.setState({
       isNodeImagePopupOpen: true,
       imageNodeItems: this.prepareImageItems(node),
-      imageIndex: imageName.indexOf(node.object.name)
+      imageIndex: imagesName.indexOf(node.object.name)
     });
   }
 
@@ -181,7 +181,7 @@ class DirColumnNav extends React.Component {
 
       const path = Utils.encodePath(Utils.joinPath(node.parentNode.path, name));
       const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
-      const isGIF = fileExt == 'gif';
+      const isGIF = fileExt === 'gif';
 
       const repoID = this.props.repoID;
       let src = '';
