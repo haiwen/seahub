@@ -7,8 +7,11 @@ import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
-import { siteRoot } from '../../utils/constants';
+import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -26,6 +29,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   navRate: PropTypes.number,
   inResizing: PropTypes.bool.isRequired,
+  currentRepoInfo: PropTypes.object.isRequired,
 };
 
 class DirColumnNav extends React.Component {
@@ -38,6 +42,9 @@ class DirColumnNav extends React.Component {
       isAddFileDialogShow: false,
       isAddFolderDialogShow: false,
       isRenameDialogShow: false,
+      isNodeImagePopupOpen: false,
+      imageNodeItems: [],
+      imageIndex: 0,
     };
     this.isNodeMenuShow = true;
   }
@@ -48,6 +55,10 @@ class DirColumnNav extends React.Component {
 
   onNodeClick = (node) => {
     this.setState({opNode: node});
+    if (Utils.imageCheck(node.object.name)) {
+      this.showNodeImagePopup(node);
+      return;
+    }
     this.props.onNodeClick(node);
   }
 
@@ -144,9 +155,88 @@ class DirColumnNav extends React.Component {
     return isDuplicated;
   }
 
+  showNodeImagePopup = (node) => {
+    let childrenNode = node.parentNode.children;
+    let items = childrenNode.filter((item) => {
+      return Utils.imageCheck(item.object.name);
+    });
+    let imageNames = items.map((item) => {
+      return item.object.name;
+    })
+    this.setState({
+      isNodeImagePopupOpen: true,
+      imageNodeItems: this.prepareImageItems(node),
+      imageIndex: imageNames.indexOf(node.object.name)
+    });
+  }
+
+  prepareImageItems = (node) => {
+    let childrenNode = node.parentNode.children;
+    let items = childrenNode.filter((item) => {
+      return Utils.imageCheck(item.object.name);
+    });
+
+    const useThumbnail = !this.props.currentRepoInfo.encrypted;
+    let prepareItem = (item) => {
+      const name = item.object.name;
+
+      const path = Utils.encodePath(Utils.joinPath(node.parentNode.path, name));
+      const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
+      const isGIF = fileExt === 'gif';
+
+      const repoID = this.props.repoID;
+      let src = '';
+      if (useThumbnail && !isGIF) {
+        src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+      } else {
+        src = `${siteRoot}repo/${repoID}/raw${path}`;
+      }
+
+      return {
+        'name': name,
+        'url': `${siteRoot}lib/${repoID}/file${path}`,
+        'src': src
+      };
+    };
+
+    return items.map((item) => { return prepareItem(item); });
+  }
+
+  closeNodeImagePopup = () => {
+    this.setState({
+      isNodeImagePopupOpen: false
+    });
+  }
+
+  moveToPrevImage = () => {
+    const imageItemsLength = this.state.imageNodeItems.length;
+    this.setState((prevState) => ({
+      imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
+    }));
+  }
+
+  moveToNextImage = () => {
+    const imageItemsLength = this.state.imageNodeItems.length;
+    this.setState((prevState) => ({
+      imageIndex: (prevState.imageIndex + 1) % imageItemsLength
+    }));
+  }
+
   render() {
     let flex = this.props.navRate ? '0 0 ' + this.props.navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
+
+    const imageNodeItems = this.state.imageNodeItems;
+    const imageIndex = this.state.imageIndex;
+    const imageItemsLength = imageNodeItems.length; 
+    const imageCaption = imageItemsLength && (
+      <Fragment>
+        <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
+        <br />
+        <a href={imageNodeItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <div className="dir-content-nav" role="navigation" style={{flex: (flex), userSelect: select}}>
@@ -204,6 +294,25 @@ class DirColumnNav extends React.Component {
               toggleCancel={this.onDeleteToggle}
             />
           </ModalPortal>
+        )}
+        {this.state.isNodeImagePopupOpen && (
+            <Lightbox
+              mainSrc={imageNodeItems[imageIndex].src}
+              imageCaption={imageCaption}
+              imageTitle={imageNodeItems[imageIndex].name}
+              nextSrc={imageNodeItems[(imageIndex + 1) % imageItemsLength].src}
+              prevSrc={imageNodeItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
+              onCloseRequest={this.closeNodeImagePopup}
+              onMovePrevRequest={this.moveToPrevImage}
+              onMoveNextRequest={this.moveToNextImage}
+              imagePadding={70}
+              imageLoadErrorMessage={gettext('The image could not be loaded.')}
+              prevLabel={gettext('Previous (Left arrow key)')}
+              nextLabel={gettext('Next (Right arrow key)')}
+              closeLabel={gettext('Close (Esc)')}
+              zoomInLabel={gettext('Zoom in')}
+              zoomOutLabel={gettext('Zoom out')}
+            />
         )}
       </Fragment>
     );
