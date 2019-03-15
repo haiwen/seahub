@@ -44,6 +44,9 @@ export const isSystemStaff = window.app.pageOptions.isSystemStaff;
 export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForOriginal;
 export const repoPasswordMinLength = window.app.pageOptions.repoPasswordMinLength;
 
+export const curNoteMsg = window.app.pageOptions.curNoteMsg;
+export const curNoteID = window.app.pageOptions.curNoteID;
+
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
