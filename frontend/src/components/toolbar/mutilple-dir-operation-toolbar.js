@@ -8,6 +8,7 @@ import URLDecorator from '../../utils/url-decorator';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
+import DirentsMenu from '../dirent-list-view/dirents-menu';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -17,6 +18,8 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  isRepoOwner: PropTypes.bool.isRequired,
+  onMenuItemClick: PropTypes.func.isRequired,
 };
 
 class MutipleDirOperationToolbar extends React.Component {
@@ -97,12 +100,24 @@ class MutipleDirOperationToolbar extends React.Component {
   render() {
     return (
       <Fragment>
-        <ButtonGroup className="flex-row group-operations">
-          <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
-        </ButtonGroup>
+        <div className="d-flex">
+          <ButtonGroup className="flex-row group-operations">
+            <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
+            <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
+            <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
+            <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+          </ButtonGroup>
+          {
+            this.props.selectedDirentList.length > 0 &&
+            <DirentsMenu
+              dirents={this.props.selectedDirentList}
+              currentRepoInfo={this.props.currentRepoInfo}
+              isRepoOwner={this.props.isRepoOwner}
+              onMenuItemClick={this.props.onMenuItemClick}
+              path={this.props.path}
+            />
+          }
+        </div>
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
             path={this.props.path}

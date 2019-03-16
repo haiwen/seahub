@@ -43,6 +43,8 @@ const propTypes = {
   switchViewMode: PropTypes.func.isRequired,
   // search
   onSearchedClick: PropTypes.func.isRequired,
+  isRepoOwner: PropTypes.bool.isRequired,
+  onMenuItemClick: PropTypes.func.isRequired,
 };
 
 class LibContentToolbar extends React.Component {
@@ -89,6 +91,9 @@ class LibContentToolbar extends React.Component {
                 onItemsMove={this.props.onItemsMove}
                 onItemsCopy={this.props.onItemsCopy}
                 onItemsDelete={this.props.onItemsDelete}
+                isRepoOwner={this.props.isRepoOwner}
+                currentRepoInfo={this.props.currentRepoInfo}
+                onMenuItemClick={this.props.onMenuItemClick}
               /> :
               <DirOperationToolBar 
                 path={this.props.path}

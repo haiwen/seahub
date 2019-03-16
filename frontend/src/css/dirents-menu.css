@@ -1,0 +1,10 @@
+.dirents-more-menu {
+  margin-right: 10px;
+  margin-left: -9px;
+  padding: 4px 15px;
+  border: 1px solid #ccc;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
