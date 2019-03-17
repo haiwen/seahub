@@ -31,10 +31,13 @@ class DirentMenu extends React.Component {
       }
       else if (dirents[0].type === 'file') {
         if (dirents[0].is_locked) {
-          menuList = ['Share', 'Tag', 'Unlock', 'Details', 'Related Files', 'History', 'Open via Client'];
+          menuList = ['Share', 'Tags', 'Unlock', 'Details', 'Related Files', 'History', 'Open via Client'];
         }
         else {
-          menuList = ['Share', 'Tag', 'Lock', 'Details', 'Related Files', 'History', 'Open via Client'];
+          menuList = ['Share', 'Tags', 'Lock', 'Details', 'Related Files', 'History', 'Open via Client'];
+        }
+        if (!(currentRepoInfo.is_admin && currentRepoInfo.permission === 'rw' || isRepoOwner)) {
+          menuList.splice(2, 1);
         }
       }
     }
@@ -47,7 +50,7 @@ class DirentMenu extends React.Component {
           return;
         }
       }
-      menuList = ['Tag'];
+      menuList = ['Tags'];
     }
     this.setState({
       menuList: menuList,
@@ -60,8 +63,8 @@ class DirentMenu extends React.Component {
       case 'Share':
         translateResult = gettext('Share');
         break;
-      case 'Tag':
-        translateResult = gettext('Tag');
+      case 'Tags':
+        translateResult = gettext('Tags');
         break;
       case 'Details':
         translateResult = gettext('Details');

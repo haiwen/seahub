@@ -1228,7 +1228,7 @@ class LibContentView extends React.Component {
           showShareDialog: true,
         });
         break;
-      case 'Tag':
+      case 'Tags':
         this.listFilesTags(dirents);
         break;
       case 'Details':

@@ -114,7 +114,6 @@ class MutipleDirOperationToolbar extends React.Component {
               currentRepoInfo={this.props.currentRepoInfo}
               isRepoOwner={this.props.isRepoOwner}
               onMenuItemClick={this.props.onMenuItemClick}
-              path={this.props.path}
             />
           }
         </div>
