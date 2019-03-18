@@ -10,6 +10,7 @@ import OrgUsersList from './org-users-list';
 import OrgAdminList from './org-admin-list';
 import OrgGroups from './org-groups';
 import OrgLibraries from './org-libraries';
+import OrgInfo from './org-info';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -66,6 +67,7 @@ class Org extends React.Component {
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
         <MainPanel currentTab={currentTab} toggleAddOrgAdmin={this.toggleAddOrgAdmin} toggleAddOrgUser={this.toggleAddOrgUser} toggleInviteUserDialog={this.toggleInviteUserDialog}>
           <Router>
+            <OrgInfo path={siteRoot + 'org/orgmanage'} />
             <OrgUsers 
               path={siteRoot + 'org/useradmin'}
               currentTab={currentTab} 

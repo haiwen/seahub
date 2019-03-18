@@ -76,6 +76,7 @@ export const originFileExists = window.draft ? window.draft.config.originFileExi
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';
 export const invitationLink = window.org ? window.org.pageOptions.invitationLink : '';
+export const orgMemberQuotaEnabled = window.org ? window.org.pageOptions.orgMemberQuotaEnabled : '';
 
 // sys admin
 export const constanceEnabled = window.sysadmin ? window.sysadmin.pageOptions.constance_enabled : '';
