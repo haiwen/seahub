@@ -306,7 +306,7 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   getDirentPath = (dirent) => {
-    if (dirent) return Utils.joinPath(this.state.path, dirent.name);
+    if (dirent) return Utils.joinPath(this.props.path, dirent.name);
   }
 
   render() {

@@ -47,7 +47,6 @@ const propTypes = {
   // selected menu
   onDirentSelected: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
-  listRelatedFiles: PropTypes.func.isRequired,
   onFilesTagChanged: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
 };
@@ -103,7 +102,6 @@ class LibContentToolbar extends React.Component {
                 updateDirent={this.props.updateDirent}
                 onDirentSelected={this.props.onDirentSelected}
                 showDirentDetail={this.props.showDirentDetail}
-                listRelatedFiles={this.props.listRelatedFiles}
                 relatedFiles={this.props.relatedFiles}
                 unSelectDirent={this.props.unSelectDirent}
                 onFilesTagChanged={this.props.onFilesTagChanged}
