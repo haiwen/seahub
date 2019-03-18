@@ -691,7 +691,6 @@ def view_lib_file(request, repo_id, path):
 
         return_dict['can_edit_file'] = can_edit_file
 
-        send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
     elif filetype in (VIDEO, AUDIO, PDF, SVG):
