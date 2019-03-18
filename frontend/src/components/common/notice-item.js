@@ -37,8 +37,9 @@ class NoticeItem extends React.Component {
     // }
 
     if (noticeType === MSG_TYPE_ADD_USER_TO_GROUP) {
+      let groupStaff = noticeItem.msg_from;
+      
       let userHref = detail.user_href;
-      let groupStaff = detail.group_staff;
       let groupHref = detail.group_href;
       let groupName = detail.group_name
 
@@ -49,11 +50,11 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{user_link}', userLink);
       notice = notice.replace('{group_link}', groupLink);
 
-      return <p dangerouslySetInnerHTML={{__html: notice}}></p>;
+      return notice;
     }
 
     if (noticeType === MSG_TYPE_REPO_SHARE) {
-      let shareFrom = detail.share_from;
+      let shareFrom = noticeItem.msg_from;
 
       let repoUrl = detail.repo_url;
       let repoName = detail.repo_name;
@@ -64,16 +65,16 @@ class NoticeItem extends React.Component {
       if (path === '/') { // share repo
         notice = gettext('{share_from} has shared a library named {repo_link} to you.');
       } else { // share folder
-        notice = gettext('{share_from} has folder a library named {repo_link} to you.');
+        notice = gettext('{share_from} has shared a folder named {repo_link} to you.');
       }
 
       notice = notice.replace('{share_from}', shareFrom);
       notice = notice.replace('{repo_link}', repoLink);
-      return <p dangerouslySetInnerHTML={{__html: notice}}></p>;
+      return notice;
     }
 
     if (noticeType === MSG_TYPE_REPO_SHARE_TO_GROUP) {
-      let shareFrom = detail.share_from;
+      let shareFrom = noticeItem.msg_from;
 
       let repoUrl = detail.repo_url;
       let repoName = detail.repo_name;
@@ -93,18 +94,19 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{share_from}', shareFrom);
       notice = notice.replace('{repo_link}', repoLink);
       notice = notice.replace('{group_link}', groupLink);
-      return <p dangerouslySetInnerHTML={{__html: notice}}></p>;
+      return notice;
     }
 
     if (noticeType === MSG_TYPE_REPO_TRANSFER) {
-      let repoOwner = detail.repo_owner;
+      let repoOwner = noticeItem.msg_from;
+
       let repoUrl = detail.repo_url;
       let repoName = detail.repo_name;
       let notice = gettext('{user} has transfered a library named {repo_link} to you.');
       let repoLink = '<a href=' + repoUrl + '>' + repoName + '</a>';
-      notice = notice.replace('{users}', repoOwner);
+      notice = notice.replace('{user}', repoOwner);
       notice = notice.replace('{repo_link}', repoLink);
-      return <p dangerouslySetInnerHTML={{__html: notice}}></p>;
+      return notice;
     }
 
     if (noticeType === MSG_TYPE_FILE_UPLOADED) {
@@ -128,12 +130,12 @@ class NoticeItem extends React.Component {
         notice = notice.replace('{file_name}', fileName);
         notice = notice.replace('{dest}', '<strong>Deleted Library</strong>')
       }
-      return <p dangerouslySetInnerHTML={{__html: notice}}></p>;
+      return notice;
     }
 
     if (noticeType === MSG_TYPE_FILE_COMMENT) {
+      let author = noticeItem.msg_from;
 
-      let author = detail.author;
       let fileUrl = detail.file_url;
       let fileName = detail.file_name;
 
@@ -141,33 +143,33 @@ class NoticeItem extends React.Component {
       let fileLink = '<a href=' + fileUrl + '>' + fileName + '</a>';
       notice = notice.replace('{file_link}', fileLink);
       notice = notice.replace('{author}', author);
-      return <p dangerouslySetInnerHTML={{__html: notice}}></p>;
+      return notice;
     }
     
     if (noticeType === MSG_TYPE_DRAFT_COMMENT) {
+      let author = noticeItem.msg_from;
 
-      let fileUrl = detail.file_url;
+      let draftUrl = detail.draft_url;
       let draftId = detail.draft_id;
-      let author = detail.author;
 
       let notice = gettext('{draft_link} has a new comment from user {author}.');
-      let draftLink = '<a href=' + fileUrl + '>' + gettext('Draft') + '#' + draftId + '</a>';
+      let draftLink = '<a href=' + draftUrl + '>' + gettext('Draft') + '#' + draftId + '</a>';
       notice = notice.replace('{draft_link}', draftLink);
       notice = notice.replace('{author}', author);
-      return <p dangerouslySetInnerHTML={{__html: notice}}></p>;
+      return notice;
     }
     
     if (noticeType === MSG_TYPE_DRAFT_REVIEWER) {
+      let fromUser = noticeItem.msg_from;
 
-      let fileUrl = detail.file_url;
+      let draftUrl = detail.draft_url;
       let draftId = detail.draft_id;
-      let fromUser = detail.from_user;
 
       let notice = gettext('{from_user} has sent you a request for {draft_link}.');
-      let draftLink = '<a href=' + fileUrl + '>' + gettext('Draft') + '#' + draftId + '</a>';
+      let draftLink = '<a href=' + draftUrl + '>' + gettext('Draft') + '#' + draftId + '</a>';
       notice = notice.replace('{from_user}', fromUser);
       notice = notice.replace('{draft_link}', draftLink);
-      return <p className="brief" dangerouslySetInnerHTML={{__html: notice}}></p>;
+      return notice;
     }
 
     // if (noticeType === MSG_TYPE_USER_MESSAGE) {
@@ -179,16 +181,23 @@ class NoticeItem extends React.Component {
     // }
   }
 
+  onNoticeItemClick = () => {
+    let item = this.props.noticeItem;
+    this.props.onNoticeItemClick(item);
+  }
+
   render() {
     let noticeItem = this.props.noticeItem;
     let noticeInfo = this.generatorNoticeInfo();
 
     return (
-      <li>
-        <div>
-        <img src={noticeItem.avatar_url} width="32" height="32" className="avatar" />
-        {noticeInfo}
-        <p className="time">{moment(noticeItem.timestamp).fromNow()}</p>
+      <li onClick={this.onNoticeItemClick} className={noticeItem.seen ? 'read' : 'unread'}>
+        <div className="notice-item">
+          <div className="main-info">
+            <img src={noticeItem.avatar_url} width="32" height="32" className="avatar" />
+            <p className="brief" dangerouslySetInnerHTML={{__html: noticeInfo}}></p>
+          </div>
+          <p className="time">{moment(noticeItem.timestamp).fromNow()}</p>
         </div>
       </li>
     )

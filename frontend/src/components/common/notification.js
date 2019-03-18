@@ -8,7 +8,6 @@ class Notification extends React.Component {
     super(props);
     this.state = {
       showNotice: false,
-      notice_html: '',
       unseenCount: 0,
       noticeList: [],
     };
@@ -41,10 +40,27 @@ class Notification extends React.Component {
     });
   }
 
-  render() {
-    const { notice_html } = this.state;
+  onNoticeItemClick = (noticeItem) => {
+    if (noticeItem.seen === true) {
+      return;
+    }
+    
+    let noticeList = this.state.noticeList.map(item => {
+      if (item.id === noticeItem.id) {
+        item.seen = true;
+      }
+      return item;
+    });
+    seafileAPI.updateNotifications();
+    let unseenCount = this.state.unseenCount === 0 ? 0 : this.state.unseenCount - 1;
+    this.setState({
+      noticeList: noticeList,
+      unseenCount: unseenCount, 
+    });
+    
+  }
 
-    // return '';
+  render() {
 
     return (
       <div id="notifications">
@@ -59,12 +75,9 @@ class Notification extends React.Component {
             <a href="#" onClick={this.onClick} title={gettext('Close')} aria-label={gettext('Close')} className="sf-popover-close js-close sf2-icon-x1 action-icon float-right"></a>
           </div>
           <div className="sf-popover-con">
-            {/* <ul className="notice-list" dangerouslySetInnerHTML={{__html: notice_html}}></ul> */}
             <ul className="notice-list">
               {this.state.noticeList.map(item => {
-                return (
-                  <NoticeItem key={item.id} noticeItem={item} />
-                );
+                return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
               })}
             </ul>
             <a href={siteRoot + 'notification/list/'} className="view-all">{gettext('See All Notifications')}</a>
