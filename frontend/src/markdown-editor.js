@@ -15,7 +15,7 @@ import ShareDialog from './components/dialog/share-dialog';
 import CommentDialog from './components/markdown-view/comment-dialog';
 import MarkdownViewerSlate from '@seafile/seafile-editor/dist/viewer/markdown-viewer-slate';
 import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
-import LocalDraftDialog from '@seafile/seafile-editor/dist/components/local-draft-dialog';
+import LocalDraftDialog from './components/dialog/local-draft-dialog';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
 import HistoryList from './components/markdown-view/history-list';
@@ -452,6 +452,12 @@ class MarkdownEditor extends React.Component {
       let draftKey = editorUtilities.getDraftKey();
       localStorage.removeItem(draftKey);
     }
+  }
+
+  closeDraftDialog = () => {
+    this.setState({
+      localDraftDialog: false
+    });
   }
 
   clearTimer = () => {
@@ -1054,11 +1060,15 @@ class MarkdownEditor extends React.Component {
       return (
         <React.Fragment>
           {this.state.localDraftDialog?
-            <LocalDraftDialog
-              localDraftDialog={this.state.localDraftDialog}
-              deleteDraft={this.deleteDraft}
-              useDraft={this.useDraft}/>:
-            null}
+            <ModalPortal>
+              <LocalDraftDialog
+                localDraftDialog={this.state.localDraftDialog}
+                deleteDraft={this.deleteDraft}
+                closeDraftDialog={this.closeDraftDialog}
+                useDraft={this.useDraft}
+              />
+            </ModalPortal>
+            : null}
           {component}
           {this.state.showMarkdownEditorDialog && (
             <React.Fragment>
