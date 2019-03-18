@@ -32,7 +32,6 @@ class ReviewComments extends React.Component {
 
   listComments = (scroll) => {
     seafileAPI.listComments(draftRepoID, draftFilePath).then((response) => {
-      response.data.comments.reverse();
       let commentList = [];
       response.data.comments.forEach(item => {
         let commentItem = new reviewComment(item);
