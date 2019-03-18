@@ -35,16 +35,11 @@ class Notification extends React.Component {
   loadNotices = () => {
     seafileAPI.listPopupNotices().then(res => {
       let noticeList = res.data.notices_list;
-      console.log(noticeList);
       this.setState({noticeList: noticeList});
     });
   }
 
-  onNoticeItemClick = (noticeItem) => {
-    if (noticeItem.seen === true) {
-      return;
-    }
-    
+  onNoticeItemClick = (noticeItem) => {    
     let noticeList = this.state.noticeList.map(item => {
       if (item.id === noticeItem.id) {
         item.seen = true;

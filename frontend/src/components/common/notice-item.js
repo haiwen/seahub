@@ -6,6 +6,7 @@ import { gettext } from '../../utils/constants';
 
 const propTypes = {
   noticeItem: PropTypes.object.isRequired,
+  onNoticeItemClick: PropTypes.func.isRequired,
 };
 
 const MSG_TYPE_GROUP_MSG = 'group_msg'
@@ -183,6 +184,9 @@ class NoticeItem extends React.Component {
 
   onNoticeItemClick = () => {
     let item = this.props.noticeItem;
+    if (noticeItem.seen === true) {
+      return;
+    }
     this.props.onNoticeItemClick(item);
   }
 
