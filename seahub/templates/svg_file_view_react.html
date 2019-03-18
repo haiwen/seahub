@@ -1,0 +1,15 @@
+{% extends 'file_view_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+
+{% block extra_style %}
+{% render_bundle 'viewFileSVG' 'css' %}
+{% endblock %}
+
+{% block extra_data %}
+  rawPath: '{{ raw_path|escapejs }}'
+{% endblock %}
+
+{% block render_bundle %}
+{% render_bundle 'viewFileSVG' 'js' %}
+{% endblock %}

@@ -698,7 +698,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['raw_path'] = raw_path
         send_file_access_msg(request, repo, path, 'web')
 
-        if filetype in (VIDEO, PDF):
+        if filetype in (VIDEO, PDF, SVG):
             template = '%s_file_view_react.html' % filetype.lower()
         return render(request, template, return_dict)
 
