@@ -46,6 +46,8 @@ html, body, #wrapper { height:100%; }
         <p class="error">{{ form.errors.freeze_account }}</p>
         {% elif form.errors.inactive %}
         <p class="error">{{ form.errors.inactive }}</p>
+        {% elif form.errors.not_found %}
+        <p class="error">{{ form.errors.not_found }}</p>
         {% else %}
         <p class="error">{% trans "Incorrect email or password" %}</p>
         {% endif %}

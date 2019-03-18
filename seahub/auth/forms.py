@@ -62,7 +62,16 @@ class AuthenticationForm(forms.Form):
 
                 self.user_cache = authenticate(username=username, password=password)
                 if self.user_cache is None:
-                    raise forms.ValidationError(_("Please enter a correct email/username and password. Note that both fields are case-sensitive."))
+                    err_msg = _("Please enter a correct email/username and password. Note that both fields are case-sensitive.")
+
+                    if settings.LOGIN_ERROR_DETAILS:
+                        try:
+                            u = User.objects.get(email=username)
+                        except User.DoesNotExist:
+                            err_msg = _("That e-mail address doesn't have an associated user account. Are you sure you've registered?")
+                            self.errors['not_found'] = err_msg
+
+                    raise forms.ValidationError(err_msg)
 
             # user found for login string but inactive
             if not self.user_cache.is_active:
