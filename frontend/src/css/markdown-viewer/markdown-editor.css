@@ -49,10 +49,13 @@
   width: 260px;
   position: fixed;
   top: 68px;
-  overflow-y: auto;
+  overflow-y: hidden;
   right: 5%;
   z-index: 1;
   height: 80%;
+}
+.seafile-md-viewer .seafile-editor-outline:hover {
+  overflow: auto;
 }
 .seafile-md-viewer .seafile-editor-outline .active {
   color: #eb8205;
