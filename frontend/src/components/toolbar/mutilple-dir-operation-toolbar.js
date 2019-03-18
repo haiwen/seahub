@@ -120,7 +120,7 @@ class MutipleDirOperationToolbar extends React.Component {
         });
         break;
       case 'Tags':
-        this.listFilesTags(dirents);
+        this.listFileTags(dirent);
         break;
       case 'Details':
         this.props.showDirentDetail();
@@ -239,18 +239,6 @@ class MutipleDirOperationToolbar extends React.Component {
     });
   }
 
-  listFilesTags = (dirents) => {
-    if (dirents.length === 1) {
-      this.listFileTags(dirents[0]);
-    } else if (dirents.length > 1) {
-      this.listMultiFileTags(dirents);
-    }
-    this.setState({
-      showLibContentViewDialogs: true,
-      showEditFileTagDialog: true,
-    });
-  }
-
   listFileTags = (dirent) => {
     let filePath = this.getDirentPath(dirent);
     seafileAPI.listFileTags(this.props.repoID, filePath).then(res => {
@@ -259,30 +247,14 @@ class MutipleDirOperationToolbar extends React.Component {
         fileTagList[i].id = fileTagList[i].file_tag_id;
       }
       this.setState({
-        fileTagList: fileTagList
+        fileTagList: fileTagList,
+        showLibContentViewDialogs: true,
+        showEditFileTagDialog: true,
       });
     });
   }
 
-  listMultiFileTags = (dirents) => {
-    let multiFileTagList = [];
-    let len = dirents.length;
-    for (let j = 0; j < len; j++) {
-      seafileAPI.listFileTags(this.props.repoID, this.getDirentPath(dirents[j])).then(res => {
-        let fileTagList = res.data.file_tags;
-        for (let i = 0, length = fileTagList.length; i < length; i++) {
-          fileTagList[i].id = fileTagList[i].file_tag_id;
-        }
-        multiFileTagList.push(fileTagList);
-      });
-      this.setState({
-        multiFileTagList: multiFileTagList
-      });
-    }
-  }
-
   onMenuFileTagChanged = () => {
-    this.listMultiFileTags(this.props.selectedDirentList);
     this.listFileTags(this.props.selectedDirentList[0]);
     let length = this.props.selectedDirentList.length;
     for (let i = 0; i < length; i++) {
@@ -312,14 +284,6 @@ class MutipleDirOperationToolbar extends React.Component {
   render() {
     const { repoID } = this.props;
     let direntPath = this.getDirentPath(this.props.selectedDirentList[0]);
-
-    let direntsPath = [];
-    if (this.state.showLibContentViewDialogs && this.props.selectedDirentList.length > 0) {
-      for (let i = 0; i < this.props.selectedDirentList.length; i++) {
-        let newDirentPath = this.getDirentPath(this.props.selectedDirentList[i]);
-        direntsPath.push(newDirentPath);
-      }
-    }
     return (
       <Fragment>
         <div className="d-flex">
@@ -386,12 +350,9 @@ class MutipleDirOperationToolbar extends React.Component {
                 <EditFileTagDialog
                   repoID={repoID}
                   filePath={direntPath}
-                  filesPath={direntsPath}
                   fileTagList={this.state.fileTagList}
-                  multiFileTagList={this.state.multiFileTagList}
                   toggleCancel={this.toggleCancel}
                   onFileTagChanged={this.onMenuFileTagChanged}
-                  selectedDirentList={this.props.selectedDirentList}
                 />
               </ModalPortal>
             }
