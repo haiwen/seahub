@@ -6,7 +6,6 @@ import { gettext, siteRoot, username, canGenerateShareLink, canGenerateUploadLin
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
-import URLDecorator from '../../utils/url-decorator';
 import Dirent from '../../models/dirent';
 import FileTag from '../../models/file-tag';
 import RepoTag from '../../models/repo-tag';
@@ -19,10 +18,6 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
-import ShareDialog from '../../components/dialog/share-dialog';
-import AddRelatedFileDialog from '../../components/dialog/add-related-file-dialog';
-import ListRelatedFileDialog from '../../components/dialog/list-related-file-dialog';
-import EditFileTagDialog from '../../components/dialog/edit-filetag-dialog';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -74,20 +69,18 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '',  // for update dir list
       errorMsg: '',
-      showLibContentViewDialogs: false,
-      showShareDialog: false,
-      showEditFileTagDialog: false,
-      showAddRelatedFileDialog: false,
-      showListRelatedFileDialog: false,
-      fileTagList: [],
       isDirentDetailShow: false,
-      multiFileTagList: [],
-      selectedDirents: null,
     };
 
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
+  }
+
+  showDirentDetail = () => {
+    this.setState({
+      isDirentDetailShow: true,
+    });
   }
 
   componentWillMount() {
@@ -1215,140 +1208,10 @@ class LibContentView extends React.Component {
       }
     });
   }
-
-  onMenuItemClick = (operation, dirents) => {
-    const dirent = dirents[0];
-    this.setState({
-      selectedDirents: dirents
-    })
-    switch(operation) {
-      case 'Share':
-        this.setState({
-          showLibContentViewDialogs: true,
-          showShareDialog: true,
-        });
-        break;
-      case 'Tags':
-        this.listFilesTags(dirents);
-        break;
-      case 'Details':
-        this.setState({
-          isDirentDetailShow: true,
-        });
-        break;
-      case 'Lock':
-        this.lockFile(dirent);
-        break;
-      case 'Unlock':
-        this.unlockFile(dirent);
-        break;
-      case 'Related Files':
-        this.openRelatedFilesDialog(dirent);
-        break;
-      case 'History':
-        this.onHistory(dirent);
-        break;
-      case 'Open via Client':
-        this.onOpenViaClient(dirent);
-        break;
-      default:
-        break;
-    }
-  }
-
-  lockFile = (dirent) => {
-    const filePath = this.getDirentPath(dirent);
-    seafileAPI.lockfile(this.props.repoID, filePath).then((res) => {
-      if (res.data.is_locked) {
-        let message = gettext('Successfully locked %(name)s.');
-        message = message.replace('%(name)s', dirent.name);
-        toaster.success(message);
-        this.updateDirent(dirent, 'is_locked', true);
-        this.updateDirent(dirent, 'locked_by_me', true);
-        this.unSelectDirent();
-      }
-    });
-  }
-
-  unlockFile = (dirent) => {
-    const filePath = this.getDirentPath(dirent);
-    seafileAPI.unlockfile(this.props.repoID, filePath).then((res) => {
-      if (!res.data.is_locked) {
-        let message = gettext('Successfully unlocked %(name)s.');
-        message = message.replace('%(name)s', dirent.name);
-        toaster.success(message);
-        this.updateDirent(dirent, 'is_locked', false);
-        this.updateDirent(dirent, 'locked_by_me', false);
-        this.unSelectDirent();
-      }
-    });
-  }
-
-  onOpenViaClient = (dirent) => {
-    const filePath = this.getDirentPath(dirent);
-    let url = URLDecorator.getUrl({
-      type: 'open_via_client',
-      repoID: this.props.repoID,
-      filePath: filePath
-    });
-    location.href = url;
-    this.unSelectDirent();
-  }
-
-  onHistory = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    let url = URLDecorator.getUrl({
-      type: 'file_revisions',
-      repoID: this.props.repoID,
-      filePath: filePath
-    });
-    location.href = url;
-  }
-
-  openRelatedFilesDialog = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
-      this.setState({
-        relatedFiles: res.data.related_files,
-        showLibContentViewDialogs: true,
-      });
-      if (res.data.related_files.length > 0) {
-        this.setState({
-          showListRelatedFileDialog: true,
-        });
-      }
-      else {
-        this.setState({
-          showAddRelatedFileDialog: true,
-        });
-      }
-    });
-  }
-
-  toggleCancel = () => {
-    this.setState({
-      showLibContentViewDialogs: false,
-      showShareDialog: false,
-      showEditFileTagDialog: false,
-      showAddRelatedFileDialog: false,
-      showListRelatedFileDialog: false,
-    });
-  }
-
-  closeAddRelatedFileDialog = () => {
-    this.setState({
-      showLibContentViewDialogs: true,
-      showAddRelatedFileDialog: false,
-      showListRelatedFileDialog: true,
-    });
-  }
-
-  addRelatedFileToggle = () => {
-    this.setState({
-      showLibContentViewDialogs: true,
-      showAddRelatedFileDialog: true,
-      showListRelatedFileDialog: false,
-    });
+  
+  getDirentPath = (dirent) => {
+    let path = this.state.path;
+    if (dirent) return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   }
 
   unSelectDirent = () => {
@@ -1358,77 +1221,6 @@ class LibContentView extends React.Component {
     });
     const dirent = {};
     this.onDirentSelected(dirent);
-  }
-
-  getDirentPath = (dirent) => {
-    let path = this.state.path;
-    if (dirent) return path === '/' ? path + dirent.name : path + '/' + dirent.name;
-  }
-
-  listFilesTags = (dirents) => {
-    if (dirents.length === 1) {
-      this.listFileTags(dirents[0]);
-    } else if (dirents.length > 1) {
-      this.listMultiFileTags(dirents);
-    }
-    this.setState({
-      showLibContentViewDialogs: true,
-      showEditFileTagDialog: true,
-    });
-  }
-
-  listFileTags = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.listFileTags(this.props.repoID, filePath).then(res => {
-      let fileTagList = res.data.file_tags;
-      for (let i = 0, length = fileTagList.length; i < length; i++) {
-        fileTagList[i].id = fileTagList[i].file_tag_id;
-      }
-      this.setState({
-        fileTagList: fileTagList
-      });
-    });
-  }
-
-  listMultiFileTags = (dirents) => {
-    let multiFileTagList = [];
-    let len = dirents.length;
-    for (let j = 0; j < len; j++) {
-      seafileAPI.listFileTags(this.props.repoID, this.getDirentPath(dirents[j])).then(res => {
-        let fileTagList = res.data.file_tags;
-        for (let i = 0, length = fileTagList.length; i < length; i++) {
-          fileTagList[i].id = fileTagList[i].file_tag_id;
-        }
-        multiFileTagList.push(fileTagList);
-      });
-      this.setState({
-        multiFileTagList: multiFileTagList
-      });
-    }
-  }
-
-  onMenuFileTagChanged = () => {
-    this.listMultiFileTags(this.state.selectedDirents);
-    this.listFileTags(this.state.selectedDirents[0]);
-    let length = this.state.selectedDirents.length;
-    for (let i = 0; i < length; i++) {
-      const dirent = this.state.selectedDirents[i];
-      const direntPath = this.getDirentPath(dirent);
-      this.onFileTagChanged(dirent, direntPath);
-    }
-  }
-
-  listRelatedFiles = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
-      this.setState({
-        relatedFiles: res.data.related_files
-      });
-    });
-  }
-
-  onRelatedFileChange = () => {
-    this.listRelatedFiles(this.state.selectedDirents[0]);
   }
 
   render() {
@@ -1476,14 +1268,6 @@ class LibContentView extends React.Component {
 
     }
     
-    let direntPath = this.state.showLibContentViewDialogs && this.getDirentPath(this.state.selectedDirents[0]);
-    let direntsPath = [];
-    if (this.state.showLibContentViewDialogs && this.state.selectedDirents.length > 0) {
-      for (let i = 0; i < this.state.selectedDirents.length; i++) {
-        let newDirentPath = this.getDirentPath(this.state.selectedDirents[i]);
-        direntsPath.push(newDirentPath);
-      }
-    }
 
     return (
       <div className="main-panel o-hidden">
@@ -1521,7 +1305,13 @@ class LibContentView extends React.Component {
             onSearchedClick={this.onSearchedClick}
             isRepoOwner={isRepoOwner}
             currentRepoInfo={this.state.currentRepoInfo}
-            onMenuItemClick={this.onMenuItemClick}
+            updateDirent={this.updateDirent}
+            onDirentSelected={this.onDirentSelected}
+            showDirentDetail={this.showDirentDetail}
+            listRelatedFiles={this.listRelatedFiles}
+            getDirentPath={this.getDirentPath}
+            unSelectDirent={this.unSelectDirent}
+            onFilesTagChanged={this.onFileTagChanged}
           />
         </div>
         <div className="main-panel-center flex-row">
@@ -1585,7 +1375,7 @@ class LibContentView extends React.Component {
             isAllDirentSelected={this.state.isAllDirentSelected}
             onAllDirentSelected={this.onAllDirentSelected}
             isDirentDetailShow={this.state.isDirentDetailShow}
-            selectedDirent={this.state.selectedDirents && this.state.selectedDirents[0]}
+            selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
@@ -1596,62 +1386,6 @@ class LibContentView extends React.Component {
               direntList={this.state.direntList}
               onFileUploadSuccess={this.onFileUploadSuccess}
             />
-          )}
-          {this.state.showLibContentViewDialogs && (
-            <Fragment>
-              {this.state.showShareDialog &&
-                <ModalPortal>
-                  <ShareDialog
-                    itemType={this.state.selectedDirents[0].type}
-                    itemName={this.state.selectedDirents[0].name}
-                    itemPath={direntPath}
-                    userPerm={this.state.selectedDirents[0].permission}
-                    repoID={repoID}
-                    repoEncrypted={false}
-                    enableDirPrivateShare={enableDirPrivateShare}
-                    isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-                    toggleDialog={this.toggleCancel}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showEditFileTagDialog &&
-                <ModalPortal>
-                  <EditFileTagDialog
-                    repoID={repoID}
-                    filePath={direntPath}
-                    filesPath={direntsPath}
-                    fileTagList={this.state.fileTagList}
-                    multiFileTagList={this.state.multiFileTagList}
-                    toggleCancel={this.toggleCancel}
-                    onFileTagChanged={this.onMenuFileTagChanged}
-                    selectedDirents={this.state.selectedDirents}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showListRelatedFileDialog &&
-                <ModalPortal>
-                  <ListRelatedFileDialog
-                    repoID={repoID}
-                    filePath={direntPath}
-                    relatedFiles={this.state.relatedFiles}
-                    toggleCancel={this.toggleCancel}
-                    addRelatedFileToggle={this.addRelatedFileToggle}
-                    onRelatedFileChange={this.onRelatedFileChange}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showAddRelatedFileDialog &&
-                <ModalPortal>
-                  <AddRelatedFileDialog
-                    repoID={repoID}
-                    filePath={direntPath}
-                    toggleCancel={this.closeAddRelatedFileDialog}
-                    dirent={this.state.selectedDirents[0]}
-                    onRelatedFileChange={this.onRelatedFileChange}
-                  />
-                </ModalPortal>
-              }
-            </Fragment>
           )}
         </div>
       </div>

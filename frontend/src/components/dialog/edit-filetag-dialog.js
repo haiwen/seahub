@@ -62,30 +62,29 @@ class TagItem extends React.Component {
     }
   }
 
-  getCommonTag = (arr, filesNumber) => {
+  getCommonTag = (filesTags, filesNumber) => {
     let hash = {};
-    let m = 1;
-    let result = [];
-    for (let i = 0, len = arr.length; i < len; i++) {
-      var el = arr[i];
-      var uniqueEl = typeof (el) + el;
-      if (!hash[uniqueEl]) {
-        hash[uniqueEl] = 1;
+    let tagNumber = 1;
+    let commonTags = [];
+    for (let i = 0, len = filesTags.length; i < len; i++) {
+      let filesTag = filesTags[i];
+      if (!hash[filesTag]) {
+        hash[filesTag] = 1;
       } else{
-        hash[uniqueEl]++;
+        hash[filesTag]++;
       }
-      if (hash[uniqueEl] == m ) {
-        if (m === filesNumber) {
-          result.push(el);
+      if (hash[filesTag] == tagNumber) {
+        if (tagNumber === filesNumber) {
+          commonTags.push(filesTag);
         }
-      } else if (hash[uniqueEl] > m) {
-        m = hash[uniqueEl];
-        if (m === filesNumber) {
-          result.push(el);
+      } else if (hash[filesTag] > tagNumber) {
+        tagNumber = hash[filesTag];
+        if (tagNumber === filesNumber) {
+          commonTags.push(filesTag);
         }
       }
     }
-    return result;
+    return commonTags;
   }
 
 
@@ -106,7 +105,7 @@ class TagItem extends React.Component {
         });
       } else {
         let fileTag = null;
-        for(let i = 0; i < fileTagList.length; i++) {
+        for (let i = 0; i < fileTagList.length; i++) {
           if (fileTagList[i].repo_tag_id === repoTag.id) {
             fileTag = fileTagList[i];
             break;

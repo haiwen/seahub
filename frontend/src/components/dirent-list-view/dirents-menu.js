@@ -24,7 +24,7 @@ class DirentMenu extends React.Component {
   calculateMenuList(props) {
     const { currentRepoInfo, dirents, isRepoOwner } = props;
     const length = dirents.length;
-    let menuList;
+    let menuList = [];
     if (length === 1) {
       if (dirents[0].type === 'dir') {
         menuList = ['Share'];
@@ -42,15 +42,13 @@ class DirentMenu extends React.Component {
       }
     }
     else if (length > 1) {
+      menuList = ['Tags'];
       for (let i = 0; i < length; i++) {
         if (dirents[i].type === 'dir') {
-          this.setState({
-            menuList: [],
-          });
-          return;
+          menuList = [];
+          break;
         }
       }
-      menuList = ['Tags'];
     }
     this.setState({
       menuList: menuList,
@@ -59,7 +57,7 @@ class DirentMenu extends React.Component {
 
   translateMenuItem = (menuItem) => {
     let translateResult = '';
-    switch(menuItem) {
+    switch (menuItem) {
       case 'Share':
         translateResult = gettext('Share');
         break;

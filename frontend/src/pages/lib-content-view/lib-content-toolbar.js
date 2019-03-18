@@ -44,7 +44,6 @@ const propTypes = {
   // search
   onSearchedClick: PropTypes.func.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
-  onMenuItemClick: PropTypes.func.isRequired,
 };
 
 class LibContentToolbar extends React.Component {
@@ -67,7 +66,7 @@ class LibContentToolbar extends React.Component {
               hasDraft={this.props.hasDraft}
               fileTags={this.props.fileTags}
               relatedFiles={this.props.relatedFiles}
-              onFileTagChanged={this.props.onFileTagChanged}
+              onFilesTagChanged={this.props.onFilesTagChanged}
               onRelatedFileChange={this.props.onRelatedFileChange}
             />
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
@@ -93,7 +92,16 @@ class LibContentToolbar extends React.Component {
                 onItemsDelete={this.props.onItemsDelete}
                 isRepoOwner={this.props.isRepoOwner}
                 currentRepoInfo={this.props.currentRepoInfo}
-                onMenuItemClick={this.props.onMenuItemClick}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                onFileTagChanged={this.props.onFileTagChanged}
+                updateDirent={this.props.updateDirent}
+                onDirentSelected={this.props.onDirentSelected}
+                showDirentDetail={this.props.showDirentDetail}
+                listRelatedFiles={this.props.listRelatedFiles}
+                relatedFiles={this.props.relatedFiles}
+                getDirentPath={this.props.getDirentPath}
+                unSelectDirent={this.props.unSelectDirent}
+                onFilesTagChanged={this.props.onFilesTagChanged}
               /> :
               <DirOperationToolBar 
                 path={this.props.path}
