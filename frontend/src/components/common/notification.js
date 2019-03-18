@@ -46,7 +46,7 @@ class Notification extends React.Component {
       }
       return item;
     });
-    seafileAPI.updateNotifications();
+    seafileAPI.markNoticeAsRead(noticeItem.id);
     let unseenCount = this.state.unseenCount === 0 ? 0 : this.state.unseenCount - 1;
     this.setState({
       noticeList: noticeList,
