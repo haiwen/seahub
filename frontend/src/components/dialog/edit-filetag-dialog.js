@@ -47,8 +47,7 @@ class TagItem extends React.Component {
         repoTagIdList.push(fileTag.repo_tag_id);
       });
       return repoTagIdList;
-    }
-    else {
+    } else {
       const tagList = this.props.multiFileTagList;
       const length = tagList.length;
       let tagArray = [];
@@ -87,14 +86,10 @@ class TagItem extends React.Component {
     return commonTags;
   }
 
-
   onEditFileTag = () => {
-    if (!this.state.freeze) {
-      this.setState({ freeze: true });
-    } else {
-      return;
-    }
+    if (this.state.freeze) return;
     let { repoID, repoTag, filePath, filesPath, fileTagList } = this.props;
+    this.setState({ freeze: true });
     if (filesPath.length === 1) {
       let repoTagIdList = this.getRepoTagIdList();
       if (repoTagIdList.indexOf(repoTag.id) === -1) {
@@ -117,8 +112,7 @@ class TagItem extends React.Component {
           this.setState({ freeze: false });
         });
       }
-    }
-    else {
+    } else {
       this.onEditFilesTag();
     }
   }
@@ -133,8 +127,7 @@ class TagItem extends React.Component {
           this.setState({ freeze: false });
         });
       }
-    }
-    else {
+    } else {
       for (let i = 0, len = multiFileTagList.length; i < len; i++) {
         for (let j = 0, length = multiFileTagList[i].length; j < length; j++) {
           if (multiFileTagList[i][j].repo_tag_id === repoTag.id) {

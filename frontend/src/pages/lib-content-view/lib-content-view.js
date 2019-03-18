@@ -1208,11 +1208,6 @@ class LibContentView extends React.Component {
       }
     });
   }
-  
-  getDirentPath = (dirent) => {
-    let path = this.state.path;
-    if (dirent) return path === '/' ? path + dirent.name : path + '/' + dirent.name;
-  }
 
   unSelectDirent = () => {
     this.setState({
@@ -1309,7 +1304,6 @@ class LibContentView extends React.Component {
             onDirentSelected={this.onDirentSelected}
             showDirentDetail={this.showDirentDetail}
             listRelatedFiles={this.listRelatedFiles}
-            getDirentPath={this.getDirentPath}
             unSelectDirent={this.unSelectDirent}
             onFilesTagChanged={this.onFileTagChanged}
           />

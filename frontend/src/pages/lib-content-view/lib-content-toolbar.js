@@ -44,6 +44,12 @@ const propTypes = {
   // search
   onSearchedClick: PropTypes.func.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
+  // selected menu
+  onDirentSelected: PropTypes.func.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
+  listRelatedFiles: PropTypes.func.isRequired,
+  onFilesTagChanged: PropTypes.func.isRequired,
+  updateDirent: PropTypes.func.isRequired,
 };
 
 class LibContentToolbar extends React.Component {
@@ -99,7 +105,6 @@ class LibContentToolbar extends React.Component {
                 showDirentDetail={this.props.showDirentDetail}
                 listRelatedFiles={this.props.listRelatedFiles}
                 relatedFiles={this.props.relatedFiles}
-                getDirentPath={this.props.getDirentPath}
                 unSelectDirent={this.props.unSelectDirent}
                 onFilesTagChanged={this.props.onFilesTagChanged}
               /> :

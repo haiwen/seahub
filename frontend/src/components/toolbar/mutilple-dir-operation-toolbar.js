@@ -146,7 +146,7 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   lockFile = (dirent) => {
-    const filePath = this.props.getDirentPath(dirent);
+    const filePath = this.getDirentPath(dirent);
     seafileAPI.lockfile(this.props.repoID, filePath).then((res) => {
       if (res.data.is_locked) {
         let message = gettext('Successfully locked %(name)s.');
@@ -160,7 +160,7 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   unlockFile = (dirent) => {
-    const filePath = this.props.getDirentPath(dirent);
+    const filePath = this.getDirentPath(dirent);
     seafileAPI.unlockfile(this.props.repoID, filePath).then((res) => {
       if (!res.data.is_locked) {
         let message = gettext('Successfully unlocked %(name)s.');
@@ -174,7 +174,7 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   onOpenViaClient = (dirent) => {
-    const filePath = this.props.getDirentPath(dirent);
+    const filePath = this.getDirentPath(dirent);
     let url = URLDecorator.getUrl({
       type: 'open_via_client',
       repoID: this.props.repoID,
@@ -185,7 +185,7 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   onHistory = (dirent) => {
-    let filePath = this.props.getDirentPath(dirent);
+    let filePath = this.getDirentPath(dirent);
     let url = URLDecorator.getUrl({
       type: 'file_revisions',
       repoID: this.props.repoID,
@@ -195,7 +195,7 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   openRelatedFilesDialog = (dirent) => {
-    let filePath = this.props.getDirentPath(dirent);
+    let filePath = this.getDirentPath(dirent);
     seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
       this.setState({
         relatedFiles: res.data.related_files,
@@ -205,8 +205,7 @@ class MutipleDirOperationToolbar extends React.Component {
         this.setState({
           showListRelatedFileDialog: true,
         });
-      }
-      else {
+      } else {
         this.setState({
           showAddRelatedFileDialog: true,
         });
@@ -253,7 +252,7 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   listFileTags = (dirent) => {
-    let filePath = this.props.getDirentPath(dirent);
+    let filePath = this.getDirentPath(dirent);
     seafileAPI.listFileTags(this.props.repoID, filePath).then(res => {
       let fileTagList = res.data.file_tags;
       for (let i = 0, length = fileTagList.length; i < length; i++) {
@@ -269,7 +268,7 @@ class MutipleDirOperationToolbar extends React.Component {
     let multiFileTagList = [];
     let len = dirents.length;
     for (let j = 0; j < len; j++) {
-      seafileAPI.listFileTags(this.props.repoID, this.props.getDirentPath(dirents[j])).then(res => {
+      seafileAPI.listFileTags(this.props.repoID, this.getDirentPath(dirents[j])).then(res => {
         let fileTagList = res.data.file_tags;
         for (let i = 0, length = fileTagList.length; i < length; i++) {
           fileTagList[i].id = fileTagList[i].file_tag_id;
@@ -288,13 +287,13 @@ class MutipleDirOperationToolbar extends React.Component {
     let length = this.props.selectedDirentList.length;
     for (let i = 0; i < length; i++) {
       const dirent = this.props.selectedDirentList[i];
-      const direntPath = this.props.getDirentPath(dirent);
+      const direntPath = this.getDirentPath(dirent);
       this.props.onFilesTagChanged(dirent, direntPath);
     }
   }
 
   listRelatedFiles = (dirent) => {
-    let filePath = this.props.getDirentPath(dirent);
+    let filePath = this.getDirentPath(dirent);
     seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
       this.setState({
         relatedFiles: res.data.related_files
@@ -306,14 +305,18 @@ class MutipleDirOperationToolbar extends React.Component {
     this.listRelatedFiles(this.props.selectedDirentList[0]);
   }
 
+  getDirentPath = (dirent) => {
+    if (dirent) return Utils.joinPath(this.state.path, dirent.name);
+  }
+
   render() {
     const { repoID } = this.props;
-    let direntPath = this.props.getDirentPath(this.props.selectedDirentList[0]);
+    let direntPath = this.getDirentPath(this.props.selectedDirentList[0]);
 
     let direntsPath = [];
     if (this.state.showLibContentViewDialogs && this.props.selectedDirentList.length > 0) {
       for (let i = 0; i < this.props.selectedDirentList.length; i++) {
-        let newDirentPath = this.props.getDirentPath(this.props.selectedDirentList[i]);
+        let newDirentPath = this.getDirentPath(this.props.selectedDirentList[i]);
         direntsPath.push(newDirentPath);
       }
     }
