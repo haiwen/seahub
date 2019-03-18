@@ -1,6 +1,7 @@
 import React from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
+import NoticeItem from './notice-item';
 
 class Notification extends React.Component {
   constructor(props) {
@@ -9,6 +10,7 @@ class Notification extends React.Component {
       showNotice: false,
       notice_html: '',
       unseenCount: 0,
+      noticeList: [],
     };
   }
 
@@ -33,14 +35,16 @@ class Notification extends React.Component {
 
   loadNotices = () => {
     seafileAPI.listPopupNotices().then(res => {
-      this.setState({
-        notice_html: res.data.notice_html
-      });
+      let noticeList = res.data.notices_list;
+      console.log(noticeList);
+      this.setState({noticeList: noticeList});
     });
   }
 
   render() {
     const { notice_html } = this.state;
+
+    // return '';
 
     return (
       <div id="notifications">
@@ -55,7 +59,14 @@ class Notification extends React.Component {
             <a href="#" onClick={this.onClick} title={gettext('Close')} aria-label={gettext('Close')} className="sf-popover-close js-close sf2-icon-x1 action-icon float-right"></a>
           </div>
           <div className="sf-popover-con">
-            <ul className="notice-list" dangerouslySetInnerHTML={{__html: notice_html}}></ul>
+            {/* <ul className="notice-list" dangerouslySetInnerHTML={{__html: notice_html}}></ul> */}
+            <ul className="notice-list">
+              {this.state.noticeList.map(item => {
+                return (
+                  <NoticeItem key={item.id} noticeItem={item} />
+                );
+              })}
+            </ul>
             <a href={siteRoot + 'notification/list/'} className="view-all">{gettext('See All Notifications')}</a>
           </div>
         </div>
