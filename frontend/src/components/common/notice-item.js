@@ -184,7 +184,7 @@ class NoticeItem extends React.Component {
 
   onNoticeItemClick = () => {
     let item = this.props.noticeItem;
-    if (noticeItem.seen === true) {
+    if (item.seen === true) {
       return;
     }
     this.props.onNoticeItemClick(item);
