@@ -43,6 +43,13 @@ const propTypes = {
   switchViewMode: PropTypes.func.isRequired,
   // search
   onSearchedClick: PropTypes.func.isRequired,
+  isRepoOwner: PropTypes.bool.isRequired,
+  // selected menu
+  onDirentSelected: PropTypes.func.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
+  listRelatedFiles: PropTypes.func.isRequired,
+  onFilesTagChanged: PropTypes.func.isRequired,
+  updateDirent: PropTypes.func.isRequired,
 };
 
 class LibContentToolbar extends React.Component {
@@ -65,7 +72,7 @@ class LibContentToolbar extends React.Component {
               hasDraft={this.props.hasDraft}
               fileTags={this.props.fileTags}
               relatedFiles={this.props.relatedFiles}
-              onFileTagChanged={this.props.onFileTagChanged}
+              onFilesTagChanged={this.props.onFilesTagChanged}
               onRelatedFileChange={this.props.onRelatedFileChange}
             />
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
@@ -89,6 +96,17 @@ class LibContentToolbar extends React.Component {
                 onItemsMove={this.props.onItemsMove}
                 onItemsCopy={this.props.onItemsCopy}
                 onItemsDelete={this.props.onItemsDelete}
+                isRepoOwner={this.props.isRepoOwner}
+                currentRepoInfo={this.props.currentRepoInfo}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                onFileTagChanged={this.props.onFileTagChanged}
+                updateDirent={this.props.updateDirent}
+                onDirentSelected={this.props.onDirentSelected}
+                showDirentDetail={this.props.showDirentDetail}
+                listRelatedFiles={this.props.listRelatedFiles}
+                relatedFiles={this.props.relatedFiles}
+                unSelectDirent={this.props.unSelectDirent}
+                onFilesTagChanged={this.props.onFilesTagChanged}
               /> :
               <DirOperationToolBar 
                 path={this.props.path}

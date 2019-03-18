@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
@@ -69,11 +69,18 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '',  // for update dir list
       errorMsg: '',
+      isDirentDetailShow: false,
     };
 
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
+  }
+
+  showDirentDetail = () => {
+    this.setState({
+      isDirentDetailShow: true,
+    });
   }
 
   componentWillMount() {
@@ -1202,7 +1209,17 @@ class LibContentView extends React.Component {
     });
   }
 
+  unSelectDirent = () => {
+    this.setState({
+      isDirentSelected: false,
+      selectedDirentList: []
+    });
+    const dirent = {};
+    this.onDirentSelected(dirent);
+  }
+
   render() {
+    const { repoID } = this.props;
 
     if (this.state.libNeedDecrypt) {
       return (
@@ -1245,6 +1262,7 @@ class LibContentView extends React.Component {
       }
 
     }
+    
 
     return (
       <div className="main-panel o-hidden">
@@ -1280,6 +1298,14 @@ class LibContentView extends React.Component {
             currentMode={this.state.currentMode}
             switchViewMode={this.switchViewMode}
             onSearchedClick={this.onSearchedClick}
+            isRepoOwner={isRepoOwner}
+            currentRepoInfo={this.state.currentRepoInfo}
+            updateDirent={this.updateDirent}
+            onDirentSelected={this.onDirentSelected}
+            showDirentDetail={this.showDirentDetail}
+            listRelatedFiles={this.listRelatedFiles}
+            unSelectDirent={this.unSelectDirent}
+            onFilesTagChanged={this.onFileTagChanged}
           />
         </div>
         <div className="main-panel-center flex-row">
@@ -1342,6 +1368,8 @@ class LibContentView extends React.Component {
             isDirentSelected={this.state.isDirentSelected}
             isAllDirentSelected={this.state.isAllDirentSelected}
             onAllDirentSelected={this.onAllDirentSelected}
+            isDirentDetailShow={this.state.isDirentDetailShow}
+            selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader

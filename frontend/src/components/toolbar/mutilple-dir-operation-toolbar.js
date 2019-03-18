@@ -8,6 +8,13 @@ import URLDecorator from '../../utils/url-decorator';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
+import DirentsMenu from '../dirent-list-view/dirents-menu';
+import ShareDialog from '../dialog/share-dialog';
+import AddRelatedFileDialog from '../dialog/add-related-file-dialog';
+import ListRelatedFileDialog from '../dialog/list-related-file-dialog';
+import EditFileTagDialog from '../dialog/edit-filetag-dialog';
+import toaster from '../toast';
+import ModalPortal from '../modal-portal';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -17,6 +24,7 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  isRepoOwner: PropTypes.bool.isRequired,
 };
 
 class MutipleDirOperationToolbar extends React.Component {
@@ -29,6 +37,13 @@ class MutipleDirOperationToolbar extends React.Component {
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isMutipleOperation: true,
+      showLibContentViewDialogs: false,
+      showShareDialog: false,
+      showEditFileTagDialog: false,
+      showAddRelatedFileDialog: false,
+      showListRelatedFileDialog: false,
+      fileTagList: [],
+      multiFileTagList: [],
     };
     this.zipToken = null;
   }
@@ -94,15 +109,236 @@ class MutipleDirOperationToolbar extends React.Component {
     });
   }
 
+  onMenuItemClick = (operation) => {
+    const dirents = this.props.selectedDirentList;
+    const dirent = dirents[0];
+    switch(operation) {
+      case 'Share':
+        this.setState({
+          showLibContentViewDialogs: true,
+          showShareDialog: true,
+        });
+        break;
+      case 'Tags':
+        this.listFilesTags(dirents);
+        break;
+      case 'Details':
+        this.props.showDirentDetail();
+        break;
+      case 'Lock':
+        this.lockFile(dirent);
+        break;
+      case 'Unlock':
+        this.unlockFile(dirent);
+        break;
+      case 'Related Files':
+        this.openRelatedFilesDialog(dirent);
+        break;
+      case 'History':
+        this.onHistory(dirent);
+        break;
+      case 'Open via Client':
+        this.onOpenViaClient(dirent);
+        break;
+      default:
+        break;
+    }
+  }
+
+  lockFile = (dirent) => {
+    const filePath = this.getDirentPath(dirent);
+    seafileAPI.lockfile(this.props.repoID, filePath).then((res) => {
+      if (res.data.is_locked) {
+        let message = gettext('Successfully locked %(name)s.');
+        message = message.replace('%(name)s', dirent.name);
+        toaster.success(message);
+        this.props.updateDirent(dirent, 'is_locked', true);
+        this.props.updateDirent(dirent, 'locked_by_me', true);
+        this.props.unSelectDirent();
+      }
+    });
+  }
+
+  unlockFile = (dirent) => {
+    const filePath = this.getDirentPath(dirent);
+    seafileAPI.unlockfile(this.props.repoID, filePath).then((res) => {
+      if (!res.data.is_locked) {
+        let message = gettext('Successfully unlocked %(name)s.');
+        message = message.replace('%(name)s', dirent.name);
+        toaster.success(message);
+        this.props.updateDirent(dirent, 'is_locked', false);
+        this.props.updateDirent(dirent, 'locked_by_me', false);
+        this.props.unSelectDirent();
+      }
+    });
+  }
+
+  onOpenViaClient = (dirent) => {
+    const filePath = this.getDirentPath(dirent);
+    let url = URLDecorator.getUrl({
+      type: 'open_via_client',
+      repoID: this.props.repoID,
+      filePath: filePath
+    });
+    location.href = url;
+    this.props.unSelectDirent();
+  }
+
+  onHistory = (dirent) => {
+    let filePath = this.getDirentPath(dirent);
+    let url = URLDecorator.getUrl({
+      type: 'file_revisions',
+      repoID: this.props.repoID,
+      filePath: filePath
+    });
+    location.href = url;
+  }
+
+  openRelatedFilesDialog = (dirent) => {
+    let filePath = this.getDirentPath(dirent);
+    seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
+      this.setState({
+        relatedFiles: res.data.related_files,
+        showLibContentViewDialogs: true,
+      });
+      if (res.data.related_files.length > 0) {
+        this.setState({
+          showListRelatedFileDialog: true,
+        });
+      } else {
+        this.setState({
+          showAddRelatedFileDialog: true,
+        });
+      }
+    });
+  }
+
+  toggleCancel = () => {
+    this.setState({
+      showLibContentViewDialogs: false,
+      showShareDialog: false,
+      showEditFileTagDialog: false,
+      showAddRelatedFileDialog: false,
+      showListRelatedFileDialog: false,
+    });
+  }
+
+  closeAddRelatedFileDialog = () => {
+    this.setState({
+      showLibContentViewDialogs: true,
+      showAddRelatedFileDialog: false,
+      showListRelatedFileDialog: true,
+    });
+  }
+
+  addRelatedFileToggle = () => {
+    this.setState({
+      showLibContentViewDialogs: true,
+      showAddRelatedFileDialog: true,
+      showListRelatedFileDialog: false,
+    });
+  }
+
+  listFilesTags = (dirents) => {
+    if (dirents.length === 1) {
+      this.listFileTags(dirents[0]);
+    } else if (dirents.length > 1) {
+      this.listMultiFileTags(dirents);
+    }
+    this.setState({
+      showLibContentViewDialogs: true,
+      showEditFileTagDialog: true,
+    });
+  }
+
+  listFileTags = (dirent) => {
+    let filePath = this.getDirentPath(dirent);
+    seafileAPI.listFileTags(this.props.repoID, filePath).then(res => {
+      let fileTagList = res.data.file_tags;
+      for (let i = 0, length = fileTagList.length; i < length; i++) {
+        fileTagList[i].id = fileTagList[i].file_tag_id;
+      }
+      this.setState({
+        fileTagList: fileTagList
+      });
+    });
+  }
+
+  listMultiFileTags = (dirents) => {
+    let multiFileTagList = [];
+    let len = dirents.length;
+    for (let j = 0; j < len; j++) {
+      seafileAPI.listFileTags(this.props.repoID, this.getDirentPath(dirents[j])).then(res => {
+        let fileTagList = res.data.file_tags;
+        for (let i = 0, length = fileTagList.length; i < length; i++) {
+          fileTagList[i].id = fileTagList[i].file_tag_id;
+        }
+        multiFileTagList.push(fileTagList);
+      });
+      this.setState({
+        multiFileTagList: multiFileTagList
+      });
+    }
+  }
+
+  onMenuFileTagChanged = () => {
+    this.listMultiFileTags(this.props.selectedDirentList);
+    this.listFileTags(this.props.selectedDirentList[0]);
+    let length = this.props.selectedDirentList.length;
+    for (let i = 0; i < length; i++) {
+      const dirent = this.props.selectedDirentList[i];
+      const direntPath = this.getDirentPath(dirent);
+      this.props.onFilesTagChanged(dirent, direntPath);
+    }
+  }
+
+  listRelatedFiles = (dirent) => {
+    let filePath = this.getDirentPath(dirent);
+    seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
+      this.setState({
+        relatedFiles: res.data.related_files
+      });
+    });
+  }
+
+  onRelatedFileChange = () => {
+    this.listRelatedFiles(this.props.selectedDirentList[0]);
+  }
+
+  getDirentPath = (dirent) => {
+    if (dirent) return Utils.joinPath(this.state.path, dirent.name);
+  }
+
   render() {
+    const { repoID } = this.props;
+    let direntPath = this.getDirentPath(this.props.selectedDirentList[0]);
+
+    let direntsPath = [];
+    if (this.state.showLibContentViewDialogs && this.props.selectedDirentList.length > 0) {
+      for (let i = 0; i < this.props.selectedDirentList.length; i++) {
+        let newDirentPath = this.getDirentPath(this.props.selectedDirentList[i]);
+        direntsPath.push(newDirentPath);
+      }
+    }
     return (
       <Fragment>
-        <ButtonGroup className="flex-row group-operations">
-          <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
-          <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
-        </ButtonGroup>
+        <div className="d-flex">
+          <ButtonGroup className="flex-row group-operations">
+            <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
+            <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
+            <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
+            <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+          </ButtonGroup>
+          {
+            this.props.selectedDirentList.length > 0 &&
+            <DirentsMenu
+              dirents={this.props.selectedDirentList}
+              currentRepoInfo={this.props.currentRepoInfo}
+              isRepoOwner={this.props.isRepoOwner}
+              onMenuItemClick={this.onMenuItemClick}
+            />
+          }
+        </div>
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
             path={this.props.path}
@@ -128,6 +364,62 @@ class MutipleDirOperationToolbar extends React.Component {
         {this.state.isProgressDialogShow &&
           <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload} />
         }
+        {this.state.showLibContentViewDialogs && (
+          <Fragment>
+            {this.state.showShareDialog &&
+              <ModalPortal>
+                <ShareDialog
+                  itemType={this.props.selectedDirentList[0].type}
+                  itemName={this.props.selectedDirentList[0].name}
+                  itemPath={direntPath}
+                  userPerm={this.props.selectedDirentList[0].permission}
+                  repoID={repoID}
+                  repoEncrypted={false}
+                  enableDirPrivateShare={this.props.enableDirPrivateShare}
+                  isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                  toggleDialog={this.toggleCancel}
+                />
+              </ModalPortal>
+            }
+            {this.state.showEditFileTagDialog &&
+              <ModalPortal>
+                <EditFileTagDialog
+                  repoID={repoID}
+                  filePath={direntPath}
+                  filesPath={direntsPath}
+                  fileTagList={this.state.fileTagList}
+                  multiFileTagList={this.state.multiFileTagList}
+                  toggleCancel={this.toggleCancel}
+                  onFileTagChanged={this.onMenuFileTagChanged}
+                  selectedDirentList={this.props.selectedDirentList}
+                />
+              </ModalPortal>
+            }
+            {this.state.showListRelatedFileDialog &&
+              <ModalPortal>
+                <ListRelatedFileDialog
+                  repoID={repoID}
+                  filePath={direntPath}
+                  relatedFiles={this.state.relatedFiles}
+                  toggleCancel={this.toggleCancel}
+                  addRelatedFileToggle={this.addRelatedFileToggle}
+                  onRelatedFileChange={this.onRelatedFileChange}
+                />
+              </ModalPortal>
+            }
+            {this.state.showAddRelatedFileDialog &&
+              <ModalPortal>
+                <AddRelatedFileDialog
+                  repoID={repoID}
+                  filePath={direntPath}
+                  toggleCancel={this.closeAddRelatedFileDialog}
+                  dirent={this.props.selectedDirentList[0]}
+                  onRelatedFileChange={this.onRelatedFileChange}
+                />
+              </ModalPortal>
+            }
+          </Fragment>
+        )}
       </Fragment>
     );
   }

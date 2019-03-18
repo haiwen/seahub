@@ -113,6 +113,15 @@ class LibContentContainer extends React.Component {
     this.setState({isDirentDetailShow: false});
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.isDirentDetailShow !== this.state.isDirentDetailShow) {
+      this.setState({
+        isDirentDetailShow: nextProps.isDirentDetailShow,
+        currentDirent: nextProps.selectedDirent,
+      });
+    }
+  }
+
   render() {
     let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts } = this.props;
     let isRepoInfoBarShow = false;
