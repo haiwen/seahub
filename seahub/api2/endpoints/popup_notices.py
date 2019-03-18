@@ -16,12 +16,12 @@ from seahub.notifications.models import UserNotification
 
 from seahub.notifications.models import get_cache_key_of_unseen_notifications
 from seahub.notifications.views import add_notice_from_info
+from seahub.notifications.utils import update_notice_detail
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 logger = logging.getLogger(__name__)
-json_content_type = 'application/json; charset=utf-8'
 
 
 class PopupNoticesView(APIView):
@@ -71,6 +71,8 @@ class PopupNoticesView(APIView):
 
         # Add 'msg_from' or 'default_avatar_url' to notice.
         result_notices = add_notice_from_info(result_notices)
+
+        result_notices = update_notice_detail(request, result_notices)
 
         notices_list = []
         for i in result_notices:
