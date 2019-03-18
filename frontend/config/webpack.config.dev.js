@@ -134,6 +134,11 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/view-file-pdf.js",
     ],
+    viewFileSVG: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/view-file-svg.js",
+    ],
     orgAdmin: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
