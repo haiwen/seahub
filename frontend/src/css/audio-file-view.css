@@ -1,0 +1,9 @@
+.video-js {
+    width: calc(100% - 40px);
+    max-width: 500px;
+    height: 30px;
+    margin: 0 auto;
+}
+.video-js .vjs-fullscreen-control {
+    display: none;
+}
