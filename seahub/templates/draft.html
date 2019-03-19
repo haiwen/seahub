@@ -17,7 +17,11 @@
             perm: '{{ permission }}',
             author: '{{ author }}',
             authorAvatar: '{{ author_avatar_url }}',
-            originFileExists: '{{ origin_file_exists }}' === 'True',
+            originFileExists: {% if origin_file_exists %} true {% else %} false {% endif %},
+            draftFileExists: {% if draft_file_exists %} true {% else %} false {% endif %},
+            draftStatus: '{{ draft_status }}',
+            draftPublishVersion: '{{ publish_file_version }}',
+            originFileVersion: '{{ origin_file_version }}',
          }
      };
 </script>

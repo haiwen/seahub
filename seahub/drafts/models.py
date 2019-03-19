@@ -92,6 +92,7 @@ class DraftManager(models.Manager):
             draft['draft_file_path'] = d.draft_file_path
             draft['created_at'] = datetime_to_isoformat_timestr(d.created_at)
             draft['updated_at'] = datetime_to_isoformat_timestr(d.updated_at)
+            draft['status'] = d.status
 
             data.append(draft)
 
@@ -242,21 +243,16 @@ class Draft(TimestampedModel):
                 username=operator, need_progress=0, synchronous=1
             )
 
-        self.delete(operator)
-
         published_file_path = posixpath.join(file_uuid.parent_path, file_name)
 
-        return published_file_path
         # get draft published version
-        # file_id = seafile_api.get_file_id_by_path(self.origin_repo_id, origin_file_path)
+        file_id = seafile_api.get_file_id_by_path(self.origin_repo_id, published_file_path)
 
-        # if not file_id:
-        #     TODO change error msg
-        #     raise OriginalFileConflict
+        self.publish_file_version = file_id
+        self.status = 'published'
+        self.save()
 
-        # self.publish_file_version = file_id
-        # self.status = 'published'
-        # self.save()
+        return published_file_path
 
     def to_dict(self):
         uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(self.origin_file_uuid)
