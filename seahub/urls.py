@@ -66,7 +66,6 @@ from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchV
 from seahub.api2.endpoints.invitation import InvitationView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
 from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
-from seahub.api2.endpoints.popup_notices import PopupNoticesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
@@ -349,7 +348,6 @@ urlpatterns = [
 
     url(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
     url(r'^api/v2.1/notification/$', NotificationView.as_view(), name='api-v2.1-notification'),
-    url(r'^api/v2.1/popup-notices/$', PopupNoticesView.as_view(), name='api-v2.1-popup-notices'),
     url(r'^api/v2.1/user-enabled-modules/$', UserEnabledModulesView.as_view(), name='api-v2.1-user-enabled-module'),
 
     ## user::invitations
