@@ -26,10 +26,11 @@
 .seafile-md-viewer-slate {
   flex: auto;
   position: relative;
-  margin: 20px 320px 20px 5%;
+  margin: 20px 0px 20px 5%;
+  max-width: calc(90% - 260px);
 }
 .seafile-md-viewer-slate.comment-on {
-  margin-right: 420px;
+  max-width: calc(90% - 360px);  
 }
 .seafile-md-viewer-main {
   flex: auto;
@@ -138,5 +139,6 @@
   .seafile-md-viewer-slate {
     width: calc(100% - 80px);
     margin: 20px 40px;
+    max-width: 100%;
   }
 }
