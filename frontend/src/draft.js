@@ -837,7 +837,7 @@ class SidePanelOrigin extends React.Component {
             <tr><th width="25%"></th><th width="75%"></th></tr>
           </thead>
           <tbody>
-            <tr><th>{gettext('Location')}</th><td>{this.props.originRepoName}{draftOriginFilePath}</td></tr>
+            <tr><th>{gettext('Location')}</th><td>{this.props.originRepoName}{draftFilePath}</td></tr>
           </tbody>
         </table>
       </div>
