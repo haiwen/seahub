@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import cookie from 'react-cookies';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
@@ -27,8 +28,8 @@ class PublicSharedView extends React.Component {
       errMessage: '',
       emptyTip: '',
       repoList: [],
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc', // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-repo-sort-by') || 'name', // 'name' or 'time'
+      sortOrder: cookie.load('seafile-repo-sort-order') || 'asc', // 'asc' or 'desc'
       libraryType: 'public',
       isCreateMenuShow: false,
       isCreateRepoDialogShow: false,
@@ -148,6 +149,8 @@ class PublicSharedView extends React.Component {
   }
 
   sortItems = (sortBy, sortOrder) => {
+    cookie.save('seafile-repo-sort-by', sortBy);
+    cookie.save('seafile-repo-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
