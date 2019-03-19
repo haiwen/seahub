@@ -78,7 +78,6 @@ class PopupNoticesView(APIView):
         for i in result_notices:
             notice = {}
             notice['id'] = i.id
-            notice['to_user'] = email2nickname(i.to_user)
             notice['msg_type'] = i.msg_type
             notice['detail'] = json.loads(i.detail)
             notice['timestamp'] = datetime_to_isoformat_timestr(i.timestamp)
