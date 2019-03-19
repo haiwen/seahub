@@ -38,14 +38,8 @@ class DirentMenu extends React.Component {
           menuList.splice(2, 1);
         }
       }
-    } else if (length > 1) {
-      menuList = ['Tags'];
-      for (let i = 0; i < length; i++) {
-        if (dirents[i].type === 'dir') {
-          menuList = [];
-          break;
-        }
-      }
+    } else {
+      menuList = [];
     }
     this.setState({
       menuList: menuList,

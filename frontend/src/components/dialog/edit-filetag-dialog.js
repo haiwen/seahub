@@ -10,10 +10,8 @@ require('../../css/repo-tag.css');
 const TagItemPropTypes = {
   repoID: PropTypes.string.isRequired,
   repoTag: PropTypes.object.isRequired,
-  filePath: PropTypes.string,
-  filesPath: PropTypes.array,
-  fileTagList: PropTypes.array,
-  multiFileTagList: PropTypes.array,
+  filePath: PropTypes.string.isRequired,
+  fileTagList: PropTypes.array.isRequired,
   onEditFileTag: PropTypes.func.isRequired,
 };
 
@@ -22,8 +20,7 @@ class TagItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSelectedTag: false,
-      freeze: false,
+      showSelectedTag: false
     };
   }
 
@@ -41,103 +38,35 @@ class TagItem extends React.Component {
 
   getRepoTagIdList = () => {
     let repoTagIdList = [];
-    if (this.props.fileTagList.length > 0) {
-      let fileTagList = this.props.fileTagList;
-      fileTagList.map((fileTag) => {
-        repoTagIdList.push(fileTag.repo_tag_id);
-      });
-      return repoTagIdList;
-    } else {
-      const tagList = this.props.multiFileTagList;
-      const length = tagList.length;
-      let tagArray = [];
-      for (let i = 0; i< length; i++) {
-        for (let j = 0; j < tagList[i].length; j++) {
-          tagArray.push(tagList[i][j].repo_tag_id);
-        }
-      }
-      repoTagIdList = this.getCommonTag(tagArray, length);
-      return repoTagIdList;
-    }
-  }
-
-  getCommonTag = (filesTags, filesNumber) => {
-    let hash = {};
-    let tagNumber = 1;
-    let commonTags = [];
-    for (let i = 0, len = filesTags.length; i < len; i++) {
-      let filesTag = filesTags[i];
-      if (!hash[filesTag]) {
-        hash[filesTag] = 1;
-      } else{
-        hash[filesTag]++;
-      }
-      if (hash[filesTag] == tagNumber) {
-        if (tagNumber === filesNumber) {
-          commonTags.push(filesTag);
-        }
-      } else if (hash[filesTag] > tagNumber) {
-        tagNumber = hash[filesTag];
-        if (tagNumber === filesNumber) {
-          commonTags.push(filesTag);
-        }
-      }
-    }
-    return commonTags;
+    let fileTagList = this.props.fileTagList;
+    fileTagList.map((fileTag) => {
+      repoTagIdList.push(fileTag.repo_tag_id);
+    });
+    return repoTagIdList;
   }
 
   onEditFileTag = () => {
-    if (this.state.freeze) return;
-    let { repoID, repoTag, filePath, filesPath, fileTagList } = this.props;
-    this.setState({ freeze: true });
-    if (filesPath.length === 1) {
-      let repoTagIdList = this.getRepoTagIdList();
-      if (repoTagIdList.indexOf(repoTag.id) === -1) {
-        seafileAPI.addFileTag(repoID, filePath, repoTag.id).then(() => {
-          repoTagIdList = this.getRepoTagIdList();
-          this.props.onEditFileTag();
-          this.setState({ freeze: false });
-        });
-      } else {
-        let fileTag = null;
-        for (let i = 0; i < fileTagList.length; i++) {
-          if (fileTagList[i].repo_tag_id === repoTag.id) {
-            fileTag = fileTagList[i];
-            break;
-          }
-        } 
-        seafileAPI.deleteFileTag(repoID, fileTag.id).then(() => {
-          repoTagIdList = this.getRepoTagIdList();
-          this.props.onEditFileTag();
-          this.setState({ freeze: false });
-        });
-      }
-    } else {
-      this.onEditFilesTag();
-    }
-  }
-
-  onEditFilesTag = () => {
-    let { repoID, repoTag, filesPath, multiFileTagList } = this.props;
+    let { repoID, repoTag, filePath } = this.props;
     let repoTagIdList = this.getRepoTagIdList();
     if (repoTagIdList.indexOf(repoTag.id) === -1) {
-      for (let i = 0, length = filesPath.length; i < length; i++) {
-        seafileAPI.addFileTag(repoID, filesPath[i], repoTag.id).then(() => {
-          this.props.onEditFileTag();
-          this.setState({ freeze: false });
-        });
-      }
+      let id = repoTag.id;
+      seafileAPI.addFileTag(repoID, filePath, id).then(() => {
+        repoTagIdList = this.getRepoTagIdList();
+        this.props.onEditFileTag();
+      });
     } else {
-      for (let i = 0, len = multiFileTagList.length; i < len; i++) {
-        for (let j = 0, length = multiFileTagList[i].length; j < length; j++) {
-          if (multiFileTagList[i][j].repo_tag_id === repoTag.id) {
-            seafileAPI.deleteFileTag(repoID, multiFileTagList[i][j].file_tag_id).then(() => {
-              this.props.onEditFileTag();
-              this.setState({ freeze: false });
-            });
-          }
+      let fileTag = null;
+      let fileTagList = this.props.fileTagList;
+      for(let i = 0; i < fileTagList.length; i++) {
+        if (fileTagList[i].repo_tag_id === repoTag.id) {
+          fileTag = fileTagList[i];
+          break;
         }
-      }
+      } 
+      seafileAPI.deleteFileTag(repoID, fileTag.id).then(() => {
+        repoTagIdList = this.getRepoTagIdList();
+        this.props.onEditFileTag();
+      });
     }
   }
 
@@ -164,10 +93,8 @@ TagItem.propTypes = TagItemPropTypes;
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  filePath: PropTypes.string,
-  filesPath: PropTypes.array,
-  fileTagList: PropTypes.array,
-  multiFileTagList: PropTypes.array,
+  filePath: PropTypes.string.isRequired,
+  fileTagList: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   toggleCancel: PropTypes.func.isRequired,
 };
@@ -220,9 +147,7 @@ class EditFileTagDialog extends React.Component {
                     repoTag={repoTag}
                     repoID={this.props.repoID}
                     filePath={this.props.filePath}
-                    filesPath={this.props.filesPath}
                     fileTagList={this.props.fileTagList}
-                    multiFileTagList={this.props.multiFileTagList}
                     onEditFileTag={this.onEditFileTag}
                   />
                 );
