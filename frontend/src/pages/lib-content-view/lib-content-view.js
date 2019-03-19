@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
@@ -81,6 +81,10 @@ class LibContentView extends React.Component {
     this.setState({
       isDirentDetailShow: true,
     });
+  }
+
+  closeDirentDetail = () => {
+    this.setState({ isDirentDetailShow: false });
   }
 
   componentWillMount() {
@@ -356,7 +360,7 @@ class LibContentView extends React.Component {
   } 
 
   loadDirentList = (path) => {
-    let repoID = this.props.repoID
+    let repoID = this.props.repoID;
     seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
       let markdownItem = null;
@@ -1159,7 +1163,6 @@ class LibContentView extends React.Component {
   }
   
   goDraftPage = () => {
-    let repoID = this.props.repoID;
     window.location.href = siteRoot + 'drafts/' + this.state.draftID + '/';
   }
 
@@ -1221,8 +1224,6 @@ class LibContentView extends React.Component {
   }
 
   render() {
-    const { repoID } = this.props;
-
     if (this.state.libNeedDecrypt) {
       return (
         <ModalPortal>
@@ -1264,7 +1265,6 @@ class LibContentView extends React.Component {
       }
 
     }
-    
 
     return (
       <div className="main-panel o-hidden">
@@ -1372,6 +1372,8 @@ class LibContentView extends React.Component {
             onAllDirentSelected={this.onAllDirentSelected}
             isDirentDetailShow={this.state.isDirentDetailShow}
             selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
+            closeDirentDetail={this.closeDirentDetail}
+            showDirentDetail={this.showDirentDetail}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader

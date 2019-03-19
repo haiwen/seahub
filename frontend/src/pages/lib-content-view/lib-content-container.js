@@ -71,6 +71,10 @@ const propTypes = {
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
   onAllDirentSelected: PropTypes.func.isRequired,
+  isDirentDetailShow: PropTypes.bool.isRequired,
+  selectedDirent: PropTypes.object,
+  closeDirentDetail: PropTypes.func.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -79,25 +83,24 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
-      isDirentDetailShow: false,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
   }
 
   onPathClick = (path) => {
-    this.setState({isDirentDetailShow: false});
     this.props.onMainNavBarClick(path);
+    this.props.closeDirentDetail();
   }
 
   onItemClick = (dirent) => {
-    this.setState({isDirentDetailShow: false});
     this.props.onItemClick(dirent);
+    this.props.closeDirentDetail();
   }
 
   // on '<tr>'
   onDirentClick = (dirent) => {
-    if (this.state.isDirentDetailShow) {
+    if (this.props.isDirentDetailShow) {
       this.onItemDetails(dirent);
     }
   }
@@ -105,18 +108,22 @@ class LibContentContainer extends React.Component {
   onItemDetails = (dirent) => {
     this.setState({
       currentDirent: dirent,
-      isDirentDetailShow: true,
     });
+    this.props.showDirentDetail();
   }
 
   onItemDetailsClose = () => {
-    this.setState({isDirentDetailShow: false});
+    this.props.closeDirentDetail();
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.isDirentDetailShow !== this.state.isDirentDetailShow) {
+    if (nextProps.isDirentDetailShow) {
       this.setState({
-        isDirentDetailShow: nextProps.isDirentDetailShow,
+        isDirentDetailShow: nextProps.isDirentDetailShow
+      });
+    }
+    if (nextProps.selectedDirent && nextProps.isDirentDetailShow) {
+      this.setState({
         currentDirent: nextProps.selectedDirent,
       });
     }
@@ -245,7 +252,7 @@ class LibContentContainer extends React.Component {
             )}
           </div>
         </div>
-        {this.state.isDirentDetailShow && (
+        {this.props.isDirentDetailShow && (
           <div className="cur-view-detail">
             <DirentDetail
               repoID={repoID}
