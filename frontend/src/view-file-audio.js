@@ -7,10 +7,10 @@ import FileInfo from './components/file-view/file-info';
 import FileToolbar from './components/file-view/file-toolbar';
 import FileViewTip from './components/file-view/file-view-tip';
 import CommentPanel from './components/file-view/comment-panel';
-import VideoPlayer from './components/video-player';
+import AudioPlayer from './components/audio-player';
 
 import './css/file-view.css';
-import './css/video-file-view.css';
+import './css/audio-file-view.css';
 
 const { isStarred, isLocked, lockedByMe,
   repoID, filePath, err, enableWatermark, userNickName,
@@ -18,7 +18,7 @@ const { isStarred, isLocked, lockedByMe,
   rawPath
 } = window.app.pageOptions;
 
-class ViewFileVideo extends React.Component {
+class ViewFileAudio extends React.Component {
 
   constructor(props) {
     super(props);
@@ -114,7 +114,7 @@ class FileContent extends React.Component {
     };
     return (
       <div className="file-view-content flex-1">
-        <VideoPlayer { ...videoJsOptions } />
+        <AudioPlayer { ...videoJsOptions } />
       </div>
     );
   }
@@ -128,6 +128,6 @@ if (enableWatermark) {
 }
 
 ReactDOM.render (
-  <ViewFileVideo />,
+  <ViewFileAudio />,
   document.getElementById('wrapper')
 );
