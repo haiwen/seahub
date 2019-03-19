@@ -14,7 +14,7 @@ const propTypes = {
   hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,
   relatedFiles: PropTypes.array.isRequired,
-  onFileTagChanged: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,  // for file-view-toolbar
   onRelatedFileChange: PropTypes.func.isRequired,
   // side-panel
   onSideNavMenuClick: PropTypes.func.isRequired,
@@ -47,7 +47,7 @@ const propTypes = {
   // selected menu
   onDirentSelected: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
-  onFilesTagChanged: PropTypes.func.isRequired,
+  onFilesTagChanged: PropTypes.func.isRequired, // for mutiple select toolbar
   updateDirent: PropTypes.func.isRequired,
 };
 
@@ -71,7 +71,7 @@ class LibContentToolbar extends React.Component {
               hasDraft={this.props.hasDraft}
               fileTags={this.props.fileTags}
               relatedFiles={this.props.relatedFiles}
-              onFilesTagChanged={this.props.onFilesTagChanged}
+              onFileTagChanged={this.props.onFileTagChanged}
               onRelatedFileChange={this.props.onRelatedFileChange}
             />
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
