@@ -64,8 +64,8 @@ class LibContentView extends React.Component {
       isDirentListLoading: true,
       direntList: [],
       isDirentSelected: false,
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc', // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-dir-sort-by') || 'name', // 'name' or 'time'
+      sortOrder: cookie.load('seafile-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isAllDirentSelected: false,
       dirID: '',  // for update dir list
       errorMsg: '',
@@ -1164,6 +1164,8 @@ class LibContentView extends React.Component {
   }
 
   sortItems = (sortBy, sortOrder) => {
+    cookie.save('seafile-dir-sort-by', sortBy);
+    cookie.save('seafile-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,

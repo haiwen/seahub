@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import cookie from 'react-cookies';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -292,8 +293,8 @@ class SharedLibraries extends Component {
       loading: true,
       errorMsg: '',
       items: [],
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc' // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-repo-sort-by') || 'name', // 'name' or 'time'
+      sortOrder: cookie.load('seafile-repo-sort-order') || 'asc', // 'asc' or 'desc'
     };
   }
 
@@ -332,6 +333,8 @@ class SharedLibraries extends Component {
   }
 
   sortItems = (sortBy, sortOrder) => {
+    cookie.save('seafile-repo-sort-by', sortBy);
+    cookie.save('seafile-repo-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,

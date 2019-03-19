@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -17,8 +18,8 @@ class MyLibraries extends Component {
       isLoading: true,
       repoList: [],
       isShowDetails: false,
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc' // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-repo-sort-by') || 'name', // 'name' or 'time'
+      sortOrder: cookie.load('seafile-repo-sort-order') || 'asc', // 'asc' or 'desc'
     };
 
     this.emptyMessage = (
@@ -80,6 +81,8 @@ class MyLibraries extends Component {
   }
 
   sortRepoList = (sortBy, sortOrder) => {
+    cookie.save('seafile-repo-sort-by', sortBy);
+    cookie.save('seafile-repo-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
