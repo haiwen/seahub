@@ -21,9 +21,9 @@ class SearchResultItem extends React.Component {
       <li className="search-result-item" onClick={this.onClickHandler}>
         <img className="item-img" src={fileIconUrl} alt="" />
         <div className="item-content">
-          <dt className="item-name ellipsis">{item.name}</dt>
-          <dd className="item-link ellipsis">{item.repo_name}/{item.link_content}</dd>
-          <dd className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content}}></dd>
+          <div className="item-name ellipsis">{item.name}</div>
+          <div className="item-link ellipsis">{item.repo_name}/{item.link_content}</div>
+          <div className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content}}></div>
         </div>
       </li>
     );
