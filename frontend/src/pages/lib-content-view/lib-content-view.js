@@ -675,8 +675,8 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     //just for view list state
     let dirName = dirent.name;
-    if(!currentPath){
-      currentPath=this.state.path
+    if (!currentPath) {
+      currentPath = this.state.path;
     }
     let direntPath = Utils.joinPath(currentPath, dirName);
     seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, currentPath, dirName).then(res => {
@@ -700,8 +700,8 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     //just for view list state
     let dirName = dirent.name;
-    if(!currentPath){
-      currentPath=this.state.path;
+    if (!currentPath) {
+      currentPath = this.state.path;
     }
     let direntPath = Utils.joinPath(currentPath, dirName);
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, currentPath, dirName).then(res => {
