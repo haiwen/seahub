@@ -163,6 +163,8 @@ class DirColumnView extends React.Component {
           navRate={this.state.navRate}
           inResizing={this.state.inResizing}
           currentRepoInfo={this.props.currentRepoInfo}
+          onItemMove={this.props.onItemMove}
+          onItemCopy={this.props.onItemCopy}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
