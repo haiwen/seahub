@@ -98,7 +98,7 @@ class Command(BaseCommand):
                 owner = seafile_api.get_repo_owner(repo_id)
                 repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        notice.repo_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+        notice.repo_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo.id, 'path': ''}
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
@@ -128,7 +128,7 @@ class Command(BaseCommand):
                 owner = seafile_api.get_repo_owner(repo_id)
                 repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        notice.repo_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+        notice.repo_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo.id, 'path': ''}
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
