@@ -41,7 +41,10 @@ class ReviewComments extends React.Component {
         commentsList: commentList
       });
       if (scroll) {
-        this.refs.commentsList.scrollTo(0, 10000);
+        let that = this;
+        setTimeout(() => {
+          that.refs.commentsList.scrollTo(0, 10000);
+        }, 100);
       }
     });
   }
