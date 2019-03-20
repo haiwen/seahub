@@ -8,6 +8,8 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnFreezedItem: PropTypes.func.isRequired,
+  openContextMenu: PropTypes.func,
+  closeContextMenu: PropTypes.func,
 };
 
 class TreeNodeMenu extends React.Component {
@@ -91,6 +93,8 @@ class TreeNodeMenu extends React.Component {
   }
 
   render() {
+    this.state.isItemMenuShow ? this.props.closeContextMenu() : this.props.openContextMenu()
+
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 

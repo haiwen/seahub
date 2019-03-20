@@ -11,6 +11,8 @@ const propTypes = {
   onNodeClick: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
+  openContextMenu: PropTypes.func,
+  closeContextMenu: PropTypes.func,
 };
 
 const PADDING_LEFT = 20;
@@ -53,6 +55,9 @@ class TreeView extends React.Component {
           onNodeDragStart={this.onNodeDragStart}
           onFreezedItem={this.onFreezedItem}
           onUnFreezedItem={this.onUnFreezedItem}
+          isNodeData={this.props.isNodeData}
+          openContextMenu={this.props.openContextMenu}
+          closeContextMenu={this.props.closeContextMenu}
         />
       </div>
     );

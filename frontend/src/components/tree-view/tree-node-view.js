@@ -17,6 +17,8 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnFreezedItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func,
+  openContextMenu: PropTypes.func,
+  closeContextMenu: PropTypes.func,
 };
 
 class TreeNodeView extends React.Component {
@@ -36,6 +38,7 @@ class TreeNodeView extends React.Component {
         isHighlight: true,
       });
     }
+    this.props.isNodeData(this.props.node)
   }
 
   onMouseLeave = () => {
@@ -45,6 +48,7 @@ class TreeNodeView extends React.Component {
         isHighlight: false,
       });
     }
+    this.props.isNodeData(null)
   }
 
   onNodeClick = () => {
@@ -127,6 +131,9 @@ class TreeNodeView extends React.Component {
               onFreezedItem={this.props.onFreezedItem}
               onMenuItemClick={this.onMenuItemClick}
               onUnFreezedItem={this.onUnFreezedItem}
+              isNodeData={this.props.isNodeData}
+              openContextMenu={this.props.openContextMenu}
+              closeContextMenu={this.props.closeContextMenu}
             />
           );
         })}
@@ -165,6 +172,8 @@ class TreeNodeView extends React.Component {
                   onMenuItemClick={this.onMenuItemClick}
                   onUnFreezedItem={this.onUnFreezedItem}
                   onFreezedItem={this.props.onFreezedItem}
+                  openContextMenu={this.props.openContextMenu}
+                  closeContextMenu={this.props.closeContextMenu}
                 />
               )}
             </div>

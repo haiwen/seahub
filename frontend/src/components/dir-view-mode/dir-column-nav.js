@@ -11,6 +11,7 @@ import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import TypeFile from './right-menu'
 
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -50,6 +51,10 @@ class DirColumnNav extends React.Component {
       isCopyDialogShow: false,
       isMoveDialogShow: false,
       isMutipleOperation:false,
+      isTypeFile:false,
+      nodeData:null,
+      fileData:null,
+      event:null,
     };
     this.isNodeMenuShow = true;
   }
@@ -71,10 +76,18 @@ class DirColumnNav extends React.Component {
     this.setState({opNode: node});
     switch (operation) {
       case 'New Folder':
-        this.onAddFolderToggle();
+        if (!node) {
+          this.onAddFolderToggle('root');
+        } else {
+          this.onAddFolderToggle();
+        }
         break;
       case 'New File':
-        this.onAddFileToggle();
+        if (!node) {
+          this.onAddFileToggle('root');
+        } else {
+          this.onAddFileToggle();
+        }
         break;
       case 'Rename':
         this.onRenameToggle();
@@ -126,7 +139,7 @@ class DirColumnNav extends React.Component {
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
   }
 
-  onCopyToggle =() => {
+  onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow})
   }
 
@@ -159,6 +172,46 @@ class DirColumnNav extends React.Component {
   onOpenFile = (node) => {
     let newUrl = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(node.path);
     window.open(newUrl, '_blank');
+  }
+
+  componentDidMount() {
+    this.openContextMenu()
+  }
+
+  contextMenu = (e) => {
+    e.preventDefault();
+    this.setState({
+      isTypeFile:false,
+    })
+    setTimeout(() => { 
+      this.setState({
+        isTypeFile:true,
+        fileData:this.state.nodeData,
+        event:e,
+      })
+    },40)
+  }  
+
+  closeContextMenu = () => {
+    let dirContentNav = document.querySelector('.dir-content-nav');
+    dirContentNav.removeEventListener('contextmenu',this.contextMenu)
+  }
+
+  openContextMenu = () => {
+    let dirContentNav = document.querySelector('.dir-content-nav');
+    dirContentNav.addEventListener('contextmenu',this.contextMenu)
+  }
+
+  isNodeData = (node) => {
+      this.setState({
+        nodeData:node
+      })
+  }
+
+  closeRightMenu = () => {
+    this.setState({
+      isTypeFile:false,
+    })
   }
 
   checkDuplicatedName = (newName) => {
@@ -272,9 +325,20 @@ class DirColumnNav extends React.Component {
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.onFreezedItem}
               onUnFreezedItem={this.onUnFreezedItem}
+              isNodeData={this.isNodeData}
+              openContextMenu={this.openContextMenu}
+              closeContextMenu={this.closeContextMenu}
             />)
           }
         </div>
+        {this.state.isTypeFile && (
+            <TypeFile 
+            node={this.state.fileData}
+            onMenuItemClick={this.onMenuItemClick}
+            event={this.state.event}
+            closeRightMenu={this.closeRightMenu}
+            />
+          )}
         {this.state.isAddFolderDialogShow && (
           <ModalPortal>
             <CreateFolder
