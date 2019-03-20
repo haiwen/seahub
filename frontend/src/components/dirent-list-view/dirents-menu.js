@@ -30,12 +30,12 @@ class DirentMenu extends React.Component {
         menuList = ['Share'];
       } else if (dirents[0].type === 'file') {
         if (dirents[0].is_locked) {
-          menuList = ['Share', 'Tags', 'Unlock', 'Details', 'Related Files', 'History', 'Open via Client'];
+          menuList = ['Share', 'Unlock', 'Tags', 'Related Files', 'Divider', 'History', 'Details', 'Divider', 'Open via Client'];
         } else {
-          menuList = ['Share', 'Tags', 'Lock', 'Details', 'Related Files', 'History', 'Open via Client'];
+          menuList = ['Share', 'Lock', 'Tags', 'Related Files', 'Divider', 'History', 'Details', 'Divider', 'Open via Client'];
         }
         if (!(currentRepoInfo.is_admin && currentRepoInfo.permission === 'rw' || isRepoOwner)) {
-          menuList.splice(2, 1);
+          menuList.splice(1, 1);
         }
       }
     } else {

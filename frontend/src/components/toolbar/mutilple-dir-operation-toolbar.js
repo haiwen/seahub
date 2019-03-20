@@ -27,7 +27,7 @@ const propTypes = {
   isRepoOwner: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  onFileTagChanged: PropTypes.func.isRequired,
+  onFilesTagChanged: PropTypes.func.isRequired,
   unSelectDirent: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
@@ -266,7 +266,7 @@ class MutipleDirOperationToolbar extends React.Component {
     for (let i = 0; i < length; i++) {
       const dirent = this.props.selectedDirentList[i];
       const direntPath = this.getDirentPath(dirent);
-      this.props.onFileTagChanged(dirent, direntPath);
+      this.props.onFilesTagChanged(dirent, direntPath);
     }
   }
 
