@@ -298,16 +298,15 @@ class MutipleDirOperationToolbar extends React.Component {
             <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
             <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
             <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+            {this.props.selectedDirentList.length > 0 &&
+              <DirentsMenu
+                dirents={this.props.selectedDirentList}
+                currentRepoInfo={this.props.currentRepoInfo}
+                isRepoOwner={this.props.isRepoOwner}
+                onMenuItemClick={this.onMenuItemClick}
+              />
+            }
           </ButtonGroup>
-          {
-            this.props.selectedDirentList.length > 0 &&
-            <DirentsMenu
-              dirents={this.props.selectedDirentList}
-              currentRepoInfo={this.props.currentRepoInfo}
-              isRepoOwner={this.props.isRepoOwner}
-              onMenuItemClick={this.onMenuItemClick}
-            />
-          }
         </div>
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
