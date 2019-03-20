@@ -38,13 +38,13 @@ class MarkdownViewerToolbar extends React.Component {
         {(this.props.hasDraft && !this.props.isDraft) &&
           <div className='seafile-btn-view-review'>
             <div className='tag tag-green'>{gettext('This file is in draft stage.')}
-              <a className="ml-2" onMouseDown={this.props.editorUtilities.goDraftPage}>{gettext('View draft')}</a></div>
+              <a className="ml-2" onMouseDown={this.props.editorUtilities.goDraftPage}>{gettext('View Draft')}</a></div>
           </div>
         }
         <div className="topbar-btn-container">
           { (!this.props.hasDraft && !this.props.isDraft) &&
             <button onMouseDown={this.props.toggleNewDraft} className="btn btn-success btn-new-draft">
-              {gettext('New draft')}</button>
+              {gettext('New Draft')}</button>
           }
           {this.props.collabUsers.length > 0 && <CollabUsersButton className={'collab-users-dropdown'}
             users={this.props.collabUsers} id={'usersButton'} />}
@@ -68,7 +68,7 @@ class MarkdownViewerToolbar extends React.Component {
             }
             {
               this.props.showFileHistory && <IconButton id={'historyButton'}
-                text={gettext('File history')} onMouseDown={this.props.toggleHistory} icon={'fa fa-history'}/>
+                text={gettext('File History')} onMouseDown={this.props.toggleHistory} icon={'fa fa-history'}/>
             }
           </ButtonGroup>
         </div>
