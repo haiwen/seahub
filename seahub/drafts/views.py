@@ -37,6 +37,11 @@ def draft(request, pk):
     if not origin_file:
         origin_file_exists = False
 
+    draft_file = seafile_api.get_file_id_by_path(origin_repo_id, d.draft_file_path)
+    draft_file_exists = True
+    if not draft_file:
+        draft_file_exists = False
+
     draft_file_name = os.path.basename(d.draft_file_path)
 
     author_info = user_to_dict(d.username, avatar_size=32)
@@ -51,4 +56,8 @@ def draft(request, pk):
         "author": author_info['user_name'],
         "author_avatar_url": author_info['avatar_url'],
         "origin_file_exists": origin_file_exists,
+        "draft_file_exists": draft_file_exists,
+        "draft_status": d.status,
+        "publish_file_version": d.publish_file_version,
+        "origin_file_version": d.origin_file_version
     })

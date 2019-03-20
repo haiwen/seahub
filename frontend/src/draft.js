@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftID, draftFileName, draftRepoID } from './utils/constants';
+import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
@@ -64,80 +64,114 @@ class Draft extends React.Component {
   }
 
   initialContent = () => {
-    if (!originFileExists) {
-      seafileAPI.getFileDownloadLink(draftRepoID, draftFilePath)
-        .then(res => { 
-          seafileAPI.getFileContent(res.data)
-            .then(res => {
-              this.setState({
-                draftContent: res.data,
-                draftOriginContent: res.data,
-                isLoading: false,
-                isShowDiff: false
-              }); 
-            });
-        });
-      return;
-    }
-
-    const hash = window.location.hash;
-    if (hash.indexOf('#history-') === 0) {
-      const currentCommitID = hash.slice(9, 49);
-      const preCommitID = hash.slice(50, 90);
-      let preItemFilePath, currentItemFilePath;
-      this.setState({
-        isLoading: false,
-        activeTab: 'history',
-      });
-      seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, 1, 25).then((res) => {
-        const historyList = res.data.data;        
-        this.setState({
-          historyList: historyList,
-          totalReversionCount: res.data.total_count
-        });
-        for (let i = 0, length = historyList.length; i < length; i++) {
-          if (preCommitID === historyList[i].commit_id) {
-            this.setState({
-              activeItem: i
-            });
-            preItemFilePath = historyList[i].path;
-          }
-          if (currentCommitID === historyList[i].commit_id) {
-            currentItemFilePath = historyList[i].path;
-          }
-          if (preItemFilePath && currentItemFilePath) break;
+    switch(draftStatus) {
+      case 'open':
+        if (!draftFileExists) {
+          this.setState({
+            isLoading: false,
+            isShowDiff: false
+          });
+          return;
         }
-        axios.all([
-          seafileAPI.getFileRevision(draftRepoID, currentCommitID, currentItemFilePath),
-          seafileAPI.getFileRevision(draftRepoID, preCommitID, preItemFilePath)
-        ]).then(axios.spread((res1, res2) => {
-          axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1, content2) => {
-            this.setDiffViewerContent(content2.data, content1.data);
+
+        if (!originFileExists) {
+          seafileAPI.getFileDownloadLink(draftRepoID, draftFilePath)
+            .then(res => { 
+              seafileAPI.getFileContent(res.data)
+                .then(res => {
+                  this.setState({
+                    draftContent: res.data,
+                    draftOriginContent: res.data,
+                    isLoading: false,
+                    isShowDiff: false
+                  }); 
+                });
+            });
+          return;
+        }
+
+        const hash = window.location.hash;
+        if (hash.indexOf('#history-') === 0) {
+          const currentCommitID = hash.slice(9, 49);
+          const preCommitID = hash.slice(50, 90);
+          let preItemFilePath, currentItemFilePath;
+          this.setState({
+            isLoading: false,
+            activeTab: 'history',
+          });
+          seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, 1, 25).then((res) => {
+            const historyList = res.data.data;        
+            this.setState({
+              historyList: historyList,
+              totalReversionCount: res.data.total_count
+            });
+            for (let i = 0, length = historyList.length; i < length; i++) {
+              if (preCommitID === historyList[i].commit_id) {
+                this.setState({
+                  activeItem: i
+                });
+                preItemFilePath = historyList[i].path;
+              }
+              if (currentCommitID === historyList[i].commit_id) {
+                currentItemFilePath = historyList[i].path;
+              }
+              if (preItemFilePath && currentItemFilePath) break;
+            }
+            axios.all([
+              seafileAPI.getFileRevision(draftRepoID, currentCommitID, currentItemFilePath),
+              seafileAPI.getFileRevision(draftRepoID, preCommitID, preItemFilePath)
+            ]).then(axios.spread((res1, res2) => {
+              axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1, content2) => {
+                this.setDiffViewerContent(content2.data, content1.data);
+              }));
+            }));
+            return;
+          });
+        } else {
+          axios.all([
+            seafileAPI.getFileDownloadLink(draftRepoID, draftFilePath),
+            seafileAPI.getFileDownloadLink(draftRepoID, draftOriginFilePath)
+          ]).then(axios.spread((res1, res2) => {
+            axios.all([
+              seafileAPI.getFileContent(res1.data),
+              seafileAPI.getFileContent(res2.data)
+            ]).then(axios.spread((draftContent, draftOriginContent) => {
+              this.setState({
+                draftContent: draftContent.data,
+                draftOriginContent: draftOriginContent.data,
+                isLoading: false
+              });
+              let that = this;
+              setTimeout(() => {
+                that.getChangedNodes();
+              }, 100);
+            }));
           }));
-        }));
-        return;
-      });
-    } else {
-      axios.all([
-        seafileAPI.getFileDownloadLink(draftRepoID, draftFilePath),
-        seafileAPI.getFileDownloadLink(draftRepoID, draftOriginFilePath)
-      ]).then(axios.spread((res1, res2) => {
+        }
+        break;
+      case 'published':
+        if (!originFileExists) {
+          this.setState({
+            isLoading: false,
+            isShowDiff: false
+          });
+          return;
+        }
+
+        let dl0 = siteRoot + 'repo/' + draftRepoID + '/' + draftPublishVersion + '/download?' + 'p=' + draftOriginFilePath; 
+        let dl = siteRoot + 'repo/' + draftRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
         axios.all([
-          seafileAPI.getFileContent(res1.data),
-          seafileAPI.getFileContent(res2.data)
+          seafileAPI.getFileContent(dl0),
+          seafileAPI.getFileContent(dl)
         ]).then(axios.spread((draftContent, draftOriginContent) => {
           this.setState({
             draftContent: draftContent.data,
             draftOriginContent: draftOriginContent.data,
-            isLoading: false
-          });
-          let that = this;
-          setTimeout(() => {
-            that.getChangedNodes();
-          }, 100);
+            isLoading: false,
+          }); 
         }));
-      }));
-    }
+        break;
+      } 
   }
 
   onHistoryItemClick = (currentItem, preItem, activeItem) => {
@@ -486,15 +520,6 @@ class Draft extends React.Component {
     }
   } 
 
-  renderNavItems = () => {
-    return (
-      <Nav tabs className="review-side-panel-nav">
-        {this.showNavItem('info')}
-        {this.showNavItem('comments')}
-        {this.showNavItem('history')}
-      </Nav>
-    );
-  }
 
   setBtnPosition = (e) => {
     const nativeSelection = window.getSelection();
@@ -661,6 +686,77 @@ class Draft extends React.Component {
     document.removeEventListener('selectionchange', this.setBtnPosition);
   }
 
+  renderDiffButton = () => {
+    switch(draftStatus) {
+      case 'open':
+        if (!draftFileExists) {
+          return;
+        }
+
+        if (!originFileExists) {
+          return;
+        }
+
+        return this.showDiffButton();
+      case 'published':
+        if (!originFileExists) {
+          return;
+        } 
+
+        return this.showDiffButton();
+    }
+  }
+
+  renderNavItems = () => {
+    switch (draftStatus) {
+      case 'open':
+        if (!draftFileExists) {
+          return (
+            <Nav tabs className="review-side-panel-nav">
+            {this.showNavItem('info')}
+            </Nav>
+          );
+        }
+
+        return (
+          <Nav tabs className="review-side-panel-nav">
+            {this.showNavItem('info')}
+            {this.showNavItem('comments')}
+            {this.showNavItem('history')}
+          </Nav>
+        );
+      case 'published':
+        if (!originFileExists) {
+          return (
+            <Nav tabs className="review-side-panel-nav">
+              {this.showNavItem('info')}
+            </Nav>
+          );
+        }
+        return (
+          <Nav tabs className="review-side-panel-nav">
+            {this.showNavItem('info')}
+            {this.showNavItem('comments')}
+          </Nav>
+        );
+    }
+  }
+
+  renderContent = () => {
+    switch(draftStatus) {
+      case 'open':
+        if (!draftFileExists) {
+          return <p className="error">{gettext('Draft has been deleted.')}</p>;
+        }
+        return this.showDiffViewer();
+      case 'published':
+        if (!originFileExists) {
+          return <p className="error">{gettext('Original file has been deleted.')}</p>;
+        }
+        return this.showDiffViewer();
+    }
+  }
+
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
@@ -672,21 +768,25 @@ class Draft extends React.Component {
               <span className="sf2-icon-review"></span>
             </div>
             <div className="info-item file-info">
-              <React.Fragment>
-                <span className="file-name">{draftFileName}</span>
-                <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>
-              </React.Fragment>
+                <React.Fragment>
+                  <span className="file-name">{draftFileName}</span>
+                  {draftFileExists &&
+                    <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>
+                  }
+                </React.Fragment>
             </div>
           </div>
           <div className="button-group">
-            {this.showDiffButton()}
-            <button 
-              className='btn btn-success file-operation-btn' 
-              title={gettext('Publish draft')}
-              onClick={this.onPublishDraft}
-            >
-              {gettext('Publish')}
-            </button>
+            {this.renderDiffButton()}
+            {draftFileExists &&
+              <button 
+                className='btn btn-success file-operation-btn' 
+                title={gettext('Publish draft')}
+                onClick={this.onPublishDraft}
+              >
+                {gettext('Publish')}
+              </button>
+            }
           </div>
         </div>
         <div id="main" className="main" ref="main">
@@ -698,7 +798,7 @@ class Draft extends React.Component {
                 </div> 
                 :
                 <div className="markdown-viewer-render-content article">
-                  {this.showDiffViewer()}
+                  {this.renderContent()}
                 </div>
               }
             </div>
@@ -713,14 +813,18 @@ class Draft extends React.Component {
                         reviewers={this.state.reviewers}
                         toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>
                       <SidePanelAuthor/>
-                      <UnresolvedComments number={this.state.unresolvedComments}/>
+                      {draftFileExists &&
+                        <UnresolvedComments number={this.state.unresolvedComments}/>
+                      }
                       {(this.state.isShowDiff === true && this.state.changedNodes.length > 0) &&
                       <SidePanelChanges
                         changedNumber={this.state.changedNodes.length}
                         scrollToChangedNode={this.scrollToChangedNode}/>
                       }
                       <SidePanelOrigin originRepoName={this.state.originRepoName}/>
-                      <a href={draftLink}><Button color="secondary">{gettext('Edit Draft')}</Button></a>
+                      {draftFileExists &&
+                        <a href={draftLink}><Button color="secondary">{gettext('Edit Draft')}</Button></a>
+                      }
                     </div>
                   </TabPane>
                   <TabPane tabId="comments" className="comments">

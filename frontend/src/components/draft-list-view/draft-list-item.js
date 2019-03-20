@@ -108,7 +108,9 @@ class DraftListItem extends React.Component {
               />
               <DropdownMenu>
                 <DropdownItem onClick={this.onDeleteHandler}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.onPublishHandler}>{gettext('Publish')}</DropdownItem>
+                {draft.status == 'open' &&
+                  <DropdownItem onClick={this.onPublishHandler}>{gettext('Publish')}</DropdownItem>
+                }
               </DropdownMenu>
             </Dropdown>
           )}
