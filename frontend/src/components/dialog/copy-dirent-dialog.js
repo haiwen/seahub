@@ -126,7 +126,7 @@ class CopyDirent extends React.Component {
       return;
     }
 
-    this.props.onItemCopy(this.props.currentPath, repo, this.props.dirent, selectedPath);
+    this.props.onItemCopy(repo, this.props.dirent, selectedPath, this.props.path);
     this.toggle();
   }
 

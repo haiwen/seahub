@@ -323,7 +323,6 @@ class DirColumnNav extends React.Component {
               onItemCopy={this.props.onItemCopy}
               repoEncrypted={this.props.currentRepoInfo.encrypted}
               onCancelCopy={this.onCopyToggle}
-              currentPath={this.state.opNode.parentNode.path}
               isMutipleOperation={this.state.isMutipleOperation}
             />
           </ModalPortal>
@@ -338,7 +337,6 @@ class DirColumnNav extends React.Component {
               repoEncrypted={this.props.currentRepoInfo.encrypted}
               onCancelMove={this.onMoveToggle}
               isMutipleOperation={this.state.isMutipleOperation}
-              currentPath={this.state.opNode.parentNode.path}
             />
           </ModalPortal>
         )}
