@@ -182,7 +182,7 @@ class DirColumnNav extends React.Component {
     e.preventDefault();
     this.setState({
       isTypeFile:false,
-    })
+    });
     setTimeout(() => { 
       this.setState({
         isTypeFile:true,
@@ -332,13 +332,13 @@ class DirColumnNav extends React.Component {
           }
         </div>
         {this.state.isTypeFile && (
-            <TypeFile 
+          <TypeFile 
             node={this.state.fileData}
             onMenuItemClick={this.onMenuItemClick}
             event={this.state.event}
             closeRightMenu={this.closeRightMenu}
-            />
-          )}
+          />
+        )}
         {this.state.isAddFolderDialogShow && (
           <ModalPortal>
             <CreateFolder

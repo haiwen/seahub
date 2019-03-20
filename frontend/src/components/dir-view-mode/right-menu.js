@@ -32,14 +32,14 @@ class TypeFie extends React.Component {
     if (!node) {
         menuList = ['New Folder', 'New File', ]
     } else {
-        if (node.object.type === 'dir') {
-            menuList = ['New Folder', 'New File', 'Copy', 'Move', 'Rename', 'Delete'];
-          } else {
-            menuList = ['Rename', 'Delete', 'Copy', 'Move', 'Open in New Tab'];
-          } 
-        }
-        return menuList;
+      if (node.object.type === 'dir') {
+        menuList = ['New Folder', 'New File', 'Copy', 'Move', 'Rename', 'Delete'];
+      } else {
+        menuList = ['Rename', 'Delete', 'Copy', 'Move', 'Open in New Tab'];
+      } 
     }
+    return menuList;
+  }
 
   translateMenuItem = (menuItem) => {
     let translateResult = '';
@@ -101,13 +101,13 @@ class TypeFie extends React.Component {
     }
 
     if (event.clientY + rightTreeMenu.offsetHeight > document.body.clientHeight) {
-        if ((e.clientY <= (parseInt(event.clientY) - parseInt(rightTreeMenu.offsetHeight))) || e.clientY >= parseInt(event.clientY)) {
-          this.props.closeRightMenu()
-        }
+      if ((e.clientY <= (parseInt(event.clientY) - parseInt(rightTreeMenu.offsetHeight))) || e.clientY >= parseInt(event.clientY)) {
+        this.props.closeRightMenu()
+      }
     } else {
-        if ((e.clientY <= parseInt(event.clientY)) || (e.clientY >= parseInt(event.clientY) + parseInt(rightTreeMenu.offsetHeight))) {
-          this.props.closeRightMenu()
-        }
+      if ((e.clientY <= parseInt(event.clientY)) || (e.clientY >= parseInt(event.clientY) + parseInt(rightTreeMenu.offsetHeight))) {
+        this.props.closeRightMenu()
+      }
     }
   }
 
@@ -122,11 +122,11 @@ class TypeFie extends React.Component {
   render() {
     return (
       <div className='right-tree-menu'>
-          {this.state.menuList.map((menuItem, index) => {
-            return (
-              <button className='right-tree-item' key={index} data-toggle={menuItem} onClick={this.onMenuItemClick}>{this.translateMenuItem(menuItem)}</button>
-            );
-          })}
+        {this.state.menuList.map((menuItem, index) => {
+          return (
+            <button className='right-tree-item' key={index} data-toggle={menuItem} onClick={this.onMenuItemClick}>{this.translateMenuItem(menuItem)}</button>
+          );
+        })}
       </div>
     );
   }
