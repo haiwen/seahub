@@ -98,7 +98,6 @@ class LibContentToolbar extends React.Component {
                 isRepoOwner={this.props.isRepoOwner}
                 currentRepoInfo={this.props.currentRepoInfo}
                 enableDirPrivateShare={this.props.enableDirPrivateShare}
-                onFileTagChanged={this.props.onFileTagChanged}
                 updateDirent={this.props.updateDirent}
                 onDirentSelected={this.props.onDirentSelected}
                 showDirentDetail={this.props.showDirentDetail}
