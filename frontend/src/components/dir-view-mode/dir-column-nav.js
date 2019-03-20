@@ -203,9 +203,9 @@ class DirColumnNav extends React.Component {
   }
 
   isNodeData = (node) => {
-      this.setState({
-        nodeData:node
-      })
+    this.setState({
+      nodeData:node
+    })
   }
 
   closeRightMenu = () => {
