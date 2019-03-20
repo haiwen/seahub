@@ -73,4 +73,4 @@ class DraftViewTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
 
-        assert len(Draft.objects.all()) == 0
+        assert len(Draft.objects.all()) == 1
