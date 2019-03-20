@@ -787,6 +787,15 @@ class Draft extends React.Component {
                 {gettext('Publish')}
               </button>
             }
+            {draftStatus == 'published' &&
+              <button 
+                className='btn btn-success file-operation-btn' 
+                title={gettext('Published')}
+                disabled
+              >
+                {gettext('Published')}
+              </button>
+            }
           </div>
         </div>
         <div id="main" className="main" ref="main">
