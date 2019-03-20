@@ -50,11 +50,11 @@ class DirColumnNav extends React.Component {
       imageIndex: 0,
       isCopyDialogShow: false,
       isMoveDialogShow: false,
-      isMutipleOperation:false,
-      isTypeFile:false,
-      nodeData:null,
-      fileData:null,
-      event:null,
+      isMutipleOperation: false,
+      isTypeFile: false,
+      nodeData: null,
+      fileData: null,
+      event: null,
     };
     this.isNodeMenuShow = true;
   }
