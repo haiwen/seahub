@@ -14,7 +14,7 @@ const propTypes = {
   onItemMove: PropTypes.func,
   onItemsMove: PropTypes.func,
   onCancelMove: PropTypes.func.isRequired,
-  repoEncrypted: PropTypes.object.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
 };
 
 // need dirent file Path；
