@@ -18,8 +18,6 @@ from seahub.notifications.views import add_notice_from_info
 from seahub.notifications.utils import update_notice_detail
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -41,67 +39,52 @@ class NotificationsView(APIView):
 
         username = request.user.username
 
+        try:
+            per_page = int(request.GET.get('per_page', ''))
+            page = int(request.GET.get('page', ''))
+        except ValueError:
+            per_page = 25
+            page = 1
+
+        start = (page - 1) * per_page
+        end = page * per_page
+
+        notice_list = UserNotification.objects.get_user_notifications(username)[start:end]
+
+        result_notices = update_notice_detail(request, notice_list)
+        notification_list = []
+        unseen_count = 0
+        for i in result_notices:
+            if i.detail is not None:
+                notice = {}
+                notice['id'] = i.id
+                notice['type'] = i.msg_type
+                notice['detail'] = json.loads(i.detail)
+                notice['time'] = datetime_to_isoformat_timestr(i.timestamp)
+                notice['seen'] = i.seen
+
+                if not i.seen:
+                    unseen_count += 1
+
+                notification_list.append(notice)
+
         cache_key = get_cache_key_of_unseen_notifications(username)
         count_from_cache = cache.get(cache_key, None)
-
-        try:
-            list_num = int(request.GET.get('list_num', ''))
-        except ValueError:
-            list_num = 25
-
-        result_notices = []
-        unseen_notices = []
-        seen_notices = []
 
         # for case of count value is `0`
         if count_from_cache is not None:
             result['unseen_count'] = count_from_cache
             unseen_num = count_from_cache
         else:
-            count_from_db = UserNotification.objects.count_unseen_user_notifications(username)
-            result['unseen_count'] = count_from_db
+            result['unseen_count'] = unseen_count
             # set cache
-            cache.set(cache_key, count_from_db)
-            unseen_num = count_from_db
+            cache.set(cache_key, unseen_count)
+            unseen_num = unseen_count
 
-        if unseen_num == 0:
-            seen_notices = UserNotification.objects.get_user_notifications(
-                username)[:list_num]
-        elif unseen_num > list_num:
-            unseen_notices = UserNotification.objects.get_user_notifications(
-                username, seen=False)
-        else:
-            unseen_notices = UserNotification.objects.get_user_notifications(
-                username, seen=False)
-            seen_notices = UserNotification.objects.get_user_notifications(
-                username, seen=True)[:list_num - unseen_num]
-
-        result_notices += unseen_notices
-        result_notices += seen_notices
-
-        # Add 'msg_from' or 'default_avatar_url' to notice.
-        result_notices = add_notice_from_info(result_notices)
-
-        result_notices = update_notice_detail(request, result_notices)
-
-        notification_list = []
-        for i in result_notices:
-            notice = {}
-            notice['id'] = i.id
-            notice['notification_type'] = i.msg_type
-            notice['detail'] = json.loads(i.detail)
-            notice['time'] = datetime_to_isoformat_timestr(i.timestamp)
-            notice['seen'] = i.seen
-            notice['avatar_url'] = request.build_absolute_uri(i.default_avatar_url)
-            notice['notification_from'] = ''
-
-            if i.msg_from:
-                notice['notification_from'] = email2nickname(i.msg_from)
-                url, is_default, date_uploaded = api_avatar_url(i.msg_from, 32)
-                notice['avatar_url'] = request.build_absolute_uri(url)
-
-            notification_list.append(notice)
+        notice_more = True if len(notice_list) == per_page else False
         result['notification_list'] = notification_list
+        result['notification_more'] = notice_more
+        result['unseen_count'] = unseen_num
 
         return Response(result)
 
