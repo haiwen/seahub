@@ -41,6 +41,7 @@
                   shareLinkExpireDaysMin: '{{ share_link_expire_days_min }}',
                   shareLinkExpireDaysMax: '{{ share_link_expire_days_max }}',
                   canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
+                  fileAuditEnabled: '{{ file_audit_enabled }}',
               },
              userInfo: {
                username: '{{ user.username }}',

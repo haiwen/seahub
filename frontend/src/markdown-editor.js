@@ -4,7 +4,7 @@ import 'whatwg-fetch';
 import { Value, Document, Block } from 'slate';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { gettext } from './utils/constants';
+import { gettext, fileAuditEnabled } from './utils/constants';
 import io from 'socket.io-client';
 import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
@@ -308,6 +308,7 @@ class MarkdownEditor extends React.Component {
       isShowComments: false,
       isShowHistory: false,
       isShowOutline: true,
+      visitedCounts: 0,
     };
 
     if (this.state.collabServer) {
@@ -594,6 +595,7 @@ class MarkdownEditor extends React.Component {
     this.listRelatedFiles();
     this.listFileTags();
     this.getCommentsNumber();
+    fileAuditEnabled && this.getFileVisitedCounts();
 
     document.addEventListener('selectionchange', this.setBtnPosition);
     setTimeout(() => {
@@ -602,6 +604,14 @@ class MarkdownEditor extends React.Component {
         window.location.href = window.location.href;
       }
     }, 100);
+  }
+
+  getFileVisitedCounts = () => {
+    seafileAPI.getFileVisitedCounts(repoID, filePath).then(res => {
+      this.setState({
+        visitedCounts: res.data.visited_counts,
+      });
+    });
   }
 
   listRelatedFiles = () => {
@@ -976,6 +986,7 @@ class MarkdownEditor extends React.Component {
               toggleCommentList={this.toggleCommentList}
               showFileHistory={this.state.isShowHistory ? false : true }
               toggleHistory={this.toggleHistory}
+              visitedCounts={this.state.visitedCounts}
             />
             <div className="seafile-md-viewer d-flex">
               <div className={sidePanel ? "seafile-md-viewer-container side-panel-on":"seafile-md-viewer-container"} ref="markdownContainer">

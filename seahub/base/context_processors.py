@@ -22,7 +22,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH
 
 from seahub.constants import DEFAULT_ADMIN
-from seahub.utils import get_site_name, get_service_url
+from seahub.utils import get_site_name, get_service_url, FILE_AUDIT_ENABLED
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -126,6 +126,7 @@ def base(request):
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
         'service_url': get_service_url().rstrip('/'),
         'enable_file_scan': ENABLE_FILE_SCAN,
+        'file_audit_enabled': FILE_AUDIT_ENABLED,
     }
 
     if request.user.is_staff:

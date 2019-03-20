@@ -142,3 +142,13 @@
     max-width: 100%;
   }
 }
+
+.sf-file-visited-counts {
+  display: flex;
+  padding: 4px 8px;
+  border-right: 1px solid #e6e6dd;
+}
+.visited-counts {
+  color: #666;
+  font-size: 14px;
+}
