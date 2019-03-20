@@ -14,7 +14,7 @@ const propTypes = {
   onItemCopy: PropTypes.func,
   onItemsCopy: PropTypes.func,
   onCancelCopy: PropTypes.func.isRequired,
-  repoEncrypted: PropTypes.object.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
 };
 
 // need dirent file Path；
@@ -126,7 +126,7 @@ class CopyDirent extends React.Component {
       return;
     }
 
-    this.props.onItemCopy(repo, this.props.dirent, selectedPath);
+    this.props.onItemCopy(repo, this.props.dirent, selectedPath, this.props.path);
     this.toggle();
   }
 

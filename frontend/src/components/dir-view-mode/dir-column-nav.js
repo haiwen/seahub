@@ -5,6 +5,8 @@ import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
+import Copy from '../../components/dialog/copy-dirent-dialog';
+import Move from '../../components/dialog/move-dirent-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
@@ -45,6 +47,9 @@ class DirColumnNav extends React.Component {
       isNodeImagePopupOpen: false,
       imageNodeItems: [],
       imageIndex: 0,
+      isCopyDialogShow: false,
+      isMoveDialogShow: false,
+      isMutipleOperation:false,
     };
     this.isNodeMenuShow = true;
   }
@@ -76,6 +81,12 @@ class DirColumnNav extends React.Component {
         break;
       case 'Delete':
         this.onDeleteToggle();
+        break;
+      case 'Copy':
+        this.onCopyToggle();
+        break;
+      case 'Move':
+        this.onMoveToggle();
         break;
       case 'Open in New Tab':
         this.onOpenFile(node);
@@ -113,6 +124,14 @@ class DirColumnNav extends React.Component {
 
   onDeleteToggle = () => {
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
+  }
+
+  onCopyToggle =() => {
+    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow})
+  }
+
+  onMoveToggle = () => {
+    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow})
   }
 
   onAddFolderNode = (dirPath) => {
@@ -292,6 +311,32 @@ class DirColumnNav extends React.Component {
               currentNode={this.state.opNode}
               handleSubmit={this.onDeleteNode}
               toggleCancel={this.onDeleteToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isCopyDialogShow && (
+          <ModalPortal>
+            <Copy
+              path={this.state.opNode.parentNode.path}
+              repoID={this.props.repoID}
+              dirent={this.state.opNode.object}
+              onItemCopy={this.props.onItemCopy}
+              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              onCancelCopy={this.onCopyToggle}
+              isMutipleOperation={this.state.isMutipleOperation}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isMoveDialogShow && (
+          <ModalPortal>
+            <Move
+              path={this.state.opNode.parentNode.path}
+              repoID={this.props.repoID}
+              dirent={this.state.opNode.object}
+              onItemMove={this.props.onItemMove}
+              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              onCancelMove={this.onMoveToggle}
+              isMutipleOperation={this.state.isMutipleOperation}
             />
           </ModalPortal>
         )}

@@ -682,12 +682,15 @@ class LibContentView extends React.Component {
   }
 
   // list operations
-  onMoveItem = (destRepo, dirent, moveToDirentPath) => {
+  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath) => {
     let repoID = this.props.repoID;
     //just for view list state
     let dirName = dirent.name;
-    let direntPath = Utils.joinPath(this.state.path, dirName);
-    seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, this.state.path, dirName).then(res => {
+    if (!nodeParentPath) {
+      nodeParentPath = this.state.path;
+    }
+    let direntPath = Utils.joinPath(nodeParentPath, dirName);
+    seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, nodeParentPath, dirName).then(res => {
       let nodeName = res.data[0].obj_name;
       if (this.state.currentMode === 'column') {
         this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
@@ -704,12 +707,15 @@ class LibContentView extends React.Component {
     });
   }
 
-  onCopyItem = (destRepo, dirent, copyToDirentPath) => {
+  onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath) => {
     let repoID = this.props.repoID;
     //just for view list state
     let dirName = dirent.name;
-    let direntPath = Utils.joinPath(this.state.path, dirName);
-    seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, this.state.path, dirName).then(res => {
+    if (!nodeParentPath) {
+      nodeParentPath = this.state.path;
+    }
+    let direntPath = Utils.joinPath(nodeParentPath, dirName);
+    seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
       let nodeName = res.data[0].obj_name;
       if (this.state.currentMode === 'column') {
         this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);

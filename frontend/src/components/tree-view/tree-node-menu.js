@@ -29,9 +29,9 @@ class TreeNodeMenu extends React.Component {
     let { node } = this.props;
     let menuList = [];
     if (node.object.type === 'dir') {
-      menuList = ['New Folder', 'New File', 'Rename', 'Delete'];
+      menuList = ['New Folder', 'New File', 'Copy', 'Move', 'Rename', 'Delete'];
     } else {
-      menuList = ['Rename', 'Delete', 'Open in New Tab'];
+      menuList = ['Rename', 'Delete', 'Copy', 'Move', 'Open in New Tab'];
     }
     return menuList;
   }
@@ -47,6 +47,12 @@ class TreeNodeMenu extends React.Component {
         break;
       case 'Rename':
         translateResult = gettext('Rename');
+        break;
+      case 'Copy':
+        translateResult = gettext('Copy');
+        break;
+      case 'Move':
+        translateResult = gettext('Move');
         break;
       case 'Delete':
         translateResult = gettext('Delete');
