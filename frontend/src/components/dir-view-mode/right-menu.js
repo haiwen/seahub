@@ -40,7 +40,6 @@ class TypeFie extends React.Component {
         }
         return menuList;
     }
-   
 
   translateMenuItem = (menuItem) => {
     let translateResult = '';
