@@ -92,7 +92,7 @@ class TreeView extends React.Component {
 
   render() {
     return (
-      <div className="tree-view tree" style={{flex:1}}>
+      <div className="tree-view tree">
         <TreeNodeView 
           repoPermission={this.props.repoPermission}
           node={this.props.treeData.root}
