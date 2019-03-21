@@ -59,6 +59,10 @@ class DirColumnNav extends React.Component {
     this.isNodeMenuShow = true;
   }
 
+  componentDidMount() {
+    this.showContextMenu()
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({opNode: nextProps.currentNode});
   }
@@ -172,10 +176,6 @@ class DirColumnNav extends React.Component {
   onOpenFile = (node) => {
     let newUrl = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(node.path);
     window.open(newUrl, '_blank');
-  }
-
-  componentDidMount() {
-    this.showContextMenu()
   }
 
   contextMenu = (e) => {
