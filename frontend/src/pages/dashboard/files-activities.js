@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, serviceURL } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import Activity from '../../models/activity';
@@ -129,7 +129,13 @@ class ActivityItem extends Component {
       details = <td>{fileLink}<br />{smallLibLink}</td>;
     } else if (item.obj_type == 'files') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
+      if (item.name.endsWith('(draft).md')) {
+        fileURL = serviceURL + '/drafts/' + item.draft_id + '/';
+      }
       let fileLink = `<a href=${fileURL} target="_blank">${item.name}</a>`;
+      if (item.name.endsWith('(draft).md') && !item.draft_id) {
+        fileLink = item.name;
+      }
       let fileCount = item.createdFilesCount - 1;
       let firstLine = gettext('{file} and {n} other files');
       firstLine = firstLine.replace('{file}', fileLink);
@@ -143,7 +149,13 @@ class ActivityItem extends Component {
         </td>;
     } else if (item.obj_type == 'file') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
+      if (item.name.endsWith('(draft).md')) {
+        fileURL = serviceURL + '/drafts/' + item.draft_id + '/';
+      }
       let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
+      if (item.name.endsWith('(draft).md') && !item.draft_id) {
+        fileLink = item.name;
+      }
       switch(item.op_type) {
         case 'create':
           if (item.name.endsWith('(draft).md')) {

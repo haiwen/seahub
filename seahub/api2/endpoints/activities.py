@@ -17,6 +17,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.drafts.models import Draft
 
 logger = logging.getLogger(__name__)
 
@@ -85,6 +86,15 @@ class ActivitiesView(APIView):
                 d['old_name'] = os.path.basename(e.old_path)
             elif e.op_type == 'publish':
                 d['old_path'] = e.old_path
+            elif d['name'].endswith('(draft).md'):
+                if e.op_type in ('create', 'edit') and e.obj_type == 'file':
+                    try:
+                        draft = Draft.objects.get(username=e.op_user,
+                                                  origin_repo_id=e.repo_id,
+                                                  draft_file_path=e.path)
+                        d['draft_id'] = draft.id
+                    except Draft.DoesNotExist:
+                        pass
 
             events_list.append(d)
 
