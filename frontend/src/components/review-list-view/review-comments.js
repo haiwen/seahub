@@ -306,7 +306,7 @@ class CommentItem extends React.Component {
           <div className="seafile-edit-comment">
             <textarea className="edit-comment-input" value={this.state.newComment} onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"></textarea>
             <Button className="comment-btn" color="success" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
-            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}> {gettext('Cancle')}</Button>
+            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}> {gettext('Cancel')}</Button>
           </div>
         </li>
       );

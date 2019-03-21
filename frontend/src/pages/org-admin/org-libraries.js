@@ -97,7 +97,7 @@ class OrgLibraries extends Component {
                 <tr>
                   <th width="4%"></th>
                   <th width="31%">{gettext('Name')}</th>
-                  <th width="26%">{gettext('ID')}</th>
+                  <th width="26%">ID</th>
                   <th width="24%">{gettext('Owner')}</th>
                   <th width="15%" className="text-center">{gettext('Operations')}</th>
                 </tr>
@@ -197,7 +197,7 @@ class RepoItem extends React.Component {
       iconTitle = gettext('Encrypted library'); 
     } else {
       href = mediaUrl + 'img/lib/48/lib.png';
-      iconTitle = gettext('Read-Write  library');
+      iconTitle = gettext('Read-Write library');
     } 
     return <img src={href} title={iconTitle} alt={iconTitle} width="24" />;
   }

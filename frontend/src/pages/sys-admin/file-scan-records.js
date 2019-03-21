@@ -25,7 +25,7 @@ class Table extends Component {
           <thead>
             <tr>
               <th width="16%">{gettext('Library')}</th>
-              <th width="30%">{gettext('ID')}</th>
+              <th width="30%">ID</th>
               <th width="30%">{gettext('Path')}</th>
               <th width="12%">{gettext('Label')}</th>
               <th width="12%">{gettext('Suggestion')}</th>

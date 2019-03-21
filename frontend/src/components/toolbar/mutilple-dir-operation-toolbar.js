@@ -155,9 +155,6 @@ class MutipleDirOperationToolbar extends React.Component {
     const filePath = this.getDirentPath(dirent);
     seafileAPI.lockfile(this.props.repoID, filePath).then((res) => {
       if (res.data.is_locked) {
-        let message = gettext('Successfully locked %(name)s.');
-        message = message.replace('%(name)s', dirent.name);
-        toaster.success(message);
         this.props.updateDirent(dirent, 'is_locked', true);
         this.props.updateDirent(dirent, 'locked_by_me', true);
         this.props.unSelectDirent();
@@ -169,9 +166,6 @@ class MutipleDirOperationToolbar extends React.Component {
     const filePath = this.getDirentPath(dirent);
     seafileAPI.unlockfile(this.props.repoID, filePath).then((res) => {
       if (!res.data.is_locked) {
-        let message = gettext('Successfully unlocked %(name)s.');
-        message = message.replace('%(name)s', dirent.name);
-        toaster.success(message);
         this.props.updateDirent(dirent, 'is_locked', false);
         this.props.updateDirent(dirent, 'locked_by_me', false);
         this.props.unSelectDirent();
