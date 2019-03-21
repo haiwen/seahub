@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TreeNodeView from './tree-node-view';
 
+import TreeViewContexMenu from './tree-view-contextmenu'
+
 const propTypes = {
   repoPermission: PropTypes.bool,
   isNodeMenuShow: PropTypes.bool.isRequired,
@@ -11,8 +13,6 @@ const propTypes = {
   onNodeClick: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
-  showContextMenu: PropTypes.func,
-  hideContextMenu: PropTypes.func,
 };
 
 const PADDING_LEFT = 20;
@@ -23,7 +23,15 @@ class TreeView extends React.Component {
     super(props);
     this.state = {
       isItemFreezed: false,
+      isRightMenuShow: false,
+      nodeData: null,
+      fileData: null,
+      event: null,
     };
+  }
+
+  componentDidMount() {
+    this.showContextMenu()
   }
 
   onNodeDragStart = (e, node) => {
@@ -38,9 +46,49 @@ class TreeView extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
+  contextMenu = (e) => {
+    e.preventDefault();
+    this.setState({
+      isRightMenuShow:false,
+    });
+    setTimeout(() => { 
+      this.setState({
+        isRightMenuShow:true,
+        fileData:this.state.nodeData,
+        event:e,
+      })
+    },40)
+  }  
+
+  hideContextMenu = () => {
+    let dirContentNav = document.querySelector('.tree-view');
+    dirContentNav.removeEventListener('contextmenu',this.contextMenu)
+  }
+
+  showContextMenu = () => {
+    let dirContentNav = document.querySelector('.tree-view');
+    dirContentNav.addEventListener('contextmenu',this.contextMenu)
+  }
+
+  isNodeData = (node) => {
+    this.setState({
+      nodeData:node
+    })
+  }
+
+  closeRightMenu = () => {
+    this.setState({
+      isRightMenuShow:false,
+    })
+  }
+
+  onMenuItemClick = (operation, node) => {
+    this.props.onMenuItemClick(operation, node)
+  }
+
   render() {
     return (
-      <div className="tree-view tree">
+      <div className="tree-view tree" style={{flex:1}}>
         <TreeNodeView 
           repoPermission={this.props.repoPermission}
           node={this.props.treeData.root}
@@ -55,10 +103,20 @@ class TreeView extends React.Component {
           onNodeDragStart={this.onNodeDragStart}
           onFreezedItem={this.onFreezedItem}
           onUnFreezedItem={this.onUnFreezedItem}
-          isNodeData={this.props.isNodeData}
-          showContextMenu={this.props.showContextMenu}
-          hideContextMenu={this.props.hideContextMenu}
+          isNodeData={this.isNodeData}
+          showContextMenu={this.showContextMenu}
+          hideContextMenu={this.hideContextMenu}
         />
+       {this.state.isRightMenuShow && (
+          <TreeViewContexMenu 
+            node={this.state.fileData}
+            onMenuItemClick={this.onMenuItemClick}
+            event={this.state.event}
+            closeRightMenu={this.closeRightMenu}
+            showContextMenu={this.showContextMenu}
+            hideContextMenu={this.hideContextMenu}
+          />
+        )}
       </div>
     );
   }

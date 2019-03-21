@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
-import '../../css/file-type.css'
+import '../../css/tree-view-contextmenu.css'
 
 const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
@@ -11,7 +11,7 @@ const propTypes = {
   closeRightMenu: PropTypes.func,
 };
 
-class RightMenu extends React.Component {
+class TreeViewContexMenu extends React.Component {
 
   constructor(props) {
     super(props);
@@ -32,6 +32,7 @@ class RightMenu extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('click',this.listenClick)
+    document.removeEventListener('mousemove',this.handleContextMenu)
   }
 
   caculateMenuList() {
@@ -62,6 +63,7 @@ class RightMenu extends React.Component {
     rightTreeMenu.style.left = event.clientX + 'px';
 
     document.addEventListener('click',this.listenClick)
+    document.addEventListener('mousemove',this.handleContextMenu)
   }
 
   translateMenuItem = (menuItem) => {
@@ -92,6 +94,27 @@ class RightMenu extends React.Component {
         break;
     }
     return translateResult;
+  }
+
+  handleContextMenu = (e) => {
+    let event = this.props.event;
+    let rightTreeMenu = document.querySelector('.right-tree-menu');
+    let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
+    let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
+
+    if (event.clientY + rightTreeMenuHeight > document.body.clientHeight) {
+      if ((e.clientX >= event.clientX) && (e.clientX <= (event.clientX + rightTreeMenuWidth)) && (e.clientY <= event.clientY) && (e.clientY >= (event.clientY - rightTreeMenuHeight))) {
+        this.props.hideContextMenu()
+      } else {
+        this.props.showContextMenu()
+      }
+    } else {
+      if ((e.clientX >= event.clientX) && (e.clientX <= (event.clientX + rightTreeMenuWidth)) && (e.clientY >= event.clientY) && (e.clientY <= (event.clientY + rightTreeMenuHeight))) {
+        this.props.hideContextMenu()
+      } else {
+        this.props.showContextMenu()
+      }
+    }
   }
 
   listenClick = (e) => {
@@ -135,6 +158,6 @@ class RightMenu extends React.Component {
   }
 }
 
-RightMenu.propTypes = propTypes;
+TreeViewContexMenu.propTypes = propTypes;
 
-export default RightMenu;
+export default TreeViewContexMenu;

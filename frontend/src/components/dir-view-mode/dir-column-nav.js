@@ -11,7 +11,6 @@ import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import RightMenu from '../tree-view/right-menu';
 
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -51,16 +50,8 @@ class DirColumnNav extends React.Component {
       isCopyDialogShow: false,
       isMoveDialogShow: false,
       isMutipleOperation: false,
-      isRightMenuShow: false,
-      nodeData: null,
-      fileData: null,
-      event: null,
     };
     this.isNodeMenuShow = true;
-  }
-
-  componentDidMount() {
-    this.showContextMenu()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -178,42 +169,6 @@ class DirColumnNav extends React.Component {
     window.open(newUrl, '_blank');
   }
 
-  contextMenu = (e) => {
-    e.preventDefault();
-    this.setState({
-      isRightMenuShow:false,
-    });
-    setTimeout(() => { 
-      this.setState({
-        isRightMenuShow:true,
-        fileData:this.state.nodeData,
-        event:e,
-      })
-    },40)
-  }  
-
-  hideContextMenu = () => {
-    let dirContentNav = document.querySelector('.dir-content-nav');
-    dirContentNav.removeEventListener('contextmenu',this.contextMenu)
-  }
-
-  showContextMenu = () => {
-    let dirContentNav = document.querySelector('.dir-content-nav');
-    dirContentNav.addEventListener('contextmenu',this.contextMenu)
-  }
-
-  isNodeData = (node) => {
-    this.setState({
-      nodeData:node
-    })
-  }
-
-  closeRightMenu = () => {
-    this.setState({
-      isRightMenuShow:false,
-    })
-  }
-
   checkDuplicatedName = (newName) => {
     let node = this.state.opNode;
     // root node to new node conditions: parentNode is null, 
@@ -326,19 +281,9 @@ class DirColumnNav extends React.Component {
               onFreezedItem={this.onFreezedItem}
               onUnFreezedItem={this.onUnFreezedItem}
               isNodeData={this.isNodeData}
-              showContextMenu={this.showContextMenu}
-              hideContextMenu={this.hideContextMenu}
             />)
           }
         </div>
-        {this.state.isRightMenuShow && (
-          <RightMenu 
-            node={this.state.fileData}
-            onMenuItemClick={this.onMenuItemClick}
-            event={this.state.event}
-            closeRightMenu={this.closeRightMenu}
-          />
-        )}
         {this.state.isAddFolderDialogShow && (
           <ModalPortal>
             <CreateFolder
