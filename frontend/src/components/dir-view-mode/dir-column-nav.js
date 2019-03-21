@@ -51,7 +51,7 @@ class DirColumnNav extends React.Component {
       isCopyDialogShow: false,
       isMoveDialogShow: false,
       isMutipleOperation: false,
-      isTypeFile: false,
+      isRightMenuShow: false,
       nodeData: null,
       fileData: null,
       event: null,
@@ -181,11 +181,11 @@ class DirColumnNav extends React.Component {
   contextMenu = (e) => {
     e.preventDefault();
     this.setState({
-      isTypeFile:false,
+      isRightMenuShow:false,
     });
     setTimeout(() => { 
       this.setState({
-        isTypeFile:true,
+        isRightMenuShow:true,
         fileData:this.state.nodeData,
         event:e,
       })
@@ -210,7 +210,7 @@ class DirColumnNav extends React.Component {
 
   closeRightMenu = () => {
     this.setState({
-      isTypeFile:false,
+      isRightMenuShow:false,
     })
   }
 
@@ -331,7 +331,7 @@ class DirColumnNav extends React.Component {
             />)
           }
         </div>
-        {this.state.isTypeFile && (
+        {this.state.isRightMenuShow && (
           <RightMenu 
             node={this.state.fileData}
             onMenuItemClick={this.onMenuItemClick}
