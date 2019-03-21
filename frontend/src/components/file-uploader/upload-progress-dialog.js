@@ -49,7 +49,7 @@ class UploadProgressDialog extends React.Component {
       </Fragment>
     );
 
-    let totalProgress = this.props.totalProgress;
+    let { totalProgress, allFilesUploaded } = this.props;
 
     return (
       <div className="uploader-list-view" style={{height: this.state.isMinimized ? '2.25rem' : '20rem'}}>
@@ -58,7 +58,7 @@ class UploadProgressDialog extends React.Component {
             {totalProgress === 100 ? uploadedMessage : uploadingMessage}
           </div>
           <div className="uploader-options">
-            {totalProgress === 100 ? uploadedOptions : uploadingOptions}
+            {totalProgress === 100 ||  allFilesUploaded ? uploadedOptions : uploadingOptions}
           </div>
         </div>
         <div className="uploader-list-content">
@@ -71,7 +71,7 @@ class UploadProgressDialog extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {(!this.props.allFilesUploaded) && 
+              {(!allFilesUploaded) && 
                 <tr><td className="text-right" colSpan={3}><span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span></td></tr>
               }
               {
