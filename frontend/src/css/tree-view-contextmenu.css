@@ -1,4 +1,4 @@
-.right-tree-menu{
+.right-tree-menu {
 	position: absolute;
 	left: 15rem;
 	top: 20rem;
@@ -16,7 +16,7 @@
 	border: 1px solid rgba(0, 40, 100, 0.12);
 	border-radius: 3px;
 }
-.right-tree-item{
+.right-tree-item {
 	display: block;
 	width: 100%;
 	padding: 0.25rem 1.5rem;
@@ -29,7 +29,7 @@
 	border: 0;
 	cursor: pointer;
 }
-.right-tree-item:hover{
+.right-tree-item:hover {
 	color: #15181A;
 	background-color: #F8F9FA;
 }
