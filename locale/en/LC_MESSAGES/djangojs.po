@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-21 17:41+0800\n"
+"POT-Creation-Date: 2019-03-21 19:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,8 +152,10 @@ msgstr ""
 #: frontend/src/components/dialog/upload-remind-dialog.js:44
 #: frontend/src/components/dialog/wiki-delete-dialog.js:25
 #: frontend/src/components/dialog/wiki-select-dialog.js:84
+#: frontend/src/components/file-view/comment-panel.js:222
 #: frontend/src/components/markdown-view/comment-dialog.js:78
 #: frontend/src/components/review-list-view/review-comment-dialog.js:92
+#: frontend/src/components/review-list-view/review-comments.js:309
 #: static/scripts/app/views/fileupload.js:22
 msgid "Cancel"
 msgstr ""
@@ -553,7 +555,7 @@ msgstr ""
 #: frontend/src/components/file-view/comment-panel.js:245
 #: frontend/src/components/review-list-view/review-comments.js:332
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:284
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:299
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:293
 #: frontend/src/components/tree-view/tree-node-menu.js:58
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:235
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:78
@@ -719,7 +721,7 @@ msgstr ""
 #: frontend/src/components/dialog/internal-link-dialog.js:71
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
 #: frontend/src/components/dirent-list-view/dirent-menu.js:104
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:298
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:292
 #: frontend/src/components/tree-view/tree-node-menu.js:52
 #: frontend/src/pages/share-admin/share-links.js:104
 msgid "Copy"
@@ -1210,7 +1212,7 @@ msgstr ""
 #: frontend/src/components/file-view/file-toolbar.js:110
 #: frontend/src/components/file-view/file-view-tip.js:19
 #: frontend/src/components/history-list-view/history-list-item.js:101
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:300
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:294
 #: frontend/src/shared-file-view-image.js:104
 #: frontend/src/shared-file-view-markdown.js:121
 #: frontend/src/shared-file-view-pdf.js:103
@@ -1247,7 +1249,7 @@ msgid "Rename"
 msgstr ""
 
 #: frontend/src/components/dirent-list-view/dirent-menu.js:101
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:297
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:291
 #: frontend/src/components/tree-view/tree-node-menu.js:55
 msgid "Move"
 msgstr ""
@@ -1440,11 +1442,6 @@ msgstr ""
 #: frontend/src/components/file-view/comment-panel.js:221
 #: frontend/src/components/review-list-view/review-comments.js:308
 msgid "Update"
-msgstr ""
-
-#: frontend/src/components/file-view/comment-panel.js:222
-#: frontend/src/components/review-list-view/review-comments.js:309
-msgid "Cancle"
 msgstr ""
 
 #: frontend/src/components/file-view/comment-panel.js:254
@@ -1700,14 +1697,6 @@ msgstr ""
 
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:113
 msgid "No related files"
-msgstr ""
-
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:158
-msgid "Successfully locked %(name)s."
-msgstr ""
-
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:172
-msgid "Successfully unlocked %(name)s."
 msgstr ""
 
 #: frontend/src/components/toolbar/repo-view-toobar.js:53
@@ -2235,11 +2224,6 @@ msgstr ""
 msgid "All Libraries"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-libraries.js:100
-#: frontend/src/pages/sys-admin/file-scan-records.js:28
-msgid "ID"
-msgstr ""
-
 #: frontend/src/pages/org-admin/org-libraries.js:197
 #: frontend/src/utils/utils.js:299 static/scripts/app/models/deleted-repo.js:19
 #: static/scripts/common.js:349
@@ -2247,7 +2231,10 @@ msgid "Encrypted library"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-libraries.js:200
-msgid "Read-Write  library"
+#: frontend/src/utils/utils.js:305 static/scripts/app/models/deleted-repo.js:21
+#: static/scripts/common.js:355
+#: static/scripts/sysadmin-app/models/trash-repo.js:14
+msgid "Read-Write library"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-user-item.js:59
@@ -2562,12 +2549,6 @@ msgstr ""
 #: frontend/src/utils/utils.js:301 seahub/templates/priv/ali.js:10
 #: static/scripts/common.js:351
 msgid "Admin access"
-msgstr ""
-
-#: frontend/src/utils/utils.js:305 static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/common.js:355
-#: static/scripts/sysadmin-app/models/trash-repo.js:14
-msgid "Read-Write library"
 msgstr ""
 
 #: frontend/src/utils/utils.js:308 static/scripts/common.js:358
