@@ -31,7 +31,7 @@ class RightMenu extends React.Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click',this.toggleClick)
+    document.removeEventListener('click',this.listenClick)
   }
 
   caculateMenuList() {
@@ -61,7 +61,7 @@ class RightMenu extends React.Component {
     }
     rightTreeMenu.style.left = event.clientX + 'px';
 
-    document.addEventListener('click',this.toggleClick)
+    document.addEventListener('click',this.listenClick)
   }
 
   translateMenuItem = (menuItem) => {
@@ -94,7 +94,7 @@ class RightMenu extends React.Component {
     return translateResult;
   }
 
-  toggleClick = (e) => {
+  listenClick = (e) => {
     let event = this.props.event;
     let rightTreeMenu = document.querySelector('.right-tree-menu');
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
