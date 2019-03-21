@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TreeNodeView from './tree-node-view';
 
-import TreeViewContexMenu from './tree-view-contextmenu'
+import TreeViewContextMenu from './tree-view-contextmenu'
 
 const propTypes = {
   repoPermission: PropTypes.bool,
@@ -26,12 +26,16 @@ class TreeView extends React.Component {
       isRightMenuShow: false,
       nodeData: null,
       fileData: null,
-      event: null,
+      mousePosition: {clientX: '', clientY: ''},
     };
   }
 
   componentDidMount() {
-    this.showContextMenu()
+    this.showContextMenu();
+  }
+
+  componentWillUnmount() {
+    this.hideContextMenu();
   }
 
   onNodeDragStart = (e, node) => {
@@ -55,22 +59,22 @@ class TreeView extends React.Component {
       this.setState({
         isRightMenuShow:true,
         fileData:this.state.nodeData,
-        event:e,
+        mousePosition: {clientX: e.clientX, clientY:e.clientY}
       })
     },40)
   }  
 
   hideContextMenu = () => {
-    let dirContentNav = document.querySelector('.tree-view');
-    dirContentNav.removeEventListener('contextmenu',this.contextMenu)
+    let treeView = document.querySelector('.tree-view');
+    treeView.removeEventListener('contextmenu',this.contextMenu);
   }
 
   showContextMenu = () => {
-    let dirContentNav = document.querySelector('.tree-view');
-    dirContentNav.addEventListener('contextmenu',this.contextMenu)
+    let treeView = document.querySelector('.tree-view');
+    treeView.addEventListener('contextmenu',this.contextMenu);
   }
 
-  isNodeData = (node) => {
+  onNodeChanged = (node) => {
     this.setState({
       nodeData:node
     })
@@ -103,15 +107,15 @@ class TreeView extends React.Component {
           onNodeDragStart={this.onNodeDragStart}
           onFreezedItem={this.onFreezedItem}
           onUnFreezedItem={this.onUnFreezedItem}
-          isNodeData={this.isNodeData}
+          onNodeChanged={this.onNodeChanged}
           showContextMenu={this.showContextMenu}
           hideContextMenu={this.hideContextMenu}
         />
        {this.state.isRightMenuShow && (
-          <TreeViewContexMenu 
+          <TreeViewContextMenu 
             node={this.state.fileData}
             onMenuItemClick={this.onMenuItemClick}
-            event={this.state.event}
+            mousePosition={this.state.mousePosition}
             closeRightMenu={this.closeRightMenu}
             showContextMenu={this.showContextMenu}
             hideContextMenu={this.hideContextMenu}

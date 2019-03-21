@@ -38,7 +38,7 @@ class TreeNodeView extends React.Component {
         isHighlight: true,
       });
     }
-    this.props.isNodeData(this.props.node)
+    this.props.onNodeChanged(this.props.node)
   }
 
   onMouseLeave = () => {
@@ -48,7 +48,7 @@ class TreeNodeView extends React.Component {
         isHighlight: false,
       });
     }
-    this.props.isNodeData(null)
+    this.props.onNodeChanged(null)
   }
 
   onNodeClick = () => {
@@ -131,7 +131,7 @@ class TreeNodeView extends React.Component {
               onFreezedItem={this.props.onFreezedItem}
               onMenuItemClick={this.onMenuItemClick}
               onUnFreezedItem={this.onUnFreezedItem}
-              isNodeData={this.props.isNodeData}
+              onNodeChanged={this.props.onNodeChanged}
               showContextMenu={this.props.showContextMenu}
               hideContextMenu={this.props.hideContextMenu}
             />

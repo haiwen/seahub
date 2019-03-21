@@ -7,11 +7,11 @@ import '../../css/tree-view-contextmenu.css'
 const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
   node: PropTypes.object,
-  event: PropTypes.object,
+  mousePosition: PropTypes.object,
   closeRightMenu: PropTypes.func,
 };
 
-class TreeViewContexMenu extends React.Component {
+class TreeViewContextMenu extends React.Component {
 
   constructor(props) {
     super(props);
@@ -27,19 +27,19 @@ class TreeViewContexMenu extends React.Component {
   }
 
   componentDidUpdate() {
-    this.calculateMenuDistance()
+    this.calculateMenuDistance();
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click',this.listenClick)
-    document.removeEventListener('mousemove',this.handleContextMenu)
+    document.removeEventListener('click', this.listenClick);
+    document.removeEventListener('mousemove', this.handleContextMenu);
   }
 
   caculateMenuList() {
     let { node } = this.props;
     let menuList = [];
     if (!node) {
-        menuList = ['New Folder', 'New File', ]
+        menuList = ['New Folder', 'New File'];
     } else {
       if (node.object.type === 'dir') {
         menuList = ['New Folder', 'New File', 'Copy', 'Move', 'Rename', 'Delete'];
@@ -51,19 +51,19 @@ class TreeViewContexMenu extends React.Component {
   }
 
   calculateMenuDistance = () => {
-    let event = this.props.event;
-    let rightTreeMenu = document.querySelector('.right-tree-menu')
+    let mousePosition = this.props.mousePosition;
+    let rightTreeMenu = document.querySelector('.right-tree-menu');
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
 
-    if (event.clientY + rightTreeMenuHeight > document.body.clientHeight) {
-      rightTreeMenu.style.top = event.clientY - rightTreeMenuHeight + 'px'
+    if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
+      rightTreeMenu.style.top = mousePosition.clientY - rightTreeMenuHeight + 'px';
     } else {
-      rightTreeMenu.style.top = event.clientY + 'px';
+      rightTreeMenu.style.top = mousePosition.clientY + 'px';
     }
-    rightTreeMenu.style.left = event.clientX + 'px';
+    rightTreeMenu.style.left = mousePosition.clientX + 'px';
 
-    document.addEventListener('click',this.listenClick)
-    document.addEventListener('mousemove',this.handleContextMenu)
+    document.addEventListener('click', this.listenClick);
+    document.addEventListener('mousemove', this.handleContextMenu);
   }
 
   translateMenuItem = (menuItem) => {
@@ -97,43 +97,43 @@ class TreeViewContexMenu extends React.Component {
   }
 
   handleContextMenu = (e) => {
-    let event = this.props.event;
+    let mousePosition = this.props.mousePosition;
     let rightTreeMenu = document.querySelector('.right-tree-menu');
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
     let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
 
-    if (event.clientY + rightTreeMenuHeight > document.body.clientHeight) {
-      if ((e.clientX >= event.clientX) && (e.clientX <= (event.clientX + rightTreeMenuWidth)) && (e.clientY <= event.clientY) && (e.clientY >= (event.clientY - rightTreeMenuHeight))) {
-        this.props.hideContextMenu()
+    if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
+      if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY <= mousePosition.clientY) && (e.clientY >= (mousePosition.clientY - rightTreeMenuHeight))) {
+        this.props.hideContextMenu();
       } else {
-        this.props.showContextMenu()
+        this.props.showContextMenu();
       }
     } else {
-      if ((e.clientX >= event.clientX) && (e.clientX <= (event.clientX + rightTreeMenuWidth)) && (e.clientY >= event.clientY) && (e.clientY <= (event.clientY + rightTreeMenuHeight))) {
-        this.props.hideContextMenu()
+      if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY >= mousePosition.clientY) && (e.clientY <= (mousePosition.clientY + rightTreeMenuHeight))) {
+        this.props.hideContextMenu();
       } else {
-        this.props.showContextMenu()
+        this.props.showContextMenu();
       }
     }
   }
 
   listenClick = (e) => {
-    let event = this.props.event;
+    let mousePosition = this.props.mousePosition;
     let rightTreeMenu = document.querySelector('.right-tree-menu');
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
     let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
 
-    if ((e.clientX <= event.clientX) || (e.clientX >= (event.clientX + rightTreeMenuWidth))) {
-      this.props.closeRightMenu()
+    if ((e.clientX <= mousePosition.clientX) || (e.clientX >= (mousePosition.clientX + rightTreeMenuWidth))) {
+      this.props.closeRightMenu();
     }
 
-    if (event.clientY + rightTreeMenuHeight > document.body.clientHeight) {
-      if ((e.clientY <= (event.clientY - rightTreeMenuHeight)) || e.clientY >= event.clientY) {
-        this.props.closeRightMenu()
+    if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
+      if ((e.clientY <= (mousePosition.clientY - rightTreeMenuHeight)) || e.clientY >= mousePosition.clientY) {
+        this.props.closeRightMenu();
       }
     } else {
-      if ((e.clientY <= event.clientY) || (e.clientY >= (event.clientY + rightTreeMenuHeight))) {
-        this.props.closeRightMenu()
+      if ((e.clientY <= mousePosition.clientY) || (e.clientY >= (mousePosition.clientY + rightTreeMenuHeight))) {
+        this.props.closeRightMenu();
       }
     }
   }
@@ -142,7 +142,7 @@ class TreeViewContexMenu extends React.Component {
     let operation = event.target.dataset.toggle;
     let node = this.props.node;
     this.props.onMenuItemClick(operation, node);
-    this.props.closeRightMenu()
+    this.props.closeRightMenu();
   }
 
   render() {
@@ -158,6 +158,6 @@ class TreeViewContexMenu extends React.Component {
   }
 }
 
-TreeViewContexMenu.propTypes = propTypes;
+TreeViewContextMenu.propTypes = propTypes;
 
-export default TreeViewContexMenu;
+export default TreeViewContextMenu;
