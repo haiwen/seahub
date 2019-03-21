@@ -497,9 +497,6 @@
     <div class="switch-mode hidden-sm-down">
         <button class="view-btn list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view" aria-label="{% trans "list view" %}"></button>
         <button class="view-btn grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view" aria-label="{% trans "grid view" %}"></button>
-        <% if (app.pageOptions.enable_repo_wiki_mode) { %> 
-        <button class="view-btn two-columns-view-icon-btn sf2-icon-two-columns <% if (mode == 'wiki') { %>active<% } %>" title="{% trans "Wiki" %}" id="js-switch-wiki-view" aria-label="{% trans "Wiki view" %}"></button>
-        <% } %>
     </div>
 </script>
 <script type="text/template" id="dir-view-toolbar2-tmpl">
