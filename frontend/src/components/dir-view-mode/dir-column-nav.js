@@ -11,7 +11,7 @@ import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import TypeFile from './right-menu'
+import RightMenu from '../tree-view/right-menu';
 
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -175,7 +175,7 @@ class DirColumnNav extends React.Component {
   }
 
   componentDidMount() {
-    this.openContextMenu()
+    this.showContextMenu()
   }
 
   contextMenu = (e) => {
@@ -192,12 +192,12 @@ class DirColumnNav extends React.Component {
     },40)
   }  
 
-  closeContextMenu = () => {
+  hideContextMenu = () => {
     let dirContentNav = document.querySelector('.dir-content-nav');
     dirContentNav.removeEventListener('contextmenu',this.contextMenu)
   }
 
-  openContextMenu = () => {
+  showContextMenu = () => {
     let dirContentNav = document.querySelector('.dir-content-nav');
     dirContentNav.addEventListener('contextmenu',this.contextMenu)
   }
@@ -326,13 +326,13 @@ class DirColumnNav extends React.Component {
               onFreezedItem={this.onFreezedItem}
               onUnFreezedItem={this.onUnFreezedItem}
               isNodeData={this.isNodeData}
-              openContextMenu={this.openContextMenu}
-              closeContextMenu={this.closeContextMenu}
+              showContextMenu={this.showContextMenu}
+              hideContextMenu={this.hideContextMenu}
             />)
           }
         </div>
         {this.state.isTypeFile && (
-          <TypeFile 
+          <RightMenu 
             node={this.state.fileData}
             onMenuItemClick={this.onMenuItemClick}
             event={this.state.event}

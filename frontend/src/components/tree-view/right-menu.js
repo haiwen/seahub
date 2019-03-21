@@ -11,7 +11,7 @@ const propTypes = {
   closeRightMenu: PropTypes.func,
 };
 
-class TypeFie extends React.Component {
+class RightMenu extends React.Component {
 
   constructor(props) {
     super(props);
@@ -24,6 +24,14 @@ class TypeFie extends React.Component {
   componentDidMount() {
     let menuList = this.caculateMenuList();
     this.setState({menuList: menuList});
+  }
+
+  componentDidUpdate() {
+    this.calculateMenuDistance()
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click',this.toggleClick)
   }
 
   caculateMenuList() {
@@ -39,6 +47,21 @@ class TypeFie extends React.Component {
       } 
     }
     return menuList;
+  }
+
+  calculateMenuDistance = () => {
+    let event = this.props.event;
+    let rightTreeMenu = document.querySelector('.right-tree-menu')
+    let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
+
+    if (event.clientY + rightTreeMenuHeight > document.body.clientHeight) {
+      rightTreeMenu.style.top = event.clientY - rightTreeMenuHeight + 'px'
+    } else {
+      rightTreeMenu.style.top = event.clientY + 'px';
+    }
+    rightTreeMenu.style.left = event.clientX + 'px';
+
+    document.addEventListener('click',this.toggleClick)
   }
 
   translateMenuItem = (menuItem) => {
@@ -71,52 +94,32 @@ class TypeFie extends React.Component {
     return translateResult;
   }
 
+  toggleClick = (e) => {
+    let event = this.props.event;
+    let rightTreeMenu = document.querySelector('.right-tree-menu');
+    let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
+    let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
+
+    if ((e.clientX <= event.clientX) || (e.clientX >= (event.clientX + rightTreeMenuWidth))) {
+      this.props.closeRightMenu()
+    }
+
+    if (event.clientY + rightTreeMenuHeight > document.body.clientHeight) {
+      if ((e.clientY <= (event.clientY - rightTreeMenuHeight)) || e.clientY >= event.clientY) {
+        this.props.closeRightMenu()
+      }
+    } else {
+      if ((e.clientY <= event.clientY) || (e.clientY >= (event.clientY + rightTreeMenuHeight))) {
+        this.props.closeRightMenu()
+      }
+    }
+  }
+
   onMenuItemClick = (event) => {
     let operation = event.target.dataset.toggle;
     let node = this.props.node;
     this.props.onMenuItemClick(operation, node);
     this.props.closeRightMenu()
-  }
-
-  isCalculationDistance = () => {
-    let event = this.props.event;
-    let rightTreeMenu = document.querySelector('.right-tree-menu')
-
-    if (event.clientY + rightTreeMenu.offsetHeight > document.body.clientHeight) {
-      rightTreeMenu.style.top = event.clientY - rightTreeMenu.offsetHeight + 'px'
-    } else {
-      rightTreeMenu.style.top = event.clientY + 'px';
-    }
-    rightTreeMenu.style.left = event.clientX + 'px';
-
-    document.addEventListener('click',this.listenerClick)
-  }
-
-  listenerClick = (e) => {
-    let event = this.props.event;
-    let rightTreeMenu = document.querySelector('.right-tree-menu');
-
-    if ((e.clientX <= parseInt(event.clientX)) || (e.clientX >= parseInt(event.clientX) + parseInt(rightTreeMenu.offsetWidth))) {
-      this.props.closeRightMenu()
-    }
-
-    if (event.clientY + rightTreeMenu.offsetHeight > document.body.clientHeight) {
-      if ((e.clientY <= (parseInt(event.clientY) - parseInt(rightTreeMenu.offsetHeight))) || e.clientY >= parseInt(event.clientY)) {
-        this.props.closeRightMenu()
-      }
-    } else {
-      if ((e.clientY <= parseInt(event.clientY)) || (e.clientY >= parseInt(event.clientY) + parseInt(rightTreeMenu.offsetHeight))) {
-        this.props.closeRightMenu()
-      }
-    }
-  }
-
-  componentDidUpdate() {
-    this.isCalculationDistance()
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click',this.listenerClick)
   }
 
   render() {
@@ -132,6 +135,6 @@ class TypeFie extends React.Component {
   }
 }
 
-TypeFie.propTypes = propTypes;
+RightMenu.propTypes = propTypes;
 
-export default TypeFie;
+export default RightMenu;
