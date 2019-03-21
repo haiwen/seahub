@@ -13,7 +13,6 @@ import ShareDialog from '../dialog/share-dialog';
 import AddRelatedFileDialog from '../dialog/add-related-file-dialog';
 import ListRelatedFileDialog from '../dialog/list-related-file-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import toaster from '../toast';
 import ModalPortal from '../modal-portal';
 
 const propTypes = {
