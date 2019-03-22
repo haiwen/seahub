@@ -33,7 +33,7 @@ class SidePanel extends React.Component {
               <h3 className="sf-heading" style={{ 'color': '#f7941d' }}>{gettext('Admin')}</h3>
               <ul className="nav nav-pills flex-column nav-container">
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('orgmanage')}`} to={siteRoot + 'org/orgmanage/'} onClick={() => this.tabItemClick('orginfo')} >
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('orgmanage')}`} to={siteRoot + 'org/orgmanage/'} onClick={() => this.tabItemClick('orgmanage')} >
                     <span className="sf2-icon-library"></span>
                     <span className="nav-text">{gettext('Info')}</span>
                   </Link>
