@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-21 19:08+0800\n"
-"PO-Revision-Date: 2019-03-21 10:14+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"PO-Revision-Date: 2019-03-21 15:59+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/haiwen/seahub/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +27,7 @@ msgstr "Administración del Sistema"
 
 #: frontend/src/components/common/account.js:102
 msgid "Exit Admin Panel"
-msgstr ""
+msgstr "Salir del panel de administración"
 
 #: frontend/src/components/common/account.js:107
 msgid "Organization Admin"
@@ -1322,7 +1322,7 @@ msgstr "Biblioteca"
 #: frontend/src/components/file-chooser/file-chooser.js:279
 #: frontend/src/components/search/search.js:198
 msgid "No results matching."
-msgstr ""
+msgstr "No hay resultados que coincidan."
 
 #: frontend/src/components/file-chooser/file-chooser.js:295
 #: frontend/src/components/file-chooser/file-chooser.js:334
@@ -1335,7 +1335,7 @@ msgstr "Otras bibliotecas"
 
 #: frontend/src/components/file-chooser/file-chooser.js:382
 msgid "Search..."
-msgstr ""
+msgstr "Buscar..."
 
 #: frontend/src/components/file-content-view.js:70
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:61
@@ -2183,7 +2183,7 @@ msgstr "Operaciones"
 #: frontend/src/pages/org-admin/org-groups.js:67
 #: frontend/src/pages/org-admin/org-libraries.js:68
 msgid "Successfully deleted {name}"
-msgstr ""
+msgstr "Eliminado con éxito {name}"
 
 #: frontend/src/pages/org-admin/org-groups.js:86
 msgid "Creator"
@@ -2225,7 +2225,7 @@ msgstr "Límites"
 
 #: frontend/src/pages/org-admin/org-libraries.js:92
 msgid "All Libraries"
-msgstr ""
+msgstr "Todas las Bibliotecas"
 
 #: frontend/src/pages/org-admin/org-libraries.js:197
 #: frontend/src/utils/utils.js:299
@@ -2413,19 +2413,19 @@ msgstr "Desmarcar"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:29
 msgid "Path"
-msgstr ""
+msgstr "Ruta"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:30
 msgid "Label"
-msgstr ""
+msgstr "Etiqueta"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Suggestion"
-msgstr ""
+msgstr "Sugerencia"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:122
 msgid "Content Scan Records"
-msgstr ""
+msgstr "Registros de Análisis de Contenido"
 
 #: frontend/src/pages/sys-admin/side-panel.js:40
 msgid "Statistic"
@@ -2445,7 +2445,7 @@ msgstr "Instituciones"
 
 #: frontend/src/pages/sys-admin/side-panel.js:136
 msgid "File Scan"
-msgstr ""
+msgstr "Escanear Archivo"
 
 #: frontend/src/pages/sys-admin/side-panel.js:144
 msgid "Virus Scan"

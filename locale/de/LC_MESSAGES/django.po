@@ -74,8 +74,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-21 19:08+0800\n"
-"PO-Revision-Date: 2019-03-21 11:09+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"PO-Revision-Date: 2019-03-21 13:01+0000\n"
+"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -567,17 +567,17 @@ msgstr "Fehler"
 
 #: seahub/api2/endpoints/repo_send_new_password.py:44
 msgid "Feature disabled."
-msgstr ""
+msgstr "Die Funktion ist deaktiviert."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:65
 #: seahub/api2/endpoints/repo_set_password.py:160
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "Das Passwort der Bibliothek kann nicht zurückgesetzt werden."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:72
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "Neues Passwort für Bibliothek %s"
 
 #: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3699
 msgid "Wrong password"
@@ -3128,14 +3128,14 @@ msgstr "%(author)s hat die Datei <a href='%(file_url)s'>%(file_name)s</a> kommen
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "<a href='%(file_url)s'>Entwurf #%(draft_id)s</a> wurde von %(author)s kommentiert"
 
 #: seahub/notifications/models.py:826
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr ""
+msgstr "%(from_user)s bittet Sie um <a href='%(file_url)s'>Entwurf #%(draft_id)s</a>"
 
 #: seahub/notifications/models.py:849
 #: seahub/notifications/templates/notifications/notice_email.html:69
@@ -3150,7 +3150,7 @@ msgstr "Gast %(user)s hat die <a href=\"%(url_base)s%(inv_url)s\">Einladung</a> 
 msgid ""
 "%(user)s has transfered a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s hat die Bibliothek <a href=\"%(repo_url)s\">%(repo_name)s</a> auf Sie übertragen."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -3570,7 +3570,7 @@ msgstr "Nutzer/in anonym"
 
 #: seahub/organizations/templates/organizations/org_file_audit.html:91
 msgid "No File Access Information"
-msgstr ""
+msgstr "Die Datei scheint noch nicht genutzt worden zu sein."
 
 #: seahub/organizations/templates/organizations/org_file_update.html:26
 msgid "Action"
@@ -4275,7 +4275,7 @@ msgstr "Zwei-Faktor-Authentifizierung"
 #: seahub/profile/templates/profile/set_profile.html:35
 #: seahub/profile/templates/profile/set_profile.html:186
 msgid "Social Login"
-msgstr ""
+msgstr "Anmelden mit Sozialen Diensten"
 
 #: seahub/profile/templates/profile/set_profile.html:39
 #: seahub/profile/templates/profile/set_profile.html:207
@@ -4325,7 +4325,7 @@ msgstr "Telefon:"
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:12
 msgid "Set Password"
-msgstr ""
+msgstr "Passwort vergeben"
 
 #: seahub/profile/templates/profile/set_profile.html:99
 #: seahub/profile/templates/profile/set_profile.html:112
@@ -4414,11 +4414,11 @@ msgstr "Zwei-Faktor-Authentifizierung aktivieren"
 #: seahub/profile/templates/profile/set_profile.html:196
 #: seahub/profile/templates/profile/set_profile.html:411
 msgid "Disconnect"
-msgstr ""
+msgstr "Trennen"
 
 #: seahub/profile/templates/profile/set_profile.html:198
 msgid "Connect"
-msgstr ""
+msgstr "Verbinden"
 
 #: seahub/profile/templates/profile/set_profile.html:208
 msgid "This operation will not be reverted. Please think twice!"
@@ -4454,7 +4454,7 @@ msgstr "Erfolgreich ausgeführt"
 
 #: seahub/profile/templates/profile/set_profile.html:412
 msgid "Are you sure you want to disconnect?"
-msgstr ""
+msgstr "Möchten Sie die Verbindung wirklich trennen?"
 
 #: seahub/profile/views.py:40
 msgid "Successfully edited profile."
@@ -6756,7 +6756,7 @@ msgstr "Bitte geben Sie ein Passwort ein"
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr ""
+msgstr "Das neue Passwort der Bibliothek %(repo_name)s lautet %(password)s. Bitte ändern Sie es so bald wie möglich."
 
 #: seahub/templates/snippets/search_form.html:19
 #: seahub/templates/snippets/search_form.html:23
@@ -6834,7 +6834,7 @@ msgstr "Bezahlung"
 
 #: seahub/templates/sysadmin/base.html:99
 msgid "File Scan"
-msgstr ""
+msgstr "Scan der Dateien"
 
 #: seahub/templates/sysadmin/org_admin_table.html:8
 msgid "Created At / Expiration"
@@ -7530,7 +7530,7 @@ msgstr "Bitte eine XLSX-Datei auswählen"
 
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:8
 msgid "Virus Scan Records"
-msgstr "Virendefinitionsdatei"
+msgstr "Doku der Viren-Scans"
 
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:13
 msgid "Virus File"
@@ -8299,4 +8299,4 @@ msgstr "Sie haben nicht die erforderlichen Rechte, ein Wiki zu erstellen"
 
 #: seahub/wiki/views.py:72
 msgid "Unable to view Wiki"
-msgstr ""
+msgstr "Das Wiki kann nicht angezeigt werden"
