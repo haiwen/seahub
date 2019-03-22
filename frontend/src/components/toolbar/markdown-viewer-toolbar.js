@@ -82,8 +82,8 @@ class MarkdownViewerToolbar extends React.Component {
     let relatedFileString = '';
     if (relatedFiles) {
       const length = relatedFiles.length;
-      if (length === 1) relatedFileString = 'Related file';
-      else if (length > 1) relatedFileString = 'Related files';
+      if (length === 1) relatedFileString = gettext('Related file');
+      else if (length > 1) relatedFileString = gettext('Related files');
     }
     return(
       <div className="sf-md-viewer-topbar-second d-flex justify-content-center">
@@ -112,7 +112,7 @@ class MarkdownViewerToolbar extends React.Component {
               <span className="edit-related-file no-related-file"
                 onClick={openDialogs.bind(this, 'related_files')}>{gettext('No related files')}</span>:
               <React.Fragment>
-                <a href="#sf-releted-files">{relatedFiles.length}{' '}{gettext(relatedFileString)}</a>
+                <a href="#sf-releted-files">{relatedFiles.length}{' '}{relatedFileString}</a>
                 <span className="edit-related-file" onClick={openDialogs.bind(this, 'related_files')}>
                   {gettext('Edit')}</span>
               </React.Fragment>
