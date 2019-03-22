@@ -323,6 +323,31 @@ class DirentListItem extends React.Component {
     this.setState({isShowTagTooltip: !this.state.isShowTagTooltip});
   }
 
+  dragStart = (e) => {
+    let startData = this.props.dirent
+    console.log(startData)
+    startData = JSON.stringify(startData)
+    e.dataTransfer.setData('application/x-bookmark',startData)
+  }
+
+  dragDrop = (e) => {
+    e.preventDefault();
+    console.log(e)
+    console.log(this.props.dirent)
+    let dropData = e.dataTransfer.getData('application/x-bookmark');
+    dropData = JSON.parse(dropData)
+    console.log(dropData)
+  }
+
+  dragEnter = (e) => {
+    e.preventDefault();
+    console.log(this.props.dirent)
+  }
+
+  dragOver = (e) => {
+    e.preventDefault();
+  }
+
   render() {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
@@ -351,7 +376,7 @@ class DirentListItem extends React.Component {
 
     return (
       <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick}  onDrop={this.dragDrop} onDragEnter={this.dragEnter} onDragOver={this.dragOver}>
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
@@ -359,7 +384,7 @@ class DirentListItem extends React.Component {
             {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onItemStarred}></i>}
             {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star cursor-pointer" onClick={this.onItemStarred}></i>}
           </td>
-          <td className="text-center">
+          <td className="text-center" draggable="true" onDragStart={this.dragStart}>
             <div className="dir-icon">
               {dirent.encoded_thumbnail_src ?
                 <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
