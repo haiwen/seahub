@@ -21,6 +21,8 @@ class AddOrgUserDialog extends React.Component {
       errMessage: '',
       isAddingUser: false,
     };
+    this.passwdInput = React.createRef();
+    this.passwdNewInput = React.createRef();
   }
 
   handleSubmit = () => {
@@ -40,8 +42,14 @@ class AddOrgUserDialog extends React.Component {
   };
 
   togglePasswordVisible = () => {
-    this.setState({
-      isPasswordVisible: !this.state.isPasswordVisible
+    this.setState({isPasswordVisible: !this.state.isPasswordVisible}, () => {
+      if (this.state.isPasswordVisible) {
+        this.passwdInput.type = 'password';
+        this.passwdNewInput.type = 'password';
+      } else {
+        this.passwdInput.type = 'text';
+        this.passwdNewInput.type = 'text';
+      }
     });
   }
 
@@ -49,7 +57,11 @@ class AddOrgUserDialog extends React.Component {
     let val = Math.random().toString(36).substr(5);
     this.setState({
       password: val,
-      passwdnew: val
+      passwdnew: val,
+      isPasswordVisible: false
+    }, () => {
+      this.passwdInput.type = 'text';
+      this.passwdNewInput.type = 'text';
     });
   }
 
@@ -65,20 +77,26 @@ class AddOrgUserDialog extends React.Component {
 
   inputPassword = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({password: passwd});
+    this.setState({password: passwd}, () => {
+      if (this.state.isPasswordVisible) {
+        this.passwdInput.type = 'password';
+        this.passwdNewInput.type = 'password';
+      }
+    });
   }
 
   inputPasswordNew = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({passwdnew: passwd});
+    this.setState({passwdnew: passwd}, () => {
+      if (this.state.isPasswordVisible) {
+        this.passwdInput.type = 'password';
+        this.passwdNewInput.type = 'password';
+      }
+    });
   }
 
   toggle = () => {
     this.props.toggle();
-  };
-
-  onInputTypeChange = () => {
-    this.setState({isPasswordVisible: false});
   }
 
   validateInputParams() {
@@ -118,16 +136,16 @@ class AddOrgUserDialog extends React.Component {
           <Form>
             <FormGroup>
               <Label for="userEmail">{gettext('Email')}</Label>
-              <Input id="userEmail"  value={this.state.email || ''} onChange={this.inputEmail} autoComplete="off" />
+              <Input id="userEmail"  value={this.state.email || ''} onChange={this.inputEmail} />
             </FormGroup>
             <FormGroup>
               <Label for="userName">{gettext('Name(optional)')}</Label>
-              <Input id="userName" value={this.state.name || ''} onChange={this.inputName} autoComplete="off" />
+              <Input id="userName" value={this.state.name || ''} onChange={this.inputName} />
             </FormGroup>
             <FormGroup>
               <Label for="userPwd">{gettext('Password')}</Label>
               <InputGroup className="passwd">
-                <Input id="userPwd" type={this.state.isPasswordVisible ? 'text' : 'password'} onFocus={this.onInputTypeChange} value={this.state.password || ''} onChange={this.inputPassword} autoComplete="off" />
+                <Input id="userPwd" innerRef={input => {this.passwdInput = input}} value={this.state.password || ''} onChange={this.inputPassword} />
                 <InputGroupAddon addonType="append">
                   <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
                   <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
@@ -136,7 +154,7 @@ class AddOrgUserDialog extends React.Component {
             </FormGroup>
             <FormGroup>
               <Label for="userPwdNew">{gettext('Confirm Password')}</Label>
-              <Input id="userPwdNew" id="user" className="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} autoComplete="off" />
+              <Input id="userPwdNew" innerRef={input => {this.passwdNewInput = input}}  className="passwd"   value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
           </Form>
           <Label className="err-message">{gettext(this.state.errMessage)}</Label>
