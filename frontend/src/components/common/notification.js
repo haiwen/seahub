@@ -33,8 +33,10 @@ class Notification extends React.Component {
   }
 
   loadNotices = () => {
-    seafileAPI.listPopupNotices().then(res => {
-      let noticeList = res.data.notices_list;
+    let page = 1;
+    let perPage = 5;
+    seafileAPI.listPopupNotices(page, perPage).then(res => {
+      let noticeList = res.data.notification_list;
       this.setState({noticeList: noticeList});
     });
   }
