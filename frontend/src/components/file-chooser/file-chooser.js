@@ -271,7 +271,11 @@ class FileChooser extends React.Component {
   }
 
   renderSearchedView = () => {
-    if (!this.state.isResultGot || this.getValueLength(this.inputValue) < 3) {
+    if (this.getValueLength(this.inputValue) < 3) {
+      return '';
+    }
+
+    if (!this.state.isResultGot) {
       return (<Loading />);
     }
 
