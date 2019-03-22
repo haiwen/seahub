@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-import json
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -59,7 +58,7 @@ class NotificationsView(APIView):
                 notice = {}
                 notice['id'] = i.id
                 notice['type'] = i.msg_type
-                notice['detail'] = json.loads(i.detail)
+                notice['detail'] = i.detail
                 notice['time'] = datetime_to_isoformat_timestr(i.timestamp)
                 notice['seen'] = i.seen
 
@@ -81,9 +80,10 @@ class NotificationsView(APIView):
             cache.set(cache_key, unseen_count)
             unseen_num = unseen_count
 
-        notice_more = True if len(notice_list) == per_page else False
+        total_count = UserNotification.objects.filter(to_user=username).count()
+
         result['notification_list'] = notification_list
-        result['notification_more'] = notice_more
+        result['count'] = total_count
         result['unseen_count'] = unseen_num
 
         return Response(result)
@@ -106,6 +106,7 @@ class NotificationsView(APIView):
         cache.delete(cache_key)
 
         return Response({'success': True})
+
 
 class NotificationView(APIView):
 

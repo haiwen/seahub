@@ -23,6 +23,7 @@ def refresh_cache():
 
 
 def update_notice_detail(request, notices):
+    repo_dict = {}
     for notice in notices:
         if notice.is_repo_share_msg():
             try:
@@ -48,11 +49,12 @@ def update_notice_detail(request, notices):
                     share_from_user_name = email2nickname(d['share_from'])
                     url, is_default, date_uploaded = api_avatar_url(d['share_from'], 32)
                     d['repo_name'] = repo.name
+                    d['repo_id'] = repo.id
                     d['share_from_user_email'] = d.pop('share_from')
                     d['share_from_user_name'] = share_from_user_name
                     d['share_from_user_avatar_url'] = request.build_absolute_uri(url)
 
-                    notice.detail = json.dumps(d)
+                    notice.detail = d
 
             except Exception as e:
                 logger.error(e)
@@ -86,8 +88,9 @@ def update_notice_detail(request, notices):
                     d['share_from_user_name'] = share_from_user_name
                     d['share_from_user_avatar_url'] = request.build_absolute_uri(url)
                     d['repo_name'] = repo.name
+                    d['repo_id'] = repo.id
                     d['group_name'] = group.group_name
-                    notice.detail = json.dumps(d)
+                    notice.detail = d
 
             except Exception as e:
                 logger.error(e)
@@ -107,7 +110,7 @@ def update_notice_detail(request, notices):
                     d['group_staff_avatar_url'] = request.build_absolute_uri(url)
                     d['group_name'] = group.group_name
 
-                    notice.detail = json.dumps(d)
+                    notice.detail = d
             except Exception as e:
                 logger.error(e)
 
@@ -120,7 +123,7 @@ def update_notice_detail(request, notices):
                 d['author_email'] = d.pop('author')
                 d['author_avatar_url'] = request.build_absolute_uri(url)
 
-                notice.detail = json.dumps(d)
+                notice.detail = d
             except Exception as e:
                 logger.error(e)
 
@@ -139,7 +142,7 @@ def update_notice_detail(request, notices):
                     d['transfer_from_user_name'] = repo_owner_name
                     url, is_default, date_uploaded = api_avatar_url(repo_owner_email, 32)
                     d['transfer_from_user_avatar_url'] = request.build_absolute_uri(url)
-                    notice.detail = json.dumps(d)
+                    notice.detail = d
 
             except Exception as e:
                 logger.error(e)
@@ -153,7 +156,7 @@ def update_notice_detail(request, notices):
                 d['request_user_name'] = request_user_name
                 d['request_user_email'] = d.pop('from_user')
                 d['request_user_avatat_url'] = request.build_absolute_uri(url)
-                notice.detail = json.dumps(d)
+                notice.detail = d
             except Exception as e:
                 logger.error(e)
 
@@ -162,7 +165,13 @@ def update_notice_detail(request, notices):
                 d = json.loads(notice.detail)
                 filename = d['file_name']
                 repo_id = d['repo_id']
-                repo = seafile_api.get_repo(repo_id)
+
+                if repo_id in repo_dict:
+                    repo = repo_dict[repo_id]
+                else:
+                    repo = seafile_api.get_repo(repo_id)
+                    repo_dict[repo_id] = repo
+
                 if repo:
                     if d['uploaded_to'] == '/':
                         # current upload path is '/'
@@ -179,7 +188,7 @@ def update_notice_detail(request, notices):
                     d['file_path'] = file_path
                     url, is_default, date_uploaded = api_avatar_url('', 32)
                     d['uploaded_user_avatar_url'] = request.build_absolute_uri(url)
-                    notice.detail = json.dumps(d)
+                    notice.detail = d
                 else:
                     notice.detail = None
 
@@ -193,7 +202,12 @@ def update_notice_detail(request, notices):
                 repo_id = d['repo_id']
                 file_path = d['file_path']
 
-                repo = seafile_api.get_repo(repo_id)
+                if repo_id in repo_dict:
+                    repo = repo_dict[repo_id]
+                else:
+                    repo = seafile_api.get_repo(repo_id)
+                    repo_dict[repo_id] = repo
+
                 if repo is None or not seafile_api.get_file_id_by_path(repo.id, file_path):
                     notice.detail = None
                 else:
@@ -204,7 +218,7 @@ def update_notice_detail(request, notices):
                     d['author_email'] = d.pop('author')
                     d['author_name'] = author_name
                     d['file_name'] = file_name
-                    notice.detail = json.dumps(d)
+                    notice.detail = d
             except Exception as e:
                 logger.error(e)
 
