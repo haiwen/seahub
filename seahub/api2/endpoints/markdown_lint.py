@@ -12,7 +12,7 @@ from rest_framework import status
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.utils.markdown_lint import check_header_one, check_heading_end_with
+from seahub.utils.markdown_lint import check_heading_one, check_heading_end_with, check_heading_increase
 
 
 logger = logging.getLogger(__name__)
@@ -42,13 +42,18 @@ class MarkdownLintView(APIView):
         document_nodes = slate["document"]["nodes"]
 
         # check h1
-        header_one_issue_list = check_header_one(document_nodes)
-        if len(header_one_issue_list) > 0:
-            issue_list.extend(header_one_issue_list)
+        heading_one_issue_list = check_heading_one(document_nodes)
+        if len(heading_one_issue_list) > 0:
+            issue_list.extend(heading_one_issue_list)
 
         # check heading_end_with
         heading_end_issue_list = check_heading_end_with(document_nodes)
         if len(heading_end_issue_list) > 0:
             issue_list.extend(heading_end_issue_list)
+
+        # check heading_increase
+        heading_increase_issue_list = check_heading_increase(document_nodes)
+        if len(heading_increase_issue_list) > 0:
+            issue_list.extend(heading_increase_issue_list)
 
         return Response({"issue_list": issue_list}, status=status.HTTP_200_OK)
