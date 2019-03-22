@@ -31,11 +31,11 @@ class TreeView extends React.Component {
   }
 
   componentDidMount() {
-    this.showContextMenu();
+    this.registerHandlers();
   }
 
   componentWillUnmount() {
-    this.hideContextMenu();
+    this.unregisterHandlers();
   }
 
   onNodeDragStart = (e, node) => {
@@ -59,19 +59,19 @@ class TreeView extends React.Component {
       this.setState({
         isRightMenuShow:true,
         fileData:this.state.nodeData,
-        mousePosition: {clientX: e.clientX, clientY:e.clientY}
+        mousePosition: {clientX: e.clientX, clientY: e.clientY}
       })
     },40)
   }  
 
-  hideContextMenu = () => {
+  unregisterHandlers = () => {
     let treeView = document.querySelector('.tree-view');
-    treeView.removeEventListener('contextmenu',this.contextMenu);
+    treeView.removeEventListener('contextmenu', this.contextMenu);
   }
 
-  showContextMenu = () => {
+  registerHandlers = () => {
     let treeView = document.querySelector('.tree-view');
-    treeView.addEventListener('contextmenu',this.contextMenu);
+    treeView.addEventListener('contextmenu', this.contextMenu);
   }
 
   onNodeChanged = (node) => {
@@ -108,8 +108,8 @@ class TreeView extends React.Component {
           onFreezedItem={this.onFreezedItem}
           onUnFreezedItem={this.onUnFreezedItem}
           onNodeChanged={this.onNodeChanged}
-          showContextMenu={this.showContextMenu}
-          hideContextMenu={this.hideContextMenu}
+          registerHandlers={this.registerHandlers}
+          unregisterHandlers={this.unregisterHandlers}
         />
        {this.state.isRightMenuShow && (
           <TreeViewContextMenu 
@@ -117,8 +117,8 @@ class TreeView extends React.Component {
             onMenuItemClick={this.onMenuItemClick}
             mousePosition={this.state.mousePosition}
             closeRightMenu={this.closeRightMenu}
-            showContextMenu={this.showContextMenu}
-            hideContextMenu={this.hideContextMenu}
+            registerHandlers={this.registerHandlers}
+            unregisterHandlers={this.unregisterHandlers}
           />
         )}
       </div>

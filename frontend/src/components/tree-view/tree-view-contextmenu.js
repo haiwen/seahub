@@ -9,6 +9,8 @@ const propTypes = {
   node: PropTypes.object,
   mousePosition: PropTypes.object,
   closeRightMenu: PropTypes.func,
+  registerHandlers:PropTypes.func,
+  unregisterHandlers:PropTypes.func
 };
 
 class TreeViewContextMenu extends React.Component {
@@ -104,15 +106,15 @@ class TreeViewContextMenu extends React.Component {
 
     if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
       if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY <= mousePosition.clientY) && (e.clientY >= (mousePosition.clientY - rightTreeMenuHeight))) {
-        this.props.hideContextMenu();
+        this.props.unregisterHandlers();
       } else {
-        this.props.showContextMenu();
+        this.props.registerHandlers();
       }
     } else {
       if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY >= mousePosition.clientY) && (e.clientY <= (mousePosition.clientY + rightTreeMenuHeight))) {
-        this.props.hideContextMenu();
+        this.props.unregisterHandlers();
       } else {
-        this.props.showContextMenu();
+        this.props.registerHandlers();
       }
     }
   }

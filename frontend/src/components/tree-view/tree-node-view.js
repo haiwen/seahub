@@ -17,8 +17,8 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnFreezedItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func,
-  showContextMenu: PropTypes.func,
-  hideContextMenu: PropTypes.func,
+  registerHandlers: PropTypes.func,
+  unregisterHandlers: PropTypes.func,
 };
 
 class TreeNodeView extends React.Component {
@@ -132,8 +132,8 @@ class TreeNodeView extends React.Component {
               onMenuItemClick={this.onMenuItemClick}
               onUnFreezedItem={this.onUnFreezedItem}
               onNodeChanged={this.props.onNodeChanged}
-              showContextMenu={this.props.showContextMenu}
-              hideContextMenu={this.props.hideContextMenu}
+              registerHandlers={this.props.registerHandlers}
+              unregisterHandlers={this.props.unregisterHandlers}
             />
           );
         })}
@@ -172,8 +172,8 @@ class TreeNodeView extends React.Component {
                   onMenuItemClick={this.onMenuItemClick}
                   onUnFreezedItem={this.onUnFreezedItem}
                   onFreezedItem={this.props.onFreezedItem}
-                  showContextMenu={this.props.showContextMenu}
-                  hideContextMenu={this.props.hideContextMenu}
+                  registerHandlers={this.props.registerHandlers}
+                  unregisterHandlers={this.props.unregisterHandlers}
                 />
               )}
             </div>
