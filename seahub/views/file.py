@@ -768,9 +768,11 @@ def view_lib_file(request, repo_id, path):
 
     elif filetype in (DOCUMENT, SPREADSHEET):
 
+        template = '%s_file_view_react.html' % filetype.lower()
+
         if repo.encrypted:
             return_dict['err'] = _(u'The library is encrypted, can not open file online.')
-            return render(request, 'view_file_base.html', return_dict)
+            return render(request, template, return_dict)
 
         if ENABLE_OFFICE_WEB_APP:
             action_name = None
@@ -835,13 +837,13 @@ def view_lib_file(request, repo_id, path):
 
         if not HAS_OFFICE_CONVERTER:
             return_dict['err'] = "File preview unsupported"
-            return render(request, 'view_file_base.html', return_dict)
+            return render(request, template, return_dict)
 
         if file_size > OFFICE_PREVIEW_MAX_SIZE:
             error_msg = _(u'File size surpasses %s, can not be opened online.') % \
                     filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
             return_dict['err'] = error_msg
-            return render(request, 'view_file_base.html', return_dict)
+            return render(request, template, return_dict)
 
         error_msg = prepare_converted_html(inner_path, file_id, fileext, return_dict)
         if error_msg:
@@ -849,9 +851,6 @@ def view_lib_file(request, repo_id, path):
             return render(request, template, return_dict)
 
         send_file_access_msg(request, repo, path, 'web')
-        # render file preview page
-        if filetype == DOCUMENT:
-            template = '%s_file_view_react.html' % filetype.lower()
         return render(request, template, return_dict)
     else:
         return_dict['err'] = "File preview unsupported"
