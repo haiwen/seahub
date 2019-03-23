@@ -17,6 +17,8 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnFreezedItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func,
+  registerHandlers: PropTypes.func,
+  unregisterHandlers: PropTypes.func,
 };
 
 class TreeNodeView extends React.Component {
@@ -36,6 +38,7 @@ class TreeNodeView extends React.Component {
         isHighlight: true,
       });
     }
+    this.props.onNodeChanged(this.props.node)
   }
 
   onMouseLeave = () => {
@@ -45,6 +48,7 @@ class TreeNodeView extends React.Component {
         isHighlight: false,
       });
     }
+    this.props.onNodeChanged(null)
   }
 
   onNodeClick = () => {
@@ -127,6 +131,9 @@ class TreeNodeView extends React.Component {
               onFreezedItem={this.props.onFreezedItem}
               onMenuItemClick={this.onMenuItemClick}
               onUnFreezedItem={this.onUnFreezedItem}
+              onNodeChanged={this.props.onNodeChanged}
+              registerHandlers={this.props.registerHandlers}
+              unregisterHandlers={this.props.unregisterHandlers}
             />
           );
         })}
@@ -165,6 +172,8 @@ class TreeNodeView extends React.Component {
                   onMenuItemClick={this.onMenuItemClick}
                   onUnFreezedItem={this.onUnFreezedItem}
                   onFreezedItem={this.props.onFreezedItem}
+                  registerHandlers={this.props.registerHandlers}
+                  unregisterHandlers={this.props.unregisterHandlers}
                 />
               )}
             </div>

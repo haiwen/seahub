@@ -49,7 +49,7 @@ class DirColumnNav extends React.Component {
       imageIndex: 0,
       isCopyDialogShow: false,
       isMoveDialogShow: false,
-      isMutipleOperation:false,
+      isMutipleOperation: false,
     };
     this.isNodeMenuShow = true;
   }
@@ -71,10 +71,18 @@ class DirColumnNav extends React.Component {
     this.setState({opNode: node});
     switch (operation) {
       case 'New Folder':
-        this.onAddFolderToggle();
+        if (!node) {
+          this.onAddFolderToggle('root');
+        } else {
+          this.onAddFolderToggle();
+        }
         break;
       case 'New File':
-        this.onAddFileToggle();
+        if (!node) {
+          this.onAddFileToggle('root');
+        } else {
+          this.onAddFileToggle();
+        }
         break;
       case 'Rename':
         this.onRenameToggle();
@@ -126,7 +134,7 @@ class DirColumnNav extends React.Component {
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
   }
 
-  onCopyToggle =() => {
+  onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow})
   }
 
