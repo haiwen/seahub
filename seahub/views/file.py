@@ -850,6 +850,8 @@ def view_lib_file(request, repo_id, path):
 
         send_file_access_msg(request, repo, path, 'web')
         # render file preview page
+        if filetype == DOCUMENT:
+            template = '%s_file_view_react.html' % filetype.lower()
         return render(request, template, return_dict)
     else:
         return_dict['err'] = "File preview unsupported"

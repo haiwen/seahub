@@ -26,6 +26,7 @@ window.app.pageOptions = {
   repoEncrypted: {% if repo.encrypted %}true{% else %}false{% endif %},
   filePath: '{{ path|escapejs }}',
   filePerm: '{{ file_perm }}',
+  fileType: '{{ filetype }}',
   parentDir: '{{ parent_dir|escapejs }}',
   err: '{{ err }}',
   lockedByMe: {% if locked_by_me %}true{% else %}false{% endif %},
