@@ -65,7 +65,7 @@ class NoticeItem extends React.Component {
       let shareFrom = detail.share_from_user_name;
 
       let repoName = detail.repo_name;
-      let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' +  repoName +  detail.path;
+      let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' +  repoName + '/';
 
       let path = detail.path;
       let notice = '';
@@ -88,7 +88,7 @@ class NoticeItem extends React.Component {
       let shareFrom = detail.share_from_user_name;
 
       let repoName = detail.repo_name;
-      let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' + repoName + detail.path;
+      let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' + repoName + '/';
 
       let groupUrl = siteRoot + 'group/' + detail.group_id + '/';
       let groupName = detail.group_name; 
