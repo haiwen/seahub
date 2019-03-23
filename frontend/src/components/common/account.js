@@ -92,16 +92,20 @@ class Account extends Component {
   }
 
   renderMenu = () => {
-    if (this.state.isStaff && !this.props.isAdminPanel) {
-      return (
-        <a href={siteRoot + 'sys/useradmin/'} title={gettext('System Admin')} className="item">{gettext('System Admin')}</a>
-      );
-    }
-    if (this.props.isAdminPanel) {
+    let isAdminPage = this.state.isStaff || this.state.isOrgStaff;
+
+    if (isAdminPage && this.props.isAdminPanel) {
       return (
         <a href={siteRoot} title={gettext('Exit Admin Panel')} className="item">{gettext('Exit Admin Panel')}</a>
       );
     }
+
+    if (this.state.isStaff) {
+      return (
+        <a href={siteRoot + 'sys/useradmin/'} title={gettext('System Admin')} className="item">{gettext('System Admin')}</a>
+      );
+    }
+
     if (this.state.isOrgStaff) {
       return (
         <a href={siteRoot + 'org/useradmin/'} title={gettext('Organization Admin')} className="item">{gettext('Organization Admin')}</a>
@@ -151,6 +155,10 @@ class Account extends Component {
       </div>
     );
   }
+}
+
+Account.defaultProps = {
+  isAdminPanel: false
 }
 
 Account.propTypes = propTypes;

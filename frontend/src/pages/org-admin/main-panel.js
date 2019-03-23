@@ -48,7 +48,7 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className="common-toolbar">
-            <Account />
+            <Account isAdminPanel={true}/>
           </div>
         </div>
         {this.props.children}
