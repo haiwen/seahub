@@ -13,6 +13,8 @@ const propTypes = {
   onNodeClick: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func,
+  currentRepoInfo: PropTypes.object,
 };
 
 const PADDING_LEFT = 20;
@@ -38,8 +40,49 @@ class TreeView extends React.Component {
     this.unregisterHandlers();
   }
 
+  onItemMove = (repo, dirent, selectedPath, currentPath) => {
+    this.props.onItemMove(repo, dirent, selectedPath, currentPath);
+  }
+
   onNodeDragStart = (e, node) => {
-    // todo
+    let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
+    dragStartNodeData = JSON.stringify(dragStartNodeData);
+
+    e.dataTransfer.effectAllowed="move";
+    e.dataTransfer.setData('application/x-bookmark', dragStartNodeData);
+  }
+
+  onNodeDragMove = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  onNodeDrop = (e, node) => {
+    let dragStartNodeData = e.dataTransfer.getData('application/x-bookmark');
+    dragStartNodeData = JSON.parse(dragStartNodeData);
+    let dropNodeData = node;
+
+    if (dropNodeData.object.type !== 'dir') {
+      return;
+    }
+
+    // copy the dirent to itself. eg: A/B -> A/B
+    if (dragStartNodeData.nodeParentPath === dropNodeData.parentNode.path) {
+      if (dropNodeData.object.name === dragStartNodeData.nodeDirent.name) {
+        return;
+      }
+    }
+
+    // copy the dirent to it's child. eg: A/B -> A/B/C
+    if (dropNodeData.object.type === 'dir' && dragStartNodeData.nodeDirent.type === 'dir') {
+      if (dropNodeData.parentNode.path !== dragStartNodeData.nodeParentPath) {
+        if (dropNodeData.path.indexOf(dragStartNodeData.nodeRootPath) !== -1) {
+          return;
+        }
+      }
+    }
+
+    this.onItemMove(this.props.currentRepoInfo, dragStartNodeData.nodeDirent, dropNodeData.path, dragStartNodeData.nodeParentPath);
   }
 
   onFreezedItem = () => {
@@ -110,6 +153,8 @@ class TreeView extends React.Component {
           onNodeChanged={this.onNodeChanged}
           registerHandlers={this.registerHandlers}
           unregisterHandlers={this.unregisterHandlers}
+          onNodeDragMove={this.onNodeDragMove}
+          onNodeDrop={this.onNodeDrop}
         />
        {this.state.isRightMenuShow && (
           <TreeViewContextMenu 

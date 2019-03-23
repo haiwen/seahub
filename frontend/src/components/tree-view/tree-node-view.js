@@ -19,6 +19,8 @@ const propTypes = {
   onMenuItemClick: PropTypes.func,
   registerHandlers: PropTypes.func,
   unregisterHandlers: PropTypes.func,
+  onNodeDragMove: PropTypes.func,
+  onNodeDrop: PropTypes.func,
 };
 
 class TreeNodeView extends React.Component {
@@ -66,6 +68,14 @@ class TreeNodeView extends React.Component {
 
   onNodeDragStart = (e) => {
     this.props.onNodeDragStart(e, this.props.node);
+  }
+
+  onNodeDragMove = (e) => {
+    this.props.onNodeDragMove(e);
+  }
+
+  onNodeDrop = (e) => {
+    this.props.onNodeDrop(e, this.props.node);
   }
 
   onUnFreezedItem = () => {
@@ -134,6 +144,9 @@ class TreeNodeView extends React.Component {
               onNodeChanged={this.props.onNodeChanged}
               registerHandlers={this.props.registerHandlers}
               unregisterHandlers={this.props.unregisterHandlers}
+              onNodeDragStart={this.props.onNodeDragStart}
+              onNodeDragMove={this.props.onNodeDragMove}
+              onNodeDrop={this.props.onNodeDrop}
             />
           );
         })}
@@ -153,7 +166,7 @@ class TreeNodeView extends React.Component {
         <div type={type} title={node.object.name}
           onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
           className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''}`}>
-          <div className="tree-node-text" draggable="true" onDragStart={this.onNodeDragStart} onClick={this.onNodeClick}>{node.object.name}</div>
+          <div className="tree-node-text" draggable="true" onDragStart={this.onNodeDragStart} onClick={this.onNodeClick}  onDragOver={this.onNodeDragMove} onDrop={this.onNodeDrop}>{node.object.name}</div>
           <div className="left-icon">
             {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
               <i 

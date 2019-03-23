@@ -280,6 +280,8 @@ class DirColumnNav extends React.Component {
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.onFreezedItem}
               onUnFreezedItem={this.onUnFreezedItem}
+              onItemMove={this.props.onItemMove}
+              currentRepoInfo={this.props.currentRepoInfo}
             />)
           }
         </div>

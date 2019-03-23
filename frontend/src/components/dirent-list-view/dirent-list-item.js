@@ -323,29 +323,49 @@ class DirentListItem extends React.Component {
     this.setState({isShowTagTooltip: !this.state.isShowTagTooltip});
   }
 
-  dragStart = (e) => {
-    let startData = this.props.dirent
-    console.log(startData)
-    startData = JSON.stringify(startData)
-    e.dataTransfer.setData('application/x-bookmark',startData)
+  onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
+    this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
   }
 
-  dragDrop = (e) => {
-    e.preventDefault();
-    console.log(e)
-    console.log(this.props.dirent)
-    let dropData = e.dataTransfer.getData('application/x-bookmark');
-    dropData = JSON.parse(dropData)
-    console.log(dropData)
+  onItemDragStart = (e) => {
+    let nodeRootPath = '';
+    nodeRootPath = this.props.path === '/' ? `${this.props.path}${this.props.dirent.name}` : this.props.path;
+    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
+    dragStartItemData = JSON.stringify(dragStartItemData);
+
+    e.dataTransfer.effectAllowed="move";
+    e.dataTransfer.setData('application/x-bookmark', dragStartItemData);
   }
 
-  dragEnter = (e) => {
+  onItemDragOver = (e) => {
     e.preventDefault();
-    console.log(this.props.dirent)
+    e.dataTransfer.dropEffect = 'move';
   }
 
-  dragOver = (e) => {
-    e.preventDefault();
+  onItemDragDrop = (e) => {
+    let dragStartItemData = e.dataTransfer.getData('application/x-bookmark');
+    dragStartItemData = JSON.parse(dragStartItemData);
+    let dropItemData = this.props.dirent;
+
+    if (dragStartItemData.nodeDirent.name === dropItemData.name) {
+      return;
+    }
+
+    if (dropItemData.type !== 'dir') {
+      return;
+    } 
+
+    //  copy the dirent to it's child. eg: A/B -> A/B/C
+    if (dropItemData.type === 'dir' && dragStartItemData.nodeDirent.type === 'dir') {
+      if (dragStartItemData.nodeParentPath !== this.props.path) {
+        if (this.props.path.indexOf(dragStartItemData.nodeRootPath) !== -1) {
+          return;
+        }
+      }
+    }
+
+    let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    this.onItemMove(this.props.currentRepoInfo, dragStartItemData.nodeDirent, selectedPath, dragStartItemData.nodeParentPath);
   }
 
   render() {
@@ -376,7 +396,7 @@ class DirentListItem extends React.Component {
 
     return (
       <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick}  onDrop={this.dragDrop} onDragEnter={this.dragEnter} onDragOver={this.dragOver}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragOver={this.onItemDragOver} onDrop={this.onItemDragDrop}>
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
@@ -384,7 +404,7 @@ class DirentListItem extends React.Component {
             {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onItemStarred}></i>}
             {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star cursor-pointer" onClick={this.onItemStarred}></i>}
           </td>
-          <td className="text-center" draggable="true" onDragStart={this.dragStart}>
+          <td className="text-center">
             <div className="dir-icon">
               {dirent.encoded_thumbnail_src ?
                 <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
