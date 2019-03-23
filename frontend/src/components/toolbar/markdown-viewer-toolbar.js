@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, fileAuditEnabled } from '../../utils/constants';
 import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbarcomponent/editorToolBar';
 import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
 
@@ -22,6 +22,7 @@ const propTypes = {
   toggleHistory: PropTypes.func.isRequired,
   commentsNumber: PropTypes.number.isRequired,
   toggleCommentList: PropTypes.func.isRequired,
+  visitedCounts: PropTypes.number.isRequired,
 };
 
 class MarkdownViewerToolbar extends React.Component {
@@ -77,7 +78,7 @@ class MarkdownViewerToolbar extends React.Component {
   }
 
   renderSecondToolbar() {
-    const { relatedFiles, fileTagList } = this.props;
+    const { relatedFiles, fileTagList, visitedCounts } = this.props;
     const openDialogs = this.props.openDialogs;
     let relatedFileString = '';
     if (relatedFiles) {
@@ -117,6 +118,13 @@ class MarkdownViewerToolbar extends React.Component {
                   {gettext('Edit')}</span>
               </React.Fragment>
             }
+          </div>
+        }
+        {fileAuditEnabled &&
+          <div className="sf-file-visited-counts">
+            <span className="visited-counts">
+              <i className="fa fa-eye"></i>{' '}{visitedCounts}
+            </span>
           </div>
         }
       </div>

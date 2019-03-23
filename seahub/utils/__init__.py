@@ -834,6 +834,10 @@ if EVENTS_CONFIG_FILE:
         records = seafevents_api.get_content_scan_results(start, limit)
         return records if records else []
 
+    def get_file_visited_counts(repo_id, file_path):
+        visited_counts = seafevents.get_file_visited_counts(repo_id, file_path)
+        return visited_counts if visited_counts else 0
+
 else:
     EVENTS_ENABLED = False
     def get_user_events():
@@ -873,6 +877,8 @@ else:
     def get_virus_record_by_id(vid):
         pass
     def get_file_scan_record():
+        pass
+    def get_file_visited_counts():
         pass
 
 def calc_file_path_hash(path, bits=12):
