@@ -2,24 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import watermark from 'watermark-dom';
 import { seafileAPI } from './utils/seafile-api';
-import { siteName, gettext, mediaUrl} from './utils/constants';
+import { siteRoot, siteName, gettext } from './utils/constants';
 import FileInfo from './components/file-view/file-info';
 import FileToolbar from './components/file-view/file-toolbar';
 import FileViewTip from './components/file-view/file-view-tip';
 import CommentPanel from './components/file-view/comment-panel';
 import Loading from './components/loading';
-import PDFViewer from './components/pdf-viewer';
 
 import './css/file-view.css';
-import './css/pdf-file-view.css';
+import './css/spreadsheet-file-view.css';
 
 const { isStarred, isLocked, lockedByMe,
   repoID, filePath, err, enableWatermark, userNickName,
   // the following are only for this type of file view
-  commitID, fileType
+  commitID, fileType, fileName
 } = window.app.pageOptions;
 
-class ViewFileDocument extends React.Component {
+class ViewFileSpreadsheet extends React.Component {
 
   constructor(props) {
     super(props);
@@ -117,6 +116,7 @@ class FileContent extends React.Component {
       seafileAPI.queryOfficeFileConvertStatus(repoID, commitID, filePath, fileType.toLowerCase()).then((res) => {
         const convertStatus = res.data['status'];
         switch (convertStatus) {
+          case 'QUEUED':
           case 'PROCESSING':
             this.setState({
               isLoading: true
@@ -134,11 +134,6 @@ class FileContent extends React.Component {
               isLoading: false,
               errorMsg: ''
             });
-
-            let scriptNode = document.createElement('script');
-            scriptNode.type = 'text/javascript';
-            scriptNode.src = `${mediaUrl}js/pdf/viewer.js`;
-            document.body.append(scriptNode);
         }
       }).catch((error) => {
         if (error.response) {
@@ -158,6 +153,10 @@ class FileContent extends React.Component {
     queryStatus();
   }
 
+  setIframeHeight = (e) => {
+    const iframe = e.currentTarget;
+    iframe.height = iframe.contentDocument.body.scrollHeight;
+  }
 
   render() {
     const { isLoading, errorMsg } = this.state;
@@ -175,8 +174,8 @@ class FileContent extends React.Component {
     }
 
     return (
-      <div className="file-view-content flex-1 pdf-file-view">
-        <PDFViewer />
+      <div className="file-view-content flex-1 spreadsheet-file-view">
+        <iframe id="spreadsheet-container" title={fileName} src={`${siteRoot}office-convert/static/${repoID}/${commitID}${encodeURIComponent(filePath)}/index.html`} onLoad={this.setIframeHeight}></iframe>
       </div>
     );
   }
@@ -190,6 +189,6 @@ if (enableWatermark) {
 }
 
 ReactDOM.render (
-  <ViewFileDocument />,
+  <ViewFileSpreadsheet />,
   document.getElementById('wrapper')
 );
