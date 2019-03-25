@@ -240,12 +240,13 @@ class DirentListView extends React.Component {
         <table>
           <thead>
             <tr>
+              <th width="2%">{/*dragIcon*/}</th>
               <th width="3%" className="text-center">
                 <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
               </th>
               <th width="3%">{/*icon */}</th>
               <th width="5%">{/*star */}</th>
-              <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+              <th width="37%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
               <th width="6%">{/*tag */}</th>
               <th width="18%">{/*operation */}</th>
               <th width="11%">{gettext('Size')}</th>

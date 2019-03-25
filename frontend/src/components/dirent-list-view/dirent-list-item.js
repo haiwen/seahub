@@ -55,6 +55,7 @@ class DirentListItem extends React.Component {
       isShareDialogShow: false,
       isMutipleOperation: false,
       isShowTagTooltip: false,
+      dragState:false,
     };
     this.zipToken = null;
   }
@@ -67,6 +68,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
+    this.setState({dragState:true})
   }
 
   onMouseOver = () => {
@@ -76,6 +78,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
+    this.setState({dragState:true})
   }
 
   onMouseLeave = () => {
@@ -85,6 +88,7 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
+    this.setState({dragState:false})
   }
 
   onUnfreezedItem = () => {
@@ -397,6 +401,9 @@ class DirentListItem extends React.Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragOver={this.onItemDragOver} onDrop={this.onItemDragDrop}>
+          <td className="star-empty">
+            {this.state.dragState && <i className="fa fa-grip-vertical"></i>}
+          </td>
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
