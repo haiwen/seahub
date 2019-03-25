@@ -51,6 +51,7 @@ class TransferDialog extends React.Component {
           />
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
