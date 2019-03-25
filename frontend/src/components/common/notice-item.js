@@ -10,14 +10,11 @@ const propTypes = {
   onNoticeItemClick: PropTypes.func.isRequired,
 };
 
-const MSG_TYPE_GROUP_MSG = 'group_msg'
-const MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
 const MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
 const MSG_TYPE_REPO_SHARE = 'repo_share'
 const MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 const MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 const MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
-const MSG_TYPE_USER_MESSAGE = 'user_message'
 const MSG_TYPE_FILE_COMMENT = 'file_comment'
 const MSG_TYPE_DRAFT_COMMENT = 'draft_comment'
 const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer'
@@ -29,14 +26,6 @@ class NoticeItem extends React.Component {
     let noticeItem = this.props.noticeItem;
     let noticeType = noticeItem.type;
     let detail = noticeItem.detail;
-
-    // if (noticeType === MSG_TYPE_GROUP_MSG) {
-      
-    // }
-
-    // if (noticeType === MSG_TYPE_GROUP_JOIN_REQUEST) {
-
-    // }
 
     if (noticeType === MSG_TYPE_ADD_USER_TO_GROUP) {
 
@@ -193,10 +182,6 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{draft_link}', draftLink);
       return {avatar_url, notice};
     }
-
-    // if (noticeType === MSG_TYPE_USER_MESSAGE) {
-
-    // }
 
     // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {
 
