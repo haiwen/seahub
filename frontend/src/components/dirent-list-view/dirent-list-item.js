@@ -55,7 +55,7 @@ class DirentListItem extends React.Component {
       isShareDialogShow: false,
       isMutipleOperation: false,
       isShowTagTooltip: false,
-      dragState: false,
+      isDragTipShow: false,
     };
     this.zipToken = null;
   }
@@ -68,7 +68,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({dragState: true})
+    this.setState({isDragTipShow: true})
   }
 
   onMouseOver = () => {
@@ -78,7 +78,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({dragState: true})
+    this.setState({isDragTipShow: true})
   }
 
   onMouseLeave = () => {
@@ -88,7 +88,7 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
-    this.setState({dragState: false})
+    this.setState({isDragTipShow: false})
   }
 
   onUnfreezedItem = () => {
@@ -338,7 +338,7 @@ class DirentListItem extends React.Component {
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData('application/x-bookmark', dragStartItemData);
+    e.dataTransfer.setData('applicaiton/drag-item-item', dragStartItemData);
   }
   
   onItemDragOver = (e) => {
@@ -350,11 +350,12 @@ class DirentListItem extends React.Component {
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
-    let dragStartItemData = e.dataTransfer.getData('application/x-bookmark');
+    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-item');
     dragStartItemData = JSON.parse(dragStartItemData);
+    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
     let dropItemData = this.props.dirent;
 
-    if (dragStartItemData.nodeDirent.name === dropItemData.name) {
+    if (nodeDirent.name === dropItemData.name) {
       return;
     }
 
@@ -363,16 +364,16 @@ class DirentListItem extends React.Component {
     } 
 
     //  copy the dirent to it's child. eg: A/B -> A/B/C
-    if (dropItemData.type === 'dir' && dragStartItemData.nodeDirent.type === 'dir') {
-      if (dragStartItemData.nodeParentPath !== this.props.path) {
-        if (this.props.path.indexOf(dragStartItemData.nodeRootPath) !== -1) {
+    if (dropItemData.type === 'dir' && nodeDirent.type === 'dir') {
+      if (nodeParentPath !== this.props.path) {
+        if (this.props.path.indexOf(nodeRootPath) !== -1) {
           return;
         }
       }
     }
 
     let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
-    this.onItemMove(this.props.currentRepoInfo, dragStartItemData.nodeDirent, selectedPath, dragStartItemData.nodeParentPath);
+    this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
   }
 
   render() {
@@ -403,7 +404,7 @@ class DirentListItem extends React.Component {
 
     return (
       <Fragment>
-        <tr className={`${this.state.dragState ? 'tr-style-nav' : ''} ${this.state.highlight ? 'tr-highlight' : ''}`} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragOver={this.onItemDragOver} onDrop={this.onItemDragDrop}>
+        <tr className={`${this.state.isDragTipShow ? 'tr-style-nav' : ''} ${this.state.highlight ? 'tr-highlight' : ''}`} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragOver={this.onItemDragOver} onDrop={this.onItemDragDrop}>
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>

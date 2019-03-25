@@ -49,7 +49,7 @@ class TreeView extends React.Component {
     dragStartNodeData = JSON.stringify(dragStartNodeData);
 
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData('application/x-bookmark', dragStartNodeData);
+    e.dataTransfer.setData('applicaiton/drag-item-item', dragStartNodeData);
   }
 
   onNodeDragMove = (e) => {
@@ -58,8 +58,13 @@ class TreeView extends React.Component {
   }
 
   onNodeDrop = (e, node) => {
-    let dragStartNodeData = e.dataTransfer.getData('application/x-bookmark');
+    if (e.dataTransfer.files.length) { // uploaded files
+      return;
+    }
+    let dragStartNodeData = e.dataTransfer.getData('applicaiton/drag-item-item');
     dragStartNodeData = JSON.parse(dragStartNodeData);
+
+    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartNodeData;
     let dropNodeData = node;
 
     if (dropNodeData.object.type !== 'dir') {
@@ -67,22 +72,22 @@ class TreeView extends React.Component {
     }
 
     // copy the dirent to itself. eg: A/B -> A/B
-    if (dragStartNodeData.nodeParentPath === dropNodeData.parentNode.path) {
-      if (dropNodeData.object.name === dragStartNodeData.nodeDirent.name) {
+    if (nodeParentPath === dropNodeData.parentNode.path) {
+      if (dropNodeData.object.name === nodeDirent.name) {
         return;
       }
     }
 
     // copy the dirent to it's child. eg: A/B -> A/B/C
-    if (dropNodeData.object.type === 'dir' && dragStartNodeData.nodeDirent.type === 'dir') {
-      if (dropNodeData.parentNode.path !== dragStartNodeData.nodeParentPath) {
-        if (dropNodeData.path.indexOf(dragStartNodeData.nodeRootPath) !== -1) {
+    if (dropNodeData.object.type === 'dir' && nodeDirent.type === 'dir') {
+      if (dropNodeData.parentNode.path !== nodeParentPath) {
+        if (dropNodeData.path.indexOf(nodeRootPath) !== -1) {
           return;
         }
       }
     }
 
-    this.onItemMove(this.props.currentRepoInfo, dragStartNodeData.nodeDirent, dropNodeData.path, dragStartNodeData.nodeParentPath);
+    this.onItemMove(this.props.currentRepoInfo, nodeDirent, dropNodeData.path, nodeParentPath);
   }
 
   onFreezedItem = () => {
