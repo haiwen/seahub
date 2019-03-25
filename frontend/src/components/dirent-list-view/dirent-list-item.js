@@ -68,7 +68,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true})
+    this.setState({isDragTipShow: true});
   }
 
   onMouseOver = () => {
@@ -78,7 +78,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true})
+    this.setState({isDragTipShow: true});
   }
 
   onMouseLeave = () => {
@@ -88,7 +88,7 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
-    this.setState({isDragTipShow: false})
+    this.setState({isDragTipShow: false});
   }
 
   onUnfreezedItem = () => {
