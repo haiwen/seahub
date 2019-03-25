@@ -48,7 +48,7 @@ class TreeView extends React.Component {
     let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
     dragStartNodeData = JSON.stringify(dragStartNodeData);
 
-    e.dataTransfer.effectAllowed="move";
+    e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData('application/x-bookmark', dragStartNodeData);
   }
 
