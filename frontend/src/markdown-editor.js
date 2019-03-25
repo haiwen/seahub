@@ -752,11 +752,13 @@ class MarkdownEditor extends React.Component {
         newNativeRange.setStartBefore(startNode);
         newNativeRange.setEndAfter(startNode);
 
-        this.range =  findRange(newNativeRange, this.state.value);
+        let editor = {value: this.state.value};
+        this.range = findRange(nativeRange, editor);
       }
 
       else {
-        this.range = findRange(nativeRange, this.state.value);
+        let editor = {value: this.state.value};
+        this.range = findRange(nativeRange, editor);
       }
       if (!this.range) return;
       let rect = nativeRange.getBoundingClientRect();
@@ -1011,7 +1013,8 @@ class MarkdownEditor extends React.Component {
                     scrollToNode={this.scrollToNode}
                   />
                 }
-                {this.state.isShowComments && <CommentPanel toggleCommentPanel={this.toggleCommentList}/>}
+                {this.state.isShowComments && 
+                  <CommentPanel toggleCommentPanel={this.toggleCommentList} commentsNumber={this.state.commentsNumber}/>}
               </div>
               <div className="seafile-md-viewer-side-panel">
                 {
