@@ -55,7 +55,7 @@ class DirentListItem extends React.Component {
       isShareDialogShow: false,
       isMutipleOperation: false,
       isShowTagTooltip: false,
-      dragState:false,
+      dragState: false,
     };
     this.zipToken = null;
   }
