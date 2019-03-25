@@ -337,7 +337,7 @@ class DirentListItem extends React.Component {
     let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
     dragStartItemData = JSON.stringify(dragStartItemData);
 
-    e.dataTransfer.effectAllowed="move";
+    e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData('application/x-bookmark', dragStartItemData);
   }
 
