@@ -13,9 +13,14 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
 
 from seahub.notifications.models import get_cache_key_of_unseen_notifications
+from seahub.notifications.views import add_notice_from_info
+from seahub.notifications.utils import update_notice_detail
+from seahub.api2.utils import api_error, to_python_boolean
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
 
 class NotificationsView(APIView):
 
@@ -24,28 +29,62 @@ class NotificationsView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        """ currently only used for get unseen notifications count
+        """ used for get notifications
 
         Permission checking:
         1. login user.
         """
-
         result = {}
 
         username = request.user.username
-        cache_key = get_cache_key_of_unseen_notifications(username)
 
+        try:
+            per_page = int(request.GET.get('per_page', ''))
+            page = int(request.GET.get('page', ''))
+        except ValueError:
+            per_page = 25
+            page = 1
+
+        start = (page - 1) * per_page
+        end = page * per_page
+
+        notice_list = UserNotification.objects.get_user_notifications(username)[start:end]
+
+        result_notices = update_notice_detail(request, notice_list)
+        notification_list = []
+        unseen_count = 0
+        for i in result_notices:
+            if i.detail is not None:
+                notice = {}
+                notice['id'] = i.id
+                notice['type'] = i.msg_type
+                notice['detail'] = i.detail
+                notice['time'] = datetime_to_isoformat_timestr(i.timestamp)
+                notice['seen'] = i.seen
+
+                if not i.seen:
+                    unseen_count += 1
+
+                notification_list.append(notice)
+
+        cache_key = get_cache_key_of_unseen_notifications(username)
         count_from_cache = cache.get(cache_key, None)
 
         # for case of count value is `0`
         if count_from_cache is not None:
             result['unseen_count'] = count_from_cache
+            unseen_num = count_from_cache
         else:
-            count_from_db = UserNotification.objects.count_unseen_user_notifications(username)
-            result['unseen_count'] = count_from_db
-
+            result['unseen_count'] = unseen_count
             # set cache
-            cache.set(cache_key, count_from_db)
+            cache.set(cache_key, unseen_count)
+            unseen_num = unseen_count
+
+        total_count = UserNotification.objects.filter(to_user=username).count()
+
+        result['notification_list'] = notification_list
+        result['count'] = total_count
+        result['unseen_count'] = unseen_num
 
         return Response(result)
 
@@ -67,6 +106,7 @@ class NotificationsView(APIView):
         cache.delete(cache_key)
 
         return Response({'success': True})
+
 
 class NotificationView(APIView):
 

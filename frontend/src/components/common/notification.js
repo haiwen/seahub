@@ -1,14 +1,15 @@
 import React from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
+import NoticeItem from './notice-item';
 
 class Notification extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showNotice: false,
-      notice_html: '',
       unseenCount: 0,
+      noticeList: [],
     };
   }
 
@@ -32,15 +33,31 @@ class Notification extends React.Component {
   }
 
   loadNotices = () => {
-    seafileAPI.listPopupNotices().then(res => {
-      this.setState({
-        notice_html: res.data.notice_html
-      });
+    let page = 1;
+    let perPage = 5;
+    seafileAPI.listPopupNotices(page, perPage).then(res => {
+      let noticeList = res.data.notification_list;
+      this.setState({noticeList: noticeList});
     });
   }
 
+  onNoticeItemClick = (noticeItem) => {    
+    let noticeList = this.state.noticeList.map(item => {
+      if (item.id === noticeItem.id) {
+        item.seen = true;
+      }
+      return item;
+    });
+    seafileAPI.markNoticeAsRead(noticeItem.id);
+    let unseenCount = this.state.unseenCount === 0 ? 0 : this.state.unseenCount - 1;
+    this.setState({
+      noticeList: noticeList,
+      unseenCount: unseenCount, 
+    });
+    
+  }
+
   render() {
-    const { notice_html } = this.state;
 
     return (
       <div id="notifications">
@@ -55,7 +72,11 @@ class Notification extends React.Component {
             <a href="#" onClick={this.onClick} title={gettext('Close')} aria-label={gettext('Close')} className="sf-popover-close js-close sf2-icon-x1 action-icon float-right"></a>
           </div>
           <div className="sf-popover-con">
-            <ul className="notice-list" dangerouslySetInnerHTML={{__html: notice_html}}></ul>
+            <ul className="notice-list">
+              {this.state.noticeList.map(item => {
+                return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
+              })}
+            </ul>
             <a href={siteRoot + 'notification/list/'} className="view-all">{gettext('See All Notifications')}</a>
           </div>
         </div>
