@@ -132,7 +132,6 @@ PREVIEW_FILEEXT = {
     AUDIO: ('mp3', 'oga', 'ogg'),
     '3D': ('stl', 'obj'),
     XMIND: ('xmind',),
-    UMIND: ('umind',),
 }
 
 def gen_fileext_type_map():

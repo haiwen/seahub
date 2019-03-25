@@ -726,9 +726,6 @@ def view_lib_file(request, repo_id, path):
 
         template = '%s_file_view_react.html' % filetype.lower()
         return render(request, template, return_dict)
-    
-    elif filetype == UMIND:
-        return render(request, 'view_file_umind.html', return_dict)
 
     elif filetype == IMAGE:
         template = '%s_file_view_react.html' % filetype.lower()
