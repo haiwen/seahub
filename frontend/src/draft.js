@@ -541,10 +541,10 @@ class Draft extends React.Component {
         let newNativeRange = document.createRange();
         newNativeRange.setStartBefore(startNode);
         newNativeRange.setEndAfter(startNode);
-        this.range =  findRange(newNativeRange, this.refs.diffViewer.value);
+        this.range =  findRange(newNativeRange, this.refs.diffViewer);
       }
       else {
-        this.range = findRange(nativeRange, this.refs.diffViewer.value);
+        this.range = findRange(nativeRange, this.refs.diffViewer);
       }
       if (!this.range) {
         return;

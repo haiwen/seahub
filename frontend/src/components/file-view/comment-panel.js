@@ -10,7 +10,8 @@ import '../../css/comments-list.css';
 const { username, repoID, filePath } = window.app.pageOptions;
 
 const CommentPanelPropTypes = {
-  toggleCommentPanel: PropTypes.func.isRequired
+  toggleCommentPanel: PropTypes.func.isRequired,
+  commentsNumber: PropTypes.number,
 };
 
 class CommentPanel extends React.Component {
@@ -73,6 +74,12 @@ class CommentPanel extends React.Component {
 
   componentDidMount() {
     this.listComments();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.commentsNumber !== nextProps.commentsNumber) {
+      this.listComments();
+    }
   }
 
   render() {
