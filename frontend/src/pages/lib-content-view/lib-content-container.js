@@ -75,6 +75,7 @@ const propTypes = {
   selectedDirent: PropTypes.object,
   closeDirentDetail: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
+  onDeleteRepoTag: PropTypes.func.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -153,6 +154,7 @@ class LibContentContainer extends React.Component {
               onPathClick={this.onPathClick}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               fileTags={this.props.fileTags}
+              onDeleteRepoTag={this.props.onDeleteRepoTag}
             />
           </div>
           <div className={`cur-view-content ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>

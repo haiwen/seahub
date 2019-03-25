@@ -14,6 +14,7 @@ const propTypes = {
   isViewFile: PropTypes.bool,
   updateUsedRepoTags: PropTypes.func.isRequired,
   fileTags: PropTypes.array.isRequired,
+  onDeleteRepoTag: PropTypes.func.isRequired,
 };
 
 class CurDirPath extends React.Component {
@@ -37,6 +38,7 @@ class CurDirPath extends React.Component {
           permission={this.props.permission}
           currentPath={this.props.currentPath} 
           updateUsedRepoTags={this.props.updateUsedRepoTags}
+          onDeleteRepoTag={this.props.onDeleteRepoTag}
         />
       </Fragment>
     );
