@@ -130,7 +130,7 @@ PREVIEW_FILEEXT = {
     MARKDOWN: ('markdown', 'md'),
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg'),
-    '3D': ('stl', 'obj'),
+    #'3D': ('stl', 'obj'),
     XMIND: ('xmind',),
     UMIND: ('umind',),
 }

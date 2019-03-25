@@ -588,10 +588,10 @@ def view_lib_file(request, repo_id, path):
 
     # handle file preview/edit according to file extention
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
-    template = 'view_file_%s.html' % filetype.lower()
+    # template = 'view_file_%s.html' % filetype.lower()
+    template = '%s_file_view_react.html' % filetype.lower()
 
     if filetype == TEXT or fileext in get_conf_text_ext():
-        template = '%s_file_view_react.html' % filetype.lower()
 
         # get file size
         if file_size > FILE_PREVIEW_MAX_SIZE:
@@ -691,13 +691,12 @@ def view_lib_file(request, repo_id, path):
 
         return_dict['can_edit_file'] = can_edit_file
 
+        template = 'view_file_%s.html' % filetype.lower()
         return render(request, template, return_dict)
 
     elif filetype in (VIDEO, AUDIO, PDF, SVG):
         return_dict['raw_path'] = raw_path
         send_file_access_msg(request, repo, path, 'web')
-
-        template = '%s_file_view_react.html' % filetype.lower()
         return render(request, template, return_dict)
 
     elif filetype == DRAW:
@@ -706,6 +705,7 @@ def view_lib_file(request, repo_id, path):
             template = 'view_file_draw_read.html'
             return render(request, template, return_dict)
         else:
+            template = 'view_file_%s.html' % filetype.lower()
             return render(request, template, return_dict)
 
     elif filetype == XMIND:
@@ -724,14 +724,12 @@ def view_lib_file(request, repo_id, path):
                 error_msg = _(u'Unable to view file')
                 return_dict['err'] = error_msg
 
-        template = '%s_file_view_react.html' % filetype.lower()
         return render(request, template, return_dict)
     
     elif filetype == UMIND:
         return render(request, 'view_file_umind.html', return_dict)
 
     elif filetype == IMAGE:
-        template = '%s_file_view_react.html' % filetype.lower()
 
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _(u'File size surpasses %s, can not be opened online.') % \
@@ -767,8 +765,6 @@ def view_lib_file(request, repo_id, path):
         return render(request, template, return_dict)
 
     elif filetype in (DOCUMENT, SPREADSHEET):
-
-        template = '%s_file_view_react.html' % filetype.lower()
 
         if repo.encrypted:
             return_dict['err'] = _(u'The library is encrypted, can not open file online.')
@@ -854,7 +850,7 @@ def view_lib_file(request, repo_id, path):
         return render(request, template, return_dict)
     else:
         return_dict['err'] = "File preview unsupported"
-        return render(request, 'view_file_base.html', return_dict)
+        return render(request, template, return_dict)
 
 def view_history_file_common(request, repo_id, ret_dict):
     # check arguments
