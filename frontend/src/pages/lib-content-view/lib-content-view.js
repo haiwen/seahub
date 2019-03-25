@@ -1229,6 +1229,22 @@ class LibContentView extends React.Component {
     this.onDirentSelected(dirent);
   }
 
+  onDeleteRepoTag = (deletedTagID) => {
+    this.state.direntList.map((dirent) => {
+      let fileTags = dirent.file_tags;
+      if (fileTags) {
+        for (let i = 0, len = fileTags.length; i < len; i++) {
+          if (fileTags[i].repo_tag_id === deletedTagID) {
+            fileTags.splice(i, 1);
+            break;
+          }
+        }
+        this.updateDirent(dirent, 'file_tags', fileTags);
+      }
+    });
+    this.updateUsedRepoTags();
+  }
+
   render() {
     if (this.state.libNeedDecrypt) {
       return (
@@ -1380,6 +1396,7 @@ class LibContentView extends React.Component {
             selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
             closeDirentDetail={this.closeDirentDetail}
             showDirentDetail={this.showDirentDetail}
+            onDeleteRepoTag={this.onDeleteRepoTag}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader

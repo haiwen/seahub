@@ -8,6 +8,7 @@ const propTypes = {
   currentTag: PropTypes.object,
   repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  onDeleteRepoTag: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired
 };
 
@@ -65,8 +66,11 @@ class UpdateTagDialog extends React.Component {
   onDeleteTag = () => {
     let tag = this.props.currentTag;
     let repoID = this.props.repoID;
-    seafileAPI.deleteRepoTag(repoID, tag.id).then(() => {
+    seafileAPI.deleteRepoTag(repoID, tag.id).then((res) => {
       this.props.toggleCancel();
+      if (res.data.success === "true") {
+        this.props.onDeleteRepoTag(tag.id);
+      }
     });
   }
 
