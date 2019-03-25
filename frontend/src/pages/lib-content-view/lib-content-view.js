@@ -1230,18 +1230,16 @@ class LibContentView extends React.Component {
   }
 
   onDeleteRepoTag = (deletedTagID) => {
-    this.state.direntList.map((dirent) => {
-      let fileTags = dirent.file_tags;
-      if (fileTags) {
-        for (let i = 0, len = fileTags.length; i < len; i++) {
-          if (fileTags[i].repo_tag_id === deletedTagID) {
-            fileTags.splice(i, 1);
-            break;
-          }
-        }
-        this.updateDirent(dirent, 'file_tags', fileTags);
+    let direntList = this.state.direntList.map(dirent => {
+      if (dirent.file_tags) {
+        let fileTags = dirent.file_tags.filter(item => {
+          return item.repo_tag_id !== deletedTagID;
+        });
+        dirent.file_tags = fileTags;
       }
+      return dirent;
     });
+    this.setState({direntList: direntList});
     this.updateUsedRepoTags();
   }
 
