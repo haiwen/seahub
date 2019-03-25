@@ -340,13 +340,16 @@ class DirentListItem extends React.Component {
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData('application/x-bookmark', dragStartItemData);
   }
-
+  
   onItemDragOver = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   }
-
+  
   onItemDragDrop = (e) => {
+    if (e.dataTransfer.files.length) { // uploaded files
+      return;
+    }
     let dragStartItemData = e.dataTransfer.getData('application/x-bookmark');
     dragStartItemData = JSON.parse(dragStartItemData);
     let dropItemData = this.props.dirent;
