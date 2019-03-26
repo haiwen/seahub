@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.3.3",
-    "@babel/runtime": "^7.3.1",
     "@reach/router": "^1.2.0",
     "@seafile/resumablejs": "^1.1.8",
     "@seafile/seafile-editor": "^0.2.2",
@@ -107,7 +105,6 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.24.1",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
-    "core-js": "^2.6.5",
     "eslint": "4.10.0",
     "eslint-config-react-app": "^2.1.0",
     "eslint-loader": "1.9.0",
