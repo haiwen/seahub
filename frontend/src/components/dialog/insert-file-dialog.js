@@ -4,13 +4,11 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'react
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
-import '../../css/dirent-detail.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   filePath: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
-  dirent: PropTypes.object.isRequired,
   getInsertLink: PropTypes.func.isRequired,
 };
 
@@ -52,14 +50,11 @@ class InsertFileDialog extends React.Component {
   }
 
   render() {
-    let subtitle = gettext('Insert file in {placeholder}');
-    subtitle = subtitle.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     const toggle = this.props.toggleCancel;
     return (
-      <Modal isOpen={true} className="sf-add-related-file" toggle={toggle} >
+      <Modal isOpen={true} toggle={toggle} >
         <ModalHeader toggle={toggle}>{gettext('Select File')}</ModalHeader>
         <ModalBody>
-          <div className="related-file-subtitle" dangerouslySetInnerHTML={{__html: subtitle}}></div>
           <FileChooser
             isShowFile={true}
             repoID={this.props.repoID}
@@ -70,8 +65,8 @@ class InsertFileDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>{gettext('Cancel')}</Button>
-          {this.state.selectedPath ? <Button color="primary" onClick={this.handleInsert}>{gettext('Insert')}</Button>
-            : <Button color="primary" disabled>{gettext('Insert')}</Button>}
+          {this.state.selectedPath ? <Button color="primary" onClick={this.handleInsert}>{gettext('Submit')}</Button>
+            : <Button color="primary" disabled>{gettext('Submit')}</Button>}
         </ModalFooter>
       </Modal>
     );
