@@ -13,6 +13,7 @@ import ListRelatedFileDialog from './components/dialog/list-related-file-dialog'
 import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
 import ShareDialog from './components/dialog/share-dialog';
 import CommentDialog from './components/markdown-view/comment-dialog';
+import InsertFileDialog from './components/dialog/insert-file-dialog';
 import MarkdownViewerSlate from '@seafile/seafile-editor/dist/viewer/markdown-viewer-slate';
 import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
 import LocalDraftDialog from './components/dialog/local-draft-dialog';
@@ -299,6 +300,7 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showCommentDialog: false,
+      showInsertFileDialog: false,
       showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
@@ -394,6 +396,7 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showCommentDialog: false,
+      showInsertFileDialog: false,
     });
   }
 
@@ -512,6 +515,12 @@ class MarkdownEditor extends React.Component {
         this.setState({
           showMarkdownEditorDialog: true,
           showCommentDialog: true,
+        });
+        break;
+      case 'insert_file':
+        this.setState({
+          showMarkdownEditorDialog: true,
+          showInsertFileDialog: true,
         });
         break;
       default:
@@ -945,6 +954,22 @@ class MarkdownEditor extends React.Component {
     }
   }
 
+  getInsertLink = (repoID, filePath) => {
+    seafileAPI.getShareLink(repoID, filePath).then((res) => {
+      if (res.data.length !== 0) {
+        let fileLink = res.data[0];
+        window.richMarkdownEditor.addLink(fileLink.obj_name, fileLink.link);
+      } else {
+        let permissions = { 'can_edit': false, 'can_download': true };
+        permissions = JSON.stringify(permissions);
+        seafileAPI.createShareLink(repoID, filePath, null, null, permissions).then((res) => {
+          let fileLink = res.data;
+          window.richMarkdownEditor.addLink(fileLink.obj_name, fileLink.link);
+        });
+      }
+    });
+  }
+
   render() {
     let component;
     let sidePanel = this.state.isShowHistory ? true : false;
@@ -1106,6 +1131,17 @@ class MarkdownEditor extends React.Component {
                     toggleCancel={this.closeAddRelatedFileDialog}
                     dirent={this.state.fileInfo}
                     onRelatedFileChange={this.onRelatedFileChange}
+                  />
+                </ModalPortal>
+              }
+              {this.state.showInsertFileDialog &&
+                <ModalPortal>
+                  <InsertFileDialog
+                    repoID={repoID}
+                    filePath={filePath}
+                    toggleCancel={this.toggleCancel}
+                    dirent={this.state.fileInfo}
+                    getInsertLink={this.getInsertLink}
                   />
                 </ModalPortal>
               }
