@@ -83,6 +83,10 @@
   justify-content: center;
 }
 
+.tree-node-drop {
+  background-color:rgb(255,239,178);
+}
+
 .tree-node-icon {
   display: inline-block;
   width: 1rem;

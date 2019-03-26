@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import TreeNodeMenu from './tree-node-menu';
 import { permission } from '../../utils/constants';
 
-import '../../css/tree-node-view.css'
-
 const propTypes = {
   repoPermission: PropTypes.bool,
   node: PropTypes.object.isRequired,

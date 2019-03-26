@@ -339,6 +339,21 @@ class DirentListItem extends React.Component {
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.effectAllowed = "move";
+
+
+    // let img = new Image();
+    
+    // window.devicePixelRatio = 1;
+    let iconUrl = Utils.getDirentIcon(this.props.dirent);
+    // img.src = `${siteRoot}${this.props.dirent.encoded_thumbnail_src}`;
+    var dragIcon = document.createElement('img');
+    dragIcon.src = iconUrl;
+    dragIcon.width = 24;
+    // dragIcon.height = 24;
+    console.log(this.props.dirent)
+    console.log(dragIcon)
+    e.dataTransfer.setDragImage(dragIcon, 12, 12);
+
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
 
