@@ -1129,6 +1129,7 @@ class MarkdownEditor extends React.Component {
                     repoID={repoID}
                     filePath={filePath}
                     toggleCancel={this.closeAddRelatedFileDialog}
+                    onClose={this.toggleCancel}
                     dirent={this.state.fileInfo}
                     onRelatedFileChange={this.onRelatedFileChange}
                   />

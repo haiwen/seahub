@@ -373,6 +373,7 @@ class MutipleDirOperationToolbar extends React.Component {
                   repoID={repoID}
                   filePath={direntPath}
                   toggleCancel={this.closeAddRelatedFileDialog}
+                  onClose={this.toggleCancel}
                   dirent={this.props.selectedDirentList[0]}
                   onRelatedFileChange={this.onRelatedFileChange}
                 />

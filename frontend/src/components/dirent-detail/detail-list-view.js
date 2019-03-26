@@ -61,16 +61,30 @@ class DetailListView extends React.Component {
 
   onListRelatedFileToggle = () => {
     this.setState({
-      isListRelatedFileShow: !this.state.isListRelatedFileShow
+      isListRelatedFileShow: true,
+    });
+  }
+
+  toggleCancel = () => {
+    this.setState({
+      isListRelatedFileShow: false,
+      isAddRelatedFileShow: false,
+    });
+  }
+
+  onCloseAddRelatedFileDialog = () => {
+    this.setState({
+      isListRelatedFileShow: true,
+      isAddRelatedFileShow: false,
     });
   }
 
   onAddRelatedFileToggle = () => {
     this.setState({
-      isListRelatedFileShow: !this.state.isListRelatedFileShow,
-      isAddRelatedFileShow: !this.state.isAddRelatedFileShow
+      isListRelatedFileShow: false,
+      isAddRelatedFileShow: true
     });
-  }
+  } 
   
   render() {
     let { direntType, direntDetail, fileTagList, relatedFiles } = this.props;
@@ -138,9 +152,10 @@ class DetailListView extends React.Component {
             <AddRelatedFileDialog
               filePath={direntPath}
               repoID={this.props.repoID}
-              toggleCancel={this.onAddRelatedFileToggle}
+              toggleCancel={this.onCloseAddRelatedFileDialog}
               onRelatedFileChange={this.props.onRelatedFileChange}
               dirent={this.props.dirent}
+              onClose={this.toggleCancel}
             />
           }
           {
@@ -149,7 +164,7 @@ class DetailListView extends React.Component {
               relatedFiles={relatedFiles}
               repoID={this.props.repoID}
               filePath={direntPath}
-              toggleCancel={this.onListRelatedFileToggle}
+              toggleCancel={this.toggleCancel}
               addRelatedFileToggle={this.onAddRelatedFileToggle}
               onRelatedFileChange={this.props.onRelatedFileChange}
             />

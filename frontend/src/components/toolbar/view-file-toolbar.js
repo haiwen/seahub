@@ -72,13 +72,27 @@ class ViewFileToolbar extends React.Component {
   }
 
   onListRelatedFileToggle = () => {
-    this.setState({isListRelatedFileDialogShow: !this.state.isListRelatedFileDialogShow})
+    this.setState({isListRelatedFileDialogShow: true});
+  }
+
+  toggleCancel = () => {
+    this.setState({
+      isListRelatedFileDialogShow: false,
+      isAddRelatedFileDialogShow: false,
+    })
+  }
+
+  onCloseAddRelatedFileDialog = () => {
+    this.setState({
+      isListRelatedFileDialogShow: true,
+      isAddRelatedFileDialogShow: false,
+    });
   }
 
   onAddRelatedFileToggle = () => {
     this.setState({
-      isListRelatedFileDialogShow: !this.state.isListRelatedFileDialogShow,
-      isAddRelatedFileDialogShow: !this.state.isAddRelatedFileDialogShow,
+      isListRelatedFileDialogShow: false,
+      isAddRelatedFileDialogShow: true,
     });
   }
 
@@ -147,7 +161,7 @@ class ViewFileToolbar extends React.Component {
               repoID={this.props.repoID}
               filePath={this.props.path}
               relatedFiles={this.props.relatedFiles}
-              toggleCancel={this.onListRelatedFileToggle}
+              toggleCancel={this.toggleCancel}
               addRelatedFileToggle={this.onAddRelatedFileToggle}
               onRelatedFileChange={this.props.onRelatedFileChange}
             />
@@ -160,7 +174,8 @@ class ViewFileToolbar extends React.Component {
               repoID={this.props.repoID}
               filePath={this.props.path}
               onRelatedFileChange={this.props.onRelatedFileChange}
-              toggleCancel={this.onAddRelatedFileToggle}
+              toggleCancel={this.onCloseAddRelatedFileDialog}
+              onClose={this.toggleCancel}
             />
           </ModalPotal>
         )}
