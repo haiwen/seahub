@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import OrgAdminRepo from '../../models/org-admin-repo';
@@ -114,7 +115,8 @@ class OrgLibraries extends Component {
                       deleteRepoItem={this.deleteRepoItem}
                       transferRepoItem={this.transferRepoItem}
                     />
-                )})}
+                  )}
+                )};
               </tbody>
             </table>
             <div className="paginator">
@@ -128,6 +130,16 @@ class OrgLibraries extends Component {
     );
   }
 }
+
+const propTypes = {
+  key: PropTypes.number.isRequired,
+  repo: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.boolean,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteRepoItem: PropTypes.func.isRequired,
+  transferRepoItem: PropTypes.func.isRequired,
+};
 
 class RepoItem extends React.Component {
 
@@ -265,12 +277,14 @@ class RepoItem extends React.Component {
               itemName={repo.repoName}
               submit={this.onTransferRepo}
               toggleDialog={this.toggleTransfer}
-          />
+            />
           </ModalPortal>
         )}
       </Fragment>
     );
   }
 }
+
+RepoItem.propTypes = propTypes;
 
 export default OrgLibraries;
