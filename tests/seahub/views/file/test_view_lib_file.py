@@ -55,7 +55,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_base.html')
+        self.assertTemplateUsed(resp, 'unknown_file_view_react.html')
         assert resp.context['err'] == 'File preview unsupported'
 
     @patch('seahub.views.file.FILE_PREVIEW_MAX_SIZE', -1)
@@ -92,7 +92,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_base.html')
+        self.assertTemplateUsed(resp, 'document_file_view_react.html')
 
     # @patch('seahub.views.file.HAS_OFFICE_CONVERTER', True)
     # @patch('seahub.views.file.can_preview_file')
