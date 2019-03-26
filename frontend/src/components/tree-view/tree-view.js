@@ -47,14 +47,22 @@ class TreeView extends React.Component {
   onNodeDragStart = (e, node) => {
     let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
     dragStartNodeData = JSON.stringify(dragStartNodeData);
-
+    
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartNodeData);
+  }
+
+  onNodeDragEnter = (e, node) => {
+    //todo
   }
 
   onNodeDragMove = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+  }
+
+  onNodeDragLeave = (e, node) => {
+    //todo
   }
 
   onNodeDrop = (e, node) => {
@@ -160,6 +168,8 @@ class TreeView extends React.Component {
           unregisterHandlers={this.unregisterHandlers}
           onNodeDragMove={this.onNodeDragMove}
           onNodeDrop={this.onNodeDrop}
+          onNodeDragEnter={this.onNodeDragEnter}
+          onNodeDragLeave={this.onNodeDragLeave}
         />
        {this.state.isRightMenuShow && (
           <TreeViewContextMenu 

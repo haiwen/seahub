@@ -56,6 +56,7 @@ class DirentListItem extends React.Component {
       isMutipleOperation: false,
       isShowTagTooltip: false,
       isDragTipShow: false,
+      isDropTipshow: false,
     };
     this.zipToken = null;
   }
@@ -340,13 +341,24 @@ class DirentListItem extends React.Component {
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
+
+  onItemDragEnter = () => {
+    if (this.props.dirent.type === 'dir') {
+      this.setState({isDropTipshow: true});
+    }
+  }
   
   onItemDragOver = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   }
+
+  onItemDragLeave = () => {
+    this.setState({isDropTipshow: false});
+  }
   
   onItemDragDrop = (e) => {
+    this.setState({isDropTipshow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
@@ -404,7 +416,7 @@ class DirentListItem extends React.Component {
 
     return (
       <Fragment>
-        <tr className={`${this.state.isDragTipShow ? 'tr-style-nav' : ''} ${this.state.highlight ? 'tr-highlight' : ''}`} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragOver={this.onItemDragOver} onDrop={this.onItemDragDrop}>
+        <tr className={`${this.state.isDropTipshow ? 'tr-dragenter' : ''} ${this.state.isDragTipShow ? 'tr-style-nav' : ''} ${this.state.highlight ? 'tr-highlight' : ''}`} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragEnter={this.onItemDragEnter} onDragOver={this.onItemDragOver} onDragLeave={this.onItemDragLeave} onDrop={this.onItemDragDrop}>
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>

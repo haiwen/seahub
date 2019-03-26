@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import TreeNodeMenu from './tree-node-menu';
 import { permission } from '../../utils/constants';
 
+import '../../css/tree-node-view.css'
+
 const propTypes = {
   repoPermission: PropTypes.bool,
   node: PropTypes.object.isRequired,
@@ -29,7 +31,8 @@ class TreeNodeView extends React.Component {
     super(props);
     this.state = {
       isHighlight: false,
-      isShowOperationMenu: false
+      isShowOperationMenu: false,
+      isNodeDropShow: false,
     };
   }
 
@@ -70,11 +73,24 @@ class TreeNodeView extends React.Component {
     this.props.onNodeDragStart(e, this.props.node);
   }
 
+  onNodeDragEnter = (e) => {
+    if (this.props.node.object.type === 'dir') {
+      this.setState({isNodeDropShow: true});
+    }
+    this.props.onNodeDragEnter(e, this.props.node);
+  }
+
   onNodeDragMove = (e) => {
     this.props.onNodeDragMove(e);
   }
 
+  onNodeDragLeave = (e) => {
+    this.setState({isNodeDropShow: false});
+    this.props.onNodeDragLeave(e, this.props.node);
+  }
+
   onNodeDrop = (e) => {
+    this.setState({isNodeDropShow: false});
     this.props.onNodeDrop(e, this.props.node);
   }
 
@@ -147,6 +163,8 @@ class TreeNodeView extends React.Component {
               onNodeDragStart={this.props.onNodeDragStart}
               onNodeDragMove={this.props.onNodeDragMove}
               onNodeDrop={this.props.onNodeDrop}
+              onNodeDragEnter={this.props.onNodeDragEnter}
+              onNodeDragLeave={this.props.onNodeDragLeave}
             />
           );
         })}
@@ -165,8 +183,8 @@ class TreeNodeView extends React.Component {
       <div className="tree-node">
         <div type={type} title={node.object.name}
           onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
-          className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''}`}>
-          <div className="tree-node-text" draggable="true" onDragStart={this.onNodeDragStart} onClick={this.onNodeClick}  onDragOver={this.onNodeDragMove} onDrop={this.onNodeDrop}>{node.object.name}</div>
+          className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''} ${this.state.isNodeDropShow ? 'tree-node-drop' : ''}`}>
+          <div className="tree-node-text" draggable="true" onDragStart={this.onNodeDragStart} onClick={this.onNodeClick} onDragEnter={this.onNodeDragEnter} onDragLeave={this.onNodeDragLeave} onDragOver={this.onNodeDragMove} onDrop={this.onNodeDrop}>{node.object.name}</div>
           <div className="left-icon">
             {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
               <i 
