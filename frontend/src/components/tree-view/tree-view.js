@@ -49,7 +49,7 @@ class TreeView extends React.Component {
     dragStartNodeData = JSON.stringify(dragStartNodeData);
 
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData('applicaiton/drag-item-item', dragStartNodeData);
+    e.dataTransfer.setData('applicaiton/drag-item-info', dragStartNodeData);
   }
 
   onNodeDragMove = (e) => {
@@ -61,7 +61,7 @@ class TreeView extends React.Component {
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
-    let dragStartNodeData = e.dataTransfer.getData('applicaiton/drag-item-item');
+    let dragStartNodeData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartNodeData = JSON.parse(dragStartNodeData);
 
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartNodeData;

@@ -338,7 +338,7 @@ class DirentListItem extends React.Component {
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData('applicaiton/drag-item-item', dragStartItemData);
+    e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
   
   onItemDragOver = (e) => {
@@ -350,7 +350,7 @@ class DirentListItem extends React.Component {
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
-    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-item');
+    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
     let dropItemData = this.props.dirent;
