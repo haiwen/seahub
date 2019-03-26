@@ -61,7 +61,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, DRAW, XMIND)
+        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, DRAW, XMIND, SDB)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
         BadRequestException, RequestForbbiddenException
@@ -724,6 +724,9 @@ def view_lib_file(request, repo_id, path):
                 error_msg = _(u'Unable to view file')
                 return_dict['err'] = error_msg
 
+        return render(request, template, return_dict)
+        
+    elif filetype == SDB:
         return render(request, template, return_dict)
 
     elif filetype == IMAGE:
