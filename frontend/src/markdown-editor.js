@@ -1140,7 +1140,6 @@ class MarkdownEditor extends React.Component {
                     repoID={repoID}
                     filePath={filePath}
                     toggleCancel={this.toggleCancel}
-                    dirent={this.state.fileInfo}
                     getInsertLink={this.getInsertLink}
                   />
                 </ModalPortal>
