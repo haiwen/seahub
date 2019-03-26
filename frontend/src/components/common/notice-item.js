@@ -182,10 +182,12 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{draft_link}', draftLink);
       return {avatar_url, notice};
     }
-
+    
     // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {
-
+      
     // }
+    
+    return {avatar_url : null, notice : null};
   }
 
   onNoticeItemClick = () => {
@@ -199,6 +201,10 @@ class NoticeItem extends React.Component {
   render() {
     let noticeItem = this.props.noticeItem;
     let { avatar_url, notice } = this.generatorNoticeInfo();
+
+    if (!avatar_url && !notice) {
+      return '';
+    }
 
     return (
       <li onClick={this.onNoticeItemClick} className={noticeItem.seen ? 'read' : 'unread'}>
