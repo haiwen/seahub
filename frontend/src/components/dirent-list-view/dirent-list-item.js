@@ -61,6 +61,13 @@ class DirentListItem extends React.Component {
     this.zipToken = null;
   }
 
+  componentDidUpdate() {
+    let dragIconParent = document.getElementsByClassName("drag-icon-parent")[0];
+    if (dragIconParent) {
+      document.querySelector('body').removeChild(dragIconParent);
+    }
+  }
+
   //UI Interactive
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
@@ -340,19 +347,16 @@ class DirentListItem extends React.Component {
 
     e.dataTransfer.effectAllowed = "move";
 
+    let iconUrl = this.props.dirent.encoded_thumbnail_src ? `${siteRoot}${this.props.dirent.encoded_thumbnail_src}` : Utils.getDirentIcon(this.props.dirent);
 
-    // let img = new Image();
-    
-    // window.devicePixelRatio = 1;
-    let iconUrl = Utils.getDirentIcon(this.props.dirent);
-    // img.src = `${siteRoot}${this.props.dirent.encoded_thumbnail_src}`;
-    var dragIcon = document.createElement('img');
+    let dragIcon = document.createElement('img');
     dragIcon.src = iconUrl;
-    dragIcon.width = 24;
-    // dragIcon.height = 24;
-    console.log(this.props.dirent)
-    console.log(dragIcon)
-    e.dataTransfer.setDragImage(dragIcon, 12, 12);
+    dragIcon.width = 30;
+    let div = document.createElement('div');
+    div.className = 'drag-icon-parent';
+    div.appendChild(dragIcon);
+    document.querySelector('body').appendChild(div);
+    e.dataTransfer.setDragImage(div, 15, 15);
 
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
@@ -371,7 +375,7 @@ class DirentListItem extends React.Component {
   onItemDragLeave = () => {
     this.setState({isDropTipshow: false});
   }
-  
+
   onItemDragDrop = (e) => {
     this.setState({isDropTipshow: false});
     if (e.dataTransfer.files.length) { // uploaded files
