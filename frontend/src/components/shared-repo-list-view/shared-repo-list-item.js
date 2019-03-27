@@ -327,7 +327,7 @@ class SharedRepoListItem extends React.Component {
 
   onStarRepo = () => {
     if (this.state.isStarred) {
-      seafileAPI.unStarItem(this.props.repo.repo_id, '/').then(() => {
+      seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
       });
     } else {

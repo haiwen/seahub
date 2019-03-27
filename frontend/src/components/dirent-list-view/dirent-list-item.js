@@ -111,7 +111,7 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(dirent);
 
     if (dirent.starred) {
-      seafileAPI.unStarItem(repoID, filePath).then(() => {
+      seafileAPI.unstarItem(repoID, filePath).then(() => {
         this.props.updateDirent(this.props.dirent, 'starred', false);
       });
     } else {

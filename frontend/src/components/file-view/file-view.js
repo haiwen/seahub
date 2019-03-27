@@ -37,7 +37,7 @@ class FileView extends React.Component {
 
   toggleStar = () => {
     if (this.state.isStarred) {
-      seafileAPI.unStarItem(repoID, filePath).then((res) => {
+      seafileAPI.unstarItem(repoID, filePath).then((res) => {
         this.setState({
           isStarred: false
         });
