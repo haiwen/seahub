@@ -23,6 +23,7 @@ import HistoryList from './components/markdown-view/history-list';
 import CommentPanel from './components/file-view/comment-panel';
 import OutlineView from './components/markdown-view/outline';
 import Loading from './components/loading';
+import { Modal } from 'reactstrap';
 import { findRange } from '@seafile/slate-react';
 
 import './css/markdown-viewer/markdown-editor.css';
@@ -310,6 +311,7 @@ class MarkdownEditor extends React.Component {
       isShowComments: false,
       isShowHistory: false,
       isShowOutline: true,
+      isRelatedFileDialogShow: false,
     };
 
     if (this.state.collabServer) {
@@ -397,6 +399,7 @@ class MarkdownEditor extends React.Component {
       showShareLinkDialog: false,
       showCommentDialog: false,
       showInsertFileDialog: false,
+      isRelatedFileDialogShow: false,
     });
   }
 
@@ -490,12 +493,14 @@ class MarkdownEditor extends React.Component {
           this.setState({
             showRelatedFileDialog: true,
             showMarkdownEditorDialog: true,
+            isRelatedFileDialogShow: true,
           });
         }
         else {
           this.setState({
             showAddRelatedFileDialog: true,
             showMarkdownEditorDialog: true,
+            isRelatedFileDialogShow: true,
           });
         }
         break;
@@ -1100,18 +1105,6 @@ class MarkdownEditor extends React.Component {
           {component}
           {this.state.showMarkdownEditorDialog && (
             <React.Fragment>
-              {this.state.showRelatedFileDialog &&
-                <ModalPortal>
-                  <ListRelatedFileDialog
-                    repoID={repoID}
-                    filePath={filePath}
-                    relatedFiles={this.state.relatedFiles}
-                    toggleCancel={this.toggleCancel}
-                    addRelatedFileToggle={this.addRelatedFileToggle}
-                    onRelatedFileChange={this.onRelatedFileChange}
-                  />
-                </ModalPortal>
-              }
               {this.state.showEditFileTagDialog &&
                 <ModalPortal>
                   <EditFileTagDialog
@@ -1123,18 +1116,32 @@ class MarkdownEditor extends React.Component {
                   />
                 </ModalPortal>
               }
-              {this.state.showAddRelatedFileDialog &&
+              {this.state.isRelatedFileDialogShow && (
                 <ModalPortal>
-                  <AddRelatedFileDialog
-                    repoID={repoID}
-                    filePath={filePath}
-                    toggleCancel={this.closeAddRelatedFileDialog}
-                    onClose={this.toggleCancel}
-                    dirent={this.state.fileInfo}
-                    onRelatedFileChange={this.onRelatedFileChange}
-                  />
+                  <Modal isOpen={true} toggle={this.toggleCancel} size='lg' style={{width: '650px'}}>
+                    {this.state.showRelatedFileDialog &&
+                      <ListRelatedFileDialog
+                        repoID={repoID}
+                        filePath={filePath}
+                        relatedFiles={this.state.relatedFiles}
+                        toggleCancel={this.toggleCancel}
+                        addRelatedFileToggle={this.addRelatedFileToggle}
+                        onRelatedFileChange={this.onRelatedFileChange}
+                      />
+                    }
+                    {this.state.showAddRelatedFileDialog &&
+                      <AddRelatedFileDialog
+                        repoID={repoID}
+                        filePath={filePath}
+                        toggleCancel={this.closeAddRelatedFileDialog}
+                        onClose={this.toggleCancel}
+                        dirent={this.state.fileInfo}
+                        onRelatedFileChange={this.onRelatedFileChange}
+                      />
+                    }
+                  </Modal>
                 </ModalPortal>
-              }
+              )}
               {this.state.showInsertFileDialog &&
                 <ModalPortal>
                   <InsertFileDialog
