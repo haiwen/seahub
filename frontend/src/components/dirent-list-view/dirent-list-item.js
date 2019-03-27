@@ -61,13 +61,6 @@ class DirentListItem extends React.Component {
     this.zipToken = null;
   }
 
-  componentDidUpdate() {
-    let dragIconParent = document.getElementsByClassName("drag-icon-parent")[0];
-    if (dragIconParent) {
-      document.querySelector('body').removeChild(dragIconParent);
-    }
-  }
-
   //UI Interactive
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
@@ -346,18 +339,7 @@ class DirentListItem extends React.Component {
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.effectAllowed = "move";
-
-    let iconUrl = this.props.dirent.encoded_thumbnail_src ? `${siteRoot}${this.props.dirent.encoded_thumbnail_src}` : Utils.getDirentIcon(this.props.dirent);
-
-    let dragIcon = document.createElement('img');
-    dragIcon.src = iconUrl;
-    dragIcon.width = 30;
-    let div = document.createElement('div');
-    div.className = 'drag-icon-parent';
-    div.appendChild(dragIcon);
-    document.querySelector('body').appendChild(div);
-    e.dataTransfer.setDragImage(div, 15, 15);
-
+    e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
 
@@ -446,8 +428,8 @@ class DirentListItem extends React.Component {
           <td className="text-center">
             <div className="dir-icon">
               {dirent.encoded_thumbnail_src ?
-                <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
-                <img src={iconUrl} width="24" alt='' />
+                <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+                <img ref='drag_icon' src={iconUrl} width="24" alt='' />
               }
               {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={dirent.lock_owner_name}/>}
             </div>
