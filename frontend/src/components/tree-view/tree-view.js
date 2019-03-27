@@ -13,6 +13,8 @@ const propTypes = {
   onNodeClick: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func,
+  currentRepoInfo: PropTypes.object,
 };
 
 const PADDING_LEFT = 20;
@@ -38,8 +40,62 @@ class TreeView extends React.Component {
     this.unregisterHandlers();
   }
 
+  onItemMove = (repo, dirent, selectedPath, currentPath) => {
+    this.props.onItemMove(repo, dirent, selectedPath, currentPath);
+  }
+
   onNodeDragStart = (e, node) => {
-    // todo
+    let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
+    dragStartNodeData = JSON.stringify(dragStartNodeData);
+    
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData('applicaiton/drag-item-info', dragStartNodeData);
+  }
+
+  onNodeDragEnter = (e, node) => {
+    //todo
+  }
+
+  onNodeDragMove = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  onNodeDragLeave = (e, node) => {
+    //todo
+  }
+
+  onNodeDrop = (e, node) => {
+    if (e.dataTransfer.files.length) { // uploaded files
+      return;
+    }
+    let dragStartNodeData = e.dataTransfer.getData('applicaiton/drag-item-info');
+    dragStartNodeData = JSON.parse(dragStartNodeData);
+
+    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartNodeData;
+    let dropNodeData = node;
+
+    if (dropNodeData.object.type !== 'dir') {
+      return;
+    }
+
+    // copy the dirent to itself. eg: A/B -> A/B
+    if (nodeParentPath === dropNodeData.parentNode.path) {
+      if (dropNodeData.object.name === nodeDirent.name) {
+        return;
+      }
+    }
+
+    // copy the dirent to it's child. eg: A/B -> A/B/C
+    if (dropNodeData.object.type === 'dir' && nodeDirent.type === 'dir') {
+      if (dropNodeData.parentNode.path !== nodeParentPath) {
+        if (dropNodeData.path.indexOf(nodeRootPath) !== -1) {
+          return;
+        }
+      }
+    }
+
+    this.onItemMove(this.props.currentRepoInfo, nodeDirent, dropNodeData.path, nodeParentPath);
   }
 
   onFreezedItem = () => {
@@ -110,6 +166,10 @@ class TreeView extends React.Component {
           onNodeChanged={this.onNodeChanged}
           registerHandlers={this.registerHandlers}
           unregisterHandlers={this.unregisterHandlers}
+          onNodeDragMove={this.onNodeDragMove}
+          onNodeDrop={this.onNodeDrop}
+          onNodeDragEnter={this.onNodeDragEnter}
+          onNodeDragLeave={this.onNodeDragLeave}
         />
        {this.state.isRightMenuShow && (
           <TreeViewContextMenu 

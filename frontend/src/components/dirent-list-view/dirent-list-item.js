@@ -55,6 +55,8 @@ class DirentListItem extends React.Component {
       isShareDialogShow: false,
       isMutipleOperation: false,
       isShowTagTooltip: false,
+      isDragTipShow: false,
+      isDropTipshow: false,
     };
     this.zipToken = null;
   }
@@ -67,6 +69,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
+    this.setState({isDragTipShow: true});
   }
 
   onMouseOver = () => {
@@ -76,6 +79,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
+    this.setState({isDragTipShow: true});
   }
 
   onMouseLeave = () => {
@@ -85,6 +89,7 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
+    this.setState({isDragTipShow: false});
   }
 
   onUnfreezedItem = () => {
@@ -323,6 +328,67 @@ class DirentListItem extends React.Component {
     this.setState({isShowTagTooltip: !this.state.isShowTagTooltip});
   }
 
+  onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
+    this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
+  }
+
+  onItemDragStart = (e) => {
+    let nodeRootPath = '';
+    nodeRootPath = this.props.path === '/' ? `${this.props.path}${this.props.dirent.name}` : this.props.path;
+    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
+    dragStartItemData = JSON.stringify(dragStartItemData);
+
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
+    e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
+  }
+
+  onItemDragEnter = () => {
+    if (this.props.dirent.type === 'dir') {
+      this.setState({isDropTipshow: true});
+    }
+  }
+  
+  onItemDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  onItemDragLeave = () => {
+    this.setState({isDropTipshow: false});
+  }
+
+  onItemDragDrop = (e) => {
+    this.setState({isDropTipshow: false});
+    if (e.dataTransfer.files.length) { // uploaded files
+      return;
+    }
+    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
+    dragStartItemData = JSON.parse(dragStartItemData);
+    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
+    let dropItemData = this.props.dirent;
+
+    if (nodeDirent.name === dropItemData.name) {
+      return;
+    }
+
+    if (dropItemData.type !== 'dir') {
+      return;
+    } 
+
+    //  copy the dirent to it's child. eg: A/B -> A/B/C
+    if (dropItemData.type === 'dir' && nodeDirent.type === 'dir') {
+      if (nodeParentPath !== this.props.path) {
+        if (this.props.path.indexOf(nodeRootPath) !== -1) {
+          return;
+        }
+      }
+    }
+
+    let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+  }
+
   render() {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
@@ -351,7 +417,7 @@ class DirentListItem extends React.Component {
 
     return (
       <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick}>
+        <tr className={`${this.state.isDropTipshow ? 'tr-dragenter' : ''} ${this.state.isDragTipShow ? 'tr-style-nav' : ''} ${this.state.highlight ? 'tr-highlight' : ''}`} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragEnter={this.onItemDragEnter} onDragOver={this.onItemDragOver} onDragLeave={this.onItemDragLeave} onDrop={this.onItemDragDrop}>
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
@@ -362,8 +428,8 @@ class DirentListItem extends React.Component {
           <td className="text-center">
             <div className="dir-icon">
               {dirent.encoded_thumbnail_src ?
-                <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
-                <img src={iconUrl} width="24" alt='' />
+                <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+                <img ref='drag_icon' src={iconUrl} width="24" alt='' />
               }
               {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={dirent.lock_owner_name}/>}
             </div>
