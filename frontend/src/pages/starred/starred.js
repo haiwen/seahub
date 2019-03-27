@@ -143,7 +143,7 @@ class Item extends Component {
     e.preventDefault();
 
     const data = this.props.data;
-    seafileAPI.unStarItem(data.repo_id, data.path).then((res) => {
+    seafileAPI.unstarItem(data.repo_id, data.path).then((res) => {
       this.setState({
         unstarred: true
       });

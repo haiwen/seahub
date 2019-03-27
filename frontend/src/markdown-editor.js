@@ -62,9 +62,9 @@ class EditorUtilities {
     );
   }
 
-  unStarItem () {
+  unstarItem () {
     return (
-      seafileAPI.unStarItem(this.repoID, this.filePath)
+      seafileAPI.unstarItem(this.repoID, this.filePath)
     );
   }
 
@@ -650,7 +650,7 @@ class MarkdownEditor extends React.Component {
   toggleStar = () => {
     let starrd = this.state.fileInfo.starred;
     if (starrd) {
-      editorUtilities.unStarItem().then((response) => {
+      editorUtilities.unstarItem().then((response) => {
         this.setState({
           fileInfo: Object.assign({}, this.state.fileInfo, {starred: !starrd})
         });

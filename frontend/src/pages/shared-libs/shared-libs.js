@@ -181,7 +181,7 @@ class Item extends Component {
 
   onStarRepo = () => {
     if (this.state.isStarred) {
-      seafileAPI.unStarItem(this.props.data.repo_id, '/').then(() => {
+      seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
       });
     } else {
