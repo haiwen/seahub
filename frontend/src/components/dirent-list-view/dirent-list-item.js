@@ -418,6 +418,7 @@ class DirentListItem extends React.Component {
     return (
       <Fragment>
         <tr className={`${this.state.isDropTipshow ? 'tr-dragenter' : ''} ${this.state.isDragTipShow ? 'tr-style-nav' : ''} ${this.state.highlight ? 'tr-highlight' : ''}`} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragEnter={this.onItemDragEnter} onDragOver={this.onItemDragOver} onDragLeave={this.onItemDragLeave} onDrop={this.onItemDragDrop}>
+          <td></td>
           <td className="text-center">
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>

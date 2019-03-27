@@ -240,6 +240,7 @@ class DirentListView extends React.Component {
         <table>
           <thead>
             <tr>
+              <th>{/*dragIcon */}</th>
               <th width="3%" className="text-center">
                 <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
               </th>
