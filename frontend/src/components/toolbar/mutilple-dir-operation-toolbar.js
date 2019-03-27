@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button , ButtonGroup } from 'reactstrap';
+import { Button , ButtonGroup , Modal } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -50,6 +50,7 @@ class MutipleDirOperationToolbar extends React.Component {
       showListRelatedFileDialog: false,
       fileTagList: [],
       multiFileTagList: [],
+      isRelatedFileDialogShow: false,
     };
     this.zipToken = null;
   }
@@ -203,10 +204,12 @@ class MutipleDirOperationToolbar extends React.Component {
       });
       if (res.data.related_files.length > 0) {
         this.setState({
+          isRelatedFileDialogShow: true,
           showListRelatedFileDialog: true,
         });
       } else {
         this.setState({
+          isRelatedFileDialogShow: true,
           showAddRelatedFileDialog: true,
         });
       }
@@ -220,6 +223,7 @@ class MutipleDirOperationToolbar extends React.Component {
       showEditFileTagDialog: false,
       showAddRelatedFileDialog: false,
       showListRelatedFileDialog: false,
+      isRelatedFileDialogShow: false,
     });
   }
 
@@ -355,30 +359,32 @@ class MutipleDirOperationToolbar extends React.Component {
                 />
               </ModalPortal>
             }
-            {this.state.showListRelatedFileDialog &&
+            {this.state.isRelatedFileDialogShow && (
               <ModalPortal>
-                <ListRelatedFileDialog
-                  repoID={repoID}
-                  filePath={direntPath}
-                  relatedFiles={this.state.relatedFiles}
-                  toggleCancel={this.toggleCancel}
-                  addRelatedFileToggle={this.addRelatedFileToggle}
-                  onRelatedFileChange={this.onRelatedFileChange}
-                />
+                <Modal isOpen={true} toggle={this.toggleCancel} size='lg' style={{width: '650px'}}>
+                  {this.state.showListRelatedFileDialog &&
+                    <ListRelatedFileDialog
+                      repoID={repoID}
+                      filePath={direntPath}
+                      relatedFiles={this.state.relatedFiles}
+                      toggleCancel={this.toggleCancel}
+                      addRelatedFileToggle={this.addRelatedFileToggle}
+                      onRelatedFileChange={this.onRelatedFileChange}
+                    />
+                  }
+                  {this.state.showAddRelatedFileDialog &&
+                    <AddRelatedFileDialog
+                      repoID={repoID}
+                      filePath={direntPath}
+                      toggleCancel={this.closeAddRelatedFileDialog}
+                      onClose={this.toggleCancel}
+                      dirent={this.props.selectedDirentList[0]}
+                      onRelatedFileChange={this.onRelatedFileChange}
+                    />
+                  }
+                </Modal>
               </ModalPortal>
-            }
-            {this.state.showAddRelatedFileDialog &&
-              <ModalPortal>
-                <AddRelatedFileDialog
-                  repoID={repoID}
-                  filePath={direntPath}
-                  toggleCancel={this.closeAddRelatedFileDialog}
-                  onClose={this.toggleCancel}
-                  dirent={this.props.selectedDirentList[0]}
-                  onRelatedFileChange={this.onRelatedFileChange}
-                />
-              </ModalPortal>
-            }
+            )}
           </Fragment>
         )}
       </Fragment>

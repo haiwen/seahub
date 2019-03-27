@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import Dirent from '../../models/dirent';
@@ -72,7 +72,7 @@ class ListRelatedFileDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle} size='lg'>
+      <Fragment>
         <ModalHeader toggle={this.toggle}>{gettext('Related Files')}</ModalHeader>
         <ModalBody className={this.state.direntList.length > 0 ? 'list-related-file-body' : ''}>
           <Table hover size="sm" className="list-related-file-table">
@@ -103,7 +103,7 @@ class ListRelatedFileDialog extends React.Component {
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
         </ModalFooter>
-      </Modal>
+      </Fragment>
     );
   }
 }
