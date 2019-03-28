@@ -308,7 +308,7 @@ class MarkdownEditor extends React.Component {
       isShowComments: false,
       isShowHistory: false,
       isShowOutline: true,
-      differentDialogState: false,
+      viewMode:'list_related_file',
     };
 
     if (this.state.collabServer) {
@@ -474,14 +474,14 @@ class MarkdownEditor extends React.Component {
             this.setState({
               showRelatedFileDialog: true,
               showMarkdownEditorDialog: true,
-              differentDialogState: false,
+              viewMode: 'list_related_file',
             });
           }
           else {
             this.setState({
               showRelatedFileDialog: true,
               showMarkdownEditorDialog: true,
-              differentDialogState: true,
+              viewMode: 'add_related_file',
             });
           }
         break;
@@ -1106,7 +1106,7 @@ class MarkdownEditor extends React.Component {
                     toggleCancel={this.toggleCancel}
                     onRelatedFileChange={this.onRelatedFileChange}
                     dirent={this.state.fileInfo}
-                    differentDialogState={this.state.differentDialogState}
+                    viewMode={this.state.viewMode}
                   />
                 </ModalPortal>
               }

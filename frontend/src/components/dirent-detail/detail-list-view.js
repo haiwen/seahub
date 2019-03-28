@@ -140,6 +140,7 @@ class DetailListView extends React.Component {
                   toggleCancel={this.toggleCancel}
                   onRelatedFileChange={this.props.onRelatedFileChange}
                   dirent={this.props.dirent}
+                  viewMode="list_related_file"
                 />
               </ModalPortal>
             }

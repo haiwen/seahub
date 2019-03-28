@@ -152,6 +152,7 @@ class ViewFileToolbar extends React.Component {
               toggleCancel={this.toggleCancel}
               onRelatedFileChange={this.props.onRelatedFileChange}
               dirent={dirent}
+              viewMode="list_related_file"
             />
           </ModalPotal>
         }

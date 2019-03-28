@@ -12,7 +12,7 @@ const propTypes = {
   onRelatedFileChange: PropTypes.func.isRequired,
   dirent: PropTypes.object.isRequired,
   relatedFiles: PropTypes.array,
-  differentDialogState: PropTypes.bool,
+  viewMode: PropTypes.oneOf(['list_related_file','add_related_file']).isRequired,
 };
 
 class RelatedFileDialogs extends React.Component {
@@ -20,40 +20,32 @@ class RelatedFileDialogs extends React.Component {
     super(props);
     this.state = {
       showListRelatedFileDialog: true,
-      showAddRelatedFileDialog: false,
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.showDiffentDialog();
   }
 
   onAddRelatedFileToggle = () => {
     this.setState({
       showListRelatedFileDialog: false,
-      showAddRelatedFileDialog: true,
     });
   }
 
   onCloseAddRelatedFileDialog = () => {
     this.setState({
       showListRelatedFileDialog: true,
-      showAddRelatedFileDialog: false,
     });
   }
 
   showDiffentDialog = () => {
-    setTimeout(()=>{
-      if (this.props.differentDialogState) {
-        this.setState({
-          showListRelatedFileDialog: false,
-          showAddRelatedFileDialog: true,
-        });
+    setTimeout(() => {
+      let {viewMode} = this.props;
+      if (viewMode === 'list_related_file') {
+        this.setState({showListRelatedFileDialog: true});
       } else {
-        this.setState({
-          showListRelatedFileDialog: true,
-          showAddRelatedFileDialog: false,
-        });
+        this.setState({showListRelatedFileDialog: false});
       }
     },40)
   }
@@ -72,7 +64,7 @@ class RelatedFileDialogs extends React.Component {
               onRelatedFileChange={this.props.onRelatedFileChange}
             />
           }
-          {this.state.showAddRelatedFileDialog && 
+          {!this.state.showListRelatedFileDialog && 
             <AddRelatedFileDialog
               filePath={this.props.filePath}
               repoID={this.props.repoID}

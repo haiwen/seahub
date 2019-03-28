@@ -48,7 +48,7 @@ class MutipleDirOperationToolbar extends React.Component {
       fileTagList: [],
       multiFileTagList: [],
       showRelatedFileDialog: false,
-      differentDialogState: false,
+      viewMode: 'list_related_file',     
     };
     this.zipToken = null;
   }
@@ -203,11 +203,11 @@ class MutipleDirOperationToolbar extends React.Component {
       });
       if (res.data.related_files.length > 0) {
         this.setState({
-          differentDialogState: false,
+          viewMode: 'list_related_file',
         });
       } else {
         this.setState({
-          differentDialogState: true,
+          viewMode: 'add_related_file',
         });
       }
     });
@@ -347,7 +347,7 @@ class MutipleDirOperationToolbar extends React.Component {
                   toggleCancel={this.toggleCancel}
                   onRelatedFileChange={this.onRelatedFileChange}
                   dirent={this.props.selectedDirentList[0]}
-                  differentDialogState={this.state.differentDialogState}
+                  viewMode={this.state.viewMode}
                 />
               </ModalPortal>
             }
