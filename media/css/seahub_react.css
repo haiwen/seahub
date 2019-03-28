@@ -161,7 +161,7 @@ ul,ol,li {
     cursor: pointer;
 }
 
-.tr-style-nav { /* just for drag&drop item */
+.tr-drag-effect{ /* just for drag&drop item */
     background-image: url('../img/grippy_large.png');
     background-repeat: no-repeat;
     background-position: 0px;
