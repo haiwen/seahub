@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
@@ -13,6 +13,7 @@ const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
   onRelatedFileChange: PropTypes.func.isRequired,
   dirent: PropTypes.object.isRequired,
+  onClose: PropTypes.func,
 };
 
 class AddRelatedFileDialog extends React.Component {
@@ -86,8 +87,11 @@ class AddRelatedFileDialog extends React.Component {
     let subtitle = gettext('Select related file for {placeholder}');
     subtitle = subtitle.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     return (
-      <Modal isOpen={true} className="sf-add-related-file" toggle={this.toggle} >
-        <ModalHeader toggle={this.toggle}>{gettext('Select File')}</ModalHeader>
+      <Fragment>
+        <ModalHeader toggle={this.props.onClose}>
+          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.toggle} aria-label={gettext('Back')}></span>
+          {gettext('Select File')}
+        </ModalHeader>
         <ModalBody>
           <div className="related-file-subtitle" dangerouslySetInnerHTML={{__html: subtitle}}></div>
           <FileChooser
@@ -107,7 +111,7 @@ class AddRelatedFileDialog extends React.Component {
             <Button color="primary" disabled>{gettext('Submit')}</Button>
           }
         </ModalFooter>
-      </Modal>
+      </Fragment>
     );
   }
 }
