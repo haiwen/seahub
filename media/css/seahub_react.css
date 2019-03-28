@@ -146,6 +146,10 @@ ul,ol,li {
     visibility: hidden;
 }
 
+.pl10 {
+    padding-left: 10px;
+}
+
 .a-simulate {
     color: #eb8205 !important;
     text-decoration: none;

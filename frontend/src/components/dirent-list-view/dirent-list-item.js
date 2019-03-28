@@ -421,14 +421,14 @@ class DirentListItem extends React.Component {
     return (
       <Fragment>
          <tr className={trClass} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragEnter={this.onItemDragEnter} onDragOver={this.onItemDragOver} onDragLeave={this.onItemDragLeave} onDrop={this.onItemDragDrop}>
-          <td className={`pl-2 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
+          <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
-          <td className="pl-2">
+          <td className="pl10">
             {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onItemStarred}></i>}
             {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star cursor-pointer" onClick={this.onItemStarred}></i>}
           </td>
-          <td className="pl-2">
+          <td className="pl10">
             <div className="dir-icon">
               {dirent.encoded_thumbnail_src ?
                 <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
