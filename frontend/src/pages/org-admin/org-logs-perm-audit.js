@@ -1,0 +1,217 @@
+import React, { Component } from 'react';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
+import Toast from '../../components/toast';
+import { Utils } from '../../utils/utils';
+
+import { seafileAPI } from '../../utils/seafile-api';
+import { siteRoot, gettext, orgID } from '../../utils/constants';
+
+import OrgLogsFilePermEvent from '../../models/org-logs-perm-audit';
+
+class OrgLogsFileUpdate extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      page: 1,
+      pageNext: false,
+      eventList: [],
+      userSelected: '',
+      repoSelected: '',
+      isItemFreezed: false  
+    };
+  }
+
+  componentDidMount() {
+    let page = this.state.page;
+    let email = this.state.userSelected;
+    let repoID = this.state.repoSelected;
+    this.initData(page, email, repoID);
+  }
+
+  initData = (page, email, repoID) => {
+    seafileAPI.orgAdminListPermAudit(page, email, repoID).then(res => {
+      let eventList = res.data.event_list.map(item => {
+        return new OrgLogsFilePermEvent(item);
+      });
+
+      this.setState({
+        eventList: eventList,
+        pageNext: res.data.page_next,
+        page: res.data.page,
+        userSelected: res.data.user_selected,
+        repoSelected: res.data.repo_selected
+      })
+    });
+  }
+
+
+
+  onChangePageNum = (e, num) => {
+    e.preventDefault();
+    let page = this.state.page;
+
+    if (num == 1) {
+      page = page + 1;
+    } else {
+      page = page - 1;
+    }
+    this.initData(page);
+  } 
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
+  }
+
+  render() {
+    let eventList = this.state.eventList;
+    return (
+      <div className="cur-view-content">
+        <table>
+          <thead>
+            <tr>
+              <th width="18%">{gettext('Share From')}</th>
+              <th width="15%">{gettext('Share To')}</th>
+              <th width="8%">{gettext('Actions')}</th>
+              <th width="13%">{gettext('Permission')}</th>
+              <th width="15%">{gettext('Library')}</th>
+              <th width="15%">{gettext('Folder')}</th>
+              <th width="16%">{gettext('Date')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {eventList.map((item, index) => {
+              return (
+                <PermAuditItem
+                  key={index}
+                  permEvent={item}
+                  isItemFreezed={this.state.isItemFreezed}
+                  onFreezedItem={this.onFreezedItem} 
+                  onUnfreezedItem={this.onUnfreezedItem}
+                />
+            )})}
+          </tbody>
+        </table>
+        <div className="paginator">
+          {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+          {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
+          {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
+        </div>
+      </div>
+    );
+  }
+}
+
+
+class PermAuditItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      highlight: false,
+      showMenu: false,
+      isItemMenuShow: false
+    };
+  }
+
+  onMouseEnter = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        showMenu: true,
+        highlight: true,
+      });
+    }
+  }
+
+  onMouseLeave = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        showMenu: false,
+        highlight: false
+      });
+    }
+  } 
+
+  renderFromUser = (permEvent) => {
+    if (!permEvent.from_user_email) { 
+      return gettext('Anonymous User');
+    }
+    
+    if (!permEvent.is_org_from_user) {
+      return permEvent.from_user_name;
+    }
+
+    return <a href={siteRoot + 'org/useradmin/info/' + permEvent.from_user_email + '/'}>{permEvent.from_user_name}</a>;
+  }
+
+  renderToUser = (permEvent) => {
+    if (permEvent.to == 'all') {
+       return <a href={siteRoot + 'org/'}>{gettext('Organization')}</a>;
+    }
+
+    if (permEvent.perm_group_name) {
+      return <a href={siteRoot + 'org/groupadmin/' + permEvent.to + '/'}>{permEvent.perm_group_name}</a>;
+    }
+
+    if (permEvent.to.indexOf('@') != -1) {
+      if (permEvent.is_org_to_user) {
+        return <a href={siteRoot + 'org/useradmin/info/' + permEvent.to + '/'}>{permEvent.to_user_name}</a>;
+      }
+      return permEvent.to
+    }
+
+    return 'Deleted' 
+  } 
+
+  renderType = (type) => {
+    if (type.indexOf('add') != -1) {
+      type = 'Add'; 
+    }
+    if (type.indexOf('modify') != -1) {
+      type = 'Modify'; 
+    }
+    if (type.indexOf('delete') != -1) {
+      type = 'Delete'; 
+    }
+    return type;
+  } 
+
+  renderRepo = (permEvent) => {
+    let repoName = 'Deleted';
+    if (permEvent.repo_name) {
+      repoName = permEvent.repo_name; 
+    } 
+    return repoName; 
+  }
+
+  renderFolder = (name) => {
+    let folderName = '/';
+    if (name) {
+      folderName = name; 
+    }
+    return folderName; 
+  }
+
+  render() {
+    let { permEvent } = this.props;
+    return (
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td>{this.renderFromUser(permEvent)}</td>
+        <td>{this.renderToUser(permEvent)}</td>
+        <td>{this.renderType(permEvent.type)}</td>
+        <td>{Utils.sharePerms(permEvent.permission)}</td>
+        <td>{this.renderRepo(permEvent)}</td>
+        <td>{this.renderFolder(permEvent.folder_name)}</td>
+        <td>{permEvent.time}</td>
+      </tr>
+    );
+  }
+}
+
+
+export default OrgLogsFileUpdate;
