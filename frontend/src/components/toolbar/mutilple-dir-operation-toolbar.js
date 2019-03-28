@@ -10,8 +10,7 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentsMenu from '../dirent-list-view/dirents-menu';
 import ShareDialog from '../dialog/share-dialog';
-import AddRelatedFileDialog from '../dialog/add-related-file-dialog';
-import ListRelatedFileDialog from '../dialog/list-related-file-dialog';
+import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
@@ -46,11 +45,10 @@ class MutipleDirOperationToolbar extends React.Component {
       showLibContentViewDialogs: false,
       showShareDialog: false,
       showEditFileTagDialog: false,
-      showAddRelatedFileDialog: false,
-      showListRelatedFileDialog: false,
       fileTagList: [],
       multiFileTagList: [],
-      isRelatedFileDialogShow: false,
+      showRelatedFileDialog: false,
+      differentDialogState: false,
     };
     this.zipToken = null;
   }
@@ -201,16 +199,15 @@ class MutipleDirOperationToolbar extends React.Component {
       this.setState({
         relatedFiles: res.data.related_files,
         showLibContentViewDialogs: true,
+        showRelatedFileDialog: true,
       });
       if (res.data.related_files.length > 0) {
         this.setState({
-          isRelatedFileDialogShow: true,
-          showListRelatedFileDialog: true,
+          differentDialogState: false,
         });
       } else {
         this.setState({
-          isRelatedFileDialogShow: true,
-          showAddRelatedFileDialog: true,
+          differentDialogState: true,
         });
       }
     });
@@ -221,25 +218,7 @@ class MutipleDirOperationToolbar extends React.Component {
       showLibContentViewDialogs: false,
       showShareDialog: false,
       showEditFileTagDialog: false,
-      showAddRelatedFileDialog: false,
-      showListRelatedFileDialog: false,
-      isRelatedFileDialogShow: false,
-    });
-  }
-
-  closeAddRelatedFileDialog = () => {
-    this.setState({
-      showLibContentViewDialogs: true,
-      showAddRelatedFileDialog: false,
-      showListRelatedFileDialog: true,
-    });
-  }
-
-  addRelatedFileToggle = () => {
-    this.setState({
-      showLibContentViewDialogs: true,
-      showAddRelatedFileDialog: true,
-      showListRelatedFileDialog: false,
+      showRelatedFileDialog: false,
     });
   }
 
@@ -359,32 +338,19 @@ class MutipleDirOperationToolbar extends React.Component {
                 />
               </ModalPortal>
             }
-            {this.state.isRelatedFileDialogShow && (
+            {this.state.showRelatedFileDialog &&
               <ModalPortal>
-                <Modal isOpen={true} toggle={this.toggleCancel} size='lg' style={{width: '650px'}}>
-                  {this.state.showListRelatedFileDialog &&
-                    <ListRelatedFileDialog
-                      repoID={repoID}
-                      filePath={direntPath}
-                      relatedFiles={this.state.relatedFiles}
-                      toggleCancel={this.toggleCancel}
-                      addRelatedFileToggle={this.addRelatedFileToggle}
-                      onRelatedFileChange={this.onRelatedFileChange}
-                    />
-                  }
-                  {this.state.showAddRelatedFileDialog &&
-                    <AddRelatedFileDialog
-                      repoID={repoID}
-                      filePath={direntPath}
-                      toggleCancel={this.closeAddRelatedFileDialog}
-                      onClose={this.toggleCancel}
-                      dirent={this.props.selectedDirentList[0]}
-                      onRelatedFileChange={this.onRelatedFileChange}
-                    />
-                  }
-                </Modal>
+                <RelatedFileDialogs
+                  repoID={repoID}
+                  filePath={direntPath}
+                  relatedFiles={this.state.relatedFiles}
+                  toggleCancel={this.toggleCancel}
+                  onRelatedFileChange={this.onRelatedFileChange}
+                  dirent={this.props.selectedDirentList[0]}
+                  differentDialogState={this.state.differentDialogState}
+                />
               </ModalPortal>
-            )}
+            }
           </Fragment>
         )}
       </Fragment>

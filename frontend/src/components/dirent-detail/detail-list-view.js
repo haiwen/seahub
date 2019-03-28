@@ -4,10 +4,8 @@ import moment from 'moment';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import ListRelatedFileDialog from '../dialog/list-related-file-dialog';
-import { Modal } from 'reactstrap';
 import ModalPortal from '../modal-portal';
-import AddRelatedFileDialog from '../dialog/add-related-file-dialog';
+import RelatedFileDialogs from '../dialog/related-file-dialogs';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -28,9 +26,7 @@ class DetailListView extends React.Component {
     super(props);
     this.state = {
       isEditFileTagShow: false,
-      isListRelatedFileShow: false,
-      isAddRelatedFileShow: false,
-      isRelatedFileDialogShow: false,
+      showRelatedFileDialog: false,
     };
   }
 
@@ -64,32 +60,15 @@ class DetailListView extends React.Component {
 
   onListRelatedFileToggle = () => {
     this.setState({
-      isListRelatedFileShow: true,
-      isRelatedFileDialogShow: true,
+      showRelatedFileDialog: true,
     });
   }
 
   toggleCancel = () => {
     this.setState({
-      isListRelatedFileShow: false,
-      isAddRelatedFileShow: false,
-      isRelatedFileDialogShow: false,
+      showRelatedFileDialog: false,
     });
   }
-
-  onCloseAddRelatedFileDialog = () => {
-    this.setState({
-      isListRelatedFileShow: true,
-      isAddRelatedFileShow: false,
-    });
-  }
-
-  onAddRelatedFileToggle = () => {
-    this.setState({
-      isListRelatedFileShow: false,
-      isAddRelatedFileShow: true
-    });
-  } 
   
   render() {
     let { direntType, direntDetail, fileTagList, relatedFiles } = this.props;
@@ -152,34 +131,18 @@ class DetailListView extends React.Component {
               </tr>
             </tbody>
           </table>
-          { this.state.isRelatedFileDialogShow && (
-            <ModalPortal>
-              <Modal isOpen={true} toggle={this.toggleCancel} size='lg' style={{width: '650px'}}>
-                {
-                  this.state.isAddRelatedFileShow &&
-                  <AddRelatedFileDialog
-                    filePath={direntPath}
-                    repoID={this.props.repoID}
-                    toggleCancel={this.onCloseAddRelatedFileDialog}
-                    onRelatedFileChange={this.props.onRelatedFileChange}
-                    dirent={this.props.dirent}
-                    onClose={this.toggleCancel}
-                  />
-                }
-                {
-                  this.state.isListRelatedFileShow &&
-                  <ListRelatedFileDialog
-                    relatedFiles={relatedFiles}
-                    repoID={this.props.repoID}
-                    filePath={direntPath}
-                    toggleCancel={this.toggleCancel}
-                    addRelatedFileToggle={this.onAddRelatedFileToggle}
-                    onRelatedFileChange={this.props.onRelatedFileChange}
-                  />
-                }
-              </Modal>
-            </ModalPortal>
-          )}
+          {this.state.showRelatedFileDialog &&
+              <ModalPortal>
+                <RelatedFileDialogs
+                  repoID={this.props.repoID}
+                  filePath={direntPath}
+                  relatedFiles={relatedFiles}
+                  toggleCancel={this.toggleCancel}
+                  onRelatedFileChange={this.props.onRelatedFileChange}
+                  dirent={this.props.dirent}
+                />
+              </ModalPortal>
+            }
           {
             this.state.isEditFileTagShow &&
             <EditFileTagDialog
