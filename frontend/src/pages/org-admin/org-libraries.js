@@ -116,7 +116,7 @@ class OrgLibraries extends Component {
                       transferRepoItem={this.transferRepoItem}
                     />
                   )}
-                )};
+                )}
               </tbody>
             </table>
             <div className="paginator">
