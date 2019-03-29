@@ -6,7 +6,7 @@ import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGen
 import { seafileAPI } from '../utils/seafile-api';
 import { Badge } from 'reactstrap';
 
-import { canViewOrg } from '../utils/constants';
+import { canViewOrg, isDocs } from '../utils/constants';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -189,12 +189,14 @@ class MainSideNav extends React.Component {
                 <span className="nav-text">{gettext('Favorites')}</span>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Activities')} onClick={() => this.tabItemClick('dashboard')}>
-                <span className="sf2-icon-clock" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Activities')}</span>
-              </Link>
-            </li>
+            {isDocs &&
+              <li className="nav-item">
+                <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Activities')} onClick={() => this.tabItemClick('dashboard')}>
+                  <span className="sf2-icon-clock" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Activities')}</span>
+                </Link>
+              </li>
+            }
             {enableWiki &&
               <li className="nav-item">
                 <Link className={`nav-link ellipsis ${this.getActiveClass('wikis')}`} to={siteRoot + 'wikis/'} title={gettext('Wikis')} onClick={() => this.tabItemClick('wikis')}>
@@ -203,15 +205,17 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
             }
-            <li className="nav-item" onClick={() => this.tabItemClick('drafts')}>
-              <Link className={`nav-link ellipsis ${this.getActiveClass('drafts')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
-                <span className="sf2-icon-edit" aria-hidden="true"></span>
-                <span className="draft-info nav-text">
-                  {gettext('Drafts')}  
-                  {this.props.draftCounts === 0 ? '' : <Badge color="info" pill>{this.props.draftCounts}</Badge>}
-                </span>
-              </Link>
-            </li>
+            {isDocs &&
+              <li className="nav-item" onClick={() => this.tabItemClick('drafts')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('drafts')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
+                  <span className="sf2-icon-edit" aria-hidden="true"></span>
+                  <span className="draft-info nav-text">
+                    {gettext('Drafts')}  
+                    {this.props.draftCounts === 0 ? '' : <Badge color="info" pill>{this.props.draftCounts}</Badge>}
+                  </span>
+                </Link>
+              </li>
+            }
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={() => this.tabItemClick('linked-devices')}>
                 <span className="sf2-icon-monitor" aria-hidden="true"></span>
