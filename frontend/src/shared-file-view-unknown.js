@@ -2,11 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
-import VideoPlayer from './components/video-player';
 
-import './css/video-file-view.css';
-
-const { rawPath, err } = window.shared.pageOptions;
+const { err } = window.shared.pageOptions;
 
 class SharedFileViewImage extends React.Component {
   render() {
@@ -19,22 +16,6 @@ class FileContent extends React.Component {
     if (err) {
       return <SharedFileViewTip />;
     }
-
-    const videoJsOptions = {
-      autoplay: false,
-      controls: true,
-      preload: 'auto',
-      sources: [{
-        src: rawPath
-      }]
-    };
-    return (
-      <div className="shared-file-view-body d-flex">
-        <div className="flex-1">
-          <VideoPlayer { ...videoJsOptions } />
-        </div>
-      </div>
-    );
   }
 }
 

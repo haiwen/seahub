@@ -109,6 +109,31 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/shared-file-view-pdf.js",
     ],
+    sharedFileViewSVG: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-svg.js",
+    ],
+    sharedFileViewAudio: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-audio.js",
+    ],
+    sharedFileViewDocument: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-document.js",
+    ],
+    sharedFileViewSpreadsheet: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-spreadsheet.js",
+    ],
+    sharedFileViewUnknown: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-unknown.js",
+    ],
     viewFileText: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),

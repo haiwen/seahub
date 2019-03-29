@@ -45,7 +45,7 @@ class SharedFileView extends React.Component {
   }
 
   componentDidMount() {
-    if (trafficOverLimit == 'True') {
+    if (trafficOverLimit) {
       toaster.danger(gettext('File download is disabled: the share link traffic of owner is used up.'), {
         duration: 3
       });
@@ -76,7 +76,7 @@ class SharedFileView extends React.Component {
                     onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
                   </Button>
                 }{' '}
-                {(trafficOverLimit === 'False') &&
+                {!trafficOverLimit &&
                   <Button color="success" className="shared-file-op-btn">
                     <a href="?dl=1">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
                   </Button>

@@ -9,11 +9,22 @@
     {% render_bundle 'sharedFileViewText' 'css' %}
 {% elif filetype == 'Image' %}
     {% render_bundle 'sharedFileViewImage' 'css' %}
+{% elif filetype == 'SVG' %}
+    {% render_bundle 'sharedFileViewSVG' 'css' %}
 {% elif filetype == 'Video' %}
     {% render_bundle 'sharedFileViewVideo' 'css' %}
+{% elif filetype == 'Audio' %}
+    {% render_bundle 'sharedFileViewAudio' 'css' %}
 {% elif filetype == 'PDF' %}
     <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
     {% render_bundle 'sharedFileViewPDF' 'css' %}
+{% elif filetype == 'Document' %}
+    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+    {% render_bundle 'sharedFileViewDocument' 'css' %}
+{% elif filetype == 'SpreadSheet' %}
+    {% render_bundle 'sharedFileViewSpreadsheet' 'css' %}
+{% elif filetype == 'Unknown' %}
+    {% render_bundle 'sharedFileViewUnknown' 'css' %}
 {% endif %}
 {% endblock %}
 
@@ -22,21 +33,21 @@
     window.shared = {
         pageOptions: {
             repoID: '{{ repo.id }}',
-            path: '{{ path|escapejs }}',
+            filePath: '{{ path|escapejs }}',
             sharedToken: '{{ shared_token }}',
-            trafficOverLimit: '{{ traffic_over_limit }}',
+            trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
             fileName: '{{ file_name|escapejs }}',
-            fileSize: '{{ file_size }}',
+            fileSize: {{ file_size }},
             rawPath: '{{ raw_path|escapejs }}',
             sharedBy: '{{ shared_by|email2nickname }}',
             siteName: '{{ site_name }}',
-            enableWatermark: '{{ enable_watermark }}' == 'True',
+            enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
             download: '{{ permissions.can_download }}' == 'True',
-            fileEncodingList: '{{ file_encoding_list|escapejs }}',
-            encoding: '{{ encoding }}',
             fileContent: '{{ file_content|escapejs }}',
-            err: '{{ err }}',
+            err: {% if err %}'{{ err }}'{% else %}''{% endif %},
+            fileType: '{{ filetype }}',
             fileExt: '{{ fileext }}',
+            commitID: '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}'
         }
     };
 </script>
@@ -46,8 +57,12 @@
     {% render_bundle 'sharedFileViewText' 'js' %}
 {% elif filetype == 'Image' %}
     {% render_bundle 'sharedFileViewImage' 'js' %}
+{% elif filetype == 'SVG' %}
+    {% render_bundle 'sharedFileViewSVG' 'js' %}
 {% elif filetype == 'Video' %}
     {% render_bundle 'sharedFileViewVideo' 'js' %}
+{% elif filetype == 'Audio' %}
+    {% render_bundle 'sharedFileViewAudio' 'js' %}
 {% elif filetype == 'PDF' %}
     {% render_bundle 'sharedFileViewPDF' 'js' %}
     <script type="text/javascript">
@@ -56,5 +71,17 @@
     </script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
+{% elif filetype == 'Document' %}
+    {% render_bundle 'sharedFileViewDocument' 'js' %}
+    <script type="text/javascript">
+      var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
+      var sf_file_url = '{{ SITE_ROOT }}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/fake.pdf?token={{shared_token}}';
+      var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
+    </script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
+{% elif filetype == 'SpreadSheet' %}
+    {% render_bundle 'sharedFileViewSpreadsheet' 'js' %}
+{% elif filetype == 'Unknown' %}
+    {% render_bundle 'sharedFileViewUnknown' 'js' %}
 {% endif %}
 {% endblock %}
