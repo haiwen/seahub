@@ -9,8 +9,7 @@ import io from 'socket.io-client';
 import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
 import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
-import ListRelatedFileDialog from './components/dialog/list-related-file-dialog';
-import AddRelatedFileDialog from './components/dialog/add-related-file-dialog';
+import RelatedFileDialogs from './components/dialog/related-file-dialogs';
 import ShareDialog from './components/dialog/share-dialog';
 import CommentDialog from './components/markdown-view/comment-dialog';
 import InsertFileDialog from './components/dialog/insert-file-dialog';
@@ -23,7 +22,6 @@ import HistoryList from './components/markdown-view/history-list';
 import CommentPanel from './components/file-view/comment-panel';
 import OutlineView from './components/markdown-view/outline';
 import Loading from './components/loading';
-import { Modal } from 'reactstrap';
 import { findRange } from '@seafile/slate-react';
 
 import './css/markdown-viewer/markdown-editor.css';
@@ -297,7 +295,6 @@ class MarkdownEditor extends React.Component {
       localDraftDialog: false,
       showRelatedFileDialog: false,
       showEditFileTagDialog: false,
-      showAddRelatedFileDialog: false,
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showCommentDialog: false,
@@ -311,7 +308,7 @@ class MarkdownEditor extends React.Component {
       isShowComments: false,
       isShowHistory: false,
       isShowOutline: true,
-      isRelatedFileDialogShow: false,
+      viewMode:'list_related_file',
     };
 
     if (this.state.collabServer) {
@@ -394,12 +391,10 @@ class MarkdownEditor extends React.Component {
     this.setState({
       showRelatedFileDialog: false,
       showEditFileTagDialog: false,
-      showAddRelatedFileDialog: false,
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showCommentDialog: false,
       showInsertFileDialog: false,
-      isRelatedFileDialogShow: false,
     });
   }
 
@@ -471,38 +466,24 @@ class MarkdownEditor extends React.Component {
     this.timer = null;
   }
 
-  closeAddRelatedFileDialog = () => {
-    this.setState({
-      showAddRelatedFileDialog: false,
-      showRelatedFileDialog: true,
-    });
-  }
-
-  addRelatedFileToggle = () => {
-    this.setState({
-      showRelatedFileDialog: false,
-      showAddRelatedFileDialog: true,
-    });
-  }
-
   openDialogs = (option) => {
     switch(option)
     {
       case 'related_files':
-        if (this.state.relatedFiles.length > 0) {
-          this.setState({
-            showRelatedFileDialog: true,
-            showMarkdownEditorDialog: true,
-            isRelatedFileDialogShow: true,
-          });
-        }
-        else {
-          this.setState({
-            showAddRelatedFileDialog: true,
-            showMarkdownEditorDialog: true,
-            isRelatedFileDialogShow: true,
-          });
-        }
+          if (this.state.relatedFiles.length > 0) {
+            this.setState({
+              showRelatedFileDialog: true,
+              showMarkdownEditorDialog: true,
+              viewMode: 'list_related_file',
+            });
+          }
+          else {
+            this.setState({
+              showRelatedFileDialog: true,
+              showMarkdownEditorDialog: true,
+              viewMode: 'add_related_file',
+            });
+          }
         break;
       case 'tags':
         this.setState({
@@ -1116,32 +1097,19 @@ class MarkdownEditor extends React.Component {
                   />
                 </ModalPortal>
               }
-              {this.state.isRelatedFileDialogShow && (
+              {this.state.showRelatedFileDialog &&
                 <ModalPortal>
-                  <Modal isOpen={true} toggle={this.toggleCancel} size='lg' style={{width: '650px'}}>
-                    {this.state.showRelatedFileDialog &&
-                      <ListRelatedFileDialog
-                        repoID={repoID}
-                        filePath={filePath}
-                        relatedFiles={this.state.relatedFiles}
-                        toggleCancel={this.toggleCancel}
-                        addRelatedFileToggle={this.addRelatedFileToggle}
-                        onRelatedFileChange={this.onRelatedFileChange}
-                      />
-                    }
-                    {this.state.showAddRelatedFileDialog &&
-                      <AddRelatedFileDialog
-                        repoID={repoID}
-                        filePath={filePath}
-                        toggleCancel={this.closeAddRelatedFileDialog}
-                        onClose={this.toggleCancel}
-                        dirent={this.state.fileInfo}
-                        onRelatedFileChange={this.onRelatedFileChange}
-                      />
-                    }
-                  </Modal>
+                  <RelatedFileDialogs
+                    repoID={repoID}
+                    filePath={filePath}
+                    relatedFiles={this.state.relatedFiles}
+                    toggleCancel={this.toggleCancel}
+                    onRelatedFileChange={this.onRelatedFileChange}
+                    dirent={this.state.fileInfo}
+                    viewMode={this.state.viewMode}
+                  />
                 </ModalPortal>
-              )}
+              }
               {this.state.showInsertFileDialog &&
                 <ModalPortal>
                   <InsertFileDialog
