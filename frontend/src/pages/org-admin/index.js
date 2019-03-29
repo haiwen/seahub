@@ -12,6 +12,7 @@ import OrgGroups from './org-groups';
 import OrgLibraries from './org-libraries';
 import OrgInfo from './org-info';
 import OrgLinks from './org-links';
+import OrgDepartments from './org-departments';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -82,6 +83,7 @@ class Org extends React.Component {
             <OrgGroups path={siteRoot + 'org/groupadmin'} />
             <OrgLibraries path={siteRoot + 'org/repoadmin'} />
             <OrgLinks path={siteRoot + 'org/publinkadmin'} />
+            <OrgDepartments path={siteRoot + 'org/departmentadmin/'} currentTab={currentTab} className="h-100"/>
           </Router>
         </MainPanel>
       </div>
