@@ -11,6 +11,7 @@ export const siteName = window.app.config.siteName;
 export const logoWidth = window.app.config.logoWidth;
 export const logoHeight = window.app.config.logoHeight;
 export const isPro = window.app.config.isPro === 'True';
+export const isDocs = window.app.config.isDocs === 'True';
 export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
 export const seafileVersion = window.app.config.seafileVersion;

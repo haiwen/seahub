@@ -5,6 +5,7 @@ import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-edi
 import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
 
 const propTypes = {
+  isDocs: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   isDraft: PropTypes.bool.isRequired,
   editorUtilities: PropTypes.object.isRequired,
@@ -42,7 +43,7 @@ class MarkdownViewerToolbar extends React.Component {
           </div>
         }
         <div className="topbar-btn-container">
-          { (!this.props.hasDraft && !this.props.isDraft) &&
+          { (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs) &&
             <button onMouseDown={this.props.toggleNewDraft} className="btn btn-success btn-new-draft">
               {gettext('New Draft')}</button>
           }

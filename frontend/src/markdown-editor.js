@@ -4,7 +4,7 @@ import 'whatwg-fetch';
 import { Value, Document, Block } from 'slate';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { gettext } from './utils/constants';
+import { gettext, isDocs } from './utils/constants';
 import io from 'socket.io-client';
 import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
@@ -909,6 +909,11 @@ class MarkdownEditor extends React.Component {
   }
 
   toggleHistory = () => {
+    if (!isDocs) {
+      window.location.href = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(filePath);
+      return; 
+    }
+
     if (this.state.isShowHistory) {
       this.setState({
         isShowHistory: false,
@@ -972,6 +977,7 @@ class MarkdownEditor extends React.Component {
         component = (
           <div className="seafile-md-viewer d-flex flex-column">
             <MarkdownViewerToolbar
+              isDocs={isDocs}
               hasDraft={hasDraft}
               isDraft={isDraft}
               editorUtilities={editorUtilities}

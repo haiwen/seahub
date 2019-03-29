@@ -83,6 +83,15 @@ def is_pro_version():
     except AttributeError:
         return False
 
+def is_docs_version():
+    is_docs_version = True
+    try:
+        import seafevents
+    except ImportError:
+        is_docs_version = False
+
+    return is_docs_version
+
 def is_cluster_mode():
     cfg = ConfigParser.ConfigParser()
     if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:

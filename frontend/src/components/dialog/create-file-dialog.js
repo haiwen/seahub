@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, isDocs } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -136,7 +136,7 @@ class CreateFile extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            {this.props.fileType == '.md' && (
+            {this.props.fileType == '.md' && isDocs && (
               <FormGroup check>
                 <Label check>
                   <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft')}
