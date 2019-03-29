@@ -16,15 +16,12 @@ const propTypes = {
 };
 
 class RelatedFileDialogs extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      showListRelatedFileDialog: true,
+      showListRelatedFileDialog: props.viewMode === 'list_related_file',
     };
-  }
-
-  componentDidMount() {
-    this.showDiffentDialog();
   }
 
   onAddRelatedFileToggle = () => {
@@ -37,17 +34,6 @@ class RelatedFileDialogs extends React.Component {
     this.setState({
       showListRelatedFileDialog: true,
     });
-  }
-
-  showDiffentDialog = () => {
-    setTimeout(() => {
-      let {viewMode} = this.props;
-      if (viewMode === 'list_related_file') {
-        this.setState({showListRelatedFileDialog: true});
-      } else {
-        this.setState({showListRelatedFileDialog: false});
-      }
-    },40)
   }
 
   render() {

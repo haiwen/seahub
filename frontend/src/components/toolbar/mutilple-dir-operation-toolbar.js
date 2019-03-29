@@ -196,17 +196,19 @@ class MutipleDirOperationToolbar extends React.Component {
   openRelatedFilesDialog = (dirent) => {
     let filePath = this.getDirentPath(dirent);
     seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
-      this.setState({
-        relatedFiles: res.data.related_files,
-        showLibContentViewDialogs: true,
-        showRelatedFileDialog: true,
-      });
-      if (res.data.related_files.length > 0) {
+      let relatedFiles = res.data.related_files;
+      if (relatedFiles.length > 0) {
         this.setState({
+          relatedFiles: relatedFiles,
+          showLibContentViewDialogs: true,
+          showRelatedFileDialog: true,
           viewMode: 'list_related_file',
         });
       } else {
         this.setState({
+          relatedFiles: relatedFiles,
+          showLibContentViewDialogs: true,
+          showRelatedFileDialog: true,
           viewMode: 'add_related_file',
         });
       }
