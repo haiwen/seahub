@@ -17,7 +17,7 @@ before_install:
   # npm token to fetch private repos
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
   # build/init/start ccnet-server/seafile-server
-  - git clone --depth=1 --branch=master git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+  - git clone --depth=1 --branch=7.0 git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
   - cd /tmp/seafile-test-deploy && ./bootstrap.sh && cd -
   # install phantomjs
   - ./tests/install-deps.sh
