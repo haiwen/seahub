@@ -1,18 +1,22 @@
-.tip-for-new-md {
+.tip-for-new-file {
   padding: 5em 8em; 
   align-self: flex-start; /* for repo wiki mode */
 }
-.big-new-md-button {
+.big-new-file-button {
   padding: .9em 2em 1em; 
-  background: #eee;
   border-radius: 8px; 
-  margin-right: 1.5em;
+  margin: 0 1.5em 1.5em 0;
   cursor: pointer;
+  width: 160px;
 }
-.big-new-md-button:hover,
-.big-new-md-button:focus {
-  background: #dfdfdf;
+.big-new-file-button:hover,
+.big-new-file-button:focus {
+  border-color: #eb9205;
+  color: #eb8205;
 }
-.add-md-icon {
-  font-size: 1.2em;
+.tip-for-new-file p {
+  color: #c4c4c4;
+}
+.big-new-file-button-group {
+  margin: 0 auto;
 }

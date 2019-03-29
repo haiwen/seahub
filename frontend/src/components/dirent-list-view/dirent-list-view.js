@@ -92,10 +92,10 @@ class DirentListView extends React.Component {
     });
   }
 
-  onCreateMarkdownToggle = () => {
+  onCreateNewFile = (suffix) => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.md'
+      fileType: suffix
     });
   }
 
@@ -199,9 +199,23 @@ class DirentListView extends React.Component {
     if (this.props.path == '/' && !direntList.length) {
       return (
         <Fragment>
-          <div className="tip-for-new-md d-flex">
-            <button className="big-new-md-button" onClick={this.onCreateMarkdownToggle}><span className="sf2-icon-plus add-md-icon"></span><br />{gettext('Markdown Document')}</button>
-            <p>{gettext('You can create online document using Markdown format easily. When creating a document, you can mark it as draft. After finishing the draft, you can ask others to review it. They can view the document history in the review page and leave comments on the document.')}</p>
+          <div className="tip-for-new-file">
+            <p className="text-center">{gettext('This folder has no content at this time, ')}</p>
+            <p className="text-center">{gettext('You can create files quickly')}{' +'}</p>
+            <div className="big-new-file-button-group">
+              <div className="d-flex justify-content-center">
+                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>
+                  {'+ '}{gettext('Markdown')}</button>
+                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.ppt')}>
+                  {'+ '}{gettext('PPT')}</button>
+              </div>
+              <div className="d-flex justify-content-center">
+                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.doc')}>
+                  {'+ '}{gettext('Word')}</button>
+                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xls')}>
+                  {'+ '}{gettext('Excel')}</button>
+              </div>
+            </div>
           </div>
           {this.state.isCreateFileDialogShow && (
             <ModalPortal>
