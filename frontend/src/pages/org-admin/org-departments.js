@@ -1,30 +1,16 @@
 import React from 'react';
-import OrgDepartmentsList from './org-departments-list';
-import OrgDepartmentItem from './org-department-item';
+import '../../css/org-department-item.css';
 
 class OrgDepartments extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      activeGroup: null,
-    };
-  }
-
-  setActiveGroup = (group) => {
-    this.setState({
-      activeGroup: group
-    });
   }
 
   render() {
     return (
-      <div className="h-100">
-        {this.state.activeGroup ?
-          <OrgDepartmentItem setActiveGroup={this.setActiveGroup} activeGroup={this.state.activeGroup}/>
-          :
-          <OrgDepartmentsList setActiveGroup={this.setActiveGroup} activeGroup={this.state.activeGroup}/>
-        }        
+      <div className="h-100 org-departments">
+        {this.props.children}
       </div>
     );
   }

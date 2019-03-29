@@ -12,5 +12,11 @@
   color: #eb8205;
 }
 .cur-view-subcontainer {
-  margin: 20px 10px;
+  margin: 10px;
+}
+.org-departments>div{
+  height: 100%;
+}
+.org-members .cur-view-content {
+  padding-bottom: 80px;
 }

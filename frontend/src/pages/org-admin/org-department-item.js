@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils.js';
-import { mediaUrl, gettext, orgID } from '../../utils/constants';
+import { serviceURL, mediaUrl, gettext, orgID } from '../../utils/constants';
 import OrgDepartmentsList from './org-departments-list';
 import ModalPortal from '../../components/modal-portal';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
@@ -28,11 +28,12 @@ class OrgDepartmentItem extends React.Component {
       showAddRepoDialog: false,
       showDeleteRepoDialog: false,
       isItemFreezed: false,
-    };
+      groupID: null,
+      groupName: '',
+    }
   }
 
-  listOrgGroupRepo = () => {
-    const groupID = this.props.activeGroup.id;
+  listOrgGroupRepo = (groupID) => {
     seafileAPI.orgAdminListDepartGroupRepos(orgID, groupID).then(res => {
       this.setState({
         repos: res.data.libraries
@@ -40,13 +41,13 @@ class OrgDepartmentItem extends React.Component {
     });
   }
 
-  listOrgMembers = () => {
-    const groupID = this.props.activeGroup.id;
+  listOrgMembers = (groupID) => {
     seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
       this.setState({
         members: res.data.members,
         groups: res.data.groups,
         ancestorGroups: res.data.ancestor_groups,
+        groupName: res.data.name,
       });
     });
   }
@@ -77,11 +78,11 @@ class OrgDepartmentItem extends React.Component {
   }
 
   onRepoChanged = () => {
-    this.listOrgGroupRepo();
+    this.listOrgGroupRepo(this.state.groupID);
   }
 
   onMemberChanged = () => {
-    this.listOrgMembers();
+    this.listOrgMembers(this.state.groupID);
   }
 
   toggleItemFreezed = (isFreezed) => {
@@ -90,24 +91,18 @@ class OrgDepartmentItem extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.listOrgGroupRepo();
-    this.listOrgMembers();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.listOrgGroupRepo();
-    this.listOrgMembers();
-  }
-
-  changeOrgGroup = (ancestor, event) => {
-    event.preventDefault();
-    this.props.setActiveGroup(ancestor);
-    window.location.hash = `groups/${ancestor.id}/`;
+  componentWillMount() {
+    const href = window.location.href;
+    let path = href.slice(href.indexOf('groups/'));
+    let groupID = path.slice(7, path.length - 1);
+    this.setState({
+      groupID: groupID
+    });
+    this.listOrgGroupRepo(groupID);
+    this.listOrgMembers(groupID);
   }
 
   render() {
-    const activeGroup = this.props.activeGroup;
     const members = this.state.members;
     const repos = this.state.repos;
     return (
@@ -115,26 +110,24 @@ class OrgDepartmentItem extends React.Component {
         <div className="cur-view-container o-auto">
           <div className="cur-view-path">
             <h3 className="sf-heading">
-              { activeGroup ? 
-                <a href="#" onClick={this.changeOrgGroup.bind(this, null)}>{gettext('Departments')}</a>
+              { this.state.groupID ? 
+                <a href={serviceURL + '/org/departmentadmin/'}>{gettext('Departments')}</a>
                 : <span>{gettext('Departments')}</span>
               }
               {
                 this.state.ancestorGroups.map(ancestor => {
+                  let newHref = serviceURL + '/org/departmentadmin/groups/' + ancestor.id + '/';
                   return (
-                    <span key={ancestor.id}>{' / '}<a href="#" onClick={this.changeOrgGroup.bind(this, ancestor)}>{ancestor.name}</a></span>
+                    <span key={ancestor.id}>{' / '}<a href={newHref}>{ancestor.name}</a></span>
                   );
                 })
               }
-              { activeGroup && <span>{' / '}{activeGroup.name}</span> }
+              { this.state.groupID && <span>{' / '}{this.state.groupName}</span> }
             </h3>
           </div>
 
           <div className="cur-view-subcontainer org-groups">
-            <OrgDepartmentsList
-              setActiveGroup={this.props.setActiveGroup}
-              activeGroup={this.props.activeGroup}
-            />
+            <OrgDepartmentsList groupID={this.state.groupID} />
           </div>
           
           <div className="cur-view-subcontainer org-members">
@@ -167,7 +160,7 @@ class OrgDepartmentItem extends React.Component {
                           isItemFreezed={this.state.isItemFreezed}
                           onMemberChanged={this.onMemberChanged}
                           toggleItemFreezed={this.toggleItemFreezed}
-                          groupID={activeGroup.id}
+                          groupID={this.state.groupID}
                         />
                       </React.Fragment>
                     );
@@ -219,7 +212,7 @@ class OrgDepartmentItem extends React.Component {
                 toggle={this.toggleCancel}
                 onMemberChanged={this.onMemberChanged}
                 member={this.state.deletedMember}
-                groupID={activeGroup.id}
+                groupID={this.state.groupID}
               />
             </ModalPortal>
           )}
@@ -229,7 +222,7 @@ class OrgDepartmentItem extends React.Component {
                 toggle={this.toggleCancel}
                 onRepoChanged={this.onRepoChanged}
                 repo={this.state.deletedRepo}
-                groupID={activeGroup.id}
+                groupID={this.state.groupID}
               />
             </ModalPortal>
           )}
@@ -238,7 +231,7 @@ class OrgDepartmentItem extends React.Component {
               <AddMemberDialog
                 toggle={this.toggleCancel}
                 onMemberChanged={this.onMemberChanged}
-                groupID={activeGroup.id}
+                groupID={this.state.groupID}
               />
             </ModalPortal>
           )}
@@ -247,7 +240,7 @@ class OrgDepartmentItem extends React.Component {
               <AddRepoDialog
                 toggle={this.toggleCancel}
                 onRepoChanged={this.onRepoChanged}
-                groupID={activeGroup.id}
+                groupID={this.state.groupID}
               />
             </ModalPortal>
           )}
@@ -256,12 +249,6 @@ class OrgDepartmentItem extends React.Component {
     );
   }
 }
-
-const OrgDepartmentPropTypes = {
-  activeGroup: PropTypes.object.isRequired
-};
-
-OrgDepartmentItem.propTypes = OrgDepartmentPropTypes;
 
 
 class MemberItem extends React.Component {

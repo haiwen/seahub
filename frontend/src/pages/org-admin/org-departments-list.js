@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { serviceURL, gettext, orgID } from '../../utils/constants';
+import { siteRoot, serviceURL, gettext, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils.js';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
@@ -24,9 +24,9 @@ class OrgDepartmentsList extends React.Component {
     };
   }
 
-  listDepartGroups = (activeGroup) => {
-    if (activeGroup !== null) {
-      seafileAPI.orgAdminListGroupInfo(orgID, activeGroup.id, true).then(res => {
+  listDepartGroups = () => {
+    if (this.props.groupID) {
+      seafileAPI.orgAdminListGroupInfo(orgID, this.props.groupID, true).then(res => {
         this.setState({
           groups: res.data.groups
         });
@@ -37,7 +37,7 @@ class OrgDepartmentsList extends React.Component {
           groups: res.data.data
         });
       });
-    }    
+    }
   }
 
   showAddDepartDialog = () => {
@@ -61,20 +61,16 @@ class OrgDepartmentsList extends React.Component {
   }
 
   onDepartChanged = () => {
-    this.listDepartGroups(this.props.activeGroup);
+    this.listDepartGroups();
   }
 
   componentWillMount() {
-    this.listDepartGroups(this.props.activeGroup);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.activeGroup !== nextProps) this.listDepartGroups(nextProps.activeGroup);
+    this.listDepartGroups();
   }
 
   render() {
     const groups = this.state.groups;
-    let isSub = this.props.activeGroup !== null ? true : false;
+    let isSub = this.props.groupID ? true : false;
     let header = isSub ? gettext('Sub-departments') : gettext('Departments');
     let headerButton = isSub ? gettext('New Sub-departments') : gettext('New Departments');
     let noGroup = isSub ? gettext('No sub-departments') : gettext('No departments');
@@ -106,7 +102,6 @@ class OrgDepartmentsList extends React.Component {
                           group={group}
                           showDeleteDepartDialog={this.showDeleteDepartDialog}
                           showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
-                          setActiveGroup={this.props.setActiveGroup}
                         />
                       </React.Fragment>
                     );
@@ -123,7 +118,7 @@ class OrgDepartmentsList extends React.Component {
                 <AddDepartDialog
                   toggle={this.toggleCancel}
                   onDepartChanged={this.onDepartChanged}
-                  activeGroup={this.props.activeGroup}
+                  parentGroupID={this.props.groupID}
                 />
               </ModalPortal>
             )}
@@ -153,13 +148,6 @@ class OrgDepartmentsList extends React.Component {
   }
 }
 
-const OrgDepartmentsListPropTypes = {
-  setActiveGroup: PropTypes.func.isRequired,
-  activeGroup: PropTypes.obj,
-};
-
-OrgDepartmentsList.propTypes = OrgDepartmentsListPropTypes;
-
 class GroupItem extends React.Component {
 
   constructor(props) {
@@ -177,18 +165,13 @@ class GroupItem extends React.Component {
     this.setState({ highlight: false });
   }
 
-  changeOrgGroup = (e) => {
-    this.props.setActiveGroup(this.props.group);
-    e.preventDefault();
-    window.location.hash = `groups/${this.props.group.id}/`;
-  }
-
   render() {
     const group = this.props.group;
     const highlight = this.state.highlight;
+    const newHref = serviceURL + '/org/departmentadmin/groups/' + group.id + '/';
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><a href="#" onClick={this.changeOrgGroup}>{group.name}</a></td>
+        <td><a href={newHref} onClick={this.changeOrgGroup}>{group.name}</a></td>
         <td>{moment(group.created_time).fromNow()}</td>
         <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
           {Utils.bytesToSize(group.quota)}{' '}
@@ -206,7 +189,6 @@ const GroupItemPropTypes = {
   group: PropTypes.object.isRequired,
   showSetGroupQuotaDialog: PropTypes.func.isRequired,
   showDeleteDepartDialog: PropTypes.func.isRequired,
-  setActiveGroup: PropTypes.func.isRequired,
 };
 
 GroupItem.propTypes = GroupItemPropTypes;

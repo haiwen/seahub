@@ -16,6 +16,9 @@ class DeleteDepartDialog extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      errMessage: null
+    }
   }
 
   deleteDepart = () => {
@@ -24,6 +27,8 @@ class DeleteDepartDialog extends React.Component {
         this.props.onDepartChanged();
         this.props.toggle();
       }
+    }).catch(err => {
+      this.setState({ errMessage: "There are sub-departments in this department." });
     });
   }
 
@@ -35,9 +40,10 @@ class DeleteDepartDialog extends React.Component {
         <ModalHeader toggle={this.props.toggle}>{gettext('Delete Department')}</ModalHeader>
         <ModalBody>
           <div dangerouslySetInnerHTML={{__html: subtitle}}></div>
+          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.deleteDepart}>{gettext('Yes')}</Button>
+          {!this.state.errMessage && <Button color="primary" onClick={this.deleteDepart}>{gettext('Yes')}</Button>}
           <Button color="secondary" onClick={this.props.toggle}>{gettext('No')}</Button>
         </ModalFooter>
       </Modal>
