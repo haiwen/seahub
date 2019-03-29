@@ -151,7 +151,18 @@ class LibContentView extends React.Component {
   }
 
   onpopstate = (event) => {
-    if (event.state && event.state.path) {
+    if (event.state && event.state.key) { // root path
+      if (this.state.path === '/') {
+        return;
+      } else {
+        let path = '/';
+        this.loadDirentList(path);
+        this.setState({
+          path: path,
+          isViewFile: false
+        });
+      }
+    } else if (event.state && event.state.path) { // file path
       let path = event.state.path;
       if (this.state.currentMode === 'column') {
         if (Utils.isMarkdownFile(path)) { // Judging not strict
