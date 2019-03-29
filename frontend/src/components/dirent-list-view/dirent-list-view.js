@@ -200,7 +200,7 @@ class DirentListView extends React.Component {
       return (
         <Fragment>
           <div className="tip-for-new-file">
-            <p className="text-center">{gettext('This folder has no content at this time, ')}</p>
+            <p className="text-center">{gettext('This folder has no content at this time.')}</p>
             <p className="text-center">{gettext('You can create files quickly')}{' +'}</p>
             <div className="big-new-file-button-group">
               <div className="d-flex justify-content-center">
