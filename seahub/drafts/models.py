@@ -29,16 +29,16 @@ class OriginalFileConflict(Exception):
 
 
 class DraftManager(models.Manager):
-    def get_draft_counts_by_repo_id(self, repo_id):
-        num = self.filter(origin_repo_id=repo_id).count()
+    def get_draft_counts_by_repo_id(self, repo_id, status='open'):
+        num = self.filter(origin_repo_id=repo_id, status='open').count()
 
         return num
 
-    def list_draft_by_repo_id(self, repo_id):
+    def list_draft_by_repo_id(self, repo_id, status='open'):
         """list draft by repo id
         """
         drafts = []
-        qs = self.filter(origin_repo_id=repo_id)
+        qs = self.filter(origin_repo_id=repo_id, status=status)
 
         for d in qs:
             draft = {}
@@ -52,7 +52,7 @@ class DraftManager(models.Manager):
 
         return drafts
 
-    def list_draft_by_username(self, username):
+    def list_draft_by_username(self, username, status='open'):
         """list all user drafts 
         If with_reviews is true, return the draft associated review
         """
@@ -70,7 +70,7 @@ class DraftManager(models.Manager):
             return repo
 
         data = []
-        qs = self.filter(username=username)
+        qs = self.filter(username=username, status='open')
 
         for d in qs:
             # If repo does not exist, no related items are displayed.
