@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
-import Toast from '../../components/toast';
 import { Utils } from '../../utils/utils';
-
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext, orgID } from '../../utils/constants';
-
+import { siteRoot, gettext } from '../../utils/constants';
 import OrgLogsFilePermEvent from '../../models/org-logs-perm-audit';
+import '../../css/org-logs.css';
 
 class OrgLogsFileUpdate extends Component {
 
@@ -42,11 +39,9 @@ class OrgLogsFileUpdate extends Component {
         page: res.data.page,
         userSelected: res.data.user_selected,
         repoSelected: res.data.repo_selected
-      })
+      });
     });
   }
-
-
 
   onChangePageNum = (e, num) => {
     e.preventDefault();
@@ -68,10 +63,19 @@ class OrgLogsFileUpdate extends Component {
     this.setState({isItemFreezed: false});
   }
 
+  filterUser = (userSelected) => {
+    this.setState({ userSelected: userSelected });
+  }
+
   render() {
     let eventList = this.state.eventList;
     return (
       <div className="cur-view-content">
+        {this.state.userSelected &&
+          <span className="audit-unselect-item" onClick={this.filterUser.bind(this, null)}>
+            <span className="no-deco">{this.state.userSelected}</span>{' ✖'}
+          </span>
+        }
         <table>
           <thead>
             <tr>
@@ -93,6 +97,8 @@ class OrgLogsFileUpdate extends Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem} 
                   onUnfreezedItem={this.onUnfreezedItem}
+                  filterUser={this.filterUser}
+                  userSelected={this.state.userSelected}
                 />
             )})}
           </tbody>
@@ -115,7 +121,8 @@ class PermAuditItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      userDropdownOpen: false,
     };
   }
 
@@ -141,17 +148,33 @@ class PermAuditItem extends React.Component {
     if (!permEvent.from_user_email) { 
       return gettext('Anonymous User');
     }
-    
     if (!permEvent.is_org_from_user) {
       return permEvent.from_user_name;
     }
+    return (
+      <span>
+        <a href={siteRoot + 'org/useradmin/info/' + permEvent.from_user_email + '/'}>{permEvent.from_user_name}</a>{' '}
+        <Dropdown size='sm' isOpen={this.state.userDropdownOpen} toggle={this.toggleUserDropdown}
+          className={this.state.highlight ? '' : 'vh'} tag="span">
+          <DropdownToggle tag="i" className="sf-dropdown-toggle sf2-icon-caret-down"></DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem onClick={this.props.filterUser.bind(this, permEvent.from_user_email)}>
+              {gettext('Only Show')}{' '}
+              <span className="font-weight-bold">{permEvent.from_user_name}</span>
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </span>
+    );
+  }
 
-    return <a href={siteRoot + 'org/useradmin/info/' + permEvent.from_user_email + '/'}>{permEvent.from_user_name}</a>;
+  toggleUserDropdown = () => {
+    this.setState({ userDropdownOpen: !this.state.userDropdownOpen });
   }
 
   renderToUser = (permEvent) => {
     if (permEvent.to == 'all') {
-       return <a href={siteRoot + 'org/'}>{gettext('Organization')}</a>;
+      return <a href={siteRoot + 'org/'}>{gettext('Organization')}</a>;
     }
 
     if (permEvent.perm_group_name) {
@@ -162,10 +185,10 @@ class PermAuditItem extends React.Component {
       if (permEvent.is_org_to_user) {
         return <a href={siteRoot + 'org/useradmin/info/' + permEvent.to + '/'}>{permEvent.to_user_name}</a>;
       }
-      return permEvent.to
+      return permEvent.to;
     }
 
-    return 'Deleted' 
+    return 'Deleted';
   } 
 
   renderType = (type) => {
@@ -199,17 +222,21 @@ class PermAuditItem extends React.Component {
 
   render() {
     let { permEvent } = this.props;
-    return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{this.renderFromUser(permEvent)}</td>
-        <td>{this.renderToUser(permEvent)}</td>
-        <td>{this.renderType(permEvent.type)}</td>
-        <td>{Utils.sharePerms(permEvent.permission)}</td>
-        <td>{this.renderRepo(permEvent)}</td>
-        <td>{this.renderFolder(permEvent.folder_name)}</td>
-        <td>{permEvent.time}</td>
-      </tr>
-    );
+    if (this.props.userSelected && permEvent.from_user_email !== this.props.userSelected ) {
+      return null;
+    } else {
+      return (
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td>{this.renderFromUser(permEvent)}</td>
+          <td>{this.renderToUser(permEvent)}</td>
+          <td>{this.renderType(permEvent.type)}</td>
+          <td>{Utils.sharePerms(permEvent.permission)}</td>
+          <td>{this.renderRepo(permEvent)}</td>
+          <td>{this.renderFolder(permEvent.folder_name)}</td>
+          <td>{permEvent.time}</td>
+        </tr>
+      );
+    }
   }
 }
 

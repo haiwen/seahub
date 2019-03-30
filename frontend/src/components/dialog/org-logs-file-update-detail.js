@@ -66,7 +66,7 @@ class FileUpdateDetailDialog extends React.Component {
         <div>
           <h4>{gettext('Deleted files')}</h4>
           <p>{this.state.time}</p>
-          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.removed)} />;
+          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.removed)} />
         </div>
       );
     }
@@ -76,7 +76,7 @@ class FileUpdateDetailDialog extends React.Component {
         <div>
           <h4>{gettext('Renamed or Moved files')}</h4>
           <p>{this.state.time}</p>
-          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.renamed)} />;
+          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.renamed)} />
         </div>
       );
     }
@@ -86,7 +86,7 @@ class FileUpdateDetailDialog extends React.Component {
         <div>
           <h4>{gettext('Modified files')}</h4>
           <p>{this.state.time}</p>
-          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.modified)} />;
+          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.modified)} />
         </div>
       );
     }
@@ -96,7 +96,7 @@ class FileUpdateDetailDialog extends React.Component {
         <div>
           <h4>{gettext('New directories')}</h4>
           <p>{this.state.time}</p>
-          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.newdir)} />;
+          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.newdir)} />
         </div>
       );
     }
@@ -106,7 +106,7 @@ class FileUpdateDetailDialog extends React.Component {
         <div>
           <h4>{gettext('Deleted directories')}</h4>
           <p>{this.state.time}</p>
-          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.deldir)} />;
+          <div dangerouslySetInnerHTML= {this.renderContentItem(this.state.deldir)} />
         </div>
       );
     }
@@ -114,7 +114,7 @@ class FileUpdateDetailDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleCancel}>
         <ModalHeader toggle={this.props.toggleCancel}>
           {gettext('Modification Details')}
         </ModalHeader>

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
 import Toast from '../../components/toast';
-
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
 import OrgLogsFileUpdateEvent from '../../models/org-logs-file-update';
 import ModalPortal from '../../components/modal-portal';
 import FileUpdateDetailDialog from '../../components/dialog/org-logs-file-update-detail';
+import '../../css/org-logs.css';
 
 class OrgLogsFileUpdate extends Component {
 
@@ -85,10 +84,33 @@ class OrgLogsFileUpdate extends Component {
     })
   }
 
+  filterUser = (userSelected) => {
+    this.setState({ userSelected: userSelected });
+  }
+
+  filterRepo = (repoSelected) => {
+    this.setState({ repoSelected: repoSelected });
+  }
+
   render() {
     let eventList = this.state.eventList;
     return (
       <div className="cur-view-content">
+        {
+          (this.state.userSelected || this.state.repoSelected) &&
+          <React.Fragment>
+            {this.state.userSelected &&
+              <span className="audit-unselect-item" onClick={this.filterUser.bind(this, null)}>
+                <span className="no-deco">{this.state.userSelected}</span>{' ✖'}
+              </span>
+            }
+            {this.state.repoSelected &&
+              <span className="audit-unselect-item" onClick={this.filterRepo.bind(this, null)}>
+                <span className="no-deco">{this.state.repoSelected}</span>{' ✖'}
+              </span>
+            }
+          </React.Fragment>
+        }
         <table>
           <thead>
             <tr>
@@ -108,6 +130,10 @@ class OrgLogsFileUpdate extends Component {
                   onFreezedItem={this.onFreezedItem} 
                   onUnfreezedItem={this.onUnfreezedItem}
                   onDetails={this.onDetails}
+                  filterUser={this.filterUser}
+                  filterRepo={this.filterRepo}
+                  userSelected={this.state.userSelected}
+                  repoSelected={this.state.repoSelected}
                 />
             )})}
           </tbody>
@@ -139,7 +165,9 @@ class FileUpdateItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      userDropdownOpen: false,
+      repoDropdownOpen: false,
     };
   }
 
@@ -159,7 +187,11 @@ class FileUpdateItem extends React.Component {
         highlight: false
       });
     }
-  } 
+  }
+
+  toggleUserDropdown = () => {
+    this.setState({ userDropdownOpen: !this.state.userDropdownOpen });
+  }
 
   renderUser = (fileEvent) => {
     if (!fileEvent.user_email) { 
@@ -170,7 +202,24 @@ class FileUpdateItem extends React.Component {
       return fileEvent.user_name;
     }
 
-    return <a href={siteRoot + 'org/useradmin/info/' + fileEvent.user_email + '/'}>{fileEvent.user_name}</a>;
+    return (
+      <span>
+        <a href={siteRoot + 'org/useradmin/info/' + fileEvent.user_email + '/'}>{fileEvent.user_name}</a>{' '}
+        <Dropdown size='sm' isOpen={this.state.userDropdownOpen} toggle={this.toggleUserDropdown}
+          className={this.state.highlight ? '' : 'vh'} tag="span">
+        <DropdownToggle tag="i" className="sf-dropdown-toggle sf2-icon-caret-down"></DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem onClick={this.props.filterUser.bind(this, fileEvent.user_email)}>
+              {gettext('Only Show')}{' '}<span className="font-weight-bold">{fileEvent.user_name}</span>
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </span>
+    );
+  }
+
+  toggleRepoDropdown = () => {
+    this.setState({ repoDropdownOpen: !this.state.repoDropdownOpen });
   }
 
   renderRepo = (fileEvent) => {
@@ -178,7 +227,23 @@ class FileUpdateItem extends React.Component {
     if (fileEvent.repo_name) {
       repoName = fileEvent.repo_name; 
     } 
-    return repoName; 
+    return (
+      <span>
+        <span>{repoName}</span>
+        { fileEvent.repo_name &&
+          <Dropdown size='sm' isOpen={this.state.repoDropdownOpen} toggle={this.toggleRepoDropdown}
+            className={this.state.highlight ? '' : 'vh'} >
+            <DropdownToggle tag="i" className="sf-dropdown-toggle sf2-icon-caret-down"></DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem size='sm' onClick={this.props.filterRepo.bind(this, fileEvent.repo_name)}>
+                {gettext('Only Show')}{' '}
+                <span className="font-weight-bold">{fileEvent.repo_name}</span>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        }
+      </span>
+    );
   }
 
   renderAction = (fileEvent) => {
@@ -186,19 +251,31 @@ class FileUpdateItem extends React.Component {
       return <td>{fileEvent.file_oper}</td>;
     }
 
-    return <td>{fileEvent.file_oper}<a className="font-weight-normal text-muted ml-1" href='#' onClick={(e) => this.props.onDetails(e, fileEvent)}>{gettext('Details')}</a></td>
+    return (
+      <td>{fileEvent.file_oper}
+        <a className="font-weight-normal text-muted ml-1" href='#'
+          onClick={(e) => this.props.onDetails(e, fileEvent)}>{gettext('Details')}</a>
+        </td>
+      );
   }
 
   render() {
     let { fileEvent } = this.props;
-    return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{this.renderUser(fileEvent)}</td>
-        <td>{fileEvent.local_time}</td>
-        <td>{this.renderRepo(fileEvent)}</td>
-        {this.renderAction(fileEvent)}
-      </tr>
-    );
+    if (this.props.userSelected && fileEvent.user_email !== this.props.userSelected ) {
+      return null;
+    } else if (this.props.repoSelected && fileEvent.repo_name !== this.props.repoSelected) {
+      return null;
+    } else {
+      return (
+        <tr className={this.state.highlight ? 'tr-highlight' : ''}
+          onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td>{this.renderUser(fileEvent)}</td>
+          <td>{fileEvent.local_time}</td>
+          <td>{this.renderRepo(fileEvent)}</td>
+          {this.renderAction(fileEvent)}
+        </tr>
+      );
+    }
   }
 }
 

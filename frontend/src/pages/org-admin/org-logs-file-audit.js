@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
 import Toast from '../../components/toast';
-
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
 import OrgLogsFileAuditEvent from '../../models/org-logs-file-audit';
+import '../../css/org-logs.css';
 
-class OrgLogsFileAudit extends Component {
+class OrgLogsFileAudit extends React.Component {
 
   constructor(props) {
     super(props);
@@ -65,17 +64,40 @@ class OrgLogsFileAudit extends Component {
     this.setState({isItemFreezed: false});
   }
 
+  filterUser = (userSelected) => {
+    this.setState({ userSelected: userSelected });
+  }
+
+  filterRepo = (repoSelected) => {
+    this.setState({ repoSelected: repoSelected });
+  }
+
   render() {
     let eventList = this.state.eventList;
     return (
       <div className="cur-view-content">
+        {
+          (this.state.userSelected || this.state.repoSelected) &&
+          <React.Fragment>
+            {this.state.userSelected &&
+              <span className="audit-unselect-item" onClick={this.filterUser.bind(this, null)}>
+                <span className="no-deco">{this.state.userSelected}</span>{' ✖'}
+              </span>
+            }
+            {this.state.repoSelected &&
+              <span className="audit-unselect-item" onClick={this.filterRepo.bind(this, null)}>
+                <span className="no-deco">{this.state.repoSelected}</span>{' ✖'}
+              </span>
+            }
+          </React.Fragment>
+        }
         <table>
           <thead>
             <tr>
               <th width="24%">{gettext('User')}</th>
               <th width="10%">{gettext('Type')}</th>
-              <th width="15%">{gettext('IP')}</th>
-              <th width="15%">{gettext('Date')}</th>
+              <th width="13%">{gettext('IP')}</th>
+              <th width="17%">{gettext('Date')}</th>
               <th width="18%">{gettext('Library')}</th>
               <th width="18%">{gettext('File')}</th>
             </tr>
@@ -89,6 +111,10 @@ class OrgLogsFileAudit extends Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem} 
                   onUnfreezedItem={this.onUnfreezedItem}
+                  filterUser={this.filterUser}
+                  filterRepo={this.filterRepo}
+                  userSelected={this.state.userSelected}
+                  repoSelected={this.state.repoSelected}
                 />
             )})}
           </tbody>
@@ -111,7 +137,9 @@ class FileAuditItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      userDropdownOpen: false,
+      repoDropdownOpen: false,
     };
   }
 
@@ -131,7 +159,11 @@ class FileAuditItem extends React.Component {
         highlight: false
       });
     }
-  } 
+  }
+
+  toggleUserDropdown = () => {
+    this.setState({ userDropdownOpen: !this.state.userDropdownOpen });
+  }
 
   renderUser = (fileEvent) => {
     if (!fileEvent.user_email) { 
@@ -142,7 +174,22 @@ class FileAuditItem extends React.Component {
       return fileEvent.user_name;
     }
 
-    return <a href={siteRoot + 'org/useradmin/info/' + fileEvent.user_email + '/'}>{fileEvent.user_name}</a>;
+    return (
+      <span>
+        <a href={siteRoot + 'org/useradmin/info/' + fileEvent.user_email + '/'}>{fileEvent.user_name}</a>{' '}
+        <Dropdown size='sm' isOpen={this.state.userDropdownOpen} toggle={this.toggleUserDropdown}
+          className={this.state.highlight ? '' : 'vh'} tag="span">
+          <DropdownToggle tag="i" className="sf-dropdown-toggle sf2-icon-caret-down"></DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem onClick={this.props.filterUser.bind(this, fileEvent.user_email)}>
+              {gettext('Only Show')}{' '}
+              <span className="font-weight-bold">{fileEvent.user_name}</span>
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </span>
+    );
+    
   }
 
   renderType = (type) => {
@@ -156,28 +203,53 @@ class FileAuditItem extends React.Component {
       type = 'share link'; 
     }
     return type;
-  } 
+  }
+
+  toggleRepoDropdown = () => {
+    this.setState({ repoDropdownOpen: !this.state.repoDropdownOpen });
+  }
 
   renderRepo = (fileEvent) => {
     let repoName = 'Deleted';
     if (fileEvent.repo_name) {
       repoName = fileEvent.repo_name; 
-    } 
-    return repoName; 
+    }
+    return (
+      <span>
+        <span>{repoName}</span>
+        { fileEvent.repo_name &&
+          <Dropdown size='sm' isOpen={this.state.repoDropdownOpen} toggle={this.toggleRepoDropdown}
+            className={this.state.highlight ? '' : 'vh'} >
+            <DropdownToggle tag="i" className="sf-dropdown-toggle sf2-icon-caret-down"></DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem size='sm' onClick={this.props.filterRepo.bind(this, fileEvent.repo_name)}>
+                {gettext('Only Show')}{' '}<span className="font-weight-bold">{fileEvent.repo_name}</span></DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        }
+      </span>
+    );
   }
 
   render() {
     let { fileEvent } = this.props;
-    return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{this.renderUser(fileEvent)}</td>
-        <td>{this.renderType(fileEvent.type)}</td>
-        <td>{fileEvent.ip}</td>
-        <td>{fileEvent.time}</td>
-        <td>{this.renderRepo(fileEvent)}</td>
-        <td><span title={fileEvent.file_path}>{fileEvent.file_name}</span></td>
-      </tr>
-    );
+    if (this.props.userSelected && fileEvent.user_email !== this.props.userSelected ) {
+      return null;
+    } else if (this.props.repoSelected && fileEvent.repo_name !== this.props.repoSelected) {
+      return null;
+    } else {
+      return (
+        <tr className={this.state.highlight ? 'tr-highlight' : ''}
+          onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td>{this.renderUser(fileEvent)}</td>
+          <td>{this.renderType(fileEvent.type)}</td>
+          <td>{fileEvent.ip}</td>
+          <td>{fileEvent.time}</td>
+          <td>{this.renderRepo(fileEvent)}</td>
+          <td><span title={fileEvent.file_path}>{fileEvent.file_name}</span></td>
+        </tr>
+      );
+    }
   }
 }
 
