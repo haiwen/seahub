@@ -6,7 +6,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  groupID: PropTypes.num,
   groupName: PropTypes.string,
   toggle: PropTypes.func.isRequired,
   onDepartChanged: PropTypes.func.isRequired
@@ -18,7 +17,7 @@ class DeleteDepartDialog extends React.Component {
     super(props);
     this.state = {
       errMessage: null
-    }
+    };
   }
 
   deleteDepart = () => {
@@ -28,7 +27,7 @@ class DeleteDepartDialog extends React.Component {
         this.props.toggle();
       }
     }).catch(err => {
-      this.setState({ errMessage: "There are sub-departments in this department." });
+      this.setState({ errMessage: 'There are sub-departments in this department.' });
     });
   }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../../css/org-department-item.css';
 
 class OrgDepartments extends React.Component {

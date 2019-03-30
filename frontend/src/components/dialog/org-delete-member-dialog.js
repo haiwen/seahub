@@ -6,7 +6,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  groupID: PropTypes.number.isRequired,
   member: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
   onMemberChanged: PropTypes.func.isRequired

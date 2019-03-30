@@ -140,40 +140,42 @@ class OrgDepartmentItem extends React.Component {
               </div>
             </div>
             <div className="cur-view-content">
-              <table>
-                <thead>
-                  <tr>
-                    <th width="5%"></th>
-                    <th width="50%">{gettext('Name')}</th>
-                    <th width="15%">{gettext('Role')}</th>
-                    <th width="30%"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {members && members.map((member, index) => {
-                    return(
-                      <React.Fragment key={index}>
-                        <MemberItem
-                          member={member}
-                          showAddMemberDialog={this.showAddMemberDialog}
-                          showDeleteMemberDialog={this.showDeleteMemberDialog}
-                          isItemFreezed={this.state.isItemFreezed}
-                          onMemberChanged={this.onMemberChanged}
-                          toggleItemFreezed={this.toggleItemFreezed}
-                          groupID={this.state.groupID}
-                        />
-                      </React.Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
+              {(members && members.length === 1 && members[0].role === "Owner") ?
+                <p className="no-member">{gettext('No Members')}</p> :
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="5%"></th>
+                      <th width="50%">{gettext('Name')}</th>
+                      <th width="15%">{gettext('Role')}</th>
+                      <th width="30%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {members.map((member, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <MemberItem
+                            member={member}
+                            showAddMemberDialog={this.showAddMemberDialog}
+                            showDeleteMemberDialog={this.showDeleteMemberDialog}
+                            isItemFreezed={this.state.isItemFreezed}
+                            onMemberChanged={this.onMemberChanged}
+                            toggleItemFreezed={this.toggleItemFreezed}
+                            groupID={this.state.groupID}
+                          />
+                        </React.Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              }
             </div>
           </div>
 
           <div className="cur-view-subcontainer org-libriries">
             <div className="cur-view-path">
               <div className="fleft"><h3 className="sf-heading">{gettext('Libraries')}</h3></div>
-
               <div className="fright">
                 <button className="btn-white operation-item" onClick={this.showAddRepoDialog}>{gettext('New Library')}</button>
               </div>
@@ -289,11 +291,12 @@ class MemberItem extends React.Component {
   render() {
     const member = this.props.member;
     const highlight = this.state.highlight;
+    let memberLink = serviceURL + '/org/useradmin/info/' + member.email + '/';
     if (member.role === 'Owner') return null;
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={member.avatar_url} alt="member-header" width="24"/></td>
-        <td>{member.name}</td>
+        <td><a href={memberLink}>{member.name}</a></td>
         <td>
           <RoleEditor 
             isTextMode={true}
@@ -307,7 +310,7 @@ class MemberItem extends React.Component {
         {
           !this.props.isItemFreezed ?
             <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
-              <a href="#" className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></a>
+              <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
             </td> : <td></td>
         }        
       </tr>
@@ -363,7 +366,7 @@ class RepoItem extends React.Component {
         <td>{repo.name}</td>
         <td>{Utils.bytesToSize(repo.size)}{' '}</td>
         <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
-          <a href="#" className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></a>
+          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
         </td>
       </tr>
     );

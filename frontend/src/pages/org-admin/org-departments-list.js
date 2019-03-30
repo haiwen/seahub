@@ -119,6 +119,7 @@ class OrgDepartmentsList extends React.Component {
                   toggle={this.toggleCancel}
                   onDepartChanged={this.onDepartChanged}
                   parentGroupID={this.props.groupID}
+                  groupID={this.state.groupID}
                 />
               </ModalPortal>
             )}
@@ -172,13 +173,13 @@ class GroupItem extends React.Component {
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><a href={newHref} onClick={this.changeOrgGroup}>{group.name}</a></td>
-        <td>{moment(group.created_time).fromNow()}</td>
+        <td>{moment(group.created_at).fromNow()}</td>
         <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
           {Utils.bytesToSize(group.quota)}{' '}
           <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
         </td>
         <td className="cursor-pointer text-center" onClick={this.props.showDeleteDepartDialog.bind(this, group)}>
-          <a href="#" className={`sf2-icon-delete action-icon  ${highlight ? '' : 'vh'}`} title="Delete"></a>
+          <span className={`sf2-icon-delete action-icon  ${highlight ? '' : 'vh'}`} title="Delete"></span>
         </td>
       </tr>
     );

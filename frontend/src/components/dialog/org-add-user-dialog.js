@@ -145,7 +145,7 @@ class AddOrgUserDialog extends React.Component {
             <FormGroup>
               <Label for="userPwd">{gettext('Password')}</Label>
               <InputGroup className="passwd">
-                <Input id="userPwd" innerRef={input => {this.passwdInput = input}} value={this.state.password || ''} onChange={this.inputPassword} />
+                <Input id="userPwd" innerRef={input => {this.passwdInput = input;}} value={this.state.password || ''} onChange={this.inputPassword} />
                 <InputGroupAddon addonType="append">
                   <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i></Button>
                   <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
@@ -154,7 +154,7 @@ class AddOrgUserDialog extends React.Component {
             </FormGroup>
             <FormGroup>
               <Label for="userPwdNew">{gettext('Confirm Password')}</Label>
-              <Input id="userPwdNew" innerRef={input => {this.passwdNewInput = input}}  className="passwd"   value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
+              <Input id="userPwdNew" innerRef={input => {this.passwdNewInput = input;}}  className="passwd"   value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
           </Form>
           <Label className="err-message">{gettext(this.state.errMessage)}</Label>

@@ -29,6 +29,9 @@ class AddDepartDialog extends React.Component {
       seafileAPI.orgAdminAddDepartGroup(orgID, parentGroup, this.state.departName.trim()).then((res) => {
         this.props.toggle();
         this.props.onDepartChanged();
+      }).catch(error => {
+        let errorMsg = gettext(error.response.data.error_msg);
+        this.setState({ errMessage: errorMsg });
       });
     }
   }
@@ -38,12 +41,6 @@ class AddDepartDialog extends React.Component {
     const name = this.state.departName.trim();
     if (!name.length) {
       errMessage = gettext('Name is required');
-      this.setState({ errMessage: errMessage });
-      return false;
-    }
-    const myReg = /[`~!@#$%^&*()\+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\{}|《》？：“”【】、；‘’，。、]/im;
-    if (myReg.test(name)) {
-      errMessage = gettext('Name can only contain letters, numbers, blank, hyphen or underscore.');
       this.setState({ errMessage: errMessage });
       return false;
     }
@@ -64,7 +61,7 @@ class AddDepartDialog extends React.Component {
   }
 
   render() {
-    let header = this.props.activeGroup ? gettext('New Sub-department') : gettext('New Department');
+    let header = this.props.parentGroupID ? gettext('New Sub-department') : gettext('New Department');
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{header}</ModalHeader>

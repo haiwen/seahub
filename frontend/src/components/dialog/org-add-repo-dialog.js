@@ -22,10 +22,12 @@ class AddRepoDialog extends React.Component {
   handleSubmit = () => {
     let isValid = this.validateName();
     if (isValid) {
-      const parentGroup = -1;
       seafileAPI.orgAdminAddDepartGroupRepo(orgID, this.props.groupID, this.state.repoName.trim()).then((res) => {
         this.props.toggle();
         this.props.onRepoChanged();
+      }).catch(error => {
+        let errorMsg = gettext(error.response.data.error_msg);
+        this.setState({ errMessage: errorMsg });
       });
     }
   }
