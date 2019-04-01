@@ -13,6 +13,7 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
+import DirentRightMenu from './dirent-right-menu'
 
 import '../../css/dirent-list-item.css';
 
@@ -57,8 +58,31 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
       isDragTipShow: false,
       isDropTipshow: false,
+      showItemContextMenu: false,
+      itemdata: '',
+      rightIndex: -1,
+      itemMousePosition: {clientX: '', clientY: ''},
+      menuIndex: -1,
     };
     this.zipToken = null;
+  }
+
+  componentDidMount() {
+    this.itemRegisterHandlers();
+  }
+
+  componentWillUnmount() {
+    this.itemUnregisterHandlers();
+  }
+
+  itemUnregisterHandlers = () => {
+    let itemTbody = document.querySelector('tbody');
+    itemTbody.removeEventListener('contextmenu', this.itemRightContextMenu);
+  }
+
+  itemRegisterHandlers = () => {
+    let treeView = document.querySelector('tbody');
+    treeView.addEventListener('contextmenu', this.itemRightContextMenu);
   }
 
   //UI Interactive
@@ -69,7 +93,11 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
+    this.setState({
+      isDragTipShow: true,
+      itemdata: this.props.dirent,
+      rightIndex: this.props.subscript,
+    });
   }
 
   onMouseOver = () => {
@@ -79,7 +107,11 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
+    this.setState({
+      isDragTipShow: true,
+      itemdata: this.props.dirent,
+      rightIndex: this.props.subscript,
+    });
   }
 
   onMouseLeave = () => {
@@ -89,7 +121,36 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
-    this.setState({isDragTipShow: false});
+    this.setState({
+      isDragTipShow: false,
+      itemdata: '',
+      rightIndex: -1,
+    });
+  }
+
+  itemRightContextMenu = (e) =>{
+    console.log(this.props.subscript)
+    console.log(this.state.rightIndex)
+    console.log(this)
+    e.preventDefault();
+    this.setState({
+      showItemContextMenu: false,
+    });
+    console.log(123)
+    setTimeout(() => {
+      this.setState({
+        showItemContextMenu: true,
+        rightItemData: this.state.itemdata,
+        itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
+        menuIndex: this.state.rightIndex,
+      });
+    },40)
+  }
+
+  closeRightMenu = () => {
+    this.setState({
+      showItemContextMenu: false,
+    });
   }
 
   onUnfreezedItem = () => {
@@ -488,6 +549,21 @@ class DirentListItem extends React.Component {
                   </li>
                 </ul>
               </div>
+            }
+            {this.state.showItemContextMenu && this.state.menuIndex === this.props.subscript && 
+              <DirentRightMenu
+                dirent={this.state.rightItemData}
+                mousePosition={this.state.itemMousePosition}
+                isRepoOwner={this.isRepoOwner}
+                currentRepoInfo={this.props.currentRepoInfo}
+                onMenuItemClick={this.onMenuItemClick}
+                onItemDownload={this.onItemDownload}
+                onItemShare={this.onItemShare}
+                onItemDelete={this.onItemDelete}
+                itemRegisterHandlers={this.itemRegisterHandlers}
+                itemUnregisterHandlers={this.itemUnregisterHandlers}
+                closeRightMenu={this.closeRightMenu}
+              />
             }
           </td>
           <td className="file-size">{dirent.size && dirent.size}</td>
