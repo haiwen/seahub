@@ -135,7 +135,7 @@
 }
 
 /* for reach/router */
-[role=group] {
+.reach-router[role=group] {
   display: flex;
   flex: 1;
   flex-direction: column;

@@ -41,7 +41,7 @@ class SysAdmin extends React.Component {
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} />
         <MainPanel>
-          <Router>
+          <Router className="reach-router">
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
