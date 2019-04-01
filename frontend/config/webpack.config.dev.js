@@ -400,6 +400,17 @@ module.exports = {
     //new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     new BundleTracker({filename: './webpack-stats.dev.json'}),
+
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'commons',
+        filename: '[name]/bundle.common.js',
+        minChunks: function(module) {
+          if(module.resource && (/^.*\.(css|scss)$/).test(module.resource)) {
+            return false;
+          }
+          return module.context && module.context.includes('node_modules');
+        }
+      })
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
