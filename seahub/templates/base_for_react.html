@@ -1,4 +1,5 @@
 {% load seahub_tags i18n staticfiles %}
+{% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -89,6 +90,7 @@
      };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
+{% render_bundle 'commons' %}
 {% block extra_script %}{% endblock %}
 </body>
 </html>
