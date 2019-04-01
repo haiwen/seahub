@@ -184,7 +184,7 @@ class App extends Component {
         <div id="main">
           <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />
           <MainPanel>
-            <Router>
+            <Router className="reach-router">
               {home}
               <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <DraftsViewWrapper path={siteRoot + 'drafts'}
