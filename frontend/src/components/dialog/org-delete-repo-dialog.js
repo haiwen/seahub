@@ -30,8 +30,8 @@ class DeleteRepoDialog extends React.Component {
           <div dangerouslySetInnerHTML={{__html: subtitle}}></div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.deleteRepo}>{gettext('Yes')}</Button>
-          <Button color="secondary" onClick={this.props.toggle}>{gettext('No')}</Button>
+          <Button color="primary" onClick={this.deleteRepo}>{gettext('Delete')}</Button>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
     );

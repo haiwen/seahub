@@ -51,7 +51,7 @@ class AddMemberDialog extends React.Component {
         <ModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</ModalHeader>
         <ModalBody>
           <UserSelect
-            placeholder={gettext('Please enter 1 or more character')}
+            placeholder={gettext('Select users...')}
             onSelectChange={this.handleSelectChange}
             ref="orgSelect"
             isMulti={false}
@@ -61,6 +61,7 @@ class AddMemberDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
     );

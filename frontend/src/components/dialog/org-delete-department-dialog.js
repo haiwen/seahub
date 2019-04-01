@@ -42,8 +42,8 @@ class DeleteDepartDialog extends React.Component {
           { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>
-          {!this.state.errMessage && <Button color="primary" onClick={this.deleteDepart}>{gettext('Yes')}</Button>}
-          <Button color="secondary" onClick={this.props.toggle}>{gettext('No')}</Button>
+          {!this.state.errMessage && <Button color="primary" onClick={this.deleteDepart}>{gettext('Delete')}</Button>}
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
     );
