@@ -13,6 +13,8 @@ import 'react-image-lightbox/style.css';
 import '../../css/tip-for-new-md.css';
 import toaster from '../toast';
 
+// import DirentRightMenu from './dirent-right-menu'
+
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -48,7 +50,7 @@ class DirentListView extends React.Component {
       imageIndex: 0,
 
       isCreateFileDialogShow: false,
-      fileType: ''
+      fileType: '',
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -240,7 +242,7 @@ class DirentListView extends React.Component {
         <table>
           <thead>
             <tr>
-            <th width="3%" className="pl10">
+              <th width="3%" className="pl10">
                 <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
               </th>
               <th width="3%" className="pl10">{/*icon */}</th>
@@ -258,6 +260,7 @@ class DirentListView extends React.Component {
                 return (
                   <DirentListItem
                     key={index}
+                    subscript={index}
                     dirent={dirent}
                     path={this.props.path}
                     repoID={this.props.repoID}
