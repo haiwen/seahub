@@ -345,24 +345,13 @@ class RepoItem extends React.Component {
     this.setState({ highlight: false });
   }
 
-  renderLibIcon = (repo) => {
-    let href, iconTitle;
-    if (repo.encrypted) {
-      href = mediaUrl + 'img/lib/48/lib-encrypted.png';
-      iconTitle = gettext('Encrypted library'); 
-    } else {
-      href = mediaUrl + 'img/lib/48/lib.png';
-      iconTitle = gettext('Read-Write library');
-    } 
-    return <img src={href} title={iconTitle} alt={iconTitle} width="24" />;
-  }
-
   render() {
     const repo = this.props.repo;
     const highlight = this.state.highlight;
+    let iconUrl = Utils.getLibIconUrl(repo);
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{this.renderLibIcon(repo)}</td>
+        <td><img src={iconUrl} width="24" alt={gettext('icon')}/></td>
         <td>{repo.name}</td>
         <td>{Utils.bytesToSize(repo.size)}{' '}</td>
         <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
