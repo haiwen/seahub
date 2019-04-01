@@ -73,7 +73,7 @@ class OrgLinks extends React.Component {
                 <tr>
                   <th width="50%">{gettext('Name')}</th>
                   <th width="15%">{gettext('Owner')}</th>
-                  <th width="15%">{gettext('Create At')}</th>
+                  <th width="15%">{gettext('Created At')}</th>
                   <th width="10%">{gettext('Count')}</th>
                   <th width="10%"></th>
                 </tr>
@@ -160,8 +160,8 @@ class RepoItem extends React.Component {
   }
 
   render() {
-    const { index, link, deleteOrgLink } = this.props;
-    const href = siteRoot + 'org/useradmin/info/' + link.owner_email + '/';
+    const { link, deleteOrgLink } = this.props;
+    const href = siteRoot + 'org/useradmin/info/' + encodeURIComponent(link.owner_email) + '/';
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} >
         <td>{link.name}</td>

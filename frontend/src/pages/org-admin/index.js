@@ -12,6 +12,9 @@ import OrgGroups from './org-groups';
 import OrgLibraries from './org-libraries';
 import OrgInfo from './org-info';
 import OrgLinks from './org-links';
+import OrgDepartments from './org-departments';
+import OrgDepartmentsList from './org-departments-list';
+import OrgDepartmentItem from './org-department-item';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -36,6 +39,9 @@ class Org extends React.Component {
     let currentTab = href[href.length - 2];
     if (currentTab == 'useradmin') {
       currentTab = 'users';
+    }
+    if (currentTab > 0) {
+      currentTab = 'departmentadmin';
     }
     this.setState({currentTab: currentTab});
   }
@@ -63,6 +69,11 @@ class Org extends React.Component {
   render() {
 
     let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog, isInviteUserDialogOpen } = this.state;
+    let href = window.location.href;
+    let newPath = 'groups/';
+    if (href.indexOf('org/departmentadmin/groups/') > 0) {
+      newPath = href.slice(href.indexOf('groups/'));
+    }
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
@@ -82,6 +93,10 @@ class Org extends React.Component {
             <OrgGroups path={siteRoot + 'org/groupadmin'} />
             <OrgLibraries path={siteRoot + 'org/repoadmin'} />
             <OrgLinks path={siteRoot + 'org/publinkadmin'} />
+            <OrgDepartments path={siteRoot + 'org/departmentadmin'}>
+              <OrgDepartmentsList path='/' />
+              <OrgDepartmentItem path={newPath} />
+            </OrgDepartments>
           </Router>
         </MainPanel>
       </div>
