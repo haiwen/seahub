@@ -73,6 +73,8 @@ class DirColumnFile extends React.Component {
         lastModified = {this.props.lastModified}
         latestContributor={this.props.latestContributor}
         onLinkClick={this.props.onLinkClick}
+        repoID={this.props.repoID}
+        path={this.props.path}
       >
         <Fragment>
           <span className='wiki-open-file position-fixed' onClick={this.onOpenFile}>
