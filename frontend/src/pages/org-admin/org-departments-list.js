@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, serviceURL, gettext, orgID } from '../../utils/constants';
+import { siteRoot, serviceURL, gettext, orgID, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils.js';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import DeleteDepartDialog from '../../components/dialog/org-delete-department-dialog';
 import SetGroupQuotaDialog from '../../components/dialog/org-set-group-quota-dialog';
 import '../../css/org-department-item.css';
+
+moment.locale(lang);
 
 class OrgDepartmentsList extends React.Component {
 

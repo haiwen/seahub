@@ -40,12 +40,6 @@ class AddRepoDialog extends React.Component {
       this.setState({ errMessage: errMessage });
       return false;
     }
-    const myReg = /[`~!@#$%^&*()\+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\+={}|《》？：“”【】、；‘’，。、]/im;
-    if (myReg.test(name)) {
-      errMessage = gettext('Name can only contain letters, numbers, blank, hyphen or underscore.');
-      this.setState({ errMessage: errMessage });
-      return false;
-    }
     return true;
   }
 

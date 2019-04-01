@@ -23,3 +23,6 @@
 .org-members .cur-view-content {
   padding-bottom: 40px;
 }
+.cur-view-path button:hover {
+  cursor: pointer;
+}
