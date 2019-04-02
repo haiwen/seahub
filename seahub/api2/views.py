@@ -5048,17 +5048,29 @@ class OrganizationView(APIView):
             User.objects.create_user(username, password, is_staff=False, is_active=True)
             create_org(org_name, prefix, username)
 
-            new_org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
+            org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
+            org_id = org.org_id
 
             # set member limit
             from seahub_extra.organizations.models import OrgMemberQuota
-            OrgMemberQuota.objects.set_quota(new_org.org_id, member_limit)
+            OrgMemberQuota.objects.set_quota(org_id, member_limit)
 
             # set quota
             quota = quota_mb * get_file_size_unit('MB')
-            seafserv_threaded_rpc.set_org_quota(new_org.org_id, quota)
+            seafserv_threaded_rpc.set_org_quota(org_id, quota)
 
-            return Response('success', status=status.HTTP_201_CREATED)
+            org_info = {}
+            org_info['org_id'] = org_id
+            org_info['org_name'] = org.org_name
+            org_info['ctime'] = timestamp_to_isoformat_timestr(org.ctime)
+            org_info['org_url_prefix'] = org.url_prefix
+
+            creator = org.creator
+            org_info['creator_email'] = creator
+            org_info['creator_name'] = email2nickname(creator)
+            org_info['creator_contact_email'] = email2contact_email(creator)
+
+            return Response(org_info, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")

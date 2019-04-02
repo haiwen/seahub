@@ -77,8 +77,8 @@ def onlyoffice_editor_callback(request):
         # Defines the link to the edited document to be saved with the document storage service.
         # The link is present when the status value is equal to 2 or 3 only.
         url = post_data.get('url')
-        resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
-        if not resp:
+        onlyoffice_resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+        if not onlyoffice_resp:
             logger.error('[OnlyOffice] No response from file content url.')
             return HttpResponse('{"error": 0}')
 
@@ -100,7 +100,7 @@ def onlyoffice_editor_callback(request):
 
         # get file content
         files = {
-            'file': requests.get(url).content,
+            'file': onlyoffice_resp.content,
             'file_name': os.path.basename(file_path),
             'target_file': file_path,
         }
