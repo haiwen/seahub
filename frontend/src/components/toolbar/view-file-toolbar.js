@@ -81,7 +81,7 @@ class ViewFileToolbar extends React.Component {
     this.setState({
       isRelatedFileDialogShow: false,
       showRelatedFileDialog: false,
-    })
+    });
   }
 
   render() {

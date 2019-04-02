@@ -470,20 +470,20 @@ class MarkdownEditor extends React.Component {
     switch(option)
     {
       case 'related_files':
-          if (this.state.relatedFiles.length > 0) {
-            this.setState({
-              showRelatedFileDialog: true,
-              showMarkdownEditorDialog: true,
-              viewMode: 'list_related_file',
-            });
-          }
-          else {
-            this.setState({
-              showRelatedFileDialog: true,
-              showMarkdownEditorDialog: true,
-              viewMode: 'add_related_file',
-            });
-          }
+        if (this.state.relatedFiles.length > 0) {
+          this.setState({
+            showRelatedFileDialog: true,
+            showMarkdownEditorDialog: true,
+            viewMode: 'list_related_file',
+          });
+        }
+        else {
+          this.setState({
+            showRelatedFileDialog: true,
+            showMarkdownEditorDialog: true,
+            viewMode: 'add_related_file',
+          });
+        }
         break;
       case 'tags':
         this.setState({
@@ -515,11 +515,12 @@ class MarkdownEditor extends React.Component {
   }
 
   componentWillUnmount() {
+
     this.socket.emit('repo_update', {
       request: 'unwatch_update',
-      repo_id: this.props.c.repoID,
+      repo_id: editorUtilities.repoID,
       user: {
-      name: editorUtilities.name,
+        name: editorUtilities.name,
         username: editorUtilities.username,
         contact_email: editorUtilities.contact_email,
       },
@@ -579,7 +580,7 @@ class MarkdownEditor extends React.Component {
         request: 'watch_update',
         repo_id: editorUtilities.repoID,
         user: {
-        name: editorUtilities.name,
+          name: editorUtilities.name,
           username: editorUtilities.username,
           contact_email: editorUtilities.contact_email,
         },
@@ -676,8 +677,8 @@ class MarkdownEditor extends React.Component {
           });
         }, 3000);
         that.timer = null;
-          }, 60000);
-        }
+      }, 60000);
+    }
   }
 
   backToParentDirectory = () => {
@@ -964,8 +965,8 @@ class MarkdownEditor extends React.Component {
   render() {
     let component;
     let sidePanel = this.state.isShowHistory ? true : false;
-    let markdownViewer = sidePanel ? "seafile-md-viewer-slate side-panel-on" :
-      (this.state.isShowComments ? "seafile-md-viewer-slate comment-on" : "seafile-md-viewer-slate");
+    let markdownViewer = sidePanel ? 'seafile-md-viewer-slate side-panel-on' :
+      (this.state.isShowComments ? 'seafile-md-viewer-slate comment-on' : 'seafile-md-viewer-slate');
     if (this.state.loading) {
       return (
         <div className="empty-loading-page">
@@ -997,7 +998,7 @@ class MarkdownEditor extends React.Component {
               toggleHistory={this.toggleHistory}
             />
             <div className="seafile-md-viewer d-flex">
-              <div className={sidePanel ? "seafile-md-viewer-container side-panel-on":"seafile-md-viewer-container"} ref="markdownContainer">
+              <div className={sidePanel ? 'seafile-md-viewer-container side-panel-on' : 'seafile-md-viewer-container'} ref="markdownContainer">
                 {
                   this.state.isShowHistory ?
                     <div className="diff-container">
@@ -1018,8 +1019,8 @@ class MarkdownEditor extends React.Component {
                         siteRoot={siteRoot}
                         value={this.state.value}
                       />
-                    {this.state.isShowComments &&
-                      <i className="fa fa-plus-square seafile-viewer-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>}
+                      {this.state.isShowComments &&
+                        <i className="fa fa-plus-square seafile-viewer-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>}
                     </div>
                 }
                 {
@@ -1074,12 +1075,12 @@ class MarkdownEditor extends React.Component {
           fileTagList={this.state.fileTagList}
           deleteDraft={this.deleteDraft}
           showDraftSaved={this.state.showDraftSaved}
-        />
+        />;
       }
 
       return (
         <React.Fragment>
-          {this.state.localDraftDialog?
+          {this.state.localDraftDialog ?
             <ModalPortal>
               <LocalDraftDialog
                 localDraftDialog={this.state.localDraftDialog}

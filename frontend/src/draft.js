@@ -171,7 +171,7 @@ class Draft extends React.Component {
           }); 
         }));
         break;
-      } 
+    }
   }
 
   onHistoryItemClick = (currentItem, preItem, activeItem) => {
@@ -713,7 +713,7 @@ class Draft extends React.Component {
         if (!draftFileExists) {
           return (
             <Nav tabs className="review-side-panel-nav">
-            {this.showNavItem('info')}
+              {this.showNavItem('info')}
             </Nav>
           );
         }
@@ -768,12 +768,12 @@ class Draft extends React.Component {
               <span className="sf2-icon-review"></span>
             </div>
             <div className="info-item file-info">
-                <React.Fragment>
-                  <span className="file-name">{draftFileName}</span>
-                  {draftFileExists &&
-                    <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>
-                  }
-                </React.Fragment>
+              <React.Fragment>
+                <span className="file-name">{draftFileName}</span>
+                {draftFileExists &&
+                  <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>
+                }
+              </React.Fragment>
             </div>
           </div>
           <div className="button-group">
