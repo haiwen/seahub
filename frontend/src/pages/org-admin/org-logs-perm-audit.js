@@ -166,7 +166,7 @@ class PermAuditItem extends React.Component {
   }
 
   renderToUser = (permEvent) => {
-    if (permEvent.type.indexOf('all') != -1) {
+    if (permEvent.type.indexOf('public') != -1) {
       return <a href={siteRoot + 'org/'}>{gettext('Organization')}</a>;
     }
 
