@@ -13,8 +13,6 @@ import 'react-image-lightbox/style.css';
 import '../../css/tip-for-new-md.css';
 import toaster from '../toast';
 
-// import DirentRightMenu from './dirent-right-menu'
-
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,

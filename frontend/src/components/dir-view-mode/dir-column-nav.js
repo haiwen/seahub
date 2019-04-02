@@ -292,7 +292,6 @@ class DirColumnNav extends React.Component {
               itemRightMenuShow={this.props.itemRightMenuShow}
               showDiffentRightMenu={this.props.showDiffentRightMenu}
               diffentRightMenuShow={this.props.diffentRightMenuShow}
-              
             />)
           }
         </div>
