@@ -13,7 +13,7 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import DirentRightMenu from './dirent-right-menu'
+import DirentRightMenu from './dirent-right-menu';
 
 import '../../css/dirent-list-item.css';
 
