@@ -63,6 +63,11 @@ const propTypes = {
   onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
+  closeContainerRightMenu: PropTypes.func,
+  closeItemRightMenu: PropTypes.func,
+  showDiffentRightMenu: PropTypes.func,
+  itemRightMenuShow: PropTypes.bool,
+  diffentRightMenuShow: PropTypes.bool,
 };
 
 class DirColumnView extends React.Component {
@@ -165,6 +170,11 @@ class DirColumnView extends React.Component {
           currentRepoInfo={this.props.currentRepoInfo}
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
+          closeContainerRightMenu={this.props.closeContainerRightMenu}
+          closeItemRightMenu={this.props.closeItemRightMenu}
+          itemRightMenuShow={this.props.itemRightMenuShow}
+          showDiffentRightMenu={this.props.showDiffentRightMenu}
+          diffentRightMenuShow={this.props.diffentRightMenuShow}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
@@ -213,6 +223,11 @@ class DirColumnView extends React.Component {
               updateDirent={this.props.updateDirent}
               isAllItemSelected={this.props.isAllItemSelected}
               onAllItemSelected={this.props.onAllItemSelected}
+              closeContainerRightMenu={this.props.closeContainerRightMenu}
+              closeItemRightMenu={this.props.closeItemRightMenu}
+              itemRightMenuShow={this.props.itemRightMenuShow}
+              showDiffentRightMenu={this.props.showDiffentRightMenu}
+              diffentRightMenuShow={this.props.diffentRightMenuShow}
             />
           )}
         </div>

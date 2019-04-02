@@ -58,6 +58,15 @@ class DirentListView extends React.Component {
     this.repoEncrypted = props.currentRepoInfo.encrypted;
   }
 
+  componentDidUpdate() {
+    let tableHeader = document.querySelector('thead');
+    if (tableHeader) {
+      tableHeader.addEventListener('contextmenu', (e) => {
+        e.stopPropagation();
+      })
+    }
+  }
+
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
   }
@@ -286,6 +295,10 @@ class DirentListView extends React.Component {
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
                     closeContainerRightMenu={this.props.closeContainerRightMenu}
+                    itemRightMenuShow={this.props.itemRightMenuShow}
+                    closeItemRightMenu={this.props.closeItemRightMenu}
+                    showDiffentRightMenu={this.props.showDiffentRightMenu}
+                    diffentRightMenuShow={this.props.diffentRightMenuShow}
                   />
                 );
               })

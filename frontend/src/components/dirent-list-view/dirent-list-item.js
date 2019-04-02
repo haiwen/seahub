@@ -131,7 +131,11 @@ class DirentListItem extends React.Component {
   itemRightContextMenu = (e) =>{
     e.preventDefault();
     e.stopPropagation();
+
     this.props.closeContainerRightMenu();
+    this.props.closeItemRightMenu();
+    this.props.showDiffentRightMenu(this.props.dirent);
+
     this.setState({
       showItemContextMenu: false,
     });
@@ -143,12 +147,6 @@ class DirentListItem extends React.Component {
         menuIndex: this.state.rightIndex,
       });
     },40)
-  }
-
-  abc = () => {
-    if (!this.props.abcd) {
-      this.setState({abc: false})
-    }
   }
 
   closeRightMenu = () => {
@@ -554,11 +552,11 @@ class DirentListItem extends React.Component {
                 </ul>
               </div>
             }
-            {this.state.showItemContextMenu && this.state.menuIndex === this.props.subscript && 
+            {this.state.showItemContextMenu && this.state.menuIndex === this.props.subscript && this.props.itemRightMenuShow && this.props.diffentRightMenuShow &&
               <DirentRightMenu
                 dirent={this.state.rightItemData}
                 mousePosition={this.state.itemMousePosition}
-                isRepoOwner={this.isRepoOwner}
+                isRepoOwner={this.props.isRepoOwner}
                 currentRepoInfo={this.props.currentRepoInfo}
                 onMenuItemClick={this.onMenuItemClick}
                 onItemDownload={this.onItemDownload}

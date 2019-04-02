@@ -94,6 +94,8 @@ class LibContentContainer extends React.Component {
       showCreateFile: false,
       fileType:'',
       itemMousePosition: {clientX: '', clientY: ''},
+      itemRightMenuShow: true,
+      diffentRightMenuShow: false,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
@@ -118,9 +120,8 @@ class LibContentContainer extends React.Component {
   }
 
   containerContextMenu = (e) => {
-    console.log(456)
     e.preventDefault();
-    this.setState({isShowContainerRightMenu: false})
+    this.setState({isShowContainerRightMenu: false, itemRightMenuShow: false});
     setTimeout(() => {
       this.setState({
         isShowContainerRightMenu: true,
@@ -133,19 +134,33 @@ class LibContentContainer extends React.Component {
   closeContainerRightMenu = () => {
     this.setState({
       isShowContainerRightMenu: false,
-    })
+    });
+  }
+
+  closeItemRightMenu = () => {
+    this.setState({
+      itemRightMenuShow: true,
+    });
+  }
+
+  showDiffentRightMenu = (node) => {
+    if (!node.object) {
+      this.setState({diffentRightMenuShow: true});
+    } else {
+      this.setState({diffentRightMenuShow: false});
+    }
   }
 
   onCreateFileToggle = () => {
     this.setState({
       showCreateFile: !this.state.showCreateFile,
-    })
+    });
   }
 
   onCreateFolderToggle = () => {
     this.setState({
       showCreateFolder: !this.state.showCreateFolder,
-    })
+    });
   }
 
   checkDuplicatedName = (newName) => {
@@ -165,6 +180,7 @@ class LibContentContainer extends React.Component {
     this.setState({showCreateFolder: false});
     this.props.onAddFolder(dirPath);
   }
+
   onPathClick = (path) => {
     this.props.onMainNavBarClick(path);
     this.props.closeDirentDetail();
@@ -267,6 +283,10 @@ class LibContentContainer extends React.Component {
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
                     closeContainerRightMenu={this.closeContainerRightMenu}
+                    closeItemRightMenu={this.closeItemRightMenu}
+                    itemRightMenuShow={this.state.itemRightMenuShow}
+                    showDiffentRightMenu={this.showDiffentRightMenu}
+                    diffentRightMenuShow={this.state.diffentRightMenuShow}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -325,13 +345,18 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
+                    closeContainerRightMenu={this.closeContainerRightMenu}
+                    closeItemRightMenu={this.closeItemRightMenu}
+                    itemRightMenuShow={this.state.itemRightMenuShow}
+                    showDiffentRightMenu={this.showDiffentRightMenu}
+                    diffentRightMenuShow={this.state.diffentRightMenuShow}
                   />
                 )}
               </Fragment>
             )}
           </div>
         </div>
-         {this.state.isShowContainerRightMenu && (
+        {this.state.isShowContainerRightMenu && (
           <DirentListMenu 
             mousePosition={this.state.itemMousePosition}
             itemUnregisterHandlers={this.containerUnregisterHandlers}
@@ -341,7 +366,7 @@ class LibContentContainer extends React.Component {
             onCreateFileToggle={this.onCreateFileToggle}
           />
         )}
-        {this.state.showCreateFile && 
+        {this.state.showCreateFile && (
           <ModalPortal>
             <CreateFile
               fileType={this.state.fileType}
@@ -351,8 +376,8 @@ class LibContentContainer extends React.Component {
               addFileCancel={this.onCreateFileToggle}
             />
           </ModalPortal>
-        }
-        {this.state.showCreateFolder && 
+        )}
+        {this.state.showCreateFolder && (
           <ModalPortal>
             <CreateFolder
               parentPath={this.props.path}
@@ -361,7 +386,7 @@ class LibContentContainer extends React.Component {
               addFolderCancel={this.onCreateFolderToggle}
             />
           </ModalPortal>
-        } 
+        )} 
         {this.props.isDirentDetailShow && (
           <div className="cur-view-detail">
             <DirentDetail

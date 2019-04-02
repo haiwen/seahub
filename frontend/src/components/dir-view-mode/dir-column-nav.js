@@ -32,6 +32,11 @@ const propTypes = {
   navRate: PropTypes.number,
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
+  closeContainerRightMenu: PropTypes.func,
+  closeItemRightMenu: PropTypes.func,
+  showDiffentRightMenu: PropTypes.func,
+  itemRightMenuShow: PropTypes.bool,
+  diffentRightMenuShow: PropTypes.bool,
 };
 
 class DirColumnNav extends React.Component {
@@ -282,6 +287,12 @@ class DirColumnNav extends React.Component {
               onUnFreezedItem={this.onUnFreezedItem}
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
+              closeContainerRightMenu={this.props.closeContainerRightMenu}
+              closeItemRightMenu={this.props.closeItemRightMenu}
+              itemRightMenuShow={this.props.itemRightMenuShow}
+              showDiffentRightMenu={this.props.showDiffentRightMenu}
+              diffentRightMenuShow={this.props.diffentRightMenuShow}
+              
             />)
           }
         </div>

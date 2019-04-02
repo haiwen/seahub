@@ -1,11 +1,23 @@
-import React, { Fragment }  from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 
 import '../../css/tree-view-contextmenu.css'
 
 const propTypes = {
- 
+  dirent: PropTypes.object,
+  mousePosition: PropTypes.object,
+  isRepoOwner: PropTypes.bool,
+  currentRepoInfo: PropTypes.object,
+  onMenuItemClick: PropTypes.func,
+  onItemDownload: PropTypes.func,
+  onItemShare: PropTypes.func,
+  onItemDelete: PropTypes.func,
+  itemRegisterHandlers: PropTypes.func,
+  itemUnregisterHandlers: PropTypes.func,
+  closeRightMenu: PropTypes.func,
+  onCreateFolderToggle: PropTypes.func,
+  onCreateFileToggle: PropTypes.func,
 };
 
 class DirentRightMenu extends React.Component {
@@ -33,8 +45,7 @@ class DirentRightMenu extends React.Component {
   }
 
   caculateMenuList() {
-
-    if(!this.props.dirent) {
+    if (!this.props.dirent) {
       let menuList = ['New Folder', 'New File'];
       return menuList;
     }
@@ -178,6 +189,10 @@ class DirentRightMenu extends React.Component {
     let rightTreeMenu = document.querySelector('.right-tree-menu');
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
     let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
+
+    rightTreeMenu.addEventListener('contextmenu', (e) => {
+      e.stopPropagation();
+    })
 
     if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
       if (mousePosition.clientX + rightTreeMenuWidth > document.body.clientWidth) {
