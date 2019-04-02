@@ -29,7 +29,7 @@ class OrgLogsFileAudit extends React.Component {
 
   initData = (page, email, repoID) => {
     seafileAPI.orgAdminListFileAudit(page, email, repoID).then(res => {
-      let eventList = res.data.event_list.map(item => {
+      let eventList = res.data.log_list.map(item => {
         return new OrgLogsFileAuditEvent(item);
       });
 
@@ -168,10 +168,6 @@ class FileAuditItem extends React.Component {
   renderUser = (fileEvent) => {
     if (!fileEvent.user_email) { 
       return gettext('Anonymous User');
-    }
-    
-    if (!fileEvent.is_org_user) {
-      return fileEvent.user_name;
     }
 
     return (

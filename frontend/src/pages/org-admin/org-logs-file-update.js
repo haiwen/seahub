@@ -34,7 +34,7 @@ class OrgLogsFileUpdate extends Component {
 
   initData = (page, email, repoID) => {
     seafileAPI.orgAdminListFileUpdate(page, email, repoID).then(res => {
-      let eventList = res.data.event_list.map(item => {
+      let eventList = res.data.log_list.map(item => {
         return new OrgLogsFileUpdateEvent(item);
       });
 
@@ -42,8 +42,6 @@ class OrgLogsFileUpdate extends Component {
         eventList: eventList,
         pageNext: res.data.page_next,
         page: res.data.page,
-        userSelected: res.data.user_selected,
-        repoSelected: res.data.repo_selected
       })
 
     });
@@ -197,10 +195,6 @@ class FileUpdateItem extends React.Component {
     if (!fileEvent.user_email) { 
       return gettext('Anonymous User');
     }
-    
-    if (!fileEvent.is_org_user) {
-      return fileEvent.user_name;
-    }
 
     return (
       <span>
@@ -248,11 +242,11 @@ class FileUpdateItem extends React.Component {
 
   renderAction = (fileEvent) => {
     if (fileEvent.repo_encrypted || !fileEvent.repo_id) {
-      return <td>{fileEvent.file_oper}</td>;
+      return <td>{fileEvent.description}</td>;
     }
 
     return (
-      <td>{fileEvent.file_oper}
+      <td>{fileEvent.description}
         <a className="font-weight-normal text-muted ml-1" href='#'
           onClick={(e) => this.props.onDetails(e, fileEvent)}>{gettext('Details')}</a>
         </td>
@@ -270,7 +264,7 @@ class FileUpdateItem extends React.Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''}
           onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td>{this.renderUser(fileEvent)}</td>
-          <td>{fileEvent.local_time}</td>
+          <td>{fileEvent.time}</td>
           <td>{this.renderRepo(fileEvent)}</td>
           {this.renderAction(fileEvent)}
         </tr>

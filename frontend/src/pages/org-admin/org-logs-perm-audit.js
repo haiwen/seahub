@@ -29,7 +29,7 @@ class OrgLogsFileUpdate extends Component {
 
   initData = (page, email, repoID) => {
     seafileAPI.orgAdminListPermAudit(page, email, repoID).then(res => {
-      let eventList = res.data.event_list.map(item => {
+      let eventList = res.data.log_list.map(item => {
         return new OrgLogsFilePermEvent(item);
       });
 
@@ -37,8 +37,6 @@ class OrgLogsFileUpdate extends Component {
         eventList: eventList,
         pageNext: res.data.page_next,
         page: res.data.page,
-        userSelected: res.data.user_selected,
-        repoSelected: res.data.repo_selected
       });
     });
   }
@@ -148,9 +146,6 @@ class PermAuditItem extends React.Component {
     if (!permEvent.from_user_email) { 
       return gettext('Anonymous User');
     }
-    if (!permEvent.is_org_from_user) {
-      return permEvent.from_user_name;
-    }
     return (
       <span>
         <a href={siteRoot + 'org/useradmin/info/' + permEvent.from_user_email + '/'}>{permEvent.from_user_name}</a>{' '}
@@ -173,22 +168,21 @@ class PermAuditItem extends React.Component {
   }
 
   renderToUser = (permEvent) => {
-    if (permEvent.to == 'all') {
-      return <a href={siteRoot + 'org/'}>{gettext('Organization')}</a>;
+    if (permEvent.type.indexOf('all') != -1) {
+       return <a href={siteRoot + 'org/'}>{gettext('Organization')}</a>;
     }
 
-    if (permEvent.perm_group_name) {
-      return <a href={siteRoot + 'org/groupadmin/' + permEvent.to + '/'}>{permEvent.perm_group_name}</a>;
-    }
-
-    if (permEvent.to.indexOf('@') != -1) {
-      if (permEvent.is_org_to_user) {
-        return <a href={siteRoot + 'org/useradmin/info/' + permEvent.to + '/'}>{permEvent.to_user_name}</a>;
+    if (permEvent.type.indexOf('group') != -1) {
+      if (permEvent.to_group_name) {
+        return <a href={siteRoot + 'org/groupadmin/' + permEvent.to_group_id + '/'}>{permEvent.to_group_name}</a>;
       }
-      return permEvent.to;
+      return 'Deleted'; 
+    }
+    
+    if (permEvent.type.indexOf('user') != -1) {
+      return <a href={siteRoot + 'org/useradmin/info/' + permEvent.to_user_email + '/'}>{permEvent.to_user_name}</a>;
     }
 
-    return 'Deleted';
   } 
 
   renderType = (type) => {

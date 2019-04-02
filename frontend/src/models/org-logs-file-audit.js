@@ -15,7 +15,6 @@ class OrgLogsFileAuditEvent {
     this.file_path = object.file_path;
     this.user_name = object.user_name;
     this.user_email = object.user_email;
-    this.is_org_user = object.is_org_user;
     this.user_contact_email = object.user_contact_email;
     this.time = moment(object.time).format('YYYY-MM-DD HH:mm:ss');
   }
