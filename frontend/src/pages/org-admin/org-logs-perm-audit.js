@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -51,14 +52,6 @@ class OrgLogsFileUpdate extends Component {
       page = page - 1;
     }
     this.initData(page);
-  } 
-
-  onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
-  }
-
-  onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
   }
 
   filterUser = (userSelected) => {
@@ -93,12 +86,11 @@ class OrgLogsFileUpdate extends Component {
                   key={index}
                   permEvent={item}
                   isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem} 
-                  onUnfreezedItem={this.onUnfreezedItem}
                   filterUser={this.filterUser}
                   userSelected={this.state.userSelected}
                 />
-            )})}
+              );
+            })}
           </tbody>
         </table>
         <div className="paginator">
@@ -111,6 +103,12 @@ class OrgLogsFileUpdate extends Component {
   }
 }
 
+
+const propTypes = {
+  filterUser: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  userSelected: PropTypes.string.isRequired,
+};
 
 class PermAuditItem extends React.Component {
 
@@ -169,7 +167,7 @@ class PermAuditItem extends React.Component {
 
   renderToUser = (permEvent) => {
     if (permEvent.type.indexOf('all') != -1) {
-       return <a href={siteRoot + 'org/'}>{gettext('Organization')}</a>;
+      return <a href={siteRoot + 'org/'}>{gettext('Organization')}</a>;
     }
 
     if (permEvent.type.indexOf('group') != -1) {
@@ -234,5 +232,6 @@ class PermAuditItem extends React.Component {
   }
 }
 
+PermAuditItem.propTypes = propTypes;
 
 export default OrgLogsFileUpdate;

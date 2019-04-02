@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import Toast from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext, orgID } from '../../utils/constants';
+import { siteRoot, gettext } from '../../utils/constants';
 import OrgLogsFileAuditEvent from '../../models/org-logs-file-audit';
 import '../../css/org-logs.css';
 
@@ -39,7 +39,7 @@ class OrgLogsFileAudit extends React.Component {
         page: res.data.page,
         userSelected: res.data.user_selected,
         repoSelected: res.data.repo_selected
-      })
+      });
     });
   }
 
@@ -54,14 +54,6 @@ class OrgLogsFileAudit extends React.Component {
       page = page - 1;
     }
     this.initData(page);
-  } 
-
-  onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
-  }
-
-  onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
   }
 
   filterUser = (userSelected) => {
@@ -109,14 +101,13 @@ class OrgLogsFileAudit extends React.Component {
                   key={index}
                   fileEvent={item}
                   isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem} 
-                  onUnfreezedItem={this.onUnfreezedItem}
                   filterUser={this.filterUser}
                   filterRepo={this.filterRepo}
                   userSelected={this.state.userSelected}
                   repoSelected={this.state.repoSelected}
                 />
-            )})}
+              );
+            })}
           </tbody>
         </table>
         <div className="paginator">
@@ -129,6 +120,11 @@ class OrgLogsFileAudit extends React.Component {
   }
 }
 
+const propTypes = {
+  filterUser: PropTypes.func.isRequired,
+  filterRepo: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+};
 
 class FileAuditItem extends React.Component {
 
@@ -248,5 +244,7 @@ class FileAuditItem extends React.Component {
     }
   }
 }
+
+FileAuditItem.propTypes = propTypes;
 
 export default OrgLogsFileAudit;

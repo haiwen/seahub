@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Loading from '../../components/loading';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 
@@ -47,7 +46,7 @@ class FileUpdateDetailDialog extends React.Component {
       con += '<li class="list-group-item">' + items[i] + '</li>';
     }
     con += '</ul>'; 
-    return {__html: con}
+    return {__html: con};
   }
 
   renderContent = () => {

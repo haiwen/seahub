@@ -1,7 +1,6 @@
-import React, { Fragment, Component } from 'react';
-
+import React, { Component } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, orgID, orgMemberQuotaEnabled} from '../../utils/constants';
+import { gettext, orgMemberQuotaEnabled} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 class OrgInfo extends Component {

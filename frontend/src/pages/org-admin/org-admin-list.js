@@ -107,7 +107,8 @@ class OrgAdminList extends React.Component {
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
                 />
-            )})}
+              );
+            })}
           </tbody>
         </table>
         {this.props.isShowAddOrgAdminDialog && (

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import Toast from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext, orgID } from '../../utils/constants';
+import { siteRoot, gettext } from '../../utils/constants';
 import OrgLogsFileUpdateEvent from '../../models/org-logs-file-update';
 import ModalPortal from '../../components/modal-portal';
 import FileUpdateDetailDialog from '../../components/dialog/org-logs-file-update-detail';
@@ -42,7 +42,7 @@ class OrgLogsFileUpdate extends Component {
         eventList: eventList,
         pageNext: res.data.page_next,
         page: res.data.page,
-      })
+      });
 
     });
   }
@@ -57,20 +57,12 @@ class OrgLogsFileUpdate extends Component {
       page = page - 1;
     }
     this.initData(page);
-  } 
-
-  onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
-  }
-
-  onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
   }
 
   toggleCancelDetail = () => {
     this.setState({
       showDetails: !this.state.showDetails
-    })
+    });
   }
 
   onDetails = (e, fileEvent) => {
@@ -79,7 +71,7 @@ class OrgLogsFileUpdate extends Component {
       showDetails: !this.state.showDetails, 
       repoID: fileEvent.repo_id,
       commitID: fileEvent.repo_commit_id
-    })
+    });
   }
 
   filterUser = (userSelected) => {
@@ -125,15 +117,14 @@ class OrgLogsFileUpdate extends Component {
                   key={index}
                   fileEvent={item}
                   isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem} 
-                  onUnfreezedItem={this.onUnfreezedItem}
                   onDetails={this.onDetails}
                   filterUser={this.filterUser}
                   filterRepo={this.filterRepo}
                   userSelected={this.state.userSelected}
                   repoSelected={this.state.repoSelected}
                 />
-            )})}
+              );
+            })}
           </tbody>
         </table>
         <div className="paginator">
@@ -154,6 +145,15 @@ class OrgLogsFileUpdate extends Component {
     );
   }
 }
+
+const propTypes = {
+  filterUser: PropTypes.func.isRequired,
+  filterRepo: PropTypes.func.isRequired,
+  onDetails: PropTypes.func.isRequired,
+  userSelected: PropTypes.string.isRequired,
+  repoSelected: PropTypes.string.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+};
 
 
 class FileUpdateItem extends React.Component {
@@ -201,7 +201,7 @@ class FileUpdateItem extends React.Component {
         <a href={siteRoot + 'org/useradmin/info/' + fileEvent.user_email + '/'}>{fileEvent.user_name}</a>{' '}
         <Dropdown size='sm' isOpen={this.state.userDropdownOpen} toggle={this.toggleUserDropdown}
           className={this.state.highlight ? '' : 'vh'} tag="span">
-        <DropdownToggle tag="i" className="sf-dropdown-toggle sf2-icon-caret-down"></DropdownToggle>
+          <DropdownToggle tag="i" className="sf-dropdown-toggle sf2-icon-caret-down"></DropdownToggle>
           <DropdownMenu>
             <DropdownItem onClick={this.props.filterUser.bind(this, fileEvent.user_email)}>
               {gettext('Only Show')}{' '}<span className="font-weight-bold">{fileEvent.user_name}</span>
@@ -249,8 +249,8 @@ class FileUpdateItem extends React.Component {
       <td>{fileEvent.description}
         <a className="font-weight-normal text-muted ml-1" href='#'
           onClick={(e) => this.props.onDetails(e, fileEvent)}>{gettext('Details')}</a>
-        </td>
-      );
+      </td>
+    );
   }
 
   render() {
@@ -273,5 +273,6 @@ class FileUpdateItem extends React.Component {
   }
 }
 
+FileUpdateItem.propTypes = propTypes;
 
 export default OrgLogsFileUpdate;

@@ -1,5 +1,3 @@
-import { Utils } from '../utils/utils';
-
 class OrgAdminRepo {
   constructor(object) {
     this.repoID = object.repo_id;
