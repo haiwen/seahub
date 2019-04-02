@@ -71,6 +71,7 @@ class DirListView extends React.Component {
           updateDirent={this.props.updateDirent}
           isAllItemSelected={this.props.isAllItemSelected}
           onAllItemSelected={this.props.onAllItemSelected}
+          closeContainerRightMenu={this.props.closeContainerRightMenu}
         />
       </Fragment>
     );

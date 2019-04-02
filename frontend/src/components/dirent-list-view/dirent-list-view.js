@@ -285,6 +285,7 @@ class DirentListView extends React.Component {
                     onDirentClick={this.props.onDirentClick}
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
+                    closeContainerRightMenu={this.props.closeContainerRightMenu}
                   />
                 );
               })

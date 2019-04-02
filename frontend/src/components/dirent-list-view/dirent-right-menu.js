@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Fragment }  from 'react';
 import PropTypes from 'prop-types';
 import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
-
 
 import '../../css/tree-view-contextmenu.css'
 
@@ -19,19 +18,12 @@ class DirentRightMenu extends React.Component {
     };
   }
 
-  // componentWillMount() {
-  //   let menuList = this.caculateMenuList();
-  //   console.log(menuList)
-  //   this.setState({menuList: menuList});
-  // }
-
   componentDidMount() {
     let menuList = this.caculateMenuList();
-    console.log(menuList)
     this.setState({menuList: menuList});
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     this.calculateMenuDistance();
   }
 
@@ -41,28 +33,36 @@ class DirentRightMenu extends React.Component {
   }
 
   caculateMenuList() {
+
+    if(!this.props.dirent) {
+      let menuList = ['New Folder', 'New File'];
+      return menuList;
+    }
+
     let { currentRepoInfo, dirent, isRepoOwner } = this.props;
 
-    let type = dirent.type;
-    let permission = dirent.permission;
+    let type = dirent.type ? dirent.type : '';
+    let permission = dirent.permission ? dirent.permission : '';
     let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
     if (type === 'dir' && permission === 'rw') {
+      let subscriptList = currentRepoInfo.encrypted ? ['Download', 'Delete'] : ['Share', 'Download', 'Delete'];
       let menuList = [];
       if (can_set_folder_perm) {
-        menuList = ['Share','Delete','Download', 'Rename', 'Move', 'Copy', 'Permission', 'Details', 'Open via Client'];
+        menuList = [...subscriptList, 'Rename', 'Move', 'Copy', 'Permission', 'Details', 'Open via Client'];
       } else {
-        menuList = ['Share','Delete','Download', 'Rename', 'Move', 'Copy', 'Details', 'Open via Client'];
+        menuList = [...subscriptList, 'Rename', 'Move', 'Copy', 'Details', 'Open via Client'];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
-      let menuList = currentRepoInfo.encrypted ? ['Copy', 'Details'] : ['Details'];
+      let menuList = currentRepoInfo.encrypted ? ['Download', 'Delete', 'Copy', 'Details'] : ['Share','Download', 'Delete', 'Details'];
       return menuList;
     }
 
     if (type === 'file' && permission === 'rw') {
-      let menuList = ['Share','Delete','Download'];
+      let menuList = currentRepoInfo.encrypted ? ['Download', 'Delete'] : ['Share','Download', 'Delete'];
+
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         menuList.push('Rename');
         menuList.push('Move');
@@ -90,7 +90,7 @@ class DirentRightMenu extends React.Component {
     }
 
     if (type === 'file' && permission === 'r') {
-      let menuList = ['Share','Delete','Download'];
+      let menuList = currentRepoInfo.encrypted ? ['Download', 'Delete'] : ['Share','Download', 'Delete'];
       if (!currentRepoInfo.encrypted) {
         menuList.push('Copy');
       }
@@ -104,16 +104,22 @@ class DirentRightMenu extends React.Component {
   }
 
  calculateMenuDistance = () => {
-    let mousePosition = this.props.mousePosition;
+    let { mousePosition } = this.props;
     let rightTreeMenu = document.querySelector('.right-tree-menu');
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
-
+    let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
+ 
     if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
       rightTreeMenu.style.top = mousePosition.clientY - rightTreeMenuHeight + 'px';
     } else {
       rightTreeMenu.style.top = mousePosition.clientY + 'px';
     }
-    rightTreeMenu.style.left = mousePosition.clientX + 'px';
+
+    if (mousePosition.clientX + rightTreeMenuWidth > document.body.clientWidth) {
+      rightTreeMenu.style.left = mousePosition.clientX - rightTreeMenuWidth + 'px';
+    } else {
+      rightTreeMenu.style.left = mousePosition.clientX + 'px';
+    }
 
     document.addEventListener('click', this.listenClick);
     document.addEventListener('mousemove', this.handleContextMenu);
@@ -168,57 +174,81 @@ class DirentRightMenu extends React.Component {
   }
 
   handleContextMenu = (e) => {
-    let mousePosition = this.props.mousePosition;
+    let { mousePosition } = this.props;
     let rightTreeMenu = document.querySelector('.right-tree-menu');
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
     let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
 
     if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
-      if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY <= mousePosition.clientY) && (e.clientY >= (mousePosition.clientY - rightTreeMenuHeight))) {
-        this.props.itemUnregisterHandlers();
+      if (mousePosition.clientX + rightTreeMenuWidth > document.body.clientWidth) {
+        if ((e.clientX >= (mousePosition.clientX - rightTreeMenuWidth)) && (e.clientX <= mousePosition.clientX) && (e.clientY <= mousePosition.clientY) && (e.clientY >= (mousePosition.clientY - rightTreeMenuHeight))) {
+          this.props.itemUnregisterHandlers();
+        } else {
+          this.props.itemRegisterHandlers();
+        }
       } else {
-        this.props.itemRegisterHandlers();
+        if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY <= mousePosition.clientY) && (e.clientY >= (mousePosition.clientY - rightTreeMenuHeight))) {
+          this.props.itemUnregisterHandlers();
+        } else {
+          this.props.itemRegisterHandlers();
+        }
       }
     } else {
-      if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY >= mousePosition.clientY) && (e.clientY <= (mousePosition.clientY + rightTreeMenuHeight))) {
-        this.props.itemUnregisterHandlers();
+      if (mousePosition.clientX + rightTreeMenuWidth > document.body.clientWidth) {
+        if ((e.clientX >= (mousePosition.clientX - rightTreeMenuWidth)) && (e.clientX <= mousePosition.clientX) && (e.clientY >= mousePosition.clientY) && (e.clientY <= (mousePosition.clientY + rightTreeMenuHeight))) {
+          this.props.itemUnregisterHandlers();
+        } else {
+          this.props.itemRegisterHandlers();
+        }
       } else {
-        this.props.itemRegisterHandlers();
+        if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY >= mousePosition.clientY) && (e.clientY <= (mousePosition.clientY + rightTreeMenuHeight))) {
+          this.props.itemUnregisterHandlers();
+        } else {
+          this.props.itemRegisterHandlers();
+        }
       }
     }
   }
 
   listenClick = (e) => {
-    let mousePosition = this.props.mousePosition;
+    let { mousePosition } = this.props;
     let rightTreeMenu = document.querySelector('.right-tree-menu');
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
     let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
 
-    if ((e.clientX <= mousePosition.clientX) || (e.clientX >= (mousePosition.clientX + rightTreeMenuWidth))) {
-      this.props.closeRightMenu();
+    if (mousePosition.clientX + rightTreeMenuWidth > document.body.clientWidth) {
+      if (e.clientX <= (mousePosition.clientX - rightTreeMenuWidth) || e.clientX >= mousePosition.clientX) {
+        this.props.closeRightMenu();
+      }
+    } else {
+      if (e.clientX <= mousePosition.clientX || e.clientX >= (mousePosition.clientX + rightTreeMenuWidth)) {
+        this.props.closeRightMenu();
+      }
     }
 
     if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
       if ((e.clientY <= (mousePosition.clientY - rightTreeMenuHeight)) || e.clientY >= mousePosition.clientY) {
-      this.props.closeRightMenu();
+        this.props.closeRightMenu();
       }
     } else {
       if ((e.clientY <= mousePosition.clientY) || (e.clientY >= (mousePosition.clientY + rightTreeMenuHeight))) {
-      this.props.closeRightMenu();
+        this.props.closeRightMenu();
       }
     }
   }
 
   onMenuItemClick = (event) => {
-    let operation = event.target.dataset.toggle;
-    console.log(operation)
-    
+    let operation = event.target.dataset.toggle;    
     if (operation === 'Share') {
       this.props.onItemShare(event);
     } else if (operation === 'Delete') {
       this.props.onItemDelete(event);
     } else if (operation === 'Download') {
       this.props.onItemDownload(event);
+    } else if (operation === 'New Folder') {
+      this.props.onCreateFolderToggle()
+    } else if (operation === 'New File') {
+      this.props.onCreateFileToggle();
     } else {
       this.props.onMenuItemClick(operation);
     }

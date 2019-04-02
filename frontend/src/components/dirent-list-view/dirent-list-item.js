@@ -67,7 +67,7 @@ class DirentListItem extends React.Component {
     this.zipToken = null;
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     this.itemRegisterHandlers();
   }
 
@@ -129,14 +129,12 @@ class DirentListItem extends React.Component {
   }
 
   itemRightContextMenu = (e) =>{
-    console.log(this.props.subscript)
-    console.log(this.state.rightIndex)
-    console.log(this)
     e.preventDefault();
+    e.stopPropagation();
+    this.props.closeContainerRightMenu();
     this.setState({
       showItemContextMenu: false,
     });
-    console.log(123)
     setTimeout(() => {
       this.setState({
         showItemContextMenu: true,
@@ -145,6 +143,12 @@ class DirentListItem extends React.Component {
         menuIndex: this.state.rightIndex,
       });
     },40)
+  }
+
+  abc = () => {
+    if (!this.props.abcd) {
+      this.setState({abc: false})
+    }
   }
 
   closeRightMenu = () => {

@@ -6,6 +6,11 @@ import DirentDetail from '../../components/dirent-detail/dirent-details';
 import DirListView from '../../components/dir-view-mode/dir-list-view';
 import DirGridView from '../../components/dir-view-mode/dir-grid-view';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
+import ModalPortal from '../../components/modal-portal';
+import CreateFolder from '../../components/dialog/create-folder-dialog';
+import CreateFile from '../../components/dialog/create-file-dialog';
+
+import DirentListMenu from '../../components/dirent-list-view/dirent-right-menu'
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -84,11 +89,82 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
+      isShowContainerRightMenu: false,
+      showCreateFolder: false,
+      showCreateFile: false,
+      fileType:'',
+      itemMousePosition: {clientX: '', clientY: ''},
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
   }
 
+  componentDidUpdate() {
+    this.containerRegisterHandlers();
+  }
+
+  componentWillUnmount() {
+    this.containerUnregisterHandlers();
+  }
+
+  containerRegisterHandlers = (e) => {
+    let curViewContent = document.querySelector('.cur-view-content');
+    curViewContent.addEventListener('contextmenu', this.containerContextMenu);
+  }
+
+  containerUnregisterHandlers = (e) => {
+    let curViewContent = document.querySelector('.cur-view-content');
+    curViewContent.removeEventListener('contextmenu', this.containerContextMenu);
+  }
+
+  containerContextMenu = (e) => {
+    console.log(456)
+    e.preventDefault();
+    this.setState({isShowContainerRightMenu: false})
+    setTimeout(() => {
+      this.setState({
+        isShowContainerRightMenu: true,
+        itemMousePosition: {clientX: e.clientX, clientY: e.clientY}
+      })
+    },40)
+    
+  }
+
+  closeContainerRightMenu = () => {
+    this.setState({
+      isShowContainerRightMenu: false,
+    })
+  }
+
+  onCreateFileToggle = () => {
+    this.setState({
+      showCreateFile: !this.state.showCreateFile,
+    })
+  }
+
+  onCreateFolderToggle = () => {
+    this.setState({
+      showCreateFolder: !this.state.showCreateFolder,
+    })
+  }
+
+  checkDuplicatedName = (newName) => {
+    let direntList = this.props.direntList;
+    let isDuplicated = direntList.some(object => {
+      return object.name === newName;
+    });
+    return isDuplicated;
+  }
+
+  onAddFile = (filePath, isDraft) => {
+    this.setState({showCreateFile: false});
+    this.props.onAddFile(filePath, isDraft);
+  }
+
+  onAddFolder = (dirPath) => {
+    this.setState({showCreateFolder: false});
+    this.props.onAddFolder(dirPath);
+  }
   onPathClick = (path) => {
     this.props.onMainNavBarClick(path);
     this.props.closeDirentDetail();
@@ -190,6 +266,7 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
+                    closeContainerRightMenu={this.closeContainerRightMenu}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -254,6 +331,37 @@ class LibContentContainer extends React.Component {
             )}
           </div>
         </div>
+         {this.state.isShowContainerRightMenu && (
+          <DirentListMenu 
+            mousePosition={this.state.itemMousePosition}
+            itemUnregisterHandlers={this.containerUnregisterHandlers}
+            itemRegisterHandlers={this.containerRegisterHandlers}
+            closeRightMenu={this.closeContainerRightMenu}
+            onCreateFolderToggle={this.onCreateFolderToggle}
+            onCreateFileToggle={this.onCreateFileToggle}
+          />
+        )}
+        {this.state.showCreateFile && 
+          <ModalPortal>
+            <CreateFile
+              fileType={this.state.fileType}
+              parentPath={this.props.path}
+              onAddFile={this.onAddFile}
+              checkDuplicatedName={this.checkDuplicatedName}
+              addFileCancel={this.onCreateFileToggle}
+            />
+          </ModalPortal>
+        }
+        {this.state.showCreateFolder && 
+          <ModalPortal>
+            <CreateFolder
+              parentPath={this.props.path}
+              onAddFolder={this.onAddFolder}
+              checkDuplicatedName={this.checkDuplicatedName}
+              addFolderCancel={this.onCreateFolderToggle}
+            />
+          </ModalPortal>
+        } 
         {this.props.isDirentDetailShow && (
           <div className="cur-view-detail">
             <DirentDetail
