@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-03 17:02+0800\n"
-"PO-Revision-Date: 2019-04-03 09:04+0000\n"
+"POT-Creation-Date: 2019-04-03 18:28+0800\n"
+"PO-Revision-Date: 2019-04-03 10:29+0000\n"
 "Last-Translator: Gaspard <info@widelinkpc.be>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -84,11 +84,8 @@ msgid "{user} has transfered a library named {repo_link} to you."
 msgstr ""
 
 #: frontend/src/components/common/notice-item.js:127
-msgid "A file named {upload_file_link} is uploaded to {uploaded_link}."
-msgstr ""
-
 #: frontend/src/components/common/notice-item.js:131
-msgid "A file name {file_name} is uploaded to {dest}."
+msgid "A file named {upload_file_link} is uploaded to {uploaded_link}."
 msgstr ""
 
 #: frontend/src/components/common/notice-item.js:147
@@ -1020,11 +1017,13 @@ msgid "Select a user as admin..."
 msgstr ""
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:64
+#: frontend/src/pages/org-admin/org-departments-list.js:77
 #: static/scripts/sysadmin-app/views/address-book-group.js:101
 msgid "New Sub-department"
 msgstr "Nouveau sous-département"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:64
+#: frontend/src/pages/org-admin/org-departments-list.js:77
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
 msgstr "Nouveau département"
@@ -1413,22 +1412,6 @@ msgstr ""
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:204
 msgid "You can create files quickly"
-msgstr ""
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:208
-msgid "Markdown"
-msgstr ""
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:210
-msgid "PPT"
-msgstr ""
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:214
-msgid "Word"
-msgstr ""
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:216
-msgid "Excel"
 msgstr ""
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:246
@@ -1923,12 +1906,12 @@ msgid "File History"
 msgstr "Historique du fichier"
 
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:86
-msgid "Related file"
-msgstr ""
+msgid "related file"
+msgstr "Fichier relatif"
 
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:87
-msgid "Related files"
-msgstr ""
+msgid "related files"
+msgstr "Fichiers relatifs"
 
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:108
 msgid "No tags"
@@ -2428,20 +2411,12 @@ msgid "Departments"
 msgstr "Départements"
 
 #: frontend/src/pages/org-admin/org-department-item.js:144
-msgid "No Members"
-msgstr ""
+msgid "No members"
+msgstr "Pas de membre"
 
 #: frontend/src/pages/org-admin/org-departments-list.js:76
 msgid "Sub-departments"
 msgstr "Sous-département"
-
-#: frontend/src/pages/org-admin/org-departments-list.js:77
-msgid "New Sub-departments"
-msgstr ""
-
-#: frontend/src/pages/org-admin/org-departments-list.js:77
-msgid "New Departments"
-msgstr ""
 
 #: frontend/src/pages/org-admin/org-departments-list.js:78
 msgid "No sub-departments"

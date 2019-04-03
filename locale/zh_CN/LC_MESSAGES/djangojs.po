@@ -19,9 +19,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-03 17:02+0800\n"
-"PO-Revision-Date: 2019-04-03 10:06+0000\n"
-"Last-Translator: 顺强 杨 <ysq9207@126.com>\n"
+"POT-Creation-Date: 2019-04-03 18:28+0800\n"
+"PO-Revision-Date: 2019-04-03 10:29+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -89,12 +89,9 @@ msgid "{user} has transfered a library named {repo_link} to you."
 msgstr "{user} 转让了一个资料库 {repo_link} 给你。"
 
 #: frontend/src/components/common/notice-item.js:127
+#: frontend/src/components/common/notice-item.js:131
 msgid "A file named {upload_file_link} is uploaded to {uploaded_link}."
 msgstr "新文件 {upload_file_link} 上传到了 {uploaded_link}。"
-
-#: frontend/src/components/common/notice-item.js:131
-msgid "A file name {file_name} is uploaded to {dest}."
-msgstr ""
 
 #: frontend/src/components/common/notice-item.js:147
 msgid "File {file_link} has a new comment form user {author}."
@@ -1025,11 +1022,13 @@ msgid "Select a user as admin..."
 msgstr "选择一个用户作为管理员..."
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:64
+#: frontend/src/pages/org-admin/org-departments-list.js:77
 #: static/scripts/sysadmin-app/views/address-book-group.js:101
 msgid "New Sub-department"
 msgstr "新建子部门"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:64
+#: frontend/src/pages/org-admin/org-departments-list.js:77
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
 msgstr "新建部门"
@@ -1419,22 +1418,6 @@ msgstr "该文件夹暂无任何内容。"
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:204
 msgid "You can create files quickly"
 msgstr "你可以快速创建文件"
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:208
-msgid "Markdown"
-msgstr "Markdown"
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:210
-msgid "PPT"
-msgstr "PPT"
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:214
-msgid "Word"
-msgstr "PPT"
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:216
-msgid "Excel"
-msgstr "Excel"
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:246
 #: static/scripts/app/views/dir.js:66
@@ -1928,12 +1911,12 @@ msgid "File History"
 msgstr "文件历史"
 
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:86
-msgid "Related file"
-msgstr ""
+msgid "related file"
+msgstr "相关文件"
 
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:87
-msgid "Related files"
-msgstr ""
+msgid "related files"
+msgstr "相关文件"
 
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:108
 msgid "No tags"
@@ -2433,20 +2416,12 @@ msgid "Departments"
 msgstr "组织架构"
 
 #: frontend/src/pages/org-admin/org-department-item.js:144
-msgid "No Members"
-msgstr ""
+msgid "No members"
+msgstr "暂无成员"
 
 #: frontend/src/pages/org-admin/org-departments-list.js:76
 msgid "Sub-departments"
 msgstr "子部门"
-
-#: frontend/src/pages/org-admin/org-departments-list.js:77
-msgid "New Sub-departments"
-msgstr "新建子部门"
-
-#: frontend/src/pages/org-admin/org-departments-list.js:77
-msgid "New Departments"
-msgstr "新建部门"
 
 #: frontend/src/pages/org-admin/org-departments-list.js:78
 msgid "No sub-departments"
