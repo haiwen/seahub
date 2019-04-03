@@ -128,7 +128,7 @@ class NoticeItem extends React.Component {
         notice = notice.replace('{upload_file_link}', uploadFileLink);
         notice = notice.replace('{uploaded_link}', uploadedLink);
       } else {
-        notice = gettext('A file name {upload_file_link} is uploaded to {uploaded_link}.');
+        notice = gettext('A file named {upload_file_link} is uploaded to {uploaded_link}.');
         notice = notice.replace('{upload_file_link}', fileName);
         notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>')
       }
