@@ -40,6 +40,8 @@ const propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  showDifferentContextmenu: PropTypes.func,
+  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
 };
 
 class DirentListItem extends React.Component {
@@ -59,10 +61,11 @@ class DirentListItem extends React.Component {
       isDragTipShow: false,
       isDropTipshow: false,
       showItemContextMenu: false,
-      itemdata: '',
-      rightIndex: -1,
+      enterItemData: '',
+      contextmenuItemData: '',
+      enterItemIndex: -1,
       itemMousePosition: {clientX: '', clientY: ''},
-      menuIndex: -1,
+      contextmenuIndex: -1,
     };
     this.zipToken = null;
   }
@@ -95,8 +98,8 @@ class DirentListItem extends React.Component {
     }
     this.setState({
       isDragTipShow: true,
-      itemdata: this.props.dirent,
-      rightIndex: this.props.subscript,
+      enterItemData: this.props.dirent,
+      enterItemIndex: this.props.subscript,
     });
   }
 
@@ -109,8 +112,8 @@ class DirentListItem extends React.Component {
     }
     this.setState({
       isDragTipShow: true,
-      itemdata: this.props.dirent,
-      rightIndex: this.props.subscript,
+      enterItemData: this.props.dirent,
+      enterItemIndex: this.props.subscript,
     });
   }
 
@@ -123,8 +126,8 @@ class DirentListItem extends React.Component {
     }
     this.setState({
       isDragTipShow: false,
-      itemdata: '',
-      rightIndex: -1,
+      enterItemData: '',
+      enterItemIndex: -1,
     });
   }
 
@@ -132,7 +135,7 @@ class DirentListItem extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.showDifferentRightMenu('item_contextmenu')
+    this.props.showDifferentContextmenu('item_contextmenu')
 
     this.setState({
       showItemContextMenu: false,
@@ -140,9 +143,9 @@ class DirentListItem extends React.Component {
     setTimeout(() => {
       this.setState({
         showItemContextMenu: true,
-        rightItemData: this.state.itemdata,
+        rightItemData: this.state.enterItemData,
         itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
-        menuIndex: this.state.rightIndex,
+        contextmenuIndex: this.state.enterItemIndex,
       });
     },40)
   }
@@ -150,10 +153,10 @@ class DirentListItem extends React.Component {
   closeRightMenu = () => {
     this.setState({
       showItemContextMenu: false,
-      itemdata: '',
-      rightIndex: -1,
+      enterItemData: '',
+      enterItemIndex: -1,
       itemMousePosition: {clientX: '', clientY: ''},
-      menuIndex: -1,
+      contextmenuIndex: -1,
       isDragTipShow:false,
     });
   }
@@ -555,7 +558,7 @@ class DirentListItem extends React.Component {
                 </ul>
               </div>
             }
-            {this.state.showItemContextMenu && this.state.menuIndex === this.props.subscript && this.props.isCloumnNavContenxtmenuShow === 'item_contextmenu' &&
+            {this.state.showItemContextMenu && this.state.contextmenuIndex === this.props.subscript && this.props.isContainerTreeItemType === 'item_contextmenu' &&
               <DirentRightMenu
                 dirent={this.state.rightItemData}
                 mousePosition={this.state.itemMousePosition}
@@ -569,6 +572,7 @@ class DirentListItem extends React.Component {
                 itemUnregisterHandlers={this.itemUnregisterHandlers}
                 closeRightMenu={this.closeRightMenu}
                 onUnfreezedItem={this.onUnfreezedItem}
+                showShare={showShare}
               />
             }
           </td>

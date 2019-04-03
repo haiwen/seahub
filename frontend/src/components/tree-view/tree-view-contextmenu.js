@@ -104,10 +104,6 @@ class TreeViewContextMenu extends React.Component {
     let rightTreeMenuHeight = rightTreeMenu.offsetHeight;
     let rightTreeMenuWidth = rightTreeMenu.offsetWidth;
 
-    rightTreeMenu.addEventListener('contextmenu', (e) => {
-      e.stopPropagation();
-    })
-
     if (mousePosition.clientY + rightTreeMenuHeight > document.body.clientHeight) {
       if ((e.clientX >= mousePosition.clientX) && (e.clientX <= (mousePosition.clientX + rightTreeMenuWidth)) && (e.clientY <= mousePosition.clientY) && (e.clientY >= (mousePosition.clientY - rightTreeMenuHeight))) {
         this.props.unregisterHandlers();

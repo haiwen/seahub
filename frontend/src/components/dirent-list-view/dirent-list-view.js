@@ -6,9 +6,6 @@ import Loading from '../loading';
 import DirentListItem from './dirent-list-item';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
-import CreateFolder from '../../components/dialog/create-folder-dialog';
-
-import DirentListMenu from './dirent-right-menu'
 
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -37,6 +34,8 @@ const propTypes = {
   onDirentClick: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
+  showDifferentContextmenu: PropTypes.func,
+  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
 };
 
 class DirentListView extends React.Component {
@@ -52,11 +51,6 @@ class DirentListView extends React.Component {
 
       isCreateFileDialogShow: false,
       fileType: '',
-
-      isContainerContextmenuShow: false,
-      isCreateFolderDialogShow: false,
-      itemMousePosition: {clientX: '', clientY: ''},
-      isCloumnNavContenxtmenuShow: false,
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -65,55 +59,12 @@ class DirentListView extends React.Component {
   }
 
   componentDidUpdate() {
-    this.registerTableContainerContextmenuHandler();
     let tableHeader = document.querySelector('thead');
     if (tableHeader) {
       tableHeader.addEventListener('contextmenu', (e) => {
         e.stopPropagation();
       })
     }
-  }
-
-  componentWillUnmount() {
-    this.unregisterTableContainerContextmenuHandler();
-  }
-
-  registerTableContainerContextmenuHandler = (e) => {
-    let tableContainer = document.querySelector('.table-container');
-    if (tableContainer) {
-      tableContainer.addEventListener('contextmenu', this.tableContainerContextmenuHandler);
-    }
-  }
-
-  unregisterTableContainerContextmenuHandler = (e) => {
-    let tableContainer = document.querySelector('.table-container');
-    tableContainer.removeEventListener('contextmenu', this.tableContainerContextmenuHandler);
-  }
-
-  tableContainerContextmenuHandler = (e) => {
-    e.preventDefault();
-    
-    this.props.showDifferentRightMenu('container_contextmenu');
-
-    this.setState({isContainerContextmenuShow: false});
-    setTimeout(() => {
-      this.setState({
-        isContainerContextmenuShow: true,
-        itemMousePosition: {clientX: e.clientX, clientY: e.clientY}
-      })
-    },40)
-  }
-
-  closeTableContainerRightMenu = () => {
-    this.setState({
-      isContainerContextmenuShow: false,
-    });
-  }
-
-  onCreateFolderToggle = () => {
-    this.setState({
-      isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow,
-    });
   }
 
   onFreezedItem = () => {
@@ -162,11 +113,6 @@ class DirentListView extends React.Component {
   onAddFile = (filePath, isDraft) => {
     this.setState({isCreateFileDialogShow: false});
     this.props.onAddFile(filePath, isDraft);
-  }
-
-  onAddFolder = (dirPath) => {
-    this.setState({isCreateFolderDialogShow: false});
-    this.props.onAddFolder(dirPath);
   }
 
   sortByName = (e) => {
@@ -256,7 +202,6 @@ class DirentListView extends React.Component {
 
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
-
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
@@ -302,113 +247,79 @@ class DirentListView extends React.Component {
 
     return (
       <Fragment>
-        <div className="table-container" style={{display: 'flex', flex: 1}}>
-          <table>
-            <thead>
-              <tr>
-                <th width="3%" className="pl10">
-                  <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
-                </th>
-                <th width="3%" className="pl10">{/*icon */}</th>
-                <th width="5%" className="pl10">{/*star */}</th>
-                <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th width="6%">{/*tag */}</th>
-                <th width="18%">{/*operation */}</th>
-                <th width="11%">{gettext('Size')}</th>
-                <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                direntList.length !== 0 && direntList.map((dirent, index) => {
-                  return (
-                    <DirentListItem
-                      key={index}
-                      subscript={index}
-                      dirent={dirent}
-                      path={this.props.path}
-                      repoID={this.props.repoID}
-                      currentRepoInfo={this.props.currentRepoInfo}
-                      isAdmin={this.isAdmin}
-                      isRepoOwner={this.isRepoOwner}
-                      repoEncrypted={this.repoEncrypted}
-                      enableDirPrivateShare={this.props.enableDirPrivateShare}
-                      isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                      direntList={this.props.direntList}
-                      onItemClick={this.props.onItemClick}
-                      onItemRenameToggle={this.onItemRenameToggle}
-                      onItemSelected={this.props.onItemSelected}
-                      onItemDelete={this.props.onItemDelete}
-                      onItemRename={this.onItemRename}
-                      onItemMove={this.props.onItemMove}
-                      onItemCopy={this.props.onItemCopy}
-                      updateDirent={this.props.updateDirent}
-                      isItemFreezed={this.state.isItemFreezed}
-                      onFreezedItem={this.onFreezedItem}
-                      onUnfreezedItem={this.onUnfreezedItem}
-                      onDirentClick={this.props.onDirentClick}
-                      onItemDetails={this.onItemDetails}
-                      showImagePopup={this.showImagePopup}
-                      showDifferentRightMenu={this.props.showDifferentRightMenu}
-                      isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
-                    />
-                  );
-                })
-              }
-            </tbody>
-          </table>
-
-          {this.state.isContainerContextmenuShow && this.props.isCloumnNavContenxtmenuShow === 'container_contextmenu' && (
-            <DirentListMenu 
-              mousePosition={this.state.itemMousePosition}
-              itemUnregisterHandlers={this.unregisterTableContainerContextmenuHandler}
-              itemRegisterHandlers={this.registerTableContainerContextmenuHandler}
-              closeRightMenu={this.closeTableContainerRightMenu}
-              onCreateFolderToggle={this.onCreateFolderToggle}
-              onCreateFileToggle={this.onCreateFileToggle}
-            />
-          )}
-          {this.state.isCreateFolderDialogShow && (
-            <ModalPortal>
-              <CreateFolder
-                parentPath={this.props.path}
-                onAddFolder={this.onAddFolder}
-                checkDuplicatedName={this.checkDuplicatedName}
-                addFolderCancel={this.onCreateFolderToggle}
-              />
-            </ModalPortal>
-          )} 
-          {this.state.isCreateFileDialogShow && (
-            <ModalPortal>
-              <CreateFile
-                parentPath={this.props.path}
-                fileType={this.state.fileType}
-                onAddFile={this.onAddFile}
-                checkDuplicatedName={this.checkDuplicatedName}
-                addFileCancel={this.onCreateFileToggle}
-              />
-            </ModalPortal>
-          )}
-          {this.state.isImagePopupOpen && (
-            <Lightbox
-              mainSrc={imageItems[imageIndex].src}
-              imageTitle={imageItems[imageIndex].name}
-              imageCaption={imageCaption}
-              nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
-              prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
-              onCloseRequest={this.closeImagePopup}
-              onMovePrevRequest={this.moveToPrevImage}
-              onMoveNextRequest={this.moveToNextImage}
-              imagePadding={70}
-              imageLoadErrorMessage={gettext('The image could not be loaded.')}
-              prevLabel={gettext('Previous (Left arrow key)')}
-              nextLabel={gettext('Next (Right arrow key)')}
-              closeLabel={gettext('Close (Esc)')}
-              zoomInLabel={gettext('Zoom in')}
-              zoomOutLabel={gettext('Zoom out')}
-            />
-          )}
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th width="3%" className="pl10">
+                <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
+              </th>
+              <th width="3%" className="pl10">{/*icon */}</th>
+              <th width="5%" className="pl10">{/*star */}</th>
+              <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+              <th width="6%">{/*tag */}</th>
+              <th width="18%">{/*operation */}</th>
+              <th width="11%">{gettext('Size')}</th>
+              <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              direntList.length !== 0 && direntList.map((dirent, index) => {
+                return (
+                  <DirentListItem
+                    key={index}
+                    subscript={index}
+                    dirent={dirent}
+                    path={this.props.path}
+                    repoID={this.props.repoID}
+                    currentRepoInfo={this.props.currentRepoInfo}
+                    isAdmin={this.isAdmin}
+                    isRepoOwner={this.isRepoOwner}
+                    repoEncrypted={this.repoEncrypted}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    direntList={this.props.direntList}
+                    onItemClick={this.props.onItemClick}
+                    onItemRenameToggle={this.onItemRenameToggle}
+                    onItemSelected={this.props.onItemSelected}
+                    onItemDelete={this.props.onItemDelete}
+                    onItemRename={this.onItemRename}
+                    onItemMove={this.props.onItemMove}
+                    onItemCopy={this.props.onItemCopy}
+                    updateDirent={this.props.updateDirent}
+                    isItemFreezed={this.state.isItemFreezed}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
+                    onDirentClick={this.props.onDirentClick}
+                    onItemDetails={this.onItemDetails}
+                    showImagePopup={this.showImagePopup}
+                    showDifferentContextmenu={this.props.showDifferentContextmenu}
+                    isContainerTreeItemType={this.props.isContainerTreeItemType}
+                  />
+                );
+              })
+            }
+          </tbody>
+        </table>
+        {this.state.isImagePopupOpen && (
+          <Lightbox
+            mainSrc={imageItems[imageIndex].src}
+            imageTitle={imageItems[imageIndex].name}
+            imageCaption={imageCaption}
+            nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
+            prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
+            onCloseRequest={this.closeImagePopup}
+            onMovePrevRequest={this.moveToPrevImage}
+            onMoveNextRequest={this.moveToNextImage}
+            imagePadding={70}
+            imageLoadErrorMessage={gettext('The image could not be loaded.')}
+            prevLabel={gettext('Previous (Left arrow key)')}
+            nextLabel={gettext('Next (Right arrow key)')}
+            closeLabel={gettext('Close (Esc)')}
+            zoomInLabel={gettext('Zoom in')}
+            zoomOutLabel={gettext('Zoom out')}
+          />
+        )}
       </Fragment>
     );
   }

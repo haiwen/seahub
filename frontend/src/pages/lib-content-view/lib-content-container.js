@@ -6,11 +6,6 @@ import DirentDetail from '../../components/dirent-detail/dirent-details';
 import DirListView from '../../components/dir-view-mode/dir-list-view';
 import DirGridView from '../../components/dir-view-mode/dir-grid-view';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
-import ModalPortal from '../../components/modal-portal';
-import CreateFolder from '../../components/dialog/create-folder-dialog';
-import CreateFile from '../../components/dialog/create-file-dialog';
-
-import DirentListMenu from '../../components/dirent-list-view/dirent-right-menu'
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -89,7 +84,7 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
-      isCloumnNavContenxtmenuShow: 'item_contextmenu',
+      isContainerTreeItemType: 'item_contextmenu',
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
@@ -123,16 +118,16 @@ class LibContentContainer extends React.Component {
     this.props.closeDirentDetail();
   }
 
-  showDifferentRightMenu = (type) => {
+  showDifferentContextmenu = (type) => {
     switch(type) {
       case 'container_contextmenu':
-        this.setState({isCloumnNavContenxtmenuShow: 'container_contextmenu'});
+        this.setState({isContainerTreeItemType: 'container_contextmenu'});
         break;
       case 'item_contextmenu':
-        this.setState({isCloumnNavContenxtmenuShow: 'item_contextmenu'});
+        this.setState({isContainerTreeItemType: 'item_contextmenu'});
         break;
       case 'tree_contextmenu':
-        this.setState({isCloumnNavContenxtmenuShow: 'tree_contextmenu'});
+        this.setState({isContainerTreeItemType: 'tree_contextmenu'});
         break;
       default:
         break;
@@ -212,8 +207,9 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    isCloumnNavContenxtmenuShow={this.state.isCloumnNavContenxtmenuShow}
-                    showDifferentRightMenu={this.showDifferentRightMenu}
+                    isContainerTreeItemType={this.state.isContainerTreeItemType}
+                    showDifferentContextmenu={this.showDifferentContextmenu}
+                    onAddFolder={this.props.onAddFolder}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -272,8 +268,9 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    isCloumnNavContenxtmenuShow={this.state.isCloumnNavContenxtmenuShow}
-                    showDifferentRightMenu={this.showDifferentRightMenu}
+                    isContainerTreeItemType={this.state.isContainerTreeItemType}
+                    showDifferentContextmenu={this.showDifferentContextmenu}
+                    onAddFolder={this.props.onAddFolder}
                   />
                 )}
               </Fragment>

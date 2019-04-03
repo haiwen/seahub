@@ -15,8 +15,8 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onItemMove: PropTypes.func,
   currentRepoInfo: PropTypes.object,
-  showDifferentRightMenu: PropTypes.func,
-  isCloumnNavContenxtmenuShow: PropTypes.string,
+  showDifferentContextmenu: PropTypes.func,
+  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
 };
 
 const PADDING_LEFT = 20;
@@ -35,6 +35,10 @@ class TreeView extends React.Component {
   }
 
   componentDidMount() {
+    this.registerHandlers();
+  }
+
+  componentDidUpdate() {
     this.registerHandlers();
   }
 
@@ -111,7 +115,7 @@ class TreeView extends React.Component {
   contextMenu = (e) => {
     e.preventDefault();
     
-    this.props.showDifferentRightMenu('tree_contextmenu');
+    this.props.showDifferentContextmenu('tree_contextmenu');
 
     this.setState({
       isRightMenuShow:false,
@@ -176,7 +180,7 @@ class TreeView extends React.Component {
           onNodeDragEnter={this.onNodeDragEnter}
           onNodeDragLeave={this.onNodeDragLeave}
         />
-       {this.state.isRightMenuShow && this.props.isCloumnNavContenxtmenuShow === 'tree_contextmenu' && (
+       {this.state.isRightMenuShow && this.props.isContainerTreeItemType === 'tree_contextmenu' && (
           <TreeViewContextMenu 
             node={this.state.fileData}
             onMenuItemClick={this.onMenuItemClick}

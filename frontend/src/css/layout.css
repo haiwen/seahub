@@ -110,6 +110,12 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-container {
+  flex: 1;
 }
 
 .cur-view-content .article {

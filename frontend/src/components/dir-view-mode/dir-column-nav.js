@@ -32,8 +32,8 @@ const propTypes = {
   navRate: PropTypes.number,
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  showDifferentRightMenu: PropTypes.func,
-  isCloumnNavContenxtmenuShow: PropTypes.string,
+  showDifferentContextmenu: PropTypes.func,
+  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
 };
 
 class DirColumnNav extends React.Component {
@@ -284,8 +284,8 @@ class DirColumnNav extends React.Component {
               onUnFreezedItem={this.onUnFreezedItem}
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
-              showDifferentRightMenu={this.props.showDifferentRightMenu}
-              isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
+              showDifferentContextmenu={this.props.showDifferentContextmenu}
+              isContainerTreeItemType={this.props.isContainerTreeItemType}
             />)
           }
         </div>

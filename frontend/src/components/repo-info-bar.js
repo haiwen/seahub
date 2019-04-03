@@ -30,13 +30,6 @@ class RepoInfoBar extends React.Component {
     };
   }
 
-  componentDidUpdate() {
-    let RepoInfoBar = document.querySelector('.repo-info-bar')
-    RepoInfoBar.addEventListener('contextmenu', (e) => {
-      e.stopPropagation();
-    })
-  }
-
   onListTaggedFiles = (currentTag) => {
     this.setState({
       currentTag: currentTag,

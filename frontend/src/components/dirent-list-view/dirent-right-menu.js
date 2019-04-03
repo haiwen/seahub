@@ -50,13 +50,13 @@ class DirentRightMenu extends React.Component {
       return menuList;
     }
 
-    let { currentRepoInfo, dirent, isRepoOwner } = this.props;
+    let { currentRepoInfo, dirent, isRepoOwner, showShare } = this.props;
 
     let type = dirent.type ? dirent.type : '';
     let permission = dirent.permission ? dirent.permission : '';
     let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
     if (type === 'dir' && permission === 'rw') {
-      let subscriptList = currentRepoInfo.encrypted ? ['Download', 'Delete'] : ['Share', 'Download', 'Delete'];
+      let subscriptList = showShare ? ['Share', 'Download', 'Delete'] : ['Download', 'Delete'];
       let menuList = [];
       if (can_set_folder_perm) {
         menuList = [...subscriptList, 'Rename', 'Move', 'Copy', 'Permission', 'Details', 'Open via Client'];
@@ -67,12 +67,12 @@ class DirentRightMenu extends React.Component {
     }
 
     if (type === 'dir' && permission === 'r') {
-      let menuList = currentRepoInfo.encrypted ? ['Download', 'Delete', 'Copy', 'Details'] : ['Share','Download', 'Delete', 'Details'];
+      let menuList = showShare ? ['Share', 'Download', 'Delete', 'Copy', 'Details'] : ['Download', 'Delete', 'Details'];
       return menuList;
     }
 
     if (type === 'file' && permission === 'rw') {
-      let menuList = currentRepoInfo.encrypted ? ['Download', 'Delete'] : ['Share','Download', 'Delete'];
+      let menuList = showShare ? ['Share', 'Download', 'Delete'] : ['Download', 'Delete'];
 
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         menuList.push('Rename');
@@ -101,7 +101,7 @@ class DirentRightMenu extends React.Component {
     }
 
     if (type === 'file' && permission === 'r') {
-      let menuList = currentRepoInfo.encrypted ? ['Download', 'Delete'] : ['Share','Download', 'Delete'];
+      let menuList = showShare ? ['Share', 'Download', 'Delete'] : ['Download', 'Delete'];
       if (!currentRepoInfo.encrypted) {
         menuList.push('Copy');
       }
