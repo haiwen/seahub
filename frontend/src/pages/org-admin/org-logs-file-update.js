@@ -29,11 +29,11 @@ class OrgLogsFileUpdate extends Component {
     let page = this.state.page;
     let email = this.state.userSelected;
     let repoID = this.state.repoSelected;
-    this.initData(page, email, repoID);
+    this.initData(email, repoID, page);
   }
 
-  initData = (page, email, repoID) => {
-    seafileAPI.orgAdminListFileUpdate(page, email, repoID).then(res => {
+  initData = (email, repoID, page) => {
+    seafileAPI.orgAdminListFileUpdate(email, repoID, page).then(res => {
       let eventList = res.data.log_list.map(item => {
         return new OrgLogsFileUpdateEvent(item);
       });
