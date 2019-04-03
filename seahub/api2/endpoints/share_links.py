@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import stat
 import logging
+import posixpath
 from constance import config
 from dateutil.relativedelta import relativedelta
 
@@ -22,10 +24,12 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.share.models import FileShare
-from seahub.utils import gen_shared_link, is_org_context, normalize_file_path
+from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
+        normalize_dir_path
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.views import check_folder_permission
-from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
+        timestamp_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED
@@ -271,7 +275,7 @@ class ShareLinks(APIView):
                 error_msg = 'path %s not found.' % path
 
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-       
+
         if parse_repo_perm(check_folder_permission(request, repo_id, path)).can_download is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -431,3 +435,84 @@ class ShareLinkOnlineOfficeLock(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return Response({'success': True})
+
+
+class ShareLinkDirents(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, token):
+        """ Only used for get dirents in a folder share link.
+
+        Permission checking:
+        1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
+        """
+
+        # permission check
+        if SHARE_LINK_LOGIN_REQUIRED and \
+                not request.user.is_authenticated():
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # resource check
+        try:
+            share_link= FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Share link %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if share_link.s_type != 'd':
+            error_msg = 'Share link %s is not a folder share link.' % token
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_id = share_link.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        share_link_path = share_link.path
+        request_path = request.GET.get('path', '/')
+        if request_path == '/':
+            path = share_link_path
+        else:
+            path = posixpath.join(share_link_path, request_path.strip('/'))
+
+        path = normalize_dir_path(path)
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % request_path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            current_commit = seafile_api.get_commit_list(repo_id, 0, 1)[0]
+            dirent_list = seafile_api.list_dir_by_commit_and_path(repo_id,
+                    current_commit.id, path, -1, -1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = []
+        for dirent in dirent_list:
+
+            # don't return parent folder(share link path) info to user
+            # so use request_path here
+            dirent_path = posixpath.join(request_path, dirent.obj_name)
+
+            dirent_info = {}
+            dirent_info['size'] = dirent.size
+            dirent_info['last_modified'] = timestamp_to_isoformat_timestr(dirent.mtime)
+
+            if stat.S_ISDIR(dirent.mode):
+                dirent_info['is_dir'] = True
+                dirent_info['folder_path'] = normalize_dir_path(dirent_path)
+                dirent_info['folder_name'] = dirent.obj_name
+            else:
+                dirent_info['is_dir'] = False
+                dirent_info['file_path'] = normalize_file_path(dirent_path)
+                dirent_info['file_name'] = dirent.obj_name
+
+            result.append(dirent_info)
+
+        return Response({'dirent_list': result})
