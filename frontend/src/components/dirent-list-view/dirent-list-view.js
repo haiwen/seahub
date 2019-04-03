@@ -268,7 +268,7 @@ class DirentListView extends React.Component {
                 return (
                   <DirentListItem
                     key={index}
-                    subscript={index}
+                    itemIndex={index}
                     dirent={dirent}
                     path={this.props.path}
                     repoID={this.props.repoID}

@@ -99,7 +99,7 @@ class DirentListItem extends React.Component {
     this.setState({
       isDragTipShow: true,
       enterItemData: this.props.dirent,
-      enterItemIndex: this.props.subscript,
+      enterItemIndex: this.props.itemIndex,
     });
   }
 
@@ -113,7 +113,7 @@ class DirentListItem extends React.Component {
     this.setState({
       isDragTipShow: true,
       enterItemData: this.props.dirent,
-      enterItemIndex: this.props.subscript,
+      enterItemIndex: this.props.itemIndex,
     });
   }
 
@@ -558,7 +558,7 @@ class DirentListItem extends React.Component {
                 </ul>
               </div>
             }
-            {this.state.showItemContextMenu && this.state.contextmenuIndex === this.props.subscript && this.props.isContainerTreeItemType === 'item_contextmenu' &&
+            {this.state.showItemContextMenu && this.state.contextmenuIndex === this.props.itemIndex && this.props.isContainerTreeItemType === 'item_contextmenu' &&
               <DirentRightMenu
                 dirent={this.state.rightItemData}
                 mousePosition={this.state.itemMousePosition}
