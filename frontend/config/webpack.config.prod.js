@@ -65,6 +65,7 @@ module.exports = {
     app: [require.resolve('./polyfills'), paths.appSrc + "/app.js"],
     draft: [require.resolve('./polyfills'), paths.appSrc + "/draft.js"],
     draw: [require.resolve('./polyfills'), paths.appSrc + "/draw/draw.js"],
+    sharedDirView: [require.resolve('./polyfills'), paths.appSrc + "/shared-dir-view.js"],
     sharedFileViewMarkdown: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-markdown.js"],
     sharedFileViewText: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-text.js"],
     sharedFileViewImage: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-image.js"],
