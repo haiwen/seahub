@@ -205,15 +205,15 @@ class DirentListView extends React.Component {
             <div className="big-new-file-button-group">
               <div className="d-flex justify-content-center">
                 <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>
-                  {'+ '}{gettext('Markdown')}</button>
+                  {'+ Markdown'}</button>
                 <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.ppt')}>
-                  {'+ '}{gettext('PPT')}</button>
+                  {'+ PPT'}</button>
               </div>
               <div className="d-flex justify-content-center">
                 <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.doc')}>
-                  {'+ '}{gettext('Word')}</button>
+                  {'+ Word'}</button>
                 <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xls')}>
-                  {'+ '}{gettext('Excel')}</button>
+                  {'+ Excel'}</button>
               </div>
             </div>
           </div>
