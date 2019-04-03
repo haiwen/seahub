@@ -132,9 +132,7 @@ class DirentListItem extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.closeContainerRightMenu();
-    this.props.closeItemRightMenu();
-    this.props.showDifferentRightMenu(this.props.dirent);
+    this.props.showDifferentRightMenu('item_contextmenu')
 
     this.setState({
       showItemContextMenu: false,
@@ -152,6 +150,11 @@ class DirentListItem extends React.Component {
   closeRightMenu = () => {
     this.setState({
       showItemContextMenu: false,
+      itemdata: '',
+      rightIndex: -1,
+      itemMousePosition: {clientX: '', clientY: ''},
+      menuIndex: -1,
+      isDragTipShow:false,
     });
   }
 
@@ -552,7 +555,7 @@ class DirentListItem extends React.Component {
                 </ul>
               </div>
             }
-            {this.state.showItemContextMenu && this.state.menuIndex === this.props.subscript && this.props.isItemContextmenuShow && this.props.isCloumnNavContenxtmenuShow &&
+            {this.state.showItemContextMenu && this.state.menuIndex === this.props.subscript && this.props.isCloumnNavContenxtmenuShow === 'item_contextmenu' &&
               <DirentRightMenu
                 dirent={this.state.rightItemData}
                 mousePosition={this.state.itemMousePosition}
@@ -565,6 +568,7 @@ class DirentListItem extends React.Component {
                 itemRegisterHandlers={this.itemRegisterHandlers}
                 itemUnregisterHandlers={this.itemUnregisterHandlers}
                 closeRightMenu={this.closeRightMenu}
+                onUnfreezedItem={this.onUnfreezedItem}
               />
             }
           </td>

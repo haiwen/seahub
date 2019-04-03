@@ -89,95 +89,10 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
-      isContainerContextmenuShow: false,
-      isCreateFolderDialogShow: false,
-      isCreateFileDialogShow: false,
-      fileType:'',
-      itemMousePosition: {clientX: '', clientY: ''},
-      isItemContextmenuShow: true,
-      isCloumnNavContenxtmenuShow: false,
+      isCloumnNavContenxtmenuShow: 'item_contextmenu',
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
-  }
-
-  componentDidUpdate() {
-    this.registerContainerContextmenuHandler();
-  }
-
-  componentWillUnmount() {
-    this.unregisterContainerContextmenuHandler();
-  }
-
-  registerContainerContextmenuHandler = (e) => {
-    let curViewContent = document.querySelector('.cur-view-content');
-    curViewContent.addEventListener('contextmenu', this.containerContextmenuHandler);
-  }
-
-  unregisterContainerContextmenuHandler = (e) => {
-    let curViewContent = document.querySelector('.cur-view-content');
-    curViewContent.removeEventListener('contextmenu', this.containerContextmenuHandler);
-  }
-
-  containerContextmenuHandler = (e) => {
-    e.preventDefault();
-    this.setState({isContainerContextmenuShow: false, isItemContextmenuShow: false});
-    setTimeout(() => {
-      this.setState({
-        isContainerContextmenuShow: true,
-        itemMousePosition: {clientX: e.clientX, clientY: e.clientY}
-      })
-    },40)
-  }
-
-  closeContainerRightMenu = () => {
-    this.setState({
-      isContainerContextmenuShow: false,
-    });
-  }
-
-  closeItemRightMenu = () => {
-    this.setState({
-      isItemContextmenuShow: true,
-    });
-  }
-
-  showDifferentRightMenu = (node) => {
-    if (!node.object) {
-      this.setState({isCloumnNavContenxtmenuShow: true});
-    } else {
-      this.setState({isCloumnNavContenxtmenuShow: false});
-    }
-  }
-
-  onCreateFileToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-    });
-  }
-
-  onCreateFolderToggle = () => {
-    this.setState({
-      isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow,
-    });
-  }
-
-  checkDuplicatedName = (newName) => {
-    let direntList = this.props.direntList;
-    let isDuplicated = direntList.some(object => {
-      return object.name === newName;
-    });
-    return isDuplicated;
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
-  }
-
-  onAddFolder = (dirPath) => {
-    this.setState({isCreateFolderDialogShow: false});
-    this.props.onAddFolder(dirPath);
   }
 
   onPathClick = (path) => {
@@ -206,6 +121,22 @@ class LibContentContainer extends React.Component {
 
   onItemDetailsClose = () => {
     this.props.closeDirentDetail();
+  }
+
+  showDifferentRightMenu = (type) => {
+    switch(type) {
+      case 'container_contextmenu':
+        this.setState({isCloumnNavContenxtmenuShow: 'container_contextmenu'});
+        break;
+      case 'item_contextmenu':
+        this.setState({isCloumnNavContenxtmenuShow: 'item_contextmenu'});
+        break;
+      case 'tree_contextmenu':
+        this.setState({isCloumnNavContenxtmenuShow: 'tree_contextmenu'});
+        break;
+      default:
+        break;
+    }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -281,11 +212,8 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    closeContainerRightMenu={this.closeContainerRightMenu}
-                    closeItemRightMenu={this.closeItemRightMenu}
-                    isItemContextmenuShow={this.state.isItemContextmenuShow}
-                    showDifferentRightMenu={this.showDifferentRightMenu}
                     isCloumnNavContenxtmenuShow={this.state.isCloumnNavContenxtmenuShow}
+                    showDifferentRightMenu={this.showDifferentRightMenu}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -344,48 +272,14 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    closeContainerRightMenu={this.closeContainerRightMenu}
-                    closeItemRightMenu={this.closeItemRightMenu}
-                    isItemContextmenuShow={this.state.isItemContextmenuShow}
-                    showDifferentRightMenu={this.showDifferentRightMenu}
                     isCloumnNavContenxtmenuShow={this.state.isCloumnNavContenxtmenuShow}
+                    showDifferentRightMenu={this.showDifferentRightMenu}
                   />
                 )}
               </Fragment>
             )}
           </div>
         </div>
-        {this.state.isContainerContextmenuShow && (
-          <DirentListMenu 
-            mousePosition={this.state.itemMousePosition}
-            itemUnregisterHandlers={this.unregisterContainerContextmenuHandler}
-            itemRegisterHandlers={this.registerContainerContextmenuHandler}
-            closeRightMenu={this.closeContainerRightMenu}
-            onCreateFolderToggle={this.onCreateFolderToggle}
-            onCreateFileToggle={this.onCreateFileToggle}
-          />
-        )}
-        {this.state.isCreateFileDialogShow && (
-          <ModalPortal>
-            <CreateFile
-              fileType={this.state.fileType}
-              parentPath={this.props.path}
-              onAddFile={this.onAddFile}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onCreateFileToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isCreateFolderDialogShow && (
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.props.path}
-              onAddFolder={this.onAddFolder}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFolderCancel={this.onCreateFolderToggle}
-            />
-          </ModalPortal>
-        )} 
         {this.props.isDirentDetailShow && (
           <div className="cur-view-detail">
             <DirentDetail

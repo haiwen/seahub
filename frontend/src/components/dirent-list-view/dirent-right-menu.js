@@ -268,6 +268,9 @@ class DirentRightMenu extends React.Component {
       this.props.onMenuItemClick(operation);
     }
     this.props.closeRightMenu();
+    if(this.props.onUnfreezedItem){
+      this.props.onUnfreezedItem();
+    }
   }
 
   render() {

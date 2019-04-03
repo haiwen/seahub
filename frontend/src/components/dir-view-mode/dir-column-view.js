@@ -63,11 +63,8 @@ const propTypes = {
   onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
-  closeContainerRightMenu: PropTypes.func,
-  closeItemRightMenu: PropTypes.func,
   showDifferentRightMenu: PropTypes.func,
-  isItemContextmenuShow: PropTypes.bool,
-  isCloumnNavContenxtmenuShow: PropTypes.bool,
+  isCloumnNavContenxtmenuShow: PropTypes.string,
 };
 
 class DirColumnView extends React.Component {
@@ -170,9 +167,6 @@ class DirColumnView extends React.Component {
           currentRepoInfo={this.props.currentRepoInfo}
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
-          closeContainerRightMenu={this.props.closeContainerRightMenu}
-          closeItemRightMenu={this.props.closeItemRightMenu}
-          isItemContextmenuShow={this.props.isItemContextmenuShow}
           showDifferentRightMenu={this.props.showDifferentRightMenu}
           isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
         />
@@ -223,9 +217,6 @@ class DirColumnView extends React.Component {
               updateDirent={this.props.updateDirent}
               isAllItemSelected={this.props.isAllItemSelected}
               onAllItemSelected={this.props.onAllItemSelected}
-              closeContainerRightMenu={this.props.closeContainerRightMenu}
-              closeItemRightMenu={this.props.closeItemRightMenu}
-              isItemContextmenuShow={this.props.isItemContextmenuShow}
               showDifferentRightMenu={this.props.showDifferentRightMenu}
               isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
             />
