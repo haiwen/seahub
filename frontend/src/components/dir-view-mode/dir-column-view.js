@@ -65,9 +65,9 @@ const propTypes = {
   onAllItemSelected: PropTypes.func.isRequired,
   closeContainerRightMenu: PropTypes.func,
   closeItemRightMenu: PropTypes.func,
-  showDiffentRightMenu: PropTypes.func,
-  itemRightMenuShow: PropTypes.bool,
-  diffentRightMenuShow: PropTypes.bool,
+  showDifferentRightMenu: PropTypes.func,
+  isItemContextmenuShow: PropTypes.bool,
+  isCloumnNavContenxtmenuShow: PropTypes.bool,
 };
 
 class DirColumnView extends React.Component {
@@ -172,9 +172,9 @@ class DirColumnView extends React.Component {
           onItemCopy={this.props.onItemCopy}
           closeContainerRightMenu={this.props.closeContainerRightMenu}
           closeItemRightMenu={this.props.closeItemRightMenu}
-          itemRightMenuShow={this.props.itemRightMenuShow}
-          showDiffentRightMenu={this.props.showDiffentRightMenu}
-          diffentRightMenuShow={this.props.diffentRightMenuShow}
+          isItemContextmenuShow={this.props.isItemContextmenuShow}
+          showDifferentRightMenu={this.props.showDifferentRightMenu}
+          isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
@@ -225,9 +225,9 @@ class DirColumnView extends React.Component {
               onAllItemSelected={this.props.onAllItemSelected}
               closeContainerRightMenu={this.props.closeContainerRightMenu}
               closeItemRightMenu={this.props.closeItemRightMenu}
-              itemRightMenuShow={this.props.itemRightMenuShow}
-              showDiffentRightMenu={this.props.showDiffentRightMenu}
-              diffentRightMenuShow={this.props.diffentRightMenuShow}
+              isItemContextmenuShow={this.props.isItemContextmenuShow}
+              showDifferentRightMenu={this.props.showDifferentRightMenu}
+              isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
             />
           )}
         </div>

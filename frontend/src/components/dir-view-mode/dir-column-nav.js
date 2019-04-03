@@ -34,9 +34,9 @@ const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
   closeContainerRightMenu: PropTypes.func,
   closeItemRightMenu: PropTypes.func,
-  showDiffentRightMenu: PropTypes.func,
-  itemRightMenuShow: PropTypes.bool,
-  diffentRightMenuShow: PropTypes.bool,
+  showDifferentRightMenu: PropTypes.func,
+  isItemContextmenuShow: PropTypes.bool,
+  isCloumnNavContenxtmenuShow: PropTypes.bool,
 };
 
 class DirColumnNav extends React.Component {
@@ -289,9 +289,9 @@ class DirColumnNav extends React.Component {
               currentRepoInfo={this.props.currentRepoInfo}
               closeContainerRightMenu={this.props.closeContainerRightMenu}
               closeItemRightMenu={this.props.closeItemRightMenu}
-              itemRightMenuShow={this.props.itemRightMenuShow}
-              showDiffentRightMenu={this.props.showDiffentRightMenu}
-              diffentRightMenuShow={this.props.diffentRightMenuShow}
+              isItemContextmenuShow={this.props.isItemContextmenuShow}
+              showDifferentRightMenu={this.props.showDifferentRightMenu}
+              isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
             />)
           }
         </div>

@@ -33,9 +33,9 @@ const propTypes = {
   onAllItemSelected: PropTypes.func.isRequired,
   closeContainerRightMenu: PropTypes.func,
   closeItemRightMenu: PropTypes.func,
-  showDiffentRightMenu: PropTypes.func,
-  itemRightMenuShow: PropTypes.bool,
-  diffentRightMenuShow: PropTypes.bool,
+  showDifferentRightMenu: PropTypes.func,
+  isItemContextmenuShow: PropTypes.bool,
+  isCloumnNavContenxtmenuShow: PropTypes.bool,
 };
 
 class DirListView extends React.Component {
@@ -77,10 +77,10 @@ class DirListView extends React.Component {
           isAllItemSelected={this.props.isAllItemSelected}
           onAllItemSelected={this.props.onAllItemSelected}
           closeContainerRightMenu={this.props.closeContainerRightMenu}
-          itemRightMenuShow={this.props.itemRightMenuShow}
+          isItemContextmenuShow={this.props.isItemContextmenuShow}
           closeItemRightMenu={this.props.closeItemRightMenu}
-          showDiffentRightMenu={this.props.showDiffentRightMenu}
-          diffentRightMenuShow={this.props.diffentRightMenuShow}
+          showDifferentRightMenu={this.props.showDifferentRightMenu}
+          isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
         />
       </Fragment>
     );

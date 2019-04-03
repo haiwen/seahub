@@ -134,7 +134,7 @@ class DirentListItem extends React.Component {
 
     this.props.closeContainerRightMenu();
     this.props.closeItemRightMenu();
-    this.props.showDiffentRightMenu(this.props.dirent);
+    this.props.showDifferentRightMenu(this.props.dirent);
 
     this.setState({
       showItemContextMenu: false,
@@ -552,7 +552,7 @@ class DirentListItem extends React.Component {
                 </ul>
               </div>
             }
-            {this.state.showItemContextMenu && this.state.menuIndex === this.props.subscript && this.props.itemRightMenuShow && this.props.diffentRightMenuShow &&
+            {this.state.showItemContextMenu && this.state.menuIndex === this.props.subscript && this.props.isItemContextmenuShow && this.props.isCloumnNavContenxtmenuShow &&
               <DirentRightMenu
                 dirent={this.state.rightItemData}
                 mousePosition={this.state.itemMousePosition}

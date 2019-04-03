@@ -89,77 +89,76 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
-      isShowContainerRightMenu: false,
-      showCreateFolder: false,
-      showCreateFile: false,
+      isContainerContextmenuShow: false,
+      isCreateFolderDialogShow: false,
+      isCreateFileDialogShow: false,
       fileType:'',
       itemMousePosition: {clientX: '', clientY: ''},
-      itemRightMenuShow: true,
-      diffentRightMenuShow: false,
+      isItemContextmenuShow: true,
+      isCloumnNavContenxtmenuShow: false,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
   }
 
   componentDidUpdate() {
-    this.containerRegisterHandlers();
+    this.registerContainerContextmenuHandler();
   }
 
   componentWillUnmount() {
-    this.containerUnregisterHandlers();
+    this.unregisterContainerContextmenuHandler();
   }
 
-  containerRegisterHandlers = (e) => {
+  registerContainerContextmenuHandler = (e) => {
     let curViewContent = document.querySelector('.cur-view-content');
-    curViewContent.addEventListener('contextmenu', this.containerContextMenu);
+    curViewContent.addEventListener('contextmenu', this.containerContextmenuHandler);
   }
 
-  containerUnregisterHandlers = (e) => {
+  unregisterContainerContextmenuHandler = (e) => {
     let curViewContent = document.querySelector('.cur-view-content');
-    curViewContent.removeEventListener('contextmenu', this.containerContextMenu);
+    curViewContent.removeEventListener('contextmenu', this.containerContextmenuHandler);
   }
 
-  containerContextMenu = (e) => {
+  containerContextmenuHandler = (e) => {
     e.preventDefault();
-    this.setState({isShowContainerRightMenu: false, itemRightMenuShow: false});
+    this.setState({isContainerContextmenuShow: false, isItemContextmenuShow: false});
     setTimeout(() => {
       this.setState({
-        isShowContainerRightMenu: true,
+        isContainerContextmenuShow: true,
         itemMousePosition: {clientX: e.clientX, clientY: e.clientY}
       })
     },40)
-    
   }
 
   closeContainerRightMenu = () => {
     this.setState({
-      isShowContainerRightMenu: false,
+      isContainerContextmenuShow: false,
     });
   }
 
   closeItemRightMenu = () => {
     this.setState({
-      itemRightMenuShow: true,
+      isItemContextmenuShow: true,
     });
   }
 
-  showDiffentRightMenu = (node) => {
+  showDifferentRightMenu = (node) => {
     if (!node.object) {
-      this.setState({diffentRightMenuShow: true});
+      this.setState({isCloumnNavContenxtmenuShow: true});
     } else {
-      this.setState({diffentRightMenuShow: false});
+      this.setState({isCloumnNavContenxtmenuShow: false});
     }
   }
 
   onCreateFileToggle = () => {
     this.setState({
-      showCreateFile: !this.state.showCreateFile,
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
     });
   }
 
   onCreateFolderToggle = () => {
     this.setState({
-      showCreateFolder: !this.state.showCreateFolder,
+      isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow,
     });
   }
 
@@ -172,12 +171,12 @@ class LibContentContainer extends React.Component {
   }
 
   onAddFile = (filePath, isDraft) => {
-    this.setState({showCreateFile: false});
+    this.setState({isCreateFileDialogShow: false});
     this.props.onAddFile(filePath, isDraft);
   }
 
   onAddFolder = (dirPath) => {
-    this.setState({showCreateFolder: false});
+    this.setState({isCreateFolderDialogShow: false});
     this.props.onAddFolder(dirPath);
   }
 
@@ -284,9 +283,9 @@ class LibContentContainer extends React.Component {
                     onAllItemSelected={this.props.onAllDirentSelected}
                     closeContainerRightMenu={this.closeContainerRightMenu}
                     closeItemRightMenu={this.closeItemRightMenu}
-                    itemRightMenuShow={this.state.itemRightMenuShow}
-                    showDiffentRightMenu={this.showDiffentRightMenu}
-                    diffentRightMenuShow={this.state.diffentRightMenuShow}
+                    isItemContextmenuShow={this.state.isItemContextmenuShow}
+                    showDifferentRightMenu={this.showDifferentRightMenu}
+                    isCloumnNavContenxtmenuShow={this.state.isCloumnNavContenxtmenuShow}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -347,26 +346,26 @@ class LibContentContainer extends React.Component {
                     onAllItemSelected={this.props.onAllDirentSelected}
                     closeContainerRightMenu={this.closeContainerRightMenu}
                     closeItemRightMenu={this.closeItemRightMenu}
-                    itemRightMenuShow={this.state.itemRightMenuShow}
-                    showDiffentRightMenu={this.showDiffentRightMenu}
-                    diffentRightMenuShow={this.state.diffentRightMenuShow}
+                    isItemContextmenuShow={this.state.isItemContextmenuShow}
+                    showDifferentRightMenu={this.showDifferentRightMenu}
+                    isCloumnNavContenxtmenuShow={this.state.isCloumnNavContenxtmenuShow}
                   />
                 )}
               </Fragment>
             )}
           </div>
         </div>
-        {this.state.isShowContainerRightMenu && (
+        {this.state.isContainerContextmenuShow && (
           <DirentListMenu 
             mousePosition={this.state.itemMousePosition}
-            itemUnregisterHandlers={this.containerUnregisterHandlers}
-            itemRegisterHandlers={this.containerRegisterHandlers}
+            itemUnregisterHandlers={this.unregisterContainerContextmenuHandler}
+            itemRegisterHandlers={this.registerContainerContextmenuHandler}
             closeRightMenu={this.closeContainerRightMenu}
             onCreateFolderToggle={this.onCreateFolderToggle}
             onCreateFileToggle={this.onCreateFileToggle}
           />
         )}
-        {this.state.showCreateFile && (
+        {this.state.isCreateFileDialogShow && (
           <ModalPortal>
             <CreateFile
               fileType={this.state.fileType}
@@ -377,7 +376,7 @@ class LibContentContainer extends React.Component {
             />
           </ModalPortal>
         )}
-        {this.state.showCreateFolder && (
+        {this.state.isCreateFolderDialogShow && (
           <ModalPortal>
             <CreateFolder
               parentPath={this.props.path}

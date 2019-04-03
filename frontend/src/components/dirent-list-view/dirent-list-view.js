@@ -293,10 +293,10 @@ class DirentListView extends React.Component {
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
                     closeContainerRightMenu={this.props.closeContainerRightMenu}
-                    itemRightMenuShow={this.props.itemRightMenuShow}
+                    isItemContextmenuShow={this.props.isItemContextmenuShow}
                     closeItemRightMenu={this.props.closeItemRightMenu}
-                    showDiffentRightMenu={this.props.showDiffentRightMenu}
-                    diffentRightMenuShow={this.props.diffentRightMenuShow}
+                    showDifferentRightMenu={this.props.showDifferentRightMenu}
+                    isCloumnNavContenxtmenuShow={this.props.isCloumnNavContenxtmenuShow}
                   />
                 );
               })
