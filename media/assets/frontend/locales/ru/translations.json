@@ -1,0 +1,169 @@
+{
+  "bold": "Полужирный",
+  "italic": "Курсив",
+  "inline_code": "Код",
+  "header_one": "Заголовок 1",
+  "header_two": "Заголовок 2",
+  "header_three": "Заголовок 3",
+  "header_four": "Заголовок 4",
+  "header_five": "Заголовок 5",
+  "header_six": "Заголовок 6",
+  "paragraph": "Параграф",
+  "quote": "Цитата",
+  "ordered_list": "Нумерованный список",
+  "unordered_list": "Маркированный список",
+  "check_list_item": "Проверка элемента списка",
+  "insert_image": "Вставить изображение",
+  "code": "Встроенный код",
+  "code_block": "Блок кода",
+  "insert_link": "Вставить ссылку",
+  "insert_table": "Вставить таблицу",
+  "save": "Сохранить",
+  "more": "Подробнее",
+  "invalid_url": "Недопустимый URL",
+  "link_address": "Адрес ссылки",
+  "image_address": "Адрес изображения",
+  "submit": "Отправить",
+  "cancel": "Отменить",
+  "switch_to_plain_text_editor": "Переключиться на обычный текстовый редактор",
+  "switch_to_rich_text_editor": "Переключиться на визуальный редактор",
+  "switch_to_viewer": "Переключиться на просмотр Markdown",
+  "help": "Помощь",
+  "remove_table": "Удалить таблицу",
+  "column": "Столбец",
+  "row": "Строка",
+  "set_align": "Установить выравнивание",
+  "left": "Слева",
+  "center": "По центру",
+  "right": "Справа",
+  "file_saved": "Файл сохранен.",
+  "file_failed_to_save": "Не удалось сохранить файл.",
+  "star": "Добавить пометку",
+  "unstar": "Удалить пометку",
+  "back_to_parent_directory":"Вернуться в родительский каталог",
+  "edit":"изменить",
+  "copy": "Копировать",
+  "copied": "Скопировано",
+  "internal_link": "Внутренняя ссылка",
+  "copy_internal_link": "Внутренняя ссылка скопирована в буфер обмена",
+  "internal_link_desc": "Внутренняя ссылка - это ссылка на файл или папку, к которым могут обращаться пользователи с правами на чтение файла или папки.",
+  "share": "Общий доступ",
+  "share_link": "Общедоступная ссылка",
+  "generate": "Создать",
+  "add_password_protection": "Защитить паролем",
+  "password": "Пароль",
+  "at_least_8_characters": "не менее 8 символов",
+  "password_again": "Подтвердите пароль",
+  "add_auto_expiration": "Добавить авто истечение срока действия",
+  "days": "дней",
+  "please_enter_password": "Пожалуйста, введите пароль",
+  "greater_than_or_equal_to": "Больше или равно",
+  "less_than_or_equal_to": "Меньше или равно",
+  "set_permission": "Установить разрешения",
+  "preview_and_download": "Предпросмотр и скачивание",
+  "preview_only": "Только предпросмотр",
+  "please_enter_valid_days": "Пожалуйста, введите корректные дни",
+  "please_enter_a_non-negative_integer": "Пожалуйста, введите неотрицательное целое число",
+  "please_enter_days": "Пожалуйста, введите дни",
+  "password_is_too_short": "Пароль слишком короткий",
+  "passwords_do_not_match": "Пароли не совпадают",
+  "return_to_wiki_page": "Вернуться на страницу Wiki",
+  "insert_network_image": "Вставить удаленное изображение",
+  "upload_local_image": "Загрузить локальное изображение",
+  "add_link": "Добавить ссылку",
+  "file_history": "История файла",
+  "history_version": "История версий",
+  "back_to_viewer": "Вернуться к просмотру",
+  "link_title": "Название ссылки",
+  "local_draft": "Локальный черновик",
+  "use_draft": "Использовать черновик",
+  "delete_draft": "Удалить черновик",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "У вас есть несохраненный черновик. Хотите использовать его?",
+  "local_draft_saved": "Локальный черновик сохранен",
+  "new_draft": "Новый черновик",
+  "edit_draft": "Изменить черновик",
+  "this_file_has_a_draft": "Этот файл имеет черновик.", 
+  "delete": "Удалить",
+  "comments": "Комментарии",
+  "add_a_comment": "Добавить комментарий...",
+  "no_comment_yet": "Комментариев пока нет.",
+  "mark_as_resolved": "Отметить как разрешенный",
+  "ask_for_review": "Спросить отзыв",
+  "review_already_exists": "Отзыв уже существует",
+  "view_review": "Просмотр отзыва",
+  "there_is_an_associated_review_with_this_file": "Есть связанный отзыв с этим файлом.",
+  "start_review": "Начать отзыв",
+  "this_file_is_in_draft_stage": "Этот файл находится в стадии черновика.",
+  "this_file_is_in_review_stage": "Этот файл находится на стадии проверки.",
+  "this_file_has_been_updated": "Этот файл был обновлен.",
+  "refresh": "Обновить",
+  "related_files": "связанные файлы",
+  "related_file": "связанный файл",
+  "no_tags": "Нет тегов",
+  "no_related_files": "Нет связанных файлов",
+  "Please_use_Chrome_to_get_best_editing_experience": "Пожалуйста, используйте Chrome, чтобы получить лучший опыт редактирования.",
+  "userHelp": {
+    "title": "Горячие клавиши",
+    "userHelpData": [
+      {
+        "shortcutType":"Список горячих клавиш",
+        "shortcutData": {
+          "Make_list": "Создать список",
+          "Make_ordered_list": "Создать нумерованный список",
+          "Insert_new_item": "Вставить новый элемент",
+          "Insert_child_in_item": "Вставить дочерний в элемент",
+          "Increase_depth": "Увеличить глубину"
+        }
+      }, {
+        "shortcutType": "Горячие клавиши для заголовка",
+        "shortcutData": {
+          "Heading_1": "Заголовок 1",
+          "Heading_2": "Заголовок 2",
+          "Heading_3": "Заголовок 3",
+          "Heading_4": "Заголовок 4",
+          "Heading_5": "Заголовок 5",
+          "Heading_6": "Заголовок 6"
+        }
+      }, {
+        "shortcutType": "Горячие клавиши для кода",
+        "shortcutData": {
+          "Make_code_block": "Создать блок кода",
+          "Insert_new_line": "Вставить новую строку",
+          "Escape_code_block": "Выделить блок кода",
+          "Insert_indent": "Вставить отступ"
+        }
+      }, {
+        "shortcutType": "Горячие клавиши для блока цитаты",
+        "shortcutData": {
+          "Make_Block_quote": "Создать блок цитаты",
+          "Escape_Block_quote": "Выделить блок цитаты"
+        }
+      }, {
+        "shortcutType": "Горячие клавиши для таблицы",
+        "shortcutData": {
+          "Insert_Table_Row": "Вставить строку таблицы",
+          "Escape_table": "Выделить таблицу"
+        }
+      }, {
+        "shortcutType":"Встроенные горячие клавиши",
+        "shortcutData": {
+          "Bold": "Полужирный",
+          "Italic": "Курсив",
+          "Italic_Bold": "Курсив Полужирный",
+          "Inline_code": "Встроенный код"
+        }
+      }, {
+        "shortcutType": "Сохранить горячие клавиши",
+        "shortcutData": {
+          "Save_file": "Сохранить файл"
+        }
+      }, {
+        "shortcutType": "Горячие клавиши для изображений",
+        "shortcutData": {
+          "Paste_screen_shot": "Вставить скриншот",
+          "Drag_image_from_anywhere_to_upload_it": "Перетащите изображение для загрузки"
+        }
+      }
+    ]
+  }
+}
