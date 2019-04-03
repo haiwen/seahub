@@ -83,8 +83,8 @@ class MarkdownViewerToolbar extends React.Component {
     let relatedFileString = '';
     if (relatedFiles) {
       const length = relatedFiles.length;
-      if (length === 1) relatedFileString = gettext('Related file');
-      else if (length > 1) relatedFileString = gettext('Related files');
+      if (length === 1) relatedFileString = gettext('related file');
+      else if (length > 1) relatedFileString = gettext('related files');
     }
     return(
       <div className="sf-md-viewer-topbar-second d-flex justify-content-center">

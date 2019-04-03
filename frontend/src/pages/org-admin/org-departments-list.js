@@ -74,8 +74,8 @@ class OrgDepartmentsList extends React.Component {
     const groups = this.state.groups;
     let isSub = this.props.groupID ? true : false;
     let header = isSub ? gettext('Sub-departments') : gettext('Departments');
-    let headerButton = isSub ? gettext('New Sub-departments') : gettext('New Departments');
-    let noGroup = isSub ? gettext('No sub-departments') : gettext('No departments');
+    let headerButton = isSub ? gettext('New Sub-department') : gettext('New Department');
+    let noGroup = isSub ? gettext('No sub-department') : gettext('No department');
     return (
       <div className="main-panel-center flex-row h-100">
         <div className="cur-view-container o-auto">
