@@ -7,7 +7,7 @@ import logging
 
 from rest_framework import status
 
-from seaserv import ccnet_api
+from seaserv import ccnet_api, seafile_api
 from pysearpc import SearpcError
 
 from seahub.api2.utils import api_error
@@ -92,6 +92,33 @@ def get_user_name_dict(email_list):
             user_name_dict[email] = email2nickname(email)
 
     return user_name_dict
+
+def get_repo_dict(repo_id_list):
+    repo_id_list = set(repo_id_list)
+    repo_dict = {}
+    for repo_id in repo_id_list:
+        if not repo_dict.has_key(repo_id):
+            repo_dict[repo_id] = ''
+            repo = seafile_api.get_repo(repo_id)
+            if repo:
+                repo_dict[repo_id] = repo
+
+    return repo_dict
+
+
+def get_group_dict(group_id_list):
+    group_id_list = set(group_id_list)
+    group_dict = {}
+    for group_id in group_id_list:
+        if not group_dict.has_key(group_id):
+            group_dict[group_id] = ''
+            group = ccnet_api.get_group(int(group_id))
+            print group
+            if group:
+                group_dict[group_id] = group
+
+    return group_dict
+
 
 def check_time_period_valid(start, end):
     if not start or not end:

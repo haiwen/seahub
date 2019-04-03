@@ -15,6 +15,10 @@ import OrgLinks from './org-links';
 import OrgDepartments from './org-departments';
 import OrgDepartmentsList from './org-departments-list';
 import OrgDepartmentItem from './org-department-item';
+import OrgLogs from './org-logs';
+import OrgLogsFileAudit from './org-logs-file-audit';
+import OrgLogsFileUpdate from './org-logs-file-update';
+import OrgLogsPermAudit from './org-logs-perm-audit';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -97,6 +101,15 @@ class Org extends React.Component {
               <OrgDepartmentsList path='/' />
               <OrgDepartmentItem path={newPath} />
             </OrgDepartments>
+            <OrgLogs
+              path={siteRoot + 'org/logadmin'}
+              currentTab={currentTab} 
+              tabItemClick={this.tabItemClick}
+            >
+              <OrgLogsFileAudit path='/' currentTab={currentTab} />
+              <OrgLogsFileUpdate path={siteRoot + 'file-update'} currentTab={currentTab} />
+              <OrgLogsPermAudit path={siteRoot + 'perm-audit'} currentTab={currentTab} />
+            </OrgLogs>
           </Router>
         </MainPanel>
       </div>
