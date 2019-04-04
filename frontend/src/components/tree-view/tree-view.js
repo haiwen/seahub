@@ -15,8 +15,8 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onItemMove: PropTypes.func,
   currentRepoInfo: PropTypes.object,
-  showDifferentContextmenu: PropTypes.func,
-  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
+  switchAnotherMenuToShow: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 const PADDING_LEFT = 20;
@@ -26,6 +26,7 @@ class TreeView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isItemFreezed: false,
       isRightMenuShow: false,
       nodeData: null,
       fileData: null,
@@ -103,22 +104,28 @@ class TreeView extends React.Component {
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, dropNodeData.path, nodeParentPath);
   }
 
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnFreezedItem = () => {
+    this.setState({isItemFreezed: false});
+  }
+
   contextMenu = (e) => {
     e.preventDefault();
     
-    this.props.onFreezedItem();
-    this.props.showDifferentContextmenu('tree_contextmenu');
+    this.props.switchAnotherMenuToShow('tree_contextmenu');
 
     this.setState({
       isRightMenuShow:false,
-    });
-    setTimeout(() => { 
+    }, () => {
       this.setState({
-        isRightMenuShow:true,
-        fileData:this.state.nodeData,
+        isRightMenuShow: true,
+        fileData: this.state.nodeData,
         mousePosition: {clientX: e.clientX, clientY: e.clientY}
       })
-    },40)
+    }) 
   }  
 
   unregisterHandlers = () => {
@@ -140,9 +147,11 @@ class TreeView extends React.Component {
   closeRightMenu = () => {
     this.setState({
       isRightMenuShow:false,
+      nodeData: null,
+      fileData: null,
+      mousePosition: {clientX: '', clientY: ''},
     })
-    this.props.onUnfreezedItem();
-    this.props.showDifferentContextmenu('empty_contextmenu');
+    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   onMenuItemClick = (operation, node) => {
@@ -158,14 +167,14 @@ class TreeView extends React.Component {
           currentPath={this.props.currentPath}
           paddingLeft={PADDING_LEFT}
           isNodeMenuShow={this.props.isNodeMenuShow}
-          isItemFreezed={this.props.isItemFreezed}
+          isItemFreezed={this.state.isItemFreezed}
           onNodeClick={this.props.onNodeClick}
           onMenuItemClick={this.props.onMenuItemClick}
           onNodeExpanded={this.props.onNodeExpanded}
           onNodeCollapse={this.props.onNodeCollapse}
           onNodeDragStart={this.onNodeDragStart}
-          onFreezedItem={this.props.onFreezedItem}
-          onUnFreezedItem={this.props.onUnfreezedItem}
+          onFreezedItem={this.onFreezedItem}
+          onUnFreezedItem={this.onUnFreezedItem}
           onNodeChanged={this.onNodeChanged}
           registerHandlers={this.registerHandlers}
           unregisterHandlers={this.unregisterHandlers}
@@ -173,9 +182,9 @@ class TreeView extends React.Component {
           onNodeDrop={this.onNodeDrop}
           onNodeDragEnter={this.onNodeDragEnter}
           onNodeDragLeave={this.onNodeDragLeave}
-          contextmenuType={this.props.contextmenuType}
+          appMenuType={this.props.appMenuType}
         />
-       {this.state.isRightMenuShow && this.props.contextmenuType === 'tree_contextmenu' && (
+       {this.state.isRightMenuShow && this.props.appMenuType === 'tree_contextmenu' && (
           <TreeViewContextMenu 
             node={this.state.fileData}
             onMenuItemClick={this.onMenuItemClick}

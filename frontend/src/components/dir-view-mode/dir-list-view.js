@@ -35,8 +35,8 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
-  showDifferentContextmenu: PropTypes.func,
-  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
+  switchAnotherMenuToShow: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
   onAddFolder: PropTypes.func,
 };
 
@@ -76,25 +76,21 @@ class DirListView extends React.Component {
   tableContainerContextmenuHandler = (e) => {
     e.preventDefault();
     
-    this.props.onFreezedItem();
-    this.props.showDifferentContextmenu('container_contextmenu');
+    this.props.switchAnotherMenuToShow('list_view_contextmenu');
 
-    this.setState({isContainerContextmenuShow: false});
-    setTimeout(() => {
+    this.setState({isContainerContextmenuShow: false}, () => {
       this.setState({
         isContainerContextmenuShow: true,
         itemMousePosition: {clientX: e.clientX, clientY: e.clientY}
       })
-    },40)
+    });
   }
 
   closeTableContainerRightMenu = () => {
     this.setState({
       isContainerContextmenuShow: false,
     });
-    
-    this.props.onUnfreezedItem();
-    this.props.showDifferentContextmenu('empty_contextmenu');
+    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   onCreateFolderToggle = () => {
@@ -165,14 +161,11 @@ class DirListView extends React.Component {
             updateDirent={this.props.updateDirent}
             isAllItemSelected={this.props.isAllItemSelected}
             onAllItemSelected={this.props.onAllItemSelected}
-            showDifferentContextmenu={this.props.showDifferentContextmenu}
-            contextmenuType={this.props.contextmenuType}
-            onFreezedItem={this.props.onFreezedItem}
-            onUnfreezedItem={this.props.onUnfreezedItem}
-            isItemFreezed={this.props.isItemFreezed}
+            switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
+            appMenuType={this.props.appMenuType}
           />
         </div>
-        {this.state.isContainerContextmenuShow && this.props.contextmenuType === 'container_contextmenu' && (
+        {this.state.isContainerContextmenuShow && this.props.appMenuType === 'list_view_contextmenu' && (
           <DirentListMenu 
             mousePosition={this.state.itemMousePosition}
             itemUnregisterHandlers={this.unregisterTableContainerContextmenuHandler}

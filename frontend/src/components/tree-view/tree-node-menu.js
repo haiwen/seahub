@@ -10,7 +10,7 @@ const propTypes = {
   onUnFreezedItem: PropTypes.func.isRequired,
   registerHandlers: PropTypes.func,
   unregisterHandlers: PropTypes.func,
-  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class TreeNodeMenu extends React.Component {
@@ -29,7 +29,7 @@ class TreeNodeMenu extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.contextmenuType) {
+    if (nextProps.appMenuType !== 'item_op_menu') {
       this.setState({isItemMenuShow: false}); 
     }
   }

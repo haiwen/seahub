@@ -34,8 +34,8 @@ const propTypes = {
   onDirentClick: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  showDifferentContextmenu: PropTypes.func,
-  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
+  switchAnotherMenuToShow: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirentListView extends React.Component {
@@ -58,6 +58,14 @@ class DirentListView extends React.Component {
     this.repoEncrypted = props.currentRepoInfo.encrypted;
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.appMenuType === 'item_op_menu') {
+      this.onUnfreezedItem();
+    } else {
+      this.onFreezedItem();
+    }
+  }
+
   componentDidUpdate() {
     let tableHeader = document.querySelector('thead');
     if (tableHeader) {
@@ -65,6 +73,14 @@ class DirentListView extends React.Component {
         e.stopPropagation();
       })
     }
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   onItemRename = (dirent, newName) => {
@@ -81,7 +97,7 @@ class DirentListView extends React.Component {
   }
 
   onItemRenameToggle = () => {
-    this.props.onFreezedItem();
+    this.onFreezedItem();
   }
 
   onItemDetails = (dirent) => {
@@ -279,14 +295,14 @@ class DirentListView extends React.Component {
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     updateDirent={this.props.updateDirent}
-                    isItemFreezed={this.props.isItemFreezed}
-                    onFreezedItem={this.props.onFreezedItem}
-                    onUnfreezedItem={this.props.onUnfreezedItem}
+                    isItemFreezed={this.state.isItemFreezed}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
                     onDirentClick={this.props.onDirentClick}
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
-                    showDifferentContextmenu={this.props.showDifferentContextmenu}
-                    contextmenuType={this.props.contextmenuType}
+                    switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
+                    appMenuType={this.props.appMenuType}
                   />
                 );
               })

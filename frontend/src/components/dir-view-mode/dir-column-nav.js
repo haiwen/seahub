@@ -32,8 +32,8 @@ const propTypes = {
   navRate: PropTypes.number,
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  showDifferentContextmenu: PropTypes.func,
-  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
+  switchAnotherMenuToShow: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirColumnNav extends React.Component {
@@ -129,6 +129,7 @@ class DirColumnNav extends React.Component {
   }
 
   onRenameToggle = () => {
+    console.log(this.state.opNode)
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
   }
 
@@ -282,11 +283,8 @@ class DirColumnNav extends React.Component {
               onMenuItemClick={this.onMenuItemClick}
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
-              showDifferentContextmenu={this.props.showDifferentContextmenu}
-              contextmenuType={this.props.contextmenuType}
-              onFreezedItem={this.props.onFreezedItem}
-              onUnfreezedItem={this.props.onUnfreezedItem}
-              isItemFreezed={this.props.isItemFreezed}
+              switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
+              appMenuType={this.props.appMenuType}
             />)
           }
         </div>

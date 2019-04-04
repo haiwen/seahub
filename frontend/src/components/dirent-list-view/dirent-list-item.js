@@ -40,8 +40,8 @@ const propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
-  showDifferentContextmenu: PropTypes.func,
-  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
+  switchAnotherMenuToShow: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirentListItem extends React.Component {
@@ -68,6 +68,15 @@ class DirentListItem extends React.Component {
       contextmenuIndex: -1,
     };
     this.zipToken = null;
+  }
+
+  componentWillReceiveProps(nextProp) {
+    if (nextProp.appMenuType === 'list_view_contextmenu' || nextProp.appMenuType === 'tree_contextmenu' ) {
+      this.setState({
+        highlight: false,
+        isOperationShow: false,
+      })
+    }
   }
 
   componentDidUpdate() {
@@ -135,23 +144,20 @@ class DirentListItem extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.onFreezedItem();
-    this.props.showDifferentContextmenu('item_contextmenu');
+    this.props.switchAnotherMenuToShow('item_contextmenu');
 
     this.setState({
       isItemContextMenuShow: false,
       highlight: false,
       isOperationShow: false,
-    });
-
-    setTimeout(() => {
+    }, () => {
       this.setState({
         isItemContextMenuShow: true,
         rightItemData: this.state.enterItemData,
         itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
         contextmenuIndex: this.state.enterItemIndex,
       });
-    },40)
+    });
   }
 
   closeRightMenu = () => {
@@ -163,8 +169,8 @@ class DirentListItem extends React.Component {
       contextmenuIndex: -1,
       isDragTipShow:false,
     });
-    this.props.onUnfreezedItem();
-    this.props.showDifferentContextmenu('empty_contextmenu');
+    this.props.onUnfreezedItem()
+    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   onUnfreezedItem = () => {
@@ -560,13 +566,13 @@ class DirentListItem extends React.Component {
                       isRepoOwner={this.props.isRepoOwner}
                       onFreezedItem={this.props.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
-                      contextmenuType={this.props.contextmenuType}
+                      appMenuType={this.props.appMenuType}
                     />
                   </li>
                 </ul>
               </div>
             }
-            {this.state.isItemContextMenuShow && this.state.contextmenuIndex === this.props.itemIndex && this.props.contextmenuType === 'item_contextmenu' &&
+            {this.state.isItemContextMenuShow && this.state.contextmenuIndex === this.props.itemIndex && this.props.appMenuType === 'item_contextmenu' &&
               <DirentRightMenu
                 dirent={this.state.rightItemData}
                 mousePosition={this.state.itemMousePosition}

@@ -84,20 +84,20 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
-      contextmenuType: '',
-      isItemFreezed: false,
+      appMenuType: 'item_op_menu',
+      // isItemFreezed: false,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
   }
 
-  onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
-  }
+  // onFreezedItem = () => {
+  //   this.setState({isItemFreezed: true});
+  // }
 
-  onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
-  }
+  // onUnfreezedItem = () => {
+  //   this.setState({isItemFreezed: false});
+  // }
 
   onPathClick = (path) => {
     this.props.onMainNavBarClick(path);
@@ -127,19 +127,19 @@ class LibContentContainer extends React.Component {
     this.props.closeDirentDetail();
   }
 
-  showDifferentContextmenu = (type) => {
+  switchAnotherMenuToShow = (type) => {
     switch(type) {
-      case 'container_contextmenu':
-        this.setState({contextmenuType: 'container_contextmenu'});
+      case 'list_view_contextmenu':
+        this.setState({appMenuType: 'list_view_contextmenu'});
         break;
       case 'item_contextmenu':
-        this.setState({contextmenuType: 'item_contextmenu'});
+        this.setState({appMenuType: 'item_contextmenu'});
         break;
       case 'tree_contextmenu':
-        this.setState({contextmenuType: 'tree_contextmenu'});
+        this.setState({appMenuType: 'tree_contextmenu'});
         break;
-      case 'empty_contextmenu':
-        this.setState({contextmenuType: null});
+      case 'item_op_menu':
+        this.setState({appMenuType: 'item_op_menu'});
         break;
       default:
         break;
@@ -219,12 +219,9 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    contextmenuType={this.state.contextmenuType}
-                    showDifferentContextmenu={this.showDifferentContextmenu}
+                    appMenuType={this.state.appMenuType}
+                    switchAnotherMenuToShow={this.switchAnotherMenuToShow}
                     onAddFolder={this.props.onAddFolder}
-                    onFreezedItem={this.onFreezedItem}
-                    onUnfreezedItem={this.onUnfreezedItem}
-                    isItemFreezed={this.state.isItemFreezed}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -283,12 +280,9 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    contextmenuType={this.state.contextmenuType}
-                    showDifferentContextmenu={this.showDifferentContextmenu}
+                    appMenuType={this.state.appMenuType}
+                    switchAnotherMenuToShow={this.switchAnotherMenuToShow}
                     onAddFolder={this.props.onAddFolder}
-                    onFreezedItem={this.onFreezedItem}
-                    onUnfreezedItem={this.onUnfreezedItem}
-                    isItemFreezed={this.state.isItemFreezed}
                   />
                 )}
               </Fragment>
