@@ -116,6 +116,7 @@ class TreeView extends React.Component {
   contextMenu = (e) => {
     e.preventDefault();
     
+    this.props.onFreezedItem();
     this.props.showDifferentContextmenu('tree_contextmenu');
 
     this.setState({
@@ -150,6 +151,8 @@ class TreeView extends React.Component {
     this.setState({
       isRightMenuShow:false,
     })
+    this.props.onUnfreezedItem();
+    this.props.showDifferentContextmenu('empty_contextmenu');
   }
 
   onMenuItemClick = (operation, node) => {

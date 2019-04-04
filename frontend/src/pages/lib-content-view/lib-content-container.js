@@ -85,9 +85,18 @@ class LibContentContainer extends React.Component {
     this.state = {
       currentDirent: null,
       contextmenuType: '',
+      isItemFreezed: false,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   onPathClick = (path) => {
@@ -213,6 +222,9 @@ class LibContentContainer extends React.Component {
                     contextmenuType={this.state.contextmenuType}
                     showDifferentContextmenu={this.showDifferentContextmenu}
                     onAddFolder={this.props.onAddFolder}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
+                    isItemFreezed={this.state.isItemFreezed}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -274,6 +286,9 @@ class LibContentContainer extends React.Component {
                     contextmenuType={this.state.contextmenuType}
                     showDifferentContextmenu={this.showDifferentContextmenu}
                     onAddFolder={this.props.onAddFolder}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
+                    isItemFreezed={this.state.isItemFreezed}
                   />
                 )}
               </Fragment>

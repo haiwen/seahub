@@ -135,6 +135,7 @@ class DirentListItem extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
+    this.props.onFreezedItem();
     this.props.showDifferentContextmenu('item_contextmenu');
 
     this.setState({
@@ -163,6 +164,7 @@ class DirentListItem extends React.Component {
       isDragTipShow:false,
     });
     this.props.onUnfreezedItem();
+    this.props.showDifferentContextmenu('empty_contextmenu');
   }
 
   onUnfreezedItem = () => {

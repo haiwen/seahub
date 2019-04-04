@@ -169,6 +169,9 @@ class DirColumnView extends React.Component {
           onItemCopy={this.props.onItemCopy}
           showDifferentContextmenu={this.props.showDifferentContextmenu}
           contextmenuType={this.props.contextmenuType}
+          onFreezedItem={this.props.onFreezedItem}
+          onUnfreezedItem={this.props.onUnfreezedItem}
+          isItemFreezed={this.props.isItemFreezed}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
@@ -220,6 +223,9 @@ class DirColumnView extends React.Component {
               showDifferentContextmenu={this.props.showDifferentContextmenu}
               contextmenuType={this.props.contextmenuType}
               onAddFolder={this.props.onAddFolder}
+              onFreezedItem={this.props.onFreezedItem}
+              onUnfreezedItem={this.props.onUnfreezedItem}
+              isItemFreezed={this.props.isItemFreezed}
             />
           )}
         </div>

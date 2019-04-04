@@ -67,15 +67,6 @@ class DirentListView extends React.Component {
     }
   }
 
-  onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
-    this.props.showDifferentContextmenu('empty_contextmenu');
-  }
-
-  onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
-  }
-
   onItemRename = (dirent, newName) => {
     let isDuplicated = this.props.direntList.some(item => {
       return item.name === newName;
@@ -288,9 +279,9 @@ class DirentListView extends React.Component {
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     updateDirent={this.props.updateDirent}
-                    isItemFreezed={this.state.isItemFreezed}
-                    onFreezedItem={this.onFreezedItem}
-                    onUnfreezedItem={this.onUnfreezedItem}
+                    isItemFreezed={this.props.isItemFreezed}
+                    onFreezedItem={this.props.onFreezedItem}
+                    onUnfreezedItem={this.props.onUnfreezedItem}
                     onDirentClick={this.props.onDirentClick}
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}

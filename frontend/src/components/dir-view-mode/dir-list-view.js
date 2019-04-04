@@ -76,6 +76,7 @@ class DirListView extends React.Component {
   tableContainerContextmenuHandler = (e) => {
     e.preventDefault();
     
+    this.props.onFreezedItem();
     this.props.showDifferentContextmenu('container_contextmenu');
 
     this.setState({isContainerContextmenuShow: false});
@@ -91,6 +92,9 @@ class DirListView extends React.Component {
     this.setState({
       isContainerContextmenuShow: false,
     });
+    
+    this.props.onUnfreezedItem();
+    this.props.showDifferentContextmenu('empty_contextmenu');
   }
 
   onCreateFolderToggle = () => {
@@ -163,6 +167,9 @@ class DirListView extends React.Component {
             onAllItemSelected={this.props.onAllItemSelected}
             showDifferentContextmenu={this.props.showDifferentContextmenu}
             contextmenuType={this.props.contextmenuType}
+            onFreezedItem={this.props.onFreezedItem}
+            onUnfreezedItem={this.props.onUnfreezedItem}
+            isItemFreezed={this.props.isItemFreezed}
           />
         </div>
         {this.state.isContainerContextmenuShow && this.props.contextmenuType === 'container_contextmenu' && (
