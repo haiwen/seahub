@@ -60,7 +60,7 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
       isDragTipShow: false,
       isDropTipshow: false,
-      showItemContextMenu: false,
+      isItemContextMenuShow: false,
       enterItemData: '',
       contextmenuItemData: '',
       enterItemIndex: -1,
@@ -138,14 +138,14 @@ class DirentListItem extends React.Component {
     this.props.showDifferentContextmenu('item_contextmenu');
 
     this.setState({
-      showItemContextMenu: false,
+      isItemContextMenuShow: false,
       highlight: false,
       isOperationShow: false,
     });
 
     setTimeout(() => {
       this.setState({
-        showItemContextMenu: true,
+        isItemContextMenuShow: true,
         rightItemData: this.state.enterItemData,
         itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
         contextmenuIndex: this.state.enterItemIndex,
@@ -155,7 +155,7 @@ class DirentListItem extends React.Component {
 
   closeRightMenu = () => {
     this.setState({
-      showItemContextMenu: false,
+      isItemContextMenuShow: false,
       enterItemData: '',
       enterItemIndex: -1,
       itemMousePosition: {clientX: '', clientY: ''},
@@ -564,7 +564,7 @@ class DirentListItem extends React.Component {
                 </ul>
               </div>
             }
-            {this.state.showItemContextMenu && this.state.contextmenuIndex === this.props.itemIndex && this.props.contextmenuType === 'item_contextmenu' &&
+            {this.state.isItemContextMenuShow && this.state.contextmenuIndex === this.props.itemIndex && this.props.contextmenuType === 'item_contextmenu' &&
               <DirentRightMenu
                 dirent={this.state.rightItemData}
                 mousePosition={this.state.itemMousePosition}

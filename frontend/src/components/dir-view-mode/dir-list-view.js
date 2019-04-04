@@ -37,6 +37,7 @@ const propTypes = {
   onAllItemSelected: PropTypes.func.isRequired,
   showDifferentContextmenu: PropTypes.func,
   contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
+  onAddFolder: PropTypes.func,
 };
 
 class DirListView extends React.Component {
@@ -65,7 +66,6 @@ class DirListView extends React.Component {
       if (tableContainer) {
         tableContainer.addEventListener('contextmenu', this.tableContainerContextmenuHandler);
     }
-    
   }
 
   unregisterTableContainerContextmenuHandler = () => {
