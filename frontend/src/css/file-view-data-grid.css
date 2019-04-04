@@ -1,0 +1,14 @@
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e8e8e8;
+  background-color: #f4f4f7;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+#main {
+  display: flex;
+  flex: 1;
+}

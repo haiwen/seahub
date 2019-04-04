@@ -142,7 +142,7 @@ PREVIEW_FILEEXT = {
     #'3D': ('stl', 'obj'),
     XMIND: ('xmind',),
     XMIND: ('xmind',),
-    SDB: ('sdb',),
+    CTABLE: ('ctable',),
 }
 
 def gen_fileext_type_map():

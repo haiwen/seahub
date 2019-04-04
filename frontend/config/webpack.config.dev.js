@@ -194,6 +194,11 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/pages/sys-admin",
     ],
+    viewDataGrid: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/view-file-ctable.js",
+    ],
   },
 
   output: {
