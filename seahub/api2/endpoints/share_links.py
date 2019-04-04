@@ -23,16 +23,17 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
 from seahub.constants import PERMISSION_READ_WRITE
-from seahub.share.models import FileShare
+from seahub.share.models import FileShare, check_share_link_access
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
-        normalize_dir_path
+        normalize_dir_path, is_pro_version
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
-        SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED
+        SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
+        ENABLE_SHARE_LINK_AUDIT
 
 logger = logging.getLogger(__name__)
 
@@ -446,11 +447,22 @@ class ShareLinkDirents(APIView):
 
         Permission checking:
         1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
+        2, If enable ENABLE_SHARE_LINK_AUDIT, user must have been authenticated, or have been audited.
+        3, If share link is encrypted, share link password must have been checked.
         """
 
         # permission check
+
+        # check if login required
         if SHARE_LINK_LOGIN_REQUIRED and \
                 not request.user.is_authenticated():
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check share link audit
+        if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
+                not request.user.is_authenticated() and \
+                not request.session.get('anonymous_email'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -460,6 +472,11 @@ class ShareLinkDirents(APIView):
         except FileShare.DoesNotExist:
             error_msg = 'Share link %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check share link password
+        if share_link.is_encrypted() and not check_share_link_access(request, token):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if share_link.s_type != 'd':
             error_msg = 'Share link %s is not a folder share link.' % token
