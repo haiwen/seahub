@@ -64,7 +64,7 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
   showDifferentContextmenu: PropTypes.func,
-  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
+  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
 };
 
 class DirColumnView extends React.Component {
@@ -168,7 +168,7 @@ class DirColumnView extends React.Component {
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
           showDifferentContextmenu={this.props.showDifferentContextmenu}
-          isContainerTreeItemType={this.props.isContainerTreeItemType}
+          contextmenuType={this.props.contextmenuType}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
@@ -218,7 +218,7 @@ class DirColumnView extends React.Component {
               isAllItemSelected={this.props.isAllItemSelected}
               onAllItemSelected={this.props.onAllItemSelected}
               showDifferentContextmenu={this.props.showDifferentContextmenu}
-              isContainerTreeItemType={this.props.isContainerTreeItemType}
+              contextmenuType={this.props.contextmenuType}
               onAddFolder={this.props.onAddFolder}
             />
           )}

@@ -21,6 +21,7 @@ const propTypes = {
   unregisterHandlers: PropTypes.func,
   onNodeDragMove: PropTypes.func,
   onNodeDrop: PropTypes.func,
+  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
 };
 
 class TreeNodeView extends React.Component {
@@ -163,6 +164,7 @@ class TreeNodeView extends React.Component {
               onNodeDrop={this.props.onNodeDrop}
               onNodeDragEnter={this.props.onNodeDragEnter}
               onNodeDragLeave={this.props.onNodeDragLeave}
+              contextmenuType={this.props.contextmenuType}
             />
           );
         })}
@@ -203,6 +205,7 @@ class TreeNodeView extends React.Component {
                   onFreezedItem={this.props.onFreezedItem}
                   registerHandlers={this.props.registerHandlers}
                   unregisterHandlers={this.props.unregisterHandlers}
+                  contextmenuType={this.props.contextmenuType}
                 />
               )}
             </div>

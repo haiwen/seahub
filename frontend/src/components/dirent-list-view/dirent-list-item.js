@@ -41,7 +41,7 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   showDifferentContextmenu: PropTypes.func,
-  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
+  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
 };
 
 class DirentListItem extends React.Component {
@@ -85,7 +85,7 @@ class DirentListItem extends React.Component {
 
   itemRegisterHandlers = () => {
     let treeView = document.querySelector('tbody');
-    treeView.addEventListener('contextmenu', this.itemRightContextMenu);
+      treeView.addEventListener('contextmenu', this.itemRightContextMenu);
   }
 
   //UI Interactive
@@ -135,11 +135,15 @@ class DirentListItem extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.showDifferentContextmenu('item_contextmenu')
+    this.props.showDifferentContextmenu('item_contextmenu');
 
     this.setState({
       showItemContextMenu: false,
+      highlight: false,
+      isOperationShow: false,
     });
+
+    this.props.onUnfreezedItem();
     setTimeout(() => {
       this.setState({
         showItemContextMenu: true,
@@ -167,6 +171,7 @@ class DirentListItem extends React.Component {
       isOperationShow: false,
     });
     this.props.onUnfreezedItem();
+    this.closeRightMenu();
   }
 
   //buiness handler
@@ -278,7 +283,7 @@ class DirentListItem extends React.Component {
 
   onRenameCancel = () => {
     this.setState({isRenameing: false});
-    this.props.onUnfreezedItem();
+    this.onUnfreezedItem();
   }
 
   onItemMoveToggle = () => {
@@ -553,12 +558,13 @@ class DirentListItem extends React.Component {
                       isRepoOwner={this.props.isRepoOwner}
                       onFreezedItem={this.props.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
+                      contextmenuType={this.props.contextmenuType}
                     />
                   </li>
                 </ul>
               </div>
             }
-            {this.state.showItemContextMenu && this.state.contextmenuIndex === this.props.itemIndex && this.props.isContainerTreeItemType === 'item_contextmenu' &&
+            {this.state.showItemContextMenu && this.state.contextmenuIndex === this.props.itemIndex && this.props.contextmenuType === 'item_contextmenu' &&
               <DirentRightMenu
                 dirent={this.state.rightItemData}
                 mousePosition={this.state.itemMousePosition}

@@ -10,6 +10,7 @@ const propTypes = {
   onUnFreezedItem: PropTypes.func.isRequired,
   registerHandlers: PropTypes.func,
   unregisterHandlers: PropTypes.func,
+  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
 };
 
 class TreeNodeMenu extends React.Component {
@@ -25,6 +26,12 @@ class TreeNodeMenu extends React.Component {
   componentDidMount() {
     let menuList = this.caculateMenuList();
     this.setState({menuList: menuList});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.contextmenuType) {
+      this.setState({isItemMenuShow: false}); 
+    }
   }
 
   caculateMenuList() {
@@ -93,8 +100,6 @@ class TreeNodeMenu extends React.Component {
   }
 
   render() {
-    this.state.isItemMenuShow ? this.props.unregisterHandlers() : this.props.registerHandlers()
-
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 

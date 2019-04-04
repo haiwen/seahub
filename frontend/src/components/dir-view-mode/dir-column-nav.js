@@ -33,7 +33,7 @@ const propTypes = {
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   showDifferentContextmenu: PropTypes.func,
-  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
+  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
 };
 
 class DirColumnNav extends React.Component {
@@ -285,7 +285,7 @@ class DirColumnNav extends React.Component {
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
               showDifferentContextmenu={this.props.showDifferentContextmenu}
-              isContainerTreeItemType={this.props.isContainerTreeItemType}
+              contextmenuType={this.props.contextmenuType}
             />)
           }
         </div>

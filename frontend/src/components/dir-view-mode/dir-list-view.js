@@ -36,7 +36,7 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
   showDifferentContextmenu: PropTypes.func,
-  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
+  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
 };
 
 class DirListView extends React.Component {
@@ -49,7 +49,6 @@ class DirListView extends React.Component {
       isContainerContextmenuShow: false,
       isCreateFolderDialogShow: false,
       itemMousePosition: {clientX: '', clientY: ''},
-      isContainerTreeItemType: false,
     }
   }
 
@@ -61,14 +60,15 @@ class DirListView extends React.Component {
     this.unregisterTableContainerContextmenuHandler();
   }
 
-  registerTableContainerContextmenuHandler = (e) => {
+  registerTableContainerContextmenuHandler = () => {
     let tableContainer = document.querySelector('.table-container');
-    if (tableContainer) {
-      tableContainer.addEventListener('contextmenu', this.tableContainerContextmenuHandler);
+      if (tableContainer) {
+        tableContainer.addEventListener('contextmenu', this.tableContainerContextmenuHandler);
     }
+    
   }
 
-  unregisterTableContainerContextmenuHandler = (e) => {
+  unregisterTableContainerContextmenuHandler = () => {
     let tableContainer = document.querySelector('.table-container');
     tableContainer.removeEventListener('contextmenu', this.tableContainerContextmenuHandler);
   }
@@ -162,10 +162,10 @@ class DirListView extends React.Component {
             isAllItemSelected={this.props.isAllItemSelected}
             onAllItemSelected={this.props.onAllItemSelected}
             showDifferentContextmenu={this.props.showDifferentContextmenu}
-            isContainerTreeItemType={this.props.isContainerTreeItemType}
+            contextmenuType={this.props.contextmenuType}
           />
         </div>
-        {this.state.isContainerContextmenuShow && this.props.isContainerTreeItemType === 'container_contextmenu' && (
+        {this.state.isContainerContextmenuShow && this.props.contextmenuType === 'container_contextmenu' && (
           <DirentListMenu 
             mousePosition={this.state.itemMousePosition}
             itemUnregisterHandlers={this.unregisterTableContainerContextmenuHandler}

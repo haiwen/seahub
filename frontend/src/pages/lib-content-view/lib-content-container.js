@@ -84,7 +84,7 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
-      isContainerTreeItemType: 'item_contextmenu',
+      contextmenuType: '',
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
@@ -121,13 +121,16 @@ class LibContentContainer extends React.Component {
   showDifferentContextmenu = (type) => {
     switch(type) {
       case 'container_contextmenu':
-        this.setState({isContainerTreeItemType: 'container_contextmenu'});
+        this.setState({contextmenuType: 'container_contextmenu'});
         break;
       case 'item_contextmenu':
-        this.setState({isContainerTreeItemType: 'item_contextmenu'});
+        this.setState({contextmenuType: 'item_contextmenu'});
         break;
       case 'tree_contextmenu':
-        this.setState({isContainerTreeItemType: 'tree_contextmenu'});
+        this.setState({contextmenuType: 'tree_contextmenu'});
+        break;
+      case 'empty_contextmenu':
+        this.setState({contextmenuType: null});
         break;
       default:
         break;
@@ -207,7 +210,7 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    isContainerTreeItemType={this.state.isContainerTreeItemType}
+                    contextmenuType={this.state.contextmenuType}
                     showDifferentContextmenu={this.showDifferentContextmenu}
                     onAddFolder={this.props.onAddFolder}
                   />
@@ -268,7 +271,7 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    isContainerTreeItemType={this.state.isContainerTreeItemType}
+                    contextmenuType={this.state.contextmenuType}
                     showDifferentContextmenu={this.showDifferentContextmenu}
                     onAddFolder={this.props.onAddFolder}
                   />

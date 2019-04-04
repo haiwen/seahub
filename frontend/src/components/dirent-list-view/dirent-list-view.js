@@ -35,7 +35,7 @@ const propTypes = {
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   showDifferentContextmenu: PropTypes.func,
-  isContainerTreeItemType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu']),
+  contextmenuType: PropTypes.oneOf(['container_contextmenu', 'item_contextmenu', 'tree_contextmenu', '']),
 };
 
 class DirentListView extends React.Component {
@@ -69,6 +69,7 @@ class DirentListView extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
+    this.props.showDifferentContextmenu('empty_contextmenu');
   }
 
   onUnfreezedItem = () => {
@@ -294,7 +295,7 @@ class DirentListView extends React.Component {
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
                     showDifferentContextmenu={this.props.showDifferentContextmenu}
-                    isContainerTreeItemType={this.props.isContainerTreeItemType}
+                    contextmenuType={this.props.contextmenuType}
                   />
                 );
               })
