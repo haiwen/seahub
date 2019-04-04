@@ -10,7 +10,7 @@ import toaster from './components/toast';
 import './css/layout.css';
 import './css/file-view-data-grid.css';
 
-const { repoID, repoName, fileName, filePath, err, enableWatermark, userNickName } = window.app.pageOptions;
+const { repoID, fileName, filePath, err, enableWatermark, userNickName } = window.app.pageOptions;
 
 class ViewFileSDB extends React.Component {
 

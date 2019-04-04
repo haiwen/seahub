@@ -1,18 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import Logo from '../../components/logo.js';
 
 const propTypes = {
   onSave: PropTypes.func.isRequired,
 };
+
+const { fileName } = window.app.pageOptions;
 
 class AddHeader extends React.Component {
 
   render() {
     return (
       <div id="header">
-        <Logo></Logo>
+        <div className="sf-font">{fileName}</div>
         <Button color="primary" onClick={this.props.onSave}>保存</Button>
       </div>
     );
