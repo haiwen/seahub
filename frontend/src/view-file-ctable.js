@@ -42,7 +42,6 @@ class ViewFileSDB extends React.Component {
     let dirPath = Utils.getDirName(filePath);
     seafileAPI.getUpdateLink(repoID, dirPath).then(res => {
       let updateLink = res.data;
-      // need optimized
       let updateData = JSON.stringify(data);
       seafileAPI.updateFile(updateLink, filePath, fileName, updateData).then(res => {
         toaster.success(gettext('File saved.'));

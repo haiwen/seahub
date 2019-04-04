@@ -51,7 +51,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node --max_old_space_size=4096 scripts/build.js",
+    "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "dev": "export NODE_ENV=development && node config/server.js"
   },
