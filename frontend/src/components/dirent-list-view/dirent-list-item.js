@@ -143,7 +143,6 @@ class DirentListItem extends React.Component {
       isOperationShow: false,
     });
 
-    this.props.onUnfreezedItem();
     setTimeout(() => {
       this.setState({
         showItemContextMenu: true,
@@ -163,6 +162,7 @@ class DirentListItem extends React.Component {
       contextmenuIndex: -1,
       isDragTipShow:false,
     });
+    this.props.onUnfreezedItem();
   }
 
   onUnfreezedItem = () => {
