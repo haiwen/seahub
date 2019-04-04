@@ -81,7 +81,7 @@ class DirentListView extends React.Component {
   }
 
   onItemRenameToggle = () => {
-    this.onFreezedItem();
+    this.props.onFreezedItem();
   }
 
   onItemDetails = (dirent) => {

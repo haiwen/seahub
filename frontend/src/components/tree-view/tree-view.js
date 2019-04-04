@@ -26,7 +26,6 @@ class TreeView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isItemFreezed: false,
       isRightMenuShow: false,
       nodeData: null,
       fileData: null,
@@ -104,15 +103,6 @@ class TreeView extends React.Component {
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, dropNodeData.path, nodeParentPath);
   }
 
-  onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
-    this.props.showDifferentContextmenu('empty_contextmenu');
-  }
-
-  onUnFreezedItem = () => {
-    this.setState({isItemFreezed: false});
-  }
-
   contextMenu = (e) => {
     e.preventDefault();
     
@@ -168,14 +158,14 @@ class TreeView extends React.Component {
           currentPath={this.props.currentPath}
           paddingLeft={PADDING_LEFT}
           isNodeMenuShow={this.props.isNodeMenuShow}
-          isItemFreezed={this.state.isItemFreezed}
+          isItemFreezed={this.props.isItemFreezed}
           onNodeClick={this.props.onNodeClick}
           onMenuItemClick={this.props.onMenuItemClick}
           onNodeExpanded={this.props.onNodeExpanded}
           onNodeCollapse={this.props.onNodeCollapse}
           onNodeDragStart={this.onNodeDragStart}
-          onFreezedItem={this.onFreezedItem}
-          onUnFreezedItem={this.onUnFreezedItem}
+          onFreezedItem={this.props.onFreezedItem}
+          onUnFreezedItem={this.props.onUnfreezedItem}
           onNodeChanged={this.onNodeChanged}
           registerHandlers={this.registerHandlers}
           unregisterHandlers={this.unregisterHandlers}
