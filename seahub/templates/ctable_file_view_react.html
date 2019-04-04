@@ -1,0 +1,11 @@
+{% extends 'file_view_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+
+{% block extra_style %}
+{% render_bundle 'viewDataGrid' 'css' %}
+{% endblock %}
+
+{% block render_bundle %}
+{% render_bundle 'viewDataGrid' 'js' %}
+{% endblock %}

@@ -87,6 +87,7 @@ module.exports = {
     viewFileUnknown: [require.resolve('./polyfills'), paths.appSrc + "/view-file-unknown.js"],
     orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
     sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
+    viewDataGrid: [require.resolve('./polyfills'), paths.appSrc + "/view-file-ctable.js"],
   },
 
   output: {
