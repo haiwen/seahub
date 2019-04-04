@@ -46,7 +46,7 @@ Run as:
     $ . .virtualenv/bin/activate
     $ ./run-seahub.sh.template
 
-Then open your browser, and input `http://localhost:8000/`, there should be a Login page. You can create admin account using `seahub-admin.py` script under `tools/` directory. 
+Then open your browser, and input `http://localhost:8000/`, there should be a Login page. You can create admin account using `seahub-admin.py` script under `tools/` directory.
 
 Internationalization (I18n)
 ==========
