@@ -36,7 +36,7 @@ class TreeNodeView extends React.Component {
   }
 
   componentWillReceiveProps(nextProp) {
-    if (nextProp.appMenuType !== 'item_op_menu') {
+    if (nextProp.appMenuType === 'list_view_contextmenu' && nextProp.appMenuType === 'item_contextmenu') {
       this.setState({
         isShowOperationMenu: false,
         isHighlight: false,
@@ -103,7 +103,7 @@ class TreeNodeView extends React.Component {
   }
 
   onUnFreezedItem = () => {
-    this.setState({isShowOperationMenu: false});
+    this.setState({isShowOperationMenu: false, isHighlight: false});
     this.props.onUnFreezedItem();
   }
 

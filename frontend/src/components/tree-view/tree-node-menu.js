@@ -31,6 +31,7 @@ class TreeNodeMenu extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.appMenuType !== 'item_op_menu') {
       this.setState({isItemMenuShow: false}); 
+      this.props.onUnFreezedItem();
     }
   }
 

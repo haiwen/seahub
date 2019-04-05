@@ -106,6 +106,7 @@ class TreeView extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
+    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   onUnFreezedItem = () => {
@@ -139,6 +140,9 @@ class TreeView extends React.Component {
   }
 
   onNodeChanged = (node) => {
+    if (this.state.isRightMenuShow) {
+      return ;
+    }
     this.setState({
       nodeData:node
     })
@@ -147,11 +151,8 @@ class TreeView extends React.Component {
   closeRightMenu = () => {
     this.setState({
       isRightMenuShow:false,
-      nodeData: null,
-      fileData: null,
-      mousePosition: {clientX: '', clientY: ''},
     })
-    this.props.switchAnotherMenuToShow('item_op_menu');
+    this.onUnFreezedItem();
   }
 
   onMenuItemClick = (operation, node) => {

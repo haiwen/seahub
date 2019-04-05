@@ -281,6 +281,8 @@ class DirColumnNav extends React.Component {
               onNodeExpanded={this.props.onNodeExpanded}
               onNodeCollapse={this.props.onNodeCollapse}
               onMenuItemClick={this.onMenuItemClick}
+              onFreezedItem={this.onFreezedItem}
+              onUnFreezedItem={this.onUnFreezedItem}
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
               switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
