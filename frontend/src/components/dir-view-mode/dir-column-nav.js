@@ -129,7 +129,6 @@ class DirColumnNav extends React.Component {
   }
 
   onRenameToggle = () => {
-    console.log(this.state.opNode)
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
   }
 

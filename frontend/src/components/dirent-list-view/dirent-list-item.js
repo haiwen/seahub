@@ -41,6 +41,12 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   switchAnotherMenuToShow: PropTypes.func,
+  enterItem: PropTypes.func,
+  contextmenuItemData: PropTypes.object,
+  isItemContextMenuShow: PropTypes.bool,
+  itemMousePosition: PropTypes.object,
+  itemUnregisterHandlers: PropTypes.func,
+  itemRegisterHandlers: PropTypes.func,
   appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
