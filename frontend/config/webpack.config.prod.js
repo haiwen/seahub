@@ -371,11 +371,11 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
         name: 'commons',
         filename: '[name]/bundle.common.js',
-        minChunks: function(module) {
+        minChunks: function(module, count) {
           if(module.resource && (/^.*\.(css|scss)$/).test(module.resource)) {
             return false;
           }
-          return module.context && module.context.includes('node_modules');
+          return module.context && module.context.includes('node_modules') && count >=5;
         }
       })
   ],
