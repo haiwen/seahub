@@ -516,7 +516,7 @@ class DirentListItem extends React.Component {
                 </ul>
               </div>
             }
-            {this.props.isItemContextMenuShow  && this.props.appMenuType === 'item_contextmenu' &&
+            {this.props.isItemContextMenuShow && this.props.appMenuType === 'item_contextmenu' &&
               <DirentRightMenu
                 dirent={this.props.contextmenuItemData}
                 mousePosition={this.props.itemMousePosition}

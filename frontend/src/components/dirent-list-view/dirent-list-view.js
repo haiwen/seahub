@@ -52,7 +52,7 @@ class DirentListView extends React.Component {
       isCreateFileDialogShow: false,
       fileType: '',
       enterItemData: '',
-      contextmenuItemData: '',
+      contextmenuItemData: {},
       isItemContextMenuShow: false,
     };
 
@@ -330,7 +330,6 @@ class DirentListView extends React.Component {
                 return (
                   <DirentListItem
                     key={index}
-                    itemIndex={index}
                     dirent={dirent}
                     path={this.props.path}
                     repoID={this.props.repoID}
