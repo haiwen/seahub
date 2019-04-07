@@ -103,7 +103,7 @@ class TreeNodeView extends React.Component {
   }
 
   onUnFreezedItem = () => {
-    this.setState({isShowOperationMenu: false, isHighlight: false});
+    this.setState({isShowOperationMenu: false});
     this.props.onUnFreezedItem();
   }
 

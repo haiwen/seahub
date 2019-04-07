@@ -85,19 +85,10 @@ class LibContentContainer extends React.Component {
     this.state = {
       currentDirent: null,
       appMenuType: 'item_op_menu',
-      // isItemFreezed: false,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
   }
-
-  // onFreezedItem = () => {
-  //   this.setState({isItemFreezed: true});
-  // }
-
-  // onUnfreezedItem = () => {
-  //   this.setState({isItemFreezed: false});
-  // }
 
   onPathClick = (path) => {
     this.props.onMainNavBarClick(path);

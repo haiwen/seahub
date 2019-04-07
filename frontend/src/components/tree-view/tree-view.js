@@ -140,9 +140,6 @@ class TreeView extends React.Component {
   }
 
   onNodeChanged = (node) => {
-    if (this.state.isRightMenuShow) {
-      return ;
-    }
     this.setState({
       nodeData:node
     })

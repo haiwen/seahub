@@ -27,8 +27,8 @@ class DirentMenu extends React.Component {
     this.menuList = this.calculateMenuList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.appMenuType !== 'item_op_menu') {
+  componentWillReceiveProps(nextProp) {
+    if (nextProp.appMenuType === 'list_view_contextmenu' || nextProp.appMenuType === 'item_contextmenu') {
       this.setState({isItemMenuShow: false}); 
     }
   }
