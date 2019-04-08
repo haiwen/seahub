@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Utils } from '../../utils/utils';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem, ButtonDropdown } from 'reactstrap';
 import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 import '../../css/dirents-menu.css';
@@ -31,6 +32,9 @@ class DirentMenu extends React.Component {
         menuList = ['Share'];
       } else if (dirent.type === 'file') {
         menuList = ['Share', 'Tags', 'Related Files', 'Divider', 'History', 'Details', 'Divider', 'Open via Client'];
+        if (!Utils.isMarkdownFile(dirent.name)) {
+          menuList.splice(2, 1);
+        }
         if (isPro) {
           if (dirent.is_locked) {
             if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && currentRepoInfo.permission === 'rw')) {
