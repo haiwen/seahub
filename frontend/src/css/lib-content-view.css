@@ -57,7 +57,7 @@
 .tree-node-inner .tree-node-text {
   padding-left: 2.8rem;
   width: calc(100% - 1.5rem);
-  font-size: 15px;
+  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
