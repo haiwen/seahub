@@ -63,7 +63,7 @@ class DirentListItem extends React.Component {
       enterItemData: '',
       enterItemIndex: -1,
       contextmenuItemData: {},
-      contextmenuItemIndex:-1,
+      contextmenuItemIndex: -1,
       isItemContextMenuShow: false,
     };
     this.zipToken = null;
@@ -110,15 +110,15 @@ class DirentListItem extends React.Component {
       contextmenuItemIndex: this.state.enterItemIndex,
     })
     setTimeout(() => {
-    this.setState({
-      isItemContextMenuShow: true,
-    })
+      this.setState({
+        isItemContextMenuShow: true,
+      })
     },40)
    }
  
   closeRightMenu = () => {
     this.setState({
-       isItemContextMenuShow: false,
+      isItemContextMenuShow: false,
     });
     this.onUnfreezedItem();
     this.props.switchAnotherMenuToShow('item_op_menu');

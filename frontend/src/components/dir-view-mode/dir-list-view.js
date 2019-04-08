@@ -63,8 +63,8 @@ class DirListView extends React.Component {
 
   registerTableContainerContextmenuHandler = () => {
     let tableContainer = document.querySelector('.table-container');
-      if (tableContainer) {
-        tableContainer.addEventListener('contextmenu', this.tableContainerContextmenuHandler);
+    if (tableContainer) {
+      tableContainer.addEventListener('contextmenu', this.tableContainerContextmenuHandler);
     }
   }
 
