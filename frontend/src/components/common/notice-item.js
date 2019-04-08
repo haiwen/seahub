@@ -213,7 +213,7 @@ class NoticeItem extends React.Component {
             <img src={avatar_url} width="32" height="32" className="avatar" />
             <p className="brief" dangerouslySetInnerHTML={{__html: notice}}></p>
           </div>
-          <p className="time">{moment(noticeItem.timestamp).fromNow()}</p>
+          <p className="time">{moment(noticeItem.time).fromNow()}</p>
         </div>
       </li>
     )
