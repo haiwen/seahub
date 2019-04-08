@@ -1,0 +1,23 @@
+{% extends "base_for_react.html" %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+{% render_bundle 'sharedDirView' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    window.shared = {
+        pageOptions: {
+            dirName: '{{ dir_name|escapejs }}',
+            sharedBy: '{{ username|email2nickname|escapejs }}',
+            path: '{{ path|escapejs }}',
+            token: '{{ token }}',
+            trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
+            canDownload: {% if permissions.can_download %}true{% else %}false{% endif %}
+        }
+    };
+</script>
+    {% render_bundle 'sharedDirView' 'js' %}
+{% endblock %}
