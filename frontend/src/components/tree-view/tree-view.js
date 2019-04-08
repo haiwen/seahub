@@ -81,6 +81,11 @@ class TreeView extends React.Component {
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartNodeData;
     let dropNodeData = node;
 
+    if (!dropNodeData) {
+      this.onItemMove(this.props.currentRepoInfo, nodeDirent, '/', nodeParentPath);
+      return;
+    }
+
     if (dropNodeData.object.type !== 'dir') {
       return;
     }
@@ -158,7 +163,7 @@ class TreeView extends React.Component {
 
   render() {
     return (
-      <div className="tree-view tree">
+      <div className="tree-view tree" onDrop={this.onNodeDrop}>
         <TreeNodeView 
           repoPermission={this.props.repoPermission}
           node={this.props.treeData.root}
