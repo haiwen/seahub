@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
-import { gettext, repoID, slug, serviceURL, isPublicWiki } from '../utils/constants';
+import { gettext, repoID, slug, serviceURL, isPublicWiki, siteRoot } from '../utils/constants';
+import { Card, CardTitle, CardText } from 'reactstrap';
 import Loading from './loading';
 import { Utils } from '../utils/utils';
+import { seafileAPI } from '../utils/seafile-api';
+import '../css/related-files-list.css';
 
 const propTypes = {
   children: PropTypes.object,
@@ -14,6 +17,9 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired,
   isWiki: PropTypes.bool,
   isTOCShow: PropTypes.bool,
+  // for dir-column-file component(import repoID is undefined)
+  repoID: PropTypes.string,
+  path: PropTypes.string,
 };
 
 const contentClass = 'wiki-page-content';
@@ -23,7 +29,8 @@ class WikiMarkdownViewer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTitleIndex: 0
+      activeTitleIndex: 0,
+      relatedFiles: [],
     };
     this.markdownContainer = React.createRef();
     this.links = [];
@@ -36,6 +43,7 @@ class WikiMarkdownViewer extends React.Component {
     this.links.forEach(link => {
       link.addEventListener('click', this.onLinkClick);
     });
+    this.listRelatedFiles();
   }
 
   componentWillReceiveProps() {
@@ -43,6 +51,7 @@ class WikiMarkdownViewer extends React.Component {
     this.links.forEach(link => {
       link.removeEventListener('click', this.onLinkClick);
     });
+    this.listRelatedFiles();
   }
 
   componentDidUpdate() {
@@ -62,6 +71,17 @@ class WikiMarkdownViewer extends React.Component {
 
   onContentRendered = (markdownViewer) => {
     this.titlesInfo = markdownViewer.titlesInfo;
+  }
+
+  listRelatedFiles = () => {
+    // for dir-column-file component(import repoID is undefined)
+    if (this.props.repoID && this.props.path) {
+      seafileAPI.listRelatedFiles(this.props.repoID, this.props.path).then(res => {
+        this.setState({
+          relatedFiles: res.data.related_files
+        });
+      });
+    }
   }
 
   onLinkClick = (event) => {
@@ -179,6 +199,37 @@ class WikiMarkdownViewer extends React.Component {
     );
   }
 
+  renderRelatedFiles = () => {
+    const relatedFiles = this.state.relatedFiles;
+    if (relatedFiles.length > 0) {
+      return (
+        <div className="sf-releted-files" id="sf-releted-files">
+          <div className="sf-releted-files-header">
+            <h4>{gettext('related files')}</h4>
+          </div>
+          {
+            relatedFiles.map((relatedFile, index) => {
+              let href = siteRoot + 'lib/' + relatedFile.repo_id + '/file' + Utils.encodePath(relatedFile.path);
+              return(
+                <div className="sf-releted-file" key={index}>
+                  <a href={href} target="_blank">
+                    <Card body size="sm">
+                      <CardTitle>{relatedFile.name}</CardTitle>
+                      <CardText>{relatedFile.repo_name}</CardText>
+                      <span className="sf-releted-file-arrow"></span>
+                    </Card>
+                  </a>
+                </div>
+              );
+            })
+          }
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     if (this.props.isFileLoading) {
       return <Loading />;
@@ -188,6 +239,7 @@ class WikiMarkdownViewer extends React.Component {
         <div className={contentClass}>
           {this.props.children}
           {this.renderMarkdown()}
+          {this.props.isWiki && this.renderRelatedFiles()}
           <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
       </div>
