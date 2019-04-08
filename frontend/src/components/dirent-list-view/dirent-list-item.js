@@ -114,7 +114,7 @@ class DirentListItem extends React.Component {
         isItemContextMenuShow: true,
       })
     },40)
-   }
+  }
  
   closeRightMenu = () => {
     this.setState({

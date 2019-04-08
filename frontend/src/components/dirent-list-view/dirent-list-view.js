@@ -201,6 +201,7 @@ class DirentListView extends React.Component {
 
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
+
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
@@ -300,6 +301,7 @@ class DirentListView extends React.Component {
             }
           </tbody>
         </table>
+
         {this.state.isImagePopupOpen && (
           <Lightbox
             mainSrc={imageItems[imageIndex].src}
