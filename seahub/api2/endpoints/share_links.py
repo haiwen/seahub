@@ -14,6 +14,7 @@ from rest_framework import status
 
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.utils.http import urlquote
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -25,15 +26,18 @@ from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.share.models import FileShare, check_share_link_access
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
-        normalize_dir_path, is_pro_version
+        normalize_dir_path, is_pro_version, get_file_type_and_ext
 from seahub.utils.file_op import if_locked_by_online_office
+from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
+from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
-        ENABLE_SHARE_LINK_AUDIT
+        ENABLE_SHARE_LINK_AUDIT, ENABLE_VIDEO_THUMBNAIL, \
+        THUMBNAIL_ROOT
 
 logger = logging.getLogger(__name__)
 
@@ -451,6 +455,14 @@ class ShareLinkDirents(APIView):
         3, If share link is encrypted, share link password must have been checked.
         """
 
+        # argument check
+        thumbnail_size = request.GET.get('thumbnail_size', 48)
+        try:
+            thumbnail_size = int(thumbnail_size)
+        except ValueError:
+            error_msg = 'thumbnail_size invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # permission check
 
         # check if login required
@@ -529,6 +541,15 @@ class ShareLinkDirents(APIView):
                 dirent_info['is_dir'] = False
                 dirent_info['file_path'] = normalize_file_path(dirent_path)
                 dirent_info['file_name'] = dirent.obj_name
+
+                file_type, file_ext = get_file_type_and_ext(dirent.obj_name)
+                if file_type in (IMAGE, XMIND) or \
+                        file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+
+                    if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), dirent.obj_id)):
+                        req_image_path = posixpath.join(request_path, dirent.obj_name)
+                        src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
+                        dirent_info['encoded_thumbnail_src'] = urlquote(src)
 
             result.append(dirent_info)
 
