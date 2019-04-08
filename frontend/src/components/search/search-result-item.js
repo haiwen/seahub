@@ -16,7 +16,7 @@ class SearchResultItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getLibIconUrl(false, 192);
+    let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(false);
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
     return (
       <li className="search-result-item" onClick={this.onClickHandler}>
