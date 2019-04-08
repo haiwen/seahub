@@ -13,6 +13,7 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
+import DirentRightMenu from './dirent-right-menu';
 
 import '../../css/dirent-list-item.css';
 
@@ -39,6 +40,8 @@ const propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  switchAnotherMenuToShow: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirentListItem extends React.Component {
@@ -57,8 +60,68 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
       isDragTipShow: false,
       isDropTipshow: false,
+      enterItemData: '',
+      enterItemIndex: -1,
+      contextmenuItemData: {},
+      contextmenuItemIndex: -1,
+      isItemContextMenuShow: false,
     };
     this.zipToken = null;
+  }
+
+  componentWillReceiveProps(nextProp) {
+    if (nextProp.appMenuType === 'list_view_contextmenu' || nextProp.appMenuType === 'item_contextmenu') {
+      this.setState({
+        highlight: false,
+        isOperationShow: false,
+      })
+    }
+  }
+
+  componentDidUpdate() {
+    this.itemRegisterHandlers();
+  }
+
+  componentWillUnmount() {
+    this.itemUnregisterHandlers();
+  }
+ 
+  itemUnregisterHandlers = () => {
+    let itemTbody = document.querySelector('tbody');
+    itemTbody.removeEventListener('contextmenu', this.itemRightContextMenu);
+  }
+ 
+  itemRegisterHandlers = () => {
+    let itemTbody = document.querySelector('tbody');
+    if  (itemTbody) {
+     itemTbody.addEventListener('contextmenu', this.itemRightContextMenu);
+    }
+  }
+ 
+  itemRightContextMenu = (e) =>{
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.props.switchAnotherMenuToShow('item_contextmenu');
+    this.setState({
+      isItemContextMenuShow: false,
+      itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
+      contextmenuItemData: this.state.enterItemData,
+      contextmenuItemIndex: this.state.enterItemIndex,
+    })
+    setTimeout(() => {
+      this.setState({
+        isItemContextMenuShow: true,
+      })
+    },40)
+  }
+ 
+  closeRightMenu = () => {
+    this.setState({
+      isItemContextMenuShow: false,
+    });
+    this.onUnfreezedItem();
+    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   //UI Interactive
@@ -69,7 +132,11 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
+    this.setState({
+      isDragTipShow: true,
+      enterItemData: this.props.dirent,
+      enterItemIndex: this.props.itemIndex,
+    });
   }
 
   onMouseOver = () => {
@@ -79,7 +146,10 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
+    this.setState({
+      isDragTipShow: true,
+      enterItemData: this.props.dirent,
+      enterItemIndex: this.props.itemIndex});
   }
 
   onMouseLeave = () => {
@@ -89,7 +159,11 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
-    this.setState({isDragTipShow: false});
+    this.setState({
+      isDragTipShow: false,
+      enterItemData: '',
+      enterItemIndex: -1,
+    });
   }
 
   onUnfreezedItem = () => {
@@ -209,7 +283,7 @@ class DirentListItem extends React.Component {
 
   onRenameCancel = () => {
     this.setState({isRenameing: false});
-    this.props.onUnfreezedItem();
+    this.onUnfreezedItem();
   }
 
   onItemMoveToggle = () => {
@@ -484,10 +558,28 @@ class DirentListItem extends React.Component {
                       isRepoOwner={this.props.isRepoOwner}
                       onFreezedItem={this.props.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
+                      appMenuType={this.props.appMenuType}
                     />
                   </li>
                 </ul>
               </div>
+            }
+            {this.state.isItemContextMenuShow && this.state.contextmenuItemIndex === this.props.itemIndex && this.props.appMenuType === 'item_contextmenu' &&
+              <DirentRightMenu
+                dirent={this.state.contextmenuItemData}
+                mousePosition={this.state.itemMousePosition}
+                isRepoOwner={this.props.isRepoOwner}
+                currentRepoInfo={this.props.currentRepoInfo}
+                onMenuItemClick={this.onMenuItemClick}
+                onItemDownload={this.onItemDownload}
+                onItemShare={this.onItemShare}
+                onItemDelete={this.onItemDelete}
+                itemRegisterHandlers={this.itemRegisterHandlers}
+                itemUnregisterHandlers={this.itemUnregisterHandlers}
+                closeRightMenu={this.closeRightMenu}
+                onUnfreezedItem={this.onUnfreezedItem}
+                showShare={showShare}
+              />
             }
           </td>
           <td className="file-size">{dirent.size && dirent.size}</td>

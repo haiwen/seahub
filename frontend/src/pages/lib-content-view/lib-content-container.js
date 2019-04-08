@@ -84,6 +84,7 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
+      appMenuType: 'item_op_menu',
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
@@ -115,6 +116,25 @@ class LibContentContainer extends React.Component {
 
   onItemDetailsClose = () => {
     this.props.closeDirentDetail();
+  }
+
+  switchAnotherMenuToShow = (type) => {
+    switch(type) {
+      case 'list_view_contextmenu':
+        this.setState({appMenuType: 'list_view_contextmenu'});
+        break;
+      case 'item_contextmenu':
+        this.setState({appMenuType: 'item_contextmenu'});
+        break;
+      case 'tree_contextmenu':
+        this.setState({appMenuType: 'tree_contextmenu'});
+        break;
+      case 'item_op_menu':
+        this.setState({appMenuType: 'item_op_menu'});
+        break;
+      default:
+        break;
+    }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -190,6 +210,9 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
+                    appMenuType={this.state.appMenuType}
+                    switchAnotherMenuToShow={this.switchAnotherMenuToShow}
+                    onAddFolder={this.props.onAddFolder}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -248,6 +271,9 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
+                    appMenuType={this.state.appMenuType}
+                    switchAnotherMenuToShow={this.switchAnotherMenuToShow}
+                    onAddFolder={this.props.onAddFolder}
                   />
                 )}
               </Fragment>

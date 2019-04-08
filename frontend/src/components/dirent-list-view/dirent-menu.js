@@ -10,6 +10,7 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirentMenu extends React.Component {
@@ -24,6 +25,12 @@ class DirentMenu extends React.Component {
 
   componentDidMount() {
     this.menuList = this.calculateMenuList();
+  }
+
+  componentWillReceiveProps(nextProp) {
+    if (nextProp.appMenuType === 'list_view_contextmenu' || nextProp.appMenuType === 'item_contextmenu') {
+      this.setState({isItemMenuShow: false}); 
+    }
   }
 
   calculateMenuList() {

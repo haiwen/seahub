@@ -34,6 +34,8 @@ const propTypes = {
   onDirentClick: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
+  switchAnotherMenuToShow: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirentListView extends React.Component {
@@ -48,12 +50,29 @@ class DirentListView extends React.Component {
       imageIndex: 0,
 
       isCreateFileDialogShow: false,
-      fileType: ''
+      fileType: '',
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
     this.isAdmin = props.currentRepoInfo.is_admin;
     this.repoEncrypted = props.currentRepoInfo.encrypted;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.appMenuType === 'item_op_menu' || nextProps.appMenuType === 'tree_contextmenu') {
+      this.setState({isItemFreezed: false});
+    } else {
+      this.setState({isItemFreezed: true});
+    }
+  }
+
+  componentDidUpdate() {
+    let thead = document.querySelector('thead');
+    if (thead) {
+      thead.addEventListener('contextmenu', (e) => {
+        e.stopPropagation();
+      })
+    }
   }
 
   onFreezedItem = () => {
@@ -254,7 +273,7 @@ class DirentListView extends React.Component {
         <table>
           <thead>
             <tr>
-            <th width="3%" className="pl10">
+              <th width="3%" className="pl10">
                 <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
               </th>
               <th width="3%" className="pl10">{/*icon */}</th>
@@ -296,6 +315,9 @@ class DirentListView extends React.Component {
                     onDirentClick={this.props.onDirentClick}
                     onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
+                    switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
+                    appMenuType={this.props.appMenuType}
+                    itemIndex={index}
                   />
                 );
               })

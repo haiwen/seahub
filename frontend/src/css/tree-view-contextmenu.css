@@ -1,7 +1,7 @@
 .right-tree-menu {
   position: absolute;
-  left: 15rem;
-  top: 20rem;
+  left: -1000rem;
+  top: -1000rem;
   z-index: 1000;
   float: left;
   min-width: 10rem;

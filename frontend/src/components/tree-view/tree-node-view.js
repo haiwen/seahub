@@ -21,6 +21,7 @@ const propTypes = {
   unregisterHandlers: PropTypes.func,
   onNodeDragMove: PropTypes.func,
   onNodeDrop: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class TreeNodeView extends React.Component {
@@ -34,6 +35,15 @@ class TreeNodeView extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProp) {
+    if (nextProp.appMenuType === 'list_view_contextmenu' && nextProp.appMenuType === 'item_contextmenu') {
+      this.setState({
+        isShowOperationMenu: false,
+        isHighlight: false,
+      })
+    }
+  }
+  
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
@@ -163,6 +173,7 @@ class TreeNodeView extends React.Component {
               onNodeDrop={this.props.onNodeDrop}
               onNodeDragEnter={this.props.onNodeDragEnter}
               onNodeDragLeave={this.props.onNodeDragLeave}
+              appMenuType={this.props.appMenuType}
             />
           );
         })}
@@ -203,6 +214,7 @@ class TreeNodeView extends React.Component {
                   onFreezedItem={this.props.onFreezedItem}
                   registerHandlers={this.props.registerHandlers}
                   unregisterHandlers={this.props.unregisterHandlers}
+                  appMenuType={this.props.appMenuType}
                 />
               )}
             </div>

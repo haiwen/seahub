@@ -15,6 +15,8 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onItemMove: PropTypes.func,
   currentRepoInfo: PropTypes.object,
+  switchAnotherMenuToShow: PropTypes.func,
+  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 const PADDING_LEFT = 20;
@@ -33,6 +35,10 @@ class TreeView extends React.Component {
   }
 
   componentDidMount() {
+    this.registerHandlers();
+  }
+
+  componentDidUpdate() {
     this.registerHandlers();
   }
 
@@ -100,6 +106,7 @@ class TreeView extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
+    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   onUnFreezedItem = () => {
@@ -108,16 +115,18 @@ class TreeView extends React.Component {
 
   contextMenu = (e) => {
     e.preventDefault();
+    
+    this.props.switchAnotherMenuToShow('tree_contextmenu');
+
     this.setState({
       isRightMenuShow:false,
-    });
-    setTimeout(() => { 
+    }, () => {
       this.setState({
-        isRightMenuShow:true,
-        fileData:this.state.nodeData,
+        isRightMenuShow: true,
+        fileData: this.state.nodeData,
         mousePosition: {clientX: e.clientX, clientY: e.clientY}
       })
-    },40)
+    }) 
   }  
 
   unregisterHandlers = () => {
@@ -140,6 +149,7 @@ class TreeView extends React.Component {
     this.setState({
       isRightMenuShow:false,
     })
+    this.onUnFreezedItem();
   }
 
   onMenuItemClick = (operation, node) => {
@@ -170,8 +180,9 @@ class TreeView extends React.Component {
           onNodeDrop={this.onNodeDrop}
           onNodeDragEnter={this.onNodeDragEnter}
           onNodeDragLeave={this.onNodeDragLeave}
+          appMenuType={this.props.appMenuType}
         />
-       {this.state.isRightMenuShow && (
+       {this.state.isRightMenuShow && this.props.appMenuType === 'tree_contextmenu' && (
           <TreeViewContextMenu 
             node={this.state.fileData}
             onMenuItemClick={this.onMenuItemClick}
