@@ -41,12 +41,6 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   switchAnotherMenuToShow: PropTypes.func,
-  enterItem: PropTypes.func,
-  contextmenuItemData: PropTypes.object,
-  isItemContextMenuShow: PropTypes.bool,
-  itemMousePosition: PropTypes.object,
-  itemUnregisterHandlers: PropTypes.func,
-  itemRegisterHandlers: PropTypes.func,
   appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
@@ -66,6 +60,11 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
       isDragTipShow: false,
       isDropTipshow: false,
+      enterItemData: '',
+      enterItemIndex: -1,
+      contextmenuItemData: {},
+      contextmenuItemIndex:-1,
+      isItemContextMenuShow: false,
     };
     this.zipToken = null;
   }
@@ -79,6 +78,52 @@ class DirentListItem extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    this.itemRegisterHandlers();
+  }
+
+  componentWillUnmount() {
+    this.itemUnregisterHandlers();
+  }
+ 
+  itemUnregisterHandlers = () => {
+    let itemTbody = document.querySelector('tbody');
+    itemTbody.removeEventListener('contextmenu', this.itemRightContextMenu);
+  }
+ 
+  itemRegisterHandlers = () => {
+    let itemTbody = document.querySelector('tbody');
+    if  (itemTbody) {
+     itemTbody.addEventListener('contextmenu', this.itemRightContextMenu);
+    }
+  }
+ 
+  itemRightContextMenu = (e) =>{
+     e.preventDefault();
+     e.stopPropagation();
+ 
+     this.props.switchAnotherMenuToShow('item_contextmenu');
+     this.setState({
+       isItemContextMenuShow: false,
+       itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
+       contextmenuItemData: this.state.enterItemData,
+       contextmenuItemIndex: this.state.enterItemIndex,
+     })
+     setTimeout(() => {
+      this.setState({
+        isItemContextMenuShow: true,
+      })
+     },40)
+   }
+ 
+   closeRightMenu = () => {
+     this.setState({
+       isItemContextMenuShow: false,
+     });
+     this.onUnfreezedItem();
+     this.props.switchAnotherMenuToShow('item_op_menu');
+   }
+
   //UI Interactive
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
@@ -87,8 +132,11 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
-    this.props.enterItem(this.props.dirent);
+    this.setState({
+      isDragTipShow: true,
+      enterItemData: this.props.dirent,
+      enterItemIndex: this.props.itemIndex,
+    });
   }
 
   onMouseOver = () => {
@@ -98,8 +146,10 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
-    this.props.enterItem(this.props.dirent);
+    this.setState({
+      isDragTipShow: true,
+      enterItemData: this.props.dirent,
+      enterItemIndex: this.props.itemIndex});
   }
 
   onMouseLeave = () => {
@@ -109,13 +159,11 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
-    this.setState({isDragTipShow: false});
-    this.props.enterItem(null);
-  }
-
-  closeRightMenu = () => {
-    this.onUnfreezedItem();
-    this.props.closeRightMenu();
+    this.setState({
+      isDragTipShow: false,
+      enterItemData: '',
+      enterItemIndex: -1,
+    });
   }
 
   onUnfreezedItem = () => {
@@ -516,18 +564,18 @@ class DirentListItem extends React.Component {
                 </ul>
               </div>
             }
-            {this.props.isItemContextMenuShow && this.props.appMenuType === 'item_contextmenu' &&
+            {this.state.isItemContextMenuShow && this.state.contextmenuItemIndex === this.props.itemIndex && this.props.appMenuType === 'item_contextmenu' &&
               <DirentRightMenu
-                dirent={this.props.contextmenuItemData}
-                mousePosition={this.props.itemMousePosition}
+                dirent={this.state.contextmenuItemData}
+                mousePosition={this.state.itemMousePosition}
                 isRepoOwner={this.props.isRepoOwner}
                 currentRepoInfo={this.props.currentRepoInfo}
                 onMenuItemClick={this.onMenuItemClick}
                 onItemDownload={this.onItemDownload}
                 onItemShare={this.onItemShare}
                 onItemDelete={this.onItemDelete}
-                itemRegisterHandlers={this.props.itemRegisterHandlers}
-                itemUnregisterHandlers={this.props.itemUnregisterHandlers}
+                itemRegisterHandlers={this.itemRegisterHandlers}
+                itemUnregisterHandlers={this.itemUnregisterHandlers}
                 closeRightMenu={this.closeRightMenu}
                 onUnfreezedItem={this.onUnfreezedItem}
                 showShare={showShare}

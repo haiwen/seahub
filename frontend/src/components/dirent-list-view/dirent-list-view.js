@@ -51,9 +51,6 @@ class DirentListView extends React.Component {
 
       isCreateFileDialogShow: false,
       fileType: '',
-      enterItemData: '',
-      contextmenuItemData: {},
-      isItemContextMenuShow: false,
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -67,66 +64,6 @@ class DirentListView extends React.Component {
     } else {
       this.setState({isItemFreezed: true});
     }
-  }
-
-  componentDidUpdate() {
-    let tableHeader = document.querySelector('thead');
-    if (tableHeader) {
-      tableHeader.addEventListener('contextmenu', (e) => {
-        e.stopPropagation();
-      })
-    }
-    this.itemRegisterHandlers();
-  }
-
-
- componentWillUnmount() {
-   this.itemUnregisterHandlers();
- }
-
- itemUnregisterHandlers = () => {
-   let itemTbody = document.querySelector('tbody');
-   itemTbody.removeEventListener('contextmenu', this.itemRightContextMenu);
- }
-
- itemRegisterHandlers = () => {
-   let itemTbody = document.querySelector('tbody');
-   if  (itemTbody) {
-    itemTbody.addEventListener('contextmenu', this.itemRightContextMenu);
-   }
- }
-
- itemRightContextMenu = (e) =>{
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.props.switchAnotherMenuToShow('item_contextmenu');
-    this.onFreezedItem();
-    this.setState({
-      isItemContextMenuShow: false,
-      itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
-      contextmenuItemData: this.state.enterItemData,
-    }, () =>{
-      this.setState({
-        isItemContextMenuShow: true,
-      })
-    })
-  }
-
-  enterItem = (dirent) => {
-    this.setState({
-      enterItemData: dirent,
-    })
-  }
-
-  closeRightMenu = () => {
-    this.setState({
-      isItemContextMenuShow: false,
-      enterItemData: '',
-      itemMousePosition: {clientX: '', clientY: ''},
-    });
-    this.onUnfreezedItem();
-    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   onFreezedItem = () => {
@@ -356,13 +293,7 @@ class DirentListView extends React.Component {
                     showImagePopup={this.showImagePopup}
                     switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
                     appMenuType={this.props.appMenuType}
-                    enterItem={this.enterItem}
-                    contextmenuItemData={this.state.contextmenuItemData}
-                    itemMousePosition={this.state.itemMousePosition}
-                    isItemContextMenuShow={this.state.isItemContextMenuShow}
-                    itemUnregisterHandlers={this.itemUnregisterHandlers}
-                    itemRegisterHandlers={this.itemRegisterHandlers}
-                    closeRightMenu={this.closeRightMenu}
+                    itemIndex={index}
                   />
                 );
               })
