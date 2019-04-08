@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import Loading from '../../components/loading';
+import { Utils } from '../../utils/utils';
 
 moment.locale(lang);
 
@@ -147,16 +148,16 @@ class DeletedRepoItem extends Component {
   render() {
     let localTime = moment.utc(this.props.repo.del_time).toDate();
     localTime = moment(localTime).fromNow();
+    let iconUrl = Utils.getLibIconUrl(this.props.repo);
 
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt='' /></td>
+        <td className="text-center"><img src={iconUrl} alt='' width="24" /></td>
         <td className="name">{this.props.repo.repo_name}</td>
         <td className="update">{localTime}</td>
         <td>
-          {this.state.highlight && (
-            <a href="#" onClick={this.restoreDeletedRepo} className="op-icon sf2-icon-reply repo-share-btn" title={gettext('Restore')} aria-label={gettext('Restore')}></a>
-          )}
+          <span onClick={this.restoreDeletedRepo} title={gettext('Restore')}
+            className={`sf2-icon-reply action-icon ${this.state.highlight ? '' : 'vh'}`}></span>
         </td>
       </tr>
     );

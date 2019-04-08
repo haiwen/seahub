@@ -135,6 +135,10 @@
   border-radius: 2px;
 }
 
+.cur-view-content .tip {
+  font-size: 14px;
+}
+
 .cur-view-detail {
   flex: 0 0 20rem;
   display: flex;
