@@ -66,6 +66,15 @@ class DirentListView extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    let thead = document.querySelector('thead');
+    if (thead) {
+      thead.addEventListener('contextmenu', (e) => {
+        e.stopPropagation();
+      })
+    }
+  }
+
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
   }
