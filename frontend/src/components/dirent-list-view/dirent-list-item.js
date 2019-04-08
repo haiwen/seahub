@@ -99,30 +99,30 @@ class DirentListItem extends React.Component {
   }
  
   itemRightContextMenu = (e) =>{
-     e.preventDefault();
-     e.stopPropagation();
- 
-     this.props.switchAnotherMenuToShow('item_contextmenu');
-     this.setState({
-       isItemContextMenuShow: false,
-       itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
-       contextmenuItemData: this.state.enterItemData,
-       contextmenuItemIndex: this.state.enterItemIndex,
-     })
-     setTimeout(() => {
-      this.setState({
-        isItemContextMenuShow: true,
-      })
-     },40)
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.props.switchAnotherMenuToShow('item_contextmenu');
+    this.setState({
+      isItemContextMenuShow: false,
+      itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
+      contextmenuItemData: this.state.enterItemData,
+      contextmenuItemIndex: this.state.enterItemIndex,
+    })
+    setTimeout(() => {
+    this.setState({
+      isItemContextMenuShow: true,
+    })
+    },40)
    }
  
-   closeRightMenu = () => {
-     this.setState({
+  closeRightMenu = () => {
+    this.setState({
        isItemContextMenuShow: false,
-     });
-     this.onUnfreezedItem();
-     this.props.switchAnotherMenuToShow('item_op_menu');
-   }
+    });
+    this.onUnfreezedItem();
+    this.props.switchAnotherMenuToShow('item_op_menu');
+  }
 
   //UI Interactive
   onMouseEnter = () => {
