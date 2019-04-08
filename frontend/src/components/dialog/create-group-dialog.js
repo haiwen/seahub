@@ -15,7 +15,7 @@ class CreateGroupDialog extends React.Component {
   }
 
   handleGroupChange = (event) => {
-    let name = event.target.value.trim();
+    let name = event.target.value;
     this.setState({
       groupName: name
     });
@@ -37,6 +37,10 @@ class CreateGroupDialog extends React.Component {
         this.setState({
           errorMsg: errorMsg
         });
+      });
+    } else {
+      this.setState({
+        errorMsg: gettext('Name is required')
       });
     }
     this.setState({
