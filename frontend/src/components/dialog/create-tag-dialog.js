@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
+  onRepoTagCreated: PropTypes.func,
   toggleCancel: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired
 };
@@ -38,7 +39,9 @@ class CreateTagDialog extends React.Component {
     let name = this.state.tagName;
     let color = this.state.tagColor;
     let repoID = this.props.repoID;
-    seafileAPI.createRepoTag(repoID, name, color).then(() =>{
+    seafileAPI.createRepoTag(repoID, name, color).then((res) => {
+      let repoTagID = res.data.repo_tag.repo_tag_id;
+      this.props.onRepoTagCreated(repoTagID);
       this.props.toggleCancel();
     });
   }
