@@ -83,7 +83,7 @@ class LibContentContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentDirent: null,
+      currentDirent: {},
       appMenuType: 'item_op_menu',
     };
 
@@ -286,6 +286,7 @@ class LibContentContainer extends React.Component {
               repoID={repoID}
               path={this.props.path}
               dirent={this.state.currentDirent}
+              currentRepoInfo={this.props.currentRepoInfo}
               onItemDetailsClose={this.onItemDetailsClose}
               onFileTagChanged={this.props.onFileTagChanged}
             />

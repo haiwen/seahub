@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
+import Dirent from '../../models/dirent';
 import DetailListView from './detail-list-view';
 import RepoInfo from '../../models/repo-info';
 import FileTag from '../../models/file-tag';
@@ -25,7 +26,14 @@ class DirentDetail extends React.Component {
       repoInfo: null,
       fileTagList: [],
       relatedFiles: [],
+      currentFolderDirent: null,
     };
+  }
+
+  componentWillMount() {
+    if (!this.props.dirent.name) {
+      this.getCurrentFolderDirent();
+    }
   }
 
   componentDidMount() {
@@ -46,7 +54,7 @@ class DirentDetail extends React.Component {
 
   updateDetailView = (dirent, direntPath) => {
     let repoID = this.props.repoID;
-    if (dirent.type === 'file') {
+    if (dirent && dirent.type === 'file') {
       seafileAPI.getFileInfo(repoID, direntPath).then(res => {
         this.setState({
           direntType: 'file',
@@ -76,14 +84,42 @@ class DirentDetail extends React.Component {
           });
         }
       });
-    } else {
+    } else if (this.props.path !== '/') {
+      const dirPath = dirent.name ? direntPath : this.props.path;
+      seafileAPI.getDirInfo(repoID, dirPath).then(res => {
+        this.setState({
+          direntType: 'dir',
+          direntDetail: res.data
+        });
+      });
+    } else if (this.props.path === '/' && dirent.name) {
       seafileAPI.getDirInfo(repoID, direntPath).then(res => {
         this.setState({
           direntType: 'dir',
           direntDetail: res.data
         });
       });
+    } else if (this.props.path === '/' && !dirent.name) {
+      this.setState({
+        direntType: 'repo',
+        direntDetail: {},
+      });
     }
+  }
+
+  getCurrentFolderDirent = () => {
+    const path = this.props.path;
+    const parentPath = path.slice(0, path.lastIndexOf('/'));
+    seafileAPI.listDir(this.props.repoID, parentPath).then(res => {
+      try {
+        res.data.dirent_list.forEach((dirent) => {
+          if ((dirent.parent_dir + dirent.name) === path) throw dirent;
+        });
+      } catch (dirent) {
+        let dirent = new Dirent(dirent);
+        this.setState({ currentFolderDirent: dirent });
+      }
+    });
   }
 
   onFileTagChanged = (dirent, direntPath) => {
@@ -98,9 +134,26 @@ class DirentDetail extends React.Component {
   }
 
   render() {
-    let { dirent } = this.props;
-    let smallIconUrl = Utils.getDirentIcon(dirent);
-    let bigIconUrl = Utils.getDirentIcon(dirent, true);
+    let { dirent, path, currentRepoInfo } = this.props;
+    let smallIconUrl, bigIconUrl, direntName;
+    let folderDirent = this.state.currentFolderDirent;
+
+    if (dirent.name) {
+      // selected something
+      smallIconUrl = Utils.getDirentIcon(dirent);
+      bigIconUrl = Utils.getDirentIcon(dirent, true);
+      direntName = dirent.name;
+    } else if (!dirent.name && path === '/') {
+      // seleted nothing and parent is repo
+      smallIconUrl = Utils.getLibIconUrl(currentRepoInfo);
+      bigIconUrl = Utils.getLibIconUrl(currentRepoInfo, true);
+      direntName = currentRepoInfo.repo_name;
+    } else if (!dirent.name && path !== '/') {
+      // select nothing and parent is folder
+      smallIconUrl = folderDirent && Utils.getDirentIcon(folderDirent);
+      bigIconUrl = folderDirent && Utils.getDirentIcon(folderDirent, true);
+      direntName = folderDirent && folderDirent.name;
+    }
 
     return (
       <div className="detail-container">
@@ -108,7 +161,7 @@ class DirentDetail extends React.Component {
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
             <img src={smallIconUrl} width="24" height="24" alt="" />{' '}
-            <span className="name ellipsis" title={dirent.name}>{dirent.name}</span>
+            <span className="name ellipsis" title={direntName}>{direntName}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
@@ -121,7 +174,7 @@ class DirentDetail extends React.Component {
                 repoInfo={this.state.repoInfo}
                 path={this.props.path}
                 repoID={this.props.repoID}
-                dirent={this.props.dirent}
+                dirent={this.props.dirent || folderDirent}
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail} 
                 fileTagList={this.state.fileTagList}

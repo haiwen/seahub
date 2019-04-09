@@ -140,8 +140,16 @@
 }
 
 .cur-view-detail {
-  flex: 0 0 20rem;
-  display: flex;
+  display: block;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  width: 300px;
+  height: calc(100% - 50px);
+}
+
+.cur-view-detail .detail-container {
+  height: 100%;
 }
 
 /* for reach/router */

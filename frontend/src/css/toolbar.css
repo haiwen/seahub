@@ -61,6 +61,10 @@
   border-radius: 0 !important;
 }
 
+.dirent-detail-btn .sf-view-mode-btn {
+  border-radius: 3px !important;
+}
+
 .sf-view-mode-btn.current-mode {
   background-color: #ccc !important;
   color: #fff !important;
