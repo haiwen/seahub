@@ -6,9 +6,7 @@ import Loading from '../loading';
 import DirentListItem from './dirent-list-item';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
-
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
+import ImageDialog from '../../components/dialog/image-dialog';
 
 import '../../css/tip-for-new-md.css';
 import toaster from '../toast';
@@ -71,7 +69,7 @@ class DirentListView extends React.Component {
     if (thead) {
       thead.addEventListener('contextmenu', (e) => {
         e.stopPropagation();
-      })
+      });
     }
   }
 
@@ -138,45 +136,42 @@ class DirentListView extends React.Component {
   }
 
   // for image popup
-  prepareImageItems = () => {
-    let items = this.props.direntList.filter((item) => {
-      return Utils.imageCheck(item.name);
-    });
-
+  prepareImageItem = (item) => {
     const useThumbnail = !this.repoEncrypted;
-    let prepareItem = (item) => {
-      const name = item.name;
+    const name = item.name;
 
-      const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
-      const isGIF = fileExt == 'gif';
+    const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
+    const isGIF = fileExt == 'gif';
 
-      const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
-      const repoID = this.props.repoID;
-      let src;
-      if (useThumbnail && !isGIF) {
-        src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
-      } else {
-        src = `${siteRoot}repo/${repoID}/raw${path}`;
-      }
+    const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
+    const repoID = this.props.repoID;
+    let src;
+    if (useThumbnail && !isGIF) {
+      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+    } else {
+      src = `${siteRoot}repo/${repoID}/raw${path}`;
+    }
 
-      return {
-        'name': name,
-        'url': `${siteRoot}lib/${repoID}/file${path}`,
-        'src': src
-      };
+    return {
+      'name': name,
+      'url': `${siteRoot}lib/${repoID}/file${path}`,
+      'src': src
     };
-
-    return items.map((item) => { return prepareItem(item); });
   }
 
-  showImagePopup = (dirent) => {
+  showImagePopup = (curItem) => {
     let items = this.props.direntList.filter((item) => {
       return Utils.imageCheck(item.name);
     });
+
+    const imageItems = items.map((item) => {
+      return this.prepareImageItem(item);
+    });
+
     this.setState({
       isImagePopupOpen: true,
-      imageItems: this.prepareImageItems(),
-      imageIndex: items.indexOf(dirent)
+      imageItems: imageItems,
+      imageIndex: items.indexOf(curItem)
     });
   }
 
@@ -256,18 +251,6 @@ class DirentListView extends React.Component {
     const sortByTime = sortBy == 'time';
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
-    // for image popup
-    const imageItems = this.state.imageItems;
-    const imageIndex = this.state.imageIndex;
-    const imageItemsLength = imageItems.length;
-    const imageCaption = imageItemsLength && (
-      <Fragment>
-        <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
-        <br />
-        <a href={imageItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
-      </Fragment>
-    );
-
     return (
       <Fragment>
         <table>
@@ -326,23 +309,15 @@ class DirentListView extends React.Component {
         </table>
 
         {this.state.isImagePopupOpen && (
-          <Lightbox
-            mainSrc={imageItems[imageIndex].src}
-            imageTitle={imageItems[imageIndex].name}
-            imageCaption={imageCaption}
-            nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
-            prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
-            onCloseRequest={this.closeImagePopup}
-            onMovePrevRequest={this.moveToPrevImage}
-            onMoveNextRequest={this.moveToNextImage}
-            imagePadding={70}
-            imageLoadErrorMessage={gettext('The image could not be loaded.')}
-            prevLabel={gettext('Previous (Left arrow key)')}
-            nextLabel={gettext('Next (Right arrow key)')}
-            closeLabel={gettext('Close (Esc)')}
-            zoomInLabel={gettext('Zoom in')}
-            zoomOutLabel={gettext('Zoom out')}
-          />
+          <ModalPortal>
+            <ImageDialog
+              imageItems={this.state.imageItems}
+              imageIndex={this.state.imageIndex}
+              closeImagePopup={this.closeImagePopup}
+              moveToPrevImage={this.moveToPrevImage}
+              moveToNextImage={this.moveToNextImage}
+            />
+          </ModalPortal>
         )}
       </Fragment>
     );

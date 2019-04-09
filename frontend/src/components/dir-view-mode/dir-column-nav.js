@@ -9,11 +9,9 @@ import Copy from '../../components/dialog/copy-dirent-dialog';
 import Move from '../../components/dialog/move-dirent-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import ImageDialog from '../../components/dialog/image-dialog';
 import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -137,11 +135,11 @@ class DirColumnNav extends React.Component {
   }
 
   onCopyToggle = () => {
-    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow})
+    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
   }
 
   onMoveToggle = () => {
-    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow})
+    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
   }
 
   onAddFolderNode = (dirPath) => {
@@ -191,7 +189,7 @@ class DirColumnNav extends React.Component {
     });
     let imageNames = items.map((item) => {
       return item.object.name;
-    })
+    });
     this.setState({
       isNodeImagePopupOpen: true,
       imageNodeItems: this.prepareImageItems(node),
@@ -254,18 +252,6 @@ class DirColumnNav extends React.Component {
   render() {
     let flex = this.props.navRate ? '0 0 ' + this.props.navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
-
-    const imageNodeItems = this.state.imageNodeItems;
-    const imageIndex = this.state.imageIndex;
-    const imageItemsLength = imageNodeItems.length; 
-    const imageCaption = imageItemsLength && (
-      <Fragment>
-        <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
-        <br />
-        <a href={imageNodeItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
-      </Fragment>
-    );
-
     return (
       <Fragment>
         <div className="dir-content-nav" role="navigation" style={{flex: (flex), userSelect: select}}>
@@ -355,23 +341,15 @@ class DirColumnNav extends React.Component {
           </ModalPortal>
         )}
         {this.state.isNodeImagePopupOpen && (
-            <Lightbox
-              mainSrc={imageNodeItems[imageIndex].src}
-              imageCaption={imageCaption}
-              imageTitle={imageNodeItems[imageIndex].name}
-              nextSrc={imageNodeItems[(imageIndex + 1) % imageItemsLength].src}
-              prevSrc={imageNodeItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
-              onCloseRequest={this.closeNodeImagePopup}
-              onMovePrevRequest={this.moveToPrevImage}
-              onMoveNextRequest={this.moveToNextImage}
-              imagePadding={70}
-              imageLoadErrorMessage={gettext('The image could not be loaded.')}
-              prevLabel={gettext('Previous (Left arrow key)')}
-              nextLabel={gettext('Next (Right arrow key)')}
-              closeLabel={gettext('Close (Esc)')}
-              zoomInLabel={gettext('Zoom in')}
-              zoomOutLabel={gettext('Zoom out')}
+          <ModalPortal>
+            <ImageDialog
+              imageItems={this.state.imageNodeItems}
+              imageIndex={this.state.imageIndex}
+              closeImagePopup={this.closeNodeImagePopup}
+              moveToPrevImage={this.moveToPrevImage}
+              moveToNextImage={this.moveToNextImage}
             />
+          </ModalPortal>
         )}
       </Fragment>
     );
