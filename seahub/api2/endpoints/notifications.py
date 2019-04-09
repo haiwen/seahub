@@ -5,6 +5,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from django.core.cache import cache
 
@@ -120,14 +121,22 @@ class NotificationView(APIView):
         Permission checking:
         1. login user.
         """
-
+        
         notice_id = request.data.get('notice_id')
 
+        # argument check
+        try:
+            int(notice_id)
+        except:
+            error_msg = 'notice_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        # resource check
         try:
             notice = UserNotification.objects.get(id=notice_id)
-        except UserNotification.DoesNotExist as e:
-            logger.error(e)
-            pass
+        except UserNotification.DoesNotExist:
+            error_msg = 'Notification %s not found.' % notice_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if not notice.seen:
             notice.seen = True
