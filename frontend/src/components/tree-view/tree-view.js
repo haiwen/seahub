@@ -31,6 +31,7 @@ class TreeView extends React.Component {
       nodeData: null,
       fileData: null,
       mousePosition: {clientX: '', clientY: ''},
+      isTreeViewDropTipShow: false,
     };
   }
 
@@ -59,7 +60,12 @@ class TreeView extends React.Component {
   }
 
   onNodeDragEnter = (e, node) => {
-    //todo
+    e.persist()
+    if (e.target.className === 'tree-view tree ') {
+      this.setState({
+        isTreeViewDropTipShow: true,
+      })
+    }
   }
 
   onNodeDragMove = (e) => {
@@ -68,7 +74,11 @@ class TreeView extends React.Component {
   }
 
   onNodeDragLeave = (e, node) => {
-    //todo
+    if (e.target.className === 'tree-view tree tree-view-drop') {
+      this.setState({
+        isTreeViewDropTipShow: false,
+      })
+    }
   }
 
   onNodeDrop = (e, node) => {
@@ -83,6 +93,7 @@ class TreeView extends React.Component {
 
     if (!dropNodeData) {
       this.onItemMove(this.props.currentRepoInfo, nodeDirent, '/', nodeParentPath);
+      this.setState({isTreeViewDropTipShow: false})
       return;
     }
 
@@ -163,7 +174,7 @@ class TreeView extends React.Component {
 
   render() {
     return (
-      <div className="tree-view tree" onDrop={this.onNodeDrop}>
+      <div className={`tree-view tree ${this.state.isTreeViewDropTipShow ? 'tree-view-drop' : ''}`} onDrop={this.onNodeDrop} onDragEnter={this.onNodeDragEnter} onDragLeave={this.onNodeDragLeave}>
         <TreeNodeView 
           repoPermission={this.props.repoPermission}
           node={this.props.treeData.root}
