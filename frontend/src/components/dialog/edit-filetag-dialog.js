@@ -182,6 +182,13 @@ class EditFileTagDialog extends React.Component {
     });
   }
 
+  onRepoTagCreated = (repoTagID) => {
+    let {repoID, filePath} = this.props;
+    seafileAPI.addFileTag(repoID, filePath, repoTagID).then(() => {
+      this.props.onFileTagChanged();
+    });
+  }
+
   render() {
     return (
       <Modal isOpen={true} toggle={this.props.toggleCancel}>
@@ -200,8 +207,7 @@ class EditFileTagDialog extends React.Component {
             repoID={this.props.repoID}
             onClose={this.props.toggleCancel}
             toggleCancel={this.createNewTag}
-            filePath={this.props.filePath}
-            onFileTagChanged={this.props.onFileTagChanged}
+            onRepoTagCreated={this.onRepoTagCreated}
           />
         }
       </Modal>
