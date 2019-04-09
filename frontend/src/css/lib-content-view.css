@@ -41,12 +41,10 @@
   line-height: 1.5;
   flex: 1;
   border: 1px solid rgba(69,170,242,0);
-  border-bottom: none;
 }
 
 .tree-view-drop {
   border: 1px solid rgba(69,170,242);
-  border-bottom: none;
 }
 
 .tree-view-drop::before {
