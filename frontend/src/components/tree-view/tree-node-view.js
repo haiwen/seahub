@@ -98,6 +98,7 @@ class TreeNodeView extends React.Component {
   }
 
   onNodeDrop = (e) => {
+    e.stopPropagation();
     this.setState({isNodeDropShow: false});
     this.props.onNodeDrop(e, this.props.node);
   }
