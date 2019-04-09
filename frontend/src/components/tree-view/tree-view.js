@@ -105,6 +105,10 @@ class TreeView extends React.Component {
       return;
     }
 
+    if (nodeParentPath === dropNodeData.path) {
+      return;
+    }
+
     // copy the dirent to itself. eg: A/B -> A/B
     if (nodeParentPath === dropNodeData.parentNode.path) {
       if (dropNodeData.object.name === nodeDirent.name) {
