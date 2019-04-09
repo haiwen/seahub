@@ -200,6 +200,8 @@ class EditFileTagDialog extends React.Component {
             repoID={this.props.repoID}
             onClose={this.props.toggleCancel}
             toggleCancel={this.createNewTag}
+            filePath={this.props.filePath}
+            onFileTagChanged={this.props.onFileTagChanged}
           />
         }
       </Modal>
