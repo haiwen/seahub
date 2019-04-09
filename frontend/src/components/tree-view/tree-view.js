@@ -92,12 +92,20 @@ class TreeView extends React.Component {
     let dropNodeData = node;
 
     if (!dropNodeData) {
+      if (nodeParentPath === '/') {
+        this.setState({isTreeViewDropTipShow: false});
+        return;
+      }
       this.onItemMove(this.props.currentRepoInfo, nodeDirent, '/', nodeParentPath);
-      this.setState({isTreeViewDropTipShow: false})
+      this.setState({isTreeViewDropTipShow: false});
       return;
     }
 
     if (dropNodeData.object.type !== 'dir') {
+      return;
+    }
+
+    if (nodeParentPath === dropNodeData.path) {
       return;
     }
 
