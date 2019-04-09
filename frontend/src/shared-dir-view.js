@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import Account from './components/common/account';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
 import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
 import ShareLinkZipDownloadDialog from './components/dialog/share-link-zip-download-dialog';
+import ImageDialog from './components/dialog/image-dialog';
 
 import './css/shared-dir-view.css';
 
@@ -26,8 +27,13 @@ class SharedDirView extends React.Component {
       isLoading: true,
       errorMsg: '',
       items: [],
+
       isZipDialogOpen: false,
-      zipFolderPath: ''
+      zipFolderPath: '',
+
+      isImagePopupOpen: false,
+      imageItems: [],
+      imageIndex: 0
     };
   }
 
@@ -45,6 +51,7 @@ class SharedDirView extends React.Component {
         errorMsg: '',
         items: items
       });
+      this.getThumbnails();
     }).catch((error) => {
       let errorMsg = '';
       if (error.response) {
@@ -61,6 +68,37 @@ class SharedDirView extends React.Component {
         errorMsg: errorMsg
       });
     });
+  }
+
+  getThumbnails = () => {
+    let items = this.state.items.filter((item) => {
+      return !item.is_dir && Utils.imageCheck(item.file_name) && !item.encoded_thumbnail_src;
+    });
+    if (items.length == 0) {
+      return ;
+    }
+
+    const len = items.length;
+    const thumbnailSize = 48;
+    const _this = this;
+    let getThumbnail = function(i) {
+      const curItem = items[i];
+      seafileAPI.getShareLinkThumbnail(token, curItem.file_path, thumbnailSize).then((res) => {
+        curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
+      }).catch((error) => {
+        // do nothing
+      }).then(() => {
+        if (i < len - 1) {
+          getThumbnail(++i);
+        } else {
+          // when done, `setState()`
+          _this.setState({
+            items: _this.state.items
+          });
+        }
+      });
+    };
+    getThumbnail(0);
   }
 
   renderPath = () => {
@@ -104,6 +142,62 @@ class SharedDirView extends React.Component {
     });
   }
 
+  // for image popup
+  prepareImageItem = (item) => {
+    const name = item.file_name;
+    const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
+    const isGIF = fileExt == 'gif';
+
+    let src;
+    const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
+    if (!isGIF) {
+      src = `${siteRoot}thumbnail/${token}/${thumbnailSizeForOriginal}${Utils.encodePath(item.file_path)}`;
+    } else {
+      src = `${fileURL}&raw=1`;
+    }
+
+    return {
+      'name': name,
+      'url': fileURL,
+      'src': src
+    };
+  }
+
+  showImagePopup = (curItem) => {
+    const items = this.state.items.filter((item) => {
+      return !item.is_dir && Utils.imageCheck(item.file_name);
+    });
+    const imageItems = items.map((item) => {
+      return this.prepareImageItem(item);
+    });
+
+    this.setState({
+      isImagePopupOpen: true,
+      imageItems: imageItems,
+      imageIndex: items.indexOf(curItem)
+    });
+  }
+
+  closeImagePopup = () => {
+    this.setState({
+      isImagePopupOpen: false
+    });
+  }
+
+  moveToPrevImage = () => {
+    const imageItemsLength = this.state.imageItems.length;
+    this.setState((prevState) => ({
+      imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
+    }));
+  }
+
+  moveToNextImage = () => {
+    const imageItemsLength = this.state.imageItems.length;
+    this.setState((prevState) => ({
+      imageIndex: (prevState.imageIndex + 1) % imageItemsLength
+    }));
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -127,6 +221,7 @@ class SharedDirView extends React.Component {
               <Content
                 data={this.state}
                 zipDownloadFolder={this.zipDownloadFolder}
+                showImagePopup={this.showImagePopup}
               />
             </div>
           </div>
@@ -137,6 +232,17 @@ class SharedDirView extends React.Component {
             token={token}
             path={this.state.zipFolderPath}
             toggleDialog={this.closeZipDialog}
+          />
+        </ModalPortal>
+        }
+        {this.state.isImagePopupOpen &&
+        <ModalPortal>
+          <ImageDialog
+            imageItems={this.state.imageItems}
+            imageIndex={this.state.imageIndex}
+            closeImagePopup={this.closeImagePopup}
+            moveToPrevImage={this.moveToPrevImage}
+            moveToNextImage={this.moveToNextImage}
           />
         </ModalPortal>
         }
@@ -174,6 +280,7 @@ class Content extends React.Component {
               key={index}
               item={item}
               zipDownloadFolder={this.props.zipDownloadFolder}
+              showImagePopup={this.props.showImagePopup}
             />;
           })}
         </tbody>
@@ -204,6 +311,16 @@ class Item extends React.Component {
     this.props.zipDownloadFolder.bind(this, this.props.item.folder_path)();
   }
 
+  handleFileNameLinkClick = (e) => {
+    const item = this.props.item;
+    if (!Utils.imageCheck(item.file_name)) {
+      return;
+    }
+
+    e.preventDefault();
+    this.props.showImagePopup(item);
+  }
+
   render() {
     const item = this.props.item;
     const { isIconShown } = this.state;
@@ -228,11 +345,17 @@ class Item extends React.Component {
       );
     } else {
       const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
+      const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
       return (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td className="text-center"><img src={Utils.getFileIconUrl(item.file_name)} alt="" width="24" /></td>
+          <td className="text-center">
+            {thumbnailURL ?
+              <img className="thumbnail" src={thumbnailURL} alt="" /> :
+              <img src={Utils.getFileIconUrl(item.file_name)} alt="" width="24" />
+            }
+          </td>
           <td>
-            <a href={fileURL}>{item.file_name}</a>
+            <a href={fileURL} onClick={this.handleFileNameLinkClick}>{item.file_name}</a>
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td>{moment(item.last_modified).format('YYYY-MM-DD')}</td>

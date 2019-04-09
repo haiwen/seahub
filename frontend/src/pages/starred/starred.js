@@ -166,7 +166,7 @@ class Item extends Component {
 
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td className="alc">
+        <td className="text-center">
           {
             data.thumbnail_url ?
               <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
@@ -189,7 +189,7 @@ class Item extends Component {
 
     const mobileItem = (
       <tr>
-        <td className="alc">
+        <td className="text-center">
           {
             data.thumbnail_url ?
               <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
