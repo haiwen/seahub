@@ -98,9 +98,9 @@
 
 .tree-node-inner {
   position: relative;
-  height: 26px;
+  height: 24px;
   cursor: pointer;
-  line-height: 1.7;
+  line-height: 1.625;
 }
 
 .tree-node-inner-hover {
@@ -115,6 +115,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 24px;
+  display: flex;
+  align-items: center;
 }
 
 .tree-node-inner .left-icon {
