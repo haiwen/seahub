@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import RepoTag from '../../models/repo-tag';
+import CreateTagDialog from './create-tag-dialog';
 require('../../css/repo-tag.css');
 
 const TagItemPropTypes = {
@@ -12,7 +13,7 @@ const TagItemPropTypes = {
   repoTag: PropTypes.object.isRequired,
   filePath: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
-  onEditFileTag: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
 };
 
 class TagItem extends React.Component {
@@ -52,7 +53,7 @@ class TagItem extends React.Component {
       let id = repoTag.id;
       seafileAPI.addFileTag(repoID, filePath, id).then(() => {
         repoTagIdList = this.getRepoTagIdList();
-        this.props.onEditFileTag();
+        this.props.onFileTagChanged();
       });
     } else {
       let fileTag = null;
@@ -65,7 +66,7 @@ class TagItem extends React.Component {
       } 
       seafileAPI.deleteFileTag(repoID, fileTag.id).then(() => {
         repoTagIdList = this.getRepoTagIdList();
-        this.props.onEditFileTag();
+        this.props.onFileTagChanged();
       });
     }
   }
@@ -91,15 +92,16 @@ class TagItem extends React.Component {
 
 TagItem.propTypes = TagItemPropTypes;
 
-const propTypes = {
+const TagListPropTypes = {
   repoID: PropTypes.string.isRequired,
   filePath: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  createNewTag: PropTypes.func.isRequired,
 };
 
-class EditFileTagDialog extends React.Component {
+class TagList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -125,39 +127,81 @@ class EditFileTagDialog extends React.Component {
     });
   }
 
-  toggle = () => {
-    this.props.toggleCancel();
+  render() {
+    return (
+      <Fragment>
+        <ModalHeader toggle={this.props.toggleCancel}>{gettext('Select Tags')}</ModalHeader>
+        <ModalBody>
+          <ul className="tag-list tag-list-container">
+            {this.state.repotagList.map((repoTag) => {
+              return (
+                <TagItem
+                  key={repoTag.id}
+                  repoTag={repoTag}
+                  repoID={this.props.repoID}
+                  filePath={this.props.filePath}
+                  fileTagList={this.props.fileTagList}
+                  onFileTagChanged={this.props.onFileTagChanged}
+                />
+              );
+            })}
+          </ul>
+          <a href="#" className="add-tag-link" onClick={this.props.createNewTag}>{gettext('Create a new tag')}</a>
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={this.props.toggleCancel}>{gettext('Close')}</Button>
+        </ModalFooter>
+      </Fragment>
+    );
+  }
+}
+
+TagList.propTypes = TagListPropTypes;
+
+const propTypes = {
+  repoID: PropTypes.string.isRequired,
+  filePath: PropTypes.string.isRequired,
+  fileTagList: PropTypes.array.isRequired,
+  toggleCancel: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
+};
+
+class EditFileTagDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isCreateRepoTagShow: false,
+      isListRepoTagShow: true,
+    };
   }
 
-  onEditFileTag = () => {
-    this.props.onFileTagChanged();
+  createNewTag = () => {
+    this.setState({
+      isCreateRepoTagShow: !this.state.isCreateRepoTagShow,
+      isListRepoTagShow: !this.state.isListRepoTagShow,
+    });
   }
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Select Tags')}</ModalHeader>
-        <ModalBody>
-          {
-            <ul className="tag-list tag-list-container">
-              {this.state.repotagList.map((repoTag) => {
-                return (
-                  <TagItem 
-                    key={repoTag.id} 
-                    repoTag={repoTag}
-                    repoID={this.props.repoID}
-                    filePath={this.props.filePath}
-                    fileTagList={this.props.fileTagList}
-                    onEditFileTag={this.onEditFileTag}
-                  />
-                );
-              })}
-            </ul>
-          }
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={this.toggle}>{gettext('Close')}</Button>
-        </ModalFooter>
+      <Modal isOpen={true} toggle={this.props.toggleCancel}>
+        {this.state.isListRepoTagShow &&
+          <TagList
+            repoID={this.props.repoID}
+            filePath={this.props.filePath}
+            fileTagList={this.props.fileTagList}
+            onFileTagChanged={this.props.onFileTagChanged}
+            toggleCancel={this.props.toggleCancel}
+            createNewTag={this.createNewTag}
+          />
+        }
+        {this.state.isCreateRepoTagShow &&
+          <CreateTagDialog
+            repoID={this.props.repoID}
+            onClose={this.props.toggleCancel}
+            toggleCancel={this.createNewTag}
+          />
+        }
       </Modal>
     );
   }
