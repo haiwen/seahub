@@ -336,8 +336,7 @@ class Item extends React.Component {
           <td>{moment(item.last_modified).format('YYYY-MM-DD')}</td>
           <td>
             {showDownloadIcon &&
-            <a className={isIconShown ? '' : ' invisible'} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
-              <img src={`${mediaUrl}img/download.png`} alt={gettext('Download')} />
+            <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
             </a>
             }
           </td>
@@ -361,8 +360,7 @@ class Item extends React.Component {
           <td>{moment(item.last_modified).format('YYYY-MM-DD')}</td>
           <td>
             {showDownloadIcon &&
-            <a className={isIconShown ? '' : ' invisible'} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
-              <img src={`${mediaUrl}img/download.png`} alt={gettext('Download')} />
+            <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
             </a>
             }
           </td>

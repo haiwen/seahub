@@ -18,7 +18,7 @@ body {
 .shared-dir-view-main {
   width: calc(100% - 40px);
   max-width: 950px;
-  padding: 15px 0;
+  padding: 15px 0 40px;
   margin: 0 auto;
 }
 .op-bar {
