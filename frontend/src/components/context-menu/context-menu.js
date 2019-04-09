@@ -6,7 +6,6 @@ import { hideMenu } from './actions';
 const propTypes = {
   id: PropTypes.string.isRequired,
   rtl: PropTypes.bool,
-  menuList: PropTypes.array.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
 };
 
@@ -18,7 +17,9 @@ class ContextMenu extends React.Component {
     this.state = {
       x: 0,
       y: 0,
-      isVisible: false
+      isVisible: false,
+      currentObject: null,
+      menuList: [],
     };
   }
 
@@ -79,15 +80,16 @@ class ContextMenu extends React.Component {
     if (e.detail.id !== this.props.id || this.state.isVisible) return;
 
     const { x, y } = e.detail.position;
+    const { currentObject, menuList} = e.detail;
 
-    this.setState({ isVisible: true, x, y });
+    this.setState({ isVisible: true, x, y, currentObject, menuList });
     this.registerHandlers();
   }
 
   handleHide = (e) => {
     if (this.state.isVisible && (!e.detail || !e.detail.id || e.detail.id === this.props.id)) {
       this.unregisterHandlers();
-      this.setState({ isVisible: false, selectedItem: null, forceSubMenuOpen: false });
+      this.setState({ isVisible: false});
     }
   }
 
@@ -185,23 +187,29 @@ class ContextMenu extends React.Component {
 
   onMenuItemClick = (event) => {
     let operation = event.target.dataset.operation;
-    this.props.onMenuItemClick(operation);
+    let currentObject = this.state.currentObject;
+    this.props.onMenuItemClick(operation, currentObject, event);
   }
 
   render() {
+    const inlineStyle = { position: 'fixed', opacity: 0, pointerEvents: 'none', display: 'block' };
     return (
-      <div role="menu" className="right-tree-menu" ref={menu => { this.menu = menu; }}>
-        {this.props.menuList.map((menuItem, index) => {
-          return (
-            <button 
-              key={index} 
-              className="right-tree-item" 
-              data-operation={menuItem.key}
-              onClick={this.onMenuItemClick}
-            >
-              {menuItem.value}
-            </button>
-          );
+      <div role="menu" className="seafile-contextmenu dropdown-menu" style={inlineStyle} ref={menu => { this.menu = menu; }}>
+        {this.state.menuList.map((menuItem, index) => {
+          if (menuItem === 'Divider') {
+            return <div key={index} className="seafile-divider dropdown-divider"></div>
+          } else {
+            return (
+              <button 
+                key={index} 
+                className="seafile-contextmenu-item dropdown-item" 
+                data-operation={menuItem.key}
+                onClick={this.onMenuItemClick}
+              >
+                {menuItem.value}
+              </button>
+            );
+          }
         })}
       </div>
     );
