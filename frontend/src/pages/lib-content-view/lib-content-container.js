@@ -55,6 +55,7 @@ const propTypes = {
   // list
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
@@ -195,6 +196,7 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}
@@ -256,6 +258,7 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}

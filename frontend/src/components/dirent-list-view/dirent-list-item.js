@@ -22,6 +22,7 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
@@ -478,14 +479,6 @@ class DirentListItem extends React.Component {
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
-    const { repoEncrypted, isRepoOwner, isAdmin } = this.props;
-    let showShare = false;
-    if (!repoEncrypted &&
-      (dirent.permission == 'rw' || dirent.permission == 'r')) {
-      showShare = dirent.type == 'file' ? canGenerateShareLink :
-        (canGenerateShareLink || canGenerateUploadLink || (isRepoOwner || isAdmin));
-    }
-
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
     trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
 
@@ -539,7 +532,7 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
-                  {showShare &&
+                  {this.props.showShareBtn &&
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>
@@ -575,7 +568,7 @@ class DirentListItem extends React.Component {
                 itemUnregisterHandlers={this.itemUnregisterHandlers}
                 closeRightMenu={this.closeRightMenu}
                 onUnfreezedItem={this.onUnfreezedItem}
-                showShare={showShare}
+                showShare={this.props.showShareBtn}
               />
             }
           </td>

@@ -18,6 +18,7 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
@@ -278,7 +279,7 @@ class DirentListView extends React.Component {
                     repoEncrypted={this.repoEncrypted}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                    direntList={this.props.direntList}
+                    showShareBtn={this.props.showShareBtn}
                     onItemClick={this.props.onItemClick}
                     onItemRenameToggle={this.onItemRenameToggle}
                     onItemSelected={this.props.onItemSelected}
