@@ -44,12 +44,12 @@
   border-bottom: none;
 }
 
-.dir-content-nav .tree-view-drop {
-  border:1px solid rgba(69,170,242);
+.tree-view-drop {
+  border: 1px solid rgba(69,170,242);
   border-bottom: none;
 }
 
-.tree-view-drop::before{
+.tree-view-drop::before {
   border-left: 1px solid rgba(69,170,242);
   content: '';
   margin-left: 8px;
