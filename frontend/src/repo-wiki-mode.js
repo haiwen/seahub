@@ -545,8 +545,16 @@ class Wiki extends Component {
       message = message.replace('%(name)s', dirNames[0]);
       toaster.success(message);
     }).catch(() => {
-      let message = gettext('Failed to move %(name)s');
-      message = message.replace('%(name)s', dirNames);
+      let message = '';
+      let dirNamesLength = dirNames.length;
+
+      if (dirNamesLength > 1) {
+        message = gettext('Failed to move %(name)s and %(amount)s other item(s).');
+        message = message.replace('%(amount)s', dirNamesLength - 1);
+      } else {
+        message = gettext('Failed to move %(name)s.');
+      }
+      message = message.replace('%(name)s', dirNames[0]);
       toaster.danger(message);
     });
   }
@@ -575,8 +583,16 @@ class Wiki extends Component {
       message = message.replace('%(name)s', dirNames[0]);
       toaster.success(message);
     }).catch(() => {
-      let message = gettext('Failed to copy %(name)s');
-      message = message.replace('%(name)s', dirNames);
+      let message = '';
+      let dirNamesLength = dirNames.length;
+
+      if (dirNamesLength > 1) {
+        message = gettext('Failed to copy %(name)s and %(amount)s other item(s).');
+        message = message.replace('%(amount)s', dirNamesLength - 1);
+      } else {
+        message = gettext('Failed to copy %(name)s.');
+      }
+      message = message.replace('%(name)s', dirNames[0]);
       toaster.danger(message);
     });
   }
