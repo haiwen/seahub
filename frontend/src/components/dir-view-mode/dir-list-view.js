@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import TextTranslation from '../../utils/text-translation';
 import RepoInfoBar from '../../components/repo-info-bar';
 import ModalPortal from '../modal-portal';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
-import DirentListMenu from '../dirent-list-view/dirent-right-menu';
+import ContextMenu from '../context-menu/context-menu';
+import { hideMenu, showMenu } from '../context-menu/actions';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -35,8 +37,6 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
-  switchAnotherMenuToShow: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
   onAddFolder: PropTypes.func,
 };
 
@@ -45,64 +45,20 @@ class DirListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isCreateFileDialogShow: false,
       fileType: '',
-      isContainerContextmenuShow: false,
+      isCreateFileDialogShow: false,
       isCreateFolderDialogShow: false,
-      itemMousePosition: {clientX: '', clientY: ''},
     }
-  }
-
-  componentDidUpdate() {
-    this.registerTableContainerContextmenuHandler();
-  }
-
-  componentWillUnmount() {
-    this.unregisterTableContainerContextmenuHandler();
-  }
-
-  registerTableContainerContextmenuHandler = () => {
-    let tableContainer = document.querySelector('.table-container');
-    if (tableContainer) {
-      tableContainer.addEventListener('contextmenu', this.tableContainerContextmenuHandler);
-    }
-  }
-
-  unregisterTableContainerContextmenuHandler = () => {
-    let tableContainer = document.querySelector('.table-container');
-    tableContainer.removeEventListener('contextmenu', this.tableContainerContextmenuHandler);
-  }
-
-  tableContainerContextmenuHandler = (e) => {
-    e.preventDefault();
-    
-    this.props.switchAnotherMenuToShow('list_view_contextmenu');
-
-    this.setState({isContainerContextmenuShow: false}, () => {
-      this.setState({
-        isContainerContextmenuShow: true,
-        itemMousePosition: {clientX: e.clientX, clientY: e.clientY}
-      })
-    });
-  }
-
-  closeTableContainerRightMenu = () => {
-    this.setState({
-      isContainerContextmenuShow: false,
-    });
-    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   onCreateFolderToggle = () => {
-    this.setState({
-      isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow,
-    });
+    this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
   }
 
   onCreateFileToggle = () => {
     this.setState({
+      fileType: '',
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: ''
     });
   }
 
@@ -124,6 +80,61 @@ class DirListView extends React.Component {
     return isDuplicated;
   }
 
+  onItemMouseDown = (event) => {
+    event.stopPropagation();
+    if (event.button ===2) {
+      return;
+    }
+  }
+
+  onItemContextMenu = (event) => {
+    this.handleContextClick(event);
+  }
+
+  handleContextClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let x = event.clientX || (event.touches && event.touches[0].pageX);
+    let y = event.clientY || (event.touches && event.touches[0].pageY);
+
+    if (this.props.posX) {
+        x -= this.props.posX;
+    }
+    if (this.props.posY) {
+        y -= this.props.posY;
+    }
+
+    hideMenu();
+
+    let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+
+    let showMenuConfig = {
+      id: 'dirent-container-menu',
+      position: { x, y },
+      target: event.target,
+      currentObject: null,
+      menuList: menuList,
+    };
+
+    showMenu(showMenuConfig);
+  }
+
+  onMenuItemClick = (operation, currentObject, event) => {
+    switch (operation) {
+      case 'New Folder':
+        this.onCreateFolderToggle();
+        break;
+      case 'New File': 
+        this.onCreateFileToggle();
+        break;
+      default:
+        break;
+    }
+    
+    hideMenu();
+  }
+
   render() {
     return (
       <Fragment>
@@ -137,7 +148,7 @@ class DirListView extends React.Component {
             updateUsedRepoTags={this.props.updateUsedRepoTags}
           />
         )}
-        <div className="table-container">
+        <div className="table-container" onMouseDown={this.onItemMouseDown} onContextMenu={this.onItemContextMenu}>
           <DirentListView
             path={this.props.path}
             currentRepoInfo={this.props.currentRepoInfo}
@@ -165,37 +176,33 @@ class DirListView extends React.Component {
             appMenuType={this.props.appMenuType}
           />
         </div>
-        {this.state.isContainerContextmenuShow && this.props.appMenuType === 'list_view_contextmenu' && (
-          <DirentListMenu 
-            mousePosition={this.state.itemMousePosition}
-            itemUnregisterHandlers={this.unregisterTableContainerContextmenuHandler}
-            itemRegisterHandlers={this.registerTableContainerContextmenuHandler}
-            closeRightMenu={this.closeTableContainerRightMenu}
-            onCreateFolderToggle={this.onCreateFolderToggle}
-            onCreateFileToggle={this.onCreateFileToggle}
+        <Fragment>
+          <ContextMenu 
+            id={"dirent-container-menu"}
+            onMenuItemClick={this.onMenuItemClick}
           />
-        )}
-        {this.state.isCreateFolderDialogShow && (
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.props.path}
-              onAddFolder={this.onAddFolder}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFolderCancel={this.onCreateFolderToggle}
-            />
-          </ModalPortal>
-        )} 
-        {this.state.isCreateFileDialogShow && (
-          <ModalPortal>
-            <CreateFile
-              parentPath={this.props.path}
-              fileType={this.state.fileType}
-              onAddFile={this.onAddFile}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onCreateFileToggle}
-            />
-          </ModalPortal>
-        )}
+          {this.state.isCreateFolderDialogShow && (
+            <ModalPortal>
+              <CreateFolder
+                parentPath={this.props.path}
+                onAddFolder={this.onAddFolder}
+                checkDuplicatedName={this.checkDuplicatedName}
+                addFolderCancel={this.onCreateFolderToggle}
+              />
+            </ModalPortal>
+          )} 
+          {this.state.isCreateFileDialogShow && (
+            <ModalPortal>
+              <CreateFile
+                parentPath={this.props.path}
+                fileType={this.state.fileType}
+                onAddFile={this.onAddFile}
+                checkDuplicatedName={this.checkDuplicatedName}
+                addFileCancel={this.onCreateFileToggle}
+              />
+            </ModalPortal>
+          )}
+        </Fragment>
       </Fragment>
     );
   }

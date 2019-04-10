@@ -556,8 +556,6 @@ class DirentListItem extends React.Component {
           onDragLeave={this.onItemDragLeave} 
           onDrop={this.onItemDragDrop}
           onMouseDown={this.onItemMouseDown}
-          onMouseUp={this.onItemMouseUp}
-          onMouseOut={this.onItemMouseOut}
           onContextMenu={this.onItemContextMenu}
         >
           <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
