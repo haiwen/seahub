@@ -127,8 +127,9 @@ class NotificationView(APIView):
         # argument check
         try:
             int(notice_id)
-        except:
+        except Exception as e:
             error_msg = 'notice_id invalid.'
+            logger(e)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         # resource check
@@ -137,6 +138,14 @@ class NotificationView(APIView):
         except UserNotification.DoesNotExist:
             error_msg = 'Notification %s not found.' % notice_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if notice.to_user == username:
+            pass
+        else:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not notice.seen:
             notice.seen = True
