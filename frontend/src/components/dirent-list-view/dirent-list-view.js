@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import { siteRoot, gettext, thumbnailSizeForOriginal, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
-import DirentListItem from './dirent-list-item';
+import toaster from '../toast';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
+import DirentListItem from './dirent-list-item';
+import ContextMenu from '../context-menu/context-menu';
+import { hideMenu } from '../context-menu/actions';
 
 import '../../css/tip-for-new-md.css';
-import toaster from '../toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -54,14 +56,9 @@ class DirentListView extends React.Component {
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
     this.isAdmin = props.currentRepoInfo.is_admin;
     this.repoEncrypted = props.currentRepoInfo.encrypted;
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.appMenuType === 'item_op_menu' || nextProps.appMenuType === 'tree_contextmenu') {
-      this.setState({isItemFreezed: false});
-    } else {
-      this.setState({isItemFreezed: true});
-    }
+    this.direntItems = [];
+    this.currentItemRef = null;
   }
 
   componentDidUpdate() {
@@ -199,6 +196,36 @@ class DirentListView extends React.Component {
     return isDuplicated;
   }
 
+  setDirentItemRef = (index) => item => {
+    this.direntItems[index] = item;
+  }
+
+  onMenuItemClick = (operation, currentObject, event) => {
+    let index = this.getDirentIndex(currentObject);
+    this.direntItems[index].onMenuItemClick(operation, event);
+    hideMenu();
+  }
+
+  getDirentIndex = (dirent) => {
+    let direntList = this.props.direntList;
+    let index = 0;
+    for (let i = 0; i < direntList.length; i++) {
+      if (direntList[i].name === dirent.name) {
+        index = i;
+        break;
+      }
+    } 
+    return index;
+  }
+
+  onShowMenu = (e) => {
+    this.onFreezedItem();
+  }
+
+  onHideMenu = (e) => {
+    this.onUnfreezedItem();
+  }
+
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
 
@@ -269,6 +296,7 @@ class DirentListView extends React.Component {
               direntList.length !== 0 && direntList.map((dirent, index) => {
                 return (
                   <DirentListItem
+                    ref={this.setDirentItemRef(index)}
                     key={index}
                     dirent={dirent}
                     path={this.props.path}
@@ -314,6 +342,12 @@ class DirentListView extends React.Component {
             />
           </ModalPortal>
         )}
+        <ContextMenu 
+          id={'dirent-item-menu'}
+          onMenuItemClick={this.onMenuItemClick}
+          onShowMenu={this.onShowMenu}
+          onHideMenu={this.onHideMenu}
+        />
       </Fragment>
     );
   }

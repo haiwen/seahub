@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -13,7 +13,8 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import DirentRightMenu from './dirent-right-menu';
+import { hideMenu, showMenu } from '../context-menu/actions';
+import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
 
 import '../../css/dirent-list-item.css';
@@ -41,8 +42,6 @@ const propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
-  switchAnotherMenuToShow: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirentListItem extends React.Component {
@@ -61,70 +60,19 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
       isDragTipShow: false,
       isDropTipshow: false,
-      enterItemData: '',
-      enterItemIndex: -1,
-      contextmenuItemData: {},
-      contextmenuItemIndex: -1,
-      isItemContextMenuShow: false,
     };
     this.zipToken = null;
   }
 
-  componentWillReceiveProps(nextProp) {
-    if (nextProp.appMenuType === 'list_view_contextmenu' || nextProp.appMenuType === 'item_contextmenu') {
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.isItemFreezed) {
       this.setState({
         highlight: false,
         isOperationShow: false,
-      })
-    }
-  }
-
-  componentDidUpdate() {
-    this.itemRegisterHandlers();
-  }
-
-  componentWillUnmount() {
-    this.itemUnregisterHandlers();
-  }
- 
-  itemUnregisterHandlers = () => {
-    let itemTbody = document.querySelector('tbody');
-    itemTbody.removeEventListener('contextmenu', this.itemRightContextMenu);
-  }
- 
-  itemRegisterHandlers = () => {
-    let itemTbody = document.querySelector('tbody');
-    if  (itemTbody) {
-     itemTbody.addEventListener('contextmenu', this.itemRightContextMenu);
+      });
     }
   }
  
-  itemRightContextMenu = (e) =>{
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.props.switchAnotherMenuToShow('item_contextmenu');
-    this.setState({
-      isItemContextMenuShow: false,
-      itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
-      contextmenuItemData: this.state.enterItemData,
-      contextmenuItemIndex: this.state.enterItemIndex,
-    })
-    setTimeout(() => {
-      this.setState({
-        isItemContextMenuShow: true,
-      })
-    },40)
-  }
- 
-  closeRightMenu = () => {
-    this.setState({
-      isItemContextMenuShow: false,
-    });
-    this.onUnfreezedItem();
-    this.props.switchAnotherMenuToShow('item_op_menu');
-  }
-
   //UI Interactive
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
@@ -133,11 +81,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({
-      isDragTipShow: true,
-      enterItemData: this.props.dirent,
-      enterItemIndex: this.props.itemIndex,
-    });
+    this.setState({isDragTipShow: true});
   }
 
   onMouseOver = () => {
@@ -147,10 +91,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({
-      isDragTipShow: true,
-      enterItemData: this.props.dirent,
-      enterItemIndex: this.props.itemIndex});
+    this.setState({isDragTipShow: true});
   }
 
   onMouseLeave = () => {
@@ -160,11 +101,7 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
-    this.setState({
-      isDragTipShow: false,
-      enterItemData: '',
-      enterItemIndex: -1,
-    });
+    this.setState({isDragTipShow: false});
   }
 
   onUnfreezedItem = () => {
@@ -229,8 +166,17 @@ class DirentListItem extends React.Component {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
 
-  onMenuItemClick = (operation) => {
+  onMenuItemClick = (operation, event) => {
     switch(operation) {
+      case 'Download': 
+        this.onItemDownload(event);
+        break;
+      case 'Share':
+        this.onItemShare(event);
+        break;
+      case 'Delete': 
+        this.onItemDelete(event);
+        break;
       case 'Rename':
         this.onItemRenameToggle();
         break;
@@ -461,6 +407,119 @@ class DirentListItem extends React.Component {
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
   }
 
+  onItemMouseDown = (event) => {
+    event.stopPropagation();
+    if (event.button ===2) {
+      return;
+    }
+  }
+
+  onItemContextMenu = (event) => {
+    this.handleContextClick(event);
+  }
+
+  handleContextClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let x = event.clientX || (event.touches && event.touches[0].pageX);
+    let y = event.clientY || (event.touches && event.touches[0].pageY);
+
+    if (this.props.posX) {
+        x -= this.props.posX;
+    }
+    if (this.props.posY) {
+        y -= this.props.posY;
+    }
+
+    hideMenu();
+
+    let menuList = this.getDirentItemMenuList(true);
+
+    let showMenuConfig = {
+      id: 'dirent-item-menu',
+      position: { x, y },
+      target: event.target,
+      currentObject: this.props.dirent,
+      menuList: menuList,
+    };
+
+    showMenu(showMenuConfig);
+  }
+
+  getDirentItemMenuList = (isContextmenu) => {
+    let { currentRepoInfo, isRepoOwner, dirent } = this.props;
+    let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
+
+    let type = dirent.type;
+    let permission = dirent.permission;
+
+    let menuList = [];
+    let contextmenuList = [];
+    if (isContextmenu) {
+      let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
+      contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
+    }
+
+    let { RENAME, MOVE, COPY, PERMISSION, DETAILS, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
+    if (type === 'dir' && permission === 'rw') {
+      if (can_set_folder_perm) {
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, DETAILS, 'Divider', OPEN_VIA_CLIENT];
+      } else {
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', DETAILS, 'Divider', OPEN_VIA_CLIENT];
+      }
+      return menuList;
+    }
+
+    if (type === 'dir' && permission === 'r') {
+      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY, DETAILS] : [DETAILS];
+      return menuList;
+    }
+
+    if (type === 'file' && permission === 'rw') {
+      menuList = [...contextmenuList];
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        menuList.push(RENAME);
+        menuList.push(MOVE);
+      }
+      menuList.push(COPY);
+      if (isPro) {
+        if (dirent.is_locked) {
+          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
+            menuList.push(UNLOCK);
+          }
+        } else {
+          menuList.push(LOCK);
+        }
+      }
+      menuList.push('Divider');
+      if (enableFileComment) {
+        menuList.push(COMMENT);
+      }
+      menuList.push(HISTORY);
+      if (fileAuditEnabled) {
+        menuList.push(ACCESS_LOG);
+      }
+      menuList.push(DETAILS);
+      menuList.push('Divider');
+      menuList.push(OPEN_VIA_CLIENT);
+      return menuList;
+    }
+
+    if (type === 'file' && permission === 'r') {
+      menuList = [...contextmenuList];
+      if (!currentRepoInfo.encrypted) {
+        menuList.push(COPY);
+      }
+      if (enableFileComment) {
+        menuList.push(COMMENT);
+      }
+      menuList.push(HISTORY);
+      menuList.push(DETAILS);
+      return menuList;
+    }
+  }
+
   render() {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
@@ -484,7 +543,23 @@ class DirentListItem extends React.Component {
 
     return (
       <Fragment>
-         <tr className={trClass} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragEnter={this.onItemDragEnter} onDragOver={this.onItemDragOver} onDragLeave={this.onItemDragLeave} onDrop={this.onItemDragDrop}>
+         <tr 
+          className={trClass} 
+          draggable="true" 
+          onMouseEnter={this.onMouseEnter} 
+          onMouseOver={this.onMouseOver} 
+          onMouseLeave={this.onMouseLeave} 
+          onClick={this.onDirentClick} 
+          onDragStart={this.onItemDragStart} 
+          onDragEnter={this.onItemDragEnter} 
+          onDragOver={this.onItemDragOver} 
+          onDragLeave={this.onItemDragLeave} 
+          onDrop={this.onItemDragDrop}
+          onMouseDown={this.onItemMouseDown}
+          onMouseUp={this.onItemMouseUp}
+          onMouseOut={this.onItemMouseOut}
+          onContextMenu={this.onItemContextMenu}
+        >
           <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
@@ -553,23 +628,6 @@ class DirentListItem extends React.Component {
                   </li>
                 </ul>
               </div>
-            }
-            {this.state.isItemContextMenuShow && this.state.contextmenuItemIndex === this.props.itemIndex && this.props.appMenuType === 'item_contextmenu' &&
-              <DirentRightMenu
-                dirent={this.state.contextmenuItemData}
-                mousePosition={this.state.itemMousePosition}
-                isRepoOwner={this.props.isRepoOwner}
-                currentRepoInfo={this.props.currentRepoInfo}
-                onMenuItemClick={this.onMenuItemClick}
-                onItemDownload={this.onItemDownload}
-                onItemShare={this.onItemShare}
-                onItemDelete={this.onItemDelete}
-                itemRegisterHandlers={this.itemRegisterHandlers}
-                itemUnregisterHandlers={this.itemUnregisterHandlers}
-                closeRightMenu={this.closeRightMenu}
-                onUnfreezedItem={this.onUnfreezedItem}
-                showShare={this.props.showShareBtn}
-              />
             }
           </td>
           <td className="file-size">{dirent.size && dirent.size}</td>
