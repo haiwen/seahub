@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import listener from './globalEventListener';
 import { hideMenu } from './actions';
+import { callIfExists } from './helpers';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
   rtl: PropTypes.bool,
   onMenuItemClick: PropTypes.func.isRequired,
+  onShowMenu: PropTypes.func,
+  onHideMenu: PropTypes.func,
 };
 
 class ContextMenu extends React.Component {
@@ -84,13 +87,15 @@ class ContextMenu extends React.Component {
 
     this.setState({ isVisible: true, x, y, currentObject, menuList });
     this.registerHandlers();
+    callIfExists(this.props.onShowMenu, e);
   }
-
+  
   handleHide = (e) => {
     if (this.state.isVisible && (!e.detail || !e.detail.id || e.detail.id === this.props.id)) {
       this.unregisterHandlers();
       this.setState({ isVisible: false});
     }
+    callIfExists(this.props.onHideMenu, e);
   }
 
   handleOutsideClick = (e) => {
