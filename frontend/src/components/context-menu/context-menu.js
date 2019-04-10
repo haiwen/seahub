@@ -191,6 +191,7 @@ class ContextMenu extends React.Component {
 
 
   onMenuItemClick = (event) => {
+    event.stopPropagation();
     let operation = event.target.dataset.operation;
     let currentObject = this.state.currentObject;
     this.props.onMenuItemClick(operation, currentObject, event);
