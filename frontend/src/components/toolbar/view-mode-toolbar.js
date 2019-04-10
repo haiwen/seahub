@@ -29,7 +29,7 @@ class ViewModeToolbar extends React.Component {
           <button className={`${baseClass} sf2-icon-two-columns ${this.props.currentMode === 'column' ? 'current-mode' : ''}`} id='column' title={gettext('Column')} onClick={this.switchViewMode}></button>
         </div>
         <div className="dirent-detail-btn btn-group">
-          <button className={`${baseClass} ml-1 sf2-icon-info ${this.props.isDirentDetailShow ? 'current-mode' : ''}`} id='detail' title={gettext('Detail')} onClick={this.switchViewMode}></button>
+          <button className={`${baseClass} ml-1 fas fa-info ${this.props.isDirentDetailShow ? 'current-mode' : ''}`} id='detail' title={gettext('Detail')} onClick={this.switchViewMode}></button>
         </div>
       </React.Fragment>
     );
