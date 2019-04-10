@@ -82,6 +82,14 @@ class MutipleDirOperationToolbar extends React.Component {
         this.zipToken = res.data['zip_token'];
         this.addDownloadAnimation();
         this.interval = setInterval(this.addDownloadAnimation, 1000);
+      }).catch((error) => {
+        clearInterval(this.interval);
+        this.setState({isProgressDialogShow: false});
+        let errorMessage = error.response.data.error_msg;
+
+        let message = gettext('%(errorMessage)');
+        message = message.replace('%(errorMessage)', errorMessage)
+        toaster.danger(message);
       });
     }
   }
@@ -110,6 +118,7 @@ class MutipleDirOperationToolbar extends React.Component {
 
   onCancelDownload = () => {
     seafileAPI.cancelZipTask(this.zipToken).then(() => {
+      clearInterval(this.interval);
       this.setState({isProgressDialogShow: false});
     });
   }
