@@ -72,7 +72,7 @@ from seahub.views import check_folder_permission, \
 from seahub.utils.repo import is_repo_owner, parse_repo_perm
 from seahub.group.utils import is_group_member
 from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
-        XMIND_IMAGE_SIZE, THUMBNAIL_ROOT
+        XMIND_IMAGE_SIZE, THUMBNAIL_ROOT, get_share_link_thumbnail_src
 from seahub.drafts.utils import get_file_draft, \
         is_draft_file, has_draft_file
 
@@ -1234,10 +1234,26 @@ def view_shared_file(request, fileshare):
 
     permissions = fileshare.get_permissions()
 
-    template = 'shared_file_view.html'
+    template = 'shared_file_view_react.html'
 
-    if filetype != XMIND:
-        template = 'shared_file_view_react.html'
+    # for XMind thumbnail not by react
+    if filetype == XMIND:
+        template = 'shared_file_view.html'
+        serviceURL = get_service_url().rstrip('/')
+        xmind_dir = os.path.join(THUMBNAIL_ROOT, str(XMIND_IMAGE_SIZE))
+        xmind_image = os.path.join(xmind_dir, obj_id)
+        if os.path.exists(xmind_image):
+            share_link_thumbnail = get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path)
+            raw_path = '%s/%s' % (serviceURL, share_link_thumbnail)
+        else:
+            try:
+                extract_xmind_image(repo_id, path)
+                share_link_thumbnail = get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path)
+                raw_path = '%s/%s' % (serviceURL, share_link_thumbnail)
+            except Exception as e:
+                logger.error(e)
+                error_msg = _(u'Unable to view file')
+                ret_dict['err'] = error_msg
 
     return render(request, template, {
             'repo': repo,

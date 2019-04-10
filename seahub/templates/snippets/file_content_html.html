@@ -41,6 +41,13 @@ For details please refer to 'snippets/file_content_js.html'.
             </div>
         {% endif %}
 
+        <!-- only for xmind thumb -->
+        {% if filetype == 'XMind' %}
+            <div class="image-file-view flex-1" style="text-align: center;">
+                <img src="{{raw_path}}" alt="{{ file_name }}" id="xmind-view" class="" style="" />
+            </div>
+        {% endif %}
+
         {% if filetype == 'SpreadSheet' %}
             {% include 'snippets/spreadsheet_convert_html.html' %}
         {% endif %}
