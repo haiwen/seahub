@@ -4,7 +4,7 @@ import axios from 'axios';
 import Loading from '../../components/loading';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { draftOriginRepoID, draftFilePath, draftOriginFilePath } from '../../utils/constants';
+import { draftRepoID, draftFilePath, draftOriginFilePath } from '../../utils/constants';
 
 import '../../css/file-history.css';
 
@@ -38,7 +38,7 @@ class HistoryList extends React.Component {
           currentPage: currentPage,
           loading : true
         });
-        seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, currentPage, this.perPage).then((res) => {
+        seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, currentPage, this.perPage).then((res) => {
           let currentHistoryList = Object.assign([], this.props.historyList);
           this.props.onHistoryListChange([...currentHistoryList, ...res.data.data]);
           this.setState({
