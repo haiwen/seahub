@@ -15,7 +15,7 @@ const propTypes = {
 };
 
 let loginUser = window.app.pageOptions.name;
-const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, download } = window.shared.pageOptions;
+const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, download, zipped } = window.shared.pageOptions;
 
 class SharedFileView extends React.Component {
 
@@ -52,6 +52,25 @@ class SharedFileView extends React.Component {
     }
   }
 
+  renderPath = () => {
+    return (
+      <React.Fragment>
+        {zipped.map((item, index) => {
+          if (index != zipped.length - 1) {
+            return (
+              <React.Fragment key={index}>
+                <a href={`${siteRoot}d/${sharedToken}/?p=${encodeURIComponent(item.path)}`}>{item.name}</a>
+                <span> / </span>
+              </React.Fragment>
+            );
+          }
+        })
+        }
+        {zipped[zipped.length - 1].name}
+      </React.Fragment>
+    );
+  }
+
   render() {
     return (
       <div className="shared-file-view-md">
@@ -67,19 +86,20 @@ class SharedFileView extends React.Component {
           <div className="shared-file-view-head">
             <div className="float-left">
               <h2 className="ellipsis" title={fileName}>{fileName}</h2>
-              <p className="share-by ellipsis">{gettext('Shared by:')}{'  '}{sharedBy}</p>
+              {zipped ?
+                <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p> :
+                <p className="share-by ellipsis">{gettext('Shared by:')}{'  '}{sharedBy}</p>
+              }
             </div>
             {download &&
               <div className="float-right">
                 {(loginUser && loginUser !== sharedBy) &&
-                  <Button color="secondary" id="save" className="shared-file-op-btn"
+                  <Button color="secondary" id="save"
                     onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
                   </Button>
                 }{' '}
                 {!trafficOverLimit &&
-                  <Button color="success" className="shared-file-op-btn">
-                    <a href="?dl=1">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
-                  </Button>
+                <a href="?dl=1" className="btn btn-success">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
                 }
               </div>
             }

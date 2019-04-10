@@ -1432,7 +1432,11 @@ def view_file_via_shared_dir(request, fileshare):
     else:
         zipped = gen_path_link(req_path, os.path.basename(fileshare.path[:-1]))
 
-    return render(request, 'shared_file_view.html', {
+    template = 'shared_file_view.html'
+    if filetype != XMIND:
+        template = 'shared_file_view_react.html'
+
+    return render(request, template, {
             'repo': repo,
             'obj_id': obj_id,
             'from_shared_dir': True,

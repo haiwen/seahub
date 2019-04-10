@@ -28,11 +28,6 @@
   justify-content: space-between;
 }
 
-.shared-file-view-head a {
-  color: #fff;
-  text-decoration: none;
-}
-
 .shared-file-view-head h2 {
   color: #222;
   font-size: 1.4em;
@@ -42,10 +37,6 @@
 
 .shared-file-view-head .share-by {
   margin: 0;
-}
-
-.shared-file-view-head .shared-file-op-btn {
-  padding: 7px;
 }
 
 .shared-file-view-body {
