@@ -104,7 +104,7 @@ class TreeNodeView extends React.Component {
 
   onItemMouseDown = (event) => {
     event.stopPropagation();
-    if (event.button ===2) {
+    if (event.button === 2) {
       return;
     }
   }
@@ -115,6 +115,7 @@ class TreeNodeView extends React.Component {
 
   handleContextClick = (event) => {
     this.props.handleContextClick(event, this.props.node);
+    this.setState({isShowOperationMenu: false});
   }
 
   getNodeTypeAndIcon = () => {

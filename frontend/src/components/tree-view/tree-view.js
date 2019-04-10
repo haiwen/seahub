@@ -113,7 +113,6 @@ class TreeView extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   onUnFreezedItem = () => {
@@ -160,7 +159,7 @@ class TreeView extends React.Component {
     hideMenu();
 
     let menuList = this.getMenuList(node);
-
+    
     let showMenuConfig = {
       id: 'tree-node-contextmenu',
       position: { x, y },
@@ -168,7 +167,7 @@ class TreeView extends React.Component {
       currentObject: node,
       menuList: menuList,
     };
-
+    
     showMenu(showMenuConfig);
   }
 

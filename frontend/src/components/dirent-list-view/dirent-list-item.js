@@ -408,9 +408,8 @@ class DirentListItem extends React.Component {
   }
 
   onItemMouseDown = (event) => {
-    event.stopPropagation();
     if (event.button === 2) {
-      return;
+      this.setState({isOperationShow: false});
     }
   }
 
@@ -433,9 +432,9 @@ class DirentListItem extends React.Component {
     }
 
     hideMenu();
-
+    
     let menuList = this.getDirentItemMenuList(true);
-
+    
     let showMenuConfig = {
       id: 'dirent-item-menu',
       position: { x, y },
@@ -623,7 +622,6 @@ class DirentListItem extends React.Component {
                       isRepoOwner={this.props.isRepoOwner}
                       onFreezedItem={this.props.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
-                      appMenuType={this.props.appMenuType}
                     />
                   </li>
                 </ul>

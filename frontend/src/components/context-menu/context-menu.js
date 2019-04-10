@@ -94,8 +94,8 @@ class ContextMenu extends React.Component {
     if (this.state.isVisible && (!e.detail || !e.detail.id || e.detail.id === this.props.id)) {
       this.unregisterHandlers();
       this.setState({ isVisible: false});
+      callIfExists(this.props.onHideMenu, e);
     }
-    callIfExists(this.props.onHideMenu, e);
   }
 
   handleOutsideClick = (e) => {
