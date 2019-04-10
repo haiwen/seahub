@@ -1437,6 +1437,24 @@ def view_file_via_shared_dir(request, fileshare):
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
 
+        # for XMind thumbnail not by react
+        elif filetype == XMIND:
+            serviceURL = get_service_url().rstrip('/')
+            xmind_dir = os.path.join(THUMBNAIL_ROOT, str(XMIND_IMAGE_SIZE))
+            xmind_image = os.path.join(xmind_dir, obj_id)
+            if os.path.exists(xmind_image):
+                share_link_thumbnail = get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path)
+                raw_path = '%s/%s' % (serviceURL, share_link_thumbnail)
+            else:
+                try:
+                    extract_xmind_image(repo_id, req_path)
+                    share_link_thumbnail = get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path)
+                    raw_path = '%s/%s' % (serviceURL, share_link_thumbnail)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = _(u'Unable to view file')
+                    ret_dict['err'] = error_msg
+
     else:
         ret_dict['err'] = err_msg
 
