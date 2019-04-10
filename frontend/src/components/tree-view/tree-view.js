@@ -119,13 +119,6 @@ class TreeView extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
-  closeRightMenu = () => {
-    this.setState({
-      isRightMenuShow:false,
-    })
-    this.onUnFreezedItem();
-  }
-
   onMenuItemClick = (operation, node) => {
     this.props.onMenuItemClick(operation, node);
     hideMenu();

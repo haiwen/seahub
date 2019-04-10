@@ -37,7 +37,7 @@ class GlobalEventListener {
 
 	unregister = (id) => {
 		if (id && this.callbacks[id]) {
-			delete this.callbacks[id];
+		delete this.callbacks[id];
 		}
 	}
 }

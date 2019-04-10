@@ -39,11 +39,11 @@ class ContextMenu extends React.Component {
         const { top, left } = this.props.rtl ? this.getRTLMenuPosition(x, y) : this.getMenuPosition(x, y);
 
         wrapper(() => {
-            if (!this.menu) return;
-            this.menu.style.top = `${top}px`;
-            this.menu.style.left = `${left}px`;
-            this.menu.style.opacity = 1;
-            this.menu.style.pointerEvents = 'auto';
+          if (!this.menu) return;
+          this.menu.style.top = `${top}px`;
+          this.menu.style.left = `${left}px`;
+          this.menu.style.opacity = 1;
+          this.menu.style.pointerEvents = 'auto';
         });
       });
     } else {
