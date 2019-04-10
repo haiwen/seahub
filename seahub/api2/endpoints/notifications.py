@@ -135,7 +135,8 @@ class NotificationView(APIView):
         # resource check
         try:
             notice = UserNotification.objects.get(id=notice_id)
-        except UserNotification.DoesNotExist:
+        except UserNotification.DoesNotExist as e:
+            logger(e)
             error_msg = 'Notification %s not found.' % notice_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -151,7 +152,6 @@ class NotificationView(APIView):
             notice.seen = True
             notice.save()
 
-        username = request.user.username
         cache_key = get_cache_key_of_unseen_notifications(username)
         cache.delete(cache_key)
 
