@@ -451,8 +451,17 @@ class LibContentView extends React.Component {
         }
         this.moveDirent(direntPath);
       });
-      let message = gettext('Successfully moved %(name)s.');
-      message = message.replace('%(name)s', dirNames);
+      let message = '';
+      let dirNamesLength = dirNames.length;
+      if (dirNamesLength === 1) {
+        message = gettext('Successfully moved %(name)s.');
+      } else if (dirNamesLength === 2) {
+        message = gettext('Successfully moved %(name)s and 1 other item.');
+      } else {
+        message = gettext('Successfully moved %(name)s and %(amount)s other items.');
+        message = message.replace('%(amount)s', (dirNamesLength - 1));
+      }
+      message = message.replace('%(name)s', dirNames[0]);
       toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to move %(name)s');
@@ -475,8 +484,17 @@ class LibContentView extends React.Component {
           this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
         });
       }
-      let message = gettext('Successfully copied %(name)s.');
-      message = message.replace('%(name)s', dirNames);
+      let message = '';
+      let dirNamesLength = dirNames.length;
+      if (dirNamesLength === 1) {
+        message = gettext('Successfully copied %(name)s.');
+      } else if (dirNamesLength === 2) {
+        message = gettext('Successfully copied %(name)s and 1 other item.');
+      } else {
+        message = gettext('Successfully copied %(name)s and %(amount)s other items.');
+        message = message.replace('%(amount)s', (dirNamesLength - 1));
+      }
+      message = message.replace('%(name)s', dirNames[0]);
       toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to copy %(name)s');
