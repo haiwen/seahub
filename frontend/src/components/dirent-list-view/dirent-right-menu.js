@@ -59,15 +59,15 @@ class DirentRightMenu extends React.Component {
       let subscriptList = showShare ? ['Share', 'Download', 'Delete', 'Divider'] : ['Download', 'Delete', 'Divider'];
       let menuList = [];
       if (can_set_folder_perm) {
-        menuList = [...subscriptList, 'Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Details', 'Divider', 'Open via Client'];
+        menuList = [...subscriptList, 'Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Divider', 'Open via Client'];
       } else {
-        menuList = [...subscriptList, 'Rename', 'Move', 'Copy', 'Divider', 'Details', 'Divider', 'Open via Client'];
+        menuList = [...subscriptList, 'Rename', 'Move', 'Copy', 'Divider', 'Open via Client'];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
-      let menuList = showShare ? ['Share', 'Download','Delete', 'Divider', 'Copy', 'Details'] : ['Download', 'Delete', 'Divider', 'Details'];
+      let menuList = showShare ? ['Share', 'Download','Delete', 'Divider', 'Copy'] : ['Download', 'Delete'];
       return menuList;
     }
 
@@ -96,7 +96,6 @@ class DirentRightMenu extends React.Component {
       if (fileAuditEnabled) {
         menuList.push('Access Log');
       }
-      menuList.push('Details');
       menuList.push('Divider');
       menuList.push('Open via Client');
       return menuList;
@@ -111,7 +110,6 @@ class DirentRightMenu extends React.Component {
         menuList.push('Comment');
       }
       menuList.push('History');
-      menuList.push('Details');
       return menuList;
     }
   }
@@ -164,9 +162,6 @@ class DirentRightMenu extends React.Component {
         break;
       case 'Delete':
         translateResult = gettext('Delete');
-        break;
-      case 'Details':
-        translateResult = gettext('Details');
         break;
       case 'Unlock':
         translateResult = gettext('Unlock');

@@ -42,15 +42,15 @@ class DirentMenu extends React.Component {
     if (type === 'dir' && permission === 'rw') {
       let menuList = [];
       if (can_set_folder_perm) {
-        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Details', 'Divider', 'Open via Client'];
+        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Divider', 'Open via Client'];
       } else {
-        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Details', 'Divider', 'Open via Client'];
+        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Open via Client'];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
-      let menuList = currentRepoInfo.encrypted ? ['Copy', 'Details'] : ['Details'];
+      let menuList = currentRepoInfo.encrypted ? ['Copy'] : [];
       return menuList;
     }
 
@@ -78,7 +78,6 @@ class DirentMenu extends React.Component {
       if (fileAuditEnabled) {
         menuList.push('Access Log');
       }
-      menuList.push('Details');
       menuList.push('Divider');
       menuList.push('Open via Client');
       return menuList;
@@ -93,7 +92,6 @@ class DirentMenu extends React.Component {
         menuList.push('Comment');
       }
       menuList.push('History');
-      menuList.push('Details');
       return menuList;
     }
   }
@@ -112,9 +110,6 @@ class DirentMenu extends React.Component {
         break;
       case 'Permission':
         translateResult = gettext('Permission');
-        break;
-      case 'Details':
-        translateResult = gettext('Details');
         break;
       case 'Unlock':
         translateResult = gettext('Unlock');

@@ -61,7 +61,6 @@ class MylibRepoMenu extends React.Component {
     if (folderPermEnabled) {
       operations.push('Folder Permission');
     }
-    operations.push('Details');
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label current state');
     }
@@ -94,9 +93,6 @@ class MylibRepoMenu extends React.Component {
         break;
       case 'Folder Permission':
         translateResult = gettext('Folder Permission');
-        break;
-      case 'Details':
-        translateResult = gettext('Details');
         break;
       case 'Label current state':
         translateResult = gettext('Label current state');
