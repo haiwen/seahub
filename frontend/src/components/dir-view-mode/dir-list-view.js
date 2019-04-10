@@ -26,6 +26,7 @@ const propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
@@ -37,7 +38,6 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
-  onAddFolder: PropTypes.func,
 };
 
 class DirListView extends React.Component {
@@ -82,7 +82,7 @@ class DirListView extends React.Component {
 
   onItemMouseDown = (event) => {
     event.stopPropagation();
-    if (event.button ===2) {
+    if (event.button === 2) {
       return;
     }
   }
@@ -172,8 +172,6 @@ class DirListView extends React.Component {
             updateDirent={this.props.updateDirent}
             isAllItemSelected={this.props.isAllItemSelected}
             onAllItemSelected={this.props.onAllItemSelected}
-            switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
-            appMenuType={this.props.appMenuType}
           />
         </div>
         <Fragment>

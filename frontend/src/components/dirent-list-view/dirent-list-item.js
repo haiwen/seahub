@@ -409,7 +409,7 @@ class DirentListItem extends React.Component {
 
   onItemMouseDown = (event) => {
     event.stopPropagation();
-    if (event.button ===2) {
+    if (event.button === 2) {
       return;
     }
   }
@@ -445,6 +445,8 @@ class DirentListItem extends React.Component {
     };
 
     showMenu(showMenuConfig);
+
+    this.setState({isOperationShow: false});
   }
 
   getDirentItemMenuList = (isContextmenu) => {

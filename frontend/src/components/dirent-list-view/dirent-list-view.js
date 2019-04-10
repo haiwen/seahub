@@ -10,6 +10,8 @@ import ImageDialog from '../../components/dialog/image-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu } from '../context-menu/actions';
+import ContextMenu from '../context-menu/context-menu';
+import DirentListItem from './dirent-list-item';
 
 import '../../css/tip-for-new-md.css';
 
@@ -34,8 +36,6 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  switchAnotherMenuToShow: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirentListView extends React.Component {
@@ -61,13 +61,15 @@ class DirentListView extends React.Component {
     this.currentItemRef = null;
   }
 
-  componentDidUpdate() {
-    let thead = document.querySelector('thead');
-    if (thead) {
-      thead.addEventListener('contextmenu', (e) => {
-        e.stopPropagation();
-      });
+  onThreadMouseDown = (event) => {
+    event.stopPropagation();
+    if (event.button === 2) {
+      return;
     }
+  }
+
+  onThreadContextMenu = (event) => {
+    event.stopPropagation();
   }
 
   onFreezedItem = () => {
@@ -277,7 +279,7 @@ class DirentListView extends React.Component {
     return (
       <Fragment>
         <table>
-          <thead>
+          <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>
               <th width="3%" className="pl10">
                 <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
@@ -321,9 +323,6 @@ class DirentListView extends React.Component {
                     onUnfreezedItem={this.onUnfreezedItem}
                     onDirentClick={this.props.onDirentClick}
                     showImagePopup={this.showImagePopup}
-                    switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
-                    appMenuType={this.props.appMenuType}
-                    itemIndex={index}
                   />
                 );
               })

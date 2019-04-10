@@ -30,8 +30,6 @@ const propTypes = {
   navRate: PropTypes.number,
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  switchAnotherMenuToShow: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirColumnNav extends React.Component {
@@ -270,8 +268,6 @@ class DirColumnNav extends React.Component {
               onUnFreezedItem={this.onUnFreezedItem}
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
-              switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
-              appMenuType={this.props.appMenuType}
             />)
           }
         </div>
