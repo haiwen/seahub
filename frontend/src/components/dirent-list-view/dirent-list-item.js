@@ -72,7 +72,7 @@ class DirentListItem extends React.Component {
       });
     }
   }
- 
+
   //UI Interactive
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {

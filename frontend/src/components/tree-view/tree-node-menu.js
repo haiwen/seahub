@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import listener from '../context-menu/globalEventListener';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
@@ -23,6 +24,24 @@ class TreeNodeMenu extends React.Component {
   componentDidMount() {
     let menuList = this.caculateMenuList();
     this.setState({menuList: menuList});
+    this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
+  }
+
+  componentWillUnmount () {
+    if (this.listenerId) {
+      listener.unregister(this.listenerId);
+    }
+  }
+
+  onShowMenu = () => {
+    // nothing todo
+  }
+
+  onHideMenu = () => {
+    if (this.state.isItemMenuShow) {
+      this.setState({isItemMenuShow: false});
+      this.props.onUnFreezedItem();
+    }
   }
 
   caculateMenuList() {

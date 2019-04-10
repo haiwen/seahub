@@ -189,6 +189,14 @@ class TreeView extends React.Component {
     return menuList;
   }
 
+  onShowMenu = () => {
+    this.onFreezedItem();
+  }
+
+  onHideMenu = () => {
+    this.onUnFreezedItem();
+  }
+
   render() {
     return (
       <div 
@@ -222,6 +230,8 @@ class TreeView extends React.Component {
         <ContextMenu 
           id={'tree-node-contextmenu'}
           onMenuItemClick={this.onMenuItemClick}
+          onHideMenu={this.onHideMenu}
+          onShowMenu={this.onShowMenu}
         />
       </div>
     );

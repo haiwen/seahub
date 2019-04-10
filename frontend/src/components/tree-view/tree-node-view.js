@@ -35,6 +35,15 @@ class TreeNodeView extends React.Component {
       isNodeDropShow: false,
     };
   }
+
+  componentWillUnmount(nextProps) {
+    if (!nextProps.isItemFreezed) {
+      this.setState({
+        isShowOperationMenu: false,
+        isHighlight: false,
+      });
+    }
+  }
   
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
