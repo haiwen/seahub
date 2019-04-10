@@ -204,9 +204,7 @@ def get_wopi_dict(request_user, repo_id, file_path,
     uid = uuid.uuid4()
     access_token = uid.hex
     key = generate_access_token_cache_key(access_token)
-    if not cache.set(key, user_repo_path_info, WOPI_ACCESS_TOKEN_EXPIRATION):
-        logger.error('Set wopi cache failed, key: %s' % key)
-        return None
+    cache.set(key, user_repo_path_info, WOPI_ACCESS_TOKEN_EXPIRATION)
 
     # access_token_ttl property tells office web app
     # when access token expires
