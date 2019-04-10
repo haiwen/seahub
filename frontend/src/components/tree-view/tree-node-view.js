@@ -36,7 +36,7 @@ class TreeNodeView extends React.Component {
     };
   }
 
-  componentWillUnmount(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (!nextProps.isItemFreezed) {
       this.setState({
         isShowOperationMenu: false,
