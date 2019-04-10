@@ -129,22 +129,20 @@ class NotificationView(APIView):
             int(notice_id)
         except Exception as e:
             error_msg = 'notice_id invalid.'
-            logger(e)
+            logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         # resource check
         try:
             notice = UserNotification.objects.get(id=notice_id)
         except UserNotification.DoesNotExist as e:
-            logger(e)
+            logger.error(e)
             error_msg = 'Notification %s not found.' % notice_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
-        if notice.to_user == username:
-            pass
-        else:
+        if notice.to_user != username:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
