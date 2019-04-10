@@ -1347,7 +1347,6 @@ class LibContentView extends React.Component {
             listRelatedFiles={this.listRelatedFiles}
             unSelectDirent={this.unSelectDirent}
             onFilesTagChanged={this.onFileTagChanged}
-            isDirentDetailShow={this.state.isDirentDetailShow}
           />
         </div>
         <div className="main-panel-center flex-row">

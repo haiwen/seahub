@@ -49,7 +49,6 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onFilesTagChanged: PropTypes.func.isRequired, // for mutiple select toolbar
   updateDirent: PropTypes.func.isRequired,
-  isDirentDetailShow: PropTypes.bool.isRequired,
 };
 
 class LibContentToolbar extends React.Component {
@@ -75,11 +74,7 @@ class LibContentToolbar extends React.Component {
               onFileTagChanged={this.props.onFileTagChanged}
               onRelatedFileChange={this.props.onRelatedFileChange}
             />
-            <ViewModeToolbar
-              currentMode={this.props.currentMode}
-              switchViewMode={this.props.switchViewMode}
-              isDirentDetailShow={this.props.isDirentDetailShow}
-            />
+            <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
           </div>
           <CommonToolbar repoID={this.props.repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
         </Fragment>
@@ -127,11 +122,7 @@ class LibContentToolbar extends React.Component {
               />
             }
           </div>
-          <ViewModeToolbar
-            currentMode={this.props.currentMode}
-            switchViewMode={this.props.switchViewMode}
-            isDirentDetailShow={this.props.isDirentDetailShow}
-          />
+          <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
         </div>
         <CommonToolbar repoID={this.props.repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
       </Fragment>

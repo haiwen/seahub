@@ -5,7 +5,6 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
-  isDirentDetailShow: PropTypes.bool.isRequired,
 };
 
 class ViewModeToolbar extends React.Component {
