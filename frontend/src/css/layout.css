@@ -52,6 +52,7 @@
   flex-shrink: 0;
   background: #f4f4f7;
   border-bottom: 1px solid #e8e8e8;
+  z-index: 100;
 }
 
 @media (max-width: 767px) {
@@ -140,8 +141,30 @@
 }
 
 .cur-view-detail {
-  flex: 0 0 20rem;
-  display: flex;
+  display: block;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  width: 300px;
+  height: calc(100% - 50px);
+  box-shadow: -1px 0 3px 0 #ccc;
+  top: 49px;
+  animation: move .5s ease-in-out 1;
+}
+
+@keyframes move {
+  from {
+    right: -500px;
+    opacity: 0.5;
+  }
+  to {
+    right: 0px;
+    opacity: 1;
+  }
+}
+
+.cur-view-detail .detail-container {
+  height: 100%;
 }
 
 /* for reach/router */

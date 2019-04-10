@@ -83,6 +83,10 @@ class LibContentView extends React.Component {
     });
   }
 
+  toggleDirentDetail = () => {
+    this.setState({ isDirentDetailShow: !this.state.isDirentDetailShow });
+  }
+
   closeDirentDetail = () => {
     this.setState({ isDirentDetailShow: false });
   }
@@ -536,6 +540,10 @@ class LibContentView extends React.Component {
 
   switchViewMode = (mode) => {
     if (mode === this.state.currentMode) {
+      return;
+    }
+    if (mode === 'detail') {
+      this.toggleDirentDetail();
       return;
     }
     cookie.save('seafile-view-mode', mode);
