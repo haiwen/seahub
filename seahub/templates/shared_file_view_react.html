@@ -50,6 +50,7 @@
       commitID: '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}',
 
       // for 'view file in shared dir'
+      {% if zipped %}
       zipped: (function() {
         var list = [];
         {% for name, path in zipped %}
@@ -60,6 +61,7 @@
         {% endfor %}
         return list;
       })(),
+      {% endif %}
       prevImgPath: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}''{% endif %},
       nextImgPath: {% if img_next %}'{{ img_next|escapejs }}'{% else %}''{% endif %}
     }
