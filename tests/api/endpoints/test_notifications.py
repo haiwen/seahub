@@ -63,9 +63,10 @@ class NotificationTest(BaseTestCase):
     def test_argument_check_notice_id_invalid(self):
         self.login_as(self.user)
         data = 'notice_id=%s' % 'a'
+
         resp = self.client.put(self.endpoint, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
-        
+
     def test_resource_check_notification_not_found(self):
         self.login_as(self.user)
         notice1 = UserNotification.objects.add_user_message(self.username, 'test1')
@@ -74,11 +75,11 @@ class NotificationTest(BaseTestCase):
 
         resp = self.client.put(self.endpoint, data, 'application/x-www-form-urlencoded')
         self.assertEqual(404, resp.status_code)
-    
+
     def test_permission_check_permission_denied(self):
         self.login_as(self.user)
         new_user = UserManager().create_user(email='new@new.com', password='root')
-        notice_to_new_user = UserNotification.objects.add_user_message(new_user.name, 'test1')
+        notice_to_new_user = UserNotification.objects.add_user_message(new_user.name, 'test for new user')
         data = 'notice_id=%s' % notice_to_new_user.id
 
         resp = self.client.put(self.endpoint, data, 'application/x-www-form-urlencoded')

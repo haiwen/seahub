@@ -121,7 +121,7 @@ class NotificationView(APIView):
         Permission checking:
         1. login user.
         """
-        
+
         notice_id = request.data.get('notice_id')
 
         # argument check
@@ -131,7 +131,7 @@ class NotificationView(APIView):
             error_msg = 'notice_id invalid.'
             logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         # resource check
         try:
             notice = UserNotification.objects.get(id=notice_id)
