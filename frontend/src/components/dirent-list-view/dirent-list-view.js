@@ -1,15 +1,22 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, thumbnailSizeForOriginal, username } from '../../utils/constants';
+import { siteRoot, gettext, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import TextTranslation from '../../utils/text-translation';
+import { seafileAPI } from '../../utils/seafile-api';
+import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
-import DirentListItem from './dirent-list-item';
-import ModalPortal from '../modal-portal';
-import CreateFile from '../../components/dialog/create-file-dialog';
-import ImageDialog from '../../components/dialog/image-dialog';
-
-import '../../css/tip-for-new-md.css';
 import toaster from '../toast';
+import ModalPortal from '../modal-portal';
+import CreateFile from '../dialog/create-file-dialog';
+import CreateFolder from '../dialog/create-folder-dialog';
+import ImageDialog from '../dialog/image-dialog';
+import ZipDownloadDialog from '../dialog/zip-download-dialog';
+import MoveDirentDialog from '../dialog/move-dirent-dialog';
+import CopyDirentDialog from '../dialog/copy-dirent-dialog';
+import DirentListItem from './dirent-list-item';
+import ContextMenu from '../context-menu/context-menu';
+import { hideMenu, showMenu } from '../context-menu/actions';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -18,10 +25,12 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
@@ -31,8 +40,10 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  switchAnotherMenuToShow: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
+  selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -41,35 +52,28 @@ class DirentListView extends React.Component {
     super(props);
     this.state = {
       isItemFreezed: false,
-
       isImagePopupOpen: false,
       imageItems: [],
       imageIndex: 0,
-
-      isCreateFileDialogShow: false,
       fileType: '',
+      isCreateFileDialogShow: false,
+      isCreateFolderDialogShow: false,
+      isMoveDialogShow: false,
+      isCopyDialogShow: false,
+      isProgressDialogShow: false,
+      progress: 0,
+      isMutipleOperation: true,
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
     this.isAdmin = props.currentRepoInfo.is_admin;
     this.repoEncrypted = props.currentRepoInfo.encrypted;
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.appMenuType === 'item_op_menu' || nextProps.appMenuType === 'tree_contextmenu') {
-      this.setState({isItemFreezed: false});
-    } else {
-      this.setState({isItemFreezed: true});
-    }
-  }
+    this.clickedDirent = null;
+    this.direntItems = [];
+    this.currentItemRef = null;
 
-  componentDidUpdate() {
-    let thead = document.querySelector('thead');
-    if (thead) {
-      thead.addEventListener('contextmenu', (e) => {
-        e.stopPropagation();
-      });
-    }
+    this.zipToken = null;
   }
 
   onFreezedItem = () => {
@@ -97,23 +101,8 @@ class DirentListView extends React.Component {
     this.onFreezedItem();
   }
 
-  onCreateFileToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: ''
-    });
-  }
-
-  onCreateNewFile = (suffix) => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: suffix
-    });
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
+  onItemDetails = (dirent) => {
+    this.props.onItemDetails(dirent);
   }
 
   sortByName = (e) => {
@@ -190,12 +179,313 @@ class DirentListView extends React.Component {
     });
   }
 
+  onCreateFileToggle = () => {
+    this.setState({isCreateFileDialogShow: !this.state.isCreateFileDialogShow});
+  }
+
+  onCreateFolderToggle = () => {
+    this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
+  }
+
+  onAddFile = (filePath, isDraft) => {
+    this.setState({isCreateFileDialogShow: false});
+    this.props.onAddFile(filePath, isDraft);
+  }
+
+  onAddFolder = (dirPath) => {
+    this.setState({isCreateFolderDialogShow: false});
+    this.props.onAddFolder(dirPath);
+  }
+
   checkDuplicatedName = (newName) => {
     let direntList = this.props.direntList;
     let isDuplicated = direntList.some(object => {
       return object.name === newName;
     });
     return isDuplicated;
+  }
+
+  onMoveToggle = () => {
+    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
+  }
+
+  onCopyToggle = () => {
+    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+  }
+
+  onItemsDownload = () => {
+    let { path, repoID, selectedDirentList } = this.props;
+    if (selectedDirentList.length) {
+      if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
+        let direntPath = Utils.joinPath(path, selectedDirentList[0].name);
+        let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+        location.href= url;
+        return;
+      }
+      let selectedDirentNames = selectedDirentList.map(dirent => {
+        return dirent.name;
+      });
+      this.setState({isProgressDialogShow: true, progress: 0});
+      seafileAPI.zipDownload(repoID, path, selectedDirentNames).then(res => {
+        this.zipToken = res.data['zip_token'];
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      });
+    }
+  }
+
+  addDownloadAnimation = () => {
+    let _this = this;
+    let token = this.zipToken;
+    seafileAPI.queryZipProgress(token).then(res => {
+      let data = res.data;
+      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
+      this.setState({progress: parseInt(progress)});
+
+      if (data['total'] === data['zipped']) {
+        this.setState({
+          progress: 100
+        });
+        clearInterval(this.interval);
+        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
+        setTimeout(function() {
+          _this.setState({isProgressDialogShow: false});
+        }, 500);
+      }
+
+    });
+  }
+
+  onCancelDownload = () => {
+    seafileAPI.cancelZipTask(this.zipToken).then(() => {
+      this.setState({isProgressDialogShow: false});
+    });
+  }
+
+  // common contextmenu handle
+  onMouseDown = (event) => {
+    event.stopPropagation();
+    if (event.button === 2) {
+      return;
+    }
+  }
+
+  handleContextClick = (event, id, menuList, currentObject = null) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let x = event.clientX || (event.touches && event.touches[0].pageX);
+    let y = event.clientY || (event.touches && event.touches[0].pageY);
+
+    if (this.props.posX) {
+        x -= this.props.posX;
+    }
+    if (this.props.posY) {
+        y -= this.props.posY;
+    }
+
+    hideMenu();
+
+    let showMenuConfig = {
+      id: id,
+      position: { x, y },
+      target: event.target,
+      currentObject: currentObject,
+      menuList: menuList,
+    };
+
+    showMenu(showMenuConfig);
+  }
+
+  // table-container contextmenu handle
+  onContainerMouseDown = (event) => {
+    this.onMouseDown(event);
+  }
+
+  onContainerContextMenu = (event) => {
+    if (this.props.selectedDirentList.length === 0) {
+      let id = "dirent-container-menu"
+      let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+      this.handleContextClick(event, id, menuList);
+    } else {
+      if (this.props.selectedDirentList.length === 1) {
+        let dirent = this.props.selectedDirentList[0];
+        let id = 'dirent-item-menu';
+        let menuList = this.getDirentItemMenuList(dirent, true);
+        this.handleContextClick(event, id, menuList, dirent);
+      } else {
+        let id = 'dirents-menu';
+        let menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        this.handleContextClick(event, id, menuList);
+      }
+    }
+  }
+
+  onContainerMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'New Folder':
+        this.onCreateFolderToggle();
+        break;
+      case 'New File':
+        this.onCreateFileToggle();
+        break;
+      default: 
+        break;
+    }
+
+    hideMenu();
+  }
+
+  onDirentsMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'Move':
+        this.onMoveToggle();
+        break;
+      case 'Copy':
+        this.onCopyToggle();
+        break;
+      case 'Download':
+        this.onItemsDownload();
+        break;
+      case 'Delete':
+        this.props.onItemsDelete();
+        break;
+      default: 
+        break;
+    }
+
+    hideMenu();
+  }
+
+  // table-thread contextmenu handle -- Shield event
+  onThreadMouseDown = (event) => {
+    this.onMouseDown(event);
+  }
+
+  onThreadContextMenu = (event) => {
+    event.stopPropagation();
+  }
+
+  // table-dirent-item contextmenu handle
+  onItemMouseDown = (event) => {
+    this.onMouseDown(event);
+  }
+
+  onItemContextMenu = (event, dirent) => {
+    if (this.props.selectedDirentList.length === 0) {
+      let id = 'dirent-item-menu';
+      let menuList = this.getDirentItemMenuList(dirent, true);
+      this.handleContextClick(event, id, menuList, dirent);
+    }
+  }
+
+  setDirentItemRef = (index) => item => {
+    this.direntItems[index] = item;
+  }
+
+  onMenuItemClick = (operation, currentObject, event) => {
+    let index = this.getDirentIndex(currentObject);
+    this.direntItems[index].onMenuItemClick(operation, event);
+
+    hideMenu();
+  }
+
+  onShowMenu = (e) => {
+    this.onFreezedItem();
+  }
+
+  onHideMenu = (e) => {
+    if (this.props.selectedDirentList.length === 0) {
+      this.onUnfreezedItem();
+    }
+  }
+
+  // contextmenu utils
+  getDirentIndex = (dirent) => {
+    let direntList = this.props.direntList;
+    let index = 0;
+    for (let i = 0; i < direntList.length; i++) {
+      if (direntList[i].name === dirent.name) {
+        index = i;
+        break;
+      }
+    } 
+    return index;
+  }
+
+  getDirentItemMenuList = (dirent, isContextmenu) => {
+
+    let isRepoOwner = this.isRepoOwner;
+    let currentRepoInfo = this.props.currentRepoInfo;
+    let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
+
+    let type = dirent.type;
+    let permission = dirent.permission;
+
+    let menuList = [];
+    let contextmenuList = [];
+    if (isContextmenu) {
+      let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
+      contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
+    }
+
+    let { RENAME, MOVE, COPY, PERMISSION, DETAILS, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
+    if (type === 'dir' && permission === 'rw') {
+      if (can_set_folder_perm) {
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, DETAILS, 'Divider', OPEN_VIA_CLIENT];
+      } else {
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', DETAILS, 'Divider', OPEN_VIA_CLIENT];
+      }
+      return menuList;
+    }
+
+    if (type === 'dir' && permission === 'r') {
+      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY, DETAILS] : [DETAILS];
+      return menuList;
+    }
+
+    if (type === 'file' && permission === 'rw') {
+      menuList = [...contextmenuList];
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        menuList.push(RENAME);
+        menuList.push(MOVE);
+      }
+      menuList.push(COPY);
+      if (isPro) {
+        if (dirent.is_locked) {
+          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
+            menuList.push(UNLOCK);
+          }
+        } else {
+          menuList.push(LOCK);
+        }
+      }
+      menuList.push('Divider');
+      if (enableFileComment) {
+        menuList.push(COMMENT);
+      }
+      menuList.push(HISTORY);
+      if (fileAuditEnabled) {
+        menuList.push(ACCESS_LOG);
+      }
+      menuList.push(DETAILS);
+      menuList.push('Divider');
+      menuList.push(OPEN_VIA_CLIENT);
+      return menuList;
+    }
+
+    if (type === 'file' && permission === 'r') {
+      menuList = [...contextmenuList];
+      if (!currentRepoInfo.encrypted) {
+        menuList.push(COPY);
+      }
+      if (enableFileComment) {
+        menuList.push(COMMENT);
+      }
+      menuList.push(HISTORY);
+      menuList.push(DETAILS);
+      return menuList;
+    }
   }
 
   render() {
@@ -205,51 +495,15 @@ class DirentListView extends React.Component {
       return (<Loading />);
     }
 
-    if (this.props.path == '/' && !direntList.length) {
-      return (
-        <Fragment>
-          <div className="tip-for-new-file">
-            <p className="text-center">{gettext('This folder has no content at this time.')}</p>
-            <p className="text-center">{gettext('You can create files quickly')}{' +'}</p>
-            <div className="big-new-file-button-group">
-              <div className="d-flex justify-content-center">
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>
-                  {'+ Markdown'}</button>
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.ppt')}>
-                  {'+ PPT'}</button>
-              </div>
-              <div className="d-flex justify-content-center">
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.doc')}>
-                  {'+ Word'}</button>
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xls')}>
-                  {'+ Excel'}</button>
-              </div>
-            </div>
-          </div>
-          {this.state.isCreateFileDialogShow && (
-            <ModalPortal>
-              <CreateFile
-                parentPath={this.props.path}
-                fileType={this.state.fileType}
-                onAddFile={this.onAddFile}
-                checkDuplicatedName={this.checkDuplicatedName}
-                addFileCancel={this.onCreateFileToggle}
-              />
-            </ModalPortal>
-          )}
-        </Fragment>
-      );
-    }
-
     // sort
     const sortByName = sortBy == 'name';
     const sortByTime = sortBy == 'time';
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     return (
-      <Fragment>
+      <div className="table-container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu}>
         <table>
-          <thead>
+          <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>
               <th width="3%" className="pl10">
                 <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
@@ -264,56 +518,116 @@ class DirentListView extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {
-              direntList.length !== 0 && direntList.map((dirent, index) => {
-                return (
-                  <DirentListItem
-                    key={index}
-                    dirent={dirent}
-                    path={this.props.path}
-                    repoID={this.props.repoID}
-                    currentRepoInfo={this.props.currentRepoInfo}
-                    isAdmin={this.isAdmin}
-                    isRepoOwner={this.isRepoOwner}
-                    repoEncrypted={this.repoEncrypted}
-                    enableDirPrivateShare={this.props.enableDirPrivateShare}
-                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                    direntList={this.props.direntList}
-                    onItemClick={this.props.onItemClick}
-                    onItemRenameToggle={this.onItemRenameToggle}
-                    onItemSelected={this.props.onItemSelected}
-                    onItemDelete={this.props.onItemDelete}
-                    onItemRename={this.onItemRename}
-                    onItemMove={this.props.onItemMove}
-                    onItemCopy={this.props.onItemCopy}
-                    updateDirent={this.props.updateDirent}
-                    isItemFreezed={this.state.isItemFreezed}
-                    onFreezedItem={this.onFreezedItem}
-                    onUnfreezedItem={this.onUnfreezedItem}
-                    onDirentClick={this.props.onDirentClick}
-                    showImagePopup={this.showImagePopup}
-                    switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
-                    appMenuType={this.props.appMenuType}
-                    itemIndex={index}
-                  />
-                );
-              })
-            }
+            {direntList.map((dirent, index) => {
+              return (
+                <DirentListItem
+                  ref={this.setDirentItemRef(index)}
+                  key={index}
+                  dirent={dirent}
+                  path={this.props.path}
+                  repoID={this.props.repoID}
+                  currentRepoInfo={this.props.currentRepoInfo}
+                  isAdmin={this.isAdmin}
+                  isRepoOwner={this.isRepoOwner}
+                  repoEncrypted={this.repoEncrypted}
+                  enableDirPrivateShare={this.props.enableDirPrivateShare}
+                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                  showShareBtn={this.props.showShareBtn}
+                  onItemClick={this.props.onItemClick}
+                  onItemRenameToggle={this.onItemRenameToggle}
+                  onItemSelected={this.props.onItemSelected}
+                  onItemDelete={this.props.onItemDelete}
+                  onItemRename={this.onItemRename}
+                  onItemMove={this.props.onItemMove}
+                  onItemCopy={this.props.onItemCopy}
+                  updateDirent={this.props.updateDirent}
+                  isItemFreezed={this.state.isItemFreezed}
+                  onFreezedItem={this.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
+                  onDirentClick={this.props.onDirentClick}
+                  onItemDetails={this.onItemDetails}
+                  showImagePopup={this.showImagePopup}
+                  onItemMouseDown={this.onItemMouseDown}
+                  onItemContextMenu={this.onItemContextMenu}
+                />
+              );
+            })}
           </tbody>
         </table>
-
-        {this.state.isImagePopupOpen && (
-          <ModalPortal>
-            <ImageDialog
-              imageItems={this.state.imageItems}
-              imageIndex={this.state.imageIndex}
-              closeImagePopup={this.closeImagePopup}
-              moveToPrevImage={this.moveToPrevImage}
-              moveToNextImage={this.moveToNextImage}
+        <Fragment>
+          <ContextMenu 
+            id={'dirent-container-menu'}
+            onMenuItemClick={this.onContainerMenuItemClick}
+          />
+          <ContextMenu 
+            id={'dirent-item-menu'}
+            onMenuItemClick={this.onMenuItemClick}
+            onShowMenu={this.onShowMenu}
+            onHideMenu={this.onHideMenu}
+          />
+          <ContextMenu
+            id={'dirents-menu'}
+            onMenuItemClick={this.onDirentsMenuItemClick}
+          />
+          {this.state.isImagePopupOpen && (
+            <ModalPortal>
+              <ImageDialog
+                imageItems={this.state.imageItems}
+                imageIndex={this.state.imageIndex}
+                closeImagePopup={this.closeImagePopup}
+                moveToPrevImage={this.moveToPrevImage}
+                moveToNextImage={this.moveToNextImage}
+              />
+            </ModalPortal>
+          )}
+          {this.state.isCreateFolderDialogShow && (
+            <ModalPortal>
+              <CreateFolder
+                parentPath={this.props.path}
+                onAddFolder={this.onAddFolder}
+                checkDuplicatedName={this.checkDuplicatedName}
+                addFolderCancel={this.onCreateFolderToggle}
+              />
+            </ModalPortal>
+          )} 
+          {this.state.isCreateFileDialogShow && (
+            <ModalPortal>
+              <CreateFile
+                parentPath={this.props.path}
+                fileType={this.state.fileType}
+                onAddFile={this.onAddFile}
+                checkDuplicatedName={this.checkDuplicatedName}
+                addFileCancel={this.onCreateFileToggle}
+              />
+            </ModalPortal>
+          )}
+          {this.state.isMoveDialogShow && 
+            <MoveDirentDialog 
+              path={this.props.path}
+              repoID={this.props.repoID}
+              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              isMutipleOperation={this.state.isMutipleOperation}
+              selectedDirentList={this.props.selectedDirentList}
+              onItemsMove={this.props.onItemsMove}
+              onCancelMove={this.onMoveToggle}
             />
-          </ModalPortal>
-        )}
-      </Fragment>
+          }
+          {this.state.isCopyDialogShow &&
+            <CopyDirentDialog
+              path={this.props.path}
+              repoID={this.props.repoID}
+              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              selectedDirentList={this.props.selectedDirentList}
+              isMutipleOperation={this.state.isMutipleOperation}
+              onItemsCopy={this.props.onItemsCopy}
+              onCancelCopy={this.onCopyToggle}
+            />
+          }
+          {this.state.isProgressDialogShow &&
+            <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload} />
+          }
+        </Fragment>
+      </div>
     );
   }
 }

@@ -22,6 +22,7 @@ const propTypes = {
   onNodeDragMove: PropTypes.func,
   onNodeDrop: PropTypes.func,
   appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
+  handleContextClick: PropTypes.func.isRequired,
 };
 
 class TreeNodeView extends React.Component {
@@ -35,12 +36,12 @@ class TreeNodeView extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProp) {
-    if (nextProp.appMenuType === 'list_view_contextmenu' && nextProp.appMenuType === 'item_contextmenu') {
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.isItemFreezed) {
       this.setState({
         isShowOperationMenu: false,
         isHighlight: false,
-      })
+      });
     }
   }
   
@@ -51,7 +52,6 @@ class TreeNodeView extends React.Component {
         isHighlight: true,
       });
     }
-    this.props.onNodeChanged(this.props.node)
   }
 
   onMouseLeave = () => {
@@ -61,7 +61,6 @@ class TreeNodeView extends React.Component {
         isHighlight: false,
       });
     }
-    this.props.onNodeChanged(null)
   }
 
   onNodeClick = () => {
@@ -110,6 +109,22 @@ class TreeNodeView extends React.Component {
 
   onMenuItemClick = (operation, node) => {
     this.props.onMenuItemClick(operation, node);
+  }
+
+  onItemMouseDown = (event) => {
+    event.stopPropagation();
+    if (event.button === 2) {
+      return;
+    }
+  }
+
+  onItemContextMenu = (event) => {
+    this.handleContextClick(event);
+  }
+
+  handleContextClick = (event) => {
+    this.props.handleContextClick(event, this.props.node);
+    this.setState({isShowOperationMenu: false});
   }
 
   getNodeTypeAndIcon = () => {
@@ -175,6 +190,7 @@ class TreeNodeView extends React.Component {
               onNodeDragEnter={this.props.onNodeDragEnter}
               onNodeDragLeave={this.props.onNodeDragLeave}
               appMenuType={this.props.appMenuType}
+              handleContextClick={this.props.handleContextClick}
             />
           );
         })}
@@ -191,9 +207,15 @@ class TreeNodeView extends React.Component {
     }
     return (
       <div className="tree-node">
-        <div type={type} title={node.object.name}
-          onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
-          className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''} ${this.state.isNodeDropShow ? 'tree-node-drop' : ''}`}>
+        <div 
+          type={type} 
+          className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''} ${this.state.isNodeDropShow ? 'tree-node-drop' : ''}`}
+          title={node.object.name}
+          onMouseEnter={this.onMouseEnter} 
+          onMouseLeave={this.onMouseLeave}
+          onMouseDown={this.onItemMouseDown}
+          onContextMenu={this.onItemContextMenu}
+        >
           <div className="tree-node-text" draggable="true" onDragStart={this.onNodeDragStart} onClick={this.onNodeClick} onDragEnter={this.onNodeDragEnter} onDragLeave={this.onNodeDragLeave} onDragOver={this.onNodeDragMove} onDrop={this.onNodeDrop}>{node.object.name}</div>
           <div className="left-icon">
             {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (

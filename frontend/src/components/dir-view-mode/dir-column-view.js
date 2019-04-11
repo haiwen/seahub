@@ -48,9 +48,11 @@ const propTypes = {
   // list
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
@@ -63,8 +65,10 @@ const propTypes = {
   onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
-  switchAnotherMenuToShow: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
+  selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
 };
 
 class DirColumnView extends React.Component {
@@ -167,8 +171,7 @@ class DirColumnView extends React.Component {
           currentRepoInfo={this.props.currentRepoInfo}
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
-          switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
-          appMenuType={this.props.appMenuType}
+          selectedDirentList={this.props.selectedDirentList}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
@@ -202,9 +205,11 @@ class DirColumnView extends React.Component {
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               isDirentListLoading={this.props.isDirentListLoading}
               direntList={this.props.direntList}
+              showShareBtn={this.props.showShareBtn}
               sortBy={this.props.sortBy}
               sortOrder={this.props.sortOrder}
               sortItems={this.props.sortItems}
+              onAddFolder={this.props.onAddFolder}
               onAddFile={this.props.onAddFile}
               onItemClick={this.props.onItemClick}
               onItemSelected={this.props.onItemSelected}
@@ -217,9 +222,10 @@ class DirColumnView extends React.Component {
               updateDirent={this.props.updateDirent}
               isAllItemSelected={this.props.isAllItemSelected}
               onAllItemSelected={this.props.onAllItemSelected}
-              switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
-              appMenuType={this.props.appMenuType}
-              onAddFolder={this.props.onAddFolder}
+              selectedDirentList={this.props.selectedDirentList}
+              onItemsMove={this.props.onItemsMove}
+              onItemsCopy={this.props.onItemsCopy}
+              onItemsDelete={this.props.onItemsDelete}
             />
           )}
         </div>

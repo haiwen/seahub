@@ -55,6 +55,7 @@ const propTypes = {
   // list
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
@@ -73,6 +74,10 @@ const propTypes = {
   onAllDirentSelected: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
   selectedDirent: PropTypes.object,
+  selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
   closeDirentDetail: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
@@ -83,8 +88,7 @@ class LibContentContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentDirent: {},
-      appMenuType: 'item_op_menu',
+      currentDirent: null,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
@@ -116,25 +120,6 @@ class LibContentContainer extends React.Component {
 
   onItemDetailsClose = () => {
     this.props.closeDirentDetail();
-  }
-
-  switchAnotherMenuToShow = (type) => {
-    switch(type) {
-      case 'list_view_contextmenu':
-        this.setState({appMenuType: 'list_view_contextmenu'});
-        break;
-      case 'item_contextmenu':
-        this.setState({appMenuType: 'item_contextmenu'});
-        break;
-      case 'tree_contextmenu':
-        this.setState({appMenuType: 'tree_contextmenu'});
-        break;
-      case 'item_op_menu':
-        this.setState({appMenuType: 'item_op_menu'});
-        break;
-      default:
-        break;
-    }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -195,9 +180,11 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}
+                    onAddFolder={this.props.onAddFolder}
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemSelected={this.props.onItemSelected}
@@ -210,9 +197,10 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    appMenuType={this.state.appMenuType}
-                    switchAnotherMenuToShow={this.switchAnotherMenuToShow}
-                    onAddFolder={this.props.onAddFolder}
+                    selectedDirentList={this.props.selectedDirentList}
+                    onItemsMove={this.props.onItemsMove}
+                    onItemsCopy={this.props.onItemsCopy}
+                    onItemsDelete={this.props.onItemsDelete}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -256,9 +244,11 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}
+                    onAddFolder={this.props.onAddFolder}
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemSelected={this.props.onItemSelected}
@@ -271,9 +261,10 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
-                    appMenuType={this.state.appMenuType}
-                    switchAnotherMenuToShow={this.switchAnotherMenuToShow}
-                    onAddFolder={this.props.onAddFolder}
+                    selectedDirentList={this.props.selectedDirentList}
+                    onItemsMove={this.props.onItemsMove}
+                    onItemsCopy={this.props.onItemsCopy}
+                    onItemsDelete={this.props.onItemsDelete}
                   />
                 )}
               </Fragment>

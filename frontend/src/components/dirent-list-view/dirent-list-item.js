@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -13,7 +13,6 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import DirentRightMenu from './dirent-right-menu';
 import toaster from '../toast';
 
 import '../../css/dirent-list-item.css';
@@ -22,6 +21,7 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
@@ -40,8 +40,8 @@ const propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
-  switchAnotherMenuToShow: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
+  onItemMouseDown: PropTypes.func.isRequired,
+  onItemContextMenu: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -60,68 +60,17 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
       isDragTipShow: false,
       isDropTipshow: false,
-      enterItemData: '',
-      enterItemIndex: -1,
-      contextmenuItemData: {},
-      contextmenuItemIndex: -1,
-      isItemContextMenuShow: false,
     };
     this.zipToken = null;
   }
 
-  componentWillReceiveProps(nextProp) {
-    if (nextProp.appMenuType === 'list_view_contextmenu' || nextProp.appMenuType === 'item_contextmenu') {
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.isItemFreezed) {
       this.setState({
         highlight: false,
         isOperationShow: false,
-      })
+      });
     }
-  }
-
-  componentDidUpdate() {
-    this.itemRegisterHandlers();
-  }
-
-  componentWillUnmount() {
-    this.itemUnregisterHandlers();
-  }
- 
-  itemUnregisterHandlers = () => {
-    let itemTbody = document.querySelector('tbody');
-    itemTbody.removeEventListener('contextmenu', this.itemRightContextMenu);
-  }
- 
-  itemRegisterHandlers = () => {
-    let itemTbody = document.querySelector('tbody');
-    if  (itemTbody) {
-     itemTbody.addEventListener('contextmenu', this.itemRightContextMenu);
-    }
-  }
- 
-  itemRightContextMenu = (e) =>{
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.props.switchAnotherMenuToShow('item_contextmenu');
-    this.setState({
-      isItemContextMenuShow: false,
-      itemMousePosition: {clientX: e.clientX, clientY: e.clientY},
-      contextmenuItemData: this.state.enterItemData,
-      contextmenuItemIndex: this.state.enterItemIndex,
-    })
-    setTimeout(() => {
-      this.setState({
-        isItemContextMenuShow: true,
-      })
-    },40)
-  }
- 
-  closeRightMenu = () => {
-    this.setState({
-      isItemContextMenuShow: false,
-    });
-    this.onUnfreezedItem();
-    this.props.switchAnotherMenuToShow('item_op_menu');
   }
 
   //UI Interactive
@@ -132,11 +81,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({
-      isDragTipShow: true,
-      enterItemData: this.props.dirent,
-      enterItemIndex: this.props.itemIndex,
-    });
+    this.setState({isDragTipShow: true});
   }
 
   onMouseOver = () => {
@@ -146,10 +91,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({
-      isDragTipShow: true,
-      enterItemData: this.props.dirent,
-      enterItemIndex: this.props.itemIndex});
+    this.setState({isDragTipShow: true});
   }
 
   onMouseLeave = () => {
@@ -159,14 +101,17 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
-    this.setState({
-      isDragTipShow: false,
-      enterItemData: '',
-      enterItemIndex: -1,
-    });
+    this.setState({isDragTipShow: false});
   }
 
   onUnfreezedItem = () => {
+    let dirent = this.props.dirent;
+    // scenes 1: dirent isSelected --> this have Highest level
+    // scenes 2: dirent contextmenu show
+    // scenes 3: dirent operation menu show
+    if (dirent.isSelected) {
+      return;
+    }
     this.setState({
       highlight: false,
       isOperationShow: false,
@@ -176,6 +121,7 @@ class DirentListItem extends React.Component {
 
   //buiness handler
   onItemSelected = () => {
+    this.props.onFreezedItem();
     this.props.onItemSelected(this.props.dirent);
   }
 
@@ -228,8 +174,17 @@ class DirentListItem extends React.Component {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
 
-  onMenuItemClick = (operation) => {
+  onMenuItemClick = (operation, event) => {
     switch(operation) {
+      case 'Download': 
+        this.onItemDownload(event);
+        break;
+      case 'Share':
+        this.onItemShare(event);
+        break;
+      case 'Delete': 
+        this.onItemDelete(event);
+        break;
       case 'Rename':
         this.onItemRenameToggle();
         break;
@@ -460,6 +415,15 @@ class DirentListItem extends React.Component {
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
   }
 
+  onItemMouseDown = (event) => {
+    this.props.onItemMouseDown(event);
+  }
+
+  onItemContextMenu = (event) => {
+    let dirent = this.props.dirent;
+    this.props.onItemContextMenu(event, dirent);
+  }
+
   render() {
     let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
@@ -478,20 +442,26 @@ class DirentListItem extends React.Component {
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
-    const { repoEncrypted, isRepoOwner, isAdmin } = this.props;
-    let showShare = false;
-    if (!repoEncrypted &&
-      (dirent.permission == 'rw' || dirent.permission == 'r')) {
-      showShare = dirent.type == 'file' ? canGenerateShareLink :
-        (canGenerateShareLink || canGenerateUploadLink || (isRepoOwner || isAdmin));
-    }
-
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
     trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
 
     return (
       <Fragment>
-         <tr className={trClass} draggable="true" onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onClick={this.onDirentClick} onDragStart={this.onItemDragStart} onDragEnter={this.onItemDragEnter} onDragOver={this.onItemDragOver} onDragLeave={this.onItemDragLeave} onDrop={this.onItemDragDrop}>
+        <tr 
+          className={trClass} 
+          draggable="true" 
+          onMouseEnter={this.onMouseEnter} 
+          onMouseOver={this.onMouseOver} 
+          onMouseLeave={this.onMouseLeave} 
+          onClick={this.onDirentClick} 
+          onDragStart={this.onItemDragStart} 
+          onDragEnter={this.onItemDragEnter} 
+          onDragOver={this.onItemDragOver} 
+          onDragLeave={this.onItemDragLeave} 
+          onDrop={this.onItemDragDrop}
+          onMouseDown={this.onItemMouseDown}
+          onContextMenu={this.onItemContextMenu}
+        >
           <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
             <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
           </td>
@@ -539,7 +509,7 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
-                  {showShare &&
+                  {this.props.showShareBtn &&
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>
@@ -555,28 +525,10 @@ class DirentListItem extends React.Component {
                       isRepoOwner={this.props.isRepoOwner}
                       onFreezedItem={this.props.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
-                      appMenuType={this.props.appMenuType}
                     />
                   </li>
                 </ul>
               </div>
-            }
-            {this.state.isItemContextMenuShow && this.state.contextmenuItemIndex === this.props.itemIndex && this.props.appMenuType === 'item_contextmenu' &&
-              <DirentRightMenu
-                dirent={this.state.contextmenuItemData}
-                mousePosition={this.state.itemMousePosition}
-                isRepoOwner={this.props.isRepoOwner}
-                currentRepoInfo={this.props.currentRepoInfo}
-                onMenuItemClick={this.onMenuItemClick}
-                onItemDownload={this.onItemDownload}
-                onItemShare={this.onItemShare}
-                onItemDelete={this.onItemDelete}
-                itemRegisterHandlers={this.itemRegisterHandlers}
-                itemUnregisterHandlers={this.itemUnregisterHandlers}
-                closeRightMenu={this.closeRightMenu}
-                onUnfreezedItem={this.onUnfreezedItem}
-                showShare={showShare}
-              />
             }
           </td>
           <td className="file-size">{dirent.size && dirent.size}</td>
