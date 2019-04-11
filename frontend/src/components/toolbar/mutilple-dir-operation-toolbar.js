@@ -86,7 +86,6 @@ class MutipleDirOperationToolbar extends React.Component {
         clearInterval(this.interval);
         this.setState({isProgressDialogShow: false});
         let errorMessage = error.response.data.error_msg;
-        
         toaster.danger(errorMessage);
       });
     }
