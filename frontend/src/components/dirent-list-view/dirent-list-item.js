@@ -31,7 +31,6 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
-  onItemDetails: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   showImagePopup: PropTypes.func.isRequired,
@@ -242,9 +241,6 @@ class DirentListItem extends React.Component {
       case 'Permission':
         this.onPermissionItem();
         break;
-      case 'Details':
-        this.onDetailsItem();
-        break;
       case 'Unlock':
         this.onUnlockItem();
         break;
@@ -296,10 +292,6 @@ class DirentListItem extends React.Component {
 
   onPermissionItem = () => {
 
-  }
-
-  onDetailsItem = () => {
-    this.props.onItemDetails(this.props.dirent);
   }
 
   onLockItem = () => {

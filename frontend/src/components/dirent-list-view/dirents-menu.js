@@ -31,7 +31,7 @@ class DirentMenu extends React.Component {
       if (dirent.type === 'dir') {
         menuList = ['Share'];
       } else if (dirent.type === 'file') {
-        menuList = ['Share', 'Tags', 'Related Files', 'Divider', 'History', 'Details', 'Divider', 'Open via Client'];
+        menuList = ['Share', 'Tags', 'Related Files', 'Divider', 'History', 'Divider', 'Open via Client'];
         if (!Utils.isMarkdownFile(dirent.name)) {
           menuList.splice(2, 1);
         }
@@ -61,9 +61,6 @@ class DirentMenu extends React.Component {
         break;
       case 'Tags':
         translateResult = gettext('Tags');
-        break;
-      case 'Details':
-        translateResult = gettext('Details');
         break;
       case 'Lock':
         translateResult = gettext('Lock');

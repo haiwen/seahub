@@ -155,7 +155,6 @@ class MyLibraries extends Component {
                   onRenameRepo={this.onRenameRepo}
                   onDeleteRepo={this.onDeleteRepo}
                   onTransferRepo={this.onTransferRepo}
-                  onRepoDetails={this.onRepoDetails}
                   onRepoClick={this.onRepoClick}
                   sortRepoList={this.sortRepoList}
                 />

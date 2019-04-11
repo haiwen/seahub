@@ -12,7 +12,6 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
-  onRepoDetails: PropTypes.func.isRequired,
   onRepoClick: PropTypes.func.isRequired,
 };
 
@@ -61,7 +60,6 @@ class MylibRepoListView extends React.Component {
               onRenameRepo={this.props.onRenameRepo}
               onDeleteRepo={this.props.onDeleteRepo}
               onTransferRepo={this.props.onTransferRepo}
-              onRepoDetails={this.props.onRepoDetails}
               onRepoClick={this.props.onRepoClick}
             />
           );

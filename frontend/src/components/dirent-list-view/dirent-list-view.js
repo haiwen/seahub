@@ -30,7 +30,6 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
-  onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   switchAnotherMenuToShow: PropTypes.func,
   appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
@@ -96,10 +95,6 @@ class DirentListView extends React.Component {
 
   onItemRenameToggle = () => {
     this.onFreezedItem();
-  }
-
-  onItemDetails = (dirent) => {
-    this.props.onItemDetails(dirent);
   }
 
   onCreateFileToggle = () => {
@@ -296,7 +291,6 @@ class DirentListView extends React.Component {
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
                     onDirentClick={this.props.onDirentClick}
-                    onItemDetails={this.onItemDetails}
                     showImagePopup={this.showImagePopup}
                     switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
                     appMenuType={this.props.appMenuType}
