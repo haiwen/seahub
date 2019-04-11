@@ -476,7 +476,7 @@ class LibContentView extends React.Component {
       let message =  Utils.getCopySuccessfulMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
-      let message = Utils.getCopyFailedMessage(dirNames)
+      let message = Utils.getCopyFailedMessage(dirNames);
       toaster.danger(message);
     });
   }
