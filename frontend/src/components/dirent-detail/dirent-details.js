@@ -50,6 +50,9 @@ class DirentDetail extends React.Component {
     let { dirent, path } = nextProps;
     let direntPath = Utils.joinPath(path, dirent.name);
     this.updateDetailView(dirent, direntPath);
+    if (!dirent.name) {
+      this.getCurrentFolderDirent();
+    }
   }
 
   updateDetailView = (dirent, direntPath) => {
@@ -85,15 +88,14 @@ class DirentDetail extends React.Component {
         }
       });
     } else if (this.props.path !== '/') {
-      const dirPath = dirent.name ? direntPath : this.props.path;
-      seafileAPI.getDirInfo(repoID, dirPath).then(res => {
+      seafileAPI.getDirInfo(repoID, this.props.path).then(res => {
         this.setState({
           direntType: 'dir',
           direntDetail: res.data
         });
       });
     } else if (this.props.path === '/' && dirent.name) {
-      seafileAPI.getDirInfo(repoID, direntPath).then(res => {
+      seafileAPI.getDirInfo(repoID, '/' + dirent.name).then(res => {
         this.setState({
           direntType: 'dir',
           direntDetail: res.data
