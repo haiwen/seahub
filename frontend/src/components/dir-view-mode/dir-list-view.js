@@ -65,59 +65,36 @@ class DirListView extends React.Component {
             updateUsedRepoTags={this.props.updateUsedRepoTags}
           />
         )}
-        <div className="table-container" onMouseDown={this.onItemMouseDown} onContextMenu={this.onItemContextMenu}>
-          <DirentListView
-            path={this.props.path}
-            currentRepoInfo={this.props.currentRepoInfo}
-            repoID={this.props.repoID}
-            isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-            enableDirPrivateShare={this.props.enableDirPrivateShare}
-            direntList={this.props.direntList}
-            showShareBtn={this.props.showShareBtn}
-            sortBy={this.props.sortBy}
-            sortOrder={this.props.sortOrder}
-            sortItems={this.props.sortItems}
-            onAddFile={this.props.onAddFile}
-            onItemClick={this.props.onItemClick}
-            onItemSelected={this.props.onItemSelected}
-            onItemDelete={this.props.onItemDelete}
-            onItemRename={this.props.onItemRename}
-            onItemMove={this.props.onItemMove}
-            onItemCopy={this.props.onItemCopy}
-            onDirentClick={this.props.onDirentClick}
-            isDirentListLoading={this.props.isDirentListLoading}
-            updateDirent={this.props.updateDirent}
-            isAllItemSelected={this.props.isAllItemSelected}
-            onAllItemSelected={this.props.onAllItemSelected}
-          />
-        </div>
-        <Fragment>
-          <ContextMenu 
-            id={"dirent-container-menu"}
-            onMenuItemClick={this.onMenuItemClick}
-          />
-          {this.state.isCreateFolderDialogShow && (
-            <ModalPortal>
-              <CreateFolder
-                parentPath={this.props.path}
-                onAddFolder={this.onAddFolder}
-                checkDuplicatedName={this.checkDuplicatedName}
-                addFolderCancel={this.onCreateFolderToggle}
-              />
-            </ModalPortal>
-          )} 
-          {this.state.isCreateFileDialogShow && (
-            <ModalPortal>
-              <CreateFile
-                parentPath={this.props.path}
-                fileType={this.state.fileType}
-                onAddFile={this.onAddFile}
-                checkDuplicatedName={this.checkDuplicatedName}
-                addFileCancel={this.onCreateFileToggle}
-              />
-            </ModalPortal>
-          )}
-        </Fragment>
+        <DirentListView
+          path={this.props.path}
+          currentRepoInfo={this.props.currentRepoInfo}
+          repoID={this.props.repoID}
+          isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+          enableDirPrivateShare={this.props.enableDirPrivateShare}
+          direntList={this.props.direntList}
+          showShareBtn={this.props.showShareBtn}
+          sortBy={this.props.sortBy}
+          sortOrder={this.props.sortOrder}
+          sortItems={this.props.sortItems}
+          onAddFile={this.props.onAddFile}
+          onItemClick={this.props.onItemClick}
+          onItemSelected={this.props.onItemSelected}
+          onItemDelete={this.props.onItemDelete}
+          onItemRename={this.props.onItemRename}
+          onItemMove={this.props.onItemMove}
+          onItemCopy={this.props.onItemCopy}
+          onDirentClick={this.props.onDirentClick}
+          isDirentListLoading={this.props.isDirentListLoading}
+          updateDirent={this.props.updateDirent}
+          isAllItemSelected={this.props.isAllItemSelected}
+          onAllItemSelected={this.props.onAllItemSelected}
+          selectedDirentList={this.props.selectedDirentList}
+          onItemsMove={this.props.onItemsMove}
+          onItemsCopy={this.props.onItemsCopy}
+          onItemsDelete={this.props.onItemsDelete}
+          onAddFile={this.props.onAddFile}
+          onAddFolder={this.props.onAddFolder}
+        />
       </Fragment>
     );
   }
