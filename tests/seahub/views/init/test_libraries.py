@@ -6,6 +6,8 @@ pytestmark = pytest.mark.django_db
 
 from seahub.options.models import UserOptions
 from seahub.test_utils import BaseTestCase
+from mock import patch, MagicMock
+
 
 class LibrariesTest(BaseTestCase):
     def setUp(self):
@@ -36,16 +38,13 @@ class LibrariesTest(BaseTestCase):
         # user
         self.login_as(self.user)
 
-        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
+        # can_add_public_repo
+        with patch('seahub.base.accounts.UserPermissions.can_add_public_repo', MagicMock(return_value=True)):
+            resp = self.client.get(self.url)
+            self.assertEqual(200, resp.status_code)
+            assert resp.context['can_add_public_repo'] is True
 
-        resp = self.client.get(self.url)
-        self.assertEqual(200, resp.status_code)
-        assert resp.context['can_add_public_repo'] is True
-
-        self.config.ENABLE_USER_CREATE_ORG_REPO = 0
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
-
+        # can_not_add_public_repo
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         assert resp.context['can_add_public_repo'] is False

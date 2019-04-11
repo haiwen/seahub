@@ -3,6 +3,54 @@ from seahub.base.accounts import User, RegistrationForm
 
 from seahub.options.models import UserOptions
 from post_office.models import Email
+from django.core.urlresolvers import reverse
+from mock import patch
+
+
+TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS = {
+    'default': {
+        'can_add_repo': True,
+        'can_add_group': True,
+        'can_view_org': True,
+        'can_add_public_repo': True,
+        'can_use_global_address_book': True,
+        'can_generate_share_link': True,
+        'can_generate_upload_link': True,
+        'can_send_share_link_mail': True,
+        'can_invite_guest': False,
+        'can_drag_drop_folder_to_sync': True,
+        'can_connect_with_android_clients': True,
+        'can_connect_with_ios_clients': True,
+        'can_connect_with_desktop_clients': True,
+        'can_export_files_via_mobile_client': True,
+        'storage_ids': [],
+        'role_quota': '',
+        'can_use_wiki': True,
+    },
+    'guest': {
+        'can_add_repo': False,
+        'can_add_group': False,
+        'can_view_org': False,
+        'can_add_public_repo': False,
+        'can_use_global_address_book': False,
+        'can_generate_share_link': False,
+        'can_generate_upload_link': False,
+        'can_send_share_link_mail': False,
+        'can_invite_guest': False,
+        'can_drag_drop_folder_to_sync': False,
+        'can_connect_with_android_clients': False,
+        'can_connect_with_ios_clients': False,
+        'can_connect_with_desktop_clients': False,
+        'can_export_files_via_mobile_client': False,
+        'storage_ids': [],
+        'role_quota': '',
+        'can_use_wiki': False,
+    },
+}
+
+CLOUD_MODE_TRUE = True
+MULTI_TENANCY_TRUE = True
+MULTI_TENANCY_FALSE = False
 
 class UserTest(BaseTestCase):
     def test_freeze_user(self):
@@ -33,6 +81,10 @@ class UserTest(BaseTestCase):
         assert len(UserOptions.objects.filter(email=test_email)) == 0
 
 class UserPermissionsTest(BaseTestCase):
+    def setUp(self):
+        from constance import config
+        self.config = config
+
     def test_permissions(self):
         assert self.user.permissions.can_add_repo() is True
         assert self.user.permissions.can_add_group() is True
@@ -47,6 +99,45 @@ class UserPermissionsTest(BaseTestCase):
         assert self.user.permissions.can_invite_guest() is False
 
         assert self.user.permissions.can_export_files_via_mobile_client() is True
+
+    def test_admin_permissions_can_add_public_repo(self):
+
+        assert self.admin.permissions.can_add_public_repo() is True
+
+    @patch('seahub.base.accounts.CLOUD_MODE', CLOUD_MODE_TRUE)
+    def test_CLOUD_MODE_permissions_can_add_public_repo(self):
+
+        with patch('seahub.base.accounts.MULTI_TENANCY', MULTI_TENANCY_TRUE):
+            assert self.user.permissions.can_add_public_repo() is True
+        with patch('seahub.base.accounts.MULTI_TENANCY', MULTI_TENANCY_FALSE):
+            assert self.user.permissions.can_add_public_repo() is False
+
+    def test_user_permissions_can_add_public_repo(self):
+        # both have
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS):
+            assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is True
+            assert self.user.permissions.can_add_public_repo() is True
+
+        # only have can_add_public_repo
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 0
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS):
+            assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is True
+            assert self.user.permissions.can_add_public_repo() is False
+
+        # only have ENABLE_USER_CREATE_ORG_REPO
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
+        assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is False
+        assert self.user.permissions.can_add_public_repo() is False
+
+        # neither have
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 0
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
+        assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is False
+        assert self.user.permissions.can_add_public_repo() is False
 
 
 class RegistrationFormTest(BaseTestCase):
