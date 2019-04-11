@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TextTranslation from '../../utils/text-translation';
 import RepoInfoBar from '../../components/repo-info-bar';
 import ModalPortal from '../modal-portal';
+import DirentNoneView from '../../components/dirent-list-view/dirent-none-view';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
@@ -136,6 +137,17 @@ class DirListView extends React.Component {
   }
 
   render() {
+
+    if (this.props.path === '/' && this.props.direntList.length === 0) {
+      return (
+        <DirentNoneView 
+          path={this.props.path}
+          isDirentListLoading={this.props.isDirentListLoading}
+          onAddFile={this.props.onAddFile}
+        />
+      );
+    }
+
     return (
       <Fragment>
         {this.props.isRepoInfoBarShow && (

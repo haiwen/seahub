@@ -1,4 +1,5 @@
 .tip-for-new-file {
+  margin: 0 auto;
   padding: 5em 8em; 
   align-self: flex-start; /* for repo wiki mode */
 }

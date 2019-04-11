@@ -5,13 +5,11 @@ import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
-import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu } from '../context-menu/actions';
-import ContextMenu from '../context-menu/context-menu';
-import DirentListItem from './dirent-list-item';
+
 
 import '../../css/tip-for-new-md.css';
 
@@ -26,7 +24,6 @@ const propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
-  onAddFile: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
@@ -44,13 +41,9 @@ class DirentListView extends React.Component {
     super(props);
     this.state = {
       isItemFreezed: false,
-
       isImagePopupOpen: false,
       imageItems: [],
       imageIndex: 0,
-
-      isCreateFileDialogShow: false,
-      fileType: '',
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -97,23 +90,8 @@ class DirentListView extends React.Component {
     this.onFreezedItem();
   }
 
-  onCreateFileToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: ''
-    });
-  }
-
-  onCreateNewFile = (suffix) => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: suffix
-    });
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
+  onItemDetails = (dirent) => {
+    this.props.onItemDetails(dirent);
   }
 
   sortByName = (e) => {
@@ -190,14 +168,6 @@ class DirentListView extends React.Component {
     });
   }
 
-  checkDuplicatedName = (newName) => {
-    let direntList = this.props.direntList;
-    let isDuplicated = direntList.some(object => {
-      return object.name === newName;
-    });
-    return isDuplicated;
-  }
-
   setDirentItemRef = (index) => item => {
     this.direntItems[index] = item;
   }
@@ -233,42 +203,6 @@ class DirentListView extends React.Component {
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);
-    }
-
-    if (this.props.path == '/' && !direntList.length) {
-      return (
-        <Fragment>
-          <div className="tip-for-new-file">
-            <p className="text-center">{gettext('This folder has no content at this time.')}</p>
-            <p className="text-center">{gettext('You can create files quickly')}{' +'}</p>
-            <div className="big-new-file-button-group">
-              <div className="d-flex justify-content-center">
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>
-                  {'+ Markdown'}</button>
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.ppt')}>
-                  {'+ PPT'}</button>
-              </div>
-              <div className="d-flex justify-content-center">
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.doc')}>
-                  {'+ Word'}</button>
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xls')}>
-                  {'+ Excel'}</button>
-              </div>
-            </div>
-          </div>
-          {this.state.isCreateFileDialogShow && (
-            <ModalPortal>
-              <CreateFile
-                parentPath={this.props.path}
-                fileType={this.state.fileType}
-                onAddFile={this.onAddFile}
-                checkDuplicatedName={this.checkDuplicatedName}
-                addFileCancel={this.onCreateFileToggle}
-              />
-            </ModalPortal>
-          )}
-        </Fragment>
-      );
     }
 
     // sort
