@@ -1,14 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import TextTranslation from '../../utils/text-translation';
-import RepoInfoBar from '../../components/repo-info-bar';
-import ModalPortal from '../modal-portal';
 import DirentNoneView from '../../components/dirent-list-view/dirent-none-view';
+import RepoInfoBar from '../../components/repo-info-bar';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
-import CreateFile from '../../components/dialog/create-file-dialog';
-import CreateFolder from '../../components/dialog/create-folder-dialog';
-import ContextMenu from '../context-menu/context-menu';
-import { hideMenu, showMenu } from '../context-menu/actions';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -43,99 +37,6 @@ const propTypes = {
 
 class DirListView extends React.Component {
   
-  constructor(props) {
-    super(props);
-    this.state = {
-      fileType: '',
-      isCreateFileDialogShow: false,
-      isCreateFolderDialogShow: false,
-    }
-  }
-
-  onCreateFolderToggle = () => {
-    this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
-  }
-
-  onCreateFileToggle = () => {
-    this.setState({
-      fileType: '',
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-    });
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
-  }
-
-  onAddFolder = (dirPath) => {
-    this.setState({isCreateFolderDialogShow: false});
-    this.props.onAddFolder(dirPath);
-  }
-
-  checkDuplicatedName = (newName) => {
-    let direntList = this.props.direntList;
-    let isDuplicated = direntList.some(object => {
-      return object.name === newName;
-    });
-    return isDuplicated;
-  }
-
-  onItemMouseDown = (event) => {
-    event.stopPropagation();
-    if (event.button === 2) {
-      return;
-    }
-  }
-
-  onItemContextMenu = (event) => {
-    this.handleContextClick(event);
-  }
-
-  handleContextClick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    let x = event.clientX || (event.touches && event.touches[0].pageX);
-    let y = event.clientY || (event.touches && event.touches[0].pageY);
-
-    if (this.props.posX) {
-        x -= this.props.posX;
-    }
-    if (this.props.posY) {
-        y -= this.props.posY;
-    }
-
-    hideMenu();
-
-    let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
-
-    let showMenuConfig = {
-      id: 'dirent-container-menu',
-      position: { x, y },
-      target: event.target,
-      currentObject: null,
-      menuList: menuList,
-    };
-
-    showMenu(showMenuConfig);
-  }
-
-  onMenuItemClick = (operation, currentObject, event) => {
-    switch (operation) {
-      case 'New Folder':
-        this.onCreateFolderToggle();
-        break;
-      case 'New File': 
-        this.onCreateFileToggle();
-        break;
-      default:
-        break;
-    }
-    
-    hideMenu();
-  }
-
   render() {
 
     if (this.props.path === '/' && this.props.direntList.length === 0) {

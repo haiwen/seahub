@@ -5,6 +5,8 @@ import Loading from '../loading';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
 
+import '../../css/tip-for-new-md.css';
+
 const propTypes = {
   path: PropTypes.string.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -13,8 +13,6 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import { hideMenu, showMenu } from '../context-menu/actions';
-import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
 
 import '../../css/dirent-list-item.css';
@@ -42,6 +40,8 @@ const propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  onItemMouseDown: PropTypes.func.isRequired,
+  onItemContextMenu: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -408,117 +408,12 @@ class DirentListItem extends React.Component {
   }
 
   onItemMouseDown = (event) => {
-    if (event.button === 2) {
-      this.setState({isOperationShow: false});
-    }
+    this.props.onItemMouseDown(event);
   }
 
   onItemContextMenu = (event) => {
-    this.handleContextClick(event);
-  }
-
-  handleContextClick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    let x = event.clientX || (event.touches && event.touches[0].pageX);
-    let y = event.clientY || (event.touches && event.touches[0].pageY);
-
-    if (this.props.posX) {
-        x -= this.props.posX;
-    }
-    if (this.props.posY) {
-        y -= this.props.posY;
-    }
-
-    hideMenu();
-    
-    let menuList = this.getDirentItemMenuList(true);
-    
-    let showMenuConfig = {
-      id: 'dirent-item-menu',
-      position: { x, y },
-      target: event.target,
-      currentObject: this.props.dirent,
-      menuList: menuList,
-    };
-
-    showMenu(showMenuConfig);
-
-    this.setState({isOperationShow: false});
-  }
-
-  getDirentItemMenuList = (isContextmenu) => {
-    let { currentRepoInfo, isRepoOwner, dirent } = this.props;
-    let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
-
-    let type = dirent.type;
-    let permission = dirent.permission;
-
-    let menuList = [];
-    let contextmenuList = [];
-    if (isContextmenu) {
-      let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
-      contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
-    }
-
-    let { RENAME, MOVE, COPY, PERMISSION, DETAILS, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
-    if (type === 'dir' && permission === 'rw') {
-      if (can_set_folder_perm) {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, DETAILS, 'Divider', OPEN_VIA_CLIENT];
-      } else {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', DETAILS, 'Divider', OPEN_VIA_CLIENT];
-      }
-      return menuList;
-    }
-
-    if (type === 'dir' && permission === 'r') {
-      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY, DETAILS] : [DETAILS];
-      return menuList;
-    }
-
-    if (type === 'file' && permission === 'rw') {
-      menuList = [...contextmenuList];
-      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-        menuList.push(RENAME);
-        menuList.push(MOVE);
-      }
-      menuList.push(COPY);
-      if (isPro) {
-        if (dirent.is_locked) {
-          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
-            menuList.push(UNLOCK);
-          }
-        } else {
-          menuList.push(LOCK);
-        }
-      }
-      menuList.push('Divider');
-      if (enableFileComment) {
-        menuList.push(COMMENT);
-      }
-      menuList.push(HISTORY);
-      if (fileAuditEnabled) {
-        menuList.push(ACCESS_LOG);
-      }
-      menuList.push(DETAILS);
-      menuList.push('Divider');
-      menuList.push(OPEN_VIA_CLIENT);
-      return menuList;
-    }
-
-    if (type === 'file' && permission === 'r') {
-      menuList = [...contextmenuList];
-      if (!currentRepoInfo.encrypted) {
-        menuList.push(COPY);
-      }
-      if (enableFileComment) {
-        menuList.push(COMMENT);
-      }
-      menuList.push(HISTORY);
-      menuList.push(DETAILS);
-      return menuList;
-    }
+    let dirent = this.props.dirent;
+    this.props.onItemContextMenu(event, dirent);
   }
 
   render() {
@@ -544,7 +439,7 @@ class DirentListItem extends React.Component {
 
     return (
       <Fragment>
-         <tr 
+        <tr 
           className={trClass} 
           draggable="true" 
           onMouseEnter={this.onMouseEnter} 
