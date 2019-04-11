@@ -358,10 +358,7 @@ class DirentListItem extends React.Component {
         clearInterval(this.interval);
         this.setState({isProgressDialogShow: false});
         let errorMessage = error.response.data.error_msg;
-
-        let message = gettext('{errorMessage}');
-        message = message.replace('{errorMessage}', errorMessage);
-        toaster.danger(message);
+        toaster.danger(errorMessage);
       });
     } else {
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
