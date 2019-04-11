@@ -451,10 +451,8 @@ class LibContentView extends React.Component {
         }
         this.moveDirent(direntPath);
       });
-
       let message =  Utils.getMoveSuccessMessage(dirNames);
       toaster.success(message);
-      
     }).catch(() => {
       let message = Utils.getMoveFailedMessage(dirNames);
       toaster.danger(message);
@@ -476,7 +474,7 @@ class LibContentView extends React.Component {
         });
       }
       let message =  Utils.getCopySuccessfulMessage(dirNames);
-      toaster.success(message)
+      toaster.success(message);
     }).catch(() => {
       let message = Utils.getCopyFailedMessage(dirNames)
       toaster.danger(message);
