@@ -532,29 +532,10 @@ class Wiki extends Component {
         this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
         this.moveDirent(direntPath);
       });
-      let message = '';
-      let dirNamesLength = dirNames.length;
-      if (dirNamesLength === 1) {
-        message = gettext('Successfully moved %(name)s.');
-      } else if (dirNamesLength === 2) {
-        message = gettext('Successfully moved %(name)s and 1 other item.');
-      } else {
-        message = gettext('Successfully moved %(name)s and %(amount)s other items.');
-        message = message.replace('%(amount)s', (dirNamesLength - 1));
-      }
-      message = message.replace('%(name)s', dirNames[0]);
+      let message = Utils.getMoveSuccessMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
-      let message = '';
-      let dirNamesLength = dirNames.length;
-
-      if (dirNamesLength > 1) {
-        message = gettext('Failed to move %(name)s and %(amount)s other item(s).');
-        message = message.replace('%(amount)s', dirNamesLength - 1);
-      } else {
-        message = gettext('Failed to move %(name)s.');
-      }
-      message = message.replace('%(name)s', dirNames[0]);
+      let message = Utils.getMoveFailedMessage(dirNames);
       toaster.danger(message);
     });
   }
@@ -570,29 +551,10 @@ class Wiki extends Component {
       direntPaths.forEach((direntPath, index) => {
         this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
       });
-      let message = '';
-      let dirNamesLength = dirNames.length;
-      if (dirNamesLength === 1) {
-        message = gettext('Successfully copied %(name)s.');
-      } else if (dirNamesLength === 2) {
-        message = gettext('Successfully copied %(name)s and 1 other item.');
-      } else {
-        message = gettext('Successfully copied %(name)s and %(amount)s other items.');
-        message = message.replace('%(amount)s', (dirNamesLength - 1));
-      }
-      message = message.replace('%(name)s', dirNames[0]);
+      let message = Utils.getCopySuccessfulMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
-      let message = '';
-      let dirNamesLength = dirNames.length;
-
-      if (dirNamesLength > 1) {
-        message = gettext('Failed to copy %(name)s and %(amount)s other item(s).');
-        message = message.replace('%(amount)s', dirNamesLength - 1);
-      } else {
-        message = gettext('Failed to copy %(name)s.');
-      }
-      message = message.replace('%(name)s', dirNames[0]);
+      let message = Utils.getCopyFailedMessage(dirNames);
       toaster.danger(message);
     });
   }
