@@ -87,8 +87,8 @@ class MutipleDirOperationToolbar extends React.Component {
         this.setState({isProgressDialogShow: false});
         let errorMessage = error.response.data.error_msg;
 
-        let message = gettext('%(errorMessage)');
-        message = message.replace('%(errorMessage)', errorMessage)
+        let message = gettext('{errorMessage}');
+        message = message.replace('{errorMessage}', errorMessage)
         toaster.danger(message);
       });
     }
