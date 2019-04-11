@@ -14,6 +14,7 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import DirentRightMenu from './dirent-right-menu';
+import toaster from '../toast';
 
 import '../../css/dirent-list-item.css';
 
@@ -345,8 +346,11 @@ class DirentListItem extends React.Component {
         this.zipToken = res.data['zip_token'];
         this.addDownloadAnimation();
         this.interval = setInterval(this.addDownloadAnimation, 1000);
-      }).catch(() => {
+      }).catch((error) => {
         clearInterval(this.interval);
+        this.setState({isProgressDialogShow: false});
+        let errorMessage = error.response.data.error_msg;
+        toaster.danger(errorMessage);
       });
     } else {
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
@@ -378,6 +382,7 @@ class DirentListItem extends React.Component {
   onCancelDownload = () => {
     let zipToken = this.zipToken;
     seafileAPI.cancelZipTask(zipToken).then(res => {
+      clearInterval(this.interval);
       this.setState({
         isProgressDialogShow: false,
       });
