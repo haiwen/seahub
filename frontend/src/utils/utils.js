@@ -768,7 +768,7 @@ export const Utils = {
       message = gettext('Successfully moved %(name)s and 1 other item.');
     } else {
       message = gettext('Successfully moved %(name)s and %(amount)s other items.');
-      message = message.replace('%(amount)s', dirNamesLength - 1)
+      message = message.replace('%(amount)s', dirNamesLength - 1);
     }
     message = message.replace('%(name)s', dirNames[0]);
     return message;
