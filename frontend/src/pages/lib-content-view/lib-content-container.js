@@ -74,6 +74,10 @@ const propTypes = {
   onAllDirentSelected: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
   selectedDirent: PropTypes.object,
+  selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
   closeDirentDetail: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
@@ -193,6 +197,10 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
+                    selectedDirentList={this.props.selectedDirentList}
+                    onItemsMove={this.props.onItemsMove}
+                    onItemsCopy={this.props.onItemsCopy}
+                    onItemsDelete={this.props.onItemsDelete}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -253,6 +261,10 @@ class LibContentContainer extends React.Component {
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
+                    selectedDirentList={this.props.selectedDirentList}
+                    onItemsMove={this.props.onItemsMove}
+                    onItemsCopy={this.props.onItemsCopy}
+                    onItemsDelete={this.props.onItemsDelete}
                   />
                 )}
               </Fragment>

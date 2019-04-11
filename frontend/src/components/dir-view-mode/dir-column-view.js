@@ -65,6 +65,10 @@ const propTypes = {
   onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
 };
 
 class DirColumnView extends React.Component {
@@ -167,6 +171,7 @@ class DirColumnView extends React.Component {
           currentRepoInfo={this.props.currentRepoInfo}
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
+          selectedDirentList={this.props.selectedDirentList}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
@@ -217,6 +222,10 @@ class DirColumnView extends React.Component {
               updateDirent={this.props.updateDirent}
               isAllItemSelected={this.props.isAllItemSelected}
               onAllItemSelected={this.props.onAllItemSelected}
+              selectedDirentList={this.props.selectedDirentList}
+              onItemsMove={this.props.onItemsMove}
+              onItemsCopy={this.props.onItemsCopy}
+              onItemsDelete={this.props.onItemsDelete}
             />
           )}
         </div>

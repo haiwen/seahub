@@ -16,6 +16,7 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onItemMove: PropTypes.func,
   currentRepoInfo: PropTypes.object,
+  selectedDirentList: PropTypes.array.isRequired,
 };
 
 const PADDING_LEFT = 20;
@@ -134,8 +135,11 @@ class TreeView extends React.Component {
   onContextMenu = (event) => {
     this.handleContextClick(event);
   }
-
+  
   handleContextClick = (event, node) => {
+    if (this.props.selectedDirentList.length) {
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
 

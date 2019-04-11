@@ -296,7 +296,8 @@ class LibContentView extends React.Component {
     this.setState({
       isDirentListLoading: true,
       path: path,
-      isViewFile: false
+      isViewFile: false,
+      selectedDirentList: [],
     });
 
     // update data
@@ -1408,6 +1409,10 @@ class LibContentView extends React.Component {
             onAllDirentSelected={this.onAllDirentSelected}
             isDirentDetailShow={this.state.isDirentDetailShow}
             selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
+            selectedDirentList={this.state.selectedDirentList}
+            onItemsMove={this.onMoveItems}
+            onItemsCopy={this.onCopyItems}
+            onItemsDelete={this.onDeleteItems}
             closeDirentDetail={this.closeDirentDetail}
             showDirentDetail={this.showDirentDetail}
             onDeleteRepoTag={this.onDeleteRepoTag}

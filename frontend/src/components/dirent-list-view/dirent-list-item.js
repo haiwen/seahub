@@ -105,6 +105,13 @@ class DirentListItem extends React.Component {
   }
 
   onUnfreezedItem = () => {
+    let dirent = this.props.dirent;
+    // scenes 1: dirent isSelected --> this have Highest level
+    // scenes 2: dirent contextmenu show
+    // scenes 3: dirent operation menu show
+    if (dirent.isSelected) {
+      return;
+    }
     this.setState({
       highlight: false,
       isOperationShow: false,
@@ -114,6 +121,7 @@ class DirentListItem extends React.Component {
 
   //buiness handler
   onItemSelected = () => {
+    this.props.onFreezedItem();
     this.props.onItemSelected(this.props.dirent);
   }
 

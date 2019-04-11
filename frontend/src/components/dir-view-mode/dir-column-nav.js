@@ -10,7 +10,7 @@ import Move from '../../components/dialog/move-dirent-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
-import { siteRoot, gettext, thumbnailSizeForOriginal } from '../../utils/constants';
+import { siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -30,6 +30,7 @@ const propTypes = {
   navRate: PropTypes.number,
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
 };
 
 class DirColumnNav extends React.Component {
@@ -268,6 +269,7 @@ class DirColumnNav extends React.Component {
               onUnFreezedItem={this.onUnFreezedItem}
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
+              selectedDirentList={this.props.selectedDirentList}
             />)
           }
         </div>

@@ -33,6 +33,10 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
 };
 
 class DirListView extends React.Component {

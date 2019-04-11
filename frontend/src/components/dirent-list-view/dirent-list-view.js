@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import { siteRoot, gettext, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
+import { seafileAPI } from '../../utils/seafile-api';
+import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import ImageDialog from '../dialog/image-dialog';
+import ZipDownloadDialog from '../dialog/zip-download-dialog';
+import MoveDirentDialog from '../dialog/move-dirent-dialog';
+import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
@@ -35,6 +40,10 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -49,6 +58,11 @@ class DirentListView extends React.Component {
       fileType: '',
       isCreateFileDialogShow: false,
       isCreateFolderDialogShow: false,
+      isMoveDialogShow: false,
+      isCopyDialogShow: false,
+      isProgressDialogShow: false,
+      progress: 0,
+      isMutipleOperation: true,
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -58,6 +72,8 @@ class DirentListView extends React.Component {
     this.clickedDirent = null;
     this.direntItems = [];
     this.currentItemRef = null;
+
+    this.zipToken = null;
   }
 
   onFreezedItem = () => {
@@ -189,7 +205,64 @@ class DirentListView extends React.Component {
     return isDuplicated;
   }
 
-  // common contextmenu handler
+  onMoveToggle = () => {
+    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
+  }
+
+  onCopyToggle = () => {
+    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+  }
+
+  onItemsDownload = () => {
+    let { path, repoID, selectedDirentList } = this.props;
+    if (selectedDirentList.length) {
+      if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
+        let direntPath = Utils.joinPath(path, selectedDirentList[0].name);
+        let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+        location.href= url;
+        return;
+      }
+      let selectedDirentNames = selectedDirentList.map(dirent => {
+        return dirent.name;
+      });
+      this.setState({isProgressDialogShow: true, progress: 0});
+      seafileAPI.zipDownload(repoID, path, selectedDirentNames).then(res => {
+        this.zipToken = res.data['zip_token'];
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      });
+    }
+  }
+
+  addDownloadAnimation = () => {
+    let _this = this;
+    let token = this.zipToken;
+    seafileAPI.queryZipProgress(token).then(res => {
+      let data = res.data;
+      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
+      this.setState({progress: parseInt(progress)});
+
+      if (data['total'] === data['zipped']) {
+        this.setState({
+          progress: 100
+        });
+        clearInterval(this.interval);
+        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
+        setTimeout(function() {
+          _this.setState({isProgressDialogShow: false});
+        }, 500);
+      }
+
+    });
+  }
+
+  onCancelDownload = () => {
+    seafileAPI.cancelZipTask(this.zipToken).then(() => {
+      this.setState({isProgressDialogShow: false});
+    });
+  }
+
+  // common contextmenu handle
   onMouseDown = (event) => {
     event.stopPropagation();
     if (event.button === 2) {
@@ -224,15 +297,28 @@ class DirentListView extends React.Component {
     showMenu(showMenuConfig);
   }
 
-  // table-container contextmenu handler
+  // table-container contextmenu handle
   onContainerMouseDown = (event) => {
     this.onMouseDown(event);
   }
 
   onContainerContextMenu = (event) => {
-    let id = "dirent-container-menu"
-    let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
-    this.handleContextClick(event, id, menuList);
+    if (this.props.selectedDirentList.length === 0) {
+      let id = "dirent-container-menu"
+      let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+      this.handleContextClick(event, id, menuList);
+    } else {
+      if (this.props.selectedDirentList.length === 1) {
+        let dirent = this.props.selectedDirentList[0];
+        let id = 'dirent-item-menu';
+        let menuList = this.getDirentItemMenuList(dirent, true);
+        this.handleContextClick(event, id, menuList, dirent);
+      } else {
+        let id = 'dirents-menu';
+        let menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        this.handleContextClick(event, id, menuList);
+      }
+    }
   }
 
   onContainerMenuItemClick = (operation) => {
@@ -250,7 +336,28 @@ class DirentListView extends React.Component {
     hideMenu();
   }
 
-  // table-thread contextmenu handler -- Shield event
+  onDirentsMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'Move':
+        this.onMoveToggle();
+        break;
+      case 'Copy':
+        this.onCopyToggle();
+        break;
+      case 'Download':
+        this.onItemsDownload();
+        break;
+      case 'Delete':
+        this.props.onItemsDelete();
+        break;
+      default: 
+        break;
+    }
+
+    hideMenu();
+  }
+
+  // table-thread contextmenu handle -- Shield event
   onThreadMouseDown = (event) => {
     this.onMouseDown(event);
   }
@@ -259,15 +366,17 @@ class DirentListView extends React.Component {
     event.stopPropagation();
   }
 
-  // table-dirent-item contextmenu handler
+  // table-dirent-item contextmenu handle
   onItemMouseDown = (event) => {
     this.onMouseDown(event);
   }
 
   onItemContextMenu = (event, dirent) => {
-    let id = 'dirent-item-menu';
-    let menuList = this.getDirentItemMenuList(dirent, true);
-    this.handleContextClick(event, id, menuList, dirent);
+    if (this.props.selectedDirentList.length === 0) {
+      let id = 'dirent-item-menu';
+      let menuList = this.getDirentItemMenuList(dirent, true);
+      this.handleContextClick(event, id, menuList, dirent);
+    }
   }
 
   setDirentItemRef = (index) => item => {
@@ -286,7 +395,9 @@ class DirentListView extends React.Component {
   }
 
   onHideMenu = (e) => {
-    this.onUnfreezedItem();
+    if (this.props.selectedDirentList.length === 0) {
+      this.onUnfreezedItem();
+    }
   }
 
   // contextmenu utils
@@ -454,6 +565,10 @@ class DirentListView extends React.Component {
             onShowMenu={this.onShowMenu}
             onHideMenu={this.onHideMenu}
           />
+          <ContextMenu
+            id={'dirents-menu'}
+            onMenuItemClick={this.onDirentsMenuItemClick}
+          />
           {this.state.isImagePopupOpen && (
             <ModalPortal>
               <ImageDialog
@@ -486,6 +601,31 @@ class DirentListView extends React.Component {
               />
             </ModalPortal>
           )}
+          {this.state.isMoveDialogShow && 
+            <MoveDirentDialog 
+              path={this.props.path}
+              repoID={this.props.repoID}
+              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              isMutipleOperation={this.state.isMutipleOperation}
+              selectedDirentList={this.props.selectedDirentList}
+              onItemsMove={this.props.onItemsMove}
+              onCancelMove={this.onMoveToggle}
+            />
+          }
+          {this.state.isCopyDialogShow &&
+            <CopyDirentDialog
+              path={this.props.path}
+              repoID={this.props.repoID}
+              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              selectedDirentList={this.props.selectedDirentList}
+              isMutipleOperation={this.state.isMutipleOperation}
+              onItemsCopy={this.props.onItemsCopy}
+              onCancelCopy={this.onCopyToggle}
+            />
+          }
+          {this.state.isProgressDialogShow &&
+            <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload} />
+          }
         </Fragment>
       </div>
     );
