@@ -9,7 +9,7 @@ import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
 import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
-import ShareLinkZipDownloadDialog from './components/dialog/share-link-zip-download-dialog';
+import ZipDownloadDialog from './components/dialog/zip-download-dialog';
 import ImageDialog from './components/dialog/image-dialog';
 
 import './css/shared-dir-view.css';
@@ -228,7 +228,7 @@ class SharedDirView extends React.Component {
         </div>
         {this.state.isZipDialogOpen &&
         <ModalPortal>
-          <ShareLinkZipDownloadDialog 
+          <ZipDownloadDialog 
             token={token}
             path={this.state.zipFolderPath}
             toggleDialog={this.closeZipDialog}

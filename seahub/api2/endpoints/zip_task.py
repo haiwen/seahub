@@ -94,7 +94,7 @@ class ZipTaskView(APIView):
                     repo.store_id, repo.version, dir_id)
 
             if dir_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-                error_msg = 'Unable to download directory "%s": size is too large.' % dir_name
+                error_msg = _('Unable to download directory "%s": size is too large.') % dir_name
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             fake_obj_id = {
