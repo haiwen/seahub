@@ -45,7 +45,7 @@ class ZipDownloadDialog extends React.Component {
     }).catch((error) => {
       let errorMsg = ''; 
       if (error.response) {
-        errorMsg = gettext('Error');
+        errorMsg = error.response.data.error_msg || gettext('Error');
       } else {
         errorMsg = gettext('Please check the network.');
       }   
