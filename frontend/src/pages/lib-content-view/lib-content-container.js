@@ -258,7 +258,11 @@ class LibContentContainer extends React.Component {
         {this.props.isDirentDetailShow && 
           <Fragment>
             <div className="cur-view-detail">
-              {this.props.path !== '/' ? 
+              {(this.props.path === '/' && !this.state.currentDirent) ? 
+                <LibDetail 
+                  currentRepo={this.props.currentRepoInfo}
+                  closeDetails={this.props.closeDirentDetail}
+                /> :
                 <DirentDetail
                   repoID={repoID}
                   path={this.props.path}
@@ -266,10 +270,6 @@ class LibContentContainer extends React.Component {
                   currentRepoInfo={this.props.currentRepoInfo}
                   onFileTagChanged={this.props.onFileTagChanged}
                   onItemDetailsClose={this.props.closeDirentDetail}
-                /> :
-                <LibDetail 
-                  currentRepo={this.props.currentRepoInfo}
-                  closeDetails={this.props.closeDirentDetail}
                 />
               }
             </div>
