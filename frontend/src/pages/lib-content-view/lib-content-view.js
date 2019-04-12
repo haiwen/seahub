@@ -78,9 +78,7 @@ class LibContentView extends React.Component {
   }
 
   showDirentDetail = () => {
-    this.setState({
-      isDirentDetailShow: true,
-    });
+    this.setState({isDirentDetailShow: true});
   }
 
   toggleDirentDetail = () => {
@@ -747,6 +745,19 @@ class LibContentView extends React.Component {
   }
 
   onDirentClick = (dirent) => {
+    let direntList = this.state.direntList.map(dirent => {
+      dirent.isSelected = false;
+      return dirent;
+    });
+    dirent.isSelected = true;
+    this.setState({
+      direntList: direntList,
+      isDirentSelected: true,
+      selectedDirentList: [dirent],
+    })
+  }
+
+  onItemClick = (dirent) => {
     this.resetSelected();
     let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
@@ -1395,7 +1406,8 @@ class LibContentView extends React.Component {
             sortOrder={this.state.sortOrder}
             sortItems={this.sortItems}
             updateDirent={this.updateDirent}
-            onItemClick={this.onDirentClick}
+            onDirentClick={this.onDirentClick}
+            onItemClick={this.onItemClick}
             onItemSelected={this.onDirentSelected}
             onItemDelete={this.onMainPanelItemDelete}
             onItemRename={this.onMainPanelItemRename}

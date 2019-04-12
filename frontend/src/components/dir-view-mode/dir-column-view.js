@@ -61,7 +61,6 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
-  onItemDetails: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
@@ -218,7 +217,6 @@ class DirColumnView extends React.Component {
               onItemMove={this.props.onItemMove}
               onItemCopy={this.props.onItemCopy}
               onDirentClick={this.props.onDirentClick}
-              onItemDetails={this.props.onItemDetails}
               updateDirent={this.props.updateDirent}
               isAllItemSelected={this.props.isAllItemSelected}
               onAllItemSelected={this.props.onAllItemSelected}

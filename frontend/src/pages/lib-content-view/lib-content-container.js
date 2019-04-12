@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
+import LibDetail from '../../components/dirent-detail/lib-details';
 import DirListView from '../../components/dir-view-mode/dir-list-view';
 import DirGridView from '../../components/dir-view-mode/dir-grid-view';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
@@ -88,10 +89,16 @@ class LibContentContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentDirent: {},
+      currentDirent: null,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.path !== this.props.path) {
+      this.setState({currentDirent: null});
+    }
   }
 
   onPathClick = (path) => {
@@ -106,33 +113,12 @@ class LibContentContainer extends React.Component {
 
   // on '<tr>'
   onDirentClick = (dirent) => {
-    if (this.props.isDirentDetailShow) {
-      this.onItemDetails(dirent);
-    }
+    this.setState({currentDirent: dirent});
+    this.props.onDirentClick(dirent);
   }
 
-  onItemDetails = (dirent) => {
-    this.setState({
-      currentDirent: dirent,
-    });
-    this.props.showDirentDetail();
-  }
-
-  onItemDetailsClose = () => {
-    this.props.closeDirentDetail();
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.isDirentDetailShow) {
-      this.setState({
-        isDirentDetailShow: nextProps.isDirentDetailShow
-      });
-    }
-    if (nextProps.selectedDirent && nextProps.isDirentDetailShow) {
-      this.setState({
-        currentDirent: nextProps.selectedDirent,
-      });
-    }
+  onItemSelected = (dirent) => {
+    this.setState({currentDirent: dirent});
   }
 
   render() {
@@ -193,7 +179,6 @@ class LibContentContainer extends React.Component {
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     onDirentClick={this.onDirentClick}
-                    onItemDetails={this.onItemDetails}
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
@@ -257,7 +242,6 @@ class LibContentContainer extends React.Component {
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     onDirentClick={this.onDirentClick}
-                    onItemDetails={this.onItemDetails}
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
                     onAllItemSelected={this.props.onAllDirentSelected}
@@ -271,18 +255,26 @@ class LibContentContainer extends React.Component {
             )}
           </div>
         </div>
-        {this.props.isDirentDetailShow && (
-          <div className="cur-view-detail">
-            <DirentDetail
-              repoID={repoID}
-              path={this.props.path}
-              dirent={this.state.currentDirent}
-              currentRepoInfo={this.props.currentRepoInfo}
-              onItemDetailsClose={this.onItemDetailsClose}
-              onFileTagChanged={this.props.onFileTagChanged}
-            />
-          </div>
-        )}
+        {this.props.isDirentDetailShow && 
+          <Fragment>
+            <div className="cur-view-detail">
+              {this.props.path !== '/' ? 
+                <DirentDetail
+                  repoID={repoID}
+                  path={this.props.path}
+                  dirent={this.state.currentDirent}
+                  currentRepoInfo={this.props.currentRepoInfo}
+                  onFileTagChanged={this.props.onFileTagChanged}
+                  onItemDetailsClose={this.props.closeDirentDetail}
+                /> :
+                <LibDetail 
+                  currentRepo={this.props.currentRepoInfo}
+                  closeDetails={this.props.closeDirentDetail}
+                />
+              }
+            </div>
+          </Fragment>
+        }
       </Fragment>
     );
   }

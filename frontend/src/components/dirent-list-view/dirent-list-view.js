@@ -101,10 +101,6 @@ class DirentListView extends React.Component {
     this.onFreezedItem();
   }
 
-  onItemDetails = (dirent) => {
-    this.props.onItemDetails(dirent);
-  }
-
   sortByName = (e) => {
     e.preventDefault();
     const sortBy = 'name';
@@ -174,9 +170,7 @@ class DirentListView extends React.Component {
   }
 
   closeImagePopup = () => {
-    this.setState({
-      isImagePopupOpen: false
-    });
+    this.setState({isImagePopupOpen: false});
   }
 
   onCreateFileToggle = () => {
@@ -395,9 +389,7 @@ class DirentListView extends React.Component {
   }
 
   onHideMenu = (e) => {
-    if (this.props.selectedDirentList.length === 0) {
-      this.onUnfreezedItem();
-    }
+    this.onUnfreezedItem();
   }
 
   // contextmenu utils
@@ -545,10 +537,10 @@ class DirentListView extends React.Component {
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
                   onDirentClick={this.props.onDirentClick}
-                  onItemDetails={this.onItemDetails}
                   showImagePopup={this.showImagePopup}
                   onItemMouseDown={this.onItemMouseDown}
                   onItemContextMenu={this.onItemContextMenu}
+                  selectedDirentList={this.props.selectedDirentList}
                 />
               );
             })}

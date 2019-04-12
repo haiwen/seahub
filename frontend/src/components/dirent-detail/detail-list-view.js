@@ -6,7 +6,6 @@ import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
-import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -28,7 +27,6 @@ class DetailListView extends React.Component {
     this.state = {
       isEditFileTagShow: false,
       showRelatedFileDialog: false,
-      repo: {},
     };
   }
 
@@ -71,28 +69,6 @@ class DetailListView extends React.Component {
       showRelatedFileDialog: false,
     });
   }
-
-  getRepoInfo = (repoID) => {
-    seafileAPI.listRepos({type: 'mine'}).then((res) => {
-      let repoList = res.data.repos;
-      for (let i = 0, length = repoList.length; i < length; i++) {
-        if (repoList[i].repo_id === repoID) {
-          this.setState({ repo: repoList[i] });
-          break;
-        }
-      }
-    });
-  }
-
-  componentDidMount() {
-    this.getRepoInfo(this.props.repoID);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.repoID !== this.props.repoID) {
-      this.getRepoInfo(nextProps.repoID);
-    }
-  }
   
   render() {
     let { direntType, direntDetail, fileTagList, relatedFiles } = this.props;
@@ -107,20 +83,6 @@ class DetailListView extends React.Component {
           <tbody>
             <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
             <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
-          </tbody>
-        </table>
-      );
-    } else if (direntType === 'repo') {
-      const repoInfo = this.props.repoInfo;
-      return (
-        <table className="table-thead-hidden">
-          <thead>
-            <tr><th width="35%"></th><th width="65%"></th></tr>
-          </thead>
-          <tbody>
-            <tr><th>{gettext('File Count')}</th><td>{repoInfo.file_count}</td></tr>
-            <tr><th>{gettext('Size')}</th><td>{repoInfo.size}</td></tr>
-            <tr><th>{gettext('Last Update')}</th><td>{moment(this.state.repo.last_modified).format('YYYY-MM-DD')}</td></tr>
           </tbody>
         </table>
       );
