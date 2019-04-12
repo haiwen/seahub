@@ -45,8 +45,6 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
   // selected menu
-  onDirentSelected: PropTypes.func.isRequired,
-  showDirentDetail: PropTypes.func.isRequired,
   onFilesTagChanged: PropTypes.func.isRequired, // for mutiple select toolbar
   updateDirent: PropTypes.func.isRequired,
 };
@@ -99,8 +97,6 @@ class LibContentToolbar extends React.Component {
                 currentRepoInfo={this.props.currentRepoInfo}
                 enableDirPrivateShare={this.props.enableDirPrivateShare}
                 updateDirent={this.props.updateDirent}
-                onDirentSelected={this.props.onDirentSelected}
-                showDirentDetail={this.props.showDirentDetail}
                 relatedFiles={this.props.relatedFiles}
                 unSelectDirent={this.props.unSelectDirent}
                 onFilesTagChanged={this.props.onFilesTagChanged}
