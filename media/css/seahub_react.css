@@ -100,6 +100,7 @@
 .sf2-icon-drafts:before {content:"\e03a"}
 .sf2-icon-recycle:before {content:"\e03b"}
 .sf2-icon-library:before { content:"\e00d"; }
+.sf2-icon-invite:before { content: "\e02b"; }
 
 /* common class and element style*/
 body { overflow-y: auto; }
