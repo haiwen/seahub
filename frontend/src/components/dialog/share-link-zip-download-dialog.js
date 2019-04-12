@@ -6,8 +6,13 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../loading';
 
 const propTypes = {
-  token: PropTypes.string.isRequired,
+  token: PropTypes.string,
   path: PropTypes.string.isRequired,
+  repoID: PropTypes.string,
+  target: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ]),
   toggleDialog: PropTypes.func.isRequired
 };
 
@@ -24,8 +29,11 @@ class ShareLinkZipDownloadDialog extends React.Component {
   }
 
   componentDidMount() {
-    const { token, path } = this.props;
-    seafileAPI.getShareLinkZipTask(token, path).then((res) => {
+    const { token, path, repoID, target } = this.props;
+    const getZipTask = token ?
+      seafileAPI.getShareLinkZipTask(token, path) :
+      seafileAPI.zipDownload(repoID, path, target);
+    getZipTask.then((res) => {
       const zipToken = res.data['zip_token'];
       this.setState({
         isLoading: false,

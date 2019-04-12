@@ -9,11 +9,10 @@ import URLDecorator from '../../utils/url-decorator';
 import DirentMenu from './dirent-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
-import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import toaster from '../toast';
+import ShareLinkZipDownloadDialog from '../dialog/share-link-zip-download-dialog';
 
 import '../../css/dirent-list-item.css';
 
@@ -51,8 +50,7 @@ class DirentListItem extends React.Component {
     this.state = {
       isOperationShow: false,
       highlight: false,
-      progress: 0,
-      isProgressDialogShow: false,
+      isZipDialogOpen: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isShareDialogShow: false,
@@ -61,7 +59,6 @@ class DirentListItem extends React.Component {
       isDragTipShow: false,
       isDropTipshow: false,
     };
-    this.zipToken = null;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -296,16 +293,8 @@ class DirentListItem extends React.Component {
     let repoID = this.props.repoID;
     let direntPath = this.getDirentPath(dirent);
     if (dirent.type === 'dir') {
-      this.setState({isProgressDialogShow: true, progress: 0});
-      seafileAPI.zipDownload(repoID, this.props.path, dirent.name).then(res => {
-        this.zipToken = res.data['zip_token'];
-        this.addDownloadAnimation();
-        this.interval = setInterval(this.addDownloadAnimation, 1000);
-      }).catch((error) => {
-        clearInterval(this.interval);
-        this.setState({isProgressDialogShow: false});
-        let errorMessage = error.response.data.error_msg;
-        toaster.danger(errorMessage);
+      this.setState({
+        isZipDialogOpen: true
       });
     } else {
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
@@ -313,34 +302,9 @@ class DirentListItem extends React.Component {
     }
   }
 
-  addDownloadAnimation = () => {
-    let _this = this;
-    let token = this.zipToken;
-    seafileAPI.queryZipProgress(token).then(res => {
-      let data = res.data;
-      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
-      this.setState({progress: parseInt(progress)});
-
-      if (data['total'] === data['zipped']) {
-        this.setState({
-          progress: 100
-        });
-        clearInterval(this.interval);
-        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
-        setTimeout(function() {
-          _this.setState({isProgressDialogShow: false});
-        }, 500);
-      }
-    });
-  }
-
-  onCancelDownload = () => {
-    let zipToken = this.zipToken;
-    seafileAPI.cancelZipTask(zipToken).then(res => {
-      clearInterval(this.interval);
-      this.setState({
-        isProgressDialogShow: false,
-      });
+  closeZipDialog = () => {
+    this.setState({
+      isZipDialogOpen: false
     });
   }
 
@@ -364,7 +328,7 @@ class DirentListItem extends React.Component {
     let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
     dragStartItemData = JSON.stringify(dragStartItemData);
 
-    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
@@ -560,11 +524,13 @@ class DirentListItem extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.isProgressDialogShow &&
+        {this.state.isZipDialogOpen &&
           <ModalPortal>
-            <ZipDownloadDialog 
-              progress={this.state.progress} 
-              onCancelDownload={this.onCancelDownload}
+            <ShareLinkZipDownloadDialog
+              repoID={this.props.repoID}
+              path={this.props.path}
+              target={this.props.dirent.name}
+              toggleDialog={this.closeZipDialog}
             />
           </ModalPortal>
         }
