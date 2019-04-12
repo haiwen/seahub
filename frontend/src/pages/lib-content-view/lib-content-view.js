@@ -752,6 +752,7 @@ class LibContentView extends React.Component {
     dirent.isSelected = true;
     this.setState({
       direntList: direntList,
+      isDirentSelected: true,
       selectedDirentList: [dirent],
     })
   }

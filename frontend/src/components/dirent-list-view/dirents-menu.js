@@ -24,13 +24,19 @@ class DirentMenu extends React.Component {
   }
 
   componentDidMount() {
-    let menuList = this.calculateMenuList();
+    const { currentRepoInfo, dirent } = this.props;
+    let menuList = this.calculateMenuList(currentRepoInfo, dirent);
     this.setState({menuList: menuList});
   }
 
-  calculateMenuList() {
+  componentWillReceiveProps(nextProps) {
+    const { currentRepoInfo, dirent } = nextProps;
+    let menuList = this.calculateMenuList(currentRepoInfo, dirent);
+    this.setState({menuList: menuList});
+  }
+
+  calculateMenuList(currentRepoInfo, dirent) {
     let menuList = [];
-    const { currentRepoInfo, dirent } = this.props;
     const { SHARE, TAGS, RELATED_FILES, HISTORY, OPEN_VIA_CLIENT, LOCK, UNLOCK } = TextTranslation;
 
     if (dirent.type === 'dir') {
