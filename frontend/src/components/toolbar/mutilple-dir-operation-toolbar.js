@@ -11,7 +11,7 @@ import DirentsMenu from '../dirent-list-view/dirents-menu';
 import ShareDialog from '../dialog/share-dialog';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import ShareLinkZipDownloadDialog from '../dialog/share-link-zip-download-dialog';
+import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ModalPortal from '../modal-portal';
 
 const propTypes = {
@@ -280,12 +280,10 @@ class MutipleDirOperationToolbar extends React.Component {
         }
         {this.state.isZipDialogOpen &&
         <ModalPortal>
-          <ShareLinkZipDownloadDialog
+          <ZipDownloadDialog
             repoID={this.props.repoID}
             path={this.props.path}
-            target={this.props.selectedDirentList.map(dirent => {
-              return dirent.name;
-            })}
+            target={this.props.selectedDirentList.map(dirent => dirent.name)}
             toggleDialog={this.closeZipDialog}
           />
         </ModalPortal>

@@ -18,7 +18,7 @@ const propTypes = {
 
 let interval;
 
-class ShareLinkZipDownloadDialog extends React.Component {
+class ZipDownloadDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -130,6 +130,6 @@ class Content extends React.Component {
   }
 }
 
-ShareLinkZipDownloadDialog.propTypes = propTypes;
+ZipDownloadDialog.propTypes = propTypes;
 
-export default ShareLinkZipDownloadDialog;
+export default ZipDownloadDialog;

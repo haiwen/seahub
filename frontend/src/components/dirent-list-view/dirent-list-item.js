@@ -12,7 +12,7 @@ import ModalPortal from '../modal-portal';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import ShareLinkZipDownloadDialog from '../dialog/share-link-zip-download-dialog';
+import ZipDownloadDialog from '../dialog/zip-download-dialog';
 
 import '../../css/dirent-list-item.css';
 
@@ -526,7 +526,7 @@ class DirentListItem extends React.Component {
         }
         {this.state.isZipDialogOpen &&
           <ModalPortal>
-            <ShareLinkZipDownloadDialog
+            <ZipDownloadDialog
               repoID={this.props.repoID}
               path={this.props.path}
               target={this.props.dirent.name}
