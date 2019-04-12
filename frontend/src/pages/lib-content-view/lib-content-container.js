@@ -88,7 +88,7 @@ class LibContentContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentDirent: null,
+      currentDirent: {},
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
