@@ -39,6 +39,7 @@ from seaserv import get_repo, send_message, get_commits, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
+from seahub.settings import SITE_ROOT
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
@@ -72,7 +73,7 @@ from seahub.views import check_folder_permission, \
 from seahub.utils.repo import is_repo_owner, parse_repo_perm
 from seahub.group.utils import is_group_member
 from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
-        XMIND_IMAGE_SIZE, THUMBNAIL_ROOT, get_share_link_thumbnail_src
+        XMIND_IMAGE_SIZE, get_share_link_thumbnail_src, get_thumbnail_image_path
 from seahub.drafts.utils import get_file_draft, \
         is_draft_file, has_draft_file
 
@@ -709,20 +710,12 @@ def view_lib_file(request, repo_id, path):
             return render(request, template, return_dict)
 
     elif filetype == XMIND:
-        xmind_dir = os.path.join(THUMBNAIL_ROOT, str(XMIND_IMAGE_SIZE))
-        xmind_image = os.path.join(xmind_dir, file_id)
-        if os.path.exists(xmind_image):
-            return_dict['xmind_image_src'] = get_thumbnail_src(repo_id,
-                    XMIND_IMAGE_SIZE, path)
+        xmind_image_path = get_thumbnail_image_path(file_id, XMIND_IMAGE_SIZE)
+        if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, path)[0]:
+            error_msg = _(u'Unable to view file')
+            return_dict['err'] = error_msg
         else:
-            try:
-                extract_xmind_image(repo_id, path)
-                return_dict['xmind_image_src'] = get_thumbnail_src(repo_id,
-                        XMIND_IMAGE_SIZE, path)
-            except Exception as e:
-                logger.error(e)
-                error_msg = _(u'Unable to view file')
-                return_dict['err'] = error_msg
+            return_dict['xmind_image_src'] = urlquote(get_thumbnail_src(repo_id, XMIND_IMAGE_SIZE, path))
 
         return render(request, template, return_dict)
         
@@ -1238,22 +1231,13 @@ def view_shared_file(request, fileshare):
 
     # for XMind thumbnail not by react
     if filetype == XMIND:
-        template = 'shared_file_view.html'
-        serviceURL = get_service_url().rstrip('/')
-        xmind_dir = os.path.join(THUMBNAIL_ROOT, str(XMIND_IMAGE_SIZE))
-        xmind_image = os.path.join(xmind_dir, obj_id)
-        if os.path.exists(xmind_image):
-            share_link_thumbnail = get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path)
-            raw_path = '%s/%s' % (serviceURL, share_link_thumbnail)
+        xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
+        if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, path)[0]:
+            error_msg = _(u'Unable to view file')
+            ret_dict['err'] = error_msg
         else:
-            try:
-                extract_xmind_image(repo_id, path)
-                share_link_thumbnail = get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path)
-                raw_path = '%s/%s' % (serviceURL, share_link_thumbnail)
-            except Exception as e:
-                logger.error(e)
-                error_msg = _(u'Unable to view file')
-                ret_dict['err'] = error_msg
+            template = 'shared_file_view.html'
+            raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
 
     return render(request, template, {
             'repo': repo,
@@ -1437,24 +1421,6 @@ def view_file_via_shared_dir(request, fileshare):
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
 
-        # for XMind thumbnail not by react
-        elif filetype == XMIND:
-            serviceURL = get_service_url().rstrip('/')
-            xmind_dir = os.path.join(THUMBNAIL_ROOT, str(XMIND_IMAGE_SIZE))
-            xmind_image = os.path.join(xmind_dir, obj_id)
-            if os.path.exists(xmind_image):
-                share_link_thumbnail = get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path)
-                raw_path = '%s/%s' % (serviceURL, share_link_thumbnail)
-            else:
-                try:
-                    extract_xmind_image(repo_id, req_path)
-                    share_link_thumbnail = get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path)
-                    raw_path = '%s/%s' % (serviceURL, share_link_thumbnail)
-                except Exception as e:
-                    logger.error(e)
-                    error_msg = _(u'Unable to view file')
-                    ret_dict['err'] = error_msg
-
     else:
         ret_dict['err'] = err_msg
 
@@ -1467,9 +1433,17 @@ def view_file_via_shared_dir(request, fileshare):
     else:
         zipped = gen_path_link(req_path, os.path.basename(fileshare.path[:-1]))
 
-    template = 'shared_file_view.html'
-    if filetype != XMIND:
-        template = 'shared_file_view_react.html'
+    template = 'shared_file_view_react.html'
+
+    # for XMind thumbnail not by react
+    if filetype == XMIND:
+        xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
+        if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, real_path)[0]:
+            error_msg = _(u'Unable to view file')
+            ret_dict['err'] = error_msg
+        else:
+            template = 'shared_file_view.html'
+            raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
 
     return render(request, template, {
             'repo': repo,
