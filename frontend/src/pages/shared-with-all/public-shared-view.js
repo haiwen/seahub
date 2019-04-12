@@ -28,8 +28,8 @@ class PublicSharedView extends React.Component {
       errMessage: '',
       emptyTip: '',
       repoList: [],
-      sortBy: cookie.load('seafile-repo-sort-by') || 'name', // 'name' or 'time'
-      sortOrder: cookie.load('seafile-repo-sort-order') || 'asc', // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time'
+      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       libraryType: 'public',
       isCreateMenuShow: false,
       isCreateRepoDialogShow: false,
@@ -149,8 +149,8 @@ class PublicSharedView extends React.Component {
   }
 
   sortItems = (sortBy, sortOrder) => {
-    cookie.save('seafile-repo-sort-by', sortBy);
-    cookie.save('seafile-repo-sort-order', sortOrder);
+    cookie.save('seafile-repo-dir-sort-by', sortBy);
+    cookie.save('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
