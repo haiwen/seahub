@@ -297,16 +297,22 @@ class DirentListView extends React.Component {
   }
 
   onContainerContextMenu = (event) => {
+    this.props.onDirentClick(null);
+
     if (this.props.selectedDirentList.length === 0) {
       let id = "dirent-container-menu"
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
       this.handleContextClick(event, id, menuList);
     } else {
       if (this.props.selectedDirentList.length === 1) {
-        let dirent = this.props.selectedDirentList[0];
-        let id = 'dirent-item-menu';
-        let menuList = this.getDirentItemMenuList(dirent, true);
-        this.handleContextClick(event, id, menuList, dirent);
+        this.props.onDirentClick(null);
+        event.preventDefault();
+        event.persist();
+        setTimeout(() => {
+          let id = "dirent-container-menu"
+          let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+          this.handleContextClick(event, id, menuList);
+        }, 0);
       } else {
         let id = 'dirents-menu';
         let menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
@@ -366,11 +372,10 @@ class DirentListView extends React.Component {
   }
 
   onItemContextMenu = (event, dirent) => {
-    if (this.props.selectedDirentList.length === 0) {
-      let id = 'dirent-item-menu';
-      let menuList = this.getDirentItemMenuList(dirent, true);
-      this.handleContextClick(event, id, menuList, dirent);
-    }
+    this.props.onDirentClick(dirent);
+    let id = 'dirent-item-menu';
+    let menuList = this.getDirentItemMenuList(dirent, true);
+    this.handleContextClick(event, id, menuList, dirent);
   }
 
   setDirentItemRef = (index) => item => {
