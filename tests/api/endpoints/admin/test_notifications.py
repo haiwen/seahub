@@ -8,14 +8,14 @@ from seahub.base.accounts import UserManager
 class AdminNotificationsTest(BaseTestCase):
     def setUp(self):
         self.endpoint = '/api/v2.1/admin/notifications/'
-        self.username = self.user.username
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
 
     def test_get_all_nofitications_as_admin(self):
         self.login_as(self.admin)
-        new_user1 = UserManager().create_user(email='new@new.com', password='root')
 
-        notice1 = UserNotification.objects.add_user_message(self.username, 'test1')
-        notice2 = UserNotification.objects.add_user_message(new_user1.username, 'test2')
+        notice1 = UserNotification.objects.add_user_message(self.user_name, 'test1')
+        notice2 = UserNotification.objects.add_user_message(self.admin_name, 'test2')
 
         resp = self.client.get(self.endpoint)
         json_resp = json.loads(resp.content)
@@ -45,16 +45,17 @@ class AdminNotificationsTest(BaseTestCase):
         json_resp2 = json.loads(resp_user2.content)
         assert json_resp2['count'] == 3
 
+        new_user1.delete()
+        new_user2.delete()
 
     def test_get_notifications_with_invalid_usre_permission(self):
-        new_user = UserManager().create_user(email='new@new.com', password='root')
-        self.login_as(new_user)
-        notice1 = UserNotification.objects.add_user_message(self.username, 'test1')
+        self.login_as(self.user)
+        notice1 = UserNotification.objects.add_user_message(self.user_name, 'test1')
         resp = self.client.get(self.endpoint)
         self.assertEqual(403, resp.status_code)
 
     def test_get_notifications_with_no_notification(self):
         self.login_as(self.admin)
         resp = self.client.get(self.endpoint)
-        self.assertEqual(404, resp.status_code)
+        self.assertEqual(200, resp.status_code)
 

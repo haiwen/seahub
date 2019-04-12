@@ -45,59 +45,44 @@ class AdminNotificationsView(APIView):
             per_page = int(request.GET.get('per_page', ''))
             page = int(request.GET.get('page', ''))
         except ValueError:
-            per_page = 25
+            per_page = 100
             page = 1
 
         start = (page - 1) * per_page
         end = page * per_page
+        total_count = 0
 
         # resource check
         if user_name != '':
             # return all notifications of a user given by name
-            notice_list = UserNotification.objects.get_user_notifications(user_name)[start:end]
+            notice_list = UserNotification.objects.get_user_notifications(user_name)
         else:
             # return all notifications of all users
-            notice_list = UserNotification.objects.get_all_notifications()[start:end]
+            notice_list = UserNotification.objects.get_all_notifications()
+        # notification does not exist, return a empty list
         if not notice_list:
-            error_msg = 'Notification not found'
-            print(error_msg)
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            result['count'] = 0
+            result['notification_list'] = []
+            return Response(result)
+
+        total_count = len(notice_list)
+        notice_list = notice_list[start:end]
 
         result_notices = update_notice_detail(request, notice_list)
-        total_count = 0
         notification_list = []
-        unseen_count = 0
         for i in result_notices:
+            notification_info = {}
+            notification_info['id'] = i.id
+            notification_info['type'] = i.msg_type
+            notification_info['time'] = datetime_to_isoformat_timestr(i.timestamp)
             if i.detail is not None:
-                total_count += 1
-                notice = {}
-                notice['id'] = i.id
-                notice['type'] = i.msg_type
-                notice['detail'] = i.detail
-                notice['time'] = datetime_to_isoformat_timestr(i.timestamp)
-                notice['seen'] = i.seen
+                notification_info['detail'] = i.detail
+            else:
+                notification_info['detail'] = {}
+            notification_list.append(notification_info)
 
-                if not i.seen:
-                    unseen_count += 1
-
-                notification_list.append(notice)
-
-        cache_key = get_cache_key_of_unseen_notifications(user_name)
-        count_from_cache = cache.get(cache_key, None)
-
-
-        # for case of count value is `0`
-        if count_from_cache is not None:
-            result['unseen_count'] = count_from_cache
-            unseen_num = count_from_cache
-        else:
-            result['unseen_count'] = unseen_count
-            # set cache
-            cache.set(cache_key, unseen_count)
-            unseen_num = unseen_count
 
         result['count'] = total_count
-        result['unseen_count'] = unseen_num
         result['notification_list'] = notification_list
 
         return Response(result)
