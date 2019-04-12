@@ -1,5 +1,5 @@
 import React from 'react';
-import SeafileEditor from '@seafile/seafile-editor';
+import { SeafileEditor } from '@seafile/seafile-editor';
 import 'whatwg-fetch';
 import { Value, Document, Block } from 'slate';
 import { seafileAPI } from './utils/seafile-api';
@@ -230,7 +230,7 @@ class EditorUtilities {
   }
 
   goDraftPage() {
-    window.location.href = serviceUrl + '/drafts/' + draftID + '/'; 
+    window.location.href = serviceUrl + '/drafts/' + draftID + '/';
   }
 
   createDraftFile() {
