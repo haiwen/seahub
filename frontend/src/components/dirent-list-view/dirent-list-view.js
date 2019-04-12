@@ -297,7 +297,6 @@ class DirentListView extends React.Component {
   }
 
   onContainerContextMenu = (event) => {
-    this.props.onDirentClick(null); // todo optimized
     if (this.props.selectedDirentList.length === 0) {
       let id = "dirent-container-menu"
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
@@ -390,9 +389,7 @@ class DirentListView extends React.Component {
   }
 
   onHideMenu = (e) => {
-    if (this.props.selectedDirentList.length === 0) {
-      this.onUnfreezedItem();
-    }
+    this.onUnfreezedItem();
   }
 
   // contextmenu utils
@@ -543,6 +540,7 @@ class DirentListView extends React.Component {
                   showImagePopup={this.showImagePopup}
                   onItemMouseDown={this.onItemMouseDown}
                   onItemContextMenu={this.onItemContextMenu}
+                  selectedDirentList={this.props.selectedDirentList}
                 />
               );
             })}

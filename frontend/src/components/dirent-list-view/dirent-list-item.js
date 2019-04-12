@@ -42,6 +42,7 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   onItemMouseDown: PropTypes.func.isRequired,
   onItemContextMenu: PropTypes.func.isRequired,
+  selectedDirentList: PropTypes.array.isRequired
 };
 
 class DirentListItem extends React.Component {
@@ -105,13 +106,6 @@ class DirentListItem extends React.Component {
   }
 
   onUnfreezedItem = () => {
-    let dirent = this.props.dirent;
-    // scenes 1: dirent isSelected --> this have Highest level
-    // scenes 2: dirent contextmenu show
-    // scenes 3: dirent operation menu show
-    if (dirent.isSelected) {
-      return;
-    }
     this.setState({
       highlight: false,
       isOperationShow: false,
@@ -121,7 +115,6 @@ class DirentListItem extends React.Component {
 
   //buiness handler
   onItemSelected = () => {
-    this.props.onFreezedItem();
     this.props.onItemSelected(this.props.dirent);
   }
 
@@ -425,7 +418,7 @@ class DirentListItem extends React.Component {
   }
 
   render() {
-    let { path, dirent } = this.props;
+    let { path, dirent, selectedDirentList } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let dirHref = '';
     if (this.props.currentRepoInfo) {
@@ -444,6 +437,7 @@ class DirentListItem extends React.Component {
 
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
     trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
+    trClass += dirent.isSelected ? 'tr-active' : '';
 
     return (
       <Fragment>
@@ -502,33 +496,65 @@ class DirentListItem extends React.Component {
             )} 
           </td>
           <td className="operation">
-            {
-              this.state.isOperationShow &&
-              <div className="operations">
-                <ul className="operation-group">
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                  </li>
-                  {this.props.showShareBtn &&
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                  </li>
-                  }
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                  </li>
-                  <li className="operation-group-item">
-                    <DirentMenu
-                      dirent={this.props.dirent}
-                      onMenuItemClick={this.onMenuItemClick}
-                      currentRepoInfo={this.props.currentRepoInfo}
-                      isRepoOwner={this.props.isRepoOwner}
-                      onFreezedItem={this.props.onFreezedItem}
-                      onUnfreezedItem={this.onUnfreezedItem}
-                    />
-                  </li>
-                </ul>
-              </div>
+            {selectedDirentList.length > 1 ? 
+              <Fragment>
+                {this.state.isOperationShow && !dirent.isSelected &&
+                  <div className="operations">
+                    <ul className="operation-group">
+                      <li className="operation-group-item">
+                        <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                      </li>
+                      {this.props.showShareBtn &&
+                      <li className="operation-group-item">
+                        <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                      </li>
+                      }
+                      <li className="operation-group-item">
+                        <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                      </li>
+                      <li className="operation-group-item">
+                        <DirentMenu
+                          dirent={this.props.dirent}
+                          onMenuItemClick={this.onMenuItemClick}
+                          currentRepoInfo={this.props.currentRepoInfo}
+                          isRepoOwner={this.props.isRepoOwner}
+                          onFreezedItem={this.props.onFreezedItem}
+                          onUnfreezedItem={this.onUnfreezedItem}
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                }
+              </Fragment> : 
+              <Fragment>
+                {this.state.isOperationShow && 
+                  <div className="operations">
+                    <ul className="operation-group">
+                      <li className="operation-group-item">
+                        <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                      </li>
+                      {this.props.showShareBtn &&
+                      <li className="operation-group-item">
+                        <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                      </li>
+                      }
+                      <li className="operation-group-item">
+                        <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                      </li>
+                      <li className="operation-group-item">
+                        <DirentMenu
+                          dirent={this.props.dirent}
+                          onMenuItemClick={this.onMenuItemClick}
+                          currentRepoInfo={this.props.currentRepoInfo}
+                          isRepoOwner={this.props.isRepoOwner}
+                          onFreezedItem={this.props.onFreezedItem}
+                          onUnfreezedItem={this.onUnfreezedItem}
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                }
+              </Fragment>
             }
           </td>
           <td className="file-size">{dirent.size && dirent.size}</td>

@@ -114,6 +114,7 @@ class LibContentContainer extends React.Component {
   // on '<tr>'
   onDirentClick = (dirent) => {
     this.setState({currentDirent: dirent});
+    this.props.onDirentClick(dirent);
   }
 
   onItemSelected = (dirent) => {
