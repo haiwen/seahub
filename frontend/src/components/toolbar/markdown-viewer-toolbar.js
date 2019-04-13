@@ -20,8 +20,8 @@ const propTypes = {
   openDialogs: PropTypes.func.isRequired,
   showFileHistory: PropTypes.bool.isRequired,
   toggleHistory: PropTypes.func.isRequired,
-  commentsNumber: PropTypes.number.isRequired,
-  toggleCommentList: PropTypes.func.isRequired,
+  // commentsNumber: PropTypes.number.isRequired,
+  // toggleCommentList: PropTypes.func.isRequired,
   editorMode: PropTypes.string.isRequired,
   readOnly: PropTypes.bool.isRequired,
   contentChanged: PropTypes.bool.isRequired,
@@ -110,7 +110,7 @@ class MarkdownViewerToolbar extends React.Component {
               <ButtonGroup>
                 <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                   onMouseDown={this.props.toggleShareLinkDialog}/>
-                {
+                {/*
                   this.props.commentsNumber > 0 ?
                     <button className="btn btn-icon btn-secondary btn-active" id="commentsNumber" type="button"
                       data-active="false" onMouseDown={this.props.toggleCommentList}>
@@ -118,7 +118,7 @@ class MarkdownViewerToolbar extends React.Component {
                     </button>
                     :
                     <IconButton id={'commentsNumber'} text={gettext('Comments')} icon={'fa fa-comments'} onMouseDown={this.props.toggleCommentList}/>
-                }
+                */}
                 <IconButton text={gettext('Back to parent directory')} id={'parentDirectory'}
                   icon={'fa fa-folder-open'} onMouseDown={this.props.backToParentDirectory}/>
                 {
