@@ -142,3 +142,17 @@
     max-width: 100%;
   }
 }
+.seafile-md-comment {
+  background-color: #fff;
+  position: absolute;
+  right: 1px;
+  height: calc(100% - 56px);
+  width: 30%;
+}
+.seafile-md-comment .seafile-comment {
+  height: 100%;
+  width: 100%;
+}
+.seafile-md-comment .seafile-comment .seafile-comment-toggle-resolved {
+  width: 100%;
+}
