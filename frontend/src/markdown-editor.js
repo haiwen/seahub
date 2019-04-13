@@ -291,6 +291,8 @@ class MarkdownEditor extends React.Component {
       isShowComments: false,
       isShowHistory: false,
       readOnly: true,
+      contentChanged: false,
+      saving: false,
     };
 
     if (this.state.collabServer) {
@@ -450,6 +452,7 @@ class MarkdownEditor extends React.Component {
     {
       case 'help':
         window.richMarkdownEditor.showHelpDialog();
+        this.setState({ isShowComments: false });
         break;
       case 'share_link':
         this.setState({
@@ -515,7 +518,7 @@ class MarkdownEditor extends React.Component {
             // case1: If file is draft file
             // case2: If mode == 'edit' and the file has no draft
             // case3: The length of markDownContent is 1 when clear all content in editor and the file has no draft
-            readOnly: !(hasPermission && (isDraft || (isEditMode && !hasDraft) || (isBlankFile && !hasDraft))),
+            readOnly: !hasPermission || hasDraft,
             value: value,
           });
         });
@@ -650,6 +653,7 @@ class MarkdownEditor extends React.Component {
 
   toggleCommentList = () => {
     this.setState({ isShowComments: !this.state.isShowComments });
+    window.richMarkdownEditor.handleCommentOpen();
   }
 
   getInsertLink = (repoID, filePath) => {
@@ -666,6 +670,14 @@ class MarkdownEditor extends React.Component {
         });
       }
     });
+  }
+
+  onContentChanged = (value) => {
+    this.setState({ contentChanged: value });
+  }
+
+  onSaving = (value) => {
+    this.setState({ saving: value });
   }
 
   render() {
@@ -700,6 +712,8 @@ class MarkdownEditor extends React.Component {
             readOnly={this.state.readOnly}
             mode={this.state.mode}
             editorMode={this.state.editorMode}
+            contentChanged={this.state.contentChanged}
+            saving={this.state.saving}
           />
           <SeafileEditor
             fileInfo={this.state.fileInfo}
@@ -725,6 +739,10 @@ class MarkdownEditor extends React.Component {
             deleteDraft={this.deleteDraft}
             showDraftSaved={this.state.showDraftSaved}
             readOnly={this.state.readOnly}
+            onContentChanged={this.onContentChanged}
+            onSaving={this.onSaving}
+            contentChanged={this.state.contentChanged}
+            saving={this.state.saving}
           />
           {this.state.isShowComments &&
             <div className="seafile-md-comment">
