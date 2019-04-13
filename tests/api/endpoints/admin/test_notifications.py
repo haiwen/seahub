@@ -2,6 +2,7 @@ import json
 
 from seahub.test_utils import BaseTestCase
 from seahub.notifications.models import UserNotification
+
 from seahub.base.accounts import UserManager
 
 
@@ -35,12 +36,12 @@ class AdminNotificationsTest(BaseTestCase):
         notice4 = UserNotification.objects.add_user_message(new_user2.username, 'test for user2')
         notice5 = UserNotification.objects.add_user_message(new_user2.username, 'test for user2')
 
-        resp_user1 = resp = self.client.get(self.endpoint + '?username=' + new_user1.username)
+        resp_user1 = self.client.get(self.endpoint + '?username=' + new_user1.username)
         self.assertEqual(200, resp_user1.status_code)
         json_resp1 = json.loads(resp_user1.content)
         assert json_resp1['count'] == 2
 
-        resp_user2 = resp = self.client.get(self.endpoint + '?username=' + new_user2.username)
+        resp_user2 = self.client.get(self.endpoint + '?username=' + new_user2.username)
         self.assertEqual(200, resp_user2.status_code)
         json_resp2 = json.loads(resp_user2.content)
         assert json_resp2['count'] == 3
@@ -58,4 +59,3 @@ class AdminNotificationsTest(BaseTestCase):
         self.login_as(self.admin)
         resp = self.client.get(self.endpoint)
         self.assertEqual(200, resp.status_code)
-
