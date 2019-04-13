@@ -108,6 +108,9 @@ class DirentListView extends React.Component {
   }
 
   onDirentClick = (dirent) => {
+    if (this.props.selectedDirentList.length > 0 && !this.state.activeDirent ) {
+      return;
+    }
     this.setState({activeDirent: dirent});
     this.props.onDirentClick(dirent);
   }

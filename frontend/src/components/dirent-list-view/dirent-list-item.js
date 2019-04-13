@@ -403,6 +403,7 @@ class DirentListItem extends React.Component {
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
     trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
     trClass += (activeDirent && activeDirent.name === dirent.name)  ? 'tr-active' : '';
+    trClass += dirent.isSelected? 'tr-active' : '';
 
     return (
       <Fragment>
