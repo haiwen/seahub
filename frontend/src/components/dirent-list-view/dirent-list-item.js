@@ -68,6 +68,10 @@ class DirentListItem extends React.Component {
       this.setState({
         highlight: false,
         isOperationShow: false,
+      }, () => {
+        if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
+          this.setState({isOperationShow: true});
+        }
       });
     }
   }
@@ -494,7 +498,7 @@ class DirentListItem extends React.Component {
                 }
               </Fragment> : 
               <Fragment>
-                {(this.state.isOperationShow || (activeDirent && dirent.name === activeDirent.name)) && 
+                {this.state.isOperationShow && 
                   <div className="operations">
                     <ul className="operation-group">
                       <li className="operation-group-item">
