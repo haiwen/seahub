@@ -56,22 +56,21 @@ class AdminNotificationsView(APIView):
         if user_name != '':
             # return all notifications of a user given by name
             total_count = UserNotification.objects.get_user_notifications(user_name).count()
-            notice_list = UserNotification.objects.get_user_notifications(user_name)[start:end]
+            notification_list = UserNotification.objects.get_user_notifications(user_name)[start:end]
         else:
             # return all notifications of all users
             total_count = UserNotification.objects.get_all_notifications().count()
-            notice_list = UserNotification.objects.get_all_notifications()[start:end]
+            notification_list = UserNotification.objects.get_all_notifications()[start:end]
         
-            
-        # notification does not exist, return a empty list
-        if not notice_list:
+        # notification does not exist, return an empty list
+        if not notification_list:
             result['count'] = 0
             result['notification_list'] = []
             return Response(result)
 
-        result_notices = update_notice_detail(request, notice_list)
+        result_notification = update_notice_detail(request, notification_list)
         notification_list = []
-        for i in result_notices:
+        for i in result_notification:
             notification_info = {}
             notification_info['id'] = i.id
             notification_info['type'] = i.msg_type
@@ -81,7 +80,6 @@ class AdminNotificationsView(APIView):
             else:
                 notification_info['detail'] = {}
             notification_list.append(notification_info)
-
 
         result['count'] = total_count
         result['notification_list'] = notification_list
