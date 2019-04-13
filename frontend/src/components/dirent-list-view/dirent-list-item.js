@@ -41,7 +41,8 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   onItemMouseDown: PropTypes.func.isRequired,
   onItemContextMenu: PropTypes.func.isRequired,
-  selectedDirentList: PropTypes.array.isRequired
+  selectedDirentList: PropTypes.array.isRequired,
+  activeDirent: PropTypes.object,
 };
 
 class DirentListItem extends React.Component {
@@ -382,7 +383,7 @@ class DirentListItem extends React.Component {
   }
 
   render() {
-    let { path, dirent, selectedDirentList } = this.props;
+    let { path, dirent, selectedDirentList, activeDirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let dirHref = '';
     if (this.props.currentRepoInfo) {
@@ -401,7 +402,8 @@ class DirentListItem extends React.Component {
 
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
     trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
-    trClass += dirent.isSelected ? 'tr-active' : '';
+    trClass += (activeDirent && activeDirent.name === dirent.name)  ? 'tr-active' : '';
+    trClass += dirent.isSelected? 'tr-active' : '';
 
     return (
       <Fragment>
