@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { SeafileEditor } from '@seafile/seafile-editor';
+import { SeafileEditor } from '@seafile/seafile-editor/dist/editor/editor.js';
 import 'whatwg-fetch';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
