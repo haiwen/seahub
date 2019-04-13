@@ -18,14 +18,23 @@ class DirentMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      menuList: [],
     };
-    this.menuList = [];
   }
 
   componentDidMount() {
-    this.menuList = this.calculateMenuList();
     this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
+    let { currentRepoInfo, dirent, isRepoOwner } = this.props;
+    let menuList = this.calculateMenuList(currentRepoInfo, dirent, isRepoOwner);
+    this.setState({menuList: menuList});
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    let { currentRepoInfo, dirent, isRepoOwner } = nextProps;
+    let menuList = this.calculateMenuList(currentRepoInfo, dirent, isRepoOwner);
+    this.setState({menuList: menuList});
+    
   }
 
   componentWillUnmount () {
@@ -45,8 +54,7 @@ class DirentMenu extends React.Component {
     }
   }
 
-  calculateMenuList() {
-    let { currentRepoInfo, dirent, isRepoOwner } = this.props;
+  calculateMenuList(currentRepoInfo, dirent, isRepoOwner) {
 
     let type = dirent.type;
     let permission = dirent.permission;
@@ -172,7 +180,7 @@ class DirentMenu extends React.Component {
   }
 
   render() { 
-    if (!this.menuList.length) {
+    if (!this.state.menuList.length) {
       return '';
     }
     return (
@@ -186,7 +194,7 @@ class DirentMenu extends React.Component {
           onClick={this.onDropdownToggleClick}
         />
         <DropdownMenu>
-          {this.menuList.map((menuItem, index) => {
+          {this.state.menuList.map((menuItem, index) => {
             if (menuItem === 'Divider') {
               return <DropdownItem key={index} divider/>;
             } else {

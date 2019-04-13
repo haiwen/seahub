@@ -119,6 +119,7 @@ class LibContentContainer extends React.Component {
 
   onItemSelected = (dirent) => {
     this.setState({currentDirent: dirent});
+    this.props.onItemSelected(dirent);
   }
 
   render() {
@@ -173,7 +174,7 @@ class LibContentContainer extends React.Component {
                     onAddFolder={this.props.onAddFolder}
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
-                    onItemSelected={this.props.onItemSelected}
+                    onItemSelected={this.onItemSelected}
                     onItemDelete={this.props.onItemDelete}
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.props.onItemMove}
@@ -236,7 +237,7 @@ class LibContentContainer extends React.Component {
                     onAddFolder={this.props.onAddFolder}
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
-                    onItemSelected={this.props.onItemSelected}
+                    onItemSelected={this.onItemSelected}
                     onItemDelete={this.props.onItemDelete}
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.props.onItemMove}

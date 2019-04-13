@@ -337,6 +337,7 @@ class RepoView(APIView):
             "has_been_shared_out": has_been_shared_out,
 
             "lib_need_decrypt": lib_need_decrypt,
+            "last_modified": timestamp_to_isoformat_timestr(repo.last_modify),
         }
 
         return Response(result)
