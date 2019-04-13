@@ -117,6 +117,7 @@
 
 .table-container {
   flex: 1;
+  padding-bottom: 20rem;
 }
 
 .cur-view-content .article {

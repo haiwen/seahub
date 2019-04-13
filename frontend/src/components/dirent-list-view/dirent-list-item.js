@@ -135,6 +135,7 @@ class DirentListItem extends React.Component {
   // on '<tr>'
   onDirentClick = (e) => {
     // '<td>' is clicked
+    e.stopPropagation();
     if (e.target.tagName == 'TD') {
       this.props.onDirentClick(this.props.dirent);
     }
@@ -493,7 +494,7 @@ class DirentListItem extends React.Component {
                 }
               </Fragment> : 
               <Fragment>
-                {this.state.isOperationShow && 
+                {(this.state.isOperationShow || (activeDirent && dirent.name === activeDirent.name)) && 
                   <div className="operations">
                     <ul className="operation-group">
                       <li className="operation-group-item">
