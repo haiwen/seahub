@@ -297,8 +297,6 @@ class DirentListView extends React.Component {
   }
 
   onContainerContextMenu = (event) => {
-    this.props.onDirentClick(null);
-
     if (this.props.selectedDirentList.length === 0) {
       let id = "dirent-container-menu"
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
