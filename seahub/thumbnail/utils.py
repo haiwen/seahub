@@ -257,4 +257,14 @@ def extract_xmind_image(repo_id, path, size=XMIND_IMAGE_SIZE):
         os.makedirs(thumbnail_dir)
     local_xmind_image = os.path.join(thumbnail_dir, file_id)
 
-    return _create_thumbnail_common(extracted_xmind_image_str, local_xmind_image, size)
+    try:
+        ret = _create_thumbnail_common(extracted_xmind_image_str, local_xmind_image, size)
+        return ret
+    except Exception as e:
+        logger.error(e)
+        return (False, 500)
+
+def get_thumbnail_image_path(obj_id, image_size):
+    thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(image_size))
+    thumbnail_image_path = os.path.join(thumbnail_dir, obj_id)
+    return thumbnail_image_path
