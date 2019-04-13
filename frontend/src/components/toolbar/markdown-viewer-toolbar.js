@@ -24,6 +24,8 @@ const propTypes = {
   toggleCommentList: PropTypes.func.isRequired,
   editorMode: PropTypes.string.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  contentChanged: PropTypes.bool.isRequired,
+  saving: PropTypes.bool.isRequired,
 };
 
 const MoreMenuPropTypes = {
@@ -84,6 +86,7 @@ class MarkdownViewerToolbar extends React.Component {
   }
 
   render() {
+    let { contentChanged, saving } = this.props;
 
     if (this.props.editorMode === 'rich') {
       return (
@@ -122,6 +125,13 @@ class MarkdownViewerToolbar extends React.Component {
                   this.props.showFileHistory && <IconButton id={'historyButton'}
                     text={gettext('File History')} onMouseDown={this.props.toggleHistory} icon={'fa fa-history'}/>
                 }
+                { saving ?
+                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                    <i className={'fa fa-spin fa-spinner'}/></button>
+                  :
+                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged} 
+                    onMouseDown={window.seafileEditor && window.seafileEditor.onPlainEditorSave} isActive={contentChanged}/>
+                }
               </ButtonGroup>
               <MoreMenu
                 readOnly={this.props.readOnly}
@@ -142,6 +152,14 @@ class MarkdownViewerToolbar extends React.Component {
             <div className="topbar-btn-container">
               {this.props.collabUsers.length > 0 && <CollabUsersButton className={'collab-users-dropdown'}
                 users={this.props.collabUsers} id={'usersButton'} />}
+              <ButtonGroup>
+                { saving ?
+                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                    <i className={'fa fa-spin fa-spinner'}/></button>
+                  :
+                  <IconButton id={'saveButton'} text={gettext('Save')} icon={'fa fa-save'} onMouseDown={window.seafileEditor && window.seafileEditor.onPlainEditorSave} disabled={!contentChanged} isActive={contentChanged} />
+                }
+              </ButtonGroup>
               <MoreMenu
                 readOnly={this.props.readOnly}
                 openDialogs={this.props.openDialogs}
