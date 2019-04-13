@@ -293,8 +293,8 @@ class SharedLibraries extends Component {
       loading: true,
       errorMsg: '',
       items: [],
-      sortBy: cookie.load('seafile-repo-sort-by') || 'name', // 'name' or 'time'
-      sortOrder: cookie.load('seafile-repo-sort-order') || 'asc', // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time'
+      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
   }
 
@@ -333,8 +333,8 @@ class SharedLibraries extends Component {
   }
 
   sortItems = (sortBy, sortOrder) => {
-    cookie.save('seafile-repo-sort-by', sortBy);
-    cookie.save('seafile-repo-sort-order', sortOrder);
+    cookie.save('seafile-repo-dir-sort-by', sortBy);
+    cookie.save('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,

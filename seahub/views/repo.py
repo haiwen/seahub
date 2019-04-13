@@ -275,8 +275,11 @@ def view_shared_dir(request, fileshare):
                 req_image_path = posixpath.join(req_path, f.obj_name)
                 src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                 f.encoded_thumbnail_src = urlquote(src)
+    
+    #template = 'view_shared_dir.html'
+    template = 'view_shared_dir_react.html'
 
-    return render(request, 'view_shared_dir.html', {
+    return render(request, template, {
             'repo': repo,
             'token': token,
             'path': req_path,

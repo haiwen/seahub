@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import listener from '../context-menu/globalEventListener';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
@@ -8,9 +9,6 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnFreezedItem: PropTypes.func.isRequired,
-  registerHandlers: PropTypes.func,
-  unregisterHandlers: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class TreeNodeMenu extends React.Component {
@@ -26,11 +24,22 @@ class TreeNodeMenu extends React.Component {
   componentDidMount() {
     let menuList = this.caculateMenuList();
     this.setState({menuList: menuList});
+    this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.appMenuType !== 'item_op_menu') {
-      this.setState({isItemMenuShow: false}); 
+  componentWillUnmount () {
+    if (this.listenerId) {
+      listener.unregister(this.listenerId);
+    }
+  }
+
+  onShowMenu = () => {
+    // nothing todo
+  }
+
+  onHideMenu = () => {
+    if (this.state.isItemMenuShow) {
+      this.setState({isItemMenuShow: false});
       this.props.onUnFreezedItem();
     }
   }

@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem, ButtonDropdown } from 'reactstrap';
-import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
+import { DropdownMenu, DropdownToggle, DropdownItem, ButtonDropdown } from 'reactstrap';
+import { Utils } from '../../utils/utils';
+import { gettext, isPro } from '../../utils/constants';
+import TextTranslation from '../../utils/text-translation';
+
 import '../../css/dirents-menu.css';
 
 const propTypes = {
-  dirents: PropTypes.array.isRequired,
+  dirent: PropTypes.object.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  isRepoOwner: PropTypes.bool.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
 };
 
@@ -21,65 +23,43 @@ class DirentMenu extends React.Component {
     };
   }
 
-  calculateMenuList(props) {
-    const { currentRepoInfo, dirents, isRepoOwner } = props;
-    const length = dirents.length;
-    let menuList = [];
-    if (length === 1) {
-      const dirent = dirents[0];
-      if (dirent.type === 'dir') {
-        menuList = ['Share'];
-      } else if (dirent.type === 'file') {
-        menuList = ['Share', 'Tags', 'Related Files', 'Divider', 'History', 'Details', 'Divider', 'Open via Client'];
-        if (isPro) {
-          if (dirent.is_locked) {
-            if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && currentRepoInfo.permission === 'rw')) {
-              menuList.splice(1, 0, 'Unlock');
-            }
-          } else {
-            menuList.splice(1, 0, 'Lock');
-          }
-        }
-      }
-    } else {
-      menuList = [];
-    }
-    this.setState({
-      menuList: menuList,
-    });
+  componentDidMount() {
+    const { currentRepoInfo, dirent } = this.props;
+    let menuList = this.calculateMenuList(currentRepoInfo, dirent);
+    this.setState({menuList: menuList});
   }
 
-  translateMenuItem = (menuItem) => {
-    let translateResult = '';
-    switch (menuItem) {
-      case 'Share':
-        translateResult = gettext('Share');
-        break;
-      case 'Tags':
-        translateResult = gettext('Tags');
-        break;
-      case 'Details':
-        translateResult = gettext('Details');
-        break;
-      case 'Lock':
-        translateResult = gettext('Lock');
-        break;
-      case 'Unlock':
-        translateResult = gettext('Unlock');
-        break;
-      case 'Related Files':
-        translateResult = gettext('Related Files');
-        break;
-      case 'History':
-        translateResult = gettext('History');
-        break;
-      case 'Open via Client':
-        translateResult = gettext('Open via Client');
-        break;
-      default:
-        break;
+  componentWillReceiveProps(nextProps) {
+    const { currentRepoInfo, dirent } = nextProps;
+    let menuList = this.calculateMenuList(currentRepoInfo, dirent);
+    this.setState({menuList: menuList});
+  }
+
+  calculateMenuList(currentRepoInfo, dirent) {
+    let menuList = [];
+    const { SHARE, TAGS, RELATED_FILES, HISTORY, OPEN_VIA_CLIENT, LOCK, UNLOCK } = TextTranslation;
+
+    if (dirent.type === 'dir') {
+      menuList = [SHARE];
+      return menuList;
+    } 
+
+    if (dirent.type === 'file') {
+      menuList = [SHARE, TAGS, RELATED_FILES, 'Divider', HISTORY, 'Divider', OPEN_VIA_CLIENT];
+      if (!Utils.isMarkdownFile(dirent.name)) {
+        menuList.splice(2, 1);
+      }
+      if (isPro) {
+        if (dirent.is_locked) {
+          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && currentRepoInfo.permission === 'rw')) {
+            menuList.splice(1, 0, UNLOCK);
+          }
+        } else {
+          menuList.splice(1, 0, LOCK);
+        }
+      }
+      return menuList;
     }
-    return translateResult;
   }
 
   onDropdownToggleClick = (e) => {
@@ -91,23 +71,11 @@ class DirentMenu extends React.Component {
 
   onMenuItemClick = (event) => {
     let operation = event.target.dataset.toggle;
-    this.props.onMenuItemClick(operation, this.props.dirents);
-  }
-
-  componentDidMount() {
-    this.calculateMenuList(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.dirents.length !== nextProps.dirents.length) {
-      this.calculateMenuList(nextProps);
-    }
+    this.props.onMenuItemClick(operation, this.props.dirent);
   }
 
   render() {
-    if (this.state.menuList.length === 0) {
-      return null;
-    }
+
     return (
       <ButtonDropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} title={gettext('More Operations')}>
         <DropdownToggle data-toggle="dropdown" aria-expanded={this.state.isItemMenuShow} onClick={this.onDropdownToggleClick} className="fas fa-ellipsis-v sf-dropdown-toggle dirents-more-menu">
@@ -118,7 +86,7 @@ class DirentMenu extends React.Component {
               return <DropdownItem key={index} divider/>;
             } else {
               return (
-                <DropdownItem key={index} data-toggle={menuItem} onClick={this.onMenuItemClick}>{this.translateMenuItem(menuItem)}</DropdownItem>
+                <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick}>{menuItem.value}</DropdownItem>
               );
             }
           })}

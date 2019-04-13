@@ -532,12 +532,10 @@ class Wiki extends Component {
         this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
         this.moveDirent(direntPath);
       });
-      let message = gettext('Successfully moved %(name)s.');
-      message = message.replace('%(name)s', dirNames);
+      let message = Utils.getMoveSuccessMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
-      let message = gettext('Failed to move %(name)s');
-      message = message.replace('%(name)s', dirNames);
+      let message = Utils.getMoveFailedMessage(dirNames);
       toaster.danger(message);
     });
   }
@@ -553,12 +551,10 @@ class Wiki extends Component {
       direntPaths.forEach((direntPath, index) => {
         this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
       });
-      let message = gettext('Successfully copied %(name)s.');
-      message = message.replace('%(name)s', dirNames);
+      let message = Utils.getCopySuccessfulMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
-      let message = gettext('Failed to copy %(name)s');
-      message = message.replace('%(name)s', dirNames);
+      let message = Utils.getCopyFailedMessage(dirNames);
       toaster.danger(message);
     });
   }

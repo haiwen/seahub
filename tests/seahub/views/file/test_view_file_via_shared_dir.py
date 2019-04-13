@@ -29,11 +29,9 @@ class ViewFileViaSharedDirTest(TestCase, Fixtures):
             '?p=%s' % self.file
         )
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'shared_file_view.html')
+        self.assertTemplateUsed(resp, 'shared_file_view_react.html')
 
         self.assertContains(resp, os.path.basename(self.file))
-        dl_url_tag = 'href="?p=%s&dl=1"' % self.file
-        self.assertContains(resp, dl_url_tag)
 
     def test_can_view_image_in_sub_dir(self):
         """View 3.jpg when share 'folder' will raise error.
@@ -74,7 +72,7 @@ class ViewFileViaSharedDirTest(TestCase, Fixtures):
             '?p=/3.jpg'
         )
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'shared_file_view.html')
+        self.assertTemplateUsed(resp, 'shared_file_view_react.html')
         self.assertContains(resp, '3.jpg')
 
     def test_can_download(self):

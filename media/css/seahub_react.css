@@ -907,6 +907,10 @@ table td {
     background-color: #f8f8f8;
 }
 
+.tr-active {
+    background-color: #f2f4f6 !important;
+}
+
 /* table-item reanme-component */
 .rename-container input {
     box-sizing: content-box;

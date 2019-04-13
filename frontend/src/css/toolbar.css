@@ -32,7 +32,7 @@
 }
 
 .group-operations {
-  margin-right: 0.5rem;
+  margin-right: 0.25rem;
 }
 
 .group-operations .group-op-item {
@@ -49,6 +49,7 @@
 /* end file-operation toolbar */
 
 /* begin view-mode toolbar */
+.detail-btn button,
 .sf-view-mode-btn {
   padding: 0;
   height: 30px;
@@ -58,7 +59,12 @@
   border: 1px solid #ccc;
   line-height: 29px;
   font-size: 18px;
-  border-radius: 0 !important;
+  border-radius: 2px;
+}
+
+.detail-btn button {
+  font-size: 15px;
+  padding-top: 1px;
 }
 
 .sf-view-mode-btn.current-mode {

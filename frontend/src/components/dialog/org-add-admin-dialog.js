@@ -26,7 +26,7 @@ class AddOrgAdminDialog extends React.Component {
   addOrgAdmin = () => {
     if (this.state.selectedOption) {
       let userEmail = this.state.selectedOption.email;
-      this.props.addOrgAdmin(userEmail)
+      this.props.addOrgAdmin(userEmail);
     }
   }
 

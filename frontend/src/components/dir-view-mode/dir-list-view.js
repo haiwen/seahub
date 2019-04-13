@@ -1,11 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import DirentNoneView from '../../components/dirent-list-view/dirent-none-view';
 import RepoInfoBar from '../../components/repo-info-bar';
-import ModalPortal from '../modal-portal';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
-import CreateFile from '../../components/dialog/create-file-dialog';
-import CreateFolder from '../../components/dialog/create-folder-dialog';
-import DirentListMenu from '../dirent-list-view/dirent-right-menu';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -20,9 +17,11 @@ const propTypes = {
   updateUsedRepoTags: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
@@ -31,100 +30,29 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
-  onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
-  switchAnotherMenuToShow: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
-  onAddFolder: PropTypes.func,
+  selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
 };
 
 class DirListView extends React.Component {
   
-  constructor(props) {
-    super(props);
-    this.state = {
-      isCreateFileDialogShow: false,
-      fileType: '',
-      isContainerContextmenuShow: false,
-      isCreateFolderDialogShow: false,
-      itemMousePosition: {clientX: '', clientY: ''},
-    }
-  }
-
-  componentDidUpdate() {
-    this.registerTableContainerContextmenuHandler();
-  }
-
-  componentWillUnmount() {
-    this.unregisterTableContainerContextmenuHandler();
-  }
-
-  registerTableContainerContextmenuHandler = () => {
-    let tableContainer = document.querySelector('.table-container');
-    if (tableContainer) {
-      tableContainer.addEventListener('contextmenu', this.tableContainerContextmenuHandler);
-    }
-  }
-
-  unregisterTableContainerContextmenuHandler = () => {
-    let tableContainer = document.querySelector('.table-container');
-    tableContainer.removeEventListener('contextmenu', this.tableContainerContextmenuHandler);
-  }
-
-  tableContainerContextmenuHandler = (e) => {
-    e.preventDefault();
-    
-    this.props.switchAnotherMenuToShow('list_view_contextmenu');
-
-    this.setState({isContainerContextmenuShow: false}, () => {
-      this.setState({
-        isContainerContextmenuShow: true,
-        itemMousePosition: {clientX: e.clientX, clientY: e.clientY}
-      })
-    });
-  }
-
-  closeTableContainerRightMenu = () => {
-    this.setState({
-      isContainerContextmenuShow: false,
-    });
-    this.props.switchAnotherMenuToShow('item_op_menu');
-  }
-
-  onCreateFolderToggle = () => {
-    this.setState({
-      isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow,
-    });
-  }
-
-  onCreateFileToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: ''
-    });
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
-  }
-
-  onAddFolder = (dirPath) => {
-    this.setState({isCreateFolderDialogShow: false});
-    this.props.onAddFolder(dirPath);
-  }
-
-  checkDuplicatedName = (newName) => {
-    let direntList = this.props.direntList;
-    let isDuplicated = direntList.some(object => {
-      return object.name === newName;
-    });
-    return isDuplicated;
-  }
-
   render() {
+
+    if (this.props.path === '/' && this.props.direntList.length === 0) {
+      return (
+        <DirentNoneView 
+          path={this.props.path}
+          isDirentListLoading={this.props.isDirentListLoading}
+          onAddFile={this.props.onAddFile}
+        />
+      );
+    }
+
     return (
       <Fragment>
         {this.props.isRepoInfoBarShow && (
@@ -137,65 +65,36 @@ class DirListView extends React.Component {
             updateUsedRepoTags={this.props.updateUsedRepoTags}
           />
         )}
-        <div className="table-container">
-          <DirentListView
-            path={this.props.path}
-            currentRepoInfo={this.props.currentRepoInfo}
-            repoID={this.props.repoID}
-            isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-            enableDirPrivateShare={this.props.enableDirPrivateShare}
-            direntList={this.props.direntList}
-            sortBy={this.props.sortBy}
-            sortOrder={this.props.sortOrder}
-            sortItems={this.props.sortItems}
-            onAddFile={this.props.onAddFile}
-            onItemClick={this.props.onItemClick}
-            onItemSelected={this.props.onItemSelected}
-            onItemDelete={this.props.onItemDelete}
-            onItemRename={this.props.onItemRename}
-            onItemMove={this.props.onItemMove}
-            onItemCopy={this.props.onItemCopy}
-            onDirentClick={this.props.onDirentClick}
-            onItemDetails={this.props.onItemDetails}
-            isDirentListLoading={this.props.isDirentListLoading}
-            updateDirent={this.props.updateDirent}
-            isAllItemSelected={this.props.isAllItemSelected}
-            onAllItemSelected={this.props.onAllItemSelected}
-            switchAnotherMenuToShow={this.props.switchAnotherMenuToShow}
-            appMenuType={this.props.appMenuType}
-          />
-        </div>
-        {this.state.isContainerContextmenuShow && this.props.appMenuType === 'list_view_contextmenu' && (
-          <DirentListMenu 
-            mousePosition={this.state.itemMousePosition}
-            itemUnregisterHandlers={this.unregisterTableContainerContextmenuHandler}
-            itemRegisterHandlers={this.registerTableContainerContextmenuHandler}
-            closeRightMenu={this.closeTableContainerRightMenu}
-            onCreateFolderToggle={this.onCreateFolderToggle}
-            onCreateFileToggle={this.onCreateFileToggle}
-          />
-        )}
-        {this.state.isCreateFolderDialogShow && (
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.props.path}
-              onAddFolder={this.onAddFolder}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFolderCancel={this.onCreateFolderToggle}
-            />
-          </ModalPortal>
-        )} 
-        {this.state.isCreateFileDialogShow && (
-          <ModalPortal>
-            <CreateFile
-              parentPath={this.props.path}
-              fileType={this.state.fileType}
-              onAddFile={this.onAddFile}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onCreateFileToggle}
-            />
-          </ModalPortal>
-        )}
+        <DirentListView
+          path={this.props.path}
+          currentRepoInfo={this.props.currentRepoInfo}
+          repoID={this.props.repoID}
+          isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+          enableDirPrivateShare={this.props.enableDirPrivateShare}
+          direntList={this.props.direntList}
+          showShareBtn={this.props.showShareBtn}
+          sortBy={this.props.sortBy}
+          sortOrder={this.props.sortOrder}
+          sortItems={this.props.sortItems}
+          onAddFile={this.props.onAddFile}
+          onItemClick={this.props.onItemClick}
+          onItemSelected={this.props.onItemSelected}
+          onItemDelete={this.props.onItemDelete}
+          onItemRename={this.props.onItemRename}
+          onItemMove={this.props.onItemMove}
+          onItemCopy={this.props.onItemCopy}
+          onDirentClick={this.props.onDirentClick}
+          isDirentListLoading={this.props.isDirentListLoading}
+          updateDirent={this.props.updateDirent}
+          isAllItemSelected={this.props.isAllItemSelected}
+          onAllItemSelected={this.props.onAllItemSelected}
+          selectedDirentList={this.props.selectedDirentList}
+          onItemsMove={this.props.onItemsMove}
+          onItemsCopy={this.props.onItemsCopy}
+          onItemsDelete={this.props.onItemsDelete}
+          onAddFile={this.props.onAddFile}
+          onAddFolder={this.props.onAddFolder}
+        />
       </Fragment>
     );
   }

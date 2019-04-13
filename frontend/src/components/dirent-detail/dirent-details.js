@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
+import Dirent from '../../models/dirent';
 import DetailListView from './detail-list-view';
-import RepoInfo from '../../models/repo-info';
 import FileTag from '../../models/file-tag';
 import '../../css/dirent-detail.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  dirent: PropTypes.object.isRequired,
+  dirent: PropTypes.object,
   path: PropTypes.string.isRequired,
+  currentRepoInfo: PropTypes.object.isRequired,
   onItemDetailsClose: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
 };
@@ -22,27 +23,44 @@ class DirentDetail extends React.Component {
     this.state = {
       direntType: '',
       direntDetail: '',
-      repoInfo: null,
       fileTagList: [],
       relatedFiles: [],
+      folderDirent: null,
     };
   }
 
   componentDidMount() {
     let { dirent, path, repoID } = this.props;
-    let direntPath = Utils.joinPath(path, dirent.name);
-    seafileAPI.getRepoInfo(repoID).then(res => {
-      let repoInfo = new RepoInfo(res.data);
-      this.setState({repoInfo: repoInfo});
-      this.updateDetailView(dirent, direntPath);
-    });
+    this.loadDirentInfo(dirent, path, repoID);
   }
 
   componentWillReceiveProps(nextProps) {
-    let { dirent, path } = nextProps;
-    let direntPath = Utils.joinPath(path, dirent.name);
-    this.updateDetailView(dirent, direntPath);
+    let { dirent, path, repoID } = nextProps;
+    this.loadDirentInfo(dirent, path, repoID);
   }
+
+  loadDirentInfo = (dirent, path, repoID) => {
+    if (dirent) {
+      let direntPath = Utils.joinPath(path, dirent.name);
+      this.updateDetailView(dirent, direntPath);
+    } else {
+      let dirPath = Utils.getDirName(path);
+      seafileAPI.listDir(repoID, dirPath).then(res => {
+        let direntList = res.data.dirent_list;
+        let folderDirent = null;
+        for (let i = 0; i < direntList.length; i++) {
+          let dirent = direntList[i];
+          if (dirent.parent_dir + dirent.name === path) {
+            folderDirent = new Dirent(dirent);
+            break;
+          }
+        }
+        this.setState({folderDirent: folderDirent});
+        this.updateDetailView(folderDirent, path);
+      });
+    }
+  }
+
 
   updateDetailView = (dirent, direntPath) => {
     let repoID = this.props.repoID;
@@ -86,11 +104,6 @@ class DirentDetail extends React.Component {
     }
   }
 
-  onFileTagChanged = (dirent, direntPath) => {
-    this.updateDetailView(dirent, direntPath);
-    this.props.onFileTagChanged(dirent, direntPath);
-  }
-
   onRelatedFileChange = () => {
     let { dirent, path } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
@@ -99,8 +112,14 @@ class DirentDetail extends React.Component {
 
   render() {
     let { dirent } = this.props;
-    let smallIconUrl = Utils.getDirentIcon(dirent);
-    let bigIconUrl = Utils.getDirentIcon(dirent, true);
+    let { folderDirent } = this.state;
+    if (!dirent && !folderDirent) {
+      return '';
+    }
+
+    let smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : Utils.getDirentIcon(folderDirent);
+    let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
+    let direntName = dirent ? dirent.name : folderDirent.name;
 
     return (
       <div className="detail-container">
@@ -108,7 +127,7 @@ class DirentDetail extends React.Component {
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
             <img src={smallIconUrl} width="24" height="24" alt="" />{' '}
-            <span className="name ellipsis" title={dirent.name}>{dirent.name}</span>
+            <span className="name ellipsis" title={direntName}>{direntName}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
@@ -118,15 +137,15 @@ class DirentDetail extends React.Component {
           {this.state.direntDetail && 
             <div className="dirent-table-container">
               <DetailListView 
-                repoInfo={this.state.repoInfo}
+                repoInfo={this.props.currentRepoInfo}
                 path={this.props.path}
                 repoID={this.props.repoID}
-                dirent={this.props.dirent}
+                dirent={this.props.dirent || folderDirent}
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail} 
                 fileTagList={this.state.fileTagList}
                 relatedFiles={this.state.relatedFiles}
-                onFileTagChanged={this.onFileTagChanged}
+                onFileTagChanged={this.props.onFileTagChanged}
                 onRelatedFileChange={this.onRelatedFileChange}
               />
             </div>

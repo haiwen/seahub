@@ -30,26 +30,42 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-    window.shared = {
-        pageOptions: {
-            repoID: '{{ repo.id }}',
-            filePath: '{{ path|escapejs }}',
-            sharedToken: '{{ shared_token }}',
-            trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
-            fileName: '{{ file_name|escapejs }}',
-            fileSize: {{ file_size }},
-            rawPath: '{{ raw_path|escapejs }}',
-            sharedBy: '{{ shared_by|email2nickname }}',
-            siteName: '{{ site_name }}',
-            enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
-            download: '{{ permissions.can_download }}' == 'True',
-            fileContent: '{{ file_content|escapejs }}',
-            err: {% if err %}'{{ err }}'{% else %}''{% endif %},
-            fileType: '{{ filetype }}',
-            fileExt: '{{ fileext }}',
-            commitID: '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}'
-        }
-    };
+  window.shared = {
+    pageOptions: {
+      repoID: '{{ repo.id }}',
+      filePath: '{{ path|escapejs }}',
+      sharedToken: '{{ shared_token }}',
+      trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
+      fileName: '{{ file_name|escapejs }}',
+      fileSize: {{ file_size }},
+      rawPath: '{{ raw_path|escapejs }}',
+      sharedBy: '{{ shared_by|email2nickname }}',
+      siteName: '{{ site_name }}',
+      enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
+      download: '{{ permissions.can_download }}' == 'True',
+      fileContent: '{{ file_content|escapejs }}',
+      err: {% if err %}'{{ err }}'{% else %}''{% endif %},
+      fileType: '{{ filetype }}',
+      fileExt: '{{ fileext }}',
+      commitID: '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}',
+
+      // for 'view file in shared dir'
+      {% if zipped %}
+      zipped: (function() {
+        var list = [];
+        {% for name, path in zipped %}
+        list.push({
+          'name': '{{ name|escapejs }}',
+          'path': '{{ path|escapejs }}'
+        });
+        {% endfor %}
+        return list;
+      })(),
+      {% endif %}
+      prevImgPath: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}''{% endif %},
+      nextImgPath: {% if img_next %}'{{ img_next|escapejs }}'{% else %}''{% endif %}
+    }
+  };
 </script>
 {% if filetype == 'Markdown' %}
     {% render_bundle 'sharedFileViewMarkdown' 'js' %}

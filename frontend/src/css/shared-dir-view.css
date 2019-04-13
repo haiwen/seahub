@@ -1,0 +1,28 @@
+body {
+  overflow: hidden;
+}
+#wrapper {
+  height: 100%;
+}
+.top-header {
+  background: #f4f4f7;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 8px 16px 4px;
+  height: 53px;
+  flex-shrink: 0;
+}
+.title {
+  font-size: 1.4rem;
+  margin-bottom: .5rem;
+}
+.shared-dir-view-main {
+  width: calc(100% - 40px);
+  max-width: 950px;
+  padding: 15px 0 40px;
+  margin: 0 auto;
+}
+.op-bar {
+  padding: 9px 10px;
+  background: #f2f2f2;
+  border-radius: 2px;
+}

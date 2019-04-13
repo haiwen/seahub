@@ -31,7 +31,7 @@ class LibContentView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMode: cookie.load('seafile-view-mode') || 'list',
+      currentMode: cookie.load('seafile_view_mode') || 'list',
       path: '',
       pathExist: true,
       isViewFile: false,
@@ -64,8 +64,8 @@ class LibContentView extends React.Component {
       isDirentListLoading: true,
       direntList: [],
       isDirentSelected: false,
-      sortBy: cookie.load('seafile-dir-sort-by') || 'name', // 'name' or 'time'
-      sortOrder: cookie.load('seafile-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time'
+      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isAllDirentSelected: false,
       dirID: '',  // for update dir list
       errorMsg: '',
@@ -78,9 +78,11 @@ class LibContentView extends React.Component {
   }
 
   showDirentDetail = () => {
-    this.setState({
-      isDirentDetailShow: true,
-    });
+    this.setState({isDirentDetailShow: true});
+  }
+
+  toggleDirentDetail = () => {
+    this.setState({ isDirentDetailShow: !this.state.isDirentDetailShow });
   }
 
   closeDirentDetail = () => {
@@ -239,11 +241,11 @@ class LibContentView extends React.Component {
         draftCounts: res.data.draft_counts,
       });
     });
-
+    
     if (Utils.isMarkdownFile(path)) {
       seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
         if (this.state.currentMode !== 'column') {
-          cookie.save('seafile-view-mode', 'column');
+          cookie.save('seafile_view_mode', 'column');
           this.setState({currentMode: 'column'});
         }
         this.loadSidePanel(path);
@@ -292,7 +294,8 @@ class LibContentView extends React.Component {
     this.setState({
       isDirentListLoading: true,
       path: path,
-      isViewFile: false
+      isViewFile: false,
+      selectedDirentList: [],
     });
 
     // update data
@@ -451,12 +454,10 @@ class LibContentView extends React.Component {
         }
         this.moveDirent(direntPath);
       });
-      let message = gettext('Successfully moved %(name)s.');
-      message = message.replace('%(name)s', dirNames);
+      let message =  Utils.getMoveSuccessMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
-      let message = gettext('Failed to move %(name)s');
-      message = message.replace('%(name)s', dirNames);
+      let message = Utils.getMoveFailedMessage(dirNames);
       toaster.danger(message);
     });
   }
@@ -475,12 +476,10 @@ class LibContentView extends React.Component {
           this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
         });
       }
-      let message = gettext('Successfully copied %(name)s.');
-      message = message.replace('%(name)s', dirNames);
+      let message =  Utils.getCopySuccessfulMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
-      let message = gettext('Failed to copy %(name)s');
-      message = message.replace('%(name)s', dirNames);
+      let message = Utils.getCopyFailedMessage(dirNames);
       toaster.danger(message);
     });
   }
@@ -538,7 +537,11 @@ class LibContentView extends React.Component {
     if (mode === this.state.currentMode) {
       return;
     }
-    cookie.save('seafile-view-mode', mode);
+    if (mode === 'detail') {
+      this.toggleDirentDetail();
+      return;
+    }
+    cookie.save('seafile_view_mode', mode);
     let path = this.state.path;
     if (this.state.currentMode === 'column' && this.state.isViewFile) {
       path = Utils.getDirName(path);
@@ -582,14 +585,22 @@ class LibContentView extends React.Component {
       } else {
         this.loadNodeAndParentsByPath(path);
       }
-    }
 
-    // load mainPanel
-    if (item.is_dir) {
-      this.showDir(path);
+      // load mainPanel
+      if (item.is_dir) {
+        this.showDir(path);
+      } else {
+        if (Utils.isMarkdownFile(path)) {
+          this.showFile(path);
+        } else {
+          let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
+          let newWindow = window.open('about:blank');
+          newWindow.location.href = url;
+        }
+      }
     } else {
-      if (Utils.isMarkdownFile(path)) {
-        this.showFile(path);
+      if (item.is_dir) {
+        this.showDir(path);
       } else {
         let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
         let newWindow = window.open('about:blank');
@@ -742,6 +753,27 @@ class LibContentView extends React.Component {
   }
 
   onDirentClick = (dirent) => {
+    let direntList = this.state.direntList.map(dirent => {
+      dirent.isSelected = false;
+      return dirent;
+    });
+    if (dirent) {
+      // dirent.isSelected = true;
+      this.setState({
+        direntList: direntList,
+        isDirentSelected: true,
+        selectedDirentList: [dirent],
+      });
+    } else {
+      this.setState({
+        direntList: direntList,
+        isDirentSelected: false,
+        selectedDirentList: [],
+      });
+    }
+  }
+
+  onItemClick = (dirent) => {
     this.resetSelected();
     let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
@@ -1184,8 +1216,8 @@ class LibContentView extends React.Component {
   }
 
   sortItems = (sortBy, sortOrder) => {
-    cookie.save('seafile-dir-sort-by', sortBy);
-    cookie.save('seafile-dir-sort-order', sortOrder);
+    cookie.save('seafile-repo-dir-sort-by', sortBy);
+    cookie.save('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -1385,11 +1417,13 @@ class LibContentView extends React.Component {
             updateUsedRepoTags={this.updateUsedRepoTags}
             isDirentListLoading={this.state.isDirentListLoading}
             direntList={this.state.direntList}
+            showShareBtn={showShareBtn}
             sortBy={this.state.sortBy}
             sortOrder={this.state.sortOrder}
             sortItems={this.sortItems}
             updateDirent={this.updateDirent}
-            onItemClick={this.onDirentClick}
+            onDirentClick={this.onDirentClick}
+            onItemClick={this.onItemClick}
             onItemSelected={this.onDirentSelected}
             onItemDelete={this.onMainPanelItemDelete}
             onItemRename={this.onMainPanelItemRename}
@@ -1403,6 +1437,10 @@ class LibContentView extends React.Component {
             onAllDirentSelected={this.onAllDirentSelected}
             isDirentDetailShow={this.state.isDirentDetailShow}
             selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
+            selectedDirentList={this.state.selectedDirentList}
+            onItemsMove={this.onMoveItems}
+            onItemsCopy={this.onCopyItems}
+            onItemsDelete={this.onDeleteItems}
             closeDirentDetail={this.closeDirentDetail}
             showDirentDetail={this.showDirentDetail}
             onDeleteRepoTag={this.onDeleteRepoTag}

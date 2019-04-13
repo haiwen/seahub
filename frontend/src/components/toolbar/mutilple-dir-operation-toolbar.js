@@ -1,18 +1,17 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button , ButtonGroup , Modal } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentsMenu from '../dirent-list-view/dirents-menu';
 import ShareDialog from '../dialog/share-dialog';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import toaster from '../toast';
+import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ModalPortal from '../modal-portal';
 
 const propTypes = {
@@ -29,7 +28,6 @@ const propTypes = {
   onFilesTagChanged: PropTypes.func.isRequired,
   unSelectDirent: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  showDirentDetail: PropTypes.func.isRequired,
 };
 
 class MutipleDirOperationToolbar extends React.Component {
@@ -37,8 +35,7 @@ class MutipleDirOperationToolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      progress: 0,
-      isProgressDialogShow: false,
+      isZipDialogOpen: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isMutipleOperation: true,
@@ -50,7 +47,6 @@ class MutipleDirOperationToolbar extends React.Component {
       showRelatedFileDialog: false,
       viewMode: 'list_related_file',     
     };
-    this.zipToken = null;
   }
 
   onMoveToggle = () => {
@@ -74,43 +70,15 @@ class MutipleDirOperationToolbar extends React.Component {
         location.href= url;
         return;
       }
-      let selectedDirentNames = selectedDirentList.map(dirent => {
-        return dirent.name;
-      });
-      this.setState({isProgressDialogShow: true, progress: 0});
-      seafileAPI.zipDownload(repoID, path, selectedDirentNames).then(res => {
-        this.zipToken = res.data['zip_token'];
-        this.addDownloadAnimation();
-        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      this.setState({
+        isZipDialogOpen: true
       });
     }
   }
 
-  addDownloadAnimation = () => {
-    let _this = this;
-    let token = this.zipToken;
-    seafileAPI.queryZipProgress(token).then(res => {
-      let data = res.data;
-      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
-      this.setState({progress: parseInt(progress)});
-
-      if (data['total'] === data['zipped']) {
-        this.setState({
-          progress: 100
-        });
-        clearInterval(this.interval);
-        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
-        setTimeout(function() {
-          _this.setState({isProgressDialogShow: false});
-        }, 500);
-      }
-
-    });
-  }
-
-  onCancelDownload = () => {
-    seafileAPI.cancelZipTask(this.zipToken).then(() => {
-      this.setState({isProgressDialogShow: false});
+  closeZipDialog = () => {
+    this.setState({
+      isZipDialogOpen: false
     });
   }
 
@@ -126,9 +94,6 @@ class MutipleDirOperationToolbar extends React.Component {
         break;
       case 'Tags':
         this.listFileTags(dirent);
-        break;
-      case 'Details':
-        this.props.showDirentDetail();
         break;
       case 'Lock':
         this.lockFile(dirent);
@@ -277,11 +242,10 @@ class MutipleDirOperationToolbar extends React.Component {
             <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
             <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
             <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
-            {this.props.selectedDirentList.length > 0 &&
+            {this.props.selectedDirentList.length === 1 &&
               <DirentsMenu
-                dirents={this.props.selectedDirentList}
+                dirent={this.props.selectedDirentList[0]}
                 currentRepoInfo={this.props.currentRepoInfo}
-                isRepoOwner={this.props.isRepoOwner}
                 onMenuItemClick={this.onMenuItemClick}
               />
             }
@@ -309,8 +273,15 @@ class MutipleDirOperationToolbar extends React.Component {
             onCancelCopy={this.onCopyToggle}
           />
         }
-        {this.state.isProgressDialogShow &&
-          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload} />
+        {this.state.isZipDialogOpen &&
+        <ModalPortal>
+          <ZipDownloadDialog
+            repoID={this.props.repoID}
+            path={this.props.path}
+            target={this.props.selectedDirentList.map(dirent => dirent.name)}
+            toggleDialog={this.closeZipDialog}
+          />
+        </ModalPortal>
         }
         {this.state.showLibContentViewDialogs && (
           <Fragment>

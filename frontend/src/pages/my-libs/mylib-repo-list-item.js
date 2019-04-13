@@ -25,7 +25,6 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
-  onRepoDetails: PropTypes.func.isRequired,
   onRepoClick: PropTypes.func.isRequired,
 };
 
@@ -90,9 +89,6 @@ class MylibRepoListItem extends React.Component {
       case 'Folder Permission':
         // todo
         break;
-      case 'Details':
-        this.onRepoDetails();
-        break;
       case 'Label current state':
         this.onLabel();
         break;
@@ -144,10 +140,6 @@ class MylibRepoListItem extends React.Component {
 
   onResetPasswordToggle = () => {
     this.setState({isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow});
-  }
-
-  onRepoDetails = () => {
-    this.props.onRepoDetails(this.props.repo);
   }
 
   onLabel = () => {

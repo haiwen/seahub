@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import listener from '../context-menu/globalEventListener';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 
@@ -10,7 +11,6 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
 };
 
 class DirentMenu extends React.Component {
@@ -25,11 +25,23 @@ class DirentMenu extends React.Component {
 
   componentDidMount() {
     this.menuList = this.calculateMenuList();
+    this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
   }
 
-  componentWillReceiveProps(nextProp) {
-    if (nextProp.appMenuType === 'list_view_contextmenu' || nextProp.appMenuType === 'item_contextmenu') {
-      this.setState({isItemMenuShow: false}); 
+  componentWillUnmount () {
+    if (this.listenerId) {
+      listener.unregister(this.listenerId);
+    }
+  }
+
+  onShowMenu = () => {
+    // nothing todo
+  }
+
+  onHideMenu = () => {
+    if (this.state.isItemMenuShow) {
+      this.setState({isItemMenuShow: false});
+      this.props.onUnfreezedItem();
     }
   }
 
@@ -42,15 +54,15 @@ class DirentMenu extends React.Component {
     if (type === 'dir' && permission === 'rw') {
       let menuList = [];
       if (can_set_folder_perm) {
-        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Details', 'Divider', 'Open via Client'];
+        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Divider', 'Open via Client'];
       } else {
-        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Details', 'Divider', 'Open via Client'];
+        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Open via Client'];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
-      let menuList = currentRepoInfo.encrypted ? ['Copy', 'Details'] : ['Details'];
+      let menuList = currentRepoInfo.encrypted ? ['Copy'] : [];
       return menuList;
     }
 
@@ -78,7 +90,6 @@ class DirentMenu extends React.Component {
       if (fileAuditEnabled) {
         menuList.push('Access Log');
       }
-      menuList.push('Details');
       menuList.push('Divider');
       menuList.push('Open via Client');
       return menuList;
@@ -93,7 +104,6 @@ class DirentMenu extends React.Component {
         menuList.push('Comment');
       }
       menuList.push('History');
-      menuList.push('Details');
       return menuList;
     }
   }
@@ -112,9 +122,6 @@ class DirentMenu extends React.Component {
         break;
       case 'Permission':
         translateResult = gettext('Permission');
-        break;
-      case 'Details':
-        translateResult = gettext('Details');
         break;
       case 'Unlock':
         translateResult = gettext('Unlock');
@@ -142,6 +149,7 @@ class DirentMenu extends React.Component {
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     this.toggleOperationMenu();
   }
 

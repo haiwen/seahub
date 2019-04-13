@@ -62,10 +62,10 @@ class RelatedFileDialogs extends React.Component {
           }
         </Modal>
       </ModalPortal>
-    )
+    );
   }
 }
 
 RelatedFileDialogs.propTypes = propTypes;
 
-export default RelatedFileDialogs
+export default RelatedFileDialogs;

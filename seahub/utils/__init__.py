@@ -131,7 +131,7 @@ MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'eps', 'psd'),
-    DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
+    DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'vsd'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     SVG: ('svg',),
     DRAW: ('draw',),
@@ -143,6 +143,7 @@ PREVIEW_FILEEXT = {
     XMIND: ('xmind',),
     XMIND: ('xmind',),
     CTABLE: ('ctable',),
+    CDOC: ('cdoc',),
 }
 
 def gen_fileext_type_map():

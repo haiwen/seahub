@@ -21,7 +21,7 @@ const publicPath = '/media/seafile-editor/';
 // For these, "homepage" can be set to "." to enable relative asset paths.
 const shouldUseRelativeAssetPaths = publicPath === './';
 // Source maps are resource heavy and can cause out of memory issue for large source files.
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
+const shouldUseSourceMap = false;
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -65,6 +65,7 @@ module.exports = {
     app: [require.resolve('./polyfills'), paths.appSrc + "/app.js"],
     draft: [require.resolve('./polyfills'), paths.appSrc + "/draft.js"],
     draw: [require.resolve('./polyfills'), paths.appSrc + "/draw/draw.js"],
+    sharedDirView: [require.resolve('./polyfills'), paths.appSrc + "/shared-dir-view.js"],
     sharedFileViewMarkdown: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-markdown.js"],
     sharedFileViewText: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-text.js"],
     sharedFileViewImage: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-image.js"],

@@ -55,6 +55,7 @@ class Draft extends React.Component {
       reviewers: [],
       inResizing: false,
       rightPartWidth: 30,
+      freezePublish: false
     };
     this.quote = '';
     this.newIndex = null;
@@ -171,7 +172,7 @@ class Draft extends React.Component {
           }); 
         }));
         break;
-      } 
+    }
   }
 
   onHistoryItemClick = (currentItem, preItem, activeItem) => {
@@ -414,8 +415,9 @@ class Draft extends React.Component {
 
   onPublishDraft = () => {
     seafileAPI.publishDraft(draftID).then(res => {
-      const OriginFileLink = siteRoot + 'lib/' + draftRepoID + '/file' + Utils.encodePath(res.data.published_file_path);
-      window.location.href = OriginFileLink; 
+      this.setState({
+        freezePublish: !this.state.freezePublish
+      })
     });
   }
 
@@ -713,7 +715,7 @@ class Draft extends React.Component {
         if (!draftFileExists) {
           return (
             <Nav tabs className="review-side-panel-nav">
-            {this.showNavItem('info')}
+              {this.showNavItem('info')}
             </Nav>
           );
         }
@@ -760,6 +762,8 @@ class Draft extends React.Component {
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
+    const freezePublish = (this.state.freezePublish || draftStatus === 'published') ? true : false;
+    const canPublish = !this.state.freezePublish && draftFileExists;
     return(
       <div className="wrapper">
         <div id="header" className="header review">
@@ -768,17 +772,17 @@ class Draft extends React.Component {
               <span className="sf2-icon-review"></span>
             </div>
             <div className="info-item file-info">
-                <React.Fragment>
-                  <span className="file-name">{draftFileName}</span>
-                  {draftFileExists &&
-                    <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>
-                  }
-                </React.Fragment>
+              <React.Fragment>
+                <span className="file-name">{draftFileName}</span>
+                {draftFileExists &&
+                  <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>
+                }
+              </React.Fragment>
             </div>
           </div>
           <div className="button-group">
             {this.renderDiffButton()}
-            {draftFileExists &&
+            {canPublish &&
               <button 
                 className='btn btn-success file-operation-btn' 
                 title={gettext('Publish draft')}
@@ -787,7 +791,7 @@ class Draft extends React.Component {
                 {gettext('Publish')}
               </button>
             }
-            {draftStatus == 'published' &&
+            {freezePublish &&
               <button 
                 className='btn btn-success file-operation-btn' 
                 title={gettext('Published')}
