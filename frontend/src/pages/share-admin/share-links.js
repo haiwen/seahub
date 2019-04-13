@@ -192,8 +192,8 @@ class Item extends Component {
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}/`}>{item.repo_name}</Link></td>
         { item.permissions.can_download ? 
-        <td>{Utils.sharePerms('preview-and-download')}</td> :
-        <td>{Utils.sharePerms('preview-only')}</td>
+        <td>{gettext('Preview and download')}</td> :
+        <td>{gettext('Preview only')}</td>
         }
         <td>{item.view_cnt}</td>
         <td>{this.renderExpriedData()}</td> 

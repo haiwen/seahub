@@ -355,12 +355,6 @@ export const Utils = {
       case 'preview':
         title = gettext('Preview-on-Cloud');
         break;
-      case 'preview-only':
-        title = gettext('Preview only');
-        break;
-      case 'preview-and-download':
-        title = gettext('Preview and download');
-        break;
     }
     return title;
   },
