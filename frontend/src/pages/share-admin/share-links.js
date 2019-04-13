@@ -82,9 +82,10 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="4%">{/*icon*/}</th>
-                <th width="36%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th width="24%">{gettext('Library')}</th>
-                <th width="12%">{gettext('Visits')}</th>
+                <th width="31%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                <th width="14%">{gettext('Library')}</th>
+                <th width="20%">{gettext('Permission')}</th>
+                <th width="7%">{gettext('Visits')}</th>
                 <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
@@ -180,7 +181,6 @@ class Item extends Component {
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let linkIconClassName = 'sf2-icon-link action-icon' + iconVisibility; 
     let deleteIconClassName = 'sf2-icon-delete action-icon' + iconVisibility;
-
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={iconUrl} width="24" /></td>
@@ -191,6 +191,10 @@ class Item extends Component {
           }
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}/`}>{item.repo_name}</Link></td>
+        { item.permissions.can_download ? 
+        <td>{gettext('Preview and download')}</td> :
+        <td>{gettext('Preview only')}</td>
+        }
         <td>{item.view_cnt}</td>
         <td>{this.renderExpriedData()}</td> 
         <td>
