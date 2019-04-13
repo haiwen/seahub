@@ -145,7 +145,7 @@ class CDOCEditor extends React.Component {
     return(
       <I18nextProvider i18n={ i18n } initialLanguage={ lang } >
         <RichEditor
-          collabServer = {this.collabServer}  
+          collabUsers = {this.state.collabUsers}
           editorUtilities = {editorUtilities}
         /> 
       </I18nextProvider>
