@@ -6,6 +6,7 @@ pytestmark = pytest.mark.django_db
 from seaserv import seafile_api, ccnet_threaded_rpc
 
 from seahub.test_utils import BaseTestCase
+from mock import patch, MagicMock
 
 
 class RepoPublicTest(BaseTestCase):
@@ -44,13 +45,22 @@ class RepoPublicTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert 'success' in json_resp
 
+    @patch('seahub.base.accounts.UserPermissions.can_add_public_repo', MagicMock(return_value=True))
     def test_user_can_set_pub_repo(self):
         self.login_as(self.user)
+        assert self.user.permissions.can_add_public_repo() is True
 
         resp = self.client.put(self.user_repo_url+'?share_type=public&permission=rw')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         assert 'success' in json_resp
+
+    def test_user_can_not_set_pub_repo_when_add_public_repo_disabled(self):
+        self.login_as(self.user)
+        assert self.user.permissions.can_add_public_repo() is False
+
+        resp = self.client.put(self.user_repo_url+'?share_type=public&permission=rw')
+        self.assertEqual(403, resp.status_code)
 
     def test_admin_can_set_pub_repo_when_setting_disalbed(self):
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True

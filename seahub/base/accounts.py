@@ -180,10 +180,11 @@ class UserPermissions(object):
                 return False
         elif self.user.is_staff:
             return True
-        elif self._get_perm_by_roles('can_add_public_repo'):
+        elif self._get_perm_by_roles('can_add_public_repo') and \
+                bool(config.ENABLE_USER_CREATE_ORG_REPO):
             return True
         else:
-            return bool(config.ENABLE_USER_CREATE_ORG_REPO)
+            return False
 
     def can_drag_drop_folder_to_sync(self):
         return self._get_perm_by_roles('can_drag_drop_folder_to_sync')
