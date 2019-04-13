@@ -306,6 +306,12 @@ class DirentListView extends React.Component {
   }
 
   // table-container contextmenu handle
+  onContainerClick = () => {
+    if (this.state.activeDirent) {
+      this.onDirentClick(null);
+    }
+  }
+
   onContainerMouseDown = (event) => {
     this.onMouseDown(event);
   }
@@ -448,18 +454,18 @@ class DirentListView extends React.Component {
       contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
     }
 
-    let { RENAME, MOVE, COPY, PERMISSION, DETAILS, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
+    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
       if (can_set_folder_perm) {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, DETAILS, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
       } else {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', DETAILS, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
-      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY, DETAILS] : [DETAILS];
+      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY] : [];
       return menuList;
     }
 
@@ -487,7 +493,6 @@ class DirentListView extends React.Component {
       if (fileAuditEnabled) {
         menuList.push(ACCESS_LOG);
       }
-      menuList.push(DETAILS);
       menuList.push('Divider');
       menuList.push(OPEN_VIA_CLIENT);
       return menuList;
@@ -502,7 +507,6 @@ class DirentListView extends React.Component {
         menuList.push(COMMENT);
       }
       menuList.push(HISTORY);
-      menuList.push(DETAILS);
       return menuList;
     }
   }
@@ -520,7 +524,7 @@ class DirentListView extends React.Component {
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     return (
-      <div className="table-container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu}>
+      <div className="table-container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick}>
         <table>
           <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>

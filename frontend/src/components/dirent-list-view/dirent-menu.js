@@ -149,6 +149,7 @@ class DirentMenu extends React.Component {
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     this.toggleOperationMenu();
   }
 
