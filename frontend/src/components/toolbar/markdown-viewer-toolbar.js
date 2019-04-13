@@ -130,7 +130,7 @@ class MarkdownViewerToolbar extends React.Component {
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
                   <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged} 
-                    onMouseDown={window.seafileEditor && window.seafileEditor.onPlainEditorSave} isActive={contentChanged}/>
+                    onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
                 }
               </ButtonGroup>
               <MoreMenu
