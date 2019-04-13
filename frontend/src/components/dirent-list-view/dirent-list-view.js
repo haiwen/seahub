@@ -63,6 +63,7 @@ class DirentListView extends React.Component {
       isProgressDialogShow: false,
       progress: 0,
       isMutipleOperation: true,
+      activeDirent: null,
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -99,6 +100,16 @@ class DirentListView extends React.Component {
 
   onItemRenameToggle = () => {
     this.onFreezedItem();
+  }
+
+  onItemSelected = (dirent) => {
+    this.setState({activeDirent: null});
+    this.props.onItemSelected(dirent);
+  }
+
+  onDirentClick = (dirent) => {
+    this.setState({activeDirent: dirent});
+    this.props.onDirentClick(dirent);
   }
 
   sortByName = (e) => {
@@ -303,14 +314,21 @@ class DirentListView extends React.Component {
       this.handleContextClick(event, id, menuList);
     } else {
       if (this.props.selectedDirentList.length === 1) {
-        this.props.onDirentClick(null);
-        event.preventDefault();
-        event.persist();
-        setTimeout(() => {
-          let id = "dirent-container-menu"
-          let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
-          this.handleContextClick(event, id, menuList);
-        }, 0);
+        if (!this.state.activeDirent) {
+          let id = 'dirent-item-menu';
+          let dirent = this.props.selectedDirentList[0];
+          let menuList = this.getDirentItemMenuList(dirent, true);
+          this.handleContextClick(event, id, menuList, dirent);
+        } else {
+          this.onDirentClick(null);
+          event.preventDefault();
+          event.persist();
+          setTimeout(() => {
+            let id = "dirent-container-menu"
+            let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+            this.handleContextClick(event, id, menuList);
+          }, 0);
+        }
       } else {
         let id = 'dirents-menu';
         let menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
@@ -370,7 +388,10 @@ class DirentListView extends React.Component {
   }
 
   onItemContextMenu = (event, dirent) => {
-    this.props.onDirentClick(dirent);
+    if (this.props.selectedDirentList.length > 1) {
+      return;
+    }
+    this.onDirentClick(dirent);
     let id = 'dirent-item-menu';
     let menuList = this.getDirentItemMenuList(dirent, true);
     this.handleContextClick(event, id, menuList, dirent);
@@ -530,7 +551,7 @@ class DirentListView extends React.Component {
                   showShareBtn={this.props.showShareBtn}
                   onItemClick={this.props.onItemClick}
                   onItemRenameToggle={this.onItemRenameToggle}
-                  onItemSelected={this.props.onItemSelected}
+                  onItemSelected={this.onItemSelected}
                   onItemDelete={this.props.onItemDelete}
                   onItemRename={this.onItemRename}
                   onItemMove={this.props.onItemMove}
@@ -539,11 +560,12 @@ class DirentListView extends React.Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
-                  onDirentClick={this.props.onDirentClick}
+                  onDirentClick={this.onDirentClick}
                   showImagePopup={this.showImagePopup}
                   onItemMouseDown={this.onItemMouseDown}
                   onItemContextMenu={this.onItemContextMenu}
                   selectedDirentList={this.props.selectedDirentList}
+                  activeDirent={this.state.activeDirent}
                 />
               );
             })}
