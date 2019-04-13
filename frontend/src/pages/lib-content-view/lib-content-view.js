@@ -31,7 +31,7 @@ class LibContentView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMode: cookie.load('seafile-view-mode') || 'list',
+      currentMode: cookie.load('seafile_view_mode') || 'list',
       path: '',
       pathExist: true,
       isViewFile: false,
@@ -241,11 +241,11 @@ class LibContentView extends React.Component {
         draftCounts: res.data.draft_counts,
       });
     });
-
+    
     if (Utils.isMarkdownFile(path)) {
       seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
         if (this.state.currentMode !== 'column') {
-          cookie.save('seafile-view-mode', 'column');
+          cookie.save('seafile_view_mode', 'column');
           this.setState({currentMode: 'column'});
         }
         this.loadSidePanel(path);
@@ -541,7 +541,7 @@ class LibContentView extends React.Component {
       this.toggleDirentDetail();
       return;
     }
-    cookie.save('seafile-view-mode', mode);
+    cookie.save('seafile_view_mode', mode);
     let path = this.state.path;
     if (this.state.currentMode === 'column' && this.state.isViewFile) {
       path = Utils.getDirName(path);
@@ -585,14 +585,22 @@ class LibContentView extends React.Component {
       } else {
         this.loadNodeAndParentsByPath(path);
       }
-    }
 
-    // load mainPanel
-    if (item.is_dir) {
-      this.showDir(path);
+      // load mainPanel
+      if (item.is_dir) {
+        this.showDir(path);
+      } else {
+        if (Utils.isMarkdownFile(path)) {
+          this.showFile(path);
+        } else {
+          let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
+          let newWindow = window.open('about:blank');
+          newWindow.location.href = url;
+        }
+      }
     } else {
-      if (Utils.isMarkdownFile(path)) {
-        this.showFile(path);
+      if (item.is_dir) {
+        this.showDir(path);
       } else {
         let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
         let newWindow = window.open('about:blank');
