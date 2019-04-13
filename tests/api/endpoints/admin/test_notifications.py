@@ -58,4 +58,6 @@ class AdminNotificationsTest(BaseTestCase):
     def test_get_notifications_with_no_notification(self):
         self.login_as(self.admin)
         resp = self.client.get(self.endpoint)
+        obj_resp = json.loads(resp.content)
+        assert len(obj_resp['notification_list']) == 0
         self.assertEqual(200, resp.status_code)

@@ -69,8 +69,6 @@ class AdminNotificationsView(APIView):
             result['notification_list'] = []
             return Response(result)
 
-        notice_list = notice_list[start:end]
-
         result_notices = update_notice_detail(request, notice_list)
         notification_list = []
         for i in result_notices:
