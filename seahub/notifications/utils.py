@@ -9,7 +9,7 @@ from seaserv import ccnet_api, seafile_api
 from seahub.notifications.models import Notification
 from seahub.notifications.settings import NOTIFICATION_CACHE_TIMEOUT
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 
 logger = logging.getLogger(__name__)
 
@@ -46,14 +46,14 @@ def update_notice_detail(request, notices):
                     notice.detail = None
                 else:
                     d.pop('org_id')
-                    share_from_user_name = email2nickname(d['share_from'])
-                    url, is_default, date_uploaded = api_avatar_url(d['share_from'], 32)
+                    share_from_user_email = d.pop('share_from') 
+                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
                     d['repo_name'] = repo.name
                     d['repo_id'] = repo.id
-                    d['share_from_user_email'] = d.pop('share_from')
-                    d['share_from_user_name'] = share_from_user_name
+                    d['share_from_user_name'] = email2nickname(share_from_user_email)
+                    d['share_from_user_email'] = share_from_user_email
+                    d['share_from_user_contact_email'] = email2contact_email(share_from_user_email)
                     d['share_from_user_avatar_url'] = request.build_absolute_uri(url)
-
                     notice.detail = d
 
             except Exception as e:
@@ -82,10 +82,11 @@ def update_notice_detail(request, notices):
                     notice.detail = None
                 else:
                     d.pop('org_id')
-                    share_from_user_name = email2nickname(d['share_from'])
-                    url, is_default, date_uploaded = api_avatar_url(d['share_from'], 32)
-                    d['share_from_user_email'] = d.pop('share_from')
-                    d['share_from_user_name'] = share_from_user_name
+                    share_from_user_email = d.pop('share_from') 
+                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
+                    d['share_from_user_name'] = email2nickname(share_from_user_email)
+                    d['share_from_user_email'] = share_from_user_email
+                    d['share_from_user_contact_email'] = email2contact_email(share_from_user_email)                    
                     d['share_from_user_avatar_url'] = request.build_absolute_uri(url)
                     d['repo_name'] = repo.name
                     d['repo_id'] = repo.id
@@ -103,10 +104,11 @@ def update_notice_detail(request, notices):
                 if group is None:
                     notice.detail = None
                 else:
-                    group_staff_name = email2nickname(d['group_staff'])
-                    url, is_default, date_uploaded = api_avatar_url(d['group_staff'], 32)
-                    d['group_staff_email'] = d.pop('group_staff')
-                    d['group_staff_name'] = group_staff_name
+                    group_staff_email = d.pop('group_staff')
+                    url, is_default, date_uploaded = api_avatar_url(group_staff_email, 32)
+                    d['group_staff_name'] = email2nickname(group_staff_email)
+                    d['group_staff_email'] = group_staff_email
+                    d['group_staff_contact_email'] = email2contact_email(group_staff_email)
                     d['group_staff_avatar_url'] = request.build_absolute_uri(url)
                     d['group_name'] = group.group_name
 
@@ -117,10 +119,11 @@ def update_notice_detail(request, notices):
         elif notice.is_draft_comment_msg():
             try:
                 d = json.loads(notice.detail)
-                author_name = email2nickname(d['author'])
-                url, is_default, date_uploaded = api_avatar_url(d['author'], 32)
-                d['author_name'] = author_name
-                d['author_email'] = d.pop('author')
+                author_email = d.pop('author')
+                url, is_default, date_uploaded = api_avatar_url(author_email, 32)
+                d['author_name'] = email2nickname(author_email)
+                d['author_email'] = author_email
+                d['author_context_email'] = email2contact_email(author_email)
                 d['author_avatar_url'] = request.build_absolute_uri(url)
 
                 notice.detail = d
@@ -136,10 +139,10 @@ def update_notice_detail(request, notices):
                     notice.detail = None
                 else:
                     d.pop('org_id')
-                    repo_owner_email = d['repo_owner']
-                    repo_owner_name = email2nickname(repo_owner_email)
-                    d['transfer_from_user_email'] = d.pop('repo_owner')
-                    d['transfer_from_user_name'] = repo_owner_name
+                    repo_owner_email = d.pop('repo_owner')
+                    d['transfer_from_user_name'] = email2nickname(repo_owner_email)
+                    d['transfer_from_user_email'] = repo_owner_email
+                    d['transfer_from_user_contact_email'] = email2contact_email(repo_owner_email)
                     url, is_default, date_uploaded = api_avatar_url(repo_owner_email, 32)
                     d['transfer_from_user_avatar_url'] = request.build_absolute_uri(url)
                     notice.detail = d
@@ -151,10 +154,11 @@ def update_notice_detail(request, notices):
             try:
                 d = json.loads(notice.detail)
                 d.pop('to_user')
-                request_user_name = email2nickname(d['from_user'])
-                url, is_default, date_uploaded = api_avatar_url(d['from_user'], 32)
-                d['request_user_name'] = request_user_name
-                d['request_user_email'] = d.pop('from_user')
+                request_user_email = d.pop('from_user')
+                url, is_default, date_uploaded = api_avatar_url(request_user_email, 32)
+                d['request_user_name'] = email2nickname(request_user_email)
+                d['request_user_email'] = request_user_email
+                d['request_user_contact_email'] = email2contact_email(request_user_email)
                 d['request_user_avatat_url'] = request.build_absolute_uri(url)
                 notice.detail = d
             except Exception as e:
@@ -211,12 +215,13 @@ def update_notice_detail(request, notices):
                 if repo is None or not seafile_api.get_file_id_by_path(repo.id, file_path):
                     notice.detail = None
                 else:
-                    author_name = email2nickname(d['author'])
+                    author_email = d.pop('author')
                     file_name = os.path.basename(file_path)
-                    url, is_default, date_uploaded = api_avatar_url(d['author'], 32)
+                    url, is_default, date_uploaded = api_avatar_url(author_email, 32)
                     d['author_avatar_url'] = request.build_absolute_uri(url)
-                    d['author_email'] = d.pop('author')
-                    d['author_name'] = author_name
+                    d['author_name'] = email2nickname(author_email)
+                    d['author_email'] = author_email
+                    d['author_contact_email'] = email2contact_email(author_email)
                     d['file_name'] = file_name
                     notice.detail = d
             except Exception as e:

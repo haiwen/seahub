@@ -131,6 +131,7 @@ from seahub.api2.endpoints.admin.address_book.groups import AdminAddressBookGrou
 from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLibraries, \
         AdminGroupOwnedLibrary
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
+from seahub.api2.endpoints.admin.notifications import AdminNotificationsView 
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
@@ -505,6 +506,9 @@ urlpatterns = [
 
     ## admin::file-scan-records
     url(r'^api/v2.1/admin/file-scan-records/$', AdminFileScanRecords.as_view(), name='api-v2.1-admin-file-scan-records'),
+
+    ## admin::notifications
+    url(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
