@@ -137,9 +137,6 @@ class TreeView extends React.Component {
   }
   
   handleContextClick = (event, node) => {
-    if (this.props.selectedDirentList.length) {
-      return;
-    }
     event.preventDefault();
     event.stopPropagation();
 
