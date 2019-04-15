@@ -38,6 +38,7 @@ from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
         ENABLE_SHARE_LINK_AUDIT, ENABLE_VIDEO_THUMBNAIL, \
         THUMBNAIL_ROOT
+from seahub.wiki.models import Wiki
 
 logger = logging.getLogger(__name__)
 
@@ -366,8 +367,20 @@ class ShareLink(APIView):
         except FileShare.DoesNotExist:
             return Response({'success': True})
 
+        has_publied_library = False
+        if fs.path == '/':
+            try:
+                Wiki.objects.get(repo_id=fs.repo_id)
+                has_publied_library = True
+            except Wiki.DoesNotExist:
+                pass
+
         username = request.user.username
         if not fs.is_owner(username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if has_publied_library:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

@@ -160,3 +160,9 @@ def remove_personal_wiki(sender, **kwargs):
     repo_id = kwargs['repo_id']
 
     PersonalWiki.objects.filter(username=repo_owner, repo_id=repo_id).delete()
+
+@receiver(repo_deleted)
+def remove_wiki(sender, **kwargs):
+    repo_id = kwargs['repo_id']
+
+    Wiki.objects.filter(repo_id=repo_id).delete()

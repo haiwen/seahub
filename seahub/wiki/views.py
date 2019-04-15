@@ -12,6 +12,7 @@ from django.utils.translation import ugettext as _
 
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import user_mods_check
+from seahub.share.models import FileShare
 from seahub.wiki.models import Wiki
 from seahub.views import check_folder_permission
 from seahub.utils import get_service_url, get_file_type_and_ext, render_permission_error
@@ -88,9 +89,13 @@ def slug(request, slug, file_path="home.md"):
     if wiki.permission == 'public':
         is_public_wiki = True
 
+    fs = FileShare.objects.get(repo_id=wiki.repo_id, path='/')
+
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
         "page_name": file_path,
+        "shared_token": fs.token,
+        "shared_type": fs.s_type,
         "user_can_write": user_can_write,
         "file_path": file_path,
         "repo_id": wiki.repo_id,

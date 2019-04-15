@@ -79,7 +79,7 @@ class MainPanel extends Component {
               <div className="cur-view-toolbar">
                 <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
                 {this.props.permission === 'rw' && (
-                  <button className="btn btn-secondary operation-item" title="Edit File" onClick={this.onEditClick}>{gettext('Edit Page')}</button>
+                  <button className="btn btn-secondary operation-item" title="Edit" onClick={this.onEditClick}>{gettext('Edit')}</button>
                 )}
               </div>
               <CommonToolbar 
@@ -93,12 +93,6 @@ class MainPanel extends Component {
         <div className="main-panel-center">
           <div className="cur-view-path">
             <div className="path-containter">
-              {username &&
-                <Fragment>
-                  <a href={siteRoot + 'wikis/'} className="normal">{gettext('Wikis')}</a>
-                  <span className="path-split">/</span>
-                </Fragment>
-              }
               <a href={siteRoot + 'wikis/' + slug} className="normal">{slug}</a>
               {this.renderNavPath()}
             </div>

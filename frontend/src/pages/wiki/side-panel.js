@@ -46,7 +46,7 @@ class SidePanel extends Component {
   renderTreeView = () => {
     return (
       <Fragment>
-        <h3 className="wiki-pages-heading">{gettext('Pages')}</h3>
+        <h3 className="wiki-pages-heading">{gettext('Contents')}</h3>
         <div className="wiki-pages-container">
           {this.props.treeData && (
             <TreeView

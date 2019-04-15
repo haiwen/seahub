@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
 import toaster from '../../components/toast';
@@ -73,8 +73,8 @@ class Wikis extends Component {
     this.setState({isShowCreateDialog: !this.state.isShowCreateDialog});
   }
 
-  addWiki = (isExist, name, repoID) => {
-    seafileAPI.addWiki(isExist, name, repoID).then((res) => {
+  addWiki = (repoID) => {
+    seafileAPI.addWiki(repoID).then((res) => {
       this.state.wikis.push(res.data);
       this.setState({wikis: this.state.wikis});
     }).catch((error) => {
@@ -123,15 +123,9 @@ class Wikis extends Component {
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-              <Dropdown tag="div" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
-                <DropdownToggle className="btn btn-secondary operation-item">
-                  <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Add Wiki')}
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={this.onCreateToggle}>{gettext('New Wiki')}</DropdownItem>
-                  <DropdownItem onClick={this.onSelectToggle}>{gettext('Choose a library as Wiki')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+                <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>
+                  <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Publish a Library')}
+                </Button>
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
@@ -140,7 +134,7 @@ class Wikis extends Component {
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
               <div className="path-container">
-                <h3 className="sf-heading">{gettext('Wikis')}</h3>
+                <h3 className="sf-heading">{gettext('Published Libraries')}</h3>
               </div>
             </div>
             <div className="cur-view-content">
