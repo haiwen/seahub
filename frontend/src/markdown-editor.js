@@ -430,10 +430,9 @@ class MarkdownEditor extends React.Component {
         localDraftDialog: false,
         loading: false,
       });
-    } else {
-      let draftKey = editorUtilities.getDraftKey();
-      localStorage.removeItem(draftKey);
     }
+    let draftKey = editorUtilities.getDraftKey();
+    localStorage.removeItem(draftKey);
   }
 
   closeDraftDialog = () => {
@@ -714,6 +713,7 @@ class MarkdownEditor extends React.Component {
             editorMode={this.state.editorMode}
             contentChanged={this.state.contentChanged}
             saving={this.state.saving}
+            showDraftSaved={this.state.showDraftSaved}
           />
           <SeafileEditor
             fileInfo={this.state.fileInfo}
@@ -737,7 +737,6 @@ class MarkdownEditor extends React.Component {
             clearTimer={this.clearTimer}
             openDialogs={this.openDialogs}
             deleteDraft={this.deleteDraft}
-            showDraftSaved={this.state.showDraftSaved}
             readOnly={this.state.readOnly}
             onContentChanged={this.onContentChanged}
             onSaving={this.onSaving}
