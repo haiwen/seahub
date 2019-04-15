@@ -26,6 +26,7 @@ const propTypes = {
   readOnly: PropTypes.bool.isRequired,
   contentChanged: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,
+  showDraftSaved: PropTypes.bool.isRequired,
 };
 
 const MoreMenuPropTypes = {
@@ -92,8 +93,12 @@ class MarkdownViewerToolbar extends React.Component {
       return (
         <div className="sf-md-viewer-topbar">
           <div className="sf-md-viewer-topbar-first d-flex justify-content-between">
-            <FileInfo toggleStar={this.props.toggleStar} editorUtilities={this.props.editorUtilities}
-              fileInfo={this.props.fileInfo}/>
+            <FileInfo
+              toggleStar={this.props.toggleStar}
+              editorUtilities={this.props.editorUtilities}
+              fileInfo={this.props.fileInfo}
+              showDraftSaved={this.props.showDraftSaved}
+            />
             {(this.props.hasDraft && !this.props.isDraft) &&
               <div className='seafile-btn-view-review'>
                 <div className='tag tag-green'>{gettext('This file is in draft stage.')}
