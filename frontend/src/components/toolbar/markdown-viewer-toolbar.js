@@ -32,7 +32,7 @@ const MoreMenuPropTypes = {
   openDialogs: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   editorMode: PropTypes.string.isRequired
-}
+};
 
 class MoreMenu extends React.PureComponent {
 
@@ -107,6 +107,14 @@ class MarkdownViewerToolbar extends React.Component {
               { (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs) &&
                 <button onMouseDown={this.props.toggleNewDraft} className="btn btn-success btn-new-draft">
                   {gettext('New Draft')}</button>
+              }
+              {this.props.isDraft &&
+                <div>
+                  <button type="button" className="btn btn-success seafile-btn-add-review"
+                    onMouseDown={this.props.editorUtilities.goDraftPage}>{gettext('Start review')}</button>
+                  <button type="button" className="btn btn-success seafile-btn-add-review"
+                    onMouseDown={this.props.editorUtilities.publishDraftFile}>{gettext('Publish')}</button>
+                </div>
               }
               {this.props.collabUsers.length > 0 && <CollabUsersButton className={'collab-users-dropdown'}
                 users={this.props.collabUsers} id={'usersButton'} />}
