@@ -12,7 +12,6 @@ import InsertFileDialog from './components/dialog/insert-file-dialog';
 import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
 import LocalDraftDialog from './components/dialog/local-draft-dialog';
 import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
-import CommentPanel from './components/file-view/comment-panel';
 
 import './css/markdown-viewer/markdown-editor.css';
 
@@ -286,9 +285,7 @@ class MarkdownEditor extends React.Component {
       showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
-      commentsNumber: null,
       value: null,
-      isShowComments: false,
       isShowHistory: false,
       readOnly: true,
       contentChanged: false,
@@ -451,7 +448,6 @@ class MarkdownEditor extends React.Component {
     {
       case 'help':
         window.richMarkdownEditor.showHelpDialog();
-        this.setState({ isShowComments: false });
         break;
       case 'share_link':
         this.setState({
@@ -542,7 +538,6 @@ class MarkdownEditor extends React.Component {
       });
     }
     this.checkDraft();
-    this.getCommentsNumber();
 
     setTimeout(() => {
       let url = new URL(window.location.href);
@@ -621,17 +616,7 @@ class MarkdownEditor extends React.Component {
     this.openDialogs('share_link');
   }
 
-  getCommentsNumber = () => {
-    editorUtilities.getCommentsNumber().then((res) => {
-      let commentsNumber = res.data[Object.getOwnPropertyNames(res.data)[0]];
-      this.setState({
-        commentsNumber: commentsNumber
-      });
-    });
-  }
-
   onCommentAdded = () => {
-    this.getCommentsNumber();
     this.toggleCancel();
   }
 
@@ -648,11 +633,6 @@ class MarkdownEditor extends React.Component {
 
   toggleHistory = () => {
     window.location.href = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(filePath);
-  }
-
-  toggleCommentList = () => {
-    this.setState({ isShowComments: !this.state.isShowComments });
-    window.richMarkdownEditor.handleCommentOpen();
   }
 
   getInsertLink = (repoID, filePath) => {
@@ -704,8 +684,6 @@ class MarkdownEditor extends React.Component {
             toggleShareLinkDialog={this.toggleShareLinkDialog}
             onEdit={this.onEdit}
             toggleNewDraft={editorUtilities.createDraftFile}
-            commentsNumber={this.state.commentsNumber}
-            toggleCommentList={this.toggleCommentList}
             showFileHistory={this.state.isShowHistory ? false : true }
             toggleHistory={this.toggleHistory}
             readOnly={this.state.readOnly}
@@ -743,11 +721,6 @@ class MarkdownEditor extends React.Component {
             contentChanged={this.state.contentChanged}
             saving={this.state.saving}
           />
-          {this.state.isShowComments &&
-            <div className="seafile-md-comment">
-              <CommentPanel toggleCommentPanel={this.toggleCommentList} commentsNumber={this.state.commentsNumber}/>
-            </div>
-          }
         </Fragment>
       );
 
