@@ -20,7 +20,6 @@ import { hideMenu, showMenu } from '../context-menu/actions';
 import FileTag from '../../models/file-tag';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
-
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -47,6 +46,7 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirentListView extends React.Component {

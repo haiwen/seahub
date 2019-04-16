@@ -20,6 +20,7 @@ const propTypes = {
   onItemMove: PropTypes.func,
   currentRepoInfo: PropTypes.object,
   selectedDirentList: PropTypes.array.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 const PADDING_LEFT = 20;

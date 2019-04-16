@@ -31,6 +31,7 @@ const propTypes = {
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirColumnNav extends React.Component {

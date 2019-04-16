@@ -68,6 +68,7 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirColumnView extends React.Component {

@@ -37,6 +37,7 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirListView extends React.Component {
