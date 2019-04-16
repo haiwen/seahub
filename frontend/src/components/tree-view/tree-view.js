@@ -17,7 +17,6 @@ const propTypes = {
   onItemMove: PropTypes.func,
   currentRepoInfo: PropTypes.object,
   selectedDirentList: PropTypes.array.isRequired,
-  onFileTagChanged: PropTypes.func,
 };
 
 const PADDING_LEFT = 20;
@@ -31,7 +30,6 @@ class TreeView extends React.Component {
       isTreeViewDropTipShow: false,
     };
   }
-
 
   onItemMove = (repo, dirent, selectedPath, currentPath) => {
     this.props.onItemMove(repo, dirent, selectedPath, currentPath);
@@ -122,17 +120,8 @@ class TreeView extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
-  onEditFileTagToggle = () => {
-    this.setState({isEditFileTagShow: !this.state.isEditFileTagShow});
-  }
-
-  onFileTagChanged = () => {
-    this.props.onFileTagChanged(this.state.nodeDirent.object, this.state.nodeDirent.path);
-  }
-
   onMenuItemClick = (operation, node) => {
     this.props.onMenuItemClick(operation, node);
-
     hideMenu();
   }
 

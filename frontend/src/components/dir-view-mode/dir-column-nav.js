@@ -115,7 +115,10 @@ class DirColumnNav extends React.Component {
   }
 
   onEditFileTagToggle = (node) => {
-    this.setState({isEditFileTagShow: !this.state.isEditFileTagShow, nodeDirent: node});
+    this.setState({
+      isEditFileTagShow: !this.state.isEditFileTagShow, 
+      nodeDirent: node,
+    });
     if (node.object) {
       this.getTagFileList(node);
     }
@@ -307,7 +310,6 @@ class DirColumnNav extends React.Component {
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
               selectedDirentList={this.props.selectedDirentList}
-              onFileTagChanged={this.props.onFileTagChanged}
             />)
           }
         </div>
