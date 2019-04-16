@@ -991,14 +991,8 @@ class LibContentView extends React.Component {
   updateDirent = (dirent, paramKey, paramValue, direntPath) => {
     let currentRepoPath = this.state.path === '/' ? `${this.state.path}${dirent.name}` : `${this.state.path}/${dirent.name}`;
     let newDirentList = this.state.direntList.map(item => {
-      if (!direntPath) {
-        if (item.name === dirent.name) {
-          item[paramKey] = paramValue;
-        }
-      } else {
-        if (item.name === dirent.name && currentRepoPath === direntPath) {
-          item[paramKey] = paramValue;
-        }
+      if (item.name === dirent.name) {
+        item[paramKey] = paramValue;
       }
       return item;
     });
