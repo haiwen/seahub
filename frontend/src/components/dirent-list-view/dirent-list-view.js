@@ -17,8 +17,6 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
-import FileTag from '../../models/file-tag';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -67,10 +65,6 @@ class DirentListView extends React.Component {
       progress: 0,
       isMutipleOperation: true,
       activeDirent: null,
-      isEditFileTagShow: false,
-      itemDirent: '',
-      direntPath: '',
-      fileTagList: [],
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -82,16 +76,6 @@ class DirentListView extends React.Component {
     this.currentItemRef = null;
 
     this.zipToken = null;
-  }
-
-  componentWillReceiveProps(nextProp) {
-    if (nextProp.path !== this.props.path) {
-      this.setState({itemDirent: ''})
-    } 
-
-    if (this.state.itemDirent) {
-      this.getTagFileList(this.state.itemDirent)
-    }
   }
 
   onFreezedItem = () => {
@@ -238,34 +222,6 @@ class DirentListView extends React.Component {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
   }
 
-  onEditFileTagToggle = () => {
-    this.setState({
-      isEditFileTagShow: !this.state.isEditFileTagShow
-    });
-  }
-
-  onFileTagChanged = () => {
-    let direntPath = this.getDirentPath(this.state.itemDirent);
-    this.props.onFileTagChanged(this.state.itemDirent, direntPath);
-  }
-
-  getDirentPath = (dirent) => {
-    let { path } = this.props;
-    return Utils.joinPath(path, dirent.name);
-  }
-
-  getTagFileList = (dirent) => {
-    let {repoID} = this.props;
-    let direntPath = this.getDirentPath(dirent);
-    seafileAPI.listFileTags(repoID, direntPath).then(res => {
-      let fileTagList = [];
-      res.data.file_tags.forEach(item => {
-        let file_tag = new FileTag(item);
-        fileTagList.push(file_tag);
-      });
-      this.setState({fileTagList: fileTagList});
-    });
-  }
 
   onItemsDownload = () => {
     let { path, repoID, selectedDirentList } = this.props;
@@ -457,22 +413,10 @@ class DirentListView extends React.Component {
   }
 
   onMenuItemClick = (operation, currentObject, event) => {
-    hideMenu();
-
-    if (operation === 'Tags') {
-      let direntPath = this.getDirentPath(currentObject);
-      
-      this.setState({
-        itemDirent: currentObject,
-        direntPath: direntPath
-      });
-      
-      this.getTagFileList(currentObject);
-      this.onEditFileTagToggle();
-      return;
-    }
     let index = this.getDirentIndex(currentObject);
     this.direntItems[index].onMenuItemClick(operation, event);
+
+    hideMenu();
   }
 
   onShowMenu = (e) => {
@@ -632,6 +576,7 @@ class DirentListView extends React.Component {
                   onItemContextMenu={this.onItemContextMenu}
                   selectedDirentList={this.props.selectedDirentList}
                   activeDirent={this.state.activeDirent}
+                  onFileTagChanged={this.props.onFileTagChanged}
                 />
               );
             })}
@@ -708,15 +653,6 @@ class DirentListView extends React.Component {
           }
           {this.state.isProgressDialogShow &&
             <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload} />
-          }
-          {this.state.isEditFileTagShow &&
-            <EditFileTagDialog
-              repoID={this.props.repoID}
-              fileTagList={this.state.fileTagList}
-              filePath={this.state.direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-            />
           }
         </Fragment>
       </div>

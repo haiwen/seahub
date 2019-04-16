@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../utils/seafile-api';
 import TextTranslation from '../../utils/text-translation';
 import TreeNodeView from './tree-node-view';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
-import FileTag from '../../models/file-tag';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
 const propTypes = {
   repoPermission: PropTypes.bool,
@@ -32,17 +29,9 @@ class TreeView extends React.Component {
     this.state = {
       isItemFreezed: false,
       isTreeViewDropTipShow: false,
-      isEditFileTagShow: false,
-      fileTagList: [],
-      nodeDirent: '',
     };
   }
 
-  componentWillReceiveProps(nextProp) {
-    if (this.state.nodeDirent) {
-      this.getTagFileList(this.state.nodeDirent)
-    }
-  }
 
   onItemMove = (repo, dirent, selectedPath, currentPath) => {
     this.props.onItemMove(repo, dirent, selectedPath, currentPath);
@@ -141,31 +130,10 @@ class TreeView extends React.Component {
     this.props.onFileTagChanged(this.state.nodeDirent.object, this.state.nodeDirent.path);
   }
 
-  getTagFileList = (node) => {
-    let {repoID} = this.props;
-    seafileAPI.listFileTags(repoID, node.path).then(res => {
-      let fileTagList = [];
-      res.data.file_tags.forEach(item => {
-        let file_tag = new FileTag(item);
-        fileTagList.push(file_tag);
-      });
-      this.setState({fileTagList: fileTagList});
-    });
-  }
-
-
   onMenuItemClick = (operation, node) => {
-    hideMenu();
-    if (operation === 'Tags') {
-      this.setState({
-        nodeDirent: node,
-      })
-      this.getTagFileList(node);
-      this.onEditFileTagToggle();
-      return;
-    }
-
     this.props.onMenuItemClick(operation, node);
+
+    hideMenu();
   }
 
   onMouseDown = (event) => {
@@ -270,15 +238,6 @@ class TreeView extends React.Component {
           onHideMenu={this.onHideMenu}
           onShowMenu={this.onShowMenu}
         />
-        {this.state.isEditFileTagShow &&
-          <EditFileTagDialog
-            repoID={this.props.repoID}
-            fileTagList={this.state.fileTagList}
-            filePath={this.state.nodeDirent.path}
-            toggleCancel={this.onEditFileTagToggle}
-            onFileTagChanged={this.onFileTagChanged}
-          />
-        }
       </div>
     );
   }
