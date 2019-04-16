@@ -861,7 +861,7 @@ class LibContentView extends React.Component {
       let fileTags = res.data.file_tags.map(item => {
         return new FileTag(item);
       });
-      this.updateDirent(dirent, 'file_tags', fileTags, direntPath);
+      this.updateDirent(dirent, 'file_tags', fileTags);
     });
 
     this.updateUsedRepoTags();
@@ -988,8 +988,7 @@ class LibContentView extends React.Component {
     this.updateReadmeMarkdown(direntList);
   }
 
-  updateDirent = (dirent, paramKey, paramValue, direntPath) => {
-    let currentRepoPath = this.state.path === '/' ? `${this.state.path}${dirent.name}` : `${this.state.path}/${dirent.name}`;
+  updateDirent = (dirent, paramKey, paramValue) => {
     let newDirentList = this.state.direntList.map(item => {
       if (item.name === dirent.name) {
         item[paramKey] = paramValue;
