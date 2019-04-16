@@ -59,6 +59,12 @@
   align-items: center;
 }
 
+.dirent-info .img .thumbnail {
+  max-width: calc(100% - 4px);
+  max-height: 100%;
+  display: inline-block;
+}
+
 .dirent-table-container {
   padding: 10px 20px;
   display: flex;

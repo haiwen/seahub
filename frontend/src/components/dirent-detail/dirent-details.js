@@ -6,6 +6,7 @@ import Dirent from '../../models/dirent';
 import DetailListView from './detail-list-view';
 import FileTag from '../../models/file-tag';
 import '../../css/dirent-detail.css';
+import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -119,8 +120,7 @@ class DirentDetail extends React.Component {
     let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
     const isImg = dirent ? Utils.imageCheck(dirent.name) : Utils.imageCheck(folderDirent.name);
     if (isImg) {
-      bigIconUrl = '/' + dirent.encoded_thumbnail_src;
-      smallIconUrl = '/' + dirent.encoded_thumbnail_src;
+      bigIconUrl = siteRoot + 'thumbnail/' + this.props.repoID + '/1024/' + dirent.name;
     }
     let direntName = dirent ? dirent.name : folderDirent.name;
 
@@ -135,7 +135,7 @@ class DirentDetail extends React.Component {
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={bigIconUrl} width="96" alt="" />
+            <img src={bigIconUrl} className="thumbnail" alt="" />
           </div>
           {this.state.direntDetail && 
             <div className="dirent-table-container">
