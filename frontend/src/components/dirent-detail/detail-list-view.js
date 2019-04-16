@@ -61,6 +61,11 @@ class DetailListView extends React.Component {
     return Utils.joinPath(path, dirent.name);
   }
 
+  onRelatedFileChange = () => {
+    let direntPath = this.getDirentPath();
+    this.props.onRelatedFileChange(this.props.dirent, direntPath);
+  }
+
   onListRelatedFileToggle = () => {
     this.setState({
       showRelatedFileDialog: true,
@@ -141,7 +146,7 @@ class DetailListView extends React.Component {
                   filePath={direntPath}
                   relatedFiles={relatedFiles}
                   toggleCancel={this.toggleCancel}
-                  onRelatedFileChange={this.props.onRelatedFileChange}
+                  onRelatedFileChange={this.onRelatedFileChange}
                   dirent={this.props.dirent}
                   viewMode="list_related_file"
                 />
