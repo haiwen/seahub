@@ -119,7 +119,7 @@ class DirentDetail extends React.Component {
 
     let smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : Utils.getDirentIcon(folderDirent);
     let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
-    const isImg = Utils.imageCheck(dirent.name);
+    const isImg = dirent ? Utils.imageCheck(dirent.name) : Utils.imageCheck(folderDirent.name);
     if (isImg) {
       bigIconUrl = '/' + dirent.encoded_thumbnail_src;
       smallIconUrl = '/' + dirent.encoded_thumbnail_src;

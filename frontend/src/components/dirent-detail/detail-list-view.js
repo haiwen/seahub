@@ -54,6 +54,9 @@ class DetailListView extends React.Component {
   }
 
   getDirentPath = () => {
+    if (Utils.isMarkdownFile(this.props.path)) {
+      return this.props.path; // column mode: view file
+    }
     let { dirent, path } = this.props;
     return Utils.joinPath(path, dirent.name);
   }
