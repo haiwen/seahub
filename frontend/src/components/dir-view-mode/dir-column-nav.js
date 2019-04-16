@@ -296,7 +296,6 @@ class DirColumnNav extends React.Component {
           {this.props.isTreeDataLoading ? 
             (<Loading/>) :
             (<TreeView
-              repoID={this.props.repoID}
               repoPermission={this.props.repoPermission}
               isNodeMenuShow={this.isNodeMenuShow}
               treeData={this.props.treeData}
