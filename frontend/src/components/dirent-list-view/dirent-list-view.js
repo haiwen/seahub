@@ -17,6 +17,9 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
+import FileTag from '../../models/file-tag';
+import EditFileTagDialog from '../dialog/edit-filetag-dialog';
+
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -64,6 +67,10 @@ class DirentListView extends React.Component {
       progress: 0,
       isMutipleOperation: true,
       activeDirent: null,
+      isEditFileTagShow: false,
+      itemDirent: '',
+      direntPath: '',
+      fileTagList: [],
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -75,6 +82,16 @@ class DirentListView extends React.Component {
     this.currentItemRef = null;
 
     this.zipToken = null;
+  }
+
+  componentWillReceiveProps(nextProp) {
+    if (nextProp.path !== this.props.path) {
+      this.setState({itemDirent: ''})
+    } 
+
+    if (this.state.itemDirent) {
+      this.getTagFileList(this.state.itemDirent)
+    }
   }
 
   onFreezedItem = () => {
@@ -219,6 +236,35 @@ class DirentListView extends React.Component {
 
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+  }
+
+  onEditFileTagToggle = () => {
+    this.setState({
+      isEditFileTagShow: !this.state.isEditFileTagShow
+    });
+  }
+
+  onFileTagChanged = () => {
+    let direntPath = this.getDirentPath(this.state.itemDirent);
+    this.props.onFileTagChanged(this.state.itemDirent, direntPath);
+  }
+
+  getDirentPath = (dirent) => {
+    let { path } = this.props;
+    return Utils.joinPath(path, dirent.name);
+  }
+
+  getTagFileList = (dirent) => {
+    let {repoID} = this.props;
+    let direntPath = this.getDirentPath(dirent);
+    seafileAPI.listFileTags(repoID, direntPath).then(res => {
+      let fileTagList = [];
+      res.data.file_tags.forEach(item => {
+        let file_tag = new FileTag(item);
+        fileTagList.push(file_tag);
+      });
+      this.setState({fileTagList: fileTagList});
+    });
   }
 
   onItemsDownload = () => {
@@ -411,10 +457,22 @@ class DirentListView extends React.Component {
   }
 
   onMenuItemClick = (operation, currentObject, event) => {
+    hideMenu();
+
+    if (operation === 'Tags') {
+      let direntPath = this.getDirentPath(currentObject);
+      
+      this.setState({
+        itemDirent: currentObject,
+        direntPath: direntPath
+      });
+      
+      this.getTagFileList(currentObject);
+      this.onEditFileTagToggle();
+      return;
+    }
     let index = this.getDirentIndex(currentObject);
     this.direntItems[index].onMenuItemClick(operation, event);
-
-    hideMenu();
   }
 
   onShowMenu = (e) => {
@@ -454,7 +512,7 @@ class DirentListView extends React.Component {
       contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
     }
 
-    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
+    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
       if (can_set_folder_perm) {
         menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
@@ -476,6 +534,7 @@ class DirentListView extends React.Component {
         menuList.push(MOVE);
       }
       menuList.push(COPY);
+      menuList.push(TAGS);
       if (isPro) {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
@@ -649,6 +708,15 @@ class DirentListView extends React.Component {
           }
           {this.state.isProgressDialogShow &&
             <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload} />
+          }
+          {this.state.isEditFileTagShow &&
+            <EditFileTagDialog
+              repoID={this.props.repoID}
+              fileTagList={this.state.fileTagList}
+              filePath={this.state.direntPath}
+              toggleCancel={this.onEditFileTagToggle}
+              onFileTagChanged={this.onFileTagChanged}
+            />
           }
         </Fragment>
       </div>

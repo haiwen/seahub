@@ -257,6 +257,7 @@ class DirColumnNav extends React.Component {
           {this.props.isTreeDataLoading ? 
             (<Loading/>) :
             (<TreeView
+              repoID={this.props.repoID}
               repoPermission={this.props.repoPermission}
               isNodeMenuShow={this.isNodeMenuShow}
               treeData={this.props.treeData}
@@ -270,6 +271,7 @@ class DirColumnNav extends React.Component {
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
               selectedDirentList={this.props.selectedDirentList}
+              onFileTagChanged={this.props.onFileTagChanged}
             />)
           }
         </div>

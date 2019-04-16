@@ -94,6 +94,7 @@ class DirListView extends React.Component {
           onItemsDelete={this.props.onItemsDelete}
           onAddFile={this.props.onAddFile}
           onAddFolder={this.props.onAddFolder}
+          onFileTagChanged={this.props.onFileTagChanged}
         />
       </Fragment>
     );
