@@ -1445,6 +1445,7 @@ class LibContentView extends React.Component {
             closeDirentDetail={this.closeDirentDetail}
             showDirentDetail={this.showDirentDetail}
             onDeleteRepoTag={this.onDeleteRepoTag}
+            onToolbarFileTagChanged={this.onToolbarFileTagChanged}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
