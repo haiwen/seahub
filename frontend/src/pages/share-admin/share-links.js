@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, canGenerateUploadLink } from '../../utils/constants';
 import SharedLinkInfo from '../../models/shared-link-info';
+import ShareLinksPermissionEditor from '../../components/select-editor/share-links-permission-editor';
 import copy from '@seafile/seafile-editor/dist//utils/copy-to-clipboard';
 import toaster from '../../components/toast';
 
@@ -118,9 +119,13 @@ class Item extends Component {
 
   constructor(props) {
     super(props);
+
+    let item = this.props.item
     this.state = {
+      currentPermission: item.permissions.can_download ? 'Preview and download' :'Preview only',
       showOpIcon: false,
     };
+    this.permissionOptions = ['Preview only', 'Preview and download'];
   }
 
   handleMouseOver = () => {
@@ -174,6 +179,26 @@ class Item extends Component {
     );
   }
 
+  changePerm = (changed_to_permissions) => {
+    const item = this.props.item;
+    let permissions = item.permissions;
+
+    if (changed_to_permissions === 'Preview only')
+      permissions.can_download = false;
+    else if (changed_to_permissions === 'Preview and download')
+      permissions.can_download = true;
+
+    seafileAPI.updateShareLink(item.token, JSON.stringify(permissions)).then(() => {
+      this.setState({
+        currentPermission: changed_to_permissions,
+      });
+      // TODO: show feedback msg
+      // gettext("Successfully modified permission")
+    }).catch((error) => {
+      // TODO: show feedback msg
+    });
+  }
+
   render() {
     const item = this.props.item;
     let { iconUrl, linkUrl } = this.getLinkParams();
@@ -182,7 +207,7 @@ class Item extends Component {
     let linkIconClassName = 'sf2-icon-link action-icon' + iconVisibility; 
     let deleteIconClassName = 'sf2-icon-delete action-icon' + iconVisibility;
     return (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <td><img src={iconUrl} width="24" /></td>
         <td>
           {item.is_dir ?
@@ -191,10 +216,15 @@ class Item extends Component {
           }
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}/`}>{item.repo_name}</Link></td>
-        { item.permissions.can_download ? 
-          <td>{gettext('Preview and download')}</td> :
-          <td>{gettext('Preview only')}</td>
-        }
+        <td>
+          <ShareLinksPermissionEditor 
+            isTextMode={true}
+            isEditIconShow={this.state.showOpIcon}
+            currentPermission={this.state.currentPermission}
+            permissionOptions={this.permissionOptions}
+            onPermissionChanged={this.changePerm}
+          />
+        </td>
         <td>{item.view_cnt}</td>
         <td>{this.renderExpriedData()}</td> 
         <td>
