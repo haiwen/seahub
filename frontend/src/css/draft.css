@@ -61,6 +61,16 @@
   font-weight: normal;
 }
 
+.file-info .file-review {
+  color: #999;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.cur-file-info .last-modification {
+  font-size: 0.8125rem;
+}
+
 .seafile-toggle-diff {
   display: flex;
   margin-right: 10px;

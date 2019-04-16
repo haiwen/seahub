@@ -21,7 +21,6 @@ import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
 import { Value, Document, Block } from 'slate';
 import ModalPortal from './components/modal-portal';
-import { Utils } from './utils/utils';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -33,6 +32,7 @@ import './css/draft.css';
 
 require('@seafile/seafile-editor/dist/editor/code-hight-package');
 const URL = require('url-parse');
+var moment = require('moment');
 
 class Draft extends React.Component {
   constructor(props) {
@@ -40,6 +40,7 @@ class Draft extends React.Component {
     this.state = {
       draftContent: '',
       draftOriginContent: '',
+      draftInfo: {},
       isLoading: true,
       isShowDiff: true,
       showDiffTip: false,
@@ -244,6 +245,12 @@ class Draft extends React.Component {
       this.setState({
         originRepoName: res.data.repo_name
       });
+    });
+  }
+
+  getDraftInfo = () => {
+    seafileAPI.getFileInfo(draftRepoID, draftFilePath).then((res) => {
+      this.setState({ draftInfo: res.data });
     });
   }
 
@@ -677,6 +684,7 @@ class Draft extends React.Component {
     this.getCommentsNumber();
     this.listReviewers();
     this.getOriginRepoInfo();
+    this.getDraftInfo();
   }
 
   componentDidMount() {
@@ -764,6 +772,8 @@ class Draft extends React.Component {
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
     const freezePublish = (this.state.freezePublish || draftStatus === 'published') ? true : false;
     const canPublish = !this.state.freezePublish && draftFileExists;
+    const time = moment(this.state.draftInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
+    const url = `${siteRoot}profile/${encodeURIComponent(this.state.draftInfo.last_modifier_email)}/`;
     return(
       <div className="wrapper">
         <div id="header" className="header review">
@@ -771,17 +781,21 @@ class Draft extends React.Component {
             <div className="info-item file-feature">
               <span className="sf2-icon-review"></span>
             </div>
-            <div className="info-item file-info">
-              <React.Fragment>
+            <div>
+              <div className="info-item file-info">
                 <span className="file-name">{draftFileName}</span>
-                {draftFileExists &&
-                  <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>
-                }
-              </React.Fragment>
+                <span className="mx-2 file-review">{gettext('Review')}</span>
+              </div>
+              <div className="last-modification">
+                <a href={url}>{this.state.draftInfo.last_modifier_name}</a><span className="mx-1">{time}</span>
+              </div>
             </div>
           </div>
           <div className="button-group">
             {this.renderDiffButton()}
+            {draftFileExists &&
+              <a href={draftLink} className="mx-xl-1"><Button color="secondary">{gettext('Edit Draft')}</Button></a>
+            }
             {canPublish &&
               <button 
                 className='btn btn-success file-operation-btn' 
@@ -834,10 +848,7 @@ class Draft extends React.Component {
                         changedNumber={this.state.changedNodes.length}
                         scrollToChangedNode={this.scrollToChangedNode}/>
                       }
-                      <SidePanelOrigin originRepoName={this.state.originRepoName}/>
-                      {draftFileExists &&
-                        <a href={draftLink}><Button color="secondary">{gettext('Edit Draft')}</Button></a>
-                      }
+                      <SidePanelOrigin originRepoName={this.state.originRepoName} draftInfo={this.state.draftInfo}/>
                     </div>
                   </TabPane>
                   <TabPane tabId="comments" className="comments">
