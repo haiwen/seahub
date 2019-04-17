@@ -67,7 +67,8 @@ class TreeNodeView extends React.Component {
     this.props.onNodeClick(this.props.node);
   }
 
-  onLoadToggle = () => {
+  onLoadToggle = (e) => {
+    e.stopPropagation();
     let { node } = this.props;
     if (node.isExpanded) {
       this.props.onNodeCollapse(node);

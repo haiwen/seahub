@@ -68,6 +68,7 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirColumnView extends React.Component {
@@ -171,6 +172,8 @@ class DirColumnView extends React.Component {
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
           selectedDirentList={this.props.selectedDirentList}
+          onFileTagChanged={this.props.onFileTagChanged}
+          onToolbarFileTagChanged={this.props.onToolbarFileTagChanged}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
@@ -224,6 +227,7 @@ class DirColumnView extends React.Component {
               onItemsMove={this.props.onItemsMove}
               onItemsCopy={this.props.onItemsCopy}
               onItemsDelete={this.props.onItemsDelete}
+              onFileTagChanged={this.props.onFileTagChanged}
             />
           )}
         </div>

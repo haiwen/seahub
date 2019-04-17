@@ -44,6 +44,7 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirentListView extends React.Component {
@@ -220,6 +221,7 @@ class DirentListView extends React.Component {
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
   }
+
 
   onItemsDownload = () => {
     let { path, repoID, selectedDirentList } = this.props;
@@ -454,7 +456,7 @@ class DirentListView extends React.Component {
       contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
     }
 
-    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
+    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
       if (can_set_folder_perm) {
         menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
@@ -476,6 +478,7 @@ class DirentListView extends React.Component {
         menuList.push(MOVE);
       }
       menuList.push(COPY);
+      menuList.push(TAGS);
       if (isPro) {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
@@ -573,6 +576,7 @@ class DirentListView extends React.Component {
                   onItemContextMenu={this.onItemContextMenu}
                   selectedDirentList={this.props.selectedDirentList}
                   activeDirent={this.state.activeDirent}
+                  onFileTagChanged={this.props.onFileTagChanged}
                 />
               );
             })}

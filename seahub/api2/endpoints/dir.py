@@ -296,6 +296,7 @@ class DirView(APIView):
                 parent_dir_list.append(tmp_parent_dir)
                 for folder_name in parent_dir.strip('/').split('/'):
                     tmp_parent_dir = posixpath.join(tmp_parent_dir, folder_name)
+                    tmp_parent_dir = normalize_dir_path(tmp_parent_dir)
                     parent_dir_list.append(tmp_parent_dir)
 
         all_dir_info_list = []

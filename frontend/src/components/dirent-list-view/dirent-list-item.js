@@ -13,6 +13,7 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
+import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
 import '../../css/dirent-list-item.css';
 
@@ -60,6 +61,7 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
       isDragTipShow: false,
       isDropTipshow: false,
+      isEditFileTagShow: false,
     };
   }
 
@@ -190,6 +192,9 @@ class DirentListItem extends React.Component {
       case 'Copy':
         this.onItemCopyToggle();
         break;
+      case 'Tags':
+        this.onEditFileTagToggle();
+        break;
       case 'Permission':
         this.onPermissionItem();
         break;
@@ -214,6 +219,17 @@ class DirentListItem extends React.Component {
       default:
         break;
     }
+  }
+
+  onEditFileTagToggle = () => {
+    this.setState({
+      isEditFileTagShow: !this.state.isEditFileTagShow
+    });
+  }
+
+  onFileTagChanged = () => {
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onFileTagChanged(this.props.dirent, direntPath);
   }
 
   onItemRenameToggle = () => {
@@ -556,6 +572,15 @@ class DirentListItem extends React.Component {
               repoEncrypted={this.props.repoEncrypted}
             />
           </ModalPortal>
+        }
+        {this.state.isEditFileTagShow &&
+          <EditFileTagDialog
+            repoID={this.props.repoID}
+            fileTagList={dirent.file_tags}
+            filePath={direntPath}
+            toggleCancel={this.onEditFileTagToggle}
+            onFileTagChanged={this.onFileTagChanged}
+          />
         }
         {this.state.isZipDialogOpen &&
           <ModalPortal>

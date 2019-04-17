@@ -12,6 +12,9 @@ import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
 import { siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import EditFileTagDialog from '../dialog/edit-filetag-dialog';
+import FileTag from '../../models/file-tag';
+import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -31,6 +34,7 @@ const propTypes = {
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirColumnNav extends React.Component {
@@ -49,12 +53,18 @@ class DirColumnNav extends React.Component {
       isCopyDialogShow: false,
       isMoveDialogShow: false,
       isMutipleOperation: false,
+      isEditFileTagShow: false,
+      fileTagList: [],
+      nodeDirent: '',
     };
     this.isNodeMenuShow = true;
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({opNode: nextProps.currentNode});
+    if (this.state.nodeDirent.object) {
+      this.getTagFileList(this.state.nodeDirent);
+    }
   }
 
   onNodeClick = (node) => {
@@ -92,6 +102,9 @@ class DirColumnNav extends React.Component {
       case 'Copy':
         this.onCopyToggle();
         break;
+      case 'Tags':
+        this.onEditFileTagToggle(node);
+        break;
       case 'Move':
         this.onMoveToggle();
         break;
@@ -99,6 +112,51 @@ class DirColumnNav extends React.Component {
         this.onOpenFile(node);
         break;
     }
+  }
+
+  onEditFileTagToggle = (node) => {
+    this.setState({
+      isEditFileTagShow: !this.state.isEditFileTagShow, 
+      nodeDirent: node,
+    });
+    if (node.object) {
+      this.getTagFileList(node);
+    }
+  }
+
+  onFileTagChanged = () => {
+    let currentPath;
+
+    if (this.props.currentPath.charAt(this.props.currentPath.length - 1) === '/') {
+      currentPath = Utils.joinPath(this.props.currentPath, this.state.nodeDirent.object.name);
+    } else {
+      currentPath = this.props.currentPath;
+    }
+
+    if (this.props.currentPath !== '/') {
+      if (currentPath === this.state.nodeDirent.path) {
+        this.props.onToolbarFileTagChanged();
+      }
+    }
+    
+    if (this.props.currentPath !== this.state.nodeDirent.parentNode.path) {
+      this.getTagFileList(this.state.nodeDirent);
+      return;
+    }
+    
+    this.props.onFileTagChanged(this.state.nodeDirent.object, this.state.nodeDirent.path);
+  }
+
+  getTagFileList = (node) => {
+    let {repoID} = this.props;
+    seafileAPI.listFileTags(repoID, node.path).then(res => {
+      let fileTagList = [];
+      res.data.file_tags.forEach(item => {
+        let file_tag = new FileTag(item);
+        fileTagList.push(file_tag);
+      });
+      this.setState({fileTagList: fileTagList});
+    });
   }
 
   onAddFileToggle = (type) => {
@@ -338,6 +396,15 @@ class DirColumnNav extends React.Component {
             />
           </ModalPortal>
         )}
+        {this.state.isEditFileTagShow &&
+          <EditFileTagDialog
+            repoID={this.props.repoID}
+            fileTagList={this.state.fileTagList}
+            filePath={this.state.nodeDirent.path}
+            toggleCancel={this.onEditFileTagToggle}
+            onFileTagChanged={this.onFileTagChanged}
+          />
+        }
         {this.state.isNodeImagePopupOpen && (
           <ModalPortal>
             <ImageDialog

@@ -187,6 +187,7 @@ class LibContentContainer extends React.Component {
                     onItemsMove={this.props.onItemsMove}
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
+                    onFileTagChanged={this.props.onFileTagChanged}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -250,6 +251,8 @@ class LibContentContainer extends React.Component {
                     onItemsMove={this.props.onItemsMove}
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
+                    onFileTagChanged={this.props.onFileTagChanged}
+                    onToolbarFileTagChanged={this.props.onToolbarFileTagChanged}
                   />
                 )}
               </Fragment>

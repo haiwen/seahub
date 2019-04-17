@@ -1031,7 +1031,8 @@ class LibContentView extends React.Component {
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
         let object = direntList[i];
-        let key = object.parent_dir;
+        let parentDir = object.parent_dir;
+        let key = parentDir === '/' ?  '/' : parentDir.slice(0, parentDir.length - 1);
         if (!results[key]) {
           results[key] = [];
         }
@@ -1444,6 +1445,7 @@ class LibContentView extends React.Component {
             closeDirentDetail={this.closeDirentDetail}
             showDirentDetail={this.showDirentDetail}
             onDeleteRepoTag={this.onDeleteRepoTag}
+            onToolbarFileTagChanged={this.onToolbarFileTagChanged}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
