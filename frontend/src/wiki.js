@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { slug, repoID, siteRoot, initialPath, isDir } from './utils/constants';
+import { slug, repoID, siteRoot, initialPath, isDir, sharedToken } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Dirent from './models/dirent';
@@ -270,7 +270,7 @@ class Wiki extends Component {
       if (Utils.isMarkdownFile(path)) {
         this.showFile(path);
       } else {
-        let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
+        let url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(path);
         let newWindow = window.open('about:blank');
         newWindow.location.href = url;
       }
@@ -285,7 +285,6 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(nodePath);
     tree.expandNode(node);
-
     this.setState({treeData: tree, currentNode: node});
     this.showDir(node.path);
   }
@@ -300,7 +299,7 @@ class Wiki extends Component {
         this.showFile(direntPath);
       } else {
         const w=window.open('about:blank');
-        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+        const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(direntPath);
         w.location.href = url;
       }
     }
@@ -351,7 +350,7 @@ class Wiki extends Component {
         }
       } else {
         const w = window.open('about:blank');
-        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
+        const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(node.path);
         w.location.href = url;
       }
     }

@@ -18,8 +18,6 @@ class WikiSelectDialog extends React.Component {
     super(props);
     this.state = {
       repos: [],
-      isExist: true,
-      name: '',
       repoID: '',
     };
   }
@@ -43,8 +41,8 @@ class WikiSelectDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    let { isExist, name, repoID } = this.state;
-    this.props.addWiki(isExist, name, repoID);
+    let { repoID } = this.state;
+    this.props.addWiki(repoID);
     this.props.toggleCancel();
   }
 
@@ -55,7 +53,7 @@ class WikiSelectDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.toggle}>{gettext('Choose a library as Wiki')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Publish a library')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead>

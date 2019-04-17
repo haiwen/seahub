@@ -153,15 +153,6 @@ class WikiListItem extends Component {
           </td>
           <td><a href={userProfileURL} target='_blank'>{wiki.owner_nickname}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
-          <td>
-            <WikiPermissionEditor 
-              isTextMode={true}
-              isEditIconShow={this.state.showOpIcon}
-              currentPermission={this.state.permission}
-              permissions={this.permissions}
-              onPermissionChanged={this.changePerm}
-            />
-          </td>
           <td className="text-center cursor-pointer">
             {this.state.isShowMenuControl && (
               <Dropdown isOpen={this.state.isShowWikiMenu} toggle={this.onMenuToggle}>
@@ -174,8 +165,7 @@ class WikiListItem extends Component {
                   onClick={this.clickMenuToggle}
                 />
                 <DropdownMenu>
-                  <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
-                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem>
+                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             )}

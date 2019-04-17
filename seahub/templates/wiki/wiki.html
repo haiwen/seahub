@@ -10,6 +10,8 @@
         config: {
             slug: "{{ wiki.slug }}",
             repoId: "{{ wiki.repo_id }}",
+            sharedToken: "{{ shared_token }}",
+            sharedType: "{{ shared_type }}",
             initial_path: "{{ file_path|escapejs }}",
             permission: "{{ user_can_write }}",
             isPublicWiki: "{{ is_public_wiki }}",

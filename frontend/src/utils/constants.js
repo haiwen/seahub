@@ -56,6 +56,8 @@ export const permission = window.wiki ? window.wiki.config.permission === 'True'
 export const isDir = window.wiki ? window.wiki.config.isDir : '';
 export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
 export const isPublicWiki = window.wiki ? window.wiki.config.isPublicWiki === 'True': '';
+export const sharedToken = window.wiki ? window.wiki.config.sharedToken : '';
+export const sharedType = window.wiki ? window.wiki.config.sharedType : '';
 
 // file history
 export const PER_PAGE = 25;

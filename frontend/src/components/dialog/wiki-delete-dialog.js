@@ -17,13 +17,13 @@ class WikiDeleteDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.toggle}>{gettext('Delete Wiki')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Unpublish Library')}</ModalHeader>
         <ModalBody>
-          <p>{gettext('Are you sure you want to delete this wiki?')}</p>
+          <p>{gettext('Are you sure you want to unpublish this library?')}</p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="danger" onClick={this.props.handleSubmit}>{gettext('Delete')}</Button>
+          <Button color="danger" onClick={this.props.handleSubmit}>{gettext('Unpublish')}</Button>
         </ModalFooter>
       </Modal>
     );
