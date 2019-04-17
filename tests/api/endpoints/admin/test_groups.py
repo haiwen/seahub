@@ -1,4 +1,5 @@
 import json
+import random
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
@@ -56,6 +57,42 @@ class GroupsTest(BaseTestCase):
         assert json_resp['owner'] == self.user.email
 
         self.remove_group(json_resp['id'])
+
+    def test_can_create_by_limit_punctuation(self):
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-groups')
+        limit_punctuation = """-'_"""
+        group_name = randstring(5) + random.choice(limit_punctuation)
+
+        data = {
+            'group_name': group_name,
+            'group_owner': self.user.email
+        }
+
+        resp = self.client.post(url, data)
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == group_name
+        assert json_resp['owner'] == self.user.email
+
+        self.remove_group(json_resp['id'])
+
+    def test_can_not_create_by_other_punctuation(self):
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-groups')
+        other_punctuation = """!"#$%&()*+,./:;<=>?@[\]^`{|}~"""
+        group_name = randstring(5) + random.choice(other_punctuation)
+
+        data = {
+            'group_name': group_name,
+            'group_owner': self.user.email
+        }
+
+        resp = self.client.post(url, data)
+        self.assertEqual(400, resp.status_code)
 
     def test_create_without_group_owner(self):
         self.login_as(self.admin)
