@@ -786,14 +786,16 @@ class Draft extends React.Component {
                 <span className="file-name">{draftFileName}</span>
                 <span className="mx-2 file-review">{gettext('Review')}</span>
               </div>
-              <div className="last-modification">
-                <a href={url}>{this.state.draftInfo.last_modifier_name}</a><span className="mx-1">{time}</span>
-              </div>
+              {(!freezePublish && this.state.draftInfo.mtime) &&
+                <div className="last-modification">
+                  <a href={url}>{this.state.draftInfo.last_modifier_name}</a><span className="mx-1">{time}</span>
+                </div>
+              }
             </div>
           </div>
           <div className="button-group">
             {this.renderDiffButton()}
-            {draftFileExists &&
+            {(draftFileExists && !freezePublish) &&
               <a href={draftLink} className="mx-xl-1"><Button color="secondary">{gettext('Edit Draft')}</Button></a>
             }
             {canPublish &&
