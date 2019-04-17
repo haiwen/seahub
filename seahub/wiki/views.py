@@ -91,7 +91,7 @@ def slug(request, slug, file_path="home.md"):
 
     try:
         fs = FileShare.objects.get(repo_id=wiki.repo_id, path='/')
-    except FileShare.DoseNotExist:
+    except FileShare.DoesNotExist:
         fs = FileShare.objects.create_dir_link(wiki.username, wiki.repo_id, '/',
                                                permission='view_download')
         wiki.permission = 'public'
