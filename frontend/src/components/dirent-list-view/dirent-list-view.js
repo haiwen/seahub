@@ -222,7 +222,6 @@ class DirentListView extends React.Component {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
   }
 
-
   onItemsDownload = () => {
     let { path, repoID, selectedDirentList } = this.props;
     if (selectedDirentList.length) {
