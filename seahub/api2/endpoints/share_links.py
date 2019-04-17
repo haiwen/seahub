@@ -367,11 +367,11 @@ class ShareLink(APIView):
         except FileShare.DoesNotExist:
             return Response({'success': True})
 
-        has_publied_library = False
+        has_published_library = False
         if fs.path == '/':
             try:
                 Wiki.objects.get(repo_id=fs.repo_id)
-                has_publied_library = True
+                has_published_library = True
             except Wiki.DoesNotExist:
                 pass
 
@@ -380,8 +380,8 @@ class ShareLink(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if has_publied_library:
-            error_msg = 'Permission denied.'
+        if has_published_library:
+            error_msg = 'This is an associated published library.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
