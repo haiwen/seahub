@@ -122,7 +122,7 @@ class Item extends Component {
 
     let item = this.props.item
     this.state = {
-      currentPermission: item.permissions.can_download ? 'Preview and download' :'Preview only',
+      currentPermission: item.permissions.can_download ? 'Preview and download' : 'Preview only',
       showOpIcon: false,
     };
     this.permissionOptions = ['Preview only', 'Preview and download'];
