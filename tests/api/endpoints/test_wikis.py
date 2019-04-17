@@ -60,9 +60,7 @@ class WikisViewTest(BaseTestCase):
         assert len(Wiki.objects.all()) == 0
 
         resp = self.client.post(self.url, {
-            'name': 'test wiki',
-            'repo_id': '',
-            'use_exist_repo': 'false',
+            'repo_id': self.repo.id,
         })
         self.assertEqual(200, resp.status_code)
 
