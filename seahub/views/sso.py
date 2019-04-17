@@ -15,6 +15,9 @@ def sso(request):
     else:
         next_page = reverse('libraries')
 
+    if getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False):
+        return HttpResponseRedirect(next_page)
+
     if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
         return HttpResponseRedirect(next_page)
 

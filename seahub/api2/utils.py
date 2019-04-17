@@ -383,6 +383,36 @@ def get_token_v2(request, username, platform, device_id, device_name,
         username, platform, device_id, device_name,
         client_version, platform_version, get_client_ip(request))
 
+def get_api_token(request, keys=None, key_prefix=''):
+
+    if not keys:
+        keys = [
+            'platform',
+            'device_id',
+            'device_name',
+            'client_version',
+            'platform_version',
+        ]
+
+    if key_prefix:
+        keys = [key_prefix + item for item in keys]
+
+    if all([key in request.GET for key in keys]):
+
+        platform = request.GET['%splatform' % key_prefix]
+        device_id = request.GET['%sdevice_id' % key_prefix]
+        device_name = request.GET['%sdevice_name' % key_prefix]
+        client_version = request.GET['%sclient_version' % key_prefix]
+        platform_version = request.GET['%splatform_version' % key_prefix]
+
+        token = get_token_v2(request, request.user.username, platform,
+                             device_id, device_name, client_version,
+                             platform_version)
+    else:
+        token = get_token_v1(request.user.username)
+
+    return token
+
 def to_python_boolean(string):
     """Convert a string to boolean.
     """
