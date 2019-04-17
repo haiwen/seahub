@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, navigate } from '@reach/router';
-import { siteRoot, canAddRepo } from './utils/constants';
+import { siteRoot, canAddRepo, isDocs } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
 import SidePanel from './components/side-panel';
@@ -61,7 +61,9 @@ class App extends Component {
     // get reviews  
     // TODO: need refactor later
     let href = window.location.href.split('/');
-    this.getDrafts();
+    if (isDocs) {
+      this.getDrafts();
+    }
     this.setState({currentTab: href[href.length - 2]});
   }
 
