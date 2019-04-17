@@ -254,7 +254,6 @@ class LibContentContainer extends React.Component {
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
-                    onToolbarFileTagChanged={this.props.onToolbarFileTagChanged}
                   />
                 )}
               </Fragment>
