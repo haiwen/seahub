@@ -19,7 +19,8 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
-    MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH
+    MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
+    ENABLE_SEAFILE_DOCS
 
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
@@ -29,7 +30,7 @@ try:
 except ImportError:
     SEACLOUD_MODE = False
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, is_docs_version
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -121,7 +122,7 @@ def base(request):
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
-        'is_docs': True if is_docs_version() else False,
+        'is_docs': ENABLE_SEAFILE_DOCS,
         'enable_repo_wiki_mode': dj_settings.ENABLE_REPO_WIKI_MODE,
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,

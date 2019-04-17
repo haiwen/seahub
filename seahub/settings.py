@@ -423,6 +423,9 @@ ENABLE_GROUP_DISCUSSION = True
 # Enable file comments
 ENABLE_FILE_COMMENT = True
 
+# Enable seafile docs
+ENABLE_SEAFILE_DOCS = False
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']

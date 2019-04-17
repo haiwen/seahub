@@ -6,7 +6,7 @@ import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGen
 import { seafileAPI } from '../utils/seafile-api';
 import { Badge } from 'reactstrap';
 
-import { canViewOrg, isDocs } from '../utils/constants';
+import { canViewOrg, isDocs, isPro } from '../utils/constants';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -144,6 +144,7 @@ class MainSideNav extends React.Component {
   }
 
   render() {
+    let showActivity = isDocs || isPro; 
     return (
       <div className="side-nav">
         <div className="side-nav-con">
@@ -189,7 +190,7 @@ class MainSideNav extends React.Component {
                 <span className="nav-text">{gettext('Favorites')}</span>
               </Link>
             </li>
-            {isDocs &&
+            {showActivity &&
               <li className="nav-item">
                 <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Activities')} onClick={() => this.tabItemClick('dashboard')}>
                   <span className="sf2-icon-clock" aria-hidden="true"></span>
