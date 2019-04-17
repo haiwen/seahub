@@ -81,6 +81,7 @@ class DirentMenu extends React.Component {
         menuList.push('Move');
       }
       menuList.push('Copy');
+      menuList.push('Tags');
       if (isPro) {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
@@ -127,6 +128,9 @@ class DirentMenu extends React.Component {
         break;
       case 'Copy':
         translateResult = gettext('Copy');
+        break;
+      case 'Tags':
+        translateResult = gettext('Tags');
         break;
       case 'Permission':
         translateResult = gettext('Permission');
