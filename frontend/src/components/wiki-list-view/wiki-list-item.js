@@ -157,8 +157,8 @@ class WikiListItem extends Component {
             {this.state.isShowMenuControl && (
               <Dropdown isOpen={this.state.isShowWikiMenu} toggle={this.onMenuToggle}>
                 <DropdownToggle 
-                  tag="a" 
-                  className="fas fa-ellipsis-v" 
+                  tag="i" 
+                  className="fas fa-ellipsis-v attr-action-icon" 
                   title={gettext('More Operations')}
                   data-toggle="dropdown" 
                   aria-expanded={this.state.isShowWikiMenu}
