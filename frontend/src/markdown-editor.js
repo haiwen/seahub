@@ -503,7 +503,6 @@ class MarkdownEditor extends React.Component {
           const contentLength = res.data.length;
           let isBlankFile =  (contentLength === 0 || contentLength === 1);
           let hasPermission = (this.state.fileInfo.permission === 'rw');
-          let isEditMode = mode === 'edit' ? true : false;
           let value = deserialize(res.data);
           this.setState({
             markdownContent: res.data,
@@ -661,7 +660,6 @@ class MarkdownEditor extends React.Component {
 
   render() {
     let component;
-    let sidePanel = this.state.isShowHistory ? true : false;
     if (this.state.loading) {
       return (
         <div className="empty-loading-page">
