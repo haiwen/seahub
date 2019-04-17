@@ -3252,6 +3252,10 @@ class FileSharedLinkView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, "Library does not exist")
 
+        if repo.encrypted:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         path = request.data.get('p', None)
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing')
