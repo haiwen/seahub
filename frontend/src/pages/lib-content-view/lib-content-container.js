@@ -8,6 +8,8 @@ import DirListView from '../../components/dir-view-mode/dir-list-view';
 import DirGridView from '../../components/dir-view-mode/dir-grid-view';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 
+import '../../css/lib-content-view.css';
+
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
   currentMode: PropTypes.string.isRequired,
@@ -149,7 +151,7 @@ class LibContentContainer extends React.Component {
               onDeleteRepoTag={this.props.onDeleteRepoTag}
             />
           </div>
-          <div className={`cur-view-content ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>
+          <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
               <Fragment>

@@ -118,6 +118,7 @@
 .table-container {
   flex: 1;
   padding-bottom: 150px;
+  padding: 0 1rem;
 }
 
 .cur-view-content .article {
