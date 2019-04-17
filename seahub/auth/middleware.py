@@ -162,11 +162,6 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
 
     def _set_auth_cookie(self, request, response):
 
-        # TODO, need test
-        if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
-            if 'from_desktop' not in str(request.GET):
-                return
-
         if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
             key_prefix = 'shib_'
         elif getattr(settings, 'ENABLE_KRB5_LOGIN', False):
