@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-03 18:28+0800\n"
-"PO-Revision-Date: 2019-04-03 10:29+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2019-04-17 11:10+0800\n"
+"PO-Revision-Date: 2019-04-17 03:11+0000\n"
+"Last-Translator: Manop Kalong <manop.ka@rd.go.th>\n"
 "Language-Team: Thai (Thailand) (http://www.transifex.com/haiwen/seahub/language/th_TH/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -105,7 +105,7 @@ msgstr "แจ้งเตือน"
 
 #: frontend/src/components/common/notification.js:72
 #: frontend/src/components/dialog/add-reviewer-dialog.js:136
-#: frontend/src/components/dialog/edit-filetag-dialog.js:159
+#: frontend/src/components/dialog/edit-filetag-dialog.js:152
 #: frontend/src/components/dialog/list-created-files-dialog.js:55
 #: frontend/src/components/dialog/list-related-file-dialog.js:104
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:71
@@ -117,7 +117,7 @@ msgstr "แจ้งเตือน"
 #: frontend/src/components/dialog/share-repo-dialog.js:149
 #: frontend/src/components/dialog/transfer-group-dialog.js:70
 #: frontend/src/components/system-notification.js:46
-#: frontend/src/pages/share-admin/share-links.js:105
+#: frontend/src/pages/share-admin/share-links.js:106
 msgid "Close"
 msgstr "ปิด"
 
@@ -139,9 +139,9 @@ msgstr "คลังแฟ้มข้อมูล"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:93
 #: frontend/src/components/dialog/list-tag-dialog.js:109
-#: frontend/src/components/dirent-detail/detail-list-view.js:101
-#: frontend/src/components/dirent-list-view/dirents-menu.js:59
+#: frontend/src/components/dirent-detail/detail-list-view.js:109
 #: frontend/src/components/toolbar/view-file-toolbar.js:114
+#: frontend/src/utils/text-translation.js:22
 msgid "Tags"
 msgstr ""
 
@@ -152,9 +152,9 @@ msgstr "ถังขยะ"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:95
 #: frontend/src/components/cur-dir-path/dir-tool.js:153
-#: frontend/src/components/dirent-list-view/dirent-menu.js:122
-#: frontend/src/components/dirent-list-view/dirents-menu.js:74
+#: frontend/src/components/dirent-list-view/dirent-menu.js:144
 #: frontend/src/components/file-view/file-toolbar.js:92
+#: frontend/src/utils/text-translation.js:20
 msgid "History"
 msgstr "ประวัติ"
 
@@ -179,7 +179,7 @@ msgid "Select related file for {placeholder}"
 msgstr ""
 
 #: frontend/src/components/dialog/add-related-file-dialog.js:92
-#: frontend/src/components/dialog/create-tag-dialog.js:65
+#: frontend/src/components/dialog/create-tag-dialog.js:68
 #: frontend/src/components/dialog/update-tag-dialog.js:85
 msgid "Back"
 msgstr ""
@@ -193,8 +193,9 @@ msgstr ""
 #: frontend/src/components/dialog/copy-dirent-dialog.js:174
 #: frontend/src/components/dialog/create-file-dialog.js:150
 #: frontend/src/components/dialog/create-folder-dialog.js:90
-#: frontend/src/components/dialog/create-group-dialog.js:64
-#: frontend/src/components/dialog/create-tag-dialog.js:96
+#: frontend/src/components/dialog/create-group-dialog.js:68
+#: frontend/src/components/dialog/create-repo-dialog.js:207
+#: frontend/src/components/dialog/create-tag-dialog.js:99
 #: frontend/src/components/dialog/delete-dialog.js:32
 #: frontend/src/components/dialog/delete-repo-dialog.js:38
 #: frontend/src/components/dialog/dismiss-group-dialog.js:28
@@ -214,7 +215,7 @@ msgstr ""
 #: frontend/src/components/dialog/transfer-dialog.js:54
 #: frontend/src/components/dialog/upload-remind-dialog.js:44
 #: frontend/src/components/dialog/wiki-delete-dialog.js:25
-#: frontend/src/components/dialog/wiki-select-dialog.js:84
+#: frontend/src/components/dialog/wiki-select-dialog.js:82
 #: frontend/src/components/file-view/comment-panel.js:229
 #: frontend/src/components/markdown-view/comment-dialog.js:78
 #: frontend/src/components/review-list-view/review-comment-dialog.js:92
@@ -232,8 +233,8 @@ msgstr "ยกเลิก"
 #: frontend/src/components/dialog/create-department-repo-dialog.js:93
 #: frontend/src/components/dialog/create-file-dialog.js:151
 #: frontend/src/components/dialog/create-folder-dialog.js:91
-#: frontend/src/components/dialog/create-group-dialog.js:65
-#: frontend/src/components/dialog/create-repo-dialog.js:207
+#: frontend/src/components/dialog/create-group-dialog.js:69
+#: frontend/src/components/dialog/create-repo-dialog.js:208
 #: frontend/src/components/dialog/insert-file-dialog.js:68
 #: frontend/src/components/dialog/insert-file-dialog.js:69
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
@@ -257,7 +258,7 @@ msgstr "ยกเลิก"
 #: frontend/src/components/dialog/share-to-user.js:286
 #: frontend/src/components/dialog/transfer-dialog.js:55
 #: frontend/src/components/dialog/transfer-group-dialog.js:71
-#: frontend/src/components/dialog/wiki-select-dialog.js:85
+#: frontend/src/components/dialog/wiki-select-dialog.js:83
 #: frontend/src/components/file-view/comment-panel.js:135
 #: frontend/src/components/markdown-view/comment-dialog.js:77
 #: frontend/src/components/review-list-view/review-comment-dialog.js:91
@@ -311,21 +312,23 @@ msgid "Successfully changed library password."
 msgstr ""
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:91
+#: frontend/src/components/dialog/zip-download-dialog.js:48
+#: frontend/src/components/dialog/zip-download-dialog.js:75
 #: frontend/src/pages/groups/group-view.js:101
 #: frontend/src/pages/groups/group-view.js:135
 #: frontend/src/pages/groups/groups-view.js:141
-#: frontend/src/pages/lib-content-view/lib-content-view.js:133
+#: frontend/src/pages/lib-content-view/lib-content-view.js:135
 #: frontend/src/pages/linked-devices/linked-devices.js:182
 #: frontend/src/pages/my-libs/my-libs.js:54
 #: frontend/src/pages/share-admin/folders.js:231
 #: frontend/src/pages/share-admin/libraries.js:211
-#: frontend/src/pages/share-admin/share-links.js:287
+#: frontend/src/pages/share-admin/share-links.js:291
 #: frontend/src/pages/share-admin/upload-links.js:171
 #: frontend/src/pages/shared-libs/shared-libs.js:322
 #: frontend/src/pages/shared-with-all/public-shared-view.js:61
 #: frontend/src/pages/starred/starred.js:250
 #: frontend/src/pages/sys-admin/file-scan-records.js:105
-#: frontend/src/pages/wikis/wikis.js:47
+#: frontend/src/pages/wikis/wikis.js:47 frontend/src/shared-dir-view.js:61
 #: static/scripts/app/views/fileupload.js:18
 #: static/scripts/app/views/fileupload.js:228
 #: static/scripts/app/views/fileupload.js:268
@@ -337,21 +340,23 @@ msgid "Error"
 msgstr "ผิดพลาด"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:94
+#: frontend/src/components/dialog/zip-download-dialog.js:50
+#: frontend/src/components/dialog/zip-download-dialog.js:77
 #: frontend/src/pages/groups/group-view.js:107
 #: frontend/src/pages/groups/group-view.js:141
 #: frontend/src/pages/groups/groups-view.js:147
-#: frontend/src/pages/lib-content-view/lib-content-view.js:139
+#: frontend/src/pages/lib-content-view/lib-content-view.js:141
 #: frontend/src/pages/linked-devices/linked-devices.js:189
 #: frontend/src/pages/my-libs/my-libs.js:60
 #: frontend/src/pages/share-admin/folders.js:238
 #: frontend/src/pages/share-admin/libraries.js:217
-#: frontend/src/pages/share-admin/share-links.js:294
+#: frontend/src/pages/share-admin/share-links.js:298
 #: frontend/src/pages/share-admin/upload-links.js:177
 #: frontend/src/pages/shared-libs/shared-libs.js:329
 #: frontend/src/pages/shared-with-all/public-shared-view.js:67
 #: frontend/src/pages/starred/starred.js:257
 #: frontend/src/pages/sys-admin/file-scan-records.js:111
-#: frontend/src/pages/wikis/wikis.js:53
+#: frontend/src/pages/wikis/wikis.js:53 frontend/src/shared-dir-view.js:64
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
 #: frontend/src/view-file-document.js:76
@@ -411,6 +416,7 @@ msgid "Copy selected item(s) to:"
 msgstr ""
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:54
+#: frontend/src/components/dialog/create-group-dialog.js:43
 #: frontend/src/components/dialog/create-repo-dialog.js:69
 #: frontend/src/components/dialog/org-add-department-dialog.js:43
 #: frontend/src/components/dialog/org-add-repo-dialog.js:39
@@ -437,9 +443,9 @@ msgstr ""
 #: frontend/src/components/dialog/create-department-repo-dialog.js:79
 #: frontend/src/components/dialog/create-file-dialog.js:130
 #: frontend/src/components/dialog/create-folder-dialog.js:77
-#: frontend/src/components/dialog/create-group-dialog.js:58
+#: frontend/src/components/dialog/create-group-dialog.js:62
 #: frontend/src/components/dialog/create-repo-dialog.js:156
-#: frontend/src/components/dialog/create-tag-dialog.js:71
+#: frontend/src/components/dialog/create-tag-dialog.js:74
 #: frontend/src/components/dialog/list-created-files-dialog.js:28
 #: frontend/src/components/dialog/list-related-file-dialog.js:81
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:49
@@ -450,14 +456,14 @@ msgstr ""
 #: frontend/src/components/dialog/org-add-repo-dialog.js:66
 #: frontend/src/components/dialog/share-repo-dialog.js:128
 #: frontend/src/components/dialog/update-tag-dialog.js:91
-#: frontend/src/components/dialog/wiki-select-dialog.js:65
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:262
+#: frontend/src/components/dialog/wiki-select-dialog.js:63
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:539
 #: frontend/src/components/draft-list-view/draft-list-view.js:36
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:109
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:20
 #: frontend/src/components/wiki-list-view/wiki-list-view.js:41
-#: frontend/src/pages/my-libs/my-libs-deleted.js:86
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:82
+#: frontend/src/pages/my-libs/my-libs-deleted.js:87
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:80
 #: frontend/src/pages/org-admin/org-admin-list.js:90
 #: frontend/src/pages/org-admin/org-department-item.js:149
 #: frontend/src/pages/org-admin/org-department-item.js:189
@@ -471,22 +477,23 @@ msgstr ""
 #: frontend/src/pages/share-admin/share-links.js:85
 #: frontend/src/pages/share-admin/upload-links.js:54
 #: frontend/src/pages/shared-libs/shared-libs.js:55
+#: frontend/src/shared-dir-view.js:271
 msgid "Name"
 msgstr "ชื่อ"
 
 #: frontend/src/components/dialog/create-file-dialog.js:48
 #: frontend/src/components/dialog/create-folder-dialog.js:45
 #: frontend/src/components/dialog/rename-dialog.js:56
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:72
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:94
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:66
 msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr ""
 
 #: frontend/src/components/dialog/create-file-dialog.js:126
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:185
-#: frontend/src/components/tree-view/tree-node-menu.js:48
-#: frontend/src/components/tree-view/tree-view-contextmenu.js:78
+#: frontend/src/components/tree-view/tree-node-menu.js:65
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:180
+#: frontend/src/utils/text-translation.js:7
 #: static/scripts/app/views/dir.js:807
 msgid "New File"
 msgstr "ไฟล์ใหม่"
@@ -497,13 +504,13 @@ msgstr ""
 
 #: frontend/src/components/dialog/create-folder-dialog.js:73
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:184
-#: frontend/src/components/tree-view/tree-node-menu.js:45
-#: frontend/src/components/tree-view/tree-view-contextmenu.js:75
+#: frontend/src/components/tree-view/tree-node-menu.js:62
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:179
+#: frontend/src/utils/text-translation.js:6
 msgid "New Folder"
 msgstr ""
 
-#: frontend/src/components/dialog/create-group-dialog.js:56
+#: frontend/src/components/dialog/create-group-dialog.js:60
 #: frontend/src/components/toolbar/groups-toolbar.js:27
 msgid "New Group"
 msgstr "กลุ่มใหม่"
@@ -549,12 +556,13 @@ msgstr "คลังแฟ้มข้อมูลใหม่"
 #: frontend/src/components/dialog/share-to-group.js:315
 #: frontend/src/components/dialog/share-to-user.js:261
 #: frontend/src/components/dialog/share-to-user.js:311
-#: frontend/src/components/dirent-list-view/dirent-menu.js:107
-#: frontend/src/components/wiki-list-view/wiki-list-view.js:44
+#: frontend/src/components/dirent-list-view/dirent-menu.js:132
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:76
 #: frontend/src/pages/org-admin/org-logs.js:28
 #: frontend/src/pages/share-admin/folders.js:44
 #: frontend/src/pages/share-admin/libraries.js:44
+#: frontend/src/pages/share-admin/share-links.js:87
+#: frontend/src/utils/text-translation.js:14
 msgid "Permission"
 msgstr "รับอนุญาต"
 
@@ -598,17 +606,19 @@ msgstr ""
 msgid "Password again"
 msgstr "รหัสผ่านอีกครั้ง"
 
-#: frontend/src/components/dialog/create-tag-dialog.js:66
+#: frontend/src/components/dialog/create-tag-dialog.js:69
 msgid "New Tag"
 msgstr ""
 
-#: frontend/src/components/dialog/create-tag-dialog.js:75
+#: frontend/src/components/dialog/create-tag-dialog.js:78
 #: frontend/src/components/dialog/update-tag-dialog.js:95
 msgid "Select a color"
 msgstr ""
 
-#: frontend/src/components/dialog/create-tag-dialog.js:95
+#: frontend/src/components/dialog/create-tag-dialog.js:98
 #: frontend/src/components/dialog/update-tag-dialog.js:115
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:134
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:162
 msgid "Save"
 msgstr ""
 
@@ -635,21 +645,21 @@ msgstr ""
 #: frontend/src/components/dialog/share-to-group.js:55
 #: frontend/src/components/dialog/share-to-user.js:55
 #: frontend/src/components/dialog/update-tag-dialog.js:114
-#: frontend/src/components/dialog/wiki-delete-dialog.js:26
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:477
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:500
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:529
 #: frontend/src/components/draft-list-view/draft-list-item.js:110
 #: frontend/src/components/file-view/comment-panel.js:252
 #: frontend/src/components/review-list-view/review-comments.js:332
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:284
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:278
-#: frontend/src/components/tree-view/tree-node-menu.js:60
-#: frontend/src/components/tree-view/tree-view-contextmenu.js:90
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:235
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:78
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:243
+#: frontend/src/components/tree-view/tree-node-menu.js:77
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:227
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:77
 #: frontend/src/pages/org-admin/org-groups.js:220
 #: frontend/src/pages/org-admin/org-libraries.js:267
 #: frontend/src/pages/org-admin/org-links.js:183
 #: frontend/src/pages/org-admin/org-user-item.js:146
+#: frontend/src/utils/text-translation.js:10
 #: static/scripts/app/views/fileupload.js:23
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
@@ -692,8 +702,13 @@ msgstr "ต้องการละทิ้งกลุ่มจริงหร
 msgid "Dismiss"
 msgstr "ละทิ้ง"
 
-#: frontend/src/components/dialog/edit-filetag-dialog.js:139
+#: frontend/src/components/dialog/edit-filetag-dialog.js:133
 msgid "Select Tags"
+msgstr ""
+
+#: frontend/src/components/dialog/edit-filetag-dialog.js:149
+#: frontend/src/components/dialog/list-tag-dialog.js:123
+msgid "Create a new tag"
 msgstr ""
 
 #: frontend/src/components/dialog/generate-share-link.js:120
@@ -765,10 +780,12 @@ msgid "Set permission"
 msgstr ""
 
 #: frontend/src/components/dialog/generate-share-link.js:340
+#: frontend/src/pages/share-admin/share-links.js:195
 msgid "Preview and download"
 msgstr ""
 
 #: frontend/src/components/dialog/generate-share-link.js:345
+#: frontend/src/pages/share-admin/share-links.js:196
 msgid "Preview only"
 msgstr ""
 
@@ -791,6 +808,49 @@ msgid ""
 " this directory via the link."
 msgstr "คุณสามารถแบ่งปันลิงก์ที่สร้างขึ้นสู่ผู้อื่นและพวกเขาสามารถอัพโหลดไฟล์สู่ไดเร็กทอรี่นี้ผ่านลิงก์"
 
+#: frontend/src/components/dialog/image-dialog.js:27
+#: static/scripts/app/views/dir.js:66
+#: static/scripts/app/views/starred-file.js:112
+msgid "%curr% of %total%"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:29
+#: frontend/src/components/tree-view/tree-node-menu.js:80
+#: static/scripts/app/views/dir.js:71
+#: static/scripts/app/views/starred-file.js:118
+msgid "Open in New Tab"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:44
+msgid "The image could not be loaded."
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:45
+#: static/scripts/app/views/dir.js:64
+#: static/scripts/app/views/starred-file.js:110
+msgid "Previous (Left arrow key)"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:46
+#: static/scripts/app/views/dir.js:65
+#: static/scripts/app/views/starred-file.js:111
+msgid "Next (Right arrow key)"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:47
+#: static/scripts/app/views/dir.js:60
+#: static/scripts/app/views/starred-file.js:106
+msgid "Close (Esc)"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:48
+msgid "Zoom in"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:49
+msgid "Zoom out"
+msgstr ""
+
 #: frontend/src/components/dialog/internal-link-dialog.js:50
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:22
 msgid "Internal link has been copied to clipboard"
@@ -809,11 +869,11 @@ msgstr ""
 
 #: frontend/src/components/dialog/internal-link-dialog.js:71
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
-#: frontend/src/components/dirent-list-view/dirent-menu.js:104
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:277
-#: frontend/src/components/tree-view/tree-node-menu.js:54
-#: frontend/src/components/tree-view/tree-view-contextmenu.js:84
-#: frontend/src/pages/share-admin/share-links.js:104
+#: frontend/src/components/dirent-list-view/dirent-menu.js:129
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:242
+#: frontend/src/components/tree-view/tree-node-menu.js:71
+#: frontend/src/pages/share-admin/share-links.js:105
+#: frontend/src/utils/text-translation.js:13
 msgid "Copy"
 msgstr "คัดลอก"
 
@@ -839,7 +899,7 @@ msgid "Please enter a non-negative integer"
 msgstr ""
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:100
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:87
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:86
 msgid "History Setting"
 msgstr ""
 
@@ -868,9 +928,9 @@ msgid "Time"
 msgstr "เวลา"
 
 #: frontend/src/components/dialog/list-related-file-dialog.js:76
-#: frontend/src/components/dirent-detail/detail-list-view.js:117
-#: frontend/src/components/dirent-list-view/dirents-menu.js:71
+#: frontend/src/components/dirent-detail/detail-list-view.js:125
 #: frontend/src/components/toolbar/view-file-toolbar.js:115
+#: frontend/src/utils/text-translation.js:23
 msgid "Related Files"
 msgstr ""
 
@@ -880,12 +940,12 @@ msgstr ""
 
 #: frontend/src/components/dialog/list-related-file-dialog.js:83
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:64
-#: frontend/src/components/dirent-detail/detail-list-view.js:97
+#: frontend/src/components/dirent-detail/detail-list-view.js:105
 #: frontend/src/components/dirent-detail/lib-details.js:65
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:265
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:542
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:111
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:21
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:84
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:82
 #: frontend/src/pages/org-admin/org-department-item.js:190
 #: frontend/src/pages/shared-libs/shared-libs.js:57
 msgid "Size"
@@ -895,17 +955,18 @@ msgstr "ขนาด"
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:51
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:65
 #: frontend/src/components/dialog/share-repo-dialog.js:129
-#: frontend/src/components/dialog/wiki-select-dialog.js:66
-#: frontend/src/components/dirent-detail/detail-list-view.js:85
-#: frontend/src/components/dirent-detail/detail-list-view.js:99
+#: frontend/src/components/dialog/wiki-select-dialog.js:64
+#: frontend/src/components/dirent-detail/detail-list-view.js:93
+#: frontend/src/components/dirent-detail/detail-list-view.js:107
 #: frontend/src/components/dirent-detail/lib-details.js:66
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:266
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:543
 #: frontend/src/components/draft-list-view/draft-list-view.js:38
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:112
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:22
 #: frontend/src/components/wiki-list-view/wiki-list-view.js:43
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:86
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:84
 #: frontend/src/pages/starred/starred.js:24
+#: frontend/src/shared-dir-view.js:273
 msgid "Last Update"
 msgstr "ปรับปรุงล่าสุด"
 
@@ -914,8 +975,8 @@ msgid "Add File"
 msgstr ""
 
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:44
-#: frontend/src/components/main-side-nav.js:210
-#: frontend/src/components/main-side-nav.js:213
+#: frontend/src/components/main-side-nav.js:211
+#: frontend/src/components/main-side-nav.js:214
 #: frontend/src/pages/drafts/drafts-view.js:19
 msgid "Drafts"
 msgstr ""
@@ -929,10 +990,6 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-links.js:75
 msgid "Owner"
 msgstr "เจ้าของ"
-
-#: frontend/src/components/dialog/list-tag-dialog.js:123
-msgid "Create a new tag"
-msgstr ""
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:58
 msgid "Tagged Files"
@@ -997,7 +1054,6 @@ msgid "Move selected item(s) to:"
 msgstr ""
 
 #: frontend/src/components/dialog/new-wiki-dialog.js:53
-#: frontend/src/pages/wikis/wikis.js:131
 msgid "New Wiki"
 msgstr ""
 
@@ -1193,23 +1249,24 @@ msgid "Share to group"
 msgstr ""
 
 #: frontend/src/components/dialog/share-dialog.js:162
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:473
-#: frontend/src/components/dirent-list-view/dirents-menu.js:56
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:496
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:525
 #: frontend/src/components/file-view/file-toolbar.js:84
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:185
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:282
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:173
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:53
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:122
 #: frontend/src/components/toolbar/view-file-toolbar.js:113
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:234
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:75
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:226
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:74
 #: frontend/src/pages/shared-libs/shared-libs.js:220
 #: frontend/src/pages/shared-libs/shared-libs.js:258
+#: frontend/src/utils/text-translation.js:8
 msgid "Share"
 msgstr "แบ่งปัน"
 
 #: frontend/src/components/dialog/share-repo-dialog.js:35
-#: frontend/src/components/dialog/wiki-select-dialog.js:74
+#: frontend/src/components/dialog/wiki-select-dialog.js:72
 #: frontend/src/pages/org-admin/org-department-item.js:354
 #: frontend/src/pages/starred/starred.js:173
 #: frontend/src/pages/starred/starred.js:196
@@ -1297,182 +1354,129 @@ msgid "Don't replace"
 msgstr ""
 
 #: frontend/src/components/dialog/wiki-delete-dialog.js:20
-msgid "Delete Wiki"
+msgid "Unpublish Library"
 msgstr ""
 
 #: frontend/src/components/dialog/wiki-delete-dialog.js:22
-msgid "Are you sure you want to delete this wiki?"
+msgid "Are you sure you want to unpublish this library?"
 msgstr ""
 
-#: frontend/src/components/dialog/wiki-select-dialog.js:58
-#: frontend/src/pages/wikis/wikis.js:132
-msgid "Choose a library as Wiki"
+#: frontend/src/components/dialog/wiki-delete-dialog.js:26
+#: frontend/src/components/wiki-list-view/wiki-list-item.js:168
+msgid "Unpublish"
+msgstr ""
+
+#: frontend/src/components/dialog/wiki-select-dialog.js:56
+msgid "Publish a library"
+msgstr ""
+
+#: frontend/src/components/dialog/zip-download-dialog.js:107
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:492
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:521
+#: frontend/src/components/file-view/file-toolbar.js:110
+#: frontend/src/components/file-view/file-view-tip.js:30
+#: frontend/src/components/history-list-view/history-list-item.js:101
+#: frontend/src/components/shared-file-view/shared-file-view-tip.js:24
+#: frontend/src/components/shared-file-view/shared-file-view.js:102
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:244
+#: frontend/src/shared-dir-view.js:363
+#: frontend/src/utils/text-translation.js:9
+msgid "Download"
+msgstr "ดาวน์โหลด"
+
+#: frontend/src/components/dialog/zip-download-dialog.js:129
+#: static/scripts/common.js:1131
+msgid "Packaging..."
 msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-column-file.js:65
 msgid "File does not exist."
 msgstr ""
 
-#: frontend/src/components/dir-view-mode/dir-column-file.js:84
+#: frontend/src/components/dir-view-mode/dir-column-file.js:86
 #: frontend/src/components/file-content-view.js:115
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:41
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:102
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:236
 msgid "This file is in draft stage."
 msgstr ""
 
-#: frontend/src/components/dir-view-mode/dir-column-file.js:85
+#: frontend/src/components/dir-view-mode/dir-column-file.js:87
 #: frontend/src/components/file-content-view.js:116
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:42
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:103
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:237
 msgid "View Draft"
 msgstr ""
 
-#: frontend/src/components/dir-view-mode/dir-column-nav.js:263
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:248
-#: frontend/src/components/tree-view/tree-node-menu.js:63
-#: frontend/src/components/tree-view/tree-view-contextmenu.js:93
-#: static/scripts/app/views/dir.js:71
-#: static/scripts/app/views/starred-file.js:118
-msgid "Open in New Tab"
-msgstr ""
-
-#: frontend/src/components/dir-view-mode/dir-column-nav.js:364
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:317
-msgid "The image could not be loaded."
-msgstr ""
-
-#: frontend/src/components/dir-view-mode/dir-column-nav.js:365
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:318
-#: static/scripts/app/views/dir.js:64
-#: static/scripts/app/views/starred-file.js:110
-msgid "Previous (Left arrow key)"
-msgstr ""
-
-#: frontend/src/components/dir-view-mode/dir-column-nav.js:366
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:319
-#: static/scripts/app/views/dir.js:65
-#: static/scripts/app/views/starred-file.js:111
-msgid "Next (Right arrow key)"
-msgstr ""
-
-#: frontend/src/components/dir-view-mode/dir-column-nav.js:367
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:320
-#: static/scripts/app/views/dir.js:60
-#: static/scripts/app/views/starred-file.js:106
-msgid "Close (Esc)"
-msgstr ""
-
-#: frontend/src/components/dir-view-mode/dir-column-nav.js:368
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:321
-msgid "Zoom in"
-msgstr ""
-
-#: frontend/src/components/dir-view-mode/dir-column-nav.js:369
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:322
-msgid "Zoom out"
-msgstr ""
-
-#: frontend/src/components/dirent-detail/detail-list-view.js:84
-#: frontend/src/components/dirent-detail/detail-list-view.js:98
-#: frontend/src/draft.js:953
+#: frontend/src/components/dirent-detail/detail-list-view.js:92
+#: frontend/src/components/dirent-detail/detail-list-view.js:106
+#: frontend/src/draft.js:968
 msgid "Location"
 msgstr ""
 
 #: frontend/src/components/dirent-detail/lib-details.js:64
-#: frontend/src/components/main-side-nav.js:150
+#: frontend/src/components/main-side-nav.js:151
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:166
 msgid "Files"
 msgstr "แฟ้มข้อมูล"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:437
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:459
 #: frontend/src/components/file-view/file-info.js:31
 msgid "locked"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:469
-#: frontend/src/components/file-view/file-toolbar.js:110
-#: frontend/src/components/file-view/file-view-tip.js:30
-#: frontend/src/components/history-list-view/history-list-item.js:101
-#: frontend/src/components/shared-file-view/shared-file-view-tip.js:24
-#: frontend/src/components/shared-file-view/shared-file-view.js:81
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:279
-msgid "Download"
-msgstr "ดาวน์โหลด"
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:203
-msgid "This folder has no content at this time."
-msgstr ""
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:204
-msgid "You can create files quickly"
-msgstr ""
-
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:246
-#: static/scripts/app/views/dir.js:66
-#: static/scripts/app/views/starred-file.js:112
-msgid "%curr% of %total%"
-msgstr ""
-
-#: frontend/src/components/dirent-list-view/dirent-menu.js:98
+#: frontend/src/components/dirent-list-view/dirent-menu.js:123
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:173
-#: frontend/src/components/tree-view/tree-node-menu.js:51
-#: frontend/src/components/tree-view/tree-view-contextmenu.js:81
-#: frontend/src/components/wiki-list-view/wiki-list-item.js:177
+#: frontend/src/components/tree-view/tree-node-menu.js:68
 #: frontend/src/pages/groups/group-view.js:401
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:81
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:80
+#: frontend/src/utils/text-translation.js:11
 msgid "Rename"
 msgstr "เปลี่ยนชื่อ"
 
-#: frontend/src/components/dirent-list-view/dirent-menu.js:101
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:276
-#: frontend/src/components/tree-view/tree-node-menu.js:57
-#: frontend/src/components/tree-view/tree-view-contextmenu.js:87
+#: frontend/src/components/dirent-list-view/dirent-menu.js:126
+#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:241
+#: frontend/src/components/tree-view/tree-node-menu.js:74
+#: frontend/src/utils/text-translation.js:12
 msgid "Move"
 msgstr "ย้าย"
 
-#: frontend/src/components/dirent-list-view/dirent-menu.js:110
-#: frontend/src/components/dirent-list-view/dirents-menu.js:62
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:179
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:99
-#: frontend/src/pages/org-admin/org-logs-file-update.js:251
-msgid "Details"
-msgstr "รายละเอียด"
-
-#: frontend/src/components/dirent-list-view/dirent-menu.js:113
-#: frontend/src/components/dirent-list-view/dirents-menu.js:68
+#: frontend/src/components/dirent-list-view/dirent-menu.js:135
 #: frontend/src/components/file-view/file-toolbar.js:51
+#: frontend/src/utils/text-translation.js:18
 msgid "Unlock"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-menu.js:116
-#: frontend/src/components/dirent-list-view/dirents-menu.js:65
+#: frontend/src/components/dirent-list-view/dirent-menu.js:138
 #: frontend/src/components/file-view/file-toolbar.js:47
+#: frontend/src/utils/text-translation.js:17
 msgid "Lock"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-menu.js:119
+#: frontend/src/components/dirent-list-view/dirent-menu.js:141
 #: frontend/src/components/file-view/file-toolbar.js:119
+#: frontend/src/utils/text-translation.js:19
 msgid "Comment"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-menu.js:125
+#: frontend/src/components/dirent-list-view/dirent-menu.js:147
+#: frontend/src/utils/text-translation.js:21
 msgid "Access Log"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-menu.js:128
-#: frontend/src/components/dirent-list-view/dirents-menu.js:77
+#: frontend/src/components/dirent-list-view/dirent-menu.js:150
+#: frontend/src/utils/text-translation.js:16
 msgid "Open via Client"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-menu.js:168
-#: frontend/src/components/dirent-list-view/dirents-menu.js:112
+#: frontend/src/components/dirent-list-view/dirent-menu.js:191
+#: frontend/src/components/dirent-list-view/dirents-menu.js:80
 #: frontend/src/components/draft-list-view/draft-list-item.js:104
 #: frontend/src/components/history-list-view/history-list-item.js:97
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:251
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:295
-#: frontend/src/components/tree-view/tree-node-menu.js:103
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:121
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:144
+#: frontend/src/components/tree-view/tree-node-menu.js:118
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:117
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:140
 #: frontend/src/pages/org-admin/org-groups.js:214
 #: frontend/src/pages/org-admin/org-libraries.js:261
 #: frontend/src/pages/org-admin/org-links.js:177
@@ -1481,8 +1485,17 @@ msgstr ""
 msgid "More Operations"
 msgstr "ดำเนินการเพิ่มเติม"
 
+#: frontend/src/components/dirent-list-view/dirent-none-view.js:57
+msgid "This folder has no content at this time."
+msgstr ""
+
+#: frontend/src/components/dirent-list-view/dirent-none-view.js:58
+msgid "You can create files quickly"
+msgstr ""
+
 #: frontend/src/components/draft-list-view/draft-list-item.js:112
-#: frontend/src/draft.js:787
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:116
+#: frontend/src/draft.js:805
 msgid "Publish"
 msgstr ""
 
@@ -1516,8 +1529,8 @@ msgid "Search..."
 msgstr ""
 
 #: frontend/src/components/file-content-view.js:70
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:61
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:87
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:59
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:85
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:170
 msgid "Side Nav Menu"
 msgstr ""
@@ -1532,22 +1545,20 @@ msgstr ""
 #: frontend/src/components/file-view/file-toolbar.js:101
 #: frontend/src/components/review-list-view/review-comments.js:335
 #: frontend/src/components/select-editor/select-editor.js:94
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:67
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:104
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:118
 #: frontend/src/components/toolbar/view-file-toolbar.js:97
+#: frontend/src/pages/wiki/main-panel.js:82
 msgid "Edit"
 msgstr "แก้ไข"
 
 #: frontend/src/components/file-content-view.js:79
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:48
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:109
 #: frontend/src/components/toolbar/view-file-toolbar.js:103
 msgid "New Draft"
 msgstr ""
 
 #: frontend/src/components/file-content-view.js:83
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:79
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:127
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:77
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:123
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:205
 #: frontend/src/pages/wiki/main-panel.js:88
 msgid "Search files in this library"
@@ -1582,7 +1593,7 @@ msgstr ""
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:68
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:135
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:105
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:103
 #: frontend/src/pages/shared-libs/shared-libs.js:70
 msgid "name"
 msgstr "ชื่อ"
@@ -1600,8 +1611,7 @@ msgid "Cancel All"
 msgstr "ยกเลิกทั้งหมด"
 
 #: frontend/src/components/file-view/comment-panel.js:92
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:62
-#: frontend/src/draft.js:977
+#: frontend/src/draft.js:992
 msgid "Comments"
 msgstr ""
 
@@ -1652,7 +1662,7 @@ msgid "Please install the desktop client to open file via client."
 msgstr ""
 
 #: frontend/src/components/history-list-view/history-list-item.js:100
-#: frontend/src/pages/my-libs/my-libs-deleted.js:158
+#: frontend/src/pages/my-libs/my-libs-deleted.js:159
 msgid "Restore"
 msgstr "กู้คืน"
 
@@ -1676,61 +1686,63 @@ msgstr "ลิงก์"
 msgid "Folders"
 msgstr "โฟลเดอร์"
 
-#: frontend/src/components/main-side-nav.js:154
-#: frontend/src/components/main-side-nav.js:156
-#: frontend/src/pages/my-libs/my-libs-deleted.js:48
+#: frontend/src/components/main-side-nav.js:155
+#: frontend/src/components/main-side-nav.js:157
+#: frontend/src/pages/my-libs/my-libs-deleted.js:49
 #: frontend/src/pages/my-libs/my-libs.js:144
 msgid "My Libraries"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:161
-#: frontend/src/components/main-side-nav.js:163
+#: frontend/src/components/main-side-nav.js:162
+#: frontend/src/components/main-side-nav.js:164
 #: frontend/src/pages/shared-libs/shared-libs.js:350
 msgid "Shared with me"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:168
-#: frontend/src/components/main-side-nav.js:170
+#: frontend/src/components/main-side-nav.js:169
+#: frontend/src/components/main-side-nav.js:171
 #: frontend/src/pages/shared-with-all/public-shared-view.js:191
 msgid "Shared with all"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:175
-#: frontend/src/components/main-side-nav.js:178
+#: frontend/src/components/main-side-nav.js:176
+#: frontend/src/components/main-side-nav.js:179
 msgid "Shared with groups"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:184
+#: frontend/src/components/main-side-nav.js:185
 msgid "Tools"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:187
-#: frontend/src/components/main-side-nav.js:189
+#: frontend/src/components/main-side-nav.js:188
+#: frontend/src/components/main-side-nav.js:190
 #: frontend/src/pages/starred/starred.js:268
 msgid "Favorites"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:194
-#: frontend/src/components/main-side-nav.js:196
+#: frontend/src/components/main-side-nav.js:195
+#: frontend/src/components/main-side-nav.js:197
 #: frontend/src/pages/dashboard/files-activities.js:415
 msgid "Activities"
 msgstr "กิจกรรม"
 
-#: frontend/src/components/main-side-nav.js:202
-#: frontend/src/components/main-side-nav.js:204
-#: frontend/src/pages/wiki/main-panel.js:98
-#: frontend/src/pages/wikis/wikis.js:143
+#: frontend/src/components/main-side-nav.js:203
 msgid "Wikis"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:220
-#: frontend/src/components/main-side-nav.js:222
+#: frontend/src/components/main-side-nav.js:205
+#: frontend/src/pages/wikis/wikis.js:137
+msgid "Published Libraries"
+msgstr ""
+
+#: frontend/src/components/main-side-nav.js:221
+#: frontend/src/components/main-side-nav.js:223
 #: frontend/src/pages/linked-devices/linked-devices.js:200
 msgid "Linked Devices"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:226
-#: frontend/src/components/main-side-nav.js:229
+#: frontend/src/components/main-side-nav.js:227
+#: frontend/src/components/main-side-nav.js:230
 msgid "Share Admin"
 msgstr "ผู้ดูแลแบ่งปัน"
 
@@ -1741,6 +1753,7 @@ msgstr ""
 
 #: frontend/src/components/markdown-view/outline.js:57
 #: frontend/src/pages/wiki/side-panel.js:34
+#: frontend/src/pages/wiki/side-panel.js:49
 msgid "Contents"
 msgstr ""
 
@@ -1777,18 +1790,23 @@ msgid "Successfully saved"
 msgstr ""
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:49
+#: frontend/src/shared-dir-view.js:42
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "ดาวน์โหลดไฟล์ถูกปิดใช้งาน: แบ่งปันลิงก์ทราฟฟิกของผู้ใช้ถูกใช้อยู่"
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:70
+#: frontend/src/components/shared-file-view/shared-file-view.js:90
+msgid "Current path: "
+msgstr "พาธปัจจุบัน:"
+
+#: frontend/src/components/shared-file-view/shared-file-view.js:91
 msgid "Shared by:"
 msgstr ""
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:76
+#: frontend/src/components/shared-file-view/shared-file-view.js:98
 msgid "Save as ..."
 msgstr ""
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:107
+#: frontend/src/components/shared-file-view/shared-file-view.js:127
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:166
 #: frontend/src/pages/org-admin/org-logs-file-update.js:196
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:145
@@ -1799,6 +1817,12 @@ msgstr ""
 msgid "Folder Premission"
 msgstr ""
 
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:179
+#: frontend/src/pages/org-admin/org-logs-file-update.js:251
+#: frontend/src/utils/text-translation.js:15
+msgid "Details"
+msgstr "รายละเอียด"
+
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:182
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:283
 #: frontend/src/pages/share-admin/folders.js:161
@@ -1808,8 +1832,8 @@ msgstr "ยกเลิกแบ่งปัน"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:108
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:132
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:81
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:102
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:79
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:100
 #: frontend/src/pages/shared-libs/shared-libs.js:54
 #: frontend/src/pages/shared-libs/shared-libs.js:67
 msgid "Library Type"
@@ -1817,8 +1841,8 @@ msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:110
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:138
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:83
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:108
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:81
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:106
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:75
 #: frontend/src/pages/shared-libs/shared-libs.js:56
 #: frontend/src/pages/shared-libs/shared-libs.js:73
@@ -1826,18 +1850,19 @@ msgid "Actions"
 msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:134
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:104
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:102
 #: frontend/src/pages/shared-libs/shared-libs.js:69
 msgid "Sort:"
 msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:136
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:106
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:104
 #: frontend/src/pages/shared-libs/shared-libs.js:71
 msgid "last update"
 msgstr ""
 
 #: frontend/src/components/side-nav-footer.js:22
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:70
 msgid "Help"
 msgstr "ช่วยเหลือ"
 
@@ -1890,37 +1915,34 @@ msgstr ""
 msgid "New Word File"
 msgstr ""
 
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:64
-msgid "Back to parent directory"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:72
-msgid "File History"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:86
-msgid "related file"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:87
-msgid "related files"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:108
-msgid "No tags"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:114
-msgid "No related files"
-msgstr ""
-
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:61
 #: frontend/src/components/toolbar/repo-view-toobar.js:53
 #: frontend/src/components/toolbar/view-file-toolbar.js:110
 msgid "More"
 msgstr "มากกว่า"
 
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:66
+msgid "Switch to plain text editor"
+msgstr ""
+
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:68
+msgid "Switch to rich text editor"
+msgstr ""
+
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:114
+msgid "Start review"
+msgstr ""
+
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:124
+msgid "Back to parent directory"
+msgstr ""
+
+#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:128
+msgid "File History"
+msgstr ""
+
 #: frontend/src/components/toolbar/repo-view-toobar.js:57
-#: frontend/src/pages/my-libs/my-libs-deleted.js:50
+#: frontend/src/pages/my-libs/my-libs-deleted.js:51
 msgid "Deleted Libraries"
 msgstr ""
 
@@ -1928,82 +1950,90 @@ msgstr ""
 msgid "Create a draft from this file, instead of editing it directly."
 msgstr ""
 
-#: frontend/src/components/toolbar/view-mode-toolbar.js:25
+#: frontend/src/components/toolbar/view-mode-toolbar.js:26
 msgid "List"
 msgstr ""
 
-#: frontend/src/components/toolbar/view-mode-toolbar.js:27
+#: frontend/src/components/toolbar/view-mode-toolbar.js:28
 msgid "Column"
 msgstr ""
+
+#: frontend/src/components/toolbar/view-mode-toolbar.js:31
+msgid "Detail"
+msgstr "รายละเอียด"
 
 #: frontend/src/components/user-select.js:16
 msgid "User not found"
 msgstr ""
 
-#: frontend/src/components/wiki-markdown-viewer.js:191
+#: frontend/src/components/wiki-markdown-viewer.js:208
+msgid "related files"
+msgstr ""
+
+#: frontend/src/components/wiki-markdown-viewer.js:243
 msgid "Last modified by"
 msgstr ""
 
-#: frontend/src/draft.js:410
+#: frontend/src/draft.js:418
 msgid "View diff"
 msgstr ""
 
-#: frontend/src/draft.js:749
+#: frontend/src/draft.js:759
 msgid "Draft has been deleted."
 msgstr ""
 
-#: frontend/src/draft.js:754
+#: frontend/src/draft.js:764
 msgid "Original file has been deleted."
 msgstr ""
 
-#: frontend/src/draft.js:774
-msgid "Edit draft"
+#: frontend/src/draft.js:787
+msgid "Review"
 msgstr ""
 
-#: frontend/src/draft.js:784
+#: frontend/src/draft.js:797
+msgid "Edit Draft"
+msgstr ""
+
+#: frontend/src/draft.js:802
 #: frontend/src/pages/dashboard/files-activities.js:128
 msgid "Publish draft"
 msgstr ""
 
-#: frontend/src/draft.js:793 frontend/src/draft.js:796
+#: frontend/src/draft.js:811 frontend/src/draft.js:814
 msgid "Published"
 msgstr ""
 
-#: frontend/src/draft.js:835
-msgid "Edit Draft"
-msgstr ""
-
-#: frontend/src/draft.js:898
+#: frontend/src/draft.js:913
 msgid "Reviewers"
 msgstr ""
 
-#: frontend/src/draft.js:911
+#: frontend/src/draft.js:926
 msgid "No reviewer yet."
 msgstr ""
 
-#: frontend/src/draft.js:929
+#: frontend/src/draft.js:944
 msgid "Author"
 msgstr ""
 
-#: frontend/src/draft.js:979
+#: frontend/src/draft.js:994
 msgid "Unresolved comments:"
 msgstr ""
 
-#: frontend/src/draft.js:1002
+#: frontend/src/draft.js:1017
 msgid "Changes"
 msgstr ""
 
-#: frontend/src/draft.js:1004
+#: frontend/src/draft.js:1019
 msgid "Number of changes:"
 msgstr ""
 
-#: frontend/src/markdown-editor.js:346
+#: frontend/src/markdown-editor.js:327 frontend/src/view-file-cdoc.js:101
 msgid "This file has been updated."
 msgstr ""
 
-#: frontend/src/markdown-editor.js:347
-#: frontend/src/pages/lib-content-view/lib-content-view.js:193
-#: frontend/src/repo-wiki-mode.js:134
+#: frontend/src/markdown-editor.js:328
+#: frontend/src/pages/lib-content-view/lib-content-view.js:195
+#: frontend/src/repo-wiki-mode.js:134 frontend/src/view-file-cdoc.js:102
 #: static/scripts/app/views/notifications.js:63
 msgid "Refresh"
 msgstr ""
@@ -2103,12 +2133,12 @@ msgstr ""
 #: frontend/src/pages/groups/group-view.js:95
 #: frontend/src/pages/groups/group-view.js:129
 #: frontend/src/pages/groups/groups-view.js:135
-#: frontend/src/pages/lib-content-view/lib-content-view.js:128
+#: frontend/src/pages/lib-content-view/lib-content-view.js:130
 #: frontend/src/pages/linked-devices/linked-devices.js:176
 #: frontend/src/pages/my-libs/my-libs.js:48
 #: frontend/src/pages/share-admin/folders.js:225
 #: frontend/src/pages/share-admin/libraries.js:205
-#: frontend/src/pages/share-admin/share-links.js:281
+#: frontend/src/pages/share-admin/share-links.js:285
 #: frontend/src/pages/share-admin/upload-links.js:165
 #: frontend/src/pages/shared-libs/shared-libs.js:316
 #: frontend/src/pages/shared-with-all/public-shared-view.js:55
@@ -2184,7 +2214,7 @@ msgid "This is a special group representing a department."
 msgstr ""
 
 #: frontend/src/pages/groups/group-view.js:404
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:84
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:83
 #: frontend/src/pages/org-admin/org-libraries.js:268
 msgid "Transfer"
 msgstr "ถ่ายโอน"
@@ -2203,42 +2233,36 @@ msgstr "สมาชิก"
 msgid "My Groups"
 msgstr "กลุ่มของฉัน"
 
-#: frontend/src/pages/lib-content-view/lib-content-container.js:89
+#: frontend/src/pages/lib-content-view/lib-content-container.js:95
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:161
 #: frontend/src/pages/wiki/main-panel.js:73
 msgid "Folder does not exist."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:192
+#: frontend/src/pages/lib-content-view/lib-content-view.js:194
 #: frontend/src/repo-wiki-mode.js:133
 msgid "This folder has been updated. "
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:454
-#: frontend/src/pages/lib-content-view/lib-content-view.js:711
-#: frontend/src/repo-wiki-mode.js:496 frontend/src/repo-wiki-mode.js:535
+#: frontend/src/pages/lib-content-view/lib-content-view.js:722
+#: frontend/src/repo-wiki-mode.js:496 frontend/src/utils/utils.js:766
 #: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
 msgid "Successfully moved %(name)s."
 msgstr "ย้าย %(name)s สำเร็จ"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:458
-#: frontend/src/pages/lib-content-view/lib-content-view.js:715
-#: frontend/src/repo-wiki-mode.js:500 frontend/src/repo-wiki-mode.js:539
-#: static/scripts/app/views/dir.js:1383
+#: frontend/src/pages/lib-content-view/lib-content-view.js:726
+#: frontend/src/repo-wiki-mode.js:500 static/scripts/app/views/dir.js:1383
 msgid "Failed to move %(name)s"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:478
-#: frontend/src/pages/lib-content-view/lib-content-view.js:734
-#: frontend/src/repo-wiki-mode.js:513 frontend/src/repo-wiki-mode.js:556
+#: frontend/src/pages/lib-content-view/lib-content-view.js:745
+#: frontend/src/repo-wiki-mode.js:513 frontend/src/utils/utils.js:751
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr "คัดลอก %(name)s สำเร็จ"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:482
-#: frontend/src/pages/lib-content-view/lib-content-view.js:738
-#: frontend/src/repo-wiki-mode.js:517 frontend/src/repo-wiki-mode.js:560
-#: static/scripts/app/views/dir.js:1383
+#: frontend/src/pages/lib-content-view/lib-content-view.js:749
+#: frontend/src/repo-wiki-mode.js:517 static/scripts/app/views/dir.js:1383
 msgid "Failed to copy %(name)s"
 msgstr ""
 
@@ -2277,24 +2301,24 @@ msgstr ""
 msgid "Unlink"
 msgstr "ยกเลิกลิงก์"
 
-#: frontend/src/pages/my-libs/my-libs-deleted.js:57
+#: frontend/src/pages/my-libs/my-libs-deleted.js:58
 msgid "No deleted libraries."
 msgstr ""
 
-#: frontend/src/pages/my-libs/my-libs-deleted.js:62
+#: frontend/src/pages/my-libs/my-libs-deleted.js:63
 msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
 msgstr ""
 
-#: frontend/src/pages/my-libs/my-libs-deleted.js:87
+#: frontend/src/pages/my-libs/my-libs-deleted.js:88
 msgid "Deleted Time"
 msgstr ""
 
-#: frontend/src/pages/my-libs/my-libs-deleted.js:138
+#: frontend/src/pages/my-libs/my-libs-deleted.js:139
 msgid "Successfully restored the library."
 msgstr ""
 
-#: frontend/src/pages/my-libs/my-libs-deleted.js:142
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:186
+#: frontend/src/pages/my-libs/my-libs-deleted.js:143
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:178
 #: frontend/src/pages/org-admin/org-libraries.js:238
 #: static/scripts/app/views/folder-share-item.js:127
 #: static/scripts/app/views/folder-share-item.js:188
@@ -2314,35 +2338,35 @@ msgid ""
 "separately."
 msgstr "คุณสามารถสร้างคลังแฟ้มข้อมูลในโครงสร้างไฟล์ของคุณ ตัวอย่าง, คุณสามารถสร้างหนึ่งของแต่ละโปรเจค แต่ละคลังแฟ้มข้อมูลสามารถเชื่อมข้อมูลและแบ่งปันแยกจากกัน"
 
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:183
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:175
 #: frontend/src/pages/org-admin/org-libraries.js:235
 #: static/scripts/app/views/repo.js:276
 #: static/scripts/sysadmin-app/views/repo.js:136
 msgid "Successfully transferred the library."
 msgstr ""
 
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:228
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:274
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:220
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:266
 msgid "Broken (please contact your administrator to fix this library)"
 msgstr ""
 
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:85
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:83
 msgid "Storage backend"
 msgstr ""
 
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:90
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:89
 msgid "Change Password"
 msgstr "เปลี่ยนรหัสผ่าน"
 
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:93
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:92
 msgid "Reset Password"
 msgstr "รีเซตรหัสผ่าน"
 
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:96
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:95
 msgid "Folder Permission"
 msgstr ""
 
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:102
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:98
 msgid "Label current state"
 msgstr ""
 
@@ -2627,36 +2651,36 @@ msgid ""
 "this link can view the folder or the file online."
 msgstr ""
 
-#: frontend/src/pages/share-admin/share-links.js:87
+#: frontend/src/pages/share-admin/share-links.js:88
 #: frontend/src/pages/share-admin/upload-links.js:56
 msgid "Visits"
 msgstr "เยี่ยมชม"
 
-#: frontend/src/pages/share-admin/share-links.js:88
+#: frontend/src/pages/share-admin/share-links.js:89
 msgid "Expiration"
 msgstr ""
 
-#: frontend/src/pages/share-admin/share-links.js:99
+#: frontend/src/pages/share-admin/share-links.js:100
 #: frontend/src/pages/share-admin/upload-links.js:68
 msgid "Link"
 msgstr ""
 
-#: frontend/src/pages/share-admin/share-links.js:197
+#: frontend/src/pages/share-admin/share-links.js:201
 #: frontend/src/pages/share-admin/upload-links.js:131
 msgid "View"
 msgstr "เรียกดู"
 
-#: frontend/src/pages/share-admin/share-links.js:198
+#: frontend/src/pages/share-admin/share-links.js:202
 #: frontend/src/pages/share-admin/upload-links.js:132
 msgid "Remove"
 msgstr "เอาออก"
 
-#: frontend/src/pages/share-admin/share-links.js:320
+#: frontend/src/pages/share-admin/share-links.js:324
 #: frontend/src/pages/share-admin/upload-links.js:203
 msgid "Share Links"
 msgstr ""
 
-#: frontend/src/pages/share-admin/share-links.js:323
+#: frontend/src/pages/share-admin/share-links.js:327
 #: frontend/src/pages/share-admin/upload-links.js:205
 msgid "Upload Links"
 msgstr "อัพโหลดลิงก์"
@@ -2766,33 +2790,33 @@ msgstr ""
 msgid "Admin Logs"
 msgstr ""
 
-#: frontend/src/pages/wiki/main-panel.js:82
-msgid "Edit Page"
-msgstr "แก้ไขหน้าเพจ"
-
-#: frontend/src/pages/wiki/side-panel.js:49
-msgid "Pages"
-msgstr "เพจ"
-
 #: frontend/src/pages/wiki/side-panel.js:76
 msgid "Go to Library"
 msgstr ""
 
-#: frontend/src/pages/wikis/wikis.js:128
-msgid "Add Wiki"
+#: frontend/src/pages/wikis/wikis.js:127
+msgid "Publish a Library"
 msgstr ""
 
-#: frontend/src/pages/wikis/wikis.js:156
+#: frontend/src/pages/wikis/wikis.js:150
 msgid "You do not have any wiki"
 msgstr ""
 
-#: frontend/src/pages/wikis/wikis.js:157
+#: frontend/src/pages/wikis/wikis.js:151
 msgid ""
 "Seafile Wiki enables you to organize your knowledge in a simple way. The "
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
 msgstr "Seafile Wiki เปิดใช้งาน คุณจัดการองค์ความรู้ของคุณอย่างง่ายดาย โดยเนื้อหาของ wiki จะถูกเก็บอยู่ในคลังแฟ้มข้อมูลปกติด้วยการกำหนดไฟล์และโฟลเดอร์ไว้ก่อน เมื่อเปิดใช้งานคุณสามารถแก้ไข wiki ของคุณในเดสก์ท็อปและเชื่อมกลับสู่เครื่องแม่ข่าย"
+
+#: frontend/src/shared-dir-view.js:214
+msgid "Shared by: "
+msgstr "แบ่งปันโดย:"
+
+#: frontend/src/shared-dir-view.js:218
+msgid "ZIP"
+msgstr "ZIP"
 
 #: frontend/src/shared-file-view-document.js:69
 #: frontend/src/shared-file-view-spreadsheet.js:53
@@ -2802,6 +2826,16 @@ msgstr "Seafile Wiki เปิดใช้งาน คุณจัดการ�
 #: frontend/src/view-file-spreadsheet.js:66
 msgid "Document convertion failed."
 msgstr "แปลงเอกสารผิดพลาด"
+
+#: frontend/src/shared-file-view-image.js:42
+#: frontend/src/view-file-image.js:51
+msgid "you can also press ← "
+msgstr "คุณสามารถกด ← เช่นเดียวกัน"
+
+#: frontend/src/shared-file-view-image.js:45
+#: frontend/src/view-file-image.js:54
+msgid "you can also press →"
+msgstr ""
 
 #: frontend/src/utils/utils.js:301 seahub/templates/priv/ali.js:10
 #: static/scripts/common.js:351
@@ -2868,7 +2902,7 @@ msgstr ""
 
 #: frontend/src/utils/utils.js:375
 msgid ""
-"Same as Preview on cloud. But user can also edit files online via browser."
+"User can view and edit file online via browser. Files can't be downloaded."
 msgstr ""
 
 #: frontend/src/utils/utils.js:378
@@ -2876,12 +2910,48 @@ msgid ""
 "User can only view files online via browser. Files can't be downloaded."
 msgstr ""
 
-#: frontend/src/view-file-image.js:51
-msgid "you can also press ← "
-msgstr "คุณสามารถกด ← เช่นเดียวกัน"
+#: frontend/src/utils/utils.js:753 static/scripts/app/views/dir.js:1289
+#: static/scripts/app/views/dir.js:1450
+msgid "Successfully copied %(name)s and 1 other item."
+msgstr ""
 
-#: frontend/src/view-file-image.js:54
-msgid "you can also press →"
+#: frontend/src/utils/utils.js:755 static/scripts/app/views/dir.js:1291
+#: static/scripts/app/views/dir.js:1452
+msgid "Successfully copied %(name)s and %(amount)s other items."
+msgstr "คัดลอก %(name)s and %(amount)s ไอเท็มอื่นๆ สำเร็จ"
+
+#: frontend/src/utils/utils.js:768 static/scripts/app/views/dir.js:1280
+#: static/scripts/app/views/dir.js:1442
+msgid "Successfully moved %(name)s and 1 other item."
+msgstr ""
+
+#: frontend/src/utils/utils.js:770 static/scripts/app/views/dir.js:1282
+#: static/scripts/app/views/dir.js:1444
+msgid "Successfully moved %(name)s and %(amount)s other items."
+msgstr "ย้าย %(name)s และ %(amount)s ไอเท็มอื่นๆสำเร็จ"
+
+#: frontend/src/utils/utils.js:782
+msgid "Failed to copy %(name)s and %(amount)s other item(s)."
+msgstr ""
+
+#: frontend/src/utils/utils.js:785
+msgid "Failed to copy %(name)s."
+msgstr ""
+
+#: frontend/src/utils/utils.js:795
+msgid "Failed to move %(name)s and %(amount)s other item(s)."
+msgstr ""
+
+#: frontend/src/utils/utils.js:798
+msgid "Failed to move %(name)s."
+msgstr ""
+
+#: frontend/src/view-file-ctable.js:47
+msgid "File saved."
+msgstr ""
+
+#: frontend/src/view-file-ctable.js:49
+msgid "File save failed."
 msgstr ""
 
 #: seahub/templates/priv/ali.js:21
@@ -3071,22 +3141,6 @@ msgstr "ลบไอเทม"
 #: static/scripts/app/views/dir.js:1159
 msgid "Are you sure you want to delete these selected items?"
 msgstr "คุณแน่ใจว่าต้องการลบไอเทมที่เลืกเหล่านี้?"
-
-#: static/scripts/app/views/dir.js:1280 static/scripts/app/views/dir.js:1442
-msgid "Successfully moved %(name)s and 1 other item."
-msgstr ""
-
-#: static/scripts/app/views/dir.js:1282 static/scripts/app/views/dir.js:1444
-msgid "Successfully moved %(name)s and %(amount)s other items."
-msgstr "ย้าย %(name)s และ %(amount)s ไอเท็มอื่นๆสำเร็จ"
-
-#: static/scripts/app/views/dir.js:1289 static/scripts/app/views/dir.js:1450
-msgid "Successfully copied %(name)s and 1 other item."
-msgstr ""
-
-#: static/scripts/app/views/dir.js:1291 static/scripts/app/views/dir.js:1452
-msgid "Successfully copied %(name)s and %(amount)s other items."
-msgstr "คัดลอก %(name)s and %(amount)s ไอเท็มอื่นๆ สำเร็จ"
 
 #: static/scripts/app/views/dir.js:1307
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
@@ -3366,10 +3420,6 @@ msgstr ""
 
 #: static/scripts/common.js:796
 msgid "Search groups"
-msgstr ""
-
-#: static/scripts/common.js:1131
-msgid "Packaging..."
 msgstr ""
 
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:91
