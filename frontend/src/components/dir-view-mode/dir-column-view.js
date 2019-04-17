@@ -4,8 +4,6 @@ import DirColumnNav from './dir-column-nav';
 import DirColumnFile from './dir-column-file';
 import DirListView from './dir-list-view';
 
-import '../../css/lib-content-view.css';
-
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -149,7 +147,7 @@ class DirColumnView extends React.Component {
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const select = this.state.inResizing ? 'none' : '';
-    const mainFlex = '1 0 ' + (1 - this.state.navRate) * 100 + '%';
+    const mainFlex = '1 0 ' + (1 - this.state.navRate - 0.05) * 100 + '%';
     return (
       <div className="dir-colunm-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
         <DirColumnNav 
