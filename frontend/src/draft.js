@@ -796,7 +796,9 @@ class Draft extends React.Component {
           <div className="button-group">
             {this.renderDiffButton()}
             {(draftFileExists && !freezePublish) &&
-              <a href={draftLink} className="mx-xl-1"><Button color="secondary">{gettext('Edit Draft')}</Button></a>
+              <a href={draftLink} className="mx-1">
+                <Button className="file-operation-btn" color="secondary">{gettext('Edit Draft')}</Button>
+              </a>
             }
             {canPublish &&
               <button 

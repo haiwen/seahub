@@ -104,6 +104,10 @@
 .review-side-panel-body .dirent-table-container {
   padding-left: 0;
 }
+.dirent-table-container th {
+  word-wrap: break-word;
+  word-break: normal;
+}
 .review-side-panel-item {
   border-bottom: 1px solid #e6e6dd;
   padding: 1em 0;
@@ -212,5 +216,11 @@
   }
   .header .file-operation-btn {
     padding: 0.1rem 0.25rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .review-side-panel, .dirent-table-container td {
+    font-size: 12px !important;
   }
 }
