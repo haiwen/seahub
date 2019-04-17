@@ -372,7 +372,7 @@ export const Utils = {
         title = gettext('Besides Write permission, user can also share the library.');
         break;
       case 'cloud-edit':
-        title = gettext('Same as Preview on cloud. But user can also edit files online via browser.');
+        title = gettext('User can view and edit file online via browser. Files can\'t be downloaded.');
         break;
       case 'preview':
         title = gettext('User can only view files online via browser. Files can\'t be downloaded.');
