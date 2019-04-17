@@ -61,7 +61,7 @@ class TableBody extends Component {
 
   getThumbnails() {
     let items = this.state.items.filter((item) => {
-        return Utils.imageCheck(item.obj_name) && !item.repo_encrypted;
+      return Utils.imageCheck(item.obj_name) && !item.repo_encrypted;
     });
     if (items.length == 0) {
       return ;
@@ -175,8 +175,8 @@ class Item extends Component {
         </td>
         <td>
           { data.is_dir ?
-              <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
-              <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+            <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
+            <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
           }
         </td>
         <td>{data.repo_name}</td>
@@ -198,8 +198,8 @@ class Item extends Component {
         </td>
         <td>
           { data.is_dir ?
-              <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
-              <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+            <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
+            <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
           }
           <br />
           <span className="dirent-meta-info">{data.repo_name}</span>

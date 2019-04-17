@@ -140,18 +140,18 @@ class DetailListView extends React.Component {
             </tbody>
           </table>
           {this.state.showRelatedFileDialog &&
-              <ModalPortal>
-                <RelatedFileDialogs
-                  repoID={this.props.repoID}
-                  filePath={direntPath}
-                  relatedFiles={relatedFiles}
-                  toggleCancel={this.toggleCancel}
-                  onRelatedFileChange={this.onRelatedFileChange}
-                  dirent={this.props.dirent}
-                  viewMode="list_related_file"
-                />
-              </ModalPortal>
-            }
+            <ModalPortal>
+              <RelatedFileDialogs
+                repoID={this.props.repoID}
+                filePath={direntPath}
+                relatedFiles={relatedFiles}
+                toggleCancel={this.toggleCancel}
+                onRelatedFileChange={this.onRelatedFileChange}
+                dirent={this.props.dirent}
+                viewMode="list_related_file"
+              />
+            </ModalPortal>
+          }
           {
             this.state.isEditFileTagShow &&
             <EditFileTagDialog

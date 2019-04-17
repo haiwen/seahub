@@ -203,7 +203,7 @@ class ContextMenu extends React.Component {
       <div role="menu" className="seafile-contextmenu dropdown-menu" style={inlineStyle} ref={menu => { this.menu = menu; }}>
         {this.state.menuList.map((menuItem, index) => {
           if (menuItem === 'Divider') {
-            return <div key={index} className="seafile-divider dropdown-divider"></div>
+            return <div key={index} className="seafile-divider dropdown-divider"></div>;
           } else {
             return (
               <button 

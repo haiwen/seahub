@@ -332,24 +332,24 @@ class FileChooser extends React.Component {
           </Fragment>
         )}
         {this.props.mode === 'only_current_library' && (
-            <div className="list-view">
-              <div className="list-view-header">
-                <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
-                <span className="library">{gettext('Current Library')}</span>
-              </div>
-              {
-                this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
-                <RepoListView 
-                  initToShowChildren={true}
-                  currentRepoInfo={this.state.currentRepoInfo}
-                  selectedRepo={this.state.selectedRepo}
-                  selectedPath={this.state.selectedPath}
-                  onRepoItemClick={this.onRepoItemClick} 
-                  onDirentItemClick={this.onDirentItemClick}
-                  isShowFile={this.props.isShowFile}
-                />
-              }
+          <div className="list-view">
+            <div className="list-view-header">
+              <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
+              <span className="library">{gettext('Current Library')}</span>
             </div>
+            {
+              this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
+              <RepoListView 
+                initToShowChildren={true}
+                currentRepoInfo={this.state.currentRepoInfo}
+                selectedRepo={this.state.selectedRepo}
+                selectedPath={this.state.selectedPath}
+                onRepoItemClick={this.onRepoItemClick} 
+                onDirentItemClick={this.onDirentItemClick}
+                isShowFile={this.props.isShowFile}
+              />
+            }
+          </div>
         )}
         {this.props.mode === 'only_all_repos' && (
           <div className="file-chooser-container">
@@ -358,15 +358,15 @@ class FileChooser extends React.Component {
                 <span className="item-toggle fa fa-caret-down"></span>
                 <span className="library">{gettext('Libraries')}</span>
               </div>
-                <RepoListView 
-                  initToShowChildren={false}
-                  repoList={this.state.repoList}
-                  selectedRepo={this.state.selectedRepo}
-                  selectedPath={this.state.selectedPath}
-                  onRepoItemClick={this.onRepoItemClick} 
-                  onDirentItemClick={this.onDirentItemClick}
-                  isShowFile={this.props.isShowFile}
-                /> 
+              <RepoListView 
+                initToShowChildren={false}
+                repoList={this.state.repoList}
+                selectedRepo={this.state.selectedRepo}
+                selectedPath={this.state.selectedPath}
+                onRepoItemClick={this.onRepoItemClick} 
+                onDirentItemClick={this.onDirentItemClick}
+                isShowFile={this.props.isShowFile}
+              /> 
             </div>
           </div>
         )}

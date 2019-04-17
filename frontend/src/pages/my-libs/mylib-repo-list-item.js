@@ -109,7 +109,7 @@ class MylibRepoListItem extends React.Component {
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-      })
+      });
     }
   }
 
@@ -252,7 +252,7 @@ class MylibRepoListItem extends React.Component {
       <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick}>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
-        {this.state.isRenaming && (
+          {this.state.isRenaming && (
             <Rename
               name={repo.repo_name}
               onRenameConfirm={this.onRenameConfirm}
@@ -351,7 +351,7 @@ class MylibRepoListItem extends React.Component {
           </ModalPortal>
         )}
       </Fragment>
-    )
+    );
   }
 }
 

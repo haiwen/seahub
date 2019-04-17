@@ -424,7 +424,7 @@ class Draft extends React.Component {
     seafileAPI.publishDraft(draftID).then(res => {
       this.setState({
         freezePublish: !this.state.freezePublish
-      })
+      });
     });
   }
 
