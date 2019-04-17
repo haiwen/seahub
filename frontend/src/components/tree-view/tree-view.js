@@ -139,6 +139,10 @@ class TreeView extends React.Component {
   handleContextClick = (event, node) => {
     event.preventDefault();
     event.stopPropagation();
+    
+    if (!this.props.isNodeMenuShow) {
+      return;
+    }
 
     let x = event.clientX || (event.touches && event.touches[0].pageX);
     let y = event.clientY || (event.touches && event.touches[0].pageY);

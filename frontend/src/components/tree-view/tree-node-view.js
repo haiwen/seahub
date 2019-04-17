@@ -54,6 +54,15 @@ class TreeNodeView extends React.Component {
     }
   }
 
+  onMouseOver = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isShowOperationMenu: true,
+        isHighlight: true,
+      });
+    }
+  }
+
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
@@ -213,6 +222,7 @@ class TreeNodeView extends React.Component {
           className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''} ${this.state.isNodeDropShow ? 'tree-node-drop' : ''}`}
           title={node.object.name}
           onMouseEnter={this.onMouseEnter} 
+          onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}
           onMouseDown={this.onItemMouseDown}
           onContextMenu={this.onItemContextMenu}
