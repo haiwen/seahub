@@ -776,6 +776,8 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                     "salt": r.salt if r.enc_version >= 3 else '',
+                    "starred": r.starred if r.starred else '',
+                    "status": r.status if r.status else '',
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -844,6 +846,8 @@ class Repos(APIView):
                     "version": r.version,
                     "group_name": library_group_name,
                     "salt": r.salt if r.enc_version >= 3 else '',
+                    "starred": r.starred if r.starred else '',
+                    "status": r.status if r.status else '',
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
@@ -943,6 +947,8 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                     "salt": r.salt if r.enc_version >= 3 else '',
+                    "starred": r.starred if r.starred else '',
+                    "status": r.status if r.status else '',
                 }
                 repos_json.append(repo)
 
@@ -1137,9 +1143,16 @@ class PubRepos(APIView):
 
         repos_json = []
         public_repos = list_inner_pub_repos(request)
+
+        repo_id_list = []
         for r in public_repos:
+
+            repo_id = r.repo_id
+            if repo_id not in repo_id_list:
+                repo_id_list.append(repo_id)
+
             repo = {
-                "id": r.repo_id,
+                "id": repo_id,
                 "name": r.repo_name,
                 "owner": r.user,
                 "owner_nickname": email2nickname(r.user),
@@ -1150,8 +1163,29 @@ class PubRepos(APIView):
                 "size_formatted": filesizeformat(r.size),
                 "encrypted": r.encrypted,
                 "permission": r.permission,
+                "starred": r.starred,
+                "status": r.status if r.status else '',
             }
             repos_json.append(repo)
+
+        # get share link info of repo
+
+        # file_share_repo_ids.query
+        # SELECT DISTINCT "share_fileshare"."repo_id" FROM "share_fileshare" WHERE "share_fileshare"."repo_id" IN ()
+        file_share_repo_ids = FileShare.objects.filter(repo_id__in=repo_id_list). \
+                values_list('repo_id', flat=True).distinct()
+
+        # upload_link_share_repo_ids.query
+        # SELECT DISTINCT "share_uploadlinkshare"."repo_id" FROM "share_uploadlinkshare" WHERE "share_uploadlinkshare"."repo_id" IN ()
+        upload_link_share_repo_ids = UploadLinkShare.objects.filter(repo_id__in=repo_id_list). \
+                values_list('repo_id', flat=True).distinct()
+
+        for repo in repos_json:
+            repo_id = repo["id"]
+            share_link_info = {}
+            share_link_info["has_download_link"] = repo_id in file_share_repo_ids
+            share_link_info["has_upload_link"] = repo_id in upload_link_share_repo_ids
+            repo["share_link"] = share_link_info
 
         return Response(repos_json)
 
@@ -1317,6 +1351,12 @@ class Repo(APIView):
         current_commit = get_commits(repo_id, 0, 1)[0]
         root_id = current_commit.root_id if current_commit else None
 
+        try:
+            is_starred = seafile_api.is_repo_starred(repo_id, username) == 1
+        except Exception as e:
+            logger.error(e)
+            is_starred = ''
+
         repo_json = {
             "type": "repo",
             "id": repo.id,
@@ -1331,7 +1371,8 @@ class Repo(APIView):
             "modifier_contact_email": email2contact_email(repo.last_modifier),
             "modifier_name": email2nickname(repo.last_modifier),
             "file_count": repo.file_count,
-            }
+            "starred": is_starred,
+        }
         if repo.encrypted:
             repo_json["enc_version"] = repo.enc_version
             repo_json["salt"] = repo.salt if repo.enc_version >= 3 else ''
