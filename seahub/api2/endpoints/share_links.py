@@ -350,7 +350,8 @@ class ShareLink(APIView):
             fs.permission = perm
             fs.save()
 
-        return Response({'success': True})
+        link_info = get_share_link_info(fs)
+        return Response(link_info)
 
     def delete(self, request, token):
         """ Delete share link.
