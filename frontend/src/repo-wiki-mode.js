@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { gettext, repoID, siteRoot, initialPath, isDir, canGenerateShareLink, canGenerateUploadLink, username } from './utils/constants';
+import { gettext, repoID, siteRoot, initialPath, isDir, canGenerateShareLink, canGenerateUploadLink, username, isDocs } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import collabServer from './utils/collab-server';
@@ -147,11 +147,13 @@ class Wiki extends Component {
     this.updateUsedRepoTags();
 
     // list draft counts and revierw counts
-    seafileAPI.getRepoDraftCounts(repoID).then(res => {
-      this.setState({
-        draftCounts: res.data.draft_counts,
+    if (isDocs) {
+      seafileAPI.getRepoDraftCounts(repoID).then(res => {
+        this.setState({
+          draftCounts: res.data.draft_counts,
+        });
       });
-    });
+    }
 
     // load side-panel data
     this.loadSidePanel(initialPath);

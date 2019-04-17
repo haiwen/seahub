@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
-import { gettext, siteRoot, username, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { gettext, siteRoot, username, canGenerateShareLink, canGenerateUploadLink, isDocs } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -236,11 +236,13 @@ class LibContentView extends React.Component {
     this.updateUsedRepoTags();
 
     // list draft counts and revierw counts
-    seafileAPI.getRepoDraftCounts(repoID).then(res => {
-      this.setState({
-        draftCounts: res.data.draft_counts,
+    if (isDocs) {
+      seafileAPI.getRepoDraftCounts(repoID).then(res => {
+        this.setState({
+          draftCounts: res.data.draft_counts,
+        });
       });
-    });
+    }
     
     if (Utils.isMarkdownFile(path)) {
       seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
