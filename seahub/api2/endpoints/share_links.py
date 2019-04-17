@@ -381,7 +381,7 @@ class ShareLink(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if has_published_library:
-            error_msg = 'This is an associated published library.'
+            error_msg = 'There is an associated published library.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
