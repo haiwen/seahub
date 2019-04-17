@@ -89,7 +89,14 @@ def slug(request, slug, file_path="home.md"):
     if wiki.permission == 'public':
         is_public_wiki = True
 
-    fs = FileShare.objects.get(repo_id=wiki.repo_id, path='/')
+    try:
+        fs = FileShare.objects.get(repo_id=wiki.repo_id, path='/')
+    except FileShare.DoseNotExist:
+        fs = FileShare.objects.create_dir_link(wiki.username, wiki.repo_id, '/',
+                                               permission='view_download')
+        wiki.permission = 'public'
+        wiki.save()
+        is_public_wiki = True
 
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
