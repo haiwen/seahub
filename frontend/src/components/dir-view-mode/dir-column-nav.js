@@ -126,18 +126,24 @@ class DirColumnNav extends React.Component {
 
   onFileTagChanged = () => {
     let currentPath;
+
     if (this.props.currentPath.charAt(this.props.currentPath.length-1) === '/') {
       currentPath = Utils.joinPath(this.props.currentPath, this.state.nodeDirent.object.name);
     } else {
       currentPath = this.props.currentPath;
     }
-    if (currentPath !== this.state.nodeDirent.path) {
+
+    if (this.props.currentPath !== '/') {
+      if (currentPath === this.state.nodeDirent.path) {
+        this.props.onToolbarFileTagChanged();
+      }
+    }
+    
+    if (this.props.currentPath === this.state.nodeDirent.parentNode.path) {
+      //
+    } else {
       this.getTagFileList(this.state.nodeDirent);
       return;
-    } else {
-      if (this.props.currentPath !== '/') {
-        this.props.onToolbarFileTagChanged()
-      }
     }
     
     this.props.onFileTagChanged(this.state.nodeDirent.object, this.state.nodeDirent.path);
