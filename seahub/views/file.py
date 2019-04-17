@@ -1227,16 +1227,15 @@ def view_shared_file(request, fileshare):
 
     permissions = fileshare.get_permissions()
 
+    #template = 'shared_file_view.html'
     template = 'shared_file_view_react.html'
 
-    # for XMind thumbnail not by react
     if filetype == XMIND:
         xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
         if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, path)[0]:
             error_msg = _(u'Unable to view file')
             ret_dict['err'] = error_msg
         else:
-            template = 'shared_file_view.html'
             raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
 
     return render(request, template, {
@@ -1433,16 +1432,15 @@ def view_file_via_shared_dir(request, fileshare):
     else:
         zipped = gen_path_link(req_path, os.path.basename(fileshare.path[:-1]))
 
+    #template = 'shared_file_view.html'
     template = 'shared_file_view_react.html'
 
-    # for XMind thumbnail not by react
     if filetype == XMIND:
         xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
         if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, real_path)[0]:
             error_msg = _(u'Unable to view file')
             ret_dict['err'] = error_msg
         else:
-            template = 'shared_file_view.html'
             raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
 
     return render(request, template, {
