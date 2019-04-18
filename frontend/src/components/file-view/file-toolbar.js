@@ -10,6 +10,7 @@ import ShareDialog from '../dialog/share-dialog';
 const propTypes = { 
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
+  onSaveChangedContent: PropTypes.func.isRequired,
   toggleLockFile: PropTypes.func.isRequired,
   toggleCommentPanel: PropTypes.func.isRequired
 };
@@ -38,7 +39,6 @@ class FileToolbar extends React.Component {
 
   render() {
     const { isLocked, lockedByMe } = this.props; 
-
     let showLockUnlockBtn = false;
     let lockUnlockText, lockUnlockIcon;
     if (canLockUnlockFile) {
@@ -94,14 +94,17 @@ class FileToolbar extends React.Component {
               href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`}
             />
           )}
-          {(canEditFile && !err) && (
-            <IconButton
-              id="edit"
-              icon="fa fa-edit"
-              text={gettext('Edit')}
-              tag="a"
-              href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(fileEnc)}`}
-            />
+          {(canEditFile && !err) && 
+          (<IconButton 
+            text={gettext('Save')} 
+            id={'saveButton'} 
+            icon={'fa fa-save'}  
+            // button imported in this file does not have functionalities of 
+            // disabled, isActive as button imported in markdowneditor has
+            //disabled={isContentChanged} 
+            //isActive={!isContentChanged}
+            onClick={this.props.onSaveChangedContent} 
+          />
           )}
           {canDownloadFile && (
             <IconButton
