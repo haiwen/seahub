@@ -44,6 +44,7 @@ export const enableRepoHistorySetting = window.app.pageOptions.enableRepoHistory
 export const isSystemStaff = window.app.pageOptions.isSystemStaff;
 export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForOriginal;
 export const repoPasswordMinLength = window.app.pageOptions.repoPasswordMinLength;
+export const canAddPublicRepo = window.app.pageOptions.canAddPublicRepo;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
