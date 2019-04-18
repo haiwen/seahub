@@ -115,6 +115,8 @@ class DirentMenu extends React.Component {
       menuList.push('History');
       return menuList;
     }
+
+    return [];
   }
 
   translateMenuItem = (menuItem) => {
