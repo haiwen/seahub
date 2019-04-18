@@ -126,7 +126,8 @@ class LibContentContainer extends React.Component {
   }
 
   onItemDelete = (dirent) => {
-    if (dirent.name === this.state.currentDirent.name) {
+    let currentDirent = this.state;
+    if (currentDirent && dirent.name === currentDirent.name) {
       this.setState({currentDirent: null});
     }
     this.props.onItemDelete(dirent);
