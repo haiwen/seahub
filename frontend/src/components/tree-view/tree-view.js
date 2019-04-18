@@ -144,6 +144,12 @@ class TreeView extends React.Component {
       return;
     }
 
+    let currentRepoInfo = this.props.currentRepoInfo;
+
+    if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
+      return '';
+    }
+    
     let x = event.clientX || (event.touches && event.touches[0].pageX);
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
