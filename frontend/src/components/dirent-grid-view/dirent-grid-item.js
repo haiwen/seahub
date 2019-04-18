@@ -64,7 +64,7 @@ class DirentGridItem extends React.Component {
       <Fragment>
         <li className="grid-item" onContextMenu={this.onItemContextMenu}>
           <div 
-            className="grid-img-link cursor-pointer"
+            className="grid-file-img-link cursor-pointer"
             draggable="true"
             onClick={this.onItemClick}
           >
@@ -74,8 +74,8 @@ class DirentGridItem extends React.Component {
             }
             {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={dirent.lock_owner_name}/>}
           </div>
-          <div className="grid-name">
-            <a className="grid-name-link" href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+          <div className="grid-file-name">
+            <a className="grid-file-name-link" href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
           </div>
         </li>
       </Fragment>
