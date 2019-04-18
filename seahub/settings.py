@@ -547,7 +547,7 @@ FAVICON_PATH = 'img/favicon.ico'
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'
 # logo size. the unit is 'px'
-LOGO_WIDTH = 128
+LOGO_WIDTH = ''
 LOGO_HEIGHT = 32
 
 CUSTOM_LOGO_PATH = 'custom/mylogo.png'
