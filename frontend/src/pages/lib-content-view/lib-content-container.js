@@ -84,6 +84,7 @@ const propTypes = {
   closeDirentDetail: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  updateDetail: PropTypes.bool.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -98,7 +99,7 @@ class LibContentContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.path !== this.props.path) {
+    if (nextProps.path !== this.props.path || nextProps.updateDetail !== this.props.updateDetail) {
       this.setState({currentDirent: null});
     }
   }
@@ -122,6 +123,13 @@ class LibContentContainer extends React.Component {
   onItemSelected = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onItemSelected(dirent);
+  }
+
+  onItemDelete = (dirent) => {
+    if (dirent.name === this.state.currentDirent.name) {
+      this.setState({currentDirent: null});
+    }
+    this.props.onItemDelete(dirent);
   }
 
   render() {
@@ -177,7 +185,7 @@ class LibContentContainer extends React.Component {
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemSelected={this.onItemSelected}
-                    onItemDelete={this.props.onItemDelete}
+                    onItemDelete={this.onItemDelete}
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}
@@ -241,7 +249,7 @@ class LibContentContainer extends React.Component {
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemSelected={this.onItemSelected}
-                    onItemDelete={this.props.onItemDelete}
+                    onItemDelete={this.onItemDelete}
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}

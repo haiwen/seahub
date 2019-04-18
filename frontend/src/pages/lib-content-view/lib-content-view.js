@@ -70,6 +70,7 @@ class LibContentView extends React.Component {
       dirID: '',  // for update dir list
       errorMsg: '',
       isDirentDetailShow: false,
+      updateDetail: false,
     };
 
     window.onpopstate = this.onpopstate;
@@ -491,6 +492,7 @@ class LibContentView extends React.Component {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
+    this.setState({updateDetail: !this.state.updateDetail});
     seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
       direntPaths.forEach(direntPath => {
         if (this.state.currentMode === 'column') {
@@ -1448,6 +1450,7 @@ class LibContentView extends React.Component {
             showDirentDetail={this.showDirentDetail}
             onDeleteRepoTag={this.onDeleteRepoTag}
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
+            updateDetail={this.state.updateDetail}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
