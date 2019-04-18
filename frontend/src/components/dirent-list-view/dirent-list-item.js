@@ -403,8 +403,80 @@ class DirentListItem extends React.Component {
     this.props.onItemContextMenu(event, dirent);
   }
 
+  renderItemOperation = () => {
+    let { dirent, selectedDirentList, currentRepoInfo } = this.props;
+    if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
+      return '';
+    }
+    
+    return (
+      <Fragment>
+        {selectedDirentList.length > 1 ? 
+          <Fragment>
+            {this.state.isOperationShow && !dirent.isSelected &&
+              <div className="operations">
+                <ul className="operation-group">
+                  <li className="operation-group-item">
+                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                  </li>
+                  {this.props.showShareBtn &&
+                  <li className="operation-group-item">
+                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                  </li>
+                  }
+                  <li className="operation-group-item">
+                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                  </li>
+                  <li className="operation-group-item">
+                    <DirentMenu
+                      dirent={this.props.dirent}
+                      onMenuItemClick={this.onMenuItemClick}
+                      currentRepoInfo={this.props.currentRepoInfo}
+                      isRepoOwner={this.props.isRepoOwner}
+                      onFreezedItem={this.props.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
+                    />
+                  </li>
+                </ul>
+              </div>
+            }
+          </Fragment> : 
+          <Fragment>
+            {this.state.isOperationShow && 
+              <div className="operations">
+                <ul className="operation-group">
+                  <li className="operation-group-item">
+                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                  </li>
+                  {this.props.showShareBtn &&
+                  <li className="operation-group-item">
+                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                  </li>
+                  }
+                  <li className="operation-group-item">
+                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                  </li>
+                  <li className="operation-group-item">
+                    <DirentMenu
+                      dirent={this.props.dirent}
+                      onMenuItemClick={this.onMenuItemClick}
+                      currentRepoInfo={this.props.currentRepoInfo}
+                      isRepoOwner={this.props.isRepoOwner}
+                      onFreezedItem={this.props.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
+                    />
+                  </li>
+                </ul>
+              </div>
+            }
+          </Fragment>
+        }
+      </Fragment>
+    )
+  }
+
   render() {
-    let { path, dirent, selectedDirentList, activeDirent } = this.props;
+    let { path, dirent, activeDirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let dirHref = '';
     if (this.props.currentRepoInfo) {
@@ -482,68 +554,7 @@ class DirentListItem extends React.Component {
               </Fragment>
             )} 
           </td>
-          <td className="operation">
-            {selectedDirentList.length > 1 ? 
-              <Fragment>
-                {this.state.isOperationShow && !dirent.isSelected &&
-                  <div className="operations">
-                    <ul className="operation-group">
-                      <li className="operation-group-item">
-                        <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                      </li>
-                      {this.props.showShareBtn &&
-                      <li className="operation-group-item">
-                        <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                      </li>
-                      }
-                      <li className="operation-group-item">
-                        <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                      </li>
-                      <li className="operation-group-item">
-                        <DirentMenu
-                          dirent={this.props.dirent}
-                          onMenuItemClick={this.onMenuItemClick}
-                          currentRepoInfo={this.props.currentRepoInfo}
-                          isRepoOwner={this.props.isRepoOwner}
-                          onFreezedItem={this.props.onFreezedItem}
-                          onUnfreezedItem={this.onUnfreezedItem}
-                        />
-                      </li>
-                    </ul>
-                  </div>
-                }
-              </Fragment> : 
-              <Fragment>
-                {this.state.isOperationShow && 
-                  <div className="operations">
-                    <ul className="operation-group">
-                      <li className="operation-group-item">
-                        <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                      </li>
-                      {this.props.showShareBtn &&
-                      <li className="operation-group-item">
-                        <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                      </li>
-                      }
-                      <li className="operation-group-item">
-                        <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                      </li>
-                      <li className="operation-group-item">
-                        <DirentMenu
-                          dirent={this.props.dirent}
-                          onMenuItemClick={this.onMenuItemClick}
-                          currentRepoInfo={this.props.currentRepoInfo}
-                          isRepoOwner={this.props.isRepoOwner}
-                          onFreezedItem={this.props.onFreezedItem}
-                          onUnfreezedItem={this.onUnfreezedItem}
-                        />
-                      </li>
-                    </ul>
-                  </div>
-                }
-              </Fragment>
-            }
-          </td>
+          <td className="operation">{this.renderItemOperation()}</td>
           <td className="file-size">{dirent.size && dirent.size}</td>
           <td className="last-update">{dirent.mtime_relative}</td>
         </tr>

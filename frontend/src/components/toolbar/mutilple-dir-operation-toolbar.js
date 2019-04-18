@@ -16,6 +16,7 @@ import ModalPortal from '../modal-portal';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
+  userPerm: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
@@ -232,8 +233,14 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   render() {
-    const { repoID } = this.props;
+
+    const { repoID, userPerm } = this.props;
     let direntPath = this.getDirentPath(this.props.selectedDirentList[0]);
+
+    if (userPerm !== 'rw' && userPerm !== 'admin') {
+      return '';
+    }
+    
     return (
       <Fragment>
         <div className="d-flex">
