@@ -249,9 +249,11 @@ class Draft extends React.Component {
   }
 
   getDraftInfo = () => {
-    seafileAPI.getFileInfo(draftRepoID, draftFilePath).then((res) => {
-      this.setState({ draftInfo: res.data });
-    });
+    if (draftStatus === 'open') {
+      seafileAPI.getFileInfo(draftRepoID, draftFilePath).then((res) => {
+        this.setState({ draftInfo: res.data });
+      });
+    }
   }
 
   getChangedNodes = () => {

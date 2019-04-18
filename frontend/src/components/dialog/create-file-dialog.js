@@ -17,7 +17,7 @@ class CreateFile extends React.Component {
     super(props);
     this.state = {
       parentPath: '',
-      childName: props.fileType,
+      childName: props.fileType || '',
       isDraft: false,
       errMessage: '',
     };
