@@ -49,3 +49,12 @@ body {
 .tip {
   color: #808080;
 }
+/* for mobile */
+.seafile-comment {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .seafile-comment {
+    width: 29%;
+  }
+}
