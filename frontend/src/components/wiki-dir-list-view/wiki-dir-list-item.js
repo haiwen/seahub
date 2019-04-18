@@ -26,6 +26,11 @@ class WikiDirListItem extends React.Component {
     this.setState({highlight: false});
   }
 
+  onContextMenu = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   onDirentClick = (e) => {
     e.preventDefault();
     this.props.onDirentClick(this.props.dirent);
@@ -37,7 +42,7 @@ class WikiDirListItem extends React.Component {
     let iconUrl = Utils.getDirentIcon(dirent);
 
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onContextMenu={this.onContextMenu}>
         <td className="text-center">
           <img src={iconUrl} width="24" alt="" />
         </td>
