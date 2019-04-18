@@ -651,6 +651,10 @@ class LibContentView extends React.Component {
     this.renameItem(node.path, node.object.isDir(), newName);
   }
 
+  onRenameGridItem = (dirent, direntPath, newName) => {
+    this.renameItem(direntPath, dirent.isDir(), newName);
+  }
+
   onDeleteTreeNode = (node) => {
     this.deleteItem(node.path, node.object.isDir());
   }
@@ -1446,6 +1450,7 @@ class LibContentView extends React.Component {
             showDirentDetail={this.showDirentDetail}
             onDeleteRepoTag={this.onDeleteRepoTag}
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
+            onRenameGridItem={this.onRenameGridItem}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader

@@ -82,6 +82,7 @@ const propTypes = {
   closeDirentDetail: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  onRenameGridItem: PropTypes.func.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -221,6 +222,7 @@ class LibContentContainer extends React.Component {
                     showDirentDetail={this.props.showDirentDetail}
                     onGridItemClick={this.onGridItemClick}
                     isDirentDetailShow={this.props.isDirentDetailShow}
+                    onRenameGridItem={this.props.onRenameGridItem}
                   />
                 )}
                 {this.props.currentMode === 'column' && (

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import RepoInfoBar from '../../components/repo-info-bar';
 import DirentGridView from '../../components/dirent-grid-view/dirent-grid-view';
+import DirentNoneView from '../../components/dirent-list-view/dirent-none-view';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -27,12 +28,22 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
-  
+  onRenameGridItem: PropTypes.func.isRequired,
 };
 
 class DirGridView extends React.Component {
 
   render() {
+
+    if (this.props.path === '/' && this.props.direntList.length === 0) {
+      return (
+        <DirentNoneView 
+          path={this.props.path}
+          isDirentListLoading={this.props.isDirentListLoading}
+          onAddFile={this.props.onAddFile}
+        />
+      );
+    }
 
     return (
       <Fragment>
@@ -65,6 +76,7 @@ class DirGridView extends React.Component {
           showDirentDetail={this.props.showDirentDetail}
           onGridItemClick={this.props.onGridItemClick}
           isDirentDetailShow={this.props.isDirentDetailShow}
+          onRenameGridItem={this.props.onRenameGridItem}
         />
       </Fragment>
     );

@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
+import { siteRoot, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
 import ModalPortal from '../modal-portal';
-import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
 import DirentGridItem from '../../components/dirent-grid-view/dirent-grid-item';
 import ContextMenu from '../context-menu/context-menu';
@@ -16,7 +15,7 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
-import Rename from '../../components/dialog/rename-dialog';
+import Rename from '../../components/dialog/rename-grid-item-dialog';
 
 import '../../css/grid-view.css';
 
@@ -38,6 +37,7 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
+  onRenameGridItem: PropTypes.func.isRequired,
 };
 
 class DirentGridView extends React.Component{
@@ -57,8 +57,6 @@ class DirentGridView extends React.Component{
 
       isMutipleOperation: false,
       dirent: '',
-      node: {},
-
     }
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
 
@@ -188,13 +186,9 @@ class DirentGridView extends React.Component{
 
   onItemRenameToggle = () => {
     let path = `${this.props.path}/${this.state.dirent.name}`;
-    let node = {
-      object: this.state.dirent,
-      path: path,
-    };
     this.setState({
       isRenameDialogShow: !this.state.isRenameDialogShow,
-      node: node,
+      path: path,
     });
     
   }
@@ -251,10 +245,10 @@ class DirentGridView extends React.Component{
     location.href = url;
   }
 
-  onRenameNode = (newName) => {
+  onRenameGridItem = (newName) => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
-    
-    this.props.onRenameNode(this.state.node, newName);
+
+    this.props.onRenameGridItem(this.state.dirent, this.state.path, newName);
   }
 
   prepareImageItem = (item) => {
@@ -442,41 +436,6 @@ class DirentGridView extends React.Component{
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
-    if (this.props.path == '/' && !direntList.length) {
-      return (
-        <Fragment>
-          <div className="tip-for-new-file">
-            <p className="text-center">{gettext('This folder has no content at this time.')}</p>
-            <p className="text-center">{gettext('You can create files quickly')}{' +'}</p>
-            <div className="big-new-file-button-group">
-              <div className="d-flex justify-content-center">
-                <button className="big-new-file-button"  onClick={this.onCreateNewFile.bind(this, '.md')}>
-                  {'+ Markdown'}</button>
-                <button className="big-new-file-button"  onClick={this.onCreateNewFile.bind(this, '.ppt')}>
-                  {'+ PPT'}</button>
-              </div>
-              <div className="d-flex justify-content-center">
-                <button className="big-new-file-button"  onClick={this.onCreateNewFile.bind(this, '.doc')}>
-                  {'+ Word'}</button>
-                <button className="big-new-file-button"  onClick={this.onCreateNewFile.bind(this, '.xls')}>
-                  {'+ Excel'}</button>
-              </div>
-            </div>
-          </div>
-          {this.state.isCreateFileDialogShow && (
-            <ModalPortal>
-              <CreateFile
-                parentPath={this.props.path}
-                fileType={this.state.fileType}
-                onAddFile={this.onAddFile}
-                checkDuplicatedName={this.checkDuplicatedName}
-                addFileCancel={this.onCreateFileToggle}
-              />
-            </ModalPortal>
-          )}
-        </Fragment>
-      );
-    }
   
     return (
       <Fragment>
@@ -553,8 +512,8 @@ class DirentGridView extends React.Component{
         {this.state.isRenameDialogShow && (
           <ModalPortal>
             <Rename
-              currentNode={this.state.node}
-              onRename={this.onRenameNode}
+              dirent={this.state.dirent}
+              onRename={this.onRenameGridItem}
               checkDuplicatedName={this.checkDuplicatedName}
               toggleCancel={this.onItemRenameToggle}
             />
