@@ -32,30 +32,10 @@ class DirentGridItem extends React.Component {
     }
   }
 
-  gridDargStart = (e) => {
-    // todo
-  }
-
-  gridDragEnter = (e) => {
-    // todo
-  }
-
-  gridDragOver = (e) => {
-    // todo
-  }
-
-  gridDragLeave = (e) => {
-    // todo
-  }
-
-  gridDrop = (e) => {
-    // todo
-  }
-
   getFileUrl = (url) => {
-    let fileArr = url.split('/');
-    fileArr.splice(fileArr.indexOf('48'), 1, '192');
-    let fileUrl = fileArr.join('/')
+    let fileUrlArr = url.split('/');
+    fileUrlArr.splice(fileUrlArr.indexOf('48'), 1, '192');
+    let fileUrl = fileUrlArr.join('/');
     return fileUrl;
   }
 
@@ -87,11 +67,6 @@ class DirentGridItem extends React.Component {
             className="grid-img-link cursor-pointer"
             draggable="true"
             onClick={this.onItemClick}
-            onDragStart={this.gridDargStart}
-            onDragEnter={this.gridDragEnter}
-            onDragOver={this.gridDragOver}
-            onDragLeave={this.gridDragLeave}
-            onDrop={this.gridDrop}
           >
             {dirent.encoded_thumbnail_src ?
               <img src={`${siteRoot}${fileUrl}`} ref={this.gridIcon} className="thumbnail" onClick={this.onItemClick} alt="" /> :

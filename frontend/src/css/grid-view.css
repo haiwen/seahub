@@ -32,10 +32,14 @@
 }
 
 .grid-img-link {
-  width: 100px;
-  height: 100px;
+  width: 96px;
+  height: 96px;
   margin: 0 auto 6px;
   position: relative;
+  border-radius: 3px;
+  font-size: 0;
+  text-align: center;
+  line-height: 0;
 }
 
 .grid-img-link::before {
@@ -66,4 +70,8 @@
   bottom: 5px;
   right: 10px;
   width: 16px;
+}
+
+.drop-active {
+  background-color: #098765;
 }

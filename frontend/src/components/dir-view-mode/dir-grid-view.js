@@ -14,18 +14,26 @@ const propTypes = {
   direntList: PropTypes.array.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func,
+  onAddFile: PropTypes.func.isRequired,
+  onItemDelete: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func.isRequired,
+  onItemCopy: PropTypes.func.isRequired,
+  onRenameNode: PropTypes.func.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
+  isRepoInfoBarShow: PropTypes.bool.isRequired,
+  isDirentListLoading: PropTypes.bool.isRequired,
+  isDirentDetailShow: PropTypes.bool.isRequired,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  updateDirent: PropTypes.func.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
+  
 };
 
 class DirGridView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isRepoInfoBarShow: true
-    }
-    
-  }
 
   render() {
+
     return (
       <Fragment>
         {this.props.isRepoInfoBarShow && (
@@ -40,29 +48,23 @@ class DirGridView extends React.Component {
         )}
         <DirentGridView
           path={this.props.path}
-          currentRepoInfo={this.props.currentRepoInfo}
           repoID={this.props.repoID}
+          currentRepoInfo={this.props.currentRepoInfo}
           isGroupOwnedRepo={this.props.isGroupOwnedRepo}
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           direntList={this.props.direntList}
           onAddFile={this.props.onAddFile}
           onItemClick={this.props.onItemClick}
-          // onItemSelected={this.props.onItemSelected}
           onItemDelete={this.props.onItemDelete}
-          // onItemRename={this.props.onItemRename}
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
-          // onDirentClick={this.props.onDirentClick}
           isDirentListLoading={this.props.isDirentListLoading}
           updateDirent={this.props.updateDirent}
-          // isAllItemSelected={this.props.isAllItemSelected}
-          // onAllItemSelected={this.props.onAllItemSelected}
           showShareBtn={this.props.showShareBtn}
           onRenameNode={this.props.onRenameNode}
           showDirentDetail={this.props.showDirentDetail}
           onGridItemClick={this.props.onGridItemClick}
           isDirentDetailShow={this.props.isDirentDetailShow}
-
         />
       </Fragment>
     );

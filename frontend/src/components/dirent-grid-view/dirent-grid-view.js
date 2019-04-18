@@ -322,18 +322,10 @@ class DirentGridView extends React.Component{
     return isDuplicated;
   }
 
-  onHideMenu = () => {
-    //
-  }
-
   gridContainerClick = () => {
     if (!this.props.isDirentDetailShow) {
       this.props.onGridItemClick(null);
     }
-  }
-
-  onShowMenu = () => {
-    //
   }
 
   handleContextClick = (event, currentObject) => {
@@ -489,27 +481,27 @@ class DirentGridView extends React.Component{
     return (
       <Fragment>
         <ul className="grid-view" onClick={this.gridContainerClick}>
-        {
-          direntList.length !== 0 && direntList.map((dirent, index) => {
-            return (
-              <DirentGridItem
-                key={index}
-                dirent={dirent}
-                repoID={this.props.repoID}
-                path={this.props.path}
-                onItemClick={this.props.onItemClick}
-                showImagePopup={this.showImagePopup}
-                handleContextClick={this.handleContextClick}
-              />
-            )
-          })
-        }
+          {
+            direntList.length !== 0 && direntList.map((dirent, index) => {
+              return (
+                <DirentGridItem
+                  key={index}
+                  dirent={dirent}
+                  repoID={this.props.repoID}
+                  path={this.props.path}
+                  onItemClick={this.props.onItemClick}
+                  currentRepoInfo={this.props.currentRepoInfo}
+                  showImagePopup={this.showImagePopup}
+                  handleContextClick={this.handleContextClick}
+                  onItemMove={this.props.onItemMove}
+                />
+              )
+            })
+          }
         </ul>
         <ContextMenu 
           id={'grid-item-contextmenu'}
           onMenuItemClick={this.onMenuItemClick}
-          onHideMenu={this.onHideMenu}
-          onShowMenu={this.onShowMenu}
         />
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
