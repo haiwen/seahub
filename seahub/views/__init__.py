@@ -1228,6 +1228,7 @@ def react_fake_view(request, **kwargs):
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
         'is_email_configured': IS_EMAIL_CONFIGURED,
+        'can_add_public_repo': request.user.permissions.can_add_public_repo(),
     })
 
 @login_required

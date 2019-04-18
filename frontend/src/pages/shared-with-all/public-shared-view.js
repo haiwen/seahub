@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext, loginUrl, canAddPublicRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import toaster from '../../components/toast';
@@ -169,20 +169,22 @@ class PublicSharedView extends React.Component {
     return (
       <Fragment>
         <div className="main-panel-north border-left-show">
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-            <div className="operation">
-              <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
-                <DropdownToggle className='btn btn-secondary operation-item'>
-                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={this.onSelectRepoToggle}>{gettext('Share existing libraries')}</DropdownItem>
-                  <DropdownItem onClick={this.onCreateRepoToggle}>{gettext('New Library')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+          {canAddPublicRepo &&
+            <div className="cur-view-toolbar">
+              <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+              <div className="operation">
+                <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
+                  <DropdownToggle className='btn btn-secondary operation-item'>
+                    <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem onClick={this.onSelectRepoToggle}>{gettext('Share existing libraries')}</DropdownItem>
+                    <DropdownItem onClick={this.onCreateRepoToggle}>{gettext('New Library')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
             </div>
-          </div>
+          }
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
         <div className="main-panel-center">

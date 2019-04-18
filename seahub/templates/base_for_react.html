@@ -81,6 +81,7 @@
             isSystemStaff: {% if request.user.is_staff %} true {% else %} false {% endif %},
             thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
             repoPasswordMinLength: {{repo_password_min_length}},
+            canAddPublicRepo: {% if can_add_public_repo %} true {% else %} false {% endif %},
 
             {% if request.user.is_authenticated and request.cur_note %}
             curNoteMsg: '{{ request.cur_note.message|urlize }}',
