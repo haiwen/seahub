@@ -106,6 +106,10 @@ class LibContentContainer extends React.Component {
     this.props.closeDirentDetail();
   }
 
+  onGridItemClick = (dirent) => {
+    this.setState({currentDirent: dirent});
+  }
+
   onItemClick = (dirent) => {
     this.props.onItemClick(dirent);
     this.props.closeDirentDetail();
@@ -192,6 +196,61 @@ class LibContentContainer extends React.Component {
                 )}
                 {this.props.currentMode === 'grid' && (
                   <DirGridView 
+                    path={this.props.path}
+                    repoID={repoID}
+                    currentRepoInfo={this.props.currentRepoInfo}
+                    repoPermission={this.props.repoPermission}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
+                    // isTreeDataLoading={this.props.isTreeDataLoading}
+                    // treeData={this.props.treeData}
+                    // currentNode={this.props.currentNode}
+                    // onNodeClick={this.props.onNodeClick}
+                    // onNodeCollapse={this.props.onNodeCollapse}
+                    // onNodeExpanded={this.props.onNodeExpanded}
+                    // onAddFolderNode={this.props.onAddFolder}
+                    // onAddFileNode={this.props.onAddFile}
+                    onRenameNode={this.props.onRenameNode}
+                    // onDeleteNode={this.props.onDeleteNode}
+                    isViewFile={this.props.isViewFile}
+                    isFileLoading={this.props.isFileLoading}
+                    // isFileLoadedErr={this.props.isFileLoadedErr}
+                    // hash={this.props.hash}
+                    isDraft={this.props.isDraft}
+                    hasDraft={this.props.hasDraft}
+                    goDraftPage={this.props.goDraftPage}
+                    filePermission={this.props.filePermission}
+                    content={this.props.content}
+                    lastModified={this.props.lastModified}
+                    latestContributor={this.props.latestContributor}
+                    onLinkClick={this.props.onLinkClick}
+                    isRepoInfoBarShow={isRepoInfoBarShow}
+                    usedRepoTags={this.props.usedRepoTags}
+                    readmeMarkdown={this.props.readmeMarkdown}
+                    draftCounts={this.props.draftCounts}
+                    updateUsedRepoTags={this.props.updateUsedRepoTags}
+                    isDirentListLoading={this.props.isDirentListLoading}
+                    direntList={this.props.direntList}
+                    // sortBy={this.props.sortBy}
+                    // sortOrder={this.props.sortOrder}
+                    // sortItems={this.props.sortItems}
+                    onAddFile={this.props.onAddFile}
+                    onItemClick={this.onItemClick}
+                    onItemSelected={this.props.onItemSelected}
+                    onItemDelete={this.props.onItemDelete}
+                    onItemRename={this.props.onItemRename}
+                    onItemMove={this.props.onItemMove}
+                    onItemCopy={this.props.onItemCopy}
+                    onDirentClick={this.onDirentClick}
+                    onItemDetails={this.onItemDetails}
+                    updateDirent={this.props.updateDirent}
+                    isAllItemSelected={this.props.isAllDirentSelected}
+                    onAllItemSelected={this.props.onAllDirentSelected}
+                    onAddFolder={this.props.onAddFolder}
+                    showShareBtn={this.props.showShareBtn}
+                    showDirentDetail={this.props.showDirentDetail}
+                    onGridItemClick={this.onGridItemClick}
+                    isDirentDetailShow={this.props.isDirentDetailShow}
                   />
                 )}
                 {this.props.currentMode === 'column' && (

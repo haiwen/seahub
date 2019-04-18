@@ -1,0 +1,69 @@
+.grid-view {
+  padding-top: 10px;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  align-content: flex-start;
+}
+
+.grid-item {
+  width: 134px;
+  padding: 10px 4px;
+  text-align: center;
+  position: relative;
+  line-height: 0;
+}
+
+.grid-item:hover .grid-img-link {
+  background: #f8f8f8;
+}
+
+.grid-item:hover a {
+  color: #eb8205;
+}
+
+.grid-item .thumbnail {
+  max-width: 96px;
+  max-height: 96px;
+  padding: 1px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.grid-img-link {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 6px;
+  position: relative;
+}
+
+.grid-img-link::before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.grid-name-link {
+  color: #333;
+  font-size: 0.875rem;
+}
+
+.grid-name {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  line-height: 17px;
+  font-size: 14px;
+}
+
+.grid-file-locked-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  width: 16px;
+}
