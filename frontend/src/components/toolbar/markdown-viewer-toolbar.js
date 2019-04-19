@@ -55,7 +55,7 @@ class MoreMenu extends React.PureComponent {
   render() {
     const editorMode = this.props.editorMode;
     return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-lg-1">
+      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1">
         <DropdownToggle id="moreButton">
           <i className="fa fa-ellipsis-v"/>
           <Tooltip toggle={this.tooltipToggle} delay={{show: 0, hide: 0}} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
