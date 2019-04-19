@@ -54,8 +54,9 @@ class MoreMenu extends React.PureComponent {
 
   render() {
     const editorMode = this.props.editorMode;
+    const isSmall = this.props.isSmallScreen;
     return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-lg-1">
+      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1">
         <DropdownToggle id="moreButton">
           <i className="fa fa-ellipsis-v"/>
           <Tooltip toggle={this.tooltipToggle} delay={{show: 0, hide: 0}} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
@@ -68,6 +69,11 @@ class MoreMenu extends React.PureComponent {
             <DropdownItem onMouseDown={this.props.onEdit.bind(this, 'rich')}>{gettext('Switch to rich text editor')}</DropdownItem>}
           {(this.props.openDialogs && editorMode === 'rich') &&
             <DropdownItem onMouseDown={this.props.openDialogs.bind(this, 'help')}>{gettext('Help')}</DropdownItem>
+          }
+          {isSmall && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
+          {isSmall && <DropdownItem onMouseDown={this.props.backToParentDirectory}>{gettext('Back to parent directory')}</DropdownItem>}
+          {(isSmall && this.props.showFileHistory) &&
+            <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('File History')}</DropdownItem>
           }
         </DropdownMenu>
       </Dropdown>
@@ -86,6 +92,8 @@ class MarkdownViewerToolbar extends React.Component {
 
   render() {
     let { contentChanged, saving } = this.props;
+    let canPublishDraft = this.props.fileInfo.permission == 'rw';
+    let canCreateDraft = canPublishDraft && (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs);
 
     if (this.props.editorMode === 'rich') {
       return (
@@ -104,7 +112,7 @@ class MarkdownViewerToolbar extends React.Component {
               </div>
             }
             <div className="topbar-btn-container">
-              { (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs) &&
+              {canCreateDraft &&
                 <button onMouseDown={this.props.toggleNewDraft} className="btn btn-success btn-new-draft">
                   {gettext('New Draft')}</button>
               }
@@ -112,8 +120,10 @@ class MarkdownViewerToolbar extends React.Component {
                 <div>
                   <button type="button" className="btn btn-success seafile-btn-add-review"
                     onMouseDown={this.props.editorUtilities.goDraftPage}>{gettext('Start review')}</button>
-                  <button type="button" className="btn btn-success seafile-btn-add-review"
-                    onMouseDown={this.props.editorUtilities.publishDraftFile}>{gettext('Publish')}</button>
+                  {canPublishDraft &&
+                    <button type="button" className="btn btn-success seafile-btn-add-review"
+                      onMouseDown={this.props.editorUtilities.publishDraftFile}>{gettext('Publish')}</button>
+                  }
                 </div>
               }
               {this.props.collabUsers.length > 0 && <CollabUsersButton className={'collab-users-dropdown'}
@@ -140,6 +150,37 @@ class MarkdownViewerToolbar extends React.Component {
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}
                 onEdit={this.props.onEdit}
+                isSmallScreen={false}
+              />
+            </div>
+          </div>
+          <div className="sf-md-viewer-topbar-first-narrow d-flex justify-content-between">
+            <FileInfo
+              toggleStar={this.props.toggleStar}
+              editorUtilities={this.props.editorUtilities}
+              fileInfo={this.props.fileInfo}
+              showDraftSaved={this.props.showDraftSaved}
+            />
+            <div className="topbar-btn-container">
+              <ButtonGroup>
+                {saving ?
+                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                    <i className={'fa fa-spin fa-spinner'}/></button>
+                  :
+                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged} 
+                    onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
+                }
+              </ButtonGroup>
+              <MoreMenu
+                readOnly={this.props.readOnly}
+                openDialogs={this.props.openDialogs}
+                editorMode={this.props.editorMode}
+                onEdit={this.props.onEdit}
+                toggleShareLinkDialog={this.props.toggleShareLinkDialog}
+                backToParentDirectory={this.props.backToParentDirectory}
+                showFileHistory={this.props.showFileHistory}
+                toggleHistory={this.props.toggleHistory}
+                isSmallScreen={true}
               />
             </div>
           </div>
@@ -167,9 +208,39 @@ class MarkdownViewerToolbar extends React.Component {
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}
                 onEdit={this.props.onEdit}
+                isSmallScreen={false}
               />
             </div>
           </div>
+          <div className="sf-md-viewer-topbar-first-narrow d-flex justify-content-between">
+            <FileInfo toggleStar={this.props.toggleStar} editorUtilities={this.props.editorUtilities}
+              fileInfo={this.props.fileInfo}/>
+            <div className="topbar-btn-container">
+              <ButtonGroup>
+                {saving ?
+                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                    <i className={'fa fa-spin fa-spinner'}/></button>
+                  :
+                  <IconButton
+                    id={'saveButton'}
+                    text={gettext('Save')}
+                    icon={'fa fa-save'}
+                    onMouseDown={window.seafileEditor && window.seafileEditor.onPlainEditorSave}
+                    disabled={!contentChanged}
+                    isActive={contentChanged}
+                  />
+                }
+              </ButtonGroup>
+              <MoreMenu
+                readOnly={this.props.readOnly}
+                openDialogs={this.props.openDialogs}
+                editorMode={this.props.editorMode}
+                onEdit={this.props.onEdit}
+                isSmallScreen={false}
+              />
+            </div>
+          </div>
+
         </div>
       );
     }

@@ -20,7 +20,6 @@ const { isStarred, isLocked, lockedByMe,
   repoID, filePath, enableWatermark, userNickName
 } = window.app.pageOptions;
 
-
 class FileView extends React.Component {
 
   constructor(props) {
@@ -29,7 +28,7 @@ class FileView extends React.Component {
       isStarred: isStarred,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
-      isCommentPanelOpen: false,
+      isCommentPanelOpen: false
     };
   }
 
@@ -76,7 +75,7 @@ class FileView extends React.Component {
   render() {
     return (
       <div className="h-100 d-flex flex-column">
-        <div className="file-view-header d-flex justify-content-between">
+        <div className="file-view-header d-flex justify-content-between align-items-center">
           <FileInfo
             isStarred={this.state.isStarred}
             isLocked={this.state.isLocked}
@@ -85,9 +84,6 @@ class FileView extends React.Component {
           <FileToolbar 
             isLocked={this.state.isLocked}
             lockedByMe={this.state.lockedByMe}
-            onSaveChangedContent={this.props.onSaveChangedContent}
-            isSaving={this.props.isSaving}
-            isContentChangedButNotSaved={this.props.isContentChangedButNotSaved}
             toggleLockFile={this.toggleLockFile}
             toggleCommentPanel={this.toggleCommentPanel}
           />

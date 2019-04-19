@@ -44,6 +44,7 @@ export const enableRepoHistorySetting = window.app.pageOptions.enableRepoHistory
 export const isSystemStaff = window.app.pageOptions.isSystemStaff;
 export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForOriginal;
 export const repoPasswordMinLength = window.app.pageOptions.repoPasswordMinLength;
+export const canAddPublicRepo = window.app.pageOptions.canAddPublicRepo;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
@@ -79,6 +80,7 @@ export const draftFileExists = window.draft ? window.draft.config.draftFileExist
 export const draftStatus = window.draft ? window.draft.config.draftStatus : '';
 export const draftPublishVersion = window.draft ? window.draft.config.draftPublishVersion : '';
 export const originFileVersion = window.draft ? window.draft.config.originFileVersion : '';
+export const filePermission = window.draft ? window.draft.config.perm : '';
 
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';

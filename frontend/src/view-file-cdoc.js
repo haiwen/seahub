@@ -5,20 +5,31 @@ import i18n from './i18n';
 import { seafileAPI } from './utils/seafile-api';
 import io from 'socket.io-client';
 import { gettext } from './utils/constants';
-
+import ModalPortal from './components/modal-portal';
 import { RichEditor } from '@seafile/seafile-editor';
-import  { EditorUtilities } from '@seafile/seafile-editor/dist/editorUtilities';
+import CDOCTypeChooser from '@seafile/seafile-editor/dist/components/codc-type-chooser';
+import { Value } from 'slate';
+import CDOCTopbar from './components/toolbar/cdoc-editor-topbar';
+import ShareDialog from './components/dialog/share-dialog';
+import { Utils } from './utils/utils';
+import { translate } from 'react-i18next';
+
+import { EditorUtilities } from '@seafile/seafile-editor/dist/editorUtilities';
 import toaster from './components/toast';
+import { RichEditorUtils } from '@seafile/seafile-editor/dist/rich-editor-utils';
+
+import './css/markdown-viewer/markdown-editor.css';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './index.css';
+
 const CryptoJS = require('crypto-js');
 
 const lang = window.app.config.lang;
 
 const { repoID, repoName, filePath, fileName, username, contactEmail } = window.app.pageOptions;
-const { siteRoot, seafileCollabServer, serviceURL} = window.app.config;
+const { siteRoot, seafileCollabServer, serviceURL } = window.app.config;
 const { name } = window.app.userInfo;
 
 let dirPath = '/';
@@ -28,10 +39,12 @@ class CDOCEditor extends React.Component {
 
   constructor(props) {
     super(props);
-    this.collabServer = seafileCollabServer ? seafileCollabServer : null
+    this.collabServer = seafileCollabServer ? seafileCollabServer : null;
+    this.richEditorUtils = new RichEditorUtils(editorUtilities, this)
     this.state = {
+      value: Value.create({}),
       collabUsers: userInfo ?
-      [{user: userInfo, is_editing: false}] : [],
+        [{ user: userInfo, is_editing: false }] : [],
       fileInfo: {
         repoID: repoID,
         name: fileName,
@@ -39,6 +52,11 @@ class CDOCEditor extends React.Component {
         lastModifier: '',
         id: '',
       },
+      isShowTypeChooser: false,
+      isSaving: false,
+      contentChanged: false,
+      showShareLinkDialog: false,
+      isShowHistory: false,
     }
 
     if (this.state.collabServer) {
@@ -50,48 +68,32 @@ class CDOCEditor extends React.Component {
         this.socket_id = socket.id;
       });
     }
-  }  
-
-  componentDidMount() {
-    editorUtilities.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, size, starred, permission, last_modifier_name, id } = res.data;
-      let lastModifier = last_modifier_name;
-      this.setState((prevState, props) => ({
-        fileInfo: {
-          ...prevState.fileInfo,
-          mtime,
-          size,
-          starred,
-          permission,
-          lastModifier,
-          id
-        }
-      }));
-    })
-
-    if (userInfo && this.socket) {
-        const { repoID, path } = this.state.fileInfo;
-        this.socket.emit('presence', {
-          request: 'join_room',
-          doc_id: CryptoJS.MD5(repoID+path).toString(),
-          user: userInfo
-        });
-  
-        this.socket.emit('repo_update', {
-          request: 'watch_update',
-          repo_id: editorUtilities.repoID,
-          user: {
-            name: editorUtilities.name,
-            username: editorUtilities.username,
-            contact_email: editorUtilities.contact_email,
-          },
-        });
-      }
   }
 
-  receiveUpdateData (data) {
+  componentDidMount() {
+    if (userInfo && this.socket) {
+      const { repoID, path } = this.state.fileInfo;
+      this.socket.emit('presence', {
+        request: 'join_room',
+        doc_id: CryptoJS.MD5(repoID + path).toString(),
+        user: userInfo
+      });
+
+      this.socket.emit('repo_update', {
+        request: 'watch_update',
+        repo_id: editorUtilities.repoID,
+        user: {
+          name: editorUtilities.name,
+          username: editorUtilities.username,
+          contact_email: editorUtilities.contact_email,
+        },
+      });
+    }
+  }
+
+  receiveUpdateData(data) {
     let currentTime = new Date();
-    if ((parseFloat(currentTime - this.lastModifyTime)/1000) <= 5) {
+    if ((parseFloat(currentTime - this.lastModifyTime) / 1000) <= 5) {
       return;
     }
     editorUtilities.fileMetaData().then((res) => {
@@ -101,13 +103,13 @@ class CDOCEditor extends React.Component {
             {gettext('This file has been updated.')}
             <a href='' >{' '}{gettext('Refresh')}</a>
           </span>,
-        {id: 'repo_updated', duration: 3600});
+          { id: 'repo_updated', duration: 3600 });
       }
     });
   }
 
   receivePresenceData(data) {
-    switch(data.response) {
+    switch (data.response) {
       case 'user_join':
         toaster.notify(`user ${data.user.name} joined`, {
           duration: 3
@@ -128,7 +130,7 @@ class CDOCEditor extends React.Component {
             }
           }
         }
-        this.setState({collabUsers: Object.values(data.users)});
+        this.setState({ collabUsers: Object.values(data.users) });
         return;
       case 'user_editing':
         toaster.danger(`user ${data.user.name} is editing this file!`, {
@@ -141,20 +143,135 @@ class CDOCEditor extends React.Component {
     }
   }
 
+  toggleStar = () => {
+    let starrd = this.state.fileInfo.starred;
+    if (starrd) {
+      editorUtilities.unStarItem().then((response) => {
+        this.setState({
+          fileInfo: Object.assign({}, this.state.fileInfo, { starred: !starrd })
+        });
+      });
+    } else if (!starrd) {
+      editorUtilities.starItem().then((response) => {
+        this.setState({
+          fileInfo: Object.assign({}, this.state.fileInfo, { starred: !starrd })
+        });
+      });
+    }
+  }
+
+  toggleHistory = () => {
+    window.location.href = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(filePath);
+  }
+
+  backToParentDirectory = () => {
+    window.location.href = editorUtilities.getParentDectionaryUrl();
+  }
+
+  toggleShareLinkDialog = () => {
+    this.openDialogs('share_link');
+  }
+
+  toggleCancel = () => {
+    this.setState({
+      showShareLinkDialog: false,
+    });
+  }
+
+  openDialogs = (option) => {
+    switch (option) {
+      case 'help':
+        window.richEditor.showHelpDialog();
+        break;
+      case 'share_link':
+        this.setState({
+          showMarkdownEditorDialog: true,
+          showShareLinkDialog: true,
+        });
+        break;
+      case 'insert_file':
+        this.setState({
+          showMarkdownEditorDialog: true,
+          showInsertFileDialog: true,
+        });
+        break;
+      default:
+        return;
+    }
+  }
+
+  componentWillMount() {
+    this.richEditorUtils.initialContent();
+    editorUtilities.getFileInfo().then((response) => {
+      this.setState({
+        fileInfo: Object.assign({}, this.state.fileInfo, {
+          mtime: response.data.mtime,
+          size: response.data.size,
+          name: response.data.name,
+          starred: response.data.starred,
+          lastModifier: response.data.last_modifier_name,
+          permission: response.data.permission,
+          id: response.data.id,
+        })
+      });
+    });
+  }
+
   render() {
-    return(
-      <I18nextProvider i18n={ i18n } initialLanguage={ lang } >
+    return (
+      <React.Fragment>
+        <CDOCTopbar
+          fileInfo={this.state.fileInfo}
+          collabUsers={this.state.collabUsers}
+          toggleStar={this.toggleStar}
+          editorUtilities={editorUtilities}
+          backToParentDirectory={this.backToParentDirectory}
+          toggleShareLinkDialog={this.toggleShareLinkDialog}
+          openDialogs={this.openDialogs}
+          showFileHistory={this.state.isShowHistory ? false : true}
+          toggleHistory={this.toggleHistory}
+          saving={this.state.isSaving}
+          onSave={this.richEditorUtils.onSave}
+          contentChanged={this.state.contentChanged}
+        />
         <RichEditor
-          collabUsers = {this.state.collabUsers}
-          editorUtilities = {editorUtilities}
-        /> 
-      </I18nextProvider>
+          onSave={this.richEditorUtils.onSave}
+          resetContentChange={this.richEditorUtils.resetContentChange}
+          value={this.state.value}
+          onChange={this.richEditorUtils.onChange}
+          editorUtilities={editorUtilities}
+        />
+        {this.state.showShareLinkDialog &&
+          <ModalPortal>
+            <ShareDialog
+              itemType="file"
+              itemName={this.state.fileInfo.name}
+              itemPath={filePath}
+              repoID={repoID}
+              toggleDialog={this.toggleCancel}
+              isGroupOwnedRepo={false}
+              repoEncrypted={false}
+            />
+          </ModalPortal>
+        }
+        {
+          this.state.isShowTypeChooser &&
+          <CDOCTypeChooser
+            showTypeChooser={this.state.isShowTypeChooser}
+            setDocument={this.richEditorUtils.setDocument}
+          />
+        }
+      </React.Fragment>
     )
   }
 }
 
+const TranslatedCDOCEditor = translate('translations')(CDOCEditor)
 
-ReactDOM.render (
-  <CDOCEditor/>,
+ReactDOM.render(
+  <I18nextProvider i18n={i18n} initialLanguage={lang} >
+    <TranslatedCDOCEditor />
+  </I18nextProvider>
+  ,
   document.getElementById('wrapper')
 );

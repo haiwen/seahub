@@ -184,7 +184,8 @@ def login(request, template_name='registration/login.html',
                  getattr(settings, 'ENABLE_KRB5_LOGIN', False) or \
                  getattr(settings, 'ENABLE_ADFS_LOGIN', False) or \
                  getattr(settings, 'ENABLE_OAUTH', False) or \
-                 getattr(settings, 'ENABLE_CAS', False)
+                 getattr(settings, 'ENABLE_CAS', False) or \
+                 getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False)
 
     login_bg_image_path = get_login_bg_image_path()
 

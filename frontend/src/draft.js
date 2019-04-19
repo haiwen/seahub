@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion } from './utils/constants';
+import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion, filePermission } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
@@ -249,9 +249,11 @@ class Draft extends React.Component {
   }
 
   getDraftInfo = () => {
-    seafileAPI.getFileInfo(draftRepoID, draftFilePath).then((res) => {
-      this.setState({ draftInfo: res.data });
-    });
+    if (draftStatus === 'open') {
+      seafileAPI.getFileInfo(draftRepoID, draftFilePath).then((res) => {
+        this.setState({ draftInfo: res.data });
+      });
+    }
   }
 
   getChangedNodes = () => {
@@ -771,7 +773,7 @@ class Draft extends React.Component {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
     const freezePublish = (this.state.freezePublish || draftStatus === 'published') ? true : false;
-    const canPublish = !this.state.freezePublish && draftFileExists;
+    const canPublish = !this.state.freezePublish && draftFileExists && filePermission == 'rw';
     const time = moment(this.state.draftInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
     const url = `${siteRoot}profile/${encodeURIComponent(this.state.draftInfo.last_modifier_email)}/`;
     return(
@@ -796,7 +798,9 @@ class Draft extends React.Component {
           <div className="button-group">
             {this.renderDiffButton()}
             {(draftFileExists && !freezePublish) &&
-              <a href={draftLink} className="mx-xl-1"><Button color="secondary">{gettext('Edit Draft')}</Button></a>
+              <a href={draftLink} className="mx-1">
+                <Button className="file-operation-btn" color="secondary">{gettext('Edit Draft')}</Button>
+              </a>
             }
             {canPublish &&
               <button 

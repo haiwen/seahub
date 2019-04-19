@@ -64,7 +64,7 @@ class UserManager(object):
         """
         If user has a role, update it; or create a role for user.
         """
-        ccnet_threaded_rpc.update_role_emailuser(email, role)
+        ccnet_api.update_role_emailuser(email, role)
         return self.get(email=email)
 
     def create_superuser(self, email, password):
@@ -576,50 +576,6 @@ class AuthBackend(object):
 
         if user.check_password(password):
             return user
-
-class ProxyRemoteUserBackend(AuthBackend):
-    """
-    This backend is to be used in conjunction with the ``RemoteUserMiddleware``
-    found in the middleware module of this package, and is used when the server
-    is handling authentication outside of Django.
-    By default, the ``authenticate`` method creates ``User`` objects for
-    usernames that don't already exist in the database.  Subclasses can disable
-    this behavior by setting the ``create_unknown_user`` attribute to
-    ``False``.
-    """
-    # Create a User object if not already in the database?
-    create_unknown_user = True
-
-    trust_proxy = getattr(settings, 'TRUST_PROXY_AUTHENTICATION', False)
-
-    def authenticate(self, remote_user):
-        """
-        The username passed as ``remote_user`` is considered trusted.  This
-        method simply returns the ``User`` object with the given username,
-        creating a new ``User`` object if ``create_unknown_user`` is ``True``.
-        Returns None if ``create_unknown_user`` is ``False`` and a ``User``
-        object with the given username is not found in the database.
-        """
-        # End the remote user auth process if the proxy is not trusted
-        if not remote_user or not self.trust_proxy:
-            return
-        user = None
-        username = self.clean_username(remote_user)
-
-        # Note that this could be accomplished in one try-except clause, but
-        # instead we use get_or_create when creating unknown users since it has
-        # built-in safeguards for multiple threads.
-
-        user = self.get_user(username)
-        return user
-
-    def clean_username(self, username):
-        """
-        Performs any cleaning on the "username" prior to using it to get or
-        create the user object.  Returns the cleaned username.
-        By default, returns the username unchanged.
-        """
-        return username
 
 ########## Register related
 class RegistrationBackend(object):

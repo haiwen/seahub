@@ -139,7 +139,17 @@ class TreeView extends React.Component {
   handleContextClick = (event, node) => {
     event.preventDefault();
     event.stopPropagation();
+    
+    if (!this.props.isNodeMenuShow) {
+      return;
+    }
 
+    let currentRepoInfo = this.props.currentRepoInfo;
+
+    if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
+      return '';
+    }
+    
     let x = event.clientX || (event.touches && event.touches[0].pageX);
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
@@ -168,7 +178,7 @@ class TreeView extends React.Component {
   getMenuList = (node) => {
     let menuList = [];
 
-    let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT, TAGS} = TextTranslation;
+    let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT } = TextTranslation;
 
     if (!node) {
       return [NEW_FOLDER, NEW_FILE];
@@ -177,7 +187,7 @@ class TreeView extends React.Component {
     if (node.object.type === 'dir') {
       menuList = [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
     } else {
-      menuList = [RENAME, DELETE, COPY, MOVE, TAGS, OPEN_VIA_CLIENT];
+      menuList = [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
     } 
 
     return menuList;

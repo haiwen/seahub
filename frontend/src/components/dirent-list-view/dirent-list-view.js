@@ -222,7 +222,6 @@ class DirentListView extends React.Component {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
   }
 
-
   onItemsDownload = () => {
     let { path, repoID, selectedDirentList } = this.props;
     if (selectedDirentList.length) {
@@ -283,6 +282,12 @@ class DirentListView extends React.Component {
   handleContextClick = (event, id, menuList, currentObject = null) => {
     event.preventDefault();
     event.stopPropagation();
+
+    let currentRepoInfo = this.props.currentRepoInfo;
+
+    if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
+      return '';
+    }
 
     let x = event.clientX || (event.touches && event.touches[0].pageX);
     let y = event.clientY || (event.touches && event.touches[0].pageY);
@@ -512,6 +517,8 @@ class DirentListView extends React.Component {
       menuList.push(HISTORY);
       return menuList;
     }
+
+    return [];
   }
 
   render() {

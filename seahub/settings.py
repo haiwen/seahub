@@ -108,6 +108,8 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'n*v0=jz-1rz@(4gx^tf%6^e7c&um@2)g-l=3_)t@19a69n1nv6'
 
+ENABLE_REMOTE_USER_AUTHENTICATION = False
+
 # Order is important
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -116,7 +118,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'seahub.auth.middleware.AuthenticationMiddleware',
-    'seahub.auth.middleware.RemoteUserMiddleware',
     'seahub.base.middleware.BaseMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
     'seahub.password_session.middleware.CheckPasswordHash',
@@ -274,10 +275,7 @@ CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
     'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2',
-
-    'seahub.base.accounts.ProxyRemoteUserBackend',
     'seahub.base.accounts.AuthBackend',
-    'seahub.oauth.backends.OauthRemoteUserBackend',
 )
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
@@ -548,7 +546,7 @@ FAVICON_PATH = 'img/favicon.ico'
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'
 # logo size. the unit is 'px'
-LOGO_WIDTH = 128
+LOGO_WIDTH = ''
 LOGO_HEIGHT = 32
 
 CUSTOM_LOGO_PATH = 'custom/mylogo.png'
@@ -899,3 +897,13 @@ CONSTANCE_CONFIG = {
     'ENABLE_TERMS_AND_CONDITIONS': (ENABLE_TERMS_AND_CONDITIONS, ''),
     'ENABLE_USER_CLEAN_TRASH': (ENABLE_USER_CLEAN_TRASH, ''),
 }
+
+# if Seafile admin enable remote user authentication in conf/seahub_settings.py
+# then add 'seahub.auth.middleware.SeafileRemoteUserMiddleware' and
+# 'seahub.auth.backends.SeafileRemoteUserBackend' to settings.
+if ENABLE_REMOTE_USER_AUTHENTICATION:
+    MIDDLEWARE_CLASSES += ('seahub.auth.middleware.SeafileRemoteUserMiddleware',)
+    AUTHENTICATION_BACKENDS += ('seahub.auth.backends.SeafileRemoteUserBackend',)
+
+if ENABLE_OAUTH:
+    AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)

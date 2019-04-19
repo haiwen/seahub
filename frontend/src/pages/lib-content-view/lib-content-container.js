@@ -34,7 +34,7 @@ const propTypes = {
   fileTags: PropTypes.array.isRequired,
   goDraftPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
-  filePermission: PropTypes.bool.isRequired,
+  filePermission: PropTypes.string,
   content: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
@@ -84,6 +84,7 @@ const propTypes = {
   closeDirentDetail: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  updateDetail: PropTypes.bool.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -98,7 +99,7 @@ class LibContentContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.path !== this.props.path) {
+    if (nextProps.path !== this.props.path || nextProps.updateDetail !== this.props.updateDetail) {
       this.setState({currentDirent: null});
     }
   }
@@ -113,6 +114,10 @@ class LibContentContainer extends React.Component {
     this.props.closeDirentDetail();
   }
 
+  onGridItemClick = (dirent) => {
+    this.setState({currentDirent: dirent});
+  }
+
   // on '<tr>'
   onDirentClick = (dirent) => {
     this.setState({currentDirent: dirent});
@@ -122,6 +127,14 @@ class LibContentContainer extends React.Component {
   onItemSelected = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onItemSelected(dirent);
+  }
+
+  onItemDelete = (dirent) => {
+    let currentDirent = this.state;
+    if (currentDirent && dirent.name === currentDirent.name) {
+      this.setState({currentDirent: null});
+    }
+    this.props.onItemDelete(dirent);
   }
 
   render() {
@@ -177,7 +190,7 @@ class LibContentContainer extends React.Component {
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemSelected={this.onItemSelected}
-                    onItemDelete={this.props.onItemDelete}
+                    onItemDelete={this.onItemDelete}
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}
@@ -194,6 +207,32 @@ class LibContentContainer extends React.Component {
                 )}
                 {this.props.currentMode === 'grid' && (
                   <DirGridView 
+                    path={this.props.path}
+                    repoID={repoID}
+                    currentRepoInfo={this.props.currentRepoInfo}
+                    repoPermission={this.props.repoPermission}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
+                    onRenameNode={this.props.onRenameNode}
+                    isRepoInfoBarShow={isRepoInfoBarShow}
+                    usedRepoTags={this.props.usedRepoTags}
+                    readmeMarkdown={this.props.readmeMarkdown}
+                    draftCounts={this.props.draftCounts}
+                    updateUsedRepoTags={this.props.updateUsedRepoTags}
+                    isDirentListLoading={this.props.isDirentListLoading}
+                    direntList={this.props.direntList}
+                    onAddFile={this.props.onAddFile}
+                    onItemClick={this.onItemClick}
+                    onItemDelete={this.props.onItemDelete}
+                    onItemMove={this.props.onItemMove}
+                    onItemCopy={this.props.onItemCopy}
+                    updateDirent={this.props.updateDirent}
+                    onAddFolder={this.props.onAddFolder}
+                    showShareBtn={this.props.showShareBtn}
+                    showDirentDetail={this.props.showDirentDetail}
+                    onGridItemClick={this.onGridItemClick}
+                    isDirentDetailShow={this.props.isDirentDetailShow}
+                    onItemRename={this.props.onItemRename}
                   />
                 )}
                 {this.props.currentMode === 'column' && (
@@ -241,7 +280,7 @@ class LibContentContainer extends React.Component {
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemSelected={this.onItemSelected}
-                    onItemDelete={this.props.onItemDelete}
+                    onItemDelete={this.onItemDelete}
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.props.onItemMove}
                     onItemCopy={this.props.onItemCopy}
@@ -254,7 +293,6 @@ class LibContentContainer extends React.Component {
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
-                    onToolbarFileTagChanged={this.props.onToolbarFileTagChanged}
                   />
                 )}
               </Fragment>

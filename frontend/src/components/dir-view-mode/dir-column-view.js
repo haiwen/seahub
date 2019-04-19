@@ -32,7 +32,7 @@ const propTypes = {
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   goDraftPage: PropTypes.func.isRequired,
-  filePermission: PropTypes.bool.isRequired,
+  filePermission: PropTypes.string,
   content: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
@@ -170,8 +170,6 @@ class DirColumnView extends React.Component {
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
           selectedDirentList={this.props.selectedDirentList}
-          onFileTagChanged={this.props.onFileTagChanged}
-          onToolbarFileTagChanged={this.props.onToolbarFileTagChanged}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>

@@ -49,6 +49,7 @@ from seahub.share.utils import is_repo_admin, check_group_share_in_permission
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
+from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_PREVIEW_EDIT
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
@@ -1753,7 +1754,8 @@ class UpdateLinkView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+        perm = check_folder_permission(request, repo_id, parent_dir)
+        if perm not in (PERMISSION_PREVIEW_EDIT, PERMISSION_READ_WRITE):
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this folder.')
 
@@ -3251,6 +3253,10 @@ class FileSharedLinkView(APIView):
         repo = seaserv.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, "Library does not exist")
+
+        if repo.encrypted:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         path = request.data.get('p', None)
         if not path:
