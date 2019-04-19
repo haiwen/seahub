@@ -32,7 +32,7 @@ const propTypes = {
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   goDraftPage: PropTypes.func.isRequired,
-  filePermission: PropTypes.bool.isRequired,
+  filePermission: PropTypes.string,
   content: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
