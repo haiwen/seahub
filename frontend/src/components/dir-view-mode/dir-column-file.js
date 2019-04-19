@@ -14,7 +14,7 @@ const propTypes = {
   goDraftPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   isFileLoadedErr: PropTypes.bool.isRequired,
-  filePermission: PropTypes.bool,
+  filePermission: PropTypes.string,
   content: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,

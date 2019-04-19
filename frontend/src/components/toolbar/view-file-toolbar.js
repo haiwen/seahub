@@ -16,7 +16,7 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
-  filePermission: PropTypes.bool.isRequired,
+  filePermission: PropTypes.string,
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,
@@ -85,26 +85,25 @@ class ViewFileToolbar extends React.Component {
   }
 
   render() {
-
+    let { filePermission } = this.props;
     let name = Utils.getFileName(this.props.path);
     let dirent = { name: name };
 
     return (
       <Fragment>
         <div className="dir-operation">
-          {(this.props.filePermission && !this.props.hasDraft) && (
+          {((filePermission === 'rw' || filePermission === 'cloud-edit') && !this.props.hasDraft) && (
             <Fragment>
               <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
             </Fragment>
           )}
-          {/* default have read priv */}
-          {(!this.props.isDraft && !this.props.hasDraft) && (
+          {(filePermission === 'rw' && !this.props.isDraft && !this.props.hasDraft) && (
             <Fragment>
               <button id="new-draft" className="btn btn-secondary operation-item" onClick={this.onNewDraft}>{gettext('New Draft')}</button>
               <Tooltip target="new-draft" placement="bottom" isOpen={this.state.isDraftMessageShow} toggle={this.onDraftHover}>{gettext('Create a draft from this file, instead of editing it directly.')}</Tooltip>
             </Fragment>
           )}
-          {this.props.filePermission && (
+          {filePermission === 'rw' && (
             <Dropdown isOpen={this.state.isMoreMenuShow} toggle={this.toggleMore}>
               <DropdownToggle className='btn btn-secondary operation-item'>
                 {gettext('More')}

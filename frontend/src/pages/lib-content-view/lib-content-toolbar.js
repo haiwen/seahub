@@ -9,7 +9,7 @@ import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
 
 const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
-  filePermission: PropTypes.bool.isRequired, // ture = 'rw'
+  filePermission: PropTypes.string,
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,

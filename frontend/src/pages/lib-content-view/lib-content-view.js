@@ -57,7 +57,7 @@ class LibContentView extends React.Component {
       currentNode: null,
       isFileLoading: true,
       isFileLoadedErr: false,
-      filePermission: true,
+      filePermission: '',
       content: '',
       lastModified: '',
       latestContributor: '',
@@ -352,7 +352,7 @@ class LibContentView extends React.Component {
         seafileAPI.getFileContent(res.data).then((res) => {
           this.setState({
             content: res.data,
-            filePermission: permission === 'rw' || permission === 'cloud-edit',
+            filePermission: permission,
             latestContributor: last_modifier_name,
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,

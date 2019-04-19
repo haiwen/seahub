@@ -34,7 +34,7 @@ const propTypes = {
   fileTags: PropTypes.array.isRequired,
   goDraftPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
-  filePermission: PropTypes.bool.isRequired,
+  filePermission: PropTypes.string,
   content: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
