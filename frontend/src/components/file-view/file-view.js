@@ -11,7 +11,9 @@ import '../../css/file-view.css';
 
 const propTypes = {
   onSaveChangedContent: PropTypes.func.isRequired,
-  content: PropTypes.object.isRequired
+  content: PropTypes.object.isRequired,
+  isSaving: PropTypes.bool.isRequired,
+  isContentChangedButNotSaved: PropTypes.bool.isRequired,
 };
 
 const { isStarred, isLocked, lockedByMe,
@@ -84,6 +86,8 @@ class FileView extends React.Component {
             isLocked={this.state.isLocked}
             lockedByMe={this.state.lockedByMe}
             onSaveChangedContent={this.props.onSaveChangedContent}
+            isSaving={this.props.isSaving}
+            isContentChangedButNotSaved={this.props.isContentChangedButNotSaved}
             toggleLockFile={this.toggleLockFile}
             toggleCommentPanel={this.toggleCommentPanel}
           />

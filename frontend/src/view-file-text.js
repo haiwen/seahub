@@ -43,7 +43,9 @@ class ViewFileText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: fileContent
+      content: fileContent,
+      isContentChangedButNotSaved: false,
+      isSaving: false,
     };
     this.onSaveChangedContent=this.onSaveChangedContent.bind(this);
   }
@@ -51,7 +53,8 @@ class ViewFileText extends React.Component {
 
   updateContent = (newContent) => {
     this.setState({
-      content: newContent
+      isContentChangedButNotSaved: true,
+      content: newContent,
     });
   }
 
@@ -60,6 +63,9 @@ class ViewFileText extends React.Component {
     return (
       seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
         const uploadLink = res.data;
+        this.setState({
+          isSaving: true
+        });
         return seafileAPI.updateFile(
           uploadLink,
           filePath,
@@ -68,6 +74,10 @@ class ViewFileText extends React.Component {
         ).then(() => {
           toaster.success(gettext('Successfully saved'), {
             duration: 3
+          });
+          this.setState({
+            isSaving: false,
+            isContentChangedButNotSaved: false
           });
         })
       })
@@ -83,6 +93,8 @@ class ViewFileText extends React.Component {
             updateContent={this.updateContent}
           />
         }
+        isSaving={this.state.isSaving}
+        isContentChangedButNotSaved={this.state.isContentChangedButNotSaved}
         onSaveChangedContent={this.onSaveChangedContent}
       />
     );
