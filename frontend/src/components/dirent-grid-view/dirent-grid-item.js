@@ -13,13 +13,6 @@ const propTypes = {
 };
 
 class DirentGridItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      gridDragImage: '',
-      isDropTipshow: false,
-    }
-  }
 
   onItemClick = (e) => {
     e.preventDefault();
@@ -39,31 +32,6 @@ class DirentGridItem extends React.Component {
     }
     let fileUrl = fileUrlArr.join('/');
     return fileUrl;
-  }
-
-  gridDargStart = (e) => {
-    // todo
-  }
-
-  gridDragEnter = (e) => {
-    // todo
-    console.log(123)
-  }
-
-  gridDragOver = (e) => {
-    // todo
-    e.preventDefault();
-
-  }
-
-  gridDragLeave = (e) => {
-    // todo
-    console.log(456)
-  }
-
-  gridDrop = (e) => {
-    // todo
-    e.preventDefault();
   }
 
   onItemContextMenu = (event) => {
@@ -92,13 +60,7 @@ class DirentGridItem extends React.Component {
         <li className="grid-item" onContextMenu={this.onItemContextMenu}>
           <div 
             className="grid-file-img-link cursor-pointer"
-            // draggable="true"
             onClick={this.onItemClick}
-            // onDragStart={this.gridDargStart}
-            onDragEnter={this.gridDragEnter}
-            onDragOver={this.gridDragOver}
-            onDragLeave={this.gridDragLeave}
-            onDrop={this.gridDrop}
           >
             {dirent.encoded_thumbnail_src ?
               <img src={`${siteRoot}${fileUrl}`} ref={this.gridIcon} className="thumbnail" onClick={this.onItemClick} alt=""/> :
