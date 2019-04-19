@@ -276,7 +276,6 @@ CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 AUTHENTICATION_BACKENDS = (
     'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2',
     'seahub.base.accounts.AuthBackend',
-    'seahub.oauth.backends.OauthRemoteUserBackend',
 )
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
@@ -905,3 +904,6 @@ CONSTANCE_CONFIG = {
 if ENABLE_REMOTE_USER_AUTHENTICATION:
     MIDDLEWARE_CLASSES += ('seahub.auth.middleware.SeafileRemoteUserMiddleware',)
     AUTHENTICATION_BACKENDS += ('seahub.auth.backends.SeafileRemoteUserBackend',)
+
+if ENABLE_OAUTH:
+    AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)

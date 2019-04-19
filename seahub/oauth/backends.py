@@ -2,8 +2,8 @@ from django.conf import settings
 
 from seahub.auth.backends import RemoteUserBackend
 from seahub.base.accounts import User
-from registration.models import (
-    notify_admins_on_activate_request, notify_admins_on_register_complete)
+from registration.models import (notify_admins_on_activate_request,
+                                 notify_admins_on_register_complete)
 
 
 class OauthRemoteUserBackend(RemoteUserBackend):
@@ -21,7 +21,9 @@ class OauthRemoteUserBackend(RemoteUserBackend):
     # Create a User object if not already in the database?
     create_unknown_user = getattr(settings, 'OAUTH_CREATE_UNKNOWN_USER', True)
     # Create active user by default.
-    activate_after_creation = getattr(settings, 'OAUTH_ACTIVATE_USER_AFTER_CREATION', True)
+    activate_after_creation = getattr(settings,
+                                      'OAUTH_ACTIVATE_USER_AFTER_CREATION',
+                                      True)
 
     def get_user(self, username):
         try:
