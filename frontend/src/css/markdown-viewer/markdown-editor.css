@@ -4,7 +4,8 @@
   position: relative;
   float: none;
 }
-.sf-md-viewer-topbar-first {
+.sf-md-viewer-topbar-first,
+.sf-md-viewer-topbar-first-narrow {
   padding: 4px 10px;
   background-color: #fff;
   border-bottom: 1px solid #e5e5e5;
@@ -155,4 +156,15 @@
 }
 .seafile-md-comment .seafile-comment .seafile-comment-toggle-resolved {
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .sf-md-viewer-topbar-first {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) {
+  .sf-md-viewer-topbar-first-narrow {
+    display: none !important;
+  }
 }
