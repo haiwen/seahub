@@ -114,6 +114,10 @@ class LibContentContainer extends React.Component {
     this.props.closeDirentDetail();
   }
 
+  onGridItemClick = (dirent) => {
+    this.setState({currentDirent: dirent});
+  }
+
   // on '<tr>'
   onDirentClick = (dirent) => {
     this.setState({currentDirent: dirent});
@@ -203,6 +207,32 @@ class LibContentContainer extends React.Component {
                 )}
                 {this.props.currentMode === 'grid' && (
                   <DirGridView 
+                    path={this.props.path}
+                    repoID={repoID}
+                    currentRepoInfo={this.props.currentRepoInfo}
+                    repoPermission={this.props.repoPermission}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    enableDirPrivateShare={this.props.enableDirPrivateShare}
+                    onRenameNode={this.props.onRenameNode}
+                    isRepoInfoBarShow={isRepoInfoBarShow}
+                    usedRepoTags={this.props.usedRepoTags}
+                    readmeMarkdown={this.props.readmeMarkdown}
+                    draftCounts={this.props.draftCounts}
+                    updateUsedRepoTags={this.props.updateUsedRepoTags}
+                    isDirentListLoading={this.props.isDirentListLoading}
+                    direntList={this.props.direntList}
+                    onAddFile={this.props.onAddFile}
+                    onItemClick={this.onItemClick}
+                    onItemDelete={this.props.onItemDelete}
+                    onItemMove={this.props.onItemMove}
+                    onItemCopy={this.props.onItemCopy}
+                    updateDirent={this.props.updateDirent}
+                    onAddFolder={this.props.onAddFolder}
+                    showShareBtn={this.props.showShareBtn}
+                    showDirentDetail={this.props.showDirentDetail}
+                    onGridItemClick={this.onGridItemClick}
+                    isDirentDetailShow={this.props.isDirentDetailShow}
+                    onItemRename={this.props.onItemRename}
                   />
                 )}
                 {this.props.currentMode === 'column' && (
