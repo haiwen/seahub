@@ -10,12 +10,16 @@ import CommentPanel from './comment-panel';
 import '../../css/file-view.css';
 
 const propTypes = {
-  content: PropTypes.object.isRequired
+  onSaveChangedContent: PropTypes.func.isRequired,
+  content: PropTypes.object.isRequired,
+  isSaving: PropTypes.bool.isRequired,
+  isContentChangedButNotSaved: PropTypes.bool.isRequired,
 };
 
 const { isStarred, isLocked, lockedByMe,
   repoID, filePath, enableWatermark, userNickName
 } = window.app.pageOptions;
+
 
 class FileView extends React.Component {
 
@@ -25,7 +29,7 @@ class FileView extends React.Component {
       isStarred: isStarred,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
-      isCommentPanelOpen: false
+      isCommentPanelOpen: false,
     };
   }
 
@@ -81,6 +85,9 @@ class FileView extends React.Component {
           <FileToolbar 
             isLocked={this.state.isLocked}
             lockedByMe={this.state.lockedByMe}
+            onSaveChangedContent={this.props.onSaveChangedContent}
+            isSaving={this.props.isSaving}
+            isContentChangedButNotSaved={this.props.isContentChangedButNotSaved}
             toggleLockFile={this.toggleLockFile}
             toggleCommentPanel={this.toggleCommentPanel}
           />
