@@ -51,7 +51,7 @@ class DraftsView(APIView):
 
     @add_org_context
     def post(self, request, org_id, format=None):
-        """Create a file draft if the user has read permission to the origin file
+        """Create a file draft if the user has read-write permission to the origin file
         """
         repo_id = request.POST.get('repo_id', '')
         file_path = request.POST.get('file_path', '')
@@ -63,7 +63,7 @@ class DraftsView(APIView):
 
         # perm check
         perm = check_folder_permission(request, repo.id, file_path)
-        if perm is None:
+        if perm != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

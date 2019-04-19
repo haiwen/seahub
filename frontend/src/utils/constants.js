@@ -80,6 +80,7 @@ export const draftFileExists = window.draft ? window.draft.config.draftFileExist
 export const draftStatus = window.draft ? window.draft.config.draftStatus : '';
 export const draftPublishVersion = window.draft ? window.draft.config.draftPublishVersion : '';
 export const originFileVersion = window.draft ? window.draft.config.originFileVersion : '';
+export const filePermission = window.draft ? window.draft.config.perm : '';
 
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';

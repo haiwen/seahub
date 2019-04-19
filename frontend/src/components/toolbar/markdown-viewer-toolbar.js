@@ -86,6 +86,8 @@ class MarkdownViewerToolbar extends React.Component {
 
   render() {
     let { contentChanged, saving } = this.props;
+    let canPublishDraft = this.props.fileInfo.permission == 'rw';
+    let canCreateDraft = canPublishDraft && (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs);
 
     if (this.props.editorMode === 'rich') {
       return (
@@ -104,7 +106,7 @@ class MarkdownViewerToolbar extends React.Component {
               </div>
             }
             <div className="topbar-btn-container">
-              { (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs) &&
+              {canCreateDraft &&
                 <button onMouseDown={this.props.toggleNewDraft} className="btn btn-success btn-new-draft">
                   {gettext('New Draft')}</button>
               }
@@ -112,8 +114,10 @@ class MarkdownViewerToolbar extends React.Component {
                 <div>
                   <button type="button" className="btn btn-success seafile-btn-add-review"
                     onMouseDown={this.props.editorUtilities.goDraftPage}>{gettext('Start review')}</button>
-                  <button type="button" className="btn btn-success seafile-btn-add-review"
-                    onMouseDown={this.props.editorUtilities.publishDraftFile}>{gettext('Publish')}</button>
+                  {canPublishDraft &&
+                    <button type="button" className="btn btn-success seafile-btn-add-review"
+                      onMouseDown={this.props.editorUtilities.publishDraftFile}>{gettext('Publish')}</button>
+                  }
                 </div>
               }
               {this.props.collabUsers.length > 0 && <CollabUsersButton className={'collab-users-dropdown'}
