@@ -24,15 +24,14 @@
 }
 
 .grid-file-img-link {
-  width: 100px;
-  height: 100px;
+  width: 96px;
+  height: 96px;
   margin: 0 auto 6px;
   position: relative;
   border-radius: 3px;
   font-size: 0;
   text-align: center;
   line-height: 0;
-  padding: 2px;
 }
 
 .grid-file-img-link .thumbnail {
@@ -77,6 +76,10 @@
   background-color: #f8f8f8;
 }
 
-.grid-selected-link-active a{
+.grid-link-selected-active {
   color: #eb8205;
+}
+
+.grid-drop-show {
+  background: #f8f8f8;
 }
