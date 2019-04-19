@@ -502,7 +502,8 @@ class MarkdownEditor extends React.Component {
         seafileAPI.getFileContent(downLoadUrl).then((res) => {
           const contentLength = res.data.length;
           let isBlankFile =  (contentLength === 0 || contentLength === 1);
-          let hasPermission = (this.state.fileInfo.permission === 'rw');
+          let permission = this.state.fileInfo.permission;
+          let hasPermission = (permission === 'rw' || permission === 'cloud-edit');
           let value = deserialize(res.data);
           this.setState({
             markdownContent: res.data,
