@@ -72,3 +72,11 @@
   right: 10px;
   width: 16px;
 }
+
+.grid-selected-active {
+  background-color: #f8f8f8;
+}
+
+.grid-selected-link-active a{
+  color: #eb8205;
+}

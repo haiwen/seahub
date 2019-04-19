@@ -233,6 +233,7 @@ class LibContentContainer extends React.Component {
                     onGridItemClick={this.onGridItemClick}
                     isDirentDetailShow={this.props.isDirentDetailShow}
                     onItemRename={this.props.onItemRename}
+                    onDirentClick={this.onDirentClick}
                   />
                 )}
                 {this.props.currentMode === 'column' && (

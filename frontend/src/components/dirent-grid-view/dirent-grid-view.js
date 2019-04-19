@@ -16,6 +16,8 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import Rename from '../../components/dialog/rename-grid-item-dialog';
+import CreateFile from '../dialog/create-file-dialog';
+import CreateFolder from '../dialog/create-folder-dialog';
 
 import '../../css/grid-view.css';
 
@@ -37,6 +39,8 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
+  onAddFolder: PropTypes.func.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
 };
 
 class DirentGridView extends React.Component{
@@ -46,20 +50,36 @@ class DirentGridView extends React.Component{
       isImagePopupOpen: false,
       imageItems: [],
       imageIndex: 0,
-      isCreateFileDialogShow: false,
       // onmenuClick 
       isShareDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isZipDialogOpen: false,
       isRenameDialogShow: false,
+      isCreateFolderDialogShow: false,
+      isCreateFileDialogShow: false,
 
       isMutipleOperation: false,
       dirent: '',
+      isGridItemFreezed: false,
+      activeDirent: null,
+
     }
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
   }
 
+  onCreateFileToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+    });
+  }
+
+  onDirentClick = (dirent) => {
+    this.setState({activeDirent: dirent});
+    this.props.onDirentClick(dirent);
+    this.props.onGridItemClick(dirent)
+  }
+ 
   onMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
   }
@@ -71,6 +91,11 @@ class DirentGridView extends React.Component{
   onAddFile = (filePath, isDraft) => {
     this.setState({isCreateFileDialogShow: false});
     this.props.onAddFile(filePath, isDraft);
+  }
+
+  onAddFolder = (dirPath) => {
+    this.setState({isCreateFolderDialogShow: false});
+    this.props.onAddFolder(dirPath);
   }
 
   onItemShare = (e) => {
@@ -126,6 +151,12 @@ class DirentGridView extends React.Component{
       case 'Details':
         this.onDetails(currentObject);
         break;
+      case 'New Folder':
+        this.onCreateFolderToggle(currentObject);
+        break;
+      case 'New File':
+        this.onCreateFileToggle(currentObject);
+        break;
       case 'Access Log':
         this.onAccessLog();
         break;
@@ -166,6 +197,12 @@ class DirentGridView extends React.Component{
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
       location.href = url;
     }
+  }
+
+  onCreateFolderToggle = () => {
+    this.setState({
+      isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow,
+    });
   }
 
   onItemRenameToggle = () => {
@@ -299,13 +336,42 @@ class DirentGridView extends React.Component{
     return isDuplicated;
   }
 
+  // common contextmenu handle
+  onMouseDown = (event) => {
+    event.stopPropagation();
+    if (event.button === 2) {
+      return;
+    }
+  }
+
+  onGridContainerMouseDown = (event) => {
+    this.onMouseDown(event)
+  }
+
+  onGridItemMouseDown = (event) => {
+    this.onMouseDown(event);
+  }
+
   gridContainerClick = () => {
     if (!this.props.isDirentDetailShow) {
       this.props.onGridItemClick(null);
     }
+    this.onDirentClick(null);
   }
 
-  handleContextClick = (event, currentObject) => {
+  onGridContainContextMenu = (event) => {
+      let id = "dirent-grid-container-menu"
+      let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+      this.handleContextClick(event, id, menuList);
+  }
+
+  onGridItemContextmenu = (event, dirent) => {
+    let id = 'grid-item-contextmenu';
+    let menuList = this.getDirentItemMenuList(dirent, true);
+    this.handleContextClick(event, id, menuList, dirent);
+  }
+
+  handleContextClick = (event, id, menuList, currentObject = null) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -320,13 +386,11 @@ class DirentGridView extends React.Component{
     }
 
     hideMenu();
-
-    let menuList = this.getDirentItemMenuList(currentObject, true);
-
+    
     this.setState({dirent: currentObject});
 
     let showMenuConfig = {
-      id: 'grid-item-contextmenu',
+      id: id,
       position: { x, y },
       target: event.target,
       currentObject: currentObject,
@@ -415,7 +479,7 @@ class DirentGridView extends React.Component{
 
   render() {
     let {direntList, path} = this.props;
-    let dirent = this.state.dirent;
+    let dirent = this.state.dirent ? this.state.dirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
 
     if (this.props.isDirentListLoading) {
@@ -424,7 +488,7 @@ class DirentGridView extends React.Component{
   
     return (
       <Fragment>
-        <ul className="grid-view" onClick={this.gridContainerClick}>
+        <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainContextMenu} onMouseDown={this.onGridContainerMouseDown}>
           {
             direntList.length !== 0 && direntList.map((dirent, index) => {
               return (
@@ -436,8 +500,11 @@ class DirentGridView extends React.Component{
                   onItemClick={this.props.onItemClick}
                   currentRepoInfo={this.props.currentRepoInfo}
                   showImagePopup={this.showImagePopup}
-                  handleContextClick={this.handleContextClick}
+                  onGridItemContextmenu={this.onGridItemContextmenu}
                   onItemMove={this.props.onItemMove}
+                  onGridItemMouseDown={this.onGridItemMouseDown}
+                  onDirentClick={this.onDirentClick}
+                  activeDirent={this.state.activeDirent}
                 />
               )
             })
@@ -447,6 +514,30 @@ class DirentGridView extends React.Component{
           id={'grid-item-contextmenu'}
           onMenuItemClick={this.onMenuItemClick}
         />
+        <ContextMenu 
+          id={'dirent-grid-container-menu'}
+          onMenuItemClick={this.onMenuItemClick}
+        />
+        {this.state.isCreateFolderDialogShow && (
+          <ModalPortal>
+            <CreateFolder
+              parentPath={this.props.path}
+              onAddFolder={this.onAddFolder}
+              checkDuplicatedName={this.checkDuplicatedName}
+              addFolderCancel={this.onCreateFolderToggle}
+            />
+          </ModalPortal>
+        )} 
+        {this.state.isCreateFileDialogShow && (
+          <ModalPortal>
+            <CreateFile
+              parentPath={this.props.path}
+              onAddFile={this.onAddFile}
+              checkDuplicatedName={this.checkDuplicatedName}
+              addFileCancel={this.onCreateFileToggle}
+            />
+          </ModalPortal>
+        )}
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
             path={this.props.path}

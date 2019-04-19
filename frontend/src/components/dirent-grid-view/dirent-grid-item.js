@@ -9,20 +9,59 @@ const propTypes = {
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   showImagePopup: PropTypes.func.isRequired,
-  handleContextClick: PropTypes.func.isRequired,
+  onGridItemContextmenu: PropTypes.func.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
+  activeDirent: PropTypes.object,
+  onGridItemMouseDown: PropTypes.func,
 };
 
 class DirentGridItem extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGridSelect: false,
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({isGridSelect: false}, () => {
+      if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
+        this.setState({isGridSelect: true});
+      }
+    })
+  }
+
   onItemClick = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     
+    const dirent = this.props.dirent;
+    if (this.props.dirent === this.props.activeDirent) {
+      this.setState({isGridSelect:false})
+      if (Utils.imageCheck(dirent.name)) {
+        this.props.showImagePopup(dirent);
+      } else {
+        this.props.onItemClick(dirent);
+      }
+    } else {
+      this.setState({isGridSelect: true})
+      this.props.onDirentClick(this.props.dirent)
+    }
+  }
+
+  onItemLinkClick = (e) => {
+    e.preventDefault();
     const dirent = this.props.dirent;
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
     } else {
       this.props.onItemClick(dirent);
     }
+  }
+
+  onGridItemMouseDown = (event) =>{
+    this.props.onGridItemMouseDown(event);
   }
 
   getFileUrl = (url) => {
@@ -34,12 +73,9 @@ class DirentGridItem extends React.Component {
     return fileUrl;
   }
 
-  onItemContextMenu = (event) => {
-    this.handleContextClick(event);
-  }
-
-  handleContextClick = (event) => {
-    this.props.handleContextClick(event, this.props.dirent);
+  onGridItemContextmenu = (event) => {
+    let dirent = this.props.dirent;
+    this.props.onGridItemContextmenu(event, dirent);
   }
    
   render() {
@@ -57,9 +93,9 @@ class DirentGridItem extends React.Component {
 
     return(
       <Fragment>
-        <li className="grid-item" onContextMenu={this.onItemContextMenu}>
+        <li className="grid-item" onContextMenu={this.onGridItemContextmenu} onMouseDown={this.onGridItemMouseDown}>
           <div 
-            className="grid-file-img-link cursor-pointer"
+            className={`grid-file-img-link cursor-pointer ${this.state.isGridSelect ? "grid-selected-active" : ""}`}
             onClick={this.onItemClick}
           >
             {dirent.encoded_thumbnail_src ?
@@ -68,8 +104,8 @@ class DirentGridItem extends React.Component {
             }
             {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={dirent.lock_owner_name}/>}
           </div>
-          <div className="grid-file-name">
-            <a className="grid-file-name-link" href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+          <div className={`grid-file-name ${this.state.isGridSelect ? "grid-link-selected-active" : ""}`}>
+            <a className="grid-file-name-link" href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
           </div>
         </li>
       </Fragment>
