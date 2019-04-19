@@ -40,11 +40,11 @@ class FileToolbar extends React.Component {
     this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
   }
 
-  toggle = () => {	
-    this.setState({	
-      dropdownOpen: !this.state.dropdownOpen	
-    });	
-  }	
+  toggle = () => {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
+  }
 
   render() {
     const { isLocked, lockedByMe } = this.props; 
@@ -141,53 +141,53 @@ class FileToolbar extends React.Component {
           )}
         </ButtonGroup>
 
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">	
-          <DropdownToggle className="sf2-icon-more">	
-          </DropdownToggle>	
-          <DropdownMenu right={true}>	
-            <DropdownItem>	
-              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">	
-                {gettext('Open parent folder')}	
-              </a>	
-            </DropdownItem>	
-            {showLockUnlockBtn && (	
-              <DropdownItem onClick={this.props.toggleLockFile}>	
-                {lockUnlockText}	
-              </DropdownItem>	
-            )}	
-            {showShareBtn && (	
-              <DropdownItem onClick={this.toggleShareDialog}>	
-                {gettext('Share')}	
-              </DropdownItem>	
-            )}	
-            {filePerm == 'rw' && (	
-              <DropdownItem>	
-                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="text-inherit">	
-                  {gettext('History')}	
-                </a>	
-              </DropdownItem>	
-            )}	
-            {(canEditFile && !err) && (	
-              <DropdownItem>	
-                <a href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(fileEnc)}`} className="text-inherit">	
-                  {gettext('Edit')}	
-                </a>	
-              </DropdownItem>	
-            )}	
-            {canDownloadFile && (	
-              <DropdownItem>	
-                <a href="?dl=1" className="text-inherit">	
-                  {gettext('Download')}	
-                </a>	
-              </DropdownItem>	
-            )}	
-            {enableComment && (	
-              <DropdownItem onClick={this.props.toggleCommentPanel}>	
-                {gettext('Comment')}	
-              </DropdownItem>	
-            )}	
-          </DropdownMenu>	
-        </Dropdown>	
+        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
+          <DropdownToggle className="sf2-icon-more">
+          </DropdownToggle>
+          <DropdownMenu right={true}>
+            <DropdownItem>
+              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
+                {gettext('Open parent folder')}
+              </a>
+            </DropdownItem>
+            {showLockUnlockBtn && (
+              <DropdownItem onClick={this.props.toggleLockFile}>
+                {lockUnlockText}
+              </DropdownItem>
+            )}
+            {showShareBtn && (
+              <DropdownItem onClick={this.toggleShareDialog}>
+                {gettext('Share')}
+              </DropdownItem>
+            )}
+            {filePerm == 'rw' && (
+              <DropdownItem>
+                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="text-inherit">
+                  {gettext('History')}
+                </a>
+              </DropdownItem>
+            )}
+            {(canEditFile && !err) && (
+              <DropdownItem>
+                <a href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(fileEnc)}`} className="text-inherit">
+                  {gettext('Edit')}
+                </a>
+              </DropdownItem>
+            )}
+            {canDownloadFile && (
+              <DropdownItem>
+                <a href="?dl=1" className="text-inherit">
+                  {gettext('Download')}
+                </a>
+              </DropdownItem>
+            )}
+            {enableComment && (
+              <DropdownItem onClick={this.props.toggleCommentPanel}>
+                {gettext('Comment')}
+              </DropdownItem>
+            )}
+          </DropdownMenu>
+        </Dropdown>
 
         {this.state.isShareDialogOpen &&
         <ModalPortal>
