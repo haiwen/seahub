@@ -10,9 +10,6 @@ import ShareDialog from '../dialog/share-dialog';
 const propTypes = { 
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
-  onSaveChangedContent: PropTypes.func.isRequired,
-  isSaving: PropTypes.bool.isRequired,
-  isContentChangedButNotSaved: PropTypes.bool.isRequired,
   toggleLockFile: PropTypes.func.isRequired,
   toggleCommentPanel: PropTypes.func.isRequired
 };
@@ -48,6 +45,7 @@ class FileToolbar extends React.Component {
 
   render() {
     const { isLocked, lockedByMe } = this.props; 
+
     let showLockUnlockBtn = false;
     let lockUnlockText, lockUnlockIcon;
     if (canLockUnlockFile) {
@@ -103,25 +101,15 @@ class FileToolbar extends React.Component {
               href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`}
             />
           )}
-          {(canEditFile && !err) && 
-            ( this.props.isSaving ? 
-              <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
-                <i className={'fa fa-spin fa-spinner'}/></button> :
-              (
-                this.props.isContentChangedButNotSaved ?
-                  <IconButton
-                    text={gettext('Save')}
-                    id={'saveButton'}
-                    icon={'fa fa-save'}
-                    // button imported in this file does not have functionalities of
-                    // isActive as button imported in markdowneditor has
-                    //isActive={!isContentChanged}
-                    onClick={this.props.onSaveChangedContent}
-                  /> :
-                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'} disabled>
-                    <i className={'fa fa-save'}/></button>
-              )
-            )}
+          {(canEditFile && !err) && (
+            <IconButton
+              id="edit"
+              icon="fa fa-edit"
+              text={gettext('Edit')}
+              tag="a"
+              href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(fileEnc)}`}
+            />
+          )}
           {canDownloadFile && (
             <IconButton
               id="download-file"
