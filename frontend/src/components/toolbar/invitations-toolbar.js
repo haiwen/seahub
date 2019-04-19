@@ -8,6 +8,7 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
+  toggleInvitationsModal: PropTypes.func.isRequired,
 };
 
 class InvitationsToolbar extends React.Component {
@@ -17,17 +18,17 @@ class InvitationsToolbar extends React.Component {
   }
 
   render() {
-    let { onShowSidePanel, onSearchedClick } = this.props;
+    let { onShowSidePanel, onSearchedClick, toggleInvitationsModal } = this.props;
     return (
       <div className="main-panel-north border-left-show">
         <div className="cur-view-toolbar">
           <span title="Side Nav Menu" onClick={onShowSidePanel}
-            className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
+                className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
           </span>
 
           <MediaQuery query="(min-width: 768px)">
             <div className="operation">
-              <Button color="btn btn-secondary operation-item" >
+              <Button color="btn btn-secondary operation-item" onClick={toggleInvitationsModal}>
                 <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite People')}
               </Button>
             </div>
@@ -42,5 +43,6 @@ class InvitationsToolbar extends React.Component {
   }
 }
 
+InvitationsToolbar.propTypes = propTypes;
 
 export default InvitationsToolbar;
