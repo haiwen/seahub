@@ -89,7 +89,7 @@ class DirentGridItem extends React.Component {
   }
 
   onGridItemDragDrop = (e) => {
-    this.setState({isDropTipshow: false});
+    this.setState({isGridDropTipshow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
