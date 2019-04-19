@@ -424,6 +424,8 @@ class DirentGridView extends React.Component{
       menuList.push(DETAILS);
       return menuList;
     }
+
+    return [];
   }
 
   render() {
