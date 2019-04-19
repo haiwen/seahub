@@ -831,14 +831,6 @@ def file_revisions(request, repo_id):
         can_revert_file = False
 
     # Whether use new file history API which read file history from db.
-    if request.GET.get('_new', None) is not None:
-        if request.GET.get('_new') == '0':
-            use_new_style = False
-        else:
-            use_new_style = True
-    else:
-        use_new_style = True if filetype == 'markdown' else False
-
     suffix_list = seafevents_api.get_file_history_suffix()
     if suffix_list and isinstance(suffix_list, list):
         suffix_list = [x.lower() for x in suffix_list]
@@ -846,6 +838,21 @@ def file_revisions(request, repo_id):
         logger.error('Wrong type of suffix_list: %s' % repr(suffix_list))
         suffix_list = []
     use_new_api = True if file_ext in suffix_list else False
+
+    if request.GET.get('_new', None) is not None:
+        if request.GET.get('_new') == '0':
+            return render(request, 'file_revisions.html', {
+                'repo': repo,
+                'path': path,
+                'u_filename': u_filename,
+                'zipped': zipped,
+                'is_owner': is_owner,
+                'can_compare': can_compare,
+                'can_revert_file': can_revert_file,
+                'can_download_file': parse_repo_perm(repo_perm).can_download,
+            })
+
+    use_new_style = True if filetype == 'markdown' else False
 
     if use_new_style:
         return render(request, 'file_revisions_new.html', {

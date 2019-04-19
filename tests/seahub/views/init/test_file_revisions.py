@@ -10,4 +10,4 @@ class RepoBasicInfoTest(BaseTestCase):
         resp = self.client.get(reverse('file_revisions', args=[self.repo.id]) + '?p=' + self.file + '&_new=0')
 
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'file_revisions_old.html')
+        self.assertTemplateUsed(resp, 'file_revisions.html')
