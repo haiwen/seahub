@@ -1,0 +1,70 @@
+@media (min-width: 768px){
+  .old-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e8e8e8;
+    background-color: #f4f4f7;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .old-history-main {
+    padding-top: 16px;
+    margin-left: 8.333333%;
+    display: inline !important;
+    overflow: auto;
+    position: relative;
+    min-height: 1px;
+    padding-right: .9375rem;
+    padding-left: .9375rem;
+  }
+
+  .old-history-main .go-back {
+    font-size: 25px;
+    color: #ccc;
+    float: left;
+  }
+
+  .old-history-main .go-back:hover {
+    color:#ff9933;
+    text-decoration: none;
+  }
+
+  .old-history-main p {
+    color: #808080;
+    font-size: 12px;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .old-history-main h2 {
+    font-size: 1.5em;
+    color: #222;
+    font-weight: bold;
+    line-height: 1.5;
+  }
+
+  .old-history-main .file-name {
+    color: #ee8204;
+    word-wrap: break-word;
+  } 
+
+  .old-history-main .commit-list {
+    width: 100%;
+    margin: 8px 0 40px;
+  }
+
+  .old-history-main .commit-list .avatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+  }
+
+  .old-history-main .commit-list .username {
+    vertical-align: middle;
+    color: #eb8205;
+    text-decoration: none;
+    font-weight: bold;
+  }
+}
