@@ -10,9 +10,9 @@ import ShareDialog from '../dialog/share-dialog';
 const propTypes = { 
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
-  onSaveChangedContent: PropTypes.func.isRequired,
-  isSaving: PropTypes.bool.isRequired,
-  isContentChangedButNotSaved: PropTypes.bool.isRequired,
+  onSaveChangedContent: PropTypes.func,
+  isSaving: PropTypes.bool,
+  isContentChangedButNotSaved: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
   toggleCommentPanel: PropTypes.func.isRequired
 };

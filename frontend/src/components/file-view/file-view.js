@@ -10,10 +10,10 @@ import CommentPanel from './comment-panel';
 import '../../css/file-view.css';
 
 const propTypes = {
-  onSaveChangedContent: PropTypes.func.isRequired,
+  onSaveChangedContent: PropTypes.func,
   content: PropTypes.object.isRequired,
-  isSaving: PropTypes.bool.isRequired,
-  isContentChangedButNotSaved: PropTypes.bool.isRequired,
+  isSaving: PropTypes.bool,
+  isContentChangedButNotSaved: PropTypes.bool,
 };
 
 const { isStarred, isLocked, lockedByMe,
