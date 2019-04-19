@@ -58,21 +58,6 @@ class DirentGridView extends React.Component{
       dirent: '',
     }
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
-
-  }
-
-  onCreateFileToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: ''
-    });
-  }
-
-  onCreateNewFile = (suffix) => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: suffix
-    });
   }
 
   onMoveToggle = () => {
