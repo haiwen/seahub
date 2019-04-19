@@ -68,7 +68,7 @@
 
 .grid-file-locked-icon {
   position: absolute;
-  bottom: 5px;
+  bottom: 0;
   right: 10px;
   width: 16px;
 }
