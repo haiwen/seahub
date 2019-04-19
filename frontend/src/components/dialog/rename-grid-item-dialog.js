@@ -12,6 +12,7 @@ const propTypes = {
 };
 
 class Rename extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {

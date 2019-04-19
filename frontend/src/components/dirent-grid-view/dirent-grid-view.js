@@ -187,7 +187,6 @@ class DirentGridView extends React.Component{
     this.setState({
       isRenameDialogShow: !this.state.isRenameDialogShow,
     });
-    
   }
 
   onItemMoveToggle = () => {
