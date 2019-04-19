@@ -8,7 +8,6 @@ import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import { seafileAPI } from './utils/seafile-api';
 
-
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
@@ -35,8 +34,7 @@ const options = {
   theme: 'default',
   textWrapping: true,
   lineWrapping: true,
-  readOnly: false,          // set false to let user edit direclty
-  //cursorBlinkRate: -1 to hide the cursor. The default blink rate is 530ms.
+  readOnly: false,          // set false to let user edit directly
 };
 
 class ViewFileText extends React.Component {
@@ -79,7 +77,7 @@ class ViewFileText extends React.Component {
             isSaving: false,
             isContentChangedButNotSaved: false
           });
-        })
+        });
       })
     );
   }
