@@ -10,7 +10,7 @@ const propTypes = {
   onItemClick: PropTypes.func.isRequired,
   showImagePopup: PropTypes.func.isRequired,
   onGridItemContextmenu: PropTypes.func.isRequired,
-  onDirentClick: PropTypes.func.isRequired,
+  onGridItemClick: PropTypes.func.isRequired,
   activeDirent: PropTypes.object,
   onGridItemMouseDown: PropTypes.func,
 };
@@ -21,7 +21,7 @@ class DirentGridItem extends React.Component {
     super(props);
     this.state = {
       isGridSelected: false,
-      isGridDropTipshow: false,
+      isGridDropTipShow: false,
     }
   }
 
@@ -51,7 +51,7 @@ class DirentGridItem extends React.Component {
       }
     } else {
       this.setState({isGridSelected: true})
-      this.props.onDirentClick(this.props.dirent)
+      this.props.onGridItemClick(this.props.dirent)
     }
   }
 
@@ -75,7 +75,7 @@ class DirentGridItem extends React.Component {
 
   onGridItemDragEnter = (e) => {
     if (this.props.dirent.type === 'dir') {
-      this.setState({isGridDropTipshow: true});
+      this.setState({isGridDropTipShow: true});
     }
   }
 
@@ -85,11 +85,11 @@ class DirentGridItem extends React.Component {
   }
 
   onGridItemDragLeave = (e) => {
-    this.setState({isGridDropTipshow: false});
+    this.setState({isGridDropTipShow: false});
   }
 
   onGridItemDragDrop = (e) => {
-    this.setState({isGridDropTipshow: false});
+    this.setState({isGridDropTipShow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
@@ -142,7 +142,7 @@ class DirentGridItem extends React.Component {
     
     let gridClass = 'grid-file-img-link cursor-pointer'
     gridClass += this.state.isGridSelected ? " grid-selected-active" : " ";
-    gridClass += this.state.isGridDropTipshow ? " grid-drop-show" : " ";
+    gridClass += this.state.isGridDropTipShow ? " grid-drop-show" : " ";
 
     return(
       <Fragment>
