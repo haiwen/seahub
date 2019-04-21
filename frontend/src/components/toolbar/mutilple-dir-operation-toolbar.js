@@ -13,7 +13,7 @@ import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ModalPortal from '../modal-portal';
-import DropDownMenu from '../dropdown-menu/dropdown-menu';
+import ItemDropDownMenu from '../dropdown-menu/dropdown-menu';
 
 import '../../css/dirents-menu.css';
 
@@ -282,7 +282,7 @@ class MutipleDirOperationToolbar extends React.Component {
             <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
             <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
             {this.props.selectedDirentList.length === 1 &&
-              <DropDownMenu 
+              <ItemDropDownMenu 
                 tagName={'button'}
                 opItem={this.props.selectedDirentList[0]}
                 menuType={'pc'}

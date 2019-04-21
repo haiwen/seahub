@@ -16,7 +16,7 @@ const propTypes = {
   onUnfrezeedItem: PropTypes.func,
 };
 
-class DropDownMenu extends React.Component {
+class ItemDropDownMenu extends React.Component {
 
   static defaultProps = {
     isHandleContextMenuEvent: true,
@@ -160,6 +160,6 @@ class DropDownMenu extends React.Component {
   }
 }
 
-DropDownMenu.propTypes = propTypes;
+ItemDropDownMenu.propTypes = propTypes;
 
-export default DropDownMenu;
+export default ItemDropDownMenu;
