@@ -16,7 +16,7 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeDragStart: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
-  onUnFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func,
   registerHandlers: PropTypes.func,
   unregisterHandlers: PropTypes.func,
@@ -113,9 +113,9 @@ class TreeNodeView extends React.Component {
     this.props.onNodeDrop(e, this.props.node);
   }
 
-  onUnFreezedItem = () => {
+  onUnfreezedItem = () => {
     this.setState({isShowOperationMenu: false});
-    this.props.onUnFreezedItem();
+    this.props.onUnfreezedItem();
   }
 
   onMenuItemClick = (operation, node) => {
@@ -201,7 +201,7 @@ class TreeNodeView extends React.Component {
               onNodeExpanded={this.props.onNodeExpanded}
               onFreezedItem={this.props.onFreezedItem}
               onMenuItemClick={this.onMenuItemClick}
-              onUnFreezedItem={this.onUnFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
               onNodeChanged={this.props.onNodeChanged}
               registerHandlers={this.props.registerHandlers}
               unregisterHandlers={this.props.unregisterHandlers}
@@ -259,8 +259,8 @@ class TreeNodeView extends React.Component {
                   menuType={'pc'}
                   getOpItemMenuList={this.caculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}
-                  onFreezedItem={this.onFreezedItem}
-                  onUnFreezedItem={this.onUnFreezedItem}
+                  onFreezedItem={this.props.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
                 />
               )}
             </div>

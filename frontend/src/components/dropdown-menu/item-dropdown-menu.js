@@ -95,7 +95,8 @@ class ItemDropDownMenu extends React.Component {
 
   onMenuItemClick = (event) => {
     let operation = event.target.dataset.toggle;
-    this.props.onMenuItemClick(operation, event);
+    let opItem = this.props.opItem;
+    this.props.onMenuItemClick(operation, opItem, event);
   }
 
   render() {
@@ -134,7 +135,7 @@ class ItemDropDownMenu extends React.Component {
     }
 
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
         <DropdownToggle
           tag={tagName || 'i'}
           className={menuClass}

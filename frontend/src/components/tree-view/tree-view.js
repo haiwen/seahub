@@ -116,7 +116,7 @@ class TreeView extends React.Component {
     this.setState({isItemFreezed: true});
   }
 
-  onUnFreezedItem = () => {
+  onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
   }
 
@@ -198,7 +198,7 @@ class TreeView extends React.Component {
   }
 
   onHideMenu = () => {
-    this.onUnFreezedItem();
+    this.onUnfreezedItem();
   }
 
   render() {
@@ -224,7 +224,7 @@ class TreeView extends React.Component {
           onNodeCollapse={this.props.onNodeCollapse}
           onNodeDragStart={this.onNodeDragStart}
           onFreezedItem={this.onFreezedItem}
-          onUnFreezedItem={this.onUnFreezedItem}
+          onUnfreezedItem={this.onUnfreezedItem}
           onNodeDragMove={this.onNodeDragMove}
           onNodeDrop={this.onNodeDrop}
           onNodeDragEnter={this.onNodeDragEnter}
