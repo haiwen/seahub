@@ -4,10 +4,12 @@ import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem, Tooltip} from 're
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import TextTranslation from '../../utils/text-translation';
 import ModalPotal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
+import TextDropDownMenu from '../dropdown-menu/text-dropdown-menu';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -31,7 +33,6 @@ class ViewFileToolbar extends React.Component {
     super(props);
     this.state = {
       isDraftMessageShow: false,
-      isMoreMenuShow: false,
       isShareDialogShow: false,
       isEditTagDialogShow: false,
       isRelatedFileDialogShow: false,
@@ -58,8 +59,20 @@ class ViewFileToolbar extends React.Component {
     this.setState({isDraftMessageShow: !this.state.isDraftMessageShow});
   }
 
-  toggleMore = () => {
-    this.setState({isMoreMenuShow: !this.state.isMoreMenuShow});
+  onMenuItemClick = (operation) => {
+    switch (operation) {
+      case 'Share':
+        this.onShareToggle();
+        break;
+      case 'Tags':
+        this.onEditFileTagToggle();
+        break;
+      case 'Related Files':
+        this.onListRelatedFileToggle();
+        break;
+      default:
+        break;
+    }
   }
 
   onShareToggle = () => {
@@ -104,16 +117,13 @@ class ViewFileToolbar extends React.Component {
             </Fragment>
           )}
           {filePermission === 'rw' && (
-            <Dropdown isOpen={this.state.isMoreMenuShow} toggle={this.toggleMore}>
-              <DropdownToggle className='btn btn-secondary operation-item'>
-                {gettext('More')}
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
-                <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Tags')}</DropdownItem>
-                <DropdownItem onClick={this.onListRelatedFileToggle}>{gettext('Related Files')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <TextDropDownMenu 
+              menuClass={'btn btn-secondary operation-item'}
+              menuType={'pc'}
+              menuChildren={gettext('More')}
+              menuList={[TextTranslation.SHARE, TextTranslation.TAGS, TextTranslation.RELATED_FILES]}
+              onMenuItemClick={this.onMenuItemClick}
+            />
           )}
         </div>
         {this.state.isShareDialogShow && (

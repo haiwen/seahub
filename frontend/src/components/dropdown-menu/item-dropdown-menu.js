@@ -30,7 +30,6 @@ class ItemDropDownMenu extends React.Component {
       menuList: [],
       isItemMenuShow: false,
     };
-
   }
 
   componentDidMount() {
@@ -96,7 +95,7 @@ class ItemDropDownMenu extends React.Component {
 
   onMenuItemClick = (event) => {
     let operation = event.target.dataset.toggle;
-    this.props.onMenuItemClick(operation);
+    this.props.onMenuItemClick(operation, event);
   }
 
   render() {
