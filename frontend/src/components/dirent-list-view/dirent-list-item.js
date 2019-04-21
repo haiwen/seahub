@@ -173,7 +173,7 @@ class DirentListItem extends React.Component {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
 
-  onMenuItemClick = (operation, opDirent, event) => {
+  onMenuItemClick = (operation, event) => {
     switch(operation) {
       case 'Download': 
         this.onItemDownload(event);

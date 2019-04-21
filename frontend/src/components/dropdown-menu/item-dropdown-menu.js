@@ -96,7 +96,7 @@ class ItemDropDownMenu extends React.Component {
   onMenuItemClick = (event) => {
     let operation = event.target.dataset.toggle;
     let opItem = this.props.opItem;
-    this.props.onMenuItemClick(operation, opItem, event);
+    this.props.onMenuItemClick(operation, event, opItem);
   }
 
   render() {

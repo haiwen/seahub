@@ -118,7 +118,7 @@ class TreeNodeView extends React.Component {
     this.props.onUnfreezedItem();
   }
 
-  onMenuItemClick = (operation, node) => {
+  onMenuItemClick = (operation, event, node) => {
     this.props.onMenuItemClick(operation, node);
   }
 
@@ -200,7 +200,7 @@ class TreeNodeView extends React.Component {
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
               onFreezedItem={this.props.onFreezedItem}
-              onMenuItemClick={this.onMenuItemClick}
+              onMenuItemClick={this.props.onMenuItemClick}
               onUnfreezedItem={this.onUnfreezedItem}
               onNodeChanged={this.props.onNodeChanged}
               registerHandlers={this.props.registerHandlers}
