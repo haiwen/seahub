@@ -13,7 +13,7 @@ import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ModalPortal from '../modal-portal';
-import ItemDropDownMenu from '../dropdown-menu/dropdown-menu';
+import ItemDropDownMenu from '../dropdown-menu/item-dropdown-menu';
 
 import '../../css/dirents-menu.css';
 

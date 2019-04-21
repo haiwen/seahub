@@ -6,7 +6,7 @@ import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import ItemDropDownMenu from '../dropdown-menu/dropdown-menu';
+import ItemDropDownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
