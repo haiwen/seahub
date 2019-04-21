@@ -29,7 +29,6 @@ const propTypes = {
   showShareBtn: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
-  onDirentClick: PropTypes.func.isRequired,
 };
 
 class DirGridView extends React.Component {
