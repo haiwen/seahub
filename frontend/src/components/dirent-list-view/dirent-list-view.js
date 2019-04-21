@@ -584,6 +584,7 @@ class DirentListView extends React.Component {
                   selectedDirentList={this.props.selectedDirentList}
                   activeDirent={this.state.activeDirent}
                   onFileTagChanged={this.props.onFileTagChanged}
+                  getDirentItemMenuList={this.getDirentItemMenuList}
                 />
               );
             })}

@@ -6,7 +6,7 @@ import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import DirentMenu from './dirent-menu';
+import DropDownMenu from '../dropdown-menu/dropdown-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
@@ -44,6 +44,7 @@ const propTypes = {
   onItemContextMenu: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   activeDirent: PropTypes.object,
+  getDirentItemMenuList: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -428,13 +429,15 @@ class DirentListItem extends React.Component {
                     <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
-                    <DirentMenu
-                      dirent={this.props.dirent}
+                    <DropDownMenu
+                      opItem={this.props.dirent}
+                      menuType={'pc'}
+                      menuClass={'sf2-icon-caret-down'}
+                      isHandleContextMenuEvent={true}
+                      getOpItemMenuList={this.props.getDirentItemMenuList}
                       onMenuItemClick={this.onMenuItemClick}
-                      currentRepoInfo={this.props.currentRepoInfo}
-                      isRepoOwner={this.props.isRepoOwner}
-                      onFreezedItem={this.props.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
+                      onFreezedItem={this.props.onFreezedItem}
                     />
                   </li>
                 </ul>
@@ -457,13 +460,15 @@ class DirentListItem extends React.Component {
                     <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
-                    <DirentMenu
-                      dirent={this.props.dirent}
+                    <DropDownMenu
+                      opItem={this.props.dirent}
+                      menuType={'pc'}
+                      menuClass={'sf2-icon-caret-down'}
+                      isHandleContextMenuEvent={true}
+                      getOpItemMenuList={this.props.getDirentItemMenuList}
                       onMenuItemClick={this.onMenuItemClick}
-                      currentRepoInfo={this.props.currentRepoInfo}
-                      isRepoOwner={this.props.isRepoOwner}
-                      onFreezedItem={this.props.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
+                      onFreezedItem={this.props.onFreezedItem}
                     />
                   </li>
                 </ul>
