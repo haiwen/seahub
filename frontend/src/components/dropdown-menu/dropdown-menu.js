@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import listener from '../context-menu/globalEventListener';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, ButtonDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
   tagName: PropTypes.string,
   opItem: PropTypes.object.isRequired,
-  menuType: PropTypes.oneOf(['pc', 'mobile']).isRequired,
-  menuClass: PropTypes.string.isRequired,
+  menuType: PropTypes.oneOf(['pc', 'mobile']),
+  menuClass: PropTypes.string,
   isHandleContextMenuEvent: PropTypes.bool,
   getOpItemMenuList: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
@@ -19,8 +19,9 @@ const propTypes = {
 class DropDownMenu extends React.Component {
 
   static defaultProps = {
-    isHandleContextMenuEvent: false,
+    isHandleContextMenuEvent: true,
     menuType: 'pc',
+    menuClass: 'sf2-icon-caret-down'
   };
 
   constructor(props) {
@@ -43,6 +44,15 @@ class DropDownMenu extends React.Component {
     let isAllOperations = menuType === 'pc' ? false : true;
     let menuList = this.props.getOpItemMenuList(opItem, isAllOperations);
     this.setState({menuList: menuList});
+  }
+
+  componentWillReceiveProps(nextProps) {  // for toolbar opItem operation
+    let { opItem, menuType } = nextProps;
+    if (opItem.name !== this.props.opItem.name) {
+      let isAllOperations = menuType === 'pc' ? false : true;
+      let menuList = this.props.getOpItemMenuList(opItem, isAllOperations);
+      this.setState({menuList: menuList});
+    }
   }
 
   componentWillUnmount() {
@@ -98,6 +108,32 @@ class DropDownMenu extends React.Component {
       return '';
     }
 
+    if (tagName && tagName === 'button') {
+      return (
+        <ButtonDropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} title={gettext('More Operations')}>
+          <DropdownToggle 
+            className={menuClass}
+            data-toggle="dropdown" 
+            title={gettext('More Operations')}
+            aria-expanded={this.state.isItemMenuShow} 
+            // onClick={this.onDropdownToggleClick} 
+          >
+          </DropdownToggle>
+          <DropdownMenu>
+            {menuList.map((menuItem, index) => {
+              if (menuItem === 'Divider') {
+                return <DropdownItem key={index} divider />;
+              } else {
+                return (
+                  <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick}>{menuItem.value}</DropdownItem>
+                );
+              }
+            })}
+          </DropdownMenu>
+        </ButtonDropdown>
+      );
+    }
+
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle
@@ -111,7 +147,7 @@ class DropDownMenu extends React.Component {
         <DropdownMenu>
           {menuList.map((menuItem, index) => {
             if (menuItem === 'Divider') {
-              return <DropdownItem key={index} divider/>;
+              return <DropdownItem key={index} divider />;
             } else {
               return (
                 <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick}>{menuItem.value}</DropdownItem>
