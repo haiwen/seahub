@@ -64,6 +64,7 @@ class DirListView extends React.Component {
             draftCounts={this.props.draftCounts}
             usedRepoTags={this.props.usedRepoTags}
             updateUsedRepoTags={this.props.updateUsedRepoTags}
+            onFileTagChanged={this.props.onFileTagChanged}
           />
         )}
         <DirentListView
