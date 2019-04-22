@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
@@ -9,6 +10,10 @@ import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
 import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
 import WikiListView from '../../components/wiki-list-view/wiki-list-view';
 
+const propTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
+};
 
 class Wikis extends Component {
   constructor(props) {
@@ -124,7 +129,7 @@ class Wikis extends Component {
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
               <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>
-                <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Publish a Library')}
+                {gettext('Publish a Library')}
               </Button>
             </div>
           </div>
@@ -174,5 +179,7 @@ class Wikis extends Component {
     );
   }
 }
+
+Wikis.propTypes = propTypes;
 
 export default Wikis;
