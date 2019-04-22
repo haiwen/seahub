@@ -28,6 +28,7 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
 };
 
 class DirGridView extends React.Component {
@@ -74,6 +75,7 @@ class DirGridView extends React.Component {
           onGridItemClick={this.props.onGridItemClick}
           isDirentDetailShow={this.props.isDirentDetailShow}
           onItemRename={this.props.onItemRename}
+          onAddFolder={this.props.onAddFolder}
         />
       </Fragment>
     );

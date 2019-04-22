@@ -116,6 +116,7 @@ class LibContentContainer extends React.Component {
 
   onGridItemClick = (dirent) => {
     this.setState({currentDirent: dirent});
+    this.props.onDirentClick(dirent);
   }
 
   // on '<tr>'

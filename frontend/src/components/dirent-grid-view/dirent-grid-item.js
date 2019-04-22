@@ -9,20 +9,109 @@ const propTypes = {
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   showImagePopup: PropTypes.func.isRequired,
-  handleContextClick: PropTypes.func.isRequired,
+  onGridItemContextMenu: PropTypes.func.isRequired,
+  onGridItemClick: PropTypes.func.isRequired,
+  activeDirent: PropTypes.object,
+  onGridItemMouseDown: PropTypes.func,
 };
 
 class DirentGridItem extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGridSelected: false,
+      isGridDropTipShow: false,
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({isGridSelected: false}, () => {
+      if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
+        this.setState({isGridSelected: true});
+      }
+    })
+  }
+
+  onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
+    this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
+  }
+
   onItemClick = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     
+    const dirent = this.props.dirent;
+    if (this.props.dirent === this.props.activeDirent) {
+      this.setState({isGridSelected: false});
+      if (Utils.imageCheck(dirent.name)) {
+        this.props.showImagePopup(dirent);
+      } else {
+        this.props.onItemClick(dirent);
+      }
+    } else {
+      this.setState({isGridSelected: false});
+      this.props.onGridItemClick(this.props.dirent)
+    }
+  }
+
+  onItemLinkClick = (e) => {
+    e.preventDefault();
     const dirent = this.props.dirent;
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
     } else {
       this.props.onItemClick(dirent);
     }
+  }
+
+  onGridItemDragStart = (e) => {
+    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path};
+    dragStartItemData = JSON.stringify(dragStartItemData);
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
+  }
+
+  onGridItemDragEnter = (e) => {
+    if (this.props.dirent.type === 'dir') {
+      this.setState({isGridDropTipShow: true});
+    }
+  }
+
+  onGridItemDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  onGridItemDragLeave = (e) => {
+    this.setState({isGridDropTipShow: false});
+  }
+
+  onGridItemDragDrop = (e) => {
+    this.setState({isGridDropTipShow: false});
+    if (e.dataTransfer.files.length) { // uploaded files
+      return;
+    }
+    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
+    dragStartItemData = JSON.parse(dragStartItemData);
+    let {nodeDirent, nodeParentPath} = dragStartItemData;
+    let dropItemData = this.props.dirent;
+
+    if (nodeDirent.name === dropItemData.name) {
+      return;
+    }
+
+    if (dropItemData.type !== 'dir') {
+      return;
+    } 
+
+    let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+  }
+
+  onGridItemMouseDown = (event) =>{
+    this.props.onGridItemMouseDown(event);
   }
 
   getFileUrl = (url) => {
@@ -34,12 +123,9 @@ class DirentGridItem extends React.Component {
     return fileUrl;
   }
 
-  onItemContextMenu = (event) => {
-    this.handleContextClick(event);
-  }
-
-  handleContextClick = (event) => {
-    this.props.handleContextClick(event, this.props.dirent);
+  onGridItemContextMenu = (event) => {
+    let dirent = this.props.dirent;
+    this.props.onGridItemContextMenu(event, dirent);
   }
    
   render() {
@@ -54,13 +140,22 @@ class DirentGridItem extends React.Component {
     }
     let fileHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(direntPath);
     
+    let gridClass = 'grid-file-img-link cursor-pointer'
+    gridClass += this.state.isGridSelected ? " grid-selected-active" : " ";
+    gridClass += this.state.isGridDropTipShow ? " grid-drop-show" : " ";
 
     return(
       <Fragment>
-        <li className="grid-item" onContextMenu={this.onItemContextMenu}>
+        <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
           <div 
-            className="grid-file-img-link cursor-pointer"
+            className={gridClass}
+            draggable="true" 
             onClick={this.onItemClick}
+            onDragStart={this.onGridItemDragStart} 
+            onDragEnter={this.onGridItemDragEnter} 
+            onDragOver={this.onGridItemDragOver} 
+            onDragLeave={this.onGridItemDragLeave} 
+            onDrop={this.onGridItemDragDrop}
           >
             {dirent.encoded_thumbnail_src ?
               <img src={`${siteRoot}${fileUrl}`} ref={this.gridIcon} className="thumbnail" onClick={this.onItemClick} alt=""/> :
@@ -68,8 +163,8 @@ class DirentGridItem extends React.Component {
             }
             {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={dirent.lock_owner_name}/>}
           </div>
-          <div className="grid-file-name">
-            <a className="grid-file-name-link" href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+          <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable="true" >
+            <a className={`grid-file-name-link ${this.state.isGridSelected ? "grid-link-selected-active" : ""}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
           </div>
         </li>
       </Fragment>
