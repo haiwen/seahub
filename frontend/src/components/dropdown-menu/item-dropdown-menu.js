@@ -7,7 +7,7 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   tagName: PropTypes.string,
   item: PropTypes.object.isRequired,
-  menuClass: PropTypes.string,
+  toggleClass: PropTypes.string,
   isHandleContextMenuEvent: PropTypes.bool,
   getMenuList: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
@@ -19,7 +19,7 @@ class ItemDropdownMenu extends React.Component {
 
   static defaultProps = {
     isHandleContextMenuEvent: true,
-    menuClass: 'sf2-icon-caret-down'
+    toggleClass: 'sf2-icon-caret-down'
   };
 
   constructor(props) {
@@ -94,8 +94,8 @@ class ItemDropdownMenu extends React.Component {
 
   render() {
     let menuList = this.state.menuList;
-    let { menuClass, tagName } = this.props;
-    menuClass = 'sf-dropdown-toggle ' + menuClass;
+    let { toggleClass, tagName } = this.props;
+    toggleClass = 'sf-dropdown-toggle ' + toggleClass;
 
     if (!menuList.length) {
       return '';
@@ -105,7 +105,7 @@ class ItemDropdownMenu extends React.Component {
       return (
         <ButtonDropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} title={gettext('More Operations')}>
           <DropdownToggle 
-            className={menuClass}
+            className={toggleClass}
             data-toggle="dropdown" 
             title={gettext('More Operations')}
             aria-expanded={this.state.isItemMenuShow} 
@@ -131,7 +131,7 @@ class ItemDropdownMenu extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
         <DropdownToggle
           tag={tagName || 'i'}
-          className={menuClass}
+          className={toggleClass}
           title={gettext('More Operations')}
           data-toggle="dropdown" 
           aria-expanded={this.state.isItemMenuShow}

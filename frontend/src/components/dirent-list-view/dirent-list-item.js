@@ -431,7 +431,7 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <ItemDropdownMenu
                       item={this.props.dirent}
-                      menuClass={'sf2-icon-caret-down'}
+                      toggleClass={'sf2-icon-caret-down'}
                       isHandleContextMenuEvent={true}
                       getMenuList={this.props.getDirentItemMenuList}
                       onMenuItemClick={this.onMenuItemClick}
@@ -461,7 +461,7 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <ItemDropdownMenu
                       item={this.props.dirent}
-                      menuClass={'sf2-icon-caret-down'}
+                      toggleClass={'sf2-icon-caret-down'}
                       isHandleContextMenuEvent={true}
                       getMenuList={this.props.getDirentItemMenuList}
                       onMenuItemClick={this.onMenuItemClick}

@@ -255,7 +255,7 @@ class TreeNodeView extends React.Component {
               {((this.props.repoPermission || permission) && this.state.isShowOperationMenu) && (
                 <ItemDropdownMenu 
                   item={this.props.node}
-                  menuClass={'fas fa-ellipsis-v'}
+                  toggleClass={'fas fa-ellipsis-v'}
                   getMenuList={this.caculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}
                   freezeItem={this.props.freezeItem}
