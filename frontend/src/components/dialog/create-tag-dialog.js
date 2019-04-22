@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -18,6 +19,7 @@ class CreateTagDialog extends React.Component {
       tagName: '',
       tagColor: '',
       newTag: {},
+      errorMsg: '',
       colorList: ['#FFA8A8', '#FFA94D', '#FFD43B', '#A0EC50', '#A9E34B', '#63E6BE', '#4FD2C9', '#72C3FC', '#91A7FF', '#E599F7', '#B197FC', '#F783AC', '#CED4DA'],
     };
     this.newInput = React.createRef();
@@ -27,6 +29,9 @@ class CreateTagDialog extends React.Component {
     this.setState({
       tagName: e.target.value,
     });
+    if (this.state.errorMsg) {
+      this.setState({errorMsg: ''});
+    }
   }
 
   selectTagcolor = (e) => {
@@ -41,8 +46,17 @@ class CreateTagDialog extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.createRepoTag(repoID, name, color).then((res) => {
       let repoTagID = res.data.repo_tag.repo_tag_id;
-      this.props.onRepoTagCreated(repoTagID);
+      if (this.props.onRepoTagCreated) this.props.onRepoTagCreated(repoTagID);
       this.props.toggleCancel();
+    }).catch((error) => {
+      let errMessage;
+      if (error.response.status === 500) {
+        errMessage = gettext('Internal Server Error');
+      } else if (error.response.status === 400) {
+        errMessage = gettext('Repo tag "{name}" is already exist.');
+        errMessage = errMessage.replace('{name}', Utils.HTMLescape(name));
+      }
+      this.setState({errorMsg: errMessage});
     });
   }
 
@@ -62,6 +76,7 @@ class CreateTagDialog extends React.Component {
 
   render() {
     let colorList = this.state.colorList;
+    let canSave = this.state.tagName.trim() ? true : false;
     return (
       <Fragment>
         <ModalHeader toggle={this.props.onClose}>
@@ -73,6 +88,7 @@ class CreateTagDialog extends React.Component {
             <div className="form-group">
               <label className="form-label">{gettext('Name')}</label>
               <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} value={this.state.tagName} onChange={this.inputNewName}/>
+              <div className="mt-2"><span className="error">{this.state.errorMsg}</span></div>
             </div>
             <div className="form-group">
               <label className="form-label">{gettext('Select a color')}</label>
@@ -95,8 +111,11 @@ class CreateTagDialog extends React.Component {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.createTag}>{gettext('Save')}</Button>
           <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Cancel')}</Button>
+          {canSave ?
+            <Button color="primary" onClick={this.createTag}>{gettext('Save')}</Button> :
+            <Button color="primary" disabled>{gettext('Save')}</Button>
+          }
         </ModalFooter>
       </Fragment>
     );
