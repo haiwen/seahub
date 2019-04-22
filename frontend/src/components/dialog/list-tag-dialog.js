@@ -46,14 +46,15 @@ class TagListItem extends React.Component {
   render() {
     let color = this.props.item.color;
     let drakColor = Utils.getDarkColor(color);
+    const fileCount = this.props.item.fileCount;
+    let fileTranslation = (fileCount === 1 || fileCount === 0) ? gettext('file') : gettext('files');
     return (
       <li className="tag-list-item">
         <div className="tag-demo" style={{backgroundColor:color}} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
           <span className={`${this.state.showSelectedTag ? 'show-tag-selected': ''}`} style={{backgroundColor: drakColor}}></span>
           <span className="tag-name">{this.props.item.name}</span>
           <span className="tag-files" onClick={this.onListTaggedFiles}>
-            {/* todo 0 file 2 files  */}
-            {this.props.item.fileCount}{' '}{'files'}
+            {fileCount}{' '}{fileTranslation}
           </span>
         </div>
         <i className="tag-edit fa fa-pencil-alt" onClick={this.onTagUpdate}></i>

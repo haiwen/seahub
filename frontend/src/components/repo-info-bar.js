@@ -16,6 +16,7 @@ const propTypes = {
   readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
 };
 
 class RepoInfoBar extends React.Component {
@@ -107,6 +108,7 @@ class RepoInfoBar extends React.Component {
               onClose={this.onCloseDialog}
               toggleCancel={this.onListTaggedFiles}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
+              onFileTagChanged={this.props.onFileTagChanged}
             />
           </ModalPortal>
         )}

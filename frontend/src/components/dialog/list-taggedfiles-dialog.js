@@ -12,6 +12,7 @@ const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class ListTaggedFilesDialog extends React.Component {
@@ -23,12 +24,20 @@ class ListTaggedFilesDialog extends React.Component {
     };
   }
 
+  onFileTagChanged = (TaggedFile) => {
+    const path = TaggedFile.parent_path;
+    const dirent = {name: TaggedFile.filename};
+    let direntPath = path === '/' ? path + TaggedFile.filename : path + '/' + TaggedFile.filename;
+    this.props.onFileTagChanged(dirent, direntPath);
+  }
+
   onDeleteTaggedFile = (taggedFile) => {
     let repoID = this.props.repoID;
     let fileTagID = taggedFile.file_tag_id;
     seafileAPI.deleteFileTag(repoID, fileTagID).then(res => {
       this.getTaggedFiles();
       this.props.updateUsedRepoTags();
+      if (this.props.onFileTagChanged) this.onFileTagChanged(taggedFile);
     });
   }
 

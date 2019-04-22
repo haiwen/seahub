@@ -9,6 +9,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  updateUsedRepoTags: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired
 };
 
@@ -48,6 +49,7 @@ class UpdateTagDialog extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.updateRepoTag(repoID, tag_id, name, color).then(() => {
       this.props.toggleCancel();
+      this.props.updateUsedRepoTags();
     });
   }
 
