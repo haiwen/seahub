@@ -126,7 +126,11 @@ class Wiki extends Component {
 
     const hash = window.location.hash;
     let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(filePath) + hash;
-    window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
+    if (filePath === '/home.md') {
+      window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
+    } else {
+      window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
+    }
   }
 
   loadDirentList = (dirPath) => {
