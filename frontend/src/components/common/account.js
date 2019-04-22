@@ -159,7 +159,7 @@ class Account extends Component {
 
 Account.defaultProps = {
   isAdminPanel: false
-}
+};
 
 Account.propTypes = propTypes;
 

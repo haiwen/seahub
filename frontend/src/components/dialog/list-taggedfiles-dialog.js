@@ -127,7 +127,7 @@ class TaggedFile extends React.Component {
     return ( taggedFile.file_deleted ?
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td colSpan='3' className="name">{taggedFile.filename}{' '}
-          <span style={{color:"red"}}>{gettext('deleted')}</span>
+          <span style={{color:'red'}}>{gettext('deleted')}</span>
         </td>
         <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
       </tr>

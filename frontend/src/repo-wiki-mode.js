@@ -1025,7 +1025,7 @@ class Wiki extends Component {
     if (!repoEncrypted && (
       canGenerateShareLink || canGenerateUploadLink ||
       isRepoOwner || isAdmin) && (
-      userPerm == 'rw' || userPerm == 'r')) {
+        userPerm == 'rw' || userPerm == 'r')) {
       showShareBtn = true;
       if (!isVirtual && (isRepoOwner || isAdmin || isDepartmentAdmin)) {
         enableDirPrivateShare = true;

@@ -10,15 +10,15 @@ const propTypes = {
   onNoticeItemClick: PropTypes.func.isRequired,
 };
 
-const MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
-const MSG_TYPE_REPO_SHARE = 'repo_share'
-const MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
-const MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
-const MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
-const MSG_TYPE_FILE_COMMENT = 'file_comment'
-const MSG_TYPE_DRAFT_COMMENT = 'draft_comment'
-const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer'
-const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
+const MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group';
+const MSG_TYPE_REPO_SHARE = 'repo_share';
+const MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group';
+const MSG_TYPE_REPO_TRANSFER = 'repo_transfer';
+const MSG_TYPE_FILE_UPLOADED = 'file_uploaded';
+const MSG_TYPE_FILE_COMMENT = 'file_comment';
+const MSG_TYPE_DRAFT_COMMENT = 'draft_comment';
+const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
+const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 
 class NoticeItem extends React.Component {
 
@@ -130,7 +130,7 @@ class NoticeItem extends React.Component {
       } else {
         notice = gettext('A file named {upload_file_link} is uploaded to {uploaded_link}.');
         notice = notice.replace('{upload_file_link}', fileName);
-        notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>')
+        notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
       }
       return {avatar_url, notice};
     }
@@ -216,7 +216,7 @@ class NoticeItem extends React.Component {
           <p className="time">{moment(noticeItem.time).fromNow()}</p>
         </div>
       </li>
-    )
+    );
   }
 }
 

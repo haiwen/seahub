@@ -40,31 +40,31 @@ class RepoViewToolbar extends React.Component {
   render() {
     return (
       <Fragment>
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-            <MediaQuery query="(min-width: 768px)">
-              <div className="operation">
-                <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateToggle}>
-                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
-                </button>
-                {this.props.libraryType !== 'group' && (
-                  <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>
-                    <DropdownToggle className='btn btn-secondary operation-item'>
-                      {gettext('More')}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      <DropdownItem className="link-dropdown-container">
-                        <Link className="link-dropdown-item" to={siteRoot + 'my-libs/deleted/'}>{gettext('Deleted Libraries')}</Link>
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                )}
-              </div>
-            </MediaQuery>
-            <MediaQuery query="(max-width: 768px)">
-              <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateToggle}></span>
-            </MediaQuery>
-          </div>
+        <div className="cur-view-toolbar">
+          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+          <MediaQuery query="(min-width: 768px)">
+            <div className="operation">
+              <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateToggle}>
+                <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+              </button>
+              {this.props.libraryType !== 'group' && (
+                <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>
+                  <DropdownToggle className='btn btn-secondary operation-item'>
+                    {gettext('More')}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem className="link-dropdown-container">
+                      <Link className="link-dropdown-item" to={siteRoot + 'my-libs/deleted/'}>{gettext('Deleted Libraries')}</Link>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
+            </div>
+          </MediaQuery>
+          <MediaQuery query="(max-width: 768px)">
+            <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateToggle}></span>
+          </MediaQuery>
+        </div>
         {this.state.isCreateRepoDialogShow && (
           <ModalPortal>
             <CreateRepoDialog 

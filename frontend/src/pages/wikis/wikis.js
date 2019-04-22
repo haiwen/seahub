@@ -123,9 +123,9 @@ class Wikis extends Component {
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-                <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>
-                  <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Publish a Library')}
-                </Button>
+              <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>
+                <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Publish a Library')}
+              </Button>
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
