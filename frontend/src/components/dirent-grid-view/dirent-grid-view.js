@@ -354,13 +354,13 @@ class DirentGridView extends React.Component{
     }
   }
 
-  onGridContainContextMenu = (event) => {
+  onGridContainerContextMenu = (event) => {
       let id = "dirent-grid-container-menu"
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
       this.handleContextClick(event, id, menuList);
   }
 
-  onGridItemContextmenu = (event, dirent) => {
+  onGridItemContextMenu = (event, dirent) => {
     let id = 'grid-item-contextmenu';
     let menuList = this.getDirentItemMenuList(dirent, true);
     this.handleContextClick(event, id, menuList, dirent);
@@ -483,7 +483,7 @@ class DirentGridView extends React.Component{
   
     return (
       <Fragment>
-        <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainContextMenu} onMouseDown={this.onGridContainerMouseDown}>
+        <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}>
           {
             direntList.length !== 0 && direntList.map((dirent, index) => {
               return (
@@ -495,7 +495,7 @@ class DirentGridView extends React.Component{
                   onItemClick={this.props.onItemClick}
                   currentRepoInfo={this.props.currentRepoInfo}
                   showImagePopup={this.showImagePopup}
-                  onGridItemContextmenu={this.onGridItemContextmenu}
+                  onGridItemContextMenu={this.onGridItemContextMenu}
                   onItemMove={this.props.onItemMove}
                   onGridItemMouseDown={this.onGridItemMouseDown}
                   onGridItemClick={this.onGridItemClick}

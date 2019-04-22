@@ -9,7 +9,7 @@ const propTypes = {
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   showImagePopup: PropTypes.func.isRequired,
-  onGridItemContextmenu: PropTypes.func.isRequired,
+  onGridItemContextMenu: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func.isRequired,
   activeDirent: PropTypes.object,
   onGridItemMouseDown: PropTypes.func,
@@ -43,14 +43,14 @@ class DirentGridItem extends React.Component {
     
     const dirent = this.props.dirent;
     if (this.props.dirent === this.props.activeDirent) {
-      this.setState({isGridSelected:false})
+      this.setState({isGridSelected: false});
       if (Utils.imageCheck(dirent.name)) {
         this.props.showImagePopup(dirent);
       } else {
         this.props.onItemClick(dirent);
       }
     } else {
-      this.setState({isGridSelected: true})
+      this.setState({isGridSelected: false});
       this.props.onGridItemClick(this.props.dirent)
     }
   }
@@ -123,9 +123,9 @@ class DirentGridItem extends React.Component {
     return fileUrl;
   }
 
-  onGridItemContextmenu = (event) => {
+  onGridItemContextMenu = (event) => {
     let dirent = this.props.dirent;
-    this.props.onGridItemContextmenu(event, dirent);
+    this.props.onGridItemContextMenu(event, dirent);
   }
    
   render() {
@@ -146,7 +146,7 @@ class DirentGridItem extends React.Component {
 
     return(
       <Fragment>
-        <li className="grid-item" onContextMenu={this.onGridItemContextmenu} onMouseDown={this.onGridItemMouseDown}>
+        <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
           <div 
             className={gridClass}
             draggable="true" 
