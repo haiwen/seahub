@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
-import ItemDropDownMenu from '../dropdown-menu/item-dropdown-menu';
+import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 
 const propTypes = {
   repoPermission: PropTypes.bool,
@@ -253,8 +253,8 @@ class TreeNodeView extends React.Component {
           {isNodeMenuShow && (
             <div className="right-icon">
               {((this.props.repoPermission || permission) && this.state.isShowOperationMenu) && (
-                <ItemDropDownMenu 
-                  opItem={this.props.node}
+                <ItemDropdownMenu 
+                  item={this.props.node}
                   menuClass={'fas fa-ellipsis-v'}
                   getMenuList={this.caculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}

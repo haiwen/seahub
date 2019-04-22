@@ -6,7 +6,7 @@ import { gettext } from '../../utils/constants';
 
 const propTypes = {
   tagName: PropTypes.string,
-  opItem: PropTypes.object.isRequired,
+  item: PropTypes.object.isRequired,
   menuClass: PropTypes.string,
   isHandleContextMenuEvent: PropTypes.bool,
   getMenuList: PropTypes.func.isRequired,
@@ -15,7 +15,7 @@ const propTypes = {
   unfreezeItem: PropTypes.func,
 };
 
-class ItemDropDownMenu extends React.Component {
+class ItemDropdownMenu extends React.Component {
 
   static defaultProps = {
     isHandleContextMenuEvent: true,
@@ -34,15 +34,15 @@ class ItemDropDownMenu extends React.Component {
     if (this.props.isHandleContextMenuEvent) {
       this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
     }
-    let { opItem } = this.props;
-    let menuList = this.props.getMenuList(opItem);
+    let { item } = this.props;
+    let menuList = this.props.getMenuList(item);
     this.setState({menuList: menuList});
   }
 
-  componentWillReceiveProps(nextProps) {  // for toolbar opItem operation
-    let { opItem } = nextProps;
-    if (opItem.name !== this.props.opItem.name) {
-      let menuList = this.props.getMenuList(opItem);
+  componentWillReceiveProps(nextProps) {  // for toolbar item operation
+    let { item } = nextProps;
+    if (item.name !== this.props.item.name) {
+      let menuList = this.props.getMenuList(item);
       this.setState({menuList: menuList});
     }
   }
@@ -88,8 +88,8 @@ class ItemDropDownMenu extends React.Component {
 
   onMenuItemClick = (event) => {
     let operation = event.target.dataset.toggle;
-    let opItem = this.props.opItem;
-    this.props.onMenuItemClick(operation, event, opItem);
+    let item = this.props.item;
+    this.props.onMenuItemClick(operation, event, item);
   }
 
   render() {
@@ -153,6 +153,6 @@ class ItemDropDownMenu extends React.Component {
   }
 }
 
-ItemDropDownMenu.propTypes = propTypes;
+ItemDropdownMenu.propTypes = propTypes;
 
-export default ItemDropDownMenu;
+export default ItemDropdownMenu;

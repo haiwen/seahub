@@ -6,7 +6,7 @@ import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import ItemDropDownMenu from '../dropdown-menu/item-dropdown-menu';
+import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
@@ -429,8 +429,8 @@ class DirentListItem extends React.Component {
                     <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
-                    <ItemDropDownMenu
-                      opItem={this.props.dirent}
+                    <ItemDropdownMenu
+                      item={this.props.dirent}
                       menuClass={'sf2-icon-caret-down'}
                       isHandleContextMenuEvent={true}
                       getMenuList={this.props.getDirentItemMenuList}
@@ -459,8 +459,8 @@ class DirentListItem extends React.Component {
                     <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
-                    <ItemDropDownMenu
-                      opItem={this.props.dirent}
+                    <ItemDropdownMenu
+                      item={this.props.dirent}
                       menuClass={'sf2-icon-caret-down'}
                       isHandleContextMenuEvent={true}
                       getMenuList={this.props.getDirentItemMenuList}
