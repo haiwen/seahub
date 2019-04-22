@@ -7,7 +7,6 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   tagName: PropTypes.string,
   opItem: PropTypes.object.isRequired,
-  menuType: PropTypes.oneOf(['pc', 'mobile']),
   menuClass: PropTypes.string,
   isHandleContextMenuEvent: PropTypes.bool,
   getOpItemMenuList: PropTypes.func.isRequired,
@@ -20,7 +19,6 @@ class ItemDropDownMenu extends React.Component {
 
   static defaultProps = {
     isHandleContextMenuEvent: true,
-    menuType: 'pc',
     menuClass: 'sf2-icon-caret-down'
   };
 
@@ -36,20 +34,15 @@ class ItemDropDownMenu extends React.Component {
     if (this.props.isHandleContextMenuEvent) {
       this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
     }
-    let { opItem, menuType } = this.props;
-
-    // scene 1: menuType === 'pc', Get some menu operations
-    // scene 2: menuType === 'mobile', Get all menu operations
-    let isAllOperations = menuType === 'pc' ? false : true;
-    let menuList = this.props.getOpItemMenuList(opItem, isAllOperations);
+    let { opItem } = this.props;
+    let menuList = this.props.getOpItemMenuList(opItem);
     this.setState({menuList: menuList});
   }
 
   componentWillReceiveProps(nextProps) {  // for toolbar opItem operation
-    let { opItem, menuType } = nextProps;
+    let { opItem } = nextProps;
     if (opItem.name !== this.props.opItem.name) {
-      let isAllOperations = menuType === 'pc' ? false : true;
-      let menuList = this.props.getOpItemMenuList(opItem, isAllOperations);
+      let menuList = this.props.getOpItemMenuList(opItem);
       this.setState({menuList: menuList});
     }
   }

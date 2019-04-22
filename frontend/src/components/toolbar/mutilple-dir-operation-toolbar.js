@@ -285,7 +285,6 @@ class MutipleDirOperationToolbar extends React.Component {
               <ItemDropDownMenu 
                 tagName={'button'}
                 opItem={this.props.selectedDirentList[0]}
-                menuType={'pc'}
                 menuClass={'fas fa-ellipsis-v dirents-more-menu'}
                 onMenuItemClick={this.onMenuItemClick}
                 getOpItemMenuList={this.getDirentMenuList}

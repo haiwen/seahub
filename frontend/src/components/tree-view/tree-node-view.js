@@ -256,7 +256,6 @@ class TreeNodeView extends React.Component {
                 <ItemDropDownMenu 
                   opItem={this.props.node}
                   menuClass={'fas fa-ellipsis-v'}
-                  menuType={'pc'}
                   getOpItemMenuList={this.caculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}
                   onFreezedItem={this.props.onFreezedItem}

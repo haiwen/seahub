@@ -431,7 +431,6 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <ItemDropDownMenu
                       opItem={this.props.dirent}
-                      menuType={'pc'}
                       menuClass={'sf2-icon-caret-down'}
                       isHandleContextMenuEvent={true}
                       getOpItemMenuList={this.props.getDirentItemMenuList}
