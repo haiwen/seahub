@@ -65,6 +65,8 @@ class DirentListView extends React.Component {
       progress: 0,
       isMutipleOperation: true,
       activeDirent: null,
+      direntItemsList: [],
+      itemIdex: 100,
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -80,6 +82,22 @@ class DirentListView extends React.Component {
 
   freezeItem = () => {
     this.setState({isItemFreezed: true});
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll, true);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let direntItemsList = nextProps.direntList.filter((item, index) => {
+      return index < 100
+    })
+    this.setState({direntItemsList: direntItemsList, itemIdex: 100,})
+    
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll, true);
   }
 
   unfreezeItem = () => {
@@ -521,8 +539,30 @@ class DirentListView extends React.Component {
     return [];
   }
 
+  handleScroll = (e) => {
+    let target = e.target;
+    let itemIdex = this.state.itemIdex;
+
+    const { direntList } = this.props;
+
+   
+    if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
+      itemIdex += 100;
+      let direntItemsList = direntList.filter((item, index) => {
+        return index < itemIdex
+      })
+      this.setState({direntItemsList: direntItemsList, itemIdex: itemIdex})
+    }
+  }
+
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
+
+    let direntItemsList = direntList.filter((item, index) => {
+      return index < 100
+    })
+
+    direntItemsList = this.state.direntItemsList.length === 0 ? direntItemsList : this.state.direntItemsList
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);
@@ -534,7 +574,7 @@ class DirentListView extends React.Component {
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     return (
-      <div className="table-container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick}>
+      <div className="table-container" ref="table_container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick} onScroll={this.handleScroll}>
         <table>
           <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>
@@ -551,7 +591,7 @@ class DirentListView extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {direntList.map((dirent, index) => {
+            {direntItemsList.map((dirent, index) => {
               return (
                 <DirentListItem
                   ref={this.setDirentItemRef(index)}
