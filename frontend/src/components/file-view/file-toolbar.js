@@ -10,6 +10,9 @@ import ShareDialog from '../dialog/share-dialog';
 const propTypes = { 
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
+  onSave: PropTypes.func,
+  isSaving: PropTypes.bool,
+  needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
   toggleCommentPanel: PropTypes.func.isRequired
 };
@@ -45,7 +48,6 @@ class FileToolbar extends React.Component {
 
   render() {
     const { isLocked, lockedByMe } = this.props; 
-
     let showLockUnlockBtn = false;
     let lockUnlockText, lockUnlockIcon;
     if (canLockUnlockFile) {
@@ -101,15 +103,25 @@ class FileToolbar extends React.Component {
               href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`}
             />
           )}
-          {(canEditFile && !err) && (
-            <IconButton
-              id="edit"
-              icon="fa fa-edit"
-              text={gettext('Edit')}
-              tag="a"
-              href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(fileEnc)}`}
-            />
-          )}
+          {(canEditFile && !err) && 
+            ( this.props.isSaving ? 
+              <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                <i className={'fa fa-spin fa-spinner'}/></button> :
+              (
+                this.props.needSave ?
+                  <IconButton
+                    text={gettext('Save')}
+                    id={'saveButton'}
+                    icon={'fa fa-save'}
+                    // button imported in this file does not have functionalities of
+                    // isActive as button imported in markdowneditor has
+                    //isActive={!isContentChanged}
+                    onClick={this.props.onSave}
+                  /> :
+                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'} disabled>
+                    <i className={'fa fa-save'}/></button>
+              )
+            )}
           {canDownloadFile && (
             <IconButton
               id="download-file"
@@ -130,7 +142,29 @@ class FileToolbar extends React.Component {
         </ButtonGroup>
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
-          <DropdownToggle className="sf2-icon-more">
+          <ButtonGroup >
+            {(canEditFile && !err) &&
+                ( this.props.isSaving ?
+                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                    <i className={'fa fa-spin fa-spinner'}/></button> :
+                  (
+                    this.props.needSave ?
+                      <IconButton
+                        text={gettext('Save')}
+                        id={'saveButton'}
+                        icon={'fa fa-save'}
+                        // button imported in this file does not have functionalities of
+                        // isActive as button imported in markdowneditor has
+                        //isActive={!isContentChanged}
+                        onClick={this.props.onSave}
+                      /> :
+                      <button type={'button'} className={'btn btn-icon btn-secondary btn-active'} disabled>
+                        <i className={'fa fa-save'}/></button>
+                  )
+                )}
+          </ButtonGroup>
+
+          <DropdownToggle className="sf2-icon-more mx-1">
           </DropdownToggle>
           <DropdownMenu right={true}>
             <DropdownItem>
@@ -152,13 +186,6 @@ class FileToolbar extends React.Component {
               <DropdownItem>
                 <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="text-inherit">
                   {gettext('History')}
-                </a>
-              </DropdownItem>
-            )}
-            {(canEditFile && !err) && (
-              <DropdownItem>
-                <a href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(fileEnc)}`} className="text-inherit">
-                  {gettext('Edit')}
                 </a>
               </DropdownItem>
             )}
