@@ -73,6 +73,7 @@ class LibContentView extends React.Component {
       updateDetail: false,
     };
 
+    this.oldonpopstate = window.onpopstate;
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
@@ -146,6 +147,7 @@ class LibContentView extends React.Component {
   }
 
   componentWillUnmount() {
+    window.onpopstate = this.oldonpopstate;
     collabServer.unwatchRepo(this.props.repoID, this.onRepoUpdateEvent);
   }
 

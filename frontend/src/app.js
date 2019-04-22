@@ -54,6 +54,14 @@ class App extends Component {
       pathPrefix: [],
     };
     this.dirViewPanels = ['my-libs', 'shared-libs', 'org']; // and group
+    window.onpopstate = this.onpopstate;
+  }
+
+  onpopstate = (event) => {
+    if (event.state && event.state.currentTab && event.state.pathPrefix) {
+      let { currentTab, pathPrefix } = event.state;
+      this.setState({currentTab, pathPrefix});
+    }
   }
 
   componentDidMount() {
@@ -129,6 +137,9 @@ class App extends Component {
     this.setState({
       currentTab: tabName,
       pathPrefix: pathPrefix
+    }, () => {
+      let { currentTab, pathPrefix } = this.state;
+      window.history.replaceState({currentTab: currentTab, pathPrefix: pathPrefix}, null);
     });
   } 
 
