@@ -59,7 +59,6 @@ class DirentGridView extends React.Component{
       isCreateFileDialogShow: false,
 
       isMutipleOperation: false,
-      contextMenuDirent: '',
       isGridItemFreezed: false,
       activeDirent: null,
     }
@@ -264,7 +263,7 @@ class DirentGridView extends React.Component{
     this.setState({
       isRenameDialogShow: !this.state.isRenameDialogShow,
     });
-    this.props.onItemRename(this.state.contextMenuDirent, newName)
+    this.props.onItemRename(this.state.activeDirent, newName)
   }
 
 
@@ -351,9 +350,8 @@ class DirentGridView extends React.Component{
 
   gridContainerClick = () => {
     if (!this.props.isDirentDetailShow) {
-      this.props.onGridItemClick(null);
+      this.onGridItemClick(null);
     }
-    this.onGridItemClick(null);
   }
 
   onGridContainContextMenu = (event) => {
@@ -384,7 +382,7 @@ class DirentGridView extends React.Component{
 
     hideMenu();
     
-    this.setState({contextMenuDirent: currentObject});
+    this.setState({activeDirent: currentObject});
 
     let showMenuConfig = {
       id: id,
@@ -476,7 +474,7 @@ class DirentGridView extends React.Component{
 
   render() {
     let {direntList, path} = this.props;
-    let dirent = this.state.contextMenuDirent ? this.state.contextMenuDirent : '';
+    let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
 
     if (this.props.isDirentListLoading) {
@@ -543,7 +541,7 @@ class DirentGridView extends React.Component{
             isMutipleOperation={this.state.isMutipleOperation}
             onItemMove={this.props.onItemMove}
             onCancelMove={this.onMoveToggle}
-            dirent={this.state.contextMenuDirent}
+            dirent={this.state.activeDirent}
           />
         }
         {this.state.isZipDialogOpen &&
@@ -564,7 +562,7 @@ class DirentGridView extends React.Component{
             isMutipleOperation={this.state.isMutipleOperation}
             onItemCopy={this.props.onItemCopy}
             onCancelCopy={this.onCopyToggle}
-            dirent={this.state.contextMenuDirent}
+            dirent={this.state.activeDirent}
           />
         }
         {this.state.isShareDialogShow &&
@@ -585,7 +583,7 @@ class DirentGridView extends React.Component{
         {this.state.isRenameDialogShow && (
           <ModalPortal>
             <Rename
-              dirent={this.state.contextMenuDirent}
+              dirent={this.state.activeDirent}
               onRename={this.onItemRename}
               checkDuplicatedName={this.checkDuplicatedName}
               toggleCancel={this.onItemRenameToggle}
