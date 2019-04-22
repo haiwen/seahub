@@ -15,8 +15,8 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeDragStart: PropTypes.func.isRequired,
-  onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired,
+  freezeItem: PropTypes.func.isRequired,
+  unfreezeItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func,
   registerHandlers: PropTypes.func,
   unregisterHandlers: PropTypes.func,
@@ -113,9 +113,9 @@ class TreeNodeView extends React.Component {
     this.props.onNodeDrop(e, this.props.node);
   }
 
-  onUnfreezedItem = () => {
+  unfreezeItem = () => {
     this.setState({isShowOperationMenu: false});
-    this.props.onUnfreezedItem();
+    this.props.unfreezeItem();
   }
 
   onMenuItemClick = (operation, event, node) => {
@@ -199,9 +199,9 @@ class TreeNodeView extends React.Component {
               onNodeClick={this.props.onNodeClick}
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
-              onFreezedItem={this.props.onFreezedItem}
+              freezeItem={this.props.freezeItem}
               onMenuItemClick={this.props.onMenuItemClick}
-              onUnfreezedItem={this.onUnfreezedItem}
+              unfreezeItem={this.unfreezeItem}
               onNodeChanged={this.props.onNodeChanged}
               registerHandlers={this.props.registerHandlers}
               unregisterHandlers={this.props.unregisterHandlers}
@@ -256,10 +256,10 @@ class TreeNodeView extends React.Component {
                 <ItemDropDownMenu 
                   opItem={this.props.node}
                   menuClass={'fas fa-ellipsis-v'}
-                  getOpItemMenuList={this.caculateMenuList}
+                  getMenuList={this.caculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}
-                  onFreezedItem={this.props.onFreezedItem}
-                  onUnfreezedItem={this.onUnfreezedItem}
+                  freezeItem={this.props.freezeItem}
+                  unfreezeItem={this.unfreezeItem}
                 />
               )}
             </div>

@@ -78,11 +78,11 @@ class DirentListView extends React.Component {
     this.zipToken = null;
   }
 
-  onFreezedItem = () => {
+  freezeItem = () => {
     this.setState({isItemFreezed: true});
   }
 
-  onUnfreezedItem = () => {
+  unfreezeItem = () => {
     this.setState({isItemFreezed: false});
   }
 
@@ -100,7 +100,7 @@ class DirentListView extends React.Component {
   }
 
   onItemRenameToggle = () => {
-    this.onFreezedItem();
+    this.freezeItem();
   }
 
   onItemSelected = (dirent) => {
@@ -425,11 +425,11 @@ class DirentListView extends React.Component {
   }
 
   onShowMenu = (e) => {
-    this.onFreezedItem();
+    this.freezeItem();
   }
 
   onHideMenu = (e) => {
-    this.onUnfreezedItem();
+    this.unfreezeItem();
   }
 
   // contextmenu utils
@@ -575,8 +575,8 @@ class DirentListView extends React.Component {
                   onItemCopy={this.props.onItemCopy}
                   updateDirent={this.props.updateDirent}
                   isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem}
-                  onUnfreezedItem={this.onUnfreezedItem}
+                  freezeItem={this.freezeItem}
+                  unfreezeItem={this.unfreezeItem}
                   onDirentClick={this.onDirentClick}
                   showImagePopup={this.showImagePopup}
                   onItemMouseDown={this.onItemMouseDown}

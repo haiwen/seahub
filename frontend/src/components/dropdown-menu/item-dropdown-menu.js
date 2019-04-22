@@ -9,10 +9,10 @@ const propTypes = {
   opItem: PropTypes.object.isRequired,
   menuClass: PropTypes.string,
   isHandleContextMenuEvent: PropTypes.bool,
-  getOpItemMenuList: PropTypes.func.isRequired,
+  getMenuList: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
-  onFrezeedItem: PropTypes.func,
-  onUnfrezeedItem: PropTypes.func,
+  freezeItem: PropTypes.func,
+  unfreezeItem: PropTypes.func,
 };
 
 class ItemDropDownMenu extends React.Component {
@@ -35,14 +35,14 @@ class ItemDropDownMenu extends React.Component {
       this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
     }
     let { opItem } = this.props;
-    let menuList = this.props.getOpItemMenuList(opItem);
+    let menuList = this.props.getMenuList(opItem);
     this.setState({menuList: menuList});
   }
 
   componentWillReceiveProps(nextProps) {  // for toolbar opItem operation
     let { opItem } = nextProps;
     if (opItem.name !== this.props.opItem.name) {
-      let menuList = this.props.getOpItemMenuList(opItem);
+      let menuList = this.props.getMenuList(opItem);
       this.setState({menuList: menuList});
     }
   }
@@ -60,8 +60,8 @@ class ItemDropDownMenu extends React.Component {
   onHideMenu = () => {
     if (this.state.isItemMenuShow) {
       this.setState({isItemMenuShow: false});
-      if (typeof(this.props.onUnfreezedItem) === 'function') {
-        this.props.onUnfreezedItem();
+      if (typeof(this.props.unfreezeItem) === 'function') {
+        this.props.unfreezeItem();
       }
     }
   }
@@ -77,10 +77,10 @@ class ItemDropDownMenu extends React.Component {
     this.setState(
       {isItemMenuShow: !this.state.isItemMenuShow},
       () => {
-        if (this.state.isItemMenuShow && typeof(this.props.onFreezedItem) === 'function') {
-          this.props.onFreezedItem();
-        } else if (!this.state.isItemMenuShow && typeof(this.props.onUnfreezedItem) === 'function') {
-          this.props.onUnfreezedItem();
+        if (this.state.isItemMenuShow && typeof(this.props.freezeItem) === 'function') {
+          this.props.freezeItem();
+        } else if (!this.state.isItemMenuShow && typeof(this.props.unfreezeItem) === 'function') {
+          this.props.unfreezeItem();
         }
       }
     );

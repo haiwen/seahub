@@ -287,7 +287,7 @@ class MutipleDirOperationToolbar extends React.Component {
                 opItem={this.props.selectedDirentList[0]}
                 menuClass={'fas fa-ellipsis-v dirents-more-menu'}
                 onMenuItemClick={this.onMenuItemClick}
-                getOpItemMenuList={this.getDirentMenuList}
+                getMenuList={this.getDirentMenuList}
               />
             }
           </ButtonGroup>

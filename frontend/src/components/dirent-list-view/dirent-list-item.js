@@ -24,8 +24,8 @@ const propTypes = {
   showShareBtn: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired,
+  freezeItem: PropTypes.func.isRequired,
+  unfreezeItem: PropTypes.func.isRequired,
   onItemRenameToggle: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
@@ -110,12 +110,12 @@ class DirentListItem extends React.Component {
     this.setState({isDragTipShow: false});
   }
 
-  onUnfreezedItem = () => {
+  unfreezeItem = () => {
     this.setState({
       highlight: false,
       isOperationShow: false,
     });
-    this.props.onUnfreezedItem();
+    this.props.unfreezeItem();
   }
 
   //buiness handler
@@ -248,7 +248,7 @@ class DirentListItem extends React.Component {
 
   onRenameCancel = () => {
     this.setState({isRenameing: false});
-    this.onUnfreezedItem();
+    this.unfreezeItem();
   }
 
   onItemMoveToggle = () => {
@@ -433,10 +433,10 @@ class DirentListItem extends React.Component {
                       opItem={this.props.dirent}
                       menuClass={'sf2-icon-caret-down'}
                       isHandleContextMenuEvent={true}
-                      getOpItemMenuList={this.props.getDirentItemMenuList}
+                      getMenuList={this.props.getDirentItemMenuList}
                       onMenuItemClick={this.onMenuItemClick}
-                      onUnfreezedItem={this.onUnfreezedItem}
-                      onFreezedItem={this.props.onFreezedItem}
+                      unfreezeItem={this.unfreezeItem}
+                      freezeItem={this.props.freezeItem}
                     />
                   </li>
                 </ul>
@@ -461,13 +461,12 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <ItemDropDownMenu
                       opItem={this.props.dirent}
-                      menuType={'pc'}
                       menuClass={'sf2-icon-caret-down'}
                       isHandleContextMenuEvent={true}
-                      getOpItemMenuList={this.props.getDirentItemMenuList}
+                      getMenuList={this.props.getDirentItemMenuList}
                       onMenuItemClick={this.onMenuItemClick}
-                      onUnfreezedItem={this.onUnfreezedItem}
-                      onFreezedItem={this.props.onFreezedItem}
+                      unfreezeItem={this.unfreezeItem}
+                      freezeItem={this.props.freezeItem}
                     />
                   </li>
                 </ul>
