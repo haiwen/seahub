@@ -142,7 +142,7 @@ class FileToolbar extends React.Component {
         </ButtonGroup>
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
-          <ButtonGroup>
+          <ButtonGroup >
             {(canEditFile && !err) &&
                 ( this.props.isSaving ?
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
@@ -162,9 +162,10 @@ class FileToolbar extends React.Component {
                         <i className={'fa fa-save'}/></button>
                   )
                 )}
-            <DropdownToggle className="sf2-icon-more">
-            </DropdownToggle>
           </ButtonGroup>
+
+          <DropdownToggle className="sf2-icon-more mx-1">
+          </DropdownToggle>
           <DropdownMenu right={true}>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
