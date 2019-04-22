@@ -35,7 +35,6 @@ class WikiSelectDialog extends React.Component {
 
   onChange = (repo) => {
     this.setState({
-      name: repo.repo_name,
       repoID: repo.repo_id,
     });
   }
@@ -53,15 +52,15 @@ class WikiSelectDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.toggle}>{gettext('Publish a library')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Publish a Library')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead>
               <tr>
-                <th width='12%'>{/* select */}</th>
-                <th width='13%'>{/* icon */}</th>
-                <th width='50%'>{gettext('Name')}</th>
-                <th width='25%'>{gettext('Last Update')}</th>
+                <th width='6%'>{/* select */}</th>
+                <th width='9%'>{/* icon */}</th>
+                <th width='55%'>{gettext('Name')}</th>
+                <th width='30%'>{gettext('Last Update')}</th>
               </tr>
             </thead>
             <tbody>
@@ -80,7 +79,10 @@ class WikiSelectDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          {this.state.repoID ?
+            <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>:
+            <Button color="primary" disabled>{gettext('Submit')}</Button>
+          }
         </ModalFooter>
       </Modal>
     );
