@@ -33,7 +33,8 @@ class HistoryItem extends React.Component {
     });
   }
 
-  onItemRestore = () => {
+  onItemRestore = (e) => {
+    e.preventDefault();
     this.props.onItemRestore(this.props.item);
   }
 
@@ -48,7 +49,7 @@ class HistoryItem extends React.Component {
         <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td>
             <time datetime={item.time} is="relative-time" title={moment(item.ctime).format('llll')}>{moment(item.ctime).fromNow()}</time>
-            {this.props.index === 0 ? gettext('(current version)') : ''}
+            {this.props.index === 0 && gettext('(current version)')}
           </td>
           <td>
             <img className="avatar" src={item.creator_avatar_url}></img>{' '}
@@ -58,7 +59,7 @@ class HistoryItem extends React.Component {
           <td>
             {this.state.active &&
               <span className="attr-action-icon">
-                {this.props.index === 0 ? '' : <a href=" " onClick={this.onItemRestore}>{gettext('Restore')}</a>}
+                {this.props.index !== 0 && <a href="#" onClick={this.onItemRestore}>{gettext('Restore')}</a>}
                 <a href={downloadUrl}>{gettext('Download')}</a>
                 <a href={viewUrl}>{gettext('View')}</a>
                 <a href={diffUrl}>{gettext('Diff')}</a>

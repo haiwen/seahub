@@ -7,7 +7,8 @@ class RepoBasicInfoTest(BaseTestCase):
         self.login_as(self.user)
 
     def test_can_render(self):
-        resp = self.client.get(reverse('file_revisions', args=[self.repo.id]) + '?p=' + self.file + '&_new=0')
+        resp = self.client.get(reverse('file_revisions', args=[self.repo.id]) + '?p=' + self.file + '&_new=0'
+        )
 
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'file_revisions.html')

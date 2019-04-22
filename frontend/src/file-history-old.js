@@ -25,6 +25,9 @@ class FileHistory extends React.Component {
       historyList: [],
       currentPage: 1,
       hasMore: false,
+      nextCommit: undefined,
+      filePath: '',
+      oldFilePath: '',
       isLoading: true,
       isError: false,
       fileOwner: '',
@@ -32,54 +35,39 @@ class FileHistory extends React.Component {
     };
   }
 
-  onSearchedClick = (selectedItem) => {
-    if (selectedItem.is_dir === true) {
-      let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
-    } else {
-      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
-    }
-  }
-
-  onCloseSidePanel = () => {
-    // do nothing
-  }
-
   componentDidMount() {
     if (useNewAPI) {
-      editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
-        let historyList = res.data;
-        if (historyList.length === 0) {
-          this.setState({isLoading: false});
-          throw Error('there has an error in server');
-        }
-        this.initResultState(res.data);
-      });
+      this.listNewHistoryRecords(filePath, PER_PAGE);
     } else {
-      seafileAPI.getFileHistory(historyRepoID, filePath).then((res) => {
-        let historyList = res.data;
-        if (historyList.length === 0) {
-          this.setState({isLoading: false});
-          throw Error('there has an error in server');
-        }
-        this.initResultState(res.data);
-      })
+      this.listOldHistoryRecords(historyRepoID, filePath);
     }
-
   }
 
-  refershFileList() {
+  listNewHistoryRecords = (filePath, PER_PAGE) => {
     editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+      let historyList = res.data;
+      if (historyList.length === 0) {
+        this.setState({isLoading: false});
+        throw Error('there has an error in server');
+      }
+      this.initResultState(res.data);
+    });
+  }
+
+  listOldHistoryRecords = (repoID, filePath) => {
+    seafileAPI.listOldFileHistoryRecords(repoID, filePath).then((res) => {
+      let historyList = res.data;
+      if (historyList.length === 0) {
+        this.setState({isLoading: false});
+        throw Error('there has an error in server');
+      }
       this.initResultState(res.data);
     });
   }
 
   initResultState(result) {
-    if (useNewAPI) {
-      if (result.data.length) {
+    if (result.data.length) {
+      if (useNewAPI) {
         this.setState({
           historyList: result.data,
           currentPage: result.page,
@@ -88,43 +76,21 @@ class FileHistory extends React.Component {
           isError: false,
           fileOwner: result.data[0].creator_email,
         });
-      }
-    } else {
-      if (result.data.length) {
+      } else {
         this.setState({
           historyList: result.data,
+          nextCommit: result.next_start_commit,
+          hasMore: result.next_start_commit ? true : false,
+          filePath: result.data[result.data.length-1].path,
+          oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
           isLoading: false,
           isError: false,
           fileOwner: result.data[0].creator_email,
         });
+        if (result.data.length < 25 && this.state.hasMore) {
+          this.reloadMore();
+        }
       }
-    }
-  }
-
-  updateResultState(result) {
-    if (result.data.length) {
-      this.setState({
-        historyList: [...this.state.historyList, ...result.data],
-        currentPage: result.page,
-        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
-        isLoading: false,
-        isError: false,
-        fileOwner: result.data[0].creator_email
-      });
-    }
-  }
-
-  reloadMore = () => {
-    if (!this.state.isReloadingData) {
-      let currentPage = this.state.currentPage + 1;
-      this.setState({
-        currentPage: currentPage,
-        isReloadingData: true,
-      });
-      editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
-        this.updateResultState(res.data);
-        this.setState({isReloadingData: false});
-      });
     }
   }
 
@@ -139,14 +105,110 @@ class FileHistory extends React.Component {
     }
   }
 
+  reloadMore = () => {
+    if (!this.state.isReloadingData) {
+      if (useNewAPI) {
+        let currentPage = this.state.currentPage + 1;
+        this.setState({
+          currentPage: currentPage,
+          isReloadingData: true,
+        });
+        editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
+          this.updateResultState(res.data);
+          this.setState({isReloadingData: false});
+        });
+      } else {
+        let commitID = this.state.nextCommit;
+        let filePath = this.state.filePath;
+        let oldFilePath = this.state.oldFilePath;
+        this.setState({isReloadingData: true});
+        if (oldFilePath) {
+          seafileAPI.listOldFileHistoryRecords(historyRepoID, oldFilePath, commitID).then((res) => {
+            this.setState({isReloadingData: false});
+            this.updateResultState(res.data);
+          });
+        } else {
+          seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
+            this.setState({isReloadingData: false});
+            this.updateResultState(res.data);
+          });
+        }
+      }
+    }
+  }
+
+  updateResultState(result) {
+    if (result.data.length) {
+      if (useNewAPI) {
+        this.setState({
+          historyList: [...this.state.historyList, ...result.data],
+          currentPage: result.page,
+          hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
+          isLoading: false,
+          isError: false,
+          fileOwner: result.data[0].creator_email
+        });
+      } else {
+        this.setState({
+          historyList: [...this.state.historyList, ...result.data],
+          nextCommit: result.next_start_commit,
+          hasMore: result.next_start_commit ? true : false,
+          filePath: result.data[result.data.length-1].path,
+          oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
+          isLoading: false,
+          isError: false,
+          fileOwner: result.data[0].creator_email,
+        });
+        if (result.data.length < 25 && this.state.hasMore) {
+          this.reloadMore();
+        }
+      }
+    } else {
+      this.setState({
+        historyList: [...this.state.historyList, ...result.data],
+        nextCommit: result.next_start_commit,
+        isLoading: false,
+        isError: false,
+      });
+      this.reloadMore();
+    }
+  }
+
   onItemRestore = (item) => {
     let commitId = item.commit_id;
+    let filePath = item.path;
     editUtilties.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
         this.setState({isLoading: true});
         this.refershFileList();
       }
     });
+  }
+
+  refershFileList() {
+    if (useNewAPI) {
+      editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then((res) => {
+        this.initResultState(res.data);
+      });
+    } else {
+      seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath).then((res) => {
+        this.initResultState(res.data);
+      });
+    }
+  }
+
+  onCloseSidePanel = () => {}
+
+  onSearchedClick = (selectedItem) => {
+    if (selectedItem.is_dir === true) {
+      let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    } else {
+      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    }
   }
 
   render() {
@@ -166,8 +228,8 @@ class FileHistory extends React.Component {
               <a href="javascript:window.history.back()" className="go-back" title="Back">
                 <span className="fas fa-chevron-left"></span>
               </a>
-              <h2><span className="file-name">{fileName}</span>{gettext(' History Versions')}</h2>
-              <p>{gettext('Tip: a new version will be generated after each modification, and you can restore the file to a previous version.')}</p>
+              <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
+              <p>{gettext('A new version will be generated after each modification, and you can restore the file to a previous version.')}</p>
             </div>
             <div>
               {this.state.isLoading && <Loading />}
@@ -195,6 +257,7 @@ class FileHistory extends React.Component {
                   </tbody>
                 </table>
               }
+              {this.state.isReloadingData && <Loading />}
             </div>
           </div>
         </div>
