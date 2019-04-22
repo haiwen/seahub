@@ -1,6 +1,5 @@
 .grid-view {
-  padding-top: 10px;
-  padding-bottom: 10rem;
+  padding: 0.625rem 1rem 10rem;
   list-style: none;
   display: flex;
   flex-wrap: wrap;
