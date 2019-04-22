@@ -2,17 +2,20 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { Utils, isPro } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
+import TextTranslation from '../../utils/text-translation';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
-import DirentsMenu from '../dirent-list-view/dirents-menu';
 import ShareDialog from '../dialog/share-dialog';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ModalPortal from '../modal-portal';
+import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
+
+import '../../css/dirents-menu.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -81,6 +84,35 @@ class MutipleDirOperationToolbar extends React.Component {
     this.setState({
       isZipDialogOpen: false
     });
+  }
+
+  getDirentMenuList = (dirent) => {
+    let menuList = [];
+    let currentRepoInfo = this.props.currentRepoInfo;
+
+    const { SHARE, TAGS, RELATED_FILES, HISTORY, OPEN_VIA_CLIENT, LOCK, UNLOCK } = TextTranslation;
+
+    if (dirent.type === 'dir') {
+      menuList = [SHARE];
+      return menuList;
+    } 
+
+    if (dirent.type === 'file') {
+      menuList = [SHARE, TAGS, RELATED_FILES, 'Divider', HISTORY, 'Divider', OPEN_VIA_CLIENT];
+      if (!Utils.isMarkdownFile(dirent.name)) {
+        menuList.splice(2, 1);
+      }
+      if (isPro) {
+        if (dirent.is_locked) {
+          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && currentRepoInfo.permission === 'rw')) {
+            menuList.splice(1, 0, UNLOCK);
+          }
+        } else {
+          menuList.splice(1, 0, LOCK);
+        }
+      }
+      return menuList;
+    }
   }
 
   onMenuItemClick = (operation) => {
@@ -250,10 +282,12 @@ class MutipleDirOperationToolbar extends React.Component {
             <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
             <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
             {this.props.selectedDirentList.length === 1 &&
-              <DirentsMenu
-                dirent={this.props.selectedDirentList[0]}
-                currentRepoInfo={this.props.currentRepoInfo}
+              <ItemDropdownMenu 
+                tagName={'button'}
+                item={this.props.selectedDirentList[0]}
+                toggleClass={'fas fa-ellipsis-v dirents-more-menu'}
                 onMenuItemClick={this.onMenuItemClick}
+                getMenuList={this.getDirentMenuList}
               />
             }
           </ButtonGroup>

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TreeNodeMenu from './tree-node-menu';
 import { permission } from '../../utils/constants';
+import TextTranslation from '../../utils/text-translation';
+import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 
 const propTypes = {
   repoPermission: PropTypes.bool,
@@ -14,8 +15,8 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeDragStart: PropTypes.func.isRequired,
-  onFreezedItem: PropTypes.func.isRequired,
-  onUnFreezedItem: PropTypes.func.isRequired,
+  freezeItem: PropTypes.func.isRequired,
+  unfreezeItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func,
   registerHandlers: PropTypes.func,
   unregisterHandlers: PropTypes.func,
@@ -112,12 +113,12 @@ class TreeNodeView extends React.Component {
     this.props.onNodeDrop(e, this.props.node);
   }
 
-  onUnFreezedItem = () => {
+  unfreezeItem = () => {
     this.setState({isShowOperationMenu: false});
-    this.props.onUnFreezedItem();
+    this.props.unfreezeItem();
   }
 
-  onMenuItemClick = (operation, node) => {
+  onMenuItemClick = (operation, event, node) => {
     this.props.onMenuItemClick(operation, node);
   }
 
@@ -168,6 +169,16 @@ class TreeNodeView extends React.Component {
     return {icon, type};
   }
 
+  caculateMenuList(node) {
+    let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT} =  TextTranslation;
+
+    if (node.object.type === 'dir') {
+      return [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
+    }
+    
+    return [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
+  }
+
   renderChildren = () => {
     let { node, paddingLeft } = this.props;
     if (!node.hasChildren()) {
@@ -188,9 +199,9 @@ class TreeNodeView extends React.Component {
               onNodeClick={this.props.onNodeClick}
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
-              onFreezedItem={this.props.onFreezedItem}
-              onMenuItemClick={this.onMenuItemClick}
-              onUnFreezedItem={this.onUnFreezedItem}
+              freezeItem={this.props.freezeItem}
+              onMenuItemClick={this.props.onMenuItemClick}
+              unfreezeItem={this.unfreezeItem}
               onNodeChanged={this.props.onNodeChanged}
               registerHandlers={this.props.registerHandlers}
               unregisterHandlers={this.props.unregisterHandlers}
@@ -242,14 +253,13 @@ class TreeNodeView extends React.Component {
           {isNodeMenuShow && (
             <div className="right-icon">
               {((this.props.repoPermission || permission) && this.state.isShowOperationMenu) && (
-                <TreeNodeMenu 
-                  node={this.props.node}
+                <ItemDropdownMenu 
+                  item={this.props.node}
+                  toggleClass={'fas fa-ellipsis-v'}
+                  getMenuList={this.caculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}
-                  onUnFreezedItem={this.onUnFreezedItem}
-                  onFreezedItem={this.props.onFreezedItem}
-                  registerHandlers={this.props.registerHandlers}
-                  unregisterHandlers={this.props.unregisterHandlers}
-                  appMenuType={this.props.appMenuType}
+                  freezeItem={this.props.freezeItem}
+                  unfreezeItem={this.unfreezeItem}
                 />
               )}
             </div>

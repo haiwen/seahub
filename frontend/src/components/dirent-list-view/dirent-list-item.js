@@ -6,7 +6,7 @@ import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import DirentMenu from './dirent-menu';
+import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
@@ -24,8 +24,8 @@ const propTypes = {
   showShareBtn: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired,
+  freezeItem: PropTypes.func.isRequired,
+  unfreezeItem: PropTypes.func.isRequired,
   onItemRenameToggle: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
@@ -44,6 +44,7 @@ const propTypes = {
   onItemContextMenu: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   activeDirent: PropTypes.object,
+  getDirentItemMenuList: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -109,12 +110,12 @@ class DirentListItem extends React.Component {
     this.setState({isDragTipShow: false});
   }
 
-  onUnfreezedItem = () => {
+  unfreezeItem = () => {
     this.setState({
       highlight: false,
       isOperationShow: false,
     });
-    this.props.onUnfreezedItem();
+    this.props.unfreezeItem();
   }
 
   //buiness handler
@@ -247,7 +248,7 @@ class DirentListItem extends React.Component {
 
   onRenameCancel = () => {
     this.setState({isRenameing: false});
-    this.onUnfreezedItem();
+    this.unfreezeItem();
   }
 
   onItemMoveToggle = () => {
@@ -428,13 +429,14 @@ class DirentListItem extends React.Component {
                     <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
-                    <DirentMenu
-                      dirent={this.props.dirent}
+                    <ItemDropdownMenu
+                      item={this.props.dirent}
+                      toggleClass={'sf2-icon-caret-down'}
+                      isHandleContextMenuEvent={true}
+                      getMenuList={this.props.getDirentItemMenuList}
                       onMenuItemClick={this.onMenuItemClick}
-                      currentRepoInfo={this.props.currentRepoInfo}
-                      isRepoOwner={this.props.isRepoOwner}
-                      onFreezedItem={this.props.onFreezedItem}
-                      onUnfreezedItem={this.onUnfreezedItem}
+                      unfreezeItem={this.unfreezeItem}
+                      freezeItem={this.props.freezeItem}
                     />
                   </li>
                 </ul>
@@ -457,13 +459,14 @@ class DirentListItem extends React.Component {
                     <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                   </li>
                   <li className="operation-group-item">
-                    <DirentMenu
-                      dirent={this.props.dirent}
+                    <ItemDropdownMenu
+                      item={this.props.dirent}
+                      toggleClass={'sf2-icon-caret-down'}
+                      isHandleContextMenuEvent={true}
+                      getMenuList={this.props.getDirentItemMenuList}
                       onMenuItemClick={this.onMenuItemClick}
-                      currentRepoInfo={this.props.currentRepoInfo}
-                      isRepoOwner={this.props.isRepoOwner}
-                      onFreezedItem={this.props.onFreezedItem}
-                      onUnfreezedItem={this.onUnfreezedItem}
+                      unfreezeItem={this.unfreezeItem}
+                      freezeItem={this.props.freezeItem}
                     />
                   </li>
                 </ul>
