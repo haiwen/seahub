@@ -123,6 +123,7 @@ class DirTool extends React.Component {
                     onClose={this.onCloseRepoTagDialog}
                     toggleCancel={this.onUpdateRepoTagToggle}
                     onDeleteRepoTag={this.props.onDeleteRepoTag}
+                    updateUsedRepoTags={this.props.updateUsedRepoTags}
                   />
                 )}
 
