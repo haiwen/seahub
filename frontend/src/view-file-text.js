@@ -42,21 +42,21 @@ class ViewFileText extends React.Component {
     super(props);
     this.state = {
       content: fileContent,
-      isContentChangedButNotSaved: false,
+      needSave: false,
       isSaving: false,
     };
-    this.onSaveChangedContent=this.onSaveChangedContent.bind(this);
+    this.onSave=this.onSave.bind(this);
   }
 
 
   updateContent = (newContent) => {
     this.setState({
-      isContentChangedButNotSaved: true,
+      needSave: true,
       content: newContent,
     });
   }
 
-  onSaveChangedContent () {
+  onSave () {
     let dirPath = '/';
     return (
       seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
@@ -75,7 +75,7 @@ class ViewFileText extends React.Component {
           });
           this.setState({
             isSaving: false,
-            isContentChangedButNotSaved: false
+            needSave: false
           });
         });
       })
@@ -92,8 +92,8 @@ class ViewFileText extends React.Component {
           />
         }
         isSaving={this.state.isSaving}
-        isContentChangedButNotSaved={this.state.isContentChangedButNotSaved}
-        onSaveChangedContent={this.onSaveChangedContent}
+        needSave={this.state.needSave}
+        onSave={this.onSave}
       />
     );
   }

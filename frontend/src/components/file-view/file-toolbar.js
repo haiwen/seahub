@@ -10,9 +10,9 @@ import ShareDialog from '../dialog/share-dialog';
 const propTypes = { 
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
-  onSaveChangedContent: PropTypes.func,
+  onSave: PropTypes.func,
   isSaving: PropTypes.bool,
-  isContentChangedButNotSaved: PropTypes.bool,
+  needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
   toggleCommentPanel: PropTypes.func.isRequired
 };
@@ -108,7 +108,7 @@ class FileToolbar extends React.Component {
               <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
                 <i className={'fa fa-spin fa-spinner'}/></button> :
               (
-                this.props.isContentChangedButNotSaved ?
+                this.props.needSave ?
                   <IconButton
                     text={gettext('Save')}
                     id={'saveButton'}
@@ -116,7 +116,7 @@ class FileToolbar extends React.Component {
                     // button imported in this file does not have functionalities of
                     // isActive as button imported in markdowneditor has
                     //isActive={!isContentChanged}
-                    onClick={this.props.onSaveChangedContent}
+                    onClick={this.props.onSave}
                   /> :
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'} disabled>
                     <i className={'fa fa-save'}/></button>
@@ -148,7 +148,7 @@ class FileToolbar extends React.Component {
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button> :
                   (
-                    this.props.isContentChangedButNotSaved ?
+                    this.props.needSave ?
                       <IconButton
                         text={gettext('Save')}
                         id={'saveButton'}
@@ -156,7 +156,7 @@ class FileToolbar extends React.Component {
                         // button imported in this file does not have functionalities of
                         // isActive as button imported in markdowneditor has
                         //isActive={!isContentChanged}
-                        onClick={this.props.onSaveChangedContent}
+                        onClick={this.props.onSave}
                       /> :
                       <button type={'button'} className={'btn btn-icon btn-secondary btn-active'} disabled>
                         <i className={'fa fa-save'}/></button>
