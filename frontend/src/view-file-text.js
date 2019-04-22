@@ -71,7 +71,7 @@ class ViewFileText extends React.Component {
           this.state.content
         ).then(() => {
           toaster.success(gettext('Successfully saved'), {
-            duration: 3
+            duration: 2
           });
           this.setState({
             isSaving: false,

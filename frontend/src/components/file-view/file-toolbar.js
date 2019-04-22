@@ -142,8 +142,29 @@ class FileToolbar extends React.Component {
         </ButtonGroup>
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
-          <DropdownToggle className="sf2-icon-more">
-          </DropdownToggle>
+          <ButtonGroup>
+            {(canEditFile && !err) &&
+                ( this.props.isSaving ?
+                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                    <i className={'fa fa-spin fa-spinner'}/></button> :
+                  (
+                    this.props.isContentChangedButNotSaved ?
+                      <IconButton
+                        text={gettext('Save')}
+                        id={'saveButton'}
+                        icon={'fa fa-save'}
+                        // button imported in this file does not have functionalities of
+                        // isActive as button imported in markdowneditor has
+                        //isActive={!isContentChanged}
+                        onClick={this.props.onSaveChangedContent}
+                      /> :
+                      <button type={'button'} className={'btn btn-icon btn-secondary btn-active'} disabled>
+                        <i className={'fa fa-save'}/></button>
+                  )
+                )}
+            <DropdownToggle className="sf2-icon-more">
+            </DropdownToggle>
+          </ButtonGroup>
           <DropdownMenu right={true}>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
@@ -164,13 +185,6 @@ class FileToolbar extends React.Component {
               <DropdownItem>
                 <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="text-inherit">
                   {gettext('History')}
-                </a>
-              </DropdownItem>
-            )}
-            {(canEditFile && !err) && (
-              <DropdownItem>
-                <a href={`${siteRoot}repo/${repoID}/file/edit/?p=${encodeURIComponent(filePath)}&file_enc=${encodeURIComponent(fileEnc)}`} className="text-inherit">
-                  {gettext('Edit')}
                 </a>
               </DropdownItem>
             )}
