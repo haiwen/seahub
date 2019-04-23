@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -269,15 +269,18 @@ class DirentListItem extends React.Component {
     seafileAPI.lockfile(repoID, filePath).then(() => {
       this.props.updateDirent(this.props.dirent, 'is_locked', true);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', true);
+      let lockName = username.split('@');
+      this.props.updateDirent(this.props.dirent, 'lock_owner_name', lockName[0]);
     });
   }
-
+  
   onUnlockItem = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.unlockfile(repoID, filePath).then(() => {
       this.props.updateDirent(this.props.dirent, 'is_locked', false);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', false);
+      this.props.updateDirent(this.props.dirent, 'lock_owner_name', '');
     });
   }
 
@@ -501,6 +504,9 @@ class DirentListItem extends React.Component {
     trClass += (activeDirent && activeDirent.name === dirent.name)  ? 'tr-active' : '';
     trClass += dirent.isSelected? 'tr-active' : '';
 
+    let lockedInfo = gettext('locked by {name}');
+    lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
+
     return (
       <Fragment>
         <tr 
@@ -531,7 +537,7 @@ class DirentListItem extends React.Component {
                 <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
                 <img ref='drag_icon' src={iconUrl} width="24" alt='' />
               }
-              {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={dirent.lock_owner_name}/>}
+              {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
             </div>
           </td>
           <td className="name">
