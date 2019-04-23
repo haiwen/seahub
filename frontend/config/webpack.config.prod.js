@@ -90,7 +90,8 @@ module.exports = {
     orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
     sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
     viewDataGrid: [require.resolve('./polyfills'), paths.appSrc + "/view-file-ctable.js"],
-    viewCdoc: [require.resolve('./polyfills'), paths.appSrc + "/view-file-cdoc.js"]
+    viewCdoc: [require.resolve('./polyfills'), paths.appSrc + "/view-file-cdoc.js"],
+    search: [require.resolve('./polyfills'), paths.appSrc + "/pages/search"]
   },
 
   output: {
