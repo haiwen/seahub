@@ -24,7 +24,8 @@ class ShareDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: this.getInitialActiveTab()
+      activeTab: this.getInitialActiveTab(),
+      itemFreezed: false,
     };
   }
 
@@ -46,6 +47,10 @@ class ShareDialog extends React.Component {
     if (this.state.activeTab !== tab) {
       this.setState({activeTab: tab});
     }
+  }
+
+  toggleItemFreezed = (value) => {
+    if (value !== this.state.itemFreezed) this.setState({itemFreezed: value});
   }
 
   renderDirContent = () => {
@@ -112,10 +117,24 @@ class ShareDialog extends React.Component {
             {enableDirPrivateShare &&
               <Fragment>
                 <TabPane tabId="shareToUser">
-                  <ShareToUser itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
+                  <ShareToUser
+                    itemType={this.props.itemType}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    itemPath={this.props.itemPath}
+                    repoID={this.props.repoID}
+                    toggleItemFreezed={this.toggleItemFreezed}
+                    itemFreezed={this.state.itemFreezed}
+                  />
                 </TabPane>
                 <TabPane tabId="shareToGroup">
-                  <ShareToGroup itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
+                  <ShareToGroup
+                    itemType={this.props.itemType}
+                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    itemPath={this.props.itemPath}
+                    repoID={this.props.repoID}
+                    toggleItemFreezed={this.toggleItemFreezed}
+                    itemFreezed={this.state.itemFreezed}
+                  />
                 </TabPane>
               </Fragment>
             }

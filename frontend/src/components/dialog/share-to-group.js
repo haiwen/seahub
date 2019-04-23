@@ -17,6 +17,7 @@ class GroupItem extends React.Component {
   }
   
   onMouseEnter = () => {
+    if (this.props.itemFreezed) return;
     this.setState({isOperationShow: true});
   }
 
@@ -46,6 +47,7 @@ class GroupItem extends React.Component {
             currentPermission={item.permission}
             permissions={this.props.permissions}
             onPermissionChanged={this.onChangeUserPermission}
+            toggleItemFreezed={this.props.toggleItemFreezed}
           />
         </td>
         <td>
@@ -75,6 +77,8 @@ class GroupList extends React.Component {
               permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}
+              toggleItemFreezed={this.props.toggleItemFreezed}
+              itemFreezed={this.props.itemFreezed}
             />
           );
         })}
@@ -307,7 +311,7 @@ class ShareToGroup extends React.Component {
             }
           </tbody>
         </table>
-        <div className="share-list-container">
+        <div className={!this.props.itemFreezed ? 'share-list-container' : 'share-list-container freeze'}>
           <table className="table-thead-hidden">
             <thead>
               <tr>
@@ -321,6 +325,8 @@ class ShareToGroup extends React.Component {
               permissions={this.permissions}
               deleteShareItem={this.deleteShareItem} 
               onChangeUserPermission={this.onChangeUserPermission}
+              toggleItemFreezed={this.props.toggleItemFreezed}
+              itemFreezed={this.props.itemFreezed}
             />
           </table>
         </div>

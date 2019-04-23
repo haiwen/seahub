@@ -33,6 +33,7 @@
     max-height: 18rem;
     overflow: auto;
     height: 100%;
+    padding: 0 10px 12rem 0;
 }
 
 .share-dialog-content label {
@@ -83,4 +84,12 @@ input.expire-input {
 
 .share-dialog-main .permission-editor .permission-editor__menu {
   width: 240px;
+}
+
+.share-list-container.freeze {
+  overflow: hidden;
+  margin-bottom: 200px;
+}
+.share-list-container.freeze::-webkit-scrollbar {
+  display: none;
 }

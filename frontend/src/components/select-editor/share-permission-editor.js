@@ -8,6 +8,7 @@ const propTypes = {
   isEditIconShow: PropTypes.bool.isRequired,
   permissions: PropTypes.array.isRequired,
   currentPermission: PropTypes.string.isRequired,
+  toggleItemFreezed: PropTypes.func,
   onPermissionChanged: PropTypes.func.isRequired
 };
 
@@ -31,6 +32,7 @@ class SharePermissionEditor extends React.Component {
         onOptionChanged={this.props.onPermissionChanged}
         translateOption={this.translatePermission}
         translateExplanation={this.translateExplanation}
+        toggleItemFreezed={this.props.toggleItemFreezed}
       />
     );
   }

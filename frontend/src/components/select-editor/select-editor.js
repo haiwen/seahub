@@ -84,6 +84,10 @@ class SelectEditor extends React.Component {
             placeholder={this.props.translateOption(currentOption)}
             onChange={this.onOptionChanged}
             captureMenuScroll={false}
+            closeMenuOnSelect={true}
+            maxMenuHeight="150px"
+            menuPlacement="auto"
+            menuShouldBlockScroll={true}
           />
         }
         {(isTextMode && !this.state.isEditing) &&
