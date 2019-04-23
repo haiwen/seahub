@@ -24,7 +24,7 @@ import 'codemirror/lib/codemirror.css';
 import './css/text-file-view.css';
 
 const {
-  err, fileExt, fileContent, repoID, filePath, fileName
+  err, fileExt, fileContent, repoID, filePath, fileName, canEditFile
 } = window.app.pageOptions;
 
 const options = {
@@ -34,7 +34,8 @@ const options = {
   theme: 'default',
   textWrapping: true,
   lineWrapping: true,
-  readOnly: false,          // set false to let user edit directly
+  readOnly: !canEditFile,
+  cursorBlinkRate: canEditFile ? 530 : -1,   // default is 530ms
 };
 
 class ViewFileText extends React.Component {
