@@ -46,6 +46,7 @@ from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
+from seahub.base.templatetags.seahub_tags import file_icon_filter
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
@@ -1240,6 +1241,7 @@ def view_shared_file(request, fileshare):
 
     file_share_link = gen_file_share_link(fileshare.token)
     desc_for_ogp = 'Share link for ' + filename
+    icon_path_for_ogp = file_icon_filter(filename, size=192)
 
     return render(request, template, {
             'repo': repo,
@@ -1264,6 +1266,7 @@ def view_shared_file(request, fileshare):
             'enable_watermark': ENABLE_WATERMARK,
             'file_share_link': file_share_link,
             'desc_for_ogp': desc_for_ogp,
+            'icon_path_for_ogp': icon_path_for_ogp
             })
 
 @share_link_audit
