@@ -9,6 +9,7 @@ import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
 import ShareDialog from './components/dialog/share-dialog';
 import InsertFileDialog from './components/dialog/insert-file-dialog';
+import InsertRepoImageDialog from './components/dialog/insert-repo-image-dialog';
 import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
 import LocalDraftDialog from './components/dialog/local-draft-dialog';
 import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
@@ -282,6 +283,7 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
+      showInsertRepoImageDialog: false,
       showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
@@ -373,6 +375,7 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
+      showInsertRepoImageDialog: false,
     });
   }
 
@@ -459,6 +462,12 @@ class MarkdownEditor extends React.Component {
         this.setState({
           showMarkdownEditorDialog: true,
           showInsertFileDialog: true,
+        });
+        break;
+      case 'insert_repo_image':
+        this.setState({
+          showMarkdownEditorDialog: true,
+          showInsertRepoImageDialog: true,
         });
         break;
       default:
@@ -745,6 +754,15 @@ class MarkdownEditor extends React.Component {
                     filePath={filePath}
                     toggleCancel={this.toggleCancel}
                     getInsertLink={this.getInsertLink}
+                  />
+                </ModalPortal>
+              }
+              {this.state.showInsertRepoImageDialog &&
+                <ModalPortal>
+                  <InsertRepoImageDialog
+                    repoID={repoID}
+                    filePath={filePath}
+                    toggleCancel={this.toggleCancel}
                   />
                 </ModalPortal>
               }

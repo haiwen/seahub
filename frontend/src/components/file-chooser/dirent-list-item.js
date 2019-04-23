@@ -12,6 +12,7 @@ const propTypes = {
   dirent: PropTypes.object.isRequired,
   repo: PropTypes.object.isRequired,
   onDirentItemClick: PropTypes.func.isRequired,
+  fileSuffix: PropTypes.array,
 };
 
 class DirentListItem extends React.Component {
@@ -91,6 +92,7 @@ class DirentListItem extends React.Component {
               selectedRepo={this.props.selectedRepo}
               onDirentItemClick={this.props.onDirentItemClick}
               isShowFile={this.props.isShowFile}
+              fileSuffix={this.props.fileSuffix}
             />
           );
         })}
@@ -102,6 +104,11 @@ class DirentListItem extends React.Component {
     let isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
     let isCurrentPath = this.props.selectedPath === this.state.filePath;
 
+    const fileName = this.props.dirent.name;
+    if (this.props.fileSuffix && fileName && fileName.indexOf('.') !== -1) {
+      const suffix = fileName.slice(fileName.lastIndexOf('.') + 1).toLowerCase();
+      if (!this.props.fileSuffix.includes(suffix)) return null;
+    }
     return (
       <li className="file-chooser-item">
         {
