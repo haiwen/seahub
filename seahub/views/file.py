@@ -1238,7 +1238,8 @@ def view_shared_file(request, fileshare):
         else:
             raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
 
-    file_shared_link = gen_file_share_link(fileshare.token)
+    file_share_link = gen_file_share_link(fileshare.token)
+    desc_for_ogp = 'Share link for ' + filename
 
     return render(request, template, {
             'repo': repo,
@@ -1261,7 +1262,8 @@ def view_shared_file(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
-            'file_shared_link': file_shared_link,
+            'file_share_link': file_share_link,
+            'desc_for_ogp': desc_for_ogp,
             })
 
 @share_link_audit
