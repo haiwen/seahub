@@ -9,7 +9,7 @@ const propTypes = {
   isShowFile: PropTypes.bool,
   selectedPath: PropTypes.string,
   selectedRepo: PropTypes.object,
-  fileSuffix: PropTypes.array,
+  fileSuffixes: PropTypes.array,
   repo: PropTypes.object.isRequired,
   isShowChildren: PropTypes.bool.isRequired,
   onDirentItemClick: PropTypes.func.isRequired
@@ -58,7 +58,7 @@ class DirentListView extends React.Component {
               onDirentItemClick={this.props.onDirentItemClick}
               selectedPath={this.props.selectedPath}
               isShowFile={this.props.isShowFile}
-              fileSuffix={this.props.fileSuffix}
+              fileSuffixes={this.props.fileSuffixes}
             />
           );
         })}

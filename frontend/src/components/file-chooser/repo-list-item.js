@@ -10,7 +10,7 @@ const propTypes = {
   initToShowChildren: PropTypes.bool.isRequired,
   onDirentItemClick: PropTypes.func.isRequired,
   onRepoItemClick: PropTypes.func.isRequired,
-  fileSuffix: PropTypes.array,
+  fileSuffixes: PropTypes.array,
 };
 
 class RepoListItem extends React.Component {
@@ -65,7 +65,7 @@ class RepoListItem extends React.Component {
             selectedRepo={this.props.selectedRepo}
             selectedPath={this.props.selectedPath}
             isShowFile={this.props.isShowFile}
-            fileSuffix={this.props.fileSuffix}
+            fileSuffixes={this.props.fileSuffixes}
           />
         )}
       </li>
