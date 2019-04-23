@@ -48,7 +48,7 @@ class FileHistory extends React.Component {
       let historyData = res.data;
       if (!historyData) {
         this.setState({isLoading: false});
-        throw Error('there has an error in server');
+        throw Error('There is an error in server.');
       }
       this.initResultState(res.data);
     });
@@ -59,7 +59,7 @@ class FileHistory extends React.Component {
       let historyData = res.data;
       if (!historyData) {
         this.setState({isLoading: false});
-        throw Error('there has an error in server');
+        throw Error('There is an error in server.');
       }
       this.initResultState(res.data);
     });
