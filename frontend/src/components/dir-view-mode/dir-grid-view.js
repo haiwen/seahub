@@ -30,6 +30,8 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
+  scrollPage: PropTypes.func.isRequired,
+  isCurrentPage: PropTypes.bool.isRequired
 };
 
 class DirGridView extends React.Component {
@@ -78,6 +80,8 @@ class DirGridView extends React.Component {
           isDirentDetailShow={this.props.isDirentDetailShow}
           onItemRename={this.props.onItemRename}
           onAddFolder={this.props.onAddFolder}
+          isCurrentPage={this.props.isCurrentPage}
+          scrollPage={this.props.scrollPage}
         />
       </Fragment>
     );

@@ -85,6 +85,8 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
   updateDetail: PropTypes.bool.isRequired,
+  scrollPage: PropTypes.func.isRequired,
+  isCurrentPage: PropTypes.bool.isRequired
 };
 
 class LibContentContainer extends React.Component {
@@ -204,6 +206,8 @@ class LibContentContainer extends React.Component {
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
+                    isCurrentPage={this.props.isCurrentPage}
+                    scrollPage={this.props.scrollPage}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -235,6 +239,8 @@ class LibContentContainer extends React.Component {
                     isDirentDetailShow={this.props.isDirentDetailShow}
                     onItemRename={this.props.onItemRename}
                     onFileTagChanged={this.props.onFileTagChanged}
+                    isCurrentPage={this.props.isCurrentPage}
+                    scrollPage={this.props.scrollPage}
                   />
                 )}
                 {this.props.currentMode === 'column' && (
@@ -295,6 +301,8 @@ class LibContentContainer extends React.Component {
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
+                    isCurrentPage={this.props.isCurrentPage}
+                    scrollPage={this.props.scrollPage}
                   />
                 )}
               </Fragment>

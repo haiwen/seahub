@@ -45,6 +45,8 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
+  scrollPage: PropTypes.func.isRequired,
+  isCurrentPage: PropTypes.bool.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -65,7 +67,6 @@ class DirentListView extends React.Component {
       progress: 0,
       isMutipleOperation: true,
       activeDirent: null,
-      direntItemsList: [],
       itemIdex: 100,
     };
 
@@ -89,11 +90,9 @@ class DirentListView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let direntItemsList = nextProps.direntList.filter((item, index) => {
-      return index < 100
-    })
-    this.setState({direntItemsList: direntItemsList, itemIdex: 100,})
-    
+    if (this.props.isCurrentPage) {
+      this.setState({itemIdex: 100})
+    }
   }
 
   componentWillUnmount() {
@@ -543,26 +542,19 @@ class DirentListView extends React.Component {
     let target = e.target;
     let itemIdex = this.state.itemIdex;
 
-    const { direntList } = this.props;
-
-   
     if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
-      itemIdex += 100;
-      let direntItemsList = direntList.filter((item, index) => {
-        return index < itemIdex
-      })
-      this.setState({direntItemsList: direntItemsList, itemIdex: itemIdex})
+      itemIdex += 100
+      this.setState({itemIdex: itemIdex})
     }
+    this.props.scrollPage();
   }
 
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
 
     let direntItemsList = direntList.filter((item, index) => {
-      return index < 100
+      return index < this.state.itemIdex;
     })
-
-    direntItemsList = this.state.direntItemsList.length === 0 ? direntItemsList : this.state.direntItemsList
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);

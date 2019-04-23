@@ -38,6 +38,8 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
+  scrollPage: PropTypes.func.isRequired,
+  isCurrentPage: PropTypes.bool.isRequired
 };
 
 class DirListView extends React.Component {
@@ -97,6 +99,8 @@ class DirListView extends React.Component {
           onAddFile={this.props.onAddFile}
           onAddFolder={this.props.onAddFolder}
           onFileTagChanged={this.props.onFileTagChanged}
+          isCurrentPage={this.props.isCurrentPage}
+          scrollPage={this.props.scrollPage}
         />
       </Fragment>
     );
