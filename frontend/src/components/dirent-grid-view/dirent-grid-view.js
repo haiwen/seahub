@@ -517,7 +517,7 @@ class DirentGridView extends React.Component{
       <Fragment>
         <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}  onScroll={this.gridViewScroll}>
           {
-            direntList.length !== 0 && direntItemsList.map((dirent, index) => {
+            direntItemsList.map((dirent, index) => {
               return (
                 <DirentGridItem
                   key={index}
