@@ -45,8 +45,8 @@ class FileHistory extends React.Component {
 
   listNewHistoryRecords = (filePath, PER_PAGE) => {
     editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
-      let historyList = res.data;
-      if (historyList.length === 0) {
+      let historyData = res.data;
+      if (!historyData) {
         this.setState({isLoading: false});
         throw Error('there has an error in server');
       }
@@ -56,8 +56,8 @@ class FileHistory extends React.Component {
 
   listOldHistoryRecords = (repoID, filePath) => {
     seafileAPI.listOldFileHistoryRecords(repoID, filePath).then((res) => {
-      let historyList = res.data;
-      if (historyList.length === 0) {
+      let historyData = res.data;
+      if (!historyData) {
         this.setState({isLoading: false});
         throw Error('there has an error in server');
       }
