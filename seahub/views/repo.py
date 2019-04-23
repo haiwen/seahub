@@ -279,6 +279,14 @@ def view_shared_dir(request, fileshare):
     #template = 'view_shared_dir.html'
     template = 'view_shared_dir_react.html'
 
+    dir_shared_link = gen_dir_share_link(token)
+
+    desc_for_opg_tags = ''
+    for i, dirent in enumerate(dir_list):
+        desc_for_opg_tags += dirent.obj_name + ' '
+    for i, dirent in enumerate(file_list):
+        desc_for_opg_tags += dirent.obj_name + ' '
+
     return render(request, template, {
             'repo': repo,
             'token': token,
@@ -293,6 +301,8 @@ def view_shared_dir(request, fileshare):
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             'mode': mode,
             'thumbnail_size': thumbnail_size,
+            'dir_shared_link': dir_shared_link,
+            'desc_for_opg_tags': desc_for_opg_tags
             })
 
 @share_link_audit

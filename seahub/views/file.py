@@ -33,6 +33,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
 
+from constance import config
+
 from seaserv import seafile_api, ccnet_api
 from seaserv import get_repo, send_message, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
@@ -1238,6 +1240,8 @@ def view_shared_file(request, fileshare):
         else:
             raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
 
+    file_shared_link = gen_file_share_link(fileshare.token)
+
     return render(request, template, {
             'repo': repo,
             'obj_id': obj_id,
@@ -1259,6 +1263,7 @@ def view_shared_file(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
+            'file_shared_link': file_shared_link,
             })
 
 @share_link_audit
