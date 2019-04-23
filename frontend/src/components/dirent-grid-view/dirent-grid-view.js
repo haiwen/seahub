@@ -73,7 +73,7 @@ class DirentGridView extends React.Component{
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.isCurrentPage) {
+    if (!this.props.isCurrentPage) {
       this.setState({itemIdex: 100})
     }
   }

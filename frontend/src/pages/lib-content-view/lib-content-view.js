@@ -71,7 +71,7 @@ class LibContentView extends React.Component {
       errorMsg: '',
       isDirentDetailShow: false,
       updateDetail: false,
-      isCurrentPage: false,
+      isCurrentPage: true,
     };
 
     window.onpopstate = this.onpopstate;
@@ -413,11 +413,11 @@ class LibContentView extends React.Component {
   }
 
   scrollPage = () => {
-    this.setState({isCurrentPage: false})
+    this.setState({isCurrentPage: true})
   }
 
   switchPage = () => {
-    this.setState({isCurrentPage: true})
+    this.setState({isCurrentPage: false})
   }
 
   getThumbnails = (repoID, path, direntList) => {

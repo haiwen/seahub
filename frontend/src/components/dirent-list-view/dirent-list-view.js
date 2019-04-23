@@ -81,22 +81,22 @@ class DirentListView extends React.Component {
     this.zipToken = null;
   }
 
-  freezeItem = () => {
-    this.setState({isItemFreezed: true});
-  }
-
   componentDidMount() {
     window.addEventListener('scroll', this.listViewScroll, true);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.isCurrentPage) {
+    if (!this.props.isCurrentPage) {
       this.setState({itemIdex: 100})
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.listViewScroll, true);
+  }
+
+  freezeItem = () => {
+    this.setState({isItemFreezed: true});
   }
 
   unfreezeItem = () => {
@@ -145,6 +145,17 @@ class DirentListView extends React.Component {
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
+  }
+
+  listViewScroll = (e) => {
+    let target = e.target;
+    let itemIdex = this.state.itemIdex;
+
+    if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
+      itemIdex += 100
+      this.setState({itemIdex: itemIdex})
+    }
+    this.props.scrollPage();
   }
 
   // for image popup
@@ -536,17 +547,6 @@ class DirentListView extends React.Component {
     }
 
     return [];
-  }
-
-  listViewScroll = (e) => {
-    let target = e.target;
-    let itemIdex = this.state.itemIdex;
-
-    if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
-      itemIdex += 100
-      this.setState({itemIdex: itemIdex})
-    }
-    this.props.scrollPage();
   }
 
   render() {
