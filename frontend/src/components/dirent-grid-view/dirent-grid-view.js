@@ -225,6 +225,8 @@ class DirentGridView extends React.Component{
     seafileAPI.lockfile(repoID, filePath).then(() => {
       this.props.updateDirent(currentObject, 'is_locked', true);
       this.props.updateDirent(currentObject, 'locked_by_me', true);
+      let lockName = username.split('@');
+      this.props.updateDirent(currentObject, 'lock_owner_name', lockName[0]);
     });
   }
 
@@ -234,6 +236,7 @@ class DirentGridView extends React.Component{
     seafileAPI.unlockfile(repoID, filePath).then(() => {
       this.props.updateDirent(currentObject, 'is_locked', false);
       this.props.updateDirent(currentObject, 'locked_by_me', false);
+      this.props.updateDirent(currentObject, 'lock_owner_name', '');
     });
   }
 

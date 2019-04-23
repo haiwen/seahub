@@ -915,7 +915,7 @@ table td {
 .rename-container input {
     box-sizing: content-box;
     padding: 2px 3px;
-    width: 15rem;
+    width: 10rem;
     height: 22px;
     line-height: 19px;
     border-radius: 2px;

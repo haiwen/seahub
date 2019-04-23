@@ -144,6 +144,9 @@ class DirentGridItem extends React.Component {
     gridClass += this.state.isGridSelected ? " grid-selected-active" : " ";
     gridClass += this.state.isGridDropTipShow ? " grid-drop-show" : " ";
 
+    let lockedInfo = gettext('locked by {name}');
+    lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
+
     return(
       <Fragment>
         <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
@@ -161,7 +164,7 @@ class DirentGridItem extends React.Component {
               <img src={`${siteRoot}${fileUrl}`} ref={this.gridIcon} className="thumbnail" onClick={this.onItemClick} alt=""/> :
               <img src={iconUrl} ref={this.gridIcon} width="96" alt='' />
             }
-            {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={dirent.lock_owner_name}/>}
+            {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
           </div>
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable="true" >
             <a className={`grid-file-name-link ${this.state.isGridSelected ? "grid-link-selected-active" : ""}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
