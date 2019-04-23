@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, isPro } from '../../utils/constants';
+import {gettext, isPro, canInvitePeople, siteRoot} from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
+import "../../css/invitations.css";
 
 class UserItem extends React.Component {
 
@@ -318,6 +319,12 @@ class ShareToUser extends React.Component {
               deleteShareItem={this.deleteShareItem} 
               onChangeUserPermission={this.onChangeUserPermission}
             />
+            { canInvitePeople &&
+            <a href={siteRoot + 'invitations/'} className="invite-link-in-popup">
+              <i className="sf2-icon-invite invite-link-icon-in-popup"></i>
+              <span className="invite-link-icon-in-popup">{gettext('Invite People')}</span>
+            </a>
+            }
           </table>
         </div>
       </Fragment>
