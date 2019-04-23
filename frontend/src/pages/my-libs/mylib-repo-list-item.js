@@ -14,6 +14,7 @@ import TransferDialog from '../../components/dialog/transfer-dialog';
 import LibHistorySettingDialog from '../../components/dialog/lib-history-setting-dialog';
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
 import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
+import LabelRepoStateDialog from '../../components/dialog/label-repo-state-dialog';
 import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 
@@ -42,6 +43,7 @@ class MylibRepoListItem extends React.Component {
       isHistorySettingDialogShow: false,
       isChangePasswordDialogShow: false,
       isResetPasswordDialogShow: false,
+      isLabelRepoStateDialogOpen: false
     };
   }
 
@@ -90,7 +92,7 @@ class MylibRepoListItem extends React.Component {
         // todo
         break;
       case 'Label current state':
-        this.onLabel();
+        this.onLabelToggle();
         break;
       default:
         break;
@@ -142,8 +144,8 @@ class MylibRepoListItem extends React.Component {
     this.setState({isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow});
   }
 
-  onLabel = () => {
-    // todo
+  onLabelToggle = () => {
+    this.setState({isLabelRepoStateDialogOpen: !this.state.isLabelRepoStateDialogOpen});
   }
 
   onUnfreezedItem = () => {
@@ -347,6 +349,15 @@ class MylibRepoListItem extends React.Component {
             <ResetEncryptedRepoPasswordDialog
               repoID={repo.repo_id}
               toggleDialog={this.onResetPasswordToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isLabelRepoStateDialogOpen && (
+          <ModalPortal>
+            <LabelRepoStateDialog
+              repoID={repo.repo_id}
+              repoName={repo.repo_name}
+              toggleDialog={this.onLabelToggle}
             />
           </ModalPortal>
         )}
