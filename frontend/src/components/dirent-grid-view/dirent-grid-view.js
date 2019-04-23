@@ -69,7 +69,7 @@ class DirentGridView extends React.Component{
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll, true);
+    window.addEventListener('scroll', this.gridViewScroll, true);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,7 +79,7 @@ class DirentGridView extends React.Component{
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll, true);
+    window.removeEventListener('scroll', this.gridViewScroll, true);
   }
 
   onCreateFileToggle = () => {
@@ -93,7 +93,7 @@ class DirentGridView extends React.Component{
     this.props.onGridItemClick(dirent);
   }
  
-  handleScroll = (e) => {
+  gridViewScroll = (e) => {
     let target = e.target;
     let itemIdex = this.state.itemIdex;
 
@@ -515,7 +515,7 @@ class DirentGridView extends React.Component{
   
     return (
       <Fragment>
-        <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}  onScroll={this.handleScroll}>
+        <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}  onScroll={this.gridViewScroll}>
           {
             direntList.length !== 0 && direntItemsList.map((dirent, index) => {
               return (

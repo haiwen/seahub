@@ -86,7 +86,7 @@ class DirentListView extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll, true);
+    window.addEventListener('scroll', this.listViewScroll, true);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -96,7 +96,7 @@ class DirentListView extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll, true);
+    window.removeEventListener('scroll', this.listViewScroll, true);
   }
 
   unfreezeItem = () => {
@@ -538,7 +538,7 @@ class DirentListView extends React.Component {
     return [];
   }
 
-  handleScroll = (e) => {
+  listViewScroll = (e) => {
     let target = e.target;
     let itemIdex = this.state.itemIdex;
 
@@ -566,7 +566,7 @@ class DirentListView extends React.Component {
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     return (
-      <div className="table-container" ref="table_container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick} onScroll={this.handleScroll}>
+      <div className="table-container" ref="table_container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick} onScroll={this.listViewScroll}>
         <table>
           <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>
