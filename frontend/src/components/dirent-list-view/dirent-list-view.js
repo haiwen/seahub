@@ -566,7 +566,7 @@ class DirentListView extends React.Component {
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     return (
-      <div className="table-container" ref="table_container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick} onScroll={this.listViewScroll}>
+      <div className="table-container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick} onScroll={this.listViewScroll}>
         <table>
           <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>
