@@ -87,9 +87,20 @@ class FileHistory extends React.Component {
           isError: false,
           fileOwner: result.data[0].creator_email,
         });
-        if (result.data.length < 25 && this.state.hasMore) {
+        if (this.state.historyList.length < 25 && this.state.hasMore) {
           this.reloadMore();
         }
+      }
+    } else {
+      this.setState({
+        nextCommit: result.next_start_commit,
+        isError: false,
+      });
+      if (this.state.nextCommit) {
+        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
+          this.setState({isReloadingData: false});
+          this.updateResultState(res.data);
+        });
       }
     }
   }
@@ -159,18 +170,21 @@ class FileHistory extends React.Component {
           isError: false,
           fileOwner: result.data[0].creator_email,
         });
-        if (result.data.length < 25 && this.state.hasMore) {
+        if (this.state.historyList.length < 25 && this.state.hasMore) {
           this.reloadMore();
         }
       }
     } else {
       this.setState({
-        historyList: [...this.state.historyList, ...result.data],
         nextCommit: result.next_start_commit,
-        isLoading: false,
         isError: false,
       });
-      this.reloadMore();
+      if (this.state.nextCommit) {
+        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
+          this.setState({isReloadingData: false});
+          this.updateResultState(res.data);
+        });
+      }
     }
   }
 
