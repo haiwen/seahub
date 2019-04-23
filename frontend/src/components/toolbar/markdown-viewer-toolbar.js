@@ -5,6 +5,8 @@ import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-edi
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
 
+const { seafileCollabServer } = window.app.config;
+
 const propTypes = {
   isDocs: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
@@ -31,7 +33,12 @@ const MoreMenuPropTypes = {
   readOnly: PropTypes.bool.isRequired,
   openDialogs: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
-  editorMode: PropTypes.string.isRequired
+  editorMode: PropTypes.string.isRequired,
+  isSmallScreen: PropTypes.bool,
+  toggleShareLinkDialog: PropTypes.func,
+  backToParentDirectory: PropTypes.func,
+  showFileHistory: PropTypes.func,
+  toggleHistory: PropTypes.func,
 };
 
 class MoreMenu extends React.PureComponent {
@@ -126,8 +133,13 @@ class MarkdownViewerToolbar extends React.Component {
                   }
                 </div>
               }
-              {this.props.collabUsers.length > 0 && <CollabUsersButton className={'collab-users-dropdown'}
-                users={this.props.collabUsers} id={'usersButton'} />}
+              {(seafileCollabServer && this.props.collabUsers.length > 0) &&
+                <CollabUsersButton
+                  className="collab-users-dropdown"
+                  users={this.props.collabUsers}
+                  id="usersButton"
+                />
+              }
               <ButtonGroup>
                 <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                   onMouseDown={this.props.toggleShareLinkDialog}/>
@@ -193,8 +205,13 @@ class MarkdownViewerToolbar extends React.Component {
             <FileInfo toggleStar={this.props.toggleStar} editorUtilities={this.props.editorUtilities}
               fileInfo={this.props.fileInfo}/>
             <div className="topbar-btn-container">
-              {this.props.collabUsers.length > 0 && <CollabUsersButton className={'collab-users-dropdown'}
-                users={this.props.collabUsers} id={'usersButton'} />}
+              {(seafileCollabServer && this.props.collabUsers.length > 0) &&
+                <CollabUsersButton
+                  className="collab-users-dropdown"
+                  users={this.props.collabUsers}
+                  id="usersButton"
+                />
+              }
               <ButtonGroup>
                 { saving ?
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
