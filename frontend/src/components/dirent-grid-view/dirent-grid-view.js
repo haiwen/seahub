@@ -40,8 +40,8 @@ const propTypes = {
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
-  scrollPage: PropTypes.func.isRequired,
-  isCurrentPage: PropTypes.bool.isRequired
+  onPageScroll: PropTypes.func.isRequired,
+  itemShownLimit: PropTypes.bool.isRequired
 };
 
 class DirentGridView extends React.Component{
@@ -73,8 +73,8 @@ class DirentGridView extends React.Component{
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.isCurrentPage) {
-      this.setState({itemIdex: 100})
+    if (this.props.itemShownLimit) {
+      this.setState({itemIdex: 100});
     }
   }
 
@@ -101,7 +101,7 @@ class DirentGridView extends React.Component{
       itemIdex += 100
       this.setState({itemIdex: itemIdex})
     }
-    this.props.scrollPage();
+    this.props.onPageScroll();
   }
 
   onMoveToggle = () => {

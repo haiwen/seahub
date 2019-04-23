@@ -45,8 +45,8 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
-  scrollPage: PropTypes.func.isRequired,
-  isCurrentPage: PropTypes.bool.isRequired,
+  onPageScroll: PropTypes.func.isRequired,
+  itemShownLimit: PropTypes.bool.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -86,7 +86,7 @@ class DirentListView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.isCurrentPage) {
+    if (this.props.itemShownLimit) {
       this.setState({itemIdex: 100})
     }
   }
@@ -155,7 +155,7 @@ class DirentListView extends React.Component {
       itemIdex += 100
       this.setState({itemIdex: itemIdex})
     }
-    this.props.scrollPage();
+    this.props.onPageScroll();
   }
 
   // for image popup
