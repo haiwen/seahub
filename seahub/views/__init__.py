@@ -744,7 +744,7 @@ def libraries(request):
 
     return render(request, 'libraries.html', {
             "allow_public_share": allow_public_share,
-            "guide_enabled": guide_enabled,
+            "guide_enabled": False,  # disable welcome popup window
             "sub_lib_enabled": sub_lib_enabled,
             'enable_wiki': request.user.permissions.can_use_wiki(),
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,

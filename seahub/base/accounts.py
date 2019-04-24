@@ -24,6 +24,7 @@ from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, 
         get_enabled_admin_role_permissions_by_role
 from seahub.utils import is_user_password_strong, get_site_name, \
     clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
+from seahub.utils.auth import gen_user_virtual_id, is_user_virtual_id
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
@@ -49,16 +50,23 @@ class UserManager(object):
         """
         Creates and saves a User with given username and password.
         """
+        virtual_id = gen_user_virtual_id()
+
         # Lowercasing email address to avoid confusion.
         email = email.lower()
 
-        user = User(email=email)
+        user = User(email=virtual_id)
         user.is_staff = is_staff
         user.is_active = is_active
         user.set_password(password)
         user.save()
 
-        return self.get(email=email)
+        # Set email as contact email if this email is not virtual id.
+        if not is_user_virtual_id(email):
+            Profile.objects.add_or_update(username=virtual_id,
+                                          contact_email=email)
+
+        return self.get(email=virtual_id)
 
     def update_role(self, email, role):
         """

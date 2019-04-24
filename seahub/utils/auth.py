@@ -21,6 +21,8 @@ def get_custom_login_bg_image_path():
     """
     return 'custom/login-bg.jpg'
 
-
 def gen_user_virtual_id():
     return gen_token(max_length=32) + VIRTUAL_ID_EMAIL_DOMAIN
+
+def is_user_virtual_id(email):
+    return True if email.endswith(VIRTUAL_ID_EMAIL_DOMAIN) else False
