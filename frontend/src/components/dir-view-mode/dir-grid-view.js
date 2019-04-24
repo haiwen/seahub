@@ -30,8 +30,6 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
-  onPageScroll: PropTypes.func.isRequired,
-  itemShownLimit: PropTypes.bool.isRequired
 };
 
 class DirGridView extends React.Component {
@@ -80,8 +78,6 @@ class DirGridView extends React.Component {
           isDirentDetailShow={this.props.isDirentDetailShow}
           onItemRename={this.props.onItemRename}
           onAddFolder={this.props.onAddFolder}
-          itemShownLimit={this.props.itemShownLimit}
-          onPageScroll={this.props.onPageScroll}
         />
       </Fragment>
     );

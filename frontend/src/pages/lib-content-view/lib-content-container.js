@@ -95,6 +95,7 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
+      itemShowLength: 100,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
@@ -104,6 +105,11 @@ class LibContentContainer extends React.Component {
     if (nextProps.path !== this.props.path || nextProps.updateDetail !== this.props.updateDetail) {
       this.setState({currentDirent: null});
     }
+
+    if (this.props.itemShownLimit) {
+      this.setState({itemShowLength: 100})
+    }
+  
   }
 
   onPathClick = (path) => {
@@ -140,14 +146,29 @@ class LibContentContainer extends React.Component {
     this.props.onItemDelete(dirent);
   }
 
+  onFileScroll = (e) => {
+    let target = e.target;
+    let itemShowLength = this.state.itemShowLength;
+    if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
+      itemShowLength += 100;
+      this.setState({itemShowLength: itemShowLength});
+    }
+    this.props.onPageScroll();
+
+  }
+
   render() {
-    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts } = this.props;
+    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts, direntList } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
       if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0) {
         isRepoInfoBarShow = true;
       }
     } 
+
+    let direntItemsList = direntList.filter((item, index) => {
+      return index < this.state.itemShowLength;
+    })
 
     return (
       <Fragment>
@@ -167,7 +188,7 @@ class LibContentContainer extends React.Component {
               onDeleteRepoTag={this.props.onDeleteRepoTag}
             />
           </div>
-          <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>
+          <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`} onScroll={this.onFileScroll}>
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
               <Fragment>
@@ -184,7 +205,7 @@ class LibContentContainer extends React.Component {
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={this.props.direntList}
+                    direntList={direntItemsList}
                     showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
@@ -225,7 +246,7 @@ class LibContentContainer extends React.Component {
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={this.props.direntList}
+                    direntList={direntItemsList}
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemDelete={this.props.onItemDelete}
@@ -279,7 +300,7 @@ class LibContentContainer extends React.Component {
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={this.props.direntList}
+                    direntList={direntItemsList}
                     showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}

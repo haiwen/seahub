@@ -40,8 +40,6 @@ const propTypes = {
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
-  onPageScroll: PropTypes.func.isRequired,
-  itemShownLimit: PropTypes.bool.isRequired
 };
 
 class DirentGridView extends React.Component{
@@ -63,23 +61,8 @@ class DirentGridView extends React.Component{
       isMutipleOperation: false,
       isGridItemFreezed: false,
       activeDirent: null,
-      itemIdex: 100,
     }
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
-  }
-
-  componentDidMount() {
-    window.addEventListener('scroll', this.gridViewScroll, true);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.itemShownLimit) {
-      this.setState({itemIdex: 100});
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.gridViewScroll, true);
   }
 
   onCreateFileToggle = () => {
@@ -91,17 +74,6 @@ class DirentGridView extends React.Component{
   onGridItemClick = (dirent) => {
     this.setState({activeDirent: dirent});
     this.props.onGridItemClick(dirent);
-  }
- 
-  gridViewScroll = (e) => {
-    let target = e.target;
-    let itemIdex = this.state.itemIdex;
-
-    if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
-      itemIdex += 100
-      this.setState({itemIdex: itemIdex})
-    }
-    this.props.onPageScroll();
   }
 
   onMoveToggle = () => {
@@ -505,19 +477,15 @@ class DirentGridView extends React.Component{
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
 
-    let direntItemsList = direntList.filter((item, index) => {
-      return index < this.state.itemIdex;
-    })
-
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
   
     return (
       <Fragment>
-        <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}  onScroll={this.gridViewScroll}>
+        <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}>
           {
-            direntItemsList.map((dirent, index) => {
+            direntList.map((dirent, index) => {
               return (
                 <DirentGridItem
                   key={index}

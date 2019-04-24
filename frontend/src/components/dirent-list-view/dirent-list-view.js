@@ -45,8 +45,6 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
-  onPageScroll: PropTypes.func.isRequired,
-  itemShownLimit: PropTypes.bool.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -67,7 +65,6 @@ class DirentListView extends React.Component {
       progress: 0,
       isMutipleOperation: true,
       activeDirent: null,
-      itemIdex: 100,
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -79,20 +76,6 @@ class DirentListView extends React.Component {
     this.currentItemRef = null;
 
     this.zipToken = null;
-  }
-
-  componentDidMount() {
-    window.addEventListener('scroll', this.listViewScroll, true);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.itemShownLimit) {
-      this.setState({itemIdex: 100})
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.listViewScroll, true);
   }
 
   freezeItem = () => {
@@ -145,17 +128,6 @@ class DirentListView extends React.Component {
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
-
-  listViewScroll = (e) => {
-    let target = e.target;
-    let itemIdex = this.state.itemIdex;
-
-    if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
-      itemIdex += 100
-      this.setState({itemIdex: itemIdex})
-    }
-    this.props.onPageScroll();
   }
 
   // for image popup
@@ -551,11 +523,6 @@ class DirentListView extends React.Component {
 
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
-
-    let direntItemsList = direntList.filter((item, index) => {
-      return index < this.state.itemIdex;
-    })
-
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
@@ -566,7 +533,7 @@ class DirentListView extends React.Component {
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     return (
-      <div className="table-container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick} onScroll={this.listViewScroll}>
+      <div className="table-container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick}>
         <table>
           <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>
@@ -583,7 +550,7 @@ class DirentListView extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {direntItemsList.map((dirent, index) => {
+            {direntList.map((dirent, index) => {
               return (
                 <DirentListItem
                   ref={this.setDirentItemRef(index)}
