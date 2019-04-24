@@ -85,6 +85,7 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
   updateDetail: PropTypes.bool.isRequired,
+  onListContainerScroll: PropTypes.func.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -138,6 +139,13 @@ class LibContentContainer extends React.Component {
     this.props.onItemDelete(dirent);
   }
 
+  onItemsScroll = (e) => {
+    let target = e.target;
+    if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
+      this.props.onListContainerScroll();
+    }
+  }
+
   render() {
     let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts } = this.props;
     let isRepoInfoBarShow = false;
@@ -165,7 +173,7 @@ class LibContentContainer extends React.Component {
               onDeleteRepoTag={this.props.onDeleteRepoTag}
             />
           </div>
-          <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`}>
+          <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
               <Fragment>
@@ -234,6 +242,7 @@ class LibContentContainer extends React.Component {
                     onGridItemClick={this.onGridItemClick}
                     isDirentDetailShow={this.props.isDirentDetailShow}
                     onItemRename={this.props.onItemRename}
+                    onFileTagChanged={this.props.onFileTagChanged}
                   />
                 )}
                 {this.props.currentMode === 'column' && (

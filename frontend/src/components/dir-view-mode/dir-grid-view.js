@@ -29,6 +29,7 @@ const propTypes = {
   showShareBtn: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirGridView extends React.Component {
@@ -53,6 +54,7 @@ class DirGridView extends React.Component {
             draftCounts={this.props.draftCounts}
             usedRepoTags={this.props.usedRepoTags}
             updateUsedRepoTags={this.props.updateUsedRepoTags}
+            onFileTagChanged={this.props.onFileTagChanged}
           />
         )}
         <DirentGridView

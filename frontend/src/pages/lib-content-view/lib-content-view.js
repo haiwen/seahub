@@ -71,6 +71,7 @@ class LibContentView extends React.Component {
       errorMsg: '',
       isDirentDetailShow: false,
       updateDetail: false,
+      itemsShowLength: 100,
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -404,12 +405,22 @@ class LibContentView extends React.Component {
       if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
+      this.resetShowLength();
     }).catch(() => {
       this.setState({
         isDirentListLoading: false,
         pathExist: false,
       });
     });
+  }
+
+  onListContainerScroll = () => {
+    let itemsShowLength = this.state.itemsShowLength + 100;
+    this.setState({itemsShowLength: itemsShowLength});
+  }
+
+  resetShowLength = () => {
+    this.setState({itemsShowLength: 100});
   }
 
   getThumbnails = (repoID, path, direntList) => {
@@ -1336,6 +1347,10 @@ class LibContentView extends React.Component {
 
     }
 
+    let direntItemsList = this.state.direntList.filter((item, index) => {
+      return index < this.state.itemsShowLength;
+    })
+
     return (
       <div className="main-panel o-hidden">
         <div className="main-panel-north border-left-show">
@@ -1423,7 +1438,7 @@ class LibContentView extends React.Component {
             readmeMarkdown={this.state.readmeMarkdown}
             updateUsedRepoTags={this.updateUsedRepoTags}
             isDirentListLoading={this.state.isDirentListLoading}
-            direntList={this.state.direntList}
+            direntList={direntItemsList}
             showShareBtn={showShareBtn}
             sortBy={this.state.sortBy}
             sortOrder={this.state.sortOrder}
@@ -1453,6 +1468,7 @@ class LibContentView extends React.Component {
             onDeleteRepoTag={this.onDeleteRepoTag}
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
             updateDetail={this.state.updateDetail}
+            onListContainerScroll={this.onListContainerScroll}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
