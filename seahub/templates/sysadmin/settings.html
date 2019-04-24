@@ -161,7 +161,7 @@
     {% endwith %}
 
     {% with type="checkbox" setting_display_name="ENABLE_USER_CREATE_ORG_REPO" setting_name="ENABLE_USER_CREATE_ORG_REPO" setting_val=config_dict.ENABLE_USER_CREATE_ORG_REPO %}
-        {% trans "Allow user to add organization libraries. Otherwise, only system admin can add organization libraries." as help_tip %}
+        {% trans "Allow user to add public libraries. Otherwise, only system admin can add public libraries." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
