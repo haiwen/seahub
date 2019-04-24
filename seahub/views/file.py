@@ -1239,8 +1239,8 @@ def view_shared_file(request, fileshare):
         else:
             raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
 
-    file_share_link = gen_file_share_link(fileshare.token)
-    desc_for_ogp = 'Share link for ' + filename
+    file_share_link = request.path
+    desc_for_ogp = _(u'Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename, size=192)
 
     return render(request, template, {
@@ -1451,8 +1451,8 @@ def view_file_via_shared_dir(request, fileshare):
         else:
             raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
 
-    file_share_link = gen_file_share_link(fileshare.token)
-    desc_for_ogp = 'Share link for ' + filename
+    file_share_link = request.path
+    desc_for_ogp = _(u'Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename, size=192)
 
     return render(request, template, {
