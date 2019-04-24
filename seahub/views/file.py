@@ -1451,6 +1451,10 @@ def view_file_via_shared_dir(request, fileshare):
         else:
             raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
 
+    file_share_link = gen_file_share_link(fileshare.token)
+    desc_for_ogp = 'Share link for ' + filename
+    icon_path_for_ogp = file_icon_filter(filename, size=192)
+
     return render(request, template, {
             'repo': repo,
             'obj_id': obj_id,
@@ -1475,6 +1479,9 @@ def view_file_via_shared_dir(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
+            'file_share_link': file_share_link,
+            'desc_for_ogp': desc_for_ogp,
+            'icon_path_for_ogp': icon_path_for_ogp,
             })
 
 def file_edit_submit(request, repo_id):
