@@ -12,7 +12,7 @@ const propTypes = {
   selectedPath: PropTypes.string,
   onDirentItemClick: PropTypes.func.isRequired,
   onRepoItemClick: PropTypes.func.isRequired,
-  fileSuffix: PropTypes.array,
+  fileSuffixes: PropTypes.array,
 };
 
 class RepoListView extends React.Component {
@@ -36,7 +36,7 @@ class RepoListView extends React.Component {
               onRepoItemClick={this.props.onRepoItemClick} 
               onDirentItemClick={this.props.onDirentItemClick}
               isShowFile={this.props.isShowFile}
-              fileSuffix={this.props.fileSuffix}
+              fileSuffixes={this.props.fileSuffixes}
             />
           );
         })}

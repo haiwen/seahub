@@ -17,7 +17,7 @@ const propTypes = {
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
   mode: PropTypes.oneOf(['current_repo_and_other_repos', 'only_all_repos', 'only_current_library']),
-  fileSuffix: PropTypes.array,
+  fileSuffixes: PropTypes.array,
 };
 
 class FileChooser extends React.Component {
@@ -309,7 +309,7 @@ class FileChooser extends React.Component {
                   onRepoItemClick={this.onRepoItemClick} 
                   onDirentItemClick={this.onDirentItemClick}
                   isShowFile={this.props.isShowFile}
-                  fileSuffix={this.props.fileSuffix}
+                  fileSuffixes={this.props.fileSuffixes}
                 />
               }
             </div>
@@ -328,7 +328,7 @@ class FileChooser extends React.Component {
                   onRepoItemClick={this.onRepoItemClick} 
                   onDirentItemClick={this.onDirentItemClick}
                   isShowFile={this.props.isShowFile}
-                  fileSuffix={this.props.fileSuffix}
+                  fileSuffixes={this.props.fileSuffixes}
                 /> 
               }
             </div>
@@ -350,7 +350,7 @@ class FileChooser extends React.Component {
                 onRepoItemClick={this.onRepoItemClick} 
                 onDirentItemClick={this.onDirentItemClick}
                 isShowFile={this.props.isShowFile}
-                fileSuffix={this.props.fileSuffix}
+                fileSuffixes={this.props.fileSuffixes}
               />
             }
           </div>
@@ -370,7 +370,7 @@ class FileChooser extends React.Component {
                 onRepoItemClick={this.onRepoItemClick} 
                 onDirentItemClick={this.onDirentItemClick}
                 isShowFile={this.props.isShowFile}
-                fileSuffix={this.props.fileSuffix}
+                fileSuffixes={this.props.fileSuffixes}
               /> 
             </div>
           </div>

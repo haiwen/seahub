@@ -47,7 +47,7 @@ class InsertRepoImageDialog extends React.Component {
 
   render() {
     const toggle = this.props.toggleCancel;
-    const fileSuffix = ['jpg', 'png', 'jpeg', 'gif', 'bmp'];
+    const fileSuffixes = ['jpg', 'png', 'jpeg', 'gif', 'bmp'];
     let imageUrl;
     if (this.state.repo) {
       imageUrl = siteRoot + 'thumbnail/' + this.state.repo.repo_id + '/1024' + this.state.selectedPath;
@@ -64,7 +64,7 @@ class InsertRepoImageDialog extends React.Component {
                 onDirentItemClick={this.onDirentItemClick}
                 onRepoItemClick={this.onRepoItemClick}
                 mode="current_repo_and_other_repos"
-                fileSuffix={fileSuffix}
+                fileSuffixes={fileSuffixes}
               />
             </div>
             <div className="insert-image-container col-6">
