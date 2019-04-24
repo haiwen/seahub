@@ -227,8 +227,6 @@ class LibContentContainer extends React.Component {
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
-                    itemShownLimit={this.props.itemShownLimit}
-                    onPageScroll={this.props.onPageScroll}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -260,8 +258,6 @@ class LibContentContainer extends React.Component {
                     isDirentDetailShow={this.props.isDirentDetailShow}
                     onItemRename={this.props.onItemRename}
                     onFileTagChanged={this.props.onFileTagChanged}
-                    itemShownLimit={this.props.itemShownLimit}
-                    onPageScroll={this.props.onPageScroll}
                   />
                 )}
                 {this.props.currentMode === 'column' && (
@@ -322,8 +318,6 @@ class LibContentContainer extends React.Component {
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
-                    itemShownLimit={this.props.itemShownLimit}
-                    onPageScroll={this.props.onPageScroll}
                   />
                 )}
               </Fragment>

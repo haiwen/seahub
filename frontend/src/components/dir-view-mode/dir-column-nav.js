@@ -248,7 +248,7 @@ class DirColumnNav extends React.Component {
     }));
   }
 
-  handleScroll = (e) => {
+  stopTreeScrollPropagation = (e) => {
     e.stopPropagation();
   }
 
@@ -257,7 +257,7 @@ class DirColumnNav extends React.Component {
     const select = this.props.inResizing ? 'none' : '';
     return (
       <Fragment>
-        <div className="dir-content-nav" role="navigation" style={{flex: (flex), userSelect: select}} onScroll={this.handleScroll}>
+        <div className="dir-content-nav" role="navigation" style={{flex: (flex), userSelect: select}} onScroll={this.stopTreeScrollPropagation}>
           {this.props.isTreeDataLoading ? 
             (<Loading/>) :
             (<TreeView
