@@ -86,7 +86,6 @@ const propTypes = {
   onDeleteRepoTag: PropTypes.func.isRequired,
   updateDetail: PropTypes.bool.isRequired,
   onPageScroll: PropTypes.func.isRequired,
-  itemShowLength: PropTypes.number.isRequired
 };
 
 class LibContentContainer extends React.Component {
@@ -156,10 +155,6 @@ class LibContentContainer extends React.Component {
       }
     } 
 
-    let direntItemsList = direntList.filter((item, index) => {
-      return index < this.props.itemShowLength;
-    })
-
     return (
       <Fragment>
         <div className="cur-view-container">
@@ -195,7 +190,7 @@ class LibContentContainer extends React.Component {
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={direntItemsList}
+                    direntList={this.props.direntList}
                     showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
@@ -234,7 +229,7 @@ class LibContentContainer extends React.Component {
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={direntItemsList}
+                    direntList={this.props.direntList}
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemDelete={this.props.onItemDelete}
@@ -286,7 +281,7 @@ class LibContentContainer extends React.Component {
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={direntItemsList}
+                    direntList={this.props.direntList}
                     showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}

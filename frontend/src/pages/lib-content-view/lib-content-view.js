@@ -1346,6 +1346,10 @@ class LibContentView extends React.Component {
 
     }
 
+    let direntItemsList = this.state.direntList.filter((item, index) => {
+      return index < this.state.itemsShowLength;
+    })
+
     return (
       <div className="main-panel o-hidden">
         <div className="main-panel-north border-left-show">
@@ -1433,7 +1437,7 @@ class LibContentView extends React.Component {
             readmeMarkdown={this.state.readmeMarkdown}
             updateUsedRepoTags={this.updateUsedRepoTags}
             isDirentListLoading={this.state.isDirentListLoading}
-            direntList={this.state.direntList}
+            direntList={direntItemsList}
             showShareBtn={showShareBtn}
             sortBy={this.state.sortBy}
             sortOrder={this.state.sortOrder}
