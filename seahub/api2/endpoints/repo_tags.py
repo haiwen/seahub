@@ -98,7 +98,7 @@ class RepoTagsView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        repo_tag = RepoTags.objects.get_one_repo_tag(repo_id, tag_name, tag_color)
+        repo_tag = RepoTags.objects.get_repo_tag_by_name(repo_id, tag_name)
         if repo_tag:
             error_msg = 'repo tag %s already exist.' % tag_name
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

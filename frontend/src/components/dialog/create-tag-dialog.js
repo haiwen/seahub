@@ -53,7 +53,7 @@ class CreateTagDialog extends React.Component {
       if (error.response.status === 500) {
         errMessage = gettext('Internal Server Error');
       } else if (error.response.status === 400) {
-        errMessage = gettext('Repo tag "{name}" is already exist.');
+        errMessage = gettext('Tag "{name}" already exists.');
         errMessage = errMessage.replace('{name}', Utils.HTMLescape(name));
       }
       this.setState({errorMsg: errMessage});
