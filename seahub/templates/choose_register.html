@@ -15,7 +15,7 @@
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
 $('#personal').on('click', function() {
-    location.href = "{% url 'registration_register'%}";
+    location.href = "{% url "social:begin" "weixin" %}";
 });
 $('#org').on('click', function() {
     location.href = "{% url 'org_register'%}";

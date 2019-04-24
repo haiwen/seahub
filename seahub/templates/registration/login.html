@@ -74,6 +74,13 @@ html, body, #wrapper { height:100%; }
     <a id="sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
     {% endif %}
 
+    <span>
+    {% trans "Login with: " %}
+    <a href="{% url "social:begin" "weixin" %}">
+        <img src="{{MEDIA_URL}}img/weixin.png?t=1531388460410" width="32" alt="" title="{% if LANGUAGE_CODE == 'zh-cn' %}微信{% else %}WeChat{% endif %}" />
+    </a>
+    </span>
+
     <div class="login-panel-bottom-container">
         {% if enable_signup %}
         <a href="{{ signup_url }}" class="normal fleft" id="sign-up">{% trans "Signup" %}</a>
