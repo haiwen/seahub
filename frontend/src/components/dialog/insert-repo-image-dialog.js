@@ -4,9 +4,9 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
-import { siteRoot } from '../../utils/constants';
 import '../../css/insert-repo-image-dialog.css';
 
+const { siteRoot, serviceUrl } = window.app.config;
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   filePath: PropTypes.string.isRequired,
@@ -24,7 +24,7 @@ class InsertRepoImageDialog extends React.Component {
   }
 
   insertImage = () => {
-    const url = siteRoot + 'thumbnail/' + this.state.repo.repo_id + '/1024' + this.state.selectedPath;
+    const url = serviceUrl + '/lib/' + this.state.repo.repo_id + '/file' + Utils.encodePath(this.state.selectedPath) + '?raw=1';
     window.richMarkdownEditor.onInsertImage(url);
     this.props.toggleCancel();
   }
