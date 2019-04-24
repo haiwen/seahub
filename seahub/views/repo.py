@@ -279,6 +279,9 @@ def view_shared_dir(request, fileshare):
     #template = 'view_shared_dir.html'
     template = 'view_shared_dir_react.html'
 
+    dir_share_link = request.path
+    desc_for_ogp = _(u'Share link for %s.') % dir_name
+
     return render(request, template, {
             'repo': repo,
             'token': token,
@@ -293,6 +296,8 @@ def view_shared_dir(request, fileshare):
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             'mode': mode,
             'thumbnail_size': thumbnail_size,
+            'dir_share_link': dir_share_link,
+            'desc_for_ogp': desc_for_ogp
             })
 
 @share_link_audit
