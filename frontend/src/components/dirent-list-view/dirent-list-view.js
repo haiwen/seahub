@@ -523,7 +523,7 @@ class DirentListView extends React.Component {
 
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
-  
+
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
