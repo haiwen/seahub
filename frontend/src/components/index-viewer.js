@@ -57,7 +57,19 @@ class IndexContentViewer extends React.Component {
       while (target.tagName !== 'A') {
         target = target.parentNode;
       }
-      link = target.href;
+
+      // link = target.href;
+
+      let expression = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
+      let re = new RegExp(expression);
+
+      let linkHref = target.getAttribute("href");
+      if(!re.test(linkHref)) {
+        link = serviceURL + "/wikis/" + slug + '/' + linkHref;
+      } else {
+        link = linkHref;
+      }
+
     } else {
       link = event.target.href;
     }
