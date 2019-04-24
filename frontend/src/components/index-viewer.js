@@ -9,7 +9,7 @@ const viewerPropTypes = {
   onLinkClick: PropTypes.func.isRequired,
 };
 
-const contentClass = 'wiki-page-content';
+const contentClass = 'wiki-nav-content';
 
 class IndexContentViewer extends React.Component {
 
