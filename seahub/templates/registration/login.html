@@ -2,7 +2,13 @@
 {% load i18n %}
 
 {% block sub_title %}{% trans "Log In" %} - {% endblock %}
+
 {% block header_css_class %}hide{% endblock %}
+
+{% block extra_base_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
+{% endblock %}
+
 {% block extra_style %}
 <style type="text/css">
 html, body, #wrapper { height:100%; }
@@ -61,7 +67,7 @@ html, body, #wrapper { height:100%; }
         </label>
         <a href="{{ SITE_ROOT }}accounts/password/reset/" class="normal forgot-passwd">{% trans "Forgot password?" %}</a>
 
-        <button type="submit" class="submit">{% trans "Log In" %}</button>
+        <button type="submit" class="submit btn btn-primary btn-block">{% trans "Log In" %}</button>
     </form>
 
     {% if enable_sso %}

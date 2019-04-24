@@ -2355,13 +2355,11 @@ button.sf-dropdown-toggle:focus {
 }
 .login-panel .submit {
     margin:20px 0 15px;
-    border-width:0;
-    border-radius:4px;
-    width:100%;
+    background-image: none;
     height:42px;
-    background:#f59f00;
-    color:#f8f9fa;
-    font-size:14px;
+}
+.login-panel .submit:focus {
+    border-color: #f19645;
 }
 .login-panel-bottom-container {
     margin-top:10px;
