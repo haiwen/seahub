@@ -86,7 +86,7 @@ const propTypes = {
   onDeleteRepoTag: PropTypes.func.isRequired,
   updateDetail: PropTypes.bool.isRequired,
   onPageScroll: PropTypes.func.isRequired,
-  itemShownLimit: PropTypes.bool.isRequired
+  itemShowLength: PropTypes.number.isRequired
 };
 
 class LibContentContainer extends React.Component {
@@ -95,7 +95,6 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
-      itemShowLength: 100,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
@@ -105,11 +104,6 @@ class LibContentContainer extends React.Component {
     if (nextProps.path !== this.props.path || nextProps.updateDetail !== this.props.updateDetail) {
       this.setState({currentDirent: null});
     }
-
-    if (this.props.itemShownLimit) {
-      this.setState({itemShowLength: 100})
-    }
-  
   }
 
   onPathClick = (path) => {
@@ -146,15 +140,11 @@ class LibContentContainer extends React.Component {
     this.props.onItemDelete(dirent);
   }
 
-  onFileScroll = (e) => {
+  onItemsScroll = (e) => {
     let target = e.target;
-    let itemShowLength = this.state.itemShowLength;
     if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
-      itemShowLength += 100;
-      this.setState({itemShowLength: itemShowLength});
+      this.props.onPageScroll();
     }
-    this.props.onPageScroll();
-
   }
 
   render() {
@@ -167,7 +157,7 @@ class LibContentContainer extends React.Component {
     } 
 
     let direntItemsList = direntList.filter((item, index) => {
-      return index < this.state.itemShowLength;
+      return index < this.props.itemShowLength;
     })
 
     return (
@@ -188,7 +178,7 @@ class LibContentContainer extends React.Component {
               onDeleteRepoTag={this.props.onDeleteRepoTag}
             />
           </div>
-          <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`} onScroll={this.onFileScroll}>
+          <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
               <Fragment>

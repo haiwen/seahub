@@ -71,7 +71,7 @@ class LibContentView extends React.Component {
       errorMsg: '',
       isDirentDetailShow: false,
       updateDetail: false,
-      itemShownLimit: false,
+      itemsShowLength: 100,
     };
 
     window.onpopstate = this.onpopstate;
@@ -413,11 +413,13 @@ class LibContentView extends React.Component {
   }
 
   onPageScroll = () => {
-    this.setState({itemShownLimit: false})
+    let itemsShowLength = this.state.itemsShowLength;
+    itemsShowLength += 100;
+    this.setState({itemsShowLength: itemsShowLength});
   }
 
   onSwitchPage = () => {
-    this.setState({itemShownLimit: true})
+    this.setState({itemsShowLength: 100});
   }
 
   getThumbnails = (repoID, path, direntList) => {
@@ -1461,8 +1463,8 @@ class LibContentView extends React.Component {
             onDeleteRepoTag={this.onDeleteRepoTag}
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
             updateDetail={this.state.updateDetail}
-            itemShownLimit={this.state.itemShownLimit}
             onPageScroll={this.onPageScroll}
+            itemsShowLength={this.state.itemsShowLength}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
