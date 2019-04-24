@@ -413,8 +413,7 @@ class LibContentView extends React.Component {
   }
 
   onListContainerScroll = () => {
-    let itemsShowLength = this.state.itemsShowLength;
-    itemsShowLength += 100;
+    let itemsShowLength = this.state.itemsShowLength + 100;
     this.setState({itemsShowLength: itemsShowLength});
   }
 
