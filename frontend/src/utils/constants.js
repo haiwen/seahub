@@ -28,7 +28,7 @@ export const canGenerateUploadLink = window.app.pageOptions.canGenerateUploadLin
 export const canViewOrg = window.app.pageOptions.canViewOrg === 'True';
 export const fileAuditEnabled = window.app.pageOptions.fileAuditEnabled ? true : false;
 export const enableFileComment = window.app.pageOptions.enableFileComment ? true : false;
-export const folderPermEnabled = window.app.pageOptions.folderPermEnabled === 'True';
+export const folderPermEnabled = window.app.pageOptions.folderPermEnabled;
 export const enableResetEncryptedRepoPassword = window.app.pageOptions.enableResetEncryptedRepoPassword === 'True';
 export const isEmailConfigured = window.app.pageOptions.isEmailConfigured === 'True';
 export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 'True';

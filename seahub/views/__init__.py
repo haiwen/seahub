@@ -1217,6 +1217,7 @@ def choose_register(request):
 
 @login_required
 def react_fake_view(request, **kwargs):
+    folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
 
     return render(request, "react_app.html", {
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
@@ -1229,6 +1230,7 @@ def react_fake_view(request, **kwargs):
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
+        'folder_perm_enabled': folder_perm_enabled,
     })
 
 @login_required

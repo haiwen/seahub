@@ -54,7 +54,7 @@
             canViewOrg:'{{ user.permissions.can_view_org }}',
             fileAuditEnabled: '{{ file_audit_enabled }}',
             enableFileComment: '{{ enable_file_comment }}',
-            folderPermEnabled: '{{ folder_perm_enabled }}',
+            folderPermEnabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
             enableResetEncryptedRepoPassword: '{{ enable_reset_encrypted_repo_password }}',
             isEmailConfigured: '{{ is_email_configured }}',
             enableUploadFolder: '{{ enable_upload_folder }}',
