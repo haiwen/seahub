@@ -37,7 +37,7 @@ const MoreMenuPropTypes = {
   isSmallScreen: PropTypes.bool,
   toggleShareLinkDialog: PropTypes.func,
   backToParentDirectory: PropTypes.func,
-  showFileHistory: PropTypes.func,
+  showFileHistory: PropTypes.bool,
   toggleHistory: PropTypes.func,
 };
 
