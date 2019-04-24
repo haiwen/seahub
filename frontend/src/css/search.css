@@ -24,6 +24,11 @@
   font-style: normal;
 }
 
+.search-icon-arrow {
+  right: 40px;
+  left: auto;
+}
+
 .search-input {
   height: 1.875rem;
   width: 15rem;
