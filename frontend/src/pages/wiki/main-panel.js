@@ -93,7 +93,7 @@ class MainPanel extends Component {
         <div className="main-panel-center">
           <div className="cur-view-path">
             <div className="path-containter">
-              <a href={siteRoot + 'wikis/' + slug} className="normal">{slug}</a>
+              <a href={siteRoot + 'published/' + slug} className="normal">{slug}</a>
               {this.renderNavPath()}
             </div>
           </div>

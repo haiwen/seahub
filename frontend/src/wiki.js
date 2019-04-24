@@ -58,7 +58,7 @@ class Wiki extends Component {
         this.showDir('/');
       } else {
         this.setState({pathExist: false});
-        let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(initialPath);
+        let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
         window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
       }
     } else if (isDir === 'True') {  
@@ -102,7 +102,7 @@ class Wiki extends Component {
     this.loadDirentList(dirPath);
 
     // update location url
-    let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(dirPath);
+    let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(dirPath);
     window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
   }
 
@@ -125,7 +125,7 @@ class Wiki extends Component {
     });
 
     const hash = window.location.hash;
-    let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(filePath) + hash;
+    let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(filePath) + hash;
     if (filePath === '/home.md') {
       window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
     } else {

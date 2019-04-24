@@ -9,7 +9,7 @@ const viewerPropTypes = {
   onLinkClick: PropTypes.func.isRequired,
 };
 
-const contentClass = 'wiki-page-content';
+const contentClass = 'wiki-nav-content';
 
 class IndexContentViewer extends React.Component {
 
@@ -58,6 +58,7 @@ class IndexContentViewer extends React.Component {
         target = target.parentNode;
       }
       link = target.href;
+
     } else {
       link = event.target.href;
     }
@@ -86,18 +87,27 @@ class IndexContentViewer extends React.Component {
 
       else if (item.type == 'link') {
         url = item.data.href;
+
+        let expression = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
+        let re = new RegExp(expression);
+
+        // Solving relative paths  
+        if (!re.test(url)) {
+          item.data.href = serviceURL + "/published/" + slug + '/' + url;
+        }
         // change file url 
-        if (Utils.isInternalMarkdownLink(url, repoID)) {
+        else if (Utils.isInternalMarkdownLink(url, repoID)) {
           let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
+          console.log(path);
           // replace url
-          item.data.href = serviceURL + '/wikis/' + slug + path;
+          item.data.href = serviceURL + '/published/' + slug + path;
         } 
         // change dir url 
         else if (Utils.isInternalDirLink(url, repoID)) {
           let path = Utils.getPathFromInternalDirLink(url, repoID);
           // replace url
-          item.data.href = serviceURL + '/wikis/' + slug + path;
-        } 
+          item.data.href = serviceURL + '/published/' + slug + path;
+        }
       }
     }
 
@@ -126,7 +136,6 @@ class IndexContentViewer extends React.Component {
       </div>
     );
   }
-
 }
 
 IndexContentViewer.propTypes = viewerPropTypes;
