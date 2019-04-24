@@ -107,6 +107,13 @@ class CaptchaAuthenticationForm(AuthenticationForm):
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(label=_("E-mail"), max_length=255)
 
+    def get_virtual_id_by_email(self, email):
+        p = Profile.objects.get_profile_by_contact_email(email)
+        if p is None:
+            return email
+        else:
+            return p.user
+
     def clean_email(self):
         """
         Validates that a user exists with the given e-mail address.
@@ -115,10 +122,12 @@ class PasswordResetForm(forms.Form):
             raise forms.ValidationError(_(u'Failed to send email, email service is not properly configured, please contact administrator.'))
 
         email = self.cleaned_data["email"].lower().strip()
+        vid = self.get_virtual_id_by_email(email)
 
         # TODO: add filter method to UserManager
         try:
-            self.users_cache = User.objects.get(email=email)
+            self.users_cache = User.objects.get(email=vid)
+            self.users_cache.profile = Profile.objects.get_profile_by_user(vid)
         except User.DoesNotExist:
             raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
 
@@ -139,15 +148,17 @@ class PasswordResetForm(forms.Form):
         else:
             site_name = domain_override
 
+        send_to = user.profile.contact_email if user.profile else user.username
+
         c = {
-            'email': user.username,
             'uid': int_to_base36(user.id),
             'user': user,
             'token': token_generator.make_token(user),
+            'send_to': send_to,
         }
 
         send_html_email(_("Reset Password on %s") % site_name,
-                  email_template_name, c, None, [user.username])
+                  email_template_name, c, None, [send_to])
 
 class SetPasswordForm(forms.Form):
     """
