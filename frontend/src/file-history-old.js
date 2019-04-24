@@ -30,8 +30,6 @@ class FileHistory extends React.Component {
       filePath: '',
       oldFilePath: '',
       isLoading: true,
-      isError: false,
-      fileOwner: '',
       isReloadingData: false,
     };
   }
@@ -51,7 +49,7 @@ class FileHistory extends React.Component {
         this.setState({isLoading: false});
         throw Error('There is an error in server.');
       }
-      this.initResultState(res.data);
+      this.initNewRecords(res.data);
     });
   }
 
@@ -62,56 +60,46 @@ class FileHistory extends React.Component {
         this.setState({isLoading: false});
         throw Error('There is an error in server.');
       }
-      this.initResultState(res.data);
+      this.initOldRecords(res.data);
     });
   }
 
-  initResultState(result) {
+  initNewRecords(result) {
+    this.setState({
+      historyList: result.data,
+      currentPage: result.page,
+      hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
+      isLoading: false,
+    });
+  }
+
+  initOldRecords(result) {
     if (result.data.length) {
-      if (useNewAPI) {
-        this.setState({
-          historyList: result.data,
-          currentPage: result.page,
-          hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
-          isLoading: false,
-          isError: false,
-          fileOwner: result.data[0].creator_email,
-        });
-      } else {
-        this.setState({
-          historyList: result.data,
-          nextCommit: result.next_start_commit,
-          hasMore: result.next_start_commit ? true : false,
-          filePath: result.data[result.data.length-1].path,
-          oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
-          isLoading: false,
-          isError: false,
-          fileOwner: result.data[0].creator_email,
-        });
-      }
-    } else {
       this.setState({
+        historyList: result.data,
         nextCommit: result.next_start_commit,
-        isError: false,
+        filePath: result.data[result.data.length-1].path,
+        oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
+        isLoading: false,
       });
+    } else {
+      this.setState({nextCommit: result.next_start_commit,});
       if (this.state.nextCommit) {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
-          this.initResultState(res.data);
+          this.initOldRecords(res.data);
         });
       }
     }
   }
 
   onScrollHandler = (event) => {
-    if (useNewAPI) {
-      const clientHeight = event.target.clientHeight;
-      const scrollHeight = event.target.scrollHeight;
-      const scrollTop = event.target.scrollTop;
-      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
-      let hasMore = this.state.hasMore;
-      if (isBottom && hasMore) {
-        this.reloadMore();
-      }
+    const clientHeight = event.target.clientHeight;
+    const scrollHeight = event.target.scrollHeight;
+    const scrollTop = event.target.scrollTop;
+    const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+    let hasMore = this.state.hasMore;
+    if (isBottom && hasMore) {
+      this.reloadMore();
     }
   }
 
@@ -124,7 +112,7 @@ class FileHistory extends React.Component {
           isReloadingData: true,
         });
         editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
-          this.updateResultState(res.data);
+          this.updateNewRecords(res.data);
           this.setState({isReloadingData: false});
         });
       } else {
@@ -134,12 +122,12 @@ class FileHistory extends React.Component {
         this.setState({isReloadingData: true});
         if (oldFilePath) {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, oldFilePath, commitID).then((res) => {
-            this.updateResultState(res.data);
+            this.updateOldRecords(res.data);
             this.setState({isReloadingData: false});
           });
         } else {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
-            this.updateResultState(res.data);
+            this.updateOldRecords(res.data);
             this.setState({isReloadingData: false});
           });
         }
@@ -147,37 +135,29 @@ class FileHistory extends React.Component {
     }
   }
 
-  updateResultState(result) {
+  updateNewRecords(result) {
+    this.setState({
+      historyList: [...this.state.historyList, ...result.data],
+      currentPage: result.page,
+      hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
+      isLoading: false,
+    });
+  }
+
+  updateOldRecords(result) {
     if (result.data.length) {
-      if (useNewAPI) {
-        this.setState({
-          historyList: [...this.state.historyList, ...result.data],
-          currentPage: result.page,
-          hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
-          isLoading: false,
-          isError: false,
-          fileOwner: result.data[0].creator_email
-        });
-      } else {
-        this.setState({
-          historyList: [...this.state.historyList, ...result.data],
-          nextCommit: result.next_start_commit,
-          hasMore: result.next_start_commit ? true : false,
-          filePath: result.data[result.data.length-1].path,
-          oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
-          isLoading: false,
-          isError: false,
-          fileOwner: result.data[0].creator_email,
-        });
-      }
-    } else {
       this.setState({
+        historyList: [...this.state.historyList, ...result.data],
         nextCommit: result.next_start_commit,
-        isError: false,
+        filePath: result.data[result.data.length-1].path,
+        oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
+        isLoading: false,
       });
+    } else {
+      this.setState({nextCommit: result.next_start_commit,});
       if (this.state.nextCommit) {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
-          this.updateResultState(res.data);
+          this.updateOldRecords(res.data);
         });
       }
     }
@@ -197,11 +177,11 @@ class FileHistory extends React.Component {
   refershFileList() {
     if (useNewAPI) {
       editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then((res) => {
-        this.initResultState(res.data);
+        this.initNewRecords(res.data);
       });
     } else {
       seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath).then((res) => {
-        this.initResultState(res.data);
+        this.initOldRecords(res.data);
       });
     }
   }
@@ -267,7 +247,9 @@ class FileHistory extends React.Component {
                 </table>
               }
               {this.state.isReloadingData && <Loading />}
-              {this.state.hasMore && <Button className="get-more-btn" onClick={this.reloadMore}>{gettext('More')}</Button>}
+              {this.state.nextCommit && !this.state.isLoading && !this.state.isReloadingData &&
+                <Button className="get-more-btn" onClick={this.reloadMore}>{gettext('More')}</Button>
+              }
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, filePath, historyRepoID } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 
@@ -55,7 +56,7 @@ class HistoryItem extends React.Component {
             <img className="avatar" src={item.creator_avatar_url}></img>{' '}
             <a href={userProfileURL} target='_blank' className="username">{item.creator_name}</a>
           </td>
-          <td>{item.size}</td>
+          <td>{Utils.bytesToSize(item.size)}</td>
           <td>
             {this.state.active &&
               <span className="attr-action-icon">
