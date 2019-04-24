@@ -10,6 +10,8 @@ moment.locale(window.app.config.lang);
 const propTypes = {
   item: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+  canDownload: PropTypes.bool.isRequired,
+  canCompare: PropTypes.bool.isRequired,
   onItemRestore: PropTypes.func.isRequired,
 };
 
@@ -61,8 +63,8 @@ class HistoryItem extends React.Component {
             {this.state.active &&
               <span className="attr-action-icon">
                 {this.props.index !== 0 && <a href="#" onClick={this.onItemRestore}>{gettext('Restore')}</a>}
-                <a href={downloadUrl}>{gettext('Download')}</a>
-                <a href={viewUrl}>{gettext('View')}</a>
+                {this.props.canDownload && <a href={downloadUrl}>{gettext('Download')}</a>}
+                {this.props.canCompare && <a href={viewUrl}>{gettext('View')}</a>}
                 <a href={diffUrl}>{gettext('Diff')}</a>
               </span>
             }
