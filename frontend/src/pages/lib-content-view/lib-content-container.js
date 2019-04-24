@@ -85,7 +85,7 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
   updateDetail: PropTypes.bool.isRequired,
-  onPageScroll: PropTypes.func.isRequired,
+  onListContainerScroll: PropTypes.func.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -142,7 +142,7 @@ class LibContentContainer extends React.Component {
   onItemsScroll = (e) => {
     let target = e.target;
     if (target.scrollTop + document.documentElement.clientHeight - target.offsetTop >= target.scrollHeight) {
-      this.props.onPageScroll();
+      this.props.onListContainerScroll();
     }
   }
 

@@ -403,7 +403,7 @@ class LibContentView extends React.Component {
       if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
-      this.onSwitchPage();
+      this.resetShowLength();
     }).catch(() => {
       this.setState({
         isDirentListLoading: false,
@@ -412,13 +412,13 @@ class LibContentView extends React.Component {
     });
   }
 
-  onPageScroll = () => {
+  onListContainerScroll = () => {
     let itemsShowLength = this.state.itemsShowLength;
     itemsShowLength += 100;
     this.setState({itemsShowLength: itemsShowLength});
   }
 
-  onSwitchPage = () => {
+  resetShowLength = () => {
     this.setState({itemsShowLength: 100});
   }
 
@@ -1467,7 +1467,7 @@ class LibContentView extends React.Component {
             onDeleteRepoTag={this.onDeleteRepoTag}
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
             updateDetail={this.state.updateDetail}
-            onPageScroll={this.onPageScroll}
+            onListContainerScroll={this.onListContainerScroll}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
