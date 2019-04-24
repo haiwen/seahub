@@ -38,11 +38,45 @@ def sso(request):
     if getattr(settings, 'ENABLE_WORK_WEIXIN', False):
         return HttpResponseRedirect(reverse('work_weixin_oauth_login') + next_param)
 
-    return HttpResponseRedirect(next_page)
+    next_param = '?%s=' % REDIRECT_FIELD_NAME + urlquote(reverse('social_post_login'))
+    return HttpResponseRedirect(reverse('social:begin', args=['weixin']) + next_param)
 
 def shib_login(request):
-    # client platform args used to create api v2 token
-    next_page = request.GET.get(REDIRECT_FIELD_NAME, '')
-    query_string = request.META.get('QUERY_STRING', '')
-    params = '?%s=%s&%s' % (REDIRECT_FIELD_NAME, urlquote(next_page), query_string)
-    return HttpResponseRedirect(reverse('sso') + params)
+    if REDIRECT_FIELD_NAME in request.GET:
+        next_page = request.GET[REDIRECT_FIELD_NAME]
+        next_param = '?%s=' % REDIRECT_FIELD_NAME + urlquote(next_page)
+        return HttpResponseRedirect(reverse('sso') + next_param)
+    else:
+        return HttpResponseRedirect(reverse('sso'))
+
+# Set cookie after WeChat login for client SSO
+from seahub.api2.utils import get_token_v1, get_token_v2
+from seahub.auth.decorators import login_required
+
+@login_required
+def social_post_login(request):
+    username = request.user.username
+    keys = (
+        'platform',
+        'device_id',
+        'device_name',
+        'client_version',
+        'platform_version',
+    )
+
+    if all([key in request.GET for key in keys]):
+        platform = request.GET['platform']
+        device_id = request.GET['device_id']
+        device_name = request.GET['device_name']
+        client_version = request.GET['client_version']
+        platform_version = request.GET['platform_version']
+        token = get_token_v2(
+            request, request.user.username, platform, device_id,
+            device_name, client_version, platform_version)
+    else:
+        token = get_token_v1(request.user.username)
+
+    # redirect user to home page
+    response = HttpResponseRedirect(reverse('libraries'))
+    response.set_cookie('seahub_auth', username + '@' + token.key)
+    return response
