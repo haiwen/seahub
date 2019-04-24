@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
+import { Button } from 'reactstrap';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import { siteRoot, gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI } from './utils/constants';
@@ -87,9 +88,6 @@ class FileHistory extends React.Component {
           isError: false,
           fileOwner: result.data[0].creator_email,
         });
-        if (this.state.historyList.length < 25 && this.state.hasMore) {
-          this.reloadMore();
-        }
       }
     } else {
       this.setState({
@@ -98,21 +96,22 @@ class FileHistory extends React.Component {
       });
       if (this.state.nextCommit) {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
-          this.setState({isReloadingData: false});
-          this.updateResultState(res.data);
+          this.initResultState(res.data);
         });
       }
     }
   }
 
   onScrollHandler = (event) => {
-    const clientHeight = event.target.clientHeight;
-    const scrollHeight = event.target.scrollHeight;
-    const scrollTop = event.target.scrollTop;
-    const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
-    let hasMore = this.state.hasMore;
-    if (isBottom && hasMore) {
-      this.reloadMore();
+    if (useNewAPI) {
+      const clientHeight = event.target.clientHeight;
+      const scrollHeight = event.target.scrollHeight;
+      const scrollTop = event.target.scrollTop;
+      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+      let hasMore = this.state.hasMore;
+      if (isBottom && hasMore) {
+        this.reloadMore();
+      }
     }
   }
 
@@ -135,13 +134,13 @@ class FileHistory extends React.Component {
         this.setState({isReloadingData: true});
         if (oldFilePath) {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, oldFilePath, commitID).then((res) => {
-            this.setState({isReloadingData: false});
             this.updateResultState(res.data);
+            this.setState({isReloadingData: false});
           });
         } else {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
-            this.setState({isReloadingData: false});
             this.updateResultState(res.data);
+            this.setState({isReloadingData: false});
           });
         }
       }
@@ -170,9 +169,6 @@ class FileHistory extends React.Component {
           isError: false,
           fileOwner: result.data[0].creator_email,
         });
-        if (this.state.historyList.length < 25 && this.state.hasMore) {
-          this.reloadMore();
-        }
       }
     } else {
       this.setState({
@@ -181,7 +177,6 @@ class FileHistory extends React.Component {
       });
       if (this.state.nextCommit) {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
-          this.setState({isReloadingData: false});
           this.updateResultState(res.data);
         });
       }
@@ -272,6 +267,7 @@ class FileHistory extends React.Component {
                 </table>
               }
               {this.state.isReloadingData && <Loading />}
+              {this.state.hasMore && <Button className="get-more-btn" onClick={this.reloadMore}>{gettext('More')}</Button>}
             </div>
           </div>
         </div>

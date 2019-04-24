@@ -11,7 +11,7 @@
 
   .old-history-main {
     padding-top: 16px;
-    margin-left: 8.333333%;
+    margin: 0 8.333333%;
     display: inline !important;
     overflow: auto;
     position: relative;
@@ -29,6 +29,18 @@
   .old-history-main .go-back:hover {
     color:#ff9933;
     text-decoration: none;
+  }
+
+  .old-history-main .get-more-btn {
+    width: 100%;
+    padding: .5em 0;
+    background: #efefef;
+    border: 0;
+    color: #777;
+    border-radius: 2px;
+  }
+  .old-history-main .get-more-btn:hover {
+    color: #444;
   }
 
   .old-history-main p {
