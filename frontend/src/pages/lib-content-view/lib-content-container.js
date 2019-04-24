@@ -147,7 +147,7 @@ class LibContentContainer extends React.Component {
   }
 
   render() {
-    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts, direntList } = this.props;
+    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
       if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0) {

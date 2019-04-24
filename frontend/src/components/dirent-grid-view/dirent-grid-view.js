@@ -75,7 +75,7 @@ class DirentGridView extends React.Component{
     this.setState({activeDirent: dirent});
     this.props.onGridItemClick(dirent);
   }
-
+  
   onMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
   }

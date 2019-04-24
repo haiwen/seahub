@@ -1468,7 +1468,6 @@ class LibContentView extends React.Component {
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
             updateDetail={this.state.updateDetail}
             onPageScroll={this.onPageScroll}
-            itemsShowLength={this.state.itemsShowLength}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
