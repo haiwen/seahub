@@ -77,7 +77,7 @@ class MoreMenu extends React.PureComponent {
           {(this.props.openDialogs && editorMode === 'rich') &&
             <DropdownItem onMouseDown={this.props.openDialogs.bind(this, 'help')}>{gettext('Help')}</DropdownItem>
           }
-          {isSmall && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
+          {isSmall && canGenerateShareLink && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
           {isSmall && <DropdownItem onMouseDown={this.props.backToParentDirectory}>{gettext('Back to parent directory')}</DropdownItem>}
           {(isSmall && this.props.showFileHistory) &&
             <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('File History')}</DropdownItem>

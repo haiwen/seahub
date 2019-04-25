@@ -414,11 +414,10 @@ class DirentListItem extends React.Component {
     }
 
     let isShowShareBtn = false;
-
-    if (canGenerateShareLink) {
-      isShowShareBtn = true;
-    } else {
-      if (this.props.showShareBtn) {
+    if (this.props.showShareBtn) {
+      if (canGenerateShareLink) {
+        isShowShareBtn = true;
+      } else {
         if (dirent.type === 'dir') {
           isShowShareBtn = true;
         } else {
@@ -437,7 +436,7 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
-                  {this.props.showShareBtn && isShowShareBtn &&
+                  {isShowShareBtn &&
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>
@@ -467,7 +466,7 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
-                  {this.props.showShareBtn && isShowShareBtn &&
+                  {isShowShareBtn &&
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>

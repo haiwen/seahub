@@ -461,7 +461,7 @@ class DirentListView extends React.Component {
       contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
 
       if (dirent.type === 'file') {
-        contextmenuList =  canGenerateShareLink ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider']
+        contextmenuList =  canGenerateShareLink ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
       }
     }
 
