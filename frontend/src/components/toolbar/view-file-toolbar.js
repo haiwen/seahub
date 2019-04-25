@@ -23,6 +23,7 @@ const propTypes = {
   relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   onRelatedFileChange: PropTypes.func.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
 };
 
 class ViewFileToolbar extends React.Component {
@@ -108,7 +109,7 @@ class ViewFileToolbar extends React.Component {
                 {gettext('More')}
               </DropdownToggle>
               <DropdownMenu>
-                {canGenerateShareLink && 
+                {this.props.showShareBtn && canGenerateShareLink && 
                   <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
                 }
                 <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Tags')}</DropdownItem>

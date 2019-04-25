@@ -413,18 +413,7 @@ class DirentListItem extends React.Component {
       return '';
     }
 
-    let isShowShareBtn = false;
-    if (this.props.showShareBtn) {
-      if (canGenerateShareLink) {
-        isShowShareBtn = true;
-      } else {
-        if (dirent.type === 'dir') {
-          isShowShareBtn = true;
-        } else {
-          isShowShareBtn = false;
-        }
-      }
-    }
+    let isShowShareBtn = (dirent.type === 'dir' && this.props.isShowShareBtn) || canGenerateShareLink;
     
     return (
       <Fragment>

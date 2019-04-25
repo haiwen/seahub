@@ -32,6 +32,7 @@ const propTypes = {
   onFilesTagChanged: PropTypes.func.isRequired,
   unSelectDirent: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
 };
 
 class MutipleDirOperationToolbar extends React.Component {
@@ -92,18 +93,16 @@ class MutipleDirOperationToolbar extends React.Component {
 
     const { SHARE, TAGS, RELATED_FILES, HISTORY, OPEN_VIA_CLIENT, LOCK, UNLOCK } = TextTranslation;
 
-    let shareBtn = currentRepoInfo.encrypted ? [] : [SHARE];
 
     if (dirent.type === 'dir') {
+      let shareBtn = this.props.showShareBtn ? [SHARE] : []
       menuList = [...shareBtn];
       return menuList;
     } 
 
     if (dirent.type === 'file') {
-      if (!currentRepoInfo.encrypted) {
-        shareBtn = canGenerateShareLink ? [SHARE] : [];
-      }
-      
+      let shareBtn = (this.props.showShareBtn && canGenerateShareLink) ? [SHARE] : [];
+
       menuList = [...shareBtn, TAGS, RELATED_FILES, 'Divider', HISTORY, 'Divider', OPEN_VIA_CLIENT];
       if (!Utils.isMarkdownFile(dirent.name)) {
         menuList.splice(2, 1);
