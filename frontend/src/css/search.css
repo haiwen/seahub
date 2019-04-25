@@ -22,10 +22,11 @@
   cursor: pointer;
   pointer-events: all;
   font-style: normal;
+  min-width: 25px;
 }
 
 .search-icon-arrow {
-  right: 40px;
+  right: 25px;
   left: auto;
 }
 
