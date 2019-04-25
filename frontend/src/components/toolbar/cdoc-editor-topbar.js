@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, canGenerateShareLink } from '../../utils/constants';
 import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbarcomponent/editorToolBar';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
@@ -62,8 +62,10 @@ class CDOCTopbar extends React.Component {
               {this.props.collabUsers.length > 0 && <CollabUsersButton className={'collab-users-dropdown'}
                 users={this.props.collabUsers} id={'usersButton'} />}
               <ButtonGroup>
-                <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
+                {canGenerateShareLink &&
+                  <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                   onMouseDown={this.props.toggleShareLinkDialog}/>
+                }
                 <IconButton text={gettext('Back to parent directory')} id={'parentDirectory'}
                   icon={'fa fa-folder-open'} onMouseDown={this.props.backToParentDirectory}/>
                 {

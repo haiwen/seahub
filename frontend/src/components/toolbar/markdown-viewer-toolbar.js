@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, canGenerateShareLink } from '../../utils/constants';
 import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbarcomponent/editorToolBar';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
@@ -77,7 +77,7 @@ class MoreMenu extends React.PureComponent {
           {(this.props.openDialogs && editorMode === 'rich') &&
             <DropdownItem onMouseDown={this.props.openDialogs.bind(this, 'help')}>{gettext('Help')}</DropdownItem>
           }
-          {isSmall && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
+          {isSmall && canGenerateShareLink && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
           {isSmall && <DropdownItem onMouseDown={this.props.backToParentDirectory}>{gettext('Back to parent directory')}</DropdownItem>}
           {(isSmall && this.props.showFileHistory) &&
             <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('File History')}</DropdownItem>
@@ -141,8 +141,10 @@ class MarkdownViewerToolbar extends React.Component {
                 />
               }
               <ButtonGroup>
-                <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
+                {canGenerateShareLink && 
+                  <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                   onMouseDown={this.props.toggleShareLinkDialog}/>
+                }
                 <IconButton text={gettext('Back to parent directory')} id={'parentDirectory'}
                   icon={'fa fa-folder-open'} onMouseDown={this.props.backToParentDirectory}/>
                 {

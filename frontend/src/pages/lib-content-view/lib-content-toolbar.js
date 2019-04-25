@@ -71,6 +71,7 @@ class LibContentToolbar extends React.Component {
               relatedFiles={this.props.relatedFiles}
               onFileTagChanged={this.props.onFileTagChanged}
               onRelatedFileChange={this.props.onRelatedFileChange}
+              showShareBtn={this.props.showShareBtn}
             />
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
           </div>
@@ -101,6 +102,7 @@ class LibContentToolbar extends React.Component {
                 relatedFiles={this.props.relatedFiles}
                 unSelectDirent={this.props.unSelectDirent}
                 onFilesTagChanged={this.props.onFilesTagChanged}
+                showShareBtn={this.props.showShareBtn}
               /> :
               <DirOperationToolBar 
                 path={this.props.path}

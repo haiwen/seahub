@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem, Tooltip} from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import ModalPotal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
@@ -23,6 +23,7 @@ const propTypes = {
   relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   onRelatedFileChange: PropTypes.func.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
 };
 
 class ViewFileToolbar extends React.Component {
@@ -88,7 +89,6 @@ class ViewFileToolbar extends React.Component {
     let { filePermission } = this.props;
     let name = Utils.getFileName(this.props.path);
     let dirent = { name: name };
-
     return (
       <Fragment>
         <div className="dir-operation">
@@ -109,7 +109,9 @@ class ViewFileToolbar extends React.Component {
                 {gettext('More')}
               </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
+                {this.props.showShareBtn && canGenerateShareLink && 
+                  <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
+                }
                 <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Tags')}</DropdownItem>
                 <DropdownItem onClick={this.onListRelatedFileToggle}>{gettext('Related Files')}</DropdownItem>
               </DropdownMenu>
