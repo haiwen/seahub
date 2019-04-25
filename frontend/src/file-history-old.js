@@ -216,7 +216,6 @@ class FileHistory extends React.Component {
                 <span className="fas fa-chevron-left"></span>
               </a>
               <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
-              <p>{gettext('A new version will be generated after each modification, and you can restore the file to a previous version.')}</p>
             </div>
             <div>
               {this.state.isLoading && <Loading />}
