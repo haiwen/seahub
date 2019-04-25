@@ -18,9 +18,10 @@ class AppMain extends React.Component {
     super(props, context);
     this._columns = [
       {
-        key: 'id',
-        name: 'ID',
+        key: 'name',
+        name: 'Name',
         width: 80,
+        editable: true,
         resizable: true
       }
     ];
@@ -48,7 +49,7 @@ class AppMain extends React.Component {
   };
 
   createFakeRowObjectData = (index) => {
-    return {id: 'id_' + index};
+    return {name: 'name_' + index};
   };
 
   getColumns = () => {
@@ -70,7 +71,7 @@ class AppMain extends React.Component {
 
   handleAddRow = ({ newRowIndex }) => {
     const newRow = {
-      id: 'id_' + newRowIndex,
+      name: 'name_' + newRowIndex,
     };
 
     let rows = this.state.rows.slice();

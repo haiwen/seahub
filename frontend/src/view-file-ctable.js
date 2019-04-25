@@ -9,6 +9,7 @@ import toaster from './components/toast';
 
 import './css/layout.css';
 import './css/file-view-data-grid.css';
+import './css/react-context-menu.css';
 
 const { repoID, fileName, filePath, err, enableWatermark, userNickName } = window.app.pageOptions;
 
