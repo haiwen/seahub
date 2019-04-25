@@ -186,8 +186,6 @@ class FileHistory extends React.Component {
     }
   }
 
-  onCloseSidePanel = () => {}
-
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
@@ -205,7 +203,7 @@ class FileHistory extends React.Component {
       <Fragment>
         <div id="header" className="old-history-header">
           <div className="logo">
-            <Logo onCloseSidePanel={this.onCloseSidePanel} />
+            <Logo showCloseSidePanelIcon={false}/>
           </div>
           <div className='toolbar'>
             <CommonToolbar onSearchedClick={this.onSearchedClick} />
@@ -226,10 +224,10 @@ class FileHistory extends React.Component {
                 <table className="commit-list">
                   <thead>
                     <tr>
-                      <th width="25%" >{gettext('Time')}</th>
-                      <th width="25%" >{gettext('Modifier')}</th>
-                      <th width="20%" >{gettext('Size')}</th>
-                      <th width="30%" >{gettext('Operation')}</th>
+                      <th width="40%" >{gettext('Time')}</th>
+                      <th width="30%" >{gettext('Modifier')}</th>
+                      <th width="25%" >{gettext('Size')}</th>
+                      <th width="5%" ></th>
                     </tr>
                   </thead>
                   <tbody>

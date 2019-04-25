@@ -1,4 +1,3 @@
-@media (min-width: 768px){
   .old-history-header {
     display: flex;
     justify-content: space-between;
@@ -10,20 +9,18 @@
   }
 
   .old-history-main {
-    padding-top: 16px;
-    margin: 0 8.333333%;
+    padding: 16px 10% 0;
     display: inline !important;
     overflow: auto;
     position: relative;
     min-height: 1px;
-    padding-right: .9375rem;
-    padding-left: .9375rem;
   }
 
   .old-history-main .go-back {
     font-size: 25px;
     color: #ccc;
     float: left;
+    margin-left: -20px;
   }
 
   .old-history-main .go-back:hover {
@@ -79,4 +76,16 @@
     text-decoration: none;
     font-weight: bold;
   }
-}
+
+  .old-history-more-operation i {
+    color: #999;
+    cursor: pointer;
+  }
+
+  .old-history-more-operation a:hover {
+    text-decoration: none;
+  }
+
+  .old-history-more-operation i:hover {
+    color: #666;
+  }
