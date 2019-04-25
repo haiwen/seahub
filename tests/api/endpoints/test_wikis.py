@@ -29,7 +29,7 @@ class WikisViewTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['data']) == 1
         assert json_resp['data'][0]['name'] == wiki.name
-        assert 'wikis/test-wiki' in json_resp['data'][0]['link']
+        assert 'published/test-wiki' in json_resp['data'][0]['link']
         assert json_resp['data'][0]['owner'] == self.user.username
         print json_resp['data'][0]['created_at']
         assert json_resp['data'][0]['created_at'] is not None
@@ -53,7 +53,7 @@ class WikisViewTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['data']) == 1
         assert json_resp['data'][0]['name'] == wiki.name
-        assert 'wikis/test-wiki' in json_resp['data'][0]['link']
+        assert 'published/test-wiki' in json_resp['data'][0]['link']
         assert json_resp['data'][0]['owner'] == self.user.username
 
     def test_can_add(self):
