@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, canGenerateShareLink } from '../../utils/constants';
 import { Utils, isPro } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -92,13 +92,17 @@ class MutipleDirOperationToolbar extends React.Component {
 
     const { SHARE, TAGS, RELATED_FILES, HISTORY, OPEN_VIA_CLIENT, LOCK, UNLOCK } = TextTranslation;
 
+    let shareBtn = currentRepoInfo.encrypted ? [] : [SHARE];
+
     if (dirent.type === 'dir') {
-      menuList = [SHARE];
+      menuList = [...shareBtn];
       return menuList;
     } 
 
     if (dirent.type === 'file') {
-      menuList = [SHARE, TAGS, RELATED_FILES, 'Divider', HISTORY, 'Divider', OPEN_VIA_CLIENT];
+      shareBtn = canGenerateShareLink ? [SHARE] : [];
+      
+      menuList = [...shareBtn, TAGS, RELATED_FILES, 'Divider', HISTORY, 'Divider', OPEN_VIA_CLIENT];
       if (!Utils.isMarkdownFile(dirent.name)) {
         menuList.splice(2, 1);
       }
