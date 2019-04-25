@@ -497,6 +497,7 @@ urlpatterns = [
     url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
+    url(r'^published/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
     url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
     url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
 

@@ -38,7 +38,7 @@ class WikiDirListItem extends React.Component {
 
   render() {
     let { path, dirent } = this.props;
-    let href = siteRoot + 'wikis' + Utils.joinPath(path, dirent.name);
+    let href = siteRoot + 'published' + Utils.joinPath(path, dirent.name);
     let iconUrl = Utils.getDirentIcon(dirent);
 
     return (
