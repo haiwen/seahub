@@ -84,3 +84,7 @@ input.expire-input {
 .share-dialog-main .permission-editor .permission-editor__menu {
   width: 240px;
 }
+
+.share-list-container::-webkit-scrollbar {
+  display: none;
+}
