@@ -60,13 +60,13 @@ class DirentNodeView extends React.Component {
             <div className="d-flex justify-content-center">
               <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>
                 {'+ Markdown'}</button>
-              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.ppt')}>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.pptx')}>
                 {'+ PPT'}</button>
             </div>
             <div className="d-flex justify-content-center">
-              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.doc')}>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.docx')}>
                 {'+ Word'}</button>
-              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xls')}>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xlsx')}>
                 {'+ Excel'}</button>
             </div>
           </div>
