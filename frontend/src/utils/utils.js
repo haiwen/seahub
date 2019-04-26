@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 
 export const Utils = {
@@ -799,6 +799,18 @@ export const Utils = {
     }
     message = message.replace('%(name)s', dirNames[0]);
     return message;
+  },
+
+  handleSearchedItemClick: function(searchedItem) {
+    if (searchedItem.is_dir === true) {
+      let url = siteRoot + 'library/' + searchedItem.repo_id + '/' + searchedItem.repo_name + searchedItem.path;
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    } else {
+      let url = siteRoot + 'lib/' + searchedItem.repo_id + '/file' + Utils.encodePath(searchedItem.path);
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    }
   },
 
 };

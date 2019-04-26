@@ -27,16 +27,8 @@ class FileHistory extends React.Component {
     };
   }
 
-  onSearchedClick = (selectedItem) => {
-    if (selectedItem.is_dir === true) {
-      let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
-    } else {
-      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
-    }
+  onSearchedClick = (searchedItem) => {
+    Utils.handleSearchedItemClick(searchedItem);
   }
 
   setDiffContent = (newMarkdownContent, oldMarkdownContent)=> {
