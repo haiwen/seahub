@@ -100,7 +100,7 @@ class FileToolbar extends React.Component {
               icon="fa fa-history"
               text={gettext('History')}
               tag="a"
-              href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`}
+              href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}`}
             />
           )}
           {(canEditFile && !err) && 

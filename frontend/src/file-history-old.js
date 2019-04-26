@@ -1,0 +1,255 @@
+import React, { Fragment } from 'react';
+import ReactDOM from 'react-dom';
+import { Button } from 'reactstrap';
+import { Utils } from './utils/utils';
+import { seafileAPI } from './utils/seafile-api';
+import { siteRoot, gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload, canCompare } from './utils/constants';
+import editUtilties from './utils/editor-utilties';
+import Loading from './components/loading';
+import Logo from './components/logo';
+import CommonToolbar from './components/toolbar/common-toolbar';
+import HistoryItem from './pages/file-history-old/history-item';
+
+import './assets/css/fa-solid.css';
+import './assets/css/fa-regular.css';
+import './assets/css/fontawesome.css';
+import './css/layout.css';
+import './css/toolbar.css';
+import './css/search.css';
+import './css/file-history-old.css';
+
+class FileHistory extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      historyList: [],
+      currentPage: 1,
+      hasMore: false,
+      nextCommit: undefined,
+      filePath: '',
+      oldFilePath: '',
+      isLoading: true,
+      isReloadingData: false,
+    };
+  }
+
+  componentDidMount() {
+    if (useNewAPI) {
+      this.listNewHistoryRecords(filePath, PER_PAGE);
+    } else {
+      this.listOldHistoryRecords(historyRepoID, filePath);
+    }
+  }
+
+  listNewHistoryRecords = (filePath, PER_PAGE) => {
+    editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+      let historyData = res.data;
+      if (!historyData) {
+        this.setState({isLoading: false});
+        throw Error('There is an error in server.');
+      }
+      this.initNewRecords(res.data);
+    });
+  }
+
+  listOldHistoryRecords = (repoID, filePath) => {
+    seafileAPI.listOldFileHistoryRecords(repoID, filePath).then((res) => {
+      let historyData = res.data;
+      if (!historyData) {
+        this.setState({isLoading: false});
+        throw Error('There is an error in server.');
+      }
+      this.initOldRecords(res.data);
+    });
+  }
+
+  initNewRecords(result) {
+    this.setState({
+      historyList: result.data,
+      currentPage: result.page,
+      hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
+      isLoading: false,
+    });
+  }
+
+  initOldRecords(result) {
+    if (result.data.length) {
+      this.setState({
+        historyList: result.data,
+        nextCommit: result.next_start_commit,
+        filePath: result.data[result.data.length-1].path,
+        oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
+        isLoading: false,
+      });
+    } else {
+      this.setState({nextCommit: result.next_start_commit,});
+      if (this.state.nextCommit) {
+        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
+          this.initOldRecords(res.data);
+        });
+      }
+    }
+  }
+
+  onScrollHandler = (event) => {
+    const clientHeight = event.target.clientHeight;
+    const scrollHeight = event.target.scrollHeight;
+    const scrollTop = event.target.scrollTop;
+    const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+    let hasMore = this.state.hasMore;
+    if (isBottom && hasMore) {
+      this.reloadMore();
+    }
+  }
+
+  reloadMore = () => {
+    if (!this.state.isReloadingData) {
+      if (useNewAPI) {
+        let currentPage = this.state.currentPage + 1;
+        this.setState({
+          currentPage: currentPage,
+          isReloadingData: true,
+        });
+        editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
+          this.updateNewRecords(res.data);
+          this.setState({isReloadingData: false});
+        });
+      } else {
+        let commitID = this.state.nextCommit;
+        let filePath = this.state.filePath;
+        let oldFilePath = this.state.oldFilePath;
+        this.setState({isReloadingData: true});
+        if (oldFilePath) {
+          seafileAPI.listOldFileHistoryRecords(historyRepoID, oldFilePath, commitID).then((res) => {
+            this.updateOldRecords(res.data);
+            this.setState({isReloadingData: false});
+          });
+        } else {
+          seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
+            this.updateOldRecords(res.data);
+            this.setState({isReloadingData: false});
+          });
+        }
+      }
+    }
+  }
+
+  updateNewRecords(result) {
+    this.setState({
+      historyList: [...this.state.historyList, ...result.data],
+      currentPage: result.page,
+      hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
+      isLoading: false,
+    });
+  }
+
+  updateOldRecords(result) {
+    if (result.data.length) {
+      this.setState({
+        historyList: [...this.state.historyList, ...result.data],
+        nextCommit: result.next_start_commit,
+        filePath: result.data[result.data.length-1].path,
+        oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
+        isLoading: false,
+      });
+    } else {
+      this.setState({nextCommit: result.next_start_commit,});
+      if (this.state.nextCommit) {
+        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
+          this.updateOldRecords(res.data);
+        });
+      }
+    }
+  }
+
+  onItemRestore = (item) => {
+    let commitId = item.commit_id;
+    let filePath = item.path;
+    editUtilties.revertFile(filePath, commitId).then(res => {
+      if (res.data.success) {
+        this.setState({isLoading: true});
+        this.refershFileList();
+      }
+    });
+  }
+
+  refershFileList() {
+    if (useNewAPI) {
+      editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then((res) => {
+        this.initNewRecords(res.data);
+      });
+    } else {
+      seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath).then((res) => {
+        this.initOldRecords(res.data);
+      });
+    }
+  }
+
+  onSearchedClick = (searchedItem) => {
+    Utils.handleSearchedItemClick(searchedItem);
+  }
+
+  render() {
+    return (
+      <Fragment>
+        <div id="header" className="old-history-header">
+          <div className="logo">
+            <Logo showCloseSidePanelIcon={false}/>
+          </div>
+          <div className='toolbar'>
+            <CommonToolbar onSearchedClick={this.onSearchedClick} />
+          </div>
+        </div>
+        <div id="main" onScroll={this.onScrollHandler}>
+          <div className="old-history-main">
+            <div>
+              <a href="javascript:window.history.back()" className="go-back" title="Back">
+                <span className="fas fa-chevron-left"></span>
+              </a>
+              <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
+            </div>
+            <div>
+              {this.state.isLoading && <Loading />}
+              {!this.state.isLoading &&
+                <table className="commit-list">
+                  <thead>
+                    <tr>
+                      <th width="40%" >{gettext('Time')}</th>
+                      <th width="30%" >{gettext('Modifier')}</th>
+                      <th width="25%" >{gettext('Size')}</th>
+                      <th width="5%" ></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.historyList.map((item, index) => {
+                      return (
+                        <HistoryItem
+                          key={index} 
+                          item={item}
+                          index={index}
+                          canDownload={canDownload}
+                          canCompare={canCompare}
+                          onItemRestore={this.onItemRestore}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </table>
+              }
+              {this.state.isReloadingData && <Loading />}
+              {this.state.nextCommit && !this.state.isLoading && !this.state.isReloadingData &&
+                <Button className="get-more-btn" onClick={this.reloadMore}>{gettext('More')}</Button>
+              }
+            </div>
+          </div>
+        </div>
+      </Fragment>
+    );
+  }
+}
+
+ReactDOM.render (
+  <FileHistory />,
+  document.getElementById('wrapper')
+);

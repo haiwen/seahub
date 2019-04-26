@@ -830,25 +830,31 @@ def file_revisions(request, repo_id):
     if repo_perm != 'rw' or (is_locked and not locked_by_me):
         can_revert_file = False
 
-    # for 'go back'
-    referer = request.GET.get('referer', '')
+    # Whether use new file history API which read file history from db.
+    suffix_list = seafevents_api.get_file_history_suffix()
+    if suffix_list and isinstance(suffix_list, list):
+        suffix_list = [x.lower() for x in suffix_list]
+    else:
+        logger.error('Wrong type of suffix_list: %s' % repr(suffix_list))
+        suffix_list = []
+    use_new_api = True if file_ext in suffix_list else False
 
-    # Whether use new file revisions page which read file history from db.
     if request.GET.get('_new', None) is not None:
         if request.GET.get('_new') == '0':
-            use_new_page = False
-        else:
-            use_new_page = True
-    else:
-        suffix_list = seafevents_api.get_file_history_suffix()
-        if suffix_list and isinstance(suffix_list, list):
-            suffix_list = [x.lower() for x in suffix_list]
-        else:
-            logger.error('Wrong type of suffix_list: %s' % repr(suffix_list))
-            suffix_list = []
-        use_new_page = True if file_ext in suffix_list else False
+            return render(request, 'file_revisions.html', {
+                'repo': repo,
+                'path': path,
+                'u_filename': u_filename,
+                'zipped': zipped,
+                'is_owner': is_owner,
+                'can_compare': can_compare,
+                'can_revert_file': can_revert_file,
+                'can_download_file': parse_repo_perm(repo_perm).can_download,
+            })
 
-    if use_new_page:
+    use_new_style = True if filetype == 'markdown' else False
+
+    if use_new_style:
         return render(request, 'file_revisions_new.html', {
             'repo': repo,
             'path': path,
@@ -857,10 +863,9 @@ def file_revisions(request, repo_id):
             'is_owner': is_owner,
             'can_compare': can_compare,
             'can_revert_file': can_revert_file,
-            'referer': referer,
         })
 
-    return render(request, 'file_revisions.html', {
+    return render(request, 'file_revisions_old.html', {
         'repo': repo,
         'path': path,
         'u_filename': u_filename,
@@ -869,8 +874,8 @@ def file_revisions(request, repo_id):
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
         'can_download_file': parse_repo_perm(repo_perm).can_download,
-        'referer': referer,
-        })
+        'use_new_api': use_new_api,
+    })
 
 
 def demo(request):
