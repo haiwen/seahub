@@ -221,12 +221,8 @@ class Draft extends React.Component {
   addComment = (e) => {
     e.stopPropagation();
     this.getQuote();
-    if (!this.quote) {
-      return;
-    }
-    this.setState({
-      isShowCommentDialog: true
-    });
+    if (!this.quote) return;
+    this.setState({ isShowCommentDialog: true });
   }
 
   onCommentAdded = () => {
@@ -482,8 +478,7 @@ class Draft extends React.Component {
       }
       if (tab == 'reviewInfo') { 
         this.initialContent();
-      }
-      else if (tab == 'history') {
+      } else if (tab == 'history') {
         this.initialDiffViewerContent();
       }
       this.setState({
@@ -553,8 +548,7 @@ class Draft extends React.Component {
         newNativeRange.setStartBefore(startNode);
         newNativeRange.setEndAfter(startNode);
         this.range =  findRange(newNativeRange, this.refs.diffViewer);
-      }
-      else {
+      } else {
         this.range = findRange(nativeRange, this.refs.diffViewer);
       }
       if (!this.range) {
@@ -588,9 +582,7 @@ class Draft extends React.Component {
 
   getQuote = () => {
     let range = this.range;
-    if (!range) {
-      return;
-    }
+    if (!range) return;
     this.quote = '';
     const { document } = this.refs.diffViewer.value;
     let { anchor, focus } = range;
@@ -633,15 +625,11 @@ class Draft extends React.Component {
   removeNullNode = (oldNodes) => {
     let newNodes = [];
     oldNodes.map((node) => {
-      const text = node.text.trim();
+      if (!node.text.trim()) return;
       const childNodes = node.nodes;
-      if (!text) {
-        return;
-      }
       if ((childNodes && childNodes.size === 1) || (!childNodes)) {
         newNodes.push(node);
-      }
-      else if (childNodes.size > 1) {
+      } else if (childNodes.size > 1) {
         let nodes = this.removeNullNode(childNodes);
         let newNode = Block.create({
           nodes: nodes,
@@ -657,29 +645,21 @@ class Draft extends React.Component {
 
   onResizeMouseUp = () => {
     if (this.state.inResizing) {
-      this.setState({
-        inResizing: false
-      });
+      this.setState({ inResizing: false });
     }
   }
 
   onResizeMouseDown = () => {
-    this.setState({
-      inResizing: true
-    });
+    this.setState({ inResizing: true });
   };
 
   onResizeMouseMove = (e) => {
     let rate = 100 - e.nativeEvent.clientX / this.refs.main.clientWidth * 100;
     if (rate < 20 || rate > 60) {
-      this.setState({
-        inResizing: false
-      });
+      this.setState({ inResizing: false });
       return null;
     }
-    this.setState({
-      rightPartWidth: rate
-    });
+    this.setState({ rightPartWidth: rate });
   };
 
   componentWillMount() {
@@ -701,20 +681,14 @@ class Draft extends React.Component {
   renderDiffButton = () => {
     switch(draftStatus) {
       case 'open':
-        if (!draftFileExists) {
+        if (!draftFileExists || !originFileExists) {
           return;
         }
-
-        if (!originFileExists) {
-          return;
-        }
-
         return this.showDiffButton();
       case 'published':
         if (!originFileExists) {
           return;
-        } 
-
+        }
         return this.showDiffButton();
     }
   }
@@ -879,7 +853,7 @@ class Draft extends React.Component {
             </div>
           </div>
         </div>
-        { this.state.showReviewerDialog &&
+        {this.state.showReviewerDialog &&
           <ModalPortal>
             <AddReviewerDialog
               showReviewerDialog={this.state.showReviewerDialog}
@@ -895,7 +869,6 @@ class Draft extends React.Component {
               toggleCommentDialog={this.toggleCommentDialog}
               onCommentAdded={this.onCommentAdded}
               quote={this.quote}
-              draftID={draftID}
               newIndex={this.newIndex}
               oldIndex={this.oldIndex}
             />
@@ -914,13 +887,14 @@ class SidePanelReviewers extends React.Component {
   }
 
   render() {
+    const { reviewers } = this.props;
     return (
       <div className="review-side-panel-item">
         <div className="review-side-panel-header">{gettext('Reviewers')}
           <i className="fa fa-cog" onClick={this.props.toggleAddReviewerDialog}></i>
         </div>
-        { this.props.reviewers.length > 0 ?
-          this.props.reviewers.map((item, index = 0, arr) => {
+        {reviewers.length > 0 ?
+          reviewers.map((item, index = 0, arr) => {
             return (
               <div className="reviewer-info" key={index}>
                 <img className="avatar review-side-panel-avatar" src={item.avatar_url} alt=""/>
@@ -1023,7 +997,7 @@ class SidePanelChanges extends React.Component {
         <div className="review-side-panel-header">{gettext('Changes')}</div>
         <div className="changes-info">
           <span>{gettext('Number of changes:')}{' '}{this.props.changedNumber}</span>
-          { this.props.changedNumber > 0 &&
+          {this.props.changedNumber > 0 &&
             <div>
               <i className="fa fa-arrow-circle-up" onClick={() => { this.props.scrollToChangedNode('down');}}></i>
               <i className="fa fa-arrow-circle-down" onClick={() => { this.props.scrollToChangedNode('up');}}></i>

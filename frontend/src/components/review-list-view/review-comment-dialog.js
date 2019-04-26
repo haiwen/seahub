@@ -13,7 +13,6 @@ const commentDialogPropTypes = {
   quote: PropTypes.string,
   newIndex: PropTypes.number,
   oldIndex: PropTypes.number,
-  draftID: PropTypes.string,
 };
 
 class ReviewCommentDialog extends React.Component {
@@ -28,43 +27,35 @@ class ReviewCommentDialog extends React.Component {
 
   handleCommentChange = (event) => {
     let comment = event.target.value;
-    this.setState({
-      comment: comment
-    });
+    this.setState({ comment: comment });
   }
 
-  submitComment = () => {
-    let comment = this.state.comment.trim();
-    if (comment.length > 0) {
-      if (this.props.quote.length > 0) {
-        let detail = {
-          quote: this.props.quote,
-          newIndex: this.props.newIndex,
-          oldIndex: this.props.oldIndex
-        };
-        let detailJSON = JSON.stringify(detail);
-        seafileAPI.postComment(draftRepoID, draftFilePath, comment, detailJSON).then((response) => {
-          this.props.onCommentAdded();
-        });
-      }
-      else {
-        seafileAPI.postComment(draftRepoID, draftFilePath, comment).then((response) => {
-          this.props.onCommentAdded();
-        });
-      }
-      this.setState({
-        comment: ''
+  submitComment = () => {    
+    const { quote, newIndex, oldIndex } = this.props;
+    const comment = this.state.comment.trim();
+    if (comment.length === 0) return;
+    if (quote.length > 0) {
+      let detail = {
+        quote: quote,
+        newIndex: newIndex,
+        oldIndex: oldIndex
+      };
+      seafileAPI.postComment(draftRepoID, draftFilePath, comment, JSON.stringify(detail)).then(() => {
+        this.props.onCommentAdded();
+      });
+    } else {
+      seafileAPI.postComment(draftRepoID, draftFilePath, comment).then(() => {
+        this.props.onCommentAdded();
       });
     }
+    this.setState({ comment: '' });
   }
 
   setQuoteText = (mdQuote) => {
     processor.process(mdQuote).then(
       (result) => {
         let quote = String(result);
-        this.setState({
-          quote: quote
-        });
+        this.setState({ quote: quote });
       }
     );
   }
