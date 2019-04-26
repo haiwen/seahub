@@ -1230,7 +1230,7 @@ class LibContentView extends React.Component {
   }
   
   goDraftPage = () => {
-    window.location.href = siteRoot + 'drafts/' + this.state.draftID + '/';
+    window.open(siteRoot + 'drafts/' + this.state.draftID + '/');
   }
 
   sortItems = (sortBy, sortOrder) => {
