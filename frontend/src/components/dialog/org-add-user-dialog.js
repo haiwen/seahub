@@ -100,10 +100,10 @@ class AddOrgUserDialog extends React.Component {
   }
 
   validateInputParams() {
-    let errMessage = '';
+    let errMessage;
     let email = this.state.email;
     if (!email.length) {
-      errMessage = 'email is required';
+      errMessage = gettext('email is required');
       this.setState({errMessage: errMessage});
       return false;
     }
@@ -111,17 +111,17 @@ class AddOrgUserDialog extends React.Component {
     let password1 = this.state.password;
     let password2 = this.state.passwdnew;
     if (!password1.length) {
-      errMessage = 'Please enter password';
+      errMessage = gettext('Please enter password');
       this.setState({errMessage: errMessage});
       return false;
     }
     if (!password2.length) {
-      errMessage = 'Please enter the password again';
+      errMessage = gettext('Please enter the password again');
       this.setState({errMessage: errMessage});
       return false;
     }
     if (password1 !== password2) {
-      errMessage = 'Passwords don\'t match';
+      errMessage = gettext('Passwords don\'t match');
       this.setState({errMessage: errMessage});
       return false;
     }
@@ -130,7 +130,7 @@ class AddOrgUserDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Add User')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -157,7 +157,7 @@ class AddOrgUserDialog extends React.Component {
               <Input id="userPwdNew" innerRef={input => {this.passwdNewInput = input;}}  className="passwd"   value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
           </Form>
-          <Label className="err-message">{gettext(this.state.errMessage)}</Label>
+          {this.state.errMessage && <Label className="err-message">{this.state.errMessage}</Label>}
         </ModalBody>
         <ModalFooter>
           <Button color="primary" disabled={this.state.isAddingUser} onClick={this.handleSubmit} className={this.state.isAddingUser ? 'btn-loading' : ''}>{gettext('Submit')}</Button>

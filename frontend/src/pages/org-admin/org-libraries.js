@@ -115,7 +115,7 @@ class OrgLibraries extends Component {
                       deleteRepoItem={this.deleteRepoItem}
                       transferRepoItem={this.transferRepoItem}
                     />
-                  )}
+                  );}
                 )}
               </tbody>
             </table>
@@ -132,9 +132,8 @@ class OrgLibraries extends Component {
 }
 
 const propTypes = {
-  key: PropTypes.number.isRequired,
   repo: PropTypes.object.isRequired,
-  isItemFreezed: PropTypes.boolean,
+  isItemFreezed: PropTypes.bool,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   deleteRepoItem: PropTypes.func.isRequired,
