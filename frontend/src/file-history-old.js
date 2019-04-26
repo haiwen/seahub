@@ -203,24 +203,23 @@ class FileHistory extends React.Component {
         </div>
         <div id="main" onScroll={this.onScrollHandler}>
           <div className="old-history-main">
-            <div>
+            <Fragment>
               <a href="javascript:window.history.back()" className="go-back" title="Back">
                 <span className="fas fa-chevron-left"></span>
               </a>
               <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
-            </div>
-            <div>
-              {this.state.isLoading && <Loading />}
-              {!this.state.isLoading &&
-                <table className="commit-list">
-                  <thead>
-                    <tr>
-                      <th width="40%" >{gettext('Time')}</th>
-                      <th width="30%" >{gettext('Modifier')}</th>
-                      <th width="25%" >{gettext('Size')}</th>
-                      <th width="5%" ></th>
-                    </tr>
-                  </thead>
+            </Fragment>
+            <Fragment>
+              <table className="commit-list">
+                <thead>
+                  <tr>
+                    <th width="40%" >{gettext('Time')}</th>
+                    <th width="30%" >{gettext('Modifier')}</th>
+                    <th width="25%" >{gettext('Size')}</th>
+                    <th width="5%" ></th>
+                  </tr>
+                </thead>
+                {!this.state.isLoading &&
                   <tbody>
                     {this.state.historyList.map((item, index) => {
                       return (
@@ -235,13 +234,13 @@ class FileHistory extends React.Component {
                       );
                     })}
                   </tbody>
-                </table>
-              }
-              {this.state.isReloadingData && <Loading />}
+                }
+              </table>
+              {(this.state.isReloadingData || this.state.isLoading) && <Loading />}
               {this.state.nextCommit && !this.state.isLoading && !this.state.isReloadingData &&
                 <Button className="get-more-btn" onClick={this.reloadMore}>{gettext('More')}</Button>
               }
-            </div>
+            </Fragment>
           </div>
         </div>
       </Fragment>
