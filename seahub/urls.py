@@ -703,6 +703,12 @@ if getattr(settings, 'ENABLE_ONLYOFFICE', False):
         url(r'^onlyoffice/editor-callback/$', onlyoffice_editor_callback, name='onlyoffice_editor_callback'),
     ]
 
+if getattr(settings, 'ENABLE_BISHENG_OFFICE', False):
+    from seahub.bisheng_office.views import BishengOfficeView
+    urlpatterns += [
+        url(r'^api/v2.1/bisheng-office/$', BishengOfficeView.as_view(), name='api-v2.1-bisheng-office'),
+    ]
+
 if getattr(settings, 'ENABLE_CAS', False):
     from seahub_extra.django_cas_ng.views import login as cas_login
     from seahub_extra.django_cas_ng.views import logout as cas_logout

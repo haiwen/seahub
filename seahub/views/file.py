@@ -78,8 +78,6 @@ from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
 from seahub.drafts.utils import get_file_draft, \
         is_draft_file, has_draft_file
 
-from seahub.constants import HASH_URLS
-
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, add_office_convert_task,
@@ -91,6 +89,7 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX
 
+# wopi
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
 except ImportError:
@@ -111,6 +110,7 @@ try:
 except ImportError:
     OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ()
 
+# onlyoffice
 try:
     from seahub.settings import ENABLE_ONLYOFFICE
 except ImportError:
@@ -125,6 +125,12 @@ try:
     from seahub.onlyoffice.settings import ONLYOFFICE_EDIT_FILE_EXTENSION
 except ImportError:
     ONLYOFFICE_EDIT_FILE_EXTENSION = ()
+
+# bisheng office
+from seahub.bisheng_office.utils import get_bisheng_dict, \
+        get_bisheng_editor_url, get_bisheng_preivew_url
+from seahub.bisheng_office.settings import ENABLE_BISHENG_OFFICE
+from seahub.bisheng_office.settings import BISHENG_OFFICE_FILE_EXTENSION
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -173,7 +179,7 @@ def repo_file_get(raw_path, file_enc):
     try:
         file_response = urllib2.urlopen(raw_path)
         content = file_response.read()
-    except urllib2.HTTPError, e:
+    except urllib2.HTTPError as e:
         logger.error(e)
         err = _(u'HTTPError: failed to open file online')
         return err, '', None
@@ -825,6 +831,31 @@ def view_lib_file(request, repo_id, path):
                 return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
             else:
                 return_dict['err'] = _(u'Error when prepare OnlyOffice file preview page.')
+
+        if ENABLE_BISHENG_OFFICE and fileext in BISHENG_OFFICE_FILE_EXTENSION:
+
+            bisheng_info_dict = get_bisheng_dict(username, repo_id, path)
+            doc_id = bisheng_info_dict['doc_id']
+            call_url = bisheng_info_dict['call_url']
+            sign = bisheng_info_dict['sign']
+
+            # openEditor vs openPreview
+            can_edit = False
+            if parse_repo_perm(permission).can_edit_on_web and \
+                    ((not is_locked) or (is_locked and locked_by_me) or \
+                    (is_locked and locked_by_online_office)):
+                can_edit = True
+
+            if can_edit:
+                editor_url = get_bisheng_editor_url(call_url, sign)
+            else:
+                editor_url = get_bisheng_preivew_url(call_url, sign)
+
+            # store info to cache
+            bisheng_info_dict['can_edit'] = can_edit
+            cache.set('BISHENG_OFFICE_' + doc_id, bisheng_info_dict, None)
+
+            return HttpResponseRedirect(editor_url)
 
         if not HAS_OFFICE_CONVERTER:
             return_dict['err'] = "File preview unsupported"
@@ -1537,7 +1568,7 @@ def file_edit_submit(request, repo_id):
 
     try:
         content = content.encode(encoding)
-    except UnicodeEncodeError as e:
+    except UnicodeEncodeError:
         remove_tmp_file()
         return error_json(_(u'The encoding you chose is not proper.'))
 
@@ -1579,7 +1610,7 @@ def file_edit_submit(request, repo_id):
         remove_tmp_file()
         return HttpResponse(json.dumps({'href': next}),
                             content_type=content_type)
-    except SearpcError, e:
+    except SearpcError as e:
         remove_tmp_file()
         return error_json(str(e))
 
@@ -1806,7 +1837,7 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_
 
         try:
             err, file_content, encoding = repo_file_get(inner_path, file_enc)
-        except Exception, e:
+        except Exception as e:
             return None, 'error when read file from fileserver: %s' % e
         return file_content, err
 
@@ -1962,7 +1993,7 @@ def office_convert_query_status(request, cluster_internal=False):
     ret = {'success': False}
     try:
         ret = query_office_convert_status(file_id, doctype, cluster_internal=cluster_internal)
-    except Exception, e:
+    except Exception as e:
         logging.exception('failed to call query_office_convert_status')
         ret['error'] = str(e)
 
