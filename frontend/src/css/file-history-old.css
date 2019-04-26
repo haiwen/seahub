@@ -68,6 +68,7 @@
   width: 16px;
   height: 16px;
   border-radius: 2px;
+  vertical-align: middle;
 }
 
 .old-history-main .commit-list .username {
