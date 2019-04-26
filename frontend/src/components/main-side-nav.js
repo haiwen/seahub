@@ -200,7 +200,7 @@ class MainSideNav extends React.Component {
             }
             {enableWiki &&
               <li className="nav-item">
-                <Link className={`nav-link ellipsis ${this.getActiveClass('wikis')}`} to={siteRoot + 'wikis/'} title={gettext('Wikis')} onClick={() => this.tabItemClick('wikis')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Published Libraries')} onClick={() => this.tabItemClick('published')}>
                   <span className="sf2-icon-wiki-view" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Published Libraries')}</span>
                 </Link>

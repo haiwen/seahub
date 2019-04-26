@@ -230,7 +230,7 @@ class App extends Component {
                 onTabNavClick={this.tabItemClick}
                 onGroupChanged={this.onGroupChanged}
               />
-              <Wikis path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
+              <Wikis path={siteRoot + 'published'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
               <PublicSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
             </Router>
           </MainPanel>

@@ -473,19 +473,19 @@ export const Utils = {
 
   isWikiInternalMarkdownLink: function(url, slug) {
     slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug + '.*\.md$');
+    var re = new RegExp(serviceURL + '/published/' + slug + '.*\.md$');
     return re.test(url);
   },
 
   isWikiInternalDirLink: function(url, slug) {
     slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug + '.*');
+    var re = new RegExp(serviceURL + '/published/' + slug + '.*');
     return re.test(url);
   },
 
   getPathFromWikiInternalMarkdownLink: function(url, slug) {
     slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug + '(.*\.md)');
+    var re = new RegExp(serviceURL + '/published/' + slug + '(.*\.md)');
     var array = re.exec(url);
     var path = array[1];
     try {
@@ -499,7 +499,7 @@ export const Utils = {
   
   getPathFromWikiInternalDirLink: function(url, slug) {
     slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug + '(/.*)');
+    var re = new RegExp(serviceURL + '/published/' + slug + '(/.*)');
     var array = re.exec(url);
     var path = array[1];
     try {

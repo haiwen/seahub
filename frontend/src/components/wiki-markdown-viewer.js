@@ -151,13 +151,13 @@ class WikiMarkdownViewer extends React.Component {
         if (Utils.isInternalMarkdownLink(url, repoID)) {
           let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
           // replace url
-          item.data.href = serviceURL + '/wikis/' + slug + path;
+          item.data.href = serviceURL + '/published/' + slug + path;
         } 
         // change dir url 
         else if (Utils.isInternalDirLink(url, repoID)) {
           let path = Utils.getPathFromInternalDirLink(url, repoID);
           // replace url
-          item.data.href = serviceURL + '/wikis/' + slug + path;
+          item.data.href = serviceURL + '/published/' + slug + path;
         } 
       }
     }
