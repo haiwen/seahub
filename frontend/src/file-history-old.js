@@ -122,12 +122,12 @@ class FileHistory extends React.Component {
         this.setState({isReloadingData: true});
         if (oldFilePath) {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, oldFilePath, commitID).then((res) => {
-            this.updateOldRecords(res.data);
+            this.updateOldRecords(res.data, oldFilePath);
             this.setState({isReloadingData: false});
           });
         } else {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
-            this.updateOldRecords(res.data);
+            this.updateOldRecords(res.data, filePath);
             this.setState({isReloadingData: false});
           });
         }
@@ -144,7 +144,7 @@ class FileHistory extends React.Component {
     });
   }
 
-  updateOldRecords(result) {
+  updateOldRecords(result, filePath) {
     if (result.data.length) {
       this.setState({
         historyList: [...this.state.historyList, ...result.data],
@@ -157,7 +157,7 @@ class FileHistory extends React.Component {
       this.setState({nextCommit: result.next_start_commit,});
       if (this.state.nextCommit) {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
-          this.updateOldRecords(res.data);
+          this.updateOldRecords(res.data, filePath);
         });
       }
     }
