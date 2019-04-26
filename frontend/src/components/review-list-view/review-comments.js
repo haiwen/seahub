@@ -37,9 +37,7 @@ class ReviewComments extends React.Component {
         let commentItem = new reviewComment(item);
         commentList.push(commentItem);
       });
-      this.setState({
-        commentsList: commentList
-      });
+      this.setState({ commentsList: commentList });
       if (scroll) {
         let that = this;
         setTimeout(() => {
@@ -50,21 +48,17 @@ class ReviewComments extends React.Component {
   }
 
   handleCommentChange = (event) => {
-    this.setState({
-      comment: event.target.value,
-    });
+    this.setState({ comment: event.target.value });
   }
 
   submitComment = () => {
     let comment = this.state.comment.trim();
     if (comment.length > 0) {
-      seafileAPI.postComment(draftRepoID, draftFilePath, comment).then((response) => {
+      seafileAPI.postComment(draftRepoID, draftFilePath, comment).then(() => {
         this.listComments(true);
         this.props.getCommentsNumber();
       });
-      this.setState({
-        comment: ''
-      });
+      this.setState({ comment: '' });
     }
   }
 
@@ -83,9 +77,7 @@ class ReviewComments extends React.Component {
   }
 
   toggleResolvedComment = () => {
-    this.setState({
-      showResolvedComment: !this.state.showResolvedComment
-    });
+    this.setState({ showResolvedComment: !this.state.showResolvedComment });
   }
 
   deleteComment = (event) => {
@@ -97,46 +89,32 @@ class ReviewComments extends React.Component {
 
   onResizeMouseUp = () => {
     if (this.state.inResizing) {
-      this.setState({
-        inResizing: false
-      });
+      this.setState({ inResizing: false });
     }
   }
 
   onResizeMouseDown = () => {
-    this.setState({
-      inResizing: true
-    });
+    this.setState({ inResizing: true });
   };
 
   onResizeMouseMove = (event) => {
     let rate = 100 - (event.nativeEvent.clientY - 120 ) / this.refs.comment.clientHeight * 100;
     if (rate < 20 || rate > 70) {
       if (rate < 20) {
-        this.setState({
-          commentFooterHeight: 25
-        });
+        this.setState({ commentFooterHeight: 25 });
       }
       if (rate > 70) {
-        this.setState({
-          commentFooterHeight: 65
-        });
+        this.setState({ commentFooterHeight: 65 });
       }
-      this.setState({
-        inResizing: false
-      });
+      this.setState({ inResizing: false });
       return null;
     }
-    this.setState({
-      commentFooterHeight: rate
-    });
+    this.setState({ commentFooterHeight: rate });
   };
   
   scrollToQuote = (newIndex, oldIndex, quote) => {
     this.props.scrollToQuote(newIndex, oldIndex, quote);
-    this.setState({
-      comment: ''
-    });
+    this.setState({ comment: '' });
   }
 
   componentWillMount() {
@@ -151,6 +129,8 @@ class ReviewComments extends React.Component {
 
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
+    const { commentsNumber } = this.props;
+    const { commentsList } = this.state;
     return (
       <div className={(this.state.inResizing || this.props.inResizing)?
         'seafile-comment seafile-comment-resizing' : 'seafile-comment'}
@@ -167,23 +147,29 @@ class ReviewComments extends React.Component {
             </label>
           </div>
         </div>
-        <div style={{height:(100-this.state.commentFooterHeight)+'%'}}>
-          { this.props.commentsNumber == 0 &&
-            <div className={'seafile-comment-list'}>
+        <div style={{height:(100 - this.state.commentFooterHeight)+'%'}}>
+          {commentsNumber == 0 &&
+            <div className="seafile-comment-list">
               <div className="comment-vacant">{gettext('No comment yet.')}</div>
             </div>
           }
-          { (this.state.commentsList.length === 0 && this.props.commentsNumber > 0) &&
+          {(commentsList.length === 0 && commentsNumber > 0) &&
             <div className={'seafile-comment-list'}><Loading/></div>
           }
-          { this.state.commentsList.length > 0 &&
-            <ul className={'seafile-comment-list'} ref='commentsList'>
-              { (this.state.commentsList.length > 0 && this.props.commentsNumber > 0) &&
-                this.state.commentsList.map((item, index) => {
+          {commentsList.length > 0 &&
+            <ul className="seafile-comment-list" ref='commentsList'>
+              {(commentsList.length > 0 && commentsNumber > 0) &&
+                commentsList.map((item, index) => {
                   return (
-                    <CommentItem item={item} showResolvedComment={this.state.showResolvedComment}
-                      resolveComment={this.resolveComment} key={index} editComment={this.editComment}
-                      scrollToQuote={this.scrollToQuote} deleteComment={this.deleteComment}/>
+                    <CommentItem
+                      item={item}
+                      key={index}
+                      showResolvedComment={this.state.showResolvedComment}
+                      resolveComment={this.resolveComment}
+                      editComment={this.editComment}
+                      scrollToQuote={this.scrollToQuote}
+                      deleteComment={this.deleteComment}
+                    />
                   );
                 })
               }
@@ -193,9 +179,13 @@ class ReviewComments extends React.Component {
         <div className="seafile-comment-footer" style={{height:this.state.commentFooterHeight+'%'}}>
           <div className="seafile-comment-row-resize" onMouseDown={this.onResizeMouseDown}></div>
           <div className="seafile-add-comment">
-            <textarea className="add-comment-input" value={this.state.comment}
-              placeholder={gettext('Add a comment.')} onChange={this.handleCommentChange}
-              clos="100" rows="3" warp="virtual"></textarea>
+            <textarea
+              className="add-comment-input"
+              value={this.state.comment}
+              placeholder={gettext('Add a comment.')}
+              onChange={this.handleCommentChange}
+              clos="100" rows="3" warp="virtual"
+            ></textarea>
             <Button className="comment-btn" color="success"
               size="sm" onClick={this.submitComment}>
               {gettext('Submit')}</Button>
@@ -231,28 +221,18 @@ class CommentItem extends React.Component {
   }
 
   toggleDropDownMenu = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-    });
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
   }
 
   convertComment = (item) => {
-    processor.process(item.comment).then(
-      (result) => {
-        let comment = String(result);
-        this.setState({
-          comment: comment
-        });
-      }
-    );
-    processor.process(item.quote).then(
-      (result) => {
-        let quote = String(result);
-        this.setState({
-          quote: quote
-        });
-      }
-    );
+    processor.process(item.comment).then((result) => {
+      let comment = String(result);
+      this.setState({ comment: comment });
+    });
+    processor.process(item.quote).then((result) => {
+      let quote = String(result);
+      this.setState({ quote: quote });
+    });
   }
 
   scrollToQuote = () => {
@@ -261,9 +241,7 @@ class CommentItem extends React.Component {
   }
 
   toggleEditComment = () => {
-    this.setState({
-      editable: !this.state.editable
-    });
+    this.setState({ editable: !this.state.editable });
   }
 
   updateComment = (event) => {
@@ -275,9 +253,7 @@ class CommentItem extends React.Component {
   }
 
   handleCommentChange = (event) => {
-    this.setState({
-      newComment: event.target.value,
-    });
+    this.setState({ newComment: event.target.value });
   }
 
   componentWillMount() {
@@ -290,9 +266,7 @@ class CommentItem extends React.Component {
 
   render() {
     const item = this.props.item;
-    if (item.resolved && !this.props.showResolvedComment) {
-      return null;
-    }
+    if (item.resolved && !this.props.showResolvedComment) return null;
     if (this.state.editable) {
       return(
         <li className="seafile-comment-item" id={item.id}>
@@ -304,9 +278,16 @@ class CommentItem extends React.Component {
             </div>
           </div>
           <div className="seafile-edit-comment">
-            <textarea className="edit-comment-input" value={this.state.newComment} onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"></textarea>
-            <Button className="comment-btn" color="success" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
-            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}> {gettext('Cancel')}</Button>
+            <textarea
+              className="edit-comment-input"
+              value={this.state.newComment}
+              onChange={this.handleCommentChange}
+              clos="100" rows="3" warp="virtual"
+            ></textarea>
+            <Button className="comment-btn" color="success" size="sm" onClick={this.updateComment} id={item.id}>
+              {gettext('Update')}</Button>{' '}
+            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}>
+              {gettext('Cancel')}</Button>
           </div>
         </li>
       );
@@ -320,17 +301,17 @@ class CommentItem extends React.Component {
             <div className="reviewer-name">{item.name}</div>
             <div className="review-time">{item.time}</div>
           </div>
-          { !item.resolved &&
+          {!item.resolved &&
             <Dropdown isOpen={this.state.dropdownOpen} size="sm"
               className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
               <DropdownToggle className="seafile-comment-dropdown-btn">
                 <i className="fas fa-ellipsis-v"></i>
               </DropdownToggle>
               <DropdownMenu>
-                { (item.userEmail === username) &&
+                {(item.userEmail === username) &&
                   <DropdownItem onClick={this.props.deleteComment}
                     className="delete-comment" id={item.id}>{gettext('Delete')}</DropdownItem>}
-                { (item.userEmail === username) &&
+                {(item.userEmail === username) &&
                   <DropdownItem onClick={this.toggleEditComment}
                     className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>}
                 <DropdownItem onClick={this.props.resolveComment}
@@ -339,7 +320,7 @@ class CommentItem extends React.Component {
             </Dropdown>
           }
         </div>
-        { (item.newIndex >= -1 && item.oldIndex >= -1) &&
+        {(item.newIndex >= -1 && item.oldIndex >= -1) &&
           <blockquote className="seafile-comment-content">
             <div onClick={this.scrollToQuote} dangerouslySetInnerHTML={{ __html: this.state.quote }}></div>
           </blockquote>

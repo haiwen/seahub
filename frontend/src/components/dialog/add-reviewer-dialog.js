@@ -28,16 +28,12 @@ class AddReviewerDialog extends React.Component {
 
   listReviewers = () => {
     seafileAPI.listDraftReviewers(this.props.draftID).then((res) => {
-      this.setState({
-        reviewers: res.data.reviewers
-      });
+      this.setState({ reviewers: res.data.reviewers });
     });
   }
 
   handleSelectChange = (option) => {
-    this.setState({
-      selectedOption: option,
-    });
+    this.setState({ selectedOption: option });
     this.Options = [];
   }
 
@@ -58,9 +54,7 @@ class AddReviewerDialog extends React.Component {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
-          this.setState({
-            errorMsg: errorMsg
-          });
+          this.setState({ errorMsg: errorMsg });
         }
         this.setState({
           selectedOption: null,
@@ -83,18 +77,18 @@ class AddReviewerDialog extends React.Component {
             newReviewers.push(this.state.reviewers[i]);
           }
         }
-        this.setState({
-          reviewers: newReviewers
-        });
+        this.setState({ reviewers: newReviewers });
       }
     });
   }
 
   render() {
+    const toggleDialog = this.props.toggleAddReviewerDialog;
+    const { reviewers, errorMsg } = this.state;
     return (
-      <Modal isOpen={true} toggle={this.props.toggleAddReviewerDialog}>
-        <ModalHeader>{gettext('Request a review')}</ModalHeader>
-        <ModalBody >
+      <Modal isOpen={true} toggle={toggleDialog}>
+        <ModalHeader toggle={toggleDialog}>{gettext('Request a review')}</ModalHeader>
+        <ModalBody>
           <p>{gettext('Add new reviewer')}</p>
           <div className='add-reviewer'>
             <UserSelect
@@ -109,16 +103,16 @@ class AddReviewerDialog extends React.Component {
               <Button color="secondary" disabled>{gettext('Submit')}</Button>
             }
           </div>
-          {this.state.errorMsg.length > 0 &&
-            this.state.errorMsg.map((item, index = 0, arr) => {
+          {errorMsg.length > 0 &&
+            errorMsg.map((item, index = 0, arr) => {
               return (
-                <p className="reviewer-select-error error" key={index}>{this.state.errorMsg[index].email}
-                  {': '}{this.state.errorMsg[index].error_msg}</p>
+                <p className="reviewer-select-error error" key={index}>{errorMsg[index].email}
+                  {': '}{errorMsg[index].error_msg}</p>
               );
             })
           }
-          { this.state.reviewers.length > 0 &&
-            this.state.reviewers.map((item, index = 0, arr) => {
+          {reviewers.length > 0 &&
+            reviewers.map((item, index = 0, arr) => {
               return (
                 <div className="reviewer-select-info" key={index}>
                   <div>
@@ -132,8 +126,7 @@ class AddReviewerDialog extends React.Component {
           }
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleAddReviewerDialog}>
-            {gettext('Close')}</Button>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Close')}</Button>
         </ModalFooter>
       </Modal>
     );
