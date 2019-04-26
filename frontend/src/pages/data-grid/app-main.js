@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDataGrid from '@seafile/react-data-grid/dist/react-data-grid';
+import ReactDataGrid from '@seafile/react-data-grid/';
 import update from 'immutability-helper';
+import { Menu, Editors } from '@seafile/react-data-grid-addons';
+import GridHeaderContextMenu from './grid-header-contextmenu';
+import GridContentContextMenu from './grid-content-contextmenu';
+import ModalPortal from '../../components/modal-portal';
+import NewColumnDialog from './new-column-dialog';
 
 const propTypes = {
   initData: PropTypes.object.isRequired,
@@ -13,9 +18,10 @@ class AppMain extends React.Component {
     super(props, context);
     this._columns = [
       {
-        key: 'id',
-        name: 'ID',
+        key: 'name',
+        name: 'Name',
         width: 80,
+        editable: true,
         resizable: true
       }
     ];
@@ -23,8 +29,9 @@ class AppMain extends React.Component {
     let initData = props.initData;
 
     this.state = {
-      columns: initData.columns.length ? initData.columns : this._columns,
-      rows: initData.rows.length ? initData.rows : this.createRows(1)
+      columns: initData.columns.length ? this.deseralizeGridData(initData.columns) : this._columns,
+      rows: initData.rows.length ? initData.rows : this.createRows(1),
+      isNewColumnDialogShow: false,
     };
   }
 
@@ -42,7 +49,7 @@ class AppMain extends React.Component {
   };
 
   createFakeRowObjectData = (index) => {
-    return {id: 'id_' + index};
+    return {name: 'name_' + index};
   };
 
   getColumns = () => {
@@ -64,7 +71,7 @@ class AppMain extends React.Component {
 
   handleAddRow = ({ newRowIndex }) => {
     const newRow = {
-      id: 'id_' + newRowIndex,
+      name: 'name_' + newRowIndex,
     };
 
     let rows = this.state.rows.slice();
@@ -90,19 +97,41 @@ class AppMain extends React.Component {
   }
 
   onInsertColumn = () => {
-    var name = window.prompt('Place enter a column name', '');
-    if (!name || name.trim() === '') {
-      return;
-    }
+    this.setState({isNewColumnDialogShow: true});
+  }
+
+  onNewColumn = (columnName, columnType) => {
+    let editor = this.createEditor(columnType);
     let newColumn = {
-      key: name,
-      name: name,
+      key: columnName,
+      name: columnName,
+      editor: editor,
       editable: true,
       width: 200,
       resizable: true
     };
+
     let columns = this.state.columns.slice();
     columns.push(newColumn);
+    this.setState({columns: columns});
+    this.onNewColumnCancel();
+  }
+
+  onNewColumnCancel = () => {
+    this.setState({isNewColumnDialogShow: false});
+  }
+
+  onRowDelete = (e, data) => {
+    let { rowIdx } = data;
+    let newRows = this.state.rows.slice(0); // copy array;
+    newRows.splice(rowIdx, 1);
+    this.setState({rows: newRows});
+  }
+
+  onColumnDelete = (e, data) => {
+    let column = data.column;
+    let key = column.key;
+    let columns = this.state.columns.filter(item => item.key !== key);
     this.setState({columns: columns});
   }
 
@@ -115,12 +144,39 @@ class AppMain extends React.Component {
   }
 
   deseralizeGridData = (data) => {
-    let columns = data.columns;
-    let rows = data.rows;
+    let columns = JSON.parse(data.columns);
+    let rows = JSON.parse(data.rows);
+    columns = this.formatColumnsData(columns);
     this.setState({
-      columns: JSON.parse(columns),
-      rows: JSON.parse(rows),
+      columns: columns,
+      rows: rows,
     });
+  }
+
+  formatColumnsData = (columns) => {
+    return columns.map(column => {
+      if (column.editor) {
+        let editor = this.createEditor(column.editor);
+        column.editor = editor;
+      }
+      return column;
+    });
+  }
+
+  createEditor = (editorType) => {
+    let editor = null;
+    switch (editorType) {
+      case 'number': 
+        editor = <Editors.NumberEditor />; 
+        break;
+      case 'text':
+        editor = null;
+        break;
+      default:
+        break;
+    }
+
+    return editor;
   }
 
   render() {
@@ -142,7 +198,18 @@ class AppMain extends React.Component {
           enableInsertRow={true}
           onInsertRow={this.onInsertRow}
           onInsertColumn={this.onInsertColumn}
+          RowsContainer={Menu.ContextMenuTrigger}
+          headerContextMenu={<GridHeaderContextMenu id="grid-header-contxtmenu" onColumnDelete={this.onColumnDelete} />}
+          contextMenu={<GridContentContextMenu id="grid-content-contxtmenu" onRowDelete={this.onRowDelete} />}
         />
+        {this.state.isNewColumnDialogShow && (
+          <ModalPortal>
+            <NewColumnDialog 
+              onNewColumnCancel={this.onNewColumnCancel}
+              onNewColumn={this.onNewColumn}
+            />
+          </ModalPortal>
+        )}
       </div>
     );
   }
