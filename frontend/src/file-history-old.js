@@ -113,7 +113,6 @@ class FileHistory extends React.Component {
         });
         editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
           this.updateNewRecords(res.data);
-          this.setState({isReloadingData: false});
         });
       } else {
         let commitID = this.state.nextCommit;
@@ -123,12 +122,10 @@ class FileHistory extends React.Component {
         if (oldFilePath) {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, oldFilePath, commitID).then((res) => {
             this.updateOldRecords(res.data, oldFilePath);
-            this.setState({isReloadingData: false});
           });
         } else {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
             this.updateOldRecords(res.data, filePath);
-            this.setState({isReloadingData: false});
           });
         }
       }
@@ -140,7 +137,7 @@ class FileHistory extends React.Component {
       historyList: [...this.state.historyList, ...result.data],
       currentPage: result.page,
       hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
-      isLoading: false,
+      isReloadingData: false,
     });
   }
 
@@ -151,7 +148,7 @@ class FileHistory extends React.Component {
         nextCommit: result.next_start_commit,
         filePath: result.data[result.data.length-1].path,
         oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
-        isLoading: false,
+        isReloadingData: false,
       });
     } else {
       this.setState({nextCommit: result.next_start_commit,});
