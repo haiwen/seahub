@@ -92,11 +92,15 @@ class Account extends Component {
   }
 
   renderMenu = () => {
-    let isAdminPage = this.state.isStaff || this.state.isOrgStaff;
-
-    if (isAdminPage && this.props.isAdminPanel) {
+    if (this.state.isStaff && this.props.isAdminPanel) {
       return (
         <a href={siteRoot} title={gettext('Exit Admin Panel')} className="item">{gettext('Exit Admin Panel')}</a>
+      );
+    }
+
+    if (this.state.isOrgStaff && this.props.isAdminPanel) {
+      return (
+        <a href={siteRoot} title={gettext('Exit Organization Admin')} className="item">{gettext('Exit Organization Admin')}</a>
       );
     }
 
