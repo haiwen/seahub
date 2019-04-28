@@ -132,7 +132,14 @@ class AppMain extends React.Component {
     let column = data.column;
     let key = column.key;
     let columns = this.state.columns.filter(item => item.key !== key);
-    this.setState({columns: columns});
+    let rows = this.state.rows.map(item => {
+      let newItem = [key, ...item];
+      return newItem;
+    });
+    this.setState({
+      columns: columns,
+      rows: rows
+    });
   }
 
   serializeGridData = () => {
