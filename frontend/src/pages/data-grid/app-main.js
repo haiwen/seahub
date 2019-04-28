@@ -133,8 +133,8 @@ class AppMain extends React.Component {
     let key = column.key;
     let columns = this.state.columns.filter(item => item.key !== key);
     let rows = this.state.rows.map(item => {
-      let newItem = [key, ...item];
-      return newItem;
+      delete item[key];
+      return item;
     });
     this.setState({
       columns: columns,
