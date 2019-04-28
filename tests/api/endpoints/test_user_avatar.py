@@ -15,9 +15,12 @@ class AvatarApiTest(ApiTestBase):
         avatar_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
         with open(avatar_file) as f:
-            json_resp = self.post(avatar_url, files={'avatar': f}).json()
+            json_resp = self.post(avatar_url, files={'avatar': f}, data={'avatar_size': 32}).json()
 
         assert json_resp.has_key('avatar_url')
+        response_url = json_resp['avatar_url']
+        list_url = response_url.split('/')
+        assert str(32) in list_url
 
         # assert is NOT default avatar
         avatar_url = urljoin(AVATAR_BASE_URL, 'user', self.username, '/resized/80/')
