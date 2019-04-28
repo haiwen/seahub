@@ -40,7 +40,7 @@ class UserAvatarView(APIView):
             avatar_size = int(avatar_size)
         except Exception as e:
             logger.error(e)
-            error_msg = 'avatar size invalid'
+            error_msg = 'avatar_size invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         (root, ext) = os.path.splitext(image_file.name.lower())
