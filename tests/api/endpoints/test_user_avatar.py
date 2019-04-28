@@ -17,7 +17,7 @@ class AvatarApiTest(ApiTestBase):
         with open(avatar_file) as f:
             json_resp = self.post(avatar_url, files={'avatar': f}).json()
 
-        assert json_resp['success'] == True
+        assert json_resp.has_key('avatar_url')
 
         # assert is NOT default avatar
         avatar_url = urljoin(AVATAR_BASE_URL, 'user', self.username, '/resized/80/')

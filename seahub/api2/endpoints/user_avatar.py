@@ -30,7 +30,7 @@ class UserAvatarView(APIView):
     def post(self, request):
 
         image_file = request.FILES.get('avatar', None)
-        avatar_size = request.POST.get('avatar_size', 64)
+        avatar_size = request.data.get('avatar_size', 64)
 
         if not image_file:
             error_msg = 'avatar invalid.'
