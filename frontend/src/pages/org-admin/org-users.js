@@ -15,7 +15,7 @@ class OrgUsers extends Component {
   render() {
     return (
       <div className="main-panel-center flex-row">
-        <div className="cur-view-container">
+        <div className="cur-view-container org-users-container">
           <div className="cur-view-path org-user-nav">
             <ul className="nav">
               <li className="nav-item" onClick={() => this.tabItemClick('users')}>

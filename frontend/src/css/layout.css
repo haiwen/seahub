@@ -87,6 +87,10 @@
   min-height: 0;
 }
 
+.org-users-container div:last-child, .org-logs-container div:last-child {
+  height: calc(100% - 20px);
+}
+
 .cur-view-path {
   position: relative; /* for the ':after' */
   padding: 8px 16px;
