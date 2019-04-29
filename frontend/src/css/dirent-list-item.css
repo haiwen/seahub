@@ -17,6 +17,8 @@
 
 .dir-icon {
   position: relative;
+  text-align: center;
+  max-width: 24px;
 }
 
 .dir-icon .locked {
