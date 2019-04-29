@@ -1250,6 +1250,13 @@ def view_shared_file(request, fileshare):
             handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == XMIND:
+            xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
+            if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, path)[0]:
+                error_msg = _(u'Unable to view file')
+                ret_dict['err'] = error_msg
+            else:
+                raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
     else:
         ret_dict['err'] = err_msg
 
@@ -1261,14 +1268,6 @@ def view_shared_file(request, fileshare):
 
     #template = 'shared_file_view.html'
     template = 'shared_file_view_react.html'
-
-    if filetype == XMIND:
-        xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
-        if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, path)[0]:
-            error_msg = _(u'Unable to view file')
-            ret_dict['err'] = error_msg
-        else:
-            raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
 
     file_share_link = request.path
     desc_for_ogp = _(u'Share link for %s.') % filename
@@ -1458,7 +1457,13 @@ def view_file_via_shared_dir(request, fileshare):
                     img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
-
+        elif filetype == XMIND:
+            xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
+            if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, real_path)[0]:
+                error_msg = _(u'Unable to view file')
+                ret_dict['err'] = error_msg
+            else:
+                raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
     else:
         ret_dict['err'] = err_msg
 
@@ -1473,14 +1478,6 @@ def view_file_via_shared_dir(request, fileshare):
 
     #template = 'shared_file_view.html'
     template = 'shared_file_view_react.html'
-
-    if filetype == XMIND:
-        xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
-        if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, real_path)[0]:
-            error_msg = _(u'Unable to view file')
-            ret_dict['err'] = error_msg
-        else:
-            raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
 
     file_share_link = request.path
     desc_for_ogp = _(u'Share link for %s.') % filename
