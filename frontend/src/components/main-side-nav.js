@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import Group from '../models/group';
-import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGenerateUploadLink } from '../utils/constants';
+import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Badge } from 'reactstrap';
 
@@ -223,6 +223,14 @@ class MainSideNav extends React.Component {
                 <span className="nav-text">{gettext('Linked Devices')}</span>
               </Link>
             </li>
+            {canInvitePeople &&
+                <li className="nav-item">
+                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite People')} onClick={() => this.tabItemClick('invitations')}>
+                  <span className="sf2-icon-invite" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Invite People')}</span>
+                </Link>
+              </li>
+            }
             <li className="nav-item flex-column" id="share-admin-nav">
               <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
                 <span className={`toggle-icon float-right fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
