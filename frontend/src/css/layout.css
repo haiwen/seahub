@@ -151,6 +151,7 @@
   box-shadow: -1px 0 3px 0 #ccc;
   top: 49px;
   animation: move .5s ease-in-out 1;
+  z-index: 50;
 }
 
 @keyframes move {
