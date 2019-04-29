@@ -199,7 +199,7 @@ class AppMain extends React.Component {
           onGridRowsUpdated={this.handleGridRowsUpdated}
           enableRowSelect={true}
           rowHeight={50}
-          minHeight={600}
+          minHeight={500}
           rowScrollTimeout={200}
           enableInsertColumn={true}
           enableInsertRow={true}
