@@ -132,7 +132,14 @@ class AppMain extends React.Component {
     let column = data.column;
     let key = column.key;
     let columns = this.state.columns.filter(item => item.key !== key);
-    this.setState({columns: columns});
+    let rows = this.state.rows.map(item => {
+      delete item[key];
+      return item;
+    });
+    this.setState({
+      columns: columns,
+      rows: rows
+    });
   }
 
   serializeGridData = () => {
@@ -192,7 +199,7 @@ class AppMain extends React.Component {
           onGridRowsUpdated={this.handleGridRowsUpdated}
           enableRowSelect={true}
           rowHeight={50}
-          minHeight={600}
+          minHeight={500}
           rowScrollTimeout={200}
           enableInsertColumn={true}
           enableInsertRow={true}
