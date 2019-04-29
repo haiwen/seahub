@@ -109,25 +109,35 @@ class OrgDepartmentItem extends React.Component {
       <div className="main-panel-center flex-row h-100">
         <div className="cur-view-container o-auto">
           <div className="cur-view-path">
-            <h3 className="sf-heading">
-              { this.state.groupID ? 
-                <a href={serviceURL + '/org/departmentadmin/'}>{gettext('Departments')}</a>
-                : <span>{gettext('Departments')}</span>
-              }
-              {
-                this.state.ancestorGroups.map(ancestor => {
+            <div className="fleft">
+              <h3 className="sf-heading">
+                {this.state.groupID ? 
+                  <a href={serviceURL + '/org/departmentadmin/'}>{gettext('Departments')}</a>
+                  : <span>{gettext('Departments')}</span>
+                }
+                {this.state.ancestorGroups.map(ancestor => {
                   let newHref = serviceURL + '/org/departmentadmin/groups/' + ancestor.id + '/';
                   return (
                     <span key={ancestor.id}>{' / '}<a href={newHref}>{ancestor.name}</a></span>
                   );
-                })
-              }
-              { this.state.groupID && <span>{' / '}{this.state.groupName}</span> }
-            </h3>
+                })}
+                {this.state.groupID && <span>{' / '}{this.state.groupName}</span>}
+              </h3>
+            </div>
+            {this.state.groupID &&
+              <div className="fright">
+                <button className="btn-white operation-item" onClick={this.props.toggleAddDepartDialog}>
+                  {gettext('New Sub-departments')}</button>
+              </div>
+            }
           </div>
 
           <div className="cur-view-subcontainer org-groups">
-            <OrgDepartmentsList groupID={this.state.groupID} />
+            <OrgDepartmentsList
+              groupID={this.state.groupID}
+              isShowAddDepartDialog={this.props.isShowAddDepartDialog}
+              toggleAddDepartDialog={this.props.toggleAddDepartDialog}
+            />
           </div>
           
           <div className="cur-view-subcontainer org-members">

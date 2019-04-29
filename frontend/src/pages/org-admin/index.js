@@ -34,6 +34,7 @@ class Org extends React.Component {
       isShowAddOrgUserDialog: false,
       isShowAddOrgAdminDialog: false,
       isInviteUserDialogOpen: false,
+      isShowAddDepartDialog: false,
       currentTab: 'users',
     };
   }
@@ -70,8 +71,11 @@ class Org extends React.Component {
     this.setState({isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen});
   }
 
-  render() {
+  toggleAddDepartDialog = () => {
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+  }
 
+  render() {
     let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog, isInviteUserDialogOpen } = this.state;
     let href = window.location.href;
     let newPath = 'groups/';
@@ -81,7 +85,13 @@ class Org extends React.Component {
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
-        <MainPanel currentTab={currentTab} toggleAddOrgAdmin={this.toggleAddOrgAdmin} toggleAddOrgUser={this.toggleAddOrgUser} toggleInviteUserDialog={this.toggleInviteUserDialog}>
+        <MainPanel
+          currentTab={currentTab}
+          toggleAddOrgAdmin={this.toggleAddOrgAdmin}
+          toggleAddOrgUser={this.toggleAddOrgUser}
+          toggleInviteUserDialog={this.toggleInviteUserDialog}
+          toggleAddDepartDialog={this.toggleAddDepartDialog}
+        >
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'} />
             <OrgUsers 
@@ -98,8 +108,16 @@ class Org extends React.Component {
             <OrgLibraries path={siteRoot + 'org/repoadmin'} />
             <OrgLinks path={siteRoot + 'org/publinkadmin'} />
             <OrgDepartments path={siteRoot + 'org/departmentadmin'}>
-              <OrgDepartmentsList path='/' />
-              <OrgDepartmentItem path={newPath} />
+              <OrgDepartmentsList
+                path='/'
+                isShowAddDepartDialog={this.state.isShowAddDepartDialog}
+                toggleAddDepartDialog={this.toggleAddDepartDialog}
+              />
+              <OrgDepartmentItem
+                path={newPath}
+                isShowAddDepartDialog={this.state.isShowAddDepartDialog}
+                toggleAddDepartDialog={this.toggleAddDepartDialog}
+              />
             </OrgDepartments>
             <OrgLogs
               path={siteRoot + 'org/logadmin'}

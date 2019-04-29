@@ -20,7 +20,6 @@ class OrgDepartmentsList extends React.Component {
       groups: null,
       groupID: -1,
       groupName: '',
-      showAddDepartDialog: false,
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
     };
@@ -42,10 +41,6 @@ class OrgDepartmentsList extends React.Component {
     }
   }
 
-  showAddDepartDialog = () => {
-    this.setState({ showAddDepartDialog: true });
-  }
-
   showDeleteDepartDialog = (group) => {
     this.setState({ showDeleteDepartDialog: true, groupID: group.id, groupName: group.name });
   }
@@ -56,7 +51,6 @@ class OrgDepartmentsList extends React.Component {
 
   toggleCancel = () => {
     this.setState({
-      showAddDepartDialog: false,
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
     });
@@ -74,16 +68,12 @@ class OrgDepartmentsList extends React.Component {
     const groups = this.state.groups;
     let isSub = this.props.groupID ? true : false;
     let header = isSub ? gettext('Sub-departments') : gettext('Departments');
-    let headerButton = isSub ? gettext('New Sub-department') : gettext('New Department');
     let noGroup = isSub ? gettext('No sub-departments') : gettext('No departments');
     return (
       <div className="main-panel-center flex-row h-100">
         <div className="cur-view-container o-auto">
           <div className="cur-view-path">
             <div className="fleft"><h3 className="sf-heading">{header}</h3></div>
-            <div className="fright">
-              <button className="btn-white operation-item" onClick={this.showAddDepartDialog}>{headerButton}</button>
-            </div>
           </div>
           <div className="cur-view-content">
             {groups && groups.length > 0 ?
@@ -115,13 +105,13 @@ class OrgDepartmentsList extends React.Component {
             }
           </div>
           <React.Fragment>
-            {this.state.showAddDepartDialog && (
+            {this.props.isShowAddDepartDialog && (
               <ModalPortal>
                 <AddDepartDialog
-                  toggle={this.toggleCancel}
                   onDepartChanged={this.onDepartChanged}
                   parentGroupID={this.props.groupID}
                   groupID={this.state.groupID}
+                  toggle={this.props.toggleAddDepartDialog}
                 />
               </ModalPortal>
             )}

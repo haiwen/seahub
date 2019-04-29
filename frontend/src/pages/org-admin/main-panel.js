@@ -22,6 +22,7 @@ class MainPanel extends Component {
   }
 
   render() {
+    const groupID = window.org.pageOptions.groupID;
     return (
       <div className="main-panel o-hidden">
         <div className="main-panel-north border-left-show">
@@ -43,6 +44,11 @@ class MainPanel extends Component {
               {this.props.currentTab === 'admins' &&
               <button className="btn btn-secondary operation-item" title={gettext('Add admin')} onClick={this.toggleAddOrgAdmin}>
                 <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add admin')}
+              </button>
+              }
+              {(this.props.currentTab === 'departmentadmin' && !groupID) &&
+              <button className="btn btn-secondary operation-item" title={gettext('New Department')} onClick={this.props.toggleAddDepartDialog}>
+                <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Department')}
               </button>
               }
             </div>
