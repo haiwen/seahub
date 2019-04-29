@@ -45,18 +45,18 @@ class NewCoumnDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader>{gettext('New Column')}</ModalHeader>
+        <ModalHeader>New Column</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="columnName">{gettext('Name')}</Label>
+              <Label for="columnName">Name</Label>
               <Input id="columnName" value={this.state.columnName} innerRef={input => {this.newInput = input;}} onChange={this.handleChange} />
             </FormGroup>
             <FormGroup>
-              <Label for="typeSelect">{gettext('type')}</Label>
+              <Label for="typeSelect">Type</Label>
               <Input id="typeSelect" type='select' name="select" onChange={this.onSelectChange}>
-                <option vlaue="text">{gettext('text')}</option>
-                <option value="number">{gettext('number')}</option>
+                <option vlaue="text">text</option>
+                <option value="number">number</option>
               </Input>
             </FormGroup>
           </Form>
