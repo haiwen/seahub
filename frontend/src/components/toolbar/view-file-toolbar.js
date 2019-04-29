@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem, Tooltip} from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
+import { gettext, siteRoot, canGenerateShareLink, isDocs } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import ModalPotal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
@@ -97,7 +97,7 @@ class ViewFileToolbar extends React.Component {
               <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
             </Fragment>
           )}
-          {(filePermission === 'rw' && !this.props.isDraft && !this.props.hasDraft) && (
+          {(filePermission === 'rw' && !this.props.isDraft && !this.props.hasDraft && isDocs) && (
             <Fragment>
               <button id="new-draft" className="btn btn-secondary operation-item" onClick={this.onNewDraft}>{gettext('New Draft')}</button>
               <Tooltip target="new-draft" placement="bottom" isOpen={this.state.isDraftMessageShow} toggle={this.onDraftHover}>{gettext('Create a draft from this file, instead of editing it directly.')}</Tooltip>
