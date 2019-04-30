@@ -92,7 +92,7 @@ class FileView extends React.Component {
             toggleCommentPanel={this.toggleCommentPanel}
           />
         </div>
-        <div className="file-view-body flex-auto d-flex">
+        <div className="file-view-body flex-auto d-flex o-hidden">
           {this.props.content}
           {this.state.isCommentPanelOpen &&
             <CommentPanel toggleCommentPanel={this.toggleCommentPanel} />
