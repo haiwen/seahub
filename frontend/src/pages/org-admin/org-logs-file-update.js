@@ -56,7 +56,9 @@ class OrgLogsFileUpdate extends Component {
     } else {
       page = page - 1;
     }
-    this.initData(page);
+    let email = this.state.userSelected;
+    let repoID = this.state.repoSelected;
+    this.initData(email, repoID, page);
   }
 
   toggleCancelDetail = () => {
