@@ -180,11 +180,26 @@ class DetailedProfileManager(models.Manager):
     def add_or_update(self, username, department, telephone):
         try:
             d_profile = self.get(user=username)
-            d_profile.department = department
-            d_profile.telephone = telephone
+
+            if department is not None:
+                d_profile.department = department
+            if telephone is not None:
+                telephone = telephone.strip()
+                d_profile.telephone = telephone
+
         except DetailedProfile.DoesNotExist:
             d_profile = self.model(user=username, department=department,
                                    telephone=telephone)
+        d_profile.save(using=self._db)
+        return d_profile
+
+    def update_telephone(self, username, telephone):
+        try:
+            d_profile = self.get(user=username)
+            d_profile.telephone = telephone
+        except DetailedProfile.DoesNotExist:
+            logger.warn('%s detail profile does not exists' % username)
+            return None
         d_profile.save(using=self._db)
         return d_profile
 
