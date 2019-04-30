@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext, invitationLink } from '../../utils/constants';
 import Account from '../../components/common/account';
 
+const groupID = window.org.pageOptions.groupID;
 const propTypes = {
   currentTab: PropTypes.string.isRequired,
   children: PropTypes.object.isRequired,
@@ -22,6 +23,7 @@ class MainPanel extends Component {
   }
 
   render() {
+    const topBtn = 'btn btn-secondary operation-item';
     return (
       <div className="main-panel o-hidden">
         <div className="main-panel-north border-left-show">
@@ -44,6 +46,18 @@ class MainPanel extends Component {
               <button className="btn btn-secondary operation-item" title={gettext('Add admin')} onClick={this.toggleAddOrgAdmin}>
                 <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add admin')}
               </button>
+              }
+              {this.props.currentTab === 'departmentadmin' && 
+                <Fragment>
+                  {!groupID && <button className={topBtn} title={gettext('New Department')}
+                    onClick={this.props.toggleAddDepartDialog}>{gettext('New Department')}</button>}
+                  {groupID && <button className={topBtn} title={gettext('New Sub-department')}
+                    onClick={this.props.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>}
+                  {groupID && <button className={topBtn} title={gettext('Add Member')}
+                    onClick={this.props.toggleAddMemberDialog}>{gettext('Add Member')}</button>}
+                  {groupID && <button className={topBtn} onClick={this.props.toggleAddRepoDialog}
+                    title={gettext('New Library')}>{gettext('New Library')}</button>}
+                </Fragment>
               }
             </div>
           </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, serviceURL, gettext, orgID, lang } from '../../utils/constants';
+import { serviceURL, gettext, orgID, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils.js';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
@@ -20,7 +20,6 @@ class OrgDepartmentsList extends React.Component {
       groups: null,
       groupID: -1,
       groupName: '',
-      showAddDepartDialog: false,
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
     };
@@ -29,21 +28,13 @@ class OrgDepartmentsList extends React.Component {
   listDepartGroups = () => {
     if (this.props.groupID) {
       seafileAPI.orgAdminListGroupInfo(orgID, this.props.groupID, true).then(res => {
-        this.setState({
-          groups: res.data.groups
-        });
+        this.setState({ groups: res.data.groups });
       });
     } else {
       seafileAPI.orgAdminListDepartGroups(orgID).then(res => {
-        this.setState({
-          groups: res.data.data
-        });
+        this.setState({ groups: res.data.data });
       });
     }
-  }
-
-  showAddDepartDialog = () => {
-    this.setState({ showAddDepartDialog: true });
   }
 
   showDeleteDepartDialog = (group) => {
@@ -56,7 +47,6 @@ class OrgDepartmentsList extends React.Component {
 
   toggleCancel = () => {
     this.setState({
-      showAddDepartDialog: false,
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
     });
@@ -74,16 +64,12 @@ class OrgDepartmentsList extends React.Component {
     const groups = this.state.groups;
     let isSub = this.props.groupID ? true : false;
     let header = isSub ? gettext('Sub-departments') : gettext('Departments');
-    let headerButton = isSub ? gettext('New Sub-department') : gettext('New Department');
     let noGroup = isSub ? gettext('No sub-departments') : gettext('No departments');
     return (
       <div className="main-panel-center flex-row h-100">
         <div className="cur-view-container o-auto">
           <div className="cur-view-path">
             <div className="fleft"><h3 className="sf-heading">{header}</h3></div>
-            <div className="fright">
-              <button className="btn-white operation-item" onClick={this.showAddDepartDialog}>{headerButton}</button>
-            </div>
           </div>
           <div className="cur-view-content">
             {groups && groups.length > 0 ?
@@ -115,13 +101,13 @@ class OrgDepartmentsList extends React.Component {
             }
           </div>
           <React.Fragment>
-            {this.state.showAddDepartDialog && (
+            {this.props.isShowAddDepartDialog && (
               <ModalPortal>
                 <AddDepartDialog
-                  toggle={this.toggleCancel}
                   onDepartChanged={this.onDepartChanged}
                   parentGroupID={this.props.groupID}
                   groupID={this.state.groupID}
+                  toggle={this.props.toggleAddDepartDialog}
                 />
               </ModalPortal>
             )}
@@ -150,6 +136,14 @@ class OrgDepartmentsList extends React.Component {
     );
   }
 }
+
+const OrgDepartmentsListPropTypes = {
+  isShowAddDepartDialog: PropTypes.bool.isRequired,
+  toggleAddDepartDialog: PropTypes.func.isRequired,
+};
+
+OrgDepartmentsList.propTypes = OrgDepartmentsListPropTypes;
+
 
 class GroupItem extends React.Component {
 
