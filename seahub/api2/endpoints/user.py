@@ -54,7 +54,7 @@ class User(APIView):
 
         # update account telephone
         if info_dict['telephone']:
-            DetailedProfile.objects.update_telephone(email, telephone=info_dict['telephone'])
+            DetailedProfile.objects.add_or_update(email, department=None , telephone=info_dict['telephone'])
 
     def _update_user_additional_info(self, request, email):
 
@@ -96,6 +96,10 @@ class User(APIView):
         # argument check for contact_email
         contact_email = request.data.get("contact_email", None)
         if contact_email:
+            if not ENABLE_USER_SET_CONTACT_EMAIL:
+                error_msg = _(u'Feature disabled.')
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             contact_email = contact_email.strip()
             if not is_valid_email(contact_email):
                 error_msg = 'contact_email invalid.'
@@ -119,12 +123,6 @@ class User(APIView):
             if list_in_address_book.lower() not in ('true', 'false'):
                 error_msg = 'list_in_address_book invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # permission check for contact_email
-        old_contact_email = Profile.objects.get_contact_email_by_user(email)
-        if not (old_contact_email or ENABLE_USER_SET_CONTACT_EMAIL):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         info_dict = {
             'name': name,
