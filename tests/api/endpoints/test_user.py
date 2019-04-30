@@ -68,7 +68,6 @@ class AccountTest(BaseTestCase):
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
-
     def test_update_user_telephone(self):
 
         self.login_as(self.user)
@@ -81,6 +80,7 @@ class AccountTest(BaseTestCase):
         DetailedProfile.objects.add_or_update(self.user_name, department='' ,telephone='')
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         json_resp = json.loads(resp.content)
+        print(json_resp)
         assert json_resp['telephone'] == random_telephone
 
         # telephone too long
@@ -91,35 +91,6 @@ class AccountTest(BaseTestCase):
         DetailedProfile.objects.add_or_update(self.user_name, department='' ,telephone='')
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
-
-    def test_update_user_login_id(self):
-
-        self.login_as(self.user)
-
-        # test can successfully change login id
-        random_loginid_length = random.randint(1,225)
-        random_loginid = ''.join(random.choice(string.digits + string.ascii_letters) for _ in range(random_loginid_length))
-        data = 'login_id=%s' % random_loginid
-        resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
-        json_resp = json.loads(resp.content)
-        assert json_resp['login_id'] == random_loginid
-
-        # login id too long
-        random_loginid_length = random.randint(226,500)
-        random_loginid = ''.join(random.choice(string.digits + string.ascii_letters) for _ in range(random_loginid_length))
-        data = 'login_id=%s' % random_loginid
-        resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
-        self.assertEqual(400, resp.status_code)
-
-        # same login id already exists
-        new_user1 = UserManager().create_user(email='1@1.com', password='1')
-        random_loginid_length = random.randint(1,225)
-        random_same_login_id = ''.join(random.choice(string.digits + string.ascii_letters) for _ in range(random_loginid_length))
-        Profile.objects.add_or_update(new_user1.username, login_id=random_same_login_id)
-        data = 'login_id=%s' % random_same_login_id
-        resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
-        self.assertEqual(400, resp.status_code)
-        new_user1.delete()
 
     def test_update_user_contact_email(self):
 

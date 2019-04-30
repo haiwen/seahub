@@ -36,39 +36,25 @@ class User(APIView):
         info['email'] = email
         info['name'] = email2nickname(email)
         info['contact_email'] = email2contact_email(email)
-        info['telephone'] = ''
-        if d_profile is not None:
-            info['telephone'] = d_profile.telephone
-        info['login_id'] = ''
-        if profile is not None:
-            info['login_id'] = profile.login_id
+        info['telephone'] = d_profile.telephone if d_profile else ''
+        info['login_id'] = profile.login_id if profile else ''
         info['list_in_address_book'] = profile.list_in_address_book if profile else False
 
         return info
 
-    def _update_user_info(self, request , email):
+    def _update_user_info(self, info_dict, email):
 
         # update nickname
-        nickname = request.data.get("name", None)
-        if nickname is not None:
-            Profile.objects.add_or_update(email, nickname=nickname)
-
-        # update account login_id
-        login_id = request.data.get("login_id", None)
-        if login_id is not None:
-            Profile.objects.add_or_update(email, login_id=login_id)
+        if info_dict['name']:
+            Profile.objects.add_or_update(email, nickname=info_dict['name'])
 
         # update account contact email
-        contact_email = request.data.get('contact_email', None)
-        if contact_email is not None:
-            Profile.objects.add_or_update(email, contact_email=contact_email)
-            # key = normalize_cache_key(email, CONTACT_CACHE_PREFIX)
-            # cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
+        if info_dict['contact_email']:
+            Profile.objects.add_or_update(email, contact_email=info_dict['contact_email'])
 
         # update account telephone
-        telephone = request.data.get('telephone', None)
-        if telephone is not None:
-            DetailedProfile.objects.update_telephone(email, telephone=telephone)
+        if info_dict['telephone']:
+            DetailedProfile.objects.update_telephone(email, telephone=info_dict['telephone'])
 
     def _update_user_additional_info(self, request, email):
 
@@ -91,53 +77,40 @@ class User(APIView):
 
         email = request.user.username
 
-        # basic permission check
         if not ENABLE_UPDATE_USER_INFO:
-            error_msg = 'Permission denied.'
+            error_msg = _(u'Feature disabled.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # argument check for name
         name = request.data.get("name", None)
         if name:
+            name = name.strip()
             if len(name) > 64:
-                error_msg = 'Name is too long (maximum is 64 characters).'
+                error_msg = _(u'Name is too long (maximum is 64 characters)')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if "/" in name:
-                error_msg = "Name should not include '/'."
+                error_msg = _(u"Name should not include '/'.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # argument check for login_id
-        login_id = request.data.get("login_id", None)
-        if login_id is not None:
-            login_id = login_id.strip()
-            if len(login_id) > 225:
-                error_msg = 'login id is too long (maximum is 225 characters).'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-
-            username_by_login_id = Profile.objects.get_username_by_login_id(login_id)
-            if username_by_login_id is not None:
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                                 _(u"Login id %s already exists." % login_id))
 
         # argument check for contact_email
         contact_email = request.data.get("contact_email", None)
-        if contact_email is not None and contact_email.strip() != '':
+        if contact_email:
+            contact_email = contact_email.strip()
             if not is_valid_email(contact_email):
-                error_msg = 'Contact email invalid.'
+                error_msg = 'contact_email invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            profile = Profile.objects.get_profile_by_contact_email(contact_email)
-            if profile: #and profile.user != email:
-                error_msg = 'Contact email %s already exists.' % contact_email
+
+            if Profile.objects.get_profile_by_contact_email(contact_email):
+                error_msg = _('Contact email %s already exists.' % contact_email)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # agrument check for telephone
         telephone = request.data.get('telephone', None)
-        if telephone is not None:
+        if telephone:
             telephone = telephone.strip()
             if len(telephone) > 100:
-                error_msg = 'Telephone is too long (maximum is 100 characters).'
+                error_msg = _('telephone is too long (maximum is 100 characters).')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # argument check for list_in_address_book
@@ -153,9 +126,15 @@ class User(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        info_dict = {
+            'name': name,
+            'contact_email': contact_email,
+            'telephone': telephone,
+        }
+
         # update user profile and user additionnal info
         try:
-            self._update_user_info(request, email)
+            self._update_user_info(info_dict, email)
             self._update_user_additional_info(request, email)
         except Exception as e:
             logger.error(e)
