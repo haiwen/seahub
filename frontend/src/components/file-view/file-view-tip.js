@@ -24,7 +24,7 @@ class FileViewTip extends React.Component {
     }
 
     return (
-      <div className="file-view-content flex-1">
+      <div className="file-view-content flex-1 o-auto">
         <div className="file-view-tip">
           {errorMsg}
           <a href="?dl=1" className="btn btn-secondary">{gettext('Download')}</a>
