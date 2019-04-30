@@ -87,10 +87,6 @@
   min-height: 0;
 }
 
-.org-users-container div:last-child, .org-logs-container div:last-child {
-  height: calc(100% - 20px);
-}
-
 .cur-view-path {
   position: relative; /* for the ':after' */
   padding: 8px 16px;
@@ -174,7 +170,8 @@
 }
 
 /* for reach/router */
-.reach-router[role=group] {
+.reach-router[role=group],
+div[tabindex="-1"][role="group"] {
   display: flex;
   flex: 1;
   flex-direction: column;
