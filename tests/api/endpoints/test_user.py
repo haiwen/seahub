@@ -1,17 +1,18 @@
 import json
 import random
 import string
+from mock import patch
 
 from django.core.urlresolvers import reverse
+
 from seahub.test_utils import BaseTestCase
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.base.accounts import UserManager
-from django.test import override_settings
 
 
-def generate_random_nickname(min_len, max_len, param_type):
+def generate_random_parammeter(min_len, max_len, param_type):
 
     if param_type == 'nickname':
         random_nickname_length = random.randint(min_len, max_len)
@@ -32,7 +33,7 @@ def generate_random_nickname(min_len, max_len, param_type):
             + '.com'
         return random_contact_email
 
-    elif param_type == 'contact_email invalid':
+    elif param_type == 'contact_email_invalid':
         random_contact_email_length = random.randint(1,100)
         random_contact_email = ''.join(random.choice(string.digits + string.ascii_letters) for _ in range(random_contact_email_length))
         return random_contact_email
@@ -41,7 +42,6 @@ def generate_random_nickname(min_len, max_len, param_type):
         random_loginid_length = random.randint(1, 225)
         random_loginid = ''.join(random.choice(string.digits + string.ascii_letters) for _ in range(random_loginid_length))
         return random_loginid
-
 
 class AccountTest(BaseTestCase):
 
@@ -56,8 +56,8 @@ class AccountTest(BaseTestCase):
 
         self.login_as(self.user)
 
-        random_login_id = generate_random_nickname(0,0,'login_id')
-        random_telephone, _ = generate_random_nickname(1, 100, 'telephone')
+        random_login_id = generate_random_parammeter(0,0,'login_id')
+        random_telephone, _ = generate_random_parammeter(1, 100, 'telephone')
 
         Profile.objects.add_or_update(
             self.user_name,
@@ -84,20 +84,20 @@ class AccountTest(BaseTestCase):
         self.login_as(self.user)
 
         # test can successfully change nickname
-        random_nickname, _ = generate_random_nickname(1, 64, 'nickname')
+        random_nickname, _ = generate_random_parammeter(1, 64, 'nickname')
         data = 'name=%s' % random_nickname
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         json_resp = json.loads(resp.content)
         assert json_resp['name'] == random_nickname
 
         # nickname too long
-        random_nickname, _ = generate_random_nickname(65, 1024, 'nickname')
+        random_nickname, _ = generate_random_parammeter(65, 1024, 'nickname')
         data = 'name=%s' % random_nickname
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
         # invalid nickname with '/'
-        random_nickname, random_nickname_length = generate_random_nickname(1, 64, 'nickname')
+        random_nickname, random_nickname_length = generate_random_parammeter(1, 64, 'nickname')
         random_nickname = random_nickname.replace(random_nickname[random.randint(0, random_nickname_length) - 1], '/')
         data = 'name=%s' % random_nickname
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
@@ -110,39 +110,51 @@ class AccountTest(BaseTestCase):
         DetailedProfile.objects.add_or_update(self.user_name, department='' ,telephone='')
 
         # test can successfully change telephone
-        random_telephone, _ = generate_random_nickname(1, 100, 'telephone')
+        random_telephone, _ = generate_random_parammeter(1, 100, 'telephone')
         data = 'telephone=%s' % random_telephone
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         json_resp = json.loads(resp.content)
         assert json_resp['telephone'] == random_telephone
 
         # telephone too long
-        random_telephone, _ = generate_random_nickname(101, 500, 'telephone')
+        random_telephone, _ = generate_random_parammeter(101, 500, 'telephone')
         data = 'telephone=%s' % random_telephone
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
-    @override_settings(ENABLE_USER_SET_CONTACT_EMAIL=True)
+    def test_update_user_contact_email_feature_disabled(self):
+        self.login_as(self.user)
+        Profile.objects.add_or_update(self.user_name, contact_email='2@2.com')
+
+        # test can successfully change contact email
+        random_contact_email = generate_random_parammeter(0, 0, 'contact_email')
+        data = 'contact_email=%s' % random_contact_email
+        resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
+        json_resp = json.loads(resp.content)
+        self.assertEqual(403, resp.status_code)
+
+
+    @patch('seahub.api2.endpoints.user.ENABLE_USER_SET_CONTACT_EMAIL', True)
     def test_update_user_contact_email(self):
 
         self.login_as(self.user)
         Profile.objects.add_or_update(self.user_name, contact_email='2@2.com')
 
         # test can successfully change contact email
-        random_contact_email = generate_random_nickname(0, 0, 'contact_email')
+        random_contact_email = generate_random_parammeter(0, 0, 'contact_email')
         data = 'contact_email=%s' % random_contact_email
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         json_resp = json.loads(resp.content)
         assert json_resp['contact_email'] == random_contact_email
 
         # test invalid contact email
-        random_contact_email = generate_random_nickname(0, 0, 'contact_email invalid')
+        random_contact_email = generate_random_parammeter(0, 0, 'contact_email_invalid')
         data = 'contact_email=%s' % random_contact_email
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
         # same contact email already exists
-        random_contact_email = generate_random_nickname(0, 0, 'contact_email')
+        random_contact_email = generate_random_parammeter(0, 0, 'contact_email')
         new_user1 = UserManager().create_user(email='1@1.com', password='1')
         Profile.objects.add_or_update(new_user1.username, contact_email=random_contact_email)
         data = 'contact_email=%s' % random_contact_email

@@ -22,7 +22,7 @@ class DuplicatedContactEmailError(Exception):
 
 class ProfileManager(models.Manager):
     def add_or_update(self, username, nickname=None, intro=None, lang_code=None,
-                      login_id=None, contact_email=None, institution=None):
+                      login_id=None, contact_email=None, institution=None, list_in_address_book=None):
         """Add or update user profile.
         """
         try:
@@ -46,6 +46,8 @@ class ProfileManager(models.Manager):
         if institution is not None:
             institution = institution.strip()
             profile.institution = institution
+        if list_in_address_book is not None:
+            profile.list_in_address_book = list_in_address_book.lower() == 'true'
 
         try:
             profile.save(using=self._db)

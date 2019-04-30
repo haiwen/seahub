@@ -57,14 +57,8 @@ class User(APIView):
             DetailedProfile.objects.add_or_update(email, department=None , telephone=info_dict['telephone'])
 
         # update user list_in_address_book
-        list_in_address_book = info_dict['list_in_address_book']
-        if list_in_address_book is not None:
-            profile = Profile.objects.get_profile_by_user(email)
-            if profile is None:
-                profile = Profile(user=email)
-
-            profile.list_in_address_book = list_in_address_book.lower() == 'true'
-            profile.save()
+        if info_dict['list_in_address_book']:
+            Profile.objects.add_or_update(email, list_in_address_book=info_dict['list_in_address_book'])
 
     def get(self, request):
         email = request.user.username
