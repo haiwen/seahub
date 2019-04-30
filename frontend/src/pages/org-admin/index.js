@@ -87,11 +87,6 @@ class Org extends React.Component {
 
   render() {
     let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog, isInviteUserDialogOpen } = this.state;
-    let href = window.location.href;
-    let newPath = 'groups/';
-    if (href.indexOf('org/departmentadmin/groups/') > 0) {
-      newPath = href.slice(href.indexOf('groups/'));
-    }
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
@@ -126,7 +121,7 @@ class Org extends React.Component {
                 toggleAddDepartDialog={this.toggleAddDepartDialog}
               />
               <OrgDepartmentItem
-                path={newPath}
+                path='groups/:groupID'
                 isShowAddDepartDialog={this.state.isShowAddDepartDialog}
                 toggleAddDepartDialog={this.toggleAddDepartDialog}
                 isShowAddMemberDialog={this.state.isShowAddMemberDialog}

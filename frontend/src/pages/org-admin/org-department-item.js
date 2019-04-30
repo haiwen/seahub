@@ -26,7 +26,6 @@ class OrgDepartmentItem extends React.Component {
       showDeleteMemberDialog: false,
       showDeleteRepoDialog: false,
       isItemFreezed: false,
-      groupID: null,
       groupName: '',
     };
   }
@@ -66,11 +65,11 @@ class OrgDepartmentItem extends React.Component {
   }
 
   onRepoChanged = () => {
-    this.listOrgGroupRepo(this.state.groupID);
+    this.listOrgGroupRepo(this.props.groupID);
   }
 
   onMemberChanged = () => {
-    this.listOrgMembers(this.state.groupID);
+    this.listOrgMembers(this.props.groupID);
   }
 
   toggleItemFreezed = (isFreezed) => {
@@ -80,26 +79,21 @@ class OrgDepartmentItem extends React.Component {
   }
 
   componentWillMount() {
-    const href = window.location.href;
-    let path = href.slice(href.indexOf('groups/'));
-    let groupID = path.slice(7, path.length - 1);
-    this.setState({
-      groupID: groupID
-    });
+    const groupID = this.props.groupID;
     this.listOrgGroupRepo(groupID);
     this.listOrgMembers(groupID);
   }
 
   render() {
-    const members = this.state.members;
-    const repos = this.state.repos;
+    const { members, repos } = this.state;
+    const groupID = this.props.groupID;
     return (
       <div className="main-panel-center flex-row h-100">
         <div className="cur-view-container o-auto">
           <div className="cur-view-path">
             <div className="fleft">
               <h3 className="sf-heading">
-                {this.state.groupID ? 
+                {groupID ? 
                   <a href={serviceURL + '/org/departmentadmin/'}>{gettext('Departments')}</a>
                   : <span>{gettext('Departments')}</span>
                 }
@@ -109,14 +103,14 @@ class OrgDepartmentItem extends React.Component {
                     <span key={ancestor.id}>{' / '}<a href={newHref}>{ancestor.name}</a></span>
                   );
                 })}
-                {this.state.groupID && <span>{' / '}{this.state.groupName}</span>}
+                {groupID && <span>{' / '}{this.state.groupName}</span>}
               </h3>
             </div>
           </div>
 
           <div className="cur-view-subcontainer org-groups">
             <OrgDepartmentsList
-              groupID={this.state.groupID}
+              groupID={groupID}
               isShowAddDepartDialog={this.props.isShowAddDepartDialog}
               toggleAddDepartDialog={this.props.toggleAddDepartDialog}
             />
@@ -150,7 +144,7 @@ class OrgDepartmentItem extends React.Component {
                             isItemFreezed={this.state.isItemFreezed}
                             onMemberChanged={this.onMemberChanged}
                             toggleItemFreezed={this.toggleItemFreezed}
-                            groupID={this.state.groupID}
+                            groupID={groupID}
                           />
                         </React.Fragment>
                       );
@@ -199,7 +193,7 @@ class OrgDepartmentItem extends React.Component {
                 toggle={this.toggleCancel}
                 onMemberChanged={this.onMemberChanged}
                 member={this.state.deletedMember}
-                groupID={this.state.groupID}
+                groupID={groupID}
               />
             </ModalPortal>
           )}
@@ -209,7 +203,7 @@ class OrgDepartmentItem extends React.Component {
                 toggle={this.toggleCancel}
                 onRepoChanged={this.onRepoChanged}
                 repo={this.state.deletedRepo}
-                groupID={this.state.groupID}
+                groupID={groupID}
               />
             </ModalPortal>
           )}
@@ -218,7 +212,7 @@ class OrgDepartmentItem extends React.Component {
               <AddMemberDialog
                 toggle={this.props.toggleAddMemberDialog}
                 onMemberChanged={this.onMemberChanged}
-                groupID={this.state.groupID}
+                groupID={groupID}
               />
             </ModalPortal>
           )}
@@ -227,7 +221,7 @@ class OrgDepartmentItem extends React.Component {
               <AddRepoDialog
                 toggle={this.props.toggleAddRepoDialog}
                 onRepoChanged={this.onRepoChanged}
-                groupID={this.state.groupID}
+                groupID={groupID}
               />
             </ModalPortal>
           )}
