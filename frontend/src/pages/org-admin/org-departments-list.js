@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from '@reach/router';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { serviceURL, gettext, orgID, lang } from '../../utils/constants';
+import { serviceURL, gettext, orgID, lang, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils.js';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
@@ -90,6 +91,7 @@ class OrgDepartmentsList extends React.Component {
                           group={group}
                           showDeleteDepartDialog={this.showDeleteDepartDialog}
                           showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
+                          setGroupID={this.props.setGroupID}
                         />
                       </React.Fragment>
                     );
@@ -165,10 +167,10 @@ class GroupItem extends React.Component {
   render() {
     const group = this.props.group;
     const highlight = this.state.highlight;
-    const newHref = serviceURL + '/org/departmentadmin/groups/' + group.id + '/';
+    const newHref = siteRoot + 'org/departmentadmin/groups/' + group.id + '/';
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><a href={newHref} onClick={this.changeOrgGroup}>{group.name}</a></td>
+        <td><Link to={newHref} onClick={this.props.setGroupID.bind(this, group.id)}>{group.name}</Link></td>
         <td>{moment(group.created_at).fromNow()}</td>
         <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
           {Utils.bytesToSize(group.quota)}{' '}

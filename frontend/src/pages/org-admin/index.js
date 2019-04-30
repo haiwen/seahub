@@ -38,6 +38,7 @@ class Org extends React.Component {
       isShowAddMemberDialog: false,
       isShowAddRepoDialog: false,
       currentTab: 'users',
+      groupID: '',
     };
   }
 
@@ -51,6 +52,9 @@ class Org extends React.Component {
       currentTab = 'departmentadmin';
     }
     this.setState({currentTab: currentTab});
+    if (href[href.length - 3] === 'groups') {
+      this.setState({ groupID: href[href.length - 2] });
+    }
   }
 
   onCloseSidePanel = () => {
@@ -85,16 +89,17 @@ class Org extends React.Component {
     this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
   }
 
+  setGroupID = (groupID) => {
+    this.setState({ groupID: groupID });
+  }
+
   render() {
     let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog, isInviteUserDialogOpen } = this.state;
-    let href = window.location.href;
-    let newPath = 'groups/';
-    if (href.indexOf('org/departmentadmin/groups/') > 0) {
-      newPath = href.slice(href.indexOf('groups/'));
-    }
+    let newPath = 'groups/' + this.state.groupID;
+    let isSubDepart = this.state.groupID ? true : false;
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
+        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} setGroupID={this.setGroupID}/>
         <MainPanel
           currentTab={currentTab}
           toggleAddOrgAdmin={this.toggleAddOrgAdmin}
@@ -103,6 +108,7 @@ class Org extends React.Component {
           toggleAddDepartDialog={this.toggleAddDepartDialog}
           toggleAddMemberDialog={this.toggleAddMemberDialog}
           toggleAddRepoDialog={this.toggleAddRepoDialog}
+          isSubDepart={isSubDepart}
         >
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'} />
@@ -124,6 +130,7 @@ class Org extends React.Component {
                 path='/'
                 isShowAddDepartDialog={this.state.isShowAddDepartDialog}
                 toggleAddDepartDialog={this.toggleAddDepartDialog}
+                setGroupID={this.setGroupID}
               />
               <OrgDepartmentItem
                 path={newPath}
@@ -133,6 +140,7 @@ class Org extends React.Component {
                 toggleAddMemberDialog={this.toggleAddMemberDialog}
                 isShowAddRepoDialog={this.state.isShowAddRepoDialog}
                 toggleAddRepoDialog={this.toggleAddRepoDialog}
+                setGroupID={this.setGroupID}
               />
             </OrgDepartments>
             <OrgLogs

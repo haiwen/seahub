@@ -21,6 +21,11 @@ class SidePanel extends React.Component {
     this.props.tabItemClick(tab);
   }
 
+  handleDeaprtClick = () => {
+    this.props.setGroupID('');
+    this.tabItemClick('departmentadmin');
+  }
+
   render() {
     return (
       <div className={`side-panel ${this.props.isSidePanelClosed ? '' : 'left-zero'}`}>
@@ -57,7 +62,7 @@ class SidePanel extends React.Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('departmentadmin')}`} to={siteRoot + 'org/departmentadmin/'} onClick={() => this.tabItemClick('departmentadmin')} >
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('departmentadmin')}`} to={siteRoot + 'org/departmentadmin/'} onClick={this.handleDeaprtClick} >
                     <span className="sf2-icon-organization"></span>
                     <span className="nav-text">{gettext('Departments')}</span>
                   </Link>

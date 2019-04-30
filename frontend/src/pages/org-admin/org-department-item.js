@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from '@reach/router';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils.js';
-import { serviceURL, gettext, orgID } from '../../utils/constants';
+import { serviceURL, gettext, orgID, siteRoot } from '../../utils/constants';
 import OrgDepartmentsList from './org-departments-list';
 import ModalPortal from '../../components/modal-portal';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
@@ -100,13 +101,15 @@ class OrgDepartmentItem extends React.Component {
             <div className="fleft">
               <h3 className="sf-heading">
                 {this.state.groupID ? 
-                  <a href={serviceURL + '/org/departmentadmin/'}>{gettext('Departments')}</a>
+                  <Link to={siteRoot + 'org/departmentadmin/'} onClick={this.props.setGroupID.bind(this, '')}>{gettext('Departments')}</Link>
                   : <span>{gettext('Departments')}</span>
                 }
                 {this.state.ancestorGroups.map(ancestor => {
-                  let newHref = serviceURL + '/org/departmentadmin/groups/' + ancestor.id + '/';
+                  let newHref = siteRoot + 'org/departmentadmin/groups/' + ancestor.id + '/';
                   return (
-                    <span key={ancestor.id}>{' / '}<a href={newHref}>{ancestor.name}</a></span>
+                    <span key={ancestor.id}>{' / '}
+                       <Link to={newHref} onClick={this.props.setGroupID.bind(this, ancestor.id)}>{ancestor.name}</Link>
+                    </span>
                   );
                 })}
                 {this.state.groupID && <span>{' / '}{this.state.groupName}</span>}
@@ -119,6 +122,7 @@ class OrgDepartmentItem extends React.Component {
               groupID={this.state.groupID}
               isShowAddDepartDialog={this.props.isShowAddDepartDialog}
               toggleAddDepartDialog={this.props.toggleAddDepartDialog}
+              setGroupID={this.props.setGroupID}
             />
           </div>
           
