@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, serviceURL, gettext, orgID, lang } from '../../utils/constants';
+import { serviceURL, gettext, orgID, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils.js';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
@@ -28,15 +28,11 @@ class OrgDepartmentsList extends React.Component {
   listDepartGroups = () => {
     if (this.props.groupID) {
       seafileAPI.orgAdminListGroupInfo(orgID, this.props.groupID, true).then(res => {
-        this.setState({
-          groups: res.data.groups
-        });
+        this.setState({ groups: res.data.groups });
       });
     } else {
       seafileAPI.orgAdminListDepartGroups(orgID).then(res => {
-        this.setState({
-          groups: res.data.data
-        });
+        this.setState({ groups: res.data.data });
       });
     }
   }
@@ -140,6 +136,14 @@ class OrgDepartmentsList extends React.Component {
     );
   }
 }
+
+const OrgDepartmentsListPropTypes = {
+  isShowAddDepartDialog: PropTypes.bool.isRequired,
+  toggleAddDepartDialog: PropTypes.func.isRequired,
+};
+
+OrgDepartmentsList.propTypes = OrgDepartmentsListPropTypes;
+
 
 class GroupItem extends React.Component {
 

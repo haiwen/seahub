@@ -35,6 +35,8 @@ class Org extends React.Component {
       isShowAddOrgAdminDialog: false,
       isInviteUserDialogOpen: false,
       isShowAddDepartDialog: false,
+      isShowAddMemberDialog: false,
+      isShowAddRepoDialog: false,
       currentTab: 'users',
     };
   }
@@ -75,6 +77,14 @@ class Org extends React.Component {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
   }
 
+  toggleAddMemberDialog = () => {
+    this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
+  }
+
+  toggleAddRepoDialog = () => {
+    this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
+  }
+
   render() {
     let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog, isInviteUserDialogOpen } = this.state;
     let href = window.location.href;
@@ -91,6 +101,8 @@ class Org extends React.Component {
           toggleAddOrgUser={this.toggleAddOrgUser}
           toggleInviteUserDialog={this.toggleInviteUserDialog}
           toggleAddDepartDialog={this.toggleAddDepartDialog}
+          toggleAddMemberDialog={this.toggleAddMemberDialog}
+          toggleAddRepoDialog={this.toggleAddRepoDialog}
         >
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'} />
@@ -117,6 +129,10 @@ class Org extends React.Component {
                 path={newPath}
                 isShowAddDepartDialog={this.state.isShowAddDepartDialog}
                 toggleAddDepartDialog={this.toggleAddDepartDialog}
+                isShowAddMemberDialog={this.state.isShowAddMemberDialog}
+                toggleAddMemberDialog={this.toggleAddMemberDialog}
+                isShowAddRepoDialog={this.state.isShowAddRepoDialog}
+                toggleAddRepoDialog={this.toggleAddRepoDialog}
               />
             </OrgDepartments>
             <OrgLogs

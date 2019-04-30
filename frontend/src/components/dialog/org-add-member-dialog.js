@@ -30,15 +30,13 @@ class AddMemberDialog extends React.Component {
     if (!this.state.selectedOption) return;
     const email = this.state.selectedOption.email;
     this.refs.orgSelect.clearSelect();
-    this.setState({ errorMsg: [] });
+    this.setState({ errMessage: [] });
     seafileAPI.orgAdminAddDepartGroupUser(orgID, this.props.groupID, email).then((res) => {
-      if (res.data.failed) {
-        this.setState({ errorMsg: res.data.failed[0] });
+      this.setState({ selectedOption: null });
+      if (res.data.failed.length > 0) {
+        this.setState({ errMessage: res.data.failed[0].error_msg });
       }
-      this.setState({
-        selectedOption: null,
-      });
-      if (res.data.success) {
+      if (res.data.success.length > 0) {
         this.props.onMemberChanged();
         this.props.toggle();
       }

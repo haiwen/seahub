@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils.js';
-import { serviceURL, mediaUrl, gettext, orgID } from '../../utils/constants';
+import { serviceURL, gettext, orgID } from '../../utils/constants';
 import OrgDepartmentsList from './org-departments-list';
 import ModalPortal from '../../components/modal-portal';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
@@ -23,14 +23,12 @@ class OrgDepartmentItem extends React.Component {
       ancestorGroups: [],
       deletedMember: {},
       deletedRepo: {},
-      showAddMemberDialog: false,
       showDeleteMemberDialog: false,
-      showAddRepoDialog: false,
       showDeleteRepoDialog: false,
       isItemFreezed: false,
       groupID: null,
       groupName: '',
-    }
+    };
   }
 
   listOrgGroupRepo = (groupID) => {
@@ -52,16 +50,8 @@ class OrgDepartmentItem extends React.Component {
     });
   }
 
-  showAddMemberDialog = () => {
-    this.setState({ showAddMemberDialog: true });
-  }
-
   showDeleteMemberDialog = (member) => {
     this.setState({ showDeleteMemberDialog: true, deletedMember: member });
-  }
-
-  showAddRepoDialog = () => {
-    this.setState({ showAddRepoDialog: true });
   }
 
   showDeleteRepoDialog = (repo) => {
@@ -70,9 +60,7 @@ class OrgDepartmentItem extends React.Component {
 
   toggleCancel = () => {
     this.setState({
-      showAddMemberDialog: false,
       showDeleteMemberDialog: false,
-      showAddRepoDialog: false,
       showDeleteRepoDialog: false,
     });
   }
@@ -124,12 +112,6 @@ class OrgDepartmentItem extends React.Component {
                 {this.state.groupID && <span>{' / '}{this.state.groupName}</span>}
               </h3>
             </div>
-            {this.state.groupID &&
-              <div className="fright">
-                <button className="btn-white operation-item" onClick={this.props.toggleAddDepartDialog}>
-                  {gettext('New Sub-departments')}</button>
-              </div>
-            }
           </div>
 
           <div className="cur-view-subcontainer org-groups">
@@ -145,12 +127,9 @@ class OrgDepartmentItem extends React.Component {
               <div className="fleft">
                 <h3 className="sf-heading">{gettext('Members')}</h3>
               </div>
-              <div className="fright">
-                <button className="btn-white operation-item" onClick={this.showAddMemberDialog}>{gettext('Add Member')}</button>
-              </div>
             </div>
             <div className="cur-view-content">
-              {(members && members.length === 1 && members[0].role === "Owner") ?
+              {(members && members.length === 1 && members[0].role === 'Owner') ?
                 <p className="no-member">{gettext('No members')}</p> :
                 <table>
                   <thead>
@@ -167,7 +146,6 @@ class OrgDepartmentItem extends React.Component {
                         <React.Fragment key={index}>
                           <MemberItem
                             member={member}
-                            showAddMemberDialog={this.showAddMemberDialog}
                             showDeleteMemberDialog={this.showDeleteMemberDialog}
                             isItemFreezed={this.state.isItemFreezed}
                             onMemberChanged={this.onMemberChanged}
@@ -186,9 +164,6 @@ class OrgDepartmentItem extends React.Component {
           <div className="cur-view-subcontainer org-libriries">
             <div className="cur-view-path">
               <div className="fleft"><h3 className="sf-heading">{gettext('Libraries')}</h3></div>
-              <div className="fright">
-                <button className="btn-white operation-item" onClick={this.showAddRepoDialog}>{gettext('New Library')}</button>
-              </div>
             </div>
             { repos.length > 0 ?
               <div className="cur-view-content">
@@ -238,19 +213,19 @@ class OrgDepartmentItem extends React.Component {
               />
             </ModalPortal>
           )}
-          {this.state.showAddMemberDialog && (
+          {this.props.isShowAddMemberDialog && (
             <ModalPortal>
               <AddMemberDialog
-                toggle={this.toggleCancel}
+                toggle={this.props.toggleAddMemberDialog}
                 onMemberChanged={this.onMemberChanged}
                 groupID={this.state.groupID}
               />
             </ModalPortal>
           )}
-          {this.state.showAddRepoDialog && (
+          {this.props.isShowAddRepoDialog && (
             <ModalPortal>
               <AddRepoDialog
-                toggle={this.toggleCancel}
+                toggle={this.props.toggleAddRepoDialog}
                 onRepoChanged={this.onRepoChanged}
                 groupID={this.state.groupID}
               />
@@ -261,6 +236,17 @@ class OrgDepartmentItem extends React.Component {
     );
   }
 }
+
+const OrgDepartmentItemPropTypes = {
+  isShowAddDepartDialog: PropTypes.bool.isRequired,
+  isShowAddMemberDialog: PropTypes.bool.isRequired,
+  isShowAddRepoDialog: PropTypes.bool.isRequired,
+  toggleAddDepartDialog: PropTypes.func.isRequired,
+  toggleAddMemberDialog: PropTypes.func.isRequired,
+  toggleAddRepoDialog: PropTypes.func.isRequired,
+};
+
+OrgDepartmentItem.propTypes = OrgDepartmentItemPropTypes;
 
 
 class MemberItem extends React.Component {
@@ -305,7 +291,7 @@ class MemberItem extends React.Component {
     if (member.role === 'Owner') return null;
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img src={member.avatar_url} alt="member-header" width="24"/></td>
+        <td><img src={member.avatar_url} alt="member-header" width="24" className="avatar"/></td>
         <td><a href={memberLink}>{member.name}</a></td>
         <td>
           <RoleEditor 
@@ -317,18 +303,18 @@ class MemberItem extends React.Component {
             toggleItemFreezed={this.props.toggleItemFreezed}
           />
         </td>
-        {
-          !this.props.isItemFreezed ?
-            <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
-              <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-            </td> : <td></td>
-        }        
+        {!this.props.isItemFreezed ?
+          <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
+            <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+          </td> : <td></td>
+        }
       </tr>
     );
   }
 }
 
 const MemberItemPropTypes = {
+  member: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onMemberChanged: PropTypes.func.isRequired,
   showDeleteMemberDialog: PropTypes.func.isRequired,
