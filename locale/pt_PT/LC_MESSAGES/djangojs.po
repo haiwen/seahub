@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-29 13:52+0800\n"
-"PO-Revision-Date: 2019-04-29 05:55+0000\n"
+"POT-Creation-Date: 2019-04-30 13:34+0800\n"
+"PO-Revision-Date: 2019-04-30 05:35+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) (http://www.transifex.com/haiwen/seahub/language/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -134,7 +134,7 @@ msgstr ""
 #: frontend/src/components/file-chooser/file-chooser.js:363
 #: frontend/src/components/main-side-nav.js:129
 #: frontend/src/components/main-side-nav.js:131
-#: frontend/src/pages/org-admin/org-department-item.js:178
+#: frontend/src/pages/org-admin/org-department-item.js:166
 #: frontend/src/pages/org-admin/side-panel.js:44
 #: frontend/src/pages/share-admin/libraries.js:270
 #: frontend/src/pages/sys-admin/side-panel.js:64
@@ -207,10 +207,11 @@ msgstr ""
 #: frontend/src/components/dialog/insert-file-dialog.js:67
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:79
 #: frontend/src/components/dialog/internal-link-dialog.js:72
+#: frontend/src/components/dialog/invite-people-dialog.js:108
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:133
 #: frontend/src/components/dialog/move-dirent-dialog.js:174
 #: frontend/src/components/dialog/new-wiki-dialog.js:59
-#: frontend/src/components/dialog/org-add-member-dialog.js:64
+#: frontend/src/components/dialog/org-add-member-dialog.js:62
 #: frontend/src/components/dialog/org-delete-department-dialog.js:46
 #: frontend/src/components/dialog/org-delete-member-dialog.js:41
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:34
@@ -246,6 +247,7 @@ msgstr ""
 #: frontend/src/components/dialog/insert-file-dialog.js:69
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:81
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:82
+#: frontend/src/components/dialog/invite-people-dialog.js:109
 #: frontend/src/components/dialog/label-repo-state-dialog.js:97
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:134
@@ -255,7 +257,7 @@ msgstr ""
 #: frontend/src/components/dialog/new-wiki-dialog.js:60
 #: frontend/src/components/dialog/org-add-admin-dialog.js:52
 #: frontend/src/components/dialog/org-add-department-dialog.js:83
-#: frontend/src/components/dialog/org-add-member-dialog.js:63
+#: frontend/src/components/dialog/org-add-member-dialog.js:61
 #: frontend/src/components/dialog/org-add-repo-dialog.js:78
 #: frontend/src/components/dialog/org-add-user-dialog.js:163
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:71
@@ -266,7 +268,7 @@ msgstr ""
 #: frontend/src/components/dialog/save-shared-file-dialog.js:78
 #: frontend/src/components/dialog/share-repo-dialog.js:150
 #: frontend/src/components/dialog/share-to-group.js:295
-#: frontend/src/components/dialog/share-to-user.js:286
+#: frontend/src/components/dialog/share-to-user.js:287
 #: frontend/src/components/dialog/transfer-dialog.js:55
 #: frontend/src/components/dialog/transfer-group-dialog.js:71
 #: frontend/src/components/dialog/wiki-select-dialog.js:83
@@ -289,8 +291,8 @@ msgstr ""
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:95
 #: frontend/src/components/dialog/manage-members-dialog.js:89
-#: frontend/src/components/dialog/org-add-member-dialog.js:54
-#: frontend/src/components/dialog/share-to-user.js:272
+#: frontend/src/components/dialog/org-add-member-dialog.js:52
+#: frontend/src/components/dialog/share-to-user.js:273
 msgid "Select users..."
 msgstr ""
 
@@ -325,6 +327,7 @@ msgid "Successfully changed library password."
 msgstr ""
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:91
+#: frontend/src/components/dialog/invite-people-dialog.js:76
 #: frontend/src/components/dialog/label-repo-state-dialog.js:37
 #: frontend/src/components/dialog/label-repo-state-dialog.js:77
 #: frontend/src/components/dialog/zip-download-dialog.js:48
@@ -332,6 +335,8 @@ msgstr ""
 #: frontend/src/pages/groups/group-view.js:101
 #: frontend/src/pages/groups/group-view.js:135
 #: frontend/src/pages/groups/groups-view.js:141
+#: frontend/src/pages/invitations/invitations-view.js:82
+#: frontend/src/pages/invitations/invitations-view.js:157
 #: frontend/src/pages/lib-content-view/lib-content-view.js:138
 #: frontend/src/pages/linked-devices/linked-devices.js:182
 #: frontend/src/pages/my-libs/my-libs.js:54
@@ -355,6 +360,7 @@ msgid "Error"
 msgstr ""
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:94
+#: frontend/src/components/dialog/invite-people-dialog.js:78
 #: frontend/src/components/dialog/label-repo-state-dialog.js:39
 #: frontend/src/components/dialog/label-repo-state-dialog.js:79
 #: frontend/src/components/dialog/zip-download-dialog.js:50
@@ -362,6 +368,8 @@ msgstr ""
 #: frontend/src/pages/groups/group-view.js:107
 #: frontend/src/pages/groups/group-view.js:141
 #: frontend/src/pages/groups/groups-view.js:147
+#: frontend/src/pages/invitations/invitations-view.js:84
+#: frontend/src/pages/invitations/invitations-view.js:160
 #: frontend/src/pages/lib-content-view/lib-content-view.js:144
 #: frontend/src/pages/linked-devices/linked-devices.js:189
 #: frontend/src/pages/my-libs/my-libs.js:60
@@ -480,13 +488,12 @@ msgstr ""
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:109
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:20
 #: frontend/src/components/wiki-list-view/wiki-list-view.js:41
-#: frontend/src/pages/data-grid/new-column-dialog.js:52
 #: frontend/src/pages/my-libs/my-libs-deleted.js:87
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:80
 #: frontend/src/pages/org-admin/org-admin-list.js:90
-#: frontend/src/pages/org-admin/org-department-item.js:149
-#: frontend/src/pages/org-admin/org-department-item.js:189
-#: frontend/src/pages/org-admin/org-departments-list.js:93
+#: frontend/src/pages/org-admin/org-department-item.js:138
+#: frontend/src/pages/org-admin/org-department-item.js:174
+#: frontend/src/pages/org-admin/org-departments-list.js:79
 #: frontend/src/pages/org-admin/org-groups.js:85
 #: frontend/src/pages/org-admin/org-libraries.js:100
 #: frontend/src/pages/org-admin/org-links.js:74
@@ -566,7 +573,7 @@ msgstr ""
 #: frontend/src/components/toolbar/repo-view-toobar.js:65
 #: frontend/src/pages/groups/group-view.js:366
 #: frontend/src/pages/groups/group-view.js:367
-#: frontend/src/pages/org-admin/org-department-item.js:180
+#: frontend/src/pages/org-admin/main-panel.js:59
 #: frontend/src/pages/shared-with-all/public-shared-view.js:182
 msgid "New Library"
 msgstr ""
@@ -575,8 +582,8 @@ msgstr ""
 #: frontend/src/components/dialog/share-repo-dialog.js:130
 #: frontend/src/components/dialog/share-to-group.js:266
 #: frontend/src/components/dialog/share-to-group.js:315
-#: frontend/src/components/dialog/share-to-user.js:261
-#: frontend/src/components/dialog/share-to-user.js:311
+#: frontend/src/components/dialog/share-to-user.js:262
+#: frontend/src/components/dialog/share-to-user.js:312
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:76
 #: frontend/src/pages/org-admin/org-logs.js:28
 #: frontend/src/pages/share-admin/folders.js:44
@@ -677,7 +684,7 @@ msgstr ""
 #: frontend/src/components/dialog/org-delete-member-dialog.js:40
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:33
 #: frontend/src/components/dialog/share-to-group.js:55
-#: frontend/src/components/dialog/share-to-user.js:55
+#: frontend/src/components/dialog/share-to-user.js:56
 #: frontend/src/components/dialog/update-tag-dialog.js:116
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:434
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:464
@@ -686,6 +693,7 @@ msgstr ""
 #: frontend/src/components/review-list-view/review-comments.js:313
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:284
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:287
+#: frontend/src/pages/invitations/invitations-view.js:46
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:229
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:77
 #: frontend/src/pages/org-admin/org-groups.js:220
@@ -915,6 +923,21 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
+#: frontend/src/components/dialog/invite-people-dialog.js:56
+#: static/scripts/app/views/invitations.js:101
+msgid "Successfully invited %(email)."
+msgstr ""
+
+#: frontend/src/components/dialog/invite-people-dialog.js:59
+#: static/scripts/app/views/invitations.js:104
+msgid "Successfully invited %(email) and %(num) other people."
+msgstr ""
+
+#: frontend/src/components/dialog/invite-people-dialog.js:84
+msgid "Email is invalid."
+msgstr ""
+
+#: frontend/src/components/dialog/invite-people-dialog.js:88
 #: frontend/src/components/dialog/label-repo-state-dialog.js:59
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:698 static/scripts/app/views/dir.js:758
@@ -930,6 +953,24 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/dir.js:82
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "It is required."
+msgstr ""
+
+#: frontend/src/components/dialog/invite-people-dialog.js:97
+#: frontend/src/components/dialog/share-to-user.js:325
+#: frontend/src/components/main-side-nav.js:228
+#: frontend/src/components/main-side-nav.js:230
+#: frontend/src/components/toolbar/invitations-toolbar.js:31
+#: frontend/src/components/toolbar/invitations-toolbar.js:36
+#: frontend/src/pages/invitations/invitations-view.js:217
+msgid "Invite People"
+msgstr ""
+
+#: frontend/src/components/dialog/invite-people-dialog.js:99
+msgid "Emails"
+msgstr ""
+
+#: frontend/src/components/dialog/invite-people-dialog.js:100
+msgid "Emails, separated by ','"
 msgstr ""
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:71
@@ -1013,7 +1054,7 @@ msgstr ""
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:21
 #: frontend/src/file-history-old.js:215
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:82
-#: frontend/src/pages/org-admin/org-department-item.js:190
+#: frontend/src/pages/org-admin/org-department-item.js:175
 #: frontend/src/pages/shared-libs/shared-libs.js:57
 msgid "Size"
 msgstr ""
@@ -1099,7 +1140,7 @@ msgid "Add group member"
 msgstr ""
 
 #: frontend/src/components/dialog/manage-members-dialog.js:114
-#: frontend/src/pages/org-admin/org-department-item.js:150
+#: frontend/src/pages/org-admin/org-department-item.js:139
 msgid "Role"
 msgstr ""
 
@@ -1141,19 +1182,22 @@ msgid "Select a user as admin..."
 msgstr ""
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:64
-#: frontend/src/pages/org-admin/org-departments-list.js:77
+#: frontend/src/pages/org-admin/main-panel.js:54
+#: frontend/src/pages/org-admin/main-panel.js:55
 #: static/scripts/sysadmin-app/views/address-book-group.js:101
 msgid "New Sub-department"
 msgstr ""
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:64
-#: frontend/src/pages/org-admin/org-departments-list.js:77
+#: frontend/src/pages/org-admin/main-panel.js:52
+#: frontend/src/pages/org-admin/main-panel.js:53
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
 msgstr ""
 
-#: frontend/src/components/dialog/org-add-member-dialog.js:51
-#: frontend/src/pages/org-admin/org-department-item.js:139
+#: frontend/src/components/dialog/org-add-member-dialog.js:49
+#: frontend/src/pages/org-admin/main-panel.js:56
+#: frontend/src/pages/org-admin/main-panel.js:57
 msgid "Add Member"
 msgstr ""
 
@@ -1167,6 +1211,7 @@ msgid "Add User"
 msgstr ""
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:138
+#: frontend/src/pages/invitations/invitations-view.js:104
 msgid "Email"
 msgstr "Email"
 
@@ -1179,8 +1224,8 @@ msgid "Confirm Password"
 msgstr ""
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:31
-#: frontend/src/pages/org-admin/main-panel.js:37
-#: frontend/src/pages/org-admin/main-panel.js:38
+#: frontend/src/pages/org-admin/main-panel.js:39
+#: frontend/src/pages/org-admin/main-panel.js:40
 msgid "Invite user"
 msgstr ""
 
@@ -1355,7 +1400,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/share-repo-dialog.js:35
 #: frontend/src/components/dialog/wiki-select-dialog.js:71
-#: frontend/src/pages/org-admin/org-department-item.js:354
+#: frontend/src/pages/org-admin/org-department-item.js:350
 #: frontend/src/pages/starred/starred.js:173
 #: frontend/src/pages/starred/starred.js:196
 msgid "icon"
@@ -1382,13 +1427,13 @@ msgstr ""
 msgid "Select groups..."
 msgstr ""
 
-#: frontend/src/components/dialog/share-to-user.js:169
-#: frontend/src/components/dialog/share-to-user.js:195
+#: frontend/src/components/dialog/share-to-user.js:170
+#: frontend/src/components/dialog/share-to-user.js:196
 msgid "Library can not be shared to owner."
 msgstr ""
 
-#: frontend/src/components/dialog/share-to-user.js:260
-#: frontend/src/components/dialog/share-to-user.js:310
+#: frontend/src/components/dialog/share-to-user.js:261
+#: frontend/src/components/dialog/share-to-user.js:311
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:89
 #: frontend/src/pages/org-admin/org-logs-file-update.js:107
 msgid "User"
@@ -1778,8 +1823,8 @@ msgstr ""
 msgid "Linked Devices"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:227
-#: frontend/src/components/main-side-nav.js:230
+#: frontend/src/components/main-side-nav.js:235
+#: frontend/src/components/main-side-nav.js:238
 msgid "Share Admin"
 msgstr ""
 
@@ -2223,22 +2268,6 @@ msgstr ""
 msgid "Permission denied"
 msgstr "Permissão recusada"
 
-#: frontend/src/pages/data-grid/new-column-dialog.js:48
-msgid "New Column"
-msgstr ""
-
-#: frontend/src/pages/data-grid/new-column-dialog.js:56
-msgid "type"
-msgstr ""
-
-#: frontend/src/pages/data-grid/new-column-dialog.js:58
-msgid "text"
-msgstr ""
-
-#: frontend/src/pages/data-grid/new-column-dialog.js:59
-msgid "number"
-msgstr ""
-
 #: frontend/src/pages/drafts/draft-content.js:28
 msgid "Successfully deleted draft %(draft)s."
 msgstr ""
@@ -2300,7 +2329,7 @@ msgstr ""
 #: frontend/src/pages/groups/group-view.js:162
 #: frontend/src/pages/groups/group-view.js:168
 #: frontend/src/pages/groups/groups-view.js:78
-#: frontend/src/pages/org-admin/org-department-item.js:205
+#: frontend/src/pages/org-admin/org-department-item.js:190
 msgid "No libraries"
 msgstr ""
 
@@ -2330,12 +2359,43 @@ msgstr ""
 
 #: frontend/src/pages/groups/group-view.js:423
 #: frontend/src/pages/groups/group-view.js:429
-#: frontend/src/pages/org-admin/org-department-item.js:136
+#: frontend/src/pages/org-admin/org-department-item.js:128
 msgid "Members"
 msgstr ""
 
 #: frontend/src/pages/groups/groups-view.js:194
 msgid "My Groups"
+msgstr ""
+
+#: frontend/src/pages/invitations/invitations-view.js:79
+#: static/scripts/app/views/invitation.js:40
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:57
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
+#: static/scripts/sysadmin-app/views/group.js:44
+msgid "Successfully deleted 1 item."
+msgstr ""
+
+#: frontend/src/pages/invitations/invitations-view.js:105
+msgid "Invite Time"
+msgstr ""
+
+#: frontend/src/pages/invitations/invitations-view.js:106
+#: frontend/src/pages/share-admin/share-links.js:90
+msgid "Expiration"
+msgstr ""
+
+#: frontend/src/pages/invitations/invitations-view.js:107
+msgid "Accepted"
+msgstr ""
+
+#: frontend/src/pages/invitations/invitations-view.js:152
+#: static/scripts/common.js:498 static/scripts/common.js:500
+#: static/scripts/sysadmin-app/views/dashboard.js:79
+msgid "Permission error"
+msgstr ""
+
+#: frontend/src/pages/invitations/invitations-view.js:192
+msgid "You have not invited any people."
 msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-container.js:99
@@ -2484,13 +2544,13 @@ msgstr ""
 msgid "Folder Permission"
 msgstr ""
 
-#: frontend/src/pages/org-admin/main-panel.js:33
-#: frontend/src/pages/org-admin/main-panel.js:34
+#: frontend/src/pages/org-admin/main-panel.js:35
+#: frontend/src/pages/org-admin/main-panel.js:36
 msgid "Add user"
 msgstr ""
 
-#: frontend/src/pages/org-admin/main-panel.js:44
-#: frontend/src/pages/org-admin/main-panel.js:45
+#: frontend/src/pages/org-admin/main-panel.js:46
+#: frontend/src/pages/org-admin/main-panel.js:47
 msgid "Add admin"
 msgstr ""
 
@@ -2533,37 +2593,37 @@ msgstr ""
 msgid "Operations"
 msgstr "Operações"
 
-#: frontend/src/pages/org-admin/org-department-item.js:114
-#: frontend/src/pages/org-admin/org-department-item.js:115
-#: frontend/src/pages/org-admin/org-departments-list.js:76
+#: frontend/src/pages/org-admin/org-department-item.js:103
+#: frontend/src/pages/org-admin/org-department-item.js:104
+#: frontend/src/pages/org-admin/org-departments-list.js:66
 #: frontend/src/pages/org-admin/side-panel.js:62
 #: frontend/src/pages/sys-admin/side-panel.js:88
 msgid "Departments"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-department-item.js:144
+#: frontend/src/pages/org-admin/org-department-item.js:133
 msgid "No members"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-departments-list.js:76
+#: frontend/src/pages/org-admin/org-departments-list.js:66
 msgid "Sub-departments"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-departments-list.js:78
+#: frontend/src/pages/org-admin/org-departments-list.js:67
 msgid "No sub-departments"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-departments-list.js:78
+#: frontend/src/pages/org-admin/org-departments-list.js:67
 msgid "No departments"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-departments-list.js:94
+#: frontend/src/pages/org-admin/org-departments-list.js:80
 #: frontend/src/pages/org-admin/org-groups.js:87
 #: frontend/src/pages/org-admin/org-links.js:76
 msgid "Created At"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-departments-list.js:95
+#: frontend/src/pages/org-admin/org-departments-list.js:81
 msgid "Quota"
 msgstr ""
 
@@ -2768,10 +2828,6 @@ msgstr ""
 #: frontend/src/pages/share-admin/share-links.js:89
 #: frontend/src/pages/share-admin/upload-links.js:56
 msgid "Visits"
-msgstr ""
-
-#: frontend/src/pages/share-admin/share-links.js:90
-msgid "Expiration"
 msgstr ""
 
 #: frontend/src/pages/share-admin/share-links.js:101
@@ -3400,21 +3456,6 @@ msgstr ""
 msgid "Are you sure you want to quit this group?"
 msgstr ""
 
-#: static/scripts/app/views/invitation.js:40
-#: static/scripts/sysadmin-app/views/address-book-group-item.js:57
-#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
-#: static/scripts/sysadmin-app/views/group.js:44
-msgid "Successfully deleted 1 item."
-msgstr ""
-
-#: static/scripts/app/views/invitations.js:101
-msgid "Successfully invited %(email)."
-msgstr ""
-
-#: static/scripts/app/views/invitations.js:104
-msgid "Successfully invited %(email) and %(num) other people."
-msgstr ""
-
 #: static/scripts/app/views/notifications.js:58
 msgid "You have logged out."
 msgstr ""
@@ -3494,11 +3535,6 @@ msgstr ""
 
 #: static/scripts/app/views/starred-file-item.js:69
 msgid "Successfully unstared {placeholder}"
-msgstr ""
-
-#: static/scripts/common.js:498 static/scripts/common.js:500
-#: static/scripts/sysadmin-app/views/dashboard.js:79
-msgid "Permission error"
 msgstr ""
 
 #: static/scripts/common.js:725
