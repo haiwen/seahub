@@ -126,7 +126,7 @@ class AccountTest(BaseTestCase):
     def test_update_user_contact_email(self):
 
         self.login_as(self.user)
-        Profile.objects.add_or_update(self.user_name)
+        Profile.objects.add_or_update(self.user_name, contact_email='2@2.com')
 
         # test can successfully change contact email
         random_contact_email = generate_random_nickname(0, 0, 'contact_email')
