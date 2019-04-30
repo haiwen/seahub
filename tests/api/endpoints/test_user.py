@@ -105,12 +105,12 @@ class AccountTest(BaseTestCase):
     def test_update_user_telephone(self):
 
         self.login_as(self.user)
+        Profile.objects.add_or_update(self.user_name)
+        DetailedProfile.objects.add_or_update(self.user_name, department='' ,telephone='')
 
         # test can successfully change telephone
         random_telephone, _ = generate_random_nickname(1, 100, 'telephone')
         data = 'telephone=%s' % random_telephone
-        Profile.objects.add_or_update(self.user_name)
-        DetailedProfile.objects.add_or_update(self.user_name, department='' ,telephone='')
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         json_resp = json.loads(resp.content)
         assert json_resp['telephone'] == random_telephone
@@ -118,14 +118,13 @@ class AccountTest(BaseTestCase):
         # telephone too long
         random_telephone, _ = generate_random_nickname(101, 500, 'telephone')
         data = 'telephone=%s' % random_telephone
-        Profile.objects.add_or_update(self.user_name)
-        DetailedProfile.objects.add_or_update(self.user_name, department='' ,telephone='')
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
     def test_update_user_contact_email(self):
 
         self.login_as(self.user)
+        Profile.objects.add_or_update(self.user_name)
 
         # test can successfully change contact email
         random_contact_email = generate_random_nickname(0, 0, 'contact_email')
