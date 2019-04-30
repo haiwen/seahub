@@ -8,6 +8,8 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.base.accounts import UserManager
+from django.test import override_settings
+
 
 def generate_random_nickname(min_len, max_len, param_type):
 
@@ -61,13 +63,12 @@ class AccountTest(BaseTestCase):
             self.user_name,
             login_id=random_login_id
         )
-        DetailedProfile.objects.add_or_update(
+        d_profile = DetailedProfile.objects.add_or_update(
             self.user_name,
             department='',
             telephone=random_telephone
         )
         profile = Profile.objects.get_profile_by_user(self.user_name)
-        d_profile = DetailedProfile.objects.get_detailed_profile_by_user(self.user_name)
 
         resp = self.client.get(self.url)
         json_resp = json.loads(resp.content)
@@ -121,6 +122,7 @@ class AccountTest(BaseTestCase):
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
+    @override_settings(ENABLE_USER_SET_CONTACT_EMAIL=True)
     def test_update_user_contact_email(self):
 
         self.login_as(self.user)

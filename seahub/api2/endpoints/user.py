@@ -56,10 +56,8 @@ class User(APIView):
         if info_dict['telephone']:
             DetailedProfile.objects.add_or_update(email, department=None , telephone=info_dict['telephone'])
 
-    def _update_user_additional_info(self, request, email):
-
         # update user list_in_address_book
-        list_in_address_book = request.data.get("list_in_address_book", None)
+        list_in_address_book = info_dict['list_in_address_book']
         if list_in_address_book is not None:
             profile = Profile.objects.get_profile_by_user(email)
             if profile is None:
@@ -128,12 +126,12 @@ class User(APIView):
             'name': name,
             'contact_email': contact_email,
             'telephone': telephone,
+            'list_in_address_book': list_in_address_book,
         }
 
         # update user profile and user additionnal info
         try:
             self._update_user_info(info_dict, email)
-            self._update_user_additional_info(request, email)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
