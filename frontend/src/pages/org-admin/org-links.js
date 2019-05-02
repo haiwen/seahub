@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import MainPanelTopbar from './main-panel-topbar';
 
 class OrgLinks extends React.Component {
 
@@ -62,46 +63,49 @@ class OrgLinks extends React.Component {
   render() {
     const linkList = this.state.linkList;
     return (
-      <div className="main-panel-center flex-row">
-        <div className="cur-view-container">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext('All Public Links')}</h3>
-          </div>
-          <div className="cur-view-content">
-            <table>
-              <thead>
-                <tr>
-                  <th width="50%">{gettext('Name')}</th>
-                  <th width="15%">{gettext('Owner')}</th>
-                  <th width="15%">{gettext('Created At')}</th>
-                  <th width="10%">{gettext('Count')}</th>
-                  <th width="10%"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {linkList && linkList.map((item, index) => {
-                  return(
-                    <React.Fragment key={index}>
-                      <RepoItem
-                        link={item}
-                        isItemFreezed={this.state.isItemFreezed}
-                        onFreezedItem={this.onFreezedItem} 
-                        onUnfreezedItem={this.onUnfreezedItem}
-                        deleteOrgLink={this.deleteOrgLink}
-                      />
-                    </React.Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-            <div className="paginator">
-              {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
-              {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
-              {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
+      <Fragment>
+        <MainPanelTopbar currentTab={this.props.currentTab}/>
+        <div className="main-panel-center flex-row">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('All Public Links')}</h3>
+            </div>
+            <div className="cur-view-content">
+              <table>
+                <thead>
+                  <tr>
+                    <th width="50%">{gettext('Name')}</th>
+                    <th width="15%">{gettext('Owner')}</th>
+                    <th width="15%">{gettext('Created At')}</th>
+                    <th width="10%">{gettext('Count')}</th>
+                    <th width="10%"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {linkList && linkList.map((item, index) => {
+                    return(
+                      <React.Fragment key={index}>
+                        <RepoItem
+                          link={item}
+                          isItemFreezed={this.state.isItemFreezed}
+                          onFreezedItem={this.onFreezedItem} 
+                          onUnfreezedItem={this.onUnfreezedItem}
+                          deleteOrgLink={this.deleteOrgLink}
+                        />
+                      </React.Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div className="paginator">
+                {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+                {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
+                {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

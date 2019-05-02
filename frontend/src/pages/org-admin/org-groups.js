@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
 import OrgGroupInfo from '../../models/org-group';
 import Toast from '../../components/toast';
-
+import MainPanelTopbar from './main-panel-topbar';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
 
@@ -73,43 +72,46 @@ class OrgGroups extends Component {
   render() {
     let groups = this.state.orgGroups;
     return (
-      <div className="main-panel-center flex-row">
-        <div className="cur-view-container">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext('All Groups')}</h3>
-          </div>
-          <div className="cur-view-content">
-            <table>
-              <thead>
-                <tr>
-                  <th width="30%">{gettext('Name')}</th>
-                  <th width="35%">{gettext('Creator')}</th>
-                  <th width="23%">{gettext('Created At')}</th>
-                  <th width="12%" className="text-center">{gettext('Operations')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {groups.map(item => {
-                  return (
-                    <GroupItem
-                      key={item.id}
-                      group={item}
-                      isItemFreezed={this.state.isItemFreezed}
-                      onFreezedItem={this.onFreezedItem} 
-                      onUnfreezedItem={this.onUnfreezedItem}
-                      deleteGroupItem={this.deleteGroupItem}
-                    />
-                )})}
-              </tbody>
-            </table>
-            <div className="paginator">
-              {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
-              {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
-              {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
+      <Fragment>
+        <MainPanelTopbar currentTab={this.props.currentTab}/>
+        <div className="main-panel-center flex-row">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('All Groups')}</h3>
+            </div>
+            <div className="cur-view-content">
+              <table>
+                <thead>
+                  <tr>
+                    <th width="30%">{gettext('Name')}</th>
+                    <th width="35%">{gettext('Creator')}</th>
+                    <th width="23%">{gettext('Created At')}</th>
+                    <th width="12%" className="text-center">{gettext('Operations')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {groups.map(item => {
+                    return (
+                      <GroupItem
+                        key={item.id}
+                        group={item}
+                        isItemFreezed={this.state.isItemFreezed}
+                        onFreezedItem={this.onFreezedItem} 
+                        onUnfreezedItem={this.onUnfreezedItem}
+                        deleteGroupItem={this.deleteGroupItem}
+                      />
+                  )})}
+                </tbody>
+              </table>
+              <div className="paginator">
+                {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+                {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
+                {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

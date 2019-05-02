@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
@@ -9,6 +9,7 @@ import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import DeleteDepartDialog from '../../components/dialog/org-delete-department-dialog';
 import SetGroupQuotaDialog from '../../components/dialog/org-set-group-quota-dialog';
+import MainPanelTopbar from './main-panel-topbar';
 import '../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -73,73 +74,84 @@ class OrgDepartmentsList extends React.Component {
     let header = isSub ? gettext('Sub-departments') : gettext('Departments');
     let noGroup = isSub ? gettext('No sub-departments') : gettext('No departments');
     return (
-      <div className="main-panel-center flex-row h-100">
-        <div className="cur-view-container o-auto">
-          <div className="cur-view-path">
-            <div className="fleft"><h3 className="sf-heading">{header}</h3></div>
+      <Fragment>
+        {!isSub &&
+          <MainPanelTopbar
+            currentTab={this.props.currentTab}
+            groupID={this.props.groupID}
+            toggleAddDepartDialog={this.props.toggleAddDepartDialog}
+            toggleAddMemberDialog={this.props.toggleAddMemberDialog}
+            toggleAddRepoDialog={this.props.toggleAddRepoDialog}
+          />
+        }
+        <div className="main-panel-center flex-row h-100">
+          <div className="cur-view-container o-auto">
+            <div className="cur-view-path">
+              <div className="fleft"><h3 className="sf-heading">{header}</h3></div>
+            </div>
+            <div className="cur-view-content">
+              {groups && groups.length > 0 ?
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="40%">{gettext('Name')}</th>
+                      <th width="25%">{gettext('Created At')}</th>
+                      <th width="20%">{gettext('Quota')}</th>
+                      <th width="15%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {groups.map((group, index) => {
+                      return(
+                        <React.Fragment key={group.id}>
+                          <GroupItem
+                            group={group}
+                            showDeleteDepartDialog={this.showDeleteDepartDialog}
+                            showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
+                          />
+                        </React.Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                : 
+                <p className="no-group">{noGroup}</p>
+              }
+            </div>
+            <React.Fragment>
+              {this.props.isShowAddDepartDialog && (
+                <ModalPortal>
+                  <AddDepartDialog
+                    onDepartChanged={this.onDepartChanged}
+                    parentGroupID={this.props.groupID}
+                    groupID={this.state.groupID}
+                    toggle={this.props.toggleAddDepartDialog}
+                  />
+                </ModalPortal>
+              )}
+              {this.state.showDeleteDepartDialog && (
+                <ModalPortal>
+                  <DeleteDepartDialog
+                    toggle={this.toggleCancel}
+                    groupID={this.state.groupID}
+                    groupName={this.state.groupName}
+                    onDepartChanged={this.onDepartChanged}
+                  />
+                </ModalPortal>
+              )}
+              {this.state.showSetGroupQuotaDialog && (
+                <ModalPortal>
+                  <SetGroupQuotaDialog
+                    toggle={this.toggleCancel}
+                    groupID={this.state.groupID}
+                    onDepartChanged={this.onDepartChanged}
+                  />
+                </ModalPortal>
+              )}
+            </React.Fragment>
           </div>
-          <div className="cur-view-content">
-            {groups && groups.length > 0 ?
-              <table>
-                <thead>
-                  <tr>
-                    <th width="40%">{gettext('Name')}</th>
-                    <th width="25%">{gettext('Created At')}</th>
-                    <th width="20%">{gettext('Quota')}</th>
-                    <th width="15%"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {groups.map((group, index) => {
-                    return(
-                      <React.Fragment key={group.id}>
-                        <GroupItem
-                          group={group}
-                          showDeleteDepartDialog={this.showDeleteDepartDialog}
-                          showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
-                        />
-                      </React.Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
-              : 
-              <p className="no-group">{noGroup}</p>
-            }
-          </div>
-          <React.Fragment>
-            {this.props.isShowAddDepartDialog && (
-              <ModalPortal>
-                <AddDepartDialog
-                  onDepartChanged={this.onDepartChanged}
-                  parentGroupID={this.props.groupID}
-                  groupID={this.state.groupID}
-                  toggle={this.props.toggleAddDepartDialog}
-                />
-              </ModalPortal>
-            )}
-            {this.state.showDeleteDepartDialog && (
-              <ModalPortal>
-                <DeleteDepartDialog
-                  toggle={this.toggleCancel}
-                  groupID={this.state.groupID}
-                  groupName={this.state.groupName}
-                  onDepartChanged={this.onDepartChanged}
-                />
-              </ModalPortal>
-            )}
-            {this.state.showSetGroupQuotaDialog && (
-              <ModalPortal>
-                <SetGroupQuotaDialog
-                  toggle={this.toggleCancel}
-                  groupID={this.state.groupID}
-                  onDepartChanged={this.onDepartChanged}
-                />
-              </ModalPortal>
-            )}
-          </React.Fragment>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
