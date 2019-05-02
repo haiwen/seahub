@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext, lang } from '../../utils/constants';
 import OrgLogsFileUpdateEvent from '../../models/org-logs-file-update';
 import ModalPortal from '../../components/modal-portal';
 import FileUpdateDetailDialog from '../../components/dialog/org-logs-file-update-detail';
 import '../../css/org-logs.css';
+
+moment.locale(lang);
 
 class OrgLogsFileUpdate extends Component {
 
@@ -266,7 +269,7 @@ class FileUpdateItem extends React.Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''}
           onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td>{this.renderUser(fileEvent)}</td>
-          <td>{fileEvent.time}</td>
+          <td>{moment(fileEvent.time).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>{this.renderRepo(fileEvent)}</td>
           {this.renderAction(fileEvent)}
         </tr>

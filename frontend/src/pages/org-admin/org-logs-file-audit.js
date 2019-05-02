@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext, lang } from '../../utils/constants';
 import OrgLogsFileAuditEvent from '../../models/org-logs-file-audit';
 import '../../css/org-logs.css';
+
+moment.locale(lang);
 
 class OrgLogsFileAudit extends React.Component {
 
@@ -238,7 +241,7 @@ class FileAuditItem extends React.Component {
           <td>{this.renderUser(fileEvent)}</td>
           <td>{this.renderType(fileEvent.type)}</td>
           <td>{fileEvent.ip}</td>
-          <td>{fileEvent.time}</td>
+          <td>{moment(fileEvent.time).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>{this.renderRepo(fileEvent)}</td>
           <td><span title={fileEvent.file_path}>{fileEvent.file_name}</span></td>
         </tr>
