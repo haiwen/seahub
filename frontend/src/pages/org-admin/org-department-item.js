@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils.js';
-import { serviceURL, gettext, orgID } from '../../utils/constants';
+import { serviceURL, siteRoot, gettext, orgID } from '../../utils/constants';
 import OrgDepartmentsList from './org-departments-list';
 import ModalPortal from '../../components/modal-portal';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
@@ -84,6 +85,13 @@ class OrgDepartmentItem extends React.Component {
     this.listOrgMembers(groupID);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.groupID !== nextProps.groupID) {
+      this.listOrgGroupRepo(nextProps.groupID);
+      this.listOrgMembers(nextProps.groupID);
+    }
+  }
+
   render() {
     const { members, repos } = this.state;
     const groupID = this.props.groupID;
@@ -94,14 +102,12 @@ class OrgDepartmentItem extends React.Component {
             <div className="fleft">
               <h3 className="sf-heading">
                 {groupID ? 
-                  <a href={serviceURL + '/org/departmentadmin/'}>{gettext('Departments')}</a>
+                  <Link to={siteRoot + 'org/departmentadmin/'}>{gettext('Departments')}</Link>
                   : <span>{gettext('Departments')}</span>
                 }
                 {this.state.ancestorGroups.map(ancestor => {
-                  let newHref = serviceURL + '/org/departmentadmin/groups/' + ancestor.id + '/';
-                  return (
-                    <span key={ancestor.id}>{' / '}<a href={newHref}>{ancestor.name}</a></span>
-                  );
+                  let newHref = siteRoot + 'org/departmentadmin/groups/' + ancestor.id + '/';
+                  return <span key={ancestor.id}>{' / '}<Link to={newHref}>{ancestor.name}</Link></span>;
                 })}
                 {groupID && <span>{' / '}{this.state.groupName}</span>}
               </h3>

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
-import { serviceURL, gettext, orgID, lang } from '../../utils/constants';
+import { serviceURL, siteRoot, gettext, orgID, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils.js';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
@@ -25,9 +26,9 @@ class OrgDepartmentsList extends React.Component {
     };
   }
 
-  listDepartGroups = () => {
-    if (this.props.groupID) {
-      seafileAPI.orgAdminListGroupInfo(orgID, this.props.groupID, true).then(res => {
+  listDepartGroups = (groupID) => {
+    if (groupID) {
+      seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
         this.setState({ groups: res.data.groups });
       });
     } else {
@@ -53,11 +54,17 @@ class OrgDepartmentsList extends React.Component {
   }
 
   onDepartChanged = () => {
-    this.listDepartGroups();
+    this.listDepartGroups(this.props.groupID);
   }
 
   componentWillMount() {
-    this.listDepartGroups();
+    this.listDepartGroups(this.props.groupID);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.groupID !== nextProps.groupID) {
+      this.listDepartGroups(nextProps.groupID);
+    }
   }
 
   render() {
@@ -165,10 +172,10 @@ class GroupItem extends React.Component {
   render() {
     const group = this.props.group;
     const highlight = this.state.highlight;
-    const newHref = serviceURL + '/org/departmentadmin/groups/' + group.id + '/';
+    const newHref = siteRoot+ 'org/departmentadmin/groups/' + group.id + '/';
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><a href={newHref} onClick={this.changeOrgGroup}>{group.name}</a></td>
+        <td><Link to={newHref}>{group.name}</Link></td>
         <td>{moment(group.created_at).fromNow()}</td>
         <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
           {Utils.bytesToSize(group.quota)}{' '}
