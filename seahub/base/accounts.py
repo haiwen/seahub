@@ -222,6 +222,12 @@ class UserPermissions(object):
 
         return self._get_perm_by_roles('can_use_wiki')
 
+    def can_publish_repo(self):
+        if not settings.ENABLE_WIKI:
+            return False
+
+        return self._get_perm_by_roles('can_publish_repo')
+
 class AdminPermissions(object):
     def __init__(self, user):
         self.user = user

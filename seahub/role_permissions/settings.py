@@ -41,6 +41,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'storage_ids': [],
         'role_quota': '',
         'can_use_wiki': True,
+        'can_publish_repo': True,
     },
     GUEST_USER: {
         'can_add_repo': False,
@@ -60,6 +61,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'storage_ids': [],
         'role_quota': '',
         'can_use_wiki': False,
+        'can_publish_repo': False,
     },
 }
 

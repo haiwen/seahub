@@ -96,6 +96,11 @@ class WikisView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check perm
+
+        if not request.user.permissions.can_publish_repo():
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         is_owner = is_repo_owner(request, repo_id, username)
 
         if not is_owner:

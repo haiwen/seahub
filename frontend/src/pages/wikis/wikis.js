@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext, loginUrl, canPublishRepo } from '../../utils/constants';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
@@ -128,9 +128,11 @@ class Wikis extends Component {
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-              <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>
-                {gettext('Publish a Library')}
-              </Button>
+              {canPublishRepo &&
+                <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>
+                  {gettext('Publish a Library')}
+                </Button>
+              }
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
