@@ -353,7 +353,7 @@ class GroupView extends React.Component {
   }
 
   render() {
-    let { errMessage, emptyTip, currentGroup } = this.state;
+    let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
     let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
     let that = this;
     return (
@@ -374,7 +374,7 @@ class GroupView extends React.Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              {currentGroup && (
+              {((!isDepartmentGroup && currentGroup) || (isDepartmentGroup && isStaff)) && (
                 <Fragment>
                   <div className="path-container">
                     <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext('Groups')}</Link>
