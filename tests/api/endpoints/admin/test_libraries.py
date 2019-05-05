@@ -148,6 +148,15 @@ class AdminLibraryTest(BaseTestCase):
         resp = self.client.get(self.library_url)
         self.assertEqual(403, resp.status_code)
 
+    def test_can_not_transfer_library_to_owner(self):
+
+        self.login_as(self.admin)
+
+        data = 'owner=%s' % self.user_name
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(400, resp.status_code)
+
     def test_can_transfer(self):
 
         self.login_as(self.admin)

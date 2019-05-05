@@ -1546,9 +1546,13 @@ class RepoOwner(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not new_owner_obj.permissions.can_add_repo():
-            error_msg = 'Transfer failed: role of %s is %s, can not add library.' % \
+            error_msg = _(u'Transfer failed: role of %s is %s, can not add library.') % \
                     (new_owner, new_owner_obj.role)
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if new_owner == repo_owner:
+            error_msg = _(u"Library can not be transferred to owner.")
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         pub_repos = []
         if org_id:
