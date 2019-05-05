@@ -306,6 +306,7 @@ class LibContentView extends React.Component {
 
     // update data
     this.loadDirentList(path);
+    this.resetShowLength();
 
     if (!this.isNeedUpdateHistoryState) {
       this.isNeedUpdateHistoryState = true;
@@ -405,7 +406,6 @@ class LibContentView extends React.Component {
       if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
-      this.resetShowLength();
     }).catch(() => {
       this.setState({
         isDirentListLoading: false,
@@ -729,12 +729,12 @@ class LibContentView extends React.Component {
       nodeParentPath = this.state.path;
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
-    seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, nodeParentPath, dirName).then(res => {
+    seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
       let nodeName = res.data[0].obj_name;
       if (this.state.currentMode === 'column') {
         this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
       }
-      this.moveDirent(direntPath);
+      this.moveDirent(direntPath, moveToDirentPath);
 
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirName);
@@ -996,8 +996,12 @@ class LibContentView extends React.Component {
     // else do nothing
   }
 
-  moveDirent = (direntPath) => {
+  moveDirent = (direntPath, moveToDirentPath=null) => {
     let name = direntPath.slice(direntPath.lastIndexOf('/') + 1);
+    if (moveToDirentPath === this.state.path) {
+      this.loadDirentList(this.state.path)
+      return;
+    }
     let direntList = this.state.direntList.filter(item => {
       return item.name !== name;
     });

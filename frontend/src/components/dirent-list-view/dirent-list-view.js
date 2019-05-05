@@ -65,6 +65,7 @@ class DirentListView extends React.Component {
       progress: 0,
       isMutipleOperation: true,
       activeDirent: null,
+      isListDropTipShow: false,
     };
 
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
@@ -525,6 +526,42 @@ class DirentListView extends React.Component {
     return [];
   }
 
+  onTableDragEnter = (e) => {
+    if (e.target.className === 'table-container ') {
+      this.setState({isListDropTipShow: true});
+    }
+  }
+
+  onTableDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  onTableDragLeave = (e) => {
+    if (e.target.className === 'table-container table-drop-active') {
+      this.setState({isListDropTipShow: false})
+    }
+  }
+
+  tableDrop = (e) => {
+    e.persist();
+    this.setState({isListDropTipShow: false});
+    if (e.dataTransfer.files.length) { // uploaded files
+      return;
+    }
+    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
+    dragStartItemData = JSON.parse(dragStartItemData);
+
+    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
+
+    if (e.target.className === 'table-container table-drop-active') {
+      if (nodeRootPath === this.props.path || nodeParentPath === this.props.path) {
+        return;
+      }
+      this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath)
+    }
+  }
+
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
 
@@ -538,7 +575,16 @@ class DirentListView extends React.Component {
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     return (
-      <div className="table-container" onMouseDown={this.onContainerMouseDown} onContextMenu={this.onContainerContextMenu} onClick={this.onContainerClick}>
+      <div 
+        className={`table-container ${this.state.isListDropTipShow ? 'table-drop-active' : ''}`}
+        onMouseDown={this.onContainerMouseDown} 
+        onContextMenu={this.onContainerContextMenu} 
+        onClick={this.onContainerClick}
+        onDragEnter={this.onTableDragEnter}
+        onDragOver={this.onTableDragOver}
+        onDragLeave={this.onTableDragLeave}
+        onDrop={this.tableDrop}
+      >
         <table>
           <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>

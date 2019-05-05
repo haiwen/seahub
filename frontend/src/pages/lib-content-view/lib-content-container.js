@@ -141,6 +141,11 @@ class LibContentContainer extends React.Component {
 
   onItemsScroll = (e) => {
     let target = e.target;
+
+    if (target.scrollTop === 0) {
+      return;
+    }
+
     if (target.scrollTop + target.clientHeight + 1 >= target.scrollHeight) {
       this.props.onListContainerScroll();
     }
