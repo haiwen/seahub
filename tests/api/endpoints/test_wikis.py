@@ -1,6 +1,8 @@
 import json
 
 from django.core.urlresolvers import reverse
+from django.test import override_settings
+
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
@@ -8,7 +10,7 @@ from seahub.share.utils import share_dir_to_user
 from seahub.wiki.models import Wiki
 from seahub.test_utils import BaseTestCase
 
-
+@override_settings(ENABLE_WIKI=True)
 class WikisViewTest(BaseTestCase):
     def setUp(self):
         self.url = reverse('api-v2.1-wikis')
@@ -68,6 +70,12 @@ class WikisViewTest(BaseTestCase):
         w = Wiki.objects.all()[0]
         assert w.created_at is not None
 
+    @override_settings(ENABLE_WIKI=False)
+    def test_no_permission(self):
+        resp = self.client.post(self.url, {
+            'repo_id': self.repo.id,
+        })
+        self.assertEqual(403, resp.status_code)
 
 class WikiViewTest(BaseTestCase):
     def setUp(self):

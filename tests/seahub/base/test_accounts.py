@@ -86,6 +86,7 @@ class UserTest(BaseTestCase):
         
         assert len(UserOptions.objects.filter(email=test_email)) == 0
 
+@override_settings(ENABLE_WIKI=True)
 class UserPermissionsTest(BaseTestCase):
     def setUp(self):
         from constance import config
@@ -144,7 +145,6 @@ class UserPermissionsTest(BaseTestCase):
         assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is False
         assert self.user.permissions.can_add_public_repo() is False
 
-    @override_settings(ENABLE_WIKI=True)
     def test_user_permissions_can_publish_repo(self):
         # enableWIKI = True, and can_use_wiki = True
         assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
@@ -156,7 +156,6 @@ class UserPermissionsTest(BaseTestCase):
         assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
         assert self.user.permissions.can_publish_repo() is False
 
-    @override_settings(ENABLE_WIKI=True)
     def test_user_permissions_can_publish_repo_can_use_wiki_false(self):
         # enableWIKI = True, and can_use_wiki = False
         with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE):
