@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils.js';
 import { serviceURL, siteRoot, gettext, orgID } from '../../utils/constants';
 import OrgDepartmentsList from './org-departments-list';
 import ModalPortal from '../../components/modal-portal';
+import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
 import DeleteMemberDialog from '../../components/dialog/org-delete-member-dialog';
 import AddRepoDialog from '../../components/dialog/org-add-repo-dialog';
@@ -27,6 +28,9 @@ class OrgDepartmentItem extends React.Component {
       deletedRepo: {},
       showDeleteMemberDialog: false,
       showDeleteRepoDialog: false,
+      isShowAddRepoDialog: false,
+      isShowAddMemberDialog: false,
+      isShowAddDepartDialog: false,
       isItemFreezed: false,
       groupName: '',
     };
@@ -80,6 +84,18 @@ class OrgDepartmentItem extends React.Component {
     });
   }
 
+  toggleAddRepoDialog = () => {
+    this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
+  }
+
+  toggleAddMemberDialog = () => {
+    this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
+  }
+
+  toggleAddDepartDialog = () => {
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+  }
+
   componentWillMount() {
     const groupID = this.props.groupID;
     this.listOrgGroupRepo(groupID);
@@ -96,15 +112,51 @@ class OrgDepartmentItem extends React.Component {
   render() {
     const { members, repos } = this.state;
     const groupID = this.props.groupID;
+    const topBtn = 'btn btn-secondary operation-item';
+    const topbarChildren = (
+      <Fragment>
+        {groupID && <button className={topBtn} title={gettext('New Sub-department')}
+          onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
+        }
+        {groupID && <button className={topBtn} title={gettext('Add Member')}
+          onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
+        }
+        {groupID && <button className={topBtn} onClick={this.toggleAddRepoDialog}
+          title={gettext('New Library')}>{gettext('New Library')}</button>
+        }
+        {this.state.isShowAddMemberDialog && (
+          <ModalPortal>
+            <AddMemberDialog
+              toggle={this.toggleAddMemberDialog}
+              onMemberChanged={this.onMemberChanged}
+              groupID={groupID}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isShowAddRepoDialog && (
+          <ModalPortal>
+            <AddRepoDialog
+              toggle={this.toggleAddRepoDialog}
+              onRepoChanged={this.onRepoChanged}
+              groupID={groupID}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isShowAddDepartDialog && (
+          <ModalPortal>
+            <AddDepartDialog
+              onDepartChanged={window.onDepartChanged}
+              parentGroupID={groupID}
+              toggle={this.toggleAddDepartDialog}
+            />
+          </ModalPortal>
+        )}
+      </Fragment>
+    );
+
     return (
       <Fragment>
-        <MainPanelTopbar
-          currentTab={this.props.currentTab}
-          groupID={groupID}
-          toggleAddDepartDialog={this.props.toggleAddDepartDialog}
-          toggleAddMemberDialog={this.props.toggleAddMemberDialog}
-          toggleAddRepoDialog={this.props.toggleAddRepoDialog}
-        />
+        <MainPanelTopbar children={topbarChildren} />
         <div className="main-panel-center flex-row h-100">
           <div className="cur-view-container o-auto">
             <div className="cur-view-path">
@@ -124,11 +176,7 @@ class OrgDepartmentItem extends React.Component {
             </div>
 
             <div className="cur-view-subcontainer org-groups">
-              <OrgDepartmentsList
-                groupID={groupID}
-                isShowAddDepartDialog={this.props.isShowAddDepartDialog}
-                toggleAddDepartDialog={this.props.toggleAddDepartDialog}
-              />
+              <OrgDepartmentsList groupID={groupID} />
             </div>
             
             <div className="cur-view-subcontainer org-members">
@@ -222,42 +270,12 @@ class OrgDepartmentItem extends React.Component {
                 />
               </ModalPortal>
             )}
-            {this.props.isShowAddMemberDialog && (
-              <ModalPortal>
-                <AddMemberDialog
-                  toggle={this.props.toggleAddMemberDialog}
-                  onMemberChanged={this.onMemberChanged}
-                  groupID={groupID}
-                />
-              </ModalPortal>
-            )}
-            {this.props.isShowAddRepoDialog && (
-              <ModalPortal>
-                <AddRepoDialog
-                  toggle={this.props.toggleAddRepoDialog}
-                  onRepoChanged={this.onRepoChanged}
-                  groupID={groupID}
-                />
-              </ModalPortal>
-            )}
           </React.Fragment>
         </div>
       </Fragment>
     );
   }
 }
-
-const OrgDepartmentItemPropTypes = {
-  isShowAddDepartDialog: PropTypes.bool.isRequired,
-  isShowAddMemberDialog: PropTypes.bool.isRequired,
-  isShowAddRepoDialog: PropTypes.bool.isRequired,
-  toggleAddDepartDialog: PropTypes.func.isRequired,
-  toggleAddMemberDialog: PropTypes.func.isRequired,
-  toggleAddRepoDialog: PropTypes.func.isRequired,
-};
-
-OrgDepartmentItem.propTypes = OrgDepartmentItemPropTypes;
-
 
 class MemberItem extends React.Component {
 

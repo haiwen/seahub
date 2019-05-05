@@ -36,8 +36,8 @@ class AddOrgAdminDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
-        <ModalHeader>{gettext('Add Admins')}</ModalHeader>
+      <Modal isOpen={true} toggle={this.toggle}>
+        <ModalHeader toggle={this.toggle}>{gettext('Add Admins')}</ModalHeader>
         <ModalBody>
           <UserSelect
             ref="userSelect"

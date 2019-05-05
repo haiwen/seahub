@@ -24,6 +24,7 @@ class OrgDepartmentsList extends React.Component {
       groupName: '',
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
+      isShowAddDepartDialog: false,
     };
   }
 
@@ -58,8 +59,13 @@ class OrgDepartmentsList extends React.Component {
     this.listDepartGroups(this.props.groupID);
   }
 
+  toggleAddDepartDialog = () => {
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+  }
+
   componentWillMount() {
     this.listDepartGroups(this.props.groupID);
+    window.onDepartChanged = this.onDepartChanged;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,17 +79,28 @@ class OrgDepartmentsList extends React.Component {
     let isSub = this.props.groupID ? true : false;
     let header = isSub ? gettext('Sub-departments') : gettext('Departments');
     let noGroup = isSub ? gettext('No sub-departments') : gettext('No departments');
+
+    const topbarChildren = (
+      <Fragment>
+        {!this.props.groupID && <button className='btn btn-secondary operation-item' title={gettext('New Department')}
+          onClick={this.toggleAddDepartDialog}>{gettext('New Department')}</button>
+        }
+        {this.state.isShowAddDepartDialog && (
+          <ModalPortal>
+            <AddDepartDialog
+              onDepartChanged={this.onDepartChanged}
+              parentGroupID={this.props.groupID}
+              groupID={this.state.groupID}
+              toggle={this.toggleAddDepartDialog}
+            />
+          </ModalPortal>
+        )}
+      </Fragment>
+    );
+
     return (
       <Fragment>
-        {!isSub &&
-          <MainPanelTopbar
-            currentTab={this.props.currentTab}
-            groupID={this.props.groupID}
-            toggleAddDepartDialog={this.props.toggleAddDepartDialog}
-            toggleAddMemberDialog={this.props.toggleAddMemberDialog}
-            toggleAddRepoDialog={this.props.toggleAddRepoDialog}
-          />
-        }
+        {!isSub && <MainPanelTopbar children={topbarChildren} />}
         <div className="main-panel-center flex-row h-100">
           <div className="cur-view-container o-auto">
             <div className="cur-view-path">
@@ -119,16 +136,6 @@ class OrgDepartmentsList extends React.Component {
               }
             </div>
             <React.Fragment>
-              {this.props.isShowAddDepartDialog && (
-                <ModalPortal>
-                  <AddDepartDialog
-                    onDepartChanged={this.onDepartChanged}
-                    parentGroupID={this.props.groupID}
-                    groupID={this.state.groupID}
-                    toggle={this.props.toggleAddDepartDialog}
-                  />
-                </ModalPortal>
-              )}
               {this.state.showDeleteDepartDialog && (
                 <ModalPortal>
                   <DeleteDepartDialog
@@ -155,14 +162,6 @@ class OrgDepartmentsList extends React.Component {
     );
   }
 }
-
-const OrgDepartmentsListPropTypes = {
-  isShowAddDepartDialog: PropTypes.bool.isRequired,
-  toggleAddDepartDialog: PropTypes.func.isRequired,
-};
-
-OrgDepartmentsList.propTypes = OrgDepartmentsListPropTypes;
-
 
 class GroupItem extends React.Component {
 

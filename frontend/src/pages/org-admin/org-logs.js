@@ -16,7 +16,7 @@ class OrgLogs extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar currentTab={this.props.currentTab}/>
+        <MainPanelTopbar/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path org-user-nav">
