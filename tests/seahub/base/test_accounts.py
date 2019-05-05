@@ -4,6 +4,7 @@ from seahub.base.accounts import User, RegistrationForm
 from seahub.options.models import UserOptions
 from post_office.models import Email
 from django.core.urlresolvers import reverse
+from django.test import override_settings
 from mock import patch
 
 
@@ -26,6 +27,7 @@ TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS = {
         'storage_ids': [],
         'role_quota': '',
         'can_use_wiki': True,
+        'can_publish_repo': True,
     },
     'guest': {
         'can_add_repo': False,
@@ -45,8 +47,12 @@ TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS = {
         'storage_ids': [],
         'role_quota': '',
         'can_use_wiki': False,
+        'can_publish_repo': False,
     },
 }
+
+TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE = TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS
+TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE['default']['can_use_wiki'] = False
 
 CLOUD_MODE_TRUE = True
 MULTI_TENANCY_TRUE = True
@@ -97,7 +103,6 @@ class UserPermissionsTest(BaseTestCase):
         assert self.user.permissions.can_connect_with_ios_clients() is True
         assert self.user.permissions.can_connect_with_desktop_clients() is True
         assert self.user.permissions.can_invite_guest() is False
-
         assert self.user.permissions.can_export_files_via_mobile_client() is True
 
     def test_admin_permissions_can_add_public_repo(self):
@@ -138,6 +143,25 @@ class UserPermissionsTest(BaseTestCase):
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
         assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is False
         assert self.user.permissions.can_add_public_repo() is False
+
+    @override_settings(ENABLE_WIKI=True)
+    def test_user_permissions_can_publish_repo(self):
+        # enableWIKI = True, and can_use_wiki = True
+        assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
+        assert self.user.permissions.can_publish_repo() is True
+
+    @override_settings(ENABLE_WIKI=False)
+    def test_user_permissions_can_publish_repo_wiki_disables(self):
+        # enableWIKI = False, and can_use_wiki = True
+        assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
+        assert self.user.permissions.can_publish_repo() is False
+
+    @override_settings(ENABLE_WIKI=True)
+    def test_user_permissions_can_publish_repo_can_use_wiki_false(self):
+        # enableWIKI = True, and can_use_wiki = False
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE):
+            assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
+            assert self.user.permissions.can_publish_repo() is False
 
 
 class RegistrationFormTest(BaseTestCase):
