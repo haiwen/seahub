@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, canGenerateShareLink } from '../../utils/constants';
+import { gettext, canGenerateShareLink, isPro, mediaUrl } from '../../utils/constants';
 import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbarcomponent/editorToolBar';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
 
+const { canLockUnlockFile } = window.app.pageOptions;
 const { seafileCollabServer } = window.app.config;
 
 const propTypes = {
@@ -27,6 +28,9 @@ const propTypes = {
   contentChanged: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,
   showDraftSaved: PropTypes.bool.isRequired,
+  isLocked: PropTypes.bool.isRequired,
+  lockedByMe: PropTypes.bool.isRequired,
+  toggleLockFile: PropTypes.func.isRequired,
 };
 
 const MoreMenuPropTypes = {
@@ -98,7 +102,7 @@ class MarkdownViewerToolbar extends React.Component {
   }
 
   render() {
-    let { contentChanged, saving } = this.props;
+    let { contentChanged, saving, isLocked, lockedByMe } = this.props;
     let canPublishDraft = this.props.fileInfo.permission == 'rw';
     let canCreateDraft = canPublishDraft && (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs);
 
@@ -111,6 +115,9 @@ class MarkdownViewerToolbar extends React.Component {
               editorUtilities={this.props.editorUtilities}
               fileInfo={this.props.fileInfo}
               showDraftSaved={this.props.showDraftSaved}
+              isLocked={this.props.isLocked}
+              isPro={isPro} mediaUrl={mediaUrl}
+              isStarred={this.props.fileInfo.isStarred}
             />
             {(this.props.hasDraft && !this.props.isDraft) &&
               <div className='seafile-btn-view-review'>
@@ -141,12 +148,18 @@ class MarkdownViewerToolbar extends React.Component {
                 />
               }
               <ButtonGroup>
+                <IconButton text={gettext('Back to parent directory')} id={'parentDirectory'}
+                  icon={'fa fa-folder-open'} onMouseDown={this.props.backToParentDirectory}/>
+                {(canLockUnlockFile && !isLocked) &&
+                  <IconButton id="lock-unlock-file" icon='fa fa-lock' text={gettext('Lock')} onMouseDown={this.props.toggleLockFile}/>
+                }
+                {(canLockUnlockFile && lockedByMe) &&
+                  <IconButton id="lock-unlock-file" icon='fa fa-unlock' text={gettext('Unlock')} onMouseDown={this.props.toggleLockFile}/>
+                }
                 {canGenerateShareLink && 
                   <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                   onMouseDown={this.props.toggleShareLinkDialog}/>
                 }
-                <IconButton text={gettext('Back to parent directory')} id={'parentDirectory'}
-                  icon={'fa fa-folder-open'} onMouseDown={this.props.backToParentDirectory}/>
                 {
                   this.props.showFileHistory && <IconButton id={'historyButton'}
                     text={gettext('File History')} onMouseDown={this.props.toggleHistory} icon={'fa fa-history'}/>
