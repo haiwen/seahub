@@ -1,3 +1,4 @@
+import copy
 from seahub.test_utils import BaseTestCase
 from seahub.base.accounts import User, RegistrationForm
 
@@ -51,7 +52,7 @@ TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS = {
     },
 }
 
-TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE = TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS
+TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE = copy.deepcopy(TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS)
 TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE['default']['can_use_wiki'] = False
 
 CLOUD_MODE_TRUE = True
