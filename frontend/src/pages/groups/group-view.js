@@ -353,7 +353,7 @@ class GroupView extends React.Component {
   }
 
   render() {
-    let { errMessage, emptyTip, currentGroup } = this.state;
+    let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
     let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
     let that = this;
     return (
@@ -362,7 +362,7 @@ class GroupView extends React.Component {
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-              {canAddRepo && (
+              {((!isDepartmentGroup && canAddRepo) || (isDepartmentGroup && isStaff)) && (
                 <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
                   <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
                 </button>
