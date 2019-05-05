@@ -362,7 +362,7 @@ class GroupView extends React.Component {
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-              {canAddRepo && (
+              {((!isDepartmentGroup && currentGroup) || (isDepartmentGroup && isStaff)) && (
                 <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
                   <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
                 </button>
@@ -374,7 +374,7 @@ class GroupView extends React.Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              {((!isDepartmentGroup && currentGroup) || (isDepartmentGroup && isStaff)) && (
+              {currentGroup && (
                 <Fragment>
                   <div className="path-container">
                     <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext('Groups')}</Link>
