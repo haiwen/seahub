@@ -56,20 +56,11 @@ class Org extends React.Component {
     let { isSidePanelClosed, currentTab } = this.state;
     return (
       <div id="main">
-        <SidePanel
-          isSidePanelClosed={isSidePanelClosed}
-          onCloseSidePanel={this.onCloseSidePanel}
-          currentTab={currentTab}
-          tabItemClick={this.tabItemClick}
-        />       
+        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>       
         <div className="main-panel o-hidden">
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>
-            <OrgUsers 
-              path={siteRoot + 'org/useradmin'}
-              currentTab={currentTab} 
-              tabItemClick={this.tabItemClick}
-            />
+            <OrgUsers path={siteRoot + 'org/useradmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
             <OrgGroups path={siteRoot + 'org/groupadmin'}/>
             <OrgLibraries path={siteRoot + 'org/repoadmin'}/>
             <OrgLinks path={siteRoot + 'org/publinkadmin'}/>
@@ -77,11 +68,7 @@ class Org extends React.Component {
               <OrgDepartmentsList path='/'/>
               <OrgDepartmentItem path='groups/:groupID'/>
             </OrgDepartments>
-            <OrgLogs
-              path={siteRoot + 'org/logadmin'}
-              currentTab={currentTab}
-              tabItemClick={this.tabItemClick}
-            >
+            <OrgLogs path={siteRoot + 'org/logadmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}>
               <OrgLogsFileAudit path='/'/>
               <OrgLogsFileUpdate path={siteRoot + 'file-update'}/>
               <OrgLogsPermAudit path={siteRoot + 'perm-audit'}/>

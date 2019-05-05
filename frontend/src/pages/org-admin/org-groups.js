@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import OrgGroupInfo from '../../models/org-group';
 import Toast from '../../components/toast';
@@ -100,7 +101,8 @@ class OrgGroups extends Component {
                         onUnfreezedItem={this.onUnfreezedItem}
                         deleteGroupItem={this.deleteGroupItem}
                       />
-                  )})}
+                    );
+                  })}
                 </tbody>
               </table>
               <div className="paginator">
@@ -115,6 +117,14 @@ class OrgGroups extends Component {
     );
   }
 }
+
+const GroupItemPropTypes = {
+  group: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteGroupItem: PropTypes.func.isRequired,
+};
 
 class GroupItem extends React.Component {
 
@@ -229,5 +239,7 @@ class GroupItem extends React.Component {
   }
 
 }
+
+GroupItem.propTypes = GroupItemPropTypes;
 
 export default OrgGroups;

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -32,6 +32,7 @@ class OrgDepartmentItem extends React.Component {
       isShowAddMemberDialog: false,
       isShowAddDepartDialog: false,
       isItemFreezed: false,
+      isSubdepartChanged: false,
       groupName: '',
     };
   }
@@ -79,9 +80,7 @@ class OrgDepartmentItem extends React.Component {
   }
 
   toggleItemFreezed = (isFreezed) => {
-    this.setState({
-      isItemFreezed: isFreezed
-    });
+    this.setState({ isItemFreezed: isFreezed });
   }
 
   toggleAddRepoDialog = () => {
@@ -94,6 +93,10 @@ class OrgDepartmentItem extends React.Component {
 
   toggleAddDepartDialog = () => {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+  }
+
+  onDepartChanged = () => {
+    this.setState({ isSubdepartChanged: !this.state.isSubdepartChanged });
   }
 
   componentWillMount() {
@@ -115,14 +118,14 @@ class OrgDepartmentItem extends React.Component {
     const topBtn = 'btn btn-secondary operation-item';
     const topbarChildren = (
       <Fragment>
-        {groupID && <button className={topBtn} title={gettext('New Sub-department')}
-          onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
+        {groupID &&
+          <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
         }
-        {groupID && <button className={topBtn} title={gettext('Add Member')}
-          onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
+        {groupID &&
+          <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
         }
-        {groupID && <button className={topBtn} onClick={this.toggleAddRepoDialog}
-          title={gettext('New Library')}>{gettext('New Library')}</button>
+        {groupID &&
+          <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>
         }
         {this.state.isShowAddMemberDialog && (
           <ModalPortal>
@@ -145,7 +148,7 @@ class OrgDepartmentItem extends React.Component {
         {this.state.isShowAddDepartDialog && (
           <ModalPortal>
             <AddDepartDialog
-              onDepartChanged={window.onDepartChanged}
+              onDepartChanged={this.onDepartChanged}
               parentGroupID={groupID}
               toggle={this.toggleAddDepartDialog}
             />
@@ -176,7 +179,7 @@ class OrgDepartmentItem extends React.Component {
             </div>
 
             <div className="cur-view-subcontainer org-groups">
-              <OrgDepartmentsList groupID={groupID} />
+              <OrgDepartmentsList groupID={groupID} isSubdepartChanged={this.state.isSubdepartChanged}/>
             </div>
             
             <div className="cur-view-subcontainer org-members">

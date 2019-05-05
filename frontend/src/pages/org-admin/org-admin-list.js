@@ -26,10 +26,6 @@ class OrgAdminList extends React.Component {
     this.props.initOrgAdmin();
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.props.initOrgAdmin();
-  }
-
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
   }

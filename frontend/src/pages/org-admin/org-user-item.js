@@ -7,6 +7,7 @@ import Toast from '../../components/toast';
 import UserStatusEditor from '../../components/select-editor/user-status-editor';
 
 const propTypes = {
+  user: PropTypes.object,
   currentTab: PropTypes.string,
   toggleRevokeAdmin: PropTypes.func,
   isItemFreezed: PropTypes.bool.isRequired,

@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
-import { serviceURL, siteRoot, gettext, orgID, lang } from '../../utils/constants';
+import { siteRoot, gettext, orgID, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils.js';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
@@ -63,13 +63,12 @@ class OrgDepartmentsList extends React.Component {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.listDepartGroups(this.props.groupID);
-    window.onDepartChanged = this.onDepartChanged;
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.groupID !== nextProps.groupID) {
+    if (this.props.groupID !== nextProps.groupID || this.props.isSubdepartChanged !== nextProps.isSubdepartChanged) {
       this.listDepartGroups(nextProps.groupID);
     }
   }
@@ -82,8 +81,9 @@ class OrgDepartmentsList extends React.Component {
 
     const topbarChildren = (
       <Fragment>
-        {!this.props.groupID && <button className='btn btn-secondary operation-item' title={gettext('New Department')}
-          onClick={this.toggleAddDepartDialog}>{gettext('New Department')}</button>
+        {!this.props.groupID &&
+          <button className='btn btn-secondary operation-item' title={gettext('New Department')} onClick={this.toggleAddDepartDialog}>{gettext('New Department')}
+          </button>
         }
         {this.state.isShowAddDepartDialog && (
           <ModalPortal>
@@ -104,7 +104,9 @@ class OrgDepartmentsList extends React.Component {
         <div className="main-panel-center flex-row h-100">
           <div className="cur-view-container o-auto">
             <div className="cur-view-path">
-              <div className="fleft"><h3 className="sf-heading">{header}</h3></div>
+              <div className="fleft">
+                <h3 className="sf-heading">{header}</h3>
+              </div>
             </div>
             <div className="cur-view-content">
               {groups && groups.length > 0 ?
@@ -204,6 +206,7 @@ const GroupItemPropTypes = {
   group: PropTypes.object.isRequired,
   showSetGroupQuotaDialog: PropTypes.func.isRequired,
   showDeleteDepartDialog: PropTypes.func.isRequired,
+  isSubdepartChanged: PropTypes.bool,
 };
 
 GroupItem.propTypes = GroupItemPropTypes;

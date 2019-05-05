@@ -129,6 +129,9 @@ const propTypes = {
   filterUser: PropTypes.func.isRequired,
   filterRepo: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  fileEvent: PropTypes.object.isRequired,
+  userSelected: PropTypes.string,
+  repoSelected: PropTypes.string,
 };
 
 class FileAuditItem extends React.Component {

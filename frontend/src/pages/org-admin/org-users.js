@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import OrgUsersList from './org-users-list';
 import OrgAdminList from './org-admin-list';
 import MainPanelTopbar from './main-panel-topbar';
@@ -9,7 +10,7 @@ import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dial
 import Toast from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';
-import { siteRoot, gettext, invitationLink, orgID } from '../../utils/constants';
+import { gettext, invitationLink, orgID } from '../../utils/constants';
 
 class OrgUsers extends Component {
 
@@ -133,13 +134,13 @@ class OrgUsers extends Component {
       topbarChildren = (
         <Fragment>
           <button className={topBtn} title={gettext('Add admin')} onClick={this.toggleAddOrgAdmin}>
-             <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add admin')}
+            <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add admin')}
           </button>
-        {this.state.isShowAddOrgAdminDialog &&
-          <ModalPortal>
-            <AddOrgAdminDialog toggle={this.toggleAddOrgAdmin} addOrgAdmin={this.addOrgAdmin}/>
-          </ModalPortal>
-        }
+          {this.state.isShowAddOrgAdminDialog &&
+            <ModalPortal>
+              <AddOrgAdminDialog toggle={this.toggleAddOrgAdmin} addOrgAdmin={this.addOrgAdmin}/>
+            </ModalPortal>
+          }
         </Fragment>
       );
     } else if (this.props.currentTab === 'users') {
@@ -205,5 +206,12 @@ class OrgUsers extends Component {
     );
   }
 }
+
+const propTypes = {
+  currentTab: PropTypes.string.isRequired,
+  tabItemClick: PropTypes.func.isRequired,
+};
+
+OrgUsers.propTypes = propTypes;
 
 export default OrgUsers;
