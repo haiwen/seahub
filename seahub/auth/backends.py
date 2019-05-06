@@ -4,11 +4,12 @@ from collections import OrderedDict
 
 from django.conf import settings
 
-from seaserv import seafile_api
+from seaserv import ccnet_api, seafile_api
 
 from seahub.base.accounts import User, AuthBackend
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
+from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from registration.models import notify_admins_on_activate_request, \
         notify_admins_on_register_complete
 
@@ -88,7 +89,29 @@ class SeafileRemoteUserBackend(AuthBackend):
     # REMOTE_USER_ATTRIBUTE_MAP = {
     #     'HTTP_DISPLAYNAME': 'name',
     #     'HTTP_MAIL': 'contact_email',
+    #
+    #     # for shibboleth user info
+    #     'HTTP_GIVENNAME': 'givenname',
+    #     'HTTP_SN': 'surname',
+    #     'HTTP_ORGANIZATION': 'institution',
+    #
+    #     # for shibboleth user role
+    #     'HTTP_Shibboleth-affiliation': 'affiliation',
     # }
+
+    # for shibboleth user role
+    # SHIBBOLETH_AFFILIATION_ROLE_MAP = {
+    #     'employee@uni-mainz.de': 'staff',
+    #     'member@uni-mainz.de': 'staff',
+    #     'student@uni-mainz.de': 'student',
+    #     'employee@hu-berlin.de': 'guest',
+    #     'patterns': (
+    #         ('*@hu-berlin.de', 'guest1'),
+    #         ('*@*.de', 'guest2'),
+    #         ('*', 'guest'),
+    #     ),
+    # }
+
     remote_user_attribute_map = getattr(settings, 'REMOTE_USER_ATTRIBUTE_MAP',
                                         {})
 
@@ -127,18 +150,19 @@ class SeafileRemoteUserBackend(AuthBackend):
                 logger.error(e)
                 return None
 
-        if self.user_can_authenticate(user):
-            # update user info after authenticated
-            try:
-                self.configure_user(request, user)
-            except Exception as e:
-                logger.error(e)
-                return None
-
-            return user
-        else:
+        if not self.user_can_authenticate(user):
             logger.error('User %s is not active' % username)
             return None
+
+        # update user info after authenticated
+        try:
+            self.configure_user(request, user)
+        except Exception as e:
+            logger.error(e)
+            return None
+
+        # get user again with updated extra info after configure
+        return self.get_user(username)
 
     def clean_username(self, username):
         """
@@ -180,7 +204,6 @@ class SeafileRemoteUserBackend(AuthBackend):
                 user_info[user_info_key] = value
 
         user_info['email'] = user.username
-        user_info['role_quota'] = user.permissions.role_quota()
         return user_info
 
     def update_user_profile(self, user_info):
@@ -198,7 +221,18 @@ class SeafileRemoteUserBackend(AuthBackend):
             profile = Profile(user=email)
 
         if name.strip():
+            # if have 'HTTP_DISPLAYNAME' header,
+            # then use its value as user's name
             profile.nickname = name
+        else:
+            # or use values of "HTTP_GIVENNAME" and "HTTP_SN" headers
+            # for shibboleth
+            givenname = user_info.get('givenname', '')
+            surname = user_info.get('surname', '')
+            if givenname.strip() and surname.strip():
+                name = "%s %s" % (givenname, surname)
+                profile.nickname = name
+
         if institution:
             profile.institution = institution
         if contact_email:
@@ -221,10 +255,10 @@ class SeafileRemoteUserBackend(AuthBackend):
                 continue
 
             # update user role
-            User.objects.update_role(user_info['email'], role)
+            ccnet_api.update_role_emailuser(user_info['email'], role)
 
             # update user role quota
-            role_quota = user_info.get('role_quota', '')
+            role_quota = get_enabled_role_permissions_by_role(role)['role_quota']
             if role_quota:
                 quota = get_quota_from_string(role_quota)
                 seafile_api.set_role_quota(role, quota)
