@@ -1,5 +1,5 @@
-import Operation from './Operation';
-import OperationTypes from './OperationTypes';
+import Operation from './operation';
+import OperationTypes from './operation-types';
 
 function invert(operation) {
 
