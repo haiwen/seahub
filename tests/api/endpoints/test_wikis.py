@@ -10,55 +10,13 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.share.utils import share_dir_to_user
 from seahub.wiki.models import Wiki
+from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
 from seahub.test_utils import BaseTestCase
 
-TEST_SETTINGS = {
-    'default': {
-        'can_add_repo': True,
-        'can_add_group': True,
-        'can_view_org': True,
-        'can_add_public_repo': True,
-        'can_use_global_address_book': True,
-        'can_generate_share_link': True,
-        'can_generate_upload_link': True,
-        'can_send_share_link_mail': True,
-        'can_invite_guest': False,
-        'can_drag_drop_folder_to_sync': True,
-        'can_connect_with_android_clients': True,
-        'can_connect_with_ios_clients': True,
-        'can_connect_with_desktop_clients': True,
-        'can_export_files_via_mobile_client': True,
-        'storage_ids': [],
-        'role_quota': '',
-        'can_use_wiki': True,
-        'can_publish_repo': True,
-    },
-    'guest': {
-        'can_add_repo': False,
-        'can_add_group': False,
-        'can_view_org': False,
-        'can_add_public_repo': False,
-        'can_use_global_address_book': False,
-        'can_generate_share_link': False,
-        'can_generate_upload_link': False,
-        'can_send_share_link_mail': False,
-        'can_invite_guest': False,
-        'can_drag_drop_folder_to_sync': False,
-        'can_connect_with_android_clients': False,
-        'can_connect_with_ios_clients': False,
-        'can_connect_with_desktop_clients': False,
-        'can_export_files_via_mobile_client': False,
-        'storage_ids': [],
-        'role_quota': '',
-        'can_use_wiki': False,
-        'can_publish_repo': False,
-    },
-}
-
-TEST_CAN_USE_WIKI_FALSE = copy.deepcopy(TEST_SETTINGS)
+TEST_CAN_USE_WIKI_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
 TEST_CAN_USE_WIKI_FALSE['default']['can_use_wiki'] = False
 
-TEST_CAN_PUBLISH_REPO_FALSE = copy.deepcopy(TEST_SETTINGS)
+TEST_CAN_PUBLISH_REPO_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
 TEST_CAN_PUBLISH_REPO_FALSE['default']['can_publish_repo'] = False
 
 
