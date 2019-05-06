@@ -1,6 +1,6 @@
-import OperationTypes from './OperationTypes';
-import GridColumn from '../model/GridColumn';
-import GridRow from '../model/GridRow';
+import OperationTypes from './operation-types';
+import GridColumn from '../model/grid-column';
+import GridRow from '../model/grid-row';
 
 function apply(value, op) {
 

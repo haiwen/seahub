@@ -1,5 +1,5 @@
-import apply from './Apply';
-import invert from './Invert';
+import apply from './apply';
+import invert from './invert';
 
 export default class Operation {
 

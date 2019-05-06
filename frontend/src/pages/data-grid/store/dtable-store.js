@@ -1,5 +1,5 @@
-import Operation from './Operation';
-import OperationTypes from './OperationTypes';
+import Operation from './operation';
+import OperationTypes from './operation-types';
 // todo Immutable
 // Implement the current version with an array
 export default class DTableStore {
