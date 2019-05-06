@@ -22,24 +22,33 @@ export default class DTableStore {
   deleteRow(rowIdx) {
     let type = OperationTypes.DELETE_ROW;
     let operation = this.createOperation({type, rowIdx});
-    let next = operation.apply(type);
+    let next = operation.apply(this.rows);
+
     this.operations.push(operation);
+    this.rows = next;
+
     return next;
   }
 
   insertRow(newRowIdx) {
     let type = OperationTypes.INSERT_ROW;
     let operation = this.createOperation({type, newRowIdx});
-    let next = operation.apply(type);
+    let next = operation.apply(this.rows);
+
     this.operations.push(operation);
+    this.rows = next;
+
     return next;
   }
 
   deleteColumn(idx) {
-    let type = OperationTypes.INSERT_COLUMN;
+    let type = OperationTypes.DELETE_COLUMN;
     let operation = this.createOperation({type, idx});
     let next = operation.apply(this.columns);
+
     this.operations.push(operation);
+    this.columns = next;
+
     return next;
   }
 
@@ -47,7 +56,10 @@ export default class DTableStore {
     let type = OperationTypes.INSERT_COLUMN;
     let operation = this.createOperation({type, idx, columnName, columnType});
     let next = operation.apply(this.columns);
+
     this.operations.push(operation);
+    this.columns = next;
+
     return next;
   }
 
@@ -55,7 +67,10 @@ export default class DTableStore {
     let type = OperationTypes.MODIFY_COLUMN;
     let operation = this.createOperation({type, idx, oldColumnName, newColumnName});
     let next = operation.apply(this.columns);
+
     this.operations.push(operation);
+    this.columns = next;
+
     return next;
   }
 
@@ -64,7 +79,10 @@ export default class DTableStore {
     let key = this.columns[idx].key;
     let operation = this.createOperation({type, rowIdx, key, oldCellValue, newCellValue});
     let next = operation.apply(this.rows);
+
     this.operations.push(operation);
+    this.rows = next;
+
     return next;
   }
 
