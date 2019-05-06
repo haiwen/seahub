@@ -1,14 +1,26 @@
 import json
+import copy
+from mock import patch
 
 from django.core.urlresolvers import reverse
+from django.test import override_settings
+
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
 from seahub.share.utils import share_dir_to_user
 from seahub.wiki.models import Wiki
+from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
 from seahub.test_utils import BaseTestCase
 
+TEST_CAN_USE_WIKI_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
+TEST_CAN_USE_WIKI_FALSE['default']['can_use_wiki'] = False
 
+TEST_CAN_PUBLISH_REPO_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
+TEST_CAN_PUBLISH_REPO_FALSE['default']['can_publish_repo'] = False
+
+
+@override_settings(ENABLE_WIKI=True)
 class WikisViewTest(BaseTestCase):
     def setUp(self):
         self.url = reverse('api-v2.1-wikis')
@@ -67,6 +79,27 @@ class WikisViewTest(BaseTestCase):
         assert len(Wiki.objects.all()) == 1
         w = Wiki.objects.all()[0]
         assert w.created_at is not None
+
+    def test_403_when_add_wiki_with_can_publish_repo_false(self):
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_PUBLISH_REPO_FALSE):
+            resp = self.client.post(self.url, {
+                'repo_id': self.repo.id,
+            })
+            self.assertEqual(403, resp.status_code)
+
+    @override_settings(ENABLE_WIKI=False)
+    def test_403_when_add_wiki_with_enable_wiki_false(self):
+        resp = self.client.post(self.url, {
+            'repo_id': self.repo.id,
+        })
+        self.assertEqual(403, resp.status_code)
+
+    def test_403_when_add_wiki_with_can_use_wiki_false(self):
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_USE_WIKI_FALSE):
+            resp = self.client.post(self.url, {
+                'repo_id': self.repo.id,
+            })
+            self.assertEqual(403, resp.status_code)
 
 
 class WikiViewTest(BaseTestCase):

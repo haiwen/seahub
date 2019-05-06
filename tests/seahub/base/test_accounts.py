@@ -1,52 +1,20 @@
+import copy
 from seahub.test_utils import BaseTestCase
 from seahub.base.accounts import User, RegistrationForm
 
 from seahub.options.models import UserOptions
+from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
 from post_office.models import Email
 from django.core.urlresolvers import reverse
+from django.test import override_settings
 from mock import patch
 
 
-TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS = {
-    'default': {
-        'can_add_repo': True,
-        'can_add_group': True,
-        'can_view_org': True,
-        'can_add_public_repo': True,
-        'can_use_global_address_book': True,
-        'can_generate_share_link': True,
-        'can_generate_upload_link': True,
-        'can_send_share_link_mail': True,
-        'can_invite_guest': False,
-        'can_drag_drop_folder_to_sync': True,
-        'can_connect_with_android_clients': True,
-        'can_connect_with_ios_clients': True,
-        'can_connect_with_desktop_clients': True,
-        'can_export_files_via_mobile_client': True,
-        'storage_ids': [],
-        'role_quota': '',
-        'can_use_wiki': True,
-    },
-    'guest': {
-        'can_add_repo': False,
-        'can_add_group': False,
-        'can_view_org': False,
-        'can_add_public_repo': False,
-        'can_use_global_address_book': False,
-        'can_generate_share_link': False,
-        'can_generate_upload_link': False,
-        'can_send_share_link_mail': False,
-        'can_invite_guest': False,
-        'can_drag_drop_folder_to_sync': False,
-        'can_connect_with_android_clients': False,
-        'can_connect_with_ios_clients': False,
-        'can_connect_with_desktop_clients': False,
-        'can_export_files_via_mobile_client': False,
-        'storage_ids': [],
-        'role_quota': '',
-        'can_use_wiki': False,
-    },
-}
+TEST_CAN_ADD_PUBLICK_REPO_TRUE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
+TEST_CAN_ADD_PUBLICK_REPO_TRUE['default']['can_add_public_repo'] = True
+
+TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
+TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE['default']['can_use_wiki'] = False
 
 CLOUD_MODE_TRUE = True
 MULTI_TENANCY_TRUE = True
@@ -80,6 +48,7 @@ class UserTest(BaseTestCase):
         
         assert len(UserOptions.objects.filter(email=test_email)) == 0
 
+@override_settings(ENABLE_WIKI=True)
 class UserPermissionsTest(BaseTestCase):
     def setUp(self):
         from constance import config
@@ -97,7 +66,6 @@ class UserPermissionsTest(BaseTestCase):
         assert self.user.permissions.can_connect_with_ios_clients() is True
         assert self.user.permissions.can_connect_with_desktop_clients() is True
         assert self.user.permissions.can_invite_guest() is False
-
         assert self.user.permissions.can_export_files_via_mobile_client() is True
 
     def test_admin_permissions_can_add_public_repo(self):
@@ -116,14 +84,14 @@ class UserPermissionsTest(BaseTestCase):
         # both have
         self.config.ENABLE_USER_CREATE_ORG_REPO = 1
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
-        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS):
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_ADD_PUBLICK_REPO_TRUE):
             assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is True
             assert self.user.permissions.can_add_public_repo() is True
 
         # only have can_add_public_repo
         self.config.ENABLE_USER_CREATE_ORG_REPO = 0
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
-        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_ADD_PUBLIC_ENABLED_ROLE_PERMISSIONS):
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_ADD_PUBLICK_REPO_TRUE):
             assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is True
             assert self.user.permissions.can_add_public_repo() is False
 
@@ -138,6 +106,23 @@ class UserPermissionsTest(BaseTestCase):
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
         assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is False
         assert self.user.permissions.can_add_public_repo() is False
+
+    def test_can_publish_repo_permission(self):
+        # enableWIKI = True, and can_use_wiki = True
+        assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
+        assert self.user.permissions.can_publish_repo() is True
+
+    @override_settings(ENABLE_WIKI=False)
+    def test_can_publish_repo_permission_with_enable_wiki_False(self):
+        # enableWIKI = False, and can_use_wiki = True
+        assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
+        assert self.user.permissions.can_publish_repo() is False
+
+    def test_can_publish_repo_permission_with_can_use_wiki_False(self):
+        # enableWIKI = True, and can_use_wiki = False
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE):
+            assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
+            assert self.user.permissions.can_publish_repo() is False
 
 
 class RegistrationFormTest(BaseTestCase):
