@@ -2,14 +2,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
-import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext, orgID, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils.js';
+import { seafileAPI } from '../../utils/seafile-api';
+import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import DeleteDepartDialog from '../../components/dialog/org-delete-department-dialog';
 import SetGroupQuotaDialog from '../../components/dialog/org-set-group-quota-dialog';
-import MainPanelTopbar from './main-panel-topbar';
+import { siteRoot, gettext, orgID, lang } from '../../utils/constants';
 import '../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -27,17 +27,15 @@ class OrgDepartmentsList extends React.Component {
       isShowAddDepartDialog: false,
     };
   }
+  
+  componentDidMount() {
+    this.listDepartGroups();
+  }
 
-  listDepartGroups = (groupID) => {
-    if (groupID) {
-      seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
-        this.setState({ groups: res.data.groups });
-      });
-    } else {
-      seafileAPI.orgAdminListDepartGroups(orgID).then(res => {
-        this.setState({ groups: res.data.data });
-      });
-    }
+  listDepartGroups = () => {
+    seafileAPI.orgAdminListDepartGroups(orgID).then(res => {
+      this.setState({ groups: res.data.data });
+    });
   }
 
   showDeleteDepartDialog = (group) => {
@@ -48,6 +46,10 @@ class OrgDepartmentsList extends React.Component {
     this.setState({ showSetGroupQuotaDialog: true, groupID: groupID });
   }
 
+  toggleAddDepartDialog = () => {
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+  }
+
   toggleCancel = () => {
     this.setState({
       showDeleteDepartDialog: false,
@@ -56,35 +58,15 @@ class OrgDepartmentsList extends React.Component {
   }
 
   onDepartChanged = () => {
-    this.listDepartGroups(this.props.groupID);
-  }
-
-  toggleAddDepartDialog = () => {
-    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
-  }
-
-  componentDidMount() {
-    this.listDepartGroups(this.props.groupID);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.groupID !== nextProps.groupID || this.props.isSubdepartChanged !== nextProps.isSubdepartChanged) {
-      this.listDepartGroups(nextProps.groupID);
-    }
+    this.listDepartGroups();
   }
 
   render() {
     const groups = this.state.groups;
-    let isSub = this.props.groupID ? true : false;
-    let header = isSub ? gettext('Sub-departments') : gettext('Departments');
-    let noGroup = isSub ? gettext('No sub-departments') : gettext('No departments');
-
     const topbarChildren = (
       <Fragment>
-        {!this.props.groupID &&
-          <button className='btn btn-secondary operation-item' title={gettext('New Department')} onClick={this.toggleAddDepartDialog}>{gettext('New Department')}
-          </button>
-        }
+        <button className='btn btn-secondary operation-item' title={gettext('New Department')} onClick={this.toggleAddDepartDialog}>{gettext('New Department')}
+        </button>
         {this.state.isShowAddDepartDialog && (
           <ModalPortal>
             <AddDepartDialog
@@ -97,15 +79,14 @@ class OrgDepartmentsList extends React.Component {
         )}
       </Fragment>
     );
-
     return (
       <Fragment>
-        {!isSub && <MainPanelTopbar children={topbarChildren} />}
+        <MainPanelTopbar children={topbarChildren}/>
         <div className="main-panel-center flex-row h-100">
           <div className="cur-view-container o-auto">
             <div className="cur-view-path">
               <div className="fleft">
-                <h3 className="sf-heading">{header}</h3>
+                <h3 className="sf-heading">{gettext('Departments')}</h3>
               </div>
             </div>
             <div className="cur-view-content">
@@ -133,8 +114,8 @@ class OrgDepartmentsList extends React.Component {
                     })}
                   </tbody>
                 </table>
-                : 
-                <p className="no-group">{noGroup}</p>
+                :
+                <p className="no-group">{gettext('No departments')}</p>
               }
             </div>
             <React.Fragment>
@@ -206,7 +187,6 @@ const GroupItemPropTypes = {
   group: PropTypes.object.isRequired,
   showSetGroupQuotaDialog: PropTypes.func.isRequired,
   showDeleteDepartDialog: PropTypes.func.isRequired,
-  isSubdepartChanged: PropTypes.bool,
 };
 
 GroupItem.propTypes = GroupItemPropTypes;

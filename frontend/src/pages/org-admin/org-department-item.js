@@ -1,47 +1,65 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils.js';
-import { serviceURL, siteRoot, gettext, orgID } from '../../utils/constants';
-import OrgDepartmentsList from './org-departments-list';
+import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
+import RoleEditor from '../../components/select-editor/role-editor';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
 import DeleteMemberDialog from '../../components/dialog/org-delete-member-dialog';
 import AddRepoDialog from '../../components/dialog/org-add-repo-dialog';
 import DeleteRepoDialog from '../../components/dialog/org-delete-repo-dialog';
-import RoleEditor from '../../components/select-editor/role-editor';
-import MainPanelTopbar from './main-panel-topbar';
+import DeleteDepartDialog from '../../components/dialog/org-delete-department-dialog';
+import SetGroupQuotaDialog from '../../components/dialog/org-set-group-quota-dialog';
+import { serviceURL, siteRoot, gettext, orgID, lang } from '../../utils/constants';
 import '../../css/org-department-item.css';
+
+moment.locale(lang);
 
 class OrgDepartmentItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      members: [],
-      repos: [],
-      groups: [],
-      ancestorGroups: [],
-      deletedMember: {},
-      deletedRepo: {},
-      showDeleteMemberDialog: false,
-      showDeleteRepoDialog: false,
-      isShowAddRepoDialog: false,
-      isShowAddMemberDialog: false,
-      isShowAddDepartDialog: false,
-      isItemFreezed: false,
-      isSubdepartChanged: false,
       groupName: '',
+      isItemFreezed: false,
+      ancestorGroups: [],
+      members: [],
+      deletedMember: {},
+      isShowAddMemberDialog: false,
+      showDeleteMemberDialog: false,
+      repos: [],
+      deletedRepo: {},
+      isShowAddRepoDialog: false,
+      showDeleteRepoDialog: false,
+      groups: [],
+      subGroupID: '',
+      subGroupName: '',
+      isShowAddDepartDialog: false,
+      showDeleteDepartDialog: false,
+      showSetGroupQuotaDialog: false,
     };
+  }
+
+  componentDidMount() {
+    const groupID = this.props.groupID;
+    this.listOrgGroupRepo(groupID);
+    this.listOrgMembers(groupID);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.groupID !== nextProps.groupID) {
+      this.listOrgGroupRepo(nextProps.groupID);
+      this.listOrgMembers(nextProps.groupID);
+    }
   }
 
   listOrgGroupRepo = (groupID) => {
     seafileAPI.orgAdminListDepartGroupRepos(orgID, groupID).then(res => {
-      this.setState({
-        repos: res.data.libraries
-      });
+      this.setState({ repos: res.data.libraries });
     });
   }
 
@@ -56,19 +74,23 @@ class OrgDepartmentItem extends React.Component {
     });
   }
 
-  showDeleteMemberDialog = (member) => {
-    this.setState({ showDeleteMemberDialog: true, deletedMember: member });
-  }
-
-  showDeleteRepoDialog = (repo) => {
-    this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
+  listSubDepartGroups = (groupID) => {
+    seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
+      this.setState({ groups: res.data.groups });
+    });
   }
 
   toggleCancel = () => {
     this.setState({
       showDeleteMemberDialog: false,
       showDeleteRepoDialog: false,
+      showDeleteDepartDialog: false,
+      showSetGroupQuotaDialog: false,
     });
+  }
+
+  onSubDepartChanged = () => {
+    this.listSubDepartGroups(this.props.groupID);
   }
 
   onRepoChanged = () => {
@@ -83,6 +105,14 @@ class OrgDepartmentItem extends React.Component {
     this.setState({ isItemFreezed: isFreezed });
   }
 
+  showDeleteMemberDialog = (member) => {
+    this.setState({ showDeleteMemberDialog: true, deletedMember: member });
+  }
+
+  showDeleteRepoDialog = (repo) => {
+    this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
+  }
+
   toggleAddRepoDialog = () => {
     this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
   }
@@ -95,25 +125,23 @@ class OrgDepartmentItem extends React.Component {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
   }
 
-  onDepartChanged = () => {
-    this.setState({ isSubdepartChanged: !this.state.isSubdepartChanged });
+  showDeleteDepartDialog = (subGroup) => {
+    this.setState({ 
+      showDeleteDepartDialog: true,
+      subGroupID: subGroup.id,
+      subGroupName: subGroup.name
+    });
   }
 
-  componentWillMount() {
-    const groupID = this.props.groupID;
-    this.listOrgGroupRepo(groupID);
-    this.listOrgMembers(groupID);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.groupID !== nextProps.groupID) {
-      this.listOrgGroupRepo(nextProps.groupID);
-      this.listOrgMembers(nextProps.groupID);
-    }
+  showSetGroupQuotaDialog = (subGroupID) => {
+    this.setState({
+      showSetGroupQuotaDialog: true,
+      subGroupID: subGroupID
+    });
   }
 
   render() {
-    const { members, repos } = this.state;
+    const { members, repos, groups } = this.state;
     const groupID = this.props.groupID;
     const topBtn = 'btn btn-secondary operation-item';
     const topbarChildren = (
@@ -148,7 +176,7 @@ class OrgDepartmentItem extends React.Component {
         {this.state.isShowAddDepartDialog && (
           <ModalPortal>
             <AddDepartDialog
-              onDepartChanged={this.onDepartChanged}
+              onDepartChanged={this.onSubDepartChanged}
               parentGroupID={groupID}
               toggle={this.toggleAddDepartDialog}
             />
@@ -179,14 +207,42 @@ class OrgDepartmentItem extends React.Component {
             </div>
 
             <div className="cur-view-subcontainer org-groups">
-              <OrgDepartmentsList groupID={groupID} isSubdepartChanged={this.state.isSubdepartChanged}/>
+              <div className="cur-view-path">
+                <div className="fleft"><h3 className="sf-heading">{gettext('Sub-departments')}</h3></div>
+              </div>
+              <div className="cur-view-content">
+                {groups && groups.length > 0 ?
+                  <table>
+                    <thead>
+                      <tr>
+                        <th width="40%">{gettext('Name')}</th>
+                        <th width="25%">{gettext('Created At')}</th>
+                        <th width="20%">{gettext('Quota')}</th>
+                        <th width="15%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {groups.map((group, index) => {
+                        return(
+                          <React.Fragment key={group.id}>
+                            <GroupItem
+                              group={group}
+                              showDeleteDepartDialog={this.showDeleteDepartDialog}
+                              showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
+                            />
+                          </React.Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  : <p className="no-group">{gettext('No sub-departments')}</p>
+                }
+              </div>
             </div>
             
             <div className="cur-view-subcontainer org-members">
               <div className="cur-view-path">
-                <div className="fleft">
-                  <h3 className="sf-heading">{gettext('Members')}</h3>
-                </div>
+                <div className="fleft"><h3 className="sf-heading">{gettext('Members')}</h3></div>
               </div>
               <div className="cur-view-content">
                 {(members && members.length === 1 && members[0].role === 'Owner') ?
@@ -273,6 +329,25 @@ class OrgDepartmentItem extends React.Component {
                 />
               </ModalPortal>
             )}
+            {this.state.showDeleteDepartDialog && (
+              <ModalPortal>
+                <DeleteDepartDialog
+                  toggle={this.toggleCancel}
+                  groupID={this.state.subGroupID}
+                  groupName={this.state.subGroupName}
+                  onDepartChanged={this.onSubDepartChanged}
+                />
+              </ModalPortal>
+            )}
+            {this.state.showSetGroupQuotaDialog && (
+              <ModalPortal>
+                <SetGroupQuotaDialog
+                  toggle={this.toggleCancel}
+                  groupID={this.state.subGroupID}
+                  onDepartChanged={this.onSubDepartChanged}
+                />
+              </ModalPortal>
+            )}
           </React.Fragment>
         </div>
       </Fragment>
@@ -354,7 +429,6 @@ const MemberItemPropTypes = {
 
 MemberItem.propTypes = MemberItemPropTypes;
 
-
 class RepoItem extends React.Component {
 
   constructor(props) {
@@ -395,5 +469,51 @@ const RepoItemPropTypes = {
 };
 
 RepoItem.propTypes = RepoItemPropTypes;
+
+class GroupItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      highlight: false,
+    };
+  }
+
+  onMouseEnter = () => {
+    this.setState({ highlight: true });
+  }
+
+  onMouseLeave = () => {
+    this.setState({ highlight: false });
+  }
+
+  render() {
+    const group = this.props.group;
+    const highlight = this.state.highlight;
+    const newHref = siteRoot+ 'org/departmentadmin/groups/' + group.id + '/';
+    return (
+      <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td><Link to={newHref}>{group.name}</Link></td>
+        <td>{moment(group.created_at).fromNow()}</td>
+        <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
+          {Utils.bytesToSize(group.quota)}{' '}
+          <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
+        </td>
+        <td className="cursor-pointer text-center" onClick={this.props.showDeleteDepartDialog.bind(this, group)}>
+          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+        </td>
+      </tr>
+    );
+  }
+}
+
+const GroupItemPropTypes = {
+  group: PropTypes.object.isRequired,
+  showSetGroupQuotaDialog: PropTypes.func.isRequired,
+  showDeleteDepartDialog: PropTypes.func.isRequired,
+  isSubdepartChanged: PropTypes.bool,
+};
+
+GroupItem.propTypes = GroupItemPropTypes;
 
 export default OrgDepartmentItem;
