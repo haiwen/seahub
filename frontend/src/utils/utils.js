@@ -813,4 +813,13 @@ export const Utils = {
     }
   },
 
+  generatePassword: function(passwordLength) {
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+    let password = '';
+    for (let i = 0; i < passwordLength; i++) {
+      password += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return password;
+  }
+
 };

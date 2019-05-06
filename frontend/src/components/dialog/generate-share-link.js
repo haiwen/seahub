@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkPasswordMinLength } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import SharedLinkInfo from '../../models/shared-link-info';
 import toaster from '../toast';
 
@@ -68,7 +69,7 @@ class GenerateShareLink extends React.Component {
   }
 
   generatePassword = () => {
-    let val = Math.random().toString(36).substr(5);
+    let val = Utils.generatePassword(shareLinkPasswordMinLength);
     this.setState({
       password: val,
       passwdnew: val
@@ -165,7 +166,7 @@ class GenerateShareLink extends React.Component {
         this.setState({errorInfo: 'Please enter password'});
         return false;
       }
-      if (password.length < 8) {
+      if (password.length < shareLinkPasswordMinLength) {
         this.setState({errorInfo: 'Password is too short'});
         return false;
       }
@@ -237,6 +238,10 @@ class GenerateShareLink extends React.Component {
   }
 
   render() {
+
+    let passwordLengthTip = gettext('(at least {passwordLength} characters)');
+    passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
+
     if (this.state.sharedLinkInfo) {
       let sharedLinkInfo = this.state.sharedLinkInfo;
       return (
@@ -293,7 +298,7 @@ class GenerateShareLink extends React.Component {
           {this.state.isShowPasswordInput &&
             <FormGroup className="link-operation-content">
               {/* todo translate  */}
-              <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{gettext('(at least 8 characters)')}</span>
+              <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
               <InputGroup className="passwd">
                 <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
                 <InputGroupAddon addonType="append">
