@@ -8,6 +8,7 @@ import GridContentContextMenu from './grid-content-contextmenu';
 import ModalPortal from '../../components/modal-portal';
 import NewColumnDialog from './new-column-dialog';
 import isHotkey from 'is-hotkey';
+import DTableStore from './store/dtable-store';
 
 const propTypes = {
   initData: PropTypes.object.isRequired,
@@ -26,14 +27,16 @@ class AppMain extends React.Component {
         resizable: true
       }
     ];
-
+    
     let initData = props.initData;
-
+    
     this.state = {
       columns: initData.columns.length ? this.deseralizeGridData(initData.columns) : this._columns,
       rows: initData.rows.length ? initData.rows : this.createRows(1),
       isNewColumnDialogShow: false,
     };
+
+    this.dTableStore = new DTableStore(initData);
   }
 
   componentDidMount() {
@@ -109,7 +112,8 @@ class AppMain extends React.Component {
 
   onInsertRow = () => {
     let newRowIndex = this.getSize();
-    this.handleAddRow({ newRowIndex });
+    let rows = this.dTableStore.insertRow(newRowIndex);
+    this.setState({rows});
     this.props.onContentChanged();
   }
 
@@ -126,18 +130,9 @@ class AppMain extends React.Component {
   }
 
   onNewColumn = (columnName, columnType) => {
-    let editor = this.createEditor(columnType);
-    let newColumn = {
-      key: columnName,
-      name: columnName,
-      editor: editor,
-      editable: true,
-      width: 200,
-      resizable: true
-    };
-
-    let columns = this.state.columns.slice();
-    columns.push(newColumn);
+    let idx = this.state.columns.length;
+    let columns = this.dTableStore.insertColumn(idx, columnName, columnType);
+    columns = this.formatColumnsData(columns);
     this.setState({columns: columns});
     this.onNewColumnCancel();
     this.props.onContentChanged();
@@ -150,24 +145,16 @@ class AppMain extends React.Component {
 
   onRowDelete = (e, data) => {
     let { rowIdx } = data;
-    let newRows = this.state.rows.slice(0); // copy array;
-    newRows.splice(rowIdx, 1);
-    this.setState({rows: newRows});
+    let rows = this.dTableStore.deleteRow(rowIdx);
+    this.setState({rows});
     this.props.onContentChanged();
   }
 
   onColumnDelete = (e, data) => {
     let column = data.column;
-    let key = column.key;
-    let columns = this.state.columns.filter(item => item.key !== key);
-    let rows = this.state.rows.map(item => {
-      delete item[key];
-      return item;
-    });
-    this.setState({
-      columns: columns,
-      rows: rows
-    });
+    let idx = column.idx - 1;
+    let columns = this.dTableStore.deleteColumn(idx);
+    this.setState({columns});
     this.props.onContentChanged();
   }
 
@@ -187,6 +174,8 @@ class AppMain extends React.Component {
       columns: columns,
       rows: rows,
     });
+
+    this.dTableStore.updateStoreValues({columns, rows});
   }
 
   formatColumnsData = (columns) => {
