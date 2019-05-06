@@ -7,6 +7,7 @@ import GridHeaderContextMenu from './grid-header-contextmenu';
 import GridContentContextMenu from './grid-content-contextmenu';
 import ModalPortal from '../../components/modal-portal';
 import NewColumnDialog from './new-column-dialog';
+import isHotkey from 'is-hotkey';
 
 const propTypes = {
   initData: PropTypes.object.isRequired,
@@ -35,9 +36,22 @@ class AppMain extends React.Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onHotKey);
+  }
+
   componentWillReceiveProps(nextProps) {
+
+    if (nextProps.isContentChanged) {
+      return;
+    }
+
     let data = nextProps.initData;
     this.deseralizeGridData(data);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onHotKey);
   }
 
   createRows = (numberOfRows) => {
@@ -67,6 +81,7 @@ class AppMain extends React.Component {
     }
 
     this.setState({ rows });
+    this.props.onContentChanged();
   };
 
   handleAddRow = ({ newRowIndex }) => {
@@ -77,6 +92,7 @@ class AppMain extends React.Component {
     let rows = this.state.rows.slice();
     rows = update(rows, {$push: [newRow]});
     this.setState({ rows });
+    this.props.onContentChanged();
   };
 
   getRowAt = (index) => {
@@ -94,10 +110,19 @@ class AppMain extends React.Component {
   onInsertRow = () => {
     let newRowIndex = this.getSize();
     this.handleAddRow({ newRowIndex });
+    this.props.onContentChanged();
   }
 
   onInsertColumn = () => {
     this.setState({isNewColumnDialogShow: true});
+    this.props.onContentChanged();
+  }
+
+  onColumnResize = (index, width) => {
+    let columns = this.state.columns.slice();
+    columns[index - 1].width = width;
+    this.setState({columns: columns});
+    this.props.onContentChanged();
   }
 
   onNewColumn = (columnName, columnType) => {
@@ -115,10 +140,12 @@ class AppMain extends React.Component {
     columns.push(newColumn);
     this.setState({columns: columns});
     this.onNewColumnCancel();
+    this.props.onContentChanged();
   }
 
   onNewColumnCancel = () => {
     this.setState({isNewColumnDialogShow: false});
+    this.props.onContentChanged();
   }
 
   onRowDelete = (e, data) => {
@@ -126,6 +153,7 @@ class AppMain extends React.Component {
     let newRows = this.state.rows.slice(0); // copy array;
     newRows.splice(rowIdx, 1);
     this.setState({rows: newRows});
+    this.props.onContentChanged();
   }
 
   onColumnDelete = (e, data) => {
@@ -140,6 +168,7 @@ class AppMain extends React.Component {
       columns: columns,
       rows: rows
     });
+    this.props.onContentChanged();
   }
 
   serializeGridData = () => {
@@ -186,6 +215,14 @@ class AppMain extends React.Component {
     return editor;
   }
 
+  onHotKey = (event) => {
+    if (isHotkey('mod+s', event)) {
+      event.preventDefault();
+      this.props.onSave();
+      return true;
+    }
+  }
+  
   render() {
     let columns = this.getColumns();
     return (
@@ -208,6 +245,7 @@ class AppMain extends React.Component {
           RowsContainer={Menu.ContextMenuTrigger}
           headerContextMenu={<GridHeaderContextMenu id="grid-header-contxtmenu" onColumnDelete={this.onColumnDelete} />}
           contextMenu={<GridContentContextMenu id="grid-content-contxtmenu" onRowDelete={this.onRowDelete} />}
+          onColumnResize={this.onColumnResize}
         />
         {this.state.isNewColumnDialogShow && (
           <ModalPortal>

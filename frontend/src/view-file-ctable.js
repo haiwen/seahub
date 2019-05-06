@@ -22,6 +22,7 @@ class ViewFileSDB extends React.Component {
         columns: [],
         rows: [],
       },
+      isContentChanged: false,
     };
 
   }
@@ -40,6 +41,11 @@ class ViewFileSDB extends React.Component {
 
   onSave = () => {
     let data = this.refs.data_grid.serializeGridData();
+    this.setState({
+      initData: data,
+      isContentChanged: false
+    })
+    
     let dirPath = Utils.getDirName(filePath);
     seafileAPI.getUpdateLink(repoID, dirPath).then(res => {
       let updateLink = res.data;
@@ -52,11 +58,24 @@ class ViewFileSDB extends React.Component {
     });
   }
 
+  onContentChanged = () => {
+    this.setState({isContentChanged: true});
+  }
+
   render() {
     return (
       <Fragment>
-        <AppHeader onSave={this.onSave}/>
-        <AppMain initData={this.state.initData} ref="data_grid"/>
+        <AppHeader 
+          onSave={this.onSave} 
+          isContentChanged={this.state.isContentChanged}
+        />
+        <AppMain 
+          initData={this.state.initData} 
+          ref="data_grid" 
+          onContentChanged={this.onContentChanged} 
+          isContentChanged={this.state.isContentChanged}
+          onSave={this.onSave}
+        />
       </Fragment>
     );
   }
