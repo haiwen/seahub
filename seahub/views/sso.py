@@ -27,7 +27,7 @@ def sso(request):
     # send next page back to other views
     next_param = '?%s=' % REDIRECT_FIELD_NAME + urlquote(next_page)
     if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
-        return HttpResponseRedirect(reverse('saml2_login'))
+        return HttpResponseRedirect(reverse('saml2_login') + next_param)
 
     if getattr(settings, 'ENABLE_OAUTH', False):
         return HttpResponseRedirect(reverse('oauth_login') + next_param)
