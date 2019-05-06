@@ -1531,6 +1531,7 @@ def view_file_via_shared_dir(request, fileshare):
             'file_share_link': file_share_link,
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
+            'enable_share_link_report_illegal': ENABLE_SHARE_LINK_REPORT_ILLEGAL,
             })
 
 def file_edit_submit(request, repo_id):

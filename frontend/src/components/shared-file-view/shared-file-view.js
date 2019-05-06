@@ -5,6 +5,7 @@ import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle
 import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
+import AddIllegalReportDialog from '../../components/dialog/add-illegal-report-dialog';
 import toaster from '../toast';
 import watermark from 'watermark-dom';
 
@@ -15,14 +16,15 @@ const propTypes = {
 };
 
 let loginUser = window.app.pageOptions.name;
-const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload, zipped, filePath } = window.shared.pageOptions;
+const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload, zipped, filePath, enableShareLinkReportIllegal } = window.shared.pageOptions;
 
 class SharedFileView extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      showSaveSharedFileDialog: false
+      showSaveSharedFileDialog: false,
+      isAddIllegalReportDialogOpen: false
     };
   }
 
@@ -41,6 +43,12 @@ class SharedFileView extends React.Component {
   handleSaveSharedFile = () => {
     toaster.success(gettext('Successfully saved'), {
       duration: 3
+    });
+  }
+
+  toggleAddIllegalReportDialog = () => {
+    this.setState({
+      isAddIllegalReportDialogOpen: !this.state.isAddIllegalReportDialogOpen
     });
   }
 
@@ -106,18 +114,21 @@ class SharedFileView extends React.Component {
                 <p className="share-by ellipsis">{gettext('Shared by:')}{'  '}{sharedBy}</p>
               }
             </div>
-            {canDownload &&
-              <div className="float-right">
-                {(loginUser && loginUser !== sharedBy) &&
-                  <Button color="secondary" id="save"
-                    onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
-                  </Button>
-                }{' '}
-                {!trafficOverLimit &&
+            <div className="float-right">
+              {(canDownload && loginUser && (loginUser !== sharedBy)) &&
+                <Button color="secondary" id="save"
+                  onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
+                </Button>
+              }{' '}
+              {(canDownload && !trafficOverLimit) &&
                 <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
-                }
-              </div>
-            }
+              }{' '}
+              {enableShareLinkReportIllegal &&
+                <Button
+                  onClick={this.toggleAddIllegalReportDialog}>{gettext('Report')}
+                </Button>
+              }
+            </div>
           </div>
           {this.props.content}
         </div>
@@ -127,6 +138,14 @@ class SharedFileView extends React.Component {
             sharedToken={sharedToken}
             toggleCancel={this.toggleCancel}
             handleSaveSharedFile={this.handleSaveSharedFile}
+          />
+        }
+        {(this.state.isAddIllegalReportDialogOpen && enableShareLinkReportIllegal) &&
+          <AddIllegalReportDialog
+            sharedToken={sharedToken}
+            filePath={filePath}
+            toggleAddIllegalReportDialog={this.toggleAddIllegalReportDialog}
+            isAddIllegalReportDialogOpen={this.state.isAddIllegalReportDialogOpen}
           />
         }
       </div>

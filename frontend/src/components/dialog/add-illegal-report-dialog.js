@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../toast';
 
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,
-  toggleCancel: PropTypes.func.isRequired,
-  handleAddIllegalReport: PropTypes.func.isRequired,
+  filePath: PropTypes.string.isRequired,
+  toggleAddIllegalReportDialog: PropTypes.func.isRequired,
+  isAddIllegalReportDialogOpen: PropTypes.bool.isRequired,
 };
 
 class AddIllegalReportDialog extends React.Component {
@@ -23,9 +25,9 @@ class AddIllegalReportDialog extends React.Component {
   }
 
   onIllegalReport = () => {
-    seafileAPI.addIllegalReport(this.props.sharedToken, this.state.illegalType, this.state.description, this.state.reporter).then((res) => {
-      this.props.toggleCancel();
-      this.props.handleAddIllegalReport();
+    seafileAPI.addIllegalReport(this.props.sharedToken, this.state.illegalType, this.state.description, this.state.reporter, this.props.filePath).then((res) => {
+      this.props.toggleAddIllegalReportDialog();
+      toaster.success(gettext('Success'), {duration: 2});
     }).catch((error) => {
       if (error.response) {
         this.setState({
@@ -33,7 +35,7 @@ class AddIllegalReportDialog extends React.Component {
         });
       }
     });
-  }
+  };
 
   onIllegalTypeChange = (event) => {
     let type = event.target.value;
@@ -46,22 +48,22 @@ class AddIllegalReportDialog extends React.Component {
     } else if (type == 'other') {
       this.state.illegalType = 'other';
     }
-  }
+  };
 
   setReporter = (event) => {
     let reporter = event.target.value;
     this.state.reporter = reporter;
-  }
+  };
 
   setDescription = (event) => {
     let desc = event.target.value;
     this.state.description = desc;
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true}>
-        <ModalHeader toggle={this.props.toggleCancel}>{gettext('Report')}</ModalHeader>
+      <Modal isOpen={this.props.isAddIllegalReportDialogOpen} toggle={this.props.toggleAddIllegalReportDialog}>
+        <ModalHeader toggle={this.props.toggleAddIllegalReportDialog}>{gettext('Report')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
@@ -85,8 +87,8 @@ class AddIllegalReportDialog extends React.Component {
           {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Cancel')}</Button>
-        <Button color="primary" onClick={this.onIllegalReport}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.props.toggleAddIllegalReportDialog}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.onIllegalReport}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import logging
+import posixpath
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
@@ -92,6 +93,18 @@ class IllegalReportsView(APIView):
         file_path = share_link.path
         file_path = normalize_file_path(file_path)
         file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+
+        if not file_id:
+            # view file via shared dir
+            req_path = request.data.get('file_path', '')
+            if not req_path:
+                file_id = None
+            else:
+                file_path = normalize_file_path(req_path)
+                dir_path = normalize_file_path(share_link.path)
+                real_path = posixpath.join(dir_path, file_path.lstrip('/'))
+                file_id = seafile_api.get_file_id_by_path(repo_id, real_path)
+
         if not file_id:
             error_msg = 'File %s not found.' % file_path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
