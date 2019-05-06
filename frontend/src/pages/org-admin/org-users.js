@@ -69,6 +69,7 @@ class OrgUsers extends Component {
       Toast.success(msg);
     }).catch(err => {
       Toast.danger(err.response.data.error_msg);
+      this.toggleAddOrgUser();
     });
   }
 
@@ -113,18 +114,15 @@ class OrgUsers extends Component {
     });
   }
 
-  addOrgAdmin = (userEmail) => {
-    seafileAPI.setOrgAdmin(orgID, userEmail, true).then(res => {
-      let userInfo = new OrgUserInfo(res.data);
-      this.state.orgAdminUsers.unshift(userInfo);
-      this.setState({
-        orgAdminUsers: this.state.orgAdminUsers
-      });
-      let msg = gettext('Successfully set %s as admin.');
-      msg = msg.replace('%s', userInfo.email);
-      Toast.success(msg);
-      this.toggleAddOrgAdmin();
+  onAddedOrgAdmin = (userInfo) => {
+    this.state.orgAdminUsers.unshift(userInfo);
+    this.setState({
+      orgAdminUsers: this.state.orgAdminUsers
     });
+    let msg = gettext('Successfully set %s as admin.');
+    msg = msg.replace('%s', userInfo.email);
+    Toast.success(msg);
+    this.toggleAddOrgAdmin();
   } 
 
   render() {
@@ -138,7 +136,7 @@ class OrgUsers extends Component {
           </button>
           {this.state.isShowAddOrgAdminDialog &&
             <ModalPortal>
-              <AddOrgAdminDialog toggle={this.toggleAddOrgAdmin} addOrgAdmin={this.addOrgAdmin}/>
+              <AddOrgAdminDialog toggle={this.toggleAddOrgAdmin} onAddedOrgAdmin={this.onAddedOrgAdmin}/>
             </ModalPortal>
           }
         </Fragment>

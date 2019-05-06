@@ -99,8 +99,8 @@ class OrgLibraries extends Component {
                 <thead>
                   <tr>
                     <th width="4%"></th>
-                    <th width="31%">{gettext('Name')}</th>
-                    <th width="26%">ID</th>
+                    <th width="27%">{gettext('Name')}</th>
+                    <th width="30%">ID</th>
                     <th width="24%">{gettext('Owner')}</th>
                     <th width="15%" className="text-center">{gettext('Operations')}</th>
                   </tr>
