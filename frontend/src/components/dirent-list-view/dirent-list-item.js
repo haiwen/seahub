@@ -343,7 +343,7 @@ class DirentListItem extends React.Component {
 
   onItemDragStart = (e) => {
     let nodeRootPath = '';
-    nodeRootPath = this.props.path === '/' ? `${this.props.path}${this.props.dirent.name}` : this.props.path;
+    nodeRootPath = this.props.path === '/' ? `${this.props.path}${this.props.dirent.name}` : `${this.props.path}/${this.props.dirent.name}`;
     let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
     dragStartItemData = JSON.stringify(dragStartItemData);
 
