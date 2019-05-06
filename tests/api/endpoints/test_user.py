@@ -122,6 +122,7 @@ class AccountTest(BaseTestCase):
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
+    @patch('seahub.api2.endpoints.user.ENABLE_USER_SET_CONTACT_EMAIL', False)
     def test_update_user_contact_email_feature_disabled(self):
         self.login_as(self.user)
         Profile.objects.add_or_update(self.user_name, contact_email='2@2.com')
@@ -146,6 +147,14 @@ class AccountTest(BaseTestCase):
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         json_resp = json.loads(resp.content)
         assert json_resp['contact_email'] == random_contact_email
+
+        # same contact email as his/her own contact email
+        contact_email = Profile.objects.get_contact_email_by_user(self.user_name)
+        data = 'contact_email=%s' % contact_email
+        resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['contact_email'] == contact_email
 
         # test invalid contact email
         random_contact_email = generate_random_parammeter(0, 0, 'contact_email_invalid')
