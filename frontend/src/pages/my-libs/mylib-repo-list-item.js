@@ -176,11 +176,13 @@ class MylibRepoListItem extends React.Component {
       this.props.onTransferRepo(repoID);
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);
-    }).catch(res => {
-      let message = gettext('Failed. Please check the network.');
-      toaster.danger(message);
+    }).catch(error => {
+      if (error.response){
+        toaster.danger(error.response.data.error_msg || gettext('Error'), {duration: 3});
+      } else {
+        toaster.danger(gettext('Failed. Please check the network.'), {duration: 3});
+      }
     });
-
     this.onTransferToggle();
   }
 
