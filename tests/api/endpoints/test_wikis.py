@@ -80,7 +80,7 @@ class WikisViewTest(BaseTestCase):
         w = Wiki.objects.all()[0]
         assert w.created_at is not None
 
-    def test_no_permission(self):
+    def test_no_permission_add_due_to_can_publish_repo_false(self):
         with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_PUBLISH_REPO_FALSE):
             resp = self.client.post(self.url, {
                 'repo_id': self.repo.id,
@@ -88,13 +88,13 @@ class WikisViewTest(BaseTestCase):
             self.assertEqual(403, resp.status_code)
 
     @override_settings(ENABLE_WIKI=False)
-    def test_no_permission_enable_wiki_false(self):
+    def test_no_permission_add_due_to_enable_wiki_false(self):
         resp = self.client.post(self.url, {
             'repo_id': self.repo.id,
         })
         self.assertEqual(403, resp.status_code)
 
-    def test_no_permission_can_use_wiki_false(self):
+    def test_no_permission_add_due_to_can_use_wiki_false(self):
         with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_USE_WIKI_FALSE):
             resp = self.client.post(self.url, {
                 'repo_id': self.repo.id,

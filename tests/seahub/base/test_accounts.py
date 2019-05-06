@@ -107,18 +107,18 @@ class UserPermissionsTest(BaseTestCase):
         assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is False
         assert self.user.permissions.can_add_public_repo() is False
 
-    def test_user_permissions_can_publish_repo(self):
+    def test_can_publish_repo_permissions(self):
         # enableWIKI = True, and can_use_wiki = True
         assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
         assert self.user.permissions.can_publish_repo() is True
 
     @override_settings(ENABLE_WIKI=False)
-    def test_user_permissions_can_publish_repo_wiki_disables(self):
+    def test_can_publish_repo_permissions_with_enable_wiki_False(self):
         # enableWIKI = False, and can_use_wiki = True
         assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
         assert self.user.permissions.can_publish_repo() is False
 
-    def test_user_permissions_can_publish_repo_can_use_wiki_false(self):
+    def test_can_publish_repo_permissions_with_can_use_wiki_False(self):
         # enableWIKI = True, and can_use_wiki = False
         with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE):
             assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
