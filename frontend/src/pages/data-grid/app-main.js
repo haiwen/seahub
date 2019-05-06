@@ -7,7 +7,7 @@ import GridHeaderContextMenu from './grid-header-contextmenu';
 import GridContentContextMenu from './grid-content-contextmenu';
 import ModalPortal from '../../components/modal-portal';
 import NewColumnDialog from './new-column-dialog';
-import DTableStore from './store/DTableStore';
+import DTableStore from './store/dtable-store';
 
 const propTypes = {
   initData: PropTypes.object.isRequired,
