@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { seafileAPI } from '../../utils/seafile-api';
-import { serviceURL, gettext, orgID, lang } from '../../utils/constants';
+import { Link } from '@reach/router';
 import { Utils } from '../../utils/utils.js';
+import { seafileAPI } from '../../utils/seafile-api';
+import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import DeleteDepartDialog from '../../components/dialog/org-delete-department-dialog';
 import SetGroupQuotaDialog from '../../components/dialog/org-set-group-quota-dialog';
+import { siteRoot, gettext, orgID, lang } from '../../utils/constants';
 import '../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -22,19 +24,18 @@ class OrgDepartmentsList extends React.Component {
       groupName: '',
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
+      isShowAddDepartDialog: false,
     };
+  }
+  
+  componentDidMount() {
+    this.listDepartGroups();
   }
 
   listDepartGroups = () => {
-    if (this.props.groupID) {
-      seafileAPI.orgAdminListGroupInfo(orgID, this.props.groupID, true).then(res => {
-        this.setState({ groups: res.data.groups });
-      });
-    } else {
-      seafileAPI.orgAdminListDepartGroups(orgID).then(res => {
-        this.setState({ groups: res.data.data });
-      });
-    }
+    seafileAPI.orgAdminListDepartGroups(orgID).then(res => {
+      this.setState({ groups: res.data.data });
+    });
   }
 
   showDeleteDepartDialog = (group) => {
@@ -43,6 +44,10 @@ class OrgDepartmentsList extends React.Component {
 
   showSetGroupQuotaDialog = (groupID) => {
     this.setState({ showSetGroupQuotaDialog: true, groupID: groupID });
+  }
+
+  toggleAddDepartDialog = () => {
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
   }
 
   toggleCancel = () => {
@@ -56,94 +61,90 @@ class OrgDepartmentsList extends React.Component {
     this.listDepartGroups();
   }
 
-  componentWillMount() {
-    this.listDepartGroups();
-  }
-
   render() {
     const groups = this.state.groups;
-    let isSub = this.props.groupID ? true : false;
-    let header = isSub ? gettext('Sub-departments') : gettext('Departments');
-    let noGroup = isSub ? gettext('No sub-departments') : gettext('No departments');
+    const topbarChildren = (
+      <Fragment>
+        <button className='btn btn-secondary operation-item' title={gettext('New Department')} onClick={this.toggleAddDepartDialog}>{gettext('New Department')}
+        </button>
+        {this.state.isShowAddDepartDialog && (
+          <ModalPortal>
+            <AddDepartDialog
+              onDepartChanged={this.onDepartChanged}
+              parentGroupID={this.props.groupID}
+              groupID={this.state.groupID}
+              toggle={this.toggleAddDepartDialog}
+            />
+          </ModalPortal>
+        )}
+      </Fragment>
+    );
     return (
-      <div className="main-panel-center flex-row h-100">
-        <div className="cur-view-container o-auto">
-          <div className="cur-view-path">
-            <div className="fleft"><h3 className="sf-heading">{header}</h3></div>
+      <Fragment>
+        <MainPanelTopbar children={topbarChildren}/>
+        <div className="main-panel-center flex-row h-100">
+          <div className="cur-view-container o-auto">
+            <div className="cur-view-path">
+              <div className="fleft">
+                <h3 className="sf-heading">{gettext('Departments')}</h3>
+              </div>
+            </div>
+            <div className="cur-view-content">
+              {groups && groups.length > 0 ?
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="40%">{gettext('Name')}</th>
+                      <th width="25%">{gettext('Created At')}</th>
+                      <th width="20%">{gettext('Quota')}</th>
+                      <th width="15%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {groups.map((group, index) => {
+                      return(
+                        <React.Fragment key={group.id}>
+                          <GroupItem
+                            group={group}
+                            showDeleteDepartDialog={this.showDeleteDepartDialog}
+                            showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
+                          />
+                        </React.Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                :
+                <p className="no-group">{gettext('No departments')}</p>
+              }
+            </div>
+            <React.Fragment>
+              {this.state.showDeleteDepartDialog && (
+                <ModalPortal>
+                  <DeleteDepartDialog
+                    toggle={this.toggleCancel}
+                    groupID={this.state.groupID}
+                    groupName={this.state.groupName}
+                    onDepartChanged={this.onDepartChanged}
+                  />
+                </ModalPortal>
+              )}
+              {this.state.showSetGroupQuotaDialog && (
+                <ModalPortal>
+                  <SetGroupQuotaDialog
+                    toggle={this.toggleCancel}
+                    groupID={this.state.groupID}
+                    onDepartChanged={this.onDepartChanged}
+                  />
+                </ModalPortal>
+              )}
+            </React.Fragment>
           </div>
-          <div className="cur-view-content">
-            {groups && groups.length > 0 ?
-              <table>
-                <thead>
-                  <tr>
-                    <th width="40%">{gettext('Name')}</th>
-                    <th width="25%">{gettext('Created At')}</th>
-                    <th width="20%">{gettext('Quota')}</th>
-                    <th width="15%"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {groups.map((group, index) => {
-                    return(
-                      <React.Fragment key={group.id}>
-                        <GroupItem
-                          group={group}
-                          showDeleteDepartDialog={this.showDeleteDepartDialog}
-                          showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
-                        />
-                      </React.Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
-              : 
-              <p className="no-group">{noGroup}</p>
-            }
-          </div>
-          <React.Fragment>
-            {this.props.isShowAddDepartDialog && (
-              <ModalPortal>
-                <AddDepartDialog
-                  onDepartChanged={this.onDepartChanged}
-                  parentGroupID={this.props.groupID}
-                  groupID={this.state.groupID}
-                  toggle={this.props.toggleAddDepartDialog}
-                />
-              </ModalPortal>
-            )}
-            {this.state.showDeleteDepartDialog && (
-              <ModalPortal>
-                <DeleteDepartDialog
-                  toggle={this.toggleCancel}
-                  groupID={this.state.groupID}
-                  groupName={this.state.groupName}
-                  onDepartChanged={this.onDepartChanged}
-                />
-              </ModalPortal>
-            )}
-            {this.state.showSetGroupQuotaDialog && (
-              <ModalPortal>
-                <SetGroupQuotaDialog
-                  toggle={this.toggleCancel}
-                  groupID={this.state.groupID}
-                  onDepartChanged={this.onDepartChanged}
-                />
-              </ModalPortal>
-            )}
-          </React.Fragment>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
-
-const OrgDepartmentsListPropTypes = {
-  isShowAddDepartDialog: PropTypes.bool.isRequired,
-  toggleAddDepartDialog: PropTypes.func.isRequired,
-};
-
-OrgDepartmentsList.propTypes = OrgDepartmentsListPropTypes;
-
 
 class GroupItem extends React.Component {
 
@@ -165,10 +166,10 @@ class GroupItem extends React.Component {
   render() {
     const group = this.props.group;
     const highlight = this.state.highlight;
-    const newHref = serviceURL + '/org/departmentadmin/groups/' + group.id + '/';
+    const newHref = siteRoot+ 'org/departmentadmin/groups/' + group.id + '/';
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><a href={newHref} onClick={this.changeOrgGroup}>{group.name}</a></td>
+        <td><Link to={newHref}>{group.name}</Link></td>
         <td>{moment(group.created_at).fromNow()}</td>
         <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
           {Utils.bytesToSize(group.quota)}{' '}

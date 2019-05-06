@@ -4,10 +4,7 @@ import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
-import MainPanel from './main-panel';
 import OrgUsers from './org-users';
-import OrgUsersList from './org-users-list';
-import OrgAdminList from './org-admin-list';
 import OrgGroups from './org-groups';
 import OrgLibraries from './org-libraries';
 import OrgInfo from './org-info';
@@ -31,12 +28,6 @@ class Org extends React.Component {
     super(props);
     this.state = {
       isSidePanelClosed: false,
-      isShowAddOrgUserDialog: false,
-      isShowAddOrgAdminDialog: false,
-      isInviteUserDialogOpen: false,
-      isShowAddDepartDialog: false,
-      isShowAddMemberDialog: false,
-      isShowAddRepoDialog: false,
       currentTab: 'users',
     };
   }
@@ -59,93 +50,31 @@ class Org extends React.Component {
 
   tabItemClick = (param) => {
     this.setState({currentTab: param});          
-  }  
-
-  toggleAddOrgUser = () => {
-    this.setState({isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog});
-  } 
-
-  toggleAddOrgAdmin = () => {
-    this.setState({isShowAddOrgAdminDialog: !this.state.isShowAddOrgAdminDialog});
-  } 
-
-  toggleInviteUserDialog = () => {
-    this.setState({isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen});
-  }
-
-  toggleAddDepartDialog = () => {
-    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
-  }
-
-  toggleAddMemberDialog = () => {
-    this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
-  }
-
-  toggleAddRepoDialog = () => {
-    this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
   }
 
   render() {
-    let { isSidePanelClosed, currentTab, isShowAddOrgUserDialog, isShowAddOrgAdminDialog, isInviteUserDialogOpen } = this.state;
-    let href = window.location.href;
-    let newPath = 'groups/';
-    if (href.indexOf('org/departmentadmin/groups/') > 0) {
-      newPath = href.slice(href.indexOf('groups/'));
-    }
+    let { isSidePanelClosed, currentTab } = this.state;
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
-        <MainPanel
-          currentTab={currentTab}
-          toggleAddOrgAdmin={this.toggleAddOrgAdmin}
-          toggleAddOrgUser={this.toggleAddOrgUser}
-          toggleInviteUserDialog={this.toggleInviteUserDialog}
-          toggleAddDepartDialog={this.toggleAddDepartDialog}
-          toggleAddMemberDialog={this.toggleAddMemberDialog}
-          toggleAddRepoDialog={this.toggleAddRepoDialog}
-        >
+        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>       
+        <div className="main-panel o-hidden">
           <Router className="reach-router">
-            <OrgInfo path={siteRoot + 'org/orgmanage'} />
-            <OrgUsers 
-              path={siteRoot + 'org/useradmin'}
-              currentTab={currentTab} 
-              tabItemClick={this.tabItemClick}
-              toggleAddOrgAdmin={this.toggleAddOrgAdmin} 
-              toggleAddOrgUser={this.toggleAddOrgUser} 
-            >
-              <OrgUsersList path="/" currentTab={currentTab} isShowAddOrgUserDialog={isShowAddOrgUserDialog} isInviteUserDialogOpen={isInviteUserDialogOpen} toggleAddOrgUser={this.toggleAddOrgUser} toggleInviteUserDialog={this.toggleInviteUserDialog} />
-              <OrgAdminList path="admins" currentTab={currentTab} isShowAddOrgAdminDialog={isShowAddOrgAdminDialog} toggleAddOrgAdmin={this.toggleAddOrgAdmin} />
-            </OrgUsers>
-            <OrgGroups path={siteRoot + 'org/groupadmin'} />
-            <OrgLibraries path={siteRoot + 'org/repoadmin'} />
-            <OrgLinks path={siteRoot + 'org/publinkadmin'} />
+            <OrgInfo path={siteRoot + 'org/orgmanage'}/>
+            <OrgUsers path={siteRoot + 'org/useradmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
+            <OrgGroups path={siteRoot + 'org/groupadmin'}/>
+            <OrgLibraries path={siteRoot + 'org/repoadmin'}/>
+            <OrgLinks path={siteRoot + 'org/publinkadmin'}/>
             <OrgDepartments path={siteRoot + 'org/departmentadmin'}>
-              <OrgDepartmentsList
-                path='/'
-                isShowAddDepartDialog={this.state.isShowAddDepartDialog}
-                toggleAddDepartDialog={this.toggleAddDepartDialog}
-              />
-              <OrgDepartmentItem
-                path={newPath}
-                isShowAddDepartDialog={this.state.isShowAddDepartDialog}
-                toggleAddDepartDialog={this.toggleAddDepartDialog}
-                isShowAddMemberDialog={this.state.isShowAddMemberDialog}
-                toggleAddMemberDialog={this.toggleAddMemberDialog}
-                isShowAddRepoDialog={this.state.isShowAddRepoDialog}
-                toggleAddRepoDialog={this.toggleAddRepoDialog}
-              />
+              <OrgDepartmentsList path='/'/>
+              <OrgDepartmentItem path='groups/:groupID'/>
             </OrgDepartments>
-            <OrgLogs
-              path={siteRoot + 'org/logadmin'}
-              currentTab={currentTab} 
-              tabItemClick={this.tabItemClick}
-            >
-              <OrgLogsFileAudit path='/' currentTab={currentTab} />
-              <OrgLogsFileUpdate path={siteRoot + 'file-update'} currentTab={currentTab} />
-              <OrgLogsPermAudit path={siteRoot + 'perm-audit'} currentTab={currentTab} />
+            <OrgLogs path={siteRoot + 'org/logadmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}>
+              <OrgLogsFileAudit path='/'/>
+              <OrgLogsFileUpdate path={siteRoot + 'file-update'}/>
+              <OrgLogsPermAudit path={siteRoot + 'perm-audit'}/>
             </OrgLogs>
           </Router>
-        </MainPanel>
+        </div>
       </div>
     );
   }

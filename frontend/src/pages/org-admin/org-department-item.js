@@ -1,41 +1,65 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils.js';
-import { serviceURL, gettext, orgID } from '../../utils/constants';
-import OrgDepartmentsList from './org-departments-list';
+import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
+import RoleEditor from '../../components/select-editor/role-editor';
+import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
 import DeleteMemberDialog from '../../components/dialog/org-delete-member-dialog';
 import AddRepoDialog from '../../components/dialog/org-add-repo-dialog';
 import DeleteRepoDialog from '../../components/dialog/org-delete-repo-dialog';
-import RoleEditor from '../../components/select-editor/role-editor';
+import DeleteDepartDialog from '../../components/dialog/org-delete-department-dialog';
+import SetGroupQuotaDialog from '../../components/dialog/org-set-group-quota-dialog';
+import { serviceURL, siteRoot, gettext, orgID, lang } from '../../utils/constants';
 import '../../css/org-department-item.css';
+
+moment.locale(lang);
 
 class OrgDepartmentItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      members: [],
-      repos: [],
-      groups: [],
-      ancestorGroups: [],
-      deletedMember: {},
-      deletedRepo: {},
-      showDeleteMemberDialog: false,
-      showDeleteRepoDialog: false,
-      isItemFreezed: false,
-      groupID: null,
       groupName: '',
+      isItemFreezed: false,
+      ancestorGroups: [],
+      members: [],
+      deletedMember: {},
+      isShowAddMemberDialog: false,
+      showDeleteMemberDialog: false,
+      repos: [],
+      deletedRepo: {},
+      isShowAddRepoDialog: false,
+      showDeleteRepoDialog: false,
+      groups: [],
+      subGroupID: '',
+      subGroupName: '',
+      isShowAddDepartDialog: false,
+      showDeleteDepartDialog: false,
+      showSetGroupQuotaDialog: false,
     };
+  }
+
+  componentDidMount() {
+    const groupID = this.props.groupID;
+    this.listOrgGroupRepo(groupID);
+    this.listOrgMembers(groupID);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.groupID !== nextProps.groupID) {
+      this.listOrgGroupRepo(nextProps.groupID);
+      this.listOrgMembers(nextProps.groupID);
+    }
   }
 
   listOrgGroupRepo = (groupID) => {
     seafileAPI.orgAdminListDepartGroupRepos(orgID, groupID).then(res => {
-      this.setState({
-        repos: res.data.libraries
-      });
+      this.setState({ repos: res.data.libraries });
     });
   }
 
@@ -50,6 +74,37 @@ class OrgDepartmentItem extends React.Component {
     });
   }
 
+  listSubDepartGroups = (groupID) => {
+    seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
+      this.setState({ groups: res.data.groups });
+    });
+  }
+
+  toggleCancel = () => {
+    this.setState({
+      showDeleteMemberDialog: false,
+      showDeleteRepoDialog: false,
+      showDeleteDepartDialog: false,
+      showSetGroupQuotaDialog: false,
+    });
+  }
+
+  onSubDepartChanged = () => {
+    this.listSubDepartGroups(this.props.groupID);
+  }
+
+  onRepoChanged = () => {
+    this.listOrgGroupRepo(this.props.groupID);
+  }
+
+  onMemberChanged = () => {
+    this.listOrgMembers(this.props.groupID);
+  }
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  }
+
   showDeleteMemberDialog = (member) => {
     this.setState({ showDeleteMemberDialog: true, deletedMember: member });
   }
@@ -58,196 +113,247 @@ class OrgDepartmentItem extends React.Component {
     this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
   }
 
-  toggleCancel = () => {
-    this.setState({
-      showDeleteMemberDialog: false,
-      showDeleteRepoDialog: false,
+  toggleAddRepoDialog = () => {
+    this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
+  }
+
+  toggleAddMemberDialog = () => {
+    this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
+  }
+
+  toggleAddDepartDialog = () => {
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+  }
+
+  showDeleteDepartDialog = (subGroup) => {
+    this.setState({ 
+      showDeleteDepartDialog: true,
+      subGroupID: subGroup.id,
+      subGroupName: subGroup.name
     });
   }
 
-  onRepoChanged = () => {
-    this.listOrgGroupRepo(this.state.groupID);
-  }
-
-  onMemberChanged = () => {
-    this.listOrgMembers(this.state.groupID);
-  }
-
-  toggleItemFreezed = (isFreezed) => {
+  showSetGroupQuotaDialog = (subGroupID) => {
     this.setState({
-      isItemFreezed: isFreezed
+      showSetGroupQuotaDialog: true,
+      subGroupID: subGroupID
     });
-  }
-
-  componentWillMount() {
-    const href = window.location.href;
-    let path = href.slice(href.indexOf('groups/'));
-    let groupID = path.slice(7, path.length - 1);
-    this.setState({
-      groupID: groupID
-    });
-    this.listOrgGroupRepo(groupID);
-    this.listOrgMembers(groupID);
   }
 
   render() {
-    const members = this.state.members;
-    const repos = this.state.repos;
-    return (
-      <div className="main-panel-center flex-row h-100">
-        <div className="cur-view-container o-auto">
-          <div className="cur-view-path">
-            <div className="fleft">
-              <h3 className="sf-heading">
-                {this.state.groupID ? 
-                  <a href={serviceURL + '/org/departmentadmin/'}>{gettext('Departments')}</a>
-                  : <span>{gettext('Departments')}</span>
-                }
-                {this.state.ancestorGroups.map(ancestor => {
-                  let newHref = serviceURL + '/org/departmentadmin/groups/' + ancestor.id + '/';
-                  return (
-                    <span key={ancestor.id}>{' / '}<a href={newHref}>{ancestor.name}</a></span>
-                  );
-                })}
-                {this.state.groupID && <span>{' / '}{this.state.groupName}</span>}
-              </h3>
-            </div>
-          </div>
-
-          <div className="cur-view-subcontainer org-groups">
-            <OrgDepartmentsList
-              groupID={this.state.groupID}
-              isShowAddDepartDialog={this.props.isShowAddDepartDialog}
-              toggleAddDepartDialog={this.props.toggleAddDepartDialog}
+    const { members, repos, groups } = this.state;
+    const groupID = this.props.groupID;
+    const topBtn = 'btn btn-secondary operation-item';
+    const topbarChildren = (
+      <Fragment>
+        {groupID &&
+          <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
+        }
+        {groupID &&
+          <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
+        }
+        {groupID &&
+          <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>
+        }
+        {this.state.isShowAddMemberDialog && (
+          <ModalPortal>
+            <AddMemberDialog
+              toggle={this.toggleAddMemberDialog}
+              onMemberChanged={this.onMemberChanged}
+              groupID={groupID}
             />
-          </div>
-          
-          <div className="cur-view-subcontainer org-members">
+          </ModalPortal>
+        )}
+        {this.state.isShowAddRepoDialog && (
+          <ModalPortal>
+            <AddRepoDialog
+              toggle={this.toggleAddRepoDialog}
+              onRepoChanged={this.onRepoChanged}
+              groupID={groupID}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isShowAddDepartDialog && (
+          <ModalPortal>
+            <AddDepartDialog
+              onDepartChanged={this.onSubDepartChanged}
+              parentGroupID={groupID}
+              toggle={this.toggleAddDepartDialog}
+            />
+          </ModalPortal>
+        )}
+      </Fragment>
+    );
+
+    return (
+      <Fragment>
+        <MainPanelTopbar children={topbarChildren} />
+        <div className="main-panel-center flex-row h-100">
+          <div className="cur-view-container o-auto">
             <div className="cur-view-path">
               <div className="fleft">
-                <h3 className="sf-heading">{gettext('Members')}</h3>
+                <h3 className="sf-heading">
+                  {groupID ? 
+                    <Link to={siteRoot + 'org/departmentadmin/'}>{gettext('Departments')}</Link>
+                    : <span>{gettext('Departments')}</span>
+                  }
+                  {this.state.ancestorGroups.map(ancestor => {
+                    let newHref = siteRoot + 'org/departmentadmin/groups/' + ancestor.id + '/';
+                    return <span key={ancestor.id}>{' / '}<Link to={newHref}>{ancestor.name}</Link></span>;
+                  })}
+                  {groupID && <span>{' / '}{this.state.groupName}</span>}
+                </h3>
               </div>
             </div>
-            <div className="cur-view-content">
-              {(members && members.length === 1 && members[0].role === 'Owner') ?
-                <p className="no-member">{gettext('No members')}</p> :
-                <table>
-                  <thead>
-                    <tr>
-                      <th width="5%"></th>
-                      <th width="50%">{gettext('Name')}</th>
-                      <th width="15%">{gettext('Role')}</th>
-                      <th width="30%"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {members.map((member, index) => {
-                      return (
-                        <React.Fragment key={index}>
-                          <MemberItem
-                            member={member}
-                            showDeleteMemberDialog={this.showDeleteMemberDialog}
-                            isItemFreezed={this.state.isItemFreezed}
-                            onMemberChanged={this.onMemberChanged}
-                            toggleItemFreezed={this.toggleItemFreezed}
-                            groupID={this.state.groupID}
-                          />
-                        </React.Fragment>
-                      );
-                    })}
-                  </tbody>
-                </table>
+
+            <div className="cur-view-subcontainer org-groups">
+              <div className="cur-view-path">
+                <div className="fleft"><h3 className="sf-heading">{gettext('Sub-departments')}</h3></div>
+              </div>
+              <div className="cur-view-content">
+                {groups && groups.length > 0 ?
+                  <table>
+                    <thead>
+                      <tr>
+                        <th width="40%">{gettext('Name')}</th>
+                        <th width="25%">{gettext('Created At')}</th>
+                        <th width="20%">{gettext('Quota')}</th>
+                        <th width="15%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {groups.map((group, index) => {
+                        return(
+                          <React.Fragment key={group.id}>
+                            <GroupItem
+                              group={group}
+                              showDeleteDepartDialog={this.showDeleteDepartDialog}
+                              showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
+                            />
+                          </React.Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  : <p className="no-group">{gettext('No sub-departments')}</p>
+                }
+              </div>
+            </div>
+            
+            <div className="cur-view-subcontainer org-members">
+              <div className="cur-view-path">
+                <div className="fleft"><h3 className="sf-heading">{gettext('Members')}</h3></div>
+              </div>
+              <div className="cur-view-content">
+                {(members && members.length === 1 && members[0].role === 'Owner') ?
+                  <p className="no-member">{gettext('No members')}</p> :
+                  <table>
+                    <thead>
+                      <tr>
+                        <th width="5%"></th>
+                        <th width="50%">{gettext('Name')}</th>
+                        <th width="15%">{gettext('Role')}</th>
+                        <th width="30%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {members.map((member, index) => {
+                        return (
+                          <React.Fragment key={index}>
+                            <MemberItem
+                              member={member}
+                              showDeleteMemberDialog={this.showDeleteMemberDialog}
+                              isItemFreezed={this.state.isItemFreezed}
+                              onMemberChanged={this.onMemberChanged}
+                              toggleItemFreezed={this.toggleItemFreezed}
+                              groupID={groupID}
+                            />
+                          </React.Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                }
+              </div>
+            </div>
+
+            <div className="cur-view-subcontainer org-libriries">
+              <div className="cur-view-path">
+                <div className="fleft"><h3 className="sf-heading">{gettext('Libraries')}</h3></div>
+              </div>
+              { repos.length > 0 ?
+                <div className="cur-view-content">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th width="5%"></th>
+                        <th width="50%">{gettext('Name')}</th>
+                        <th width="30%">{gettext('Size')}</th>
+                        <th width="15%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {repos.map((repo, index) => {
+                        return(
+                          <React.Fragment key={index}>
+                            <RepoItem repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog}/>
+                          </React.Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                : <p className="no-libraty">{gettext('No libraries')}</p>
               }
             </div>
-          </div>
 
-          <div className="cur-view-subcontainer org-libriries">
-            <div className="cur-view-path">
-              <div className="fleft"><h3 className="sf-heading">{gettext('Libraries')}</h3></div>
-            </div>
-            { repos.length > 0 ?
-              <div className="cur-view-content">
-                <table>
-                  <thead>
-                    <tr>
-                      <th width="5%"></th>
-                      <th width="50%">{gettext('Name')}</th>
-                      <th width="30%">{gettext('Size')}</th>
-                      <th width="15%"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {repos.map((repo, index) => {
-                      return(
-                        <React.Fragment key={index}>
-                          <RepoItem repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog}/>
-                        </React.Fragment>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              : <p className="no-libraty">{gettext('No libraries')}</p>
-            }
           </div>
-
+          <React.Fragment>
+            {this.state.showDeleteMemberDialog && (
+              <ModalPortal>
+                <DeleteMemberDialog
+                  toggle={this.toggleCancel}
+                  onMemberChanged={this.onMemberChanged}
+                  member={this.state.deletedMember}
+                  groupID={groupID}
+                />
+              </ModalPortal>
+            )}
+            {this.state.showDeleteRepoDialog && (
+              <ModalPortal>
+                <DeleteRepoDialog
+                  toggle={this.toggleCancel}
+                  onRepoChanged={this.onRepoChanged}
+                  repo={this.state.deletedRepo}
+                  groupID={groupID}
+                />
+              </ModalPortal>
+            )}
+            {this.state.showDeleteDepartDialog && (
+              <ModalPortal>
+                <DeleteDepartDialog
+                  toggle={this.toggleCancel}
+                  groupID={this.state.subGroupID}
+                  groupName={this.state.subGroupName}
+                  onDepartChanged={this.onSubDepartChanged}
+                />
+              </ModalPortal>
+            )}
+            {this.state.showSetGroupQuotaDialog && (
+              <ModalPortal>
+                <SetGroupQuotaDialog
+                  toggle={this.toggleCancel}
+                  groupID={this.state.subGroupID}
+                  onDepartChanged={this.onSubDepartChanged}
+                />
+              </ModalPortal>
+            )}
+          </React.Fragment>
         </div>
-        <React.Fragment>
-          {this.state.showDeleteMemberDialog && (
-            <ModalPortal>
-              <DeleteMemberDialog
-                toggle={this.toggleCancel}
-                onMemberChanged={this.onMemberChanged}
-                member={this.state.deletedMember}
-                groupID={this.state.groupID}
-              />
-            </ModalPortal>
-          )}
-          {this.state.showDeleteRepoDialog && (
-            <ModalPortal>
-              <DeleteRepoDialog
-                toggle={this.toggleCancel}
-                onRepoChanged={this.onRepoChanged}
-                repo={this.state.deletedRepo}
-                groupID={this.state.groupID}
-              />
-            </ModalPortal>
-          )}
-          {this.props.isShowAddMemberDialog && (
-            <ModalPortal>
-              <AddMemberDialog
-                toggle={this.props.toggleAddMemberDialog}
-                onMemberChanged={this.onMemberChanged}
-                groupID={this.state.groupID}
-              />
-            </ModalPortal>
-          )}
-          {this.props.isShowAddRepoDialog && (
-            <ModalPortal>
-              <AddRepoDialog
-                toggle={this.props.toggleAddRepoDialog}
-                onRepoChanged={this.onRepoChanged}
-                groupID={this.state.groupID}
-              />
-            </ModalPortal>
-          )}
-        </React.Fragment>
-      </div>
+      </Fragment>
     );
   }
 }
-
-const OrgDepartmentItemPropTypes = {
-  isShowAddDepartDialog: PropTypes.bool.isRequired,
-  isShowAddMemberDialog: PropTypes.bool.isRequired,
-  isShowAddRepoDialog: PropTypes.bool.isRequired,
-  toggleAddDepartDialog: PropTypes.func.isRequired,
-  toggleAddMemberDialog: PropTypes.func.isRequired,
-  toggleAddRepoDialog: PropTypes.func.isRequired,
-};
-
-OrgDepartmentItem.propTypes = OrgDepartmentItemPropTypes;
-
 
 class MemberItem extends React.Component {
 
@@ -323,7 +429,6 @@ const MemberItemPropTypes = {
 
 MemberItem.propTypes = MemberItemPropTypes;
 
-
 class RepoItem extends React.Component {
 
   constructor(props) {
@@ -364,5 +469,51 @@ const RepoItemPropTypes = {
 };
 
 RepoItem.propTypes = RepoItemPropTypes;
+
+class GroupItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      highlight: false,
+    };
+  }
+
+  onMouseEnter = () => {
+    this.setState({ highlight: true });
+  }
+
+  onMouseLeave = () => {
+    this.setState({ highlight: false });
+  }
+
+  render() {
+    const group = this.props.group;
+    const highlight = this.state.highlight;
+    const newHref = siteRoot+ 'org/departmentadmin/groups/' + group.id + '/';
+    return (
+      <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td><Link to={newHref}>{group.name}</Link></td>
+        <td>{moment(group.created_at).fromNow()}</td>
+        <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
+          {Utils.bytesToSize(group.quota)}{' '}
+          <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
+        </td>
+        <td className="cursor-pointer text-center" onClick={this.props.showDeleteDepartDialog.bind(this, group)}>
+          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+        </td>
+      </tr>
+    );
+  }
+}
+
+const GroupItemPropTypes = {
+  group: PropTypes.object.isRequired,
+  showSetGroupQuotaDialog: PropTypes.func.isRequired,
+  showDeleteDepartDialog: PropTypes.func.isRequired,
+  isSubdepartChanged: PropTypes.bool,
+};
+
+GroupItem.propTypes = GroupItemPropTypes;
 
 export default OrgDepartmentItem;

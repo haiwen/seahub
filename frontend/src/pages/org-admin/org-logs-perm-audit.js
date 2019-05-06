@@ -111,6 +111,7 @@ const propTypes = {
   filterUser: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   userSelected: PropTypes.string.isRequired,
+  permEvent: PropTypes.object.isRequired,
 };
 
 class PermAuditItem extends React.Component {

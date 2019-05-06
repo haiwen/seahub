@@ -1,33 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { gettext, orgID } from '../../utils/constants';
 import UserSelect from '../user-select';
+import { seafileAPI } from '../../utils/seafile-api';
+import OrgUserInfo from '../../models/org-user';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-  addOrgAdmin: PropTypes.func.isRequired,
+  onAddedOrgAdmin: PropTypes.func.isRequired,
 };
 
 class AddOrgAdminDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null
+      selectedOption: null,
+      errMessage: '',
     };
     this.options = [];
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({
+      selectedOption: option,
+      errMessage: ''
+    });
     this.options = [];
   }
 
   addOrgAdmin = () => {
-    if (this.state.selectedOption) {
-      let userEmail = this.state.selectedOption.email;
-      this.props.addOrgAdmin(userEmail);
-    }
+    if (!this.state.selectedOption) return;
+    const userEmail = this.state.selectedOption.email;
+    seafileAPI.setOrgAdmin(orgID, userEmail, true).then(res => {
+      let userInfo = new OrgUserInfo(res.data);
+      this.props.onAddedOrgAdmin(userInfo);
+    }).catch((error) => {
+      if (error.response) {
+        this.setState({
+          errMessage: error.response.data.error_msg
+        });
+      }
+    });
   }
 
   toggle = () => {
@@ -36,8 +50,8 @@ class AddOrgAdminDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
-        <ModalHeader>{gettext('Add Admins')}</ModalHeader>
+      <Modal isOpen={true} toggle={this.toggle}>
+        <ModalHeader toggle={this.toggle}>{gettext('Add Admins')}</ModalHeader>
         <ModalBody>
           <UserSelect
             ref="userSelect"
@@ -46,6 +60,7 @@ class AddOrgAdminDialog extends React.Component {
             placeholder={gettext('Select a user as admin...')}
             onSelectChange={this.handleSelectChange}
           />
+          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>

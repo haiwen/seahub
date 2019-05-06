@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
+import MainPanelTopbar from './main-panel-topbar';
 import OrgAdminRepo from '../../models/org-admin-repo';
 import toaster from '../../components/toast';
 import TransferDialog from '../../components/dialog/transfer-dialog';
@@ -87,46 +87,49 @@ class OrgLibraries extends Component {
   render() {
     let repos = this.state.orgRepos;
     return (
-      <div className="main-panel-center flex-row">
-        <div className="cur-view-container">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext('All Libraries')}</h3>
-          </div>
-          <div className="cur-view-content">
-            <table>
-              <thead>
-                <tr>
-                  <th width="4%"></th>
-                  <th width="31%">{gettext('Name')}</th>
-                  <th width="26%">ID</th>
-                  <th width="24%">{gettext('Owner')}</th>
-                  <th width="15%" className="text-center">{gettext('Operations')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {repos.map(item => {
-                  return (
-                    <RepoItem
-                      key={item.repoID}
-                      repo={item}
-                      isItemFreezed={this.state.isItemFreezed}
-                      onFreezedItem={this.onFreezedItem} 
-                      onUnfreezedItem={this.onUnfreezedItem}
-                      deleteRepoItem={this.deleteRepoItem}
-                      transferRepoItem={this.transferRepoItem}
-                    />
-                  );}
-                )}
-              </tbody>
-            </table>
-            <div className="paginator">
-              {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
-              {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
-              {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
+      <Fragment>
+        <MainPanelTopbar/>
+        <div className="main-panel-center flex-row">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('All Libraries')}</h3>
+            </div>
+            <div className="cur-view-content">
+              <table>
+                <thead>
+                  <tr>
+                    <th width="4%"></th>
+                    <th width="27%">{gettext('Name')}</th>
+                    <th width="30%">ID</th>
+                    <th width="24%">{gettext('Owner')}</th>
+                    <th width="15%" className="text-center">{gettext('Operations')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {repos.map(item => {
+                    return (
+                      <RepoItem
+                        key={item.repoID}
+                        repo={item}
+                        isItemFreezed={this.state.isItemFreezed}
+                        onFreezedItem={this.onFreezedItem} 
+                        onUnfreezedItem={this.onUnfreezedItem}
+                        deleteRepoItem={this.deleteRepoItem}
+                        transferRepoItem={this.transferRepoItem}
+                      />
+                    );}
+                  )}
+                </tbody>
+              </table>
+              <div className="paginator">
+                {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+                {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
+                {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
