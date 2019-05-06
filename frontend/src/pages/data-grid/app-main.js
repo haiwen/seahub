@@ -8,6 +8,7 @@ import GridContentContextMenu from './grid-content-contextmenu';
 import ModalPortal from '../../components/modal-portal';
 import NewColumnDialog from './new-column-dialog';
 import isHotkey from 'is-hotkey';
+import DTableStore from './store/dtable-store';
 
 const propTypes = {
   initData: PropTypes.object.isRequired,
