@@ -104,10 +104,12 @@ class ShareToGroup extends React.Component {
       selectedOption: null,
       errorMsg: [],
       permission: 'rw',
-      sharedItems: []
+      sharedItems: [],
+      isSessionExpired: false
     };
     this.options = [];
     this.permissions = []
+    this.sessionExpiredTip = (<div className="session-tip">{gettext('Please login.')}</div>)
     if (this.props.itemType === 'library') {
       this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
     } else if (this.props.itemType === 'dir') {
@@ -146,8 +148,13 @@ class ShareToGroup extends React.Component {
     seafileAPI.listSharedItems(repoID, path, 'group').then((res) => {
       if(res.data.length !== 0) {
         this.setState({
-          sharedItems: res.data
+          sharedItems: res.data,
+          isSessionExpired: false
         });
+      }
+    }).catch((err) => {
+      if (err.response.status === 403) {
+        this.setState({isSessionExpired: true})
       }
     });
   }
@@ -259,56 +266,9 @@ class ShareToGroup extends React.Component {
   render() {
     return (
       <Fragment>
-        <table>
-          <thead>
-            <tr>
-              <th width="50%">{gettext('Group')}</th>
-              <th width="35%">{gettext('Permission')}</th>
-              <th width="15%"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <Select
-                  isMulti
-                  onChange={this.handleSelectChange}
-                  options={this.options}
-                  placeholder={gettext('Select groups...')}
-                  components={makeAnimated()}
-                  maxMenuHeight={200}
-                  inputId={'react-select-2-input'}
-                  value={this.state.selectedOption}
-                  components={{ NoOptionsMessage }}
-                />
-              </td>
-              <td>
-                <SharePermissionEditor 
-                  isTextMode={false}
-                  isEditIconShow={false}
-                  currentPermission={this.state.permission}
-                  permissions={this.permissions}
-                  onPermissionChanged={this.setPermission}
-                />
-              </td>
-              <td>
-                <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
-              </td>
-            </tr>
-            {this.state.errorMsg.length > 0 &&                  
-              this.state.errorMsg.map((item, index) => {
-                let errMessage = item.group_name + ': ' + item.error_msg;
-                return (
-                  <tr key={index}>
-                    <td colSpan={3}><p className="error">{errMessage}</p></td>
-                  </tr>
-                );
-              })                                                
-            }
-          </tbody>
-        </table>
-        <div className="share-list-container">
-          <table className="table-thead-hidden">
+        {this.state.isSessionExpired && this.sessionExpiredTip}
+        {!this.state.isSessionExpired && 
+          <table>
             <thead>
               <tr>
                 <th width="50%">{gettext('Group')}</th>
@@ -316,14 +276,66 @@ class ShareToGroup extends React.Component {
                 <th width="15%"></th>
               </tr>
             </thead>
-            <GroupList 
-              items={this.state.sharedItems}
-              permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem} 
-              onChangeUserPermission={this.onChangeUserPermission}
-            />
+            <tbody>
+              <tr>
+                <td>
+                  <Select
+                    isMulti
+                    onChange={this.handleSelectChange}
+                    options={this.options}
+                    placeholder={gettext('Select groups...')}
+                    components={makeAnimated()}
+                    maxMenuHeight={200}
+                    inputId={'react-select-2-input'}
+                    value={this.state.selectedOption}
+                    components={{ NoOptionsMessage }}
+                  />
+                </td>
+                <td>
+                  <SharePermissionEditor 
+                    isTextMode={false}
+                    isEditIconShow={false}
+                    currentPermission={this.state.permission}
+                    permissions={this.permissions}
+                    onPermissionChanged={this.setPermission}
+                  />
+                </td>
+                <td>
+                  <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
+                </td>
+              </tr>
+              {this.state.errorMsg.length > 0 &&                  
+                this.state.errorMsg.map((item, index) => {
+                  let errMessage = item.group_name + ': ' + item.error_msg;
+                  return (
+                    <tr key={index}>
+                      <td colSpan={3}><p className="error">{errMessage}</p></td>
+                    </tr>
+                  );
+                })                                                
+              }
+            </tbody>
           </table>
-        </div>
+        }
+        {!this.state.isSessionExpired && 
+          <div className="share-list-container">
+            <table className="table-thead-hidden">
+              <thead>
+                <tr>
+                  <th width="50%">{gettext('Group')}</th>
+                  <th width="35%">{gettext('Permission')}</th>
+                  <th width="15%"></th>
+                </tr>
+              </thead>
+              <GroupList 
+                items={this.state.sharedItems}
+                permissions={this.permissions}
+                deleteShareItem={this.deleteShareItem} 
+                onChangeUserPermission={this.onChangeUserPermission}
+              />
+            </table>
+          </div>
+        }
       </Fragment>
     );
   }

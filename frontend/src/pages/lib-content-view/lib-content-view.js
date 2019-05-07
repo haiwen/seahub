@@ -72,6 +72,7 @@ class LibContentView extends React.Component {
       isDirentDetailShow: false,
       updateDetail: false,
       itemsShowLength: 100,
+      isSessionExpired: false,
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -296,13 +297,15 @@ class LibContentView extends React.Component {
   showDir = (path) => {
     let repoID = this.props.repoID;
 
-    // update stste
-    this.setState({
-      isDirentListLoading: true,
-      path: path,
-      isViewFile: false,
-      selectedDirentList: [],
-    });
+    if (!this.state.isSessionExpired) {
+      // update stste
+      this.setState({
+        isDirentListLoading: true,
+        // path: path,
+        isViewFile: false,
+        selectedDirentList: [],
+      });
+    }
 
     // update data
     this.loadDirentList(path);
@@ -401,12 +404,21 @@ class LibContentView extends React.Component {
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.data.dir_id,
         readmeMarkdown: markdownItem,
+        path: path,
+        isSessionExpired: false,
       });
 
       if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
-    }).catch(() => {
+    }).catch((err) => {
+      if (err.response.status === 403) {
+        this.setState({
+          isSessionExpired: true,
+          isDirentListLoading: false,
+        });
+        return;
+      }
       this.setState({
         isDirentListLoading: false,
         pathExist: false,
@@ -1473,6 +1485,7 @@ class LibContentView extends React.Component {
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
             updateDetail={this.state.updateDetail}
             onListContainerScroll={this.onListContainerScroll}
+            isSessionExpired={this.state.isSessionExpired}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader
