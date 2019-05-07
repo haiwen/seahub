@@ -97,6 +97,7 @@ class LibContentContainer extends React.Component {
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
+    this.sessionExpiredTip = (<div className="session-tip">{gettext('Please login.')}</div>)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -180,7 +181,8 @@ class LibContentContainer extends React.Component {
           </div>
           <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
             {!this.props.pathExist && this.errMessage}
-            {this.props.pathExist && (
+            {this.props.isSessionExpired && this.sessionExpiredTip}
+            {this.props.pathExist && !this.props.isSessionExpired &&(
               <Fragment>
                 {this.props.currentMode === 'list' && (
                   <DirListView 
