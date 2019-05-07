@@ -1,18 +1,49 @@
 import Operation from './operation';
 import OperationTypes from './operation-types';
+import editorFactory from '../utils/editor-factory';
 // todo Immutable
 // Implement the current version with an array
+
 export default class DTableStore {
 
-  constructor(value) {
+  constructor() {
+    this.value = {};
+    this.value.columns = [];
+    this.value.rows = [];
     this.operations = [];
-    this.columns = value.columns || [];
-    this.rows = value.rows || [];
   }
 
-  updateStoreValues({ columns, rows }) {
-    this.columns = columns;
-    this.rows = rows;
+  serializeGridData() {
+
+    let value = this.value;
+    let columns = value.columns.map(column => {
+      delete column.editor; // delete editor attr;
+      return column;
+    });
+
+    value.columns = columns;
+
+    return JSON.stringify(value);
+  }
+
+  deseralizeGridData(gridData) {
+
+    gridData = JSON.parse(gridData);
+    let columns = gridData.columns;
+    let rows = gridData.rows;
+
+    columns = columns.map(column => {
+      if (column.type) {
+        let editor = editorFactory.createEditor(column.type);
+        column.editor = editor;
+      }
+      return column;
+    });
+
+    this.value.columns = columns;
+    this.value.rows = rows;
+
+    return this.value;
   }
 
   createOperation(op) {
@@ -22,68 +53,81 @@ export default class DTableStore {
   deleteRow(rowIdx) {
     let type = OperationTypes.DELETE_ROW;
     let operation = this.createOperation({type, rowIdx});
-    let next = operation.apply(this.rows);
+    let next = operation.apply(this.value.rows);
 
     this.operations.push(operation);
-    this.rows = next;
+    this.value.rows = next;
 
-    return next;
+    return this.value;
   }
 
   insertRow(newRowIdx) {
     let type = OperationTypes.INSERT_ROW;
     let operation = this.createOperation({type, newRowIdx});
-    let next = operation.apply(this.rows);
+    let next = operation.apply(this.value.rows);
 
     this.operations.push(operation);
-    this.rows = next;
+    this.value.rows = next;
 
-    return next;
+    return this.value;
   }
 
   deleteColumn(idx) {
     let type = OperationTypes.DELETE_COLUMN;
     let operation = this.createOperation({type, idx});
-    let next = operation.apply(this.columns);
+    let next = operation.apply(this.value.columns);
 
     this.operations.push(operation);
-    this.columns = next;
+    this.value.columns = next;
 
-    return next;
+    return this.value;
   }
 
   insertColumn(idx, columnName, columnType) {
     let type = OperationTypes.INSERT_COLUMN;
     let operation = this.createOperation({type, idx, columnName, columnType});
-    let next = operation.apply(this.columns);
+    let next = operation.apply(this.value.columns);
 
     this.operations.push(operation);
-    this.columns = next;
+    this.value.columns = next;
 
-    return next;
+    let value = this.serializeGridData();
+    this.deseralizeGridData(value);
+
+    return this.value;
   }
 
   modifyColumn(idx, oldColumnName, newColumnName) {
     let type = OperationTypes.MODIFY_COLUMN;
     let operation = this.createOperation({type, idx, oldColumnName, newColumnName});
-    let next = operation.apply(this.columns);
+    let next = operation.apply(this.value.columns);
 
     this.operations.push(operation);
-    this.columns = next;
+    this.value.columns = next;
 
-    return next;
+    return this.value;
   }
 
-  modifyCell(idx, rowIdx, oldCellValue, newCellValue) {
+  modifyCell(rowIdx, key, newValue) {
     let type = OperationTypes.MODIFY_CELL;
-    let key = this.columns[idx].key;
-    let operation = this.createOperation({type, rowIdx, key, oldCellValue, newCellValue});
-    let next = operation.apply(this.rows);
+    let operation = this.createOperation({type, rowIdx, key, newValue});
+    let next = operation.apply(this.value.rows);
 
     this.operations.push(operation);
-    this.rows = next;
+    this.value.rows = next;
 
-    return next;
+    return this.value;
+  }
+
+  resizeColumn(idx, width) {
+    let type = OperationTypes.RESIZE_COLUMN;
+    let operation = this.createOperation({type, idx, width});
+    let next = operation.apply(this.value.columns);
+
+    this.operations.push(operation);
+    this.value.columns = next;
+
+    return this.value;
   }
 
 }

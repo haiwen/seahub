@@ -35,8 +35,8 @@ function apply(value, op) {
     }
 
     case OperationTypes.MODIFY_CELL : {
-      let { rowIdx, key, newCellValue } = op;
-      next[rowIdx][key] = newCellValue;
+      let { rowIdx, key, newValue } = op;
+      next[rowIdx][key] = newValue;
       return next;
     }
 
@@ -44,6 +44,13 @@ function apply(value, op) {
       let { idx, newColumnName } = op;
       next[idx]['key'] = newColumnName;
       next[idx]['name'] = newColumnName;
+      return next;
+    }
+
+    case OperationTypes.RESIZE_COLUMN : {
+      let { idx, width } = op;
+      next[idx].width = width;
+
       return next;
     }
   }
