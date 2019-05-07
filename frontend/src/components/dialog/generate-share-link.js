@@ -123,7 +123,7 @@ class GenerateShareLink extends React.Component {
   }
   
   onCopyDownloadLink = () => {
-    let downloadLink = this.state.sharedLinkInfo.link + '?dl';
+    let downloadLink = this.state.sharedLinkInfo.link + '?dl=1';
     copy(downloadLink);
     toaster.success(gettext('Direct download link is copied to the clipboard.'));
     this.props.closeShareDialog();
@@ -261,7 +261,7 @@ class GenerateShareLink extends React.Component {
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
                 <dd className="d-flex">
-                  <span>{sharedLinkInfo.link}?dl</span>{' '}
+                  <span>{sharedLinkInfo.link}?dl=1</span>{' '}
                   {sharedLinkInfo.is_expired ?
                     <span className="err-message">({gettext('Expired')})</span> :
                     <span className="far fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
