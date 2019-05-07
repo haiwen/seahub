@@ -1,0 +1,48 @@
+body {
+  overflow: hidden;
+}
+#wrapper {
+  height: 100%;
+}
+.top-header {
+  background: #f4f4f7;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 8px 16px 4px;
+  height: 53px;
+  flex-shrink: 0;
+}
+
+.side-panel {
+  flex: 0 0 22%;
+  padding: 20px;
+  border-right: 1px solid #eee;
+}
+.main-panel {
+  flex: 1 0 78%;
+}
+.heading {
+  padding: 8px 16px;
+    background: #f9f9f9;
+    font-size: 1rem;
+    color: #322;
+    font-weight: normal;
+    line-height: 1.5;
+    margin:0;
+}
+.content {
+  padding: 0rem 1rem;
+  overflow: auto;
+}
+.setting-item {
+  margin: 1em 0 2em;
+}
+.setting-item-heading {
+  font-size: 1rem;
+  font-weight: normal;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 0.7em;
+}
+.user-avatar {
+  border-radius: 3px;
+}

@@ -131,7 +131,9 @@ def edit_profile(request):
         resp_dict['default_device'] = default_device(request.user)
         resp_dict['backup_tokens'] = backup_tokens
 
-    return render(request, 'profile/set_profile.html', resp_dict)
+    #template = 'profile/set_profile.html'
+    template = 'profile/set_profile_react.html'
+    return render(request, template, resp_dict)
 
 @login_required
 def user_profile(request, username):
