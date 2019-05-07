@@ -88,23 +88,22 @@ class User(APIView):
         # argument check for contact_email
         contact_email = request.data.get("contact_email", None)
         if contact_email:
-            profile = Profile.objects.get_profile_by_contact_email(contact_email)
-            if not profile:
-                # update contact email
-                if not ENABLE_USER_SET_CONTACT_EMAIL:
-                    error_msg = _(u'Feature disabled.')
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            
+            if not ENABLE_USER_SET_CONTACT_EMAIL:
+                error_msg = _(u'Feature disabled.')
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-                contact_email = contact_email.strip()
-                if not is_valid_email(contact_email):
-                    error_msg = 'contact_email invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            else:
-                # if profile is other user(contact_email already exists)
-                # else: input same contact email of this user, let it pass
-                if profile.user != email:
-                    error_msg = _('Contact email %s already exists.' % contact_email)
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            profile = Profile.objects.get_profile_by_contact_email(contact_email)
+            if profile and profile.user != email:
+                # if contact email is used by others, return 403
+                error_msg = _('Contact email %s already exists.' % contact_email)
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # update contact email
+            contact_email = contact_email.strip()
+            if not is_valid_email(contact_email):
+                error_msg = 'contact_email invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # agrument check for telephone
         telephone = request.data.get('telephone', None)
