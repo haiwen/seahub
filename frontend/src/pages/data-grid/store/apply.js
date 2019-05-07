@@ -35,8 +35,10 @@ function apply(value, op) {
     }
 
     case OperationTypes.MODIFY_CELL : {
-      let { rowIdx, key, newValue } = op;
-      next[rowIdx][key] = newValue;
+      let { rowIdx, updated } = op;
+      let updateRow = next[rowIdx];
+      updateRow = Object.assign({}, {...updateRow}, updated); // todo
+      next[rowIdx] = updateRow;
       return next;
     }
 

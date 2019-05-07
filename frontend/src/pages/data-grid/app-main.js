@@ -123,11 +123,10 @@ class AppMain extends React.Component {
     this.props.onContentChanged();
   }
 
-  handleGridRowsUpdated = ({ cellKey, fromRow, updated }) => {
+  handleGridRowsUpdated = ({fromRow, updated}) => {
     let rowIdx = fromRow;
-    let value = this.dTableStore.modifyCell(rowIdx, cellKey, updated[cellKey]);
+    let value = this.dTableStore.modifyCell(rowIdx, updated);
     this.setState({value});
-    this.forceUpdate();
 
     this.props.onContentChanged();
   }

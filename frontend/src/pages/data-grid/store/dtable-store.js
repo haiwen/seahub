@@ -108,9 +108,10 @@ export default class DTableStore {
     return this.value;
   }
 
-  modifyCell(rowIdx, key, newValue) {
+  modifyCell(rowIdx, updated) {
     let type = OperationTypes.MODIFY_CELL;
-    let operation = this.createOperation({type, rowIdx, key, newValue});
+    let operation = this.createOperation({type, rowIdx, updated});
+
     let next = operation.apply(this.value.rows);
 
     this.operations.push(operation);
