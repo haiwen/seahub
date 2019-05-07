@@ -999,7 +999,7 @@ class LibContentView extends React.Component {
   moveDirent = (direntPath, moveToDirentPath = null) => {
     let name = Utils.getFileName(direntPath);
     if (moveToDirentPath === this.state.path) {
-      this.loadDirentList(this.state.path)
+      this.loadDirentList(this.state.path);
       return;
     }
     let direntList = this.state.direntList.filter(item => {
