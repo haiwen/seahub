@@ -17,11 +17,6 @@ class EditProfileTest(BaseTestCase):
     def tearDown(self):
         self.remove_user(self.tmp_user.username)
 
-    def test_can_render_edit_page(self):
-        resp = self.client.get(self.url)
-        self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'profile/set_profile.html')
-
     def test_can_edit(self):
         assert email2nickname(self.tmp_user.username) == self.tmp_user.username.split('@')[0]
 
