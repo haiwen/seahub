@@ -11,46 +11,30 @@ import './css/layout.css';
 import './css/file-view-data-grid.css';
 import './css/react-context-menu.css';
 
-const { repoID, fileName, filePath, err, enableWatermark, userNickName } = window.app.pageOptions;
+const { repoID, fileName, filePath } = window.app.pageOptions;
 
 class ViewFileSDB extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      initData: {
-        columns: [],
-        rows: [],
-      },
       isContentChanged: false,
     };
-
   }
 
-  componentDidMount() {
-    seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
-      let url = res.data;
-      seafileAPI.getFileContent(url).then(res => {
-        let data = res.data;
-        if (data) {
-          this.setState({initData: data});
-        }
-      });
-    });
+  onContentChanged = () => {
+    this.setState({isContentChanged: true});
   }
 
   onSave = () => {
+    this.setState({isContentChanged: false});
+
     let data = this.refs.data_grid.serializeGridData();
-    this.setState({
-      initData: data,
-      isContentChanged: false
-    })
-    
+
     let dirPath = Utils.getDirName(filePath);
     seafileAPI.getUpdateLink(repoID, dirPath).then(res => {
       let updateLink = res.data;
-      let updateData = JSON.stringify(data);
-      seafileAPI.updateFile(updateLink, filePath, fileName, updateData).then(res => {
+      seafileAPI.updateFile(updateLink, filePath, fileName, JSON.stringify(data)).then(res => {
         toaster.success(gettext('File saved.'));
       }).catch(() => {
         toaster.success(gettext('File save failed.'));
@@ -58,24 +42,11 @@ class ViewFileSDB extends React.Component {
     });
   }
 
-  onContentChanged = () => {
-    this.setState({isContentChanged: true});
-  }
-
   render() {
     return (
       <Fragment>
-        <AppHeader 
-          onSave={this.onSave} 
-          isContentChanged={this.state.isContentChanged}
-        />
-        <AppMain 
-          initData={this.state.initData} 
-          ref="data_grid" 
-          onContentChanged={this.onContentChanged} 
-          isContentChanged={this.state.isContentChanged}
-          onSave={this.onSave}
-        />
+        <AppHeader onSave={this.onSave} isContentChanged={this.state.isContentChanged} />
+        <AppMain ref="data_grid" onContentChanged={this.onContentChanged} onSave={this.onSave} />
       </Fragment>
     );
   }

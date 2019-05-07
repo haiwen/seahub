@@ -5,6 +5,7 @@ const OperationTypes = {
   INSERT_COLUMN: 'INSERT_COLUMN',
   MODIFY_CELL: 'MODIFY_CELL',
   MODIFY_COLUMN: 'MODIFY_COLUMN',
+  RESIZE_COLUMN: 'RESIZE_COLUMN',
 };
 
 export default OperationTypes;

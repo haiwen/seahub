@@ -1,207 +1,138 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import isHotkey from 'is-hotkey';
 import ReactDataGrid from '@seafile/react-data-grid/';
-import update from 'immutability-helper';
-import { Menu, Editors } from '@seafile/react-data-grid-addons';
-import GridHeaderContextMenu from './grid-header-contextmenu';
-import GridContentContextMenu from './grid-content-contextmenu';
+import { Menu } from '@seafile/react-data-grid-addons';
+import { seafileAPI } from '../../utils/seafile-api';
 import ModalPortal from '../../components/modal-portal';
 import NewColumnDialog from './new-column-dialog';
-import isHotkey from 'is-hotkey';
+import GridHeaderContextMenu from './grid-header-contextmenu';
+import GridContentContextMenu from './grid-content-contextmenu';
 import DTableStore from './store/dtable-store';
 
-const propTypes = {
-  initData: PropTypes.object.isRequired,
-};
+const { repoID, filePath } = window.app.pageOptions;
+
+const DEFAULT_DATA = {
+  columns:  [
+    {
+      key: 'name',
+      name: 'Name',
+      type: '',
+      width: 80,
+      editable: true,
+      resizable: true
+    }
+  ],
+  rows:  [{name: 'name_' + 0}]
+}
 
 class AppMain extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this._columns = [
-      {
-        key: 'name',
-        name: 'Name',
-        width: 80,
-        editable: true,
-        resizable: true
-      }
-    ];
-    
-    let initData = props.initData;
-    
     this.state = {
-      columns: initData.columns.length ? this.deseralizeGridData(initData.columns) : this._columns,
-      rows: initData.rows.length ? initData.rows : this.createRows(1),
+      value: null,
       isNewColumnDialogShow: false,
     };
-
-    this.dTableStore = new DTableStore(initData);
+    this.dTableStore = new DTableStore();
   }
 
   componentDidMount() {
+
+    seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
+      let url = res.data;
+      seafileAPI.getFileContent(url).then(res => {
+        let data = res.data ? res.data : JSON.stringify(DEFAULT_DATA);
+        let value = this.dTableStore.deseralizeGridData(data);
+        this.setState({value});
+      });
+    });
+
     document.addEventListener('keydown', this.onHotKey);
-  }
-
-  componentWillReceiveProps(nextProps) {
-
-    if (nextProps.isContentChanged) {
-      return;
-    }
-
-    let data = nextProps.initData;
-    this.deseralizeGridData(data);
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onHotKey);
   }
 
-  createRows = (numberOfRows) => {
-    let rows = [];
-    for (let i = 0; i < numberOfRows; i++) {
-      rows[i] = this.createFakeRowObjectData(i);
-    }
-    return rows;
-  };
-
-  createFakeRowObjectData = (index) => {
-    return {name: 'name_' + index};
-  };
-
-  getColumns = () => {
-    let clonedColumns = this.state.columns.slice();
-    return clonedColumns;
-  };
-
-  handleGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    let rows = this.state.rows.slice();
-
-    for (let i = fromRow; i <= toRow; i++) {
-      let rowToUpdate = rows[i];
-      let updatedRow = update(rowToUpdate, {$merge: updated});
-      rows[i] = updatedRow;
-    }
-
-    this.setState({ rows });
-    this.props.onContentChanged();
-  };
-
-  handleAddRow = ({ newRowIndex }) => {
-    const newRow = {
-      name: 'name_' + newRowIndex,
-    };
-
-    let rows = this.state.rows.slice();
-    rows = update(rows, {$push: [newRow]});
-    this.setState({ rows });
-    this.props.onContentChanged();
-  };
-
   getRowAt = (index) => {
     if (index < 0 || index > this.getSize()) {
       return undefined;
     }
 
-    return this.state.rows[index];
+    return this.state.value.rows[index];
   };
 
   getSize = () => {
-    return this.state.rows.length;
+    return this.state.value.rows.length;
   };
 
   onInsertRow = () => {
+
     let newRowIndex = this.getSize();
-    let rows = this.dTableStore.insertRow(newRowIndex);
-    this.setState({rows});
+    let value = this.dTableStore.insertRow(newRowIndex);
+    this.setState({value});
+
     this.props.onContentChanged();
   }
 
   onInsertColumn = () => {
     this.setState({isNewColumnDialogShow: true});
-    this.props.onContentChanged();
-  }
-
-  onColumnResize = (index, width) => {
-    let columns = this.state.columns.slice();
-    columns[index - 1].width = width;
-    this.setState({columns: columns});
-    this.props.onContentChanged();
   }
 
   onNewColumn = (columnName, columnType) => {
-    let idx = this.state.columns.length;
-    let columns = this.dTableStore.insertColumn(idx, columnName, columnType);
-    columns = this.formatColumnsData(columns);
-    this.setState({columns: columns});
+
+    let idx = this.state.value.columns.length;
+    let value = this.dTableStore.insertColumn(idx, columnName, columnType);
+    this.setState({value});
     this.onNewColumnCancel();
+
     this.props.onContentChanged();
   }
 
   onNewColumnCancel = () => {
     this.setState({isNewColumnDialogShow: false});
+
     this.props.onContentChanged();
   }
 
   onRowDelete = (e, data) => {
+
     let { rowIdx } = data;
-    let rows = this.dTableStore.deleteRow(rowIdx);
-    this.setState({rows});
+    let value = this.dTableStore.deleteRow(rowIdx);
+    this.setState({value});
+
     this.props.onContentChanged();
   }
 
   onColumnDelete = (e, data) => {
+
     let column = data.column;
     let idx = column.idx - 1;
-    let columns = this.dTableStore.deleteColumn(idx);
-    this.setState({columns});
+    let value = this.dTableStore.deleteColumn(idx);
+    this.setState({value});
+
+    this.props.onContentChanged();
+  }
+
+  onColumnResize = (index, width) => {
+    
+    let idx = index - 1;
+    let value = this.dTableStore.resizeColumn(idx, width);
+    this.setState({value});
+
+    this.props.onContentChanged();
+  }
+
+  handleGridRowsUpdated = ({fromRow, updated}) => {
+    let rowIdx = fromRow;
+    let value = this.dTableStore.modifyCell(rowIdx, updated);
+    this.setState({value});
+
     this.props.onContentChanged();
   }
 
   serializeGridData = () => {
-    let gridData = {
-      columns: JSON.stringify(this.state.columns),
-      rows: JSON.stringify(this.state.rows),
-    };
-    return gridData;
-  }
-
-  deseralizeGridData = (data) => {
-    let columns = JSON.parse(data.columns);
-    let rows = JSON.parse(data.rows);
-    columns = this.formatColumnsData(columns);
-    this.setState({
-      columns: columns,
-      rows: rows,
-    });
-
-    this.dTableStore.updateStoreValues({columns, rows});
-  }
-
-  formatColumnsData = (columns) => {
-    return columns.map(column => {
-      if (column.editor) {
-        let editor = this.createEditor(column.editor);
-        column.editor = editor;
-      }
-      return column;
-    });
-  }
-
-  createEditor = (editorType) => {
-    let editor = null;
-    switch (editorType) {
-      case 'number': 
-        editor = <Editors.NumberEditor />; 
-        break;
-      case 'text':
-        editor = null;
-        break;
-      default:
-        break;
-    }
-
-    return editor;
+    return this.dTableStore.serializeGridData();
   }
 
   onHotKey = (event) => {
@@ -213,13 +144,17 @@ class AppMain extends React.Component {
   }
   
   render() {
-    let columns = this.getColumns();
+
+    if (!this.state.value) {
+      return '';
+    }
+
     return (
       <div id="main">
         <ReactDataGrid
           ref={ node => this.grid = node }
           enableCellSelect={true}
-          columns={columns}
+          columns={this.state.value.columns}
           rowGetter={this.getRowAt}
           rowsCount={this.getSize()}
           onGridRowsUpdated={this.handleGridRowsUpdated}
@@ -248,7 +183,5 @@ class AppMain extends React.Component {
     );
   }
 }
-
-AppMain.propTypes = propTypes;
 
 export default AppMain;
