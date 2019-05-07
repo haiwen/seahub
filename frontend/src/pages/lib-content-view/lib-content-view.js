@@ -996,8 +996,8 @@ class LibContentView extends React.Component {
     // else do nothing
   }
 
-  moveDirent = (direntPath, moveToDirentPath=null) => {
-    let name = direntPath.slice(direntPath.lastIndexOf('/') + 1);
+  moveDirent = (direntPath, moveToDirentPath = null) => {
+    let name = Utils.getFileName(direntPath);
     if (moveToDirentPath === this.state.path) {
       this.loadDirentList(this.state.path)
       return;
