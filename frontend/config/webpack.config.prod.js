@@ -87,6 +87,7 @@ module.exports = {
     viewFileSVG: [require.resolve('./polyfills'), paths.appSrc + "/view-file-svg.js"],
     viewFileAudio: [require.resolve('./polyfills'), paths.appSrc + "/view-file-audio.js"],
     viewFileUnknown: [require.resolve('./polyfills'), paths.appSrc + "/view-file-unknown.js"],
+    settings: [require.resolve('./polyfills'), paths.appSrc + "/settings.js"],
     orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
     sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
     viewDataGrid: [require.resolve('./polyfills'), paths.appSrc + "/view-file-ctable.js"],
