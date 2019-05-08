@@ -17,6 +17,12 @@ class AddDepartDialog extends React.Component {
       departName: '',
       errMessage: '',
     };
+    this.newInput = React.createRef();
+  }
+
+  componentDidMount() {
+    this.newInput.focus();
+    this.newInput.setSelectionRange(0, 0);
   }
 
   handleSubmit = () => {
@@ -74,6 +80,7 @@ class AddDepartDialog extends React.Component {
                 onKeyPress={this.handleKeyPress} 
                 value={this.state.departName} 
                 onChange={this.handleChange}
+                innerRef={input => {this.newInput = input;}}
               />
             </FormGroup>
           </Form>
