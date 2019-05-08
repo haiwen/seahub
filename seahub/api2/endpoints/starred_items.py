@@ -195,13 +195,20 @@ class StarredItems(APIView):
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # permission check
-        if not check_folder_permission(request, repo_id, '/'):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # handler path if item exist
+        if seafile_api.get_dir_id_by_path(repo_id, path):
+            path = normalize_dir_path(path)
+        elif seafile_api.get_file_id_by_path(repo_id, path):
+            path = normalize_file_path(path)
+
+        email = request.user.username
+
+        # database record check
+        if not UserStarredFiles.objects.get_starred_item(email, repo_id, path):
+            error_msg = 'Item %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # unstar a item
-        email = request.user.username
         try:
             UserStarredFiles.objects.delete_starred_item(email, repo_id, path)
         except Exception as e:
