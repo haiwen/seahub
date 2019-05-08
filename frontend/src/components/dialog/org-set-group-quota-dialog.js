@@ -18,6 +18,12 @@ class SetGroupQuotaDialog extends React.Component {
       quota: '',
       errMessage: '',
     };
+    this.newInput = React.createRef();
+  }
+
+  componentDidMount() {
+    this.newInput.focus();
+    this.newInput.setSelectionRange(0, 0);
   }
 
   setGroupQuota = () => {
@@ -58,6 +64,7 @@ class SetGroupQuotaDialog extends React.Component {
               onKeyPress={this.handleKeyPress} 
               value={this.state.quota} 
               onChange={this.handleChange}
+              innerRef={input => {this.newInput = input;}}
             />
             <InputGroupAddon addonType="append">{'MB'}</InputGroupAddon>
           </InputGroup>
