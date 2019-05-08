@@ -261,7 +261,7 @@ class ShareToUser extends React.Component {
     let { sharedItems } = this.state;
     return (
       <Fragment>
-        {this.state.isSessionExpired && <div className="session-expired-tip">{this.state.errorMessage}</div>}
+        {this.state.isSessionExpired && <div className="session-expired-tip">{gettext('Please login.')}</div>}
         {!this.state.isSessionExpired && 
           <table>
             <thead>
