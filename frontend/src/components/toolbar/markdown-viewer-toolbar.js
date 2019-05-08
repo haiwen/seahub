@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, canGenerateShareLink, isPro, mediaUrl } from '../../utils/constants';
+import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../utils/constants';
 import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbarcomponent/editorToolBar';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
 
-const { canLockUnlockFile } = window.app.pageOptions;
 const { seafileCollabServer } = window.app.config;
 
 const propTypes = {
