@@ -36,10 +36,6 @@ class EmailNotice extends React.Component {
 
   formSubmit = (e) => {
     e.preventDefault();
-    const { currentInterval } = this.state;
-    if (currentInterval == initialEmailNotificationInterval) {
-      return;
-    }
     seafileAPI.updateEmailNotificationInterval(this.state.currentInterval).then((res) => {
       toaster.success(gettext('Success'));
     }).catch((error) => {
