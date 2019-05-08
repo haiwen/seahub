@@ -45,11 +45,14 @@ class UserBasicInfoForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.updateUserInfo({
+    let data = {
       name: this.state.name,
-      contact_email: this.state.contactEmail,
       telephone: this.state.telephone
-    });
+    };
+    if (enableUserSetContactEmail) {
+      data.contact_email = this.state.contactEmail;
+    }
+    this.props.updateUserInfo(data);
   }
 
   render() {
