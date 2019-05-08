@@ -31,7 +31,6 @@ class GenerateShareLink extends React.Component {
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
       isSessionExpired: false,
-      errorMessage: '',
     };
     this.permissions = {
       'can_edit': false, 
@@ -54,7 +53,7 @@ class GenerateShareLink extends React.Component {
       }
     }).catch((err) => {
       if (err.response.status === 403) {
-        this.setState({isSessionExpired: true, errorMessage: err.response.data.detail});
+        this.setState({isSessionExpired: true});
       }
     });
   } 

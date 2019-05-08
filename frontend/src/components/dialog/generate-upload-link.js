@@ -24,7 +24,6 @@ class GenerateUploadLink extends React.Component {
       passwdnew: '',
       sharedUploadInfo: null,
       isSessionExpired: false,
-      errorMessage: '',
     };
   }
 
@@ -42,7 +41,7 @@ class GenerateUploadLink extends React.Component {
       }
     }).catch((err) => {
       if (err.response.status === 403) {
-        this.setState({isSessionExpired: true, errorMessage: err.response.data.detail})
+        this.setState({isSessionExpired: true})
       }
     });
   }

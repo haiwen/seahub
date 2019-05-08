@@ -101,7 +101,6 @@ class ShareToUser extends React.Component {
       permission: 'rw',
       sharedItems: [],
       isSessionExpired: false,
-      errorMessage: '',
     };
     this.options = [];
     this.permissions = [];
@@ -129,7 +128,7 @@ class ShareToUser extends React.Component {
       }
     }).catch((err) => {
       if (err.response.status === 403) {
-        this.setState({isSessionExpired: true, errorMessage: err.response.data.detail})
+        this.setState({isSessionExpired: true})
       }
     });
   }
