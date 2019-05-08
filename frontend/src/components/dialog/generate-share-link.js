@@ -249,7 +249,7 @@ class GenerateShareLink extends React.Component {
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
 
     if (this.state.isSessionExpired) {
-      return(<div className="session-tip">{this.state.errorMessage}</div>)
+      return(<div className="session-expired-tip">{this.state.errorMessage}</div>)
     } else {
       if (this.state.sharedLinkInfo) {
         let sharedLinkInfo = this.state.sharedLinkInfo;

@@ -97,7 +97,7 @@ class LibContentContainer extends React.Component {
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
-    this.sessionExpiredTip = (<div className="session-tip">{gettext('Please login.')}</div>)
+    this.sessionExpiredTip = (<div className="session-expired-tip">{gettext('Please login.')}</div>)
   }
 
   componentWillReceiveProps(nextProps) {

@@ -132,7 +132,7 @@ class GenerateUploadLink extends React.Component {
     let passwordLengthTip = gettext('(at least {passwordLength} characters)');
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
     if (this.state.isSessionExpired) {
-      return(<div className="session-tip">{this.state.errorMessage}</div>)
+      return(<div className="session-expired-tip">{this.state.errorMessage}</div>)
     } else {
       if (this.state.sharedUploadInfo) {
         let sharedUploadInfo = this.state.sharedUploadInfo;
