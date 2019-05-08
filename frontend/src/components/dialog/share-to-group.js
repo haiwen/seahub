@@ -266,7 +266,7 @@ class ShareToGroup extends React.Component {
   render() {
     return (
       <Fragment>
-        {this.state.isSessionExpired && <div className="session-tip">{this.state.errorMessage}</div>}
+        {this.state.isSessionExpired && <div className="session-expired-tip">{this.state.errorMessage}</div>}
         {!this.state.isSessionExpired && 
           <table>
             <thead>
