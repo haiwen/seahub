@@ -100,11 +100,11 @@ class ShareToUser extends React.Component {
       errorMsg: [],
       permission: 'rw',
       sharedItems: [],
-      isSessionExpired: false
+      isSessionExpired: false,
+      errorMessage: '',
     };
     this.options = [];
     this.permissions = [];
-    this.sessionExpiredTip = (<div className="session-tip">{gettext('Please login.')}</div>)
     if (this.props.itemType === 'library') {
       this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
     } else if (this.props.itemType === 'dir') {
@@ -129,7 +129,7 @@ class ShareToUser extends React.Component {
       }
     }).catch((err) => {
       if (err.response.status === 403) {
-        this.setState({isSessionExpired: true})
+        this.setState({isSessionExpired: true, errorMessage: err.response.data.detail})
       }
     });
   }
@@ -261,7 +261,7 @@ class ShareToUser extends React.Component {
     let { sharedItems } = this.state;
     return (
       <Fragment>
-        {this.state.isSessionExpired && this.sessionExpiredTip}
+        {this.state.isSessionExpired && <div className="session-tip">{this.state.errorMessage}</div>}
         {!this.state.isSessionExpired && 
           <table>
             <thead>
