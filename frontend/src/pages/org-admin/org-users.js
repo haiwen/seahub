@@ -109,7 +109,7 @@ class OrgUsers extends Component {
         orgAdminUsers: this.state.orgAdminUsers.filter(item => item.email != email)
       });
       let msg = gettext('Successfully revoke the admin permission of %s');
-      msg = msg.replace('%s', email);
+      msg = msg.replace('%s', res.data.name);
       Toast.success(msg);
     });
   }
