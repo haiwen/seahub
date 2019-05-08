@@ -18,7 +18,7 @@ import './css/markdown-viewer/markdown-editor.css';
 
 const CryptoJS = require('crypto-js');
 const URL = require('url-parse');
-const { repoID, repoName, filePath, fileName, mode, draftID, isDraft, hasDraft } = window.app.pageOptions;
+const { repoID, repoName, filePath, fileName, mode, draftID, isDraft, hasDraft, isLocked, lockedByMe } = window.app.pageOptions;
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
@@ -292,6 +292,8 @@ class MarkdownEditor extends React.Component {
       readOnly: true,
       contentChanged: false,
       saving: false,
+      isLocked: isLocked,
+      lockedByMe: lockedByMe,
     };
 
     if (this.state.collabServer) {
@@ -301,6 +303,19 @@ class MarkdownEditor extends React.Component {
       socket.on('repo_update', (data) => this.receiveUpdateData(data));
       socket.on('connect', () => {
         this.socket_id = socket.id;
+      });
+    }
+  }
+
+  toggleLockFile = () => {
+    const { repoID, path } = this.state.fileInfo;
+    if (this.state.isLocked) {
+      seafileAPI.unlockfile(repoID, path).then((res) => {
+        this.setState({ isLocked: false, lockedByMe: false });
+      });
+    } else {
+      seafileAPI.lockfile(repoID, path).then((res) => {
+        this.setState({ isLocked: true, lockedByMe: true });
       });
     }
   }
@@ -690,6 +705,9 @@ class MarkdownEditor extends React.Component {
             contentChanged={this.state.contentChanged}
             saving={this.state.saving}
             showDraftSaved={this.state.showDraftSaved}
+            isLocked={this.state.isLocked}
+            lockedByMe={this.state.lockedByMe}
+            toggleLockFile={this.toggleLockFile}
           />
           <SeafileEditor
             fileInfo={this.state.fileInfo}
