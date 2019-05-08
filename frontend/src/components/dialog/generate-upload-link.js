@@ -23,7 +23,8 @@ class GenerateUploadLink extends React.Component {
       password: '',
       passwdnew: '',
       sharedUploadInfo: null,
-      isSessionExpired: false
+      isSessionExpired: false,
+      errorMessage: '',
     };
   }
 
@@ -41,7 +42,7 @@ class GenerateUploadLink extends React.Component {
       }
     }).catch((err) => {
       if (err.response.status === 403) {
-        this.setState({isSessionExpired: true})
+        this.setState({isSessionExpired: true, errorMessage: err.response.data.detail})
       }
     });
   }
@@ -131,7 +132,7 @@ class GenerateUploadLink extends React.Component {
     let passwordLengthTip = gettext('(at least {passwordLength} characters)');
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
     if (this.state.isSessionExpired) {
-      return(<div className="session-tip">{gettext('Please login.')}</div>)
+      return(<div className="session-tip">{this.state.errorMessage}</div>)
     } else {
       if (this.state.sharedUploadInfo) {
         let sharedUploadInfo = this.state.sharedUploadInfo;
