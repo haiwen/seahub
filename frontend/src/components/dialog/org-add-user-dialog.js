@@ -107,6 +107,12 @@ class AddOrgUserDialog extends React.Component {
       this.setState({errMessage: errMessage});
       return false;
     }
+    let name = this.state.name;
+    if (!name.length) {
+      errMessage = gettext('Name is required');
+      this.setState({errMessage: errMessage});
+      return false;
+    }
 
     let password1 = this.state.password;
     let password2 = this.state.passwdnew;
@@ -139,7 +145,7 @@ class AddOrgUserDialog extends React.Component {
               <Input id="userEmail"  value={this.state.email || ''} onChange={this.inputEmail} />
             </FormGroup>
             <FormGroup>
-              <Label for="userName">{gettext('Name(optional)')}</Label>
+              <Label for="userName">{gettext('Name')}</Label>
               <Input id="userName" value={this.state.name || ''} onChange={this.inputName} />
             </FormGroup>
             <FormGroup>
