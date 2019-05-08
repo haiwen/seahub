@@ -114,8 +114,9 @@ class MarkdownViewerToolbar extends React.Component {
               editorUtilities={this.props.editorUtilities}
               fileInfo={this.props.fileInfo}
               showDraftSaved={this.props.showDraftSaved}
-              isLocked={this.props.isLocked}
-              isPro={isPro} mediaUrl={mediaUrl}
+              isLocked={isLocked}
+              isPro={isPro}
+              mediaUrl={mediaUrl}
               isStarred={this.props.fileInfo.isStarred}
             />
             {(this.props.hasDraft && !this.props.isDraft) &&
