@@ -259,11 +259,7 @@ class GenerateShareLink extends React.Component {
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Link:')}</dt>
                 <dd className="d-flex">
-<<<<<<< HEAD
                   <span>{sharedLinkInfo.link}?dl=1</span>{' '}
-=======
-                  <span>{sharedLinkInfo.link}</span>{' '}
->>>>>>> Prompt when the session expires
                   {sharedLinkInfo.is_expired ?
                     <span className="err-message">({gettext('Expired')})</span> :
                     <span className="far fa-copy action-icon" onClick={this.onCopySharedLink}></span>
