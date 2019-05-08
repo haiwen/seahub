@@ -64,7 +64,7 @@ class GenerateShareLink extends React.Component {
       isShowPasswordInput: !this.state.isShowPasswordInput,
       password: '',
       passwdnew: '',
-      errorInfo: '',
+      errorInfo: ''
     });
   }
 

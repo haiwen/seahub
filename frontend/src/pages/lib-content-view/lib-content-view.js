@@ -301,7 +301,6 @@ class LibContentView extends React.Component {
       // update stste
       this.setState({
         isDirentListLoading: true,
-        // path: path,
         isViewFile: false,
         selectedDirentList: [],
       });
