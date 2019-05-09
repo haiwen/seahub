@@ -570,13 +570,23 @@ class DirDetailView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        dir_obj = seafile_api.get_dirent_by_path(repo_id, path)
+        try:
+            dir_obj = seafile_api.get_dirent_by_path(repo_id, path)
+            count_info = seafile_api.get_file_count_info_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         dir_info = {
             'repo_id': repo_id,
             'path': path,
-            'name': dir_obj.obj_name if dir_obj else '',
+            'name': dir_obj.obj_name,
             'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime) if dir_obj else '',
             'permission': permission,
+            'file_count': count_info.file_count,
+            'dir_count': count_info.dir_count,
+            'size': count_info.size,
         }
 
         return Response(dir_info)
