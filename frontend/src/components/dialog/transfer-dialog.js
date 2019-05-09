@@ -34,11 +34,11 @@ class TransferDialog extends React.Component {
   } 
 
   componentDidMount() {
-    seafileAPI.shareableGroups().then((res) => {
+    seafileAPI.listDepartments().then((res) => {
       for (let i = 0 ; i < res.data.length; i++) {
         let obj = {};
         obj.value = res.data[i].name;
-        obj.email = `${res.data[i].id}@seafile_group`;
+        obj.email = res.data[i].email;
         obj.label = res.data[i].name;
         this.options.push(obj);
       }
