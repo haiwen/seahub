@@ -46,3 +46,31 @@ body {
 .user-avatar {
   border-radius: 3px;
 }
+.avatar-edit {
+  position: absolute;
+  left: 0.75rem;
+  top: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 24px;
+  line-height: 80px;
+  text-align: center;
+  cursor: pointer;
+}
+.user-setting-nav .nav-item .nav-link {
+  flex: auto;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 1px solid transparent;
+  color: #333;
+}
+.user-setting-nav .nav-item .nav-link.active {
+  color: #eb8205;
+  border-color: #eb8205;
+}
+.user-setting-nav .nav-item .nav-link:hover {
+  color: #eb8205;
+}

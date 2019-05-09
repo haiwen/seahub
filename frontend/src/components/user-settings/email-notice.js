@@ -64,7 +64,7 @@ class EmailNotice extends React.Component {
               </React.Fragment>
             );
           })}
-          <button type="submit" className="btn btn-secondary mt-2">{gettext('Submit')}</button>
+          <button type="submit" className="btn btn-outline-primary mt-2">{gettext('Submit')}</button>
         </form>
       </div>
     );

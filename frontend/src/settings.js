@@ -106,7 +106,7 @@ class Settings extends React.Component {
                 {canUpdatePassword &&
                 <div id="update-user-passwd" className="setting-item">
                   <h3 className="setting-item-heading">{gettext('Password')}</h3>
-                  <a href={`${siteRoot}accounts/password/change/`} className="btn btn-secondary">{passwordOperationText}</a>
+                  <a href={`${siteRoot}accounts/password/change/`} className="btn btn-outline-primary">{passwordOperationText}</a>
                 </div>
                 }
                 {enableWebdavSecret && <WebdavPassword />}

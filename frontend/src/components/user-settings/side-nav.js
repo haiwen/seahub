@@ -18,29 +18,29 @@ class SideNav extends React.Component {
 
   render() {
     return (
-      <ul className="list-group list-group-flush">
-        <li className="list-group-item"><a href="#user-basic-info">{gettext('Profile')}</a></li>
+      <ul className="nav flex-column user-setting-nav">
+        <li className="nav-item"><a className="nav-link" href="#user-basic-info">{gettext('Profile')}</a></li>
         {canUpdatePassword &&  
-        <li className="list-group-item"><a href="#update-user-passwd">{gettext('Password')}</a></li>
+        <li className="nav-item"><a className="nav-link" href="#update-user-passwd">{gettext('Password')}</a></li>
         }   
         {enableWebdavSecret &&
-        <li className="list-group-item"><a href="#update-webdav-passwd">{gettext('WebDav Password')}</a></li>
+        <li className="nav-item"><a className="nav-link" href="#update-webdav-passwd">{gettext('WebDav Password')}</a></li>
         }   
         {enableAddressBook &&
-        <li className="list-group-item"><a href="#list-in-address-book">{gettext('Global Address Book')}</a></li>
+        <li className="nav-item"><a className="nav-link" href="#list-in-address-book">{gettext('Global Address Book')}</a></li>
         }   
-        <li className="list-group-item"><a href="#lang-setting">{gettext('Language')}</a></li>
+        <li className="nav-item"><a className="nav-link" href="#lang-setting">{gettext('Language')}</a></li>
         {isPro &&
-        <li className="list-group-item"><a href="#email-notice">{gettext('Email Notification')}</a></li>
+        <li className="nav-item"><a className="nav-link" href="#email-notice">{gettext('Email Notification')}</a></li>
         }   
         {twoFactorAuthEnabled &&
-        <li className="list-group-item"><a href="#two-factor-auth">{gettext('Two-Factor Authentication')}</a></li>
+        <li className="nav-item"><a className="nav-link" href="#two-factor-auth">{gettext('Two-Factor Authentication')}</a></li>
         }   
         {enableWechatWork &&  
-        <li className="list-group-item"><a href="#social-auth">{gettext('Social Login')}</a></li>
+        <li className="nav-item"><a className="nav-link" href="#social-auth">{gettext('Social Login')}</a></li>
         }   
         {enableDeleteAccount &&
-        <li className="list-group-item"><a href="#del-account">{gettext('Delete Account')}</a></li>
+        <li className="nav-item"><a className="nav-link" href="#del-account">{gettext('Delete Account')}</a></li>
         }   
       </ul>
     );
