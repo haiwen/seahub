@@ -20,7 +20,7 @@ from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 logger = logging.getLogger(__name__)
 
 
-class AllDepartments(APIView):
+class Departments(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)

@@ -23,7 +23,7 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
-from seahub.api2.endpoints.all_departments import AllDepartments
+from seahub.api2.endpoints.departments import Departments
 from seahub.api2.endpoints.shareable_groups import ShareableGroups
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 
@@ -256,7 +256,7 @@ urlpatterns = [
     url(r'^api/v2.1/smart-links/(?P<token>[-0-9a-f]{36})/$', SmartLinkToken.as_view(), name="api-v2.1-smart-links-token"),
 
     # departments
-    url(r'api/v2.1/all-departments/$', AllDepartments.as_view(), name='api-v2.1-all-departments'),
+    url(r'api/v2.1/departments/$', Departments.as_view(), name='api-v2.1-all-departments'),
 
     ## user::groups
     url(r'^api/v2.1/all-groups/$', AllGroups.as_view(), name='api-v2.1-all-groups'),
