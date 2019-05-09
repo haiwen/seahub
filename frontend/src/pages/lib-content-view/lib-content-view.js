@@ -193,13 +193,7 @@ class LibContentView extends React.Component {
     let { path, dirID } = this.state;
     seafileAPI.dirMetaData(repoID, path).then((res) => {
       if (res.data.id !== dirID) {
-        toaster.notify(
-          <span>
-            {gettext('This folder has been updated. ')}
-            <a href='' >{gettext('Refresh')}</a>
-          </span>,
-          {id: 'repo_updated', duration: 3600}
-        );
+        this.loadDirentList(this.state.path);
       }
     });
   }
