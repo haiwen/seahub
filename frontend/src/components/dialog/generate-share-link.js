@@ -8,7 +8,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedLinkInfo from '../../models/shared-link-info';
 import toaster from '../toast';
-import SessionExpiredTip from '../session-expired-tip'
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -50,14 +49,6 @@ class GenerateShareLink extends React.Component {
       if (res.data.length !== 0) {
         let sharedLinkInfo = new SharedLinkInfo(res.data[0]);
         this.setState({sharedLinkInfo: sharedLinkInfo});
-      }
-    }).catch((err) => {
-      if (err.response.status === 403) {
-        toaster.danger(
-          <SessionExpiredTip />,
-          {id: 'session_expired', duration: 3600}
-        )
-        this.props.closeShareDialog();
       }
     });
   } 
