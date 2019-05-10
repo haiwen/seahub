@@ -191,11 +191,24 @@ class LibContentView extends React.Component {
     }
     let repoID = this.props.repoID;
     let { path, dirID } = this.state;
-    seafileAPI.dirMetaData(repoID, path).then((res) => {
-      if (res.data.id !== dirID) {
-        this.loadDirentList(this.state.path);
+
+    if (this.state.currentMode === 'column') {
+      if (this.state.isViewFile) {
+        this.updataColumnMarkdownData(path)
+      } else {
+        seafileAPI.dirMetaData(repoID, path).then((res) => {
+          if (res.data.id !== dirID) {
+            this.loadDirentList(path);
+          }
+        })
       }
-    });
+    } else {
+      seafileAPI.dirMetaData(repoID, path).then((res) => {
+        if (res.data.id !== dirID) {
+          this.loadDirentList(path);
+        }
+      })
+    }
   }
 
   updateUsedRepoTags = () => {
@@ -220,6 +233,43 @@ class LibContentView extends React.Component {
         this.setState({readmeMarkdown: item});
         return true;
       }
+    });
+  }
+
+  updataColumnMarkdownData = (filePath) => {
+    let repoID = this.props.repoID;
+    // update state
+    this.setState({
+      path: filePath,
+      isViewFile: true
+    });
+
+    // update data
+    seafileAPI.getFileInfo(repoID, filePath).then((res) => {
+      let { mtime, permission, last_modifier_name, is_draft, has_draft, draft_id } = res.data;
+      seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
+        seafileAPI.getFileContent(res.data).then((res) => {
+          if (this.state.content !== res.data) {
+            this.setState({isFileLoading: true})
+          }
+          this.setState({
+            content: res.data,
+            filePermission: permission,
+            latestContributor: last_modifier_name,
+            lastModified: moment.unix(mtime).fromNow(),
+            isFileLoading: false,
+            isFileLoadedErr: false,
+            isDraft: is_draft,
+            hasDraft: has_draft,
+            draftID: draft_id
+          });
+        });
+      });
+    }).catch(() => {
+      this.setState({
+        isFileLoading: false,
+        isFileLoadedErr: true,
+      });
     });
   }
 
