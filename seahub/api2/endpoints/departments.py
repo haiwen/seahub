@@ -15,6 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, get_default_group_avatar_url
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.group.utils import is_group_member
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 
 logger = logging.getLogger(__name__)
@@ -45,6 +46,10 @@ class Departments(APIView):
         result = []
         for department in departments:
             department = seaserv.get_group(department.id)
+
+            username = request.user.username
+            if not is_group_member(department.id, username):
+                continue
 
             try:
                 avatar_url, is_default, date_uploaded = api_grp_avatar_url(department.id, avatar_size)

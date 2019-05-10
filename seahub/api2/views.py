@@ -1579,7 +1579,11 @@ class RepoOwner(APIView):
         # transfer repo
         try:
             if org_id:
-                seafile_api.set_org_repo_owner(org_id, repo_id, new_owner)
+                if '@seafile_group' in new_owner:
+                    group_id = int(new_owner.split('@')[0])
+                    seafile_api.org_transfer_repo_to_group(repo_id, org_id, group_id, PERMISSION_READ_WRITE)
+                else:
+                    seafile_api.set_org_repo_owner(org_id, repo_id, new_owner)
             else:
                 if ccnet_api.get_orgs_by_user(new_owner):
                     # can not transfer library to organization user %s.
@@ -1588,7 +1592,7 @@ class RepoOwner(APIView):
                 else:
                     if '@seafile_group' in new_owner:
                         group_id = int(new_owner.split('@')[0])
-                        seafile_api.transfer_repo_to_group(repo_id, group_id, '')
+                        seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
                     else:
                         seafile_api.set_repo_owner(repo_id, new_owner)
         except SearpcError as e:
@@ -1614,7 +1618,8 @@ class RepoOwner(APIView):
         for shared_group in shared_groups:
             shared_group_id = shared_group.group_id
 
-            if not is_group_member(shared_group_id, new_owner):
+            if ('@seafile_group' not in new_owner) and\
+                    (not is_group_member(shared_group_id, new_owner)):
                 continue
 
             if org_id:
