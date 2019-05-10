@@ -100,10 +100,9 @@ class IllegalReportsView(APIView):
             if not req_path:
                 file_id = None
             else:
-                file_path = normalize_file_path(req_path)
                 dir_path = normalize_file_path(share_link.path)
-                real_path = posixpath.join(dir_path, file_path.lstrip('/'))
-                file_id = seafile_api.get_file_id_by_path(repo_id, real_path)
+                file_path = posixpath.join(dir_path, normalize_file_path(req_path).lstrip('/'))
+                file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
 
         if not file_id:
             error_msg = 'File %s not found.' % file_path

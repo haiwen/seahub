@@ -39,25 +39,25 @@ class AddIllegalReportDialog extends React.Component {
 
   onIllegalTypeChange = (event) => {
     let type = event.target.value;
-    if (type == 'copyright') {
-      this.state.illegalType = 'copyright';
-    } else if (type == 'virus') {
-      this.state.illegalType = 'virus';
-    } else if (type == 'illegal_content') {
-      this.state.illegalType = 'illegal_content';
-    } else if (type == 'other') {
-      this.state.illegalType = 'other';
+    if (type === 'copyright') {
+      this.setState({illegalType: 'copyright'});
+    } else if (type === 'virus') {
+      this.setState({illegalType: 'virus'});
+    } else if (type === 'illegal_content') {
+      this.setState({illegalType: 'illegal_content'});
+    } else if (type === 'other') {
+      this.setState({illegalType: 'other'});
     }
   };
 
   setReporter = (event) => {
     let reporter = event.target.value;
-    this.state.reporter = reporter;
+    this.setState({reporter: reporter});
   };
 
   setDescription = (event) => {
     let desc = event.target.value;
-    this.state.description = desc;
+    this.setState({description: desc});
   };
 
   render() {

@@ -36,8 +36,7 @@
             mode: '{{ mode }}',
             thumbnailSize: {{ thumbnail_size }},
             trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
-            canDownload: {% if permissions.can_download %}true{% else %}false{% endif %},
-            enableShareLinkReportIllegal: '{{ enable_share_link_report_illegal }}' == 'True',
+            canDownload: {% if permissions.can_download %}true{% else %}false{% endif %}
         }
     };
 </script>
