@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react';
-import { Button, Col, Collapse, CustomInput, FormGroup, Input, Label, Row, InputGroupAddon, InputGroup } from 'reactstrap';
-import { gettext, lang } from '../../utils/constants';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
+import { gettext, lang } from '../../utils/constants';
+import { Button, Col, Collapse, CustomInput, FormGroup, Input, Label, Row, InputGroupAddon, InputGroup } from 'reactstrap';
 import SelectDate from '@seafile/seafile-editor/dist/components/calander';
 
-class SearchScales extends React.Component {
+const { repo_name, search_repo } = window.search.pageOptions;
+
+class AdvancedSearch extends React.Component {
 
   constructor(props) {
     super(props);
@@ -24,6 +26,7 @@ class SearchScales extends React.Component {
 
   render() {
     const { stateAndValues } = this.props;
+    const { errorDateMsg, errorSizeMsg } = stateAndValues;
 
     if (stateAndValues.isShowSearchFilter) {
       const { size_from, size_to, time_from, time_to, search_repo, fileTypeItemsStatus } = stateAndValues;
@@ -31,11 +34,9 @@ class SearchScales extends React.Component {
       const typesLength = fileTypes.length;
       return (
         <div className="search-filters">
-          {search_repo &&
-            <span className="mr-4">{gettext('Libraries')}{': '}{search_repo}</span>
-          }
+          {search_repo && <span className="mr-4">{gettext('Libraries')}{': '}{search_repo}</span>}
           {typesLength > 0 &&
-            <span className="mr-4">{gettext('File types')}{': '}
+            <span className="mr-4">{gettext('File Types')}{': '}
               {fileTypes.map((type, index) => {
                 return <span key={index}>{type}{index !== (typesLength - 1) && ','}{' '}</span>;
               })}
@@ -52,17 +53,18 @@ class SearchScales extends React.Component {
     }
     else {
       return (
-        <div className="search-scales">
+        <div className="advanced-search">
           <Collapse isOpen={stateAndValues.isCollapseOpen}>
 
-            {this.props.repoID &&
+            {search_repo !== 'all' &&
               <div className='search-repo search-catalog'>
                 <Row>
                   <Col md="2" lg="2">{gettext('Libraries')}{': '}</Col>
                   <Col md="4" lg="4">
                     <FormGroup check>
                       <Label check>
-                        <Input type="radio" name="repo"
+                        <Input
+                          type="radio" name="repo"
                           checked={stateAndValues.isAllRepoCheck}
                           onChange={() => this.props.handlerRepo(true)}
                         />{gettext('In all libraries')}
@@ -72,10 +74,11 @@ class SearchScales extends React.Component {
                   <Col md="4" lg="4">
                     <FormGroup check>
                       <Label check>
-                        <Input type="radio" name="repo"
+                        <Input
+                          type="radio" name="repo"
                           checked={!stateAndValues.isAllRepoCheck}
                           onChange={() => this.props.handlerRepo(false)}
-                        />{this.props.repoName}
+                        />{repo_name}
                       </Label>
                     </FormGroup>
                   </Col>
@@ -89,7 +92,8 @@ class SearchScales extends React.Component {
                 <Col md="4" lg="4">
                   <FormGroup check>
                     <Label check>
-                      <Input type="radio" name="types"
+                      <Input
+                        type="radio" name="types"
                         checked={!stateAndValues.isFileTypeCollapseOpen}
                         onChange={this.props.closeFileTypeCollapse}
                       />{gettext('All file types')}
@@ -99,7 +103,8 @@ class SearchScales extends React.Component {
                 <Col md="4" lg="4">
                   <FormGroup check>
                     <Label check>
-                      <Input type="radio" name="types"
+                      <Input
+                        type="radio" name="types"
                         checked={stateAndValues.isFileTypeCollapseOpen}
                         onChange={this.props.openFileTypeCollapse}
                       />{gettext('Custom file types')}
@@ -162,22 +167,25 @@ class SearchScales extends React.Component {
             <div className='search-date search-catalog'>
               <Row>
                 <Col md="2" lg="2" className="mt-2">{gettext('Last Update')}{': '}</Col>
-                <Col md="4" lg="4" sm="4" xs="5">
+                <Col md="4" lg="4" sm="4" xs="5" className="position-relative">
                   <SelectDate
                     onDateChange={this.props.handleTimeFromInput}
                     value={stateAndValues.time_from}
                     locale={lang}
                   />
+                  <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
                 </Col>
                 <div className="mt-2">-</div>
-                <Col md="4" lg="4" sm="4" xs="5">
+                <Col md="4" lg="4" sm="4" xs="5" className="position-relative">
                   <SelectDate
                     onDateChange={this.props.handleTimeToInput}
                     value={stateAndValues.time_to}
                     locale={lang}
                   />
+                  <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
                 </Col>
               </Row>
+              {errorDateMsg && <Row><Col md="2" lg="2"></Col><Col md="8" className="error mt-2">{errorDateMsg}</Col></Row>}
             </div>
 
             <div className='search-size search-catalog'>
@@ -196,6 +204,7 @@ class SearchScales extends React.Component {
                     </InputGroup>
                   </FormGroup>
                   <MediaQuery query="(min-width: 768px)">
+                    {errorSizeMsg && <div className="error mb-4">{errorSizeMsg}</div>}
                     <Button color="primary" onClick={this.props.handleSubmit}>{gettext('Submit')}</Button>
                     <Button className="ml-2" onClick={this.props.handleReset}>{gettext('Reset')}</Button>
                   </MediaQuery>
@@ -217,6 +226,7 @@ class SearchScales extends React.Component {
               </Row>
             </div>
             <MediaQuery query="(max-width: 768px)">
+              {errorSizeMsg && <div className="error mb-4">{errorSizeMsg}</div>}
               <Button className="ml-3" color="primary" onClick={this.props.handleSubmit}>{gettext('Submit')}</Button>
               <Button className="ml-2" onClick={this.props.handleReset}>{gettext('Reset')}</Button>
             </MediaQuery>
@@ -227,8 +237,7 @@ class SearchScales extends React.Component {
   }
 }
 
-const searchScalesPropTypes = {
-  toggleCollapse: PropTypes.func.isRequired,
+const advancedSearchPropTypes = {
   openFileTypeCollapse: PropTypes.func.isRequired,
   closeFileTypeCollapse: PropTypes.func.isRequired,
   handlerFileTypes: PropTypes.func.isRequired,
@@ -241,11 +250,9 @@ const searchScalesPropTypes = {
   handleTimeToInput: PropTypes.func.isRequired,
   handleSizeFromInput: PropTypes.func.isRequired,
   handleSizeToInput: PropTypes.func.isRequired,
-  repoName: PropTypes.string,
-  repoID: PropTypes.string,
   stateAndValues: PropTypes.object.isRequired,
 };
 
-SearchScales.propTypes = searchScalesPropTypes;
+AdvancedSearch.propTypes = advancedSearchPropTypes;
 
-export default SearchScales;
+export default AdvancedSearch;

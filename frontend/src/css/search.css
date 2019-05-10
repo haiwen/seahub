@@ -97,7 +97,7 @@
   font-weight: bold;
 }
 
-.main-panle-south {
+.main-panel-south {
   flex: auto;
   overflow: auto;
   height: calc(100% - 50px);
@@ -105,6 +105,10 @@
 .search-page {
   margin: 30px auto;
   width: 65%;
+}
+.search-page .search-result-container {
+  border-radius: 0;
+  box-shadow: none;
 }
 .search-page .search-page-container {
   padding: 10px;
@@ -114,7 +118,11 @@
   padding-left: 0.5rem;
   width: 30rem;
 }
-.search-page .search-scales .search-file-types .search-input {
+.search-page .search-page-container .fa-angle-double-up,
+.search-page .search-page-container .fa-angle-double-down {
+  font-size: 1rem;
+}
+.search-page .advanced-search .search-file-types .search-input {
   padding-left: 0.5rem;
   width: 30rem;
   max-width: 100%;
@@ -126,25 +134,25 @@
   text-align: center;
   margin: 1rem 0;
 }
-.search-page .search-scales, .search-page .search-filters {
+.search-page .advanced-search, .search-page .search-filters {
   color: #747474;
 }
 .search-page .search-filters {
   padding: 10px 10px 0;
 }
-.search-page .search-scales .search-repo, 
-.search-page .search-scales .search-file-types {
+.search-page .advanced-search .search-repo, 
+.search-page .advanced-search .search-file-types {
   padding: 5px 0;
 }
 .search-file-types .search-file-types-form {
   top: 10px;
 }
-.search-page .search-scales .search-catalog {
+.search-page .advanced-search .search-catalog {
   margin: 0 10px;
   border-top: 1px dashed #e2e2e2;
   padding: 10px 0;
 }
-.search-page .search-scales .search-catalog:first-child {
+.search-page .advanced-search .search-catalog:first-child {
   border: none;
 }
 .search-page .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
@@ -157,6 +165,12 @@
   border: 1px solid rgba(0, 40, 100, 0.12);
   border-radius: 3px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.search-date .select-data-icon {
+  position: absolute;
+  right: 1.5rem;
+  top: 0.5rem;
+  color: #b2b2b2;
 }
 
 @media (max-width: 767px) {
@@ -214,7 +228,7 @@
   .search-page .search-page-container .search-icon-right {
     left: 85%;
   }
-  
+
   .search-page .search-result-container {
     top: 0;
     left: 0;
