@@ -132,54 +132,53 @@ class GenerateUploadLink extends React.Component {
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
     if (this.state.isSessionExpired) {
       return(<div className="session-expired-tip">{gettext('Please login.')}</div>)
-    } else {
-      if (this.state.sharedUploadInfo) {
-        let sharedUploadInfo = this.state.sharedUploadInfo;
-        return (
-          <div>
-            <Form className="mb-4">
-              <FormGroup>
-                <dt className="text-secondary font-weight-normal">{gettext('Upload Link:')}</dt>
-                <dd className="d-flex">
-                  <span>{sharedUploadInfo.link}</span>
-                  <span className="far fa-copy action-icon" onClick={this.onCopyUploadLink}></span>
-                </dd>
-              </FormGroup>
-            </Form>
-            <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>
-          </div>
-        );
-      }
+    }
+    if (this.state.sharedUploadInfo) {
+      let sharedUploadInfo = this.state.sharedUploadInfo;
       return (
-        <Form className="generate-upload-link">
-          <FormGroup>
-            <FormText className="tip">{gettext('You can share the generated link to others and then they can upload files to this directory via the link.')}</FormText>
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input type="checkbox" onChange={this.addPassword}/>{'  '}{gettext('Add password protection')} 
-            </Label>
-          </FormGroup>
-          {this.state.showPasswordInput &&
-            <FormGroup className="link-operation-content">
-              {/* todo translate  */}
-              <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
-              <InputGroup className="passwd">
-                <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
-                <InputGroupAddon addonType="append">
-                  <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                  <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
-                </InputGroupAddon>
-              </InputGroup>
-              <Label className="font-weight-bold">{gettext('Password again')}</Label>
-              <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
+        <div>
+          <Form className="mb-4">
+            <FormGroup>
+              <dt className="text-secondary font-weight-normal">{gettext('Upload Link:')}</dt>
+              <dd className="d-flex">
+                <span>{sharedUploadInfo.link}</span>
+                <span className="far fa-copy action-icon" onClick={this.onCopyUploadLink}></span>
+              </dd>
             </FormGroup>
-          }
-          {this.state.errorInfo && <Alert color="danger" className="mt-2">{this.state.errorInfo}</Alert>}
-          <Button className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
-        </Form>
+          </Form>
+          <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>
+        </div>
       );
     }
+    return (
+      <Form className="generate-upload-link">
+        <FormGroup>
+          <FormText className="tip">{gettext('You can share the generated link to others and then they can upload files to this directory via the link.')}</FormText>
+        </FormGroup>
+        <FormGroup check>
+          <Label check>
+            <Input type="checkbox" onChange={this.addPassword}/>{'  '}{gettext('Add password protection')} 
+          </Label>
+        </FormGroup>
+        {this.state.showPasswordInput &&
+          <FormGroup className="link-operation-content">
+            {/* todo translate  */}
+            <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
+            <InputGroup className="passwd">
+              <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
+              <InputGroupAddon addonType="append">
+                <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+                <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
+              </InputGroupAddon>
+            </InputGroup>
+            <Label className="font-weight-bold">{gettext('Password again')}</Label>
+            <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
+          </FormGroup>
+        }
+        {this.state.errorInfo && <Alert color="danger" className="mt-2">{this.state.errorInfo}</Alert>}
+        <Button className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
+      </Form>
+    );
   }
 }
 

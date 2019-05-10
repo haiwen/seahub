@@ -249,120 +249,119 @@ class GenerateShareLink extends React.Component {
 
     if (this.state.isSessionExpired) {
       return(<div className="session-expired-tip">{gettext('Please login.')}</div>)
-    } else {
-      if (this.state.sharedLinkInfo) {
-        let sharedLinkInfo = this.state.sharedLinkInfo;
-        return (
-          <div>
-            <Form className="mb-4">
+    }
+    if (this.state.sharedLinkInfo) {
+      let sharedLinkInfo = this.state.sharedLinkInfo;
+      return (
+        <div>
+          <Form className="mb-4">
+            <FormGroup className="mb-0">
+              <dt className="text-secondary font-weight-normal">{gettext('Link:')}</dt>
+              <dd className="d-flex">
+                <span>{sharedLinkInfo.link}?dl=1</span>{' '}
+                {sharedLinkInfo.is_expired ?
+                  <span className="err-message">({gettext('Expired')})</span> :
+                  <span className="far fa-copy action-icon" onClick={this.onCopySharedLink}></span>
+                }
+              </dd>
+            </FormGroup>
+            {!sharedLinkInfo.is_dir && (  //just for file
               <FormGroup className="mb-0">
-                <dt className="text-secondary font-weight-normal">{gettext('Link:')}</dt>
+                <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
                 <dd className="d-flex">
-                  <span>{sharedLinkInfo.link}?dl=1</span>{' '}
+                  <span>{sharedLinkInfo.link}?dl</span>{' '}
                   {sharedLinkInfo.is_expired ?
                     <span className="err-message">({gettext('Expired')})</span> :
-                    <span className="far fa-copy action-icon" onClick={this.onCopySharedLink}></span>
+                    <span className="far fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
                   }
                 </dd>
               </FormGroup>
-              {!sharedLinkInfo.is_dir && (  //just for file
-                <FormGroup className="mb-0">
-                  <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
-                  <dd className="d-flex">
-                    <span>{sharedLinkInfo.link}?dl</span>{' '}
-                    {sharedLinkInfo.is_expired ?
-                      <span className="err-message">({gettext('Expired')})</span> :
-                      <span className="far fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
-                    }
-                  </dd>
-                </FormGroup>
-              )}
-              {sharedLinkInfo.expire_date && (
-                <FormGroup className="mb-0">
-                  <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-                  <dd>{moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD hh:mm:ss')}</dd>
-                </FormGroup>
-              )}
-            </Form>
-            {!this.state.isNoticeMessageShow ?
-              <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button> :
-              <div className="alert alert-warning">
-                <h4 className="alert-heading">{gettext('Are you sure you want to delete the share link?')}</h4>
-                <p className="mb-4">{gettext('If the share link is deleted, no one will be able to access it any more.')}</p>
-                <button className="btn btn-primary" onClick={this.deleteShareLink}>{gettext('Delete')}</button>{' '}
-                <button className="btn btn-secondary" onClick={this.onNoticeMessageToggle}>{gettext('Cancel')}</button>
-              </div>
-            }
-          </div>
-        );
-      } else {
-        return (
-          <Form className="generate-share-link">
-            <FormGroup check>
-              <Label check>
-                <Input type="checkbox" onChange={this.onPasswordInputChecked}/>{'  '}{gettext('Add password protection')} 
-              </Label>
-            </FormGroup>
-            {this.state.isShowPasswordInput &&
-              <FormGroup className="link-operation-content">
-                {/* todo translate  */}
-                <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
-                <InputGroup className="passwd">
-                  <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
-                  <InputGroupAddon addonType="append">
-                    <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                    <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
-                  </InputGroupAddon>
-                </InputGroup>
-                <Label className="font-weight-bold">{gettext('Password again')}</Label>
-                <Input className="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
-              </FormGroup>
-            }
-            {this.isExpireDaysNoLimit && (
-              <FormGroup check>
-                <Label check>
-                  <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
-                  <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span>{gettext('days')}</span>
-                </Label>
+            )}
+            {sharedLinkInfo.expire_date && (
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
+                <dd>{moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD hh:mm:ss')}</dd>
               </FormGroup>
             )}
-            {!this.isExpireDaysNoLimit && (
-              <FormGroup check>
-                <Label check>
-                  <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} checked readOnly/>{'  '}{gettext('Add auto expiration')}
-                  <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} /> <span>{gettext('days')}</span>
-                  {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
-                    <span> ({shareLinkExpireDaysMin} - {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
-                  )}
-                  {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) === 0) && (
-                    <span> ({gettext('Greater than or equal to')} {shareLinkExpireDaysMin}{' '}{gettext('days')})</span>
-                  )}
-                  {(parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
-                    <span> ({gettext('Less than or equal to')} {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
-                  )}
-                </Label>
-              </FormGroup>
-            )}
-            <FormGroup check>
-              <Label check>
-                <Input type="checkbox" checked readOnly/>{'  '}{gettext('Set permission')}
-              </Label>
-            </FormGroup>
-            <FormGroup check className="permission">
-              <Label check>
-                <Input type="radio" name="radio1" defaultChecked={true} onChange={() => this.setPermission('previewAndDownload')}/>{'  '}{gettext('Preview and download')}
-              </Label>
-            </FormGroup>
-            <FormGroup check className="permission">
-              <Label check>
-                <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
-              </Label>
-            </FormGroup>
-            {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
-            <Button onClick={this.generateShareLink}>{gettext('Generate')}</Button>
           </Form>
-        );
-      }
+          {!this.state.isNoticeMessageShow ?
+            <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button> :
+            <div className="alert alert-warning">
+              <h4 className="alert-heading">{gettext('Are you sure you want to delete the share link?')}</h4>
+              <p className="mb-4">{gettext('If the share link is deleted, no one will be able to access it any more.')}</p>
+              <button className="btn btn-primary" onClick={this.deleteShareLink}>{gettext('Delete')}</button>{' '}
+              <button className="btn btn-secondary" onClick={this.onNoticeMessageToggle}>{gettext('Cancel')}</button>
+            </div>
+          }
+        </div>
+      );
+    } else {
+      return (
+        <Form className="generate-share-link">
+          <FormGroup check>
+            <Label check>
+              <Input type="checkbox" onChange={this.onPasswordInputChecked}/>{'  '}{gettext('Add password protection')} 
+            </Label>
+          </FormGroup>
+          {this.state.isShowPasswordInput &&
+            <FormGroup className="link-operation-content">
+              {/* todo translate  */}
+              <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
+              <InputGroup className="passwd">
+                <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
+                <InputGroupAddon addonType="append">
+                  <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+                  <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
+                </InputGroupAddon>
+              </InputGroup>
+              <Label className="font-weight-bold">{gettext('Password again')}</Label>
+              <Input className="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
+            </FormGroup>
+          }
+          {this.isExpireDaysNoLimit && (
+            <FormGroup check>
+              <Label check>
+                <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
+                <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span>{gettext('days')}</span>
+              </Label>
+            </FormGroup>
+          )}
+          {!this.isExpireDaysNoLimit && (
+            <FormGroup check>
+              <Label check>
+                <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} checked readOnly/>{'  '}{gettext('Add auto expiration')}
+                <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} /> <span>{gettext('days')}</span>
+                {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
+                  <span> ({shareLinkExpireDaysMin} - {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
+                )}
+                {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) === 0) && (
+                  <span> ({gettext('Greater than or equal to')} {shareLinkExpireDaysMin}{' '}{gettext('days')})</span>
+                )}
+                {(parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
+                  <span> ({gettext('Less than or equal to')} {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
+                )}
+              </Label>
+            </FormGroup>
+          )}
+          <FormGroup check>
+            <Label check>
+              <Input type="checkbox" checked readOnly/>{'  '}{gettext('Set permission')}
+            </Label>
+          </FormGroup>
+          <FormGroup check className="permission">
+            <Label check>
+              <Input type="radio" name="radio1" defaultChecked={true} onChange={() => this.setPermission('previewAndDownload')}/>{'  '}{gettext('Preview and download')}
+            </Label>
+          </FormGroup>
+          <FormGroup check className="permission">
+            <Label check>
+              <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
+            </Label>
+          </FormGroup>
+          {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
+          <Button onClick={this.generateShareLink}>{gettext('Generate')}</Button>
+        </Form>
+      );
     }
   }
 }
