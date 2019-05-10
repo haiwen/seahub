@@ -6,8 +6,6 @@ import makeAnimated from 'react-select/lib/animated';
 import { gettext, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
-import SessionExpiredTip from '../session-expired-tip';
-import toaster from '../toast';
 
 class GroupItem extends React.Component {
 
@@ -106,7 +104,7 @@ class ShareToGroup extends React.Component {
       selectedOption: null,
       errorMsg: [],
       permission: 'rw',
-      sharedItems: [],
+      sharedItems: []
     };
     this.options = [];
     this.permissions = []
@@ -148,10 +146,10 @@ class ShareToGroup extends React.Component {
     seafileAPI.listSharedItems(repoID, path, 'group').then((res) => {
       if(res.data.length !== 0) {
         this.setState({
-          sharedItems: res.data,
+          sharedItems: res.data
         });
       }
-    })
+    });
   }
 
   setPermission = (permission) => {

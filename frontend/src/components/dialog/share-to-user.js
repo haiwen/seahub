@@ -99,7 +99,7 @@ class ShareToUser extends React.Component {
       selectedOption: null,
       errorMsg: [],
       permission: 'rw',
-      sharedItems: [],
+      sharedItems: []
     };
     this.options = [];
     this.permissions = [];
@@ -125,7 +125,7 @@ class ShareToUser extends React.Component {
       if(res.data.length !== 0) {
         this.setState({sharedItems: res.data});
       }
-    })
+    });
   }
 
   setPermission = (permission) => {

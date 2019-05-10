@@ -38,7 +38,7 @@ class GenerateUploadLink extends React.Component {
         let sharedUploadInfo = new SharedUploadInfo(res.data[0]);
         this.setState({sharedUploadInfo: sharedUploadInfo});
       }
-    })
+    });
   }
 
   addPassword = () => {
