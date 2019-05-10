@@ -31,7 +31,6 @@ class GenerateShareLink extends React.Component {
       errorInfo: '',
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
-      isSessionExpired: false,
     };
     this.permissions = {
       'can_edit': false, 
@@ -50,11 +49,10 @@ class GenerateShareLink extends React.Component {
     seafileAPI.getShareLink(repoID, path).then((res) => {
       if (res.data.length !== 0) {
         let sharedLinkInfo = new SharedLinkInfo(res.data[0]);
-        this.setState({sharedLinkInfo: sharedLinkInfo, isSessionExpired: false});
+        this.setState({sharedLinkInfo: sharedLinkInfo});
       }
     }).catch((err) => {
       if (err.response.status === 403) {
-        // this.setState({isSessionExpired: true});
         toaster.danger(
           <SessionExpiredTip />,
           {id: 'session_expired', duration: 3600}
@@ -253,9 +251,6 @@ class GenerateShareLink extends React.Component {
     let passwordLengthTip = gettext('(at least {passwordLength} characters)');
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
 
-    if (this.state.isSessionExpired) {
-      return(<SessionExpiredTip />)
-    }
     if (this.state.sharedLinkInfo) {
       let sharedLinkInfo = this.state.sharedLinkInfo;
       return (
