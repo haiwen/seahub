@@ -192,9 +192,9 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     let { path, dirID } = this.state;
 
-    let currentPath = path.substring(path.lastIndexOf('.'))
+    let currentPathExpandName = path.substring(path.lastIndexOf('.'))
 
-    if (currentPath !== '.md') {
+    if (currentPathExpandName !== '.md') {
       seafileAPI.dirMetaData(repoID, path).then((res) => {
         if (res.data.id !== dirID) {
           this.loadDirentList(path);
