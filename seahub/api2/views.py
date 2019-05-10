@@ -1586,7 +1586,11 @@ class RepoOwner(APIView):
                     error_msg = 'Email %s invalid.' % new_owner
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                 else:
-                    seafile_api.set_repo_owner(repo_id, new_owner)
+                    if '@seafile_group' in new_owner:
+                        group_id = int(new_owner.split('@')[0])
+                        seafile_api.transfer_repo_to_group(repo_id, group_id, '')
+                    else:
+                        seafile_api.set_repo_owner(repo_id, new_owner)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
