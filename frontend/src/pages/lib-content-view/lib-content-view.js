@@ -192,18 +192,22 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     let { path, dirID } = this.state;
 
-    let currentPathExpandName = path.substring(path.lastIndexOf('.'))
-
-    if (currentPathExpandName !== '.md') {
+    if (this.state.currentMode === 'column') {
+      if (this.state.isViewFile) {
+        this.updataColumnMarkdownData(path)
+      } else {
+        seafileAPI.dirMetaData(repoID, path).then((res) => {
+          if (res.data.id !== dirID) {
+            this.loadDirentList(path);
+          }
+        })
+      }
+    } else {
       seafileAPI.dirMetaData(repoID, path).then((res) => {
         if (res.data.id !== dirID) {
           this.loadDirentList(path);
         }
       })
-    } else {
-      if (this.state.currentMode === 'column') {
-        this.updataColumnMarkdownData(path)
-      }
     }
   }
 
