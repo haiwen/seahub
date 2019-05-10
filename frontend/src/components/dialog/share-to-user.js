@@ -6,7 +6,6 @@ import { seafileAPI } from '../../utils/seafile-api.js';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import "../../css/invitations.css";
-import SessionExpiredTip from '../session-expired-tip'
 
 class UserItem extends React.Component {
 
@@ -101,7 +100,6 @@ class ShareToUser extends React.Component {
       errorMsg: [],
       permission: 'rw',
       sharedItems: [],
-      isSessionExpired: false,
     };
     this.options = [];
     this.permissions = [];
@@ -125,13 +123,9 @@ class ShareToUser extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.listSharedItems(repoID, path, 'user').then((res) => {
       if(res.data.length !== 0) {
-        this.setState({sharedItems: res.data, isSessionExpired: false});
+        this.setState({sharedItems: res.data});
       }
-    }).catch((err) => {
-      if (err.response.status === 403) {
-        this.setState({isSessionExpired: true})
-      }
-    });
+    })
   }
 
   setPermission = (permission) => {
@@ -261,9 +255,57 @@ class ShareToUser extends React.Component {
     let { sharedItems } = this.state;
     return (
       <Fragment>
-        {this.state.isSessionExpired && <SessionExpiredTip />}
-        {!this.state.isSessionExpired && 
-          <table>
+        <table>
+          <thead>
+            <tr>
+              <th width="50%">{gettext('User')}</th>
+              <th width="35%">{gettext('Permission')}</th>
+              <th width="15%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <UserSelect
+                  ref="userSelect"
+                  isMulti={true}
+                  className="reviewer-select"
+                  placeholder={gettext('Select users...')}
+                  onSelectChange={this.handleSelectChange}
+                />
+              </td>
+              <td>
+                <SharePermissionEditor 
+                  isTextMode={false}
+                  isEditIconShow={false}
+                  currentPermission={this.state.permission}
+                  permissions={this.permissions}
+                  onPermissionChanged={this.setPermission}
+                />
+              </td>
+              <td>
+                <Button onClick={this.shareToUser}>{gettext('Submit')}</Button>
+              </td>
+            </tr>
+            {this.state.errorMsg.length > 0 &&
+              this.state.errorMsg.map((item, index) => {
+                let errMessage = '';
+                if (item.email) {
+                  errMessage = item.email + ': ' + item.error_msg;
+                } else {
+                  errMessage = item;
+                }
+                return (
+                  <tr key={index}>
+                    <td colSpan={3}><p className="error">{errMessage}</p></td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+        <div className="share-list-container">
+          <table className="table-thead-hidden">
             <thead>
               <tr>
                 <th width="50%">{gettext('User')}</th>
@@ -271,73 +313,20 @@ class ShareToUser extends React.Component {
                 <th width="15%"></th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <UserSelect
-                    ref="userSelect"
-                    isMulti={true}
-                    className="reviewer-select"
-                    placeholder={gettext('Select users...')}
-                    onSelectChange={this.handleSelectChange}
-                  />
-                </td>
-                <td>
-                  <SharePermissionEditor 
-                    isTextMode={false}
-                    isEditIconShow={false}
-                    currentPermission={this.state.permission}
-                    permissions={this.permissions}
-                    onPermissionChanged={this.setPermission}
-                  />
-                </td>
-                <td>
-                  <Button onClick={this.shareToUser}>{gettext('Submit')}</Button>
-                </td>
-              </tr>
-              {this.state.errorMsg.length > 0 &&
-                this.state.errorMsg.map((item, index) => {
-                  let errMessage = '';
-                  if (item.email) {
-                    errMessage = item.email + ': ' + item.error_msg;
-                  } else {
-                    errMessage = item;
-                  }
-                  return (
-                    <tr key={index}>
-                      <td colSpan={3}><p className="error">{errMessage}</p></td>
-                    </tr>
-                  );
-                })
-              }
-            </tbody>
+            <UserList 
+              items={sharedItems}
+              permissions={this.permissions}
+              deleteShareItem={this.deleteShareItem} 
+              onChangeUserPermission={this.onChangeUserPermission}
+            />
+            { canInvitePeople &&
+              <a href={siteRoot + 'invitations/'} className="invite-link-in-popup">
+                <i className="sf2-icon-invite invite-link-icon-in-popup"></i>
+                <span className="invite-link-icon-in-popup">{gettext('Invite People')}</span>
+              </a>
+            }
           </table>
-        }
-        {!this.state.isSessionExpired && 
-          <div className="share-list-container">
-            <table className="table-thead-hidden">
-              <thead>
-                <tr>
-                  <th width="50%">{gettext('User')}</th>
-                  <th width="35%">{gettext('Permission')}</th>
-                  <th width="15%"></th>
-                </tr>
-              </thead>
-              <UserList 
-                items={sharedItems}
-                permissions={this.permissions}
-                deleteShareItem={this.deleteShareItem} 
-                onChangeUserPermission={this.onChangeUserPermission}
-              />
-              { canInvitePeople &&
-                <a href={siteRoot + 'invitations/'} className="invite-link-in-popup">
-                  <i className="sf2-icon-invite invite-link-icon-in-popup"></i>
-                  <span className="invite-link-icon-in-popup">{gettext('Invite People')}</span>
-                </a>
-              }
-            </table>
-          </div>
-        }
+        </div>
       </Fragment>
     );
   }

@@ -54,7 +54,12 @@ class GenerateShareLink extends React.Component {
       }
     }).catch((err) => {
       if (err.response.status === 403) {
-        this.setState({isSessionExpired: true});
+        // this.setState({isSessionExpired: true});
+        toaster.danger(
+          <SessionExpiredTip />,
+          {id: 'session_expired', duration: 3600}
+        )
+        this.props.closeShareDialog();
       }
     });
   } 

@@ -18,6 +18,7 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
+import SessionExpiredTip from '../../components/session-expired-tip'
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -412,10 +413,11 @@ class LibContentView extends React.Component {
       }
     }).catch((err) => {
       if (err.response.status === 403) {
-        this.setState({
-          isSessionExpired: true,
-          isDirentListLoading: false,
-        });
+        toaster.danger(
+          <SessionExpiredTip />,
+          {id: 'session_expired', duration: 3600}
+        )
+        this.setState({isDirentListLoading: false})
         return;
       }
       this.setState({
@@ -1484,7 +1486,6 @@ class LibContentView extends React.Component {
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
             updateDetail={this.state.updateDetail}
             onListContainerScroll={this.onListContainerScroll}
-            isSessionExpired={this.state.isSessionExpired}
           />
           {this.state.pathExist && !this.state.isViewFile && (
             <FileUploader

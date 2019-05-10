@@ -7,7 +7,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedUploadInfo from '../../models/shared-upload-info';
 import toaster from '../toast';
-import SessionExpiredTip from '../session-expired-tip'
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -24,7 +23,6 @@ class GenerateUploadLink extends React.Component {
       password: '',
       passwdnew: '',
       sharedUploadInfo: null,
-      isSessionExpired: false,
     };
   }
 
@@ -38,13 +36,9 @@ class GenerateUploadLink extends React.Component {
     seafileAPI.getUploadLinks(repoID, path).then((res) => {
       if (res.data.length !== 0) {
         let sharedUploadInfo = new SharedUploadInfo(res.data[0]);
-        this.setState({sharedUploadInfo: sharedUploadInfo, isSessionExpired: false});
+        this.setState({sharedUploadInfo: sharedUploadInfo});
       }
-    }).catch((err) => {
-      if (err.response.status === 403) {
-        this.setState({isSessionExpired: true})
-      }
-    });
+    })
   }
 
   addPassword = () => {
@@ -131,9 +125,6 @@ class GenerateUploadLink extends React.Component {
 
     let passwordLengthTip = gettext('(at least {passwordLength} characters)');
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
-    if (this.state.isSessionExpired) {
-      return(<SessionExpiredTip />)
-    }
     if (this.state.sharedUploadInfo) {
       let sharedUploadInfo = this.state.sharedUploadInfo;
       return (

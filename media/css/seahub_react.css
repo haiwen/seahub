@@ -1025,8 +1025,6 @@ a.table-sort-op:focus {
 }
 
 .session-expired-tip {
-    margin-top: 0.625rem;
-    margin-left: 1rem;
     color: red;
     font-size: 0.8125rem;
 }
