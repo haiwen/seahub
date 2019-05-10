@@ -370,7 +370,13 @@ class LibContentView extends React.Component {
           });
         });
       });
-    }).catch(() => {
+    }).catch((err) => {
+      if (err.response.status === 403) {
+        toaster.danger(
+          <SessionExpiredTip />,
+          {id: 'session_expired', duration: 3600}
+        )
+      }
       this.setState({
         isFileLoading: false,
         isFileLoadedErr: true,
