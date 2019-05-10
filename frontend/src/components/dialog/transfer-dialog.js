@@ -76,14 +76,14 @@ class TransferDialog extends React.Component {
               maxMenuHeight={200}
               hideSelectedOptions={true}
               components={makeAnimated()}
-              placeholder={gettext('Select a Department')}
+              placeholder={gettext('Select a department')}
               options={this.options}
               onChange={this.handleSelectChange}
             />
           }
           {isPro &&
             <a href="#" onClick={this.onClick}>{this.state.transferToUser ?
-              gettext('Transfer Library to Department'): gettext('Transfer Library to User')}
+              gettext('Transfer to department'): gettext('Transfer to user')}
             </a>
           }
         </ModalBody>
