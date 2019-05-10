@@ -82,9 +82,9 @@ class TransferDialog extends React.Component {
             />
           }
           {isPro &&
-            <a href="#" onClick={this.onClick}>{this.state.transferToUser ?
+            <span className="action-link" onClick={this.onClick}>{this.state.transferToUser ?
               gettext('Transfer to department'): gettext('Transfer to user')}
-            </a>
+            </span>
           }
         </ModalBody>
         <ModalFooter>

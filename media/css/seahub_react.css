@@ -361,6 +361,16 @@ ul,ol,li {
     font-size: 0.875rem;
 }
 
+/* action-link */
+.action-link {
+    display: inline-block;
+    padding: 0.5rem 0;
+    text-decoration: underline;
+    color: #666;
+    cursor: pointer;
+    user-select: none;
+}
+
 /** Account info **/
 #account {
     position:relative;
