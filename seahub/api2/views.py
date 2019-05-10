@@ -1593,7 +1593,6 @@ class RepoOwner(APIView):
                         seafile_api.set_repo_owner(repo_id, new_owner)
         except SearpcError as e:
             logger.error(e)
-            print e
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
