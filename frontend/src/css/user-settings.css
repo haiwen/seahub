@@ -67,7 +67,7 @@ body {
   border-left: 1px solid transparent;
   color: #333;
 }
-.user-setting-nav .nav-item .nav-link.active {
+.user-setting-nav .nav-item.active .nav-link {
   color: #eb8205;
   border-color: #eb8205;
 }
