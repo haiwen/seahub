@@ -11,10 +11,7 @@ import '../../css/layout.css';
 import '../../css/toolbar.css';
 import '../../css/search.css';
 
-export const q = window.search ? window.search.pageOptions.q : '';
-export const repoName = window.search ? window.search.pageOptions.repo_name : '';
-export const searchRepo = window.search ? window.search.pageOptions.search_repo : 'all';
-export const searchFtypes = window.search ? window.search.pageOptions.search_ftypes : 'all';
+const { q, repoName, searchRepo, searchFtypes } = window.search.pageOptions;
 
 class SearchView extends React.Component {
   constructor(props) {
@@ -41,12 +38,12 @@ class SearchView extends React.Component {
   render() {
     return (
       <div id="main">
-        <div style={{width: '100%'}}>
+        <div className="w-100">
           <div className="main-panel-north border-left-show">
             <Logo/>
             <CommonToolbar onSearchedClick={this.onSearchedClick}/>
           </div>
-          <div>
+          <div className="main-panle-south">
             {!isPro && this.handlePermissionDenied()}
             {isPro &&
             <SearchViewPanel

@@ -10,21 +10,6 @@ class SearchViewResultsItem extends React.Component {
     super(props);
   }
 
-  formatFileSize = (size) => {
-    if (typeof size !== 'number') {
-      return '';
-    }
-    if (size >= 1000 * 1000 * 1000) {
-      return (size / (1000 * 1000 * 1000)).toFixed(1) + ' G';
-    } else if (size >= 1000 * 1000) {
-      return (size / (1000 * 1000)).toFixed(1) + ' M';
-    } else if (size >= 1000) {
-      return (size / 1000).toFixed(1) + ' K';
-    }else {
-      return size.toFixed(1) + ' B';
-    }
-  };
-
   handlerFileURL= (item) => {
     return item.is_dir ?
       siteRoot + 'library/' + item.repo_id + '/' + item.repo_name + item.fullpath :
@@ -33,7 +18,7 @@ class SearchViewResultsItem extends React.Component {
 
   handlerParentDirPath= (item) => {
     let index = item.is_dir ?
-      item.fullpath.length - item.name.length -1 :
+      item.fullpath.length - item.name.length - 1 :
       item.fullpath.length - item.name.length;
     return item.fullpath.substring(0, index);
   };
@@ -61,7 +46,7 @@ class SearchViewResultsItem extends React.Component {
             <a href={this.handlerParentDirURL(item)} target="_blank" >{item.repo_name}{item.parent_dir}</a>
           </div>
           <div
-            className="item-link ellipsis">{this.formatFileSize(item.size) + ' ' + moment(item.last_modified * 1000).format("YYYY-MM-DD")}</div>
+            className="item-link ellipsis">{Utils.bytesToSize(item.size) + ' ' + moment(item.last_modified * 1000).format('YYYY-MM-DD')}</div>
           <div className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content_highlight}}></div>
         </div>
       </li>
@@ -83,7 +68,7 @@ class SearchViewResultsList extends React.Component {
 
   render() {
     return (
-      <div className="search-result-container" style={{position: 'static', cursor: 'default'}}>
+      <div className="search-result-container position-static">
         <ul className="search-result-list">
           <p className="tip">{this.props.total + ' ' + gettext('results')}</p>
           {this.props.resultItems.map((item, index) => {

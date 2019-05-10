@@ -8,6 +8,8 @@ import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import moment from 'moment';
 
+import '../../css/search.css';
+
 class SearchViewPanel extends React.Component {
 
   constructor(props) {
@@ -43,6 +45,7 @@ class SearchViewPanel extends React.Component {
       size_to: '',
       shared_from: '',
       not_shared_from: '',
+      isShowSearchFilter: false,
     };
   }
 
@@ -60,6 +63,7 @@ class SearchViewPanel extends React.Component {
         hasMore: res.data.has_more,
         total: res.data.total,
         page: params.page,
+        isShowSearchFilter: true,
       });
       this.stateHistory = stateHistory;
       this.stateHistory.resultItems = res.data.results;
@@ -88,10 +92,10 @@ class SearchViewPanel extends React.Component {
     if (this.state.obj_type) {params.obj_type = this.state.obj_type;}
     if (this.state.input_fexts) {params.input_fexts = this.state.input_fexts;}
     if (this.state.with_permission) {params.with_permission = this.state.with_permission;}
-    if (this.state.time_from) {params.time_from = moment(this.state.time_from).valueOf() /1000;}
-    if (this.state.time_to) {params.time_to = moment(this.state.time_to).valueOf() /1000;}
-    if (this.state.size_from) {params.size_from = this.state.size_from *1000 *1000;}
-    if (this.state.size_to) {params.size_to = this.state.size_to *1000 *1000;}
+    if (this.state.time_from) {params.time_from = moment(this.state.time_from).valueOf() / 1000;}
+    if (this.state.time_to) {params.time_to = moment(this.state.time_to).valueOf() / 1000;}
+    if (this.state.size_from) {params.size_from = this.state.size_from * 1000 *1000;}
+    if (this.state.size_to) {params.size_to = this.state.size_to * 1000 * 1000;}
     if (this.state.shared_from) {params.shared_from = this.state.shared_from;}
     if (this.state.not_shared_from) {params.not_shared_from = this.state.not_shared_from;}
     if (ftype.length !== 0) {params.ftype = ftype;}
@@ -99,6 +103,14 @@ class SearchViewPanel extends React.Component {
   };
 
   handleSubmit = () => {
+    if (this.compareNumber(this.state.time_from, this.state.time_to)) {
+      this.setState({ errorMsg: gettext('Start date should be earlier than end date.') });
+      return;
+    }
+    if (this.compareNumber(this.state.size_from, this.state.size_to)) {
+      this.setState({ errorMsg: gettext('Invalid file size range.') });
+      return;
+    }
     if (this.getValueLength(this.state.q.trim()) < 3) {
       if (this.state.q.trim().length === 0) {
         this.setState({errorMsg: gettext('It is required.')});
@@ -114,21 +126,58 @@ class SearchViewPanel extends React.Component {
     }
   };
 
+  compareNumber = (num1, num2) => {
+    if (!num1 || !num2) return false;
+    if (parseInt(num1.replace(/\-/g, '')) >= parseInt(num2.replace(/\-/g, ''))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  showSearchFilter = () => {
+    this.setState({ isShowSearchFilter: true });
+  }
+
+  hideSearchFilter = () => {
+    this.setState({ isShowSearchFilter: false });
+  }
+
+  handleReset = () => {
+    this.setState({
+      q: this.props.q.trim(),
+      search_repo: this.props.searchRepo,
+      search_ftypes: this.props.searchFtypes,
+      input_fexts: '',
+      ftype: [],
+      obj_type: '',
+      search_path: '',
+      with_permission: '',
+      time_from: '',
+      time_to: '',
+      size_from: '',
+      size_to: '',
+      shared_from: '',
+      not_shared_from: '',
+      errorMsg: '',
+    });
+  }
+
   handlePrevious = () => {
-    if (this.stateHistory && this.state.page > 1){
+    if (this.stateHistory && this.state.page > 1) {
       this.setState(this.stateHistory,() => {
         const params = this.handleSearchParams(this.state.page -1);
         this.getSearchResults(params);
       });
-    }else{
+    } else {
       toaster.danger(gettext('Error'), {duration: 3});
     }
   };
 
   handleNext = () => {
-    if (this.stateHistory && this.state.hasMore){
+    if (this.stateHistory && this.state.hasMore) {
       this.setState(this.stateHistory,() => {
-        const params = this.handleSearchParams(this.state.page +1);
+        const params = this.handleSearchParams(this.state.page + 1);
         this.getSearchResults(params);
       });
     } else {
@@ -155,6 +204,7 @@ class SearchViewPanel extends React.Component {
 
   toggleCollapse = () => {
     this.setState({isCollapseOpen: !this.state.isCollapseOpen});
+    this.hideSearchFilter();
   };
 
   openFileTypeCollapse = () => {
@@ -216,8 +266,8 @@ class SearchViewPanel extends React.Component {
   getFileTypesList = () => {
     const fileTypeItems = ['Text', 'Document', 'Image', 'Video', 'Audio', 'PDF', 'Markdown'];
     let ftype = [];
-    for (let i=0; i<this.state.fileTypeItemsStatus.length; i++){
-      if (this.state.fileTypeItemsStatus[i]){
+    for (let i = 0; i < this.state.fileTypeItemsStatus.length; i++){
+      if (this.state.fileTypeItemsStatus[i]) {
         ftype.push(fileTypeItems[i]);
       }
     }
@@ -230,16 +280,12 @@ class SearchViewPanel extends React.Component {
     });
   };
 
-  handleTimeFromInput = (event) => {
-    this.setState({
-      time_from: event.target.value,
-    });
+  handleTimeFromInput = (value) => {
+    this.setState({ time_from: value });
   };
 
-  handleTimeToInput = (event) => {
-    this.setState({
-      time_to: event.target.value,
-    });
+  handleTimeToInput = (value) => {
+    this.setState({ time_to: value });
   };
 
   handleSizeFromInput = (event) => {
@@ -252,7 +298,6 @@ class SearchViewPanel extends React.Component {
     this.setState({
       size_to: event.target.value >= 0 ? event.target.value : 0,
     });
-
   };
 
   componentDidMount() {
@@ -266,77 +311,72 @@ class SearchViewPanel extends React.Component {
   }
 
   render() {
+    let { isCollapseOpen } = this.state;
     return (
-      <div style={{width: '65%', margin: '0 auto'}}>
-
-        <div className="search" style={{marginTop: '30px'}}>
-          <div className="search-container" style={{padding: '10px', background: '#f7f7f8'}}>
-            <div className="input-icon" style={{display: 'flex', alignItems: 'center'}}>
-              <input
-                type="text"
-                className="form-control search-input"
-                name="query"
-                autoComplete="off"
-                value={this.state.q}
-                style={{paddingLeft: '0.5rem', width: '30rem',}}
-                placeholder={gettext('Search Files')}
-                onChange={this.handleSearchInput}
-                onKeyDown={this.handleKeyDown}
-              />
-              <i className="search-icon-right input-icon-addon fas fa-search" style={{left: '28rem'}}
-                onClick={this.handleSubmit}>
-              </i>
-              <i className="sf2-icon-caret-down action-icon" onClick={this.toggleCollapse}>
-              </i>
-            </div>
-            {this.state.errorMsg && <span className="error">{this.state.errorMsg}</span>}
-            <SearchScales
-              toggleCollapse={this.toggleCollapse}
-              openFileTypeCollapse={this.openFileTypeCollapse}
-              closeFileTypeCollapse={this.closeFileTypeCollapse}
-              handlerFileTypes={this.handlerFileTypes}
-              handlerFileTypesInput={this.handlerFileTypesInput}
-              handleSubmit={this.handleSubmit}
-              handlerRepo={this.handlerRepo}
-              handleKeyDown={this.handleKeyDown}
-              handleTimeFromInput={this.handleTimeFromInput}
-              handleTimeToInput={this.handleTimeToInput}
-              handleSizeFromInput={this.handleSizeFromInput}
-              handleSizeToInput={this.handleSizeToInput}
-              repoName={this.repoName}
-              repoID={this.repoID}
-              stateAndValues={this.state}
+      <div className="search-page">
+        <div className="search-page-container">
+          <div className="input-icon align-items-center d-flex">
+            <input
+              type="text"
+              className="form-control search-input"
+              name="query"
+              autoComplete="off"
+              value={this.state.q}
+              placeholder={gettext('Search Files')}
+              onChange={this.handleSearchInput}
+              onKeyDown={this.handleKeyDown}
             />
+            <i className="search-icon-right input-icon-addon fas fa-search" onClick={this.handleSubmit}></i>
+            <i className={`fas action-icon fa-angle-double-${isCollapseOpen ? 'up' : 'down'}`} onClick={this.toggleCollapse}></i>
           </div>
-          {this.state.isLoading && <Loading/>}
-          {(!this.state.isLoading && this.state.isResultGot && !this.state.resultItems.length) &&
-          <div className="message empty-tip">
-            <h2>{gettext('No result found')}</h2>
-          </div>
-          }
-          {(!this.state.isLoading && this.state.isResultGot && this.state.resultItems.length !== 0) &&
-          <SearchViewResultsList
-            resultItems={this.state.resultItems}
-            total={this.state.total}
+          {this.state.errorMsg && <span className="error">{this.state.errorMsg}</span>}
+          <SearchScales
+            toggleCollapse={this.toggleCollapse}
+            openFileTypeCollapse={this.openFileTypeCollapse}
+            closeFileTypeCollapse={this.closeFileTypeCollapse}
+            handlerFileTypes={this.handlerFileTypes}
+            handlerFileTypesInput={this.handlerFileTypesInput}
+            handleSubmit={this.handleSubmit}
+            handleReset={this.handleReset}
+            handlerRepo={this.handlerRepo}
+            handleKeyDown={this.handleKeyDown}
+            handleTimeFromInput={this.handleTimeFromInput}
+            handleTimeToInput={this.handleTimeToInput}
+            handleSizeFromInput={this.handleSizeFromInput}
+            handleSizeToInput={this.handleSizeToInput}
+            repoName={this.repoName}
+            repoID={this.repoID}
+            stateAndValues={this.state}
           />
-          }
-          {(!this.state.isLoading && this.state.isResultGot) &&
-          <div className="paginator" style={{textAlign:'center', marginTop:'1rem', marginBottom:'1rem'}}>
-            {this.state.page !== 1 && <a href="#" onClick={() => this.handlePrevious()}>{gettext('Previous')}</a>}
-            {(this.state.page !== 1 && this.state.hasMore) && <span> | </span>}
-            {this.state.hasMore &&<a href="#" onClick={() => this.handleNext()}>{gettext('Next')}</a>}
-          </div>}
         </div>
+        {this.state.isLoading && <Loading/>}
+        {(!this.state.isLoading && this.state.isResultGot && !this.state.resultItems.length) &&
+        <div className="message empty-tip">
+          <h2>{gettext('No result found')}</h2>
+        </div>
+        }
+        {(!this.state.isLoading && this.state.isResultGot && this.state.resultItems.length !== 0) &&
+        <SearchViewResultsList
+          resultItems={this.state.resultItems}
+          total={this.state.total}
+        />
+        }
+        {(!this.state.isLoading && this.state.isResultGot) &&
+        <div className="paginator">
+          {this.state.page !== 1 && <a href="#" onClick={() => this.handlePrevious()}>{gettext('Previous')}</a>}
+          {(this.state.page !== 1 && this.state.hasMore) && <span> | </span>}
+          {this.state.hasMore &&<a href="#" onClick={() => this.handleNext()}>{gettext('Next')}</a>}
+        </div>}
       </div>
     );
   }
 }
 
 const searchViewPanelPropTypes = {
-  q: PropTypes.string.isRequired,
-  searchRepo: PropTypes.string.isRequired,
-  searchFtypes: PropTypes.string.isRequired,
-  repoName: PropTypes.string.isRequired,
+  q: PropTypes.string,
+  searchRepo: PropTypes.string,
+  searchFtypes: PropTypes.string,
+  repoName: PropTypes.string,
 };
 
 SearchViewPanel.propTypes = searchViewPanelPropTypes;

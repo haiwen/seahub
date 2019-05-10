@@ -97,6 +97,68 @@
   font-weight: bold;
 }
 
+.main-panle-south {
+  flex: auto;
+  overflow: auto;
+  height: calc(100% - 50px);
+}
+.search-page {
+  margin: 30px auto;
+  width: 65%;
+}
+.search-page .search-page-container {
+  padding: 10px;
+  background: #f7f7f8;
+}
+.search-page .search-page-container .search-input {
+  padding-left: 0.5rem;
+  width: 30rem;
+}
+.search-page .search-scales .search-file-types .search-input {
+  padding-left: 0.5rem;
+  width: 30rem;
+  max-width: 100%;
+}
+.search-page .search-page-container .search-icon-right {
+  left: 28rem;
+}
+.search-page .paginator {
+  text-align: center;
+  margin: 1rem 0;
+}
+.search-page .search-scales, .search-page .search-filters {
+  color: #747474;
+}
+.search-page .search-filters {
+  padding: 10px 10px 0;
+}
+.search-page .search-scales .search-repo, 
+.search-page .search-scales .search-file-types {
+  padding: 5px 0;
+}
+.search-file-types .search-file-types-form {
+  top: 10px;
+}
+.search-page .search-scales .search-catalog {
+  margin: 0 10px;
+  border-top: 1px dashed #e2e2e2;
+  padding: 10px 0;
+}
+.search-page .search-scales .search-catalog:first-child {
+  border: none;
+}
+.search-page .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #3B88FD;
+}
+.search-date .ant-input {
+  height: 2.375rem;
+  padding: 0.375rem 0.75rem;
+  line-height: 1.6;
+  border: 1px solid rgba(0, 40, 100, 0.12);
+  border-radius: 3px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
 @media (max-width: 767px) {
   .common-toolbar .search {
     margin: 0;
@@ -136,5 +198,27 @@
     top: 2.5rem;
     left: auto;
     width: 20rem;
+  }
+
+  .search-page {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .search-page .search-page-container .search-input {
+    box-shadow: none;
+    width: 95% !important;
+  }
+
+  .search-page .search-page-container .search-icon-right {
+    left: 85%;
+  }
+  
+  .search-page .search-result-container {
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
   }
 }
