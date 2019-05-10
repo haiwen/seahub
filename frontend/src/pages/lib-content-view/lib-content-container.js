@@ -7,6 +7,7 @@ import LibDetail from '../../components/dirent-detail/lib-details';
 import DirListView from '../../components/dir-view-mode/dir-list-view';
 import DirGridView from '../../components/dir-view-mode/dir-grid-view';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
+import SessionExpiredTip from '../../components/session-expired-tip'
 
 import '../../css/lib-content-view.css';
 
@@ -97,7 +98,6 @@ class LibContentContainer extends React.Component {
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
-    this.sessionExpiredTip = (<div className="session-expired-tip">{gettext('Please login.')}</div>)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -181,7 +181,7 @@ class LibContentContainer extends React.Component {
           </div>
           <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
             {!this.props.pathExist && this.errMessage}
-            {this.props.isSessionExpired && this.sessionExpiredTip}
+            {this.props.isSessionExpired && <SessionExpiredTip />}
             {this.props.pathExist && !this.props.isSessionExpired &&(
               <Fragment>
                 {this.props.currentMode === 'list' && (

@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api.js';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import "../../css/invitations.css";
+import SessionExpiredTip from '../session-expired-tip'
 
 class UserItem extends React.Component {
 
@@ -260,7 +261,7 @@ class ShareToUser extends React.Component {
     let { sharedItems } = this.state;
     return (
       <Fragment>
-        {this.state.isSessionExpired && <div className="session-expired-tip">{gettext('Please login.')}</div>}
+        {this.state.isSessionExpired && <SessionExpiredTip />}
         {!this.state.isSessionExpired && 
           <table>
             <thead>

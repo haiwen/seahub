@@ -8,6 +8,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedLinkInfo from '../../models/shared-link-info';
 import toaster from '../toast';
+import SessionExpiredTip from '../session-expired-tip'
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -248,7 +249,7 @@ class GenerateShareLink extends React.Component {
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
 
     if (this.state.isSessionExpired) {
-      return(<div className="session-expired-tip">{gettext('Please login.')}</div>)
+      return(<SessionExpiredTip />)
     }
     if (this.state.sharedLinkInfo) {
       let sharedLinkInfo = this.state.sharedLinkInfo;

@@ -6,6 +6,7 @@ import makeAnimated from 'react-select/lib/animated';
 import { gettext, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
+import SessionExpiredTip from '../session-expired-tip'
 
 class GroupItem extends React.Component {
 
@@ -265,7 +266,7 @@ class ShareToGroup extends React.Component {
   render() {
     return (
       <Fragment>
-        {this.state.isSessionExpired && <div className="session-expired-tip">{gettext('Please login.')}</div>}
+        {this.state.isSessionExpired && <SessionExpiredTip />}
         {!this.state.isSessionExpired && 
           <table>
             <thead>
