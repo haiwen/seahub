@@ -1,6 +1,6 @@
 from seahub.profile.models import Profile
 from seahub.utils.auth import gen_user_virtual_id
-
+from seahub.utils import is_valid_email
 USER_FIELDS = ['username', 'email']
 
 
@@ -32,12 +32,12 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
     }
 
 
-
 def save_profile(strategy, details, backend, user=None, *args, **kwargs):
     if not user:
         return
-    email = details.get('email', '')
-    if email:
+    email = details.get('email', '').strip()
+    profile = Profile.objects.get_profile_by_contact_email(email)
+    if email and is_valid_email(email) and not profile:
         Profile.objects.add_or_update(username=user.username,
                                       contact_email=email)
 
@@ -63,6 +63,7 @@ from django.core.files import File
 from seahub.avatar.models import Avatar
 from seahub.avatar.signals import avatar_updated
 logger = logging.getLogger(__name__)
+
 
 def _update_user_avatar(user, pic):
     if not pic:

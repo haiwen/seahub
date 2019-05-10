@@ -253,6 +253,16 @@ class AdminUsers(APIView):
             error_msg = 'password required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        contact_email = request.data.get("contact_email", None)
+        if contact_email is not None and contact_email.strip() != '':
+            if not is_valid_email(contact_email):
+                error_msg = 'Contact email invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            profile = Profile.objects.get_profile_by_contact_email(contact_email)
+            if profile:
+                error_msg = 'Contact email %s already exists.' % contact_email
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # create user
         try:
             user_obj = User.objects.create_user(email)
