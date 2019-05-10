@@ -198,7 +198,7 @@ class LibContentView extends React.Component {
     }).catch((error) => {
       if (error.response.status === 404) {
         if (this.state.currentMode === 'column') {
-          this.updataColumnData(path)
+          this.updataColumnMarkdownData(path)
         }
       }
     });
@@ -229,7 +229,7 @@ class LibContentView extends React.Component {
     });
   }
 
-  updataColumnData = (filePath) => {
+  updataColumnMarkdownData = (filePath) => {
     let repoID = this.props.repoID;
     // update state
     this.setState({
