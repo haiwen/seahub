@@ -10,6 +10,7 @@ import Loading from '../../components/loading';
 
 import '../../css/search.css';
 
+const _ = require('lodash');
 const { q, repo_name, search_repo, search_ftypes } = window.search.pageOptions;
 
 class SearchViewPanel extends React.Component {
@@ -50,7 +51,7 @@ class SearchViewPanel extends React.Component {
       isLoading: true,
       isResultGot: false,
     });
-    const stateHistory = this.state;
+    const stateHistory = _.cloneDeep(this.state);
     seafileAPI.searchFiles(params, null).then(res => {
       this.setState({
         isLoading: false,
