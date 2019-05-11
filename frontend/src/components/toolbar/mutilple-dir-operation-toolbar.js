@@ -95,7 +95,7 @@ class MutipleDirOperationToolbar extends React.Component {
 
 
     if (dirent.type === 'dir') {
-      let shareBtn = this.props.showShareBtn ? [SHARE] : []
+      let shareBtn = this.props.showShareBtn ? [SHARE] : [];
       menuList = [...shareBtn];
       return menuList;
     } 

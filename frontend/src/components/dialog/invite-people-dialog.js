@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {gettext} from '../../utils/constants';
 import {seafileAPI} from '../../utils/seafile-api';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Input, Button} from 'reactstrap';
-import toaster from "../toast";
+import toaster from '../toast';
 
 class InvitePeopleDialog extends React.Component {
 
@@ -97,10 +97,12 @@ class InvitePeopleDialog extends React.Component {
         <ModalHeader toggle={this.props.toggleInvitePeopleDialog}>{gettext('Invite People')}</ModalHeader>
         <ModalBody>
           <label htmlFor="emails">{gettext('Emails')}</label>
-          <Input type="text" id="emails" placeholder={gettext("Emails, separated by ','")}
-                 value={this.state.emails}
-                 onChange={this.handleEmailsChange}
-                 onKeyDown={this.handleKeyDown}
+          <Input
+            type="text" id="emails"
+            placeholder={gettext("Emails, separated by ','")}
+            value={this.state.emails}
+            onChange={this.handleEmailsChange}
+            onKeyDown={this.handleKeyDown}
           />
           <span className="error">{this.state.errorMsg}</span>
         </ModalBody>

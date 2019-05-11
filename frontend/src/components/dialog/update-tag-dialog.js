@@ -70,7 +70,7 @@ class UpdateTagDialog extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.deleteRepoTag(repoID, tag.id).then((res) => {
       this.props.toggleCancel();
-      if (res.data.success === "true") {
+      if (res.data.success === 'true') {
         this.props.onDeleteRepoTag(tag.id);
       }
     });

@@ -78,7 +78,6 @@ class DirListView extends React.Component {
           sortBy={this.props.sortBy}
           sortOrder={this.props.sortOrder}
           sortItems={this.props.sortItems}
-          onAddFile={this.props.onAddFile}
           onItemClick={this.props.onItemClick}
           onItemSelected={this.props.onItemSelected}
           onItemDelete={this.props.onItemDelete}
