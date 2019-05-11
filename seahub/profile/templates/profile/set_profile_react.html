@@ -20,10 +20,14 @@ window.app.pageOptions = {
   enableUserSetContactEmail: {% if ENABLE_USER_SET_CONTACT_EMAIL %} true {% else %} false {% endif %},
   
   canUpdatePassword: {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %} true {% else %} false {% endif %},
+  {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
   passwordOperationText: {% if user_unusable_password %}"{% trans "Set Password" %}"{% else %}"{% trans "Update" %}"{% endif %},
+  {% endif %}
 
   enableWebdavSecret: {% if ENABLE_WEBDAV_SECRET %} true {% else %} false {% endif %},
+  {% if ENABLE_WEBDAV_SECRET %}
   webdavPasswd: '{{ webdav_passwd|escapejs }}',
+  {% endif %}
 
   enableAddressBook: {% if ENABLE_ADDRESSBOOK_OPT_IN %} true {% else %} false {% endif %},
 
@@ -39,16 +43,22 @@ window.app.pageOptions = {
     return list;
   })(),
 
+  {% if is_pro %}
   initialEmailNotificationInterval: {{ email_notification_interval }},
+  {% endif %}
 
   twoFactorAuthEnabled: {% if two_factor_auth_enabled %} true {% else %} false {% endif %},
+  {% if two_factor_auth_enabled %}
   defaultDevice: {% if default_device %} true {% else %} false {% endif %},
   backupTokens: {{backup_tokens}},
+  {% endif %}
 
   enableWechatWork: {% if enable_wechat_work %} true {% else %} false {% endif %},
   langCode: "{{LANGUAGE_CODE|escapejs}}",
+  {% if enable_wechat_work %}
   socialConnected: {% if social_connected %} true {% else %} false {% endif %},
   socialNextPage: "{{ social_next_page|escapejs }}",
+  {% endif %}
 
   enableDeleteAccount: {% if ENABLE_DELETE_ACCOUNT %} true {% else %} false {% endif %}
 };

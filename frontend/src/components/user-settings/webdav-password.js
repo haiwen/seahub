@@ -11,19 +11,29 @@ class WebdavPassword extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPasswordVisible: false,
+      isPasswordHidden: true,
       password: webdavPasswd 
     };
+
+    this.passwordInput = React.createRef();
   }
 
   handleInputChange = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({password: passwd});
+    this.setState({password: passwd}, () => {
+      if (this.state.isPasswordHidden) {
+        this.passwordInput.type = 'password';
+      }
+    });
   }
 
   togglePasswordVisible = () => {
-    this.setState({
-      isPasswordVisible: !this.state.isPasswordVisible
+    this.setState({isPasswordHidden: !this.state.isPasswordHidden}, () => {
+      if (this.state.isPasswordHidden) {
+        this.passwordInput.type = 'password';
+      } else {
+        this.passwordInput.type = 'text';
+      }
     });
   }
 
@@ -35,7 +45,9 @@ class WebdavPassword extends React.Component {
     }
     this.setState({
       password: randomPassword,
-      isPasswordVisible: true
+      isPasswordHidden: false,
+    }, () => {
+      this.passwordInput.type = 'text';
     });
   }
 
@@ -62,9 +74,7 @@ class WebdavPassword extends React.Component {
   }
 
   handleDelete = () => {
-    this.setState({
-      password: ''
-    });
+    this.setState({password: ''});
     this.updatePassword('');
   }
 
@@ -75,9 +85,9 @@ class WebdavPassword extends React.Component {
         <label>{gettext('Password')}</label>
         <div className="row mb-2">
           <InputGroup className="col-sm-5">
-            <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} />
+            <Input innerRef={input => {this.passwordInput = input}} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
             <InputGroupAddon addonType="append">
-              <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+              <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.isPasswordHidden ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
               <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
             </InputGroupAddon>
           </InputGroup>

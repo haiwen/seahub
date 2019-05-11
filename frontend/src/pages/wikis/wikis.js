@@ -154,8 +154,8 @@ class Wikis extends Component {
               }
               {(!this.state.loading && this.state.wikis.length === 0) &&
                 <div className="message empty-tip">
-                  <h2>{gettext('You do not have any wiki')}</h2>
-                  <p>{gettext('Seafile Wiki enables you to organize your knowledge in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server.')}</p>
+                  <h2>{gettext('You do not have any public library')}</h2>
+                  <p>{gettext('Public libraries are for publishing your contents in an organized way.')}</p>
                 </div>
               }
             </div>

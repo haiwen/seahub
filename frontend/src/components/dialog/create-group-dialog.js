@@ -12,6 +12,12 @@ class CreateGroupDialog extends React.Component {
       groupName: '',
       errorMsg: '',
     };
+    this.newInput = React.createRef();
+  }
+
+  componentDidMount() {
+    this.newInput.focus();
+    this.newInput.setSelectionRange(0, 0);
   }
 
   handleGroupChange = (event) => {
@@ -51,6 +57,7 @@ class CreateGroupDialog extends React.Component {
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       this.handleSubmitGroup();
+      e.preventDefault();
     }
   }
 
@@ -60,8 +67,14 @@ class CreateGroupDialog extends React.Component {
         <ModalHeader toggle={this.props.toggleAddGroupModal}>{gettext('New Group')}</ModalHeader>
         <ModalBody>
           <label htmlFor="groupName">{gettext('Name')}</label>
-          <Input type="text" id="groupName" value={this.state.groupName}
-            onChange={this.handleGroupChange} onKeyDown={this.handleKeyDown}/>
+          <Input
+            innerRef={input => {this.newInput = input;}}
+            type="text"
+            id="groupName"
+            value={this.state.groupName}
+            onChange={this.handleGroupChange}
+            onKeyDown={this.handleKeyDown}
+          />
           <span className="error">{this.state.errorMsg}</span>
         </ModalBody>
         <ModalFooter>

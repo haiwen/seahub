@@ -48,6 +48,7 @@ export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForO
 export const repoPasswordMinLength = window.app.pageOptions.repoPasswordMinLength;
 export const canAddPublicRepo = window.app.pageOptions.canAddPublicRepo;
 export const canInvitePeople = window.app.pageOptions.canInvitePeople;
+export const canLockUnlockFile = window.app.pageOptions.canLockUnlockFile;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;

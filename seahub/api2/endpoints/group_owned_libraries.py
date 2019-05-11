@@ -194,9 +194,8 @@ class GroupOwnedLibrary(APIView):
 
         # rename repo
         try:
-            repo_owner = get_repo_owner(request, repo_id)
             # desc is ''
-            seafile_api.edit_repo(repo_id, new_repo_name, '', repo_owner)
+            seafile_api.edit_repo(repo_id, new_repo_name, '', username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
