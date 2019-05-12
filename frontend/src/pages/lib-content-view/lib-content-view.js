@@ -18,6 +18,7 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
+import SessionExpiredTip from '../../components/session-expired-tip';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -72,6 +73,7 @@ class LibContentView extends React.Component {
       isDirentDetailShow: false,
       updateDetail: false,
       itemsShowLength: 100,
+      isSessionExpired: false,
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -340,13 +342,14 @@ class LibContentView extends React.Component {
   showDir = (path) => {
     let repoID = this.props.repoID;
 
-    // update stste
-    this.setState({
-      isDirentListLoading: true,
-      path: path,
-      isViewFile: false,
-      selectedDirentList: [],
-    });
+    if (!this.state.isSessionExpired) {
+      // update stste
+      this.setState({
+        isDirentListLoading: true,
+        isViewFile: false,
+        selectedDirentList: [],
+      });
+    }
 
     // update data
     this.loadDirentList(path);
@@ -411,7 +414,13 @@ class LibContentView extends React.Component {
           });
         });
       });
-    }).catch(() => {
+    }).catch((err) => {
+      if (err.response.status === 403) {
+        toaster.danger(
+          <SessionExpiredTip />,
+          {id: 'session_expired', duration: 3600}
+        )
+      }
       this.setState({
         isFileLoading: false,
         isFileLoadedErr: true,
@@ -445,12 +454,22 @@ class LibContentView extends React.Component {
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.data.dir_id,
         readmeMarkdown: markdownItem,
+        path: path,
+        isSessionExpired: false,
       });
 
       if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
-    }).catch(() => {
+    }).catch((err) => {
+      if (err.response.status === 403) {
+        toaster.danger(
+          <SessionExpiredTip />,
+          {id: 'session_expired', duration: 3600}
+        )
+        this.setState({isDirentListLoading: false})
+        return;
+      }
       this.setState({
         isDirentListLoading: false,
         pathExist: false,

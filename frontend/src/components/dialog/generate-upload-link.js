@@ -7,6 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedUploadInfo from '../../models/shared-upload-info';
 import toaster from '../toast';
+import SessionExpiredTip from '../session-expired-tip';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -37,6 +38,14 @@ class GenerateUploadLink extends React.Component {
       if (res.data.length !== 0) {
         let sharedUploadInfo = new SharedUploadInfo(res.data[0]);
         this.setState({sharedUploadInfo: sharedUploadInfo});
+      }
+    }).catch((err) => {
+      if (err.response.status === 403) {
+        toaster.danger(
+          <SessionExpiredTip />,
+          {id: 'session_expired', duration: 3600}
+        )
+        this.props.closeShareDialog();
       }
     });
   }
@@ -125,7 +134,6 @@ class GenerateUploadLink extends React.Component {
 
     let passwordLengthTip = gettext('(at least {passwordLength} characters)');
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
-
     if (this.state.sharedUploadInfo) {
       let sharedUploadInfo = this.state.sharedUploadInfo;
       return (
