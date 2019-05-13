@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { UncontrolledTooltip } from 'reactstrap';
 import { siteRoot, gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import FileTag from '../../models/file-tag';
 import InternalLinkDialog from '../dialog/internal-link-dialog';
 
 const propTypes = {
@@ -101,7 +99,7 @@ class DirPath extends React.Component {
         {(this.props.isViewFile && fileTags.length !== 0) && 
           <span id='column-mode-file-tags' className="tag-list tag-list-stacked align-middle ml-1">
             {fileTags.map((fileTag, index) => {
-              return (<span className="file-tag" key={fileTag.id} style={{zIndex: index, backgroundColor: fileTag.color}}></span>)
+              return (<span className="file-tag" key={fileTag.id} style={{zIndex: index, backgroundColor: fileTag.color}}></span>);
             })}
             <UncontrolledTooltip target="column-mode-file-tags" placement="bottom">
               {tagTitle}

@@ -2,14 +2,14 @@ import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import {gettext, siteRoot} from '../../utils/constants';
 import InvitationsToolbar from '../../components/toolbar/invitations-toolbar';
-import InvitePeopleDialog from "../../components/dialog/invite-people-dialog";
-import {seafileAPI} from "../../utils/seafile-api";
+import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
+import {seafileAPI} from '../../utils/seafile-api';
 import {Table} from 'reactstrap';
-import Loading from "../../components/loading";
+import Loading from '../../components/loading';
 import moment from 'moment';
 import toaster from '../../components/toast';
 
-import "../../css/invitations.css";
+import '../../css/invitations.css';
 
 class InvitationsListItem extends React.Component {
 
@@ -43,16 +43,14 @@ class InvitationsListItem extends React.Component {
     const invitationItem = this.props.invitation;
     const acceptIcon = <i className="sf2-icon-tick invite-accept-icon"></i>;
     const deleteOperation = <i className="action-icon sf2-icon-x3"
-                               title={gettext('Delete')}
-                               style={!this.state.isOperationShow ? {opacity: 0} : {}}
-                               onClick={this.props.onItemDelete.bind(this, invitationItem.token, this.props.index)}></i>;
+      title={gettext('Delete')}
+      style={!this.state.isOperationShow ? {opacity: 0} : {}}
+      onClick={this.props.onItemDelete.bind(this, invitationItem.token, this.props.index)}></i>;
     return (
-      <tr onMouseEnter={this.onMouseEnter}
-          onMouseOver={this.onMouseOver}
-          onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td>{invitationItem.accepter}</td>
-        <td>{moment(invitationItem.invite_time).format("YYYY-MM-DD")}</td>
-        <td>{moment(invitationItem.expire_time).format("YYYY-MM-DD")}</td>
+        <td>{moment(invitationItem.invite_time).format('YYYY-MM-DD')}</td>
+        <td>{moment(invitationItem.expire_time).format('YYYY-MM-DD')}</td>
         <td>{invitationItem.accept_time && acceptIcon}</td>
         <td>{!invitationItem.accept_time && deleteOperation}</td>
       </tr>
@@ -94,24 +92,24 @@ class InvitationsListView extends React.Component {
           onItemDelete={this.onItemDelete}
           invitation={invitation}
           index={index}
-        />)
+        />);
     });
 
     return (
-        <Table hover>
-          <thead>
-            <tr>
-              <th width="25%">{gettext('Email')}</th>
-              <th width="20%">{gettext('Invite Time')}</th>
-              <th width="20%">{gettext('Expiration')}</th>
-              <th width="18%">{gettext('Accepted')}</th>
-              <th width="7%"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {invitationsListItems}
-          </tbody>
-        </Table>
+      <Table hover>
+        <thead>
+          <tr>
+            <th width="25%">{gettext('Email')}</th>
+            <th width="20%">{gettext('Invite Time')}</th>
+            <th width="20%">{gettext('Expiration')}</th>
+            <th width="18%">{gettext('Accepted')}</th>
+            <th width="7%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {invitationsListItems}
+        </tbody>
+      </Table>
     );
   }
 }
@@ -191,7 +189,7 @@ class InvitationsView extends React.Component {
       <div className="message empty-tip">
         <h2>{gettext('You have not invited any people.')}</h2>
       </div>
-    )
+    );
   }
 
   handlePermissionDenied = () => {
@@ -200,7 +198,7 @@ class InvitationsView extends React.Component {
       <div className="error mt-6 text-center">
         <span>{this.state.permissionDeniedMsg}</span>
       </div>
-    )
+    );
   }
 
   render() {
@@ -239,5 +237,12 @@ class InvitationsView extends React.Component {
     );
   }
 }
+
+const InvitationsViewPropTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
+};
+
+InvitationsView.propTypes = InvitationsViewPropTypes;
 
 export default InvitationsView;

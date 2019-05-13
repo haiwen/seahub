@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import Logo from '../../components/logo';
 import { gettext, siteRoot, isPro, isDefaultAdmin, canViewSystemInfo, canViewStatistic,
-        canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
-        canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
-        enableGuestInvitation, enableTermsAndConditions, enableFileScan } from '../../utils/constants';
+  canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
+  canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
+  enableGuestInvitation, enableTermsAndConditions, enableFileScan } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -27,7 +27,7 @@ class SidePanel extends React.Component {
               <ul className="nav nav-pills flex-column nav-container">
                 {canViewSystemInfo &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sysadmin/#dashboard/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#dashboard/'}>
                       <span className="sf2-icon-info" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Info')}</span>
                     </a>
@@ -35,7 +35,7 @@ class SidePanel extends React.Component {
                 }
                 {isPro && canViewStatistic &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/statistic/file/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/statistic/file/'}>
                       <span className="sf2-icon-histogram" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Statistic')}</span>
                     </a>
@@ -43,7 +43,7 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sysadmin/#desktop-devices/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#desktop-devices/'}>
                       <span className="sf2-icon-monitor" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Devices')}</span>
                     </a>
@@ -51,7 +51,7 @@ class SidePanel extends React.Component {
                 }
                 {constanceEnabled && canConfigSystem &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/settings/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/settings/'}>
                       <span className="sf2-icon-cog2" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Settings')}</span>
                     </a>
@@ -59,7 +59,7 @@ class SidePanel extends React.Component {
                 }
                 {canManageLibrary &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sysadmin/#all-libs/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#all-libs/'}>
                       <span className="sf2-icon-library" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Libraries')}</span>
                     </a>
@@ -67,7 +67,7 @@ class SidePanel extends React.Component {
                 }
                 {canManageUser &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/useradmin/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/useradmin/'}>
                       <span className="sf2-icon-user" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Users')}</span>
                     </a>
@@ -75,7 +75,7 @@ class SidePanel extends React.Component {
                 }
                 {canManageGroup &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sysadmin/#groups/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#groups/'}>
                       <span className="sf2-icon-group" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Groups')}</span>
                     </a>
@@ -83,7 +83,7 @@ class SidePanel extends React.Component {
                 }
                 {isPro && canManageGroup &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sysadmin/#address-book/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#address-book/'}>
                       <span className="sf2-icon-organization" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Departments')}</span>
                     </a>
@@ -91,7 +91,7 @@ class SidePanel extends React.Component {
                 }
                 {multiTenancy && isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/orgadmin/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/orgadmin/'}>
                       <span className="sf2-icon-organization" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Organizations')}</span>
                     </a>
@@ -99,7 +99,7 @@ class SidePanel extends React.Component {
                 }
                 {multiInstitution && isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/instadmin/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/instadmin/'}>
                       <span className="sf2-icon-organization" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Institutions')}</span>
                     </a>
@@ -107,7 +107,7 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/notificationadmin/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/notificationadmin/'}>
                       <span className="sf2-icon-msgs" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Notifications')}</span>
                     </a>
@@ -115,7 +115,7 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/publinkadmin/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/publinkadmin/'}>
                       <span className="sf2-icon-link" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Links')}</span>
                     </a>
@@ -123,7 +123,7 @@ class SidePanel extends React.Component {
                 }
                 {sysadminExtraEnabled && canViewUserLog &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/loginadmin/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/loginadmin/'}>
                       <span className="sf2-icon-clock" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Logs')}</span>
                     </a>
@@ -131,7 +131,7 @@ class SidePanel extends React.Component {
                 }
                 {isPro && isDefaultAdmin && enableFileScan &&
                   <li className="nav-item">
-                    <Link className='nav-link ellipsis' to={siteRoot + "sys/file-scan-records/"}>
+                    <Link className='nav-link ellipsis' to={siteRoot + 'sys/file-scan-records/'}>
                       <span className="sf2-icon-security" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('File Scan')}</span>
                     </Link>
@@ -139,7 +139,7 @@ class SidePanel extends React.Component {
                 }
                 {isPro && isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/virus_scan_records/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/virus_scan_records/'}>
                       <span className="sf2-icon-security" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Virus Scan')}</span>
                     </a>
@@ -147,7 +147,7 @@ class SidePanel extends React.Component {
                 }
                 {enableGuestInvitation && isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/invitationadmin/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/invitationadmin/'}>
                       <span className="sf2-icon-invite" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Invitations')}</span>
                     </a>
@@ -155,7 +155,7 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin && enableTermsAndConditions &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sys/termsadmin/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sys/termsadmin/'}>
                       <span className="sf2-icon-wiki" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Terms and Conditions')}</span>
                     </a>
@@ -163,7 +163,7 @@ class SidePanel extends React.Component {
                 }
                 {isPro && canViewAdminLog &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + "sysadmin/#admin-operation-logs/"}>
+                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#admin-operation-logs/'}>
                       <span className="sf2-icon-admin-log" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Admin Logs')}</span>
                     </a>

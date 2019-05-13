@@ -40,6 +40,8 @@ const propTypes = {
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
+  showDirentDetail: PropTypes.func,
+  onItemRename: PropTypes.func,
 };
 
 class DirentGridView extends React.Component{
@@ -61,7 +63,7 @@ class DirentGridView extends React.Component{
       isMutipleOperation: false,
       isGridItemFreezed: false,
       activeDirent: null,
-    }
+    };
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
   }
 
@@ -176,7 +178,7 @@ class DirentGridView extends React.Component{
   }
 
   onDetails = (dirent) => {
-    this.props.onGridItemClick(dirent)
+    this.props.onGridItemClick(dirent);
     this.props.showDirentDetail();
   }
 
@@ -266,7 +268,7 @@ class DirentGridView extends React.Component{
     this.setState({
       isRenameDialogShow: !this.state.isRenameDialogShow,
     });
-    this.props.onItemRename(this.state.activeDirent, newName)
+    this.props.onItemRename(this.state.activeDirent, newName);
   }
 
 
@@ -310,7 +312,7 @@ class DirentGridView extends React.Component{
   }
 
   closeImagePopup = () => {
-    this.setState({isImagePopupOpen: false})
+    this.setState({isImagePopupOpen: false});
   }
 
   moveToPrevImage = () => {
@@ -344,7 +346,7 @@ class DirentGridView extends React.Component{
   }
 
   onGridContainerMouseDown = (event) => {
-    this.onMouseDown(event)
+    this.onMouseDown(event);
   }
 
   onGridItemMouseDown = (event) => {
@@ -358,9 +360,9 @@ class DirentGridView extends React.Component{
   }
 
   onGridContainerContextMenu = (event) => {
-      let id = "dirent-grid-container-menu"
-      let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
-      this.handleContextClick(event, id, menuList);
+    let id = 'dirent-grid-container-menu';
+    let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+    this.handleContextClick(event, id, menuList);
   }
 
   onGridItemContextMenu = (event, dirent) => {
@@ -377,10 +379,10 @@ class DirentGridView extends React.Component{
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
     if (this.props.posX) {
-        x -= this.props.posX;
+      x -= this.props.posX;
     }
     if (this.props.posY) {
-        y -= this.props.posY;
+      y -= this.props.posY;
     }
 
     hideMenu();
@@ -414,7 +416,7 @@ class DirentGridView extends React.Component{
       contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
 
       if (dirent.type === 'file') {
-        contextmenuList =  canGenerateShareLink ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider']
+        contextmenuList =  canGenerateShareLink ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
       }
     }
 
@@ -508,7 +510,7 @@ class DirentGridView extends React.Component{
                   onGridItemClick={this.onGridItemClick}
                   activeDirent={this.state.activeDirent}
                 />
-              )
+              );
             })
           }
         </ul>
@@ -609,9 +611,10 @@ class DirentGridView extends React.Component{
           </ModalPortal>
         )}
       </Fragment>
-    )
+    );
   }
 }
 
 DirentGridView.propTypes = propTypes;
+
 export default DirentGridView;
