@@ -97,7 +97,7 @@ input.expire-input {
     border-left: none;
     font-size: 0.9375rem;
     margin-left: -5px;
-    padding: 1px 4px;
+    padding: 0px 8px;
     height: 2.375rem;
     display: inline-block;
     text-align: center;
