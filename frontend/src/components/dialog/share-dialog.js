@@ -160,7 +160,7 @@ class ShareDialog extends React.Component {
       <div>
         <Modal isOpen={true} style={{maxWidth: '720px'}} className="share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog}>{gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span></ModalHeader>
-          <ModalBody className="dialog-list-container share-dialog-content">
+          <ModalBody className="share-dialog-content">
             {(itemType === 'library' || itemType === 'dir') && this.renderDirContent()}
             {(itemType === 'file' && enableShareLink) && this.renderFileContent()}
           </ModalBody>
