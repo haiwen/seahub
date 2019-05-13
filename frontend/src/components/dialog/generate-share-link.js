@@ -31,7 +31,7 @@ class GenerateShareLink extends React.Component {
       errorInfo: '',
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
-      mounted: false,
+      isLoading: true,
     };
     this.permissions = {
       'can_edit': false, 
@@ -47,11 +47,11 @@ class GenerateShareLink extends React.Component {
       if (res.data.length !== 0) {
         let sharedLinkInfo = new SharedLinkInfo(res.data[0]);
         this.setState({
-          mounted: true,
+          isLoading: false,
           sharedLinkInfo: sharedLinkInfo
         });
       }
-      this.setState({mounted: true});
+      this.setState({isLoading: false});
     });
   }
 
@@ -241,7 +241,7 @@ class GenerateShareLink extends React.Component {
 
   render() {
 
-    if (!this.state.mounted) {
+    if (this.state.isLoading) {
       return <Loading />;
     }
 
