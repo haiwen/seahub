@@ -31,7 +31,10 @@ window.app.pageOptions = {
 
   enableAddressBook: {% if ENABLE_ADDRESSBOOK_OPT_IN %} true {% else %} false {% endif %},
 
-  currentLang: '{{ LANGUAGE_CODE|language_name_local|capfirst|escapejs }}',
+  currentLang: {
+    langCode: '{{ LANGUAGE_CODE|escapejs }}',
+    langName: '{{ LANGUAGE_CODE|language_name_local|capfirst|escapejs }}'
+  },
   langList: (function() {
     var list = [];
     {% for LANG in LANGUAGES %}

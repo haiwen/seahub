@@ -35,7 +35,20 @@ class Settings extends React.Component {
 
   constructor(props) {
     super(props);
+    this.sideNavItems = [
+      {show: true, href: '#user-basic-info', text: gettext('Profile')},
+      {show: canUpdatePassword, href: '#update-user-passwd', text: gettext('Password')},
+      {show: enableWebdavSecret, href: '#update-webdav-passwd', text: gettext('WebDav Password')},
+      {show: enableAddressBook, href: '#list-in-address-book', text: gettext('Global Address Book')},
+      {show: true, href: '#lang-setting', text: gettext('Language')},
+      {show: isPro, href: '#email-notice', text: gettext('Email Notification')},
+      {show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication')},
+      {show: enableWechatWork, href: '#social-auth', text: gettext('Social Login')},
+      {show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account')},
+    ];
+
     this.state = {
+      curItemID: this.sideNavItems[0].href.substr(1)
     };
   }
 
@@ -81,6 +94,18 @@ class Settings extends React.Component {
     }
   }
 
+  handleContentScroll = (e) => {
+    const scrollTop = e.target.scrollTop;
+    const scrolled = this.sideNavItems.filter((item, index) => {
+      return item.show && document.getElementById(item.href.substr(1)).offsetTop - 30 < scrollTop;
+    });
+    if (scrolled.length) {
+      this.setState({
+        curItemID: scrolled[scrolled.length -1].href.substr(1)
+      });
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -93,11 +118,11 @@ class Settings extends React.Component {
           </div>
           <div className="flex-auto d-flex">
             <div className="side-panel o-auto">
-              <SideNav />
+              <SideNav data={this.sideNavItems} curItemID={this.state.curItemID} />
             </div>
             <div className="main-panel d-flex flex-column">
               <h2 className="heading">{gettext('Settings')}</h2>
-              <div className="content">
+              <div className="content position-relative" onScroll={this.handleContentScroll}>
                 <div id="user-basic-info" className="setting-item">
                   <h3 className="setting-item-heading">{gettext('Profile Setting')}</h3>
                   <UserAvatarForm  />
@@ -106,7 +131,7 @@ class Settings extends React.Component {
                 {canUpdatePassword &&
                 <div id="update-user-passwd" className="setting-item">
                   <h3 className="setting-item-heading">{gettext('Password')}</h3>
-                  <a href={`${siteRoot}accounts/password/change/`} className="btn btn-secondary">{passwordOperationText}</a>
+                  <a href={`${siteRoot}accounts/password/change/`} className="btn btn-outline-primary">{passwordOperationText}</a>
                 </div>
                 }
                 {enableWebdavSecret && <WebdavPassword />}

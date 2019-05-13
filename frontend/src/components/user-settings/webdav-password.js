@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import ModalPortal from '../modal-portal';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
+import UpdateWebdavPassword from '../dialog/update-webdav-password';
 
 const { webdavPasswd } = window.app.pageOptions;
 
@@ -11,48 +12,24 @@ class WebdavPassword extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPasswordHidden: true,
-      password: webdavPasswd 
+      password: webdavPasswd,
+      isPasswordVisible: false,
+      isDialogOpen: false
     };
-
-    this.passwordInput = React.createRef();
-  }
-
-  handleInputChange = (e) => {
-    let passwd = e.target.value.trim();
-    this.setState({password: passwd}, () => {
-      if (this.state.isPasswordHidden) {
-        this.passwordInput.type = 'password';
-      }
-    });
   }
 
   togglePasswordVisible = () => {
-    this.setState({isPasswordHidden: !this.state.isPasswordHidden}, () => {
-      if (this.state.isPasswordHidden) {
-        this.passwordInput.type = 'password';
-      } else {
-        this.passwordInput.type = 'text';
-      }
-    });
-  }
-
-  generatePassword = () => {
-    let randomPassword = '';
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 8; i++) {
-      randomPassword += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
     this.setState({
-      password: randomPassword,
-      isPasswordHidden: false,
-    }, () => {
-      this.passwordInput.type = 'text';
+      isPasswordVisible: !this.state.isPasswordVisible
     });
   }
 
   updatePassword = (password) => {
     seafileAPI.updateWebdavSecret(password).then((res) => {
+      this.toggleDialog();
+      this.setState({
+        password: password
+      });
       toaster.success(gettext('Success'));
     }).catch((error) => {
       let errorMsg = ''; 
@@ -65,36 +42,46 @@ class WebdavPassword extends React.Component {
       } else {
         errorMsg = gettext('Please check the network.');
       }   
+      this.toggleDialog();
       toaster.danger(errorMsg);
     }); 
   }
 
-  handleUpdate = () => {
-    this.updatePassword(this.state.password);
-  }
-
-  handleDelete = () => {
-    this.setState({password: ''});
-    this.updatePassword('');
+  toggleDialog = () => {
+    this.setState({
+      isDialogOpen: !this.state.isDialogOpen
+    });
   }
 
   render() {
+    const { password, isPasswordVisible } = this.state;
     return (
-      <div id="update-webdav-passwd" className="setting-item">
-        <h3 className="setting-item-heading">{gettext('WebDav Password')}</h3>
-        <label>{gettext('Password')}</label>
-        <div className="row mb-2">
-          <InputGroup className="col-sm-5">
-            <Input innerRef={input => {this.passwordInput = input}} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
-            <InputGroupAddon addonType="append">
-              <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.isPasswordHidden ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-              <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
-            </InputGroupAddon>
-          </InputGroup>
+      <React.Fragment>
+        <div id="update-webdav-passwd" className="setting-item">
+          <h3 className="setting-item-heading">{gettext('WebDav Password')}</h3>
+          {password ? (
+            <React.Fragment>
+              <div className="d-flex align-items-center">
+                <label className="m-0 mr-2">{gettext('Password:')}</label>
+                <input className="border-0 mr-1" type="text" value={isPasswordVisible ? password : '**********'} readOnly={true} size={Math.max(password.length, 10)} />
+                <span onClick={this.togglePasswordVisible} className={`eye-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+              </div>
+              <button className="btn btn-outline-primary mt-2" onClick={this.toggleDialog}>{gettext('Update')}</button>
+            </React.Fragment>
+          ) : (
+            <button className="btn btn-outline-primary" onClick={this.toggleDialog}>{gettext('Set Password')}</button>
+          )}
         </div>
-        <button className="btn btn-secondary mr-1" onClick={this.handleUpdate}>{gettext('Update')}</button>
-        <button className="btn btn-secondary" onClick={this.handleDelete}>{gettext('Delete')}</button>
-      </div>
+        {this.state.isDialogOpen && (
+          <ModalPortal>
+            <UpdateWebdavPassword
+              password={this.state.password}
+              updatePassword={this.updatePassword}
+              toggle={this.toggleDialog}
+            />
+          </ModalPortal>
+        )}
+      </React.Fragment>
     );
   }
 }

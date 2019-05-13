@@ -101,7 +101,7 @@ class UserBasicInfoForm extends React.Component {
             </div>
           </div>
         )}
-        <button type="submit" className="btn btn-secondary offset-sm-1" disabled={!enableUpdateUserInfo}>{gettext('Submit')}</button>
+        <button type="submit" className="btn btn-outline-primary offset-sm-1" disabled={!enableUpdateUserInfo}>{gettext('Submit')}</button>
       </form>
     );
   }

@@ -16,7 +16,7 @@ class TwoFactorAuthentication extends React.Component {
     return (
       <React.Fragment>
         <p className="mb-2">{gettext('Status: enabled')}</p>
-        <a className="btn btn-secondary mb-4" href={`${siteRoot}profile/two_factor_authentication/disable/`}>
+        <a className="btn btn-outline-primary mb-4" href={`${siteRoot}profile/two_factor_authentication/disable/`}>
           {gettext('Disable Two-Factor Authentication')}</a>
         <p className="mb-2">
           {gettext('If you don\'t have any device with you, you can access your account using backup codes.')}
@@ -24,7 +24,7 @@ class TwoFactorAuthentication extends React.Component {
             gettext('You have {num} backup codes remaining.').replace('{num}', backupTokens)}
         </p>
         <a href={`${siteRoot}profile/two_factor_authentication/backup/tokens/`}
-          className="btn btn-secondary">{gettext('Show Codes')}</a>
+          className="btn btn-outline-primary">{gettext('Show Codes')}</a>
       </React.Fragment>
     );
   }
@@ -33,7 +33,7 @@ class TwoFactorAuthentication extends React.Component {
     return (
       <React.Fragment>
         <p className="mb-2">{gettext('Two-factor authentication is not enabled for your account. Enable two-factor authentication for enhanced account security.')}</p>
-        <a href={`${siteRoot}profile/two_factor_authentication/setup/`} className="btn btn-secondary">
+        <a href={`${siteRoot}profile/two_factor_authentication/setup/`} className="btn btn-outline-primary">
           {gettext('Enable Two-Factor Authentication')}</a>
       </React.Fragment>
     );
