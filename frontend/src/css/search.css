@@ -56,12 +56,21 @@
   list-style: none;
 }
 
+.search-result-list .item-content .item-name {
+  color: #eb8205!important;
+}
+
+.search-result-container .search-result-item:hover {
+  border-left: 2px solid #eb8205;
+  background-color: #eee;
+}
+
 .search-result-container .search-result-item {
   display: flex;
+  padding: 0.25rem 0.5rem;
   border-left: 2px solid #fff;
   font-size: 0.8125rem;
   cursor: pointer;
-  margin-bottom: 1rem;
 }
 
 .search-result-item .item-img {
@@ -76,13 +85,13 @@
 .search-result-item .item-content {
   flex: 1;
   width: 0;
-  margin-left: 0.8rem;
+  margin-left: 0.25rem;
 }
-.item-content .item-name a , .item-content .item-link a {
+.item-content .item-name a {
   color: #EA8102 !important;
 }
 .item-content .item-link {
-  color: #888;
+  color: #7d7d7d;
   margin: 0;
 }
 .item-content .item-text {
@@ -166,6 +175,23 @@
   right: 1.5rem;
   top: 0.5rem;
   color: #b2b2b2;
+}
+.search-page .search-result-container .search-result-item {
+  padding: 0;
+  margin-bottom: 1rem;
+}
+.search-page .search-result-container .search-result-item:hover {
+  border-left: 2px solid #fff;
+  background-color: inherit;
+}
+.search-page .search-result-item .item-content {
+  margin-left: 0.8rem;
+}
+.search-page .search-result-item .item-content .item-link a {
+  color: #8b8b8b !important;
+}
+.search-page .search-result-container .search-result-item {
+  cursor: default;
 }
 .rc-calendar tbody tr {
   height: 1.75rem;
