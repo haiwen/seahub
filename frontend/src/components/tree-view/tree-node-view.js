@@ -24,7 +24,6 @@ const propTypes = {
   handleContextClick: PropTypes.func.isRequired,
   onNodeDragEnter: PropTypes.func.isRequired,
   onNodeDragLeave:PropTypes.func.isRequired,
-
 };
 
 class TreeNodeView extends React.Component {
