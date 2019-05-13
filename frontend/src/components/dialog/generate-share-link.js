@@ -50,8 +50,9 @@ class GenerateShareLink extends React.Component {
           isLoading: false,
           sharedLinkInfo: sharedLinkInfo
         });
+      } else {
+        this.setState({isLoading: false});
       }
-      this.setState({isLoading: false});
     });
   }
 
