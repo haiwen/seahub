@@ -45,6 +45,8 @@ const propTypes = {
   selectedDirentList: PropTypes.array.isRequired,
   activeDirent: PropTypes.object,
   getDirentItemMenuList: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -480,7 +482,7 @@ class DirentListItem extends React.Component {
           </Fragment>
         }
       </Fragment>
-    )
+    );
   }
 
   render() {

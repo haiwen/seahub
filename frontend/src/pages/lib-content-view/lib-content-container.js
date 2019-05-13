@@ -86,6 +86,7 @@ const propTypes = {
   onDeleteRepoTag: PropTypes.func.isRequired,
   updateDetail: PropTypes.bool.isRequired,
   onListContainerScroll: PropTypes.func.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
 };
 
 class LibContentContainer extends React.Component {

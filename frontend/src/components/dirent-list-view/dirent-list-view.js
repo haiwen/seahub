@@ -45,6 +45,8 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -294,10 +296,10 @@ class DirentListView extends React.Component {
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
     if (this.props.posX) {
-        x -= this.props.posX;
+      x -= this.props.posX;
     }
     if (this.props.posY) {
-        y -= this.props.posY;
+      y -= this.props.posY;
     }
 
     hideMenu();
@@ -326,7 +328,7 @@ class DirentListView extends React.Component {
 
   onContainerContextMenu = (event) => {
     if (this.props.selectedDirentList.length === 0) {
-      let id = "dirent-container-menu"
+      let id = 'dirent-container-menu';
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
       this.handleContextClick(event, id, menuList);
     } else {
@@ -341,7 +343,7 @@ class DirentListView extends React.Component {
           event.preventDefault();
           event.persist();
           setTimeout(() => {
-            let id = "dirent-container-menu"
+            let id = 'dirent-container-menu';
             let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
             this.handleContextClick(event, id, menuList);
           }, 0);
@@ -539,7 +541,7 @@ class DirentListView extends React.Component {
 
   onTableDragLeave = (e) => {
     if (e.target.className === 'table-container table-drop-active') {
-      this.setState({isListDropTipShow: false})
+      this.setState({isListDropTipShow: false});
     }
   }
 
@@ -558,7 +560,7 @@ class DirentListView extends React.Component {
       if (nodeRootPath === this.props.path || nodeParentPath === this.props.path) {
         return;
       }
-      this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath)
+      this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
     }
   }
 

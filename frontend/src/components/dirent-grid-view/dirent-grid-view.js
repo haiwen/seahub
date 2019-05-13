@@ -40,8 +40,8 @@ const propTypes = {
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
-  showDirentDetail: PropTypes.func,
-  onItemRename: PropTypes.func,
+  showDirentDetail: PropTypes.func.isRequired,
+  onItemRename: PropTypes.func.isRequired,
 };
 
 class DirentGridView extends React.Component{

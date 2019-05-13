@@ -39,16 +39,16 @@ class TreeView extends React.Component {
     let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
     dragStartNodeData = JSON.stringify(dragStartNodeData);
     
-    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartNodeData);
   }
 
   onNodeDragEnter = (e, node) => {
-    e.persist()
+    e.persist();
     if (e.target.className === 'tree-view tree ') {
       this.setState({
         isTreeViewDropTipShow: true,
-      })
+      });
     }
   }
 
@@ -61,7 +61,7 @@ class TreeView extends React.Component {
     if (e.target.className === 'tree-view tree tree-view-drop') {
       this.setState({
         isTreeViewDropTipShow: false,
-      })
+      });
     }
   }
 
@@ -154,10 +154,10 @@ class TreeView extends React.Component {
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
     if (this.props.posX) {
-        x -= this.props.posX;
+      x -= this.props.posX;
     }
     if (this.props.posY) {
-        y -= this.props.posY;
+      y -= this.props.posY;
     }
 
     hideMenu();

@@ -196,20 +196,20 @@ class LibContentView extends React.Component {
 
     if (this.state.currentMode === 'column') {
       if (this.state.isViewFile) {
-        this.updataColumnMarkdownData(path)
+        this.updataColumnMarkdownData(path);
       } else {
         seafileAPI.dirMetaData(repoID, path).then((res) => {
           if (res.data.id !== dirID) {
             this.loadDirentList(path);
           }
-        })
+        });
       }
     } else {
       seafileAPI.dirMetaData(repoID, path).then((res) => {
         if (res.data.id !== dirID) {
           this.loadDirentList(path);
         }
-      })
+      });
     }
   }
 
@@ -252,7 +252,7 @@ class LibContentView extends React.Component {
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         seafileAPI.getFileContent(res.data).then((res) => {
           if (this.state.content !== res.data) {
-            this.setState({isFileLoading: true})
+            this.setState({isFileLoading: true});
           }
           this.setState({
             content: res.data,
@@ -419,7 +419,7 @@ class LibContentView extends React.Component {
         toaster.danger(
           <SessionExpiredTip />,
           {id: 'session_expired', duration: 3600}
-        )
+        );
       }
       this.setState({
         isFileLoading: false,
@@ -466,8 +466,8 @@ class LibContentView extends React.Component {
         toaster.danger(
           <SessionExpiredTip />,
           {id: 'session_expired', duration: 3600}
-        )
-        this.setState({isDirentListLoading: false})
+        );
+        this.setState({isDirentListLoading: false});
         return;
       }
       this.setState({
@@ -1416,7 +1416,7 @@ class LibContentView extends React.Component {
 
     let direntItemsList = this.state.direntList.filter((item, index) => {
       return index < this.state.itemsShowLength;
-    })
+    });
 
     return (
       <div className="main-panel o-hidden">

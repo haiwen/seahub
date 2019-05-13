@@ -158,7 +158,7 @@ class MarkdownViewerToolbar extends React.Component {
                 }
                 {canGenerateShareLink && 
                   <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
-                  onMouseDown={this.props.toggleShareLinkDialog}/>
+                    onMouseDown={this.props.toggleShareLinkDialog}/>
                 }
                 {
                   this.props.showFileHistory && <IconButton id={'historyButton'}
