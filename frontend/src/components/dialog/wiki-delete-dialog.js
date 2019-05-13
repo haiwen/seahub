@@ -23,7 +23,7 @@ class WikiDeleteDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="danger" onClick={this.props.handleSubmit}>{gettext('Unpublish')}</Button>
+          <Button color="primary" onClick={this.props.handleSubmit}>{gettext('Unpublish')}</Button>
         </ModalFooter>
       </Modal>
     );
