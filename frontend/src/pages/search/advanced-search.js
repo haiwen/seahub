@@ -140,11 +140,11 @@ class AdvancedSearch extends React.Component {
                           onChange={() => this.props.handlerFileTypes(4)}
                           checked={stateAndValues.fileTypeItemsStatus[4]}/>
                         <CustomInput
-                          type="checkbox" id="checkPdf" label={gettext('pdf')} inline
+                          type="checkbox" id="checkPdf" label="PDF" inline
                           onChange={() => this.props.handlerFileTypes(5)}
                           checked={stateAndValues.fileTypeItemsStatus[5]}/>
                         <CustomInput
-                          type="checkbox" id="checkMarkdown" label={gettext('markdown')} inline
+                          type="checkbox" id="checkMarkdown" label="Markdown" inline
                           onChange={() => this.props.handlerFileTypes(6)}
                           checked={stateAndValues.fileTypeItemsStatus[6]}/>
                       </Fragment>
@@ -227,7 +227,7 @@ class AdvancedSearch extends React.Component {
             </div>
             <MediaQuery query="(max-width: 768px)">
               {errorSizeMsg && <div className="error mb-4">{errorSizeMsg}</div>}
-              <Button className="ml-3" color="primary" onClick={this.props.handleSubmit}>{gettext('Submit')}</Button>
+              <Button color="primary" onClick={this.props.handleSubmit}>{gettext('Submit')}</Button>
               <Button className="ml-2" onClick={this.props.handleReset}>{gettext('Reset')}</Button>
             </MediaQuery>
           </Collapse>
