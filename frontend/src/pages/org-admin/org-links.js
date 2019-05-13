@@ -2,9 +2,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext, serviceURL } from '../../utils/constants';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import MainPanelTopbar from './main-panel-topbar';
+import ViewLinkDialog from '../../components/dialog/view-link-dialog';
 
 class OrgLinks extends React.Component {
 
@@ -15,6 +16,8 @@ class OrgLinks extends React.Component {
       page: 1,
       pageNext: false,
       isItemFreezed: false,
+      isShowLinkDialog: false,
+      currentLinkHref: '',
     };
   }
 
@@ -56,6 +59,21 @@ class OrgLinks extends React.Component {
     });
   }
 
+  openLinkDialog = (link) => {
+    let href;
+    if (link.name.indexOf('/') > -1) {
+      href = serviceURL + '/d/' + link.token + '/';
+    } else {
+      href = serviceURL + '/f/' + link.token + '/';
+    }
+    this.setState({ currentLinkHref: href });
+    this.toggleLinkDialog();
+  }
+
+  toggleLinkDialog = () => {
+    this.setState({isShowLinkDialog: !this.state.isShowLinkDialog});
+  }
+
   componentDidMount() {
     this.listOrgLinks(this.state.page);
   }
@@ -91,6 +109,7 @@ class OrgLinks extends React.Component {
                           onFreezedItem={this.onFreezedItem} 
                           onUnfreezedItem={this.onUnfreezedItem}
                           deleteOrgLink={this.deleteOrgLink}
+                          openLinkDialog={this.openLinkDialog}
                         />
                       </React.Fragment>
                     );
@@ -105,6 +124,9 @@ class OrgLinks extends React.Component {
             </div>
           </div>
         </div>
+        {this.state.isShowLinkDialog &&
+          <ViewLinkDialog currentLinkHref={this.state.currentLinkHref} toggle={this.toggleLinkDialog}/>
+        }
       </Fragment>
     );
   }
@@ -185,6 +207,7 @@ class RepoItem extends React.Component {
               />
               <DropdownMenu>
                 <DropdownItem onClick={deleteOrgLink.bind(this, link.token)}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.props.openLinkDialog.bind(this, link)}>{gettext('View Link')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           }
