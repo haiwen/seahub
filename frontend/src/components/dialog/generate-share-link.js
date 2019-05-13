@@ -352,7 +352,7 @@ class GenerateShareLink extends React.Component {
             </Label>
           </FormGroup>
           <FormGroup check className="permission">
-            <Label check>
+            <Label>
               <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
