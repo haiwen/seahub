@@ -81,3 +81,8 @@ body {
   padding-top: calc(0.375rem + 1px);
   color: #666;
 }
+@media (min-width: 768px) {
+  .input-tip {
+    padding-left: 0;
+  }
+}
