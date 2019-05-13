@@ -320,9 +320,7 @@ class GenerateShareLink extends React.Component {
           {this.state.isExpireChecked && 
             <FormGroup check>
               <Label check>
-              <InputGroup>
-                <Input className="expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
-              </InputGroup>
+                <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
               </Label>
             </FormGroup>
           }
