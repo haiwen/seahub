@@ -2675,3 +2675,16 @@ def sys_delete_terms(request, pk):
 
     return HttpResponseRedirect(reverse('sys_terms_admin'))
 
+@login_required
+@sys_staff_required
+def sys_work_weixin_departments(request):
+
+    return render(request, 'sysadmin/sys_work_weixin_departments_react.html', {
+        'constance_enabled': dj_settings.CONSTANCE_ENABLED,
+        'multi_tenancy': MULTI_TENANCY,
+        'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
+        'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
+        'enable_guest_invitation': ENABLE_GUEST_INVITATION,
+        'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
+        'enable_work_weixin_departments': True,
+    })

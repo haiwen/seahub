@@ -133,7 +133,8 @@ from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLib
         AdminGroupOwnedLibrary
 from seahub.api2.endpoints.admin.user_activities import UserActivitiesView
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
-from seahub.api2.endpoints.admin.notifications import AdminNotificationsView 
+from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
+from seahub.api2.endpoints.admin.work_weixin_departments import AdminWorkWeixinDepartments, AdminWorkWeixinDepartmentMembers
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
@@ -520,6 +521,11 @@ urlpatterns = [
 
     ## admin::notifications
     url(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
+
+    ## admin::work weixin departments
+    url(r'^api/v2.1/admin/work-weixin-departments/$', AdminWorkWeixinDepartments.as_view(), name='api-v2.1-admin-work-weixin-departments'),
+    url(r'^api/v2.1/admin/work-weixin-departments/(?P<department_id>\d+)/members/$', AdminWorkWeixinDepartmentMembers.as_view(), name='api-v2.1-admin-work-weixin-department-members'),
+    url(r'^sys/work-weixin-departments/$', sys_work_weixin_departments, name="sys_work_weixin_departments"),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
