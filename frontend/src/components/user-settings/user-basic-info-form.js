@@ -79,7 +79,7 @@ class UserBasicInfoForm extends React.Component {
             <div className="col-sm-5">
               <input className="form-control" id="user-name" type="text" name="username" value={loginID} disabled={true} readOnly={true} />
             </div>
-            <p className="col-sm-5 m-0">{gettext('You can use this field at login.')}</p>
+            <p className="col-sm-5 m-0 input-tip">{gettext('You can use this field at login.')}</p>
           </div>
         )}
 
@@ -89,7 +89,7 @@ class UserBasicInfoForm extends React.Component {
             <div className="col-sm-5">
               <input className="form-control" id="contact-email" type="text" name="contact_email" value={contactEmail} disabled={!enableUserSetContactEmail} readOnly={!enableUserSetContactEmail} onChange={this.handleContactEmailInputChange} />
             </div>
-            <p className="col-sm-5 m-0">{gettext('Your notifications will be sent to this email.')}</p>
+            <p className="col-sm-5 m-0 input-tip">{gettext('Your notifications will be sent to this email.')}</p>
           </div>
         )}
 

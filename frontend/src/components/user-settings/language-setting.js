@@ -1,6 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 
 const {
