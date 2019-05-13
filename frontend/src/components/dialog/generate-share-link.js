@@ -8,6 +8,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedLinkInfo from '../../models/shared-link-info';
 import toaster from '../toast';
+import Loading from '../loading';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -30,6 +31,7 @@ class GenerateShareLink extends React.Component {
       errorInfo: '',
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
+      isLoading: true,
     };
     this.permissions = {
       'can_edit': false, 
@@ -39,19 +41,20 @@ class GenerateShareLink extends React.Component {
   }
 
   componentDidMount() {
-    this.getShareLink();
-  }
-
-  getShareLink = () => {
     let path = this.props.itemPath; 
     let repoID = this.props.repoID;
     seafileAPI.getShareLink(repoID, path).then((res) => {
       if (res.data.length !== 0) {
         let sharedLinkInfo = new SharedLinkInfo(res.data[0]);
-        this.setState({sharedLinkInfo: sharedLinkInfo});
+        this.setState({
+          isLoading: false,
+          sharedLinkInfo: sharedLinkInfo
+        });
+      } else {
+        this.setState({isLoading: false});
       }
     });
-  } 
+  }
 
   onPasswordInputChecked = () => {
     this.setState({
@@ -238,6 +241,10 @@ class GenerateShareLink extends React.Component {
   }
 
   render() {
+
+    if (this.state.isLoading) {
+      return <Loading />;
+    }
 
     let passwordLengthTip = gettext('(at least {passwordLength} characters)');
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
