@@ -296,7 +296,7 @@ class GenerateShareLink extends React.Component {
             </Label>
           </FormGroup>
           {this.state.isShowPasswordInput &&
-            <FormGroup className="link-operation-content">
+            <FormGroup className="link-operation-content" check>
               {/* todo translate  */}
               <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
               <InputGroup className="passwd">
@@ -314,10 +314,16 @@ class GenerateShareLink extends React.Component {
             <FormGroup check>
               <Label check>
                 <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
-                <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span>{gettext('days')}</span>
               </Label>
             </FormGroup>
           )}
+          {this.state.isExpireChecked && 
+            <FormGroup check>
+              <Label check>
+                <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
+              </Label>
+            </FormGroup>
+          }
           {!this.isExpireDaysNoLimit && (
             <FormGroup check>
               <Label check>
@@ -337,7 +343,7 @@ class GenerateShareLink extends React.Component {
           )}
           <FormGroup check>
             <Label check>
-              <Input type="checkbox" checked readOnly/>{'  '}{gettext('Set permission')}
+              <span>{'  '}{gettext('Set permission')}</span>
             </Label>
           </FormGroup>
           <FormGroup check className="permission">
@@ -346,7 +352,7 @@ class GenerateShareLink extends React.Component {
             </Label>
           </FormGroup>
           <FormGroup check className="permission">
-            <Label check>
+            <Label>
               <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
