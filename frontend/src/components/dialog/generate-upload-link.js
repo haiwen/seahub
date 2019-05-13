@@ -44,7 +44,7 @@ class GenerateUploadLink extends React.Component {
         toaster.danger(
           <SessionExpiredTip />,
           {id: 'session_expired', duration: 3600}
-        )
+        );
         this.props.closeShareDialog();
       }
     });
@@ -153,9 +153,6 @@ class GenerateUploadLink extends React.Component {
     }
     return (
       <Form className="generate-upload-link">
-        <FormGroup>
-          <FormText className="tip">{gettext('You can share the generated link to others and then they can upload files to this directory via the link.')}</FormText>
-        </FormGroup>
         <FormGroup check>
           <Label check>
             <Input type="checkbox" onChange={this.addPassword}/>{'  '}{gettext('Add password protection')} 

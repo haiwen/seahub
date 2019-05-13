@@ -62,7 +62,7 @@
 }
 
 .generate-share-link .permission {
-    margin-left: 1.25rem;
+    margin-left: 2.5rem;
 }
 
 .generate-link-btn {
@@ -80,7 +80,29 @@ input.expire-input {
     padding: 0.25rem 0.25rem;
     margin: 0 0.25rem 0 1.25rem;
 }
+.expire-input-border {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
 
 .share-dialog-main .permission-editor .permission-editor__menu {
   width: 240px;
+}
+
+.expir-span {
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    border-left: none;
+    color: #ccc;
+    font-size: 12px;
+    margin-left: -5px;
+    padding: 1px 3px;
+    height: 1.5rem;
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    top: 4px;
+    min-width: 24px;
+    line-height: 20px;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
 }
