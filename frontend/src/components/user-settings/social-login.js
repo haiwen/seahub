@@ -39,8 +39,8 @@ class SocialLogin extends React.Component {
           <h3 className="setting-item-heading">{gettext('Social Login')}</h3>
           <p className="mb-2">{langCode == 'zh-cn' ? '企业微信': 'WeChat Work'}</p>
           {socialConnected ?
-            <a href="#" className="btn btn-secondary" onClick={this.confirmDisconnect}>{gettext('Disconnect')}</a> :
-            <a href={`${siteRoot}social/login/weixin-work/?next=${encodeURIComponent(socialNextPage)}`} className="btn btn-secondary">{gettext('Connect')}</a>
+            <a href="#" className="btn btn-outline-primary" onClick={this.confirmDisconnect}>{gettext('Disconnect')}</a> :
+            <a href={`${siteRoot}social/login/weixin-work/?next=${encodeURIComponent(socialNextPage)}`} className="btn btn-outline-primary">{gettext('Connect')}</a>
           }
         </div>
         {this.state.isConfirmDialogOpen && (
