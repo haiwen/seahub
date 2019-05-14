@@ -30,6 +30,8 @@ const propTypes = {
   navRate: PropTypes.number,
   inResizing: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
+  onItemMove: PropTypes.func.isRequired,
+  onItemCopy: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
 };
 
