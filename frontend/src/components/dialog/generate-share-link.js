@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
@@ -32,6 +32,10 @@ class GenerateShareLink extends React.Component {
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
       isLoading: true,
+      isShowSendLink: false,
+      sendLinkEmails: '',
+      sendLinkMessage: '',
+      sendLinkErrorMessage: '',
     };
     this.permissions = {
       'can_edit': false, 
@@ -240,6 +244,47 @@ class GenerateShareLink extends React.Component {
     this.setState({isNoticeMessageShow: !this.state.isNoticeMessageShow});
   }
 
+  onSendLinkEmailsChange = (event) => {
+    if (this.state.sendLinkErrorMessage) this.setState({ sendLinkErrorMessage: '' });
+    this.setState({sendLinkEmails: event.target.value});
+  }
+
+  onSendLinkMessageChange = (event) => {
+    if (this.state.sendLinkErrorMessage) this.setState({ sendLinkErrorMessage: '' });
+    this.setState({sendLinkMessage: event.target.value});
+  }
+
+  toggleSendLink = () => {
+    this.setState({ isShowSendLink: !this.state.isShowSendLink });
+  }
+
+  sendShareLink = () => {
+    if (!this.state.sendLinkEmails) return;
+    const token = this.state.sharedLinkInfo.token;
+    const emails = this.state.sendLinkEmails.replace(/\s*/g,'');
+    const message = this.state.sendLinkMessage.trim();
+    this.setState({ isLoading: true });
+    seafileAPI.sendShareLink(token, emails, message).then((res) => {
+      this.props.closeShareDialog();
+      if (res.data.failed.length > 0) {
+        res.data.failed.map(failed => {
+          toaster.warning(gettext('Failed sent link to') + ' ' + failed.email + ', ' + failed.error_msg);
+        });
+      }
+      if (res.data.success.length > 0) {
+        let users = res.data.success.join(',');
+        toaster.success(gettext('Successfully sent link to') + ' ' + users);
+      }
+    }).catch((error) => {
+      if (error.response) {
+        this.setState({
+          sendLinkErrorMessage: error.response.data.error_msg,
+          isLoading: false,
+        });
+      }
+    });
+  }
+
   render() {
 
     if (this.state.isLoading) {
@@ -283,8 +328,39 @@ class GenerateShareLink extends React.Component {
               </FormGroup>
             )}
           </Form>
-          {!this.state.isNoticeMessageShow ?
-            <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button> :
+          {!this.state.isShowSendLink ?
+            <Button onClick={this.toggleSendLink} className='mr-2'>{gettext('Send')}</Button> :
+            <Fragment>
+              <Form>
+                <FormGroup>
+                  <Label htmlFor="sendLinkEmails" className="text-secondary font-weight-normal">{gettext('Send to')}{':'}</Label>
+                  <Input 
+                    id="sendLinkEmails"
+                    className="w-75"
+                    value={this.state.sendLinkEmails}
+                    onChange={this.onSendLinkEmailsChange}
+                    placeholder={gettext('Emails, separated by ","')}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="sendLinkMessage" className="text-secondary font-weight-normal">{gettext('Message (optional)')}{':'}</Label><br/>
+                  <textarea
+                    className="w-75"
+                    id="sendLinkMessage"
+                    value={this.state.sendLinkMessage}
+                    onChange={this.onSendLinkMessageChange}
+                  ></textarea>
+                </FormGroup>
+              </Form>
+              {this.state.sendLinkErrorMessage && <p className="error">{this.state.sendLinkErrorMessage}</p>}
+              <Button color="primary" onClick={this.sendShareLink}>{gettext('Send')}</Button>{' '}
+              <Button color="secondary" onClick={this.toggleSendLink}>{gettext('Cancel')}</Button>{' '}
+            </Fragment>
+          }
+          {(!this.state.isShowSendLink && !this.state.isNoticeMessageShow) &&
+            <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button>
+          }
+          {this.state.isNoticeMessageShow &&
             <div className="alert alert-warning">
               <h4 className="alert-heading">{gettext('Are you sure you want to delete the share link?')}</h4>
               <p className="mb-4">{gettext('If the share link is deleted, no one will be able to access it any more.')}</p>
