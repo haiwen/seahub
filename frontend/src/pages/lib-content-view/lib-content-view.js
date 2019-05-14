@@ -1189,16 +1189,14 @@ class LibContentView extends React.Component {
 
   getColumnMarkdownContent = (filePath) => {
     let repoID = this.props.repoID;
-    seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
-      seafileAPI.getFileContent(res.data).then((res) => {
-        if (!res.data.trim()){
-          const w = window.open('about:blank');
-          const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
-          w.location.href = url;
-        } else {
-          this.showFile(filePath);
-        }
-      });
+    seafileAPI.getFileInfo(repoID, filePath).then((res) => {
+      if (res.data.size === 0) {
+        const w = window.open('about:blank');
+        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
+        w.location.href = url;
+      } else {
+        this.showFile(filePath);
+      }
     });
   }
 
