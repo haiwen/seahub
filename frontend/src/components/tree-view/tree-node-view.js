@@ -20,7 +20,6 @@ const propTypes = {
   onMenuItemClick: PropTypes.func,
   onNodeDragMove: PropTypes.func,
   onNodeDrop: PropTypes.func,
-  appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
   handleContextClick: PropTypes.func.isRequired,
   onNodeDragEnter: PropTypes.func.isRequired,
   onNodeDragLeave:PropTypes.func.isRequired,
@@ -207,7 +206,6 @@ class TreeNodeView extends React.Component {
               onNodeDrop={this.props.onNodeDrop}
               onNodeDragEnter={this.props.onNodeDragEnter}
               onNodeDragLeave={this.props.onNodeDragLeave}
-              appMenuType={this.props.appMenuType}
               handleContextClick={this.props.handleContextClick}
             />
           );
