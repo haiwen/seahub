@@ -13,6 +13,8 @@ const propTypes = {
   onGridItemClick: PropTypes.func.isRequired,
   activeDirent: PropTypes.object,
   onGridItemMouseDown: PropTypes.func,
+  currentRepoInfo: PropTypes.object,
+  onItemMove: PropTypes.func.isRequired,
 };
 
 class DirentGridItem extends React.Component {
@@ -22,7 +24,7 @@ class DirentGridItem extends React.Component {
     this.state = {
       isGridSelected: false,
       isGridDropTipShow: false,
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,7 +32,7 @@ class DirentGridItem extends React.Component {
       if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
         this.setState({isGridSelected: true});
       }
-    })
+    });
   }
 
   onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
@@ -51,7 +53,7 @@ class DirentGridItem extends React.Component {
       }
     } else {
       this.setState({isGridSelected: false});
-      this.props.onGridItemClick(this.props.dirent)
+      this.props.onGridItemClick(this.props.dirent);
     }
   }
 
@@ -140,9 +142,9 @@ class DirentGridItem extends React.Component {
     }
     let fileHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(direntPath);
     
-    let gridClass = 'grid-file-img-link cursor-pointer'
-    gridClass += this.state.isGridSelected ? " grid-selected-active" : " ";
-    gridClass += this.state.isGridDropTipShow ? " grid-drop-show" : " ";
+    let gridClass = 'grid-file-img-link cursor-pointer';
+    gridClass += this.state.isGridSelected ? ' grid-selected-active' : ' ';
+    gridClass += this.state.isGridDropTipShow ? ' grid-drop-show' : ' ';
 
     let lockedInfo = gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
@@ -167,11 +169,11 @@ class DirentGridItem extends React.Component {
             {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
           </div>
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable="true" >
-            <a className={`grid-file-name-link ${this.state.isGridSelected ? "grid-link-selected-active" : ""}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
+            <a className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
           </div>
         </li>
       </Fragment>
-    )
+    );
   }
 }
 

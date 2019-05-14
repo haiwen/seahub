@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
-import "../../css/invitations.css";
+import '../../css/invitations.css';
 
 class UserItem extends React.Component {
 

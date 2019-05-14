@@ -18,12 +18,12 @@ const propTypes = {
   freezeItem: PropTypes.func.isRequired,
   unfreezeItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func,
-  registerHandlers: PropTypes.func,
-  unregisterHandlers: PropTypes.func,
   onNodeDragMove: PropTypes.func,
   onNodeDrop: PropTypes.func,
   appMenuType: PropTypes.oneOf(['list_view_contextmenu', 'item_contextmenu', 'tree_contextmenu', 'item_op_menu']),
   handleContextClick: PropTypes.func.isRequired,
+  onNodeDragEnter: PropTypes.func.isRequired,
+  onNodeDragLeave:PropTypes.func.isRequired,
 };
 
 class TreeNodeView extends React.Component {
@@ -202,9 +202,6 @@ class TreeNodeView extends React.Component {
               freezeItem={this.props.freezeItem}
               onMenuItemClick={this.props.onMenuItemClick}
               unfreezeItem={this.unfreezeItem}
-              onNodeChanged={this.props.onNodeChanged}
-              registerHandlers={this.props.registerHandlers}
-              unregisterHandlers={this.props.unregisterHandlers}
               onNodeDragStart={this.props.onNodeDragStart}
               onNodeDragMove={this.props.onNodeDragMove}
               onNodeDrop={this.props.onNodeDrop}

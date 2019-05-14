@@ -1,6 +1,6 @@
 import React ,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import { Button, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import Dirent from '../../models/dirent';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
