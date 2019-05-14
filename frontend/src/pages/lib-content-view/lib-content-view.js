@@ -864,7 +864,7 @@ class LibContentView extends React.Component {
       this.showDir(direntPath);
     } else {  // is file
       if (this.state.currentMode === 'column' && Utils.isMarkdownFile(direntPath)) {
-        this.getColumnMarkdownSize(direntPath);
+        this.showColumnMarkdownFile(direntPath);
       } else {
         const w=window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
@@ -1177,7 +1177,7 @@ class LibContentView extends React.Component {
     } else {
       if (Utils.isMarkdownFile(node.path)) {
         if (node.path !== this.state.path) {
-          this.getColumnMarkdownSize(node.path);
+          this.showColumnMarkdownFile(node.path);
         }
       } else {
         const w = window.open('about:blank');
@@ -1187,7 +1187,7 @@ class LibContentView extends React.Component {
     }
   }
 
-  getColumnMarkdownSize = (filePath) => {
+  showColumnMarkdownFile = (filePath) => {
     let repoID = this.props.repoID;
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
       if (res.data.size === 0) {
