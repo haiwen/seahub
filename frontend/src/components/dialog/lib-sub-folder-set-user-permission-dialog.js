@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext, isPro, siteRoot } from '../../utils/constants';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import { Utils } from '../../utils/utils.js';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser/file-chooser';
@@ -39,12 +40,12 @@ class UserItem extends React.Component {
     let currentPermission = item.permission;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="name">
-          <a href={siteRoot + 'profile/' + item.user_email} target="_blank">{item.user_name}</a>
+        <td>
+          <a href={`${siteRoot}profile/${encodeURIComponent(item.user_email)}/`} target="_blank">{item.user_name}</a>
         </td>
         {this.props.showPath &&
           <td>
-            <a href={siteRoot + 'library/' + item.repo_id + '/' + this.props.repoName + item.folder_path}>{item.folder_name}</a>
+            <a href={`${siteRoot}library/${item.repo_id}/${Utils.encodePath(this.props.repoName + item.folder_path)}`}>{item.folder_name}</a>
           </td>
         }
         <td>
@@ -80,31 +81,29 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedUsers: null,
       errorMsg: [],
       permission: 'rw',
       userFolderPermItems: [],
       folderPath: '',
       showFileChooser: false
     };
-    this.options = [];
     if (!isPro) {
       this.permissions = ['r', 'rw'];
     } else {
-      this.permissions = ['r', 'rw', 'admin', 'cloud-edit', 'preview']
+      this.permissions = ['r', 'rw', 'cloud-edit', 'preview'];
     }
   }
 
-  handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
-    this.options = [];
+  handleUserSelectChange = (option) => {
+    this.setState({selectedUsers: option});
   }
 
   componentDidMount() {
     let repoID = this.props.repoID;
     let folderPath = this.props.folderPath;
     seafileAPI.listUserFolderPerm(repoID, folderPath).then((res) => {
-      if(res.data.length !== 0) {
+      if (res.data.length !== 0) {
         this.setState({userFolderPermItems: res.data});
       }
     });
@@ -115,34 +114,43 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
   }
 
   addUserFolderPerm = () => {
-    let users = [];
-    let path = this.state.folderPath; 
-    let repoID = this.props.repoID;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
-      for (let i = 0; i < this.state.selectedOption.length; i ++) {
-        users[i] = this.state.selectedOption[i].email;
-      }
-    }
-    if (this.props.folderPath) {
-      path = this.props.folderPath;
+    const { selectedUsers } = this.state;
+    const folderPath = this.props.folderPath || this.state.folderPath;
+    if (!selectedUsers || !selectedUsers.length || !folderPath) { // selectedUsers: null or []
+      return false;
     }
 
-    seafileAPI.addUserFolderPerm(repoID, this.state.permission, path, users).then(res => {
+    const users = selectedUsers.map((item, index) => item.email); 
+    seafileAPI.addUserFolderPerm(this.props.repoID, this.state.permission, folderPath, users).then(res => {
       let errorMsg = [];
       if (res.data.failed.length > 0) {
-        for (let i = 0 ; i < res.data.failed.length ; i++) {
+        for (let i = 0; i < res.data.failed.length; i++) {
           errorMsg[i] = res.data.failed[i];
         }
       }
       this.setState({
         errorMsg: errorMsg,
         userFolderPermItems: this.state.userFolderPermItems.concat(res.data.success),
-        selectedOption: null,
+        selectedUsers: null,
         permission: 'rw',
         folderPath: '',
       });
       this.refs.userSelect.clearSelect();
-    })
+    }).catch((error) => {
+      let errorMsg = ''; 
+      if (error.response) {
+        if (error.response.data && error.response.data['error_msg']) {
+          errorMsg = error.response.data['error_msg'];
+        } else {
+          errorMsg = gettext('Error');
+        }   
+      } else {
+        errorMsg = gettext('Please check the network.');
+      }   
+      this.setState({
+        errorMsg: [errorMsg]
+      });
+    }); 
   } 
 
   deleteUserFolderPermItem = (item) => {
@@ -151,8 +159,8 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         userFolderPermItems: this.state.userFolderPermItems.filter(deletedItem => {
           return deletedItem != item;
         }) 
-      })
-    })
+      });
+    });
   }
 
   onChangeUserFolderPerm = (repoID, permission, folderPath, userEmail) => {
@@ -164,38 +172,38 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         return item;
       });
       this.setState({userFolderPermItems: userFolderPermItems});
-    })
+    });
   }
 
   onSetSubFolder = (e) => {
     this.setState({
       folderPath: e.target.value 
-    })
+    });
   }
 
   toggleFileChooser = () => {
     this.setState({
       showFileChooser: !this.state.showFileChooser,
       folderPath: ''
-    })
+    });
   }
 
   toggleSubFolder = (repo, path, item) => {
     this.setState({
       folderPath: path,
-    }) 
+    }); 
   }
 
-  handleSubmit = () => {
+  handleFileChooserSubmit = () => {
     this.setState({
       showFileChooser: !this.state.showFileChooser
-    })
+    });
   }
 
   onRepoItemClick = () => {
     this.setState({
       folderPath: '/' 
-    })
+    });
   }
 
   render() {
@@ -206,16 +214,16 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       return (
         <div>
           <FileChooser repoID={this.props.repoID} 
-                       mode={'only_current_library'}
-                       onDirentItemClick={this.toggleSubFolder}
-                       onRepoItemClick={this.onRepoItemClick}
+            mode={'only_current_library'}
+            onDirentItemClick={this.toggleSubFolder}
+            onRepoItemClick={this.onRepoItemClick}
           />
           <div className="modal-footer">
             <Button color="secondary" onClick={this.toggleFileChooser}>{gettext('Cancel')}</Button>
-            <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+            <Button color="primary" onClick={this.handleFileChooserSubmit}>{gettext('Submit')}</Button>
           </div>
         </div>
-      )
+      );
     }
 
     return (
@@ -225,10 +233,10 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
             <tr>
               <th width={showPath ? '32%': '55%'}>{gettext('User')}</th>
               {showPath &&
-                <th width="32%">{gettext('Path')}</th>
+                <th width="32%">{gettext('Folder')}</th>
               }
-              <th width={showPath ? "26%": "30%"}>{gettext('Permission')}</th>
-              <th width={showPath ? "10%" : "15%"}></th>
+              <th width={showPath ? '26%': '30%'}>{gettext('Permission')}</th>
+              <th width={showPath ? '10%' : '15%'}></th>
             </tr>
           </thead>
           <tbody>
@@ -239,14 +247,14 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
                   isMulti={true}
                   className="reviewer-select"
                   placeholder={gettext('Select users...')}
-                  onSelectChange={this.handleSelectChange}
-                  value={this.state.selectedOption}
+                  onSelectChange={this.handleUserSelectChange}
+                  value={this.state.selectedUsers}
                 />
               </td>
               {showPath &&
                 <td>
                   <InputGroup>
-                    <Input value={this.state.folderPath} onChange={this.onSetSubFolder}/>
+                    <Input value={this.state.folderPath} onChange={this.onSetSubFolder} />
                     <InputGroupAddon addonType="append"><Button className="sf2-icon-plus" onClick={this.toggleFileChooser}></Button></InputGroupAddon>
                   </InputGroup>
                 </td>
@@ -285,12 +293,12 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
           <table className="table-thead-hidden">
             <thead>
               <tr>
-                <th width={showPath ? '32%': "55%"}>{gettext('User')}</th>
+                <th width={showPath ? '32%': '55%'}>{gettext('User')}</th>
                 {showPath &&
-                  <th width="32%">{gettext('Path')}</th>
+                  <th width="32%">{gettext('Folder')}</th>
                 }
-                <th width={showPath ? "26%": "30%"}>{gettext('Permission')}</th>
-                <th width={showPath ? "10%" : "15%"}></th>
+                <th width={showPath ? '26%': '30%'}>{gettext('Permission')}</th>
+                <th width={showPath ? '10%' : '15%'}></th>
               </tr>
             </thead>
             <tbody>

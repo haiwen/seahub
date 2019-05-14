@@ -64,7 +64,7 @@ class DirentListItem extends React.Component {
       isDragTipShow: false,
       isDropTipshow: false,
       isEditFileTagShow: false,
-      showPermissinDialog: false,
+      isPermissionDialogOpen: false,
     };
   }
 
@@ -262,7 +262,7 @@ class DirentListItem extends React.Component {
   }
 
   onPermissionItem = () => {
-    this.setState({showPermissinDialog: !this.state.showPermissinDialog});
+    this.setState({isPermissionDialogOpen: !this.state.isPermissionDialogOpen});
   }
 
   onLockItem = () => {
@@ -629,7 +629,7 @@ class DirentListItem extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.showPermissinDialog &&
+        {this.state.isPermissionDialogOpen &&
           <ModalPortal>
             <LibSubFolderPermissionDialog 
               toggleDialog={this.onPermissionItem}

@@ -6,6 +6,15 @@ import { Utils } from '../../utils/utils';
 import LibSubFolderSetUserPermissionDialog from './lib-sub-folder-set-user-permission-dialog';
 import LibSubFolderSetGroupPermissionDialog from './lib-sub-folder-set-group-permission-dialog';
 import '../../css/share-link-dialog.css';
+import '../../css/sub-folder-permission.css';
+
+const propTypes = { 
+  repoID: PropTypes.string.isRequired,
+  repoName: PropTypes.string,
+  folderPath: PropTypes.string,
+  folderName: PropTypes.string,
+  toggleDialog: PropTypes.func.isRequired
+};
 
 class LibSubFolderPermissionDialog extends React.Component {
   constructor(props) {
@@ -21,7 +30,7 @@ class LibSubFolderPermissionDialog extends React.Component {
     }
   }
 
-  renderDirContent = () => {
+  renderContent = () => {
     let activeTab = this.state.activeTab;
     
     return (
@@ -54,26 +63,24 @@ class LibSubFolderPermissionDialog extends React.Component {
     );
   }
 
-
   render() {
-    let { repoName, folderName } = this.props;
-    let title = gettext("Set {folderName}'s Permission");
-        title = title.replace('{folderName}', '<span class="op-target mr-1">' + Utils.HTMLescape(folderName) + '</span>');
+    const { repoName, folderName } = this.props;
   
     return (
       <div>
         <Modal isOpen={true} style={{maxWidth: '980px'}} className="share-dialog" toggle={this.props.toggleDialog}>
-          {repoName ?
-          <ModalHeader toggle={this.props.toggleDialog}><span className="op-target mr-1" title={repoName}>{repoName}</span>{gettext('Folder Permission')}</ModalHeader> :
-          <ModalHeader toggle={this.props.toggleDialog}><div dangerouslySetInnerHTML={{__html: title}} /></ModalHeader>
-          }
+          <ModalHeader toggle={this.props.toggleDialog}>
+            <span dangerouslySetInnerHTML={{__html: repoName ? Utils.generateDialogTitle(gettext('{placeholder} Folder Permission'), repoName) : Utils.generateDialogTitle(gettext('Set {placeholder}\'s permission'), folderName)}}></span>
+          </ModalHeader>
           <ModalBody className="dialog-list-container share-dialog-content">
-            {this.renderDirContent()}
+            {this.renderContent()}
           </ModalBody>
         </Modal>
       </div>
     );
   }
 }
+
+LibSubFolderPermissionDialog.propTypes = propTypes;
 
 export default LibSubFolderPermissionDialog;
