@@ -864,7 +864,7 @@ class LibContentView extends React.Component {
       this.showDir(direntPath);
     } else {  // is file
       if (this.state.currentMode === 'column' && Utils.isMarkdownFile(direntPath)) {
-        this.showFile(direntPath);
+        this.getColumnMarkdownContent(direntPath);
       } else {
         const w=window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
@@ -1177,7 +1177,7 @@ class LibContentView extends React.Component {
     } else {
       if (Utils.isMarkdownFile(node.path)) {
         if (node.path !== this.state.path) {
-          this.showFile(node.path);
+          this.getColumnMarkdownContent(node.path);
         }
       } else {
         const w = window.open('about:blank');
@@ -1185,6 +1185,21 @@ class LibContentView extends React.Component {
         w.location.href = url;
       }
     }
+  }
+
+  getColumnMarkdownContent = (filePath) => {
+    let repoID = this.props.repoID;
+    seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
+      seafileAPI.getFileContent(res.data).then((res) => {
+        if (!res.data.trim()){
+          const w = window.open('about:blank');
+          const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
+          w.location.href = url;
+        } else {
+          this.showFile(filePath);
+        }
+      });
+    });
   }
 
   onTreeNodeCollapse = (node) => {
