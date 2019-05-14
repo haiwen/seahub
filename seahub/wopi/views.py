@@ -9,6 +9,7 @@ import requests
 import hashlib
 import urlparse
 import posixpath
+import datetime
 
 from rest_framework.views import APIView
 
@@ -170,6 +171,7 @@ class WOPIFilesView(APIView):
         result['Size'] = file_size
         result['UserId'] = request_user
         result['Version'] = obj_id
+        result['LastModifiedTime'] = ''
 
         try:
             if is_pro_version():
@@ -177,6 +179,11 @@ class WOPIFilesView(APIView):
                         seafile_api.get_org_repo_owner(repo_id)
             else:
                 result['OwnerId'] = seafile_api.get_repo_owner(repo_id)
+
+            dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
+            if dirent:
+                last_modified = datetime.datetime.utcfromtimestamp(dirent.mtime)
+                result['LastModifiedTime'] = last_modified.isoformat()
         except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
