@@ -11,6 +11,7 @@ import '../../css/sub-folder-permission.css';
 const propTypes = { 
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string,
+  isDepartmentRepo: PropTypes.bool,
   folderPath: PropTypes.string,
   folderName: PropTypes.string,
   toggleDialog: PropTypes.func.isRequired
