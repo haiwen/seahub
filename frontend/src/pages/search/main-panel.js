@@ -112,6 +112,7 @@ class SearchViewPanel extends React.Component {
       const params = this.handleSearchParams(1);
       this.getSearchResults(params);
     }
+    if (this.state.isCollapseOpen) this.setState({ isCollapseOpen: false });
   };
 
   compareNumber = (num1, num2) => {
