@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-30 13:34+0800\n"
-"PO-Revision-Date: 2019-04-24 05:53+0000\n"
+"POT-Creation-Date: 2019-05-15 13:32+0800\n"
+"PO-Revision-Date: 2019-05-15 03:51+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/haiwen/seahub/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -18,12 +18,13 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: seahub/api2/endpoints/admin/account.py:195 seahub/api2/views.py:345
+#: seahub/api2/endpoints/admin/account.py:195 seahub/api2/endpoints/user.py:81
+#: seahub/api2/views.py:345
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "الاسم طويل جدا (الحد الأقصى 64 حرف)"
 
-#: seahub/api2/endpoints/admin/account.py:199 seahub/api2/views.py:349
-#: seahub/forms.py:44
+#: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
+#: seahub/api2/views.py:349 seahub/forms.py:44
 #: seahub/organizations/templates/organizations/userinfo.html:171
 #: seahub/profile/forms.py:27 seahub/templates/sysadmin/userinfo.html:427
 #: seahub/templates/wiki/wiki_list.html:379
@@ -58,13 +59,13 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "المساحة المخصصة صغيرة جدا (على الأقل 0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/views.py:1020 seahub/views/sysadmin.py:871
+#: seahub/organizations/views.py:1023 seahub/views/sysadmin.py:871
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "فشل تحديد المخصص: المخصص الأقصى %d MB"
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:80
-#: seahub/api2/endpoints/wikis.py:206
+#: seahub/api2/endpoints/wikis.py:210
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr ""
 
@@ -109,6 +110,15 @@ msgstr "المستخدم %s هو مالك المجموعة بالفعل."
 msgid "System library can not be deleted."
 msgstr "لا يمكن حذف مكتبة النظام"
 
+#: seahub/api2/endpoints/admin/libraries.py:317 seahub/api2/views.py:1549
+#, python-format
+msgid "Transfer failed: role of %s is %s, can not add library."
+msgstr ""
+
+#: seahub/api2/endpoints/admin/libraries.py:338 seahub/api2/views.py:1554
+msgid "Library can not be transferred to owner."
+msgstr ""
+
 #: seahub/api2/endpoints/admin/shares.py:180
 #, python-format
 msgid "User %s is already library owner."
@@ -125,8 +135,8 @@ msgstr "عنوان البريد %s غير صحيح."
 #: seahub/api2/endpoints/admin/shares.py:263
 #: seahub/api2/endpoints/dir_shared_items.py:332
 #: seahub/api2/endpoints/dir_shared_items.py:431
-#: seahub/api2/endpoints/group_owned_libraries.py:932
-#: seahub/api2/endpoints/group_owned_libraries.py:1200
+#: seahub/api2/endpoints/group_owned_libraries.py:931
+#: seahub/api2/endpoints/group_owned_libraries.py:1199
 #, python-format
 msgid "This item has been shared to %s."
 msgstr ""
@@ -363,11 +373,11 @@ msgstr "مسار الوجهة غير صحيح"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1679
-#: seahub/api2/views.py:1715 seahub/api2/views.py:1763
-#: seahub/api2/views.py:1807 seahub/api2/views.py:1852
-#: seahub/api2/views.py:1900 seahub/api2/views.py:2311
-#: seahub/api2/views.py:2425 seahub/templates/js/templates.html:470
+#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1692
+#: seahub/api2/views.py:1728 seahub/api2/views.py:1776
+#: seahub/api2/views.py:1820 seahub/api2/views.py:1865
+#: seahub/api2/views.py:1913 seahub/api2/views.py:2324
+#: seahub/api2/views.py:2438 seahub/templates/js/templates.html:470
 #: seahub/views/ajax.py:715 seahub/views/ajax.py:799 seahub/views/ajax.py:872
 msgid "Out of quota."
 msgstr "نفدت المساحة المخصصة."
@@ -391,13 +401,13 @@ msgstr "فشل الإلغاء"
 
 #: seahub/api2/endpoints/dir_shared_items.py:316
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:916
+#: seahub/api2/endpoints/group_owned_libraries.py:915
 msgid "username invalid."
 msgstr ""
 
 #: seahub/api2/endpoints/dir_shared_items.py:325
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:925
+#: seahub/api2/endpoints/group_owned_libraries.py:924
 #: seahub/oauth/views.py:177
 #, python-format
 msgid "User %s not found."
@@ -406,10 +416,10 @@ msgstr ""
 #: seahub/api2/endpoints/draft_reviewer.py:96
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wiki_pages.py:88
-#: seahub/api2/endpoints/wiki_pages.py:185 seahub/api2/endpoints/wikis.py:108
-#: seahub/api2/endpoints/wikis.py:197 seahub/drafts/views.py:32
+#: seahub/api2/endpoints/wiki_pages.py:185 seahub/api2/endpoints/wikis.py:112
+#: seahub/api2/endpoints/wikis.py:201 seahub/drafts/views.py:32
 #: seahub/group/views.py:454 seahub/profile/forms.py:24
-#: seahub/profile/views.py:200 seahub/thumbnail/views.py:51
+#: seahub/profile/views.py:202 seahub/thumbnail/views.py:51
 #: seahub/thumbnail/views.py:166 seahub/views/__init__.py:794
 #: seahub/views/ajax.py:209 seahub/views/ajax.py:239 seahub/views/ajax.py:245
 #: seahub/views/ajax.py:912 seahub/views/wiki.py:201
@@ -459,8 +469,8 @@ msgstr "المستخدم %s عضو في المجموعة بالفعل."
 msgid "User %s not found in organization."
 msgstr "المستخدم %s غير موجود في النظام."
 
-#: seahub/api2/endpoints/group_owned_libraries.py:371
-#: seahub/api2/endpoints/group_owned_libraries.py:643
+#: seahub/api2/endpoints/group_owned_libraries.py:370
+#: seahub/api2/endpoints/group_owned_libraries.py:642
 msgid "Permission already exists."
 msgstr ""
 
@@ -481,7 +491,7 @@ msgid "%s is already invited."
 msgstr "لقد تم دعوة %s مسبقا."
 
 #: seahub/api2/endpoints/invitations.py:69
-#: seahub/api2/endpoints/invitations.py:133 seahub/base/accounts.py:788
+#: seahub/api2/endpoints/invitations.py:133 seahub/base/accounts.py:794
 #, python-format
 msgid "User %s already exists."
 msgstr "المستخدم %s موجود مسبقا."
@@ -506,6 +516,7 @@ msgid "Error"
 msgstr "خطأ"
 
 #: seahub/api2/endpoints/repo_send_new_password.py:44
+#: seahub/api2/endpoints/user.py:73 seahub/api2/endpoints/user.py:93
 msgid "Feature disabled."
 msgstr ""
 
@@ -519,16 +530,16 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3705
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3718
 msgid "Wrong password"
 msgstr "كلمة مرور غير صحيحة"
 
-#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3708
+#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3721
 #: seahub/views/ajax.py:710 seahub/views/sysadmin.py:2227
 msgid "Internal server error"
 msgstr "خطأ داخلي في الخادم"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3711
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3724
 msgid "Decrypt library error"
 msgstr "خطأ فك تشفير المكتبة"
 
@@ -597,6 +608,15 @@ msgstr ""
 msgid "Password is too short"
 msgstr "كلمة المرور قصيرة جدا"
 
+#: seahub/api2/endpoints/user.py:99
+#, python-format
+msgid "Contact email %s already exists."
+msgstr ""
+
+#: seahub/api2/endpoints/user.py:113
+msgid "telephone is too long (maximum is 100 characters)."
+msgstr ""
+
 #: seahub/api2/endpoints/user_avatar.py:48 seahub/utils/error_msg.py:8
 #, python-format
 msgid ""
@@ -629,16 +649,16 @@ msgstr "الصفحة \"%s\" موجودة بالفعل."
 msgid "Page %s not found."
 msgstr ""
 
-#: seahub/api2/endpoints/wikis.py:115 seahub/api2/endpoints/wikis.py:213
+#: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
 #, python-format
 msgid "%s is taken by others, please try another name."
 msgstr ""
 
-#: seahub/api2/endpoints/wikis.py:193
+#: seahub/api2/endpoints/wikis.py:197
 msgid "Wiki not found."
 msgstr ""
 
-#: seahub/api2/endpoints/wikis.py:202
+#: seahub/api2/endpoints/wikis.py:206
 #: seahub/group/templates/group/group_wiki.html:158
 #: seahub/templates/wiki/personal_wiki.html:153
 #: seahub/templates/wiki/wiki_list.html:550
@@ -658,7 +678,7 @@ msgid "Email or Username"
 msgstr "البريد أو اسم المستخدم"
 
 #: seahub/auth/forms.py:27 seahub/auth/forms.py:217
-#: seahub/base/accounts.py:766
+#: seahub/base/accounts.py:772
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:36
 #: seahub/organizations/templates/organizations/org_user_admin.html:29
@@ -734,7 +754,7 @@ msgid "New password confirmation"
 msgstr "تأكيد كلمة المرور"
 
 #: seahub/auth/forms.py:187 seahub/auth/forms.py:229
-#: seahub/base/accounts.py:822 seahub/organizations/forms.py:69
+#: seahub/base/accounts.py:828 seahub/organizations/forms.py:69
 msgid "The two password fields didn't match."
 msgstr "كلمتي المرور غير متطابقتان."
 
@@ -746,7 +766,7 @@ msgstr "كلمو المرور السابقة"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "كلمة المرور السابقة غير صحيحة. الرجاء إعادة الادخال."
 
-#: seahub/auth/forms.py:218 seahub/base/accounts.py:768
+#: seahub/auth/forms.py:218 seahub/base/accounts.py:774
 msgid "Password (again)"
 msgstr "كلمة المرور(إعادة)"
 
@@ -833,51 +853,51 @@ msgstr "تم تحديث شعارك بنجاح"
 msgid "Successfully deleted the requested avatars."
 msgstr "تم حذف الشعارات المحددة بنجاح."
 
-#: seahub/base/accounts.py:480
+#: seahub/base/accounts.py:486
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "الحساب %(account)s تجمد على %(site)s."
 
-#: seahub/base/accounts.py:757
+#: seahub/base/accounts.py:763
 msgid "Email address"
 msgstr "عنوان الريد"
 
-#: seahub/base/accounts.py:762
+#: seahub/base/accounts.py:768
 msgid "Username"
 msgstr "اسم المستخدم"
 
-#: seahub/base/accounts.py:763
+#: seahub/base/accounts.py:769
 msgid "This value must be of length 40"
 msgstr "القيمة يجب أن تكون بطول 40 خانة"
 
-#: seahub/base/accounts.py:778 seahub/forms.py:30
+#: seahub/base/accounts.py:784 seahub/forms.py:30
 #: seahub/views/sysadmin.py:2058
 msgid "The number of users exceeds the limit."
 msgstr "عدد المستخدمين تجاوز الحد المسموح."
 
-#: seahub/base/accounts.py:782
+#: seahub/base/accounts.py:788
 msgid "Enter a valid email address."
 msgstr "أدخل عنوان بريد صحيح."
 
-#: seahub/base/accounts.py:792
+#: seahub/base/accounts.py:798
 msgid "Invalid user id."
 msgstr "رمز دخول غير صحيح."
 
-#: seahub/base/accounts.py:843 seahub/templates/js/templates.html:561
+#: seahub/base/accounts.py:849 seahub/templates/js/templates.html:561
 #: seahub/templates/js/templates.html:1913
 #: seahub/templates/js/templates.html:1950
 msgid "name"
 msgstr "اسم"
 
-#: seahub/base/accounts.py:846
+#: seahub/base/accounts.py:852
 msgid "department"
 msgstr "ادارة"
 
-#: seahub/base/accounts.py:849
+#: seahub/base/accounts.py:855
 msgid "telephone"
 msgstr "التلفون"
 
-#: seahub/base/accounts.py:852
+#: seahub/base/accounts.py:858
 msgid "note"
 msgstr "ملاحظة"
 
@@ -2871,13 +2891,13 @@ msgstr "مالك"
 msgid "Member"
 msgstr "عضو"
 
-#: seahub/institutions/views.py:193 seahub/organizations/views.py:504
+#: seahub/institutions/views.py:193 seahub/organizations/views.py:507
 #: seahub/views/sysadmin.py:926
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "تم حذف %s بنجاح"
 
-#: seahub/institutions/views.py:195 seahub/organizations/views.py:485
+#: seahub/institutions/views.py:195 seahub/organizations/views.py:488
 #: seahub/views/sysadmin.py:936
 msgid "Failed to delete: the user does not exist"
 msgstr "فشل في الحذف: المستخدم غير موجود"
@@ -4120,18 +4140,18 @@ msgstr "مكتبات مشتركة"
 msgid "Quota can not be empty"
 msgstr "المساحة المخصصة لا يمكن أن تكون فارغة"
 
-#: seahub/organizations/views.py:402 seahub/views/sysadmin.py:1207
+#: seahub/organizations/views.py:405 seahub/views/sysadmin.py:1207
 #, python-format
 msgid "Fail to add user %s."
 msgstr "فشل إضافة المستخدم %s."
 
-#: seahub/organizations/views.py:418 seahub/views/sysadmin.py:1232
+#: seahub/organizations/views.py:421 seahub/views/sysadmin.py:1232
 #: seahub/views/sysadmin.py:1245
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "تم إضافة المستخدم %s بنجاح. تم إرسال إشعار بالبريد إلكتروني."
 
-#: seahub/organizations/views.py:421 seahub/views/sysadmin.py:1235
+#: seahub/organizations/views.py:424 seahub/views/sysadmin.py:1235
 #: seahub/views/sysadmin.py:1248
 #, python-format
 msgid ""
@@ -4139,39 +4159,39 @@ msgid ""
 " please check your email configuration."
 msgstr "تم إضافة المستخدم %s بنجاح. حدث خطأ عند إرسال إشعار بالبريد الإلكتروني، الرجاء التحقق من تكوين البريد الإلكتروني الخاص بك."
 
-#: seahub/organizations/views.py:423 seahub/views/sysadmin.py:1237
+#: seahub/organizations/views.py:426 seahub/views/sysadmin.py:1237
 #: seahub/views/sysadmin.py:1250
 #, python-format
 msgid "Successfully added user %s."
 msgstr "تم إضافة المستخدم %s بنجاح."
 
-#: seahub/organizations/views.py:425 seahub/views/sysadmin.py:1252
+#: seahub/organizations/views.py:428 seahub/views/sysadmin.py:1252
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "تم إضافة المستخدم %s بنجاح. ولكن لا يمكن إرسال إشعار بالبريد الإلكتروني، لأنه لم يتم تكوين خدمة البريد الإلكتروني بشكل صحيح."
 
-#: seahub/organizations/views.py:539 seahub/views/sysadmin.py:1143
+#: seahub/organizations/views.py:542 seahub/views/sysadmin.py:1143
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى %(passwd)s، تم إرسال بريد إلكتروني إلى %(user)s."
 
-#: seahub/organizations/views.py:544 seahub/views/sysadmin.py:1148
+#: seahub/organizations/views.py:547 seahub/views/sysadmin.py:1148
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى %(passwd)s، ولكن فشل في إرسال البريد الإلكتروني إلى %(user)s، الرجاء التحقق من تكوين البريد الإلكتروني الخاص بك."
 
-#: seahub/organizations/views.py:548 seahub/views/sysadmin.py:1152
+#: seahub/organizations/views.py:551 seahub/views/sysadmin.py:1152
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى%(passwd)s للمستخدم %(user)s."
 
-#: seahub/organizations/views.py:551 seahub/views/sysadmin.py:1155
+#: seahub/organizations/views.py:554 seahub/views/sysadmin.py:1155
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -4179,39 +4199,40 @@ msgid ""
 "configured."
 msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى%(passwd)s للمستخدم %(user)s. و لكن لا يمكن ارسال الاشعار بالبريد، بسبب عدم تكوين خدمة البريد بصورة صحيحة."
 
-#: seahub/organizations/views.py:575 seahub/organizations/views.py:1136
+#: seahub/organizations/views.py:578 seahub/organizations/views.py:1139
 #: seahub/views/sysadmin.py:1988
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "تم تعيين %s كمدير بنجاح."
 
-#: seahub/organizations/views.py:589 seahub/views/sysadmin.py:988
+#: seahub/organizations/views.py:592 seahub/views/sysadmin.py:988
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "فشل إلغاء صلاحية المشرف: المستخدم غير موجود"
 
-#: seahub/organizations/views.py:598 seahub/views/sysadmin.py:986
+#: seahub/organizations/views.py:601 seahub/views/sysadmin.py:986
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "تم إلغاء صلاحية المشرف %s بنجاح"
 
-#: seahub/organizations/views.py:708
+#: seahub/organizations/views.py:711
 #: seahub/templates/sysadmin/repoadmin_js.html:52
 msgid "Successfully transfered 1 item."
 msgstr ""
 
-#: seahub/organizations/views.py:773 seahub/organizations/views.py:1091
+#: seahub/organizations/views.py:776 seahub/organizations/views.py:1094
 #: seahub/views/sysadmin.py:1481 seahub/views/sysadmin.py:1895
 #: seahub/views/sysadmin.py:1954
 msgid "Successfully deleted."
 msgstr "تم الحذف بنجاح."
 
-#: seahub/organizations/views.py:1138 seahub/views/sysadmin.py:1990
+#: seahub/organizations/views.py:1141 seahub/views/sysadmin.py:1990
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "فشل تعيين %s كمشرف: المستخدم غير موجود."
 
 #: seahub/profile/templates/profile/set_profile.html:4
 #: seahub/profile/templates/profile/set_profile.html:46
+#: seahub/profile/templates/profile/set_profile_react.html:5
 #: seahub/templates/base.html:71
 #: seahub/templates/js/admin-common-templates.html:15
 #: seahub/templates/js/sysadmin-templates.html:28
@@ -4264,6 +4285,7 @@ msgid "Change"
 msgstr "تغيير"
 
 #: seahub/profile/templates/profile/set_profile.html:59
+#: seahub/profile/templates/profile/set_profile_react.html:19
 msgctxt "true name"
 msgid "Name:"
 msgstr "الاسم:"
@@ -4289,6 +4311,7 @@ msgid "Telephone:"
 msgstr "التلفون:"
 
 #: seahub/profile/templates/profile/set_profile.html:99
+#: seahub/profile/templates/profile/set_profile_react.html:24
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:12
 msgid "Set Password"
@@ -4296,6 +4319,7 @@ msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:99
 #: seahub/profile/templates/profile/set_profile.html:112
+#: seahub/profile/templates/profile/set_profile_react.html:24
 #: seahub/templates/sysadmin/sys_terms_admin.html:39
 msgid "Update"
 msgstr "تحديث"
@@ -4435,23 +4459,23 @@ msgstr "تحرير الشخصية بنجاح."
 msgid "Failed to edit profile"
 msgstr "الملف الشخصي"
 
-#: seahub/profile/views.py:186
+#: seahub/profile/views.py:188
 msgid "Has not accepted invitation yet"
 msgstr "لم يقبل دعوة بعد"
 
-#: seahub/profile/views.py:210
+#: seahub/profile/views.py:212
 msgid "Demo account can not be deleted."
 msgstr "لا يمكن حذف الحساب التوضيحي."
 
-#: seahub/profile/views.py:236
+#: seahub/profile/views.py:238
 msgid "Failed to set default library."
 msgstr "فشل تثبيت المكتبة الافتراضية."
 
-#: seahub/profile/views.py:240
+#: seahub/profile/views.py:242
 msgid "Can not set encrypted library as default library."
 msgstr "لا يمكن تعيين مكتبة مشفرة كالمكتبة الافتراضية."
 
-#: seahub/profile/views.py:245
+#: seahub/profile/views.py:247
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "تم تعيين \"%s\" كالمكتبة الافتراضية الخاصة بك بنجاح."
