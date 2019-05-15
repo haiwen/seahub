@@ -636,6 +636,7 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         'mtime_relative': translate_seahub_time(repo.latest_modify),
         'encrypted': enc,
         'enc_version': enc_version,
+        'salt': repo.salt if enc_version == 3 else '',
         'magic': magic,
         'random_key': random_key,
         'repo_version': repo_version,
@@ -996,14 +997,17 @@ class Repos(APIView):
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd, storage_id)
+                            repo_desc, username, passwd, storage_id,
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd)
+                            repo_desc, username, passwd,
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd)
+                        repo_desc, username, passwd,
+                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
 
         if passwd and ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
             add_encrypted_repo_secret_key_to_database(repo_id, passwd)
@@ -1017,11 +1021,24 @@ class Repos(APIView):
             return None, api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
         magic = request.data.get('magic', '')
         random_key = request.data.get('random_key', '')
+
         try:
             enc_version = int(request.data.get('enc_version', 0))
         except ValueError:
             return None, api_error(status.HTTP_400_BAD_REQUEST,
                              'Invalid enc_version param.')
+
+        if enc_version > settings.ENCRYPTED_LIBRARY_VERSION:
+            return None, api_error(status.HTTP_400_BAD_REQUEST,
+                             'Invalid enc_version param.')
+
+        salt = None
+        if enc_version == 3 and settings.ENCRYPTED_LIBRARY_VERSION == 3:
+            salt = request.data.get('salt', '')
+            if not salt:
+                error_msg = 'salt invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if len(magic) != 64 or len(random_key) != 96 or enc_version < 0:
             return None, api_error(status.HTTP_400_BAD_REQUEST,
                              'You must provide magic, random_key and enc_version.')
@@ -1032,7 +1049,7 @@ class Repos(APIView):
         else:
             repo_id = seafile_api.create_enc_repo(
                 repo_id, repo_name, repo_desc, username,
-                magic, random_key, enc_version)
+                magic, random_key, salt, enc_version)
         return repo_id, None
 
 
@@ -1114,14 +1131,17 @@ class PubRepos(APIView):
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd, storage_id)
+                            repo_desc, username, passwd, storage_id,
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd)
+                            repo_desc, username, passwd,
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd)
+                        repo_desc, username, passwd,
+                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
 
             repo = seafile_api.get_repo(repo_id)
             seafile_api.add_inner_pub_repo(repo.id, permission)
@@ -4654,14 +4674,17 @@ class GroupRepos(APIView):
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd, storage_id)
+                            repo_desc, username, passwd, storage_id,
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd)
+                            repo_desc, username, passwd,
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd)
+                        repo_desc, username, passwd,
+                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
 
             repo = seafile_api.get_repo(repo_id)
             seafile_api.set_group_repo(repo.id, group.id, username, permission)

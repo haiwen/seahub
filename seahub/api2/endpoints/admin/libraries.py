@@ -176,7 +176,7 @@ class AdminLibraries(APIView):
             repo_owner = username
 
         try:
-            repo_id = seafile_api.create_repo(repo_name, '', repo_owner, None)
+            repo_id = seafile_api.create_repo(repo_name, '', repo_owner)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

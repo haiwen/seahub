@@ -167,10 +167,9 @@ def personal_wiki_create(request):
     repo_name = form.cleaned_data['repo_name']
     repo_desc = form.cleaned_data['repo_desc']
     username = request.user.username
-    passwd = None
     permission = "rw"
 
-    repo_id = seafile_api.create_repo(repo_name, repo_desc, username, passwd)
+    repo_id = seafile_api.create_repo(repo_name, repo_desc, username)
     if not repo_id:
         return json_error(_(u'Failed to create'), 500)
 
