@@ -12,7 +12,8 @@ body {
 .file-title {
   font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 5px;
+  line-height: 1.5;
+  margin-bottom: 0;
 }
 .file-star,
 .file-internal-link {
