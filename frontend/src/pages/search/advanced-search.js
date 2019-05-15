@@ -88,7 +88,7 @@ class AdvancedSearch extends React.Component {
 
             <div className='search-file-types search-catalog'>
               <Row>
-                <Col md="2" lg="2">{gettext('File types')}{': '}</Col>
+                <Col md="2" lg="2">{gettext('File Types')}{': '}</Col>
                 <Col md="4" lg="4">
                   <FormGroup check>
                     <Label check>

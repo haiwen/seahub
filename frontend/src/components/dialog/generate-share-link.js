@@ -339,11 +339,11 @@ class GenerateShareLink extends React.Component {
                     className="w-75"
                     value={this.state.sendLinkEmails}
                     onChange={this.onSendLinkEmailsChange}
-                    placeholder={gettext('Emails, separated by ","')}
+                    placeholder={gettext('Emails, separated by \',\'')}
                   />
                 </FormGroup>
                 <FormGroup>
-                  <Label htmlFor="sendLinkMessage" className="text-secondary font-weight-normal">{gettext('Message (optional)')}{':'}</Label><br/>
+                  <Label htmlFor="sendLinkMessage" className="text-secondary font-weight-normal">{gettext('Message (optional):')}</Label><br/>
                   <textarea
                     className="w-75"
                     id="sendLinkMessage"
