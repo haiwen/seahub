@@ -120,7 +120,7 @@ class Item extends Component {
     
     let iconUrl = Utils.getLibIconUrl(item); 
     let iconTitle = Utils.getLibIconTitle(item);
-    let repoUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}`;
+    let repoUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}/`;
 
     return { iconUrl, iconTitle, repoUrl };
   }

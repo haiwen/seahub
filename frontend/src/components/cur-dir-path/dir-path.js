@@ -75,13 +75,13 @@ class DirPath extends React.Component {
         })}
         {this.props.pathPrefix && this.props.pathPrefix.length === 0 && (
           <Fragment>
-            <Link to={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick.bind(this, 'my-libs')}>{gettext('Libraries')}</Link>
+            <Link to={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick('my-libs')}>{gettext('Libraries')}</Link>
             <span className="path-split">/</span>
           </Fragment>
         )}
         {!this.props.pathPrefix && (
           <Fragment>
-            <a href={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick.bind(this, 'my-libs')}>{gettext('Libraries')}</a>
+            <Link href={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick('my-libs')}>{gettext('Libraries')}</Link>
             <span className="path-split">/</span>
           </Fragment>
         )}
