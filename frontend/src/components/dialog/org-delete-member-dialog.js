@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   member: PropTypes.object.isRequired,
+  groupID: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
   onMemberChanged: PropTypes.func.isRequired
 };

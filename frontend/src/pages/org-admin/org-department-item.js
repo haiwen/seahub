@@ -420,6 +420,7 @@ class MemberItem extends React.Component {
 }
 
 const MemberItemPropTypes = {
+  groupID: PropTypes.string.isRequired,
   member: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onMemberChanged: PropTypes.func.isRequired,
@@ -509,11 +510,19 @@ class GroupItem extends React.Component {
 
 const GroupItemPropTypes = {
   group: PropTypes.object.isRequired,
+  groupID: PropTypes.string,
   showSetGroupQuotaDialog: PropTypes.func.isRequired,
   showDeleteDepartDialog: PropTypes.func.isRequired,
   isSubdepartChanged: PropTypes.bool,
 };
 
 GroupItem.propTypes = GroupItemPropTypes;
+
+
+const OrgDepartmentItemPropTypes = {
+  groupID: PropTypes.string,
+};
+
+OrgDepartmentItem.propTypes = OrgDepartmentItemPropTypes;
 
 export default OrgDepartmentItem;

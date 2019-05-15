@@ -5,6 +5,8 @@ import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
+  groupID: PropTypes.string,
+  parentGroupID: PropTypes.string,
   toggle: PropTypes.func.isRequired,
   onDepartChanged: PropTypes.func.isRequired,
 };

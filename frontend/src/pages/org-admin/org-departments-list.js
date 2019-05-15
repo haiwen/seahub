@@ -20,7 +20,7 @@ class OrgDepartmentsList extends React.Component {
     super(props);
     this.state = {
       groups: null,
-      groupID: -1,
+      groupID: '',
       groupName: '',
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
@@ -71,7 +71,6 @@ class OrgDepartmentsList extends React.Component {
           <ModalPortal>
             <AddDepartDialog
               onDepartChanged={this.onDepartChanged}
-              parentGroupID={this.props.groupID}
               groupID={this.state.groupID}
               toggle={this.toggleAddDepartDialog}
             />
