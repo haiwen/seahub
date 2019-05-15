@@ -151,8 +151,9 @@ class Item extends Component {
     let iconUrl = '';
     let linkUrl = '';
     if (item.is_dir) {
+      let path = item.path === '/' ? '/' : item.path.slice(0, item.path.length - 1);
       iconUrl = Utils.getFolderIconUrl(false);
-      linkUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}${Utils.encodePath(item.path)}`;
+      linkUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}${Utils.encodePath(path)}`;
     } else {
       iconUrl = Utils.getFileIconUrl(item.obj_name); 
       linkUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
