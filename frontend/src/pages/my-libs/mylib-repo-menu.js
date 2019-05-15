@@ -56,7 +56,7 @@ class MylibRepoMenu extends React.Component {
       operations.push('Change Password');
     }
     if (showResetPasswordMenuItem) {
-      operations.push('Reset Password')
+      operations.push('Reset Password');
     }
     if (folderPermEnabled) {
       operations.push('Folder Permission');
@@ -125,7 +125,7 @@ class MylibRepoMenu extends React.Component {
             })}
           </DropdownMenu>
         </Dropdown>
-      )
+      );
     }
 
     // mobile menu

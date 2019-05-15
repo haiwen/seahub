@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { siteRoot, filePath, fileName, historyRepoID } from './utils/constants';
+import { fileName, historyRepoID } from './utils/constants';
 import { Utils } from './utils/utils';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import SidePanel from './pages/file-history/side-panel';
@@ -52,8 +52,8 @@ class FileHistory extends React.Component {
           seafileAPI.getFileContent(res1.data)
         ]).then(axios.spread((content1, content2) => {
           this.setDiffContent(content1.data, content2.data);
+        }));
       }));
-     }));
     } else {
       seafileAPI.getFileRevision(historyRepoID, item.commit_id, item.path).then((res) => {
         axios.all([
@@ -61,7 +61,7 @@ class FileHistory extends React.Component {
         ]).then(axios.spread((content1) => {
           this.setDiffContent(content1.data, '');
         }));
-      })
+      });
     }
   }
 

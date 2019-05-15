@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -11,7 +10,7 @@ import Loading from '../../components/loading';
 import '../../css/search.css';
 
 const _ = require('lodash');
-const { q, repo_name, search_repo, search_ftypes } = window.search.pageOptions;
+const { q, search_repo, search_ftypes } = window.search.pageOptions;
 
 class SearchViewPanel extends React.Component {
 

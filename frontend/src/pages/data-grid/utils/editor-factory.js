@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Editors } from '@seafile/react-data-grid-addons';
 
 const EDITOR_NUMBER = 'number';
@@ -9,7 +9,7 @@ class EditorFactory {
   createEditor(editorType) {
     switch(editorType) {
       case EDITOR_NUMBER: {
-        return <Editors.NumberEditor />
+        return <Editors.NumberEditor />;
       }
   
       case EDITOR_TEXT: {

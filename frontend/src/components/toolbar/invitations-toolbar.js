@@ -22,8 +22,7 @@ class InvitationsToolbar extends React.Component {
     return (
       <div className="main-panel-north border-left-show">
         <div className="cur-view-toolbar">
-          <span title="Side Nav Menu" onClick={onShowSidePanel}
-                className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
+          <span title="Side Nav Menu" onClick={onShowSidePanel} className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
           </span>
           <MediaQuery query="(min-width: 768px)">
             <div className="operation">
