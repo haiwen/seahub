@@ -54,6 +54,7 @@ class EmailNotice extends React.Component {
     return (
       <div className="setting-item" id="email-notice">
         <h3 className="setting-item-heading">{gettext('Email Notification of File Changes')}</h3>
+        <p className="mb-1">{gettext('The list of added, deleted and modified files will be sent to your mailbox.')}</p>
         <form method="post" action="" id="set-email-notice-interval-form" onSubmit={this.formSubmit}>
           {this.intervalOptions.map((item, index) => {
             return (
