@@ -15,6 +15,7 @@ import LibHistorySettingDialog from '../../components/dialog/lib-history-setting
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
 import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
 import LabelRepoStateDialog from '../../components/dialog/label-repo-state-dialog';
+import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
 import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 
@@ -43,7 +44,8 @@ class MylibRepoListItem extends React.Component {
       isHistorySettingDialogShow: false,
       isChangePasswordDialogShow: false,
       isResetPasswordDialogShow: false,
-      isLabelRepoStateDialogOpen: false
+      isLabelRepoStateDialogOpen: false,
+      isFolderPermissionDialogShow: false,
     };
   }
 
@@ -89,7 +91,7 @@ class MylibRepoListItem extends React.Component {
         this.onResetPasswordToggle();
         break;
       case 'Folder Permission':
-        // todo
+        this.onFolderPermissionToggle();
         break;
       case 'Label current state':
         this.onLabelToggle();
@@ -146,6 +148,10 @@ class MylibRepoListItem extends React.Component {
 
   onLabelToggle = () => {
     this.setState({isLabelRepoStateDialogOpen: !this.state.isLabelRepoStateDialogOpen});
+  }
+
+  onFolderPermissionToggle = () => {
+    this.setState({isFolderPermissionDialogShow: !this.state.isFolderPermissionDialogShow});
   }
 
   onUnfreezedItem = () => {
@@ -354,12 +360,23 @@ class MylibRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
+
         {this.state.isLabelRepoStateDialogOpen && (
           <ModalPortal>
             <LabelRepoStateDialog
               repoID={repo.repo_id}
               repoName={repo.repo_name}
               toggleDialog={this.onLabelToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isFolderPermissionDialogShow && (
+          <ModalPortal>
+            <LibSubFolderPermissionDialog
+              toggleDialog={this.onFolderPermissionToggle}
+              repoID={repo.repo_id}
+              repoName={repo.repo_name}
             />
           </ModalPortal>
         )}

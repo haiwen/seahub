@@ -66,6 +66,7 @@ class UserSelect extends React.Component {
         onChange={this.handleSelectChange}
         placeholder={this.props.placeholder}
         className={`user-select ${this.props.className}`}
+        value={this.props.value}
         ref="userSelect"
       />
     );

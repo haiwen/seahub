@@ -21,6 +21,7 @@ class SelectEditor extends React.Component {
     super(props);
     this.state = {
       isEditing: false,
+      options: []
     };
     this.options = [];
   }
@@ -39,6 +40,10 @@ class SelectEditor extends React.Component {
       option.label = <div>{this.props.translateOption(options[i])}{ this.props.translateExplanation && <div className="permission-editor-explanation">{this.props.translateExplanation(options[i])}</div>}</div>;
       this.options.push(option);
     }
+
+    this.setState({
+      options: this.options
+    })
   }
 
   componentWillUnmount() {
@@ -78,7 +83,7 @@ class SelectEditor extends React.Component {
       <div className="permission-editor" onClick={this.onSelectHandler}>
         {(!isTextMode || this.state.isEditing) &&
           <Select
-            options={this.options}
+            options={this.state.options}
             className="permission-editor-select"
             classNamePrefix="permission-editor"
             placeholder={this.props.translateOption(currentOption)}

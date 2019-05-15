@@ -14,6 +14,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
+import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 
 import '../../css/dirent-list-item.css';
 
@@ -65,6 +66,7 @@ class DirentListItem extends React.Component {
       isDragTipShow: false,
       isDropTipshow: false,
       isEditFileTagShow: false,
+      isPermissionDialogOpen: false,
     };
   }
 
@@ -262,7 +264,7 @@ class DirentListItem extends React.Component {
   }
 
   onPermissionItem = () => {
-
+    this.setState({isPermissionDialogOpen: !this.state.isPermissionDialogOpen});
   }
 
   onLockItem = () => {
@@ -628,6 +630,16 @@ class DirentListItem extends React.Component {
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.closeSharedDialog}
+            />
+          </ModalPortal>
+        }
+        {this.state.isPermissionDialogOpen &&
+          <ModalPortal>
+            <LibSubFolderPermissionDialog 
+              toggleDialog={this.onPermissionItem}
+              repoID={this.props.repoID}
+              folderPath={direntPath}
+              folderName={dirent.name}
             />
           </ModalPortal>
         }
