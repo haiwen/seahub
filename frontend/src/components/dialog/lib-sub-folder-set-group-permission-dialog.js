@@ -185,7 +185,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
   }
 
   onChangeGroupPermission = (item, permission) => {
-    seafileAPI.updateGroupFolderPerm(item.repoID, item.permission, item.folder_path, item.group_id).then(() => {
+    seafileAPI.updateGroupFolderPerm(item.repo_id, permission, item.folder_path, item.group_id).then(() => {
       this.updateGroupPermission(item, permission);
     });
   }
