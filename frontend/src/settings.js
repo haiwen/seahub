@@ -97,7 +97,7 @@ class Settings extends React.Component {
   handleContentScroll = (e) => {
     const scrollTop = e.target.scrollTop;
     const scrolled = this.sideNavItems.filter((item, index) => {
-      return item.show && document.getElementById(item.href.substr(1)).offsetTop - 30 < scrollTop;
+      return item.show && document.getElementById(item.href.substr(1)).offsetTop - 45 < scrollTop;
     });
     if (scrolled.length) {
       this.setState({
