@@ -40,13 +40,6 @@ body {
   background: #f4f4f4;
   border-right: 4px solid transparent;
 }
-.open-via-client {
-  display: block;
-  margin-top: 25px;
-  color: #333;
-  font-weight: normal;
-  text-decoration: underline;
-}
 .tip {
   color: #808080;
 }
