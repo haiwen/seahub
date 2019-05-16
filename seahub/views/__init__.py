@@ -851,7 +851,7 @@ def file_revisions(request, repo_id):
                 'can_download_file': parse_repo_perm(repo_perm).can_download,
             })
 
-    use_new_style = True if filetype == 'markdown' else False
+    use_new_style = True if suffix_list and filetype == 'markdown' else False
 
     if use_new_style:
         return render(request, 'file_revisions_new.html', {
