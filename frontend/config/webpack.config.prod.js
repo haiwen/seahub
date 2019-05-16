@@ -273,6 +273,12 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      // test: /\.xxx$/, // may apply this only for some modules
+      options: {
+        concatenateModules: false
+      }
+    }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -325,6 +331,7 @@ module.exports = {
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
       filename: cssFilename,
+      allChunks: true
     }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
