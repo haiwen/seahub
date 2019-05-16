@@ -99,7 +99,7 @@ class InvitePeopleDialog extends React.Component {
           <label htmlFor="emails">{gettext('Emails')}</label>
           <Input
             type="text" id="emails"
-            placeholder={gettext("Emails, separated by ','")}
+            placeholder={gettext('Emails, separated by \',\'')}
             value={this.state.emails}
             onChange={this.handleEmailsChange}
             onKeyDown={this.handleKeyDown}

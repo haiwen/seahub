@@ -223,7 +223,7 @@ class Search extends Component {
   }
 
   onSearchPage = () => {
-    window.location.href = siteRoot + 'search/'
+    window.location.href = siteRoot + 'search/';
   }
 
   render() {

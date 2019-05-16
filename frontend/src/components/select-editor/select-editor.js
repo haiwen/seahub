@@ -43,7 +43,7 @@ class SelectEditor extends React.Component {
 
     this.setState({
       options: this.options
-    })
+    });
   }
 
   componentWillUnmount() {

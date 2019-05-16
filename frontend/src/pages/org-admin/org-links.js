@@ -138,6 +138,7 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   deleteOrgLink: PropTypes.func.isRequired,
+  openLinkDialog: PropTypes.func.isRequired,
 };
 
 class RepoItem extends React.Component {

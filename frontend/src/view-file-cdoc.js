@@ -40,7 +40,7 @@ class CDOCEditor extends React.Component {
   constructor(props) {
     super(props);
     this.collabServer = seafileCollabServer ? seafileCollabServer : null;
-    this.richEditorUtils = new RichEditorUtils(editorUtilities, this)
+    this.richEditorUtils = new RichEditorUtils(editorUtilities, this);
     this.state = {
       value: Value.create({}),
       collabUsers: userInfo ?
@@ -57,7 +57,7 @@ class CDOCEditor extends React.Component {
       contentChanged: false,
       showShareLinkDialog: false,
       isShowHistory: false,
-    }
+    };
 
     if (this.state.collabServer) {
       const socket = io(this.state.collabServer);
@@ -262,11 +262,11 @@ class CDOCEditor extends React.Component {
           />
         }
       </React.Fragment>
-    )
+    );
   }
 }
 
-const TranslatedCDOCEditor = translate('translations')(CDOCEditor)
+const TranslatedCDOCEditor = translate('translations')(CDOCEditor);
 
 ReactDOM.render(
   <I18nextProvider i18n={i18n} initialLanguage={lang} >

@@ -154,7 +154,7 @@ class AdvancedSearch extends React.Component {
                       className="form-control search-input"
                       name="query"
                       autoComplete="off"
-                      placeholder={gettext("Input file extensions here, separate with ','")}
+                      placeholder={gettext('Input file extensions here, separate with \',\'')}
                       onChange={this.props.handlerFileTypesInput}
                       value={stateAndValues.input_fexts}
                       onKeyDown={this.props.handleKeyDown}

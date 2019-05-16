@@ -18,8 +18,9 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
-  onItmeDetails: PropTypes.func,
+  onItemDetails: PropTypes.func,
   onItemRename: PropTypes.func,
+  onItemDelete: PropTypes.func,
 };
 
 class SharedRepoListItem extends React.Component {
@@ -333,7 +334,7 @@ class SharedRepoListItem extends React.Component {
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-      })
+      });
     }
   }
 

@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
+  groupID: PropTypes.string.isRequired,
   onRepoChanged: PropTypes.func.isRequired,
 };
 
