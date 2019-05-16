@@ -29,7 +29,7 @@ class LanguageSetting extends React.Component {
       <div className="setting-item" id="lang-setting">
         <h3 className="setting-item-heading">{gettext('Language Setting')}</h3>
         <Select
-          className='w-25'
+          className='language-selector'
           defaultValue={{value: currentLang.langCode, label: currentLang.langName}}
           options={options}
           onChange={this.onSelectChange}
