@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-15 13:32+0800\n"
+"POT-Creation-Date: 2019-05-16 14:14+0800\n"
 "PO-Revision-Date: 2019-05-15 03:51+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
@@ -116,12 +116,12 @@ msgstr "用戶 %s 已經是群組擁有者。"
 msgid "System library can not be deleted."
 msgstr "系統資料庫無法被刪除。"
 
-#: seahub/api2/endpoints/admin/libraries.py:317 seahub/api2/views.py:1549
+#: seahub/api2/endpoints/admin/libraries.py:317 seahub/api2/views.py:1569
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:338 seahub/api2/views.py:1554
+#: seahub/api2/endpoints/admin/libraries.py:338 seahub/api2/views.py:1574
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -379,11 +379,11 @@ msgstr "目標路徑無效"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1692
-#: seahub/api2/views.py:1728 seahub/api2/views.py:1776
-#: seahub/api2/views.py:1820 seahub/api2/views.py:1865
-#: seahub/api2/views.py:1913 seahub/api2/views.py:2324
-#: seahub/api2/views.py:2438 seahub/templates/js/templates.html:470
+#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1712
+#: seahub/api2/views.py:1748 seahub/api2/views.py:1796
+#: seahub/api2/views.py:1840 seahub/api2/views.py:1885
+#: seahub/api2/views.py:1933 seahub/api2/views.py:2344
+#: seahub/api2/views.py:2458 seahub/templates/js/templates.html:470
 #: seahub/views/ajax.py:715 seahub/views/ajax.py:799 seahub/views/ajax.py:872
 msgid "Out of quota."
 msgstr "超過空間上限"
@@ -424,11 +424,11 @@ msgstr "找不到使用者%s "
 #: seahub/api2/endpoints/wiki_pages.py:88
 #: seahub/api2/endpoints/wiki_pages.py:185 seahub/api2/endpoints/wikis.py:112
 #: seahub/api2/endpoints/wikis.py:201 seahub/drafts/views.py:32
-#: seahub/group/views.py:454 seahub/profile/forms.py:24
+#: seahub/group/views.py:452 seahub/profile/forms.py:24
 #: seahub/profile/views.py:202 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:794
+#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:793
 #: seahub/views/ajax.py:209 seahub/views/ajax.py:239 seahub/views/ajax.py:245
-#: seahub/views/ajax.py:912 seahub/views/wiki.py:201
+#: seahub/views/ajax.py:912 seahub/views/wiki.py:200
 msgid "Permission denied."
 msgstr "沒有權限"
 
@@ -448,8 +448,8 @@ msgstr ""
 #: seahub/api2/endpoints/wiki_pages.py:154
 #: seahub/api2/endpoints/wiki_pages.py:194
 #: seahub/api2/endpoints/wiki_pages.py:204
-#: seahub/api2/endpoints/wiki_pages.py:310 seahub/group/views.py:367
-#: seahub/views/__init__.py:993 seahub/views/ajax.py:1179
+#: seahub/api2/endpoints/wiki_pages.py:310 seahub/group/views.py:366
+#: seahub/views/__init__.py:992 seahub/views/ajax.py:1179
 #: seahub/views/ajax.py:1183 seahub/views/file.py:1535
 #: seahub/views/sysadmin.py:2045 seahub/views/wiki.py:134
 msgid "Internal Server Error"
@@ -463,14 +463,14 @@ msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:94
-#: seahub/api2/endpoints/group_members.py:293 seahub/views/ajax.py:1371
+#: seahub/api2/endpoints/group_members.py:293 seahub/views/ajax.py:1370
 #, python-format
 msgid "User %s is already a group member."
 msgstr "用戶 %s 已經是群組的成員"
 
 #: seahub/api2/endpoints/group_members.py:100
-#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1534
-#: seahub/views/ajax.py:1380
+#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1554
+#: seahub/views/ajax.py:1379
 #, python-format
 msgid "User %s not found in organization."
 msgstr "組織內無用戶 %s 。"
@@ -536,16 +536,16 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3718
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3738
 msgid "Wrong password"
 msgstr "密碼錯誤"
 
-#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3721
+#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3741
 #: seahub/views/ajax.py:710 seahub/views/sysadmin.py:2227
 msgid "Internal server error"
 msgstr "伺服器內部錯誤"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3724
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3744
 msgid "Decrypt library error"
 msgstr "解密資料庫出錯"
 
@@ -590,7 +590,7 @@ msgid "An upload link is shared to you on %s"
 msgstr "有人在 %s 上共享了一個上傳網址給你"
 
 #: seahub/api2/endpoints/share_link_zip_task.py:101
-#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:977
+#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:976
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "無法下載 \"%s\"：目錄大小超過限制。"
@@ -644,8 +644,8 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "你已經有 %(nb_avatars)d 個頭像，最大上限爲%(nb_max_avatars)d."
 
-#: seahub/api2/endpoints/wiki_pages.py:111 seahub/group/views.py:490
-#: seahub/views/wiki.py:233
+#: seahub/api2/endpoints/wiki_pages.py:111 seahub/group/views.py:488
+#: seahub/views/wiki.py:232
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr "頁面 \"%s\" 已存在。"
@@ -2037,52 +2037,52 @@ msgstr "建立失敗：該群組不存在。"
 msgid "Failed to create: you are not in the group."
 msgstr "建立失敗：你不在該群組中。"
 
-#: seahub/group/views.py:242 seahub/group/views.py:264
-#: seahub/group/views.py:421 seahub/views/wiki.py:175
+#: seahub/group/views.py:242 seahub/group/views.py:263
+#: seahub/group/views.py:419 seahub/views/wiki.py:174
 msgid "Failed to create"
 msgstr "建立失敗"
 
-#: seahub/group/views.py:249 seahub/group/views.py:270
-#: seahub/group/views.py:427
+#: seahub/group/views.py:249 seahub/group/views.py:269
+#: seahub/group/views.py:425
 msgid "Failed to create: internal error."
 msgstr "建立團體群組失敗。"
 
-#: seahub/group/views.py:309 seahub/group/views.py:493 seahub/views/wiki.py:74
-#: seahub/views/wiki.py:236
+#: seahub/group/views.py:308 seahub/group/views.py:491 seahub/views/wiki.py:74
+#: seahub/views/wiki.py:235
 msgid "Failed to create wiki page. Please retry later."
 msgstr "建立維基頁面失敗，請稍後再試"
 
-#: seahub/group/views.py:345 seahub/templates/file_revisions.html:78
+#: seahub/group/views.py:344 seahub/templates/file_revisions.html:78
 #: seahub/templates/repo_history.html:65
 #: seahub/templates/repo_history_view.html:30 seahub/views/wiki.py:102
 msgid "Unknown"
 msgstr "未知"
 
-#: seahub/group/views.py:369 seahub/views/wiki.py:136
+#: seahub/group/views.py:368 seahub/views/wiki.py:136
 msgid "Wiki does not exists."
 msgstr "Wiki不存在"
 
-#: seahub/group/views.py:434 seahub/group/views.py:463
-#: seahub/views/wiki.py:182 seahub/views/wiki.py:210
+#: seahub/group/views.py:432 seahub/group/views.py:461
+#: seahub/views/wiki.py:181 seahub/views/wiki.py:209
 msgid "Failed to create home page. Please retry later"
 msgstr "建立首頁失敗，請稍後再試"
 
-#: seahub/group/views.py:450 seahub/views/wiki.py:197
+#: seahub/group/views.py:448 seahub/views/wiki.py:196
 msgid "Failed to set wiki library."
 msgstr "設定維基資料庫失敗。"
 
-#: seahub/group/views.py:483 seahub/group/views.py:509
-#: seahub/group/views.py:527 seahub/views/wiki.py:226 seahub/views/wiki.py:249
-#: seahub/views/wiki.py:264
+#: seahub/group/views.py:481 seahub/group/views.py:507
+#: seahub/group/views.py:525 seahub/views/wiki.py:225 seahub/views/wiki.py:248
+#: seahub/views/wiki.py:263
 msgid "Wiki is not found."
 msgstr "Wiki未找到。"
 
-#: seahub/group/views.py:532
+#: seahub/group/views.py:530
 #, python-format
 msgid "Successfully deleted \"%s\"."
 msgstr "%s 刪除成功。"
 
-#: seahub/group/views.py:534
+#: seahub/group/views.py:532
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
 msgstr "刪移 %s 失敗。請稍後嘗試。"
@@ -7969,7 +7969,7 @@ msgid "Unable to view library modification"
 msgstr "無法瀏覽該資料庫修改歷史"
 
 #: seahub/views/__init__.py:525 seahub/views/__init__.py:568
-#: seahub/views/__init__.py:789 seahub/views/__init__.py:948
+#: seahub/views/__init__.py:788 seahub/views/__init__.py:947
 #: seahub/views/ajax.py:1159 seahub/views/file.py:2042
 msgid "Library does not exist"
 msgstr "資料庫不存在"
@@ -7990,25 +7990,25 @@ msgstr "指定的歷史記錄不存在"
 msgid "Unknown error"
 msgstr "未知錯誤"
 
-#: seahub/views/__init__.py:955 seahub/views/repo.py:232
+#: seahub/views/__init__.py:954 seahub/views/repo.py:232
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" 不存在。"
 
-#: seahub/views/__init__.py:974 seahub/views/file.py:1517
+#: seahub/views/__init__.py:973 seahub/views/file.py:1517
 msgid "Internal Error"
 msgstr "內部錯誤"
 
-#: seahub/views/__init__.py:996
+#: seahub/views/__init__.py:995
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "無法下載 \"%s\""
 
-#: seahub/views/__init__.py:1118
+#: seahub/views/__init__.py:1117
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "\"個人維基\"模組新增成功。"
 
-#: seahub/views/__init__.py:1123
+#: seahub/views/__init__.py:1122
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"個人維基\"模組刪除成功。"
 

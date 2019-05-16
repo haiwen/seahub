@@ -30,7 +30,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-15 13:32+0800\n"
+"POT-Creation-Date: 2019-05-16 14:14+0800\n"
 "PO-Revision-Date: 2019-05-15 03:51+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
@@ -132,12 +132,12 @@ msgstr "L'utilisateur %s est déjà propriétaire du groupe."
 msgid "System library can not be deleted."
 msgstr "La bibliothèque système ne peut pas être supprimée."
 
-#: seahub/api2/endpoints/admin/libraries.py:317 seahub/api2/views.py:1549
+#: seahub/api2/endpoints/admin/libraries.py:317 seahub/api2/views.py:1569
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:338 seahub/api2/views.py:1554
+#: seahub/api2/endpoints/admin/libraries.py:338 seahub/api2/views.py:1574
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -395,11 +395,11 @@ msgstr "Chemin de destination invalide"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1692
-#: seahub/api2/views.py:1728 seahub/api2/views.py:1776
-#: seahub/api2/views.py:1820 seahub/api2/views.py:1865
-#: seahub/api2/views.py:1913 seahub/api2/views.py:2324
-#: seahub/api2/views.py:2438 seahub/templates/js/templates.html:470
+#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1712
+#: seahub/api2/views.py:1748 seahub/api2/views.py:1796
+#: seahub/api2/views.py:1840 seahub/api2/views.py:1885
+#: seahub/api2/views.py:1933 seahub/api2/views.py:2344
+#: seahub/api2/views.py:2458 seahub/templates/js/templates.html:470
 #: seahub/views/ajax.py:715 seahub/views/ajax.py:799 seahub/views/ajax.py:872
 msgid "Out of quota."
 msgstr "Quota dépassé."
@@ -440,11 +440,11 @@ msgstr "L'utilisateur %s est introuvable."
 #: seahub/api2/endpoints/wiki_pages.py:88
 #: seahub/api2/endpoints/wiki_pages.py:185 seahub/api2/endpoints/wikis.py:112
 #: seahub/api2/endpoints/wikis.py:201 seahub/drafts/views.py:32
-#: seahub/group/views.py:454 seahub/profile/forms.py:24
+#: seahub/group/views.py:452 seahub/profile/forms.py:24
 #: seahub/profile/views.py:202 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:794
+#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:793
 #: seahub/views/ajax.py:209 seahub/views/ajax.py:239 seahub/views/ajax.py:245
-#: seahub/views/ajax.py:912 seahub/views/wiki.py:201
+#: seahub/views/ajax.py:912 seahub/views/wiki.py:200
 msgid "Permission denied."
 msgstr "Autorisation refusée."
 
@@ -464,8 +464,8 @@ msgstr "Impossible de rafraichir. Ce fichier est verrouillé."
 #: seahub/api2/endpoints/wiki_pages.py:154
 #: seahub/api2/endpoints/wiki_pages.py:194
 #: seahub/api2/endpoints/wiki_pages.py:204
-#: seahub/api2/endpoints/wiki_pages.py:310 seahub/group/views.py:367
-#: seahub/views/__init__.py:993 seahub/views/ajax.py:1179
+#: seahub/api2/endpoints/wiki_pages.py:310 seahub/group/views.py:366
+#: seahub/views/__init__.py:992 seahub/views/ajax.py:1179
 #: seahub/views/ajax.py:1183 seahub/views/file.py:1535
 #: seahub/views/sysadmin.py:2045 seahub/views/wiki.py:134
 msgid "Internal Server Error"
@@ -479,14 +479,14 @@ msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "Un Tag peut contenir uniquement des lettres, chiffres, points, trait d'union ou trait du bas."
 
 #: seahub/api2/endpoints/group_members.py:94
-#: seahub/api2/endpoints/group_members.py:293 seahub/views/ajax.py:1371
+#: seahub/api2/endpoints/group_members.py:293 seahub/views/ajax.py:1370
 #, python-format
 msgid "User %s is already a group member."
 msgstr "L'utilisateur %s est déjà membre d'un groupe."
 
 #: seahub/api2/endpoints/group_members.py:100
-#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1534
-#: seahub/views/ajax.py:1380
+#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1554
+#: seahub/views/ajax.py:1379
 #, python-format
 msgid "User %s not found in organization."
 msgstr "L'utilisateur %s n'a pas été trouvé dans l’organisation."
@@ -552,16 +552,16 @@ msgstr "Impossible de réinitialiser le mot de passe de cette bibliothèque."
 msgid "New password of library %s"
 msgstr "Nouveau mot de passe de la bibliothèque %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3718
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3738
 msgid "Wrong password"
 msgstr "Le mot de passe est erroné"
 
-#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3721
+#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3741
 #: seahub/views/ajax.py:710 seahub/views/sysadmin.py:2227
 msgid "Internal server error"
 msgstr "Erreur interne du serveur"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3724
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3744
 msgid "Decrypt library error"
 msgstr "Erreur de déchiffrement de la bibliothèque"
 
@@ -606,7 +606,7 @@ msgid "An upload link is shared to you on %s"
 msgstr "Un lien d'envoi a été partagé pour vous sur %s"
 
 #: seahub/api2/endpoints/share_link_zip_task.py:101
-#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:977
+#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:976
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Impossible de télécharger le dossier \"%s\" : La taille est trop grande."
@@ -660,8 +660,8 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "Vous avez déjà %(nb_avatars)d avatars et la valeur maximale autorisée est de %(nb_max_avatars)d."
 
-#: seahub/api2/endpoints/wiki_pages.py:111 seahub/group/views.py:490
-#: seahub/views/wiki.py:233
+#: seahub/api2/endpoints/wiki_pages.py:111 seahub/group/views.py:488
+#: seahub/views/wiki.py:232
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr "La page \"%s\" existe déjà."
@@ -2058,52 +2058,52 @@ msgstr "Impossible de créer : le groupe n'existe pas."
 msgid "Failed to create: you are not in the group."
 msgstr "Impossible de créer : vous n'êtes pas dans le groupe."
 
-#: seahub/group/views.py:242 seahub/group/views.py:264
-#: seahub/group/views.py:421 seahub/views/wiki.py:175
+#: seahub/group/views.py:242 seahub/group/views.py:263
+#: seahub/group/views.py:419 seahub/views/wiki.py:174
 msgid "Failed to create"
 msgstr "Impossible de créer."
 
-#: seahub/group/views.py:249 seahub/group/views.py:270
-#: seahub/group/views.py:427
+#: seahub/group/views.py:249 seahub/group/views.py:269
+#: seahub/group/views.py:425
 msgid "Failed to create: internal error."
 msgstr "Impossible de créer : erreur interne."
 
-#: seahub/group/views.py:309 seahub/group/views.py:493 seahub/views/wiki.py:74
-#: seahub/views/wiki.py:236
+#: seahub/group/views.py:308 seahub/group/views.py:491 seahub/views/wiki.py:74
+#: seahub/views/wiki.py:235
 msgid "Failed to create wiki page. Please retry later."
 msgstr "Impossible de créer la page du Wiki. Veuillez réessayer plus tard."
 
-#: seahub/group/views.py:345 seahub/templates/file_revisions.html:78
+#: seahub/group/views.py:344 seahub/templates/file_revisions.html:78
 #: seahub/templates/repo_history.html:65
 #: seahub/templates/repo_history_view.html:30 seahub/views/wiki.py:102
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: seahub/group/views.py:369 seahub/views/wiki.py:136
+#: seahub/group/views.py:368 seahub/views/wiki.py:136
 msgid "Wiki does not exists."
 msgstr "Le Wiki n'existe pas."
 
-#: seahub/group/views.py:434 seahub/group/views.py:463
-#: seahub/views/wiki.py:182 seahub/views/wiki.py:210
+#: seahub/group/views.py:432 seahub/group/views.py:461
+#: seahub/views/wiki.py:181 seahub/views/wiki.py:209
 msgid "Failed to create home page. Please retry later"
 msgstr "Impossible de créer la page d'accueil. Veuillez réessayer plus tard."
 
-#: seahub/group/views.py:450 seahub/views/wiki.py:197
+#: seahub/group/views.py:448 seahub/views/wiki.py:196
 msgid "Failed to set wiki library."
 msgstr "Impossible de créer le Wiki."
 
-#: seahub/group/views.py:483 seahub/group/views.py:509
-#: seahub/group/views.py:527 seahub/views/wiki.py:226 seahub/views/wiki.py:249
-#: seahub/views/wiki.py:264
+#: seahub/group/views.py:481 seahub/group/views.py:507
+#: seahub/group/views.py:525 seahub/views/wiki.py:225 seahub/views/wiki.py:248
+#: seahub/views/wiki.py:263
 msgid "Wiki is not found."
 msgstr "Wiki introuvable."
 
-#: seahub/group/views.py:532
+#: seahub/group/views.py:530
 #, python-format
 msgid "Successfully deleted \"%s\"."
 msgstr "\"%s\" supprimé avec succès."
 
-#: seahub/group/views.py:534
+#: seahub/group/views.py:532
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
 msgstr "Échec de la suppression de \"%s\", veuillez réessayer plus tard."
@@ -7993,7 +7993,7 @@ msgid "Unable to view library modification"
 msgstr "Impossible d'afficher les modifications de la bibliothèque"
 
 #: seahub/views/__init__.py:525 seahub/views/__init__.py:568
-#: seahub/views/__init__.py:789 seahub/views/__init__.py:948
+#: seahub/views/__init__.py:788 seahub/views/__init__.py:947
 #: seahub/views/ajax.py:1159 seahub/views/file.py:2042
 msgid "Library does not exist"
 msgstr "La bibliothèque n'existe pas"
@@ -8014,25 +8014,25 @@ msgstr "L'historique que vous avez spécifié n'existe pas"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: seahub/views/__init__.py:955 seahub/views/repo.py:232
+#: seahub/views/__init__.py:954 seahub/views/repo.py:232
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" n'existe pas."
 
-#: seahub/views/__init__.py:974 seahub/views/file.py:1517
+#: seahub/views/__init__.py:973 seahub/views/file.py:1517
 msgid "Internal Error"
 msgstr "Erreur interne"
 
-#: seahub/views/__init__.py:996
+#: seahub/views/__init__.py:995
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Impossible de télécharger \"%s\""
 
-#: seahub/views/__init__.py:1118
+#: seahub/views/__init__.py:1117
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "Activation du \"Wiki personnel\" avec succès."
 
-#: seahub/views/__init__.py:1123
+#: seahub/views/__init__.py:1122
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "Désactivation du \"Wiki personnel\" avec succès."
 

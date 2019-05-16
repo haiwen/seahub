@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-15 13:32+0800\n"
+"POT-Creation-Date: 2019-05-16 14:14+0800\n"
 "PO-Revision-Date: 2019-05-15 03:51+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/haiwen/seahub/language/ko/)\n"
@@ -112,12 +112,12 @@ msgstr "%s 사용자는 이미 그룹 소유자입니다."
 msgid "System library can not be deleted."
 msgstr "시스템 라이브러리는 삭제할 수 없습니다."
 
-#: seahub/api2/endpoints/admin/libraries.py:317 seahub/api2/views.py:1549
+#: seahub/api2/endpoints/admin/libraries.py:317 seahub/api2/views.py:1569
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:338 seahub/api2/views.py:1554
+#: seahub/api2/endpoints/admin/libraries.py:338 seahub/api2/views.py:1574
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -375,11 +375,11 @@ msgstr "대상 경로가 잘못되었습니다"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1692
-#: seahub/api2/views.py:1728 seahub/api2/views.py:1776
-#: seahub/api2/views.py:1820 seahub/api2/views.py:1865
-#: seahub/api2/views.py:1913 seahub/api2/views.py:2324
-#: seahub/api2/views.py:2438 seahub/templates/js/templates.html:470
+#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1712
+#: seahub/api2/views.py:1748 seahub/api2/views.py:1796
+#: seahub/api2/views.py:1840 seahub/api2/views.py:1885
+#: seahub/api2/views.py:1933 seahub/api2/views.py:2344
+#: seahub/api2/views.py:2458 seahub/templates/js/templates.html:470
 #: seahub/views/ajax.py:715 seahub/views/ajax.py:799 seahub/views/ajax.py:872
 msgid "Out of quota."
 msgstr "제한 용량을 넘었습니다."
@@ -420,11 +420,11 @@ msgstr "%s 사용자가 없습니다."
 #: seahub/api2/endpoints/wiki_pages.py:88
 #: seahub/api2/endpoints/wiki_pages.py:185 seahub/api2/endpoints/wikis.py:112
 #: seahub/api2/endpoints/wikis.py:201 seahub/drafts/views.py:32
-#: seahub/group/views.py:454 seahub/profile/forms.py:24
+#: seahub/group/views.py:452 seahub/profile/forms.py:24
 #: seahub/profile/views.py:202 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:794
+#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:793
 #: seahub/views/ajax.py:209 seahub/views/ajax.py:239 seahub/views/ajax.py:245
-#: seahub/views/ajax.py:912 seahub/views/wiki.py:201
+#: seahub/views/ajax.py:912 seahub/views/wiki.py:200
 msgid "Permission denied."
 msgstr "권한이 거부되었습니다."
 
@@ -444,8 +444,8 @@ msgstr "잠근 파일을 새로 고칠 수 없습니다."
 #: seahub/api2/endpoints/wiki_pages.py:154
 #: seahub/api2/endpoints/wiki_pages.py:194
 #: seahub/api2/endpoints/wiki_pages.py:204
-#: seahub/api2/endpoints/wiki_pages.py:310 seahub/group/views.py:367
-#: seahub/views/__init__.py:993 seahub/views/ajax.py:1179
+#: seahub/api2/endpoints/wiki_pages.py:310 seahub/group/views.py:366
+#: seahub/views/__init__.py:992 seahub/views/ajax.py:1179
 #: seahub/views/ajax.py:1183 seahub/views/file.py:1535
 #: seahub/views/sysadmin.py:2045 seahub/views/wiki.py:134
 msgid "Internal Server Error"
@@ -459,14 +459,14 @@ msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "태그에는 문자, 숫자, 점, 음수 기호 또는 밑줄 문자만 넣을 수 있습니다."
 
 #: seahub/api2/endpoints/group_members.py:94
-#: seahub/api2/endpoints/group_members.py:293 seahub/views/ajax.py:1371
+#: seahub/api2/endpoints/group_members.py:293 seahub/views/ajax.py:1370
 #, python-format
 msgid "User %s is already a group member."
 msgstr "%s 사용자는 이미 그룹 구성원입니다."
 
 #: seahub/api2/endpoints/group_members.py:100
-#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1534
-#: seahub/views/ajax.py:1380
+#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1554
+#: seahub/views/ajax.py:1379
 #, python-format
 msgid "User %s not found in organization."
 msgstr "%s 사용자는 조직에 없습니다."
@@ -532,16 +532,16 @@ msgstr "이 라이브러리 암호를 초기화할 수 없습니다."
 msgid "New password of library %s"
 msgstr "%s 라이브러리의 새 암호"
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3718
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3738
 msgid "Wrong password"
 msgstr "잘못된 암호입니다"
 
-#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3721
+#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3741
 #: seahub/views/ajax.py:710 seahub/views/sysadmin.py:2227
 msgid "Internal server error"
 msgstr "내부 서버 오류"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3724
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3744
 msgid "Decrypt library error"
 msgstr "해독 라이브러리 오류"
 
@@ -586,7 +586,7 @@ msgid "An upload link is shared to you on %s"
 msgstr "%s에서 업로드 링크를 공유했습니다"
 
 #: seahub/api2/endpoints/share_link_zip_task.py:101
-#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:977
+#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:976
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "\"%s\" 디렉터리를 다운로드할 수 없습니다: 크기가 너무 큽니다."
@@ -640,8 +640,8 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "이미 아바타 %(nb_avatars)d개를 보유하고 있으며, 최대 허용 보유 갯수는 %(nb_max_avatars)d개 입니다."
 
-#: seahub/api2/endpoints/wiki_pages.py:111 seahub/group/views.py:490
-#: seahub/views/wiki.py:233
+#: seahub/api2/endpoints/wiki_pages.py:111 seahub/group/views.py:488
+#: seahub/views/wiki.py:232
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr "\"%s\" 페이지가 이미 있습니다."
@@ -2033,52 +2033,52 @@ msgstr "만들기 실패: 그룹이 없습니다."
 msgid "Failed to create: you are not in the group."
 msgstr "만들기 실패: 그룹에 속해 있지 않습니다."
 
-#: seahub/group/views.py:242 seahub/group/views.py:264
-#: seahub/group/views.py:421 seahub/views/wiki.py:175
+#: seahub/group/views.py:242 seahub/group/views.py:263
+#: seahub/group/views.py:419 seahub/views/wiki.py:174
 msgid "Failed to create"
 msgstr "만들기 실패"
 
-#: seahub/group/views.py:249 seahub/group/views.py:270
-#: seahub/group/views.py:427
+#: seahub/group/views.py:249 seahub/group/views.py:269
+#: seahub/group/views.py:425
 msgid "Failed to create: internal error."
 msgstr "만들기 실패: 내부 오류."
 
-#: seahub/group/views.py:309 seahub/group/views.py:493 seahub/views/wiki.py:74
-#: seahub/views/wiki.py:236
+#: seahub/group/views.py:308 seahub/group/views.py:491 seahub/views/wiki.py:74
+#: seahub/views/wiki.py:235
 msgid "Failed to create wiki page. Please retry later."
 msgstr "위키 페이지를 만드는데 실패했습니다. 나중에 다시 해보세요."
 
-#: seahub/group/views.py:345 seahub/templates/file_revisions.html:78
+#: seahub/group/views.py:344 seahub/templates/file_revisions.html:78
 #: seahub/templates/repo_history.html:65
 #: seahub/templates/repo_history_view.html:30 seahub/views/wiki.py:102
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: seahub/group/views.py:369 seahub/views/wiki.py:136
+#: seahub/group/views.py:368 seahub/views/wiki.py:136
 msgid "Wiki does not exists."
 msgstr "위키가 없습니다."
 
-#: seahub/group/views.py:434 seahub/group/views.py:463
-#: seahub/views/wiki.py:182 seahub/views/wiki.py:210
+#: seahub/group/views.py:432 seahub/group/views.py:461
+#: seahub/views/wiki.py:181 seahub/views/wiki.py:209
 msgid "Failed to create home page. Please retry later"
 msgstr "처음 페이지 만들기에 실패했습니다. 나중에 다시 만드세요."
 
-#: seahub/group/views.py:450 seahub/views/wiki.py:197
+#: seahub/group/views.py:448 seahub/views/wiki.py:196
 msgid "Failed to set wiki library."
 msgstr "위키 라이브러리 설정에 실패했습니다."
 
-#: seahub/group/views.py:483 seahub/group/views.py:509
-#: seahub/group/views.py:527 seahub/views/wiki.py:226 seahub/views/wiki.py:249
-#: seahub/views/wiki.py:264
+#: seahub/group/views.py:481 seahub/group/views.py:507
+#: seahub/group/views.py:525 seahub/views/wiki.py:225 seahub/views/wiki.py:248
+#: seahub/views/wiki.py:263
 msgid "Wiki is not found."
 msgstr "위키가 없습니다."
 
-#: seahub/group/views.py:532
+#: seahub/group/views.py:530
 #, python-format
 msgid "Successfully deleted \"%s\"."
 msgstr "\"%s\" 삭제에 성공했습니다."
 
-#: seahub/group/views.py:534
+#: seahub/group/views.py:532
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
 msgstr "\"%s\" 삭제에 실패했습니다. 나중에 다시 해보세요."
@@ -7965,7 +7965,7 @@ msgid "Unable to view library modification"
 msgstr "라이브러리 수정 상태를 볼 수 없습니다"
 
 #: seahub/views/__init__.py:525 seahub/views/__init__.py:568
-#: seahub/views/__init__.py:789 seahub/views/__init__.py:948
+#: seahub/views/__init__.py:788 seahub/views/__init__.py:947
 #: seahub/views/ajax.py:1159 seahub/views/file.py:2042
 msgid "Library does not exist"
 msgstr "라이브러리가 없습니다"
@@ -7986,25 +7986,25 @@ msgstr "지정한 이력이 없습니다"
 msgid "Unknown error"
 msgstr "알 수 없는 오류"
 
-#: seahub/views/__init__.py:955 seahub/views/repo.py:232
+#: seahub/views/__init__.py:954 seahub/views/repo.py:232
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\"이(가) 없습니다."
 
-#: seahub/views/__init__.py:974 seahub/views/file.py:1517
+#: seahub/views/__init__.py:973 seahub/views/file.py:1517
 msgid "Internal Error"
 msgstr "내부 오류"
 
-#: seahub/views/__init__.py:996
+#: seahub/views/__init__.py:995
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "\"%s\"을(를) 다운로드할 수 없습니다"
 
-#: seahub/views/__init__.py:1118
+#: seahub/views/__init__.py:1117
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "\"개인 위키\" 활성화에 성공했습니다."
 
-#: seahub/views/__init__.py:1123
+#: seahub/views/__init__.py:1122
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"개인 위키\" 비활성화에 성공했습니다."
 

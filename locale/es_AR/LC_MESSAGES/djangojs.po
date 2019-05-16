@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-15 13:32+0800\n"
-"PO-Revision-Date: 2019-05-15 05:32+0000\n"
-"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
+"POT-Creation-Date: 2019-05-16 14:14+0800\n"
+"PO-Revision-Date: 2019-05-16 06:15+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -194,7 +194,7 @@ msgid "Back"
 msgstr "Atrás"
 
 #: frontend/src/components/dialog/add-related-file-dialog.js:93
-#: frontend/src/components/dialog/insert-file-dialog.js:56
+#: frontend/src/components/dialog/insert-file-dialog.js:55
 msgid "Select File"
 msgstr "Seleccionar Archivo"
 
@@ -212,7 +212,7 @@ msgstr "Seleccionar Archivo"
 #: frontend/src/components/dialog/dismiss-group-dialog.js:28
 #: frontend/src/components/dialog/generate-share-link.js:357
 #: frontend/src/components/dialog/generate-share-link.js:368
-#: frontend/src/components/dialog/insert-file-dialog.js:67
+#: frontend/src/components/dialog/insert-file-dialog.js:66
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:79
 #: frontend/src/components/dialog/internal-link-dialog.js:72
 #: frontend/src/components/dialog/invite-people-dialog.js:110
@@ -221,9 +221,9 @@ msgstr "Seleccionar Archivo"
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:222
 #: frontend/src/components/dialog/move-dirent-dialog.js:174
 #: frontend/src/components/dialog/new-wiki-dialog.js:59
-#: frontend/src/components/dialog/org-add-member-dialog.js:62
-#: frontend/src/components/dialog/org-delete-department-dialog.js:46
-#: frontend/src/components/dialog/org-delete-member-dialog.js:41
+#: frontend/src/components/dialog/org-add-member-dialog.js:63
+#: frontend/src/components/dialog/org-delete-department-dialog.js:47
+#: frontend/src/components/dialog/org-delete-member-dialog.js:42
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:34
 #: frontend/src/components/dialog/rename-dialog.js:115
 #: frontend/src/components/dialog/rename-grid-item-dialog.js:116
@@ -255,8 +255,8 @@ msgstr "Cancelar"
 #: frontend/src/components/dialog/create-folder-dialog.js:91
 #: frontend/src/components/dialog/create-group-dialog.js:82
 #: frontend/src/components/dialog/create-repo-dialog.js:208
+#: frontend/src/components/dialog/insert-file-dialog.js:67
 #: frontend/src/components/dialog/insert-file-dialog.js:68
-#: frontend/src/components/dialog/insert-file-dialog.js:69
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:81
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:82
 #: frontend/src/components/dialog/invite-people-dialog.js:111
@@ -272,9 +272,9 @@ msgstr "Cancelar"
 #: frontend/src/components/dialog/move-dirent-dialog.js:175
 #: frontend/src/components/dialog/new-wiki-dialog.js:60
 #: frontend/src/components/dialog/org-add-admin-dialog.js:67
-#: frontend/src/components/dialog/org-add-department-dialog.js:90
-#: frontend/src/components/dialog/org-add-member-dialog.js:61
-#: frontend/src/components/dialog/org-add-repo-dialog.js:85
+#: frontend/src/components/dialog/org-add-department-dialog.js:92
+#: frontend/src/components/dialog/org-add-member-dialog.js:62
+#: frontend/src/components/dialog/org-add-repo-dialog.js:86
 #: frontend/src/components/dialog/org-add-user-dialog.js:169
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:78
 #: frontend/src/components/dialog/rename-dialog.js:116
@@ -294,7 +294,7 @@ msgstr "Cancelar"
 #: frontend/src/components/markdown-view/comment-dialog.js:77
 #: frontend/src/components/review-list-view/review-comment-dialog.js:82
 #: frontend/src/components/review-list-view/review-comments.js:191
-#: frontend/src/components/user-settings/email-notice.js:67
+#: frontend/src/components/user-settings/email-notice.js:68
 #: frontend/src/components/user-settings/user-basic-info-form.js:104
 #: frontend/src/pages/data-grid/new-column-dialog.js:67
 #: frontend/src/pages/search/advanced-search.js:208
@@ -313,7 +313,7 @@ msgstr "Agregar un revisor"
 #: frontend/src/components/dialog/add-reviewer-dialog.js:95
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:249
 #: frontend/src/components/dialog/manage-members-dialog.js:89
-#: frontend/src/components/dialog/org-add-member-dialog.js:52
+#: frontend/src/components/dialog/org-add-member-dialog.js:53
 #: frontend/src/components/dialog/share-to-user.js:273
 msgid "Select users..."
 msgstr "Seleccionar usuarios..."
@@ -367,12 +367,12 @@ msgstr "Contraseña de la biblioteca cambiada con éxito."
 #: frontend/src/pages/linked-devices/linked-devices.js:182
 #: frontend/src/pages/my-libs/my-libs.js:54
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:187
-#: frontend/src/pages/search/main-panel.js:71
+#: frontend/src/pages/search/main-panel.js:70
 #: frontend/src/pages/search/main-panel.js:158
 #: frontend/src/pages/search/main-panel.js:169
 #: frontend/src/pages/share-admin/folders.js:231
 #: frontend/src/pages/share-admin/libraries.js:211
-#: frontend/src/pages/share-admin/share-links.js:321
+#: frontend/src/pages/share-admin/share-links.js:322
 #: frontend/src/pages/share-admin/upload-links.js:171
 #: frontend/src/pages/shared-libs/shared-libs.js:322
 #: frontend/src/pages/shared-with-all/public-shared-view.js:61
@@ -408,10 +408,10 @@ msgstr "Error"
 #: frontend/src/pages/lib-content-view/lib-content-view.js:146
 #: frontend/src/pages/linked-devices/linked-devices.js:189
 #: frontend/src/pages/my-libs/my-libs.js:60
-#: frontend/src/pages/search/main-panel.js:73
+#: frontend/src/pages/search/main-panel.js:72
 #: frontend/src/pages/share-admin/folders.js:238
 #: frontend/src/pages/share-admin/libraries.js:217
-#: frontend/src/pages/share-admin/share-links.js:328
+#: frontend/src/pages/share-admin/share-links.js:329
 #: frontend/src/pages/share-admin/upload-links.js:177
 #: frontend/src/pages/shared-libs/shared-libs.js:329
 #: frontend/src/pages/shared-with-all/public-shared-view.js:67
@@ -467,8 +467,8 @@ msgstr "¿Seguro que deseas eliminar tu cuenta?"
 #: frontend/src/components/dialog/generate-upload-link.js:150
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:64
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:64
-#: frontend/src/components/dialog/org-delete-department-dialog.js:45
-#: frontend/src/components/dialog/org-delete-member-dialog.js:40
+#: frontend/src/components/dialog/org-delete-department-dialog.js:46
+#: frontend/src/components/dialog/org-delete-member-dialog.js:41
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:33
 #: frontend/src/components/dialog/share-to-group.js:55
 #: frontend/src/components/dialog/share-to-user.js:56
@@ -478,7 +478,7 @@ msgstr "¿Seguro que deseas eliminar tu cuenta?"
 #: frontend/src/components/draft-list-view/draft-list-item.js:110
 #: frontend/src/components/file-view/comment-panel.js:252
 #: frontend/src/components/review-list-view/review-comments.js:313
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:284
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:285
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:287
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/pages/invitations/invitations-view.js:46
@@ -486,7 +486,7 @@ msgstr "¿Seguro que deseas eliminar tu cuenta?"
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:77
 #: frontend/src/pages/org-admin/org-groups.js:232
 #: frontend/src/pages/org-admin/org-libraries.js:269
-#: frontend/src/pages/org-admin/org-links.js:209
+#: frontend/src/pages/org-admin/org-links.js:210
 #: frontend/src/pages/org-admin/org-user-item.js:147
 #: frontend/src/utils/text-translation.js:10
 #: static/scripts/app/views/fileupload.js:23
@@ -535,8 +535,8 @@ msgstr "Copiar item(s) seleccionados a:"
 #: frontend/src/components/dialog/create-department-repo-dialog.js:54
 #: frontend/src/components/dialog/create-group-dialog.js:49
 #: frontend/src/components/dialog/create-repo-dialog.js:69
-#: frontend/src/components/dialog/org-add-department-dialog.js:49
-#: frontend/src/components/dialog/org-add-repo-dialog.js:45
+#: frontend/src/components/dialog/org-add-department-dialog.js:51
+#: frontend/src/components/dialog/org-add-repo-dialog.js:46
 #: frontend/src/components/dialog/org-add-user-dialog.js:112
 #: static/scripts/app/models/repo.js:34
 msgid "Name is required"
@@ -571,8 +571,8 @@ msgstr "Nueva Biblioteca Departamental"
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:72
 #: frontend/src/components/dialog/manage-members-dialog.js:113
 #: frontend/src/components/dialog/new-wiki-dialog.js:55
-#: frontend/src/components/dialog/org-add-department-dialog.js:77
-#: frontend/src/components/dialog/org-add-repo-dialog.js:72
+#: frontend/src/components/dialog/org-add-department-dialog.js:79
+#: frontend/src/components/dialog/org-add-repo-dialog.js:73
 #: frontend/src/components/dialog/org-add-user-dialog.js:148
 #: frontend/src/components/dialog/share-repo-dialog.js:128
 #: frontend/src/components/dialog/update-tag-dialog.js:93
@@ -588,7 +588,7 @@ msgstr "Nueva Biblioteca Departamental"
 #: frontend/src/pages/org-admin/org-department-item.js:218
 #: frontend/src/pages/org-admin/org-department-item.js:254
 #: frontend/src/pages/org-admin/org-department-item.js:290
-#: frontend/src/pages/org-admin/org-departments-list.js:97
+#: frontend/src/pages/org-admin/org-departments-list.js:96
 #: frontend/src/pages/org-admin/org-groups.js:87
 #: frontend/src/pages/org-admin/org-libraries.js:102
 #: frontend/src/pages/org-admin/org-links.js:95
@@ -662,7 +662,7 @@ msgid "Passwords don't match"
 msgstr "Las contraseñas no coinciden"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:152
-#: frontend/src/components/dialog/org-add-repo-dialog.js:68
+#: frontend/src/components/dialog/org-add-repo-dialog.js:69
 #: frontend/src/components/toolbar/repo-view-toobar.js:47
 #: frontend/src/components/toolbar/repo-view-toobar.js:48
 #: frontend/src/components/toolbar/repo-view-toobar.js:65
@@ -1032,7 +1032,7 @@ msgstr "Email es inválido"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:88
 #: frontend/src/components/dialog/label-repo-state-dialog.js:59
-#: frontend/src/pages/search/main-panel.js:104
+#: frontend/src/pages/search/main-panel.js:103
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:698 static/scripts/app/views/dir.js:758
 #: static/scripts/app/views/dirent.js:527
@@ -1053,8 +1053,8 @@ msgstr "Es requerido."
 #: frontend/src/components/dialog/share-to-user.js:325
 #: frontend/src/components/main-side-nav.js:228
 #: frontend/src/components/main-side-nav.js:230
-#: frontend/src/components/toolbar/invitations-toolbar.js:31
-#: frontend/src/components/toolbar/invitations-toolbar.js:36
+#: frontend/src/components/toolbar/invitations-toolbar.js:30
+#: frontend/src/components/toolbar/invitations-toolbar.js:35
 #: frontend/src/pages/invitations/invitations-view.js:215
 msgid "Invite People"
 msgstr "Invitar Personas"
@@ -1327,19 +1327,19 @@ msgstr "Agregar Administradores"
 msgid "Select a user as admin..."
 msgstr "Selccione un usuario como administrador..."
 
-#: frontend/src/components/dialog/org-add-department-dialog.js:70
+#: frontend/src/components/dialog/org-add-department-dialog.js:72
 #: frontend/src/pages/org-admin/org-department-item.js:150
 #: static/scripts/sysadmin-app/views/address-book-group.js:101
 msgid "New Sub-department"
 msgstr "Nuevo Sub-departamento"
 
-#: frontend/src/components/dialog/org-add-department-dialog.js:70
+#: frontend/src/components/dialog/org-add-department-dialog.js:72
 #: frontend/src/pages/org-admin/org-departments-list.js:68
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
 msgstr "Nuevo Departamento"
 
-#: frontend/src/components/dialog/org-add-member-dialog.js:49
+#: frontend/src/components/dialog/org-add-member-dialog.js:50
 #: frontend/src/pages/org-admin/org-department-item.js:153
 msgid "Add Member"
 msgstr "Agregar Miembro"
@@ -1374,18 +1374,18 @@ msgid ""
 "organization via scanning the QR code."
 msgstr "Envía el enlace de invitación a los otros, y ellos podrán unirse a la organización escanendo el código QR."
 
-#: frontend/src/components/dialog/org-delete-department-dialog.js:35
-#: frontend/src/components/dialog/org-delete-member-dialog.js:31
+#: frontend/src/components/dialog/org-delete-department-dialog.js:36
+#: frontend/src/components/dialog/org-delete-member-dialog.js:32
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:24
 msgid "Are you sure you want to delete {placeholder} ?"
 msgstr "¿Seguro que quieres borrar {placeholder} ?"
 
-#: frontend/src/components/dialog/org-delete-department-dialog.js:39
+#: frontend/src/components/dialog/org-delete-department-dialog.js:40
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:46
 msgid "Delete Department"
 msgstr "Eliminar Departamento"
 
-#: frontend/src/components/dialog/org-delete-member-dialog.js:35
+#: frontend/src/components/dialog/org-delete-member-dialog.js:36
 #: static/scripts/sysadmin-app/views/group-member.js:90
 msgid "Delete Member"
 msgstr "Eliminar Miembro"
@@ -1522,8 +1522,8 @@ msgstr "Compartir con grupo"
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:464
 #: frontend/src/components/file-view/file-toolbar.js:93
 #: frontend/src/components/file-view/file-toolbar.js:182
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:185
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:282
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:186
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:283
 #: frontend/src/components/toolbar/cdoc-editor-topbar.js:66
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:173
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:83
@@ -1539,7 +1539,7 @@ msgstr "Compartir"
 
 #: frontend/src/components/dialog/share-repo-dialog.js:35
 #: frontend/src/components/dialog/wiki-select-dialog.js:71
-#: frontend/src/pages/org-admin/org-department-item.js:455
+#: frontend/src/pages/org-admin/org-department-item.js:456
 #: frontend/src/pages/starred/starred.js:173
 #: frontend/src/pages/starred/starred.js:196
 msgid "icon"
@@ -1728,13 +1728,13 @@ msgstr "Puedes crear archivos rápidamente"
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:110
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:135
 #: frontend/src/components/history-list-view/history-list-item.js:97
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:251
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:295
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:252
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:296
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:117
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:140
 #: frontend/src/pages/org-admin/org-groups.js:226
 #: frontend/src/pages/org-admin/org-libraries.js:263
-#: frontend/src/pages/org-admin/org-links.js:203
+#: frontend/src/pages/org-admin/org-links.js:204
 #: frontend/src/pages/org-admin/org-user-item.js:141
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:173
 msgid "More Operations"
@@ -2060,25 +2060,25 @@ msgstr "Guardar como..."
 msgid "Anonymous User"
 msgstr "Usuario Anónimo"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:173
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:174
 #: frontend/src/pages/groups/group-view.js:401
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:80
 #: frontend/src/utils/text-translation.js:11
 msgid "Rename"
 msgstr "Renombrar"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:176
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:177
 msgid "Folder Premission"
 msgstr "Permisos de Carpeta"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:179
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:180
 #: frontend/src/pages/org-admin/org-logs-file-update.js:256
 #: frontend/src/utils/text-translation.js:15
 msgid "Details"
 msgstr "Detalles"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:182
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:283
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:183
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:284
 #: frontend/src/pages/share-admin/folders.js:161
 #: frontend/src/pages/share-admin/libraries.js:171
 msgid "Unshare"
@@ -2284,6 +2284,11 @@ msgstr "Éxito"
 #: frontend/src/components/user-settings/email-notice.js:56
 msgid "Email Notification of File Changes"
 msgstr "Email de notificación de modificaciones de archivo"
+
+#: frontend/src/components/user-settings/email-notice.js:57
+msgid ""
+"The list of added, deleted and modified files will be sent to your mailbox."
+msgstr ""
 
 #: frontend/src/components/user-settings/language-setting.js:30
 msgid "Language Setting"
@@ -2569,7 +2574,7 @@ msgstr "Carpeta movida"
 #: frontend/src/pages/my-libs/my-libs.js:48
 #: frontend/src/pages/share-admin/folders.js:225
 #: frontend/src/pages/share-admin/libraries.js:205
-#: frontend/src/pages/share-admin/share-links.js:315
+#: frontend/src/pages/share-admin/share-links.js:316
 #: frontend/src/pages/share-admin/upload-links.js:165
 #: frontend/src/pages/shared-libs/shared-libs.js:316
 #: frontend/src/pages/shared-with-all/public-shared-view.js:55
@@ -2611,7 +2616,7 @@ msgid "(current version)"
 msgstr "(versión actual)"
 
 #: frontend/src/pages/file-history-old/history-item.js:123
-#: frontend/src/pages/share-admin/share-links.js:231
+#: frontend/src/pages/share-admin/share-links.js:232
 #: frontend/src/pages/share-admin/upload-links.js:131
 msgid "View"
 msgstr "Ver"
@@ -2875,7 +2880,7 @@ msgstr "Operaciones"
 
 #: frontend/src/pages/org-admin/org-department-item.js:197
 #: frontend/src/pages/org-admin/org-department-item.js:198
-#: frontend/src/pages/org-admin/org-departments-list.js:89
+#: frontend/src/pages/org-admin/org-departments-list.js:88
 #: frontend/src/pages/org-admin/side-panel.js:62
 #: frontend/src/pages/sys-admin/side-panel.js:88
 msgid "Departments"
@@ -2886,14 +2891,14 @@ msgid "Sub-departments"
 msgstr "Sub-departamentos"
 
 #: frontend/src/pages/org-admin/org-department-item.js:219
-#: frontend/src/pages/org-admin/org-departments-list.js:98
+#: frontend/src/pages/org-admin/org-departments-list.js:97
 #: frontend/src/pages/org-admin/org-groups.js:89
 #: frontend/src/pages/org-admin/org-links.js:97
 msgid "Created At"
 msgstr "Creado En"
 
 #: frontend/src/pages/org-admin/org-department-item.js:220
-#: frontend/src/pages/org-admin/org-departments-list.js:99
+#: frontend/src/pages/org-admin/org-departments-list.js:98
 msgid "Quota"
 msgstr "Cuota"
 
@@ -2905,7 +2910,7 @@ msgstr "No hay sub-departamentos"
 msgid "No members"
 msgstr "No hay miembros"
 
-#: frontend/src/pages/org-admin/org-departments-list.js:118
+#: frontend/src/pages/org-admin/org-departments-list.js:117
 msgid "No departments"
 msgstr "No hay departamentos"
 
@@ -2983,7 +2988,7 @@ msgstr "Enlaces Públicos"
 msgid "Count"
 msgstr "Cuenta"
 
-#: frontend/src/pages/org-admin/org-links.js:210
+#: frontend/src/pages/org-admin/org-links.js:211
 msgid "View Link"
 msgstr ""
 
@@ -3164,15 +3169,15 @@ msgstr "Ingresa extensiones de archivo, separadas con ','"
 msgid "Reset"
 msgstr ""
 
-#: frontend/src/pages/search/main-panel.js:95
+#: frontend/src/pages/search/main-panel.js:94
 msgid "Start date should be earlier than end date."
 msgstr "La fecha de inicio debe ser anterior a la de finalización."
 
-#: frontend/src/pages/search/main-panel.js:99
+#: frontend/src/pages/search/main-panel.js:98
 msgid "Invalid file size range."
 msgstr ""
 
-#: frontend/src/pages/search/main-panel.js:106
+#: frontend/src/pages/search/main-panel.js:105
 msgid "Required at least three letters."
 msgstr ""
 
@@ -3228,17 +3233,17 @@ msgstr "Puedes generar un enlace de compartir para una carpeta o para un archivo
 msgid "Visits"
 msgstr "Visitas"
 
-#: frontend/src/pages/share-admin/share-links.js:232
+#: frontend/src/pages/share-admin/share-links.js:233
 #: frontend/src/pages/share-admin/upload-links.js:132
 msgid "Remove"
 msgstr "Remover"
 
-#: frontend/src/pages/share-admin/share-links.js:354
+#: frontend/src/pages/share-admin/share-links.js:355
 #: frontend/src/pages/share-admin/upload-links.js:203
 msgid "Share Links"
 msgstr "Enlaces Compartidos"
 
-#: frontend/src/pages/share-admin/share-links.js:357
+#: frontend/src/pages/share-admin/share-links.js:358
 #: frontend/src/pages/share-admin/upload-links.js:205
 msgid "Upload Links"
 msgstr "Enlaces de subida"
