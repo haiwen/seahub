@@ -1259,8 +1259,7 @@ def _create_repo_common(request, repo_name, repo_desc, encryption,
                 repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
                                                       username, None, org_id)
             else:
-                repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                                  username, None)
+                repo_id = seafile_api.create_repo(repo_name, repo_desc, username)
         else:
             if is_org_context(request):
                 org_id = request.user.org.org_id

@@ -14,6 +14,7 @@ class ServerInfoView(APIView):
     def get(self, request, format=None):
         info = {
             'version': settings.SEAFILE_VERSION,
+            'encrypted_library_version': 3 if settings.ENCRYPTED_LIBRARY_VERSION == 3 else 2,
         }
 
         features = ['seafile-basic']

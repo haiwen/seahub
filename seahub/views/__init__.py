@@ -634,8 +634,7 @@ def create_default_library(request):
     else:
         default_repo = seafile_api.create_repo(name=_("My Library"),
                                                desc=_("My Library"),
-                                               username=username,
-                                               passwd=None)
+                                               username=username)
     sys_repo_id = get_system_default_repo_id()
     if sys_repo_id is None:
         return

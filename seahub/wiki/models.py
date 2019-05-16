@@ -75,8 +75,7 @@ class WikiManager(models.Manager):
                 repo_id = seafile_api.create_org_repo(wiki_name, '', username,
                                                       passwd=None, org_id=org_id)
             else:
-                repo_id = seafile_api.create_repo(wiki_name, '', username,
-                                                  passwd=None)
+                repo_id = seafile_api.create_repo(wiki_name, '', username)
 
         repo = seafile_api.get_repo(repo_id)
         assert repo is not None

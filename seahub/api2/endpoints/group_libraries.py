@@ -11,6 +11,7 @@ from seaserv import seafile_api, ccnet_api
 
 from constance import config
 
+from seahub import settings
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -190,7 +191,7 @@ class GroupLibraries(APIView):
                     '', username, password, org_id)
         else:
             repo_id = seafile_api.create_repo(repo_name,
-                    '', username, password)
+                    '', username, password, enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
 
         repo = seafile_api.get_repo(repo_id)
         share_dir_to_group(repo, '/', username, username, group_id,

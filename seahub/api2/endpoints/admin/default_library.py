@@ -29,7 +29,7 @@ class AdminDefaultLibrary(APIView):
     def create_default_repo(self, username):
 
         default_repo_id = seafile_api.create_repo(name=_("My Library"),
-                desc=_("My Library"), username=username, passwd=None)
+                desc=_("My Library"), username=username)
 
         sys_repo_id = get_system_default_repo_id()
         if not sys_repo_id or not seafile_api.get_repo(sys_repo_id):

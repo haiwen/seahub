@@ -19,8 +19,7 @@ def create_user_draft_repo(username, org_id=-1):
         repo_id = seafile_api.create_org_repo(repo_name, '', username,
                                               passwd=None, org_id=org_id)
     else:
-        repo_id = seafile_api.create_repo(repo_name, '', username,
-                                          passwd=None)
+        repo_id = seafile_api.create_repo(repo_name, '', username)
     return repo_id
 
 
