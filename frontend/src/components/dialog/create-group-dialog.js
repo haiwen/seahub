@@ -11,6 +11,7 @@ class CreateGroupDialog extends React.Component {
     this.state = {
       groupName: '',
       errorMsg: '',
+      isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
@@ -22,6 +23,12 @@ class CreateGroupDialog extends React.Component {
 
   handleGroupChange = (event) => {
     let name = event.target.value;
+
+    if (!name.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
     this.setState({
       groupName: name
     });
@@ -79,7 +86,7 @@ class CreateGroupDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleAddGroupModal}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmitGroup}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmitGroup} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

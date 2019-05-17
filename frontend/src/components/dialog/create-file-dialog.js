@@ -20,6 +20,7 @@ class CreateFile extends React.Component {
       childName: props.fileType || '',
       isDraft: false,
       errMessage: '',
+      isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
@@ -36,6 +37,12 @@ class CreateFile extends React.Component {
   }
 
   handleChange = (e) => {
+    if (!e.target.value.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
+
     this.setState({
       childName: e.target.value, 
     }) ;
@@ -44,6 +51,7 @@ class CreateFile extends React.Component {
   handleSubmit = () => {
     let isDuplicated = this.checkDuplicatedName();
     let newName = this.state.childName;
+    
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
@@ -148,7 +156,7 @@ class CreateFile extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
