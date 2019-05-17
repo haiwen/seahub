@@ -164,6 +164,11 @@ class LibContentContainer extends React.Component {
     return (
       <Fragment>
         <div className="cur-view-container">
+          {this.props.currentRepoInfo.status === 'read-only' &&
+            <div style={{background:'#FEFBDC', textAlign:'center'}}>
+              <p>{gettext('This library has been set to read-only by admin and cannot be updated.')}</p>
+            </div>
+          }
           <div className="cur-view-path">
             <CurDirPath 
               repoID={repoID}
