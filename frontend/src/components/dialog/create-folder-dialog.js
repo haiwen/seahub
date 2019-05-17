@@ -41,6 +41,12 @@ class CreateForder extends React.Component {
   handleSubmit = () => {
     let newName = this.state.childName;
     let isDuplicated = this.checkDuplicatedName();
+    if (!newName.trim()) {
+      let errMessage = gettext('The folder name is empty');
+      this.setState({errMessage: errMessage});
+      return;
+    }
+
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
