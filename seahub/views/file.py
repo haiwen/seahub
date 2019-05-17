@@ -365,6 +365,10 @@ def can_preview_file(file_name, file_size, repo):
                 return False, error_msg
 
         else:
+            if not HAS_OFFICE_CONVERTER:
+                error_msg = "File preview unsupported"
+                return False, error_msg
+
             # HAS_OFFICE_CONVERTER
             if file_size > OFFICE_PREVIEW_MAX_SIZE:
                 error_msg = _(u'File size surpasses %s, can not be opened online.') % \
