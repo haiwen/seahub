@@ -5,8 +5,9 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { Link } from '@reach/router';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff } from '../../utils/constants';
-import ModalPotal from '../../components/modal-portal';
+import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
+import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 
@@ -34,6 +35,7 @@ class SharedRepoListItem extends React.Component {
       isShowSharedDialog: false,
       isRenaming: false,
       isStarred: this.props.repo.starred,
+      isFolderPermissionDialogOpen: false
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -109,7 +111,7 @@ class SharedRepoListItem extends React.Component {
         this.onItemRenameToggle();
         break;
       case 'Folder Permission':
-        this.onItemPermisionChanged();
+        this.onItemFolderPermissionToggle();
         break;
       case 'Details':
         this.onItemDetails();
@@ -143,8 +145,8 @@ class SharedRepoListItem extends React.Component {
     this.setState({isRenaming: !this.state.isRenaming});
   }
 
-  onItemPermisionChanged = () => {
-    // todo
+  onItemFolderPermissionToggle = () => {
+    this.setState({isFolderPermissionDialogOpen: !this.state.isFolderPermissionDialogOpen});
   }
 
   onItemDetails = () => {
@@ -364,7 +366,7 @@ class SharedRepoListItem extends React.Component {
           <td title={repo.owner_contact_email}>{repo.owner_name}</td>
         </tr>
         {this.state.isShowSharedDialog && (
-          <ModalPotal>
+          <ModalPortal>
             <ShareDialog 
               itemType={'library'}
               itemName={repo.repo_name}
@@ -377,7 +379,17 @@ class SharedRepoListItem extends React.Component {
               isGroupOwnedRepo={isGroupOwnedRepo}
               toggleDialog={this.toggleShareDialog}
             />
-          </ModalPotal>
+          </ModalPortal>
+        )}
+        {this.state.isFolderPermissionDialogOpen && (
+          <ModalPortal>
+            <LibSubFolderPermissionDialog
+              toggleDialog={this.onItemFolderPermissionToggle}
+              repoID={repo.repo_id}
+              repoName={repo.repo_name}
+              isDepartmentRepo={true}
+            />
+          </ModalPortal>
         )}
       </Fragment>
     );
@@ -404,7 +416,7 @@ class SharedRepoListItem extends React.Component {
           <td>{this.generatorMobileMenu()}</td>
         </tr>
         {this.state.isShowSharedDialog && (
-          <ModalPotal>
+          <ModalPortal>
             <ShareDialog 
               itemType={'library'}
               itemName={repo.repo_name}
@@ -417,7 +429,7 @@ class SharedRepoListItem extends React.Component {
               isGroupOwnedRepo={isGroupOwnedRepo}
               toggleDialog={this.toggleShareDialog}
             />
-          </ModalPotal>
+          </ModalPortal>
         )}
       </Fragment>
     );

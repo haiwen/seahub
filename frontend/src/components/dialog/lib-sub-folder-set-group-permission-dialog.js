@@ -71,7 +71,8 @@ class GroupItem extends React.Component {
 }
 
 const propTypes = {
-  repoID: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  isDepartmentRepo: PropTypes.bool
 };
 
 const NoOptionsMessage = (props) => {
@@ -122,9 +123,11 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
   }
 
   listGroupPermissionItems = () => {
-    let repoID = this.props.repoID; 
-    let folderPath = this.props.folderPath;
-    seafileAPI.listGroupFolderPerm(repoID, folderPath).then((res) => {
+    const { isDepartmentRepo, repoID, folderPath } = this.props;
+    const request = isDepartmentRepo ?
+      seafileAPI.listDepartmentRepoGroupFolderPerm(repoID, folderPath) :
+      seafileAPI.listGroupFolderPerm(repoID, folderPath);
+    request.then((res) => {
       if (res.data.length !== 0) {
         this.setState({
           groupPermissionItems: res.data
@@ -144,7 +147,10 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
       return false;
     }
 
-    seafileAPI.addGroupFolderPerm(this.props.repoID, this.state.permission, folderPath, selectedOption.id).then(res => {
+    const request = this.props.isDepartmentRepo ?
+      seafileAPI.addDepartmentRepoGroupFolderPerm(this.props.repoID, this.state.permission, folderPath, selectedOption.id) :
+      seafileAPI.addGroupFolderPerm(this.props.repoID, this.state.permission, folderPath, selectedOption.id)
+    request.then(res => {
       let errorMsg = [];
       if (res.data.failed.length > 0) {
         for (let i = 0; i < res.data.failed.length; i++) {
@@ -177,7 +183,10 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
   }
 
   deleteGroupPermissionItem = (item) => {
-    seafileAPI.deleteGroupFolderPerm(item.repo_id, item.permission, item.folder_path, item.group_id).then(() => {
+    const request = this.props.isDepartmentRepo ?
+      seafileAPI.deleteDepartmentRepoGroupFolderPerm(item.repo_id, item.permission, item.folder_path, item.group_id) :
+      seafileAPI.deleteGroupFolderPerm(item.repo_id, item.permission, item.folder_path, item.group_id)
+    request.then(() => {
       this.setState({
         groupPermissionItems: this.state.groupPermissionItems.filter(deletedItem => { return deletedItem != item; }) 
       });
@@ -185,7 +194,10 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
   }
 
   onChangeGroupPermission = (item, permission) => {
-    seafileAPI.updateGroupFolderPerm(item.repo_id, permission, item.folder_path, item.group_id).then(() => {
+    const request = this.props.isDepartmentRepo ?
+      seafileAPI.updateDepartmentRepoGroupFolderPerm(item.repo_id, permission, item.folder_path, item.group_id) :
+      seafileAPI.updateGroupFolderPerm(item.repo_id, permission, item.folder_path, item.group_id);
+    request.then(() => {
       this.updateGroupPermission(item, permission);
     });
   }

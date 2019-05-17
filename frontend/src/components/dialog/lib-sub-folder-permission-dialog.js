@@ -11,6 +11,7 @@ import '../../css/sub-folder-permission.css';
 const propTypes = { 
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string,
+  isDepartmentRepo: PropTypes.bool,
   folderPath: PropTypes.string,
   folderName: PropTypes.string,
   toggleDialog: PropTypes.func.isRequired
@@ -52,10 +53,10 @@ class LibSubFolderPermissionDialog extends React.Component {
         <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
             <TabPane tabId="userPermission">
-              <LibSubFolderSetUserPermissionDialog repoID={this.props.repoID} repoName={this.props.repoName} folderPath={this.props.folderPath}  />
+              <LibSubFolderSetUserPermissionDialog repoID={this.props.repoID} repoName={this.props.repoName} folderPath={this.props.folderPath} isDepartmentRepo={this.props.isDepartmentRepo} />
             </TabPane>
             <TabPane tabId="groupPermission">
-              <LibSubFolderSetGroupPermissionDialog repoID={this.props.repoID} repoName={this.props.repoName} folderPath={this.props.folderPath} />
+              <LibSubFolderSetGroupPermissionDialog repoID={this.props.repoID} repoName={this.props.repoName} folderPath={this.props.folderPath} isDepartmentRepo={this.props.isDepartmentRepo} />
             </TabPane>
           </TabContent>
         </div>
