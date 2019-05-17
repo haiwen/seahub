@@ -49,6 +49,10 @@ class CreateFile extends React.Component {
   }
 
   handleSubmit = () => {
+    if (!this.state.isSubmitBtnActive) {
+      return;
+    }
+
     let isDuplicated = this.checkDuplicatedName();
     let newName = this.state.childName;
     

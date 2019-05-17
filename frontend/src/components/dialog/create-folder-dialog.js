@@ -46,6 +46,10 @@ class CreateForder extends React.Component {
   }
 
   handleSubmit = () => {
+    if (!this.state.isSubmitBtnActive) {
+      return;
+    }
+
     let newName = this.state.childName;
     let isDuplicated = this.checkDuplicatedName();
 
