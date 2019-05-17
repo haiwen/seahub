@@ -629,7 +629,6 @@ def create_default_library(request):
         default_repo = seafile_api.create_org_repo(name=_("My Library"),
                                                    desc=_("My Library"),
                                                    username=username,
-                                                   passwd=None,
                                                    org_id=org_id)
     else:
         default_repo = seafile_api.create_repo(name=_("My Library"),

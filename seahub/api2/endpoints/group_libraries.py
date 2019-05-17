@@ -188,7 +188,7 @@ class GroupLibraries(APIView):
             is_org = True
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name,
-                    '', username, password, org_id)
+                    '', username, org_id, password, enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
         else:
             repo_id = seafile_api.create_repo(repo_name,
                     '', username, password, enc_version=settings.ENCRYPTED_LIBRARY_VERSION)

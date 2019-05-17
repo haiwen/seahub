@@ -983,7 +983,8 @@ class Repos(APIView):
 
         if org_id > 0:
             repo_id = seafile_api.create_org_repo(repo_name,
-                    repo_desc, username, passwd, org_id)
+                    repo_desc, username, org_id, passwd,
+                    enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
@@ -1045,7 +1046,8 @@ class Repos(APIView):
 
         if org_id > 0:
             repo_id = seafile_api.create_org_enc_repo(repo_id, repo_name, repo_desc,
-                                                      username, magic, random_key, enc_version, org_id)
+                                                      username, magic, random_key,
+                                                      salt, enc_version, org_id)
         else:
             repo_id = seafile_api.create_enc_repo(
                 repo_id, repo_name, repo_desc, username,
@@ -1115,7 +1117,8 @@ class PubRepos(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
-                                                  username, passwd, org_id)
+                                                  username, org_id, passwd,
+                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
             repo = seafile_api.get_repo(repo_id)
             seafile_api.set_org_inner_pub_repo(org_id, repo.id, permission)
         else:
@@ -4657,7 +4660,8 @@ class GroupRepos(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
-                                                  username, passwd, org_id)
+                                                  username, org_id, passwd,
+                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
             repo = seafile_api.get_repo(repo_id)
             seafile_api.add_org_group_repo(repo_id, org_id, group.id,
                                            username, permission)

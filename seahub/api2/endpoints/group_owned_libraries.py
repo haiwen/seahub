@@ -41,7 +41,8 @@ from seahub.share.utils import share_dir_to_user, share_dir_to_group, update_use
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.views import check_folder_permission
 
-from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
+from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
+        ENCRYPTED_LIBRARY_VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -131,7 +132,7 @@ class GroupOwnedLibraries(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
-                        password, permission, storage_id)
+                        permission, password, ENCRYPTED_LIBRARY_VERSION, storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                 repo_id = SeafileAPI.add_group_owned_repo(

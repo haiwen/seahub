@@ -23,7 +23,8 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.share.signals import share_repo_to_group_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 
-from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
+from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
+        ENCRYPTED_LIBRARY_VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -95,22 +96,26 @@ class AdminGroupOwnedLibraries(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
-                        password, permission, storage_id)
+                        permission, password, ENCRYPTED_LIBRARY_VERSION, storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                 if org_id > 0:
                     repo_id = seafile_api.org_add_group_owned_repo(
-                        org_id, group_id, repo_name, password, permission)
+                        org_id, group_id, repo_name, permission, password,
+                        ENCRYPTED_LIBRARY_VERSION)
                 else:
                     repo_id = seafile_api.add_group_owned_repo(
-                        group_id, repo_name, password, permission)
+                        group_id, repo_name, permission, password,
+                        ENCRYPTED_LIBRARY_VERSION)
         else:
             if org_id > 0:
                 repo_id = seafile_api.org_add_group_owned_repo(
-                    org_id, group_id, repo_name, password, permission)
+                    org_id, group_id, repo_name, permission, password,
+                    ENCRYPTED_LIBRARY_VERSION)
             else:
                 repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
-                                                           password, permission)
+                                                           permission, password,
+                                                           ENCRYPTED_LIBRARY_VERSION)
 
         # for activities
         username = request.user.username
