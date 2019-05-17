@@ -102,7 +102,10 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
 
   componentDidMount() {
     const {repoID, folderPath, isDepartmentRepo} = this.props;
-    seafileAPI.listUserFolderPerm(isDepartmentRepo, repoID, folderPath).then((res) => {
+    const request = isDepartmentRepo ?
+      seafileAPI.listDepartmentRepoUserFolderPerm(repoID, folderPath) :
+      seafileAPI.listUserFolderPerm(repoID, folderPath);
+    request.then((res) => {
       if (res.data.length !== 0) {
         this.setState({userFolderPermItems: res.data});
       }
@@ -121,7 +124,11 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
     }
 
     const users = selectedUsers.map((item, index) => item.email); 
-    seafileAPI.addUserFolderPerm(this.props.isDepartmentRepo, this.props.repoID, this.state.permission, folderPath, users).then(res => {
+
+    const request = this.props.isDepartmentRepo ?
+      seafileAPI.addDepartmentRepoUserFolderPerm(this.props.repoID, this.state.permission, folderPath, users) :
+      seafileAPI.addUserFolderPerm(this.props.repoID, this.state.permission, folderPath, users);
+    request.then(res => {
       let errorMsg = [];
       if (res.data.failed.length > 0) {
         for (let i = 0; i < res.data.failed.length; i++) {
@@ -154,7 +161,10 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
   } 
 
   deleteUserFolderPermItem = (item) => {
-    seafileAPI.deleteUserFolderPerm(this.props.isDepartmentRepo, item.repo_id, item.permission, item.folder_path, item.user_email).then(res => {
+    const request = this.props.isDepartmentRepo ?
+      seafileAPI.deleteDepartmentRepoUserFolderPerm(item.repo_id, item.permission, item.folder_path, item.user_email) :
+      seafileAPI.deleteUserFolderPerm(item.repo_id, item.permission, item.folder_path, item.user_email);
+    request.then(res => {
       this.setState({
         userFolderPermItems: this.state.userFolderPermItems.filter(deletedItem => {
           return deletedItem != item;
@@ -164,7 +174,10 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
   }
 
   onChangeUserFolderPerm = (repoID, permission, folderPath, userEmail) => {
-    seafileAPI.updateUserFolderPerm(this.props.isDepartmentRepo, repoID, permission, folderPath, userEmail).then(res => {
+    const request = this.props.isDepartmentRepo ?
+      seafileAPI.updateDepartmentRepoUserFolderPerm(repoID, permission, folderPath, userEmail) :
+      seafileAPI.updateUserFolderPerm(repoID, permission, folderPath, userEmail);
+    request.then(res => {
       let userFolderPermItems = this.state.userFolderPermItems.map(item => {
         if (item.user_email === userEmail && item.folder_path === folderPath) {
           item.permission = permission;
