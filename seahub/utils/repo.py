@@ -8,7 +8,8 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.constants import (
     PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT,
-    PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN
+    PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+    REPO_STATUS_NORMAL, REPO_STATUS_READ_ONLY
 )
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
 from seahub.base.models import RepoSecretKey
@@ -18,6 +19,16 @@ from seahub.settings import ENABLE_STORAGE_CLASSES, \
         STORAGE_CLASS_MAPPING_POLICY, ENABLE_FOLDER_PERM
 
 logger = logging.getLogger(__name__)
+
+
+def normalize_repo_status(status):
+    if status == 0:
+        return REPO_STATUS_NORMAL
+    elif status == 1:
+        return REPO_STATUS_READ_ONLY
+    else:
+        return ''
+
 
 def get_available_repo_perms():
     perms = [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]
