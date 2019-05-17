@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-16 14:14+0800\n"
-"PO-Revision-Date: 2019-05-16 06:15+0000\n"
+"POT-Creation-Date: 2019-05-17 10:59+0800\n"
+"PO-Revision-Date: 2019-05-17 03:02+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/haiwen/seahub/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -214,8 +214,8 @@ msgstr ""
 #: frontend/src/components/dialog/internal-link-dialog.js:72
 #: frontend/src/components/dialog/invite-people-dialog.js:110
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:133
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:248
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:222
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:260
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:235
 #: frontend/src/components/dialog/move-dirent-dialog.js:174
 #: frontend/src/components/dialog/new-wiki-dialog.js:59
 #: frontend/src/components/dialog/org-add-member-dialog.js:63
@@ -260,10 +260,10 @@ msgstr "Cancela"
 #: frontend/src/components/dialog/label-repo-state-dialog.js:97
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:134
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:249
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:300
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:223
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:272
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:261
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:312
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:236
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:285
 #: frontend/src/components/dialog/manage-members-dialog.js:96
 #: frontend/src/components/dialog/manage-members-dialog.js:97
 #: frontend/src/components/dialog/move-dirent-dialog.js:175
@@ -308,7 +308,7 @@ msgid "Add new reviewer"
 msgstr ""
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:95
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:249
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:262
 #: frontend/src/components/dialog/manage-members-dialog.js:89
 #: frontend/src/components/dialog/org-add-member-dialog.js:53
 #: frontend/src/components/dialog/share-to-user.js:273
@@ -349,8 +349,8 @@ msgstr ""
 #: frontend/src/components/dialog/invite-people-dialog.js:76
 #: frontend/src/components/dialog/label-repo-state-dialog.js:37
 #: frontend/src/components/dialog/label-repo-state-dialog.js:77
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:168
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:145
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:174
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:152
 #: frontend/src/components/dialog/zip-download-dialog.js:48
 #: frontend/src/components/dialog/zip-download-dialog.js:75
 #: frontend/src/components/user-settings/email-notice.js:44
@@ -391,8 +391,8 @@ msgstr "Error"
 #: frontend/src/components/dialog/invite-people-dialog.js:78
 #: frontend/src/components/dialog/label-repo-state-dialog.js:39
 #: frontend/src/components/dialog/label-repo-state-dialog.js:79
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:171
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:148
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:177
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:155
 #: frontend/src/components/dialog/zip-download-dialog.js:50
 #: frontend/src/components/dialog/zip-download-dialog.js:77
 #: frontend/src/components/user-settings/email-notice.js:46
@@ -475,7 +475,7 @@ msgstr "Esteu segur que voleu eliminar el seu compte?"
 #: frontend/src/components/draft-list-view/draft-list-item.js:110
 #: frontend/src/components/file-view/comment-panel.js:252
 #: frontend/src/components/review-list-view/review-comments.js:313
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:285
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:287
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:287
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/pages/invitations/invitations-view.js:46
@@ -671,10 +671,10 @@ msgid "New Library"
 msgstr "Crea una llibreria"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:167
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:264
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:323
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:238
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:300
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:276
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:335
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:251
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:313
 #: frontend/src/components/dialog/share-repo-dialog.js:130
 #: frontend/src/components/dialog/share-to-group.js:266
 #: frontend/src/components/dialog/share-to-group.js:315
@@ -1112,51 +1112,51 @@ msgstr "No conservis l'historial"
 msgid "Only keep a period of history:"
 msgstr "Només conserva l'historial dels darrers:"
 
-#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:42
+#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:43
 msgid "User Permission"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:47
+#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:48
 msgid "Group Permission"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:73
+#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:74
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:91
 msgid "{placeholder} Folder Permission"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:73
+#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:74
 #: static/scripts/app/views/folder-perm.js:60
 msgid "Set {placeholder}'s permission"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:79
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:80
 #: frontend/src/components/dialog/share-to-group.js:95
 msgid "Group not found"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:260
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:319
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:272
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:331
 #: frontend/src/components/dialog/share-to-group.js:265
 #: frontend/src/components/dialog/share-to-group.js:314
 msgid "Group"
 msgstr "Grup"
 
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:262
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:321
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:236
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:298
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:274
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:333
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:249
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:311
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:81
 msgid "Folder"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:274
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:286
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:141
 msgid "Select a group"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:234
-#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:296
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:247
+#: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:309
 #: frontend/src/components/dialog/share-to-user.js:261
 #: frontend/src/components/dialog/share-to-user.js:311
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:94
@@ -1519,8 +1519,8 @@ msgstr ""
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:464
 #: frontend/src/components/file-view/file-toolbar.js:93
 #: frontend/src/components/file-view/file-toolbar.js:182
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:186
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:283
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:188
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:285
 #: frontend/src/components/toolbar/cdoc-editor-topbar.js:66
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:173
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:83
@@ -1657,7 +1657,7 @@ msgstr ""
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:460
 #: frontend/src/components/file-view/file-toolbar.js:129
 #: frontend/src/components/file-view/file-toolbar.js:195
-#: frontend/src/components/file-view/file-view-tip.js:30
+#: frontend/src/components/file-view/file-view-tip.js:25
 #: frontend/src/components/history-list-view/history-list-item.js:101
 #: frontend/src/components/shared-file-view/shared-file-view-tip.js:24
 #: frontend/src/components/shared-file-view/shared-file-view.js:102
@@ -1725,8 +1725,8 @@ msgstr ""
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:110
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:135
 #: frontend/src/components/history-list-view/history-list-item.js:97
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:252
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:296
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:254
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:298
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:117
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:140
 #: frontend/src/pages/org-admin/org-groups.js:226
@@ -1893,10 +1893,6 @@ msgstr ""
 msgid "Online view is not applicable to this file format"
 msgstr ""
 
-#: frontend/src/components/file-view/file-view-tip.js:34
-msgid "Please install the desktop client to open file via client."
-msgstr ""
-
 #: frontend/src/components/history-list-view/history-list-item.js:100
 #: frontend/src/pages/file-history-old/history-item.js:121
 #: frontend/src/pages/my-libs/my-libs-deleted.js:159
@@ -2021,7 +2017,7 @@ msgid "Public"
 msgstr ""
 
 #: frontend/src/components/session-expired-tip.js:6
-msgid "You are log out."
+msgid "You are logged out."
 msgstr ""
 
 #: frontend/src/components/session-expired-tip.js:7
@@ -2057,25 +2053,25 @@ msgstr ""
 msgid "Anonymous User"
 msgstr ""
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:174
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:176
 #: frontend/src/pages/groups/group-view.js:401
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:80
 #: frontend/src/utils/text-translation.js:11
 msgid "Rename"
 msgstr "Reanomena"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:177
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:179
 msgid "Folder Premission"
 msgstr ""
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:180
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:182
 #: frontend/src/pages/org-admin/org-logs-file-update.js:256
 #: frontend/src/utils/text-translation.js:15
 msgid "Details"
 msgstr "Detalls"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:183
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:284
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:185
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:286
 #: frontend/src/pages/share-admin/folders.js:161
 #: frontend/src/pages/share-admin/libraries.js:171
 msgid "Unshare"
