@@ -328,8 +328,10 @@ class GenerateShareLink extends React.Component {
               </FormGroup>
             )}
           </Form>
-          {!this.state.isShowSendLink ?
-            <Button onClick={this.toggleSendLink} className='mr-2'>{gettext('Send')}</Button> :
+          {(!this.state.isShowSendLink && !this.state.isNoticeMessageShow) &&
+            <Button onClick={this.toggleSendLink} className='mr-2'>{gettext('Send')}</Button>
+          }
+          {this.state.isShowSendLink &&
             <Fragment>
               <Form>
                 <FormGroup>
