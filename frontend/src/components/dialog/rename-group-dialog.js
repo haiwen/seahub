@@ -10,10 +10,17 @@ class RenameGroupDialog extends React.Component {
     super(props);
     this.state = {
       newGroupName: this.props.currentGroupName,
+      isSubmitBtnActive: false,
     };
   }
 
   handleGroupNameChange = (event) => {
+    if (!event.target.value.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
+
     let name = event.target.value;
     this.setState({
       newGroupName: name
@@ -52,7 +59,7 @@ class RenameGroupDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleRenameGroupDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.renameGroup}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.renameGroup} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

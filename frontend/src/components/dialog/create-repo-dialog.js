@@ -19,12 +19,19 @@ class CreateRepoDialog extends React.Component {
       password1: '',
       password2: '',
       errMessage: '',
-      permission: 'rw'
+      permission: 'rw',
+      isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
 
   handleRepoNameChange = (e) => {
+    if (!e.target.value.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
+
     this.setState({repoName: e.target.value});
   }
 
@@ -205,7 +212,7 @@ class CreateRepoDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

@@ -14,11 +14,18 @@ class CreateDepartmentRepoDialog extends React.Component {
     this.state = {
       repoName: '',
       errMessage: '',
+      isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
 
   handleChange = (e) => {
+    if (!e.target.value.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
+
     this.setState({
       repoName: e.target.value, 
     });
@@ -90,7 +97,7 @@ class CreateDepartmentRepoDialog extends React.Component {
           {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

@@ -18,7 +18,8 @@ class CreateForder extends React.Component {
     this.state = {
       parentPath: '',
       childName: '',
-      errMessage: ''
+      errMessage: '',
+      isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
@@ -35,17 +36,18 @@ class CreateForder extends React.Component {
   }
 
   handleChange = (e) => {
+    if (!e.target.value.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
+
     this.setState({childName: e.target.value});
   }
 
   handleSubmit = () => {
     let newName = this.state.childName;
     let isDuplicated = this.checkDuplicatedName();
-    if (!newName.trim()) {
-      let errMessage = gettext('The folder name is empty');
-      this.setState({errMessage: errMessage});
-      return;
-    }
 
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
@@ -94,7 +96,7 @@ class CreateForder extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

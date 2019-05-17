@@ -18,6 +18,7 @@ class Rename extends React.Component {
     this.state = {
       newName: '',
       errMessage: '',
+      isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
@@ -44,6 +45,12 @@ class Rename extends React.Component {
   }
   
   handleChange = (e) => {
+    if (!e.target.value.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
+
     this.setState({newName: e.target.value}); 
   }
 
@@ -114,7 +121,7 @@ class Rename extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
