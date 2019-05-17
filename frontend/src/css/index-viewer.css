@@ -1,16 +1,22 @@
-.folder-item {
-  position: relative;
-  margin-top: 5px;
+.wiki-nav-content {
+  margin-bottom: 5px;
 }
-.folder-item .wiki-nav-content a {
+.wiki-nav-content a {
   color: #333;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
 }
-.folder-item .wiki-nav-content a:hover {
+.wiki-nav-content a:hover {
   text-decoration: none;
+  color: #eb8205;
 }
 .switch-btn {
+  width: 1rem;
   position: absolute;
-  left: 0.5rem;
+  left: 0;
   top: 0;
   color: #c0c0c0;
+  cursor: pointer;
 }

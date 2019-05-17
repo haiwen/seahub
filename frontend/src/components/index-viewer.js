@@ -11,12 +11,33 @@ const viewerPropTypes = {
   onLinkClick: PropTypes.func.isRequired,
 };
 
+class TreeNode {
+
+  constructor({ name, href, parentNode }) {
+    this.name = name;
+    this.href = href;
+    this.parentNode = parentNode || null;
+    this.children = [];
+  }
+
+  setParent(parentNode) {
+    this.parentNode = parentNode;
+  }
+
+  addChildren(nodeList) {
+    nodeList.forEach((node) => {
+      node.setParent(this);
+    });
+    this.children = nodeList;
+  }
+}
+
 class IndexContentViewer extends React.Component {
 
   constructor(props) {
     super(props);
     this.links = [];
-    this.rootNode = {};
+    this.treeRoot = new TreeNode({ name: '', href: '' });
   }
 
   componentWillMount() {
@@ -92,7 +113,6 @@ class IndexContentViewer extends React.Component {
 
       else if (item.type == 'link') {
         url = item.data.href;
-
         /* eslint-disable */
         let expression = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
         /* eslint-enable */
@@ -120,37 +140,45 @@ class IndexContentViewer extends React.Component {
     return item;
   }
 
-  modifyValueBeforeRender = (value) => {
-    let nodes = value.document.nodes;
-    let newNodes = Utils.changeMarkdownNodes(nodes, this.changeInlineNode);
-    value.document.nodes = newNodes;
-    return value;
-  }
-
   getRootNode = () => {
     let value = deserialize(this.props.indexContent);
     value = value.toJSON();
-    value = this.modifyValueBeforeRender(value);
-    value = Value.fromJSON(value);
-    const nodes = value.document.nodes;
-    nodes.map((node) => {
-      if (node.type ==='unordered_list' || node.type === 'ordered_list') {
-        this.rootNode = node;
+    const newNodes = Utils.changeMarkdownNodes(value.document.nodes, this.changeInlineNode);
+    newNodes.map((node) => {
+      if (node.type === 'unordered_list' || node.type === 'ordered_list') {
+        this.treeRoot = this.transSlateToTree(node.nodes, this.treeRoot);
       }
     });
   }
 
+  transSlateToTree = (slateNodes, treeRoot) => {
+    let treeNodes = slateNodes.map((slateNode) => {
+      const inline = slateNode.nodes[0].nodes[0];
+      if (slateNode.nodes.length === 2 && slateNode.nodes[1].type === 'unordered_list') {
+        let treeNode = new TreeNode({ name: inline.nodes[0].leaves[0].text, href: inline.data.href });
+        return this.transSlateToTree(slateNode.nodes[1].nodes, treeNode);
+      } else {
+        return new TreeNode({ name: inline.nodes[0].leaves[0].text, href: inline.data.href });
+      }
+    });
+    treeRoot.addChildren(treeNodes);
+    return treeRoot;
+  }
+
   render() {
-    return <FolderItem rootNode={this.rootNode} bindClickEvent={this.bindClickEvent} hasChild={false}/>;
+    return (
+      <div className="mx-2 o-hidden">
+        <FolderItem node={this.treeRoot} bindClickEvent={this.bindClickEvent}/>
+      </div>
+    );
   }
 }
 
 IndexContentViewer.propTypes = viewerPropTypes;
 
 const FolderItemPropTypes = {
-  rootNode: PropTypes.object.isRequired,
+  node: PropTypes.object.isRequired,
   bindClickEvent: PropTypes.func.isRequired,
-  hasChild: PropTypes.bool,
 };
 
 class FolderItem extends React.Component {
@@ -158,65 +186,45 @@ class FolderItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showChild: true
+      expanded: true
     };
   }
 
-  toggleShowChild = () => {
-    this.setState({showChild: !this.state.showChild}, () => {
-      if (this.state.showChild) {
-        this.props.bindClickEvent();
-      }
+  toggleExpanded = () => {
+    this.setState({ expanded: !this.state.expanded }, () => {
+      if (this.state.expanded) this.props.bindClickEvent();
     });
   }
 
-  componentDidMount() {
-    if (this.props.hasChild) {
-      this.setState({ showChild: false });
-    }
+  renderLink = (node) => {
+    return <div className="wiki-nav-content"><a href={node.href}>{node.name}</a></div>;
   }
 
   render() {
-    const { rootNode } = this.props;
-    return (
-      <div className="folder-item px-2">
-        {
-          rootNode.nodes.map((node) => {
-            if (node.type === 'paragraph') {
-              let href = '';
-              node.nodes.map((linkNode) => {
-                // deal with node isn't a link
-                href = linkNode.data ? encodeURI(linkNode.data.get('href')) : 'javascript:void(0);';
-              });
-              return (
-                <div key={node.key} className="px-4 wiki-nav-content">
-                  <a href={href}>{node.text}</a>
-                </div>
-              );
-            } else {
-              const hasChild = (rootNode.type === 'unordered_list' && rootNode.nodes.size > 1);
-              return (
-                <React.Fragment key={node.key}>
-                  {this.props.hasChild &&
-                    <span className="switch-btn" onClick={this.toggleShowChild}>
-                      {this.state.showChild ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
-                    </span>
-                  }
-                  {this.state.showChild &&
-                    <FolderItem
-                      rootNode={node}
-                      key={node.key}
-                      hasChild={hasChild}
-                      bindClickEvent={this.props.bindClickEvent}
-                    />
-                  }
-                </React.Fragment>
-              );
-            }
-          })
-        }
-      </div>
-    );
+    const { node } = this.props;
+    if (node.children.length > 0) {
+      return (
+        <React.Fragment>
+          {node.parentNode &&
+            <React.Fragment>
+              <span className="switch-btn" onClick={this.toggleExpanded}>
+                {this.state.expanded ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
+              </span>
+              {this.renderLink(node)}
+            </React.Fragment>
+          }
+          {this.state.expanded && node.children.map((child, index) => {
+            return (
+              <div className="pl-4 position-relative" key={index}>
+                <FolderItem node={child} bindClickEvent={this.props.bindClickEvent}/>
+              </div>
+            );
+          })}
+        </React.Fragment>
+      );
+    } else {
+      return this.renderLink(node);
+    }
   }
 }
 
