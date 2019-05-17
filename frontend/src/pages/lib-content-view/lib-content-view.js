@@ -134,6 +134,9 @@ class LibContentView extends React.Component {
             isDirentListLoading: false,
             errorMsg: gettext('Permission denied')
           });
+          
+          let errorMsg = gettext('Permission denied');
+          toaster.danger(errorMsg);
         } else {
           this.setState({
             isDirentListLoading: false,
