@@ -1244,38 +1244,6 @@ def repo_history_changes(request, repo_id):
 
     return HttpResponse(json.dumps(changes), content_type=content_type)
 
-def _create_repo_common(request, repo_name, repo_desc, encryption,
-                        uuid, magic_str, encrypted_file_key):
-    """Common logic for creating repo.
-
-    Returns:
-        newly created repo id. Or ``None`` if error raised.
-    """
-    username = request.user.username
-    try:
-        if not encryption:
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
-                                                      username, None, org_id)
-            else:
-                repo_id = seafile_api.create_repo(repo_name, repo_desc, username)
-        else:
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-                repo_id = seafile_api.create_org_enc_repo(
-                    uuid, repo_name, repo_desc, username, magic_str,
-                    encrypted_file_key, enc_version=2, org_id=org_id)
-            else:
-                repo_id = seafile_api.create_enc_repo(
-                    uuid, repo_name, repo_desc, username,
-                    magic_str, encrypted_file_key, enc_version=2)
-    except SearpcError as e:
-        logger.error(e)
-        repo_id = None
-
-    return repo_id
-
 @login_required_ajax
 def ajax_group_members_import(request, group_id):
     """Import users to group.
