@@ -155,9 +155,13 @@ class IndexContentViewer extends React.Component {
     let treeNodes = slateNodes.map((slateNode) => {
       const inline = slateNode.nodes[0].nodes[0];
       if (slateNode.nodes.length === 2 && slateNode.nodes[1].type === 'unordered_list') {
+        // item has children(unordered list)
         let treeNode = new TreeNode({ name: inline.nodes[0].leaves[0].text, href: inline.data.href });
+        // nodes[0] is paragraph, create TreeNode, set name and href
+        // nodes[1] is unordered-list, set it as TreeNode's children 
         return this.transSlateToTree(slateNode.nodes[1].nodes, treeNode);
       } else {
+        // item doesn't have children list
         return new TreeNode({ name: inline.nodes[0].leaves[0].text, href: inline.data.href });
       }
     });
