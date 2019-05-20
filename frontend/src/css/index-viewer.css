@@ -1,0 +1,22 @@
+.wiki-nav-content {
+  margin-bottom: 5px;
+}
+.wiki-nav-content a {
+  color: #333;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+.wiki-nav-content a:hover {
+  text-decoration: none;
+  color: #eb8205;
+}
+.switch-btn {
+  width: 1rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #c0c0c0;
+  cursor: pointer;
+}
