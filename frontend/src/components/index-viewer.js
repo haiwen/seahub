@@ -151,22 +151,50 @@ class IndexContentViewer extends React.Component {
     });
   }
 
-  transSlateToTree = (slateNodes, treeRoot) => {
+  // slateNodes is list items of an unordered list or ordered list, translate them to treeNode and add to parentTreeNode
+  transSlateToTree = (slateNodes, parentTreeNode) => {
     let treeNodes = slateNodes.map((slateNode) => {
-      const inline = slateNode.nodes[0].nodes[0];
-      if (slateNode.nodes.length === 2 && slateNode.nodes[1].type === 'unordered_list') {
-        // item has children(unordered list)
-        let treeNode = new TreeNode({ name: inline.nodes[0].leaves[0].text, href: inline.data.href });
-        // nodes[0] is paragraph, create TreeNode, set name and href
-        // nodes[1] is unordered-list, set it as TreeNode's children 
-        return this.transSlateToTree(slateNode.nodes[1].nodes, treeNode);
+      // item has children(unordered list)
+      if (slateNode.nodes.length === 2 && (slateNode.nodes[1].type === 'unordered_list' || slateNode.nodes[1].type === 'ordered_list')) {
+         // slateNode.nodes[0] is paragraph, create TreeNode, set name and href
+        const paragraphNode = slateNode.nodes[0];
+        const treeNode = this.transParagraph(paragraphNode);
+        // slateNode.nodes[1] is list, set it as TreeNode's children
+        const listNode = slateNode.nodes[1];
+        // Add sub list items to the tree node
+        return this.transSlateToTree(listNode.nodes, treeNode);
       } else {
         // item doesn't have children list
-        return new TreeNode({ name: inline.nodes[0].leaves[0].text, href: inline.data.href });
+        if (slateNode.nodes[0] && (slateNode.nodes[0].type === 'paragraph')) {
+          return this.transParagraph(slateNode.nodes[0]);
+        } else {
+          // list item contain table/code_block/blockqupta
+          return new TreeNode({ name: '', href: '' });
+        }
       }
     });
-    treeRoot.addChildren(treeNodes);
-    return treeRoot;
+    parentTreeNode.addChildren(treeNodes);
+    return parentTreeNode;
+  }
+
+  // translate slate_paragraph_node to treeNode
+  transParagraph = (paragraphNode) => {
+    let treeNode;
+    if (paragraphNode.nodes[0].type === 'link') {
+      // paragraph node is a link node
+      const linkNode = paragraphNode.nodes[0];
+      const textNode = linkNode.nodes[0];
+      let name = textNode.leaves[0] ? textNode.leaves[0].text : '';
+      treeNode =  new TreeNode({ name: name, href: linkNode.data.href });
+    } else if (paragraphNode.nodes[0].object === 'text') {
+      // paragraph first child node is a text node, then get node name
+      const textNode = paragraphNode.nodes[0];
+      let name = textNode.leaves[0] ? textNode.leaves[0].text : '';
+      treeNode = new TreeNode({ name: name, href: '' });
+    } else {
+      treeNode = new TreeNode({ name: '', href: '' });
+    }
+    return treeNode;
   }
 
   render() {
@@ -201,7 +229,13 @@ class FolderItem extends React.Component {
   }
 
   renderLink = (node) => {
-    return <div className="wiki-nav-content"><a href={node.href}>{node.name}</a></div>;
+    if (node.href && node.name) {
+      return <div className="wiki-nav-content"><a href={node.href}>{node.name}</a></div>;
+    } else if (node.name) {
+      return <div className="wiki-nav-content"><span>{node.name}</span></div>;
+    } else {
+      return null;
+    }
   }
 
   render() {
