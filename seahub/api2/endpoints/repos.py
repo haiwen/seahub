@@ -24,7 +24,7 @@ from seahub.group.utils import group_id_to_name
 from seahub.utils import is_org_context, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
-        repo_has_been_shared_out, get_related_users_by_repo
+        repo_has_been_shared_out, get_related_users_by_repo, normalize_repo_status
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
@@ -119,6 +119,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
                     "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status(r.status),
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -180,6 +181,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status(r.status),
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
@@ -222,6 +224,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status(r.status),
                 }
                 repo_info_list.append(repo_info)
 
@@ -265,6 +268,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status(r.status),
                 }
                 repo_info_list.append(repo_info)
 
@@ -338,6 +342,7 @@ class RepoView(APIView):
 
             "lib_need_decrypt": lib_need_decrypt,
             "last_modified": timestamp_to_isoformat_timestr(repo.last_modify),
+            "status": normalize_repo_status(repo.status),
         }
 
         return Response(result)
@@ -353,6 +358,12 @@ class RepoView(APIView):
         username = request.user.username
         repo_owner = get_repo_owner(request, repo_id)
         if username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check repo status
+        repo_status = repo.status
+        if repo_status != 0:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

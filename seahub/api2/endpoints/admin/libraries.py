@@ -21,7 +21,8 @@ from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import is_group_member, group_id_to_name
-from seahub.utils.repo import get_related_users_by_repo
+from seahub.utils.repo import get_related_users_by_repo, normalize_repo_status
+from seahub.utils import is_valid_dirent_name, is_valid_email
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
@@ -54,6 +55,7 @@ def get_repo_info(repo):
     result['size_formatted'] = filesizeformat(repo.size)
     result['encrypted'] = repo.encrypted
     result['file_count'] = repo.file_count
+    result['status'] = normalize_repo_status(repo.status)
 
     if '@seafile_group' in owner:
         group_id = get_group_id_by_repo_owner(owner)
@@ -279,17 +281,44 @@ class AdminLibrary(APIView):
         return Response({'success': True})
 
     def put(self, request, repo_id, format=None):
-        """ transfer a library, rename a library
+        """ update a library status, transfer a library, rename a library
 
         Permission checking:
         1. only admin can perform this action.
         """
+        # argument check
+        new_status = request.data.get('status', None)
+        if new_status:
+            if new_status not in ('0', '1'):
+                error_msg = 'status invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_repo_name = request.data.get('name', None)
+        if new_repo_name:
+            if not is_valid_dirent_name(new_repo_name):
+                error_msg = 'name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_owner = request.data.get('owner', None)
+        if new_owner:
+            if not is_valid_email(new_owner):
+                error_msg = 'owner invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        new_repo_name = request.data.get('name', None)
+        if new_status:
+            try:
+                seafile_api.set_repo_status(repo_id, int(new_status))
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         if new_repo_name:
             try:
                 res = seafile_api.edit_repo(repo_id, new_repo_name, '', None)
@@ -305,7 +334,6 @@ class AdminLibrary(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        new_owner = request.data.get('owner', None)
         if new_owner:
             try:
                 new_owner_obj = User.objects.get(email=new_owner)

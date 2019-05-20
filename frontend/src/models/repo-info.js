@@ -20,6 +20,7 @@ class RepoInfo {
     this.encrypted = object.encrypted;
     this.lib_need_decrypt = object.lib_need_decrypt;
     this.last_modified= object.last_modified;
+    this.status = object.status;
   }
 }
 

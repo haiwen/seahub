@@ -75,6 +75,20 @@ class RepoTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp == 'success'
 
+    def test_rename_repo_with_read_only_status(self):
+
+        self.login_as(self.user)
+
+        seafile_api.set_repo_status(self.repo.id, int(1))
+
+        invalid_name = '123456'
+        data = {'repo_name': invalid_name}
+
+        resp = self.client.post(
+                reverse('api2-repo', args=[self.repo.id])+'?op=rename', data)
+
+        self.assertEqual(403, resp.status_code)
+
     def test_cleaning_stuff_when_delete(self):
         self.login_as(self.user)
 
