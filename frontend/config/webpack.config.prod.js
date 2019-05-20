@@ -101,7 +101,7 @@ module.exports = {
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'js/[name].js',
+    filename: 'js/[name].[chunkhash].js',
     chunkFilename: 'js/[name].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     // publicPath: publicPath,
@@ -382,7 +382,7 @@ module.exports = {
     // https://webpack.js.org/plugins/commons-chunk-plugin/
     new webpack.optimize.CommonsChunkPlugin({
         name: 'commons',
-        filename: '[name]/bundle.common.js',
+        filename: '[name]/bundle.common.[chunkhash].js',
         minChunks: function(module, count) {
           if(module.resource && (/^.*\.(css|scss)$/).test(module.resource)) {
             return false;

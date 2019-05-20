@@ -1315,6 +1315,12 @@ class Repo(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN,
                         'You do not have permission to rename this library.')
 
+            # check repo status
+            repo_status = repo.status
+            if repo_status != 0:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             if edit_repo(repo_id, repo_name, repo_desc, username):
                 return Response("success")
             else:

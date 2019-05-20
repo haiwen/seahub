@@ -5,6 +5,7 @@ import logging
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.deprecation import MiddlewareMixin
+from django.shortcuts import render
 
 from seahub import auth
 from seahub.base.sudo_mode import update_sudo_mode_ts
@@ -118,7 +119,15 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
         # We are seeing this user for the first time in this session, attempt
         # to authenticate the user.
         user = auth.authenticate(request=request, remote_user=username)
+        if not user:
+            if not getattr(settings, 'REMOTE_USER_CREATE_UNKNOWN_USER', True):
+                return render(request, 'remote_user/create_unknown_user_false.html')
+	    return render(request, 'remote_user/error.html')
+
         if user:
+            if not user.is_active:
+                return render(request, 'remote_user/not_active.html')
+
             # User is valid.  Set request.user and persist user in the session
             # by logging the user in.
             request.user = user

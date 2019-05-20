@@ -130,6 +130,35 @@ class AdminLibraryTest(BaseTestCase):
         self.fs_upload = UploadLinkShare.objects.create_upload_link_share(self.user.username,
              self.repo_id, self.folder, None, None)
 
+    def test_can_update_status_to_read_only(self):
+
+        self.login_as(self.admin)
+
+        data = 'status=%s' % 1
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['status'] == 'read-only'
+
+        data = 'status=%s' % 0
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['status'] == 'normal'
+
+    def test_update_status_with_invalid_args(self):
+
+        self.login_as(self.admin)
+
+        data = 'status=%s' % -1
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(400, resp.status_code)
+
     def test_can_get(self):
 
         self.login_as(self.admin)
@@ -141,6 +170,7 @@ class AdminLibraryTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['owner'] == self.user_name
         assert json_resp['name'] == self.repo.repo_name
+        assert json_resp['status'] == 'normal'
 
     def test_get_with_invalid_user_permission(self):
 

@@ -134,7 +134,6 @@ class SeafileRemoteUserBackend(AuthBackend):
         if not user:
             # when user doesn't exist
             if not self.create_unknown_user:
-                logger.error('User %s not found.' % username)
                 return None
 
             try:
@@ -150,16 +149,13 @@ class SeafileRemoteUserBackend(AuthBackend):
                 logger.error(e)
                 return None
 
-        if not self.user_can_authenticate(user):
-            logger.error('User %s is not active' % username)
-            return None
-
-        # update user info after authenticated
-        try:
-            self.configure_user(request, user)
-        except Exception as e:
-            logger.error(e)
-            return None
+        if self.user_can_authenticate(user):
+            # update user info after authenticated
+            try:
+                self.configure_user(request, user)
+            except Exception as e:
+                logger.error(e)
+                return None
 
         # get user again with updated extra info after configure
         return self.get_user(username)
