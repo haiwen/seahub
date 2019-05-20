@@ -1,48 +1,74 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
 import { repoID, slug, serviceURL, isPublicWiki } from '../utils/constants';
 import { Utils } from '../utils/utils';
+import { Value } from 'slate';
+import { deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
+import'../css/index-viewer.css';
 
 const viewerPropTypes = {
   indexContent: PropTypes.string.isRequired,
   onLinkClick: PropTypes.func.isRequired,
 };
 
-const contentClass = 'wiki-nav-content';
+class TreeNode {
+
+  constructor({ name, href, parentNode }) {
+    this.name = name;
+    this.href = href;
+    this.parentNode = parentNode || null;
+    this.children = [];
+  }
+
+  setParent(parentNode) {
+    this.parentNode = parentNode;
+  }
+
+  addChildren(nodeList) {
+    nodeList.forEach((node) => {
+      node.setParent(this);
+    });
+    this.children = nodeList;
+  }
+}
 
 class IndexContentViewer extends React.Component {
 
   constructor(props) {
     super(props);
     this.links = [];
+    this.treeRoot = new TreeNode({ name: '', href: '' });
+  }
+
+  componentWillMount() {
+    this.getRootNode();
   }
 
   componentDidMount() {
-    // Bind event when first loaded
-    this.links = document.querySelectorAll(`.${contentClass} a`);
-    this.links.forEach(link => {
-      link.addEventListener('click', this.onLinkClick);
-    });
+    this.bindClickEvent();
   }
 
   componentWillReceiveProps() {
-    // Unbound event when updating
-    this.links.forEach(link => {
-      link.removeEventListener('click', this.onLinkClick);
-    });
+    this.removeClickEvent();
   }
 
   componentDidUpdate() {
-    // Update completed, rebind event
+    this.bindClickEvent();
+  }
+
+  componentWillUnmount() {
+    this.removeClickEvent();
+  }
+
+  bindClickEvent = () => {
+    const contentClass = 'wiki-nav-content';
     this.links = document.querySelectorAll(`.${contentClass} a`);
     this.links.forEach(link => {
       link.addEventListener('click', this.onLinkClick);
     });
   }
 
-  componentWillUnmount() {
-    // Rebinding events when the component is destroyed
+  removeClickEvent = () => {
     this.links.forEach(link => {
       link.removeEventListener('click', this.onLinkClick);
     });
@@ -51,18 +77,18 @@ class IndexContentViewer extends React.Component {
   onLinkClick = (event) => {
     event.preventDefault(); 
     event.stopPropagation();
-    let link = '';
-    if (event.target.tagName !== 'A') {
-      let target = event.target.parentNode;
-      while (target.tagName !== 'A') {
-        target = target.parentNode;
-      }
-      link = target.href;
+    const link = this.getLink(event.target);
+    if (link) this.props.onLinkClick(link);
+  }
 
+  getLink = (node) => {
+    const tagName = node.tagName;
+    if (!tagName || tagName === 'HTML') return;
+    if (tagName === 'A') {
+      return node.href;
     } else {
-      link = event.target.href;
+      return this.getLink(node.parentNode);
     }
-    this.props.onLinkClick(link);
   }
 
   changeInlineNode = (item) => {
@@ -87,18 +113,18 @@ class IndexContentViewer extends React.Component {
 
       else if (item.type == 'link') {
         url = item.data.href;
-
+        /* eslint-disable */
         let expression = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
+        /* eslint-enable */
         let re = new RegExp(expression);
 
         // Solving relative paths  
         if (!re.test(url)) {
-          item.data.href = serviceURL + "/published/" + slug + '/' + url;
+          item.data.href = serviceURL + '/published/' + slug + '/' + url;
         }
         // change file url 
         else if (Utils.isInternalMarkdownLink(url, repoID)) {
           let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
-          console.log(path);
           // replace url
           item.data.href = serviceURL + '/published/' + slug + path;
         } 
@@ -114,30 +140,98 @@ class IndexContentViewer extends React.Component {
     return item;
   }
 
-  modifyValueBeforeRender = (value) => {
-    let nodes = value.document.nodes;
-    let newNodes = Utils.changeMarkdownNodes(nodes, this.changeInlineNode);
-    value.document.nodes = newNodes;
-    return value;
+  getRootNode = () => {
+    let value = deserialize(this.props.indexContent);
+    value = value.toJSON();
+    const newNodes = Utils.changeMarkdownNodes(value.document.nodes, this.changeInlineNode);
+    newNodes.map((node) => {
+      if (node.type === 'unordered_list' || node.type === 'ordered_list') {
+        this.treeRoot = this.transSlateToTree(node.nodes, this.treeRoot);
+      }
+    });
   }
 
-  onContentRendered = () => {
-    // todo
+  transSlateToTree = (slateNodes, treeRoot) => {
+    let treeNodes = slateNodes.map((slateNode) => {
+      const inline = slateNode.nodes[0].nodes[0];
+      if (slateNode.nodes.length === 2 && slateNode.nodes[1].type === 'unordered_list') {
+        // item has children(unordered list)
+        let treeNode = new TreeNode({ name: inline.nodes[0].leaves[0].text, href: inline.data.href });
+        // nodes[0] is paragraph, create TreeNode, set name and href
+        // nodes[1] is unordered-list, set it as TreeNode's children 
+        return this.transSlateToTree(slateNode.nodes[1].nodes, treeNode);
+      } else {
+        // item doesn't have children list
+        return new TreeNode({ name: inline.nodes[0].leaves[0].text, href: inline.data.href });
+      }
+    });
+    treeRoot.addChildren(treeNodes);
+    return treeRoot;
   }
 
   render() {
     return (
-      <div className={contentClass}>
-        <MarkdownViewer
-          markdownContent={this.props.indexContent}
-          onContentRendered={this.onContentRendered}
-          modifyValueBeforeRender={this.modifyValueBeforeRender}
-        />
+      <div className="mx-2 o-hidden">
+        <FolderItem node={this.treeRoot} bindClickEvent={this.bindClickEvent}/>
       </div>
     );
   }
 }
 
 IndexContentViewer.propTypes = viewerPropTypes;
+
+const FolderItemPropTypes = {
+  node: PropTypes.object.isRequired,
+  bindClickEvent: PropTypes.func.isRequired,
+};
+
+class FolderItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: true
+    };
+  }
+
+  toggleExpanded = () => {
+    this.setState({ expanded: !this.state.expanded }, () => {
+      if (this.state.expanded) this.props.bindClickEvent();
+    });
+  }
+
+  renderLink = (node) => {
+    return <div className="wiki-nav-content"><a href={node.href}>{node.name}</a></div>;
+  }
+
+  render() {
+    const { node } = this.props;
+    if (node.children.length > 0) {
+      return (
+        <React.Fragment>
+          {node.parentNode &&
+            <React.Fragment>
+              <span className="switch-btn" onClick={this.toggleExpanded}>
+                {this.state.expanded ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
+              </span>
+              {this.renderLink(node)}
+            </React.Fragment>
+          }
+          {this.state.expanded && node.children.map((child, index) => {
+            return (
+              <div className="pl-4 position-relative" key={index}>
+                <FolderItem node={child} bindClickEvent={this.props.bindClickEvent}/>
+              </div>
+            );
+          })}
+        </React.Fragment>
+      );
+    } else {
+      return this.renderLink(node);
+    }
+  }
+}
+
+FolderItem.propTypes = FolderItemPropTypes;
 
 export default IndexContentViewer;
