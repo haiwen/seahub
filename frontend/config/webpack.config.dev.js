@@ -232,7 +232,7 @@ module.exports = {
     // This does not produce a real file. It's just the virtual path that is
     // served by WebpackDevServer in development. This is the JS bundle
     // containing code from all our entry points, and the Webpack runtime.
-    filename: '[name].bundle.[hash].js',
+    filename: '[name].bundle.js',
     // There are also additional JS chunk files if you use code splitting.
     chunkFilename: 'static/js/[name].chunk.js',
     // This is the URL that app is served from. We use "/" in development.
@@ -433,7 +433,7 @@ module.exports = {
 
     new webpack.optimize.CommonsChunkPlugin({
         name: 'commons',
-        filename: '[name]/bundle.common.[hash].js',
+        filename: '[name]/bundle.common.js',
         minChunks: function(module, count) {
           if(module.resource && (/^.*\.(css|scss)$/).test(module.resource)) {
             return false;
