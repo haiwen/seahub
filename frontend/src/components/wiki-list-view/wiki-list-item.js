@@ -2,15 +2,15 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { siteRoot } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import Toast from '../toast';
+// import { seafileAPI } from '../../utils/seafile-api';
+// import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
-import Rename from '../rename';
+// import Rename from '../rename';
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
-  renameWiki: PropTypes.func.isRequired,
+  // renameWiki: PropTypes.func.isRequired,
   deleteWiki: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
@@ -22,11 +22,11 @@ class WikiListItem extends Component {
     super(props);
     this.state = {
       isShowDeleteDialog: false,
-      isRenameing: false,
+      // isRenameing: false,
       highlight: false,
-      permission: this.props.wiki.permission,
+      // permission: this.props.wiki.permission,
     };
-    this.permissions = ['private', 'public'];
+    // this.permissions = ['private', 'public'];
   }
 
   onMouseEnter = () => {
@@ -41,32 +41,32 @@ class WikiListItem extends Component {
     }
   }
 
-  changePerm = (permission) => {
-    let wiki = this.props.wiki;
-    seafileAPI.updateWikiPermission(wiki.slug, permission).then(() => {
-      this.setState({permission: permission});
-    }).catch((error) => {
-      if(error.response) {
-        let errorMsg = error.response.data.error_msg;
-        Toast.danger(errorMsg);
-      }
-    });
-  }
+  // changePerm = (permission) => {
+  //   let wiki = this.props.wiki;
+  //   seafileAPI.updateWikiPermission(wiki.slug, permission).then(() => {
+  //     this.setState({permission: permission});
+  //   }).catch((error) => {
+  //     if(error.response) {
+  //       let errorMsg = error.response.data.error_msg;
+  //       Toast.danger(errorMsg);
+  //     }
+  //   });
+  // }
 
-  onRenameToggle = (e) => {
-    this.props.onFreezedItem();
-    this.setState({ isRenameing: true });
-  }
+  // onRenameToggle = (e) => {
+  //   this.props.onFreezedItem();
+  //   this.setState({ isRenameing: true });
+  // }
 
-  onRenameConfirm = (newName) => {
-    this.renameWiki(newName);
-    this.onRenameCancel();
-  }
+  // onRenameConfirm = (newName) => {
+  //   this.renameWiki(newName);
+  //   this.onRenameCancel();
+  // }
 
-  onRenameCancel = () => {
-    this.props.onUnfreezedItem();
-    this.setState({isRenameing: false});
-  }
+  // onRenameCancel = () => {
+  //   this.props.onUnfreezedItem();
+  //   this.setState({isRenameing: false});
+  // }
   
   onDeleteToggle = () => {
     this.props.onUnfreezedItem();
@@ -82,10 +82,10 @@ class WikiListItem extends Component {
     });
   }
 
-  renameWiki = (newName) => {
-    let wiki = this.props.wiki;
-    this.props.renameWiki(wiki, newName);
-  }
+  // renameWiki = (newName) => {
+  //   let wiki = this.props.wiki;
+  //   this.props.renameWiki(wiki, newName);
+  // }
 
   deleteWiki = () => {
     let wiki = this.props.wiki;
@@ -103,10 +103,11 @@ class WikiListItem extends Component {
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td className="name">
-            {this.state.isRenameing ?
+            <a href={wiki.link}>{wiki.name}</a>
+            {/*this.state.isRenameing ?
               <Rename wiki={wiki} name={wiki.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
               <a href={wiki.link}>{wiki.name}</a>
-            }
+            */}
           </td>
           <td><a href={userProfileURL} target='_blank'>{wiki.owner_nickname}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
