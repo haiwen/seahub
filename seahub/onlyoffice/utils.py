@@ -20,6 +20,7 @@ def get_onlyoffice_dict(username, repo_id, file_path,
         file_id='', can_edit=False, can_download=True):
 
     repo = seafile_api.get_repo(repo_id)
+    latest = can_edit and (not file_id)
     if repo.is_virtual:
         origin_repo_id = repo.origin_repo_id
         origin_file_path = posixpath.join(repo.origin_path, file_path.strip('/'))
@@ -47,8 +48,17 @@ def get_onlyoffice_dict(username, repo_id, file_path,
     else:
         document_type = 'text'
 
-    doc_info = json.dumps({'repo_id': repo_id, 'file_path': file_path, 'username': username})
-    doc_key = hashlib.md5(force_bytes(origin_repo_id + origin_file_path + file_id)).hexdigest()[:20]
+    doc_info = {'repo_id': repo_id, 'file_path': file_path, 'username': username}
+    oo_session_file_id = file_id
+    # When the file_id was not set (latest file), join an open session if it already exists
+    if latest:
+        cache_key = "ONLYOFFICE_SESSION_{0}".format(
+            hashlib.md5(force_bytes(origin_repo_id + origin_file_path)).hexdigest()[:20])
+        oo_session_file_id = cache.get_or_set(cache_key, file_id, None)
+        doc_info['oo_session_cache_key'] = cache_key
+    doc_info = json.dumps(doc_info)
+
+    doc_key = hashlib.md5(force_bytes(origin_repo_id + origin_file_path + oo_session_file_id)).hexdigest()[:20]
     cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
 
     file_name = os.path.basename(file_path.rstrip('/'))

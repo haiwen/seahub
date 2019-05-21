@@ -108,5 +108,8 @@ def onlyoffice_editor_callback(request):
         # update file
         update_url = gen_inner_file_upload_url('update-api', update_token)
         requests.post(update_url, files=files)
+        # Everyone has left editing session, remove the cached session key
+        if status == 2 and 'oo_session_cache_key' in doc_info:
+            cache.delete(doc_info['oo_session_cache_key'])
 
     return HttpResponse('{"error": 0}')
