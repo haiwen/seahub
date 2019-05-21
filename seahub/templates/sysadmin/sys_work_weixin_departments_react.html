@@ -15,7 +15,8 @@
 			enable_guest_invitation: {% if enable_guest_invitation %} true {% else %} false {% endif %},
 			enable_terms_and_conditions: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
 			is_default_admin: {% if is_default_admin %} true {% else %} false {% endif %},
-			enable_work_weixin_departments: {% if enable_work_weixin_departments %} true {% else %} false {% endif %},
+            enable_file_scan: {% if enable_file_scan %} true {% else %} false {% endif %},
+            enable_work_weixin_departments: {% if enable_work_weixin_departments %} true {% else %} false {% endif %},
 			admin_permissions: {
                 "can_view_system_info": {% if user.admin_permissions.can_view_system_info %} true {% else %} false {% endif %},
                 "can_view_statistic": {% if user.admin_permissions.can_view_statistic %} true {% else %} false {% endif %},

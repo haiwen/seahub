@@ -22,7 +22,7 @@ class WorkWeixinDepartmentMembersList extends Component {
       } else {
         avatar = siteRoot + 'media/avatars/default.png';
       }
-      const checkbox = member.email ? '' :
+      const checkbox = member.exists ? '' :
         <input
           type="checkbox"
           className="vam"
@@ -36,40 +36,45 @@ class WorkWeixinDepartmentMembersList extends Component {
           <td>{member.name}</td>
           <td>{member.mobile}</td>
           <td>{member.email}</td>
-          <td>{member.email ? <i className="sf2-icon-tick"></i> : ''}</td>
+          <td>{member.exists ? <i className="sf2-icon-tick"></i> : ''}</td>
         </tr>
       );
     });
+
+    const allCheckBox = !this.props.canCheckUserIds.length ? '' :
+      <input
+        type="checkbox"
+        className="vam"
+        checked={this.props.isCheckedAll}
+        onChange={() => this.props.handlerAllUsers()}
+      ></input>;
 
     return (
       <div className="dir-content-main" style={{width: '75%'}}>
         <div className="table-container ">
           {this.props.isMembersListLoading && <Loading/>}
-          {!this.props.isMembersListLoading && this.props.membersList.length === 0 &&
-          <div className="message empty-tip">
-            <h2>{gettext('无成员')}</h2>
-          </div>
-          }
-          {!this.props.isMembersListLoading && this.props.membersList.length > 0 &&
+
+          {!this.props.isMembersListLoading &&
           <Table hover>
             <thead>
               <tr>
-                <th width="3%"><input
-                  type="checkbox"
-                  className="vam"
-                  checked={this.props.isCheckedAll}
-                  onChange={() => this.props.handlerAllUsers()}></input></th>
-                <th width="10%"></th>
+                <th width="36px">{allCheckBox}</th>
+                <th width="56px"></th>
                 <th width="">{'名称'}</th>
                 <th width="">{'手机号'}</th>
                 <th width="">{'邮箱'}</th>
-                <th width="10%">{'已添加'}</th>
+                <th width="66px">{'已添加'}</th>
               </tr>
             </thead>
             <tbody>
               {membersList}
             </tbody>
           </Table>
+          }
+          {!this.props.isMembersListLoading && this.props.membersList.length === 0 &&
+          <div className="message empty-tip">
+            <h2>{gettext('无成员')}</h2>
+          </div>
           }
         </div>
       </div>
@@ -85,6 +90,7 @@ const WorkWeixinDepartmentMembersListPropTypes = {
   handlerUser: PropTypes.func.isRequired,
   handlerAllUsers: PropTypes.func.isRequired,
   isCheckedAll: PropTypes.bool.isRequired,
+  canCheckUserIds: PropTypes.array.isRequired,
 };
 
 WorkWeixinDepartmentMembersList.propTypes = WorkWeixinDepartmentMembersListPropTypes;
@@ -143,7 +149,10 @@ class WorkWeixinDepartmentsTreeNode extends Component {
         {this.props.isChildrenShow &&
         <div>
           <i className={toggleIconClass} onClick={() => this.toggleChildren()}></i>{' '}
-          <i style={departmentStyle} onClick={() => this.props.onChangeDepartment(this.props.department.id)}>{this.props.department.name}</i>
+          <i
+            style={departmentStyle}
+            onClick={() => this.props.onChangeDepartment(this.props.department.id)}
+          >{this.props.department.name}</i>
         </div>
         }
         {this.state.isChildrenShow &&
@@ -216,8 +225,6 @@ class WorkWeixinDepartments extends Component {
 
   constructor(props) {
     super(props);
-    this.emailDomain = '@work.weixin.com';
-    this.password = '!';
     this.state = {
       isTreeLoading: true,
       isMembersListLoading: true,
@@ -265,7 +272,10 @@ class WorkWeixinDepartments extends Component {
         departmentsTree: departmentsTree,
       });
     }).catch((error) => {
-      this.setState({isTreeLoading: false});
+      this.setState({
+        isTreeLoading: false,
+        isMembersListLoading: false,
+      });
       if (error.response) {
         toaster.danger(error.response.data.error_msg || error.response.data.detail || gettext('Error'), {duration: 3});
       } else {
@@ -302,7 +312,7 @@ class WorkWeixinDepartments extends Component {
     let canCheckUserIds = [];
     for (let i = 0; i < membersList.length; i++) {
       let user = membersList[i];
-      if (user.email === '') {
+      if (!user.exists) {
         canCheckUserIds.push(user.userid);
       }
     }
@@ -375,30 +385,65 @@ class WorkWeixinDepartments extends Component {
   };
 
   handlerSubmit = () => {
-    let newUsersList = [];
+    let userList = [];
     for (let i in this.state.newUsersTempObj) {
-      newUsersList.push(this.state.newUsersTempObj[i]);
+      userList.push(this.state.newUsersTempObj[i]);
     }
-    if (!newUsersList.length) {
+    if (!userList.length) {
       toaster.danger('未选择成员', {duration: 3});
     } else {
-      for (let i = 0; i < newUsersList.length; i++) {
-        let user = newUsersList[i];
-        let userParams = {
-          email: user.userid + this.emailDomain,
-          name: user.name,
-          password: this.password
-        };
-        seafileAPI.adminAddUser(userParams).then((res) => {
-          toaster.success('成功添加 ' + user.name, {duration: 1});
-        }).catch((error) => {
-          if (error.response) {
-            toaster.danger(error.response.data.error_msg || error.response.data.detail || gettext('Error'), {duration: 3});
-          } else {
-            toaster.danger(gettext('Please check the network.'), {duration: 3});
-          }
+      seafileAPI.adminAddWorkWeixinUsers(userList).then((res) => {
+        this.setState({
+          newUsersTempObj: {},
+          isCheckedAll: false,
         });
-      }
+        if (res.data.success) {
+          let membersTempObj = this.state.membersTempObj;
+          let membersList = this.state.membersList;
+          let canCheckUserIds = this.state.canCheckUserIds;
+          for (let i = 0; i < res.data.success.length; i++) {
+            let userid = res.data.success[i].userid;
+            let name = res.data.success[i].name;
+            toaster.success(name + ' 成功导入', {duration: 1});
+            // refresh all temp
+            if (canCheckUserIds.indexOf(userid) !== -1) {
+              canCheckUserIds.splice(canCheckUserIds.indexOf(userid), 1);
+            }
+            for (let j = 0; j < membersList.length; j++) {
+              if (membersList[j].userid === userid) {
+                membersList[j].exists = true;
+                break;
+              }
+            }
+            for (let departmentId in membersTempObj) {
+              for (let k = 0; k < membersTempObj[departmentId].length; k++) {
+                if (membersTempObj[departmentId][k].userid === userid) {
+                  membersTempObj[departmentId][k].exists = true;
+                  break;
+                }
+              }
+            }
+          }
+          this.setState({
+            membersTempObj: membersTempObj,
+            membersList: membersList,
+            canCheckUserIds: canCheckUserIds,
+          });
+        }
+        if (res.data.failed) {
+          for (let i = 0; i < res.data.failed.length; i++) {
+            let name = res.data.failed[i].name;
+            let errorMsg = res.data.failed[i].error_msg;
+            toaster.danger(name + ' ' + errorMsg, {duration: 3});
+          }
+        }
+      }).catch((error) => {
+        if (error.response) {
+          toaster.danger(error.response.data.error_msg || error.response.data.detail || gettext('Error'), {duration: 3});
+        } else {
+          toaster.danger(gettext('Please check the network.'), {duration: 3});
+        }
+      });
     }
 
   };
@@ -433,6 +478,7 @@ class WorkWeixinDepartments extends Component {
               handlerUser={this.handlerUser}
               handlerAllUsers={this.handlerAllUsers}
               isCheckedAll={this.state.isCheckedAll}
+              canCheckUserIds={this.state.canCheckUserIds}
             />
           </div>
         </div>

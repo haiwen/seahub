@@ -51,7 +51,7 @@ class SysAdmin extends React.Component {
           </Router>
           <Router className="reach-router">
             <WorkWeixinDepartments
-              path={siteRoot + 'sys/work-weixin-departments'}
+              path={siteRoot + 'sys/work-weixin/departments'}
               currentTab={currentTab}
               tabItemClick={this.tabItemClick}
             />
