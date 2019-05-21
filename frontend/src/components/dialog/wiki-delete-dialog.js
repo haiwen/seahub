@@ -16,7 +16,7 @@ class WikiDeleteDialog extends React.Component {
   
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Unpublish Library')}</ModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure you want to unpublish this library?')}</p>
