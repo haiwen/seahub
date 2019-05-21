@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { repoID, slug, serviceURL, isPublicWiki } from '../utils/constants';
 import { Utils } from '../utils/utils';
-import { Value } from 'slate';
 import { deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
 import'../css/index-viewer.css';
 
@@ -156,7 +155,7 @@ class IndexContentViewer extends React.Component {
     let treeNodes = slateNodes.map((slateNode) => {
       // item has children(unordered list)
       if (slateNode.nodes.length === 2 && (slateNode.nodes[1].type === 'unordered_list' || slateNode.nodes[1].type === 'ordered_list')) {
-         // slateNode.nodes[0] is paragraph, create TreeNode, set name and href
+        // slateNode.nodes[0] is paragraph, create TreeNode, set name and href
         const paragraphNode = slateNode.nodes[0];
         const treeNode = this.transParagraph(paragraphNode);
         // slateNode.nodes[1] is list, set it as TreeNode's children
