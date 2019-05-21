@@ -60,7 +60,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
-from seahub.constants import HASH_URLS
+from seahub.constants import HASH_URLS, PERMISSION_READ
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 
@@ -108,6 +108,10 @@ def check_folder_permission(request, repo_id, path):
     - `repo_id`:
     - `path`:
     """
+    repo_status = seafile_api.get_repo_status(repo_id)
+    if repo_status == 1:
+        return PERMISSION_READ
+
     username = request.user.username
     return seafile_api.check_permission_by_path(repo_id, path, username)
 

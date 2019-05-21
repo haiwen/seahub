@@ -1,7 +1,7 @@
 .wiki-nav-content {
   margin-bottom: 5px;
 }
-.wiki-nav-content a {
+.wiki-nav-content a, .wiki-nav-content span {
   color: #333;
   text-overflow: ellipsis;
   white-space: nowrap;

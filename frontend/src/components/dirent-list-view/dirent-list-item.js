@@ -640,6 +640,7 @@ class DirentListItem extends React.Component {
               repoID={this.props.repoID}
               folderPath={direntPath}
               folderName={dirent.name}
+              isDepartmentRepo={this.props.isGroupOwnedRepo}
             />
           </ModalPortal>
         }

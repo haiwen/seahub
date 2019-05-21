@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Error" %}{% endblock %}
+
+{% block main_panel %}
+<div class="text-panel">
+    <p>{% trans "Error, please contact administrator." %}</p>
+</div>
+{% endblock %}

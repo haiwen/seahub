@@ -108,12 +108,14 @@ class LibContentView extends React.Component {
     location = decodeURIComponent(location);
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repoInfo = new RepoInfo(res.data);
+      let isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
       this.setState({
         currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt, 
         repoEncrypted: repoInfo.encrypted,
-        repoPermission: repoInfo.permission === 'rw'
+        repoPermission: repoInfo.permission === 'rw',
+        isGroupOwnedRepo: isGroupOwnedRepo,
       });
 
       let repoID = repoInfo.repo_id;
