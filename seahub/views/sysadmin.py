@@ -98,6 +98,10 @@ try:
     from seahub.settings import ENABLE_FILE_SCAN
 except ImportError:
     ENABLE_FILE_SCAN = False
+try:
+    from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN_DEPARTMENTS
+except ImportError:
+    ENABLE_WORK_WEIXIN_DEPARTMENTS = False
 
 logger = logging.getLogger(__name__)
 
@@ -2686,5 +2690,6 @@ def sys_work_weixin_departments(request):
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
-        'enable_work_weixin_departments': True,
+        'enable_file_scan': ENABLE_FILE_SCAN,
+        'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
     })
