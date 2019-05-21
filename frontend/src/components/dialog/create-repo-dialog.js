@@ -187,7 +187,7 @@ class CreateRepoDialog extends React.Component {
                 {!this.state.disabled && 
                   <FormGroup>
                     {/* todo translate */}
-                    <Label for="passwd1" className="font-weight-bold">{gettext('Password')}{' '}</Label><span className="tip">{gettext('(at least 8 characters)')}</span>
+                    <Label for="passwd1" className="font-weight-bold">{gettext('Password')}</Label><span className="tip">{' '}{gettext('(at least 8 characters)')}</span>
                     <Input 
                       id="passwd1" 
                       type="password"
