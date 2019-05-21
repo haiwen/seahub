@@ -1,10 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot } from '../../utils/constants';
+import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import WikiPermissionEditor from '../select-editor/wiki-permission-editor.js';
 import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
@@ -23,58 +21,23 @@ class WikiListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowWikiMenu: false,
       isShowDeleteDialog: false,
-      isShowMenuControl: false,
       isRenameing: false,
       highlight: false,
       permission: this.props.wiki.permission,
-      showOpIcon: false,
     };
     this.permissions = ['private', 'public'];
   }
 
-  clickMenuToggle = (e) => {
-    e.preventDefault();
-    this.onMenuToggle(e);
-  }
-
-  onMenuToggle = (e) => {
-    let targetType = e.target.dataset.toggle;
-    if (targetType !== 'item') {
-      if (this.props.isItemFreezed) {
-        this.setState({
-          highlight: false,
-          isShowMenuControl: false,
-          isShowWikiMenu: !this.state.isShowWikiMenu
-        });
-        this.props.onUnfreezedItem();
-      } else {
-        this.setState({
-          isShowWikiMenu: !this.state.isShowWikiMenu
-        });
-        this.props.onFreezedItem();
-      }
-    }
-  }
-
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
-      this.setState({
-        isShowMenuControl: true,
-        highlight: true,
-        showOpIcon: true,
-      });
+      this.setState({ highlight: true });
     }
   }
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
-      this.setState({
-        isShowMenuControl: false,
-        highlight: false,
-        showOpIcon: false,
-      });
+      this.setState({ highlight: false });
     }
   }
 
@@ -92,11 +55,7 @@ class WikiListItem extends Component {
 
   onRenameToggle = (e) => {
     this.props.onFreezedItem();
-    this.setState({
-      isShowWikiMenu: false,
-      isShowMenuControl: false,
-      isRenameing: true,
-    });
+    this.setState({ isRenameing: true });
   }
 
   onRenameConfirm = (newName) => {
@@ -113,8 +72,6 @@ class WikiListItem extends Component {
     this.props.onUnfreezedItem();
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
-      isShowWikiMenu: false,
-      isShowMenuControl: false,
     });
   }
   
@@ -141,7 +98,7 @@ class WikiListItem extends Component {
   render() {
     let wiki = this.props.wiki;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
-
+    let deleteIcon = `action-icon sf2-icon-x3 ${this.state.highlight ? '' : 'invisible'}`;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -154,21 +111,7 @@ class WikiListItem extends Component {
           <td><a href={userProfileURL} target='_blank'>{wiki.owner_nickname}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
           <td className="text-center cursor-pointer">
-            {this.state.isShowMenuControl && (
-              <Dropdown isOpen={this.state.isShowWikiMenu} toggle={this.onMenuToggle}>
-                <DropdownToggle 
-                  tag="i" 
-                  className="fas fa-ellipsis-v attr-action-icon" 
-                  title={gettext('More Operations')}
-                  data-toggle="dropdown" 
-                  aria-expanded={this.state.isShowWikiMenu}
-                  onClick={this.clickMenuToggle}
-                />
-                <DropdownMenu>
-                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            )}
+            <span className={deleteIcon} onClick={this.onDeleteToggle}></span>
           </td>
         </tr>
         {this.state.isShowDeleteDialog &&
