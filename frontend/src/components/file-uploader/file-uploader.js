@@ -378,9 +378,6 @@ class FileUploader extends React.Component {
   }
 
   setHeaders = (resumableFile, resumable) => {
-    if (resumableFile.formData.replace) {
-      return [];
-    }
     let offset = resumable.offset;
     let chunkSize = resumable.getOpt('chunkSize');
     let fileSize = resumableFile.size;
