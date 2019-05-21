@@ -44,7 +44,6 @@ class WikiMarkdownViewer extends React.Component {
       link.addEventListener('click', this.onLinkClick);
     });
     this.listRelatedFiles();
-    this.scrollToNode();
   }
 
   componentWillReceiveProps() {
@@ -69,14 +68,6 @@ class WikiMarkdownViewer extends React.Component {
       link.removeEventListener('click', this.onLinkClick);
     });
   }
-
-  scrollToNode = () => {
-    const hash = window.location.hash;
-    if (hash.indexOf('user-content-') > -1 && window.markdownViewer) {
-      let text = hash.slice(14);
-      window.markdownViewer.scrollToNode({text: text});
-    }
-  } 
 
   onContentRendered = (markdownViewer) => {
     this.titlesInfo = markdownViewer.titlesInfo;
