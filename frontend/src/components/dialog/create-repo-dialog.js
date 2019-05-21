@@ -184,27 +184,33 @@ class CreateRepoDialog extends React.Component {
                   <Input type="checkbox" id="encrypt" onChange={this.onEncrypted}/>
                   <Label for="encrypt">{gettext('Encrypt')}</Label>
                 </FormGroup>
-                <FormGroup>
-                  {/* todo translate */}
-                  <Label for="passwd1" className="font-weight-bold">{gettext('Password')}{' '}</Label><span className="tip">{gettext('(at least 8 characters)')}</span>
-                  <Input 
-                    id="passwd1" 
-                    type="password"
-                    disabled={this.state.disabled}
-                    value={this.state.password1} 
-                    onChange={this.handlePassword1Change}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="passwd2" className="font-weight-bold">{gettext('Password again')}</Label>
-                  <Input 
-                    id="passwd2"
-                    type="password"
-                    disabled={this.state.disabled}
-                    value={this.state.password2} 
-                    onChange={this.handlePassword2Change}
-                  />
-                </FormGroup>
+                {!this.state.disabled && 
+                  <FormGroup>
+                    {/* todo translate */}
+                    <Label for="passwd1" className="font-weight-bold">{gettext('Password')}</Label><span className="tip">{' '}{gettext('(at least 8 characters)')}</span>
+                    <Input 
+                      id="passwd1" 
+                      type="password"
+                      disabled={this.state.disabled}
+                      value={this.state.password1} 
+                      onChange={this.handlePassword1Change}
+                      autoComplete="new-password"
+                    />
+                  </FormGroup>
+                }
+                {!this.state.disabled && 
+                  <FormGroup>
+                    <Label for="passwd2" className="font-weight-bold">{gettext('Password again')}</Label>
+                    <Input 
+                      id="passwd2"
+                      type="password"
+                      disabled={this.state.disabled}
+                      value={this.state.password2} 
+                      onChange={this.handlePassword2Change}
+                      autoComplete="new-password"
+                    />
+                  </FormGroup>
+                }
               </div>
             }
           </Form>
