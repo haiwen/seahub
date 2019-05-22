@@ -6,7 +6,7 @@ import logging
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import SessionAuthentication
 
 from seahub.base.accounts import User
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 class UserActivitiesView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAdminUser, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
