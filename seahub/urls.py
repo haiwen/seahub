@@ -737,6 +737,10 @@ if getattr(settings, 'ENABLE_CAS', False):
         url(r'^accounts/cas-callback/$', cas_callback, name='cas_ng_proxy_callback'),
     ]
 
+if getattr(settings, 'ENABLE_WORK_WEIXIN_OAUTH', False):
+    urlpatterns += [
+        url(r'^work-weixin/', include('seahub.work_weixin.urls')),
+    ]
 
 from seahub.social_core.views import (
     weixin_work_cb, weixin_work_3rd_app_install, weixin_work_3rd_app_install_cb

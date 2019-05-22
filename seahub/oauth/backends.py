@@ -51,10 +51,10 @@ class OauthRemoteUserBackend(RemoteUserBackend):
             if self.create_unknown_user:
                 user = User.objects.create_user(
                     email=username, is_active=self.activate_after_creation)
-                if user and self.activate_after_creation is False:
-                    notify_admins_on_activate_request(user.email)
-                if user and settings.NOTIFY_ADMIN_AFTER_REGISTRATION is True:
-                    notify_admins_on_register_complete(user.email)
+                if not self.activate_after_creation:
+                    notify_admins_on_activate_request(username)
+                elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
+                    notify_admins_on_register_complete(username)
             else:
                 user = None
 
