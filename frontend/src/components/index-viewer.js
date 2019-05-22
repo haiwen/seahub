@@ -38,6 +38,9 @@ class IndexContentViewer extends React.Component {
     super(props);
     this.links = [];
     this.treeRoot = new TreeNode({ name: '', href: '' });
+    this.state = {
+      currentPath: '',
+    };
   }
 
   componentWillMount() {
@@ -79,6 +82,10 @@ class IndexContentViewer extends React.Component {
     event.stopPropagation();
     const link = this.getLink(event.target);
     if (link) this.props.onLinkClick(link);
+    const currentPath = event.target.getAttribute('data-path');
+    if (currentPath) {
+      this.setState({ currentPath: currentPath });
+    }
   }
 
   getLink = (node) => {
@@ -146,9 +153,22 @@ class IndexContentViewer extends React.Component {
     const newNodes = Utils.changeMarkdownNodes(value.document.nodes, this.changeInlineNode);
     newNodes.map((node) => {
       if (node.type === 'unordered_list' || node.type === 'ordered_list') {
-        this.treeRoot = this.transSlateToTree(node.nodes, this.treeRoot);
+        let treeRoot = this.transSlateToTree(node.nodes, this.treeRoot);
+        this.setNodePath(treeRoot, '/');
+        this.treeRoot = treeRoot; 
       }
     });
+  }
+
+  setNodePath = (node, parentNodePath) => {
+    let name = node.name;
+    let path = parentNodePath === '/' ? parentNodePath + name : parentNodePath + '/' + name;
+    node.path = path;
+    if (node.children.length > 0) {      
+      node.children.map(child => {
+        this.setNodePath(child, path);
+      });
+    }
   }
 
   // slateNodes is list items of an unordered list or ordered list, translate them to treeNode and add to parentTreeNode
@@ -200,7 +220,7 @@ class IndexContentViewer extends React.Component {
   render() {
     return (
       <div className="mx-2 o-hidden">
-        <FolderItem node={this.treeRoot} bindClickEvent={this.bindClickEvent}/>
+        <FolderItem node={this.treeRoot} bindClickEvent={this.bindClickEvent} currentPath={this.state.currentPath}/>
       </div>
     );
   }
@@ -218,7 +238,7 @@ class FolderItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: true
+      expanded: false
     };
   }
 
@@ -229,12 +249,21 @@ class FolderItem extends React.Component {
   }
 
   renderLink = (node) => {
+    const className = node.path === this.props.currentPath ? 'wiki-nav-content wiki-nav-content-highlight' : 'wiki-nav-content'
     if (node.href && node.name) {
-      return <div className="wiki-nav-content"><a href={node.href}>{node.name}</a></div>;
+      return <div className={className}><a href={node.href} data-path={node.path}>{node.name}</a></div>;
     } else if (node.name) {
       return <div className="wiki-nav-content"><span>{node.name}</span></div>;
     } else {
       return null;
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.node && !this.props.node.parentNode) {
+      this.setState({ expanded: true }, () => {
+        this.props.bindClickEvent();
+      });
     }
   }
 
@@ -254,7 +283,7 @@ class FolderItem extends React.Component {
           {this.state.expanded && node.children.map((child, index) => {
             return (
               <div className="pl-4 position-relative" key={index}>
-                <FolderItem node={child} bindClickEvent={this.props.bindClickEvent}/>
+                <FolderItem node={child} bindClickEvent={this.props.bindClickEvent} currentPath={this.props.currentPath}/>
               </div>
             );
           })}
