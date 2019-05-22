@@ -12,15 +12,17 @@ const viewerPropTypes = {
 
 class TreeNode {
 
-  constructor({ name, href, parentNode }) {
+  constructor({ name, href, path, parentNode }) {
     this.name = name;
     this.href = href;
+    this.path = path || this.name;
     this.parentNode = parentNode || null;
     this.children = [];
   }
 
   setParent(parentNode) {
     this.parentNode = parentNode;
+    this.path = this.generatePath(parentNode);
   }
 
   addChildren(nodeList) {
@@ -29,6 +31,10 @@ class TreeNode {
     });
     this.children = nodeList;
   }
+
+  generatePath(parentNode) {
+    return parentNode.path === '/' ? parentNode.path + this.name : parentNode.path + '/' + this.name;
+  }
 }
 
 class IndexContentViewer extends React.Component {
@@ -36,7 +42,10 @@ class IndexContentViewer extends React.Component {
   constructor(props) {
     super(props);
     this.links = [];
-    this.treeRoot = new TreeNode({ name: '', href: '' });
+    this.treeRoot = new TreeNode({ name: '', href: '', path: '/' });
+    this.state = {
+      currentPath: '',
+    };
   }
 
   componentWillMount() {
@@ -78,6 +87,8 @@ class IndexContentViewer extends React.Component {
     event.stopPropagation();
     const link = this.getLink(event.target);
     if (link) this.props.onLinkClick(link);
+    const currentPath = event.target.getAttribute('data-path');
+    if (currentPath) this.setState({ currentPath: currentPath });
   }
 
   getLink = (node) => {
@@ -168,7 +179,7 @@ class IndexContentViewer extends React.Component {
           return this.transParagraph(slateNode.nodes[0]);
         } else {
           // list item contain table/code_block/blockqupta
-          return new TreeNode({ name: '', href: '' });
+          return new TreeNode({ name: '', href: '', path: '' });
         }
       }
     });
@@ -189,9 +200,9 @@ class IndexContentViewer extends React.Component {
       // paragraph first child node is a text node, then get node name
       const textNode = paragraphNode.nodes[0];
       let name = textNode.leaves[0] ? textNode.leaves[0].text : '';
-      treeNode = new TreeNode({ name: name, href: '' });
+      treeNode = new TreeNode({ name: name, href: '', path: '' });
     } else {
-      treeNode = new TreeNode({ name: '', href: '' });
+      treeNode = new TreeNode({ name: '', href: '', path: '' });
     }
     return treeNode;
   }
@@ -199,7 +210,7 @@ class IndexContentViewer extends React.Component {
   render() {
     return (
       <div className="mx-2 o-hidden">
-        <FolderItem node={this.treeRoot} bindClickEvent={this.bindClickEvent}/>
+        <FolderItem node={this.treeRoot} bindClickEvent={this.bindClickEvent} currentPath={this.state.currentPath}/>
       </div>
     );
   }
@@ -217,7 +228,7 @@ class FolderItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: true
+      expanded: false
     };
   }
 
@@ -228,12 +239,21 @@ class FolderItem extends React.Component {
   }
 
   renderLink = (node) => {
+    const className = node.path === this.props.currentPath ? 'wiki-nav-content wiki-nav-content-highlight' : 'wiki-nav-content'
     if (node.href && node.name) {
-      return <div className="wiki-nav-content"><a href={node.href}>{node.name}</a></div>;
+      return <div className={className}><a href={node.href} data-path={node.path}>{node.name}</a></div>;
     } else if (node.name) {
       return <div className="wiki-nav-content"><span>{node.name}</span></div>;
     } else {
       return null;
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.node && !this.props.node.parentNode) {
+      this.setState({ expanded: true }, () => {
+        this.props.bindClickEvent();
+      });
     }
   }
 
@@ -253,7 +273,7 @@ class FolderItem extends React.Component {
           {this.state.expanded && node.children.map((child, index) => {
             return (
               <div className="pl-4 position-relative" key={index}>
-                <FolderItem node={child} bindClickEvent={this.props.bindClickEvent}/>
+                <FolderItem node={child} bindClickEvent={this.props.bindClickEvent} currentPath={this.props.currentPath}/>
               </div>
             );
           })}
