@@ -11,7 +11,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2contact_email
-from seahub.utils import EVENTS_ENABLED, admin_get_one_user_activities, is_valid_email
+from seahub.utils import EVENTS_ENABLED, get_user_activities, is_valid_email
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
@@ -64,7 +64,7 @@ class UserActivitiesView(APIView):
         count = per_page
 
         try:
-            events = admin_get_one_user_activities(user, start, count)
+            events = get_user_activities(user, start, count)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

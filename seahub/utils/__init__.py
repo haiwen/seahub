@@ -634,16 +634,6 @@ if EVENTS_CONFIG_FILE:
 
         return events
 
-    def _admin_get_one_user_activities(username, start, count):
-        ev_session = SeafEventsSession()
-
-        try:
-            events = seafevents.admin_get_one_user_activities(ev_session, username, start, count)
-        finally:
-            ev_session.close()
-
-        return events
-
     def _get_events_inner(ev_session, username, start, limit, org_id=None):
         '''Read events from seafevents database, and remove events that are
         no longer valid
@@ -706,12 +696,6 @@ if EVENTS_CONFIG_FILE:
                  15th events.
         """
         return _get_activities(username, start, count)
-
-    def admin_get_one_user_activities(username, start, count):
-        """
-        get only one user's file activities.
-        """
-        return _admin_get_one_user_activities(username, start, count)
 
     def get_user_activity_stats_by_day(start, end, offset):
         """
@@ -862,8 +846,6 @@ else:
     def get_org_user_events():
         pass
     def get_user_activities():
-        pass
-    def admin_get_one_user_activities():
         pass
     def get_file_history():
         pass
