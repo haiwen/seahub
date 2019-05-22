@@ -27,6 +27,7 @@ from seahub.utils import is_valid_username, is_org_context, \
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_size import get_file_size_unit
 from seahub.role_permissions.utils import get_available_roles
+from seahub.utils.licenseparse import user_number_over_limit
 
 
 logger = logging.getLogger(__name__)
@@ -170,6 +171,10 @@ class AdminUsers(APIView):
         return resp
 
     def post(self, request):
+
+        if user_number_over_limit():
+            error_msg = _("The number of users exceeds the limit.")
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         email = request.data.get('email', None)
         if not email or not is_valid_username(email):
