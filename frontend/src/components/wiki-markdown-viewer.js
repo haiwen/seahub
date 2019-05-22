@@ -22,7 +22,7 @@ const propTypes = {
   path: PropTypes.string,
 };
 
-const contentClass = 'wiki-page-content';
+const contentClass = 'wiki-page-content w-100';
 
 class WikiMarkdownViewer extends React.Component {
 
