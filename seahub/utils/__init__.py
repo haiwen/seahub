@@ -521,6 +521,13 @@ def is_org_context(request):
     return request.cloud_mode and request.user.org is not None
 
 # events related
+
+def SeafEventsSession():
+    if EVENTS_CONFIG_FILE:
+        return seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
+    else:
+        raise Exception('SeafEventsSession() requires EVENTS_CONFIG_FILE to be defined')
+
 if EVENTS_CONFIG_FILE:
     parsed_events_conf = ConfigParser.ConfigParser()
     parsed_events_conf.read(EVENTS_CONFIG_FILE)
@@ -528,7 +535,6 @@ if EVENTS_CONFIG_FILE:
     import seafevents
 
     EVENTS_ENABLED = True
-    SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
 
     @contextlib.contextmanager
     def _get_seafevents_session():
