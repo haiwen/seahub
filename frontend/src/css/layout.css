@@ -71,6 +71,7 @@
   flex-direction: column;
   flex: 1;
   min-height: 0;
+  position: relative;
 }
 
 .side-panel-center,
@@ -159,9 +160,8 @@
   right: 0;
   background-color: #fff;
   width: 300px;
-  height: calc(100% - 50px);
+  height: 100%;
   box-shadow: -1px 0 3px 0 #ccc;
-  top: 49px;
   animation: move .5s ease-in-out 1;
   z-index: 50;
 }
