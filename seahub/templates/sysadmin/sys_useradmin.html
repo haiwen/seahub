@@ -162,7 +162,7 @@ $('#add-user-form').on('submit', function() {
     var submit_btn = $(this).find('[type="submit"]');
     disable(submit_btn);
     $.ajax({
-        url: '{% url 'user_add' %}',
+        url: '{% url 'api-v2.1-admin-users' %}',
         type: 'POST',
         datatype: 'json',
         cache: false,
@@ -173,13 +173,11 @@ $('#add-user-form').on('submit', function() {
             {% if is_pro %}
             'role': role,
             {% endif %}
-            'password1': pwd1,
-            'password2': pwd2
+            'password': pwd1,
+            'is_active': true
         },
         success: function(data) {
-            if (data['success']) {
-                location.reload(true);
-            }   
+            location.reload(true);
         },  
         error: function(xhr, textStatus, errorThrown) {
             var error_msg = prepareAjaxErrorMsg(xhr);
