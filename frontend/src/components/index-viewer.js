@@ -12,17 +12,15 @@ const viewerPropTypes = {
 
 class TreeNode {
 
-  constructor({ name, href, path, parentNode }) {
+  constructor({ name, href, parentNode }) {
     this.name = name;
     this.href = href;
-    this.path = path || this.name;
     this.parentNode = parentNode || null;
     this.children = [];
   }
 
   setParent(parentNode) {
     this.parentNode = parentNode;
-    this.path = this.generatePath(parentNode);
   }
 
   addChildren(nodeList) {
@@ -31,10 +29,6 @@ class TreeNode {
     });
     this.children = nodeList;
   }
-
-  generatePath(parentNode) {
-    return parentNode.path === '/' ? parentNode.path + this.name : parentNode.path + '/' + this.name;
-  }
 }
 
 class IndexContentViewer extends React.Component {
@@ -42,7 +36,7 @@ class IndexContentViewer extends React.Component {
   constructor(props) {
     super(props);
     this.links = [];
-    this.treeRoot = new TreeNode({ name: '', href: '', path: '/' });
+    this.treeRoot = new TreeNode({ name: '', href: '' });
     this.state = {
       currentPath: '',
     };
@@ -88,7 +82,9 @@ class IndexContentViewer extends React.Component {
     const link = this.getLink(event.target);
     if (link) this.props.onLinkClick(link);
     const currentPath = event.target.getAttribute('data-path');
-    if (currentPath) this.setState({ currentPath: currentPath });
+    if (currentPath) {
+      this.setState({ currentPath: currentPath });
+    }
   }
 
   getLink = (node) => {
@@ -156,9 +152,22 @@ class IndexContentViewer extends React.Component {
     const newNodes = Utils.changeMarkdownNodes(value.document.nodes, this.changeInlineNode);
     newNodes.map((node) => {
       if (node.type === 'unordered_list' || node.type === 'ordered_list') {
-        this.treeRoot = this.transSlateToTree(node.nodes, this.treeRoot);
+        let treeRoot = this.transSlateToTree(node.nodes, this.treeRoot);
+        this.setNodePath(treeRoot, '/');
+        this.treeRoot = treeRoot; 
       }
     });
+  }
+
+  setNodePath = (node, parentNodePath) => {
+    let name = node.name;
+    let path = parentNodePath === '/' ? parentNodePath + name : parentNodePath + '/' + name;
+    node.path = path;
+    if (node.children.length > 0) {      
+      node.children.map(child => {
+        this.setNodePath(child, path);
+      });
+    }
   }
 
   // slateNodes is list items of an unordered list or ordered list, translate them to treeNode and add to parentTreeNode
@@ -179,7 +188,7 @@ class IndexContentViewer extends React.Component {
           return this.transParagraph(slateNode.nodes[0]);
         } else {
           // list item contain table/code_block/blockqupta
-          return new TreeNode({ name: '', href: '', path: '' });
+          return new TreeNode({ name: '', href: '' });
         }
       }
     });
@@ -200,9 +209,9 @@ class IndexContentViewer extends React.Component {
       // paragraph first child node is a text node, then get node name
       const textNode = paragraphNode.nodes[0];
       let name = textNode.leaves[0] ? textNode.leaves[0].text : '';
-      treeNode = new TreeNode({ name: name, href: '', path: '' });
+      treeNode = new TreeNode({ name: name, href: '' });
     } else {
-      treeNode = new TreeNode({ name: '', href: '', path: '' });
+      treeNode = new TreeNode({ name: '', href: '' });
     }
     return treeNode;
   }
