@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl} from '../../utils/constants';
@@ -9,6 +10,11 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
 import MylibRepoListView from './mylib-repo-list-view';
+
+const propTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
+};
 
 class MyLibraries extends Component {
   constructor(props) {
@@ -174,5 +180,7 @@ class MyLibraries extends Component {
     );
   }
 }
+
+MyLibraries.propTypes = propTypes;
 
 export default MyLibraries;
