@@ -124,6 +124,12 @@
             </li>
             {% endif %}
 
+            {% if is_pro and is_default_admin and enable_work_weixin_departments %}
+            <li class="tab">
+                <a href="{{ SITE_ROOT }}sys/work-weixin/departments/"><span class="sf2-icon-organization"></span>企业微信集成</a>
+            </li>
+            {% endif %}
+
         </ul>
         {% endblock %}
     </div>

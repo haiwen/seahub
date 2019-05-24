@@ -265,7 +265,7 @@ class WorkWeixinDepartments extends Component {
   };
 
   getWorkWeixinDepartmentsList = () => {
-    seafileAPI.listWorkWeixinDepartments().then((res) => {
+    seafileAPI.adminListWorkWeixinDepartments().then((res) => {
       let departmentsTree = this.getDepartmentsTree(res.data.department);
       this.setState({
         isTreeLoading: false,
@@ -281,6 +281,9 @@ class WorkWeixinDepartments extends Component {
       } else {
         toaster.danger(gettext('Please check the network.'), {duration: 3});
       }
+      if (error.response.status === 403) {
+        window.location = siteRoot + 'sys/useradmin/';
+      }
     });
   };
 
@@ -288,7 +291,7 @@ class WorkWeixinDepartments extends Component {
     this.setState({
       isMembersListLoading: true,
     });
-    seafileAPI.listWorkWeixinDepartmentMembers(department_id.toString(), {fetch_child: 1}).then((res) => {
+    seafileAPI.adminListWorkWeixinDepartmentMembers(department_id.toString(), {fetch_child: 1}).then((res) => {
       let membersTempObj = this.state.membersTempObj;
       membersTempObj[department_id] = res.data.userlist;
       let canCheckUserIds = this.getCanCheckUserIds(res.data.userlist);
@@ -457,7 +460,7 @@ class WorkWeixinDepartments extends Component {
       <div className="main-panel-center">
         <div className="cur-view-container">
           <div className="cur-view-path">
-            <h3 className="sf-heading">{'企业微信组织架构'}</h3>
+            <h3 className="sf-heading">{'企业微信集成'}</h3>
             {JSON.stringify(this.state.newUsersTempObj) !== '{}' &&
             <Button className="btn btn-secondary operation-item" onClick={this.handlerSubmit}>{'导入用户'}</Button>
             }

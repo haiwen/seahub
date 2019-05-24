@@ -98,10 +98,8 @@ try:
     from seahub.settings import ENABLE_FILE_SCAN
 except ImportError:
     ENABLE_FILE_SCAN = False
-try:
-    from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN_DEPARTMENTS
-except ImportError:
-    ENABLE_WORK_WEIXIN_DEPARTMENTS = False
+from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN_DEPARTMENTS
+
 
 logger = logging.getLogger(__name__)
 
