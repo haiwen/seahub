@@ -134,7 +134,7 @@ class AdminLibraryTest(BaseTestCase):
 
         self.login_as(self.admin)
 
-        data = 'status=%s' % 1
+        data = 'status=%s' % 'read-only'
         resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
 
         self.assertEqual(200, resp.status_code)
@@ -142,7 +142,7 @@ class AdminLibraryTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['status'] == 'read-only'
 
-        data = 'status=%s' % 0
+        data = 'status=%s' % 'normal'
         resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
 
         self.assertEqual(200, resp.status_code)
@@ -154,7 +154,7 @@ class AdminLibraryTest(BaseTestCase):
 
         self.login_as(self.admin)
 
-        data = 'status=%s' % -1
+        data = 'status=%s' % 'invalid_args'
         resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
 
         self.assertEqual(400, resp.status_code)
