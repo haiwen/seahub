@@ -169,7 +169,7 @@ class SidePanel extends React.Component {
                     </a>
                   </li>
                 }
-                {isPro && isDefaultAdmin && enableWorkWeixinDepartments &&
+                {isDefaultAdmin && enableWorkWeixinDepartments &&
                   <li className="nav-item">
                     <Link className='nav-link ellipsis' to={siteRoot + 'sys/work-weixin/departments/'}>
                       <span className="sf2-icon-organization" aria-hidden="true"></span>

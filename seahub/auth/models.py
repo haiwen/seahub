@@ -2,6 +2,7 @@
 import datetime
 import hashlib
 import urllib
+import logging
 
 # import auth
 from django.core.exceptions import ImproperlyConfigured
@@ -11,6 +12,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
+logger = logging.getLogger(__name__)
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 
 
@@ -125,15 +127,16 @@ class AnonymousUser(object):
 
 
 class SocialAuthUserManager(models.Manager):
-    def add_by_uid(self, username, provider, uid, extra_data=''):
+    def add(self, username, provider, uid, extra_data=''):
         try:
-            social_auth_user = self.get(provider=provider, uid=uid)
-        except self.model.DoesNotExist:
             social_auth_user = self.model(username=username, provider=provider, uid=uid, extra_data=extra_data)
             social_auth_user.save()
-        return social_auth_user
+            return social_auth_user
+        except Exception as e:
+            logger.error(e)
+            return None
 
-    def get_by_uid(self, provider, uid):
+    def get_by_provider_and_uid(self, provider, uid):
         try:
             social_auth_user = self.get(provider=provider, uid=uid)
             return social_auth_user

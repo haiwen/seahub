@@ -135,7 +135,7 @@ from seahub.api2.endpoints.admin.user_activities import UserActivitiesView
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
-    AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsers
+    AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
@@ -509,6 +509,7 @@ urlpatterns = [
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
     url(r'^published/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
+    url(r'^work-weixin/', include('seahub.work_weixin.urls')),
     # Must specify a namespace if specifying app_name.
     url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki-unused')),
     url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
@@ -526,7 +527,7 @@ urlpatterns = [
     ## admin::work weixin departments
     url(r'^api/v2.1/admin/work-weixin/departments/$', AdminWorkWeixinDepartments.as_view(), name='api-v2.1-admin-work-weixin-departments'),
     url(r'^api/v2.1/admin/work-weixin/departments/(?P<department_id>\d+)/members/$', AdminWorkWeixinDepartmentMembers.as_view(), name='api-v2.1-admin-work-weixin-department-members'),
-    url(r'^api/v2.1/admin/work-weixin/users/$', AdminWorkWeixinUsers.as_view(), name='api-v2.1-admin-work-weixin-users'),
+    url(r'^api/v2.1/admin/work-weixin/users/batch/$', AdminWorkWeixinUsersBatch.as_view(), name='api-v2.1-admin-work-weixin-users'),
     url(r'^sys/work-weixin/departments/$', sys_work_weixin_departments, name="sys_work_weixin_departments"),
 
     ### system admin ###
@@ -735,11 +736,6 @@ if getattr(settings, 'ENABLE_CAS', False):
         url(r'^accounts/cas-login/$', cas_login, name='cas_ng_login'),
         url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),
         url(r'^accounts/cas-callback/$', cas_callback, name='cas_ng_proxy_callback'),
-    ]
-
-if getattr(settings, 'ENABLE_WORK_WEIXIN_OAUTH', False):
-    urlpatterns += [
-        url(r'^work-weixin/', include('seahub.work_weixin.urls')),
     ]
 
 from seahub.social_core.views import (

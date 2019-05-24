@@ -22,7 +22,7 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.utils import is_ldap_user
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
-
+from seahub.work_weixin.utils import work_weixin_oauth_check
 from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
 
 @login_required
@@ -86,9 +86,9 @@ def edit_profile(request):
     email_inverval = UserOptions.objects.get_file_updates_email_interval(username)
     email_inverval = email_inverval if email_inverval is not None else 0
 
-    from seahub.work_weixin.utils import work_weixin_oauth_check
     if work_weixin_oauth_check():
         enable_wechat_work = True
+
         # from social_django.models import UserSocialAuth
         from seahub.auth.models import SocialAuthUser
         from seahub.work_weixin.settings import WORK_WEIXIN_PROVIDER

@@ -4,7 +4,7 @@ from seahub.auth.backends import RemoteUserBackend
 from seahub.base.accounts import User
 from registration.models import (notify_admins_on_activate_request,
                                  notify_admins_on_register_complete)
-
+from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN_OAUTH
 
 class OauthRemoteUserBackend(RemoteUserBackend):
     """
@@ -21,9 +21,11 @@ class OauthRemoteUserBackend(RemoteUserBackend):
     # Create a User object if not already in the database?
     create_unknown_user = getattr(settings, 'OAUTH_CREATE_UNKNOWN_USER', True)
     # Create active user by default.
-    activate_after_creation = getattr(settings,
-                                      'OAUTH_ACTIVATE_USER_AFTER_CREATION',
-                                      True)
+    activate_after_creation = getattr(settings, 'OAUTH_ACTIVATE_USER_AFTER_CREATION', True)
+
+    if ENABLE_WORK_WEIXIN_OAUTH:
+        create_unknown_user = getattr(settings, 'WORK_WEIXIN_OAUTH_CREATE_UNKNOWN_USER', True)
+        activate_after_creation = getattr(settings, 'WORK_WEIXIN_OAUTH_ACTIVATE_USER_AFTER_CREATION', True)
 
     def get_user(self, username):
         try:

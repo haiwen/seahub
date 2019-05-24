@@ -298,6 +298,9 @@ SOCIAL_AUTH_PIPELINE = (
     'seahub.social_core.pipeline.user.save_profile',
 )
 
+ENABLE_WORK_WEIXIN_OAUTH = False
+ENABLE_WORK_WEIXIN_DEPARTMENTS = False
+
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
 
@@ -907,5 +910,5 @@ if ENABLE_REMOTE_USER_AUTHENTICATION:
     MIDDLEWARE_CLASSES += ('seahub.auth.middleware.SeafileRemoteUserMiddleware',)
     AUTHENTICATION_BACKENDS += ('seahub.auth.backends.SeafileRemoteUserBackend',)
 
-if ENABLE_OAUTH:
+if ENABLE_OAUTH or ENABLE_WORK_WEIXIN_OAUTH:
     AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)

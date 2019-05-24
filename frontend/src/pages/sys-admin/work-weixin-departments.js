@@ -22,31 +22,31 @@ class WorkWeixinDepartmentMembersList extends Component {
       } else {
         avatar = siteRoot + 'media/avatars/default.png';
       }
-      const checkbox = member.exists ? '' :
+      const userCheckBox = member.email ? '' :
         <input
           type="checkbox"
           className="vam"
           checked={(member.userid in this.props.newUsersTempObj) ? 'checked' : ''}
-          onChange={() => this.props.handlerUser(member)}
+          onChange={() => this.props.onUserChecked(member)}
         ></input>;
       return (
         <tr key={this.props.checkedDepartmentId.toString() + member.userid}>
-          <td>{checkbox}</td>
+          <td>{userCheckBox}</td>
           <td><img className="avatar" src={avatar}></img></td>
           <td>{member.name}</td>
           <td>{member.mobile}</td>
-          <td>{member.email}</td>
-          <td>{member.exists ? <i className="sf2-icon-tick"></i> : ''}</td>
+          <td>{member.contact_email}</td>
+          <td>{member.email ? <i className="sf2-icon-tick"></i> : ''}</td>
         </tr>
       );
     });
 
-    const allCheckBox = !this.props.canCheckUserIds.length ? '' :
+    const allUsersCheckBox = !this.props.canCheckUserIds.length ? '' :
       <input
         type="checkbox"
         className="vam"
         checked={this.props.isCheckedAll}
-        onChange={() => this.props.handlerAllUsers()}
+        onChange={() => this.props.onAllUsersChecked()}
       ></input>;
 
     return (
@@ -58,7 +58,7 @@ class WorkWeixinDepartmentMembersList extends Component {
           <Table hover>
             <thead>
               <tr>
-                <th width="36px">{allCheckBox}</th>
+                <th width="36px">{allUsersCheckBox}</th>
                 <th width="56px"></th>
                 <th width="">{'名称'}</th>
                 <th width="">{'手机号'}</th>
@@ -87,8 +87,8 @@ const WorkWeixinDepartmentMembersListPropTypes = {
   membersList: PropTypes.array.isRequired,
   newUsersTempObj: PropTypes.object.isRequired,
   checkedDepartmentId: PropTypes.number.isRequired,
-  handlerUser: PropTypes.func.isRequired,
-  handlerAllUsers: PropTypes.func.isRequired,
+  onUserChecked: PropTypes.func.isRequired,
+  onAllUsersChecked: PropTypes.func.isRequired,
   isCheckedAll: PropTypes.bool.isRequired,
   canCheckUserIds: PropTypes.array.isRequired,
 };
@@ -291,7 +291,7 @@ class WorkWeixinDepartments extends Component {
     this.setState({
       isMembersListLoading: true,
     });
-    seafileAPI.adminListWorkWeixinDepartmentMembers(department_id.toString(), {fetch_child: 1}).then((res) => {
+    seafileAPI.adminListWorkWeixinDepartmentMembers(department_id.toString(), {fetch_child: true}).then((res) => {
       let membersTempObj = this.state.membersTempObj;
       membersTempObj[department_id] = res.data.userlist;
       let canCheckUserIds = this.getCanCheckUserIds(res.data.userlist);
@@ -315,7 +315,7 @@ class WorkWeixinDepartments extends Component {
     let canCheckUserIds = [];
     for (let i = 0; i < membersList.length; i++) {
       let user = membersList[i];
-      if (!user.exists) {
+      if (!user.email) {
         canCheckUserIds.push(user.userid);
       }
     }
@@ -339,7 +339,7 @@ class WorkWeixinDepartments extends Component {
     }
   };
 
-  handlerUser = (user) => {
+  onUserChecked = (user) => {
     if (this.state.canCheckUserIds.indexOf(user.userid) !== -1) {
       let newUsersTempObj = this.state.newUsersTempObj;
       if (user.userid in newUsersTempObj) {
@@ -363,7 +363,7 @@ class WorkWeixinDepartments extends Component {
     }
   };
 
-  handlerAllUsers = () => {
+  onAllUsersChecked = () => {
     this.setState({
       isCheckedAll: !this.state.isCheckedAll,
     }, () => {
@@ -387,7 +387,7 @@ class WorkWeixinDepartments extends Component {
     });
   };
 
-  handlerSubmit = () => {
+  onSubmit = () => {
     let userList = [];
     for (let i in this.state.newUsersTempObj) {
       userList.push(this.state.newUsersTempObj[i]);
@@ -395,7 +395,7 @@ class WorkWeixinDepartments extends Component {
     if (!userList.length) {
       toaster.danger('未选择成员', {duration: 3});
     } else {
-      seafileAPI.adminAddWorkWeixinUsers(userList).then((res) => {
+      seafileAPI.adminAddWorkWeixinUsersBatch(userList).then((res) => {
         this.setState({
           newUsersTempObj: {},
           isCheckedAll: false,
@@ -407,6 +407,7 @@ class WorkWeixinDepartments extends Component {
           for (let i = 0; i < res.data.success.length; i++) {
             let userid = res.data.success[i].userid;
             let name = res.data.success[i].name;
+            let email = res.data.success[i].email;
             toaster.success(name + ' 成功导入', {duration: 1});
             // refresh all temp
             if (canCheckUserIds.indexOf(userid) !== -1) {
@@ -414,14 +415,14 @@ class WorkWeixinDepartments extends Component {
             }
             for (let j = 0; j < membersList.length; j++) {
               if (membersList[j].userid === userid) {
-                membersList[j].exists = true;
+                membersList[j].email = email;
                 break;
               }
             }
             for (let departmentId in membersTempObj) {
               for (let k = 0; k < membersTempObj[departmentId].length; k++) {
                 if (membersTempObj[departmentId][k].userid === userid) {
-                  membersTempObj[departmentId][k].exists = true;
+                  membersTempObj[departmentId][k].email = email;
                   break;
                 }
               }
@@ -462,7 +463,7 @@ class WorkWeixinDepartments extends Component {
           <div className="cur-view-path">
             <h3 className="sf-heading">{'企业微信集成'}</h3>
             {JSON.stringify(this.state.newUsersTempObj) !== '{}' &&
-            <Button className="btn btn-secondary operation-item" onClick={this.handlerSubmit}>{'导入用户'}</Button>
+            <Button className="btn btn-secondary operation-item" onClick={this.onSubmit}>{'导入用户'}</Button>
             }
           </div>
           <div className="cur-view-content" style={{display: 'flex', flexDirection: 'row'}}>
@@ -478,8 +479,8 @@ class WorkWeixinDepartments extends Component {
               membersList={this.state.membersList}
               checkedDepartmentId={this.state.checkedDepartmentId}
               newUsersTempObj={this.state.newUsersTempObj}
-              handlerUser={this.handlerUser}
-              handlerAllUsers={this.handlerAllUsers}
+              onUserChecked={this.onUserChecked}
+              onAllUsersChecked={this.onAllUsersChecked}
               isCheckedAll={this.state.isCheckedAll}
               canCheckUserIds={this.state.canCheckUserIds}
             />
