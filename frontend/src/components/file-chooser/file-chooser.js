@@ -291,7 +291,6 @@ class FileChooser extends React.Component {
         <SearchedListView 
           searchResults={this.state.searchResults} 
           onItemClick={this.onSearchedItemClick}
-          onRepoItemClick={this.onRepoItemClick}
           onCloseSearching={this.onCloseSearching}
           toAimsDir={this.toAimsDir}
         />);

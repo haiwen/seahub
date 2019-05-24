@@ -35,7 +35,7 @@ class RepoListItem extends React.Component {
       let tree = this.state.treeData.clone();
       let direntList = res.data.dirent_list.filter(item => item.type === 'dir')
       this.addResponseListToNode(direntList, tree.root);
-      this.setState({treeData: tree})
+      this.setState({treeData: tree});
     })
 
     if (this.props.repoObj) {

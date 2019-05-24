@@ -5,6 +5,8 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   currentItem: PropTypes.object,
   onItemClick: PropTypes.func.isRequired,
+  toAimsDir: PropTypes.func.isRequired,
+  onCloseSearching: PropTypes.func.isRequired,
 };
 
 class SearchedListItem extends React.Component {

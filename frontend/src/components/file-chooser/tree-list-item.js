@@ -90,7 +90,7 @@ class TreeViewItem extends React.Component {
         </div>
         {node.isExpanded && this.renderChildren()}
       </div>
-    )
+    );
   }
 }
 

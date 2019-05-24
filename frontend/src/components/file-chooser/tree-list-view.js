@@ -29,7 +29,7 @@ class TreeListView extends React.Component {
           fileSuffixes={this.props.fileSuffixes}
         />
       </div>
-    )
+    );
   }
 
 }
