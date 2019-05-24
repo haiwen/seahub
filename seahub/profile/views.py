@@ -86,12 +86,14 @@ def edit_profile(request):
     email_inverval = UserOptions.objects.get_file_updates_email_interval(username)
     email_inverval = email_inverval if email_inverval is not None else 0
 
-    if settings.SOCIAL_AUTH_WEIXIN_WORK_KEY:
+    from seahub.work_weixin.utils import work_weixin_oauth_check
+    if work_weixin_oauth_check():
         enable_wechat_work = True
-
-        from social_django.models import UserSocialAuth
-        social_connected = UserSocialAuth.objects.filter(
-            username=request.user.username, provider='weixin-work').count() > 0
+        # from social_django.models import UserSocialAuth
+        from seahub.auth.models import SocialAuthUser
+        from seahub.work_weixin.settings import WORK_WEIXIN_PROVIDER
+        social_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=WORK_WEIXIN_PROVIDER).count() > 0
     else:
         enable_wechat_work = False
         social_connected = False
