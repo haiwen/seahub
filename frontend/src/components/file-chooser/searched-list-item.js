@@ -29,18 +29,25 @@ class SearchedListItem extends React.Component {
     this.props.onItemClick(item);
   }
 
+  searchItemDoubleClick = (e) => {
+    let item = this.props.item;
+   
+    this.props.toAimsDir(item);
+    this.props.onCloseSearching();
+  }
+
   render() {
     let { item, currentItem } = this.props;
     let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(false);
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
-    let trClass = this.state.highlight ? 'tr-highlight' : '';
+    let trClass = this.state.highlight ? 'select-open-repo' : '';
     if (currentItem) {
       if (item.repo_id === currentItem.repo_id && item.path === currentItem.path) {
         trClass = 'searched-active';
       }
     }
     return (
-      <tr className={trClass} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={trClass} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onDoubleClick={this.searchItemDoubleClick}>
         <td className="text-center"><img className="item-img" src={fileIconUrl} alt="" width="24"/></td>
         <td><span className="item-link">{item.repo_name}/{item.link_content}</span></td>
       </tr>

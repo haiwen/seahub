@@ -37,6 +37,10 @@ class RepoListView extends React.Component {
               onDirentItemClick={this.props.onDirentItemClick}
               isShowFile={this.props.isShowFile}
               fileSuffixes={this.props.fileSuffixes}
+              onNodeCollapse={this.props.onNodeCollapse}
+              onNodeExpanded={this.props.onNodeExpanded}
+              repoObj={this.props.repoObj}
+              treeData={this.props.treeData}
             />
           );
         })}

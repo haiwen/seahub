@@ -50,15 +50,16 @@
 }
 
 .file-chooser-item .item-info:hover {
-  background: #e7f4f9;
+  background: #FDEFB9;
   border-radius: 2px;
   box-shadow: inset 0 0 1px #999;
 }
 
 .file-chooser-item .item-active {
-  background: #beebff !important;
+  background: #F3AF7D !important;
   border-radius: 2px;
   box-shadow: inset 0 0 1px #999;
+  color: #fff
 }
 
 .file-chooser-item .item-info .icon {
@@ -74,14 +75,22 @@
   flex: 1;
 }
 
+.file-chooser-item .item-active .icon {
+  color: #fff !important;
+}
+
 .file-chooser-search-input {
   position: relative;
 }
 
 .file-chooser-search-input .search-control {
   position: absolute;
-  top: 0.7rem;
+  top: 0.5rem;
   right: 0.7rem;
+}
+
+.file-chooser-search-input .search-input {
+  width: 100%;
 }
 
 .file-chooser-search-container {
@@ -99,10 +108,32 @@
 }
 
 .searched-active {
-  background: #beebff !important;
+  background: #F3AF7D !important;
   border-radius: 2px;
   box-shadow: inset 0 0 1px #999;
 }
+
+.searched-active td {
+  color: #fff;
+}
+
+.searched-active .icon {
+  color: #fff !important;
+}
+
+.searched-active img {
+  background: #fff;
+}
+
+.select-open-repo {
+  background: #FDEFB9;
+}
+
+.file-chooser-table td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0);
+}
+
+
 
 
 

@@ -23,7 +23,7 @@ class SearchedListView extends React.Component {
 
   render() {
     return (
-      <table className="table-thead-hidden">
+      <table className="table-thead-hidden file-chooser-table" rules="node" frame="void">
         <thead>
           <tr>
             <th width="8%"></th>
@@ -32,7 +32,16 @@ class SearchedListView extends React.Component {
         </thead>
         <tbody>
           {this.props.searchResults.map((item, index) => {
-            return (<SearchedListItem key={index} item={item} currentItem={this.state.currentItem} onItemClick={this.onItemClick} />);
+            return (
+            <SearchedListItem 
+              key={index} 
+              item={item} 
+              currentItem={this.state.currentItem} 
+              onItemClick={this.onItemClick}
+              onRepoItemClick={this.props.onRepoItemClick}
+              onCloseSearching={this.props.onCloseSearching}
+              toAimsDir={this.props.toAimsDir}
+            />);
           })}
         </tbody>
       </table>
