@@ -101,6 +101,7 @@ class FileChooser extends React.Component {
         this.setState({
           repoList: repoList,
           isOtherRepoShow: !this.state.isOtherRepoShow,
+          repoObj: {}
         });
       });
     }
