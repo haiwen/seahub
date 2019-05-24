@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, navigate } from '@reach/router';
+import MediaQuery from 'react-responsive';
+import { Modal } from 'reactstrap';
 import { siteRoot, canAddRepo, isDocs } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
@@ -62,6 +64,14 @@ class App extends Component {
     if (event.state && event.state.currentTab && event.state.pathPrefix) {
       let { currentTab, pathPrefix } = event.state;
       this.setState({currentTab, pathPrefix});
+    }
+  }
+
+  componentWillMount() {
+    if (window.screen.width <= 768) {
+      this.setState({
+        isSidePanelClosed: true
+      });
     }
   }
 
@@ -142,6 +152,9 @@ class App extends Component {
       let { currentTab, pathPrefix } = this.state;
       window.history.replaceState({currentTab: currentTab, pathPrefix: pathPrefix}, null);
     });
+    if (window.screen.width <= 768 && !this.state.isSidePanelClosed) {
+      this.setState({ isSidePanelClosed: true });
+    }
   } 
 
   generatorPrefix = (tabName, groupID) => {
@@ -185,8 +198,14 @@ class App extends Component {
     }
   }
 
+  toggleSidePanel = () => {
+    this.setState({
+      isSidePanelClosed: !this.state.isSidePanelClosed
+    });
+  }
+
   render() {
-    let { currentTab } = this.state;
+    let { currentTab, isSidePanelClosed } = this.state;
 
     const home = canAddRepo ?
       <MyLibraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} /> :
@@ -236,6 +255,9 @@ class App extends Component {
               <InvitationsView path={siteRoot + 'invitations/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             </Router>
           </MainPanel>
+          <MediaQuery query="(max-width: 768px)">
+            <Modal isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
+          </MediaQuery>
         </div>
       </React.Fragment>
     );

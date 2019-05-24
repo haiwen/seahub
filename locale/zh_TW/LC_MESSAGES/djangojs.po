@@ -4,13 +4,13 @@
 # 
 # Translators:
 # aa bbb <lung375706226@gmail.com>, 2017
-# 涂哲維 <david082321@gmail.com>, 2018
+# david082321 <david082321@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-17 10:59+0800\n"
-"PO-Revision-Date: 2019-05-17 03:02+0000\n"
+"POT-Creation-Date: 2019-05-22 17:30+0800\n"
+"PO-Revision-Date: 2019-05-22 09:30+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -201,16 +201,16 @@ msgstr ""
 #: frontend/src/components/dialog/confirm-delete-account.js:35
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:35
 #: frontend/src/components/dialog/copy-dirent-dialog.js:174
-#: frontend/src/components/dialog/create-file-dialog.js:150
-#: frontend/src/components/dialog/create-folder-dialog.js:90
-#: frontend/src/components/dialog/create-group-dialog.js:81
-#: frontend/src/components/dialog/create-repo-dialog.js:207
+#: frontend/src/components/dialog/create-file-dialog.js:162
+#: frontend/src/components/dialog/create-folder-dialog.js:102
+#: frontend/src/components/dialog/create-group-dialog.js:88
+#: frontend/src/components/dialog/create-repo-dialog.js:220
 #: frontend/src/components/dialog/create-tag-dialog.js:114
 #: frontend/src/components/dialog/delete-dialog.js:32
 #: frontend/src/components/dialog/delete-repo-dialog.js:38
 #: frontend/src/components/dialog/dismiss-group-dialog.js:28
-#: frontend/src/components/dialog/generate-share-link.js:357
-#: frontend/src/components/dialog/generate-share-link.js:368
+#: frontend/src/components/dialog/generate-share-link.js:359
+#: frontend/src/components/dialog/generate-share-link.js:370
 #: frontend/src/components/dialog/insert-file-dialog.js:66
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:79
 #: frontend/src/components/dialog/internal-link-dialog.js:72
@@ -219,14 +219,14 @@ msgstr ""
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:260
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:235
 #: frontend/src/components/dialog/move-dirent-dialog.js:174
-#: frontend/src/components/dialog/new-wiki-dialog.js:59
+#: frontend/src/components/dialog/new-wiki-dialog.js:66
 #: frontend/src/components/dialog/org-add-member-dialog.js:63
 #: frontend/src/components/dialog/org-delete-department-dialog.js:47
 #: frontend/src/components/dialog/org-delete-member-dialog.js:42
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:34
-#: frontend/src/components/dialog/rename-dialog.js:115
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:116
-#: frontend/src/components/dialog/rename-group-dialog.js:54
+#: frontend/src/components/dialog/rename-dialog.js:122
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:123
+#: frontend/src/components/dialog/rename-group-dialog.js:61
 #: frontend/src/components/dialog/save-shared-file-dialog.js:74
 #: frontend/src/components/dialog/transfer-dialog.js:91
 #: frontend/src/components/dialog/update-webdav-password.js:68
@@ -249,11 +249,11 @@ msgstr "取消"
 #: frontend/src/components/dialog/add-reviewer-dialog.js:103
 #: frontend/src/components/dialog/change-repo-password-dialog.js:124
 #: frontend/src/components/dialog/copy-dirent-dialog.js:175
-#: frontend/src/components/dialog/create-department-repo-dialog.js:93
-#: frontend/src/components/dialog/create-file-dialog.js:151
-#: frontend/src/components/dialog/create-folder-dialog.js:91
-#: frontend/src/components/dialog/create-group-dialog.js:82
-#: frontend/src/components/dialog/create-repo-dialog.js:208
+#: frontend/src/components/dialog/create-department-repo-dialog.js:100
+#: frontend/src/components/dialog/create-file-dialog.js:163
+#: frontend/src/components/dialog/create-folder-dialog.js:103
+#: frontend/src/components/dialog/create-group-dialog.js:89
+#: frontend/src/components/dialog/create-repo-dialog.js:221
 #: frontend/src/components/dialog/insert-file-dialog.js:67
 #: frontend/src/components/dialog/insert-file-dialog.js:68
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:81
@@ -269,16 +269,16 @@ msgstr "取消"
 #: frontend/src/components/dialog/manage-members-dialog.js:96
 #: frontend/src/components/dialog/manage-members-dialog.js:97
 #: frontend/src/components/dialog/move-dirent-dialog.js:175
-#: frontend/src/components/dialog/new-wiki-dialog.js:60
+#: frontend/src/components/dialog/new-wiki-dialog.js:67
 #: frontend/src/components/dialog/org-add-admin-dialog.js:67
 #: frontend/src/components/dialog/org-add-department-dialog.js:92
 #: frontend/src/components/dialog/org-add-member-dialog.js:62
 #: frontend/src/components/dialog/org-add-repo-dialog.js:86
 #: frontend/src/components/dialog/org-add-user-dialog.js:169
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:78
-#: frontend/src/components/dialog/rename-dialog.js:116
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:117
-#: frontend/src/components/dialog/rename-group-dialog.js:55
+#: frontend/src/components/dialog/rename-dialog.js:123
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:124
+#: frontend/src/components/dialog/rename-group-dialog.js:62
 #: frontend/src/components/dialog/save-shared-file-dialog.js:76
 #: frontend/src/components/dialog/save-shared-file-dialog.js:78
 #: frontend/src/components/dialog/share-repo-dialog.js:150
@@ -362,7 +362,7 @@ msgstr "資料庫密碼重置成功。"
 #: frontend/src/pages/groups/groups-view.js:141
 #: frontend/src/pages/invitations/invitations-view.js:80
 #: frontend/src/pages/invitations/invitations-view.js:155
-#: frontend/src/pages/lib-content-view/lib-content-view.js:140
+#: frontend/src/pages/lib-content-view/lib-content-view.js:145
 #: frontend/src/pages/linked-devices/linked-devices.js:182
 #: frontend/src/pages/my-libs/my-libs.js:54
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:187
@@ -404,7 +404,7 @@ msgstr "錯誤"
 #: frontend/src/pages/groups/groups-view.js:147
 #: frontend/src/pages/invitations/invitations-view.js:82
 #: frontend/src/pages/invitations/invitations-view.js:158
-#: frontend/src/pages/lib-content-view/lib-content-view.js:146
+#: frontend/src/pages/lib-content-view/lib-content-view.js:151
 #: frontend/src/pages/linked-devices/linked-devices.js:189
 #: frontend/src/pages/my-libs/my-libs.js:60
 #: frontend/src/pages/search/main-panel.js:72
@@ -461,8 +461,8 @@ msgstr "確定要刪除該帳號嗎？"
 #: frontend/src/components/dialog/confirm-delete-account.js:36
 #: frontend/src/components/dialog/delete-dialog.js:33
 #: frontend/src/components/dialog/delete-repo-dialog.js:37
-#: frontend/src/components/dialog/generate-share-link.js:361
-#: frontend/src/components/dialog/generate-share-link.js:367
+#: frontend/src/components/dialog/generate-share-link.js:363
+#: frontend/src/components/dialog/generate-share-link.js:369
 #: frontend/src/components/dialog/generate-upload-link.js:150
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:64
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:64
@@ -531,9 +531,9 @@ msgstr "複製 {placeholder} 到"
 msgid "Copy selected item(s) to:"
 msgstr "將已選條目複製到："
 
-#: frontend/src/components/dialog/create-department-repo-dialog.js:54
-#: frontend/src/components/dialog/create-group-dialog.js:49
-#: frontend/src/components/dialog/create-repo-dialog.js:69
+#: frontend/src/components/dialog/create-department-repo-dialog.js:61
+#: frontend/src/components/dialog/create-group-dialog.js:56
+#: frontend/src/components/dialog/create-repo-dialog.js:76
 #: frontend/src/components/dialog/org-add-department-dialog.js:51
 #: frontend/src/components/dialog/org-add-repo-dialog.js:46
 #: frontend/src/components/dialog/org-add-user-dialog.js:112
@@ -541,10 +541,10 @@ msgstr "將已選條目複製到："
 msgid "Name is required"
 msgstr "名稱為必填項"
 
-#: frontend/src/components/dialog/create-department-repo-dialog.js:59
-#: frontend/src/components/dialog/create-repo-dialog.js:74
-#: frontend/src/components/dialog/rename-dialog.js:92
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:93
+#: frontend/src/components/dialog/create-department-repo-dialog.js:66
+#: frontend/src/components/dialog/create-repo-dialog.js:81
+#: frontend/src/components/dialog/rename-dialog.js:99
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:100
 #: frontend/src/components/rename.js:79 static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:703 static/scripts/app/views/dir.js:763
@@ -554,22 +554,22 @@ msgstr "名稱為必填項"
 msgid "Name should not include '/'."
 msgstr "名字不能包含 ‘/’。"
 
-#: frontend/src/components/dialog/create-department-repo-dialog.js:75
+#: frontend/src/components/dialog/create-department-repo-dialog.js:82
 msgid "New Department Library"
 msgstr ""
 
-#: frontend/src/components/dialog/create-department-repo-dialog.js:79
-#: frontend/src/components/dialog/create-file-dialog.js:130
-#: frontend/src/components/dialog/create-folder-dialog.js:77
-#: frontend/src/components/dialog/create-group-dialog.js:69
-#: frontend/src/components/dialog/create-repo-dialog.js:156
+#: frontend/src/components/dialog/create-department-repo-dialog.js:86
+#: frontend/src/components/dialog/create-file-dialog.js:142
+#: frontend/src/components/dialog/create-folder-dialog.js:89
+#: frontend/src/components/dialog/create-group-dialog.js:76
+#: frontend/src/components/dialog/create-repo-dialog.js:163
 #: frontend/src/components/dialog/create-tag-dialog.js:89
 #: frontend/src/components/dialog/list-created-files-dialog.js:28
 #: frontend/src/components/dialog/list-related-file-dialog.js:81
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:49
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:72
 #: frontend/src/components/dialog/manage-members-dialog.js:113
-#: frontend/src/components/dialog/new-wiki-dialog.js:55
+#: frontend/src/components/dialog/new-wiki-dialog.js:62
 #: frontend/src/components/dialog/org-add-department-dialog.js:79
 #: frontend/src/components/dialog/org-add-repo-dialog.js:73
 #: frontend/src/components/dialog/org-add-user-dialog.js:148
@@ -601,16 +601,16 @@ msgstr ""
 msgid "Name"
 msgstr "名稱"
 
-#: frontend/src/components/dialog/create-file-dialog.js:48
-#: frontend/src/components/dialog/create-folder-dialog.js:45
-#: frontend/src/components/dialog/rename-dialog.js:56
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:57
+#: frontend/src/components/dialog/create-file-dialog.js:60
+#: frontend/src/components/dialog/create-folder-dialog.js:57
+#: frontend/src/components/dialog/rename-dialog.js:63
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:64
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:97
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:66
 msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr ""
 
-#: frontend/src/components/dialog/create-file-dialog.js:126
+#: frontend/src/components/dialog/create-file-dialog.js:138
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:185
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:180
 #: frontend/src/utils/text-translation.js:7
@@ -618,49 +618,49 @@ msgstr ""
 msgid "New File"
 msgstr "新建文件"
 
-#: frontend/src/components/dialog/create-file-dialog.js:142
+#: frontend/src/components/dialog/create-file-dialog.js:154
 msgid "This is a draft"
 msgstr ""
 
-#: frontend/src/components/dialog/create-folder-dialog.js:73
+#: frontend/src/components/dialog/create-folder-dialog.js:85
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:184
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:179
 #: frontend/src/utils/text-translation.js:6
 msgid "New Folder"
 msgstr "新建資料夾"
 
-#: frontend/src/components/dialog/create-group-dialog.js:67
+#: frontend/src/components/dialog/create-group-dialog.js:74
 #: frontend/src/components/toolbar/groups-toolbar.js:27
 msgid "New Group"
 msgstr "新建群組"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:82
+#: frontend/src/components/dialog/create-repo-dialog.js:89
 #: frontend/src/components/dialog/generate-upload-link.js:94
 #: frontend/src/components/dialog/org-add-user-dialog.js:120
 #: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:350
 msgid "Please enter password"
 msgstr "請輸入密碼"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:87
+#: frontend/src/components/dialog/create-repo-dialog.js:94
 #: frontend/src/components/dialog/org-add-user-dialog.js:125
 #: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:358
 msgid "Please enter the password again"
 msgstr "請再次輸入密碼"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:92
+#: frontend/src/components/dialog/create-repo-dialog.js:99
 #: frontend/src/components/dialog/generate-upload-link.js:99
 #: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:354
 msgid "Password is too short"
 msgstr "密碼太短"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:97
+#: frontend/src/components/dialog/create-repo-dialog.js:104
 #: frontend/src/components/dialog/generate-upload-link.js:104
 #: frontend/src/components/dialog/org-add-user-dialog.js:130
 #: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:362
 msgid "Passwords don't match"
 msgstr "兩次輸入的密碼不一致"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:152
+#: frontend/src/components/dialog/create-repo-dialog.js:159
 #: frontend/src/components/dialog/org-add-repo-dialog.js:69
 #: frontend/src/components/toolbar/repo-view-toobar.js:47
 #: frontend/src/components/toolbar/repo-view-toobar.js:48
@@ -672,7 +672,7 @@ msgstr "兩次輸入的密碼不一致"
 msgid "New Library"
 msgstr "新建資料庫"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:167
+#: frontend/src/components/dialog/create-repo-dialog.js:174
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:276
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:335
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:251
@@ -691,28 +691,28 @@ msgstr "新建資料庫"
 msgid "Permission"
 msgstr "讀寫權限"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:169
+#: frontend/src/components/dialog/create-repo-dialog.js:176
 #: frontend/src/components/dialog/share-repo-dialog.js:40
-#: frontend/src/utils/utils.js:344
+#: frontend/src/utils/utils.js:345
 #: static/scripts/app/views/share-admin-folder.js:109
 #: static/scripts/app/views/share-admin-repo.js:123
 msgid "Read-Write"
 msgstr "可讀寫"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:170
+#: frontend/src/components/dialog/create-repo-dialog.js:177
 #: frontend/src/components/dialog/share-repo-dialog.js:41
-#: frontend/src/utils/utils.js:347
+#: frontend/src/utils/utils.js:348
 #: static/scripts/app/views/share-admin-folder.js:112
 #: static/scripts/app/views/share-admin-repo.js:126
 msgid "Read-Only"
 msgstr "唯讀"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:178
+#: frontend/src/components/dialog/create-repo-dialog.js:185
 msgid "Encrypt"
 msgstr "加密"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:182
-#: frontend/src/components/dialog/generate-share-link.js:384
+#: frontend/src/components/dialog/create-repo-dialog.js:190
+#: frontend/src/components/dialog/generate-share-link.js:386
 #: frontend/src/components/dialog/generate-upload-link.js:164
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:66
 #: frontend/src/components/dialog/org-add-user-dialog.js:152
@@ -720,12 +720,12 @@ msgstr "加密"
 msgid "Password"
 msgstr "密碼"
 
-#: frontend/src/components/dialog/create-repo-dialog.js:182
+#: frontend/src/components/dialog/create-repo-dialog.js:190
 msgid "(at least 8 characters)"
 msgstr ""
 
-#: frontend/src/components/dialog/create-repo-dialog.js:192
-#: frontend/src/components/dialog/generate-share-link.js:392
+#: frontend/src/components/dialog/create-repo-dialog.js:203
+#: frontend/src/components/dialog/generate-share-link.js:394
 #: frontend/src/components/dialog/generate-upload-link.js:172
 msgid "Password again"
 msgstr "請再次輸入密碼"
@@ -860,74 +860,74 @@ msgid "Expiration Date:"
 msgstr ""
 
 #: frontend/src/components/dialog/generate-share-link.js:332
-#: frontend/src/components/dialog/generate-share-link.js:356
+#: frontend/src/components/dialog/generate-share-link.js:358
 msgid "Send"
 msgstr "發送"
 
-#: frontend/src/components/dialog/generate-share-link.js:336
+#: frontend/src/components/dialog/generate-share-link.js:338
 msgid "Send to"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:342
+#: frontend/src/components/dialog/generate-share-link.js:344
 #: frontend/src/components/dialog/invite-people-dialog.js:102
 msgid "Emails, separated by ','"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:346
+#: frontend/src/components/dialog/generate-share-link.js:348
 msgid "Message (optional):"
 msgstr "附加消息(可選)："
 
-#: frontend/src/components/dialog/generate-share-link.js:365
+#: frontend/src/components/dialog/generate-share-link.js:367
 msgid "Are you sure you want to delete the share link?"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:366
+#: frontend/src/components/dialog/generate-share-link.js:368
 msgid ""
 "If the share link is deleted, no one will be able to access it any more."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:378
+#: frontend/src/components/dialog/generate-share-link.js:380
 #: frontend/src/components/dialog/generate-upload-link.js:158
 msgid "Add password protection"
 msgstr "增加密碼保護"
 
-#: frontend/src/components/dialog/generate-share-link.js:399
-#: frontend/src/components/dialog/generate-share-link.js:413
+#: frontend/src/components/dialog/generate-share-link.js:401
+#: frontend/src/components/dialog/generate-share-link.js:415
 msgid "Add auto expiration"
 msgstr "增加自動過期"
 
-#: frontend/src/components/dialog/generate-share-link.js:406
-#: frontend/src/components/dialog/generate-share-link.js:414
+#: frontend/src/components/dialog/generate-share-link.js:408
 #: frontend/src/components/dialog/generate-share-link.js:416
-#: frontend/src/components/dialog/generate-share-link.js:419
-#: frontend/src/components/dialog/generate-share-link.js:422
+#: frontend/src/components/dialog/generate-share-link.js:418
+#: frontend/src/components/dialog/generate-share-link.js:421
+#: frontend/src/components/dialog/generate-share-link.js:424
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:127
 msgid "days"
 msgstr "天"
 
-#: frontend/src/components/dialog/generate-share-link.js:419
+#: frontend/src/components/dialog/generate-share-link.js:421
 msgid "Greater than or equal to"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:422
+#: frontend/src/components/dialog/generate-share-link.js:424
 msgid "Less than or equal to"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:429
+#: frontend/src/components/dialog/generate-share-link.js:431
 msgid "Set permission"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:434
+#: frontend/src/components/dialog/generate-share-link.js:436
 #: frontend/src/components/select-editor/share-links-permission-editor.js:22
 msgid "Preview and download"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:439
+#: frontend/src/components/dialog/generate-share-link.js:441
 #: frontend/src/components/select-editor/share-links-permission-editor.js:18
 msgid "Preview only"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:443
+#: frontend/src/components/dialog/generate-share-link.js:445
 #: frontend/src/components/dialog/generate-upload-link.js:177
 msgid "Generate"
 msgstr "生成連結"
@@ -1294,7 +1294,7 @@ msgstr "用戶角色"
 #: frontend/src/pages/groups/group-view.js:345
 #: frontend/src/pages/org-admin/org-users.js:178
 #: frontend/src/pages/org-admin/side-panel.js:33
-#: frontend/src/utils/utils.js:350
+#: frontend/src/utils/utils.js:351
 msgid "Admin"
 msgstr "管理"
 
@@ -1314,7 +1314,7 @@ msgstr "移動 {placeholder} 到"
 msgid "Move selected item(s) to:"
 msgstr "將已選條目移動到："
 
-#: frontend/src/components/dialog/new-wiki-dialog.js:53
+#: frontend/src/components/dialog/new-wiki-dialog.js:60
 msgid "New Wiki"
 msgstr ""
 
@@ -1439,8 +1439,8 @@ msgstr ""
 msgid "Tip: -2 means no limit."
 msgstr ""
 
-#: frontend/src/components/dialog/rename-dialog.js:86
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:87
+#: frontend/src/components/dialog/rename-dialog.js:93
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:94
 #: frontend/src/components/rename.js:73
 #: frontend/src/pages/data-grid/new-column-dialog.js:39
 #: static/scripts/sysadmin-app/views/address-book-group.js:114
@@ -1450,33 +1450,33 @@ msgstr ""
 msgid "Name is required."
 msgstr "必須填寫名字。"
 
-#: frontend/src/components/dialog/rename-dialog.js:108
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:109
+#: frontend/src/components/dialog/rename-dialog.js:115
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:116
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
 msgstr "重新命名文件"
 
-#: frontend/src/components/dialog/rename-dialog.js:108
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:109
+#: frontend/src/components/dialog/rename-dialog.js:115
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:116
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
 msgstr "重新命名目錄"
 
-#: frontend/src/components/dialog/rename-dialog.js:110
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:111
+#: frontend/src/components/dialog/rename-dialog.js:117
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:118
 msgid "New file name"
 msgstr ""
 
-#: frontend/src/components/dialog/rename-dialog.js:110
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:111
+#: frontend/src/components/dialog/rename-dialog.js:117
+#: frontend/src/components/dialog/rename-grid-item-dialog.js:118
 msgid "New folder name"
 msgstr ""
 
-#: frontend/src/components/dialog/rename-group-dialog.js:47
+#: frontend/src/components/dialog/rename-group-dialog.js:54
 msgid "Rename Group"
 msgstr ""
 
-#: frontend/src/components/dialog/rename-group-dialog.js:49
+#: frontend/src/components/dialog/rename-group-dialog.js:56
 msgid "Rename group to"
 msgstr ""
 
@@ -2564,7 +2564,8 @@ msgstr ""
 #: frontend/src/pages/groups/group-view.js:95
 #: frontend/src/pages/groups/group-view.js:129
 #: frontend/src/pages/groups/groups-view.js:135
-#: frontend/src/pages/lib-content-view/lib-content-view.js:135
+#: frontend/src/pages/lib-content-view/lib-content-view.js:137
+#: frontend/src/pages/lib-content-view/lib-content-view.js:140
 #: frontend/src/pages/linked-devices/linked-devices.js:176
 #: frontend/src/pages/my-libs/my-libs.js:48
 #: frontend/src/pages/share-admin/folders.js:225
@@ -2715,6 +2716,10 @@ msgstr "你還沒有邀請任何人。"
 msgid "Folder does not exist."
 msgstr ""
 
+#: frontend/src/pages/lib-content-view/lib-content-container.js:169
+msgid "This library has been set to read-only by admin and cannot be updated."
+msgstr ""
+
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:59
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:86
 #: frontend/src/pages/repo-wiki-mode/main-panel.js:170
@@ -2728,24 +2733,24 @@ msgstr "側邊導航選單"
 msgid "Search files in this library"
 msgstr "在當前資料庫搜尋檔案"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:802
-#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:766
+#: frontend/src/pages/lib-content-view/lib-content-view.js:807
+#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:767
 #: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
 msgid "Successfully moved %(name)s."
 msgstr "成功移動 %(name)s。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:806
+#: frontend/src/pages/lib-content-view/lib-content-view.js:811
 #: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
 msgid "Failed to move %(name)s"
 msgstr "移動 %(name)s 失敗"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:825
-#: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:751
+#: frontend/src/pages/lib-content-view/lib-content-view.js:830
+#: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:752
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr "成功複製 %(name)s。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:829
+#: frontend/src/pages/lib-content-view/lib-content-view.js:834
 #: frontend/src/repo-wiki-mode.js:519 static/scripts/app/views/dir.js:1383
 msgid "Failed to copy %(name)s"
 msgstr "複製 %(name)s 失敗"
@@ -2963,13 +2968,13 @@ msgid "All Libraries"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-libraries.js:211
-#: frontend/src/utils/utils.js:299
+#: frontend/src/utils/utils.js:300
 #: static/scripts/app/models/deleted-repo.js:19 static/scripts/common.js:349
 msgid "Encrypted library"
 msgstr "加密資料庫"
 
 #: frontend/src/pages/org-admin/org-libraries.js:214
-#: frontend/src/utils/utils.js:305
+#: frontend/src/utils/utils.js:306
 #: static/scripts/app/models/deleted-repo.js:21 static/scripts/common.js:355
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
@@ -3415,112 +3420,112 @@ msgstr "客戶端打開"
 msgid "Access Log"
 msgstr "瀏覽日誌"
 
-#: frontend/src/utils/utils.js:301 seahub/templates/priv/ali.js:10
+#: frontend/src/utils/utils.js:302 seahub/templates/priv/ali.js:10
 #: static/scripts/common.js:351
 msgid "Admin access"
 msgstr ""
 
-#: frontend/src/utils/utils.js:308 static/scripts/common.js:358
+#: frontend/src/utils/utils.js:309 static/scripts/common.js:358
 msgid "Read-Only library"
 msgstr "唯讀資料庫"
 
-#: frontend/src/utils/utils.js:311 seahub/templates/priv/ali.js:8
+#: frontend/src/utils/utils.js:312 seahub/templates/priv/ali.js:8
 #: static/scripts/common.js:361
 msgid "Preview-Edit-on-Cloud library"
 msgstr ""
 
-#: frontend/src/utils/utils.js:314 seahub/templates/priv/ali.js:9
+#: frontend/src/utils/utils.js:315 seahub/templates/priv/ali.js:9
 #: static/scripts/common.js:364
 msgid "Preview-on-Cloud library"
 msgstr ""
 
-#: frontend/src/utils/utils.js:325 seahub/templates/priv/ali.js:12
+#: frontend/src/utils/utils.js:326 seahub/templates/priv/ali.js:12
 #: static/scripts/common.js:375
 msgid "Read-Write folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:328 seahub/templates/priv/ali.js:13
+#: frontend/src/utils/utils.js:329 seahub/templates/priv/ali.js:13
 #: static/scripts/common.js:378
 msgid "Read-Only folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:331 seahub/templates/priv/ali.js:14
+#: frontend/src/utils/utils.js:332 seahub/templates/priv/ali.js:14
 #: static/scripts/common.js:381
 msgid "Preview-Edit-on-Cloud folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:334 seahub/templates/priv/ali.js:15
+#: frontend/src/utils/utils.js:335 seahub/templates/priv/ali.js:15
 #: static/scripts/common.js:384
 msgid "Preview-on-Cloud folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:353 seahub/templates/priv/ali.js:17
+#: frontend/src/utils/utils.js:354 seahub/templates/priv/ali.js:17
 #: static/scripts/app/views/share-admin-folder.js:115
 #: static/scripts/app/views/share-admin-repo.js:129
 msgid "Preview-Edit-on-Cloud"
 msgstr ""
 
-#: frontend/src/utils/utils.js:356 seahub/templates/priv/ali.js:18
+#: frontend/src/utils/utils.js:357 seahub/templates/priv/ali.js:18
 #: static/scripts/app/views/share-admin-folder.js:118
 #: static/scripts/app/views/share-admin-repo.js:132
 msgid "Preview-on-Cloud"
 msgstr ""
 
-#: frontend/src/utils/utils.js:366
+#: frontend/src/utils/utils.js:367
 msgid "User can read, write, upload, download and sync files."
 msgstr ""
 
-#: frontend/src/utils/utils.js:369
+#: frontend/src/utils/utils.js:370
 msgid "User can read, download and sync files."
 msgstr ""
 
-#: frontend/src/utils/utils.js:372
+#: frontend/src/utils/utils.js:373
 msgid "Besides Write permission, user can also share the library."
 msgstr ""
 
-#: frontend/src/utils/utils.js:375
+#: frontend/src/utils/utils.js:376
 msgid ""
 "User can view and edit file online via browser. Files can't be downloaded."
 msgstr ""
 
-#: frontend/src/utils/utils.js:378
+#: frontend/src/utils/utils.js:379
 msgid ""
 "User can only view files online via browser. Files can't be downloaded."
 msgstr ""
 
-#: frontend/src/utils/utils.js:753 static/scripts/app/views/dir.js:1289
+#: frontend/src/utils/utils.js:754 static/scripts/app/views/dir.js:1289
 #: static/scripts/app/views/dir.js:1450
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "成功複製 %(name)s 和另1項條目。"
 
-#: frontend/src/utils/utils.js:755 static/scripts/app/views/dir.js:1291
+#: frontend/src/utils/utils.js:756 static/scripts/app/views/dir.js:1291
 #: static/scripts/app/views/dir.js:1452
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "成功複製 %(name)s 和其他 %(amount)s 項條目。"
 
-#: frontend/src/utils/utils.js:768 static/scripts/app/views/dir.js:1280
+#: frontend/src/utils/utils.js:769 static/scripts/app/views/dir.js:1280
 #: static/scripts/app/views/dir.js:1442
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "成功移動 %(name)s 和另1項條目。"
 
-#: frontend/src/utils/utils.js:770 static/scripts/app/views/dir.js:1282
+#: frontend/src/utils/utils.js:771 static/scripts/app/views/dir.js:1282
 #: static/scripts/app/views/dir.js:1444
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "成功移動 %(name)s 和其他 %(amount)s 項條目。"
 
-#: frontend/src/utils/utils.js:782
+#: frontend/src/utils/utils.js:783
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: frontend/src/utils/utils.js:785
+#: frontend/src/utils/utils.js:786
 msgid "Failed to copy %(name)s."
 msgstr ""
 
-#: frontend/src/utils/utils.js:795
+#: frontend/src/utils/utils.js:796
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: frontend/src/utils/utils.js:798
+#: frontend/src/utils/utils.js:799
 msgid "Failed to move %(name)s."
 msgstr ""
 

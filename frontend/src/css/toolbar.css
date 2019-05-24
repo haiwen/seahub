@@ -107,3 +107,8 @@
 }
 /* end path toolbar */
 
+@media (max-width: 767px) {
+  .border-left-show:before {
+    width: 0;
+  }
+}

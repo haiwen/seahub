@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-17 10:59+0800\n"
-"PO-Revision-Date: 2019-05-17 03:02+0000\n"
-"Last-Translator: Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>\n"
+"POT-Creation-Date: 2019-05-22 17:30+0800\n"
+"PO-Revision-Date: 2019-05-22 09:30+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Icelandic (http://www.transifex.com/haiwen/seahub/language/is/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -85,8 +85,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:629 seahub/views/__init__.py:630
-#: seahub/views/__init__.py:634 seahub/views/__init__.py:635
+#: seahub/views/__init__.py:633 seahub/views/__init__.py:634
+#: seahub/views/__init__.py:638 seahub/views/__init__.py:639
 msgid "My Library"
 msgstr "Safnið mitt"
 
@@ -108,16 +108,16 @@ msgstr "Það er þegar til hópur með þetta nafn."
 msgid "User %s is already group owner."
 msgstr "Notandi %s er þegar eigandi hóps."
 
-#: seahub/api2/endpoints/admin/libraries.py:226 seahub/views/sysadmin.py:1871
+#: seahub/api2/endpoints/admin/libraries.py:228 seahub/views/sysadmin.py:1871
 msgid "System library can not be deleted."
 msgstr "Ekki er hægt að eyða kerfissafni."
 
-#: seahub/api2/endpoints/admin/libraries.py:317 seahub/api2/views.py:1572
+#: seahub/api2/endpoints/admin/libraries.py:345 seahub/api2/views.py:1578
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:338 seahub/api2/views.py:1577
+#: seahub/api2/endpoints/admin/libraries.py:366 seahub/api2/views.py:1583
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -375,11 +375,11 @@ msgstr "Ekki leyfileg viðtökuslóð"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1715
-#: seahub/api2/views.py:1751 seahub/api2/views.py:1799
-#: seahub/api2/views.py:1843 seahub/api2/views.py:1888
-#: seahub/api2/views.py:1936 seahub/api2/views.py:2347
-#: seahub/api2/views.py:2461 seahub/templates/js/templates.html:470
+#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1721
+#: seahub/api2/views.py:1757 seahub/api2/views.py:1805
+#: seahub/api2/views.py:1849 seahub/api2/views.py:1894
+#: seahub/api2/views.py:1942 seahub/api2/views.py:2353
+#: seahub/api2/views.py:2467 seahub/templates/js/templates.html:470
 #: seahub/views/ajax.py:715 seahub/views/ajax.py:799 seahub/views/ajax.py:872
 msgid "Out of quota."
 msgstr ""
@@ -393,7 +393,7 @@ msgstr "Get ekki flutt möppuna %(src)s í undirmöppuna %(des)s"
 #: seahub/api2/endpoints/file.py:291 seahub/api2/endpoints/file.py:382
 #: seahub/api2/endpoints/file.py:491 seahub/api2/endpoints/file.py:568
 #: seahub/api2/endpoints/file.py:661 seahub/views/ajax.py:481
-#: seahub/views/ajax.py:552 seahub/views/file.py:1539
+#: seahub/views/ajax.py:552 seahub/views/file.py:1543
 msgid "File is locked"
 msgstr "Skrá er læst"
 
@@ -422,7 +422,7 @@ msgstr ""
 #: seahub/api2/endpoints/wikis.py:201 seahub/drafts/views.py:32
 #: seahub/group/views.py:374 seahub/profile/forms.py:24
 #: seahub/profile/views.py:202 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:792
+#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:796
 #: seahub/views/ajax.py:209 seahub/views/ajax.py:239 seahub/views/ajax.py:245
 #: seahub/views/ajax.py:912 seahub/views/wiki.py:200
 msgid "Permission denied."
@@ -445,8 +445,8 @@ msgstr ""
 #: seahub/api2/endpoints/wiki_pages.py:194
 #: seahub/api2/endpoints/wiki_pages.py:204
 #: seahub/api2/endpoints/wiki_pages.py:310 seahub/group/views.py:288
-#: seahub/views/__init__.py:991 seahub/views/ajax.py:1179
-#: seahub/views/ajax.py:1183 seahub/views/file.py:1536
+#: seahub/views/__init__.py:995 seahub/views/ajax.py:1179
+#: seahub/views/ajax.py:1183 seahub/views/file.py:1540
 #: seahub/views/sysadmin.py:2045 seahub/views/wiki.py:134
 msgid "Internal Server Error"
 msgstr "Kerfisvilla"
@@ -465,7 +465,7 @@ msgid "User %s is already a group member."
 msgstr "Notandi %s er þegar meðlimur hóps."
 
 #: seahub/api2/endpoints/group_members.py:100
-#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1557
+#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1563
 #: seahub/views/ajax.py:1347
 #, python-format
 msgid "User %s not found in organization."
@@ -500,6 +500,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/templates/js/sysadmin-templates.html:292
+#: seahub/templates/remote_user/create_unknown_user_false.html:4
+#: seahub/templates/remote_user/error.html:4
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:100
 #: seahub/templates/sysadmin/sys_statistic_file.html:90
 #: seahub/templates/sysadmin/sys_statistic_storage.html:90
@@ -532,16 +534,16 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3741
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3747
 msgid "Wrong password"
 msgstr "Rangt lykilorð"
 
-#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3744
+#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3750
 #: seahub/views/ajax.py:710 seahub/views/sysadmin.py:2227
 msgid "Internal server error"
 msgstr "Kerfisvilla"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3747
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3753
 msgid "Decrypt library error"
 msgstr "Villa í dulkóðuðu safni"
 
@@ -586,7 +588,7 @@ msgid "An upload link is shared to you on %s"
 msgstr "Upphleðsluslóð er deilt með þér á %s"
 
 #: seahub/api2/endpoints/share_link_zip_task.py:101
-#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:975
+#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:979
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Get ekki hlaðið niður möppu \"%s\": of stórt."
@@ -1693,7 +1695,7 @@ msgstr "Ekki má nota nafnið %s"
 #: seahub/forms.py:97 seahub/views/ajax.py:443 seahub/views/ajax.py:655
 #: seahub/views/ajax.py:995 seahub/views/ajax.py:999 seahub/views/ajax.py:1003
 #: seahub/views/ajax.py:1014 seahub/views/ajax.py:1225
-#: seahub/views/file.py:2048 seahub/views/sysadmin.py:1742
+#: seahub/views/file.py:2052 seahub/views/sysadmin.py:1742
 #: seahub/views/sysadmin.py:1760
 msgid "Argument missing"
 msgstr "Vantar frumgildi"
@@ -1756,7 +1758,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "Leyfisvilla: aðeins stjórnendur hóps geta bætt við félögum"
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:450
+#: seahub/views/file.py:454
 msgid "Group does not exist"
 msgstr "Hópur er ekki til"
 
@@ -2015,12 +2017,12 @@ msgid "Description is required."
 msgstr "Lýsing er áskilin"
 
 #: seahub/group/views.py:127 seahub/share/views.py:228
-#: seahub/views/__init__.py:534 seahub/views/ajax.py:164
+#: seahub/views/__init__.py:538 seahub/views/ajax.py:164
 #: seahub/views/ajax.py:461 seahub/views/ajax.py:468 seahub/views/ajax.py:531
 #: seahub/views/ajax.py:538 seahub/views/ajax.py:668 seahub/views/ajax.py:1164
-#: seahub/views/ajax.py:1205 seahub/views/file.py:1124
-#: seahub/views/file.py:1343 seahub/views/file.py:1530
-#: seahub/views/file.py:2057 seahub/views/repo.py:111 seahub/views/repo.py:175
+#: seahub/views/ajax.py:1205 seahub/views/file.py:1128
+#: seahub/views/file.py:1347 seahub/views/file.py:1534
+#: seahub/views/file.py:2061 seahub/views/repo.py:111 seahub/views/repo.py:175
 #: seahub/views/repo.py:228 seahub/views/repo.py:333
 msgid "Permission denied"
 msgstr "Aðgangi hafnað"
@@ -3021,7 +3023,7 @@ msgstr[1] "\nÞað bíða þín %(num)s nýjar athugasemdir á %(site_name)s:\n"
 #: seahub/notifications/models.py:756 seahub/notifications/models.py:778
 #: seahub/notifications/models.py:804 seahub/notifications/models.py:821
 #: seahub/notifications/models.py:838 seahub/notifications/models.py:867
-#: seahub/utils/__init__.py:173 seahub/utils/__init__.py:1245
+#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1244
 msgid "Internal error"
 msgstr "kerfisvilla"
 
@@ -3293,7 +3295,7 @@ msgid "Successfully cleared all notices."
 msgstr "Tókst að hreinsa burt allar tilkynningar."
 
 #: seahub/oauth/views.py:70 seahub/oauth/views.py:93 seahub/oauth/views.py:136
-#: seahub/oauth/views.py:164
+#: seahub/oauth/views.py:164 seahub/templates/remote_user/error.html:8
 msgid "Error, please contact administrator."
 msgstr ""
 
@@ -6489,6 +6491,18 @@ msgstr "Skráningu er lokið, vinsamlegast bíddu eftir að kerfisstjóri virki 
 msgid "Signup function is not enabled."
 msgstr "Skráningarmöguleikinn er ekki virkur."
 
+#: seahub/templates/remote_user/create_unknown_user_false.html:8
+msgid ""
+"Error, new user registration is not allowed, please contact administrator."
+msgstr ""
+
+#: seahub/templates/remote_user/not_active.html:6
+#: seahub/templates/shibboleth/complete.html:8
+msgid ""
+"Your account is created successfully, please wait for administrator to "
+"activate your account."
+msgstr "Reikningurinn þinn hefur verið stofnaður, vinsamlegast bíðið eftir að kerfisstjóri hefur virkjað reikninginn þinn."
+
 #: seahub/templates/repo_dir_recycle_view.html:13
 #, python-format
 msgid "<span class=\"op-target\">%(repo_dir_name)s</span> Trash"
@@ -6620,12 +6634,6 @@ msgstr ""
 #: seahub/templates/shared_upload_link_email.html:15
 msgid "You can go to the following page and upload your files:"
 msgstr "Þú getur farið á eftirfarandi síðu og hlaðið upp skránum þínum:"
-
-#: seahub/templates/shibboleth/complete.html:8
-msgid ""
-"Your account is created successfully, please wait for administrator to "
-"activate your account."
-msgstr "Reikningurinn þinn hefur verið stofnaður, vinsamlegast bíðið eftir að kerfisstjóri hefur virkjað reikninginn þinn."
 
 #: seahub/templates/snippets/document_file_viewer.html:43
 #: seahub/templates/snippets/document_file_viewer.html:53
@@ -7855,7 +7863,7 @@ msgid "Are you sure you want to delete this wiki?"
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
-#: seahub/views/__init__.py:566 seahub/views/file.py:1553
+#: seahub/views/__init__.py:570 seahub/views/file.py:1557
 msgid "Invalid arguments."
 msgstr "Ógild gildi."
 
@@ -7953,59 +7961,59 @@ msgstr ""
 msgid "Disable"
 msgstr ""
 
-#: seahub/utils/__init__.py:159
+#: seahub/utils/__init__.py:158
 msgid "permission error"
 msgstr "leyfisvilla"
 
-#: seahub/views/__init__.py:393 seahub/views/__init__.py:409
+#: seahub/views/__init__.py:397 seahub/views/__init__.py:413
 msgid "Unable to view recycle page"
 msgstr "Get ekki skoðað endurnýjaða síðu"
 
-#: seahub/views/__init__.py:445
+#: seahub/views/__init__.py:449
 msgid "Unable to view library modification"
 msgstr "Getur ekki skoðað breytingar safns"
 
-#: seahub/views/__init__.py:525 seahub/views/__init__.py:568
-#: seahub/views/__init__.py:787 seahub/views/__init__.py:946
-#: seahub/views/ajax.py:1159 seahub/views/file.py:2043
+#: seahub/views/__init__.py:529 seahub/views/__init__.py:572
+#: seahub/views/__init__.py:791 seahub/views/__init__.py:950
+#: seahub/views/ajax.py:1159 seahub/views/file.py:2047
 msgid "Library does not exist"
 msgstr "Safn er ekki til"
 
-#: seahub/views/__init__.py:559
+#: seahub/views/__init__.py:563
 msgid "Please specify history ID"
 msgstr "Vinsamlegast tilgreinið söguauðkenni"
 
-#: seahub/views/__init__.py:563
+#: seahub/views/__init__.py:567
 msgid "Successfully restored the library."
 msgstr ""
 
-#: seahub/views/__init__.py:570
+#: seahub/views/__init__.py:574
 msgid "History you specified does not exist"
 msgstr "Sagan sem þú tilgreindir er ekki til"
 
-#: seahub/views/__init__.py:572
+#: seahub/views/__init__.py:576
 msgid "Unknown error"
 msgstr "Óþekkt villa"
 
-#: seahub/views/__init__.py:953 seahub/views/repo.py:232
+#: seahub/views/__init__.py:957 seahub/views/repo.py:232
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" er ekki til."
 
-#: seahub/views/__init__.py:972 seahub/views/file.py:1518
+#: seahub/views/__init__.py:976 seahub/views/file.py:1522
 msgid "Internal Error"
 msgstr "Kerfisvilla"
 
-#: seahub/views/__init__.py:994
+#: seahub/views/__init__.py:998
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Get ekki hlaðið niður \"%s\""
 
-#: seahub/views/__init__.py:1116
+#: seahub/views/__init__.py:1120
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "Virkja \"Eigið Wiki\"."
 
-#: seahub/views/__init__.py:1121
+#: seahub/views/__init__.py:1125
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "Slökkva á \"Eigin Wiki\""
 
@@ -8068,9 +8076,9 @@ msgstr "Rangt auðkenni safns"
 msgid "Bad upload link token."
 msgstr "Slæmt tákn í upphleðsluhlekk"
 
-#: seahub/views/ajax.py:1025 seahub/views/file.py:444 seahub/views/file.py:475
-#: seahub/views/file.py:1119 seahub/views/file.py:1338
-#: seahub/views/file.py:2052
+#: seahub/views/ajax.py:1025 seahub/views/file.py:448 seahub/views/file.py:479
+#: seahub/views/file.py:1123 seahub/views/file.py:1342
+#: seahub/views/file.py:2056
 msgid "File does not exist"
 msgstr "Skrá er ekki til"
 
@@ -8090,7 +8098,7 @@ msgstr "HTTP villa: tókst ekki að opna skrána"
 msgid "URLError: failed to open file online"
 msgstr "Veffangsvilla: tókst ekki að opna skrána"
 
-#: seahub/views/file.py:195 seahub/views/file.py:1571
+#: seahub/views/file.py:195 seahub/views/file.py:1575
 msgid "The encoding you chose is not proper."
 msgstr "Kóðunin sem þú valdir á ekki við."
 
@@ -8098,82 +8106,82 @@ msgstr "Kóðunin sem þú valdir á ekki við."
 msgid "Unknown file encoding"
 msgstr "Óþekkt skráargerð"
 
-#: seahub/views/file.py:336 seahub/views/file.py:370 seahub/views/file.py:607
-#: seahub/views/file.py:647 seahub/views/file.py:737 seahub/views/file.py:866
+#: seahub/views/file.py:336 seahub/views/file.py:374 seahub/views/file.py:611
+#: seahub/views/file.py:651 seahub/views/file.py:741 seahub/views/file.py:870
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Skráarstærð yfir %s, ekki hægt að opna í vafra."
 
-#: seahub/views/file.py:346 seahub/views/file.py:772
+#: seahub/views/file.py:346 seahub/views/file.py:776
 msgid "The library is encrypted, can not open file online."
 msgstr "Þetta safn er dulkóðað, get ekki opnað skrár innan kerfis."
 
-#: seahub/views/file.py:431 seahub/views/file.py:453 seahub/views/file.py:458
-#: seahub/views/file.py:499 seahub/views/file.py:723 seahub/views/file.py:988
-#: seahub/views/file.py:1010 seahub/views/file.py:1035
-#: seahub/views/file.py:1149 seahub/views/file.py:1257
-#: seahub/views/file.py:1359 seahub/views/file.py:1464
-#: seahub/views/file.py:1645
+#: seahub/views/file.py:435 seahub/views/file.py:457 seahub/views/file.py:462
+#: seahub/views/file.py:503 seahub/views/file.py:727 seahub/views/file.py:992
+#: seahub/views/file.py:1014 seahub/views/file.py:1039
+#: seahub/views/file.py:1153 seahub/views/file.py:1261
+#: seahub/views/file.py:1363 seahub/views/file.py:1468
+#: seahub/views/file.py:1649
 msgid "Unable to view file"
 msgstr "Getur ekki skoðað skrá"
 
-#: seahub/views/file.py:806 seahub/views/file.py:936 seahub/views/file.py:1218
-#: seahub/views/file.py:1403
+#: seahub/views/file.py:810 seahub/views/file.py:940 seahub/views/file.py:1222
+#: seahub/views/file.py:1407
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:834 seahub/views/file.py:948 seahub/views/file.py:1237
-#: seahub/views/file.py:1418
+#: seahub/views/file.py:838 seahub/views/file.py:952 seahub/views/file.py:1241
+#: seahub/views/file.py:1422
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1067
+#: seahub/views/file.py:1071
 msgid "Unable to download file, invalid file path"
 msgstr "Gat ekki niðurhalað skrá, röng skráarslóð"
 
-#: seahub/views/file.py:1076
+#: seahub/views/file.py:1080
 msgid "Unable to download file, wrong file path"
 msgstr "Gat ekki niðurhalað skrá, röng skráarslóð"
 
-#: seahub/views/file.py:1081
+#: seahub/views/file.py:1085
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Gat ekki niðurhalað skrá, deilihlekksumferð er uppurin."
 
-#: seahub/views/file.py:1088
+#: seahub/views/file.py:1092
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:1160 seahub/views/file.py:1370
+#: seahub/views/file.py:1164 seahub/views/file.py:1374
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:1274 seahub/views/file.py:1484
+#: seahub/views/file.py:1278 seahub/views/file.py:1488
 #: seahub/views/repo.py:283
 #, python-format
 msgid "Share link for %s."
 msgstr ""
 
-#: seahub/views/file.py:1543
+#: seahub/views/file.py:1547
 msgid "The library does not exist."
 msgstr "Safnið er ekki til."
 
-#: seahub/views/file.py:1547
+#: seahub/views/file.py:1551
 msgid "The library is encrypted."
 msgstr "Safnið er dulkóðað"
 
-#: seahub/views/file.py:1633
+#: seahub/views/file.py:1637
 msgid "Unable to edit file"
 msgstr "Ekki hægt að breyta skrá"
 
-#: seahub/views/file.py:1639
+#: seahub/views/file.py:1643
 msgid "The file does not exist."
 msgstr "Skráin er ekki til."
 
-#: seahub/views/file.py:1671
+#: seahub/views/file.py:1675
 msgid "Edit online is not offered for this type of file."
 msgstr "Ekki er hægt að breyta skrá af þessari gerð í vafra"
 
-#: seahub/views/file.py:1794 seahub/views/file.py:1799
+#: seahub/views/file.py:1798 seahub/views/file.py:1803
 msgid "Unable to download file"
 msgstr "Get ekki halað niður skrá"
 

@@ -10,6 +10,7 @@ from rest_framework import status
 from seaserv import seafile_api, ccnet_api
 
 from seahub.group.utils import get_group_member_info, is_group_member
+from seahub.group.signals import add_user_to_group
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -122,6 +123,11 @@ class AdminGroupMembers(APIView):
                     'email': email,
                     'error_msg': 'Internal Server Error'
                     })
+
+            add_user_to_group.send(sender=None,
+                                   group_staff=request.user.username,
+                                   group_id=group_id,
+                                   added_user=email)
 
         return Response(result)
 

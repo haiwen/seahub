@@ -116,7 +116,7 @@ class RepoViewTest(BaseTestCase):
     def test_delete_with_read_only_status(self):
         self.login_as(self.user)
 
-        seafile_api.set_repo_status(self.repo.id, int(1))
+        seafile_api.set_repo_status(self.repo.id, 1)
 
         resp = self.client.delete(self.url)
         self.assertEqual(403, resp.status_code)
