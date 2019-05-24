@@ -16,16 +16,19 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.work_weixin.utils import handler_work_weixin_api_response, \
     get_work_weixin_access_token, admin_work_weixin_departments_check, \
-    update_work_weixin_user_info, create_work_weixin_social_auth
+    update_work_weixin_user_info
 from seahub.work_weixin.settings import WORK_WEIXIN_DEPARTMENTS_URL, \
-    WORK_WEIXIN_DEPARTMENT_MEMBERS_URL, WORK_WEIXIN_PROVIDER
-from social_django.models import UserSocialAuth
+    WORK_WEIXIN_DEPARTMENT_MEMBERS_URL, WORK_WEIXIN_PROVIDER, WORK_WEIXIN_CORP_ID, \
+    WORK_WEIXIN_UID_PREFIX
+# from social_django.models import UserSocialAuth
 from seahub.base.accounts import User
 from seahub.utils.auth import gen_user_virtual_id
+from seahub.auth.models import SocialAuthUser
 
 logger = logging.getLogger(__name__)
 
 
+# # uid = corpid + '_' + userid
 # get departments: https://work.weixin.qq.com/api/doc#90000/90135/90208
 # get members: https://work.weixin.qq.com/api/doc#90000/90135/90200
 
@@ -102,25 +105,28 @@ class AdminWorkWeixinDepartmentMembers(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         api_user_list = api_response_dic['userlist']
-        social_auth_queryset = UserSocialAuth.objects.filter(provider=WORK_WEIXIN_PROVIDER)
+        # todo filter ccnet User database
+        social_auth_queryset = SocialAuthUser.objects.filter(
+            provider=WORK_WEIXIN_PROVIDER, uid__contains=WORK_WEIXIN_UID_PREFIX)
         for api_user in api_user_list:
-            uid = api_user.get('userid', '')
+            uid = WORK_WEIXIN_UID_PREFIX + api_user.get('userid', '')
             api_user['exists'] = True if social_auth_queryset.filter(uid=uid).exists() else False
 
         return Response(api_response_dic)
 
 
 def _handler_work_weixin_user_data(api_user, social_auth_queryset):
-    user_id = api_user.get('userid', None)
+    user_id = api_user.get('userid', '')
+    uid = WORK_WEIXIN_UID_PREFIX + user_id
     name = api_user.get('name', None)
     error_data = None
-    if not user_id:
+    if not uid:
         error_data = {
             'userid': None,
             'name': None,
             'error_msg': 'userid invalid.',
         }
-    elif social_auth_queryset.filter(uid=user_id).exists():
+    elif social_auth_queryset.filter(uid=uid).exists():
         error_data = {
             'userid': user_id,
             'name': name,
@@ -130,13 +136,13 @@ def _handler_work_weixin_user_data(api_user, social_auth_queryset):
     return error_data
 
 
-def _create_user_and_user_info_and_work_weixin_social_auth(api_user):
+def _create_user_and_update_user_info_and_work_weixin_social_auth(api_user):
     email = gen_user_virtual_id()
     api_user['username'] = email
-    uid = api_user.get('userid')
+    uid = WORK_WEIXIN_UID_PREFIX + api_user.get('userid')
     try:
         User.objects.create_user(email)
-        create_work_weixin_social_auth(uid, email)
+        SocialAuthUser.objects.add_by_uid(email, WORK_WEIXIN_PROVIDER, uid)
         update_work_weixin_user_info(api_user)
     except Exception as e:
         logger.error(e)
@@ -162,14 +168,15 @@ class AdminWorkWeixinUsers(APIView):
 
         success = []
         failed = []
-        social_auth_queryset = UserSocialAuth.objects.filter(provider=WORK_WEIXIN_PROVIDER)
+        social_auth_queryset = SocialAuthUser.objects.filter(
+            provider=WORK_WEIXIN_PROVIDER, uid__contains=WORK_WEIXIN_UID_PREFIX)
 
         for api_user in api_user_list:
 
             error_data = _handler_work_weixin_user_data(api_user, social_auth_queryset)
             if not error_data:
 
-                if _create_user_and_user_info_and_work_weixin_social_auth(api_user):
+                if _create_user_and_update_user_info_and_work_weixin_social_auth(api_user):
                     success.append({
                         'userid': api_user.get('userid'),
                         'name': api_user.get('name'),

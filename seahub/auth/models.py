@@ -11,8 +11,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
+UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 
-UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
 def get_hexdigest(algorithm, salt, raw_password):
     """
@@ -33,6 +33,7 @@ def get_hexdigest(algorithm, salt, raw_password):
         return hashlib.sha1(salt + raw_password).hexdigest()
     raise ValueError("Got unknown password algorithm type in password.")
 
+
 def check_password(raw_password, enc_password):
     """
     Returns a boolean of whether the raw_password was correct. Handles
@@ -40,6 +41,7 @@ def check_password(raw_password, enc_password):
     """
     algo, salt, hsh = enc_password.split('$')
     return hsh == get_hexdigest(algo, salt, raw_password)
+
 
 class SiteProfileNotAvailable(Exception):
     pass
@@ -70,7 +72,7 @@ class AnonymousUser(object):
         return not self.__eq__(other)
 
     def __hash__(self):
-        return 1 # instances always return the same hash value
+        return 1  # instances always return the same hash value
 
     def save(self):
         raise NotImplementedError
@@ -86,10 +88,12 @@ class AnonymousUser(object):
 
     def _get_groups(self):
         return self._groups
+
     groups = property(_get_groups)
 
     def _get_user_permissions(self):
         return self._user_permissions
+
     user_permissions = property(_get_user_permissions)
 
     def get_group_permissions(self, obj=None):
@@ -118,3 +122,45 @@ class AnonymousUser(object):
 
     def is_authenticated(self):
         return False
+
+
+class SocialAuthUserManager(models.Manager):
+    def add_by_uid(self, username, provider, uid, extra_data=''):
+        try:
+            social_auth_user = self.get(provider=provider, uid=uid)
+        except self.model.DoesNotExist:
+            social_auth_user = self.model(username=username, provider=provider, uid=uid, extra_data=extra_data)
+            social_auth_user.save()
+        return social_auth_user
+
+    def get_by_uid(self, provider, uid):
+        try:
+            social_auth_user = self.get(provider=provider, uid=uid)
+            return social_auth_user
+        except self.model.DoesNotExist:
+            return None
+
+
+class SocialAuthUser(models.Model):
+    username = models.CharField(max_length=255, db_index=True)
+    provider = models.CharField(max_length=32)
+    uid = models.CharField(max_length=255)
+    extra_data = models.TextField()
+    objects = SocialAuthUserManager()
+
+    class Meta:
+        """Meta data"""
+        app_label = "seahub.work_weixin"
+        unique_together = ('provider', 'uid')
+        db_table = 'social_auth_usersocialauth'
+
+
+# # handle signals
+from django.dispatch import receiver
+from registration.signals import user_deleted
+
+
+@receiver(user_deleted)
+def user_deleted_cb(sender, **kwargs):
+    username = kwargs['username']
+    SocialAuthUser.objects.filter(username=username).delete()

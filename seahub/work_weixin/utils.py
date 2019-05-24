@@ -7,17 +7,18 @@ import requests
 
 from django.core.cache import cache
 from seahub.utils import normalize_cache_key
-from .settings import WEIXIN_WORK_CORPID, WEIXIN_WORK_AGENT_SECRET, \
+from .settings import WORK_WEIXIN_CORP_ID, WORK_WEIXIN_AGENT_SECRET, \
     WORK_WEIXIN_ACCESS_TOKEN_URL, ENABLE_WORK_WEIXIN_DEPARTMENTS, \
     WORK_WEIXIN_DEPARTMENTS_URL, WORK_WEIXIN_DEPARTMENT_MEMBERS_URL, \
-    ENABLE_WORK_WEIXIN_OAUTH, WEIXIN_WORK_AGENT_ID, \
+    ENABLE_WORK_WEIXIN_OAUTH, WORK_WEIXIN_AGENT_ID, \
     WORK_WEIXIN_AUTHORIZATION_URL, WORK_WEIXIN_REDIRECT_URI, \
-    WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_PROVIDER, WORK_WEIXIN_GET_USER_PROFILE_URL
+    WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL
 from seahub.profile.models import Profile
 from seahub.constants import DEFAULT_USER
 from seahub.utils import is_pro_version
 from seahub.base.accounts import User
-from social_django.models import UserSocialAuth
+from seahub.settings import ENABLE_OAUTH
+# from social_django.models import UserSocialAuth
 
 logger = logging.getLogger(__name__)
 WORK_WEIXIN_ACCESS_TOKEN_CACHE_KEY = 'WORK_WEIXIN_ACCESS_TOKEN'
@@ -32,8 +33,8 @@ def get_work_weixin_access_token():
 
     if not access_token:
         data = {
-            'corpid': WEIXIN_WORK_CORPID,
-            'corpsecret': WEIXIN_WORK_AGENT_SECRET,
+            'corpid': WORK_WEIXIN_CORP_ID,
+            'corpsecret': WORK_WEIXIN_AGENT_SECRET,
         }
         response = requests.get(WORK_WEIXIN_ACCESS_TOKEN_URL, params=data)
         response = handler_work_weixin_api_response(response)
@@ -63,20 +64,21 @@ def handler_work_weixin_api_response(response):
 
 
 def work_weixin_oauth_check():
-    if not ENABLE_WORK_WEIXIN_OAUTH:
+
+    if not (ENABLE_WORK_WEIXIN_OAUTH and ENABLE_OAUTH):
         logger.error('work weixin oauth not enabled.')
         return False
     else:
-        if not WEIXIN_WORK_CORPID \
-                or not WEIXIN_WORK_AGENT_ID \
+        if not WORK_WEIXIN_CORP_ID \
+                or not WORK_WEIXIN_AGENT_ID \
                 or not WORK_WEIXIN_ACCESS_TOKEN_URL \
                 or not WORK_WEIXIN_REDIRECT_URI \
                 or not WORK_WEIXIN_GET_USER_INFO_URL \
                 or not WORK_WEIXIN_AUTHORIZATION_URL \
                 or not WORK_WEIXIN_GET_USER_PROFILE_URL:
             logger.error('work weixin oauth relevant settings invalid.')
-            logger.error('WEIXIN_WORK_CORPID: %s' % WEIXIN_WORK_CORPID)
-            logger.error('WEIXIN_WORK_AGENT_ID: %s' % WEIXIN_WORK_AGENT_ID)
+            logger.error('WORK_WEIXIN_CORP_ID: %s' % WORK_WEIXIN_CORP_ID)
+            logger.error('WORK_WEIXIN_AGENT_ID: %s' % WORK_WEIXIN_AGENT_ID)
             logger.error('WORK_WEIXIN_ACCESS_TOKEN_URL: %s' % WORK_WEIXIN_ACCESS_TOKEN_URL)
             logger.error('WORK_WEIXIN_REDIRECT_URI: %s' % WORK_WEIXIN_REDIRECT_URI)
             logger.error('WORK_WEIXIN_GET_USER_INFO_URL: %s' % WORK_WEIXIN_GET_USER_INFO_URL)
@@ -92,14 +94,14 @@ def admin_work_weixin_departments_check():
         logger.error('admin work weixin departments not enabled.')
         return False
     else:
-        if not WEIXIN_WORK_CORPID \
-                or not WEIXIN_WORK_AGENT_SECRET \
+        if not WORK_WEIXIN_CORP_ID \
+                or not WORK_WEIXIN_AGENT_SECRET \
                 or not WORK_WEIXIN_ACCESS_TOKEN_URL \
                 or not WORK_WEIXIN_DEPARTMENTS_URL \
                 or not WORK_WEIXIN_DEPARTMENT_MEMBERS_URL:
             logger.error('admin work weixin departments relevant settings invalid.')
-            logger.error('WEIXIN_WORK_CORPID: %s' % WEIXIN_WORK_CORPID)
-            logger.error('WEIXIN_WORK_AGENT_SECRET: %s' % WEIXIN_WORK_AGENT_SECRET)
+            logger.error('WORK_WEIXIN_CORP_ID: %s' % WORK_WEIXIN_CORP_ID)
+            logger.error('WORK_WEIXIN_AGENT_SECRET: %s' % WORK_WEIXIN_AGENT_SECRET)
             logger.error('WORK_WEIXIN_ACCESS_TOKEN_URL: %s' % WORK_WEIXIN_ACCESS_TOKEN_URL)
             logger.error('WORK_WEIXIN_DEPARTMENTS_URL: %s' % WORK_WEIXIN_DEPARTMENTS_URL)
             logger.error('WORK_WEIXIN_DEPARTMENT_MEMBERS_URL: %s' % WORK_WEIXIN_DEPARTMENT_MEMBERS_URL)
@@ -120,16 +122,3 @@ def update_work_weixin_user_info(api_user):
             Profile.objects.add_or_update(email, nickname)
     except Exception as e:
         logger.error(e)
-
-
-def create_work_weixin_social_auth(uid, username):
-
-    work_weixin_user = UserSocialAuth.objects.create(
-        username=username,
-        provider=WORK_WEIXIN_PROVIDER,
-        uid=uid,
-        extra_data='{}'
-    )
-
-    # create or update
-    return work_weixin_user

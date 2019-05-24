@@ -8,10 +8,11 @@ WORK_WEIXIN_DEPARTMENT_MEMBERS_URL = getattr(settings, 'WORK_WEIXIN_DEPARTMENTS_
                                              'https://qyapi.weixin.qq.com/cgi-bin/user/list')
 ENABLE_WORK_WEIXIN_DEPARTMENTS = getattr(settings, 'ENABLE_WORK_WEIXIN_DEPARTMENTS', False)
 
-WEIXIN_WORK_CORPID = getattr(settings, 'WEIXIN_WORK_CORPID', '')
-WEIXIN_WORK_AGENT_ID = getattr(settings, 'WEIXIN_WORK_AGENT_ID', '')
-WEIXIN_WORK_AGENT_SECRET = getattr(settings, 'WEIXIN_WORK_AGENT_SECRET', '')
+WORK_WEIXIN_CORP_ID = getattr(settings, 'WORK_WEIXIN_CORP_ID', '')
+WORK_WEIXIN_AGENT_ID = getattr(settings, 'WORK_WEIXIN_AGENT_ID', '')
+WORK_WEIXIN_AGENT_SECRET = getattr(settings, 'WORK_WEIXIN_AGENT_SECRET', '')
 WORK_WEIXIN_PROVIDER = 'work-weixin'
+WORK_WEIXIN_UID_PREFIX = WORK_WEIXIN_CORP_ID + '_'
 
 ENABLE_WORK_WEIXIN_OAUTH = getattr(settings, 'ENABLE_WORK_WEIXIN_OAUTH', False)
 WORK_WEIXIN_REDIRECT_URI = '/work-weixin/oauth-callback/'
