@@ -291,12 +291,12 @@ class FileChooser extends React.Component {
         <SearchedListView 
           searchResults={this.state.searchResults} 
           onItemClick={this.onSearchedItemClick}
-          toAimsDir={this.toAimsDir}
+          onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
         />);
     }
   }
 
-  toAimsDir = (item) => {
+  onSearchedItemDoubleClick = (item) => {
     
     let repoObj = {
       repoID: item.repo_id,

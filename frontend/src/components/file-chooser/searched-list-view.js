@@ -5,7 +5,7 @@ import SearchedListItem from './searched-list-item';
 const propTypes = {
   searchResults: PropTypes.array.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  toAimsDir: PropTypes.func.isRequired,
+  onSearchedItemDoubleClick: PropTypes.func.isRequired,
 };
 
 class SearchedListView extends React.Component {
@@ -39,7 +39,7 @@ class SearchedListView extends React.Component {
               item={item} 
               currentItem={this.state.currentItem} 
               onItemClick={this.onItemClick}
-              toAimsDir={this.props.toAimsDir}
+              onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
             />);
           })}
         </tbody>
