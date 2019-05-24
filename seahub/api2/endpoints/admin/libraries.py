@@ -21,7 +21,7 @@ from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import is_group_member, group_id_to_name
-from seahub.utils.repo import get_related_users_by_repo, normalize_repo_status
+from seahub.utils.repo import get_related_users_by_repo, normalize_repo_status_code, normalize_repo_status_str
 from seahub.utils import is_valid_dirent_name, is_valid_email
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
@@ -55,7 +55,7 @@ def get_repo_info(repo):
     result['size_formatted'] = filesizeformat(repo.size)
     result['encrypted'] = repo.encrypted
     result['file_count'] = repo.file_count
-    result['status'] = normalize_repo_status(repo.status)
+    result['status'] = normalize_repo_status_code(repo.status)
 
     if '@seafile_group' in owner:
         group_id = get_group_id_by_repo_owner(owner)
@@ -289,7 +289,7 @@ class AdminLibrary(APIView):
         # argument check
         new_status = request.data.get('status', None)
         if new_status:
-            if new_status not in ('0', '1'):
+            if new_status not in ('normal', 'read-only'):
                 error_msg = 'status invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -313,7 +313,7 @@ class AdminLibrary(APIView):
 
         if new_status:
             try:
-                seafile_api.set_repo_status(repo_id, int(new_status))
+                seafile_api.set_repo_status(repo_id, normalize_repo_status_str(new_status))
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'

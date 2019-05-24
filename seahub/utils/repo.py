@@ -21,11 +21,20 @@ from seahub.settings import ENABLE_STORAGE_CLASSES, \
 logger = logging.getLogger(__name__)
 
 
-def normalize_repo_status(status):
+def normalize_repo_status_code(status):
     if status == 0:
         return REPO_STATUS_NORMAL
     elif status == 1:
         return REPO_STATUS_READ_ONLY
+    else:
+        return ''
+
+
+def normalize_repo_status_str(status):
+    if status == 'normal':
+        return 0
+    elif status == 'read-only':
+        return 1
     else:
         return ''
 
