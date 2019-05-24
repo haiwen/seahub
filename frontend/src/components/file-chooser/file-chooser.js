@@ -374,8 +374,8 @@ class FileChooser extends React.Component {
         {this.props.mode === 'current_repo_and_other_repos' && (
           <Fragment>
             <div className="list-view">
-              <div className={`list-view-header ${this.state.isCurrentRepoShow ? 'select-open-repo' : ''}`}>
-                <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down select-open-repo' : 'fa-caret-right'} `} onClick={this.onCurrentRepoToggle}></span>
+              <div className="list-view-header">
+                <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'} `} onClick={this.onCurrentRepoToggle}></span>
                 <span className="library">{gettext('Current Library')}</span>
               </div>
               {
@@ -394,7 +394,7 @@ class FileChooser extends React.Component {
               }
             </div>
             <div className="list-view">
-              <div className={`list-view-header ${this.state.isOtherRepoShow ? 'select-open-repo' : ''}`}>
+              <div className="list-view-header">
                 <span className={`item-toggle fa ${this.state.isOtherRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>
                 <span className="library">{gettext('Other Libraries')}</span>
               </div>

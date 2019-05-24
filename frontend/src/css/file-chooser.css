@@ -26,6 +26,9 @@
   position: relative;
   padding-left: 1.5rem;
 }
+.list-view-header:hover {
+  background-color: #FDEFB9;
+}
 
 .list-view-header .name {
   color: #eb8205;
@@ -119,10 +122,6 @@
 
 .searched-active .icon {
   color: #fff !important;
-}
-
-.searched-active img {
-  background: #fff;
 }
 
 .select-open-repo {
