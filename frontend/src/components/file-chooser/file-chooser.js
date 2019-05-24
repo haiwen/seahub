@@ -423,7 +423,7 @@ class FileChooser extends React.Component {
             {
               this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
               <RepoListView 
-                initToShowChildren={false}
+                initToShowChildren={true}
                 currentRepoInfo={this.state.currentRepoInfo}
                 selectedRepo={this.state.selectedRepo}
                 selectedPath={this.state.selectedPath}
