@@ -6,7 +6,6 @@ const propTypes = {
   currentItem: PropTypes.object,
   onItemClick: PropTypes.func.isRequired,
   toAimsDir: PropTypes.func.isRequired,
-  onCloseSearching: PropTypes.func.isRequired,
 };
 
 class SearchedListItem extends React.Component {
@@ -35,7 +34,6 @@ class SearchedListItem extends React.Component {
     let item = this.props.item;
    
     this.props.toAimsDir(item);
-    this.props.onCloseSearching();
   }
 
   render() {
