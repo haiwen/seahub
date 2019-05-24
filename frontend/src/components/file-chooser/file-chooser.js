@@ -36,7 +36,7 @@ class FileChooser extends React.Component {
       isResultGot: false,
       searchInfo: '',
       searchResults: [],
-      repoObj: {},
+      repoClickInfo: {},
     };
     this.inputValue = '';
     this.timer = null;
@@ -101,7 +101,7 @@ class FileChooser extends React.Component {
         this.setState({
           repoList: repoList,
           isOtherRepoShow: !this.state.isOtherRepoShow,
-          repoObj: {}
+          repoClickInfo: {}
         });
       });
     }
@@ -298,13 +298,13 @@ class FileChooser extends React.Component {
 
   onSearchedItemDoubleClick = (item) => {
     
-    let repoObj = {
+    let repoClickInfo = {
       repoID: item.repo_id,
       filePath: item.path,
     }
 
     this.setState({
-      repoObj: repoObj
+      repoClickInfo: repoClickInfo
     });
 
     if (item.repo_id === this.props.repoID) {
@@ -387,7 +387,7 @@ class FileChooser extends React.Component {
                   onDirentItemClick={this.onDirentItemClick}
                   isShowFile={this.props.isShowFile}
                   fileSuffixes={this.props.fileSuffixes}
-                  repoObj={this.state.repoObj}
+                  repoClickInfo={this.state.repoClickInfo}
                 />
               }
             </div>
@@ -407,7 +407,7 @@ class FileChooser extends React.Component {
                   onDirentItemClick={this.onDirentItemClick}
                   isShowFile={this.props.isShowFile}
                   fileSuffixes={this.props.fileSuffixes}
-                  repoObj={this.state.repoObj}
+                  repoClickInfo={this.state.repoClickInfo}
                 /> 
               }
             </div>
@@ -430,7 +430,7 @@ class FileChooser extends React.Component {
                 onDirentItemClick={this.onDirentItemClick}
                 isShowFile={this.props.isShowFile}
                 fileSuffixes={this.props.fileSuffixes}
-                repoObj={this.state.repoObj}
+                repoClickInfo={this.state.repoClickInfo}
               />
             }
           </div>
@@ -451,7 +451,7 @@ class FileChooser extends React.Component {
                 onDirentItemClick={this.onDirentItemClick}
                 isShowFile={this.props.isShowFile}
                 fileSuffixes={this.props.fileSuffixes}
-                repoObj={this.state.repoObj}
+                repoClickInfo={this.state.repoClickInfo}
               /> 
             </div>
           </div>
