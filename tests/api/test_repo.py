@@ -79,7 +79,7 @@ class RepoTest(BaseTestCase):
 
         self.login_as(self.user)
 
-        seafile_api.set_repo_status(self.repo.id, int(1))
+        seafile_api.set_repo_status(self.repo.id, 1)
 
         invalid_name = '123456'
         data = {'repo_name': invalid_name}
