@@ -19,6 +19,8 @@ TEST_CAN_USE_WIKI_FALSE['default']['can_use_wiki'] = False
 TEST_CAN_PUBLISH_REPO_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
 TEST_CAN_PUBLISH_REPO_FALSE['default']['can_publish_repo'] = False
 
+TEST_CAN_GENERATE_SHARE_LINK = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
+TEST_CAN_GENERATE_SHARE_LINK['default']['can_generate_share_link'] = False
 
 @override_settings(ENABLE_WIKI=True)
 class WikisViewTest(BaseTestCase):
@@ -101,6 +103,12 @@ class WikisViewTest(BaseTestCase):
             })
             self.assertEqual(403, resp.status_code)
 
+    def test_403_when_add_wiki_with_can_generate_share_link_false(self):
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_GENERATE_SHARE_LINK):
+            resp = self.client.post(self.url, {
+                'repo_id': self.repo.id,
+            })
+            self.assertEqual(403, resp.status_code)
 
 class WikiViewTest(BaseTestCase):
     def setUp(self):
