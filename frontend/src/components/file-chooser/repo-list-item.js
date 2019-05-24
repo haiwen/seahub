@@ -87,7 +87,7 @@ class RepoListItem extends React.Component {
    
     seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
       let direntList = res.data.dirent_list;
-      direntList = direntList.filter(item => item.type === 'dir')
+      direntList = direntList.filter(item => item.type === 'dir');
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
         let object = direntList[i];
