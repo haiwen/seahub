@@ -50,6 +50,7 @@
   padding-left: 10px;
   height: 2rem;
   display: block;
+  max-width: 75%;
 }
 .seafile-comment-item .seafile-comment-info .reviewer-name {
   font-size: 1rem;

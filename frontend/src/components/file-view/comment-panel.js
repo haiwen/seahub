@@ -219,7 +219,7 @@ class CommentItem extends React.Component {
           <div className="seafile-comment-info">
             <img className="avatar" src={item.avatar_url} alt=""/>
             <div className="reviewer-info">
-              <div className="reviewer-name">{item.user_name}</div>
+              <div className="reviewer-name ellipsis">{item.user_name}</div>
               <div className="review-time">{this.props.time}</div>
             </div>
           </div>
@@ -237,7 +237,7 @@ class CommentItem extends React.Component {
         <div className="seafile-comment-info">
           <img className="avatar" src={item.avatar_url} alt=""/>
           <div className="reviewer-info">
-            <div className="reviewer-name">{item.user_name}</div>
+            <div className="reviewer-name ellipsis">{item.user_name}</div>
             <div className="review-time">{this.props.time}</div>
           </div>
           <Dropdown isOpen={this.state.dropdownOpen} size="sm"

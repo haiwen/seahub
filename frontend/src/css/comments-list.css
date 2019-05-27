@@ -59,6 +59,7 @@
 }
 .seafile-comment-item .seafile-comment-info .reviewer-info {
   padding-left: 10px;
+  max-width: 75%;
 }
 .seafile-comment-item .seafile-comment-info .review-time {
   font-size: 10px;
@@ -125,4 +126,9 @@
 }
 .seafile-edit-comment .comment-btn {
   height: 28px;
+}
+@media (max-width: 768px) {
+  .seafile-comment-toggle-resolved {
+    width: 100%;
+  }
 }

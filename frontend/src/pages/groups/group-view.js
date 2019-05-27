@@ -436,10 +436,10 @@ class GroupView extends React.Component {
                             this.state.groupMembers.map(function(item, index) {
                               return (
                                 <li key={index}>
-                                  <a href="#" className="sf-popover-item user-item">
+                                  <a href="#" className="sf-popover-item user-item d-flex">
                                     <img src={item.avatar_url} alt="" className="group-member-avatar avatar"/>
-                                    <span className="txt-item ellipsis">
-                                      <span className="group-member-name">{item.name}</span>
+                                    <span className="txt-item ellipsis d-flex">
+                                      <span className="group-member-name ellipsis">{item.name}</span>
                                       <span className="group-member-admin">{that.translateRole(item.role)}</span>
                                     </span>
                                   </a>

@@ -898,7 +898,7 @@ class SidePanelReviewers extends React.Component {
             return (
               <div className="reviewer-info" key={index}>
                 <img className="avatar review-side-panel-avatar" src={item.avatar_url} alt=""/>
-                <span className="reviewer-name">{item.user_name}</span>
+                <span className="reviewer-name ellipsis">{item.user_name}</span>
               </div>
             );
           })
@@ -924,7 +924,7 @@ class SidePanelAuthor extends React.Component {
         <div className="review-side-panel-header">{gettext('Author')}</div>
         <div className="author-info">
           <img className="avatar review-side-panel-avatar" src={authorAvatar} alt=""/>
-          <span className="author-name">{author}</span>
+          <span className="author-name ellipsis">{author}</span>
         </div>
       </div>
     );

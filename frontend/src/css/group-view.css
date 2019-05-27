@@ -17,6 +17,7 @@
 }
 .group-member-list .user-item .group-member-name {
   margin: 0 5px;
+  max-width: 70%;
 }
 .group-member-list .user-item .group-member-admin {
   color: #888;
