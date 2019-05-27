@@ -17,7 +17,6 @@ const propTypes = {
   onDirentItemClick: PropTypes.func.isRequired,
   onRepoItemClick: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
-  repoClickInfo: PropTypes.object,
 };
 
 class RepoListItem extends React.Component {
@@ -38,12 +37,9 @@ class RepoListItem extends React.Component {
       this.addResponseListToNode(direntList, tree.root);
       this.setState({treeData: tree});
     })
-
-    if (this.props.repoClickInfo) {
-      if (this.props.repoClickInfo.repoID === this.props.repo.repo_id) {
-        this.setState({isShowChildren: true});
-        this.loadNodeAndParentsByPath(this.props.repoClickInfo.repoID, this.props.repoClickInfo.filePath);
-      }
+    if (this.props.selectedRepo.repo_id === this.props.repo.repo_id) {
+      this.setState({isShowChildren: true});
+      this.loadNodeAndParentsByPath(this.props.selectedRepo.repo_id, this.props.selectedPath);
     }
   }
 

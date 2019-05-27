@@ -13,7 +13,6 @@ const propTypes = {
   onDirentItemClick: PropTypes.func.isRequired,
   onRepoItemClick: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
-  repoClickInfo: PropTypes.object,
 };
 
 class RepoListView extends React.Component {
@@ -38,10 +37,6 @@ class RepoListView extends React.Component {
               onDirentItemClick={this.props.onDirentItemClick}
               isShowFile={this.props.isShowFile}
               fileSuffixes={this.props.fileSuffixes}
-              onNodeCollapse={this.props.onNodeCollapse}
-              onNodeExpanded={this.props.onNodeExpanded}
-              repoClickInfo={this.props.repoClickInfo}
-              treeData={this.props.treeData}
             />
           );
         })}
