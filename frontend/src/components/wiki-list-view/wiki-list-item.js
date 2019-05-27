@@ -148,10 +148,8 @@ class WikiListItem extends Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-          <td className="publish-icon">
-            <img className="item-img" src={fileIconUrl} alt="" width="24"/>
-          </td>
-          <td className="name">
+          <td className="name" className="pl-6 position-relative">
+            <img className="item-img wiki-published-img" src={fileIconUrl} alt="" width="24" style={{'left': '0'}}/>
             {this.state.isRenameing ?
               <Rename wiki={wiki} name={wiki.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
               <a href={wiki.link}>{wiki.name}</a>
