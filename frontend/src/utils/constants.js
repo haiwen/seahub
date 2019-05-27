@@ -38,6 +38,7 @@ export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshot
 export const shareLinkPasswordMinLength = window.app.pageOptions.shareLinkPasswordMinLength;
 export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
+export const shareLinkExpireDaysDefault = window.app.pageOptions.shareLinkExpireDaysDefault;
 export const maxFileName = window.app.pageOptions.maxFileName;
 export const enableWiki = window.app.pageOptions.enableWiki;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;

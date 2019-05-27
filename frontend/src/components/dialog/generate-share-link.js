@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkPasswordMinLength } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkPasswordMinLength } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedLinkInfo from '../../models/shared-link-info';
@@ -27,7 +27,7 @@ class GenerateShareLink extends React.Component {
       isExpireChecked: false,
       password: '',
       passwdnew: '',
-      expireDays: '',
+      expireDays: shareLinkExpireDaysDefault,
       errorInfo: '',
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
