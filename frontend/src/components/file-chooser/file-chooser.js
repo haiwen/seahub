@@ -315,7 +315,9 @@ class FileChooser extends React.Component {
 
         this.setState({
           selectedRepo: repoInfo,
-          selectedPath: path
+          selectedPath: path,
+          isCurrentRepoShow: true,
+          isOtherRepoShow: false,
         });
       });
     } else {
