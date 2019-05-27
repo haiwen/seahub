@@ -317,7 +317,6 @@ class FileChooser extends React.Component {
           selectedRepo: repoInfo,
           selectedPath: path,
           isCurrentRepoShow: true,
-          isOtherRepoShow: false,
         });
       });
     } else {
