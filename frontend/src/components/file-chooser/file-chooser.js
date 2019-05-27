@@ -36,7 +36,6 @@ class FileChooser extends React.Component {
       isResultGot: false,
       searchInfo: '',
       searchResults: [],
-      selectedItemInfo: {},
     };
     this.inputValue = '';
     this.timer = null;
@@ -101,7 +100,6 @@ class FileChooser extends React.Component {
         this.setState({
           repoList: repoList,
           isOtherRepoShow: !this.state.isOtherRepoShow,
-          selectedItemInfo: {}
         });
       });
     }
@@ -287,83 +285,13 @@ class FileChooser extends React.Component {
     }
 
     if (this.state.isResultGot && this.state.searchResults.length > 0) {
-      return (
-        <SearchedListView 
-          searchResults={this.state.searchResults} 
-          onItemClick={this.onSearchedItemClick}
-          onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
-        />);
+      return (<SearchedListView searchResults={this.state.searchResults} onItemClick={this.onSearchedItemClick}/>);
     }
   }
-
-  onSearchedItemDoubleClick = (item) => {
-    
-    let selectedItemInfo = {
-      repoID: item.repo_id,
-      filePath: item.path,
-    }
-
-    this.setState({
-      selectedItemInfo: selectedItemInfo
-    });
-
-    if (item.repo_id === this.props.repoID) {
-      seafileAPI.getRepoInfo(this.props.repoID).then(res => {
-        // need to optimized
-        let repoInfo = new RepoInfo(res.data);
-        let path = item.path.substring(0, (item.path.length - 1));
-
-        this.setState({
-          selectedRepo: repoInfo,
-          selectedPath: path,
-          isCurrentRepoShow: true,
-        });
-      });
-    } else {
-      if (!this.state.hasRequest) {
-        let that = this;
-        seafileAPI.listRepos().then(res => {
-          // todo optimized code
-          let repos = res.data.repos;
-          let repoList = [];
-          let repoIdList = [];
-          for (let i = 0; i < repos.length; i++) {
-            if (repos[i].permission !== 'rw') {
-              continue;
-            }
-            if (that.props.repoID && (repos[i].repo_name === that.state.currentRepoInfo.repo_name)) {
-              continue;
-            }
-            if (repoIdList.indexOf(repos[i].repo_id) > -1) {
-              continue;
-            }
-            repoList.push(repos[i]);
-            repoIdList.push(repos[i].repo_id);
-          }
-          repoList = Utils.sortRepos(repoList, 'name', 'asc');
-          let repo = repoList.filter(repoItem => repoItem.repo_id === item.repo_id);
-          let path = item.path.substring(0, (item.path.length - 1));
-
-          let selectRepo = repo[0];
-          this.setState({
-            repoList: repoList,
-            isOtherRepoShow: true,
-            selectedPath: path,
-            selectedRepo: selectRepo,
-          });
-        });
-      }
-      else {
-        this.setState({isOtherRepoShow: !this.state.isOtherRepoShow});
-      }
-    }
-    this.onCloseSearching();
-  }
-
+ 
   renderRepoListView = () => {
-
     return (
-      <div className="file-chooser-container user-select-none">
+      <div className="file-chooser-container">
         {this.props.mode === 'current_repo_and_other_repos' && (
           <Fragment>
             <div className="list-view">
@@ -382,7 +310,6 @@ class FileChooser extends React.Component {
                   onDirentItemClick={this.onDirentItemClick}
                   isShowFile={this.props.isShowFile}
                   fileSuffixes={this.props.fileSuffixes}
-                  selectedItemInfo={this.state.selectedItemInfo}
                 />
               }
             </div>
@@ -402,7 +329,6 @@ class FileChooser extends React.Component {
                   onDirentItemClick={this.onDirentItemClick}
                   isShowFile={this.props.isShowFile}
                   fileSuffixes={this.props.fileSuffixes}
-                  selectedItemInfo={this.state.selectedItemInfo}
                 /> 
               }
             </div>
@@ -425,7 +351,6 @@ class FileChooser extends React.Component {
                 onDirentItemClick={this.onDirentItemClick}
                 isShowFile={this.props.isShowFile}
                 fileSuffixes={this.props.fileSuffixes}
-                selectedItemInfo={this.state.selectedItemInfo}
               />
             }
           </div>
@@ -446,7 +371,6 @@ class FileChooser extends React.Component {
                 onDirentItemClick={this.onDirentItemClick}
                 isShowFile={this.props.isShowFile}
                 fileSuffixes={this.props.fileSuffixes}
-                selectedItemInfo={this.state.selectedItemInfo}
               /> 
             </div>
           </div>
