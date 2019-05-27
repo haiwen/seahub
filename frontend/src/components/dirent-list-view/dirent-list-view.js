@@ -560,6 +560,11 @@ class DirentListView extends React.Component {
       if (nodeRootPath === this.props.path || nodeParentPath === this.props.path) {
         return;
       }
+
+      if (this.props.path.indexOf(nodeRootPath) !== -1) {
+        return;
+      }
+
       this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
     }
   }
