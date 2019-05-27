@@ -9,7 +9,7 @@ import Loading from './components/loading';
 import ModalPortal from './components/modal-portal';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import CommitDetails from './components/dialog/commit-details';
-import EditRepoCommitLabels from './components/dialog/edit-repo-commit-labels';
+import UpdateRepoCommitLabels from './components/dialog/edit-repo-commit-labels';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -199,7 +199,7 @@ class Item extends React.Component {
     this.state = {
       labels: this.props.item.tags, 
       isIconShown: false,
-      isCommitLabelEditDialogOpen: false,
+      isCommitLabelUpdateDialogOpen: false,
       isCommitDetailsDialogOpen: false
     };
   }
@@ -227,13 +227,13 @@ class Item extends React.Component {
 
   editLabel = () => {
     this.setState({
-      isCommitLabelEditDialogOpen: !this.state.isCommitLabelEditDialogOpen
+      isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
   }
 
   toggleLabelEditDialog = () => {
     this.setState({
-      isCommitLabelEditDialogOpen: !this.state.isCommitLabelEditDialogOpen
+      isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
   }
 
@@ -245,7 +245,7 @@ class Item extends React.Component {
 
   render() {
     const item = this.props.item;
-    const { isIconShown, isCommitLabelEditDialogOpen, isCommitDetailsDialogOpen, labels } = this.state;
+    const { isIconShown, isCommitLabelUpdateDialogOpen, isCommitDetailsDialogOpen, labels } = this.state;
 
     let name = '';
     if (item.email) {
@@ -300,9 +300,9 @@ class Item extends React.Component {
             />
           </ModalPortal>
         }
-        {isCommitLabelEditDialogOpen &&
+        {isCommitLabelUpdateDialogOpen &&
           <ModalPortal>
-            <EditRepoCommitLabels
+            <UpdateRepoCommitLabels
               repoID={repoID}
               commitID={item.commit_id}
               commitLabels={labels}

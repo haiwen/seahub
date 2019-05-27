@@ -14,7 +14,7 @@ const propTypes = {
   toggleDialog: PropTypes.func.isRequired
 };
 
-class EditRepoCommitLabels extends React.Component {
+class UpdateRepoCommitLabels extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,7 +40,7 @@ class EditRepoCommitLabels extends React.Component {
       submitBtnDisabled: true 
     });
 
-    seafileAPI.editRepoCommitLabels(repoID, commitID, labels).then((res) => {
+    seafileAPI.updateRepoCommitLabels(repoID, commitID, labels).then((res) => {
       this.props.updateCommitLabels(res.data.revisionTags.map((item, index) => item.tag));
       this.props.toggleDialog();
       toaster.success(gettext('Successfully edited labels.'));
@@ -82,6 +82,6 @@ class EditRepoCommitLabels extends React.Component {
   }
 }
 
-EditRepoCommitLabels.propTypes = propTypes;
+UpdateRepoCommitLabels.propTypes = propTypes;
 
-export default EditRepoCommitLabels;
+export default UpdateRepoCommitLabels;
