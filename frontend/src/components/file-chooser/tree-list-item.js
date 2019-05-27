@@ -56,19 +56,19 @@ class TreeViewItem extends React.Component {
     return(
       <div className="list-view-content">
         {node.children.map(item => {
-          return(
-          <TreeViewItem
-            key={item.path}
-            node={item}
-            onNodeCollapse={this.props.onNodeCollapse}
-            onNodeExpanded={this.props.onNodeExpanded}
-            onNodeClick={this.props.onTreeNodeClick}
-            repo={this.props.repo} 
-            onDirentItemClick={this.props.onDirentItemClick}
-            selectedRepo={this.props.selectedRepo}
-            selectedPath={this.props.selectedPath}
-            fileSuffixes={this.props.fileSuffixes}
-          />)
+          return (
+            <TreeViewItem
+              key={item.path}
+              node={item}
+              onNodeCollapse={this.props.onNodeCollapse}
+              onNodeExpanded={this.props.onNodeExpanded}
+              onNodeClick={this.props.onTreeNodeClick}
+              repo={this.props.repo} 
+              onDirentItemClick={this.props.onDirentItemClick}
+              selectedRepo={this.props.selectedRepo}
+              selectedPath={this.props.selectedPath}
+              fileSuffixes={this.props.fileSuffixes}
+            />)
         })}
       </div>
     )
