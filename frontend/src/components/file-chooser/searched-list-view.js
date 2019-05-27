@@ -5,7 +5,6 @@ import SearchedListItem from './searched-list-item';
 const propTypes = {
   searchResults: PropTypes.array.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  onSearchedItemDoubleClick: PropTypes.func.isRequired,
 };
 
 class SearchedListView extends React.Component {
@@ -24,7 +23,7 @@ class SearchedListView extends React.Component {
 
   render() {
     return (
-      <table className="table-thead-hidden file-chooser-table" rules="node" frame="void">
+      <table className="table-thead-hidden">
         <thead>
           <tr>
             <th width="8%"></th>
@@ -33,14 +32,7 @@ class SearchedListView extends React.Component {
         </thead>
         <tbody>
           {this.props.searchResults.map((item, index) => {
-            return (
-            <SearchedListItem 
-              key={index} 
-              item={item} 
-              currentItem={this.state.currentItem} 
-              onItemClick={this.onItemClick}
-              onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
-            />);
+            return (<SearchedListItem key={index} item={item} currentItem={this.state.currentItem} onItemClick={this.onItemClick} />);
           })}
         </tbody>
       </table>

@@ -5,7 +5,6 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   currentItem: PropTypes.object,
   onItemClick: PropTypes.func.isRequired,
-  onSearchedItemDoubleClick: PropTypes.func.isRequired,
 };
 
 class SearchedListItem extends React.Component {
@@ -30,12 +29,6 @@ class SearchedListItem extends React.Component {
     this.props.onItemClick(item);
   }
 
-  searchItemDoubleClick = (e) => {
-    let item = this.props.item;
-   
-    this.props.onSearchedItemDoubleClick(item);
-  }
-
   render() {
     let { item, currentItem } = this.props;
     let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(false);
@@ -43,11 +36,11 @@ class SearchedListItem extends React.Component {
     let trClass = this.state.highlight ? 'tr-highlight' : '';
     if (currentItem) {
       if (item.repo_id === currentItem.repo_id && item.path === currentItem.path) {
-        trClass = 'tr-active';
+        trClass = 'searched-active';
       }
     }
     return (
-      <tr className={trClass} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onDoubleClick={this.searchItemDoubleClick}>
+      <tr className={trClass} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="text-center"><img className="item-img" src={fileIconUrl} alt="" width="24"/></td>
         <td><span className="item-link">{item.repo_name}/{item.link_content}</span></td>
       </tr>
