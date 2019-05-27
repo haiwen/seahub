@@ -298,11 +298,13 @@ SOCIAL_AUTH_PIPELINE = (
     'seahub.social_core.pipeline.user.save_profile',
 )
 
-ENABLE_WORK_WEIXIN_OAUTH = False
-ENABLE_WORK_WEIXIN_DEPARTMENTS = False
-
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
+
+# allow user scan the work weixin qrcode to login
+ENABLE_WORK_WEIXIN_OAUTH = False
+# allow seafile admin import user from work weixin
+ENABLE_WORK_WEIXIN_DEPARTMENTS = False
 
 # allow user to clean library trash
 ENABLE_USER_CLEAN_TRASH = True

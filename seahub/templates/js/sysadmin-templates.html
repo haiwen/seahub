@@ -83,6 +83,12 @@
         </li>
         {% endif %}
 
+        {% if is_pro and is_default_admin and enable_file_scan %}
+        <li class="tab {% block cur_file_scan %}{% endblock %}">
+            <a href="{{ SITE_ROOT }}sys/file-scan-records/"><span class="sf2-icon-security"></span>{% trans "File Scan" %}</a>
+        </li>
+        {% endif %}
+
         {% if is_pro and is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/virus_scan_records/"><span class="sf2-icon-security"></span>{% trans "Virus Scan" %}</a>
@@ -104,6 +110,12 @@
         {% if is_pro and user.admin_permissions.can_view_admin_log %}
         <li class="tab<% if (cur_tab == 'admin-logs') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#admin-operation-logs/"><span class="sf2-icon-admin-log"></span>{% trans "Admin Logs" %}</a>
+        </li>
+        {% endif %}
+
+        {% if is_default_admin and enable_work_weixin_departments %}
+        <li class="tab">
+            <a href="{{ SITE_ROOT }}sys/work-weixin/departments/"><span class="sf2-icon-organization"></span>企业微信集成</a>
         </li>
         {% endif %}
 

@@ -528,7 +528,6 @@ urlpatterns = [
     url(r'^api/v2.1/admin/work-weixin/departments/$', AdminWorkWeixinDepartments.as_view(), name='api-v2.1-admin-work-weixin-departments'),
     url(r'^api/v2.1/admin/work-weixin/departments/(?P<department_id>\d+)/members/$', AdminWorkWeixinDepartmentMembers.as_view(), name='api-v2.1-admin-work-weixin-department-members'),
     url(r'^api/v2.1/admin/work-weixin/users/batch/$', AdminWorkWeixinUsersBatch.as_view(), name='api-v2.1-admin-work-weixin-users'),
-    url(r'^sys/work-weixin/departments/$', sys_work_weixin_departments, name="sys_work_weixin_departments"),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
@@ -582,6 +581,7 @@ urlpatterns = [
     url(r'^sys/invitationadmin/remove/$', sys_invitation_remove, name='sys_invitation_remove'),
     url(r'^sys/sudo/', sys_sudo_mode, name='sys_sudo_mode'),
     url(r'^sys/check-license/', sys_check_license, name='sys_check_license'),
+    url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
     url(r'^useradmin/add/$', user_add, name="user_add"),
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
     url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
@@ -607,7 +607,7 @@ except ImportError:
     ENABLE_FILE_SCAN = False
 if ENABLE_FILE_SCAN:
     urlpatterns += [
-        url(r'^sys/file-scan-records/$', sys_file_scan_records, name="sys_file_scan_records"),
+        url(r'^sys/file-scan-records/$', sysadmin_react_fake_view, name="sys_file_scan_records"),
     ]
 
 from seahub.utils import EVENTS_ENABLED
