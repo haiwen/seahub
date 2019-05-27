@@ -10,6 +10,8 @@ import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
 import Rename from '../rename';
 
+import { Utils } from '../../utils/utils';
+
 const propTypes = {
   wiki: PropTypes.object.isRequired,
   renameWiki: PropTypes.func.isRequired,
@@ -141,10 +143,14 @@ class WikiListItem extends Component {
   render() {
     let wiki = this.props.wiki;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
+    let fileIconUrl = Utils.getDefaultLibIconUrl(false);
 
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td className="publish-icon">
+            <img className="item-img" src={fileIconUrl} alt="" width="24"/>
+          </td>
           <td className="name">
             {this.state.isRenameing ?
               <Rename wiki={wiki} name={wiki.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
