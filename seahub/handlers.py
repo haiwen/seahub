@@ -7,20 +7,7 @@ import datetime
 from seaserv import seafile_api, get_org_id_by_repo_id
 logger = logging.getLogger(__name__)
 
-if not hasattr(settings, 'EVENTS_CONFIG_FILE'):
-    def repo_created_cb(sender, **kwargs):
-        pass
-
-    def repo_restored_cb(sender, **kwargs):
-        pass
-
-    def repo_deleted_cb(sender, **kwargs):
-        pass
-
-    def clean_up_repo_trash_cb(sender, **kwargs):
-        pass
-
-else:
+try:
 
     import seafevents
 
@@ -170,3 +157,16 @@ else:
         session = SeafEventsSession()
         seafevents.save_user_activity(session, record)
         session.close()
+except ImportError:
+
+    def repo_created_cb(sender, **kwargs):
+        pass
+
+    def repo_restored_cb(sender, **kwargs):
+        pass
+
+    def repo_deleted_cb(sender, **kwargs):
+        pass
+
+    def clean_up_repo_trash_cb(sender, **kwargs):
+        pass
