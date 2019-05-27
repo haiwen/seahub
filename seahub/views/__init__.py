@@ -504,7 +504,10 @@ def repo_history(request, repo_id):
     # for 'go back'
     referer = request.GET.get('referer', '')
 
-    return render(request, 'repo_history.html', {
+    #template = 'repo_history.html'
+    template = 'repo_history_react.html'
+
+    return render(request, template, {
             "repo": repo,
             "commits": commits,
             'current_page': current_page,
