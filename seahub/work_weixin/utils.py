@@ -1,4 +1,4 @@
-# Copyright (c) 2012-2016 Seafile Ltd.
+# Copyright (c) 2012-2019 Seafile Ltd.
 # encoding: utf-8
 
 import logging
@@ -59,9 +59,10 @@ def handler_work_weixin_api_response(response):
 
 
 def work_weixin_base_check():
-    if not WORK_WEIXIN_CORP_ID or not WORK_WEIXIN_ACCESS_TOKEN_URL:
+    if not WORK_WEIXIN_CORP_ID or not WORK_WEIXIN_AGENT_SECRET or not WORK_WEIXIN_ACCESS_TOKEN_URL:
         logger.error('work weixin base relevant settings invalid.')
         logger.error('WORK_WEIXIN_CORP_ID: %s' % WORK_WEIXIN_CORP_ID)
+        logger.error('WORK_WEIXIN_AGENT_SECRET: %s' % WORK_WEIXIN_AGENT_SECRET)
         logger.error('WORK_WEIXIN_ACCESS_TOKEN_URL: %s' % WORK_WEIXIN_ACCESS_TOKEN_URL)
         return False
     return True
@@ -97,11 +98,9 @@ def admin_work_weixin_departments_check():
         logger.error('admin work weixin departments not enabled.')
         return False
     else:
-        if not WORK_WEIXIN_AGENT_SECRET \
-                or not WORK_WEIXIN_DEPARTMENTS_URL \
+        if not WORK_WEIXIN_DEPARTMENTS_URL \
                 or not WORK_WEIXIN_DEPARTMENT_MEMBERS_URL:
             logger.error('admin work weixin departments relevant settings invalid.')
-            logger.error('WORK_WEIXIN_AGENT_SECRET: %s' % WORK_WEIXIN_AGENT_SECRET)
             logger.error('WORK_WEIXIN_DEPARTMENTS_URL: %s' % WORK_WEIXIN_DEPARTMENTS_URL)
             logger.error('WORK_WEIXIN_DEPARTMENT_MEMBERS_URL: %s' % WORK_WEIXIN_DEPARTMENT_MEMBERS_URL)
             return False

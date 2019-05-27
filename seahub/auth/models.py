@@ -143,6 +143,9 @@ class SocialAuthUserManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
+    def delete_by_username_and_provider(self, username, provider):
+        self.filter(username=username, provider=provider).delete()
+
 
 class SocialAuthUser(models.Model):
     username = models.CharField(max_length=255, db_index=True)

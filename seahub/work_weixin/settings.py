@@ -1,13 +1,14 @@
+# Copyright (c) 2012-2019 Seafile Ltd.
+# encoding: utf-8
 from django.conf import settings
-
 
 # # work weixin base
 WORK_WEIXIN_CORP_ID = getattr(settings, 'WORK_WEIXIN_CORP_ID', '')
+WORK_WEIXIN_AGENT_SECRET = getattr(settings, 'WORK_WEIXIN_AGENT_SECRET', '')
 WORK_WEIXIN_ACCESS_TOKEN_URL = getattr(settings, 'WORK_WEIXIN_ACCESS_TOKEN_URL',
                                        'https://qyapi.weixin.qq.com/cgi-bin/gettoken')
 
 # # admin work weixin departments
-WORK_WEIXIN_AGENT_SECRET = getattr(settings, 'WORK_WEIXIN_AGENT_SECRET', '')
 ENABLE_WORK_WEIXIN_DEPARTMENTS = getattr(settings, 'ENABLE_WORK_WEIXIN_DEPARTMENTS', False)
 WORK_WEIXIN_DEPARTMENTS_URL = getattr(settings, 'WORK_WEIXIN_DEPARTMENTS_URL',
                                       'https://qyapi.weixin.qq.com/cgi-bin/department/list')
