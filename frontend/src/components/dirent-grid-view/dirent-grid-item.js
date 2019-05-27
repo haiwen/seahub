@@ -133,7 +133,7 @@ class DirentGridItem extends React.Component {
   render() {
     let { dirent, path } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
-    let iconUrl = Utils.getDirentIcon(dirent);
+    let iconUrl = Utils.getDirentIcon(dirent, true);
     let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
 
     let dirHref = '';
