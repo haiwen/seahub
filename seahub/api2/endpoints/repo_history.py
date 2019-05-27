@@ -10,7 +10,7 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email, translate_commit_desc
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.revision_tag.models import RevisionTags
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -37,7 +37,7 @@ class RepoHistory(APIView):
             "contact_email": email2contact_email(email),
             'time': timestamp_to_isoformat_timestr(commit.ctime),
             'commit_id': commit.id,
-            'description': commit.desc,
+            'description': translate_commit_desc(commit.desc),
             'client_version': commit.client_version,
             'device_name': commit.device_name,
             'second_parent_id': commit.second_parent_id,
