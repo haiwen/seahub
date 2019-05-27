@@ -65,7 +65,7 @@ class SearchResults extends React.Component {
     const { resultItems } = this.props;
     const total = resultItems.length;
     return (
-      <div className="search-result-container position-static mt-4">
+      <div className="search-result-container position-static">
         <ul className="search-result-list">
           <p className="tip">{total > 0 ? (total + ' ' + (total === 1 ? gettext('result') : gettext('results'))) : gettext('No result')}</p>
           {resultItems.map((item, index) => {

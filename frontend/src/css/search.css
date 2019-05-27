@@ -113,7 +113,7 @@
 .search-page .search-result-container {
   border-radius: 0;
   box-shadow: none;
-  margin-left: 1rem;
+  padding: 1.25rem 1rem;
 }
 .search-page .search-page-container {
   padding: 1.25rem 1rem;
