@@ -27,6 +27,11 @@ WORK_WEIXIN_GET_USER_INFO_URL = getattr(settings, 'WORK_WEIXIN_GET_USER_INFO_URL
 WORK_WEIXIN_GET_USER_PROFILE_URL = getattr(settings, 'WORK_WEIXIN_GET_USER_PROFILE_URL',
                                            'https://qyapi.weixin.qq.com/cgi-bin/user/get')
 
+# # work weixin notifications
+ENABLE_WORK_WEIXIN_NOTIFICATIONS = getattr(settings, 'ENABLE_WORK_WEIXIN_NOTIFICATIONS', False)
+WORK_WEIXIN_NOTIFICATIONS_URL = getattr(settings, 'WORK_WEIXIN_NOTIFICATIONS_URL',
+                                        'https://qyapi.weixin.qq.com/cgi-bin/message/send')
+
 # # constants
 
 WORK_WEIXIN_PROVIDER = 'work-weixin'

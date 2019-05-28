@@ -305,6 +305,8 @@ ENABLE_WATERMARK = False
 ENABLE_WORK_WEIXIN_OAUTH = False
 # allow seafile admin import user from work weixin
 ENABLE_WORK_WEIXIN_DEPARTMENTS = False
+# allow send unread msg to work weixin
+ENABLE_WORK_WEIXIN_NOTIFICATIONS = False
 
 # allow user to clean library trash
 ENABLE_USER_CLEAN_TRASH = True

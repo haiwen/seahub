@@ -1,24 +1,33 @@
-# Copyright (c) 2012-2016 Seafile Ltd.
+# Copyright (c) 2012-2019 Seafile Ltd.
 # encoding: utf-8
 from datetime import datetime
 import logging
 import re
+import requests
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.core.urlresolvers import reverse
 from django.utils import translation
 from django.utils.translation import ungettext
-from social_django.models import UserSocialAuth
-from weworkapi import CorpApi
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
 from seahub.utils import get_site_scheme_and_netloc, get_site_name
+from seahub.auth.models import SocialAuthUser
+from seahub.work_weixin.utils import work_weixin_notifications_check, \
+    get_work_weixin_access_token, handler_work_weixin_api_response
+from seahub.work_weixin.settings import WORK_WEIXIN_NOTIFICATIONS_URL, \
+    WORK_WEIXIN_PROVIDER, WORK_WEIXIN_UID_PREFIX, WORK_WEIXIN_AGENT_ID
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+# https://work.weixin.qq.com/api/doc#90000/90135/90236/
+# title 标题，不超过128个字节，超过会自动截断
+# description 描述，不超过512个字节，超过会自动截断
+# from social_django.models import UserSocialAuth
 
 ########## Utility Functions ##########
 def wrap_div(s):
@@ -31,6 +40,7 @@ def wrap_div(s):
         return matchobj.group(1)
 
     return '<div class="highlight">' + re.sub(patt, repl, s) + '</div>'
+
 
 class CommandLogMixin(object):
     def println(self, msg):
@@ -48,6 +58,7 @@ class CommandLogMixin(object):
         logger.debug(msg)
         self.println(msg)
 
+
 #######################################
 
 class Command(BaseCommand, CommandLogMixin):
@@ -56,45 +67,58 @@ class Command(BaseCommand, CommandLogMixin):
     label = "notifications_send_wxwork_notices"
 
     def handle(self, *args, **options):
-        self.log_debug('Start sending WeChat Work msg...')
-        self.api = CorpApi.CorpApi(settings.SOCIAL_AUTH_WEIXIN_WORK_KEY,
-                                   settings.SOCIAL_AUTH_WEIXIN_WORK_SECRET)
-
+        self.log_debug('Start sending work weixin msg...')
         self.do_action()
-        self.log_debug('Finish sending WeChat Work msg.\n')
+        self.log_debug('Finish sending work weixin msg.\n')
 
-    def send_wx_msg(self, uid, title, content, detail_url):
-        try:
-            self.log_info('Send wechat msg to user: %s, msg: %s' % (uid, content))
-            response = self.api.httpCall(
-                CorpApi.CORP_API_TYPE['MESSAGE_SEND'],
-                {
-                    "touser": uid,
-                    "agentid": settings.SOCIAL_AUTH_WEIXIN_WORK_AGENTID,
-                    'msgtype': 'textcard',
-                    # 'climsgid': 'climsgidclimsgid_d',
-                    'textcard': {
-                        'title': title,
-                        'description': content,
-                        'url': detail_url,
-                    },
-                    'safe': 0,
-                })
-            self.log_info(response)
-        except Exception as ex:
-            logger.error(ex, exc_info=True)
+    def send_work_weixin_msg(self, uid, title, content):
+
+        self.log_info('Send wechat msg to user: %s, msg: %s' % (uid, content))
+
+        data = {
+            "touser": uid,
+            "agentid": WORK_WEIXIN_AGENT_ID,
+            'msgtype': 'textcard',
+            'textcard': {
+                'title': title,
+                'description': content,
+                'url': self.detail_url,
+            },
+        }
+
+        api_response = requests.post(self.work_weixin_notifications_url, json=data)
+        api_response_dic = handler_work_weixin_api_response(api_response)
+        if api_response_dic:
+            self.log_info(api_response_dic)
+        else:
+            self.log_error('can not get work weixin notifications API response')
 
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
 
     def do_action(self):
+        # check before start
+        if not work_weixin_notifications_check():
+            self.log_error('work weixin notifications settings check failed')
+            return
+
+        access_token = get_work_weixin_access_token()
+        if not access_token:
+            self.log_error('can not get access_token')
+
+        self.work_weixin_notifications_url = WORK_WEIXIN_NOTIFICATIONS_URL + '?access_token=' + access_token
+        self.detail_url = get_site_scheme_and_netloc().rstrip('/') + reverse('user_notification_list')
+        site_name = get_site_name()
+
+        # start
         now = datetime.now()
         today = datetime.now().replace(hour=0).replace(minute=0).replace(
             second=0).replace(microsecond=0)
 
-        # 1. get all users who are connected wechat work
-        socials = UserSocialAuth.objects.filter(provider='weixin-work')
-        users = [(x.username, x.uid) for x in socials]
+        # 1. get all users who are connected work weixin
+        socials = SocialAuthUser.objects.filter(provider=WORK_WEIXIN_PROVIDER, uid__contains=WORK_WEIXIN_UID_PREFIX)
+        users = [(x.username, x.uid[len(WORK_WEIXIN_UID_PREFIX):]) for x in socials]
+        self.log_info('Found %d users' % len(users))
         if not users:
             return
 
@@ -122,6 +146,9 @@ class Command(BaseCommand, CommandLogMixin):
         ).filter(seen=False).filter(
             to_user__in=user_uid_map.keys()
         )
+        self.log_info('Found %d notices' % qs.count())
+        if qs.count() == 0:
+            return
 
         user_notices = {}
         for q in qs:
@@ -131,8 +158,6 @@ class Command(BaseCommand, CommandLogMixin):
                 user_notices[q.to_user].append(q)
 
         # 4. send msg to users
-        url = get_site_scheme_and_netloc().rstrip('/') + reverse('user_notification_list')
-
         for username, uid in users:
             notices = user_notices.get(username, [])
             count = len(notices)
@@ -155,10 +180,10 @@ class Command(BaseCommand, CommandLogMixin):
                 "You've got %(num)s new notices on %(site_name)s:\n",
                 count
             ) % {
-                'num': count,
-                'site_name': get_site_name(),
-            }
+                        'num': count,
+                        'site_name': site_name,
+                    }
             content = ''.join([wrap_div(x.format_msg()) for x in notices])
-            self.send_wx_msg(uid, title, content, url)
+            self.send_work_weixin_msg(uid, title, content)
 
             translation.activate(cur_language)
