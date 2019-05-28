@@ -44,7 +44,7 @@ class FileActivitiesContent extends Component {
             })}
           </tbody>
         </table>
-        {isLoadingMore ? <span className="loading-icon loading-tip table-loading"></span> : ''}
+        {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
       </Fragment>
     ); 
   }
@@ -414,7 +414,7 @@ class FilesActivities extends Component {
           <div className="cur-view-path">
             <h3 className="sf-heading">{gettext('Activities')}</h3>
           </div>
-          <div className="cur-view-content" onScroll={this.handleScroll}>
+          <div className="cur-view-content d-block" onScroll={this.handleScroll}>
             {this.state.isFirstLoading && <Loading />}
             {(!this.state.isFirstLoading && this.state.errorMsg) && 
               <p className="error text-center">{this.state.errorMsg}</p>

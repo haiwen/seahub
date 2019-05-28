@@ -155,10 +155,6 @@
   font-size: 14px;
 }
 
-.cur-view-content .table-loading {
-  display: table!important;
-}
-
 .cur-view-detail {
   display: block;
   position: absolute;
