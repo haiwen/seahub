@@ -1242,6 +1242,7 @@ def react_fake_view(request, **kwargs):
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
         'folder_perm_enabled': folder_perm_enabled,
+        'file_audit_enabled' : FILE_AUDIT_ENABLED
     })
 
 @login_required
