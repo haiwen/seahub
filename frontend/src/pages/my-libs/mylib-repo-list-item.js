@@ -196,11 +196,11 @@ class MylibRepoListItem extends React.Component {
     seafileAPI.deleteRepo(repo.repo_id).then((res) => {
       this.props.onDeleteRepo(repo);
       let name = repo.repo_name;
-      var msg = gettext("Successfully deleted {name}s.").replace('{name}s', name);
+      var msg = gettext("Successfully deleted {name}.").replace('{name}', name);
       toaster.success(msg);
     }).catch(() => {
       let name = repo.repo_name;
-      var msg = gettext("Failed to delete {name}s.").replace('{name}s', name);
+      var msg = gettext("Failed to delete {name}.").replace('{name}', name);
       toaster.danger(msg);
     });
   }
