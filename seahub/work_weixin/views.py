@@ -9,7 +9,7 @@ import urllib
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from seahub.auth.decorators import login_required
-from seahub.utils import get_service_url
+from seahub.utils import get_site_scheme_and_netloc
 from seahub.api2.utils import get_api_token
 from seahub import auth
 from seahub.utils import render_error
@@ -42,7 +42,7 @@ def work_weixin_oauth_login(request):
     data = {
         'appid': WORK_WEIXIN_CORP_ID,
         'agentid': WORK_WEIXIN_AGENT_ID,
-        'redirect_uri': get_service_url().rstrip('/') + reverse('work_weixin_oauth_callback'),
+        'redirect_uri': get_site_scheme_and_netloc() + reverse('work_weixin_oauth_callback'),
         'state': state,
     }
     authorization_url = WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.urlencode(data)
@@ -144,7 +144,7 @@ def work_weixin_oauth_connect(request):
     data = {
         'appid': WORK_WEIXIN_CORP_ID,
         'agentid': WORK_WEIXIN_AGENT_ID,
-        'redirect_uri': get_service_url().rstrip('/') + reverse('work_weixin_oauth_connect_callback'),
+        'redirect_uri': get_site_scheme_and_netloc() + reverse('work_weixin_oauth_connect_callback'),
         'state': state,
     }
     authorization_url = WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.urlencode(data)
