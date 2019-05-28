@@ -5,6 +5,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
+import toaster from '../../components/toast';
 import GroupsToolbar from '../../components/toolbar/groups-toolbar';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import CreateGroupDialog from '../../components/dialog/create-group-dialog';
@@ -53,8 +54,13 @@ class RepoListViewPanel extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
+      let name = repo.repo_name;
+      var msg = gettext("Successfully deleted {name}s.").replace('{name}s', name);
+      toaster.success(msg);
     }).catch(() => {
-      // todo;
+      let name = repo.repo_name;
+      var msg = gettext("Failed to delete {name}s.").replace('{name}s', name);
+      toaster.danger(msg);
     });
   }
   

@@ -10,6 +10,7 @@ import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
+import toaster from '../../components/toast';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
@@ -219,8 +220,13 @@ class GroupView extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
+      let name = repo.repo_name;
+      var msg = gettext("Successfully deleted {name}s.").replace('{name}s', name);
+      toaster.success(msg);
     }).catch(() => {
-      // todo;
+      let name = repo.repo_name;
+      var msg = gettext("Failed to delete {name}s.").replace('{name}s', name);
+      toaster.danger(msg);
     });
   }
 
