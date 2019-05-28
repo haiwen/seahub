@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
-import { gettext, canGenerateShareLink, isPro } from '../../utils/constants';
+import { gettext, siteRoot, canGenerateShareLink, isPro, fileAuditEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -91,7 +91,7 @@ class MutipleDirOperationToolbar extends React.Component {
     let menuList = [];
     let currentRepoInfo = this.props.currentRepoInfo;
 
-    const { SHARE, TAGS, RELATED_FILES, HISTORY, OPEN_VIA_CLIENT, LOCK, UNLOCK } = TextTranslation;
+    const { SHARE, TAGS, RELATED_FILES, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, LOCK, UNLOCK } = TextTranslation;
 
 
     if (dirent.type === 'dir') {
@@ -103,9 +103,16 @@ class MutipleDirOperationToolbar extends React.Component {
     if (dirent.type === 'file') {
       let shareBtn = (this.props.showShareBtn && canGenerateShareLink) ? [SHARE] : [];
 
-      menuList = [...shareBtn, TAGS, RELATED_FILES, 'Divider', HISTORY, 'Divider', OPEN_VIA_CLIENT];
+      menuList = [...shareBtn, TAGS, RELATED_FILES, 'Divider', HISTORY, ACCESS_LOG, 'Divider', OPEN_VIA_CLIENT];
       if (!Utils.isMarkdownFile(dirent.name)) {
-        menuList.splice(2, 1);
+        menuList = menuList.filter(menu => {
+          return menu !== RELATED_FILES;
+        });
+      }
+      if (!fileAuditEnabled) {
+        menuList = menuList.filter(menu => {
+          return menu !== ACCESS_LOG;
+        });
       }
       if (isPro) {
         if (dirent.is_locked) {
@@ -144,6 +151,9 @@ class MutipleDirOperationToolbar extends React.Component {
         break;
       case 'History':
         this.onHistory(dirent);
+        break;
+      case 'Access Log': 
+        this.onAccessLog(dirent);
         break;
       case 'Open via Client':
         this.onOpenViaClient(dirent);
@@ -194,6 +204,12 @@ class MutipleDirOperationToolbar extends React.Component {
       filePath: filePath
     });
     location.href = url;
+  }
+
+  onAccessLog = (dirent) => {
+    let filePath = this.getDirentPath(dirent);
+    let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
+    window.open(path);
   }
 
   openRelatedFilesDialog = (dirent) => {
