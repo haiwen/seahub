@@ -19,7 +19,7 @@ class TreeViewItem extends React.Component {
 
     this.state = {
       filePath: filePath,
-    }
+    };
   }
 
   onToggleClick = (e) => {
@@ -62,16 +62,15 @@ class TreeViewItem extends React.Component {
               node={item}
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
-              onNodeClick={this.props.onTreeNodeClick}
               repo={this.props.repo} 
               onDirentItemClick={this.props.onDirentItemClick}
               selectedRepo={this.props.selectedRepo}
               selectedPath={this.props.selectedPath}
               fileSuffixes={this.props.fileSuffixes}
-            />)
+            />);
         })}
       </div>
-    )
+    );
   }
 
   render() {
@@ -80,7 +79,7 @@ class TreeViewItem extends React.Component {
     let isCurrentPath = this.props.selectedPath === this.state.filePath;
 
     return(
-      <div className={`file-chooser-item `}>
+      <div className="file-chooser-item">
         <div className={`${node.path === '/'? 'hide': ''}`}>
           <span className={`item-toggle fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
           <span className={`item-info ${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''}`} onClick={this.onItemClick}>

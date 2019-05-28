@@ -34,13 +34,13 @@ class SearchedListView extends React.Component {
         <tbody>
           {this.props.searchResults.map((item, index) => {
             return (
-            <SearchedListItem 
-              key={index} 
-              item={item} 
-              currentItem={this.state.currentItem} 
-              onItemClick={this.onItemClick}
-              onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
-            />);
+              <SearchedListItem 
+                key={index} 
+                item={item} 
+                currentItem={this.state.currentItem} 
+                onItemClick={this.onItemClick}
+                onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
+              />);
           })}
         </tbody>
       </table>
