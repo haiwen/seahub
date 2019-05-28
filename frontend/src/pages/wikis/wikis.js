@@ -129,7 +129,7 @@ class Wikis extends Component {
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
               {canPublishRepo &&
-                <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>
+                <Button className="btn btn-secondary operation-item my-1" onClick={this.onSelectToggle}>
                   {gettext('Publish a Library')}
                 </Button>
               }

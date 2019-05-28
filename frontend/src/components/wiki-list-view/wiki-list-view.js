@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import MediaQuery from 'react-responsive';
 import { gettext } from '../../utils/constants';
 import WikiListItem from './wiki-list-item';
 
@@ -38,8 +39,14 @@ class WikiListView extends Component {
         <table>
           <thead>
             <tr>
-              <th width="4%"></th>
-              <th width="36%">{gettext('Name')}</th>
+              <MediaQuery query="(min-width: 768px)">
+                <th width="4%"></th>
+                <th width="36%">{gettext('Name')}</th>
+              </MediaQuery>
+              <MediaQuery query="(max-width: 768px)">
+                <th width="10%"></th>
+                <th width="30%">{gettext('Name')}</th>
+              </MediaQuery>
               <th width="25%">{gettext('Owner')}</th>
               <th width="25%">{gettext('Last Update')}</th>
               <th width="10%">{/* operation */}</th>
