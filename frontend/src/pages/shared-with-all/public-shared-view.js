@@ -174,7 +174,7 @@ class PublicSharedView extends React.Component {
               <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
               <div className="operation">
                 <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
-                  <DropdownToggle className='btn btn-secondary operation-item'>
+                  <DropdownToggle className='btn btn-secondary operation-item my-1'>
                     <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
                   </DropdownToggle>
                   <DropdownMenu>

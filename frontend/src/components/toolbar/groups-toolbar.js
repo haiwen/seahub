@@ -22,14 +22,12 @@ class GroupsToolbar extends React.Component {
     return (
       <div className="main-panel-north border-left-show">
         <div className="cur-view-toolbar">
+          <span title="Side Nav Menu" onClick={onShowSidePanel} className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none"></span>
           <div className="operation">
-            <Button color="btn btn-secondary operation-item" onClick={this.props.toggleAddGroupModal}>
+            <Button color="btn btn-secondary operation-item my-1" onClick={this.props.toggleAddGroupModal}>
               <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Group')}
             </Button>
           </div>
-          <span title="Side Nav Menu" onClick={onShowSidePanel}
-            className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
-          </span>
         </div>
         <CommonToolbar searchPlaceholder={this.props.searchPlaceholder} onSearchedClick={onSearchedClick}/>
       </div>
