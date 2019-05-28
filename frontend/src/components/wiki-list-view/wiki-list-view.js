@@ -38,7 +38,8 @@ class WikiListView extends Component {
         <table>
           <thead>
             <tr>
-              <th width="40%">{gettext('Name')}</th>
+              <th width="4%"></th>
+              <th width="36%">{gettext('Name')}</th>
               <th width="25%">{gettext('Owner')}</th>
               <th width="25%">{gettext('Last Update')}</th>
               <th width="10%">{/* operation */}</th>

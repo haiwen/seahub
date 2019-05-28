@@ -504,7 +504,10 @@ def repo_history(request, repo_id):
     # for 'go back'
     referer = request.GET.get('referer', '')
 
-    return render(request, 'repo_history.html', {
+    #template = 'repo_history.html'
+    template = 'repo_history_react.html'
+
+    return render(request, template, {
             "repo": repo,
             "commits": commits,
             'current_page': current_page,
@@ -1239,6 +1242,7 @@ def react_fake_view(request, **kwargs):
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
         'folder_perm_enabled': folder_perm_enabled,
+        'file_audit_enabled' : FILE_AUDIT_ENABLED
     })
 
 @login_required

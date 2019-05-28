@@ -85,7 +85,7 @@ class DirTool extends React.Component {
     let isFile = this.isMarkdownFile(currentPath);
     let name = Utils.getFileName(currentPath);
     let trashUrl = siteRoot + 'repo/recycle/' + repoID + '/?referer=' + encodeURIComponent(location.href);
-    let historyUrl = siteRoot + 'repo/history/' + repoID + '/?referer=' + encodeURIComponent(location.href);
+    let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
     if ( (name === repoName  || name === '') && !isFile && permission) {
       return (
         <Fragment>

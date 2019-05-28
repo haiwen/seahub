@@ -298,9 +298,11 @@ class DirentListItem extends React.Component {
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath});
     location.href = url;
   }
-
+  
   onAccessLog = () => {
-
+    let filePath = this.getDirentPath(this.props.dirent);
+    let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
+    window.open(path);
   }
 
   onOpenViaClient = () => {
