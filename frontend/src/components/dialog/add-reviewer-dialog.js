@@ -115,9 +115,9 @@ class AddReviewerDialog extends React.Component {
             reviewers.map((item, index = 0, arr) => {
               return (
                 <div className="reviewer-select-info" key={index}>
-                  <div>
+                  <div className="d-flex">
                     <img className="avatar reviewer-select-avatar" src={item.avatar_url} alt=""/>
-                    <span className="reviewer-select-name">{item.user_name}</span>
+                    <span className="reviewer-select-name ellipsis">{item.user_name}</span>
                   </div>
                   <i className="fa fa-times" name={item.user_email} onClick={this.deleteReviewer}></i>
                 </div>
