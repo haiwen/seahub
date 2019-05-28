@@ -4,7 +4,7 @@ import Account from '../../components/common/account';
 
 
 const propTypes = {
-  children: PropTypes.object.isRequired,
+  children: PropTypes.array.isRequired,
 };
 
 class MainPanel extends Component {

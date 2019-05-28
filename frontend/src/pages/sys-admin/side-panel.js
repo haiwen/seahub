@@ -5,7 +5,7 @@ import Logo from '../../components/logo';
 import { gettext, siteRoot, isPro, isDefaultAdmin, canViewSystemInfo, canViewStatistic,
   canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
   canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
-  enableGuestInvitation, enableTermsAndConditions, enableFileScan } from '../../utils/constants';
+  enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixinDepartments } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -167,6 +167,14 @@ class SidePanel extends React.Component {
                       <span className="sf2-icon-admin-log" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Admin Logs')}</span>
                     </a>
+                  </li>
+                }
+                {isDefaultAdmin && enableWorkWeixinDepartments &&
+                  <li className="nav-item">
+                    <Link className='nav-link ellipsis' to={siteRoot + 'sys/work-weixin/departments/'}>
+                      <span className="sf2-icon-organization" aria-hidden="true"></span>
+                      <span className="nav-text">{'企业微信集成'}</span>
+                    </Link>
                   </li>
                 }
               </ul>

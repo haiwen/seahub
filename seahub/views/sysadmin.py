@@ -98,6 +98,8 @@ try:
     from seahub.settings import ENABLE_FILE_SCAN
 except ImportError:
     ENABLE_FILE_SCAN = False
+from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN_DEPARTMENTS
+
 
 logger = logging.getLogger(__name__)
 
@@ -130,23 +132,24 @@ def sysadmin(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'enable_limit_ipaddress': ENABLE_LIMIT_IPADDRESS,
             'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
+            'enable_file_scan': ENABLE_FILE_SCAN,
+            'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
             })
-
 
 @login_required
 @sys_staff_required
-def sys_file_scan_records(request):
+def sysadmin_react_fake_view(request):
 
-    return render(request, 'sysadmin/sys_file_scan_records_react.html', {
-            'constance_enabled': dj_settings.CONSTANCE_ENABLED,
-            'multi_tenancy': MULTI_TENANCY,
-            'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
-            'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
-            'enable_guest_invitation': ENABLE_GUEST_INVITATION,
-            'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
-            'enable_file_scan': ENABLE_FILE_SCAN,
-            })
-
+    return render(request, 'sysadmin/sysadmin_react_app.html', {
+        'constance_enabled': dj_settings.CONSTANCE_ENABLED,
+        'multi_tenancy': MULTI_TENANCY,
+        'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
+        'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
+        'enable_guest_invitation': ENABLE_GUEST_INVITATION,
+        'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
+        'enable_file_scan': ENABLE_FILE_SCAN,
+        'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
+    })
 
 @login_required
 @sys_staff_required
@@ -2674,4 +2677,3 @@ def sys_delete_terms(request, pk):
     messages.success(request, _('Successfully deleted 1 item'))
 
     return HttpResponseRedirect(reverse('sys_terms_admin'))
-

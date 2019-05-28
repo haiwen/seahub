@@ -133,7 +133,9 @@ from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLib
         AdminGroupOwnedLibrary
 from seahub.api2.endpoints.admin.user_activities import UserActivitiesView
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
-from seahub.api2.endpoints.admin.notifications import AdminNotificationsView 
+from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
+from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
+    AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
@@ -507,6 +509,7 @@ urlpatterns = [
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
     url(r'^published/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
+    url(r'^work-weixin/', include('seahub.work_weixin.urls')),
     # Must specify a namespace if specifying app_name.
     url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki-unused')),
     url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
@@ -520,6 +523,11 @@ urlpatterns = [
 
     ## admin::notifications
     url(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
+
+    ## admin::work weixin departments
+    url(r'^api/v2.1/admin/work-weixin/departments/$', AdminWorkWeixinDepartments.as_view(), name='api-v2.1-admin-work-weixin-departments'),
+    url(r'^api/v2.1/admin/work-weixin/departments/(?P<department_id>\d+)/members/$', AdminWorkWeixinDepartmentMembers.as_view(), name='api-v2.1-admin-work-weixin-department-members'),
+    url(r'^api/v2.1/admin/work-weixin/users/batch/$', AdminWorkWeixinUsersBatch.as_view(), name='api-v2.1-admin-work-weixin-users'),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
@@ -573,6 +581,7 @@ urlpatterns = [
     url(r'^sys/invitationadmin/remove/$', sys_invitation_remove, name='sys_invitation_remove'),
     url(r'^sys/sudo/', sys_sudo_mode, name='sys_sudo_mode'),
     url(r'^sys/check-license/', sys_check_license, name='sys_check_license'),
+    url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
     url(r'^useradmin/add/$', user_add, name="user_add"),
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
     url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
@@ -598,7 +607,7 @@ except ImportError:
     ENABLE_FILE_SCAN = False
 if ENABLE_FILE_SCAN:
     urlpatterns += [
-        url(r'^sys/file-scan-records/$', sys_file_scan_records, name="sys_file_scan_records"),
+        url(r'^sys/file-scan-records/$', sysadmin_react_fake_view, name="sys_file_scan_records"),
     ]
 
 from seahub.utils import EVENTS_ENABLED
@@ -728,7 +737,6 @@ if getattr(settings, 'ENABLE_CAS', False):
         url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),
         url(r'^accounts/cas-callback/$', cas_callback, name='cas_ng_proxy_callback'),
     ]
-
 
 from seahub.social_core.views import (
     weixin_work_cb, weixin_work_3rd_app_install, weixin_work_3rd_app_install_cb
