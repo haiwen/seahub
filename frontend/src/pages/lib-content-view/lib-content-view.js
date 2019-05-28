@@ -581,6 +581,15 @@ class LibContentView extends React.Component {
         }
         this.deleteDirent(direntPath);
       });
+      var msg = gettext("Successfully deleted {name} and other {n} items.");
+      msg = msg.replace('{name}', dirNames[0]);
+      msg = msg.replace('{n}', dirNames.length - 1);
+      toaster.success(msg);
+    }).catch(() => {
+      var msg = gettext("Failed to delete {name} and other {n} items.");
+      msg = msg.replace('{name}', dirNames[0]);
+      msg = msg.replace('{n}', dirNames.length - 1);
+      toaster.danger(msg);
     });
   }
 
@@ -745,14 +754,24 @@ class LibContentView extends React.Component {
     if (isDir) {
       seafileAPI.renameDir(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
+        let name = Utils.getFileName(path);
+        var msg = gettext("Rename {name} successfully").replace('{name}', name);
+        toaster.success(msg);
       }).catch(() => {
-        // todo
+        let name = Utils.getFileName(path);
+        var msg = gettext("Renaming {name} failed").replace('{name}', name);
+        toaster.danger(msg);
       });
     } else {
       seafileAPI.renameFile(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
+        let name = Utils.getFileName(path);
+        var msg = gettext("Rename {name} successfully").replace('{name}', name);
+        toaster.success(msg);
       }).catch(() => {
-        // todo
+        let name = Utils.getFileName(path);
+        var msg = gettext("Renaming {name} failed").replace('{name}', name);
+        toaster.danger(msg);
       });
     }
   }
@@ -769,14 +788,24 @@ class LibContentView extends React.Component {
     if (isDir) {
       seafileAPI.deleteDir(repoID, path).then(() => {
         this.deleteItemAjaxCallback(path, isDir);
+        let name = Utils.getFileName(path);
+        var msg = gettext("Successfully deleted {name}").replace('{name}', name);
+        toaster.success(msg);
       }).catch(() => {
-        // todo
+        let name = Utils.getFileName(path);
+        var msg = gettext("Failed to delete {name}").replace('{name}', name);
+        toaster.danger(msg);
       });
     } else {
       seafileAPI.deleteFile(repoID, path).then(() => {
         this.deleteItemAjaxCallback(path, isDir);
+        let name = Utils.getFileName(path);
+        var msg = gettext("Successfully deleted {name}").replace('{name}', name);
+        toaster.success(msg);
       }).catch(() => {
-        // todo
+        let name = Utils.getFileName(path);
+        var msg = gettext("Failed to delete {name}").replace('{name}', name);
+        toaster.danger(msg);
       });
     }
   }
