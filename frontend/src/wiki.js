@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import MediaQuery from 'react-responsive';
+import { Modal } from 'reactstrap';
 import { slug, repoID, siteRoot, initialPath, isDir, sharedToken } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
@@ -44,6 +46,12 @@ class Wiki extends Component {
     window.onpopstate = this.onpopstate;
     this.indexPath = '/index.md';
     this.homePath = '/home.md';
+  }
+
+  componentWillMount() {
+    if (window.screen.width <= 768) {
+      this.setState({ closeSideBar: true });
+    }
   }
 
   componentDidMount() {
@@ -224,6 +232,9 @@ class Wiki extends Component {
       this.showDir(path);
     } else {
       window.location.href = url;
+    }
+    if (!this.state.closeSideBar) {
+      this.setState({ closeSideBar: true });
     }
   }
 
@@ -446,6 +457,9 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onDirentClick={this.onDirentClick}
         />
+        <MediaQuery query="(max-width: 768px)">
+          <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
+        </MediaQuery>
       </div>
     );
   }
