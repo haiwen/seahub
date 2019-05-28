@@ -143,7 +143,7 @@ class GenerateShareLink extends React.Component {
         password: '',
         passwordnew: '',
         isShowPasswordInput: false,
-        expireDays: '',
+        expireDays: shareLinkExpireDaysDefault,
         isExpireChecked: false,
         errorInfo: '',
         sharedLinkInfo: null,
@@ -192,8 +192,7 @@ class GenerateShareLink extends React.Component {
           this.setState({errorInfo: 'Please enter days'});
           return false;
         }
-        let flag = reg.test(expireDays);
-        if (!flag) {
+        if (!reg.test(expireDays)) {
           this.setState({errorInfo: 'Please enter a non-negative integer'});
           return false;
         }
@@ -204,8 +203,7 @@ class GenerateShareLink extends React.Component {
         this.setState({errorInfo: 'Please enter days'});
         return false;
       }
-      let flag = reg.test(expireDays);
-      if (!flag) {
+      if (!reg.test(expireDays)) {
         this.setState({errorInfo: 'Please enter a non-negative integer'});
         return false;
       }
@@ -229,7 +227,7 @@ class GenerateShareLink extends React.Component {
       }
       
       if (minDays !== 0 && maxDays !== 0) {
-        if (expireDays < minDays || expireDays < maxDays) {
+        if (expireDays < minDays || expireDays > maxDays) {
           this.setState({errorInfo: 'Please enter valid days'});
           return false;
         }
