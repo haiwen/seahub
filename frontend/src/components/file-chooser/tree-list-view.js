@@ -21,7 +21,6 @@ class TreeListView extends React.Component {
           node={this.props.treeData.root}
           onNodeCollapse={this.props.onNodeCollapse}
           onNodeExpanded={this.props.onNodeExpanded}
-          onNodeClick={this.props.onTreeNodeClick}
           repo={this.props.repo} 
           onDirentItemClick={this.props.onDirentItemClick}
           selectedRepo={this.props.selectedRepo}

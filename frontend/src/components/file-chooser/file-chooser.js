@@ -301,7 +301,7 @@ class FileChooser extends React.Component {
     let selectedItemInfo = {
       repoID: item.repo_id,
       filePath: item.path,
-    }
+    };
 
     this.setState({
       selectedItemInfo: selectedItemInfo

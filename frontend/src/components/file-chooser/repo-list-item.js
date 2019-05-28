@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TreeListView from './tree-list-view'
+import TreeListView from './tree-list-view';
 
 import TreeNode from '../../components/tree-view/tree-node';
 import Dirent from '../../models/dirent';
@@ -34,10 +34,10 @@ class RepoListItem extends React.Component {
     let repoID = this.props.repo.repo_id;
     seafileAPI.listDir(repoID, '/').then(res => {
       let tree = this.state.treeData.clone();
-      let direntList = res.data.dirent_list.filter(item => item.type === 'dir')
+      let direntList = res.data.dirent_list.filter(item => item.type === 'dir');
       this.addResponseListToNode(direntList, tree.root);
       this.setState({treeData: tree});
-    })
+    });
 
     if (this.props.selectedItemInfo.repoID === this.props.repo.repo_id) {
       this.setState({isShowChildren: true});
@@ -65,7 +65,7 @@ class RepoListItem extends React.Component {
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
       seafileAPI.listDir(repoID, node.path).then(res => {
-        let direntList = res.data.dirent_list.filter(item => item.type === 'dir')
+        let direntList = res.data.dirent_list.filter(item => item.type === 'dir');
         this.addResponseListToNode(direntList, node);
         this.setState({treeData: tree});
       });
