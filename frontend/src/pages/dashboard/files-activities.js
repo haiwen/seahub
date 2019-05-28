@@ -44,7 +44,7 @@ class FileActivitiesContent extends Component {
             })}
           </tbody>
         </table>
-        {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
+        {isLoadingMore ? <span className="loading-icon loading-tip table-loading"></span> : ''}
       </Fragment>
     ); 
   }
