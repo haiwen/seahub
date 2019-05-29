@@ -616,6 +616,18 @@ export const Utils = {
           return a.last_modified < b.last_modified ? 1 : -1;
         };
         break;
+      case 'size-asc':
+        comparator = function(a, b) {
+          let reult = _this.compareTwoSize(a.size, b.size);
+          return reult;
+        };
+        break;
+      case 'size-desc':
+        comparator = function(a, b) {
+          let reult = _this.compareTwoSize(a.size, b.size);
+          return -reult;
+        };
+        break;
     }
 
     repos.sort(comparator);
@@ -649,6 +661,28 @@ export const Utils = {
           return a.mtime < b.mtime ? 1 : -1;
         };
         break;
+      case 'size-asc':
+        comparator = function(a, b) {
+          if (a.type == 'dir' && b.type == 'dir') {
+            let reult = _this.compareTwoWord(a.name, b.name);
+            return reult;
+          } else {
+            let reult = _this.compareTwoSize(a.size, b.size);
+            return reult;
+          }
+        };
+        break;
+      case 'size-desc':
+        comparator = function(a, b) {
+          if (a.type == 'dir' && b.type == 'dir') {
+            let reult = _this.compareTwoWord(a.name, b.name);
+            return -reult;
+          } else {
+            let reult = _this.compareTwoSize(a.size, b.size);
+            return -reult;
+          }
+        };
+        break;
     }
 
     items.sort((a, b) => {
@@ -661,6 +695,28 @@ export const Utils = {
       }
     });
     return items;
+  },
+
+  compareTwoSize: function(a, b) {
+    let suffix = /[A-Za-z]+/g;
+    let fileSizeName = /(\-|\+)?\d+(\.\d+)?/g;
+    let sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
+    let aSuffixName = a.match(suffix)[0];
+    let bSuffixName = b.match(suffix)[0];
+    let aIndex = sizes.indexOf(aSuffixName);
+    let bIndex = sizes.indexOf(bSuffixName);
+
+    if (aIndex === bIndex) {
+      let aFileName = a.match(fileSizeName)[0];
+      let bFileName = b.match(fileSizeName)[0];
+      let aBytes = aFileName * (1000 ** aIndex);
+      let bBytes = bFileName * (1000 ** bIndex);
+      return aBytes < bBytes ? -1 : 1;
+    } else {
+      return aIndex < bIndex ? -1 : 1;
+    }
+    
   },
 
   changeMarkdownNodes: function(nodes, fn) {
