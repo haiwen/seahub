@@ -12,7 +12,6 @@ from django.utils.translation import ungettext
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
-from seahub.profile.models import Profile
 from seahub.utils import get_site_scheme_and_netloc, get_site_name
 from seahub.auth.models import SocialAuthUser
 from seahub.work_weixin.utils import work_weixin_notifications_check, \
@@ -25,8 +24,6 @@ logger = logging.getLogger(__name__)
 
 
 # https://work.weixin.qq.com/api/doc#90000/90135/90236/
-# title 标题，不超过128个字节，超过会自动截断
-# description 描述，不超过512个字节，超过会自动截断
 # from social_django.models import UserSocialAuth
 
 ########## Utility Functions ##########
@@ -93,9 +90,6 @@ class Command(BaseCommand, CommandLogMixin):
         else:
             self.log_error('can not get work weixin notifications API response')
 
-    def get_user_language(self, username):
-        return Profile.objects.get_user_language(username)
-
     def do_action(self):
         # check before start
         if not work_weixin_notifications_check():
@@ -157,6 +151,12 @@ class Command(BaseCommand, CommandLogMixin):
             else:
                 user_notices[q.to_user].append(q)
 
+        # save current language
+        cur_language = translation.get_language()
+        # active zh-cn
+        translation.activate('zh-cn')
+        self.log_info('the language is set to zh-cn')
+
         # 4. send msg to users
         for username, uid in users:
             notices = user_notices.get(username, [])
@@ -164,26 +164,17 @@ class Command(BaseCommand, CommandLogMixin):
             if count == 0:
                 continue
 
-            # save current language
-            cur_language = translation.get_language()
-
-            # get and active user language
-            user_language = self.get_user_language(username)
-            translation.activate(user_language)
-            self.log_debug('Set language code to %s for user: %s' % (
-                user_language, username))
-
             title = ungettext(
                 "\n"
                 "You've got 1 new notice on %(site_name)s:\n",
                 "\n"
                 "You've got %(num)s new notices on %(site_name)s:\n",
                 count
-            ) % {
-                        'num': count,
-                        'site_name': site_name,
-                    }
+            ) % {'num': count, 'site_name': site_name, }
+
             content = ''.join([wrap_div(x.format_msg()) for x in notices])
             self.send_work_weixin_msg(uid, title, content)
 
-            translation.activate(cur_language)
+        # reset language
+        translation.activate(cur_language)
+        self.log_info('reset language success')
