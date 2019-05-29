@@ -89,6 +89,13 @@ def slug(request, slug, file_path="home.md"):
     if wiki.permission == 'public':
         is_public_wiki = True
 
+    has_index = False
+    dirs = seafile_api.list_dir_by_path(wiki.repo_id, '/')
+    for dir_obj in dirs:
+        if dir_obj.obj_name == 'index.md':
+            has_index = True
+            break
+
     try:
         fs = FileShare.objects.get(repo_id=wiki.repo_id, path='/')
     except FileShare.DoesNotExist:
@@ -110,6 +117,7 @@ def slug(request, slug, file_path="home.md"):
         "search_wiki": True,
         "is_public_wiki": is_public_wiki,
         "is_dir": is_dir,
+        "has_index": has_index,
     })
 
 
