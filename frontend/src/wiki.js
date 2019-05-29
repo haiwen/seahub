@@ -78,31 +78,17 @@ class Wiki extends Component {
 
   loadSidePanel = (initialPath) => {
 
-    if (initialPath === this.homePath) {
-      if (hasIndex) {
-        this.loadIndexNode();
-      } else {
+    if (hasIndex) {
+      this.loadIndexNode();
+    } else {
+      if (isDir === 'none') {
         initialPath = '/';
+        this.loadNodeAndParentsByPath('/');
+      } else  {
         this.loadNodeAndParentsByPath(initialPath);
       }
     }
-
-    if (initialPath !== this.homePath) {
-      if (isDir === 'None') {
-        if (hasIndex) {
-          this.loadIndexNode();
-        } else {
-          initialPath = '/';
-          this.loadNodeAndParentsByPath(initialPath);
-        }
-      } else {
-        if (hasIndex) {
-          this.loadIndexNode();
-        } else {
-          this.loadNodeAndParentsByPath(initialPath);
-        }
-      }
-    }
+    
   }
 
   loadIndexNode = () => {
