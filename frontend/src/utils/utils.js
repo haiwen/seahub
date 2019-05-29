@@ -619,23 +619,23 @@ export const Utils = {
       case 'size-asc':
         comparator = function(a, b) {
           if (a.size === b.size) {
-            var result = _this.compareTwoWord(a.repo_name, b.repo_name);
+            let result = _this.compareTwoWord(a.repo_name, b.repo_name);
             return result;
           }
 
-          let reult = _this.compareTwoSize(a.size, b.size);
-          return reult;
+          let result = _this.compareTwoSize(a.size, b.size);
+          return result;
         };
         break;
       case 'size-desc':
         comparator = function(a, b) {
           if (a.size === b.size) {
-            var result = _this.compareTwoWord(a.repo_name, b.repo_name);
+            let result = _this.compareTwoWord(a.repo_name, b.repo_name);
             return -result;
           }
 
-          let reult = _this.compareTwoSize(a.size, b.size);
-          return -reult;
+          let result = _this.compareTwoSize(a.size, b.size);
+          return -result;
         };
         break;
     }
@@ -674,22 +674,22 @@ export const Utils = {
       case 'size-asc':
         comparator = function(a, b) {
           if (a.type == 'dir' && b.type == 'dir') {
-            let reult = _this.compareTwoWord(a.name, b.name);
-            return reult;
+            let result = _this.compareTwoWord(a.name, b.name);
+            return result;
           } else {
-            let reult = _this.compareTwoSize(a.size, b.size);
-            return reult;
+            let result = _this.compareTwoSize(a.size, b.size);
+            return result;
           }
         };
         break;
       case 'size-desc':
         comparator = function(a, b) {
           if (a.type == 'dir' && b.type == 'dir') {
-            let reult = _this.compareTwoWord(a.name, b.name);
-            return -reult;
+            let result = _this.compareTwoWord(a.name, b.name);
+            return -result;
           } else {
-            let reult = _this.compareTwoSize(a.size, b.size);
-            return -reult;
+            let result = _this.compareTwoSize(a.size, b.size);
+            return -result;
           }
         };
         break;
