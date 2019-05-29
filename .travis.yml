@@ -38,7 +38,7 @@ script:
 
 after_success:
   # notify seafile-docs to rebuild if master is updated
-  - test $TRAVIS_PULL_REQUEST = "false" && test $TRAVIS_BRANCH = "master" && .travis/rebuild-branches.sh
+  # - test $TRAVIS_PULL_REQUEST = "false" && test $TRAVIS_BRANCH = "master" && .travis/rebuild-branches.sh
 
   # making dist assets if current branch(master/6.3/6.2) is updated
   - test $TRAVIS_PULL_REQUEST = "false" && .travis/dist_and_push.sh
@@ -64,6 +64,5 @@ notifications:
 branches:
   only:
     - master
-    - 6.3
     - 7.0
     - seafile-docs
