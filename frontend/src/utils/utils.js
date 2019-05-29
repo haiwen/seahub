@@ -717,10 +717,10 @@ export const Utils = {
     let aIndex = sizes.indexOf(aSuffixName);
     let bIndex = sizes.indexOf(bSuffixName);
 
-    let aFileName = a.match(fileSizeName)[0];
-    let bFileName = b.match(fileSizeName)[0];
-    let aBytes = aFileName * (1000 ** aIndex);
-    let bBytes = bFileName * (1000 ** bIndex);
+    let aSizeName = a.match(fileSizeName)[0];
+    let bSizeName = b.match(fileSizeName)[0];
+    let aBytes = aSizeName * (1000 ** aIndex);
+    let bBytes = bSizeName * (1000 ** bIndex);
 
     return aBytes < bBytes ? -1 : 1;
   },
