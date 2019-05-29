@@ -91,6 +91,11 @@ class RepoHistory extends React.Component {
     }
   }
 
+  goBack = (e) => {
+    e.preventDefault();
+    window.history.back();
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -101,10 +106,13 @@ class RepoHistory extends React.Component {
             </a>
             <CommonToolbar onSearchedClick={this.onSearchedClick} />
           </div>
-          <div className="flex-auto container-fluid pt-4">
+          <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{__html: Utils.generateDialogTitle(gettext('{placeholder} Modification History'), repoName)}}></h2>
+                <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack}>
+                  <span className="fas fa-chevron-left"></span>
+                </a>
                 {userPerm == 'rw' && <p className="tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
                 <Content 
                   data={this.state}
