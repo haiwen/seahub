@@ -239,13 +239,26 @@ export const Utils = {
   getLibIconUrl: function(repo, isBig) {
     let permission = repo.permission || repo.share_permission; //Compatible with regular repo and repo shared
     let size = Utils.isHiDPI() ? 48 : 24;
-    let status = repo.status;
     size = isBig ? 256 : size;
+
     let icon_name = 'lib.png';
     if (repo.encrypted) {
       icon_name = 'lib-encrypted.png';
     }
-    if (permission === 'r' || permission === 'perview' || status === 'read-only') {
+    switch (permission) {
+      case 'r':
+        icon_name = 'lib-readonly.png';
+        break;
+      case 'preview':
+        icon_name = 'lib-cloud-preview.png';
+        break;
+      case 'cloud-edit':
+        icon_name = 'lib-cloud-preview-edit.png';
+        break;
+    }
+
+    // must be the last
+    if (repo.status == 'read-only') {
       icon_name = 'lib-readonly.png';
     }
 
