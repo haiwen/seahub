@@ -699,7 +699,7 @@ export const Utils = {
 
   compareTwoSize: function(a, b) {
     let suffix = /[A-Za-z]+/g;
-    let fileSizeName = /(\-|\+)?\d+(\.\d+)?/g;
+    let fileSizeName = /\d+(\.\d+)?/g;
     let sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
     let aSuffixName = a.match(suffix)[0];
@@ -707,16 +707,12 @@ export const Utils = {
     let aIndex = sizes.indexOf(aSuffixName);
     let bIndex = sizes.indexOf(bSuffixName);
 
-    if (aIndex === bIndex) {
-      let aFileName = a.match(fileSizeName)[0];
-      let bFileName = b.match(fileSizeName)[0];
-      let aBytes = aFileName * (1000 ** aIndex);
-      let bBytes = bFileName * (1000 ** bIndex);
-      return aBytes < bBytes ? -1 : 1;
-    } else {
-      return aIndex < bIndex ? -1 : 1;
-    }
+    let aFileName = a.match(fileSizeName)[0];
+    let bFileName = b.match(fileSizeName)[0];
+    let aBytes = aFileName * (1000 ** aIndex);
+    let bBytes = bFileName * (1000 ** bIndex);
     
+    return aBytes < bBytes ? -1 : 1;
   },
 
   changeMarkdownNodes: function(nodes, fn) {

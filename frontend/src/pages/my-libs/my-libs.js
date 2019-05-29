@@ -24,7 +24,7 @@ class MyLibraries extends Component {
       isLoading: true,
       repoList: [],
       isShowDetails: false,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or size
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
 
