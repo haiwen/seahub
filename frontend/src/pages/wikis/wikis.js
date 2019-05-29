@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
+import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl, canPublishRepo } from '../../utils/constants';
 import toaster from '../../components/toast';
@@ -128,11 +129,14 @@ class Wikis extends Component {
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-              {canPublishRepo &&
-                <Button className="btn btn-secondary operation-item my-1" onClick={this.onSelectToggle}>
-                  {gettext('Publish a Library')}
-                </Button>
-              }
+              {canPublishRepo && <Fragment>
+                <MediaQuery query="(min-width: 768px)">
+                  <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>{gettext('Publish a Library')}</Button>
+                </MediaQuery>
+                <MediaQuery query="(max-width: 767.8px)">
+                  <Button className="btn btn-secondary operation-item my-1" onClick={this.onSelectToggle}>{gettext('Publish a Library')}</Button>
+                </MediaQuery>
+              </Fragment>}
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />

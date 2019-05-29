@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import MediaQuery from 'react-responsive';
 import { gettext, repoID, slug, siteRoot, username } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
@@ -78,9 +79,14 @@ class MainPanel extends Component {
             <Fragment>
               <div className="cur-view-toolbar">
                 <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-                {this.props.permission === 'rw' && (
-                  <button className="btn btn-secondary operation-item my-1" title="Edit" onClick={this.onEditClick}>{gettext('Edit')}</button>
-                )}
+                <MediaQuery query="(min-width: 768px)">
+                  {this.props.permission === 'rw' &&
+                    <button className="btn btn-secondary operation-item" title="Edit" onClick={this.onEditClick}>{gettext('Edit')}</button>}
+                </MediaQuery>
+                <MediaQuery query="(max-width: 767.8px)">
+                  {this.props.permission === 'rw' &&
+                    <button className="btn btn-secondary operation-item my-1" title="Edit" onClick={this.onEditClick}>{gettext('Edit')}</button>}
+                </MediaQuery>
               </div>
               <CommonToolbar 
                 repoID={repoID}

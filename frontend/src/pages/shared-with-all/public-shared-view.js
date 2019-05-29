@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
+import MediaQuery from 'react-responsive';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl, canAddPublicRepo } from '../../utils/constants';
@@ -174,9 +175,16 @@ class PublicSharedView extends React.Component {
               <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
               <div className="operation">
                 <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
-                  <DropdownToggle className='btn btn-secondary operation-item my-1'>
-                    <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
-                  </DropdownToggle>
+                  <MediaQuery query="(min-width: 768px)">
+                    <DropdownToggle className='btn btn-secondary operation-item'>
+                      <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
+                    </DropdownToggle>
+                  </MediaQuery>
+                  <MediaQuery query="(max-width: 767.8px)">
+                    <DropdownToggle className='btn btn-secondary operation-item my-1'>
+                      <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
+                    </DropdownToggle>
+                  </MediaQuery>
                   <DropdownMenu>
                     <DropdownItem onClick={this.onSelectRepoToggle}>{gettext('Share existing libraries')}</DropdownItem>
                     <DropdownItem onClick={this.onCreateRepoToggle}>{gettext('New Library')}</DropdownItem>
