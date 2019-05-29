@@ -143,7 +143,7 @@ class GenerateShareLink extends React.Component {
         password: '',
         passwordnew: '',
         isShowPasswordInput: false,
-        expireDays: '',
+        expireDays: shareLinkExpireDaysDefault,
         isExpireChecked: false,
         errorInfo: '',
         sharedLinkInfo: null,
@@ -192,8 +192,7 @@ class GenerateShareLink extends React.Component {
           this.setState({errorInfo: 'Please enter days'});
           return false;
         }
-        let flag = reg.test(expireDays);
-        if (!flag) {
+        if (!reg.test(expireDays)) {
           this.setState({errorInfo: 'Please enter a non-negative integer'});
           return false;
         }
@@ -204,8 +203,7 @@ class GenerateShareLink extends React.Component {
         this.setState({errorInfo: 'Please enter days'});
         return false;
       }
-      let flag = reg.test(expireDays);
-      if (!flag) {
+      if (!reg.test(expireDays)) {
         this.setState({errorInfo: 'Please enter a non-negative integer'});
         return false;
       }
@@ -229,7 +227,7 @@ class GenerateShareLink extends React.Component {
       }
       
       if (minDays !== 0 && maxDays !== 0) {
-        if (expireDays < minDays || expireDays < maxDays) {
+        if (expireDays < minDays || expireDays > maxDays) {
           this.setState({errorInfo: 'Please enter valid days'});
           return false;
         }
@@ -382,7 +380,6 @@ class GenerateShareLink extends React.Component {
           </FormGroup>
           {this.state.isShowPasswordInput &&
             <FormGroup className="link-operation-content" check>
-              {/* todo translate  */}
               <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
               <InputGroup className="passwd">
                 <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
@@ -396,35 +393,43 @@ class GenerateShareLink extends React.Component {
             </FormGroup>
           }
           {this.isExpireDaysNoLimit && (
-            <FormGroup check>
-              <Label check>
-                <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
-              </Label>
-            </FormGroup>
+            <Fragment>
+              <FormGroup check>
+                <Label check>
+                  <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
+                </Label>
+              </FormGroup>
+              {this.state.isExpireChecked && 
+                <FormGroup check>
+                  <Label check>
+                    <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
+                  </Label>
+                </FormGroup>
+              }
+            </Fragment>
           )}
-          {this.state.isExpireChecked && 
-            <FormGroup check>
-              <Label check>
-                <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
-              </Label>
-            </FormGroup>
-          }
           {!this.isExpireDaysNoLimit && (
-            <FormGroup check>
-              <Label check>
-                <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} checked readOnly/>{'  '}{gettext('Add auto expiration')}
-                <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} /> <span>{gettext('days')}</span>
-                {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
-                  <span> ({shareLinkExpireDaysMin} - {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
-                )}
-                {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) === 0) && (
-                  <span> ({gettext('Greater than or equal to')} {shareLinkExpireDaysMin}{' '}{gettext('days')})</span>
-                )}
-                {(parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
-                  <span> ({gettext('Less than or equal to')} {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
-                )}
-              </Label>
-            </FormGroup>
+            <Fragment>
+              <FormGroup check>
+                <Label check>
+                  <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} checked readOnly disabled/>{'  '}{gettext('Add auto expiration')}
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} /><span className="expir-span">{gettext('days')}</span>
+                  {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
+                    <span className="d-inline-block ml-7">({shareLinkExpireDaysMin} - {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
+                  )}
+                  {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) === 0) && (
+                    <span className="d-inline-block ml-7">({gettext('Greater than or equal to')} {shareLinkExpireDaysMin}{' '}{gettext('days')})</span>
+                  )}
+                  {(parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
+                    <span className="d-inline-block ml-7">({gettext('Less than or equal to')} {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
+                  )}
+                </Label>
+              </FormGroup>
+            </Fragment>
           )}
           <FormGroup check>
             <Label check>
