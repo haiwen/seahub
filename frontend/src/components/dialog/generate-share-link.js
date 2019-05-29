@@ -380,7 +380,6 @@ class GenerateShareLink extends React.Component {
           </FormGroup>
           {this.state.isShowPasswordInput &&
             <FormGroup className="link-operation-content" check>
-              {/* todo translate  */}
               <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
               <InputGroup className="passwd">
                 <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
@@ -410,7 +409,7 @@ class GenerateShareLink extends React.Component {
           {!this.isExpireDaysNoLimit && (
             <FormGroup check>
               <Label check>
-                <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} checked readOnly/>{'  '}{gettext('Add auto expiration')}
+                <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} checked readOnly disabled/>{'  '}{gettext('Add auto expiration')}
                 <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} /> <span>{gettext('days')}</span>
                 {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
                   <span> ({shareLinkExpireDaysMin} - {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
