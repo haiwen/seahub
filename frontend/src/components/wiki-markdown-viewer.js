@@ -234,9 +234,11 @@ class WikiMarkdownViewer extends React.Component {
     if (this.props.isFileLoading) {
       return <Loading />;
     }
+    // In dir-column-file repoID is one of props, width is 100%; In wiki-viewer repoID is not props, width isn't 100%
+    let contentClassName = `${this.props.repoID ? contentClass + ' w-100' : contentClass}`
     return (
       <div ref={this.markdownContainer} className="wiki-page-container" onScroll={this.onScrollHandler.bind(this)}>
-        <div className={contentClass}>
+        <div className={contentClassName}>
           {this.props.children}
           {this.renderMarkdown()}
           {this.props.isWiki && this.renderRelatedFiles()}

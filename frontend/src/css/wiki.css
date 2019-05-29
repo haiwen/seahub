@@ -101,7 +101,7 @@ img[src=""] {
     width: 100%;
     padding-right: 0;
   }
-  .cur-view-content .markdown-outline {
+  .cur-view-content .seafile-markdown-outline {
     display: none;
   }
 }
