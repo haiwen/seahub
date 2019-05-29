@@ -618,12 +618,22 @@ export const Utils = {
         break;
       case 'size-asc':
         comparator = function(a, b) {
+          if (a.size === b.size) {
+            var result = _this.compareTwoWord(a.repo_name, b.repo_name);
+            return result;
+          }
+
           let reult = _this.compareTwoSize(a.size, b.size);
           return reult;
         };
         break;
       case 'size-desc':
         comparator = function(a, b) {
+          if (a.size === b.size) {
+            var result = _this.compareTwoWord(a.repo_name, b.repo_name);
+            return -result;
+          }
+
           let reult = _this.compareTwoSize(a.size, b.size);
           return -reult;
         };
@@ -711,7 +721,7 @@ export const Utils = {
     let bFileName = b.match(fileSizeName)[0];
     let aBytes = aFileName * (1000 ** aIndex);
     let bBytes = bFileName * (1000 ** bIndex);
-    
+
     return aBytes < bBytes ? -1 : 1;
   },
 

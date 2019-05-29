@@ -86,7 +86,7 @@ class MylibRepoListView extends React.Component {
             <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="38%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
             <th width="14%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width={showStorageBackend ? '15%' : '20%'} onClick={this.sortBySize}>{gettext('Size')} {this.props.sortBy === 'size' && sortIcon}</th>
+            <th width={showStorageBackend ? '15%' : '20%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {this.props.sortBy === 'size' && sortIcon}</a></th>
             {showStorageBackend ? <th width="10%">{gettext('Storage backend')}</th> : null}
             <th width={showStorageBackend ? '15%' : '20%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {this.props.sortBy === 'time' && sortIcon}</a></th>
           </tr>
