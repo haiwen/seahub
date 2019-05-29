@@ -77,33 +77,50 @@ class Wiki extends Component {
   }
 
   loadSidePanel = (initialPath) => {
-    if (initialPath === this.homePath || isDir === 'None') {
-      seafileAPI.listWikiDir(slug, '/').then(res => {
-        let tree = this.state.treeData;
-        this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
-        let indexNode = tree.getNodeByPath(this.indexPath);
-        let homeNode = tree.getNodeByPath(this.homePath);
-        if (homeNode && indexNode) {
-          seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
-            this.setState({
-              treeData: tree,
-              indexNode: indexNode,
-              indexContent: res.data.content,
-              isTreeDataLoading: false,
-            });
-          });
-        } else {
-          this.setState({
-            treeData: tree,
-            isTreeDataLoading: false,
-          });
-        }
-      }).catch(() => {
-        this.setState({isLoadFailed: true});
-      });
-    } else {
-      this.loadNodeAndParentsByPath(initialPath);
+
+    if (initialPath === this.homePath) {
+      if (hasIndex) {
+        this.loadIndexNode();
+      } else {
+        initialPath = '/';
+        this.loadNodeAndParentsByPath(initialPath);
+      }
     }
+
+    if (initialPath !== this.homePath) {
+      if (isDir === 'None') {
+        if (hasIndex) {
+          this.loadIndexNode();
+        } else {
+          initialPath = '/';
+          this.loadNodeAndParentsByPath(initialPath);
+        }
+      } else {
+        if (hasIndex) {
+          this.loadIndexNode();
+        } else {
+          this.loadNodeAndParentsByPath(initialPath);
+        }
+      }
+    }
+  }
+
+  loadIndexNode = () => {
+    seafileAPI.listWikiDir(slug, '/').then(res => {
+      let tree = this.state.treeData;
+      this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
+      let indexNode = tree.getNodeByPath(this.indexPath);
+      seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
+        this.setState({
+          treeData: tree,
+          indexNode: indexNode,
+          indexContent: res.data.content,
+          isTreeDataLoading: false,
+        });
+      });
+    }).catch(() => {
+      this.setState({isLoadFailed: true});
+    });
   }
 
   showDir = (dirPath) => {
