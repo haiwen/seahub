@@ -81,7 +81,7 @@ class Wiki extends Component {
     if (hasIndex) {
       this.loadIndexNode();
     } else {
-      if (isDir === 'none') {
+      if (isDir === 'None') {
         initialPath = '/';
         this.loadNodeAndParentsByPath('/');
       } else  {
