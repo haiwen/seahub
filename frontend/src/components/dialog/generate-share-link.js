@@ -393,35 +393,43 @@ class GenerateShareLink extends React.Component {
             </FormGroup>
           }
           {this.isExpireDaysNoLimit && (
-            <FormGroup check>
-              <Label check>
-                <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
-              </Label>
-            </FormGroup>
+            <Fragment>
+              <FormGroup check>
+                <Label check>
+                  <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
+                </Label>
+              </FormGroup>
+              {this.state.isExpireChecked && 
+                <FormGroup check>
+                  <Label check>
+                    <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
+                  </Label>
+                </FormGroup>
+              }
+            </Fragment>
           )}
-          {this.state.isExpireChecked && 
-            <FormGroup check>
-              <Label check>
-                <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
-              </Label>
-            </FormGroup>
-          }
           {!this.isExpireDaysNoLimit && (
-            <FormGroup check>
-              <Label check>
-                <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} checked readOnly disabled/>{'  '}{gettext('Add auto expiration')}
-                <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} /> <span>{gettext('days')}</span>
-                {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
-                  <span> ({shareLinkExpireDaysMin} - {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
-                )}
-                {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) === 0) && (
-                  <span> ({gettext('Greater than or equal to')} {shareLinkExpireDaysMin}{' '}{gettext('days')})</span>
-                )}
-                {(parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
-                  <span> ({gettext('Less than or equal to')} {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
-                )}
-              </Label>
-            </FormGroup>
+            <Fragment>
+              <FormGroup check>
+                <Label check>
+                  <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} checked readOnly disabled/>{'  '}{gettext('Add auto expiration')}
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} /><span className="expir-span">{gettext('days')}</span>
+                  {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
+                    <span className="d-inline-block ml-7">({shareLinkExpireDaysMin} - {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
+                  )}
+                  {(parseInt(shareLinkExpireDaysMin) !== 0 && parseInt(shareLinkExpireDaysMax) === 0) && (
+                    <span className="d-inline-block ml-7">({gettext('Greater than or equal to')} {shareLinkExpireDaysMin}{' '}{gettext('days')})</span>
+                  )}
+                  {(parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) !== 0) && (
+                    <span className="d-inline-block ml-7">({gettext('Less than or equal to')} {shareLinkExpireDaysMax}{' '}{gettext('days')})</span>
+                  )}
+                </Label>
+              </FormGroup>
+            </Fragment>
           )}
           <FormGroup check>
             <Label check>
