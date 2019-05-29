@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { slug, repoID, siteRoot, initialPath, isDir, sharedToken } from './utils/constants';
+import { slug, repoID, siteRoot, initialPath, isDir, sharedToken, hasIndex } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Dirent from './models/dirent';
@@ -77,33 +77,36 @@ class Wiki extends Component {
   }
 
   loadSidePanel = (initialPath) => {
-    if (initialPath === this.homePath || isDir === 'None') {
-      seafileAPI.listWikiDir(slug, '/').then(res => {
-        let tree = this.state.treeData;
-        this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
-        let indexNode = tree.getNodeByPath(this.indexPath);
-        let homeNode = tree.getNodeByPath(this.homePath);
-        if (homeNode && indexNode) {
-          seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
-            this.setState({
-              treeData: tree,
-              indexNode: indexNode,
-              indexContent: res.data.content,
-              isTreeDataLoading: false,
-            });
-          });
-        } else {
-          this.setState({
-            treeData: tree,
-            isTreeDataLoading: false,
-          });
-        }
-      }).catch(() => {
-        this.setState({isLoadFailed: true});
-      });
+
+    if (hasIndex) {
+      this.loadIndexNode();
     } else {
-      this.loadNodeAndParentsByPath(initialPath);
+      if (isDir === 'none') {
+        initialPath = '/';
+        this.loadNodeAndParentsByPath('/');
+      } else  {
+        this.loadNodeAndParentsByPath(initialPath);
+      }
     }
+    
+  }
+
+  loadIndexNode = () => {
+    seafileAPI.listWikiDir(slug, '/').then(res => {
+      let tree = this.state.treeData;
+      this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
+      let indexNode = tree.getNodeByPath(this.indexPath);
+      seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
+        this.setState({
+          treeData: tree,
+          indexNode: indexNode,
+          indexContent: res.data.content,
+          isTreeDataLoading: false,
+        });
+      });
+    }).catch(() => {
+      this.setState({isLoadFailed: true});
+    });
   }
 
   showDir = (dirPath) => {
