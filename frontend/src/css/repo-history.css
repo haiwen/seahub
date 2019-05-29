@@ -26,3 +26,10 @@ body {
 .commit-detail-item {
   list-style-type: none;
 }
+.go-back {
+  color: #c0c0c0;
+  font-size: 1.75rem;
+  position: absolute;
+  left: -40px;
+  top: -5px;
+}
