@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import DetailCommentList from './detail-comments-list';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
@@ -15,6 +18,7 @@ const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
   onItemDetailsClose: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
+  direntDetailPanelTab: PropTypes.string,
 };
 
 class DirentDetail extends React.Component {
@@ -27,7 +31,14 @@ class DirentDetail extends React.Component {
       fileTagList: [],
       relatedFiles: [],
       folderDirent: null,
+      activeTab: 'info',
     };
+  }
+
+  componentWillMount() {
+    if (this.props.direntDetailPanelTab) {
+      this.tabItemClick(this.props.direntDetailPanelTab);
+    }
   }
 
   componentDidMount() {
@@ -38,6 +49,9 @@ class DirentDetail extends React.Component {
   componentWillReceiveProps(nextProps) {
     let { dirent, path, repoID } = nextProps;
     this.loadDirentInfo(dirent, path, repoID);
+    if (this.props.direntDetailPanelTab) {
+      this.tabItemClick(this.props.direntDetailPanelTab);
+    }
   }
 
   loadDirentInfo = (dirent, path, repoID) => {
@@ -109,34 +123,50 @@ class DirentDetail extends React.Component {
     this.updateDetailView(dirent, direntPath);
   }
 
-  render() {
-    let { dirent } = this.props;
-    let { folderDirent } = this.state;
-    if (!dirent && !folderDirent) {
-      return '';
+  tabItemClick = (tab) => {
+    if (this.state.activeTab !== tab) {
+      this.setState({ activeTab: tab });
     }
+  }
 
-    let smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : Utils.getDirentIcon(folderDirent);
-    let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
-    const isImg = dirent ? Utils.imageCheck(dirent.name) : Utils.imageCheck(folderDirent.name);
-    if (isImg) {
-      bigIconUrl = siteRoot + 'thumbnail/' + this.props.repoID + '/1024/' + dirent.name;
+  renderNavItem = (showTab) => {
+    switch(showTab) {
+      case 'info':
+        return (
+          <NavItem className="nav-item w-50">
+            <NavLink className={classnames({ active: this.state.activeTab === 'info' })} onClick={() => { this.tabItemClick('info');}}>
+              <i className="fas fa-info-circle"></i>
+            </NavLink>
+          </NavItem>
+        );
+      case 'comments':
+        return (
+          <NavItem className="nav-item w-50">
+            <NavLink className={classnames({ active: this.state.activeTab === 'comments' })} onClick={() => {this.tabItemClick('comments');}}>
+              <i className="fa fa-comments"></i>
+            </NavLink>
+          </NavItem>
+        );
     }
-    let direntName = dirent ? dirent.name : folderDirent.name;
+  }
 
+  renderHeader = (smallIconUrl, direntName) => {
     return (
-      <div className="detail-container">
-        <div className="detail-header">
-          <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
-          <div className="detail-title dirent-title">
-            <img src={smallIconUrl} width="24" height="24" alt="" />{' '}
-            <span className="name ellipsis" title={direntName}>{direntName}</span>
-          </div>
+      <div className="detail-header">
+        <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
+        <div className="detail-title dirent-title">
+          <img src={smallIconUrl} width="24" height="24" alt="" />{' '}
+          <span className="name ellipsis" title={direntName}>{direntName}</span>
         </div>
+      </div>
+    );
+  }
+
+  renderDetailBody = (bigIconUrl, folderDirent) => {
+    return (
+      <Fragment>
         <div className="detail-body dirent-info">
-          <div className="img">
-            <img src={bigIconUrl} className="thumbnail" alt="" />
-          </div>
+          <div className="img"><img src={bigIconUrl} className="thumbnail" alt="" /></div>
           {this.state.direntDetail && 
             <div className="dirent-table-container">
               <DetailListView 
@@ -154,8 +184,48 @@ class DirentDetail extends React.Component {
             </div>
           }
         </div>
-      </div>
+      </Fragment>
     );
+  }
+
+  render() {
+    let { dirent } = this.props;
+    let { folderDirent } = this.state;
+    if (!dirent && !folderDirent) {
+      return '';
+    }
+    let smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : Utils.getDirentIcon(folderDirent);
+    let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
+    const isImg = dirent ? Utils.imageCheck(dirent.name) : Utils.imageCheck(folderDirent.name);
+    if (isImg) {
+      bigIconUrl = siteRoot + 'thumbnail/' + this.props.repoID + '/1024/' + dirent.name;
+    }
+    let direntName = dirent ? dirent.name : folderDirent.name;
+
+    if (dirent && dirent.type === 'file') {
+      return (
+        <div className="detail-container">
+          {this.renderHeader(smallIconUrl, direntName)}
+          <Nav tabs className="mx-0">{this.renderNavItem('info')}{this.renderNavItem('comments')}</Nav>
+          <TabContent activeTab={this.state.activeTab}>
+            <TabPane tabId="info">{this.renderDetailBody(bigIconUrl, folderDirent)}</TabPane>
+            <TabPane tabId="comments" className="comments h-100">
+              <DetailCommentList
+                repoID={this.props.repoID}
+                filePath={this.props.path + dirent.name}
+              />
+            </TabPane>
+          </TabContent>
+        </div>
+      );
+    } else {
+      return (
+        <div className="detail-container">
+          {this.renderHeader(smallIconUrl, direntName)}
+          {this.renderDetailBody(bigIconUrl, folderDirent)}
+        </div>
+      );
+    }
   }
 }
 

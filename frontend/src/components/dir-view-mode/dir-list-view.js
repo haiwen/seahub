@@ -38,6 +38,7 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
+  showDirentDetail: PropTypes.func.isRequired,
 };
 
 class DirListView extends React.Component {
@@ -96,6 +97,7 @@ class DirListView extends React.Component {
           onAddFile={this.props.onAddFile}
           onAddFolder={this.props.onAddFolder}
           onFileTagChanged={this.props.onFileTagChanged}
+          showDirentDetail={this.props.showDirentDetail}
         />
       </Fragment>
     );

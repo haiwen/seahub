@@ -87,6 +87,7 @@ const propTypes = {
   updateDetail: PropTypes.bool.isRequired,
   onListContainerScroll: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
+  direntDetailPanelTab: PropTypes.string,
 };
 
 class LibContentContainer extends React.Component {
@@ -223,6 +224,7 @@ class LibContentContainer extends React.Component {
                     onItemsCopy={this.props.onItemsCopy}
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
+                    showDirentDetail={this.props.showDirentDetail}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -335,6 +337,7 @@ class LibContentContainer extends React.Component {
                   currentRepoInfo={this.props.currentRepoInfo}
                   onFileTagChanged={this.props.onFileTagChanged}
                   onItemDetailsClose={this.props.closeDirentDetail}
+                  direntDetailPanelTab={this.props.direntDetailPanelTab}
                 />
               }
             </div>
