@@ -71,6 +71,7 @@ class LibContentView extends React.Component {
       dirID: '',  // for update dir list
       errorMsg: '',
       isDirentDetailShow: false,
+      direntDetailPanelTab: '',
       updateDetail: false,
       itemsShowLength: 100,
       isSessionExpired: false,
@@ -82,16 +83,31 @@ class LibContentView extends React.Component {
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
   }
 
-  showDirentDetail = () => {
-    this.setState({isDirentDetailShow: true});
+  showDirentDetail = (direntDetailPanelTab) => {
+    if (direntDetailPanelTab) {
+      this.setState({ direntDetailPanelTab: direntDetailPanelTab }, () => {
+        this.setState({ isDirentDetailShow: true });
+      });
+    } else {
+      this.setState({
+        direntDetailPanelTab: '',
+        isDirentDetailShow: true
+      });
+    }
   }
 
   toggleDirentDetail = () => {
-    this.setState({ isDirentDetailShow: !this.state.isDirentDetailShow });
+    this.setState({
+      direntDetailPanelTab: '',
+      isDirentDetailShow: !this.state.isDirentDetailShow
+    });
   }
 
   closeDirentDetail = () => {
-    this.setState({ isDirentDetailShow: false });
+    this.setState({
+      isDirentDetailShow: false,
+      direntDetailPanelTab: '',
+    });
   }
 
   componentWillMount() {
@@ -581,12 +597,12 @@ class LibContentView extends React.Component {
         }
         this.deleteDirent(direntPath);
       });
-      var msg = gettext("Successfully deleted {name} and other {n} items.");
+      var msg = gettext('Successfully deleted {name} and other {n} items.');
       msg = msg.replace('{name}', dirNames[0]);
       msg = msg.replace('{n}', dirNames.length - 1);
       toaster.success(msg);
     }).catch(() => {
-      var msg = gettext("Failed to delete {name} and other {n} items.");
+      var msg = gettext('Failed to delete {name} and other {n} items.');
       msg = msg.replace('{name}', dirNames[0]);
       msg = msg.replace('{n}', dirNames.length - 1);
       toaster.danger(msg);
@@ -755,22 +771,22 @@ class LibContentView extends React.Component {
       seafileAPI.renameDir(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
         let name = Utils.getFileName(path);
-        var msg = gettext("Rename {name} successfully").replace('{name}', name);
+        var msg = gettext('Rename {name} successfully').replace('{name}', name);
         toaster.success(msg);
       }).catch(() => {
         let name = Utils.getFileName(path);
-        var msg = gettext("Renaming {name} failed").replace('{name}', name);
+        var msg = gettext('Renaming {name} failed').replace('{name}', name);
         toaster.danger(msg);
       });
     } else {
       seafileAPI.renameFile(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
         let name = Utils.getFileName(path);
-        var msg = gettext("Rename {name} successfully").replace('{name}', name);
+        var msg = gettext('Rename {name} successfully').replace('{name}', name);
         toaster.success(msg);
       }).catch(() => {
         let name = Utils.getFileName(path);
-        var msg = gettext("Renaming {name} failed").replace('{name}', name);
+        var msg = gettext('Renaming {name} failed').replace('{name}', name);
         toaster.danger(msg);
       });
     }
@@ -789,22 +805,22 @@ class LibContentView extends React.Component {
       seafileAPI.deleteDir(repoID, path).then(() => {
         this.deleteItemAjaxCallback(path, isDir);
         let name = Utils.getFileName(path);
-        var msg = gettext("Successfully deleted {name}").replace('{name}', name);
+        var msg = gettext('Successfully deleted {name}').replace('{name}', name);
         toaster.success(msg);
       }).catch(() => {
         let name = Utils.getFileName(path);
-        var msg = gettext("Failed to delete {name}").replace('{name}', name);
+        var msg = gettext('Failed to delete {name}').replace('{name}', name);
         toaster.danger(msg);
       });
     } else {
       seafileAPI.deleteFile(repoID, path).then(() => {
         this.deleteItemAjaxCallback(path, isDir);
         let name = Utils.getFileName(path);
-        var msg = gettext("Successfully deleted {name}").replace('{name}', name);
+        var msg = gettext('Successfully deleted {name}').replace('{name}', name);
         toaster.success(msg);
       }).catch(() => {
         let name = Utils.getFileName(path);
-        var msg = gettext("Failed to delete {name}").replace('{name}', name);
+        var msg = gettext('Failed to delete {name}').replace('{name}', name);
         toaster.danger(msg);
       });
     }
@@ -1579,6 +1595,7 @@ class LibContentView extends React.Component {
             onItemsDelete={this.onDeleteItems}
             closeDirentDetail={this.closeDirentDetail}
             showDirentDetail={this.showDirentDetail}
+            direntDetailPanelTab={this.state.direntDetailPanelTab}
             onDeleteRepoTag={this.onDeleteRepoTag}
             onToolbarFileTagChanged={this.onToolbarFileTagChanged}
             updateDetail={this.state.updateDetail}

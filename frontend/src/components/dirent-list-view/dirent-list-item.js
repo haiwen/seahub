@@ -48,6 +48,7 @@ const propTypes = {
   getDirentItemMenuList: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -210,7 +211,7 @@ class DirentListItem extends React.Component {
         this.onLockItem();
         break;
       case 'Comment':
-        this.onComnentItem();
+        this.props.showDirentDetail('comments');
         break;
       case 'History':
         this.onHistory();
@@ -286,10 +287,6 @@ class DirentListItem extends React.Component {
       this.props.updateDirent(this.props.dirent, 'locked_by_me', false);
       this.props.updateDirent(this.props.dirent, 'lock_owner_name', '');
     });
-  }
-
-  onComnentItem = () => {
-
   }
 
   onHistory = () => {

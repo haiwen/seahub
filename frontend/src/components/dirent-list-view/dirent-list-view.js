@@ -47,6 +47,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -642,6 +643,7 @@ class DirentListView extends React.Component {
                   activeDirent={this.state.activeDirent}
                   onFileTagChanged={this.props.onFileTagChanged}
                   getDirentItemMenuList={this.getDirentItemMenuList}
+                  showDirentDetail={this.props.showDirentDetail}
                 />
               );
             })}
