@@ -560,12 +560,12 @@ if EVENTS_CONFIG_FILE:
 
     try:
         import seafevents
+        EVENTS_ENABLED = True
+        SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
     except ImportError:
         logging.exception('Failed to import seafevents package.')
         seafevents = None
-
-    EVENTS_ENABLED = True
-    SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
+        EVENTS_ENABLED = False
 
     @contextlib.contextmanager
     def _get_seafevents_session():
