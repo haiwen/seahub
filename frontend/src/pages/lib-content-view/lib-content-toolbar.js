@@ -47,6 +47,8 @@ const propTypes = {
   // selected menu
   onFilesTagChanged: PropTypes.func.isRequired, // for mutiple select toolbar
   updateDirent: PropTypes.func.isRequired,
+  unSelectDirent: PropTypes.func,
+  currentRepoInfo: PropTypes.object,
 };
 
 class LibContentToolbar extends React.Component {

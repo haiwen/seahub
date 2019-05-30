@@ -67,6 +67,7 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
+  showDirentDetail: PropTypes.func.isRequired,
 };
 
 class DirColumnView extends React.Component {
@@ -224,6 +225,7 @@ class DirColumnView extends React.Component {
               onItemsCopy={this.props.onItemsCopy}
               onItemsDelete={this.props.onItemsDelete}
               onFileTagChanged={this.props.onFileTagChanged}
+              showDirentDetail={this.props.showDirentDetail}
             />
           )}
         </div>
