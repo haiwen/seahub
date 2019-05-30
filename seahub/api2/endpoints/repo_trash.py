@@ -164,3 +164,71 @@ class RepoTrash(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class RepoDirTrash(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def _get_item_info(self, item, path):
+
+        item_info = {
+            'parent_dir': path,
+            'obj_name': item.obj_name,
+        }
+
+        if stat.S_ISDIR(item.mode):
+            is_dir = True
+        else:
+            is_dir = False
+
+        item_info['is_dir'] = is_dir
+        item_info['size'] = item.size if not is_dir else ''
+        return item_info
+
+    def get(self, request, repo_id, format=None):
+        """ Return files/dirs in a deleted dir
+
+        Permission checking:
+        1. all authenticated user can perform this action.
+        """
+
+        # argument check
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        commit_id = request.GET.get('commit_id', None)
+        if not commit_id:
+            error_msg = 'commit_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        commit = seafile_api.get_commit(repo.id, repo.version, commit_id)
+        if not commit:
+            error_msg = 'Commit %s not found.' % commit
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        dir_entries = seafile_api.list_dir_by_commit_and_path(repo_id, commit_id, path)
+        if dir_entries is None:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        items = []
+        for dirent in dir_entries:
+            items.append(self._get_item_info(dirent, path))
+
+        return Response({'data': items})
