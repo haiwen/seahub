@@ -73,7 +73,7 @@ class WorkWeixinDepartmentMembersList extends Component {
           }
           {!this.props.isMembersListLoading && this.props.membersList.length === 0 &&
           <div className="message empty-tip">
-            <h2>{gettext('无成员')}</h2>
+            <h2>{'无成员'}</h2>
           </div>
           }
         </div>
