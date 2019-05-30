@@ -153,7 +153,7 @@ class DirentGridView extends React.Component{
         this.onCreateFileToggle(currentObject);
         break;
       case 'Access Log':
-        this.onAccessLog();
+        this.onAccessLog(currentObject);
         break;
       case 'Open via Client':
         this.onOpenViaClient(currentObject);
@@ -245,8 +245,10 @@ class DirentGridView extends React.Component{
     location.href = url;
   }
   
-  onAccessLog = () => {
-
+  onAccessLog = (currentObject) => {
+    let filePath = this.getDirentPath(currentObject);
+    let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
+    window.open(path);
   }
 
   onOpenViaClient = (currentObject) => {
@@ -449,7 +451,7 @@ class DirentGridView extends React.Component{
         menuList.push(COMMENT);
       }
       menuList.push(HISTORY);
-      if (fileAuditEnabled) {
+      if (isPro && fileAuditEnabled) {
         menuList.push(ACCESS_LOG);
       }
       menuList.push('Divider');

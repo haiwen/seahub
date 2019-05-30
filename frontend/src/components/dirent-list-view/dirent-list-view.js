@@ -506,7 +506,7 @@ class DirentListView extends React.Component {
         menuList.push(COMMENT);
       }
       menuList.push(HISTORY);
-      if (fileAuditEnabled) {
+      if (isPro && fileAuditEnabled) {
         menuList.push(ACCESS_LOG);
       }
       menuList.push('Divider');
