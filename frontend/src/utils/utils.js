@@ -622,7 +622,7 @@ export const Utils = {
             let result = _this.compareTwoWord(a.repo_name, b.repo_name);
             return result;
           }
-          return a.initialSize < b.initialSize ? -1 : 1;
+          return a.size_original < b.size_original ? -1 : 1;
         };
         break;
       case 'size-desc':
@@ -632,7 +632,7 @@ export const Utils = {
             return -result;
           }
 
-          return a.initialSize < b.initialSize ? 1 : -1;
+          return a.size_original < b.size_original ? 1 : -1;
         };
         break;
     }
@@ -674,7 +674,7 @@ export const Utils = {
             let result = _this.compareTwoWord(a.name, b.name);
             return result;
           } 
-          return a.initialSize < b.initialSize ? -1 : 1;
+          return a.size_original < b.size_original ? -1 : 1;
         };
         break;
       case 'size-desc':
@@ -683,7 +683,7 @@ export const Utils = {
             let result = _this.compareTwoWord(a.name, b.name);
             return -result;
           } 
-          return a.initialSize < b.initialSize ? 1 : -1;
+          return a.size_original < b.size_original ? 1 : -1;
         };
         break;
     }
