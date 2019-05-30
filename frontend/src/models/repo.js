@@ -5,8 +5,8 @@ class Repo {
     this.repo_id = object.repo_id;
     this.repo_name = object.repo_name;
     this.permission = object.permission;
+    this.initialSize = object.size;
     this.size = Utils.bytesToSize(object.size);
-    this.Initialsize = object.size
     this.owner_name = object.owner_name;
     this.owner_email = object.owner_email;
     this.owner_contact_email = object.owner_contact_email;
