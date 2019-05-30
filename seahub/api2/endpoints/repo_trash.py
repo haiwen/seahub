@@ -186,6 +186,7 @@ class RepoDirTrash(APIView):
 
         item_info['is_dir'] = is_dir
         item_info['size'] = item.size if not is_dir else ''
+
         return item_info
 
     def get(self, request, repo_id, format=None):
@@ -224,8 +225,8 @@ class RepoDirTrash(APIView):
 
         dir_entries = seafile_api.list_dir_by_commit_and_path(repo_id, commit_id, path)
         if dir_entries is None:
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         items = []
         for dirent in dir_entries:
