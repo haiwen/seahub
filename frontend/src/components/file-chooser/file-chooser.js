@@ -297,6 +297,9 @@ class FileChooser extends React.Component {
   }
 
   onSearchedItemDoubleClick = (item) => {
+    if (item.type !== 'dir') {
+      return;
+    }
     
     let selectedItemInfo = {
       repoID: item.repo_id,

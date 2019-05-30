@@ -34,7 +34,13 @@ class RepoListItem extends React.Component {
     let repoID = this.props.repo.repo_id;
     seafileAPI.listDir(repoID, '/').then(res => {
       let tree = this.state.treeData.clone();
-      let direntList = res.data.dirent_list.filter(item => item.type === 'dir');
+      let direntList = [];
+      if (this.props.isShowFile === true) {
+        direntList = res.data.dirent_list;
+      } else {
+        direntList = res.data.dirent_list.filter(item => item.type === 'dir');
+      }
+
       this.addResponseListToNode(direntList, tree.root);
       this.setState({treeData: tree});
     });
@@ -65,7 +71,12 @@ class RepoListItem extends React.Component {
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
       seafileAPI.listDir(repoID, node.path).then(res => {
-        let direntList = res.data.dirent_list.filter(item => item.type === 'dir');
+        let direntList = [];
+        if (this.props.isShowFile === true) {
+          direntList = res.data.dirent_list;
+        } else {
+          direntList = res.data.dirent_list.filter(item => item.type === 'dir');
+        }
         this.addResponseListToNode(direntList, node);
         this.setState({treeData: tree});
       });
