@@ -53,7 +53,7 @@
             canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
             canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
             canViewOrg:'{{ user.permissions.can_view_org }}',
-            fileAuditEnabled: '{{ file_audit_enabled }}',
+            fileAuditEnabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
             enableFileComment: {% if enableFileComment %} true {% else %} false {% endif %},
             folderPermEnabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
             enableResetEncryptedRepoPassword: '{{ enable_reset_encrypted_repo_password }}',
