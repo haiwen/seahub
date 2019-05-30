@@ -21,6 +21,7 @@ import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
 import { Value, Document, Block } from 'slate';
 import ModalPortal from './components/modal-portal';
+import reviewComment from './models/review-comment.js';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -45,11 +46,10 @@ class Draft extends React.Component {
       isShowDiff: true,
       showDiffTip: false,
       activeTab: 'reviewInfo',
-      commentsNumber: null,
+      commentsList: [],
       changedNodes: [],
       originRepoName: '',
       isShowCommentDialog: false,
-      unresolvedComments: 0,
       activeItem: null,
       historyList: [],
       showReviewerDialog: false,
@@ -196,25 +196,16 @@ class Draft extends React.Component {
   }
 
   onHistoryListChange = (historyList) => {
-    this.setState({
-      historyList: historyList
-    });
+    this.setState({historyList: historyList });
   }
 
-  getCommentsNumber = () => {
+  listComments = () => {
     seafileAPI.listComments(draftRepoID, draftFilePath).then((res) => {
-      let number = res.data.total_count;
-      let comments = res.data.comments;
-      let unresolvedComments = 0;
-      for (let i = 0; i < res.data.total_count; i++) {
-        if (comments[i].resolved === false) {
-          unresolvedComments++;
-        }
-      }
-      this.setState({
-        commentsNumber: number,
-        unresolvedComments: unresolvedComments,
+      let commentsList = [];
+      res.data.comments.forEach((item) => {
+        commentsList.push(new reviewComment(item));
       });
+      this.setState({ commentsList: commentsList });
     });
   }
 
@@ -226,7 +217,7 @@ class Draft extends React.Component {
   }
 
   onCommentAdded = () => {
-    this.getCommentsNumber();
+    this.listComments();
     this.toggleCommentDialog();
   }
 
@@ -238,9 +229,7 @@ class Draft extends React.Component {
 
   getOriginRepoInfo = () => {
     seafileAPI.getRepoInfo(draftRepoID).then((res) => {
-      this.setState({
-        originRepoName: res.data.repo_name
-      });
+      this.setState({ originRepoName: res.data.repo_name });
     });
   }
 
@@ -488,6 +477,7 @@ class Draft extends React.Component {
   }
 
   showNavItem = (showTab) => {
+    const commentsNumber = this.state.commentsList.length;
     switch(showTab) {
       case 'info':
         return (
@@ -508,7 +498,7 @@ class Draft extends React.Component {
               onClick={() => {this.tabItemClick('comments');}}
             >
               <i className="fa fa-comments"></i>
-              {this.state.commentsNumber > 0 && <div className='comments-number'>{this.state.commentsNumber}</div>}
+              {commentsNumber > 0 && <div className='comments-number'>{commentsNumber}</div>}
             </NavLink>
           </NavItem>
         );
@@ -662,14 +652,11 @@ class Draft extends React.Component {
     this.setState({ rightPartWidth: rate });
   };
 
-  componentWillMount() {
-    this.getCommentsNumber();
-    this.listReviewers();
+  componentDidMount() {
     this.getOriginRepoInfo();
     this.getDraftInfo();
-  }
-
-  componentDidMount() {
+    this.listReviewers();
+    this.listComments();
     this.initialContent();
     document.addEventListener('selectionchange', this.setBtnPosition);
   }
@@ -744,12 +731,13 @@ class Draft extends React.Component {
   }
 
   render() {
+    const { draftInfo, reviewers, originRepoName } = this.state; 
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
     const freezePublish = (this.state.freezePublish || draftStatus === 'published') ? true : false;
     const canPublish = !this.state.freezePublish && draftFileExists && filePermission == 'rw';
-    const time = moment(this.state.draftInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
-    const url = `${siteRoot}profile/${encodeURIComponent(this.state.draftInfo.last_modifier_email)}/`;
+    const time = moment(draftInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
+    const url = `${siteRoot}profile/${encodeURIComponent(draftInfo.last_modifier_email)}/`;
     return(
       <div className="wrapper">
         <div id="header" className="header review">
@@ -762,9 +750,9 @@ class Draft extends React.Component {
                 <span className="file-name">{draftFileName}</span>
                 <span className="mx-2 file-review">{gettext('Review')}</span>
               </div>
-              {(!freezePublish && this.state.draftInfo.mtime) &&
+              {(!freezePublish && draftInfo.mtime) &&
                 <div className="last-modification">
-                  <a href={url}>{this.state.draftInfo.last_modifier_name}</a><span className="mx-1">{time}</span>
+                  <a href={url}>{draftInfo.last_modifier_name}</a><span className="mx-1">{time}</span>
                 </div>
               }
             </div>
@@ -777,20 +765,12 @@ class Draft extends React.Component {
               </a>
             }
             {canPublish &&
-              <button 
-                className='btn btn-success file-operation-btn' 
-                title={gettext('Publish draft')}
-                onClick={this.onPublishDraft}
-              >
+              <button className='btn btn-success file-operation-btn' title={gettext('Publish draft')} onClick={this.onPublishDraft}>
                 {gettext('Publish')}
               </button>
             }
             {freezePublish &&
-              <button 
-                className='btn btn-success file-operation-btn' 
-                title={gettext('Published')}
-                disabled
-              >
+              <button className='btn btn-success file-operation-btn' title={gettext('Published')} disabled>
                 {gettext('Published')}
               </button>
             }
@@ -817,25 +797,23 @@ class Draft extends React.Component {
                   <TabPane tabId="reviewInfo">
                     <div className="review-side-panel-body">
                       <SidePanelReviewers
-                        reviewers={this.state.reviewers}
+                        reviewers={reviewers}
                         toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>
                       <SidePanelAuthor/>
-                      {draftFileExists &&
-                        <UnresolvedComments number={this.state.unresolvedComments}/>
-                      }
+                      {draftFileExists && <UnresolvedComments commentsList={this.state.commentsList}/>}
                       {(this.state.isShowDiff === true && this.state.changedNodes.length > 0) &&
                       <SidePanelChanges
                         changedNumber={this.state.changedNodes.length}
                         scrollToChangedNode={this.scrollToChangedNode}/>
                       }
-                      <SidePanelOrigin originRepoName={this.state.originRepoName} draftInfo={this.state.draftInfo}/>
+                      <SidePanelOrigin originRepoName={originRepoName} draftInfo={draftInfo}/>
                     </div>
                   </TabPane>
                   <TabPane tabId="comments" className="comments">
                     <ReviewComments
                       scrollToQuote={this.scrollToQuote}
-                      getCommentsNumber={this.getCommentsNumber}
-                      commentsNumber={this.state.commentsNumber}
+                      listComments={this.listComments}
+                      commentsList={this.state.commentsList}
                       inResizing={false}
                     />
                   </TabPane>
@@ -859,7 +837,7 @@ class Draft extends React.Component {
               showReviewerDialog={this.state.showReviewerDialog}
               toggleAddReviewerDialog={this.toggleAddReviewerDialog}
               draftID={draftID}
-              reviewers={this.state.reviewers}
+              reviewers={reviewers}
             />
           </ModalPortal>
         }
@@ -967,11 +945,20 @@ class UnresolvedComments extends React.Component {
   }
 
   render() {
+    const { commentsList } = this.props;
+    let unresolvedNumber = 0;
+    if (commentsList) {
+      for (let i = 0, count = commentsList.length; i < count; i++) {
+        if (commentsList[i].resolved === false) {
+          unresolvedNumber++;
+        }
+      }
+    }
     return (
       <div className="review-side-panel-item">
         <div className="review-side-panel-header">{gettext('Comments')}</div>
         <div className="changes-info">
-          <span>{gettext('Unresolved comments:')}{' '}{this.props.number}</span>
+          <span>{gettext('Unresolved comments:')}{' '}{unresolvedNumber}</span>
         </div>
       </div>
     );
@@ -979,7 +966,7 @@ class UnresolvedComments extends React.Component {
 }
 
 const UnresolvedCommentsPropTypes = {
-  number: PropTypes.number.isRequired
+  commentsList: PropTypes.array.isRequired,
 };
 
 UnresolvedComments.propTypes = UnresolvedCommentsPropTypes;
