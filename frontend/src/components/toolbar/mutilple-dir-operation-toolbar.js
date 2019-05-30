@@ -109,7 +109,7 @@ class MutipleDirOperationToolbar extends React.Component {
           return menu !== RELATED_FILES;
         });
       }
-      if (!fileAuditEnabled) {
+      if (!isPro || !fileAuditEnabled) {
         menuList = menuList.filter(menu => {
           return menu !== ACCESS_LOG;
         });
