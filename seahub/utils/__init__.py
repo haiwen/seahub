@@ -61,8 +61,12 @@ except ImportError:
 
 # init Seafevents API
 if EVENTS_CONFIG_FILE:
-    from seafevents import seafevents_api
-    seafevents_api.init(EVENTS_CONFIG_FILE)
+    try:
+        from seafevents import seafevents_api
+        seafevents_api.init(EVENTS_CONFIG_FILE)
+    except ImportError:
+        logging.exception('Failed to import seafevents package.')
+        seafevents_api = None
 else:
     class RPCProxy(object):
         def __getattr__(self, name):
@@ -554,7 +558,11 @@ if EVENTS_CONFIG_FILE:
     parsed_events_conf = ConfigParser.ConfigParser()
     parsed_events_conf.read(EVENTS_CONFIG_FILE)
 
-    import seafevents
+    try:
+        import seafevents
+    except ImportError:
+        logging.exception('Failed to import seafevents package.')
+        seafevents = None
 
     EVENTS_ENABLED = True
     SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
