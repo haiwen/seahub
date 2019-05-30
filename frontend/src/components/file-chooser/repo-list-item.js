@@ -130,7 +130,7 @@ class RepoListItem extends React.Component {
   }
 
   onRepoItemClick = () => {
-    if (!this.isCurrentRepo()) {
+    if (!this.isCurrentRepo() || this.refs.itemActive.className !== 'item-info item-active') {
       this.props.onRepoItemClick(this.props.repo);
     } else {
       this.onToggleClick();
@@ -152,7 +152,7 @@ class RepoListItem extends React.Component {
     return (
       <li className="file-chooser-item">
         <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
-        <span className={`item-info ${repoActive ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
+        <span className={`item-info ${repoActive ? 'item-active' : ''}`} onClick={this.onRepoItemClick} ref='itemActive'>
           <span className="icon far fa-folder"></span>
           <span className="name user-select-none ellipsis">{this.props.repo.repo_name}</span>
         </span>
