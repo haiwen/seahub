@@ -96,7 +96,7 @@ class DirTool extends React.Component {
         );
       } else {
         if (name) { // name not '' is not root path
-          trashUrl = siteRoot + 'repo/recycle/' + repoID + '/?dir_path=' + Utils.encodePath(currentPath) + '/?referer=' + encodeURIComponent(location.href);
+          trashUrl = siteRoot + 'dir/recycle/' + repoID + '/?dir_path=' + encodeURIComponent(currentPath) + '&referer=' + encodeURIComponent(location.href);
           return (
             <ul className="path-toolbar">
               <li className="toolbar-item"><a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
