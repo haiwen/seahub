@@ -211,6 +211,7 @@ class DirentListItem extends React.Component {
         this.onLockItem();
         break;
       case 'Comment':
+        this.props.onDirentClick(this.props.dirent);
         this.props.showDirentDetail('comments');
         break;
       case 'History':
