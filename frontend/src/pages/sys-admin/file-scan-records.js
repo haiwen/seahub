@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
+import Account from '../../components/common/account';
 
 
 const tablePropTypes = {
@@ -116,20 +117,30 @@ class FileScanRecords extends Component {
 
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container" id="content-scan-records">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext('Content Scan Records')}</h3>
+      <React.Fragment>
+        <div className="main-panel-north border-left-show">
+          <div className="cur-view-toolbar">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
           </div>
-          <div className="cur-view-content">
-            <Table 
-              loading={this.state.loading}
-              errorMsg={this.state.errorMsg}
-              records={this.state.records}
-            />
+          <div className="common-toolbar">
+            <Account isAdminPanel={true} />
           </div>
         </div>
-      </div>
+        <div className="main-panel-center">
+          <div className="cur-view-container" id="content-scan-records">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('Content Scan Records')}</h3>
+            </div>
+            <div className="cur-view-content">
+              <Table 
+                loading={this.state.loading}
+                errorMsg={this.state.errorMsg}
+                records={this.state.records}
+              />
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 }
