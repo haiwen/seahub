@@ -13,6 +13,7 @@ class Dirent {
     this.isSelected = false; // is check or not
     this.starred = json.starred || false;
     if (json.type === 'file') {
+      this.Initialsize = json.size;
       this.size = Utils.bytesToSize(json.size);
       this.is_locked = json.is_locked || false;
       this.lock_time = json.lock_time || '';

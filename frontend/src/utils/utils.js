@@ -622,9 +622,7 @@ export const Utils = {
             let result = _this.compareTwoWord(a.repo_name, b.repo_name);
             return result;
           }
-
-          let result = _this.compareTwoSize(a.size, b.size);
-          return result;
+          return a.Initialsize < b.Initialsize ? -1 : 1;
         };
         break;
       case 'size-desc':
@@ -634,8 +632,7 @@ export const Utils = {
             return -result;
           }
 
-          let result = _this.compareTwoSize(a.size, b.size);
-          return -result;
+          return a.Initialsize < b.Initialsize ? 1 : -1;
         };
         break;
     }
@@ -676,10 +673,8 @@ export const Utils = {
           if (a.type == 'dir' && b.type == 'dir') {
             let result = _this.compareTwoWord(a.name, b.name);
             return result;
-          } else {
-            let result = _this.compareTwoSize(a.size, b.size);
-            return result;
-          }
+          } 
+          return a.Initialsize < b.Initialsize ? -1 : 1;
         };
         break;
       case 'size-desc':
@@ -687,10 +682,8 @@ export const Utils = {
           if (a.type == 'dir' && b.type == 'dir') {
             let result = _this.compareTwoWord(a.name, b.name);
             return -result;
-          } else {
-            let result = _this.compareTwoSize(a.size, b.size);
-            return -result;
-          }
+          } 
+          return a.Initialsize < b.Initialsize ? 1 : -1;
         };
         break;
     }
@@ -705,24 +698,6 @@ export const Utils = {
       }
     });
     return items;
-  },
-
-  compareTwoSize: function(a, b) {
-    let suffix = /[A-Za-z]+/g;
-    let fileSizeName = /\d+(\.\d+)?/g;
-    let sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
-
-    let aSuffixName = a.match(suffix)[0];
-    let bSuffixName = b.match(suffix)[0];
-    let aIndex = sizes.indexOf(aSuffixName);
-    let bIndex = sizes.indexOf(bSuffixName);
-
-    let aSizeName = a.match(fileSizeName)[0];
-    let bSizeName = b.match(fileSizeName)[0];
-    let aBytes = aSizeName * (1000 ** aIndex);
-    let bBytes = bSizeName * (1000 ** bIndex);
-
-    return aBytes < bBytes ? -1 : 1;
   },
 
   changeMarkdownNodes: function(nodes, fn) {
