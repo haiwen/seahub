@@ -10,6 +10,7 @@ const propTypes = {
   treeData: PropTypes.object.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
+  fileSuffixes: PropTypes.array,
 };
 
 class TreeListView extends React.Component {

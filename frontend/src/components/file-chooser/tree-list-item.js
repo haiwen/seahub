@@ -10,6 +10,7 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   filePath: PropTypes.string,
+  fileSuffixes: PropTypes.array,
 };
 
 class TreeViewItem extends React.Component {
@@ -88,10 +89,10 @@ class TreeViewItem extends React.Component {
     return(
       <div className="file-chooser-item">
         <div className={`${node.path === '/'? 'hide': ''}`}>
-        {
-          node.object.type !== 'file' &&
-          <span className={`item-toggle fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
-        }
+          {
+            node.object.type !== 'file' &&
+            <span className={`item-toggle fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
+          }
           <span className={`item-info ${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''}`} onClick={this.onItemClick}>
             <span className={`icon far ${node.object.type === 'dir' ? 'fa-folder' : 'fa-file'}`}></span>
             <span className="name user-select-none ellipsis">{node.object && node.object.name}</span>
