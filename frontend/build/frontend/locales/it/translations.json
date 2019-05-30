@@ -1,0 +1,169 @@
+{
+  "bold": "Grassetto",
+  "italic": "Corsivo",
+  "inline_code": "Codice",
+  "header_one": "Titolo 1",
+  "header_two": "Titolo 2",
+  "header_three": "Titolo 3",
+  "header_four": "Titolo 4",
+  "header_five": "Intestazione 5",
+  "header_six": "Intestazione 6",
+  "paragraph": "Paragrafo",
+  "quote": "Citazione",
+  "ordered_list": "Lista ordinata",
+  "unordered_list": "Lista non ordinata",
+  "check_list_item": "Controlla la voce dell'elenco",
+  "insert_image": "Inserisci Immagine",
+  "code": "Codice in linea",
+  "code_block": "Codice",
+  "insert_link": "Inserisci Collegamento",
+  "insert_table": "Inserisci tabella",
+  "save": "Salvare",
+  "more": "Altro",
+  "invalid_url": "URL non valida",
+  "link_address": "Indirizzo collegamento",
+  "image_address": "Indirizzo Immagine",
+  "submit": "Invia",
+  "cancel": "Annulla",
+  "switch_to_plain_text_editor": "Passa all'Editor di testo semplice",
+  "switch_to_rich_text_editor": "Passa all'Editor di testo formattato",
+  "switch_to_viewer": "Passa alla vista di tipo Markdown",
+  "help": "Aiuto",
+  "remove_table": "Rimuovere Tabella",
+  "column": "Colonna",
+  "row": "Riga",
+  "set_align": "Imposta allineamento",
+  "left": "Sinistra",
+  "center": "Centrato",
+  "right": "Destra",
+  "file_saved": "File salvato.",
+  "file_failed_to_save": "Errore salvataggio file.",
+  "star": "Aggiungi asterisco",
+  "unstar": "Rimozione asterisco",
+  "back_to_parent_directory":"Torna alla cartella precedente",
+  "edit":"modifica",
+  "copy": "Copia",
+  "copied": "Copiato",
+  "internal_link": "Collegamento interno",
+  "copy_internal_link": "Il collegamento interno è stato copiato negli appunti",
+  "internal_link_desc": "Un collegamento interno è un collegamento a un file o una cartella a cui gli utenti possono accedere con autorizzazione di lettura al file o alla cartella.",
+  "share": "Condividi",
+  "share_link": "Condividi Collegamento",
+  "generate": "Generare",
+  "add_password_protection": "Aggiungi la protezione password",
+  "password": "Password",
+  "at_least_8_characters": "almeno 8 caratteri",
+  "password_again": "Ridigita password",
+  "add_auto_expiration": "Aggiungi la scadenza automatica",
+  "days": "giorni",
+  "please_enter_password": "Per favore, inserisci la password",
+  "greater_than_or_equal_to": "Maggiore o uguale a ",
+  "less_than_or_equal_to": "Minore o uguale  a",
+  "set_permission": "Imposta permessi",
+  "preview_and_download": "Anteprima e download",
+  "preview_only": "Solo Anteprima",
+  "please_enter_valid_days": "Si prega di inserire giorni validi",
+  "please_enter_a_non-negative_integer": "Prego inserire un intero non negativo",
+  "please_enter_days": "Prego inserire i giorni",
+  "password_is_too_short": "La password è troppo corta",
+  "passwords_do_not_match": "Le password non corrispondono",
+  "return_to_wiki_page": "Torna alla pagina Wiki",
+  "insert_network_image": "Inserisci immagine di rete",
+  "upload_local_image": "Inserisci immagine locale",
+  "add_link": "Aggiungi collegamento",
+  "file_history": "Cronologia dei file",
+  "history_version": "Versioni cronologia",
+  "back_to_viewer": "Torma alla vista",
+  "link_title": "Link al titolo",
+  "local_draft": "Bozza locale",
+  "use_draft": "Usa bozza",
+  "delete_draft": "Rimuovi Bozza",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "Hai una bozza non salvata. La vuoi utilizzare?",
+  "local_draft_saved": "Bozza salvata in locale",
+  "new_draft": "Nuova Bozza",
+  "edit_draft": "Modifica Bozza",
+  "this_file_has_a_draft": "Questo file è una bozza", 
+  "delete": "Elimina",
+  "comments": "Commenti",
+  "add_a_comment": "Aggiungi un commento...",
+  "no_comment_yet": "Ancora nessun commento.",
+  "mark_as_resolved": "Contrassegnato come risolto",
+  "ask_for_review": "Richiedi una revisione",
+  "review_already_exists": "Revisione già esistente",
+  "view_review": "Visualizza revisione",
+  "there_is_an_associated_review_with_this_file": "C'è una recensione associata con questo file.",
+  "start_review": "Inizia Revisione",
+  "this_file_is_in_draft_stage": "Questo file è in fase di bozza.",
+  "this_file_is_in_review_stage": "Questo file è in fase di revisione.",
+  "this_file_has_been_updated": "Questo file è stato aggiornato.",
+  "refresh": "Aggiornare",
+  "related_files": "file correlati",
+  "related_file": "file correlato",
+  "no_tags": "Nessun tag",
+  "no_related_files": "Nessun file correlato",
+  "Please_use_Chrome_to_get_best_editing_experience": "Si prega di utilizzare Chrome per ottenere la migliore esperienza di modifica.",
+  "userHelp": {
+    "title": "Tasti rapidi",
+    "userHelpData": [
+      {
+        "shortcutType":"Elenca scorciatoie",
+        "shortcutData": {
+          "Make_list": "Crea elenco",
+          "Make_ordered_list": "Crea elenco ordinato",
+          "Insert_new_item": "Inserisci un nuovo elemento",
+          "Insert_child_in_item": "Inserisci un elemento figlio sotto questo elemento",
+          "Increase_depth": "Aumenta la profondità"
+        }
+      }, {
+        "shortcutType": "Scorciatoie principali",
+        "shortcutData": {
+          "Heading_1": "Titolo 1",
+          "Heading_2": "Titolo 2",
+          "Heading_3": "Titolo 3",
+          "Heading_4": "Titolo 4",
+          "Heading_5": "Intestazione 5",
+          "Heading_6": "Intestazione 6"
+        }
+      }, {
+        "shortcutType": "Scorciatoie di codice",
+        "shortcutData": {
+          "Make_code_block": "Crea un blocco di codice",
+          "Insert_new_line": "Inserisci nuova linea",
+          "Escape_code_block": "Codice di escape",
+          "Insert_indent": "Inserisci indentazione"
+        }
+      }, {
+        "shortcutType": "Blocco scorciatoie di citazione",
+        "shortcutData": {
+          "Make_Block_quote": "Crea blocco citazioni",
+          "Escape_Block_quote": "Escape Blocco Codice"
+        }
+      }, {
+        "shortcutType": "Scorciatoie Tabella",
+        "shortcutData": {
+          "Insert_Table_Row": "Inserisci riga nella tabella",
+          "Escape_table": "Escape tabella"
+        }
+      }, {
+        "shortcutType":"Scorciatoie in linea",
+        "shortcutData": {
+          "Bold": "Grassetto",
+          "Italic": "Corsivo",
+          "Italic_Bold": "Corsivo Grassetto",
+          "Inline_code": "Codice in linea"
+        }
+      }, {
+        "shortcutType": "Salva scorciatoie",
+        "shortcutData": {
+          "Save_file": "Salva file"
+        }
+      }, {
+        "shortcutType": "Scorciatoie per le immagini",
+        "shortcutData": {
+          "Paste_screen_shot": "Incolla la schermata",
+          "Drag_image_from_anywhere_to_upload_it": "Trascina l'immagine da qualsiasi posizione per caricarla"
+        }
+      }
+    ]
+  }
+}
