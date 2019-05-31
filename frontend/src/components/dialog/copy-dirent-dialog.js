@@ -67,12 +67,6 @@ class CopyDirent extends React.Component {
       return;
     }
 
-    // copy dirents to current path
-    if (selectedPath && selectedPath === this.props.path && repo.repo_id === repoID) {
-      this.setState({errMessage: message});
-      return;
-    }
-
     // copy dirents to one of their child. eg: A/B, A/D -> A/B/C
     let copyDirentPath = '';
     let isChildPath = direntPaths.some(direntPath => {

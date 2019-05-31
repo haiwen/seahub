@@ -96,7 +96,8 @@ class MoveDirent extends React.Component {
   }
 
   moveItem = () => {
-    let { repo, repoID, selectedPath } = this.state; 
+    let { repoID } = this.props;
+    let { repo, selectedPath } = this.state; 
     let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     let message = gettext('Invalid destination path');
 
