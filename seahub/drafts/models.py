@@ -11,9 +11,9 @@ from seahub.base.fields import LowerCaseCharField
 from seahub.base.models import TimestampedModel
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.tags.models import FileUUIDMap
-from seahub.utils import normalize_file_path, EMPTY_SHA1
+from seahub.utils import normalize_file_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from .utils import create_user_draft_repo, get_draft_file_name
+from .utils import get_draft_file_name
 
 
 class DraftFileExist(Exception):
@@ -53,7 +53,7 @@ class DraftManager(models.Manager):
         return drafts
 
     def list_draft_by_username(self, username, status='open'):
-        """list all user drafts 
+        """list all user drafts
         If with_reviews is true, return the draft associated review
         """
         repo_cache = {}
@@ -70,7 +70,7 @@ class DraftManager(models.Manager):
             return repo
 
         data = []
-        qs = self.filter(username=username, status='open')
+        qs = self.filter(username=username, status=status)
 
         for d in qs:
             # If repo does not exist, no related items are displayed.
@@ -99,10 +99,6 @@ class DraftManager(models.Manager):
         return data
 
     def create_exist_file_draft(self, repo, username, file_uuid, file_path):
-        # create drafts dir if does not exist
-        draft_dir_id = seafile_api.get_dir_id_by_path(repo.id, '/Drafts')
-        if draft_dir_id is None:
-            seafile_api.post_dir(repo.id, '/', 'Drafts', username)
 
         # check draft file does not exists and copy origin file content to
         # draft file
@@ -146,10 +142,12 @@ class DraftManager(models.Manager):
 
                 return draft_file_path
 
+
     def add(self, username, repo, file_path, file_exist=True, file_id=None, org_id=-1, status='open'):
         file_path = normalize_file_path(file_path)
         parent_path = os.path.dirname(file_path)
         filename = os.path.basename(file_path)
+
         # origin file uuid
         file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(
             repo.id, parent_path, filename, is_dir=False)
@@ -186,6 +184,11 @@ class Draft(TimestampedModel):
     # class Meta:
     #     unique_together = (('username', 'draft_repo_id'), )
 
+    def update(self, publish_file_version, status = 'published'):
+        self.publish_file_version = publish_file_version
+        self.status = status
+        self.save()
+
     def delete(self, operator):
         draft_file_name = os.path.basename(self.draft_file_path)
         draft_file_path = os.path.dirname(self.draft_file_path)
@@ -193,66 +196,6 @@ class Draft(TimestampedModel):
                              draft_file_name, operator)
 
         super(Draft, self).delete()
-
-    def publish(self, operator):
-        # check whether origin file is updated
-        r_repo = seafile_api.get_repo(self.origin_repo_id)
-        if not r_repo:
-            raise DraftFileConflict
-
-        file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(self.origin_file_uuid)
-        if not file_uuid:
-            # TODO update error msg
-            raise DraftFileConflict
-
-        if file_uuid.parent_path == '/':
-            origin_file_path = file_uuid.parent_path + file_uuid.filename
-        else:
-            origin_file_path = file_uuid.parent_path + '/' + file_uuid.filename
-
-        file_id = seafile_api.get_file_id_by_path(self.origin_repo_id,
-                                                  origin_file_path)
-
-        draft_file_name = os.path.basename(self.draft_file_path)
-        draft_file_path = os.path.dirname(self.draft_file_path)
-        file_name = file_uuid.filename
-        if file_id:
-            if file_id != self.origin_file_version and self.draft_file_path != origin_file_path:
-                raise DraftFileConflict
-
-            if self.draft_file_path == origin_file_path:
-                f = os.path.splitext(draft_file_name)[0][:-7]
-                file_type = os.path.splitext(draft_file_name)[-1]
-                file_name = f + file_type
-
-            # move draft file to origin file
-            seafile_api.move_file(
-                self.origin_repo_id, draft_file_path, draft_file_name,
-                self.origin_repo_id, file_uuid.parent_path,
-                file_name, replace=1,
-                username=operator, need_progress=0, synchronous=1
-            )
-
-        else:
-
-            # move draft file to origin file
-            seafile_api.move_file(
-                self.origin_repo_id, draft_file_path, draft_file_name,
-                self.origin_repo_id, file_uuid.parent_path,
-                file_name, replace=1,
-                username=operator, need_progress=0, synchronous=1
-            )
-
-        published_file_path = posixpath.join(file_uuid.parent_path, file_name)
-
-        # get draft published version
-        file_id = seafile_api.get_file_id_by_path(self.origin_repo_id, published_file_path)
-
-        self.publish_file_version = file_id
-        self.status = 'published'
-        self.save()
-
-        return published_file_path
 
     def to_dict(self):
         uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(self.origin_file_uuid)

@@ -6,10 +6,9 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 from seaserv import seafile_api
 
-from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.auth.decorators import login_required
 from seahub.views import check_folder_permission
-from seahub.utils import render_permission_error, render_error
+from seahub.utils import render_permission_error
 from seahub.drafts.models import Draft
 from seahub.api2.utils import user_to_dict
 from seahub.tags.models import FileUUIDMap
