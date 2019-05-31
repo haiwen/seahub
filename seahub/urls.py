@@ -84,6 +84,7 @@ from seahub.api2.endpoints.related_files import RelatedFilesView, RelatedFileVie
 from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
+from seahub.api2.endpoints.dtable import WorkSpacesView, WorkSpaceView, DTableView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -220,6 +221,7 @@ urlpatterns = [
     url(r'^my-libs/deleted/$', react_fake_view, name="my_libs_deleted"),
     url(r'^org/$', react_fake_view, name="org"),
     url(r'^invitations/$', react_fake_view, name="invitations"),
+    url(r'^dtable/$', react_fake_view, name='dtable'),
 
     ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
@@ -341,6 +343,11 @@ urlpatterns = [
 
     # user: markdown-lint
     url(r'^api/v2.1/markdown-lint/$', MarkdownLintView.as_view(), name='api-v2.1-markdown-lint'),
+
+    # user: workspaces
+    url(r'^api/v2.1/workspaces/$', WorkSpacesView.as_view(), name='api-v2.1-workspaces'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/$', WorkSpaceView.as_view(), name='api-v2.1-workspace'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/table/$', DTableView.as_view(), name='api-v2.1-workspace-table'),
 
     # Deprecated
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),

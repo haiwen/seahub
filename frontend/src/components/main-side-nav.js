@@ -182,6 +182,16 @@ class MainSideNav extends React.Component {
             </li>
           </ul>
 
+          <h3 className="sf-heading">{gettext('Database')}</h3>
+          <ul className="nav nav-pills flex-column nav-container">
+            <li className="nav-item">
+              <Link className={`nav-link ellipsis ${this.getActiveClass('dtable')}`} to={siteRoot + 'dtable/'} title={gettext('DTable')} onClick={() => this.tabItemClick('dtable')}>
+                <span className="sf2-icon-star" aria-hidden="true"></span>
+                <span className="nav-text">{gettext('DTable')}</span>
+              </Link>
+            </li>
+          </ul>
+
           <h3 className="sf-heading">{gettext('Tools')}</h3>
           <ul className="nav nav-pills flex-column nav-container">
             <li className="nav-item">
