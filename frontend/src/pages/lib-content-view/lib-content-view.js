@@ -576,6 +576,9 @@ class LibContentView extends React.Component {
           this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
         });
       }
+      if (destDirentPath === this.state.path) {
+        this.loadDirentList(this.state.path);
+      }
       let message =  Utils.getCopySuccessfulMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
@@ -871,6 +874,9 @@ class LibContentView extends React.Component {
       let nodeName = res.data[0].obj_name;
       if (this.state.currentMode === 'column') {
         this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);
+      }
+      if (copyToDirentPath === nodeParentPath) {
+        this.loadDirentList(this.state.path);
       }
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);

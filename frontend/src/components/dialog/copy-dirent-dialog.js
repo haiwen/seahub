@@ -67,12 +67,6 @@ class CopyDirent extends React.Component {
       return;
     }
 
-    // copy dirents to current path
-    if (selectedPath && selectedPath === this.props.path && repo.repo_id === repoID) {
-      this.setState({errMessage: message});
-      return;
-    }
-
     // copy dirents to one of their child. eg: A/B, A/D -> A/B/C
     let copyDirentPath = '';
     let isChildPath = direntPaths.some(direntPath => {
@@ -110,6 +104,9 @@ class CopyDirent extends React.Component {
       this.setState({errMessage: message});
       return;
     }
+
+    console.log(repo.repo_id);
+    console.log(repoID)
     
     // copy the dirent to current path
     if (selectedPath && this.props.path === selectedPath && repo.repo_id === repoID) {
