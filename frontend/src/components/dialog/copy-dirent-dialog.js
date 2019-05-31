@@ -104,7 +104,7 @@ class CopyDirent extends React.Component {
       this.setState({errMessage: message});
       return;
     }
-
+    
     // copy the dirent to current path
     if (selectedPath && this.props.path === selectedPath && repo.repo_id === repoID) {
       this.setState({errMessage: message});
