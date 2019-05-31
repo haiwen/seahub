@@ -104,7 +104,11 @@ class WorkSpacesView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"workspace": workspace.to_dict()}, status=status.HTTP_201_CREATED)
+        res = workspace.to_dict()
+        res["table_list"] = []
+        res["updated_at"] = workspace.updated_at
+
+        return Response({"workspace": res}, status=status.HTTP_201_CREATED)
 
 
 class WorkSpaceView(APIView):
@@ -162,7 +166,20 @@ class WorkSpaceView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"workspace": workspace.to_dict()}, status=status.HTTP_200_OK)
+        table_objs = seafile_api.list_dir_by_path(repo_id, '/')
+        table_list = list()
+        for table_obj in table_objs:
+            table = dict()
+            table["name"] = table_obj.obj_name
+            table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
+            table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
+            table_list.append(table)
+
+        res = workspace.to_dict()
+        res["table_list"] = table_list
+        res["updated_at"] = workspace.updated_at
+
+        return Response({"workspace": res}, status=status.HTTP_200_OK)
 
     def delete(self, request, workspace_id):
         """delete a workspace

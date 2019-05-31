@@ -347,7 +347,7 @@ urlpatterns = [
     # user: workspaces
     url(r'^api/v2.1/workspaces/$', WorkSpacesView.as_view(), name='api-v2.1-workspaces'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/$', WorkSpaceView.as_view(), name='api-v2.1-workspace'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/table/$', DTableView.as_view(), name='api-v2.1-workspace-table'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/$', DTableView.as_view(), name='api-v2.1-workspace-table'),
 
     # Deprecated
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),

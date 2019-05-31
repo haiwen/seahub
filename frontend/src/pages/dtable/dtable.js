@@ -1,40 +1,220 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ModalHeader, ModalBody, ModalFooter, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import Loading from '../../components/loading';
-import ModalPortal from '../../components/modal-portal';
-import CreateWorkSpaceDialog from '../../components/dialog/create-workspace-dialog';
+import CreateWorkspaceDialog from '../../components/dialog/create-workspace-dialog';
+import DeleteWorkspaceDialog from '../../components/dialog/delete-workspace-dialog';
+import CreateTableDialog from '../../components/dialog/create-table-dialog';
+import DeleteTableDialog from '../../components/dialog/delete-table-dialog';
+import Rename from '../../components/rename';
 
 moment.locale(window.app.config.lang);
 
 
-const itemPropTypes = {
-  item: PropTypes.object.isRequired,
-  renameWorkSpace: PropTypes.func.isRequired,
-  deleteWorkSpace: PropTypes.func.isRequired,
+const tablePropTypes = {
+  table: PropTypes.object.isRequired,
+  repoID: PropTypes.string.isRequired,
+  renameTable: PropTypes.func.isRequired,
+  deleteTable: PropTypes.func.isRequired,
 };
 
-class Item extends Component {
+class Table extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      isTableRenaming: false,
+      isTableDeleting: false,
       dropdownOpen: false,
-      newName: '',
+      active: false,
     };
   }
 
-  onRenameWorkSpace(workspace) {
-    let name = this.state.newName;
-    this.props.renameWorkSpace(workspace, name);
+  onRenameTableCancel = () => {
+    this.setState({isTableRenaming: !this.state.isTableRenaming});
   }
 
-  onDeleteWorkSpace(workspace) {
-    this.props.deleteWorkSpace(workspace);
+  onRenameTableConfirm = (newTableName) => {
+    let oldTableName = this.props.table.name;
+    this.props.renameTable(oldTableName, newTableName);
+    this.onRenameTableCancel();
+  }
+
+  onDeleteTableCancel = () => {
+    this.setState({isTableDeleting: !this.state.isTableDeleting});
+  }
+
+  onDeleteTableSubmit = () => {
+    let tableName = this.props.table.name;
+    console.log(tableName);
+    this.props.deleteTable(tableName);
+    this.onDeleteTableCancel();
+  }
+
+  dropdownToggle = () => {
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  }
+
+  onMouseEnter = () => {
+    this.setState({
+      active: true
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      active: false
+    });
+  }
+
+  render() {
+
+    let table = this.props.table;
+    let tableHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(Utils.joinPath('/', table.name));
+
+    return (
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td></td>
+        <td>
+          {this.state.isTableRenaming &&
+            <Rename
+              hasSuffix={true}
+              name={table.name}
+              onRenameConfirm={this.onRenameTableConfirm}
+              onRenameCancel={this.onRenameTableCancel}
+            />
+          }
+          {!this.state.isTableRenaming &&
+            <a href={tableHref} target="_blank">{table.name}</a>
+          }
+        </td>
+        <td>{table.modifier}</td>
+        <td>{moment(table.mtime).fromNow()}</td>
+        <td>
+          {this.state.active &&
+            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
+              <DropdownToggle
+                tag='i'
+                className='fa fa-ellipsis-v'
+                title={gettext('More Operations')}
+                data-toggle="dropdown" 
+                aria-expanded={this.state.dropdownOpen}
+              >
+              </DropdownToggle>
+              <DropdownMenu className="drop-list" right={true}>
+                <DropdownItem onClick={this.onRenameTableCancel}>{gettext('Rename')}</DropdownItem>
+                <DropdownItem onClick={this.onDeleteTableCancel}>{gettext('Delete')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          }
+          {this.state.isTableDeleting &&
+            <DeleteTableDialog
+              currentTable={table}
+              deleteCancel={this.onDeleteTableCancel}
+              handleSubmit={this.onDeleteTableSubmit}
+            />
+          }
+        </td>
+      </tr>
+    );
+  }
+}
+
+Table.propTypes = tablePropTypes;
+
+
+const workspacePropTypes = {
+  workspace: PropTypes.object.isRequired,
+  renameWorkspace: PropTypes.func.isRequired,
+  deleteWorkspace: PropTypes.func.isRequired,
+};
+
+class Workspace extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      tableList: this.props.workspace.table_list,
+      errorMsg: '',
+      isWorkspaceRenaming: false,
+      isWorkspaceDeleting: false,
+      isShowAddTableDialog: false,
+      dropdownOpen: false,
+    };
+  }
+
+  onAddTable = () => {
+    this.setState({
+      isShowAddTableDialog: !this.state.isShowAddTableDialog,
+    });
+  }
+
+  createTable = (tableName) => {
+    let workspaceID = this.props.workspace.id;
+    seafileAPI.createTable(workspaceID, tableName).then((res) => {
+      this.state.tableList.push(res.data.table);
+      this.setState({tableList: this.state.tableList});
+    }).catch((error) => {
+      if(error.response) {
+        this.setState({errorMsg: gettext('Error')});
+      }
+    });
+    this.onAddTable();
+  }
+
+  renameTable = (oldTableName, newTableName) => {
+    let workspaceID = this.props.workspace.id;
+    seafileAPI.renameTable(workspaceID, oldTableName, newTableName).then((res) => {
+      let tableList = this.state.tableList.map((table) => {
+        if (table.name === oldTableName) {
+          table = res.data.table;
+        }
+        return table;
+      });
+      this.setState({tableList: tableList});
+    }).catch((error) => {
+      if(error.response) {
+        this.setState({errorMsg: gettext('Error')});
+      }
+    });
+  }
+
+  deleteTable = (tableName) => {
+    let workspaceID = this.props.workspace.id;
+    seafileAPI.deleteTable(workspaceID, tableName).then(() => {
+      let tableList = this.state.tableList.filter(table => {
+        return table.name !== tableName;
+      });
+      this.setState({tableList: tableList});
+    }).catch((error) => {
+      if(error.response) {
+        this.setState({errorMsg: gettext('Error')});
+      }
+    });
+  }
+
+  onRenameWorkspaceCancel = () => {
+    this.setState({isWorkspaceRenaming: !this.state.isWorkspaceRenaming});
+  }
+
+  onRenameWorkspaceConfirm = (newName) => {
+    let workspace = this.props.workspace;
+    this.props.renameWorkspace(workspace, newName);
+    this.onRenameWorkspaceCancel();
+  }
+
+  onDeleteWorkspaceCancel = () => {
+    this.setState({isWorkspaceDeleting: !this.state.isWorkspaceDeleting});
+  }
+
+  onDeleteWorkspaceSubmit = () => {
+    let workspace = this.props.workspace;
+    this.props.deleteWorkspace(workspace);
+    this.onDeleteWorkspaceCancel();
   }
 
   dropdownToggle = () => {
@@ -42,63 +222,89 @@ class Item extends Component {
   }
 
   render() {
-    let item = this.props.item;
+    let workspace = this.props.workspace;
 
     return(
       <Fragment>
         <tr>
           <td colSpan='5'>
-            {item.name}
-            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
-              <DropdownToggle
-                caret={true}
-                tag='i'
-                title={gettext('More Operations')}
-                data-toggle="dropdown" 
-                aria-expanded={this.state.dropdownOpen}
-              >
-              </DropdownToggle>
-              <DropdownMenu className="drop-list" right={true}>
-                <DropdownItem onClick={this.onRenameWorkSpace.bind(this, item)}>{gettext('Rename')}</DropdownItem>
-                <DropdownItem onClick={this.onDeleteWorkSpace.bind(this, item)}>{gettext('Delete')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            {this.state.isWorkspaceRenaming &&
+              <Rename
+                hasSuffix={false}
+                name={workspace.name}
+                onRenameConfirm={this.onRenameWorkspaceConfirm}
+                onRenameCancel={this.onRenameWorkspaceCancel}
+              />
+            }
+            {!this.state.isWorkspaceRenaming &&
+              <div>
+                {workspace.name}
+                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
+                  <DropdownToggle
+                    caret={true}
+                    tag='i'
+                    title={gettext('More Operations')}
+                    data-toggle="dropdown" 
+                    aria-expanded={this.state.dropdownOpen}
+                  >
+                  </DropdownToggle>
+                  <DropdownMenu className="drop-list" right={true}>
+                    <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>
+                    <DropdownItem onClick={this.onDeleteWorkspaceCancel}>{gettext('Delete')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+                {this.state.isWorkspaceDeleting &&
+                  <DeleteWorkspaceDialog
+                    currentWorkspace={workspace}
+                    deleteCancel={this.onDeleteWorkspaceCancel}
+                    handleSubmit={this.onDeleteWorkspaceSubmit}
+                  />
+                }
+              </div>
+            }
           </td>
         </tr>
-        {item.table_list.map((table, index) => {
-          let tableHref = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(Utils.joinPath('/', table.name));
+        {this.state.tableList.map((table, index) => {
           return (
-            <tr key={index}>
-              <td></td>
-              <td><a href={tableHref} target="_blank">{table.name}</a></td>
-              <td>{table.modifier}</td>
-              <td>{moment(table.mtime).fromNow()}</td>
-              <td></td>
-            </tr>
+            <Table
+              key={index}
+              table={table}
+              repoID={workspace.repo_id}
+              renameTable={this.renameTable}
+              deleteTable={this.deleteTable}
+            />
           );
         })}
         <tr>
-          <td><Button className="fa fa-plus"></Button></td>
-          <td colSpan='4' >{gettext('Add a table')}</td>
+          <td>
+            <Button className="fa fa-plus" onClick={this.onAddTable}></Button>
+            {this.state.isShowAddTableDialog &&
+              <CreateTableDialog
+                onAddTable={this.onAddTable}
+                createTable={this.createTable}
+              />
+            }
+          </td>
+          <td colSpan='4' >{gettext('Add a DTable')}</td>
         </tr>
       </Fragment>
     );
   }
 }
 
-Item.propTypes = itemPropTypes;
+Workspace.propTypes = workspacePropTypes;
 
 
 const contentPropTypes = {
-  items: PropTypes.array.isRequired,
-  renameWorkSpace: PropTypes.func.isRequired,
-  deleteWorkSpace: PropTypes.func.isRequired,
+  workspaceList: PropTypes.array.isRequired,
+  renameWorkspace: PropTypes.func.isRequired,
+  deleteWorkspace: PropTypes.func.isRequired,
 };
 
 class Content extends Component {
 
   render() {
-    let items = this.props.items;
+    let workspaceList = this.props.workspaceList;
 
     return ( 
       <table width="100%" className="table table-hover table-vcenter">
@@ -110,13 +316,13 @@ class Content extends Component {
           <col width="5%"/>
         </colgroup>
         <tbody>
-          {items.map((item, index) => {
+          {workspaceList.map((workspace, index) => {
             return (
-              <Item
+              <Workspace
                 key={index}
-                item={item}
-                renameWorkSpace={this.props.renameWorkSpace}
-                deleteWorkSpace={this.props.deleteWorkSpace}
+                workspace={workspace}
+                renameWorkspace={this.props.renameWorkspace}
+                deleteWorkspace={this.props.deleteWorkspace}
               />
             );
           })}
@@ -135,38 +341,39 @@ class DTable extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      items: [],
-      isShowCreateDialog: false,
+      workspaceList: [],
+      isShowAddWorkspaceDialog: false,
     };
   }
 
-  onCreateToggle = () => {
+  onAddWorkspace = () => {
     this.setState({
-      isShowCreateDialog: !this.state.isShowCreateDialog,
+      isShowAddWorkspaceDialog: !this.state.isShowAddWorkspaceDialog,
     });
   }
 
-  createWorkSpace = (name) => {
-    seafileAPI.addWorkSpace(name).then((res) => {
-      this.state.items.push(res.data.workspace);
-      this.setState({items: this.state.items});
+  createWorkspace = (name) => {
+    seafileAPI.createWorkspace(name).then((res) => {
+      this.state.workspaceList.push(res.data.workspace);
+      this.setState({workspaceList: this.state.workspaceList});
     }).catch((error) => {
       if(error.response) {
         this.setState({errorMsg: gettext('Error')});
       }
     });
-    this.onCreateToggle();
+    this.onAddWorkspace();
   }
 
-  renameWorkSpace = (workspace, name) => {
-    seafileAPI.renameWorkSpace(workspace.id, name).then((res) => {
-      let items = this.state.items.map((item) => {
-        if (item.id === workspace.id) {
-          item = res.data;
+  renameWorkspace = (workspace, name) => {
+    let workspaceID = workspace.id;
+    seafileAPI.renameWorkspace(workspaceID, name).then((res) => {
+      let workspaceList = this.state.workspaceList.map((workspace) => {
+        if (workspace.id === workspaceID) {
+          workspace = res.data.workspace;
         }
-        return item;
+        return workspace;
       });
-      this.setState({items: items});
+      this.setState({workspaceList: workspaceList});
     }).catch((error) => {
       if(error.response) {
         this.setState({errorMsg: gettext('Error')});
@@ -174,12 +381,13 @@ class DTable extends Component {
     });
   }
 
-  deleteWorkSpace = (workspace) => {
-    seafileAPI.deleteWorkSpace(workspace.id).then(() => {
-      let items = this.state.items.filter(item => {
-        return item.id !== workspace.id;
+  deleteWorkspace = (workspace) => {
+    let workspaceID = workspace.id;
+    seafileAPI.deleteWorkspace(workspaceID).then(() => {
+      let workspaceList = this.state.workspaceList.filter(workspace => {
+        return workspace.id !== workspaceID;
       });
-      this.setState({items: items});
+      this.setState({workspaceList: workspaceList});
     }).catch((error) => {
       if(error.response) {
         this.setState({errorMsg: gettext('Error')});
@@ -188,10 +396,10 @@ class DTable extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listWorkSpaces().then((res) => {
+    seafileAPI.listWorkspaces().then((res) => {
       this.setState({
         loading: false,
-        items: res.data.workspace_list,
+        workspaceList: res.data.workspace_list,
       });
     }).catch((error) => {
       if (error.response) {
@@ -223,21 +431,21 @@ class DTable extends Component {
             {!this.state.loading &&
               <Fragment>
                 <Content
-                  items={this.state.items}
-                  renameWorkSpace={this.renameWorkSpace}
-                  deleteWorkSpace={this.deleteWorkSpace}
+                  workspaceList={this.state.workspaceList}
+                  renameWorkspace={this.renameWorkspace}
+                  deleteWorkspace={this.deleteWorkspace}
                 />
                 <br />
                 <div>
-                  {this.state.isShowCreateDialog &&
-                    <CreateWorkSpaceDialog
-                      createWorkSpace={this.createWorkSpace}
-                      onCreateToggle={this.onCreateToggle}
+                  <Button onClick={this.onAddWorkspace} className="fa fa-plus">
+                    {gettext('Add a Workspace')}
+                  </Button>
+                  {this.state.isShowAddWorkspaceDialog &&
+                    <CreateWorkspaceDialog
+                      createWorkspace={this.createWorkspace}
+                      onAddWorkspace={this.onAddWorkspace}
                     />
                   }
-                  <Button onClick={this.onCreateToggle} className="fa fa-plus">
-                    {gettext('Add a workspace')}
-                  </Button>
                 </div>
               </Fragment>
             }

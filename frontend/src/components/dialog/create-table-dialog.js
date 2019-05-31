@@ -5,38 +5,49 @@ import { gettext } from '../../utils/constants';
 
 
 const propTypes = {
-  createWorkspace: PropTypes.func.isRequired,
-  onAddWorkspace: PropTypes.func.isRequired,
+  createTable: PropTypes.func.isRequired,
+  onAddTable: PropTypes.func.isRequired,
 };
 
-class CreateWorkspaceDialog extends React.Component {
+class CreateTableDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      workspaceName: '',
+      tableName: '',
       errMessage: '',
       isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
 
-  handleNameChange = (e) => {
+  componentDidMount() {
+    this.newInput.focus();
+    this.newInput.setSelectionRange(0,0);
+  }
+
+  handleChange = (e) => {
     if (!e.target.value.trim()) {
       this.setState({isSubmitBtnActive: false});
     } else {
       this.setState({isSubmitBtnActive: true});
     }
 
-    this.setState({workspaceName: e.target.value});
+    this.setState({
+      tableName: e.target.value, 
+    }) ;
   }
 
   handleSubmit = () => {
-    let isValid= this.validateInputParams();
-    if (isValid) {
-      let workspaceName = this.state.workspaceName.trim();
-      this.props.createWorkspace(workspaceName);
+    if (!this.state.isSubmitBtnActive) {
+      return;
     }
-  } 
+
+    let isValid = this.validateInputParams();
+    if (isValid) {
+      let newName = this.state.tableName.trim();
+      this.props.createTable(newName);
+    }
+  }
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -46,22 +57,18 @@ class CreateWorkspaceDialog extends React.Component {
   }
 
   toggle = () => {
-    this.props.onAddWorkspace();
+    this.props.onAddTable();
   }
 
-  componentDidMount() {
-    this.newInput.focus();
-  }
-
-  validateInputParams() {
+  validateInputParams = () => {
     let errMessage = '';
-    let workspaceName = this.state.workspaceName.trim();
-    if (!workspaceName.length) {
+    let tableName = this.state.tableName.trim();
+    if (!tableName.length) {
       errMessage = gettext('Name is required');
       this.setState({errMessage: errMessage});
       return false;
     }
-    if (workspaceName.indexOf('/') > -1) {
+    if (tableName.indexOf('/') > -1) {
       errMessage = gettext('Name should not include \'/\'.');
       this.setState({errMessage: errMessage});
       return false;
@@ -72,21 +79,21 @@ class CreateWorkspaceDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('New Workspace')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('New Table')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="workspaceName">{gettext('Name')}</Label>
+              <Label for="tableName">{gettext('Name')}</Label>
               <Input 
-                id="workspaceName"
+                id="tableName" 
                 onKeyPress={this.handleKeyPress} 
                 innerRef={input => {this.newInput = input;}} 
-                value={this.state.workspaceName} 
-                onChange={this.handleNameChange}
+                value={this.state.tableName} 
+                onChange={this.handleChange}
               />
             </FormGroup>
           </Form>
-          {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
+          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
@@ -97,6 +104,6 @@ class CreateWorkspaceDialog extends React.Component {
   }
 }
 
-CreateWorkspaceDialog.propTypes = propTypes;
+CreateTableDialog.propTypes = propTypes;
 
-export default CreateWorkspaceDialog;
+export default CreateTableDialog;
