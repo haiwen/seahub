@@ -27,6 +27,13 @@ class Content extends Component {
     this.props.sortItems(sortBy, sortOrder);
   }
 
+  sortBySize = (e) => {
+    e.preventDefault();
+    const sortBy = 'size';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
     
@@ -45,6 +52,7 @@ class Content extends Component {
       // sort
       const sortByName = sortBy == 'name';
       const sortByTime = sortBy == 'time';
+      const sortBySize = sortBy == 'size';
       const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
       const desktopThead = (
@@ -54,7 +62,7 @@ class Content extends Component {
             <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width="14%">{gettext('Size')}</th>
+            <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
             <th width="18%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             <th width="16%">{gettext('Owner')}</th>
           </tr>
@@ -293,7 +301,7 @@ class SharedLibraries extends Component {
       loading: true,
       errorMsg: '',
       items: [],
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
   }

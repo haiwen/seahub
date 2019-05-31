@@ -629,6 +629,25 @@ export const Utils = {
           return a.last_modified < b.last_modified ? 1 : -1;
         };
         break;
+      case 'size-asc':
+        comparator = function(a, b) {
+          if (a.size === b.size) {
+            let result = _this.compareTwoWord(a.repo_name, b.repo_name);
+            return result;
+          }
+          return a.size_original < b.size_original ? -1 : 1;
+        };
+        break;
+      case 'size-desc':
+        comparator = function(a, b) {
+          if (a.size === b.size) {
+            let result = _this.compareTwoWord(a.repo_name, b.repo_name);
+            return -result;
+          }
+
+          return a.size_original < b.size_original ? 1 : -1;
+        };
+        break;
     }
 
     repos.sort(comparator);
@@ -660,6 +679,24 @@ export const Utils = {
       case 'time-desc':
         comparator = function(a, b) {
           return a.mtime < b.mtime ? 1 : -1;
+        };
+        break;
+      case 'size-asc':
+        comparator = function(a, b) {
+          if (a.type == 'dir' && b.type == 'dir') {
+            let result = _this.compareTwoWord(a.name, b.name);
+            return result;
+          } 
+          return a.size_original < b.size_original ? -1 : 1;
+        };
+        break;
+      case 'size-desc':
+        comparator = function(a, b) {
+          if (a.type == 'dir' && b.type == 'dir') {
+            let result = _this.compareTwoWord(a.name, b.name);
+            return -result;
+          } 
+          return a.size_original < b.size_original ? 1 : -1;
         };
         break;
     }

@@ -42,10 +42,18 @@ class SharedRepoListView extends React.Component {
     this.props.sortItems(sortBy, sortOrder);
   }
 
+  sortBySize = (e) => {
+    e.preventDefault();
+    const sortBy = 'size';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   getSortMetaData = () => {
     return {
       sortByName: this.props.sortBy == 'name',
       sortByTime: this.props.sortBy == 'time',
+      sortBySize: this.props.sortBy == 'size',
       sortIcon: this.props.sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>
     };
   }
@@ -98,7 +106,7 @@ class SharedRepoListView extends React.Component {
   renderPCUI = () => {
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
 
-    const { sortByName, sortByTime, sortIcon } = this.getSortMetaData();
+    const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
     return (
       <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
@@ -108,7 +116,7 @@ class SharedRepoListView extends React.Component {
             <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
             <th width="36%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="12%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width={'14%'}>{gettext('Size')}</th>
+            <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
             <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             <th width="16%">{gettext('Owner')}</th>
           </tr>

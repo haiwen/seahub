@@ -29,7 +29,7 @@ class PublicSharedView extends React.Component {
       errMessage: '',
       emptyTip: '',
       repoList: [],
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       libraryType: 'public',
       isCreateMenuShow: false,

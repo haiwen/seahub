@@ -65,7 +65,7 @@ class LibContentView extends React.Component {
       isDirentListLoading: true,
       direntList: [],
       isDirentSelected: false,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isAllDirentSelected: false,
       dirID: '',  // for update dir list

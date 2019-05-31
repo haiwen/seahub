@@ -44,7 +44,7 @@ class GroupView extends React.Component {
       currentRepo: null,
       isStaff: false,
       isOwner: false,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       repoList: [],
       libraryType: 'group',

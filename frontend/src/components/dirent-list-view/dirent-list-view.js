@@ -134,6 +134,13 @@ class DirentListView extends React.Component {
     this.props.sortItems(sortBy, sortOrder);
   }
 
+  sortBySize = (e) => {
+    e.preventDefault();
+    const sortBy = 'size';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   // for image popup
   prepareImageItem = (item) => {
     const useThumbnail = !this.repoEncrypted;
@@ -580,6 +587,7 @@ class DirentListView extends React.Component {
     // sort
     const sortByName = sortBy == 'name';
     const sortByTime = sortBy == 'time';
+    const sortBySize = sortBy == 'size';
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
     return (
@@ -604,7 +612,7 @@ class DirentListView extends React.Component {
               <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
               <th width="6%">{/*tag */}</th>
               <th width="18%">{/*operation */}</th>
-              <th width="11%">{gettext('Size')}</th>
+              <th width="11%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
               <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             </tr>
           </thead>
