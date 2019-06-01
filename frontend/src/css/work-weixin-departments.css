@@ -9,6 +9,9 @@
 .dir-content-main table td {
   line-height: 2rem;
 }
+.dir-content-main .empty-tip {
+  box-shadow: none;
+}
 .dir-content-nav {
   width: 24%;
   overflow: hidden;
