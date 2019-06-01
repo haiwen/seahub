@@ -1,0 +1,60 @@
+.dir-content-main {
+  width: 75%;
+  overflow-y: hidden;
+  padding-right: 1rem;
+}
+.dir-content-main:hover {
+  overflow-y: auto;
+}
+.dir-content-main table td {
+  line-height: 2rem;
+}
+.dir-content-main .empty-tip {
+  box-shadow: none;
+}
+.dir-content-nav {
+  width: 24%;
+  overflow: hidden;
+}
+.dir-content-nav:hover {
+  overflow: auto;
+}
+.dir-content-resize {
+  width: 1%;
+  border-left: 1px solid #eee;
+}
+.department-children {
+  padding-left: 1rem;
+  position: relative;
+}
+.tree-node-inner {
+  position: relative;
+}
+.tree-node-inner i {
+  position: absolute;
+  top: 20%;
+  left: 0.3rem;
+}
+.tree-node-inner:hover {
+  background-color: #FFEFB2;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.tree-node-hight-light {
+  color: #fff;
+  border-radius: 4px;
+  background-color: #feac74 !important;
+}
+.tree-node-text {
+  padding-left: 1.3rem;
+  width: calc(100% - 1.3rem);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 24px;
+}
+.tree-view {
+  padding: 12px 12px 12px 0;
+  flex: 1 1;
+}
