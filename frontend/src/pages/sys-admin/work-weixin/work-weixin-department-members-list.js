@@ -70,7 +70,7 @@ class WorkWeixinDepartmentMembersList extends Component {
         }
         {!isMembersListLoading && this.props.membersList.length === 0 &&
           <div className="message empty-tip text-center">
-            <img src='/media/img/member-list-empty.png'/>
+            <img src={`${siteRoot}media/img/member-list-empty.png`}/>
             <h4>{'成员列表为空'}</h4>
           </div>
         }
