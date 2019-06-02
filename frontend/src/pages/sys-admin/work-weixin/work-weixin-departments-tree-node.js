@@ -19,7 +19,9 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     };
   }
 
-  toggleChildren = () => {
+  toggleChildren = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     this.setState({
       isChildrenShow: !this.state.isChildrenShow,
     });
@@ -27,7 +29,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
 
   componentDidMount() {
     if (this.props.index === 0) {
-      this.toggleChildren();
+      this.setState({ isChildrenShow: true });
       this.props.onChangeDepartment(this.props.department.id);
     }
   }
@@ -61,9 +63,9 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     return (
       <Fragment>
         {isChildrenShow &&
-          <div className={nodeInnerClass}>
-            <i className={toggleClass} onClick={() => this.toggleChildren()}></i>{' '}
-            <span className="tree-node-text" onClick={() => this.props.onChangeDepartment(department.id)}>{department.name}</span>
+          <div className={nodeInnerClass} onClick={() => this.props.onChangeDepartment(department.id)}>
+            <i className={toggleClass} onClick={(e) => this.toggleChildren(e)}></i>{' '}
+            <span className="tree-node-text">{department.name}</span>
           </div>
         }
         {this.state.isChildrenShow &&
