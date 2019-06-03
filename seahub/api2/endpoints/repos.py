@@ -371,19 +371,12 @@ class RepoView(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
 
-        try:
-            related_users = get_related_users_by_repo(repo_id, org_id)
-        except Exception as e:
-            logger.error(e)
-            related_users = []
-
         # remove repo
         seafile_api.remove_repo(repo_id)
 
         repo_deleted.send(sender=None,
                           org_id=org_id,
                           operator=username,
-                          usernames=related_users,
                           repo_owner=repo_owner,
                           repo_id=repo_id,
                           repo_name=repo.name)
