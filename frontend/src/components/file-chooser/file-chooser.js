@@ -363,10 +363,14 @@ class FileChooser extends React.Component {
     this.onCloseSearching();
   }
 
+  onScroll = (event) => {
+    event.stopPropagation();
+  }
+
   renderRepoListView = () => {
 
     return (
-      <div className="file-chooser-container user-select-none">
+      <div className="file-chooser-container user-select-none" onScroll={this.onScroll}>
         {this.props.mode === 'current_repo_and_other_repos' && (
           <Fragment>
             <div className="list-view">
