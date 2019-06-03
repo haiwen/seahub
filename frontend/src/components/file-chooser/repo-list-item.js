@@ -150,12 +150,18 @@ class RepoListItem extends React.Component {
     }
 
     return (
-      <li className="file-chooser-item">
-        <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
-        <span className={`item-info ${repoActive ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
-          <span className="icon far fa-folder"></span>
-          <span className="name user-select-none ellipsis">{this.props.repo.repo_name}</span>
-        </span>
+      <li>
+        <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
+          <div className="item-text">
+            <span className="name user-select-none ellipsis">{this.props.repo.repo_name}</span>
+          </div>
+          <div className="item-left-icon">
+            <span className={`item-toggle icon fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
+            <i className="tree-node-icon">
+              <span className="icon far fa-folder tree-node-icon"></span> 
+            </i>
+          </div>
+         </div>
         {this.state.isShowChildren && (
           <TreeListView 
             repo={this.props.repo} 
