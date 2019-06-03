@@ -56,9 +56,6 @@ class DirColumnNav extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.currentNode) {
-      return;
-    }
     this.setState({opNode: nextProps.currentNode});
   }
 
