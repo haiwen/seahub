@@ -10,9 +10,14 @@ import { gettext, siteRoot, isPro, isDefaultAdmin, canViewSystemInfo, canViewSta
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
   onCloseSidePanel: PropTypes.func.isRequired,
+  currentTab: PropTypes.string.isRequired,
 };
 
 class SidePanel extends React.Component {
+
+  getActiveClass = (tab) => {
+    return this.props.currentTab == tab ? 'active' : '';
+  }
 
   render() {
     return (
@@ -171,7 +176,7 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin && enableWorkWeixinDepartments &&
                   <li className="nav-item">
-                    <Link className='nav-link ellipsis' to={siteRoot + 'sys/work-weixin/departments/'}>
+                    <Link className={`nav-link ellipsis ${this.getActiveClass('departments')}`} to={siteRoot + 'sys/work-weixin/departments/'}>
                       <span className="sf2-icon-msgs" aria-hidden="true"></span>
                       <span className="nav-text">{'企业微信集成'}</span>
                     </Link>
