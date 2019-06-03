@@ -2,6 +2,7 @@ import json
 
 from django.core.urlresolvers import reverse
 
+from seaserv import seafile_api
 from seahub.drafts.models import Draft
 from seahub.test_utils import BaseTestCase
 
@@ -50,6 +51,7 @@ class DraftsViewTest(BaseTestCase):
 
 class DraftViewTest(BaseTestCase):
     def setUp(self):
+        seafile_api.post_dir(self.repo.id, '/', 'Drafts', self.user.username)
         draft = Draft.objects.add(self.user.username, self.repo, self.file)
         self.url = reverse('api-v2.1-draft', args=[draft.id])
 
