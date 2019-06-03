@@ -1,11 +1,15 @@
 from django.core.urlresolvers import reverse
-from seahub.drafts.models import Draft, DraftFileExist
+from seahub.drafts.models import Draft
 from seahub.test_utils import BaseTestCase
 
 from seaserv import seafile_api
 
 
 class DraftManagerTest(BaseTestCase):
+
+    def setUp(self):
+        seafile_api.post_dir(self.repo.id, '/', 'Drafts', self.user.username)
+
     def test_list_draft_by_username(self):
         assert len(Draft.objects.all()) == 0
         Draft.objects.add(self.user.username, self.repo, self.file)
@@ -81,6 +85,9 @@ class DraftManagerTest(BaseTestCase):
 
 
 class DraftTest(BaseTestCase):
+    def setUp(self):
+        seafile_api.post_dir(self.repo.id, '/', 'Drafts', self.user.username)
+
     def test_delete(self):
         assert len(Draft.objects.all()) == 0
         d = Draft.objects.add(self.user.username, self.repo, self.file)
@@ -94,16 +101,3 @@ class DraftTest(BaseTestCase):
 
         assert len(Draft.objects.all()) == 0
         assert seafile_api.get_file_id_by_path(d.origin_repo_id, d.draft_file_path) is None
-
-    def test_publish(self):
-        assert len(Draft.objects.all()) == 0
-        d = Draft.objects.add(self.user.username, self.repo, self.file)
-        assert d is not None
-        assert len(Draft.objects.all()) == 1
-        assert seafile_api.get_file_id_by_path(d.origin_repo_id, d.draft_file_path) is not None
-        assert len(seafile_api.list_dir_by_path(self.repo.id, '/Drafts')) == 1
-
-        d.publish(self.user.username)
-
-        # file is updated in origin repo
-        assert len(seafile_api.list_dir_by_path(self.repo.id, '/')) == 2
