@@ -130,11 +130,11 @@ class RepoListItem extends React.Component {
     this.props.onDirentItemClick(repo, filePath, dirent);
   }
 
-  onRepoItemClick = () => {
+  onRepoItemClick = (e) => {
     if (!this.isCurrentRepo() || this.props.selectedPath !== '') {
       this.props.onRepoItemClick(this.props.repo);
     } else {
-      this.onToggleClick();
+      this.onToggleClick(e);
     }
   }
 

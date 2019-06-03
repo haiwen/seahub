@@ -4,6 +4,7 @@ import { gettext, PER_PAGE, filePath } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
 import HistoryListView from '../../components/history-list-view/history-list-view';
+import toaster from '../../components/toast';
 
 const propTypes = {
   onItemClick: PropTypes.func.isRequired,
@@ -88,6 +89,8 @@ class SidePanel extends React.Component {
         this.setState({isLoading: true});
         this.refershFileList();
       }
+      let message = gettext('Successful restore.');
+      toaster.success(message);
     });
   }
 
