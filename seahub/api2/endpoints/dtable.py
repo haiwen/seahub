@@ -12,17 +12,17 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 from pysearpc import SearpcError
-from seaserv import seafile_api, edit_repo, is_repo_owner
+from seaserv import seafile_api, edit_repo, check_quota
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.api2.views import get_repo_file
+from seahub.api2.views import get_repo_file, HTTP_443_ABOVE_QUOTA
 from seahub.dtable.models import WorkSpaces
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
-    check_filename_with_rename, render_error, render_permission_error, CTABLE
+     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, CTABLE
 from seahub.views.file import send_file_access_msg
 from seahub.auth.decorators import login_required
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN, \
@@ -464,6 +464,49 @@ class DTableView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True}, status=status.HTTP_200_OK)
+
+
+class DTableUpdateLinkView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, workspace_id):
+        """get table file update link
+        """
+        # resource check
+        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = 'WorkSpace %s not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        owner = workspace.owner
+        if username != owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if check_quota(repo_id) < 0:
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+
+        try:
+            token = seafile_api.get_fileserver_access_token(repo_id, 'dummy', 'update',
+                                                            request.user.username, use_onetime=False)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        url = gen_file_upload_url(token, 'update-api')
+        return Response(url)
 
 
 @login_required

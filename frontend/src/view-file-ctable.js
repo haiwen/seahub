@@ -11,7 +11,7 @@ import './css/layout.css';
 import './css/file-view-data-grid.css';
 import './css/react-context-menu.css';
 
-const { repoID, fileName, filePath } = window.app.pageOptions;
+const { workspaceID, fileName, filePath } = window.app.pageOptions;
 
 class ViewFileSDB extends React.Component {
 
@@ -31,8 +31,7 @@ class ViewFileSDB extends React.Component {
 
     let data = this.refs.data_grid.serializeGridData();
 
-    let dirPath = Utils.getDirName(filePath);
-    seafileAPI.getUpdateLink(repoID, dirPath).then(res => {
+    seafileAPI.getTableUpdateLink(workspaceID).then(res => {
       let updateLink = res.data;
       seafileAPI.updateFile(updateLink, filePath, fileName, JSON.stringify(data)).then(res => {
         toaster.success(gettext('File saved.'));
