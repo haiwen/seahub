@@ -9,7 +9,7 @@ import GridHeaderContextMenu from './grid-header-contextmenu';
 import GridContentContextMenu from './grid-content-contextmenu';
 import DTableStore from './store/dtable-store';
 
-const { repoID, filePath } = window.app.pageOptions;
+const { workspaceID, fileName } = window.app.pageOptions;
 
 const DEFAULT_DATA = {
   columns:  [
@@ -38,7 +38,7 @@ class AppMain extends React.Component {
 
   componentDidMount() {
 
-    seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
+    seafileAPI.getTableDownloadLink(workspaceID, fileName).then(res => {
       let url = res.data;
       seafileAPI.getFileContent(url).then(res => {
         let data = res.data ? res.data : JSON.stringify(DEFAULT_DATA);

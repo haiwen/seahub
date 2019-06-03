@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import Loading from '../../components/loading';
 import CreateWorkspaceDialog from '../../components/dialog/create-workspace-dialog';
@@ -17,7 +16,7 @@ moment.locale(window.app.config.lang);
 
 const tablePropTypes = {
   table: PropTypes.object.isRequired,
-  repoID: PropTypes.string.isRequired,
+  workspaceID: PropTypes.string.isRequired,
   renameTable: PropTypes.func.isRequired,
   deleteTable: PropTypes.func.isRequired,
 };
@@ -74,7 +73,7 @@ class Table extends Component {
   render() {
 
     let table = this.props.table;
-    let tableHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(Utils.joinPath('/', table.name));
+    let tableHref = siteRoot + 'workspace/' + this.props.workspaceID + '/dtable/' + table.name + '/';
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -269,7 +268,7 @@ class Workspace extends Component {
             <Table
               key={index}
               table={table}
-              repoID={workspace.repo_id}
+              workspaceID={workspace.id}
               renameTable={this.renameTable}
               deleteTable={this.deleteTable}
             />

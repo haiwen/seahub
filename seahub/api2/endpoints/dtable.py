@@ -7,17 +7,26 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
+from django.http import HttpResponse, Http404
+from django.shortcuts import render
+from django.utils.translation import ugettext as _
 
 from pysearpc import SearpcError
-from seaserv import seafile_api, edit_repo
+from seaserv import seafile_api, edit_repo, is_repo_owner
+
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.api2.views import get_repo_file
 from seahub.dtable.models import WorkSpaces
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, check_filename_with_rename
-from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN
+from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
+    check_filename_with_rename, render_error, render_permission_error, CTABLE
+from seahub.views.file import send_file_access_msg
+from seahub.auth.decorators import login_required
+from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN, \
+     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT
 
 
 logger = logging.getLogger(__name__)
@@ -233,6 +242,52 @@ class DTableView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
+    def get(self, request, workspace_id):
+        """view table file, get table download link
+        """
+        # argument check
+        table_name = request.GET.get('name', None)
+        if not table_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        reuse = request.GET.get('reuse', '0')
+        if reuse not in ('1', '0'):
+            error_msg = 'reuse invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = 'WorkSpace %s not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        table_path = normalize_file_path(table_name)
+        table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
+        if not table_file_id:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        owner = workspace.owner
+        if username != owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # send stats message
+        send_file_access_msg(request, repo, table_path, 'api')
+
+        op = request.GET.get('op', 'download')
+        use_onetime = False if reuse == '1' else True
+        return get_repo_file(request, repo_id, table_file_id, table_name, op, use_onetime)
+
     def post(self, request, workspace_id):
         """create a table file
         """
@@ -409,3 +464,41 @@ class DTableView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True}, status=status.HTTP_200_OK)
+
+
+@login_required
+def dtable_file_view(request, workspace_id, name):
+
+    # resource check
+    workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+    if not workspace:
+        raise Http404
+
+    repo_id = workspace.repo_id
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    table_path = normalize_file_path(name)
+    table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
+    if not table_file_id:
+        return render_error(request, _(u'Table does not exist'))
+
+    # permission check
+    username = request.user.username
+    owner = workspace.owner
+    if username != owner:
+        return render_permission_error(request, _(u'Unable to view file'))
+
+    return_dict = {
+        'repo': repo,
+        'workspace_id': workspace_id,
+        'path': table_path,
+        'filename': name,
+        'filetype': CTABLE,
+        'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
+        'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
+        'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+    }
+
+    return render(request, 'ctable_file_view_react.html', return_dict)
