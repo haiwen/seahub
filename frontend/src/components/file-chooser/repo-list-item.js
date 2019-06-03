@@ -120,7 +120,8 @@ class RepoListItem extends React.Component {
     });
   }
 
-  onToggleClick = () => {
+  onToggleClick = (e) => {
+    e.stopPropagation();
     this.setState({isShowChildren: !this.state.isShowChildren});
   }
 
