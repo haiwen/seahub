@@ -89,7 +89,7 @@ class SidePanel extends React.Component {
         this.setState({isLoading: true});
         this.refershFileList();
       }
-      let message = gettext('Successful restore.');
+      let message = gettext('Successfully restored.');
       toaster.success(message);
     });
   }
