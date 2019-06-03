@@ -40,7 +40,7 @@ class SysAdmin extends React.Component {
 
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} />
+        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab}/>
         <MainPanel>
           <Router className="reach-router">
             <FileScanRecords
