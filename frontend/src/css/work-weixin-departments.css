@@ -12,6 +12,10 @@
 .dir-content-main .empty-tip {
   box-shadow: none;
 }
+.dir-content-main .empty-tip img {
+  width: 140px;
+  height: 140px;
+}
 .dir-content-nav {
   width: 24%;
   overflow: hidden;
