@@ -38,7 +38,7 @@ class MainPanel extends Component {
   }
 
   onMainNavBarClick = (e) => {
-    let path = Utils.getEventData(e, path);
+    let path = Utils.getEventData(e, 'path');
     this.props.onMainNavBarClick(path);
   }
 
