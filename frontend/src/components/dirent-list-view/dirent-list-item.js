@@ -346,7 +346,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragStart = (e) => {
-    if (Utils.isIEBrower()) { // is ie <= ie11 not include edage
+    if (Utils.isIEBrower()) {
       return false;
     }
     let nodeRootPath = '';
@@ -362,7 +362,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragEnter = () => {
-    if (Utils.isIEBrower()) { // is ie <= ie11 not include edage
+    if (Utils.isIEBrower()) {
       return false;
     }
     if (this.props.dirent.type === 'dir') {
@@ -371,7 +371,7 @@ class DirentListItem extends React.Component {
   }
   
   onItemDragOver = (e) => {
-    if (Utils.isIEBrower()) { // is ie <= ie11 not include edage
+    if (Utils.isIEBrower()) {
       return false;
     }
     e.preventDefault();
@@ -379,14 +379,14 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragLeave = () => {
-    if (Utils.isIEBrower()) { // is ie <= ie11 not include edage
+    if (Utils.isIEBrower()) {
       return false;
     }
     this.setState({isDropTipshow: false});
   }
 
   onItemDragDrop = (e) => {
-    if (Utils.isIEBrower()) { // is ie <= ie11 not include edage
+    if (Utils.isIEBrower()) {
       return false;
     }
     this.setState({isDropTipshow: false});
