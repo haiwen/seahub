@@ -1,5 +1,8 @@
 'use strict';
 
+require('react-app-polyfill/ie9');
+require('react-app-polyfill/stable');
+
 if (typeof Promise === 'undefined') {
   // Rejection tracking prevents a common issue where React gets into an
   // inconsistent state due to an error, but it gets swallowed by a Promise,
@@ -7,9 +10,6 @@ if (typeof Promise === 'undefined') {
   require('promise/lib/rejection-tracking').enable();
   window.Promise = require('promise/lib/es6-extensions.js');
 }
-
-// require('babel-polyfill');
-require('react-app-polyfill/stable');
 
 // fetch() polyfill for making API calls.
 require('whatwg-fetch');

@@ -229,6 +229,13 @@ export const Utils = {
       navigator.userAgent.indexOf('Chrome') > -1;
   },
 
+  isIEBrower: function() {
+    var userAgent = navigator.userAgent;
+    var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+    return isIE || isIE11;
+  },
+
   getDefaultLibIconUrl: function(isBig) {
     let size = Utils.isHiDPI() ? 48 : 24;
     size = isBig ? 256 : size;
@@ -871,6 +878,14 @@ export const Utils = {
       password += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return password;
+  },
+
+  getEventData: function(event, data) {
+    if (event.target.dataset) {
+      return event.target.dataset[data];
+    }
+    return event.target.getAttribute('data-' + data);
+    
   }
 
 };

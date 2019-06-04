@@ -6,6 +6,7 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import Loading from '../../components/loading';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -37,7 +38,8 @@ class MainPanel extends Component {
   }
 
   onMainNavBarClick = (e) => {
-    this.props.onMainNavBarClick(e.target.dataset.path);
+    let path = Utils.getEventData(e, path);
+    this.props.onMainNavBarClick(path);
   }
 
   renderNavPath = () => {
