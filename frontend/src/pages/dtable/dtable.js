@@ -420,7 +420,7 @@ class DTable extends Component {
       <div className="main-panel-center">
         <div className="cur-view-container" id="starred">
           <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext('DTable')}</h3>
+            <h3 className="sf-heading">DTable</h3>
           </div>
           <div className="cur-view-content">
             {this.state.loading && <Loading />}

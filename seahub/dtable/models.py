@@ -7,23 +7,23 @@ from seahub.base.fields import LowerCaseCharField
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 
 
-class WorkSpacesManager(models.Manager):
+class WorkspacesManager(models.Manager):
 
     def get_workspaces_by_owner(self, owner):
         try:
-            return super(WorkSpacesManager, self).filter(owner=owner)
+            return super(WorkspacesManager, self).filter(owner=owner)
         except self.model.DoesNotExist:
             return None
 
     def get_workspace_by_id(self, workspace_id):
         try:
-            return super(WorkSpacesManager, self).get(pk=workspace_id)
+            return super(WorkspacesManager, self).get(pk=workspace_id)
         except self.model.DoesNotExist:
             return None
 
     def create_workspace(self, name, owner, repo_id):
         try:
-            return super(WorkSpacesManager, self).get(name=name, owner=owner, repo_id=repo_id)
+            return super(WorkspacesManager, self).get(name=name, owner=owner, repo_id=repo_id)
         except self.model.DoesNotExist:
             workspace = self.model(name=name, owner=owner, repo_id=repo_id)
             workspace.save()
@@ -31,21 +31,21 @@ class WorkSpacesManager(models.Manager):
 
     def delete_workspace(self, workspace_id):
         try:
-            workspace = super(WorkSpacesManager, self).get(pk=workspace_id)
+            workspace = super(WorkspacesManager, self).get(pk=workspace_id)
             workspace.delete()
             return True
         except self.model.DoesNotExist:
             return False
 
 
-class WorkSpaces(models.Model):
+class Workspaces(models.Model):
 
     name = LowerCaseCharField(max_length=255)
     owner = models.CharField(max_length=255)
     repo_id = models.CharField(max_length=36, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
-    objects = WorkSpacesManager()
+    objects = WorkspacesManager()
 
     class Meta:
         unique_together = (('owner', 'repo_id'),)

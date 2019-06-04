@@ -84,7 +84,7 @@ from seahub.api2.endpoints.related_files import RelatedFilesView, RelatedFileVie
 from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
-from seahub.api2.endpoints.dtable import WorkSpacesView, WorkSpaceView, DTableView, \
+from seahub.api2.endpoints.dtable import WorkspacesView, WorkspaceView, DTableView, \
      DTableUpdateLinkView, dtable_file_view
 
 # Admin
@@ -346,10 +346,10 @@ urlpatterns = [
     url(r'^api/v2.1/markdown-lint/$', MarkdownLintView.as_view(), name='api-v2.1-markdown-lint'),
 
     # user: workspaces
-    url(r'^api/v2.1/workspaces/$', WorkSpacesView.as_view(), name='api-v2.1-workspaces'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/$', WorkSpaceView.as_view(), name='api-v2.1-workspace'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-update-link/$', DTableUpdateLinkView.as_view()),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/$', DTableView.as_view(), name='api-v2.1-workspace-table'),
+    url(r'^api/v2.1/workspaces/$', WorkspacesView.as_view(), name='api-v2.1-workspaces'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/$', WorkspaceView.as_view(), name='api-v2.1-workspace'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/$', DTableView.as_view(), name='api-v2.1-workspace-dtable'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-update-link/$', DTableUpdateLinkView.as_view(), name='api-v2.1-workspace-dtable-update-link'),
     url(r'^workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/$', dtable_file_view, name='dtable-file-view'),
 
     # Deprecated

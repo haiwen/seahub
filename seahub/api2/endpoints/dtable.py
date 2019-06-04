@@ -7,7 +7,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
-from django.http import HttpResponse, Http404
+from django.http import Http404
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
@@ -18,11 +18,12 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.views import get_repo_file, HTTP_443_ABOVE_QUOTA
-from seahub.dtable.models import WorkSpaces
+from seahub.dtable.models import Workspaces
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
-     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, CTABLE
+     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, \
+     get_file_type_and_ext, CTABLE
 from seahub.views.file import send_file_access_msg
 from seahub.auth.decorators import login_required
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN, \
@@ -32,7 +33,7 @@ from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN
 logger = logging.getLogger(__name__)
 
 
-class WorkSpacesView(APIView):
+class WorkspacesView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -43,7 +44,7 @@ class WorkSpacesView(APIView):
         """
         owner = request.user.username
         try:
-            workspaces = WorkSpaces.objects.get_workspaces_by_owner(owner)
+            workspaces = Workspaces.objects.get_workspaces_by_owner(owner)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
@@ -107,7 +108,7 @@ class WorkSpacesView(APIView):
 
         owner = request.user.username
         try:
-            workspace = WorkSpaces.objects.create_workspace(name, owner, repo_id)
+            workspace = Workspaces.objects.create_workspace(name, owner, repo_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
@@ -120,7 +121,7 @@ class WorkSpacesView(APIView):
         return Response({"workspace": res}, status=status.HTTP_201_CREATED)
 
 
-class WorkSpaceView(APIView):
+class WorkspaceView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -135,10 +136,14 @@ class WorkSpaceView(APIView):
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        if not is_valid_dirent_name(workspace_name):
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # resource check
-        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
         if not workspace:
-            error_msg = 'WorkSpace %s not found.' % workspace_id
+            error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = workspace.repo_id
@@ -194,16 +199,14 @@ class WorkSpaceView(APIView):
         """delete a workspace
         """
         # resource check
-        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
         if not workspace:
-            error_msg = 'WorkSpace %s not found.' % workspace_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            return Response({'success': True}, status=status.HTTP_200_OK)
 
         repo_id = workspace.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            logger.warning('Library %s not found.' % repo_id)
 
         # permission check
         username = request.user.username
@@ -212,22 +215,24 @@ class WorkSpaceView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # repo status check
-        repo_status = repo.status
-        if repo_status != 0:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if repo:
 
-        # remove repo
-        try:
-            seafile_api.remove_repo(repo_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error.'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            # repo status check
+            repo_status = repo.status
+            if repo_status != 0:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # remove repo
+            try:
+                seafile_api.remove_repo(repo_id)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error.'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
-            WorkSpaces.objects.delete_workspace(workspace_id)
+            Workspaces.objects.delete_workspace(workspace_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
@@ -257,9 +262,9 @@ class DTableView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
         if not workspace:
-            error_msg = 'WorkSpace %s not found.' % workspace_id
+            error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = workspace.repo_id
@@ -302,9 +307,9 @@ class DTableView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
         if not workspace:
-            error_msg = 'WorkSpace %s not found.' % workspace_id
+            error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = workspace.repo_id
@@ -368,9 +373,9 @@ class DTableView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
         if not workspace:
-            error_msg = 'WorkSpace %s not found.' % workspace_id
+            error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = workspace.repo_id
@@ -426,9 +431,9 @@ class DTableView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
         if not workspace:
-            error_msg = 'WorkSpace %s not found.' % workspace_id
+            error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = workspace.repo_id
@@ -476,9 +481,9 @@ class DTableUpdateLinkView(APIView):
         """get table file update link
         """
         # resource check
-        workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
         if not workspace:
-            error_msg = 'WorkSpace %s not found.' % workspace_id
+            error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = workspace.repo_id
@@ -513,7 +518,7 @@ class DTableUpdateLinkView(APIView):
 def dtable_file_view(request, workspace_id, name):
 
     # resource check
-    workspace = WorkSpaces.objects.get_workspace_by_id(workspace_id)
+    workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
     if not workspace:
         raise Http404
 
@@ -533,15 +538,21 @@ def dtable_file_view(request, workspace_id, name):
     if username != owner:
         return render_permission_error(request, _(u'Unable to view file'))
 
+    filetype, fileext = get_file_type_and_ext(name)
+
     return_dict = {
-        'repo': repo,
-        'workspace_id': workspace_id,
-        'path': table_path,
-        'filename': name,
-        'filetype': CTABLE,
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
     }
 
-    return render(request, 'ctable_file_view_react.html', return_dict)
+    if filetype == CTABLE:
+        return_dict['repo'] = repo
+        return_dict['workspace_id'] = workspace_id
+        return_dict['path'] = table_path
+        return_dict['filename'] = name
+        return_dict['filetype'] = filetype
+        return render(request, 'ctable_file_view_react.html', return_dict)
+    else:
+        return_dict['err'] = "File preview unsupported"
+        return render(request, 'unknown_file_view_react.html', return_dict)
