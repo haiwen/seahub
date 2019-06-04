@@ -4,6 +4,7 @@ import { Link } from '@reach/router';
 import { UncontrolledTooltip } from 'reactstrap';
 import { siteRoot, gettext } from '../../utils/constants';
 import InternalLinkDialog from '../dialog/internal-link-dialog';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,
@@ -19,7 +20,7 @@ const propTypes = {
 class DirPath extends React.Component {
 
   onPathClick = (e) => {
-    let path = e.target.dataset.path;
+    let path = Utils.getEventData(e, 'path');
     this.props.onPathClick(path);
   }
 

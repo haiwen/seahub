@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -21,7 +22,7 @@ class MylibRepoMenu extends React.Component {
   }
 
   onMenuItemClick = (e) => {
-    let operation = e.target.dataset.toggle;
+    let operation = Utils.getEventData(e, 'toggle');
     this.props.onMenuItemClick(operation);
   }
 

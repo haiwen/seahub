@@ -120,6 +120,7 @@
     "i18next": "^11.3.2",
     "i18next-browser-languagedetector": "^2.2.0",
     "i18next-xhr-backend": "^1.5.1",
+    "react-app-polyfill": "^1.0.1",
     "react-dev-utils": "^5.0.0",
     "react-i18next": "^7.6.1",
     "webpack": "3.8.1",

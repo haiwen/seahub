@@ -39,7 +39,7 @@ class UploadListItem extends React.Component {
       <tr className="file-upload-item">
         <td className="upload-name">
           <div className="ellipsis">{item.resumableFile.relativePath}</div>
-          <div className="message err-message ml-0">{error}</div>
+          <div className="message err-message ml-0" dangerouslySetInnerHTML={{__html: error}}></div>
         </td>
         <td className="upload-progress">
           <span className="file-size">{this.formatFileSize(item.resumableFile.size)}</span>

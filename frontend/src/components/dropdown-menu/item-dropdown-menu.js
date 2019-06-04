@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import listener from '../context-menu/globalEventListener';
 import { Dropdown, ButtonDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   tagName: PropTypes.string,
@@ -87,7 +88,7 @@ class ItemDropdownMenu extends React.Component {
   }
 
   onMenuItemClick = (event) => {
-    let operation = event.target.dataset.toggle;
+    let operation = Utils.getEventData(event, 'toggle');
     let item = this.props.item;
     this.props.onMenuItemClick(operation, event, item);
   }
