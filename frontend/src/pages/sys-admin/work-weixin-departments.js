@@ -231,8 +231,8 @@ class WorkWeixinDepartments extends Component {
       <div className="main-panel-north border-left-show">
         <div className="cur-view-toolbar">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
-          <Button className={btnClass + "my-1 d-md-none"} onClick={this.onSubmit}>{'导入用户'}</Button>
-          <Button className={btnClass + "hidden-md-up"} onClick={this.onSubmit}>{'导入用户'}</Button>
+          <Button className={btnClass + 'my-1 d-md-none'} onClick={this.onSubmit}>{'导入用户'}</Button>
+          <Button className={btnClass + 'hidden-md-up'} onClick={this.onSubmit}>{'导入用户'}</Button>
         </div>
         <div className="common-toolbar">
           <Account isAdminPanel={true}/>

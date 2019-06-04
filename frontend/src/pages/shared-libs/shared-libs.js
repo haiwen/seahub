@@ -179,7 +179,7 @@ class Item extends Component {
       });
       // TODO: show feedback msg
     }).catch((error) => {
-        // TODO: show feedback msg
+      // TODO: show feedback msg
     });
   }
 
@@ -195,7 +195,7 @@ class Item extends Component {
     } else {
       seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-      })
+      });
     }
   }
 
@@ -265,7 +265,7 @@ class Item extends Component {
             {(isPro && data.is_admin) &&
               <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
             }
-            <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
+            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} onClick={this.leaveShare}></a>
           </td>
         </tr>
         {this.state.isShowSharedDialog && (

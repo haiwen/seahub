@@ -90,19 +90,19 @@ class TreeViewItem extends React.Component {
       <div className="file-chooser-item">
         <div className={`${node.path === '/'? 'hide': ''}`}>
           <div className={`${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''} item-info`} onClick={this.onItemClick}>
-          <div className="item-text">
-            <span className="name user-select-none ellipsis">{node.object && node.object.name}</span>
+            <div className="item-text">
+              <span className="name user-select-none ellipsis">{node.object && node.object.name}</span>
+            </div>
+            <div className="item-left-icon">
+              {
+                node.object.type !== 'file' &&
+                <span className={`icon item-toggle fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
+              }
+              <i className="tree-node-icon">
+                <span className={`icon far ${node.object.type === 'dir' ? 'fa-folder' : 'fa-file'}`}></span>
+              </i>
+            </div>
           </div>
-          <div className="item-left-icon">
-          {
-            node.object.type !== 'file' &&
-            <span className={`icon item-toggle fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
-          }
-            <i className="tree-node-icon">
-              <span className={`icon far ${node.object.type === 'dir' ? 'fa-folder' : 'fa-file'}`}></span>
-            </i>
-          </div>
-         </div>
         </div>
         {node.isExpanded && this.renderChildren()}
       </div>
