@@ -546,7 +546,7 @@ class DirentListView extends React.Component {
   }
 
   onTableDragOver = (e) => {
-    if (Utils.isIEBrower) {
+    if (Utils.isIEBrower()) {
       return false;
     }
     e.preventDefault();
@@ -554,7 +554,7 @@ class DirentListView extends React.Component {
   }
 
   onTableDragLeave = (e) => {
-    if (Utils.isIEBrower) {
+    if (Utils.isIEBrower()) {
       return false;
     }
     if (e.target.className === 'table-container table-drop-active') {
@@ -563,7 +563,7 @@ class DirentListView extends React.Component {
   }
 
   tableDrop = (e) => {
-    if (Utils.isIEBrower) {
+    if (Utils.isIEBrower()) {
       return false;
     }
     e.persist();
