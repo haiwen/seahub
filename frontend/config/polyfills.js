@@ -8,7 +8,8 @@ if (typeof Promise === 'undefined') {
   window.Promise = require('promise/lib/es6-extensions.js');
 }
 
-require('babel-polyfill');
+// require('babel-polyfill');
+require('react-app-polyfill/stable');
 
 // fetch() polyfill for making API calls.
 require('whatwg-fetch');

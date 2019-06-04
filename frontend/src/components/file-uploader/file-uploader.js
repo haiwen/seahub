@@ -414,19 +414,19 @@ class FileUploader extends React.Component {
 
   onFileUpload = () => {
     this.uploadInput.current.removeAttribute('webkitdirectory');
-    this.uploadInput.current.click();
     let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data;
+      this.uploadInput.current.click();
     });
   }
 
   onFolderUpload = () => {
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
-    this.uploadInput.current.click();
     let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data;
+      this.uploadInput.current.click();
     });
   }
 
