@@ -55,9 +55,9 @@ class DirOperationToolbar extends React.Component {
 
   toggleOperationMenu = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    let targetRect = e.target.getClientRects()[0];
-    let left = targetRect.x;
-    let top  = targetRect.y + targetRect.height;
+    let targetRect = e.target.getBoundingClientRect();
+    let left = targetRect.left;
+    let top  = targetRect.bottom;
     let style = {position: 'fixed', display: 'block', left: left, top: top};
     this.setState({operationMenuStyle: style});
   }
