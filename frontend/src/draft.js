@@ -56,7 +56,7 @@ class Draft extends React.Component {
       reviewers: [],
       inResizing: false,
       rightPartWidth: 30,
-      freezePublish: false
+      draftStatus: window.draft.config.draftStatus,
     };
     this.quote = '';
     this.newIndex = null;
@@ -410,7 +410,7 @@ class Draft extends React.Component {
   onPublishDraft = () => {
     seafileAPI.publishDraft(draftID).then(res => {
       this.setState({
-        freezePublish: !this.state.freezePublish
+        draftStatus: res.data.draft_status,
       });
     });
   }
@@ -734,8 +734,9 @@ class Draft extends React.Component {
     const { draftInfo, reviewers, originRepoName } = this.state; 
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
-    const freezePublish = (this.state.freezePublish || draftStatus === 'published') ? true : false;
-    const canPublish = !this.state.freezePublish && draftFileExists && filePermission == 'rw';
+    const showPublishedButton = this.state.draftStatus == 'published';
+    const showPublishButton = this.state.draftStatus == 'open' && filePermission == 'rw';
+    const showEditButton = this.state.draftStatus == 'open' && filePermission == 'rw';
     const time = moment(draftInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
     const url = `${siteRoot}profile/${encodeURIComponent(draftInfo.last_modifier_email)}/`;
     return(
@@ -750,7 +751,7 @@ class Draft extends React.Component {
                 <span className="file-name">{draftFileName}</span>
                 <span className="mx-2 file-review">{gettext('Review')}</span>
               </div>
-              {(!freezePublish && draftInfo.mtime) &&
+              {(!showPublishedButton && draftInfo.mtime) &&
                 <div className="last-modification">
                   <a href={url}>{draftInfo.last_modifier_name}</a><span className="mx-1">{time}</span>
                 </div>
@@ -759,17 +760,17 @@ class Draft extends React.Component {
           </div>
           <div className="button-group">
             {this.renderDiffButton()}
-            {(draftFileExists && !freezePublish) &&
+            {showEditButton &&
               <a href={draftLink} className="mx-1">
                 <Button className="file-operation-btn" color="secondary">{gettext('Edit Draft')}</Button>
               </a>
             }
-            {canPublish &&
+            {showPublishButton &&
               <button className='btn btn-success file-operation-btn' title={gettext('Publish draft')} onClick={this.onPublishDraft}>
                 {gettext('Publish')}
               </button>
             }
-            {freezePublish &&
+            {showPublishedButton &&
               <button className='btn btn-success file-operation-btn' title={gettext('Published')} disabled>
                 {gettext('Published')}
               </button>
