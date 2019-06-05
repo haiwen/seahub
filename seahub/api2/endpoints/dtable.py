@@ -32,6 +32,9 @@ from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN
 logger = logging.getLogger(__name__)
 
 
+FILE_TYPE = '.dtable'
+
+
 class WorkspacesView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -272,7 +275,7 @@ class DTableView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        table_file_name = table_name + '.dtable'
+        table_file_name = table_name + FILE_TYPE
         table_path = normalize_file_path(table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
         if not table_file_id:
@@ -302,7 +305,7 @@ class DTableView(APIView):
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        table_file_name = table_name + '.dtable'
+        table_file_name = table_name + FILE_TYPE
         if not is_valid_dirent_name(table_file_name):
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -365,7 +368,7 @@ class DTableView(APIView):
             error_msg = 'new_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        new_table_file_name = new_table_name + '.dtable'
+        new_table_file_name = new_table_name + FILE_TYPE
         if not is_valid_dirent_name(new_table_file_name):
             error_msg = 'new_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -386,7 +389,7 @@ class DTableView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        old_table_file_name = old_table_name + '.dtable'
+        old_table_file_name = old_table_name + FILE_TYPE
         old_table_path = normalize_file_path(old_table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, old_table_path)
         if not table_file_id:
@@ -432,7 +435,7 @@ class DTableView(APIView):
         if not table_name:
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        table_file_name = table_name + '.dtable'
+        table_file_name = table_name + FILE_TYPE
 
         # resource check
         workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
@@ -531,7 +534,7 @@ def dtable_file_view(request, workspace_id, name):
     if not repo:
         raise Http404
 
-    table_file_name = name + '.dtable'
+    table_file_name = name + FILE_TYPE
     table_path = normalize_file_path(table_file_name)
     table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
     if not table_file_id:
