@@ -409,7 +409,6 @@ def dir_recycle_view(request, repo_id):
 
     if not seafile_api.get_dir_id_by_path(repo_id, dir_path) or \
         check_folder_permission(request, repo_id, dir_path) != 'rw':
-
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
@@ -418,6 +417,30 @@ def dir_recycle_view(request, repo_id):
         return render_dir_recycle_root(request, repo_id, dir_path, referer)
     else:
         return render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer)
+
+@login_required
+def repo_folder_trash(request, repo_id):
+    path = request.GET.get('path', '/')
+
+    if not seafile_api.get_dir_id_by_path(repo_id, path) or \
+        check_folder_permission(request, repo_id, path) != 'rw':
+        return render_permission_error(request, _(u'Unable to view recycle page'))
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    if path == '/':
+        name = repo.name
+    else:
+        name = os.path.basename(path.rstrip('/'))
+
+    return render(request, 'repo_folder_trash_react.html', {
+            'repo': repo,
+            'repo_folder_name': name,
+            'path': path,
+            'enable_clean': config.ENABLE_USER_CLEAN_TRASH,
+            })
 
 def can_access_repo_setting(request, repo_id, username):
     repo = seafile_api.get_repo(repo_id)
