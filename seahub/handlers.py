@@ -66,14 +66,19 @@ try:
 
         """
         org_id = kwargs['org_id']
-        related_users = kwargs['usernames']
         operator = kwargs['operator']
 
         repo_owner = kwargs['repo_owner']
         repo_id = kwargs['repo_id']
         repo_name = kwargs['repo_name']
-        related_users.append(repo_owner)
 
+        if org_id > 0:
+            related_users = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
+        else:
+            related_users = seafile_api.get_shared_users_by_repo(repo_id)
+            org_id = -1
+
+        related_users.append(repo_owner)
 
         record = {
             'op_type':'delete',

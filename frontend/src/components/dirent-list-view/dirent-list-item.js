@@ -346,32 +346,49 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragStart = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     let nodeRootPath = '';
     nodeRootPath = this.props.path === '/' ? `${this.props.path}${this.props.dirent.name}` : `${this.props.path}/${this.props.dirent.name}`;
     let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
+    if (e.dataTransfer && e.dataTransfer.setDragImage) {
+      e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
+    }
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
 
   onItemDragEnter = () => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     if (this.props.dirent.type === 'dir') {
       this.setState({isDropTipshow: true});
     }
   }
   
   onItemDragOver = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   }
 
   onItemDragLeave = () => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     this.setState({isDropTipshow: false});
   }
 
   onItemDragDrop = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     this.setState({isDropTipshow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;

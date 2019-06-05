@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import listener from './globalEventListener';
 import { hideMenu } from './actions';
 import { callIfExists } from './helpers';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -192,7 +193,7 @@ class ContextMenu extends React.Component {
 
   onMenuItemClick = (event) => {
     event.stopPropagation();
-    let operation = event.target.dataset.operation;
+    let operation = Utils.getEventData(event, 'operation');
     let currentObject = this.state.currentObject;
     this.props.onMenuItemClick(operation, currentObject, event);
   }

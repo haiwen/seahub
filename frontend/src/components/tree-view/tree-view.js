@@ -4,6 +4,7 @@ import TextTranslation from '../../utils/text-translation';
 import TreeNodeView from './tree-node-view';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   repoPermission: PropTypes.bool,
@@ -36,6 +37,9 @@ class TreeView extends React.Component {
   }
 
   onNodeDragStart = (e, node) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
     dragStartNodeData = JSON.stringify(dragStartNodeData);
     
@@ -44,6 +48,9 @@ class TreeView extends React.Component {
   }
 
   onNodeDragEnter = (e, node) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     e.persist();
     if (e.target.className === 'tree-view tree ') {
       this.setState({
@@ -53,11 +60,17 @@ class TreeView extends React.Component {
   }
 
   onNodeDragMove = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   }
 
   onNodeDragLeave = (e, node) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     if (e.target.className === 'tree-view tree tree-view-drop') {
       this.setState({
         isTreeViewDropTipShow: false,
@@ -66,6 +79,9 @@ class TreeView extends React.Component {
   }
 
   onNodeDrop = (e, node) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }

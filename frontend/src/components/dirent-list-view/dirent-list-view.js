@@ -537,23 +537,35 @@ class DirentListView extends React.Component {
   }
 
   onTableDragEnter = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     if (e.target.className === 'table-container ') {
       this.setState({isListDropTipShow: true});
     }
   }
 
   onTableDragOver = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   }
 
   onTableDragLeave = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     if (e.target.className === 'table-container table-drop-active') {
       this.setState({isListDropTipShow: false});
     }
   }
 
   tableDrop = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
     e.persist();
     this.setState({isListDropTipShow: false});
     if (e.dataTransfer.files.length) { // uploaded files

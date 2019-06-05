@@ -773,9 +773,6 @@ class LibContentView extends React.Component {
     if (isDir) {
       seafileAPI.renameDir(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
-        let name = Utils.getFileName(path);
-        var msg = gettext('Rename {name} successfully').replace('{name}', name);
-        toaster.success(msg);
       }).catch(() => {
         let name = Utils.getFileName(path);
         var msg = gettext('Renaming {name} failed').replace('{name}', name);
@@ -784,9 +781,6 @@ class LibContentView extends React.Component {
     } else {
       seafileAPI.renameFile(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
-        let name = Utils.getFileName(path);
-        var msg = gettext('Rename {name} successfully').replace('{name}', name);
-        toaster.success(msg);
       }).catch(() => {
         let name = Utils.getFileName(path);
         var msg = gettext('Renaming {name} failed').replace('{name}', name);
