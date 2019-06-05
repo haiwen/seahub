@@ -600,9 +600,15 @@ class LibContentView extends React.Component {
         }
         this.deleteDirent(direntPath);
       });
-      var msg = gettext('Successfully deleted {name} and other {n} items.');
-      msg = msg.replace('{name}', dirNames[0]);
-      msg = msg.replace('{n}', dirNames.length - 1);
+      let msg = '';
+      if (direntPaths.length > 1) {
+        msg = gettext('Successfully deleted {name} and other {n} items.');
+        msg = msg.replace('{name}', dirNames[0]);
+        msg = msg.replace('{n}', dirNames.length - 1);
+      } else {
+        msg = gettext('Successfully deleted {name}.');
+        msg = msg.replace('{name}', dirNames[0]);
+      }
       toaster.success(msg);
     }).catch(() => {
       var msg = gettext('Failed to delete {name} and other {n} items.');
