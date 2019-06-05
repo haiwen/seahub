@@ -734,8 +734,6 @@ def view_lib_file(request, repo_id, path):
 
         return render(request, template, return_dict)
         
-    elif filetype == CTABLE:
-        return render(request, template, return_dict)
     elif filetype == CDOC:
         return render(request, template, return_dict)    
     elif filetype == IMAGE:
