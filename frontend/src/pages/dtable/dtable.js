@@ -16,7 +16,7 @@ moment.locale(window.app.config.lang);
 
 const tablePropTypes = {
   table: PropTypes.object.isRequired,
-  workspaceID: PropTypes.string.isRequired,
+  workspaceID: PropTypes.number.isRequired,
   renameTable: PropTypes.func.isRequired,
   deleteTable: PropTypes.func.isRequired,
 };

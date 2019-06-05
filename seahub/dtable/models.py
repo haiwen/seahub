@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
+
 from seaserv import seafile_api
 
-from seahub.base.fields import LowerCaseCharField
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 
 
@@ -40,7 +40,7 @@ class WorkspacesManager(models.Manager):
 
 class Workspaces(models.Model):
 
-    name = LowerCaseCharField(max_length=255)
+    name = models.CharField(max_length=255)
     owner = models.CharField(max_length=255)
     repo_id = models.CharField(max_length=36, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
