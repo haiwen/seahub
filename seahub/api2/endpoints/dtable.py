@@ -22,8 +22,7 @@ from seahub.dtable.models import Workspaces
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
-     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, \
-     get_file_type_and_ext, CTABLE
+     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url
 from seahub.views.file import send_file_access_msg
 from seahub.auth.decorators import login_required
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN, \
@@ -62,7 +61,7 @@ class WorkspacesView(APIView):
             table_list = list()
             for table_obj in table_objs:
                 table = dict()
-                table["name"] = table_obj.obj_name
+                table["name"] = table_obj.obj_name[:-7]
                 table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
                 table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
                 table_list.append(table)
@@ -184,7 +183,7 @@ class WorkspaceView(APIView):
         table_list = list()
         for table_obj in table_objs:
             table = dict()
-            table["name"] = table_obj.obj_name
+            table["name"] = table_obj.obj_name[:-7]
             table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
             table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
             table_list.append(table)
@@ -273,7 +272,8 @@ class DTableView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        table_path = normalize_file_path(table_name)
+        table_file_name = table_name + '.dtable'
+        table_path = normalize_file_path(table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
         if not table_file_id:
             error_msg = 'Library %s not found.' % repo_id
@@ -291,7 +291,7 @@ class DTableView(APIView):
 
         op = request.GET.get('op', 'download')
         use_onetime = False if reuse == '1' else True
-        return get_repo_file(request, repo_id, table_file_id, table_name, op, use_onetime)
+        return get_repo_file(request, repo_id, table_file_id, table_file_name, op, use_onetime)
 
     def post(self, request, workspace_id):
         """create a table file
@@ -302,7 +302,8 @@ class DTableView(APIView):
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if not is_valid_dirent_name(table_name):
+        table_file_name = table_name + '.dtable'
+        if not is_valid_dirent_name(table_file_name):
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -332,19 +333,19 @@ class DTableView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # create new empty table
-        table_name = check_filename_with_rename(repo_id, '/', table_name)
+        table_file_name = check_filename_with_rename(repo_id, '/', table_file_name)
 
         try:
-            seafile_api.post_empty_file(repo_id, '/', table_name, owner)
+            seafile_api.post_empty_file(repo_id, '/', table_file_name, owner)
         except SearpcError, e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        table_path = normalize_file_path(table_name)
+        table_path = normalize_file_path(table_file_name)
         table_obj = seafile_api.get_dirent_by_path(repo_id, table_path)
         table = dict()
-        table["name"] = table_obj.obj_name
+        table["name"] = table_obj.obj_name[:-7]
         table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
         table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
 
@@ -364,11 +365,12 @@ class DTableView(APIView):
             error_msg = 'new_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if not is_valid_dirent_name(new_table_name):
+        new_table_file_name = new_table_name + '.dtable'
+        if not is_valid_dirent_name(new_table_file_name):
             error_msg = 'new_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if len(new_table_name) > MAX_UPLOAD_FILE_NAME_LEN:
+        if len(new_table_file_name) > MAX_UPLOAD_FILE_NAME_LEN:
             error_msg = 'new_name is too long.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -384,7 +386,8 @@ class DTableView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        old_table_path = normalize_file_path(old_table_name)
+        old_table_file_name = old_table_name + '.dtable'
+        old_table_path = normalize_file_path(old_table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, old_table_path)
         if not table_file_id:
             error_msg = 'table %s not found.' % old_table_name
@@ -404,18 +407,18 @@ class DTableView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # rename table
-        new_table_name = check_filename_with_rename(repo_id, '/', new_table_name)
+        new_table_file_name = check_filename_with_rename(repo_id, '/', new_table_file_name)
         try:
-            seafile_api.rename_file(repo_id, '/', old_table_name, new_table_name, owner)
+            seafile_api.rename_file(repo_id, '/', old_table_file_name, new_table_file_name, owner)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        new_table_path = normalize_file_path(new_table_name)
+        new_table_path = normalize_file_path(new_table_file_name)
         table_obj = seafile_api.get_dirent_by_path(repo_id, new_table_path)
         table = dict()
-        table["name"] = table_obj.obj_name
+        table["name"] = table_obj.obj_name[:-7]
         table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
         table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
 
@@ -429,6 +432,7 @@ class DTableView(APIView):
         if not table_name:
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        table_file_name = table_name + '.dtable'
 
         # resource check
         workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
@@ -442,7 +446,7 @@ class DTableView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        table_path = normalize_file_path(table_name)
+        table_path = normalize_file_path(table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
         if not table_file_id:
             return Response({'success': True}, status=status.HTTP_200_OK)
@@ -462,7 +466,7 @@ class DTableView(APIView):
 
         # delete table
         try:
-            seafile_api.del_file(repo_id, '/', table_name, owner)
+            seafile_api.del_file(repo_id, '/', table_file_name, owner)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -527,7 +531,8 @@ def dtable_file_view(request, workspace_id, name):
     if not repo:
         raise Http404
 
-    table_path = normalize_file_path(name)
+    table_file_name = name + '.dtable'
+    table_path = normalize_file_path(table_file_name)
     table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
     if not table_file_id:
         return render_error(request, _(u'Table does not exist'))
@@ -538,21 +543,15 @@ def dtable_file_view(request, workspace_id, name):
     if username != owner:
         return render_permission_error(request, _(u'Unable to view file'))
 
-    filetype, fileext = get_file_type_and_ext(name)
-
     return_dict = {
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+        'repo': repo,
+        'filename': name,
+        'path': table_path,
+        'filetype': 'dtable',
+        'workspace_id': workspace_id,
     }
 
-    if filetype == CTABLE:
-        return_dict['repo'] = repo
-        return_dict['workspace_id'] = workspace_id
-        return_dict['path'] = table_path
-        return_dict['filename'] = name
-        return_dict['filetype'] = filetype
-        return render(request, 'ctable_file_view_react.html', return_dict)
-    else:
-        return_dict['err'] = "File preview unsupported"
-        return render(request, 'unknown_file_view_react.html', return_dict)
+    return render(request, 'dtable_file_view_react.html', return_dict)
