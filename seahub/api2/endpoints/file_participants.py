@@ -102,9 +102,3 @@ class FileParticipantsView(APIView):
         participant = get_user_common_info(email)
 
         return Response(participant, status=201)
-
-
-def auto_add_file_participant(repo_id, path, email):
-    """ auto add file participant when a user upload or update a file
-    """
-    FileParticipant.objects.add_by_file_path_and_username(repo_id, path, email)
