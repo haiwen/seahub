@@ -15,6 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.views import check_folder_permission
 from seaserv import seafile_api
+from seahub.utils import normalize_dir_path
 
 logger = logging.getLogger(__name__)
 
@@ -24,20 +25,21 @@ class RepoCommitDirView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def _get_item_info(self, item, path):
+    def _get_item_info(self, dirent, path):
 
-        item_info = {
-            'parent_dir': path,
-            'name': item.obj_name,
-        }
-
-        if stat.S_ISDIR(item.mode):
-            item_info['type'] = 'dir'
+        # # seahub/seahub/api2/views get_dir_file_recursively
+        entry = {}
+        if stat.S_ISDIR(dirent.mode):
+            entry['type'] = 'dir'
         else:
-            item_info['type'] = 'file'
-            item_info['size'] = item.size
+            entry['type'] = 'file'
+            entry['size'] = dirent.size
 
-        return item_info
+        entry['parent_dir'] = path
+        entry['obj_id'] = dirent.obj_id
+        entry['name'] = dirent.obj_name
+
+        return entry
 
     def get(self, request, repo_id, commit_id, format=None):
         """ List dir by commit
@@ -49,6 +51,7 @@ class RepoCommitDirView(APIView):
 
         # argument check
         path = request.GET.get('path', '/')
+        path = normalize_dir_path(path)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
