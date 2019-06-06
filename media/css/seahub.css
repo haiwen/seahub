@@ -1015,7 +1015,8 @@ textarea:-moz-placeholder {/* for FF */
     background-color:#feefb8;
     text-decoration:none;
 }
-.side-tabnav-tabs .tab [class^="sf2-icon-"] {
+.side-tabnav-tabs .tab [class^="sf2-icon-"],
+.side-tabnav-tabs .tab [class^="sf3-font-"] {
     display:inline-block;
     width:42px;
     margin-right:5px;
@@ -1047,6 +1048,7 @@ textarea:-moz-placeholder {/* for FF */
     background-color:#feac74;
 }
 .side-tabnav-tabs .tab-cur [class^="sf2-icon-"],
+.side-tabnav-tabs .tab-cur [class^="sf3-font-"],
 .side-tabnav-tabs .tab-cur a,
 #group-nav .tab-cur .sharp,
 #share-admin-nav .tab-cur .sharp {
