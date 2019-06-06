@@ -31,3 +31,12 @@ body {
   color: #000;
   background: #dfdfdf;
 }
+.clean {
+  border-color: #ccc;
+  border-radius: 2px;
+  height: 30px;
+  line-height: 28px;
+  font-weight: normal;
+  padding: 0 0.5rem;
+  min-width: 55px;
+}
