@@ -78,6 +78,9 @@ class RepoFolderTrash extends React.Component {
   }
 
   getMore = () => {
+    this.setState({
+      isLoading: true
+    });
     this.getItems(this.state.scanStat);
   }
 
@@ -325,7 +328,8 @@ class Item extends React.Component {
     request.then((res) => {
       this.setState({
         restored: true
-      }); toaster.success(gettext('Successfully restored 1 item.'));
+      });
+      toaster.success(gettext('Successfully restored 1 item.'));
     }).catch((error) => {
       let errorMsg = ''; 
       if (error.response) {
@@ -352,29 +356,25 @@ class Item extends React.Component {
     }
 
     return item.is_dir ? (
-      <React.Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
-          <td><a href="#" onClick={this.renderFolder}>{item.obj_name}</a></td>
-          <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
-          <td></td>
-          <td>
-            <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem}>{gettext('Restore')}</a>
-          </td>
-        </tr>
-      </React.Fragment>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
+        <td><a href="#" onClick={this.renderFolder}>{item.obj_name}</a></td>
+        <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
+        <td></td>
+        <td>
+          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem}>{gettext('Restore')}</a>
+        </td>
+      </tr>
     ) : (
-      <React.Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td className="text-center"><img src={Utils.getFileIconUrl(item.obj_name)} alt={gettext('File')} width="24" /></td>
-          <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${item.commit_id}&base=${encodeURIComponent(item.parent_dir)}&p=${encodeURIComponent('/' + item.obj_name)}`} target="_blank">{item.obj_name}</a></td>
-          <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
-          <td>{Utils.bytesToSize(item.size)}</td>
-          <td>
-            <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem}>{gettext('Restore')}</a>
-          </td>
-        </tr>
-      </React.Fragment>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <td className="text-center"><img src={Utils.getFileIconUrl(item.obj_name)} alt={gettext('File')} width="24" /></td>
+        <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${item.commit_id}&base=${encodeURIComponent(item.parent_dir)}&p=${encodeURIComponent('/' + item.obj_name)}`} target="_blank">{item.obj_name}</a></td>
+        <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
+        <td>{Utils.bytesToSize(item.size)}</td>
+        <td>
+          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem}>{gettext('Restore')}</a>
+        </td>
+      </tr>
     );
   }
 }
@@ -410,25 +410,21 @@ class FolderItem extends React.Component {
     const { commitID, baseDir, folderPath } = this.props;
 
     return item.type == 'dir' ? (
-      <React.Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
-          <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </React.Fragment>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
+        <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
     ) : (
-      <React.Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
-          <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${commitID}&base=${encodeURIComponent(baseDir)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank">{item.name}</a></td>
-          <td></td>
-          <td>{Utils.bytesToSize(item.size)}</td>
-          <td></td>
-        </tr>
-      </React.Fragment>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
+        <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${commitID}&base=${encodeURIComponent(baseDir)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank">{item.name}</a></td>
+        <td></td>
+        <td>{Utils.bytesToSize(item.size)}</td>
+        <td></td>
+      </tr>
     );
   }
 }
