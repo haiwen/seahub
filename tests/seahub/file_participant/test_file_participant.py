@@ -1,7 +1,8 @@
 import json
 
+from seaserv import seafile_api
 from django.core.urlresolvers import reverse
-from seahub.base.models import FileParticipant
+from seahub.file_participants.models import FileParticipant
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
@@ -12,6 +13,8 @@ class FileParticipantTest(BaseTestCase):
 
         self.login_as(self.user)
         self.url = reverse('api2-file-participant', args=[self.repo.id]) + '?path=' + self.file
+        # share repo and add participant
+        seafile_api.share_repo(self.repo.id, self.user.username, self.tmp_user.username, 'rw')
         FileParticipant.objects.add_by_file_path_and_username(
             repo_id=self.repo.id, file_path=self.file, username=self.tmp_user.username)
 

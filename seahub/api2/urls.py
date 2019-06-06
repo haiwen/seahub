@@ -17,8 +17,7 @@ from .endpoints.group_discussions import GroupDiscussions
 from .endpoints.group_discussion import GroupDiscussion
 from .endpoints.send_share_link_email import SendShareLinkView
 from .endpoints.send_upload_link_email import SendUploadLinkView
-from .endpoints.file_participants import FileParticipantsView
-from .endpoints.file_participant import FileParticipantView
+from seahub.file_participants.views import FileParticipantsView, FileParticipantView
 
 urlpatterns = [
     url(r'^ping/$', Ping.as_view()),

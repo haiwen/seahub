@@ -1,10 +1,4 @@
-from seahub.base.models import FileParticipant
-
-
-def add_file_participant(repo_id, path, email):
-    """ add file participant when a user upload or update a file
-    """
-    FileParticipant.objects.add_by_file_path_and_username(repo_id, path, email)
+from .models import FileParticipant
 
 
 def list_file_participants_username(repo_id, path):

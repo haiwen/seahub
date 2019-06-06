@@ -25,7 +25,7 @@ from seahub.utils import normalize_cache_key
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.constants import HASH_URLS
 from seahub.drafts.models import DraftReviewer
-from seahub.utils.file_participants import list_file_participants_username
+from seahub.file_participants.utils import list_file_participants_username
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
