@@ -2,13 +2,86 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e8e8e8;
-  background-color: #f4f4f7;
+  border-bottom: 1px solid #F09F3F;
+  background-color: #F09F3F;
   font-size: 1rem;
-  padding: 0.5rem 1rem;
+  height: 4rem;
+  padding: 0 0.5rem;
 }
 
 #main {
   display: flex;
   flex: 1;
+}
+
+#footer {
+  display: flex;
+  background-color: #F3F3F3;
+  height: 52px;
+  line-height: 52px;
+  padding: 0 0.5rem;
+  border-top: 1px solid #ddd;
+}
+
+/* header */
+.logo .dtable-icon-dtable-logo {
+  margin-left: .5rem;
+  font-size: 28px;
+  color: #fff;
+}
+
+#header .title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.btn-seafile {
+  padding-right: 0.5rem;
+  border-radius: 0.125rem;
+  width: 60px;
+  height: 30px;
+  background-color: #fff;
+  color: #F09F3F;
+  font-size: 14px;
+  border: none;
+  outline: none !important;
+}
+
+.btn-seafile:hover {
+  color: #F09F3F;
+  background-color: #FFEEDA;
+}
+
+.btn-seafile:disabled, .btn-seafile.disabled {
+  color: #F09F3F;
+  background-color: #FFD29E;
+}
+
+/* main */
+.drag-drop-container {
+  display: flex;
+  flex: 1;
+}
+
+.react-grid-Canvas {
+  background-color: #F3F3F3;
+}
+
+.react-grid-Grid {
+  border: none;
+}
+
+.react-grid-checkbox-label {
+  font-size: 0;
+}
+
+.react-grid-add-row-icon,
+.react-grid-add-row-item {
+  background-color: #FFFFFF;
+}
+
+/* footer */
+#footer .state {
+
 }

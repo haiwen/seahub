@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.0",
+    "@seafile/dtable": "^0.0.1",
     "@seafile/react-data-grid": "^6.1.5",
     "@seafile/react-data-grid-addons": "^6.1.5",
     "@seafile/resumablejs": "^1.1.9",
