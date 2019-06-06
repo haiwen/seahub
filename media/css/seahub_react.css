@@ -587,11 +587,13 @@ ul,ol,li {
 }
 
 .side-nav-con .active [class^="sf2-icon-"],
+.side-nav-con .active [class^="sf3-font-"],
 .side-nav-con .active .sharp {
     color: #fff;
 }
 
-.side-nav-con [class^="sf2-icon-"] {
+.side-nav-con [class^="sf2-icon-"],
+.side-nav-con [class^="sf3-font-"] {
     display:inline-block;
     width:2.625rem;
     margin-right:0.325rem;
