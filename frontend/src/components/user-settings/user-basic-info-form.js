@@ -14,14 +14,12 @@ class UserBasicInfoForm extends React.Component {
     const {
       contact_email,
       login_id,
-      name,
-      telephone
+      name
     } = this.props.userInfo;
     this.state = {
       contactEmail: contact_email,
       loginID: login_id,
-      name: name,
-      telephone: telephone
+      name: name
     };
   }
 
@@ -37,17 +35,10 @@ class UserBasicInfoForm extends React.Component {
     });
   }
 
-  handleTelephoneInputChange = (e) => {
-    this.setState({
-      telephone: e.target.value
-    });
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
     let data = {
-      name: this.state.name,
-      telephone: this.state.telephone
+      name: this.state.name
     };
     if (enableUserSetContactEmail) {
       data.contact_email = this.state.contactEmail;
@@ -59,8 +50,7 @@ class UserBasicInfoForm extends React.Component {
     const {
       contactEmail,
       loginID,
-      name,
-      telephone
+      name
     } = this.state;
 
     return (
@@ -93,14 +83,6 @@ class UserBasicInfoForm extends React.Component {
           </div>
         )}
 
-        {(telephone != undefined) && (
-          <div className="form-group row">
-            <label className="col-sm-1 col-form-label" htmlFor="telephone">{gettext('Telephone:')}</label>
-            <div className="col-sm-5">
-              <input className="form-control" id="telephone" type="text" name="telephone" value={telephone} disabled={!enableUpdateUserInfo} readOnly={!enableUpdateUserInfo} onChange={this.handleTelephoneInputChange} />
-            </div>
-          </div>
-        )}
         <button type="submit" className="btn btn-outline-primary offset-sm-1" disabled={!enableUpdateUserInfo}>{gettext('Submit')}</button>
       </form>
     );
