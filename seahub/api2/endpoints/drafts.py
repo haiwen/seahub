@@ -173,7 +173,10 @@ class DraftView(APIView):
             # 3. Send draft file publish msg.
             send_draft_publish_msg(draft, username, dst_file_path)
 
-            return Response({'published_file_path': dst_file_path})
+            result = {}
+            result['published_file_path'] = dst_file_path
+            result['draft_status'] = draft.status
+            return Response(result)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
