@@ -615,6 +615,9 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
 
     def test_copy_with_invalid_src_folder_permission(self):
 
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.user)
 
         # share admin's tmp repo to user with 'cloud-edit' permission
@@ -664,8 +667,10 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)
-
         self.remove_repo(admin_repo_id)
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
 
         # share admin's tmp repo to user with 'cloud-edit' permission
         admin_repo_id = self.create_new_repo(self.admin_name)
@@ -907,6 +912,9 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         self.assertEqual(403, resp.status_code)
         self.remove_repo(admin_repo_id)
 
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         # share admin's tmp repo to user with 'cloud-edit' permission
         admin_repo_id = self.create_new_repo(self.admin_name)
         seafile_api.share_repo(admin_repo_id, self.admin_name,
@@ -954,6 +962,9 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
 
         # share admin's tmp repo to user with 'cloud-edit' permission
         admin_repo_id = self.create_new_repo(self.admin_name)
