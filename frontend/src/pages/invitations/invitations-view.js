@@ -8,6 +8,7 @@ import {Table} from 'reactstrap';
 import Loading from '../../components/loading';
 import moment from 'moment';
 import toaster from '../../components/toast';
+import EmptyTip from '../../components/empty-tip';
 
 import '../../css/invitations.css';
 
@@ -186,9 +187,9 @@ class InvitationsView extends React.Component {
 
   emptyTip = () => {
     return (
-      <div className="message empty-tip">
+      <EmptyTip>
         <h2>{gettext('You have not invited any people.')}</h2>
-      </div>
+      </EmptyTip>
     );
   }
 

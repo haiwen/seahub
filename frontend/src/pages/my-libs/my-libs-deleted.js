@@ -3,10 +3,11 @@ import { Link } from '@reach/router';
 import moment from 'moment';
 import { gettext, siteRoot, lang } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import toaster from '../../components/toast';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
-import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
+import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 
 moment.locale(lang);
 
@@ -46,7 +47,7 @@ class MyLibsDeleted extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <div className="path-container">
-                <Link to={ siteRoot + 'my-libs/' }>{gettext("My Libraries")}</Link>
+                <Link to={ siteRoot + 'my-libs/' }>{gettext('My Libraries')}</Link>
                 <span className="path-split">/</span>
                 <span>{gettext('Deleted Libraries')}</span>
               </div>
@@ -54,9 +55,9 @@ class MyLibsDeleted extends Component {
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
               {(!this.state.isLoading && this.state.deletedRepoList.length === 0) &&
-                <div className="message empty-tip">
-                  <h2>{gettext('No deleted libraries.')}</h2>
-                </div>
+              <EmptyTip>
+                <h2>{gettext('No deleted libraries.')}</h2>
+              </EmptyTip>
               }
               {this.state.deletedRepoList.length !== 0 && 
                 <div>
@@ -140,9 +141,9 @@ class DeletedRepoItem extends Component {
       toaster.success(message);
       this.props.refreshDeletedRepoList(repoID);
     }).catch(res => {
-        let message = gettext('Failed. Please check the network.')
-        toaster.danger(message);
-    })
+      let message = gettext('Failed. Please check the network.');
+      toaster.danger(message);
+    });
   }
 
   render() {

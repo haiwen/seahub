@@ -5,6 +5,7 @@ import { gettext, siteRoot, loginUrl, canGenerateShareLink } from '../../utils/c
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedUploadInfo from '../../models/shared-upload-info';
+import EmptyTip from '../../components/empty-tip';
 
 class Content extends Component {
 
@@ -39,10 +40,10 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <div className="empty-tip">
+        <EmptyTip>
           <h2>{gettext('You don\'t have any upload links')}</h2>
           <p>{gettext('You can generate an upload link from any folder. Anyone who receives this link can upload files to this folder.')}</p>
-        </div>
+        </EmptyTip>
       );
 
       const table = (
