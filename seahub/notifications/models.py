@@ -25,6 +25,7 @@ from seahub.utils import normalize_cache_key
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.constants import HASH_URLS
 from seahub.drafts.models import DraftReviewer
+from seahub.file_participants.utils import list_file_participants_username
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -979,14 +980,15 @@ def add_user_to_group_cb(sender, **kwargs):
 
 @receiver(comment_file_successful)
 def comment_file_successful_cb(sender, **kwargs):
+    """ send notification to file participants
+    """
     repo = kwargs['repo']
     repo_owner = kwargs['repo_owner']
     file_path = kwargs['file_path']
     comment = kwargs['comment']
     author = kwargs['author']
 
-    notify_users = get_repo_shared_users(repo.id, repo_owner)
-    notify_users.append(repo_owner)
+    notify_users = list_file_participants_username(repo.id, file_path)
     notify_users = [x for x in notify_users if x != author]
     for u in notify_users:
         detail = file_comment_msg_to_json(repo.id, file_path, author, comment)
