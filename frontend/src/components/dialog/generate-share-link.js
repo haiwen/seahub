@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkPasswordMinLength } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkPasswordMinLength, canDownload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedLinkInfo from '../../models/shared-link-info';
@@ -307,7 +307,7 @@ class GenerateShareLink extends React.Component {
                 }
               </dd>
             </FormGroup>
-            {!sharedLinkInfo.is_dir && (  //just for file
+            {!sharedLinkInfo.is_dir && canDownload && (  //just for file
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
                 <dd className="d-flex">
