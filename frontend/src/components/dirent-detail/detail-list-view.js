@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
+import FileParticipantDialog from '../dialog/file-participant-dialog';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -18,6 +19,7 @@ const propTypes = {
   relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   onRelatedFileChange: PropTypes.func.isRequired,
+  fileParticipantList: PropTypes.array.isRequired,
 };
 
 class DetailListView extends React.Component {
@@ -27,6 +29,7 @@ class DetailListView extends React.Component {
     this.state = {
       isEditFileTagShow: false,
       showRelatedFileDialog: false,
+      isFileParticipantDialogShow : false,
     };
   }
 
@@ -77,9 +80,15 @@ class DetailListView extends React.Component {
       showRelatedFileDialog: false,
     });
   }
+
+  toggleFileParticipantDialog = () => {
+    this.setState({
+      isFileParticipantDialogShow: !this.state.isFileParticipantDialogShow,
+    });
+  }
   
   render() {
-    let { direntType, direntDetail, fileTagList, relatedFiles } = this.props;
+    let { direntType, direntDetail, fileTagList, relatedFiles, fileParticipantList } = this.props;
     let position = this.getDirentPostion();
     let direntPath = this.getDirentPath();
     if (direntType === 'dir') {
@@ -137,6 +146,21 @@ class DetailListView extends React.Component {
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onListRelatedFileToggle}></i>
                 </td>
               </tr>
+              <tr className="file-related-files">
+                <th>{gettext('Participants')}</th>
+                <td>
+                  <ul>
+                    {fileParticipantList.map((fileParticipant, index) => {
+                      return (
+                        <li key={index}>
+                          <span>{fileParticipant.name}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <i className='fa fa-pencil-alt attr-action-icon' onClick={this.toggleFileParticipantDialog}></i>
+                </td>
+              </tr>
             </tbody>
           </table>
           {this.state.showRelatedFileDialog &&
@@ -160,6 +184,17 @@ class DetailListView extends React.Component {
               filePath={direntPath}
               toggleCancel={this.onEditFileTagToggle}
               onFileTagChanged={this.onFileTagChanged}
+            />
+          }
+          {
+            this.state.isFileParticipantDialogShow &&
+            <FileParticipantDialog
+              repoID={this.props.repoID}
+              filePath={direntPath}
+              dirent={this.props.dirent}
+              toggleFileParticipantDialog={this.toggleFileParticipantDialog}
+              fileParticipantList={this.props.fileParticipantList}
+              onRelatedFileChange={this.props.onRelatedFileChange}
             />
           }
         </Fragment>
