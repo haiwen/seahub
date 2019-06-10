@@ -12,7 +12,7 @@ class FileParticipantsTest(BaseTestCase):
         self.tmp_user = self.create_user()
 
         self.login_as(self.user)
-        self.url = reverse('api2-file-participants', args=[self.repo.id]) + '?path=' + self.file
+        self.url = reverse('api-v2.1-file-participants', args=[self.repo.id]) + '?path=' + self.file
         # share repo and add participant
         seafile_api.share_repo(self.repo.id, self.user.username, self.tmp_user.username, 'rw')
         FileParticipant.objects.add_by_file_path_and_username(

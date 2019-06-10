@@ -17,7 +17,6 @@ from .endpoints.group_discussions import GroupDiscussions
 from .endpoints.group_discussion import GroupDiscussion
 from .endpoints.send_share_link_email import SendShareLinkView
 from .endpoints.send_upload_link_email import SendUploadLinkView
-from seahub.file_participants.views import FileParticipantsView, FileParticipantView
 
 urlpatterns = [
     url(r'^ping/$', Ping.as_view()),
@@ -61,8 +60,6 @@ urlpatterns = [
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/$', FileCommentsView.as_view(), name='api2-file-comments'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/counts/$', FileCommentsCounts.as_view(), name='api2-file-comments-counts'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/(?P<comment_id>\d+)/$', FileCommentView.as_view(), name='api2-file-comment'),
-    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/participants/$', FileParticipantsView.as_view(), name='api2-file-participants'),
-    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/participant/$', FileParticipantView.as_view(), name='api2-file-participant'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/detail/$', FileDetailView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/history/$', FileHistory.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/revision/$', FileRevision.as_view()),
