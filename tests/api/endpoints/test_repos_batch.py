@@ -421,3 +421,564 @@ class ReposBatchCreateDirViewTest(BaseTestCase):
                 path_2) is not None
         assert seafile_api.get_dir_id_by_path(self.repo_id,
                 path_3) is not None
+
+
+class ReposAsyncBatchCopyItemView(BaseTestCase):
+
+    def create_new_repo(self, username):
+        new_repo_id = seafile_api.create_repo(name=randstring(10),
+                desc='', username=username, passwd=None)
+
+        return new_repo_id
+
+    def setUp(self):
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
+
+        self.src_repo_id = self.repo.id
+        self.dst_repo_id = self.create_new_repo(self.user_name)
+
+        self.file_path = self.file
+        self.file_name = os.path.basename(self.file_path)
+
+        self.folder_path = self.folder
+        self.folder_name = os.path.basename(self.folder)
+
+        self.url = reverse('api-v2.1-repos-async-batch-copy-item')
+
+    def tearDown(self):
+        self.remove_repo(self.src_repo_id)
+        self.remove_repo(self.dst_repo_id)
+
+    def test_can_copy(self):
+
+        self.login_as(self.user)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+
+        resp = self.client.post(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        task_id = json_resp['task_id']
+        assert len(task_id) == 36
+
+#        progress_url = reverse('api-v2.1-query-copy-move-progress') + '?task_id=%s' % task_id
+#        count = 1
+#        while True:
+#            count += 1
+#            resp = self.client.get(progress_url)
+#            json_resp = json.loads(resp.content)
+#            if json_resp['done'] == 1 or count == 10:
+#                break
+#
+#        # items remain in src folder
+#        assert seafile_api.get_dir_id_by_path(self.src_repo_id, self.folder_path) is not None
+#        assert seafile_api.get_file_id_by_path(self.src_repo_id, self.file_path) is not None
+#
+#        # items in dst folder
+#        assert seafile_api.get_file_id_by_path(self.dst_repo_id, self.file_path) is not None
+#        assert seafile_api.get_dir_id_by_path(self.dst_repo_id, self.folder_path) is not None
+
+    def test_copy_with_invalid_parameter(self):
+
+        self.login_as(self.user)
+
+        data = {
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+    def test_copy_with_repo_not_exist(self):
+
+        self.login_as(self.user)
+
+        invalid_repo_id = 'd53fe97e-919a-42f9-a29f-042d285ba6fb'
+        data = {
+            "src_repo_id": invalid_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(404, resp.status_code)
+
+        invalid_repo_id = 'd53fe97e-919a-42f9-a29f-042d285ba6fb'
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": invalid_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(404, resp.status_code)
+
+    def test_copy_with_folder_not_exist(self):
+
+        self.login_as(self.user)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": 'invalid_folder',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(404, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": 'invalid_folder',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(404, resp.status_code)
+
+    def test_copy_with_invalid_repo_permission(self):
+
+        tmp_repo_id = self.create_new_repo(self.admin_name)
+
+        self.login_as(self.user)
+
+        data = {
+            "src_repo_id": tmp_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": tmp_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+
+    def test_copy_with_invalid_src_folder_permission(self):
+
+        self.login_as(self.user)
+
+        # share admin's tmp repo to user with 'cloud-edit' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'cloud-edit')
+        data = {
+            "src_repo_id": admin_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.src_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        self.remove_repo(admin_repo_id)
+
+        # share admin's tmp repo to user with 'preivew' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'preview')
+        data = {
+            "src_repo_id": admin_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.src_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        self.remove_repo(admin_repo_id)
+
+    def test_copy_with_invalid_dst_folder_permission(self):
+
+        self.login_as(self.user)
+
+        # share admin's tmp repo to user with 'r' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'r')
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": admin_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+
+        self.remove_repo(admin_repo_id)
+
+        # share admin's tmp repo to user with 'cloud-edit' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'cloud-edit')
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": admin_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        self.remove_repo(admin_repo_id)
+
+        # share admin's tmp repo to user with 'preview' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'preivew')
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": admin_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        self.remove_repo(admin_repo_id)
+
+
+class ReposAsyncBatchMoveItemView(BaseTestCase):
+
+    def create_new_repo(self, username):
+        new_repo_id = seafile_api.create_repo(name=randstring(10),
+                desc='', username=username, passwd=None)
+
+        return new_repo_id
+
+    def setUp(self):
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
+
+        self.src_repo_id = self.repo.id
+        self.dst_repo_id = self.create_new_repo(self.user_name)
+
+        self.file_path = self.file
+        self.file_name = os.path.basename(self.file_path)
+
+        self.folder_path = self.folder
+        self.folder_name = os.path.basename(self.folder)
+
+        self.url = reverse('api-v2.1-repos-async-batch-move-item')
+
+    def tearDown(self):
+        self.remove_repo(self.src_repo_id)
+        self.remove_repo(self.dst_repo_id)
+
+    def test_can_move(self):
+
+        self.login_as(self.user)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+
+        resp = self.client.post(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        task_id = json_resp['task_id']
+        assert len(task_id) == 36
+
+#        progress_url = reverse('api-v2.1-query-copy-move-progress') + '?task_id=%s' % task_id
+#        count = 1
+#        while True:
+#            count += 1
+#            resp = self.client.get(progress_url)
+#            json_resp = json.loads(resp.content)
+#            if json_resp['done'] == 1 or count == 10:
+#                break
+#
+#        # items NOT in src folder
+#        assert seafile_api.get_dir_id_by_path(self.src_repo_id, self.folder_path) is None
+#        assert seafile_api.get_file_id_by_path(self.src_repo_id, self.file_path) is None
+#
+#        # items in dst folder
+#        assert seafile_api.get_file_id_by_path(self.dst_repo_id, self.file_path) is not None
+#        assert seafile_api.get_dir_id_by_path(self.dst_repo_id, self.folder_path) is not None
+
+    def test_move_with_invalid_parameter(self):
+
+        self.login_as(self.user)
+
+        data = {
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+    def test_move_with_repo_not_exist(self):
+
+        self.login_as(self.user)
+
+        invalid_repo_id = 'd53fe97e-919a-42f9-a29f-042d285ba6fb'
+        data = {
+            "src_repo_id": invalid_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(404, resp.status_code)
+
+        invalid_repo_id = 'd53fe97e-919a-42f9-a29f-042d285ba6fb'
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": invalid_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(404, resp.status_code)
+
+    def test_move_with_folder_not_exist(self):
+
+        self.login_as(self.user)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": 'invalid_folder',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(404, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": 'invalid_folder',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(404, resp.status_code)
+
+    def test_move_with_invalid_repo_permission(self):
+
+        tmp_repo_id = self.create_new_repo(self.admin_name)
+
+        self.login_as(self.user)
+
+        data = {
+            "src_repo_id": tmp_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": tmp_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+
+    def test_move_with_invalid_src_folder_permission(self):
+
+        self.login_as(self.user)
+
+        # share admin's tmp repo to user with 'r' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'r')
+        data = {
+            "src_repo_id": admin_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.src_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        self.remove_repo(admin_repo_id)
+
+        # share admin's tmp repo to user with 'cloud-edit' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'cloud-edit')
+        data = {
+            "src_repo_id": admin_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.src_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        self.remove_repo(admin_repo_id)
+
+        # share admin's tmp repo to user with 'preivew' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'preview')
+        data = {
+            "src_repo_id": admin_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.src_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        self.remove_repo(admin_repo_id)
+
+    def test_move_with_invalid_dst_folder_permission(self):
+
+        self.login_as(self.user)
+
+        # share admin's tmp repo to user with 'r' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'r')
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": admin_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+
+        # share admin's tmp repo to user with 'cloud-edit' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'cloud-edit')
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": admin_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+
+        # share admin's tmp repo to user with 'preview' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'preview')
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": admin_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
