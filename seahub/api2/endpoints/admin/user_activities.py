@@ -106,10 +106,14 @@ class UserActivitiesView(APIView):
             elif d['name'].endswith('(draft).md'):
                 if e.op_type in ('create', 'edit') and e.obj_type == 'file':
                     try:
-                        draft = Draft.objects.get(username=e.op_user,
-                                                  origin_repo_id=e.repo_id,
-                                                  draft_file_path=e.path)
-                        d['draft_id'] = draft.id
+                        draft = Draft.objects.filter(username=e.op_user,
+                                                     origin_repo_id=e.repo_id,
+                                                     draft_file_path=e.path)
+                        if draft:
+                            draft = draft[0]
+                            d['draft_id'] = draft.id
+                        else:
+                            Draft.DoesNotExist
                     except Draft.DoesNotExist:
                         pass
 

@@ -38,7 +38,7 @@ def is_draft_file(repo_id, file_path):
 
     from .models import Draft
     try:
-        Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
+        Draft.objects.filter(origin_repo_id=repo_id, draft_file_path=file_path)
         is_draft = True
     except Draft.DoesNotExist:
         pass
@@ -58,11 +58,14 @@ def has_draft_file(repo_id, file_path):
     from .models import Draft
     if file_uuid:
         try:
-            d = Draft.objects.get(origin_file_uuid=file_uuid.uuid)
-            file_id = seafile_api.get_file_id_by_path(repo_id, d.draft_file_path)
-            if file_id:
-                has_draft = True
-
+            d = Draft.objects.filter(origin_file_uuid=file_uuid.uuid)
+            if d:
+                d = d[0]
+                file_id = seafile_api.get_file_id_by_path(repo_id, d.draft_file_path)
+                if file_id:
+                    has_draft = True
+            else:
+                Draft.DoesNotExist
         except Draft.DoesNotExist:
             pass
 
@@ -78,12 +81,16 @@ def get_file_draft(repo_id, file_path, is_draft=False, has_draft=False):
     from .models import Draft
 
     if is_draft:
-        d = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
-        uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(d.origin_file_uuid)
-        file_path = posixpath.join(uuid.parent_path, uuid.filename)
-        draft['draft_id'] = d.id
-        draft['draft_file_path'] = d.draft_file_path
-        draft['draft_origin_file_path'] = file_path
+        d = Draft.objects.filter(origin_repo_id=repo_id, draft_file_path=file_path)
+        if d:
+            d = d[0]
+            uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(d.origin_file_uuid)
+            file_path = posixpath.join(uuid.parent_path, uuid.filename)
+            draft['draft_id'] = d.id
+            draft['draft_file_path'] = d.draft_file_path
+            draft['draft_origin_file_path'] = file_path
+        else:
+            Draft.DoesNotExist
 
     if has_draft:
         file_path = normalize_file_path(file_path)
@@ -93,10 +100,13 @@ def get_file_draft(repo_id, file_path, is_draft=False, has_draft=False):
         file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(
                 repo_id, parent_path, filename, is_dir=False)
 
-        d = Draft.objects.get(origin_file_uuid=file_uuid.uuid)
-
-        draft['draft_id'] = d.id
-        draft['draft_file_path'] = d.draft_file_path
+        d = Draft.objects.filter(origin_file_uuid=file_uuid.uuid)
+        if d:
+            d = d[0]
+            draft['draft_id'] = d.id
+            draft['draft_file_path'] = d.draft_file_path
+        else:
+            Draft.DoesNotExist
 
     return draft
 
