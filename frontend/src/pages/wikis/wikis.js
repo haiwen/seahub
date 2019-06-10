@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl, canPublishRepo } from '../../utils/constants';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
+import EmptyTip from '../../components/empty-tip';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
 import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
@@ -157,10 +158,10 @@ class Wikis extends Component {
                 />
               }
               {(!this.state.loading && this.state.wikis.length === 0) &&
-                <div className="message empty-tip">
+                <EmptyTip>
                   <h2>{gettext('You do not have any public library')}</h2>
                   <p>{gettext('Public libraries are for publishing your contents in an organized way.')}</p>
-                </div>
+                </EmptyTip>
               }
             </div>
           </div>

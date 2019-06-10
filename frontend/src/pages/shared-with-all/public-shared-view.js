@@ -9,6 +9,7 @@ import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
 import ModalPortal from '../../components/modal-portal';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
@@ -162,10 +163,10 @@ class PublicSharedView extends React.Component {
   render() {
     let errMessage = this.state.errMessage;
     let emptyTip = (
-      <div className="empty-tip">
+      <EmptyTip>
         <h2>{gettext('No public libraries')}</h2>
         <p>{gettext('You can create a public library by clicking the "New Library" button, others can view and download this library.')}</p>
-      </div>
+      </EmptyTip>
     );
     return (
       <Fragment>

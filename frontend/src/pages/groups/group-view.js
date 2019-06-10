@@ -7,6 +7,7 @@ import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
 import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
@@ -150,25 +151,25 @@ class GroupView extends React.Component {
     if (currentGroup) {
       if (currentGroup.parent_group_id === 0) {
         emptyTip = (
-          <div className="empty-tip">
+          <EmptyTip>
             <h2>{gettext('No library is shared to this group')}</h2>
             <p>{gettext('You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.')}</p>
             <p>{gettext('Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded.')}</p>
-          </div>
+          </EmptyTip>
         );
       } else {
         if (currentGroup.admins.indexOf(username) == -1) {  // is a member of this group
           emptyTip = (
-            <div className="empty-tip">
+            <EmptyTip>
               <h2>{gettext('No libraries')}</h2>
-            </div>
+            </EmptyTip>
           );
         } else {
           emptyTip = (
-            <div className="empty-tip">
+            <EmptyTip>
               <h2>{gettext('No libraries')}</h2>
               <p>{gettext('You can create libraries by clicking the "New Library" button above.')}</p>
-            </div>
+            </EmptyTip>
           );
         }
       }
