@@ -38,8 +38,9 @@ def is_draft_file(repo_id, file_path):
 
     from .models import Draft
     try:
-        Draft.objects.filter(origin_repo_id=repo_id, draft_file_path=file_path)
-        is_draft = True
+        draft = Draft.objects.filter(origin_repo_id=repo_id, draft_file_path=file_path)
+        if draft:
+            is_draft = True
     except Draft.DoesNotExist:
         pass
 
