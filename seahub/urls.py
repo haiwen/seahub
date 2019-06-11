@@ -45,7 +45,8 @@ from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
 from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposBatchCopyDirView, ReposBatchCreateDirView, \
         ReposBatchCopyItemView, ReposBatchMoveItemView, \
-        ReposAsyncBatchCopyItemView, ReposAsyncBatchMoveItemView
+        ReposAsyncBatchCopyItemView, ReposAsyncBatchMoveItemView, \
+        ReposSyncBatchCopyItemView, ReposSyncBatchMoveItemView
 from seahub.api2.endpoints.repos import RepoView, ReposView
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryView
@@ -318,6 +319,8 @@ urlpatterns = [
     url(r'^api/v2.1/repos/batch-move-item/$', ReposBatchMoveItemView.as_view(), name='api-v2.1-repos-batch-move-item'),
     url(r'^api/v2.1/repos/async-batch-copy-item/$', ReposAsyncBatchCopyItemView.as_view(), name='api-v2.1-repos-async-batch-copy-item'),
     url(r'^api/v2.1/repos/async-batch-move-item/$', ReposAsyncBatchMoveItemView.as_view(), name='api-v2.1-repos-async-batch-move-item'),
+    url(r'^api/v2.1/repos/sync-batch-copy-item/$', ReposSyncBatchCopyItemView.as_view(), name='api-v2.1-repos-sync-batch-copy-item'),
+    url(r'^api/v2.1/repos/sync-batch-move-item/$', ReposSyncBatchMoveItemView.as_view(), name='api-v2.1-repos-sync-batch-move-item'),
 
     ## user::deleted repos
     url(r'^api/v2.1/deleted-repos/$', DeletedRepos.as_view(), name='api2-v2.1-deleted-repos'),
