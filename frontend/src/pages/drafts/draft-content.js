@@ -4,6 +4,7 @@ import editUtilties from '../../utils/editor-utilties';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
 import toaster from '../../components/toast';
+import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';
 
@@ -57,10 +58,10 @@ class DraftContent extends React.Component {
         {!this.props.isLoadingDraft && (
           <Fragment>
             {this.props.draftList.length === 0 && (
-              <div className="message empty-tip">
+              <EmptyTip>
                 <h2>{gettext('No draft yet')}</h2>
                 <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft be reviewed.')}</p>
-              </div>
+              </EmptyTip>
             )}
             {this.props.draftList.length !==0 && (
               <DraftListView

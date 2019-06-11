@@ -2,13 +2,14 @@ import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import copy from '@seafile/seafile-editor/dist//utils/copy-to-clipboard';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, canGenerateUploadLink } from '../../utils/constants';
 import SharedLinkInfo from '../../models/shared-link-info';
 import ShareLinksPermissionEditor from '../../components/select-editor/share-links-permission-editor';
-import copy from '@seafile/seafile-editor/dist//utils/copy-to-clipboard';
 import toaster from '../../components/toast';
+import EmptyTip from '../../components/empty-tip';
 
 class Content extends Component {
 
@@ -26,7 +27,7 @@ class Content extends Component {
     this.props.sortItems(sortBy, sortOrder);
   }
 
- constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       modalOpen: false,
@@ -66,10 +67,10 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <div className="empty-tip">
+        <EmptyTip>
           <h2>{gettext('You don\'t have any share links')}</h2>
           <p>{gettext('You can generate a share link for a folder or a file. Anyone who receives this link can view the folder or the file online.')}</p>
-        </div>
+        </EmptyTip>
       );
 
       // sort
@@ -120,7 +121,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
 
-    let item = this.props.item
+    let item = this.props.item;
     this.state = {
       currentPermission: item.permissions.can_download ? 'Preview and download' : 'Preview only',
       showOpIcon: false,
@@ -209,7 +210,7 @@ class Item extends Component {
     let deleteIconClassName = 'sf2-icon-delete action-icon' + iconVisibility;
     return (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <td><img src={iconUrl} width="24" /></td>
+        <td><img src={iconUrl} width="24" alt=""/></td>
         <td>
           {item.is_dir ?
             <Link to={linkUrl}>{item.obj_name}</Link> :

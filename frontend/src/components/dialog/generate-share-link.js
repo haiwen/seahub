@@ -307,7 +307,7 @@ class GenerateShareLink extends React.Component {
                 }
               </dd>
             </FormGroup>
-            {!sharedLinkInfo.is_dir && (  //just for file
+            {!sharedLinkInfo.is_dir && sharedLinkInfo.permissions.can_download &&(  //just for file
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
                 <dd className="d-flex">

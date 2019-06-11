@@ -1268,7 +1268,3 @@ def react_fake_view(request, **kwargs):
         'folder_perm_enabled': folder_perm_enabled,
         'file_audit_enabled' : FILE_AUDIT_ENABLED
     })
-
-@login_required
-def react_group(request, group_id):
-    return render(request, "react_app.html")

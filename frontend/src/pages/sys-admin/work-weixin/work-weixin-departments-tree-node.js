@@ -55,7 +55,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     let toggleClass = classNames({
       'folder-toggle-icon fa fa-caret-down': department.children && this.state.isChildrenShow,
       'folder-toggle-icon fa fa-caret-right': department.children && !this.state.isChildrenShow,
-    })
+    });
     let nodeInnerClass = classNames({
       'tree-node-inner': true,
       'tree-node-hight-light': checkedDepartmentId === department.id

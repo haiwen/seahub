@@ -3,6 +3,7 @@ import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
+import EmptyTip from '../../components/empty-tip';
 import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
 import SharedRepoInfo from '../../models/shared-repo-info';
 
@@ -24,10 +25,10 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <div className="empty-tip">
+        <EmptyTip>
           <h2>{gettext('You have not shared any libraries')}</h2>
           <p>{gettext('You can share libraries with your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in.')}</p>
-        </div>
+        </EmptyTip>
       );
 
       // sort

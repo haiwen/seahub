@@ -215,7 +215,7 @@ class RepoFolderTrash extends React.Component {
                 <div className="d-flex justify-content-between align-items-center op-bar">
                   <p className="m-0">{gettext('Current path: ')}{showFolder ? this.renderFolderPath() : repoFolderName}</p>
                   {(path == '/' && enableClean && !showFolder) &&
-                  <button className="btn btn-secondary" onClick={this.cleanTrash}>{gettext('Clean')}</button>
+                  <button className="btn btn-secondary clean" onClick={this.cleanTrash}>{gettext('Clean')}</button>
                   }
                 </div>
                 <Content 

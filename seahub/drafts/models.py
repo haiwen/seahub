@@ -174,8 +174,8 @@ class Draft(TimestampedModel):
     username = LowerCaseCharField(max_length=255, db_index=True)
     status = models.CharField(max_length=20, default='open')
     draft_file_path = models.CharField(max_length=1024)
-    origin_repo_id = models.CharField(max_length=36)
-    origin_file_uuid = models.UUIDField(db_index=True, default=uuid.uuid4)
+    origin_repo_id = models.CharField(max_length=36, db_index=True)
+    origin_file_uuid = models.UUIDField(unique=True)
     origin_file_version = models.CharField(max_length=100)
     publish_file_version = models.CharField(max_length=100, null=True)
 

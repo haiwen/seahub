@@ -234,7 +234,7 @@ class MainSideNav extends React.Component {
               </Link>
             </li>
             {canInvitePeople &&
-                <li className="nav-item">
+              <li className="nav-item">
                 <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite People')} onClick={() => this.tabItemClick('invitations')}>
                   <span className="sf2-icon-invite" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Invite People')}</span>

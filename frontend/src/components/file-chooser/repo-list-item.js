@@ -162,7 +162,7 @@ class RepoListItem extends React.Component {
               <span className="icon far fa-folder tree-node-icon"></span> 
             </i>
           </div>
-         </div>
+        </div>
         {this.state.isShowChildren && (
           <TreeListView 
             repo={this.props.repo} 

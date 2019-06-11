@@ -6,6 +6,7 @@ import { gettext, loginUrl} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
@@ -29,10 +30,10 @@ class MyLibraries extends Component {
     };
 
     this.emptyMessage = (
-      <div className="empty-tip">
+      <EmptyTip>
         <h2>{gettext('You have not created any libraries')}</h2>
         <p>{gettext('You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately.')}</p>
-      </div>
+      </EmptyTip>
     );
   }
 
@@ -151,9 +152,9 @@ class MyLibraries extends Component {
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
-              {!this.state.isLoading && this.state.errorMsg &&  <p className="error text-center">{this.state.errorMsg}</p>}
-              {!this.state.isLoading && this.state.repoList.length === 0 && this.emptyMessage}
-              {!this.state.isLoading && this.state.repoList.length > 0 && 
+              {!this.state.isLoading && this.state.errorMsg && <p className="error text-center mt-8">{this.state.errorMsg}</p>}
+              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length === 0 && this.emptyMessage}
+              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length > 0 &&
                 <MylibRepoListView
                   sortBy={this.state.sortBy}
                   sortOrder={this.state.sortOrder}

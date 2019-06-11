@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import FileScanRecords from './file-scan-records';
-import WorkWeixinDepartments from './work-weixin-departments'
+import WorkWeixinDepartments from './work-weixin-departments';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';

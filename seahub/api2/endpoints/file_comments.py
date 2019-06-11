@@ -124,11 +124,15 @@ class FileCommentsView(APIView):
         repo_owner = get_repo_owner(request, repo.id)
 
         if is_draft_file(repo_id, path):
-            draft = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=path)
-            comment_draft_successful.send(sender=None,
-                                          draft=draft,
-                                          comment=comment,
-                                          author=username)
+            draft = Draft.objects.filter(origin_repo_id=repo_id, draft_file_path=path)
+            if draft:
+                draft = draft[0]
+                comment_draft_successful.send(sender=None,
+                                              draft=draft,
+                                              comment=comment,
+                                              author=username)
+            else:
+                Draft.DoesNotExist
         else:
             comment_file_successful.send(sender=None,
                                          repo=repo,

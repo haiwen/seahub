@@ -8,6 +8,7 @@ import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 
@@ -38,10 +39,10 @@ class Content extends Component {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
     
     const emptyTip = (
-      <div className="empty-tip">
+      <EmptyTip>
         <h2>{gettext('No libraries have been shared with you')}</h2>
         <p>{gettext('No libraries have been shared directly with you. You can find more shared libraries at "Shared with groups".')}</p>
-      </div>
+      </EmptyTip>
     );
 
     if (loading) {
@@ -179,7 +180,7 @@ class Item extends Component {
       });
       // TODO: show feedback msg
     }).catch((error) => {
-        // TODO: show feedback msg
+      // TODO: show feedback msg
     });
   }
 
@@ -195,7 +196,7 @@ class Item extends Component {
     } else {
       seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-      })
+      });
     }
   }
 
@@ -265,7 +266,7 @@ class Item extends Component {
             {(isPro && data.is_admin) &&
               <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
             }
-            <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
+            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} onClick={this.leaveShare}></a>
           </td>
         </tr>
         {this.state.isShowSharedDialog && (
