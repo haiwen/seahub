@@ -152,9 +152,9 @@ class MyLibraries extends Component {
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
-              {!this.state.isLoading && this.state.errorMsg &&  <p className="error text-center">{this.state.errorMsg}</p>}
-              {!this.state.isLoading && this.state.repoList.length === 0 && this.emptyMessage}
-              {!this.state.isLoading && this.state.repoList.length > 0 && 
+              {!this.state.isLoading && this.state.errorMsg && <p className="error text-center mt-8">{this.state.errorMsg}</p>}
+              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length === 0 && this.emptyMessage}
+              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length > 0 &&
                 <MylibRepoListView
                   sortBy={this.state.sortBy}
                   sortOrder={this.state.sortOrder}
