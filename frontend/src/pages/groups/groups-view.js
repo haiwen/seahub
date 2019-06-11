@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, loginUrl } from '../../utils/constants';
+import { gettext, siteRoot, loginUrl, canAddGroup } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import Group from '../../models/group';
@@ -10,6 +10,7 @@ import GroupsToolbar from '../../components/toolbar/groups-toolbar';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import CreateGroupDialog from '../../components/dialog/create-group-dialog';
 import LibDetail from '../../components/dirent-detail/lib-details';
+import EmptyTip from '../../components/empty-tip';
 
 import '../../css/groups.css';
 
@@ -55,11 +56,11 @@ class RepoListViewPanel extends React.Component {
       });
       this.setState({repoList: repoList});
       let name = repo.repo_name;
-      var msg = gettext("Successfully deleted {name}.").replace('{name}', name);
+      var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
       toaster.success(msg);
     }).catch(() => {
       let name = repo.repo_name;
-      var msg = gettext("Failed to delete {name}.").replace('{name}', name);
+      var msg = gettext('Failed to delete {name}.').replace('{name}', name);
       toaster.danger(msg);
     });
   }
@@ -187,6 +188,16 @@ class GroupsView extends React.Component {
   }
 
   render() {
+    const emptyTip = (
+      <EmptyTip>
+        <h2>{gettext('You are not in any groups')}</h2>
+        {canAddGroup ?
+          <p>{gettext('Groups allow multiple people to collaborate on libraries. You can create a group by clicking the "New Group" button.')}</p> :
+          <p>{gettext('Groups allow multiple people to collaborate on libraries. Groups you join will be listed here.')}</p>
+        }
+      </EmptyTip>
+    );
+
     return (
       <Fragment>
         <GroupsToolbar
@@ -201,8 +212,8 @@ class GroupsView extends React.Component {
             </div>
             <div className="cur-view-content cur-view-content-groups">
               {this.state.isLoading && <Loading />}
-              {(!this.state.isLoading && this.state.errorMsg !== '') && this.state.errorMsg}
-              {/* {(!this.state.isLoading && this.state.groupList.length === 0 ) && emptyTip} //todo */}
+              {(!this.state.isLoading && this.state.errorMsg) && this.state.errorMsg}
+              {(!this.state.isLoading && !this.state.errorMsg && this.state.groupList.length == 0) && emptyTip}
               {!this.state.isLoading && this.state.groupList.map((group, index) => {
                 return (
                   <RepoListViewPanel 

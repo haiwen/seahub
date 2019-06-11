@@ -3,6 +3,7 @@ import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
 import toaster from '../../components/toast';
+import EmptyTip from '../../components/empty-tip';
 
 class Content extends Component {
 
@@ -14,6 +15,13 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
+      const emptyTip = (
+        <EmptyTip>
+          <h2>{gettext("You do not have connected devices")}</h2>
+          <p>{gettext("Your clients (Desktop/Android/iOS) will be listed here.")}</p>
+        </EmptyTip>
+      );
+
       const desktopThead = (
         <thead>
           <tr>
@@ -35,12 +43,12 @@ class Content extends Component {
         </thead>
       );
 
-      return (
+      return items.length ? (
         <table>
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
-      );
+      ): emptyTip;
     }
   }
 }

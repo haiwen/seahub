@@ -51,6 +51,7 @@
             contactEmail: "{{request.user.username|email2contact_email|escapejs}}",
             username: "{{request.user.username|escapejs}}",
             canAddRepo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
+            canAddGroup: {% if user.permissions.can_add_group %} true {% else %} false {% endif %},
             canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
             canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
             canViewOrg:'{{ user.permissions.can_view_org }}',
