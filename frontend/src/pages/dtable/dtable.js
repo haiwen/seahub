@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -10,6 +10,7 @@ import DeleteWorkspaceDialog from '../../components/dialog/delete-workspace-dial
 import CreateTableDialog from '../../components/dialog/create-table-dialog';
 import DeleteTableDialog from '../../components/dialog/delete-table-dialog';
 import Rename from '../../components/rename';
+import '../../css/dtable-page.css';
 
 moment.locale(window.app.config.lang);
 
@@ -19,6 +20,9 @@ const tablePropTypes = {
   workspaceID: PropTypes.number.isRequired,
   renameTable: PropTypes.func.isRequired,
   deleteTable: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
 };
 
 class Table extends Component {
@@ -35,6 +39,7 @@ class Table extends Component {
 
   onRenameTableCancel = () => {
     this.setState({isTableRenaming: !this.state.isTableRenaming});
+    this.props.onUnfreezedItem();
   }
 
   onRenameTableConfirm = (newTableName) => {
@@ -45,29 +50,42 @@ class Table extends Component {
 
   onDeleteTableCancel = () => {
     this.setState({isTableDeleting: !this.state.isTableDeleting});
+    this.props.onUnfreezedItem();
   }
 
   onDeleteTableSubmit = () => {
     let tableName = this.props.table.name;
-    console.log(tableName);
     this.props.deleteTable(tableName);
     this.onDeleteTableCancel();
   }
 
   dropdownToggle = () => {
+    if (this.state.dropdownOpen) {
+      this.props.onUnfreezedItem();
+    } else {
+      this.props.onFreezedItem();
+    }
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   }
 
   onMouseEnter = () => {
+    if (this.props.isItemFreezed) return;
     this.setState({
       active: true
     });
   }
 
   onMouseLeave = () => {
+    if (this.props.isItemFreezed) return;
     this.setState({
       active: false
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.isItemFreezed) {
+      this.setState({ active: false });
+    }
   }
 
   render() {
@@ -76,8 +94,8 @@ class Table extends Component {
     let tableHref = siteRoot + 'workspace/' + this.props.workspaceID + '/dtable/' + table.name + '/';
 
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td></td>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
+        <td><img src={siteRoot + 'media/img/data-base.svg'} alt="" width="20"/></td>
         <td>
           {this.state.isTableRenaming &&
             <Rename
@@ -98,7 +116,7 @@ class Table extends Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
               <DropdownToggle
                 tag='i'
-                className='fa fa-ellipsis-v'
+                className='fa fa-ellipsis-v cursor-pointer attr-action-icon'
                 title={gettext('More Operations')}
                 data-toggle="dropdown" 
                 aria-expanded={this.state.dropdownOpen}
@@ -143,7 +161,16 @@ class Workspace extends Component {
       isWorkspaceDeleting: false,
       isShowAddTableDialog: false,
       dropdownOpen: false,
+      isItemFreezed: false,
     };
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+  
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   onAddTable = () => {
@@ -220,119 +247,95 @@ class Workspace extends Component {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.workspace.table_list !== this.props.workspace.table_list) {
+      this.setState({
+        tableList: nextProps.workspace.table_list
+      });
+    }
+  }
+
   render() {
     let workspace = this.props.workspace;
 
     return(
-      <Fragment>
-        <tr>
-          <td colSpan='5'>
-            {this.state.isWorkspaceRenaming &&
-              <Rename
-                hasSuffix={false}
-                name={workspace.name}
-                onRenameConfirm={this.onRenameWorkspaceConfirm}
-                onRenameCancel={this.onRenameWorkspaceCancel}
-              />
-            }
-            {!this.state.isWorkspaceRenaming &&
-              <div>
-                {workspace.name}
-                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
-                  <DropdownToggle
-                    caret={true}
-                    tag='i'
-                    title={gettext('More Operations')}
-                    data-toggle="dropdown" 
-                    aria-expanded={this.state.dropdownOpen}
-                  >
-                  </DropdownToggle>
-                  <DropdownMenu className="drop-list" right={true}>
-                    <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>
-                    <DropdownItem onClick={this.onDeleteWorkspaceCancel}>{gettext('Delete')}</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-                {this.state.isWorkspaceDeleting &&
-                  <DeleteWorkspaceDialog
-                    currentWorkspace={workspace}
-                    deleteCancel={this.onDeleteWorkspaceCancel}
-                    handleSubmit={this.onDeleteWorkspaceSubmit}
-                  />
-                }
-              </div>
-            }
-          </td>
-        </tr>
-        {this.state.tableList.map((table, index) => {
-          return (
-            <Table
-              key={index}
-              table={table}
-              workspaceID={workspace.id}
-              renameTable={this.renameTable}
-              deleteTable={this.deleteTable}
+      <div className="workspace my-2">
+        <div className="d-flex">
+          {this.state.isWorkspaceRenaming &&
+            <Rename
+              hasSuffix={false}
+              name={workspace.name}
+              onRenameConfirm={this.onRenameWorkspaceConfirm}
+              onRenameCancel={this.onRenameWorkspaceCancel}
             />
-          );
-        })}
-        <tr>
-          <td>
-            <Button className="fa fa-plus" onClick={this.onAddTable}></Button>
-            {this.state.isShowAddTableDialog &&
-              <CreateTableDialog
-                onAddTable={this.onAddTable}
-                createTable={this.createTable}
-              />
-            }
-          </td>
-          <td colSpan='4' >{gettext('Add a DTable')}</td>
-        </tr>
-      </Fragment>
+          }
+          {!this.state.isWorkspaceRenaming &&
+            <Fragment>
+              <span className="workspace-name mb-2">{workspace.name}</span>
+              <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
+                <DropdownToggle
+                  caret={true}
+                  tag='i'
+                  title={gettext('More Operations')}
+                  data-toggle="dropdown" 
+                  aria-expanded={this.state.dropdownOpen}
+                  className="attr-action-icon"
+                >
+                </DropdownToggle>
+                <DropdownMenu className="drop-list" right={true}>
+                  <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>
+                  <DropdownItem onClick={this.onDeleteWorkspaceCancel}>{gettext('Delete')}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              {this.state.isWorkspaceDeleting &&
+                <DeleteWorkspaceDialog
+                  currentWorkspace={workspace}
+                  deleteCancel={this.onDeleteWorkspaceCancel}
+                  handleSubmit={this.onDeleteWorkspaceSubmit}
+                />
+              }
+            </Fragment>
+          }
+        </div>
+        <div className="my-2 d-flex add-table-btn-container">
+          <div className="add-table-btn cursor-pointer" onClick={this.onAddTable}>
+            <i className="fa fa-plus"></i>
+          </div>
+          {this.state.isShowAddTableDialog &&
+            <CreateTableDialog
+              onAddTable={this.onAddTable}
+              createTable={this.createTable}
+            />
+          }
+          <span className="ml-2">{gettext('Add a DTable')}</span>
+        </div>
+        <table width="100%" className="table table-vcenter">
+          <colgroup>
+            <col width="5%"/><col width="30%"/><col width="30%"/><col width="30%"/><col width="5%"/>
+          </colgroup>
+          <tbody>
+            {this.state.tableList.map((table, index) => {
+              return (
+                <Table
+                  key={index}
+                  table={table}
+                  workspaceID={workspace.id}
+                  renameTable={this.renameTable}
+                  deleteTable={this.deleteTable}
+                  onFreezedItem={this.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
+                  isItemFreezed={this.state.isItemFreezed}
+                />
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }
 
 Workspace.propTypes = workspacePropTypes;
-
-
-const contentPropTypes = {
-  workspaceList: PropTypes.array.isRequired,
-  renameWorkspace: PropTypes.func.isRequired,
-  deleteWorkspace: PropTypes.func.isRequired,
-};
-
-class Content extends Component {
-
-  render() {
-    let workspaceList = this.props.workspaceList;
-
-    return ( 
-      <table width="100%" className="table table-hover table-vcenter">
-        <colgroup>
-          <col width="5%"/>
-          <col width="30%"/>
-          <col width="30%"/>
-          <col width="30%"/>
-          <col width="5%"/>
-        </colgroup>
-        <tbody>
-          {workspaceList.map((workspace, index) => {
-            return (
-              <Workspace
-                key={index}
-                workspace={workspace}
-                renameWorkspace={this.props.renameWorkspace}
-                deleteWorkspace={this.props.deleteWorkspace}
-              />
-            );
-          })}
-        </tbody>
-      </table>
-    );
-  }
-}
-
-Content.propTypes = contentPropTypes;
-
 
 class DTable extends Component {
   constructor(props) {
@@ -429,16 +432,20 @@ class DTable extends Component {
             }
             {!this.state.loading &&
               <Fragment>
-                <Content
-                  workspaceList={this.state.workspaceList}
-                  renameWorkspace={this.renameWorkspace}
-                  deleteWorkspace={this.deleteWorkspace}
-                />
-                <br />
+                {this.state.workspaceList.map((workspace, index) => {
+                  return (
+                    <Workspace
+                      key={index}
+                      workspace={workspace}
+                      renameWorkspace={this.renameWorkspace}
+                      deleteWorkspace={this.deleteWorkspace}
+                    />
+                  );
+                })}
                 <div>
-                  <Button onClick={this.onAddWorkspace} className="fa fa-plus">
-                    {gettext('Add a Workspace')}
-                  </Button>
+                  <span className="add-workspace cursor-pointer" onClick={this.onAddWorkspace}>
+                    <i className="fa fa-plus"></i>{' '}{gettext('Add a Workspace')}
+                  </span>
                   {this.state.isShowAddWorkspaceDialog &&
                     <CreateWorkspaceDialog
                       createWorkspace={this.createWorkspace}

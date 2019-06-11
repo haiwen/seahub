@@ -1,0 +1,36 @@
+.workspace .workspace-name {
+  font-weight: 400;
+  color: #202428;
+  border-bottom: 2px solid #e3e3e3;
+  font-size: 1rem;
+}
+.workspace .workspace-name:hover {
+  border-bottom: 2px solid #202428;
+}
+.workspace .add-table-btn {
+  width: 42px;
+  height: 42px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  display: flex;
+}
+.workspace .add-table-btn:hover {
+  background-color: #e3e3e3;
+}
+.workspace .add-table-btn i {
+  margin: auto;
+  font-size: 18px;
+  color: #929292;
+}
+.workspace .add-table-btn:hover i {
+  color: #202428;
+}
+.add-table-btn-container {
+  align-items: center;
+}
+.add-workspace {
+  color: #929292;
+}
+.add-workspace:hover {
+  color: #202428;
+}
