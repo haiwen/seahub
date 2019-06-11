@@ -4,6 +4,7 @@ import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl } from '../../utils/constants';
+import EmptyTip from '../../components/empty-tip';
 
 class Content extends Component {
 
@@ -15,6 +16,12 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
+      const emptyTip = (
+        <EmptyTip>
+          <h2>{gettext('You don\'t have any favorite items yet')}</h2>
+        </EmptyTip>
+      );
+
       const desktopThead = (
         <thead>
           <tr>
@@ -36,12 +43,12 @@ class Content extends Component {
         </thead>
       );
 
-      return ( 
+      return items.length ? (
         <table className="table-hover">
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
-      ); 
+      ) : emptyTip;
     }
   }
 }
