@@ -143,7 +143,7 @@ from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch
-from seahub.file_participants.views import FileParticipantsView, FileParticipantView
+from seahub.file_participants.api import FileParticipantsView, FileParticipantView
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),

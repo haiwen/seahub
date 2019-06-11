@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2019 Seafile Ltd.
-import os
-
 import logging
+
 from django.db import models
 from seahub.tags.models import FileUUIDMap
 from seahub.base.fields import LowerCaseCharField
@@ -12,42 +11,25 @@ logger = logging.getLogger(__name__)
 
 class FileParticipantManager(models.Manager):
 
-    def _get_file_uuid_map(self, repo_id, file_path):
-        parent_path = os.path.dirname(file_path)
-        item_name = os.path.basename(file_path)
+    def get_participants(self, uuid):
+        objs = self.filter(uuid=uuid)
 
-        file_uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(
-            repo_id, parent_path, item_name, False)
+        return objs
 
-        return file_uuid_map
-
-    def add_by_file_path_and_username(self, repo_id, file_path, username):
-        uuid = self._get_file_uuid_map(repo_id, file_path)
+    def get_participant(self, uuid, username):
         if self.filter(uuid=uuid, username=username).exists():
             return self.filter(uuid=uuid, username=username)[0]
 
+        return None
+
+    def add_participant(self, uuid, username):
         obj = self.model(uuid=uuid, username=username)
         obj.save(using=self._db)
 
         return obj
 
-    def get_by_file_path_and_username(self, repo_id, file_path, username):
-        uuid = self._get_file_uuid_map(repo_id, file_path)
-        try:
-            obj = self.get(uuid=uuid, username=username)
-            return obj
-        except self.model.DoesNotExist:
-            return None
-
-    def delete_by_file_path_and_username(self, repo_id, file_path, username):
-        uuid = self._get_file_uuid_map(repo_id, file_path)
+    def delete_participant(self, uuid, username):
         self.filter(uuid=uuid, username=username).delete()
-
-    def get_by_file_path(self, repo_id, file_path):
-        uuid = self._get_file_uuid_map(repo_id, file_path)
-        objs = self.filter(uuid=uuid)
-
-        return objs
 
 
 class FileParticipant(models.Model):

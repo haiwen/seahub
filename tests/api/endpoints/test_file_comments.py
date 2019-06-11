@@ -8,6 +8,7 @@ from seahub.base.models import FileComment
 from seahub.notifications.models import UserNotification
 from seahub.test_utils import BaseTestCase
 from seahub.file_participants.models import FileParticipant
+from seahub.tags.models import FileUUIDMap
 
 class FileCommentsTest(BaseTestCase):
     def setUp(self):
@@ -92,8 +93,8 @@ class FileCommentsTest(BaseTestCase):
 
         # share repo and add participant
         seafile_api.share_repo(self.repo.id, self.user.username, self.admin.username, 'rw')
-        FileParticipant.objects.add_by_file_path_and_username(
-            repo_id=self.repo.id, file_path=self.file, username=self.admin.username)
+        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(self.repo.id, self.file, False)
+        FileParticipant.objects.add_participant(file_uuid, self.admin.username)
 
         resp = self.client.post(self.endpoint, {
             'comment': 'new comment'
