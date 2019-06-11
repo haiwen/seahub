@@ -23,7 +23,7 @@ const DEFAULT_DATA = {
     }
   ],
   rows:  [{name: 'name_' + 0}]
-}
+};
 
 class AppMain extends React.Component {
 

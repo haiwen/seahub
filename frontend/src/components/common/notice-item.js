@@ -210,7 +210,7 @@ class NoticeItem extends React.Component {
       <li onClick={this.onNoticeItemClick} className={noticeItem.seen ? 'read' : 'unread'}>
         <div className="notice-item">
           <div className="main-info">
-            <img src={avatar_url} width="32" height="32" className="avatar" />
+            <img src={avatar_url} width="32" height="32" className="avatar" alt=""/>
             <p className="brief" dangerouslySetInnerHTML={{__html: notice}}></p>
           </div>
           <p className="time">{moment(noticeItem.time).fromNow()}</p>

@@ -27,7 +27,7 @@ class Content extends Component {
     this.props.sortItems(sortBy, sortOrder);
   }
 
- constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       modalOpen: false,
@@ -121,7 +121,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
 
-    let item = this.props.item
+    let item = this.props.item;
     this.state = {
       currentPermission: item.permissions.can_download ? 'Preview and download' : 'Preview only',
       showOpIcon: false,
@@ -210,7 +210,7 @@ class Item extends Component {
     let deleteIconClassName = 'sf2-icon-delete action-icon' + iconVisibility;
     return (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <td><img src={iconUrl} width="24" /></td>
+        <td><img src={iconUrl} width="24" alt=""/></td>
         <td>
           {item.is_dir ?
             <Link to={linkUrl}>{item.obj_name}</Link> :
