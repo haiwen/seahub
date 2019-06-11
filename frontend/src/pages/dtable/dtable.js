@@ -95,7 +95,7 @@ class Table extends Component {
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
-        <td><img src={siteRoot + 'media/img/data-base.svg'} alt="" width="20"/></td>
+        <td><img src={siteRoot + 'media/img/data-base.svg'} alt="" width="24"/></td>
         <td>
           {this.state.isTableRenaming &&
             <Rename
@@ -260,7 +260,7 @@ class Workspace extends Component {
 
     return(
       <div className="workspace my-2">
-        <div className="d-flex">
+        <Fragment>
           {this.state.isWorkspaceRenaming &&
             <Rename
               hasSuffix={false}
@@ -271,16 +271,15 @@ class Workspace extends Component {
           }
           {!this.state.isWorkspaceRenaming &&
             <Fragment>
-              <span className="workspace-name mb-2">{workspace.name}</span>
-              <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
+              <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="workspace-name">
                 <DropdownToggle
                   caret={true}
-                  tag='i'
+                  tag='span'
                   title={gettext('More Operations')}
                   data-toggle="dropdown" 
                   aria-expanded={this.state.dropdownOpen}
-                  className="attr-action-icon"
                 >
+                  <span className="mb-2">{workspace.name}</span>
                 </DropdownToggle>
                 <DropdownMenu className="drop-list" right={true}>
                   <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>
@@ -296,8 +295,8 @@ class Workspace extends Component {
               }
             </Fragment>
           }
-        </div>
-        <div className="my-2 d-flex add-table-btn-container">
+        </Fragment>
+        <div className="d-flex add-table-btn-container">
           <div className="add-table-btn cursor-pointer" onClick={this.onAddTable}>
             <i className="fa fa-plus"></i>
           </div>
@@ -307,11 +306,11 @@ class Workspace extends Component {
               createTable={this.createTable}
             />
           }
-          <span className="ml-2">{gettext('Add a DTable')}</span>
+          <span>{gettext('Add a DTable')}</span>
         </div>
-        <table width="100%" className="table table-vcenter">
+        <table width="100%" className="table-vcenter">
           <colgroup>
-            <col width="5%"/><col width="30%"/><col width="30%"/><col width="30%"/><col width="5%"/>
+            <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
           </colgroup>
           <tbody>
             {this.state.tableList.map((table, index) => {
@@ -442,7 +441,7 @@ class DTable extends Component {
                     />
                   );
                 })}
-                <div>
+                <div className="my-2">
                   <span className="add-workspace cursor-pointer" onClick={this.onAddWorkspace}>
                     <i className="fa fa-plus"></i>{' '}{gettext('Add a Workspace')}
                   </span>

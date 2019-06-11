@@ -4,8 +4,14 @@
   border-bottom: 2px solid #e3e3e3;
   font-size: 1rem;
 }
+.workspace .workspace-name .dropdown-toggle:after {
+  color: #929292;
+}
 .workspace .workspace-name:hover {
   border-bottom: 2px solid #202428;
+}
+.workspace .workspace-name:hover .dropdown-toggle:after {
+  color: #202428;
 }
 .workspace .add-table-btn {
   width: 42px;
@@ -27,6 +33,10 @@
 }
 .add-table-btn-container {
   align-items: center;
+  margin: 1rem 0 0.75rem;
+}
+.add-table-btn-container span {
+  margin-left: 1rem;
 }
 .add-workspace {
   color: #929292;
