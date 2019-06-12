@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-30 11:50+0800\n"
+"POT-Creation-Date: 2019-06-12 11:40+0800\n"
 "PO-Revision-Date: 2019-05-30 03:26+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
@@ -89,8 +89,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:636 seahub/views/__init__.py:637
-#: seahub/views/__init__.py:641 seahub/views/__init__.py:642
+#: seahub/views/__init__.py:659 seahub/views/__init__.py:660
+#: seahub/views/__init__.py:664 seahub/views/__init__.py:665
 msgid "My Library"
 msgstr "我的資料庫"
 
@@ -384,7 +384,7 @@ msgstr "目標路徑無效"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:492 seahub/api2/views.py:1721
+#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1721
 #: seahub/api2/views.py:1757 seahub/api2/views.py:1805
 #: seahub/api2/views.py:1849 seahub/api2/views.py:1894
 #: seahub/api2/views.py:1942 seahub/api2/views.py:2353
@@ -428,10 +428,10 @@ msgstr "找不到使用者%s "
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wiki_pages.py:88
 #: seahub/api2/endpoints/wiki_pages.py:185 seahub/api2/endpoints/wikis.py:112
-#: seahub/api2/endpoints/wikis.py:201 seahub/drafts/views.py:32
+#: seahub/api2/endpoints/wikis.py:201 seahub/drafts/views.py:31
 #: seahub/group/views.py:374 seahub/profile/forms.py:24
 #: seahub/profile/views.py:204 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:799
+#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:822
 #: seahub/views/ajax.py:209 seahub/views/ajax.py:239 seahub/views/ajax.py:245
 #: seahub/views/ajax.py:912 seahub/views/wiki.py:200
 msgid "Permission denied."
@@ -454,7 +454,7 @@ msgstr ""
 #: seahub/api2/endpoints/wiki_pages.py:194
 #: seahub/api2/endpoints/wiki_pages.py:204
 #: seahub/api2/endpoints/wiki_pages.py:310 seahub/group/views.py:288
-#: seahub/views/__init__.py:998 seahub/views/ajax.py:1179
+#: seahub/views/__init__.py:1021 seahub/views/ajax.py:1179
 #: seahub/views/ajax.py:1183 seahub/views/file.py:1543
 #: seahub/views/sysadmin.py:2048 seahub/views/wiki.py:134
 msgid "Internal Server Error"
@@ -597,7 +597,7 @@ msgid "An upload link is shared to you on %s"
 msgstr "有人在 %s 上共享了一個上傳網址給你"
 
 #: seahub/api2/endpoints/share_link_zip_task.py:101
-#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:982
+#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:1005
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "無法下載 \"%s\"：目錄大小超過限制。"
@@ -976,7 +976,7 @@ msgstr "上次登入"
 #: seahub/organizations/templates/organizations/org_perm_audit.html:85
 #: seahub/organizations/templates/organizations/org_user_admin.html:15
 #: seahub/organizations/templates/organizations/org_useradmin_admins.html:15
-#: seahub/templates/base.html:77 seahub/templates/base.html:80
+#: seahub/templates/base.html:78 seahub/templates/base.html:81
 #: seahub/templates/js/admin-common-templates.html:28
 #: seahub/templates/js/admin-common-templates.html:32
 #: seahub/templates/js/admin-common-templates.html:39
@@ -1053,9 +1053,9 @@ msgstr "不啓動"
 #: seahub/base/management/commands/export_users.py:127
 #: seahub/organizations/templates/organizations/org_admin_backbone.html:62
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:87
-#: seahub/templates/base.html:129 seahub/templates/base_for_backbone.html:96
+#: seahub/templates/base.html:130 seahub/templates/base_for_backbone.html:96
 #: seahub/templates/js/templates.html:1297
-#: seahub/templates/sysadmin/sysadmin_backbone.html:65
+#: seahub/templates/sysadmin/sysadmin_backbone.html:66
 #: seahub/views/sysadmin.py:490 seahub/views/sysadmin.py:491
 msgid "Yes"
 msgstr "確定"
@@ -1815,7 +1815,7 @@ msgstr "%(escaped_nickname)s 邀請你加入 %(grp_name)s上的群組 %(site_nam
 #: seahub/organizations/templates/organizations/org_admin_backbone.html:30
 #: seahub/organizations/templates/organizations/org_admin_sidebar.html:7
 #: seahub/profile/templates/profile/set_profile.html:12
-#: seahub/templates/base.html:31 seahub/templates/base_for_backbone.html:29
+#: seahub/templates/base.html:32 seahub/templates/base_for_backbone.html:29
 #: seahub/templates/base_for_backbone.html:35
 #: seahub/templates/base_for_backbone.html:55
 #: seahub/templates/base_for_backbone.html:109
@@ -1832,7 +1832,7 @@ msgstr "%(escaped_nickname)s 邀請你加入 %(grp_name)s上的群組 %(site_nam
 #: seahub/templates/js/templates.html:2829
 #: seahub/templates/js/templates.html:2882
 #: seahub/templates/sysadmin/base.html:14
-#: seahub/templates/sysadmin/sysadmin_backbone.html:31
+#: seahub/templates/sysadmin/sysadmin_backbone.html:32
 #: seahub/templates/view_file_base.html:98
 msgid "Close"
 msgstr "關閉"
@@ -2016,7 +2016,7 @@ msgid "Description is required."
 msgstr "描述為必填項"
 
 #: seahub/group/views.py:127 seahub/share/views.py:228
-#: seahub/views/__init__.py:541 seahub/views/ajax.py:164
+#: seahub/views/__init__.py:564 seahub/views/ajax.py:164
 #: seahub/views/ajax.py:461 seahub/views/ajax.py:468 seahub/views/ajax.py:531
 #: seahub/views/ajax.py:538 seahub/views/ajax.py:668 seahub/views/ajax.py:1164
 #: seahub/views/ajax.py:1205 seahub/views/file.py:1131
@@ -3021,7 +3021,7 @@ msgstr[0] "\n你在 %(site_name)s 上有 %(num)s 條新消息：\n"
 #: seahub/notifications/models.py:756 seahub/notifications/models.py:778
 #: seahub/notifications/models.py:804 seahub/notifications/models.py:821
 #: seahub/notifications/models.py:838 seahub/notifications/models.py:867
-#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1244
+#: seahub/utils/__init__.py:176 seahub/utils/__init__.py:1252
 msgid "Internal error"
 msgstr "內部錯誤"
 
@@ -3340,26 +3340,26 @@ msgid "File Collaboration Team Organization"
 msgstr "檔案 合作 團隊 團體"
 
 #: seahub/organizations/templates/organizations/org_admin_backbone.html:43
-#: seahub/templates/base.html:44 seahub/templates/base_for_backbone.html:62
-#: seahub/templates/sysadmin/sysadmin_backbone.html:44
+#: seahub/templates/base.html:45 seahub/templates/base_for_backbone.html:62
+#: seahub/templates/sysadmin/sysadmin_backbone.html:45
 msgid "Side Nav Menu"
 msgstr "側邊導航選單"
 
 #: seahub/organizations/templates/organizations/org_admin_backbone.html:46
 #: seahub/organizations/templates/organizations/org_admin_backbone.html:49
-#: seahub/templates/base.html:56 seahub/templates/base.html:59
+#: seahub/templates/base.html:57 seahub/templates/base.html:60
 #: seahub/templates/base_for_backbone.html:81
 #: seahub/templates/base_for_backbone.html:84
-#: seahub/templates/sysadmin/sysadmin_backbone.html:47
-#: seahub/templates/sysadmin/sysadmin_backbone.html:50
+#: seahub/templates/sysadmin/sysadmin_backbone.html:48
+#: seahub/templates/sysadmin/sysadmin_backbone.html:51
 msgid "View profile and more"
 msgstr "查看個人資料"
 
 #: seahub/organizations/templates/organizations/org_admin_backbone.html:63
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:88
-#: seahub/templates/base.html:130 seahub/templates/base_for_backbone.html:97
+#: seahub/templates/base.html:131 seahub/templates/base_for_backbone.html:97
 #: seahub/templates/js/templates.html:1298
-#: seahub/templates/sysadmin/sysadmin_backbone.html:66
+#: seahub/templates/sysadmin/sysadmin_backbone.html:67
 msgid "No"
 msgstr "取消"
 
@@ -4198,7 +4198,7 @@ msgstr "無法設定 %s 為管理員：用戶不存在。"
 #: seahub/profile/templates/profile/set_profile.html:4
 #: seahub/profile/templates/profile/set_profile.html:46
 #: seahub/profile/templates/profile/set_profile_react.html:5
-#: seahub/templates/base.html:71
+#: seahub/templates/base.html:72
 #: seahub/templates/js/admin-common-templates.html:15
 #: seahub/templates/js/sysadmin-templates.html:28
 #: seahub/templates/js/templates.html:1652
@@ -4534,17 +4534,17 @@ msgstr "發送驗證碼失敗，請稍後再試。"
 msgid "Sorry, but the requested page could not be found."
 msgstr "對不起，你瀏覽的頁面不存在。"
 
-#: seahub/templates/base.html:74 seahub/templates/js/sysadmin-templates.html:5
+#: seahub/templates/base.html:75 seahub/templates/js/sysadmin-templates.html:5
 #: seahub/templates/js/templates.html:2504
 #: seahub/templates/sysadmin/base.html:16
 msgid "System Admin"
 msgstr "系統管理"
 
-#: seahub/templates/base.html:77 seahub/templates/js/templates.html:2507
+#: seahub/templates/base.html:78 seahub/templates/js/templates.html:2507
 msgid "Organization Admin"
 msgstr "組織管理"
 
-#: seahub/templates/base.html:83 seahub/templates/base_for_backbone.html:77
+#: seahub/templates/base.html:84 seahub/templates/base_for_backbone.html:77
 #: seahub/templates/finish_payment.html:5
 #: seahub/templates/js/admin-common-templates.html:17
 #: seahub/templates/js/templates.html:2512
@@ -5307,6 +5307,7 @@ msgstr "系統資料庫"
 #: seahub/templates/js/sysadmin-templates.html:355
 #: seahub/templates/js/templates.html:505
 #: seahub/templates/js/templates.html:510
+#: seahub/templates/repo_folder_trash_react.html:5
 #: seahub/templates/view_trash_file.html:6
 msgid "Trash"
 msgstr "資源回收筒"
@@ -7866,7 +7867,7 @@ msgid "Are you sure you want to delete this wiki?"
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
-#: seahub/views/__init__.py:573 seahub/views/file.py:1560
+#: seahub/views/__init__.py:596 seahub/views/file.py:1560
 msgid "Invalid arguments."
 msgstr "非法參數"
 
@@ -7964,59 +7965,60 @@ msgstr ""
 msgid "Disable"
 msgstr "停用"
 
-#: seahub/utils/__init__.py:158
+#: seahub/utils/__init__.py:162
 msgid "permission error"
 msgstr "權限錯誤"
 
-#: seahub/views/__init__.py:397 seahub/views/__init__.py:413
+#: seahub/views/__init__.py:397 seahub/views/__init__.py:412
+#: seahub/views/__init__.py:427
 msgid "Unable to view recycle page"
 msgstr "無法查看資源回收筒"
 
-#: seahub/views/__init__.py:449
+#: seahub/views/__init__.py:472
 msgid "Unable to view library modification"
 msgstr "無法瀏覽該資料庫修改歷史"
 
-#: seahub/views/__init__.py:532 seahub/views/__init__.py:575
-#: seahub/views/__init__.py:794 seahub/views/__init__.py:953
+#: seahub/views/__init__.py:555 seahub/views/__init__.py:598
+#: seahub/views/__init__.py:817 seahub/views/__init__.py:976
 #: seahub/views/ajax.py:1159 seahub/views/file.py:2050
 msgid "Library does not exist"
 msgstr "資料庫不存在"
 
-#: seahub/views/__init__.py:566
+#: seahub/views/__init__.py:589
 msgid "Please specify history ID"
 msgstr "請指定歷史記錄ID"
 
-#: seahub/views/__init__.py:570
+#: seahub/views/__init__.py:593
 msgid "Successfully restored the library."
 msgstr ""
 
-#: seahub/views/__init__.py:577
+#: seahub/views/__init__.py:600
 msgid "History you specified does not exist"
 msgstr "指定的歷史記錄不存在"
 
-#: seahub/views/__init__.py:579
+#: seahub/views/__init__.py:602
 msgid "Unknown error"
 msgstr "未知錯誤"
 
-#: seahub/views/__init__.py:960 seahub/views/repo.py:232
+#: seahub/views/__init__.py:983 seahub/views/repo.py:232
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" 不存在。"
 
-#: seahub/views/__init__.py:979 seahub/views/file.py:1525
+#: seahub/views/__init__.py:1002 seahub/views/file.py:1525
 msgid "Internal Error"
 msgstr "內部錯誤"
 
-#: seahub/views/__init__.py:1001
+#: seahub/views/__init__.py:1024
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "無法下載 \"%s\""
 
-#: seahub/views/__init__.py:1123
+#: seahub/views/__init__.py:1146
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "\"個人維基\"模組新增成功。"
 
-#: seahub/views/__init__.py:1128
+#: seahub/views/__init__.py:1151
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"個人維基\"模組刪除成功。"
 
