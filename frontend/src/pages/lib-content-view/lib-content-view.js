@@ -596,7 +596,6 @@ class LibContentView extends React.Component {
           this.updateMoveCopyTreeNode(destDirentPath);
         }
       }
-      
       if (destDirentPath === this.state.path) {
         this.loadDirentList(this.state.path);
       }
@@ -897,11 +896,9 @@ class LibContentView extends React.Component {
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
       if (this.state.currentMode === 'column') {
         if (repoID === destRepo.repo_id) {
-          
           this.updateMoveCopyTreeNode(copyToDirentPath);
         }
       }
-
       if (copyToDirentPath === nodeParentPath) {
         this.loadDirentList(this.state.path);
       }
