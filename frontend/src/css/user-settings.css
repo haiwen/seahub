@@ -88,3 +88,6 @@ body {
 .language-selector {
   width: 260px;
 }
+.btn {
+  min-width: 60px;
+}
