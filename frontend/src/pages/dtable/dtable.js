@@ -270,16 +270,16 @@ class Workspace extends Component {
             />
           }
           {!this.state.isWorkspaceRenaming &&
-            <Fragment>
-              <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="workspace-name">
+            <span className="mb-2 workspace-name-container">
+              <span className="workspace-name">{workspace.name}</span>
+              <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
                 <DropdownToggle
                   caret={true}
-                  tag='span'
+                  tag='i'
                   title={gettext('More Operations')}
                   data-toggle="dropdown" 
                   aria-expanded={this.state.dropdownOpen}
                 >
-                  <span className="mb-2">{workspace.name}</span>
                 </DropdownToggle>
                 <DropdownMenu className="drop-list" right={true}>
                   <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>
@@ -293,7 +293,7 @@ class Workspace extends Component {
                   handleSubmit={this.onDeleteWorkspaceSubmit}
                 />
               }
-            </Fragment>
+            </span>
           }
         </Fragment>
         <div className="d-flex add-table-btn-container">

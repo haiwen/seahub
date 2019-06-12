@@ -1,16 +1,17 @@
 .workspace .workspace-name {
   font-weight: 400;
   color: #202428;
+  padding: 2px;
   border-bottom: 2px solid #e3e3e3;
   font-size: 1rem;
 }
-.workspace .workspace-name .dropdown-toggle:after {
+.workspace .workspace-name-container .dropdown-toggle:after {
   color: #929292;
 }
-.workspace .workspace-name:hover {
+.workspace .workspace-name-container:hover .workspace-name {
   border-bottom: 2px solid #202428;
 }
-.workspace .workspace-name:hover .dropdown-toggle:after {
+.workspace .workspace-name-container:hover .dropdown-toggle:after {
   color: #202428;
 }
 .workspace .add-table-btn {
