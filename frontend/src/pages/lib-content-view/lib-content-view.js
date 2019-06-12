@@ -538,7 +538,7 @@ class LibContentView extends React.Component {
     getThumbnail(0);
   }
 
-  getListDir = (temporaryData, path) => {
+  updateMoveCopyTreeNode = (temporaryData, path) => {
     let repoID = this.props.repoID;
 
     seafileAPI.listDir(repoID, path).then(res => {
@@ -570,7 +570,7 @@ class LibContentView extends React.Component {
           let tree = this.state.treeData.clone();
           let node = tree.getNodeByPath(destDirentPath);
           let temporaryData = node.children.map(item => item.object);
-          this.getListDir(temporaryData, node.path);
+          this.updateMoveCopyTreeNode(temporaryData, node.path);
         }
       }
       let message =  Utils.getMoveSuccessMessage(dirNames);
@@ -592,7 +592,7 @@ class LibContentView extends React.Component {
           let tree = this.state.treeData.clone();
           let node = tree.getNodeByPath(destDirentPath);
           let temporaryData = node.children.map(item => item.object);
-          this.getListDir(temporaryData, node.path);
+          this.updateMoveCopyTreeNode(temporaryData, node.path);
         }
       }
       
@@ -892,7 +892,7 @@ class LibContentView extends React.Component {
           let tree = this.state.treeData.clone();
           let node = tree.getNodeByPath(moveToDirentPath);
           let temporaryData = node.children.map(item => item.object);
-          this.getListDir(temporaryData, node.path);
+          this.updateMoveCopyTreeNode(temporaryData, node.path);
         }
       }
       this.moveDirent(direntPath, moveToDirentPath);
@@ -922,7 +922,7 @@ class LibContentView extends React.Component {
           let tree = this.state.treeData.clone();
           let node = tree.getNodeByPath(copyToDirentPath);
           let temporaryData = node.children.map(item => item.object);
-          this.getListDir(temporaryData, node.path);
+          this.updateMoveCopyTreeNode(temporaryData, node.path);
         }
       }
 
