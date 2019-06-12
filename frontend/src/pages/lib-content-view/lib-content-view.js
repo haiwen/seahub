@@ -544,16 +544,35 @@ class LibContentView extends React.Component {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
-    seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
-      let names = res.data.map(item => {
-        return item.obj_name;
+    let temporaryData = [];
+
+    if (repoID === destRepo.repo_id) {
+      seafileAPI.listDir(repoID, destDirentPath).then(res => {
+        temporaryData = res.data.dirent_list;
       });
+    }
+
+    seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       direntPaths.forEach((direntPath, index) => {
         if (this.state.currentMode === 'column') {
-          this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
+          this.deleteTreeNode(direntPath);
         }
         this.moveDirent(direntPath);
       });
+
+      if (repoID === destRepo.repo_id) {
+        if (this.state.currentMode === 'column') {
+          let tree = this.state.treeData.clone();
+          let node = tree.getNodeByPath(destDirentPath);
+          seafileAPI.listDir(repoID, node.path).then(res => {
+            let name = res.data.dirent_list;
+            let names = this.compareArray(temporaryData, name);
+            names.map(item => {
+              this.addNodeToTree(item.name, destDirentPath, item.type)
+            })
+          });
+        }
+      }
       let message =  Utils.getMoveSuccessMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
@@ -567,15 +586,27 @@ class LibContentView extends React.Component {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
-    seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
-      let names = res.data.map(item => {
-        return item.obj_name;
+    let temporaryData = [];
+    if (repoID === destRepo.repo_id) {
+      seafileAPI.listDir(repoID, destDirentPath).then(res => {
+        temporaryData = res.data.dirent_list;
       });
-      if (this.state.currentMode === 'column') {
-        direntPaths.forEach((direntPath, index) => {
-          this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
-        });
+    }
+    seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
+      if (repoID === destRepo.repo_id) {
+        if (this.state.currentMode === 'column') {
+          let tree = this.state.treeData.clone();
+          let node = tree.getNodeByPath(destDirentPath);
+          seafileAPI.listDir(repoID, node.path).then(res => {
+            let name = res.data.dirent_list;
+            let names = this.compareArray(temporaryData, name);
+            names.map(item => {
+              this.addNodeToTree(item.name, destDirentPath, item.type)
+            })
+          });
+        }
       }
+      
       if (destDirentPath === this.state.path) {
         this.loadDirentList(this.state.path);
       }
@@ -755,6 +786,26 @@ class LibContentView extends React.Component {
     }
   }
 
+  compareArray = (arr1, arr2) => {
+    let result = [];
+    for (let i = 0; i < arr2.length; i++) {
+      let obj = arr2[i];
+      let a = obj.name;
+      let isExist = false;
+      for (let j = 0; j < arr1.length; j++) {
+        let b = arr1[j].name;
+        if (a === b) {
+          isExist = true;
+          break;
+        }
+      }
+      if (!isExist) {
+        result.push(obj)
+      }
+    }
+    return result;
+  }
+
   // list&tree operations
   onMainPanelItemRename = (dirent, newName) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
@@ -845,10 +896,24 @@ class LibContentView extends React.Component {
       nodeParentPath = this.state.path;
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
+    let temporaryData = [];
+    if (repoID === destRepo.repo_id) {
+      seafileAPI.listDir(repoID, moveToDirentPath).then(res => {
+        temporaryData = res.data.dirent_list;
+      });
+    }
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
-      let nodeName = res.data[0].obj_name;
       if (this.state.currentMode === 'column') {
-        this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
+        this.deleteTreeNode(direntPath);
+        if (repoID === destRepo.repo_id) {
+          let tree = this.state.treeData.clone();
+          let node = tree.getNodeByPath(moveToDirentPath);
+          seafileAPI.listDir(repoID, node.path).then(res => {
+            let name = res.data.dirent_list;
+            let names = this.compareArray(temporaryData, name);
+            this.addNodeToTree(names[0].name, moveToDirentPath, dirent.type)
+          });
+        }
       }
       this.moveDirent(direntPath, moveToDirentPath);
 
@@ -870,11 +935,26 @@ class LibContentView extends React.Component {
       nodeParentPath = this.state.path;
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
+
+    let temporaryData = [];
+
+    seafileAPI.listDir(repoID, copyToDirentPath).then(res => {
+      temporaryData = res.data.dirent_list;
+    });
+
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
-      let nodeName = res.data[0].obj_name;
       if (this.state.currentMode === 'column') {
-        this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);
+        if (repoID === destRepo.repo_id) {
+          let tree = this.state.treeData.clone();
+          let node = tree.getNodeByPath(copyToDirentPath);
+          seafileAPI.listDir(repoID, node.path).then(res => {
+            let name = res.data.dirent_list;
+            let names = this.compareArray(temporaryData, name);
+            this.addNodeToTree(names[0].name, copyToDirentPath, dirent.type)
+          });
+        }
       }
+
       if (copyToDirentPath === nodeParentPath) {
         this.loadDirentList(this.state.path);
       }
