@@ -545,37 +545,18 @@ class LibContentView extends React.Component {
     let node = tree.getNodeByPath(path);
 
     let temporaryData = node.children.map(item => item.object);
+    let beforeNames = temporaryData.map(item => item.name);
 
     seafileAPI.listDir(repoID, path).then(res => {
       let name = res.data.dirent_list;
-      let names = this.getTreeNodeNames(temporaryData, name);
+      let names = name.filter(item => {
+        return !beforeNames.includes(item.name)
+      })
       names.map(item => {
         this.addNodeToTree(item.name, path, item.type);
       })
     });
   }
-
-    getTreeNodeNames = (beforeArrData, arrData) => {
-    let result = [];
-    for (let i = 0; i < arrData.length; i++) {
-      let obj = arrData[i];
-      let arrDataName = obj.name;
-      let isExist = false;
-      for (let j = 0; j < beforeArrData.length; j++) {
-        let beforeArrDataName = beforeArrData[j].name;
-        if (arrDataName === beforeArrDataName) {
-          isExist = true;
-          break;
-        }
-      }
-      if (!isExist) {
-        result.push(obj);
-      }
-    }
-    return result;
-  }
-
-  
 
   // toolbar operations
   onMoveItems = (destRepo, destDirentPath) => {
