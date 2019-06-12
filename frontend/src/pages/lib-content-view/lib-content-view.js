@@ -566,9 +566,9 @@ class LibContentView extends React.Component {
           let node = tree.getNodeByPath(destDirentPath);
           seafileAPI.listDir(repoID, node.path).then(res => {
             let name = res.data.dirent_list;
-            let names = this.compareArray(temporaryData, name);
+            let names = this.getTreeNodeNames(temporaryData, name);
             names.map(item => {
-              this.addNodeToTree(item.name, destDirentPath, item.type)
+              this.addNodeToTree(item.name, destDirentPath, item.type);
             })
           });
         }
@@ -599,9 +599,9 @@ class LibContentView extends React.Component {
           let node = tree.getNodeByPath(destDirentPath);
           seafileAPI.listDir(repoID, node.path).then(res => {
             let name = res.data.dirent_list;
-            let names = this.compareArray(temporaryData, name);
+            let names = this.getTreeNodeNames(temporaryData, name);
             names.map(item => {
-              this.addNodeToTree(item.name, destDirentPath, item.type)
+              this.addNodeToTree(item.name, destDirentPath, item.type);
             })
           });
         }
@@ -786,21 +786,21 @@ class LibContentView extends React.Component {
     }
   }
 
-  compareArray = (arr1, arr2) => {
+  getTreeNodeNames = (beforeArrData, arrData) => {
     let result = [];
-    for (let i = 0; i < arr2.length; i++) {
-      let obj = arr2[i];
-      let a = obj.name;
+    for (let i = 0; i < arrData.length; i++) {
+      let obj = arrData[i];
+      let arrDataName = obj.name;
       let isExist = false;
-      for (let j = 0; j < arr1.length; j++) {
-        let b = arr1[j].name;
-        if (a === b) {
+      for (let j = 0; j < beforeArrData.length; j++) {
+        let beforeArrDataName = beforeArrData[j].name;
+        if (arrDataName === beforeArrDataName) {
           isExist = true;
           break;
         }
       }
       if (!isExist) {
-        result.push(obj)
+        result.push(obj);
       }
     }
     return result;
@@ -910,8 +910,8 @@ class LibContentView extends React.Component {
           let node = tree.getNodeByPath(moveToDirentPath);
           seafileAPI.listDir(repoID, node.path).then(res => {
             let name = res.data.dirent_list;
-            let names = this.compareArray(temporaryData, name);
-            this.addNodeToTree(names[0].name, moveToDirentPath, dirent.type)
+            let names = this.getTreeNodeNames(temporaryData, name);
+            this.addNodeToTree(names[0].name, moveToDirentPath, dirent.type);
           });
         }
       }
@@ -949,8 +949,8 @@ class LibContentView extends React.Component {
           let node = tree.getNodeByPath(copyToDirentPath);
           seafileAPI.listDir(repoID, node.path).then(res => {
             let name = res.data.dirent_list;
-            let names = this.compareArray(temporaryData, name);
-            this.addNodeToTree(names[0].name, copyToDirentPath, dirent.type)
+            let names = this.getTreeNodeNames(temporaryData, name);
+            this.addNodeToTree(names[0].name, copyToDirentPath, dirent.type);
           });
         }
       }
