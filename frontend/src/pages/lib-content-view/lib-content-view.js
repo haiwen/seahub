@@ -538,8 +538,13 @@ class LibContentView extends React.Component {
     getThumbnail(0);
   }
 
-  updateMoveCopyTreeNode = (temporaryData, path) => {
+  updateMoveCopyTreeNode = (path) => {
     let repoID = this.props.repoID;
+
+    let tree = this.state.treeData.clone();
+    let node = tree.getNodeByPath(path);
+
+    let temporaryData = node.children.map(item => item.object);
 
     seafileAPI.listDir(repoID, path).then(res => {
       let name = res.data.dirent_list;
@@ -549,6 +554,27 @@ class LibContentView extends React.Component {
       })
     });
   }
+
+    getTreeNodeNames = (beforeArrData, arrData) => {
+    let result = [];
+    for (let i = 0; i < arrData.length; i++) {
+      let obj = arrData[i];
+      let arrDataName = obj.name;
+      let isExist = false;
+      for (let j = 0; j < beforeArrData.length; j++) {
+        let beforeArrDataName = beforeArrData[j].name;
+        if (arrDataName === beforeArrDataName) {
+          isExist = true;
+          break;
+        }
+      }
+      if (!isExist) {
+        result.push(obj);
+      }
+    }
+    return result;
+  }
+
   
 
   // toolbar operations
@@ -567,10 +593,7 @@ class LibContentView extends React.Component {
 
       if (repoID === destRepo.repo_id) {
         if (this.state.currentMode === 'column') {
-          let tree = this.state.treeData.clone();
-          let node = tree.getNodeByPath(destDirentPath);
-          let temporaryData = node.children.map(item => item.object);
-          this.updateMoveCopyTreeNode(temporaryData, node.path);
+          this.updateMoveCopyTreeNode(destDirentPath);
         }
       }
       let message =  Utils.getMoveSuccessMessage(dirNames);
@@ -589,10 +612,7 @@ class LibContentView extends React.Component {
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID === destRepo.repo_id) {
         if (this.state.currentMode === 'column') {
-          let tree = this.state.treeData.clone();
-          let node = tree.getNodeByPath(destDirentPath);
-          let temporaryData = node.children.map(item => item.object);
-          this.updateMoveCopyTreeNode(temporaryData, node.path);
+          this.updateMoveCopyTreeNode(destDirentPath);
         }
       }
       
@@ -775,26 +795,6 @@ class LibContentView extends React.Component {
     }
   }
 
-  getTreeNodeNames = (beforeArrData, arrData) => {
-    let result = [];
-    for (let i = 0; i < arrData.length; i++) {
-      let obj = arrData[i];
-      let arrDataName = obj.name;
-      let isExist = false;
-      for (let j = 0; j < beforeArrData.length; j++) {
-        let beforeArrDataName = beforeArrData[j].name;
-        if (arrDataName === beforeArrDataName) {
-          isExist = true;
-          break;
-        }
-      }
-      if (!isExist) {
-        result.push(obj);
-      }
-    }
-    return result;
-  }
-
   // list&tree operations
   onMainPanelItemRename = (dirent, newName) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
@@ -889,10 +889,7 @@ class LibContentView extends React.Component {
       if (this.state.currentMode === 'column') {
         this.deleteTreeNode(direntPath);
         if (repoID === destRepo.repo_id) {
-          let tree = this.state.treeData.clone();
-          let node = tree.getNodeByPath(moveToDirentPath);
-          let temporaryData = node.children.map(item => item.object);
-          this.updateMoveCopyTreeNode(temporaryData, node.path);
+          this.updateMoveCopyTreeNode(moveToDirentPath);
         }
       }
       this.moveDirent(direntPath, moveToDirentPath);
@@ -919,10 +916,8 @@ class LibContentView extends React.Component {
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
       if (this.state.currentMode === 'column') {
         if (repoID === destRepo.repo_id) {
-          let tree = this.state.treeData.clone();
-          let node = tree.getNodeByPath(copyToDirentPath);
-          let temporaryData = node.children.map(item => item.object);
-          this.updateMoveCopyTreeNode(temporaryData, node.path);
+          
+          this.updateMoveCopyTreeNode(copyToDirentPath);
         }
       }
 
