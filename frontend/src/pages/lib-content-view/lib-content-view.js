@@ -538,6 +538,26 @@ class LibContentView extends React.Component {
     getThumbnail(0);
   }
 
+  updateMoveCopyTreeNode = (path) => {
+    let repoID = this.props.repoID;
+
+    let tree = this.state.treeData.clone();
+    let node = tree.getNodeByPath(path);
+
+    let nodeChildren = node.children.map(item => item.object);
+    let nodeChildrenNames = nodeChildren.map(item => item.name);
+
+    seafileAPI.listDir(repoID, path).then(res => {
+      let newDirentList = res.data.dirent_list;
+      let newAddedDirents = newDirentList.filter(item => {
+        return !nodeChildrenNames.includes(item.name)
+      })
+      newAddedDirents.map(item => {
+        this.addNodeToTree(item.name, path, item.type);
+      })
+    });
+  }
+
   // toolbar operations
   onMoveItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
@@ -545,15 +565,18 @@ class LibContentView extends React.Component {
     let dirNames = this.getSelectedDirentNames();
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
-      let names = res.data.map(item => {
-        return item.obj_name;
-      });
       direntPaths.forEach((direntPath, index) => {
         if (this.state.currentMode === 'column') {
-          this.moveTreeNode(direntPath, destDirentPath, destRepo, names[index]);
+          this.deleteTreeNode(direntPath);
         }
         this.moveDirent(direntPath);
       });
+
+      if (repoID === destRepo.repo_id) {
+        if (this.state.currentMode === 'column') {
+          this.updateMoveCopyTreeNode(destDirentPath);
+        }
+      }
       let message =  Utils.getMoveSuccessMessage(dirNames);
       toaster.success(message);
     }).catch(() => {
@@ -568,13 +591,10 @@ class LibContentView extends React.Component {
     let dirNames = this.getSelectedDirentNames();
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
-      let names = res.data.map(item => {
-        return item.obj_name;
-      });
-      if (this.state.currentMode === 'column') {
-        direntPaths.forEach((direntPath, index) => {
-          this.copyTreeNode(direntPath, destDirentPath, destRepo, names[index]);
-        });
+      if (repoID === destRepo.repo_id) {
+        if (this.state.currentMode === 'column') {
+          this.updateMoveCopyTreeNode(destDirentPath);
+        }
       }
       if (destDirentPath === this.state.path) {
         this.loadDirentList(this.state.path);
@@ -846,9 +866,11 @@ class LibContentView extends React.Component {
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
-      let nodeName = res.data[0].obj_name;
       if (this.state.currentMode === 'column') {
-        this.moveTreeNode(direntPath, moveToDirentPath, destRepo, nodeName);
+        this.deleteTreeNode(direntPath);
+        if (repoID === destRepo.repo_id) {
+          this.updateMoveCopyTreeNode(moveToDirentPath);
+        }
       }
       this.moveDirent(direntPath, moveToDirentPath);
 
@@ -870,10 +892,12 @@ class LibContentView extends React.Component {
       nodeParentPath = this.state.path;
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
+
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
-      let nodeName = res.data[0].obj_name;
       if (this.state.currentMode === 'column') {
-        this.copyTreeNode(direntPath, copyToDirentPath, destRepo, nodeName);
+        if (repoID === destRepo.repo_id) {
+          this.updateMoveCopyTreeNode(copyToDirentPath);
+        }
       }
       if (copyToDirentPath === nodeParentPath) {
         this.loadDirentList(this.state.path);
