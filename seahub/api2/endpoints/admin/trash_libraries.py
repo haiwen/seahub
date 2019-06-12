@@ -20,7 +20,6 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.group.utils import group_id_to_name
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
-from seahub.signals import repo_restored
 
 logger = logging.getLogger(__name__)
 
@@ -147,7 +146,6 @@ class AdminTrashLibrary(APIView):
 
         try:
             seafile_api.restore_repo_from_trash(repo_id)
-            repo_restored.send(sender=None, repo_id=repo_id, operator=request.user.username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
