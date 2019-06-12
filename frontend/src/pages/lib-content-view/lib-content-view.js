@@ -544,15 +544,15 @@ class LibContentView extends React.Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
 
-    let temporaryData = node.children.map(item => item.object);
-    let beforeNames = temporaryData.map(item => item.name);
+    let nodeChildren = node.children.map(item => item.object);
+    let nodeChildrenNames = nodeChildren.map(item => item.name);
 
     seafileAPI.listDir(repoID, path).then(res => {
-      let name = res.data.dirent_list;
-      let names = name.filter(item => {
-        return !beforeNames.includes(item.name)
+      let newDirentList = res.data.dirent_list;
+      let newAddedDirents = newDirentList.filter(item => {
+        return !nodeChildrenNames.includes(item.name)
       })
-      names.map(item => {
+      newAddedDirents.map(item => {
         this.addNodeToTree(item.name, path, item.type);
       })
     });
