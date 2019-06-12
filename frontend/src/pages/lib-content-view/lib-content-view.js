@@ -538,19 +538,24 @@ class LibContentView extends React.Component {
     getThumbnail(0);
   }
 
+  getListDir = (temporaryData, path) => {
+    let repoID = this.props.repoID;
+
+    seafileAPI.listDir(repoID, path).then(res => {
+      let name = res.data.dirent_list;
+      let names = this.getTreeNodeNames(temporaryData, name);
+      names.map(item => {
+        this.addNodeToTree(item.name, path, item.type);
+      })
+    });
+  }
+  
+
   // toolbar operations
   onMoveItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
-
-    let temporaryData = [];
-
-    if (repoID === destRepo.repo_id) {
-      seafileAPI.listDir(repoID, destDirentPath).then(res => {
-        temporaryData = res.data.dirent_list;
-      });
-    }
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       direntPaths.forEach((direntPath, index) => {
@@ -564,13 +569,8 @@ class LibContentView extends React.Component {
         if (this.state.currentMode === 'column') {
           let tree = this.state.treeData.clone();
           let node = tree.getNodeByPath(destDirentPath);
-          seafileAPI.listDir(repoID, node.path).then(res => {
-            let name = res.data.dirent_list;
-            let names = this.getTreeNodeNames(temporaryData, name);
-            names.map(item => {
-              this.addNodeToTree(item.name, destDirentPath, item.type);
-            })
-          });
+          let temporaryData = node.children.map(item => item.object);
+          this.getListDir(temporaryData, node.path);
         }
       }
       let message =  Utils.getMoveSuccessMessage(dirNames);
@@ -586,24 +586,13 @@ class LibContentView extends React.Component {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
-    let temporaryData = [];
-    if (repoID === destRepo.repo_id) {
-      seafileAPI.listDir(repoID, destDirentPath).then(res => {
-        temporaryData = res.data.dirent_list;
-      });
-    }
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID === destRepo.repo_id) {
         if (this.state.currentMode === 'column') {
           let tree = this.state.treeData.clone();
           let node = tree.getNodeByPath(destDirentPath);
-          seafileAPI.listDir(repoID, node.path).then(res => {
-            let name = res.data.dirent_list;
-            let names = this.getTreeNodeNames(temporaryData, name);
-            names.map(item => {
-              this.addNodeToTree(item.name, destDirentPath, item.type);
-            })
-          });
+          let temporaryData = node.children.map(item => item.object);
+          this.getListDir(temporaryData, node.path);
         }
       }
       
@@ -896,23 +885,14 @@ class LibContentView extends React.Component {
       nodeParentPath = this.state.path;
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
-    let temporaryData = [];
-    if (repoID === destRepo.repo_id) {
-      seafileAPI.listDir(repoID, moveToDirentPath).then(res => {
-        temporaryData = res.data.dirent_list;
-      });
-    }
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
       if (this.state.currentMode === 'column') {
         this.deleteTreeNode(direntPath);
         if (repoID === destRepo.repo_id) {
           let tree = this.state.treeData.clone();
           let node = tree.getNodeByPath(moveToDirentPath);
-          seafileAPI.listDir(repoID, node.path).then(res => {
-            let name = res.data.dirent_list;
-            let names = this.getTreeNodeNames(temporaryData, name);
-            this.addNodeToTree(names[0].name, moveToDirentPath, dirent.type);
-          });
+          let temporaryData = node.children.map(item => item.object);
+          this.getListDir(temporaryData, node.path);
         }
       }
       this.moveDirent(direntPath, moveToDirentPath);
@@ -936,22 +916,13 @@ class LibContentView extends React.Component {
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
 
-    let temporaryData = [];
-
-    seafileAPI.listDir(repoID, copyToDirentPath).then(res => {
-      temporaryData = res.data.dirent_list;
-    });
-
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
       if (this.state.currentMode === 'column') {
         if (repoID === destRepo.repo_id) {
           let tree = this.state.treeData.clone();
           let node = tree.getNodeByPath(copyToDirentPath);
-          seafileAPI.listDir(repoID, node.path).then(res => {
-            let name = res.data.dirent_list;
-            let names = this.getTreeNodeNames(temporaryData, name);
-            this.addNodeToTree(names[0].name, copyToDirentPath, dirent.type);
-          });
+          let temporaryData = node.children.map(item => item.object);
+          this.getListDir(temporaryData, node.path);
         }
       }
 
