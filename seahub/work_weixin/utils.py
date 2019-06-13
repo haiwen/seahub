@@ -69,13 +69,13 @@ def work_weixin_base_check():
 
 
 def work_weixin_oauth_check():
-    if not work_weixin_base_check():
-        return False
-
     if not ENABLE_WORK_WEIXIN_OAUTH:
         logger.error('work weixin oauth not enabled.')
         return False
     else:
+        if not work_weixin_base_check():
+            return False
+
         if not WORK_WEIXIN_AGENT_ID \
                 or not WORK_WEIXIN_GET_USER_INFO_URL \
                 or not WORK_WEIXIN_AUTHORIZATION_URL \
@@ -91,13 +91,13 @@ def work_weixin_oauth_check():
 
 
 def admin_work_weixin_departments_check():
-    if not work_weixin_base_check():
-        return False
-
     if not ENABLE_WORK_WEIXIN_DEPARTMENTS:
         logger.error('admin work weixin departments not enabled.')
         return False
     else:
+        if not work_weixin_base_check():
+            return False
+
         if not WORK_WEIXIN_DEPARTMENTS_URL \
                 or not WORK_WEIXIN_DEPARTMENT_MEMBERS_URL:
             logger.error('admin work weixin departments relevant settings invalid.')
