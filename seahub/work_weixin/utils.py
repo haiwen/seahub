@@ -110,13 +110,13 @@ def admin_work_weixin_departments_check():
 
 
 def work_weixin_notifications_check():
-    if not work_weixin_base_check():
-        return False
-
     if not ENABLE_WORK_WEIXIN_NOTIFICATIONS:
         logger.error('work weixin notifications not enabled.')
         return False
     else:
+        if not work_weixin_base_check():
+            return False
+
         if not WORK_WEIXIN_AGENT_ID \
                 or not WORK_WEIXIN_NOTIFICATIONS_URL:
             logger.error('work weixin notifications relevant settings invalid.')
