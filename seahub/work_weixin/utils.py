@@ -11,7 +11,8 @@ from seahub.work_weixin.settings import WORK_WEIXIN_CORP_ID, WORK_WEIXIN_AGENT_S
     WORK_WEIXIN_ACCESS_TOKEN_URL, ENABLE_WORK_WEIXIN_DEPARTMENTS, \
     WORK_WEIXIN_DEPARTMENTS_URL, WORK_WEIXIN_DEPARTMENT_MEMBERS_URL, \
     ENABLE_WORK_WEIXIN_OAUTH, WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_AUTHORIZATION_URL, \
-    WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL
+    WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL, \
+    ENABLE_WORK_WEIXIN_NOTIFICATIONS, WORK_WEIXIN_NOTIFICATIONS_URL
 from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
@@ -103,6 +104,24 @@ def admin_work_weixin_departments_check():
             logger.error('admin work weixin departments relevant settings invalid.')
             logger.error('WORK_WEIXIN_DEPARTMENTS_URL: %s' % WORK_WEIXIN_DEPARTMENTS_URL)
             logger.error('WORK_WEIXIN_DEPARTMENT_MEMBERS_URL: %s' % WORK_WEIXIN_DEPARTMENT_MEMBERS_URL)
+            return False
+
+    return True
+
+
+def work_weixin_notifications_check():
+    if not ENABLE_WORK_WEIXIN_NOTIFICATIONS:
+        logger.error('work weixin notifications not enabled.')
+        return False
+    else:
+        if not work_weixin_base_check():
+            return False
+
+        if not WORK_WEIXIN_AGENT_ID \
+                or not WORK_WEIXIN_NOTIFICATIONS_URL:
+            logger.error('work weixin notifications relevant settings invalid.')
+            logger.error('WORK_WEIXIN_AGENT_ID: %s' % WORK_WEIXIN_AGENT_ID)
+            logger.error('WORK_WEIXIN_NOTIFICATIONS_URL: %s' % WORK_WEIXIN_NOTIFICATIONS_URL)
             return False
 
     return True
