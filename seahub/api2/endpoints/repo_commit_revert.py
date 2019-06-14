@@ -29,7 +29,7 @@ class RepoCommitRevertView(APIView):
         """ revert commit in repo history
 
         Permission checking:
-        1. all authenticated user can perform this action.
+        1. only repo owner can perform this action.
         """
         username = request.user.username
 
@@ -45,8 +45,8 @@ class RepoCommitRevertView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE or \
-                not is_repo_owner(request, repo_id, username):
+        if not is_repo_owner(request, repo_id, username) or \
+                check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -59,6 +59,11 @@ class RepoCommitRevertView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        seafile_api.revert_repo(repo_id, commit_id, username)
+        try:
+            seafile_api.revert_repo(repo_id, commit_id, username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
