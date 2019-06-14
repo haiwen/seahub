@@ -19,6 +19,7 @@ WORK_WEIXIN_DEPARTMENT_MEMBERS_URL = getattr(settings, 'WORK_WEIXIN_DEPARTMENT_M
 WORK_WEIXIN_AGENT_ID = getattr(settings, 'WORK_WEIXIN_AGENT_ID', '')
 ENABLE_WORK_WEIXIN_OAUTH = getattr(settings, 'ENABLE_WORK_WEIXIN_OAUTH', False)
 WORK_WEIXIN_UID_PREFIX = WORK_WEIXIN_CORP_ID + '_'
+WORK_WEIXIN_USER_INFO_AUTO_UPDATE = getattr(settings, 'WORK_WEIXIN_USER_INFO_AUTO_UPDATE', True)
 WORK_WEIXIN_AUTHORIZATION_URL = getattr(settings, 'WORK_WEIXIN_AUTHORIZATION_URL',
                                         'https://open.work.weixin.qq.com/wwopen/sso/qrConnect')
 WORK_WEIXIN_GET_USER_INFO_URL = getattr(settings, 'WORK_WEIXIN_GET_USER_INFO_URL',

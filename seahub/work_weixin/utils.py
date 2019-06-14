@@ -140,7 +140,6 @@ def update_work_weixin_user_info(api_user):
     """ update user profile from work weixin
 
     use for work weixin departments, login, profile bind
-    not overwrite the profile already exists
     """
     # update additional user info
     username = api_user.get('username')
@@ -160,18 +159,6 @@ def update_work_weixin_user_info(api_user):
 
     if profile_kwargs:
         try:
-            profile = Profile.objects.get_profile_by_user(username)
-            if profile:
-                # not overwrite the profile already exists
-                if profile.nickname and profile_kwargs.get('nickname'):
-                    profile_kwargs.pop('nickname')
-                if profile.contact_email and profile_kwargs.get('contact_email'):
-                    profile_kwargs.pop('contact_email')
-
-                if profile_kwargs:
-                    Profile.objects.add_or_update(username, **profile_kwargs)
-            else:
-                Profile.objects.add_or_update(username, **profile_kwargs)
-
+            Profile.objects.add_or_update(username, **profile_kwargs)
         except Exception as e:
             logger.error(e)
