@@ -222,7 +222,7 @@ module.exports = {
     viewDataGrid: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-ctable.js",
+      paths.appSrc + "/view-file-dtable.js",
     ],
     viewCdoc: [
       require.resolve('./polyfills'),
