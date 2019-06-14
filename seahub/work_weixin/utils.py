@@ -138,12 +138,40 @@ def work_weixin_notifications_check():
 
 def update_work_weixin_user_info(api_user):
     """ update user profile from work weixin
+
+    use for work weixin departments, login, profile bind
+    not overwrite the profile already exists
     """
-    email = api_user.get('username')
-    try:
-        # update additional user info
-        nickname = api_user.get("name", None)
-        if nickname is not None:
-            Profile.objects.add_or_update(email, nickname)
-    except Exception as e:
-        logger.error(e)
+    # update additional user info
+    username = api_user.get('username')
+    nickname = api_user.get('name')
+    contact_email = api_user.get('contact_email')
+
+    # make sure the contact_email is unique
+    if contact_email and Profile.objects.get_profile_by_contact_email(contact_email):
+        logger.warning('contact email %s already exists' % contact_email)
+        contact_email = ''
+
+    profile_kwargs = {}
+    if nickname:
+        profile_kwargs['nickname'] = nickname
+    if contact_email:
+        profile_kwargs['contact_email'] = contact_email
+
+    if profile_kwargs:
+        try:
+            profile = Profile.objects.get_profile_by_user(username)
+            if profile:
+                # not overwrite the profile already exists
+                if profile.nickname and profile_kwargs.get('nickname'):
+                    profile_kwargs.pop('nickname')
+                if profile.contact_email and profile_kwargs.get('contact_email'):
+                    profile_kwargs.pop('contact_email')
+
+                if profile_kwargs:
+                    Profile.objects.add_or_update(username, **profile_kwargs)
+            else:
+                Profile.objects.add_or_update(username, **profile_kwargs)
+
+        except Exception as e:
+            logger.error(e)

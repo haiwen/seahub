@@ -16,8 +16,7 @@ from seahub.utils import render_error
 from seahub.base.accounts import User
 from seahub.work_weixin.settings import WORK_WEIXIN_AUTHORIZATION_URL, WORK_WEIXIN_CORP_ID, \
     WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_PROVIDER, \
-    WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL, WORK_WEIXIN_UID_PREFIX, \
-    AUTO_UPDATE_WORK_WEIXIN_USER_INFO
+    WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL, WORK_WEIXIN_UID_PREFIX
 from seahub.work_weixin.utils import work_weixin_oauth_check, get_work_weixin_access_token, \
     handler_work_weixin_api_response, update_work_weixin_user_info
 from seahub.utils.auth import gen_user_virtual_id, VIRTUAL_ID_EMAIL_DOMAIN
@@ -85,11 +84,9 @@ def work_weixin_oauth_callback(request):
     work_weixin_user = SocialAuthUser.objects.get_by_provider_and_uid(WORK_WEIXIN_PROVIDER, uid)
     if work_weixin_user:
         email = work_weixin_user.username
-        is_new_user = False
     else:
         email = gen_user_virtual_id()
         SocialAuthUser.objects.add(email, WORK_WEIXIN_PROVIDER, uid)
-        is_new_user = True
 
     try:
         user = auth.authenticate(remote_user=email)
@@ -100,19 +97,18 @@ def work_weixin_oauth_callback(request):
         return render_error(
             request, _('Error, new user registration is not allowed, please contact administrator.'))
 
-    if is_new_user or AUTO_UPDATE_WORK_WEIXIN_USER_INFO:
-        # update user info
-        user_info_data = {
-            'access_token': access_token,
-            'userid': user_id,
-        }
-        user_info_api_response = requests.get(WORK_WEIXIN_GET_USER_PROFILE_URL, params=user_info_data)
-        user_info_api_response_dic = handler_work_weixin_api_response(user_info_api_response)
-        if user_info_api_response_dic:
-            api_user = user_info_api_response_dic
-            api_user['username'] = email
-            api_user['contact_email'] = api_user['email']
-            update_work_weixin_user_info(api_user)
+    # update user info
+    user_info_data = {
+        'access_token': access_token,
+        'userid': user_id,
+    }
+    user_info_api_response = requests.get(WORK_WEIXIN_GET_USER_PROFILE_URL, params=user_info_data)
+    user_info_api_response_dic = handler_work_weixin_api_response(user_info_api_response)
+    if user_info_api_response_dic:
+        api_user = user_info_api_response_dic
+        api_user['username'] = email
+        api_user['contact_email'] = api_user['email']
+        update_work_weixin_user_info(api_user)
 
     if not user.is_active:
         return render_error(
@@ -193,19 +189,18 @@ def work_weixin_oauth_connect_callback(request):
 
     SocialAuthUser.objects.add(email, WORK_WEIXIN_PROVIDER, uid)
 
-    if AUTO_UPDATE_WORK_WEIXIN_USER_INFO:
-        # update user info
-        user_info_data = {
-            'access_token': access_token,
-            'userid': user_id,
-        }
-        user_info_api_response = requests.get(WORK_WEIXIN_GET_USER_PROFILE_URL, params=user_info_data)
-        user_info_api_response_dic = handler_work_weixin_api_response(user_info_api_response)
-        if user_info_api_response_dic:
-            api_user = user_info_api_response_dic
-            api_user['username'] = email
-            api_user['contact_email'] = api_user['email']
-            update_work_weixin_user_info(api_user)
+    # update user info
+    user_info_data = {
+        'access_token': access_token,
+        'userid': user_id,
+    }
+    user_info_api_response = requests.get(WORK_WEIXIN_GET_USER_PROFILE_URL, params=user_info_data)
+    user_info_api_response_dic = handler_work_weixin_api_response(user_info_api_response)
+    if user_info_api_response_dic:
+        api_user = user_info_api_response_dic
+        api_user['username'] = email
+        api_user['contact_email'] = api_user['email']
+        update_work_weixin_user_info(api_user)
 
     # redirect user to page
     response = HttpResponseRedirect(request.session.get('work_weixin_oauth_connect_redirect', '/'))
