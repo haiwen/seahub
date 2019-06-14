@@ -24,6 +24,8 @@ WORK_WEIXIN_ACCESS_TOKEN_CACHE_KEY = 'WORK_WEIXIN_ACCESS_TOKEN'
 
 
 def get_work_weixin_access_token():
+    """ get global work weixin access_token
+    """
     cache_key = normalize_cache_key(WORK_WEIXIN_ACCESS_TOKEN_CACHE_KEY)
     access_token = cache.get(cache_key, None)
 
@@ -46,6 +48,8 @@ def get_work_weixin_access_token():
 
 
 def handler_work_weixin_api_response(response):
+    """ handler work_weixin response and errcode
+    """
     try:
         response = response.json()
     except ValueError:
@@ -60,6 +64,8 @@ def handler_work_weixin_api_response(response):
 
 
 def work_weixin_base_check():
+    """ work weixin base check
+    """
     if not WORK_WEIXIN_CORP_ID or not WORK_WEIXIN_AGENT_SECRET or not WORK_WEIXIN_ACCESS_TOKEN_URL:
         logger.error('work weixin base relevant settings invalid.')
         logger.error('WORK_WEIXIN_CORP_ID: %s' % WORK_WEIXIN_CORP_ID)
@@ -70,8 +76,9 @@ def work_weixin_base_check():
 
 
 def work_weixin_oauth_check():
+    """ use for work weixin login and profile bind
+    """
     if not ENABLE_WORK_WEIXIN_OAUTH:
-        logger.error('work weixin oauth not enabled.')
         return False
     else:
         if not work_weixin_base_check():
@@ -92,8 +99,9 @@ def work_weixin_oauth_check():
 
 
 def admin_work_weixin_departments_check():
+    """ use for admin work weixin departments
+    """
     if not ENABLE_WORK_WEIXIN_DEPARTMENTS:
-        logger.error('admin work weixin departments not enabled.')
         return False
     else:
         if not work_weixin_base_check():
@@ -110,8 +118,9 @@ def admin_work_weixin_departments_check():
 
 
 def work_weixin_notifications_check():
+    """ use for send work weixin notifications
+    """
     if not ENABLE_WORK_WEIXIN_NOTIFICATIONS:
-        logger.error('work weixin notifications not enabled.')
         return False
     else:
         if not work_weixin_base_check():
@@ -128,6 +137,8 @@ def work_weixin_notifications_check():
 
 
 def update_work_weixin_user_info(api_user):
+    """ update user profile from work weixin
+    """
     email = api_user.get('username')
     try:
         # update additional user info
