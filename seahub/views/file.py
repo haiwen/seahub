@@ -63,7 +63,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, DRAW, XMIND, DTABLE, CDOC)
+        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, DRAW, XMIND, CTABLE, CDOC)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
         BadRequestException, RequestForbbiddenException
@@ -734,7 +734,7 @@ def view_lib_file(request, repo_id, path):
 
         return render(request, template, return_dict)
         
-    elif filetype == DTABLE:
+    elif filetype == CTABLE:
         return render(request, template, return_dict)
     elif filetype == CDOC:
         return render(request, template, return_dict)    
