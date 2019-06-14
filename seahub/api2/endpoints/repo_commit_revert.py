@@ -3,6 +3,7 @@
 
 import logging
 
+from django.utils.translation import ugettext as _
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -41,7 +42,7 @@ class RepoCommitRevertView(APIView):
 
         commit = seafile_api.get_commit(repo.id, repo.version, commit_id)
         if not commit:
-            error_msg = 'Commit %s not found.' % commit
+            error_msg = 'Commit %s not found.' % commit_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -56,7 +57,7 @@ class RepoCommitRevertView(APIView):
             is_decrypted = False if ret == 0 else True
 
             if not is_decrypted:
-                error_msg = 'Permission denied.'
+                error_msg = _('This library has not been decrypted.')
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
