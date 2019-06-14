@@ -189,7 +189,7 @@ class DirentDetail extends React.Component {
   }
 
   render() {
-    let { dirent } = this.props;
+    let { dirent, repoID, path } = this.props;
     let { folderDirent } = this.state;
     if (!dirent && !folderDirent) {
       return '';
@@ -198,7 +198,7 @@ class DirentDetail extends React.Component {
     let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
     const isImg = dirent ? Utils.imageCheck(dirent.name) : Utils.imageCheck(folderDirent.name);
     if (isImg) {
-      bigIconUrl = siteRoot + 'thumbnail/' + this.props.repoID + '/1024/' + dirent.name;
+      bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
     }
     let direntName = dirent ? dirent.name : folderDirent.name;
 
