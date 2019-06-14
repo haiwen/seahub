@@ -55,6 +55,7 @@ from seahub.api2.endpoints.file_tag import FileTagView
 from seahub.api2.endpoints.file_tag import FileTagsView
 from seahub.api2.endpoints.repo_trash import RepoTrash
 from seahub.api2.endpoints.repo_commit_dir import RepoCommitDirView
+from seahub.api2.endpoints.repo_commit_revert import RepoCommitRevertView
 from seahub.api2.endpoints.deleted_repos import DeletedRepos
 from seahub.api2.endpoints.repo_history import RepoHistory
 from seahub.api2.endpoints.repo_set_password import RepoSetPassword
@@ -333,6 +334,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/new_history/$', NewFileHistoryView.as_view(), name='api-v2.1-new-file-history-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/commits/(?P<commit_id>[0-9a-f]{40})/dir/$', RepoCommitDirView.as_view(), name='api-v2.1-repo-commit-dir'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/commits/(?P<commit_id>[0-9a-f]{40})/revert/$', RepoCommitRevertView.as_view(), name='api-v2.1-repo-commit-revert'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/detail/$', DirDetailView.as_view(), name='api-v2.1-dir-detail-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash/$', RepoTrash.as_view(), name='api-v2.1-repo-trash'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/history/$', RepoHistory.as_view(), name='api-v2.1-repo-history'),
