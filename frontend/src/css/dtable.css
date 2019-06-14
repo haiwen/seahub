@@ -1,0 +1,3 @@
+.rc-calendar table tbody tr {
+  height: fit-content;
+}

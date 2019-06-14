@@ -136,7 +136,7 @@ PREVIEW_FILEEXT = {
     AUDIO: ('mp3', 'oga', 'ogg'),
     #'3D': ('stl', 'obj'),
     XMIND: ('xmind',),
-    CTABLE: ('ctable',),
+    DTABLE: ('dtable',),
     CDOC: ('cdoc',),
 }
 
