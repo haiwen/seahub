@@ -61,7 +61,7 @@ class RepoCommitDirView(APIView):
 
         commit = seafile_api.get_commit(repo.id, repo.version, commit_id)
         if not commit:
-            error_msg = 'Commit %s not found.' % commit
+            error_msg = 'Commit %s not found.' % commit_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         dir_id = seafile_api.get_dir_id_by_commit_and_path(repo_id, commit_id, path)

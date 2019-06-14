@@ -7,7 +7,7 @@ from seaserv import seafile_api
 from seahub.test_utils import BaseTestCase
 
 
-class RepoCommitDirTest(BaseTestCase):
+class RepoCommitRevertTest(BaseTestCase):
 
     def setUp(self):
         self.user_name = self.user.username
