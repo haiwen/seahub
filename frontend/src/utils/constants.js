@@ -55,7 +55,7 @@ export const canLockUnlockFile = window.app.pageOptions.canLockUnlockFile;
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
 
-// ctable
+// dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
 
 // wiki
