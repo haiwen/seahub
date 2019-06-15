@@ -154,6 +154,50 @@ def repo_history_view(request, repo_id):
             })
 
 @login_required
+def repo_snapshot(request, repo_id):
+    """View repo in history.
+    """
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    username = request.user.username
+    user_perm = check_folder_permission(request, repo.id, '/')
+    if user_perm is None:
+        return render_error(request, _(u'Permission denied'))
+
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False
+
+    reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
+    if repo.encrypted and \
+        (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
+        and not is_password_set(repo.id, username):
+        return render(request, 'decrypt_repo_form.html', {
+                'repo': repo,
+                'next': get_next_url_from_request(request) or reverse_url,
+                })
+
+    commit_id = request.GET.get('commit_id', None)
+    if commit_id is None:
+        return HttpResponseRedirect(reverse_url)
+    current_commit = get_commit(repo.id, repo.version, commit_id)
+    if not current_commit:
+        current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
+
+    repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_repo_owner = True if username == repo_owner else False
+
+    return render(request, 'repo_snapshot_react.html', {
+            'repo': repo,
+            "is_repo_owner": is_repo_owner,
+            'current_commit': current_commit,
+            })
+
+@login_required
 def view_lib_as_wiki(request, repo_id, path):
 
     if not path.startswith('/'):

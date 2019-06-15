@@ -294,7 +294,7 @@ class Item extends React.Component {
             {userPerm == 'rw' && (
               item.isFirstCommit ?
                 <span className={isIconShown ? '': 'invisible'}>{gettext('Current Version')}</span> :
-                <a href={`${siteRoot}repo/history/view/${repoID}/?commit_id=${item.commit_id}`} className={isIconShown ? '': 'invisible'}>{gettext('View Snapshot')}</a>
+                <a href={`${siteRoot}repo/${repoID}/snapshot/?commit_id=${item.commit_id}`} className={isIconShown ? '': 'invisible'}>{gettext('View Snapshot')}</a>
             )}
           </td>
         </tr>
