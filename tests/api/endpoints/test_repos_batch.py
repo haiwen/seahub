@@ -994,6 +994,36 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)
 
+    def test_move_with_locked_file(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.user)
+
+        # share admin's tmp repo to user with 'r' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'rw')
+
+        # admin lock file
+        admin_file_name = randstring(6)
+        seafile_api.post_empty_file(admin_repo_id, '/', admin_file_name,
+                self.admin_name)
+        seafile_api.lock_file(admin_repo_id, admin_file_name, self.admin_name, 0)
+
+        # user move locked file
+        data = {
+            "src_repo_id": admin_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[admin_file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['error_msg'] == 'File %s is locked.' % admin_file_name
 
 class ReposSyncBatchCopyItemView(BaseTestCase):
 
@@ -1539,3 +1569,34 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)
+
+    def test_move_with_locked_file(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.user)
+
+        # share admin's tmp repo to user with 'r' permission
+        admin_repo_id = self.create_new_repo(self.admin_name)
+        seafile_api.share_repo(admin_repo_id, self.admin_name,
+                self.user_name, 'rw')
+
+        # admin lock file
+        admin_file_name = randstring(6)
+        seafile_api.post_empty_file(admin_repo_id, '/', admin_file_name,
+                self.admin_name)
+        seafile_api.lock_file(admin_repo_id, admin_file_name, self.admin_name, 0)
+
+        # user move locked file
+        data = {
+            "src_repo_id": admin_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents":[admin_file_name],
+            "dst_repo_id": self.dst_repo_id,
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(403, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['error_msg'] == 'File %s is locked.' % admin_file_name

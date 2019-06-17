@@ -29,7 +29,7 @@ from seahub.utils import is_org_context, send_perm_audit_msg, \
         normalize_dir_path, get_folder_permission_recursively, \
         normalize_file_path, check_filename_with_rename
 from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
-        parse_repo_perm
+        parse_repo_perm, get_locked_files_by_dir
 
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
@@ -1244,9 +1244,18 @@ class ReposAsyncBatchMoveItemView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        result = {}
+        # check locked files
         username = request.user.username
+        locked_files = get_locked_files_by_dir(request, src_repo_id, src_parent_dir)
+        for dirent in src_dirents:
+            # file is locked and lock owner is not current user
+            if dirent in locked_files.keys() and \
+                    locked_files[dirent] != username:
+                error_msg = _(u'File %s is locked.') % dirent
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # move file
+        result = {}
         formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
         src_multi = "\t".join(formated_src_dirents)
         dst_multi = "\t".join(formated_src_dirents)
@@ -1445,9 +1454,18 @@ class ReposSyncBatchMoveItemView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        result = {}
+        # check locked files
         username = request.user.username
+        locked_files = get_locked_files_by_dir(request, src_repo_id, src_parent_dir)
+        for dirent in src_dirents:
+            # file is locked and lock owner is not current user
+            if dirent in locked_files.keys() and \
+                    locked_files[dirent] != username:
+                error_msg = _(u'File %s is locked.') % dirent
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # move file
+        result = {}
         formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
         src_multi = "\t".join(formated_src_dirents)
         dst_multi = "\t".join(formated_src_dirents)
