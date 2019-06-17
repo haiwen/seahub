@@ -49,6 +49,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -349,15 +350,31 @@ class DirentListItem extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    let nodeRootPath = '';
-    nodeRootPath = this.props.path === '/' ? `${this.props.path}${this.props.dirent.name}` : `${this.props.path}/${this.props.dirent.name}`;
-    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
-    dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.effectAllowed = 'move';
     if (e.dataTransfer && e.dataTransfer.setDragImage) {
       e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
     }
+
+    let { selectedDirentList } = this.props;
+    let selectedList = [];
+    if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
+      selectedDirentList.map(item => {
+        let nodeRootPath = '';
+        nodeRootPath = this.props.path === '/' ? `${this.props.path}${item.name}` : `${this.props.path}/${item.name}`;
+        let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
+        return selectedList.push(dragStartItemData)
+      })
+      selectedList = JSON.stringify(selectedList);
+      e.dataTransfer.setData('applicaiton/drag-item-info', selectedList);
+      return ;
+    }
+
+    let nodeRootPath = '';
+    nodeRootPath = this.props.path === '/' ? `${this.props.path}${this.props.dirent.name}` : `${this.props.path}/${this.props.dirent.name}`;
+    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
+    dragStartItemData = JSON.stringify(dragStartItemData);
+
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
 
@@ -395,6 +412,23 @@ class DirentListItem extends React.Component {
     }
     let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
+    if (Array.isArray(dragStartItemData)) { //move items
+      let direntPaths = [];
+      dragStartItemData.forEach(dirent => {
+        let path = Utils.joinPath(this.props.path, dirent.nodeDirent.name);
+        direntPaths.push(path);
+      });
+
+      let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+
+      if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) { //eg; A/B, A/C --> A/B
+        return;
+      }
+      
+      this.props.onItemsMove(this.props.currentRepoInfo, selectedPath);
+      return ;
+    }
+
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
     let dropItemData = this.props.dirent;
 

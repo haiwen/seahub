@@ -33,6 +33,7 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
 };
 
 class DirColumnNav extends React.Component {
@@ -276,6 +277,7 @@ class DirColumnNav extends React.Component {
               onItemMove={this.props.onItemMove}
               currentRepoInfo={this.props.currentRepoInfo}
               selectedDirentList={this.props.selectedDirentList}
+              onItemsMove={this.props.onItemsMove}
             />)
           }
         </div>
