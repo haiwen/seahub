@@ -70,3 +70,45 @@ class Workspaces(models.Model):
             'repo_id': self.repo_id,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
         }
+
+
+class WorkspacesShareUserManager(models.Manager):
+
+    def list_by_to_user(self, to_user):
+        return self.filter(to_user=to_user)
+
+
+class WorkspacesShareUser(models.Model):
+
+    id = models.BigAutoField(primary_key=True)
+    workspace = models.ForeignKey(Workspaces, on_delete=models.CASCADE)
+    from_user = models.CharField(max_length=255, db_index=True)
+    to_user = models.CharField(max_length=255, db_index=True)
+    permission = models.CharField(max_length=15)
+
+    objects = WorkspacesShareUserManager()
+
+    class Meta:
+        unique_together = (('workspace', 'to_user'),)
+        db_table = 'workspaces_share_user'
+
+
+class WorkspacesShareGroupManager(models.Manager):
+
+    def list_by_group_id(self, group_id):
+        return self.filter(group_id=group_id)
+
+
+class WorkspacesShareGroup(models.Model):
+
+    id = models.BigAutoField(primary_key=True)
+    workspace = models.ForeignKey(Workspaces, on_delete=models.CASCADE)
+    from_user = models.CharField(max_length=255, db_index=True)
+    group_id = models.IntegerField(db_index=True)
+    permission = models.CharField(max_length=15)
+
+    objects = WorkspacesShareGroupManager()
+
+    class Meta:
+        unique_together = (('workspace', 'group_id'),)
+        db_table = 'workspaces_share_group'
