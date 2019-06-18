@@ -586,14 +586,14 @@ class DTableUploadLinkView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        upload_link = gen_file_upload_url(token, 'upload-aj')
+        upload_link = gen_file_upload_url(token, 'upload-api')
         uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, '/',
                                                              table_file_name, is_dir=False)
-        relative_path = '/asset/' + str(uuid.uuid)
+        asset_path = '/asset/' + str(uuid.uuid)
 
         res = dict()
         res['upload_link'] = upload_link
-        res['relative_path'] = relative_path
+        res['parent_path'] = asset_path
         return Response(res)
 
 
