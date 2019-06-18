@@ -111,7 +111,8 @@ class CopyDirent extends React.Component {
       return;
     }
     
-    // copy the dirent to it's child. eg: A/B -> A/B/C
+    // copy the dirent to it's child. eg: A/B -> A/B/C 
+    //find problem eg ABC can't move AB/ABC and A can't move B/AB
     if ( selectedPath && selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1) {
       message = gettext('Can not copy directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', direntPath);

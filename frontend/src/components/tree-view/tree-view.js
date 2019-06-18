@@ -100,10 +100,10 @@ class TreeView extends React.Component {
         }
         this.props.onItemsMove(this.props.currentRepoInfo, '/');
         this.setState({isTreeViewDropTipShow: false});
-        return ;
+        return;
       }
       this.onMoveItems(dragStartNodeData, dropNodeData, this.props.currentRepoInfo, node.path);
-      return ;
+      return;
     }
 
     if (!dropNodeData) {
@@ -134,9 +134,23 @@ class TreeView extends React.Component {
     // copy the dirent to it's child. eg: A/B -> A/B/C
     if (dropNodeData.object.type === 'dir' && nodeDirent.type === 'dir') {
       if (dropNodeData.parentNode.path !== nodeParentPath) {
-        if (dropNodeData.path.indexOf(nodeRootPath) !== -1) {
+        let dropNodeDataArr = dropNodeData.path.split('/');
+        let nodeRootPathArr = nodeRootPath.split('/');
+        let isFather = '';
+
+        let smallArr = dropNodeDataArr.length > nodeRootPathArr.length ?  nodeRootPathArr : dropNodeDataArr;
+        for (let i = 0; i< smallArr.length; i++) {
+          if (dropNodeDataArr[i] !== nodeRootPathArr[i]) {
+            isFather = smallArr[i];
+            break;
+          }
+        }
+        if (isFather.length === 0) {
           return;
         }
+        // if (dropNodeData.path.indexOf(nodeRootPath) !== -1) {
+        //   return;
+        // }
       }
     }
 
@@ -145,6 +159,7 @@ class TreeView extends React.Component {
 
   onMoveItems = (dragStartNodeData, dropNodeData, destRepo, destDirentPath) => {
     let direntPaths = [];
+    let destDirentPathArr = destDirentPath.split('/')
     dragStartNodeData.forEach(dirent => {
       let path = dirent.nodeRootPath;
       direntPaths.push(path);
@@ -161,19 +176,29 @@ class TreeView extends React.Component {
 
     // move dirents to one of their child. eg: A/B, A/D -> A/B/C
     let isChildPath = direntPaths.some(direntPath => {
-      let flag = destDirentPath.length > direntPath.length && destDirentPath.indexOf(direntPath) > -1;
+      let direntPathArr = direntPath.split('/');
+
+      let flag = this.compareArray(direntPathArr, destDirentPathArr);
       return flag;
     });
     if (isChildPath) {
       return;
     }
 
-    if (!dropNodeData) { //selectPath === '/'
-      this.setState({isTreeViewDropTipShow: false});
-      return;
-    }
-
     this.props.onItemsMove(destRepo, destDirentPath);
+  }
+
+  compareArray = (direntPathArr, destDirentPathArr) => {
+    if (destDirentPathArr.length < direntPathArr.length) { // 往上移
+      return false;
+    } else {
+      for (let i = 0; i < direntPathArr.length; i++) { //往下移
+        if (direntPathArr[i] !== destDirentPathArr[i]) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   freezeItem = () => {
