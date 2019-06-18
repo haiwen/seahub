@@ -72,13 +72,25 @@ class Workspaces(models.Model):
         }
 
 
-class WorkspacesShareUserManager(models.Manager):
+class UserShareWorkspaceManager(models.Manager):
 
     def list_by_to_user(self, to_user):
-        return self.filter(to_user=to_user)
+        return self.filter(to_user=to_user).select_related('workspace')
+
+    def get_by_workspace_id_and_to_user(self, workspace_id, to_user):
+        if self.filter(workspace_id=workspace_id, to_user=to_user).exists():
+            return self.filter(workspace_id=workspace_id, to_user=to_user)[0]
+
+        return None
+
+    def add(self, workspace_id, from_user, to_user, permission):
+        obj = self.model(workspace_id=workspace_id, from_user=from_user,
+                         to_user=to_user, permission=permission)
+        obj.save()
+        return obj
 
 
-class WorkspacesShareUser(models.Model):
+class UserShareWorkspace(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     workspace = models.ForeignKey(Workspaces, on_delete=models.CASCADE)
@@ -86,20 +98,23 @@ class WorkspacesShareUser(models.Model):
     to_user = models.CharField(max_length=255, db_index=True)
     permission = models.CharField(max_length=15)
 
-    objects = WorkspacesShareUserManager()
+    objects = UserShareWorkspaceManager()
 
     class Meta:
         unique_together = (('workspace', 'to_user'),)
-        db_table = 'workspaces_share_user'
+        db_table = 'user_share_workspace'
 
 
-class WorkspacesShareGroupManager(models.Manager):
+class GroupShareWorkspaceManager(models.Manager):
 
     def list_by_group_id(self, group_id):
-        return self.filter(group_id=group_id)
+        return self.filter(group_id=group_id).select_related('workspace')
+
+    def list_by_group_ids(self, group_ids):
+        return self.filter(group_id__in=group_ids).select_related('workspace')
 
 
-class WorkspacesShareGroup(models.Model):
+class GroupShareWorkspace(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     workspace = models.ForeignKey(Workspaces, on_delete=models.CASCADE)
@@ -107,8 +122,8 @@ class WorkspacesShareGroup(models.Model):
     group_id = models.IntegerField(db_index=True)
     permission = models.CharField(max_length=15)
 
-    objects = WorkspacesShareGroupManager()
+    objects = GroupShareWorkspaceManager()
 
     class Meta:
         unique_together = (('workspace', 'group_id'),)
-        db_table = 'workspaces_share_group'
+        db_table = 'group_share_workspace'
