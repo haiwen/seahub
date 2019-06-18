@@ -357,11 +357,10 @@ class DirentListItem extends React.Component {
     }
 
     let { selectedDirentList } = this.props;
-    let selectedList = [];
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
-      selectedList =  selectedDirentList.map(item => {
-        let getDirentPath = this.getDirentPath(item);
-        let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: getDirentPath};
+      let selectedList =  selectedDirentList.map(item => {
+        let nodeRootPath = this.getDirentPath(item);
+        let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
         return dragStartItemData;
       });
       selectedList = JSON.stringify(selectedList);
@@ -369,8 +368,8 @@ class DirentListItem extends React.Component {
       return ;
     }
 
-    let getDirentPath = this.getDirentPath(this.props.dirent);
-    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: getDirentPath};
+    let nodeRootPath = this.getDirentPath(this.props.dirent);
+    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
@@ -411,10 +410,8 @@ class DirentListItem extends React.Component {
     let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
     if (Array.isArray(dragStartItemData)) { //move items
-      let direntPaths = [];
-      dragStartItemData.forEach(draggedItem => {
-        let path = Utils.joinPath(this.props.path, draggedItem.nodeDirent.name);
-        direntPaths.push(path);
+      let direntPaths =  dragStartItemData.map(draggedItem => {
+        return draggedItem.nodeRootPath
       });
 
       let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);

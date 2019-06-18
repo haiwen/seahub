@@ -135,8 +135,7 @@ class TreeView extends React.Component {
     if (dropNodeData.object.type === 'dir' && nodeDirent.type === 'dir') {
       if (dropNodeData.parentNode.path !== nodeParentPath) {
         let paths = Utils.getPaths(dropNodeData.path);
-        let isChildPath = paths.includes(nodeRootPath);
-        if (isChildPath) {
+        if (paths.includes(nodeRootPath)) {
           return;
         }
       }
@@ -169,8 +168,7 @@ class TreeView extends React.Component {
 
     // move dirents to one of their child. eg: A/B, A/D -> A/B/C
     let isChildPath = direntPaths.some(direntPath => {
-      let flag = paths.includes(direntPath);
-      return flag;
+      return paths.includes(direntPath);
     });
     if (isChildPath) {
       return;
