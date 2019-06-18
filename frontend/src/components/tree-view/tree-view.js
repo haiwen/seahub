@@ -134,11 +134,10 @@ class TreeView extends React.Component {
     // copy the dirent to it's child. eg: A/B -> A/B/C
     if (dropNodeData.object.type === 'dir' && nodeDirent.type === 'dir') {
       if (dropNodeData.parentNode.path !== nodeParentPath) {
-        let dropNodeDataArr = dropNodeData.path.split('/');
-        let nodeRootPathArr = nodeRootPath.split('/');
-        let flag = this.compareArray(nodeRootPathArr, dropNodeDataArr);
-        if (flag) {
-          return ;
+        let paths = Utils.getPaths(dropNodeData.path);
+        let isChildPath = paths.includes(nodeRootPath);
+        if (isChildPath) {
+          return;
         }
       }
     }
@@ -148,7 +147,7 @@ class TreeView extends React.Component {
 
   onMoveItems = (dragStartNodeData, dropNodeData, destRepo, destDirentPath) => {
     let direntPaths = [];
-    let destDirentPathDetail = destDirentPath.split('/');
+    let paths = Utils.getPaths(destDirentPath);
     dragStartNodeData.forEach(dirent => {
       let path = dirent.nodeRootPath;
       direntPaths.push(path);
@@ -163,16 +162,14 @@ class TreeView extends React.Component {
       return;
     }
 
-     // move dirents to current path
-     if (dragStartNodeData[0].nodeParentPath && dragStartNodeData[0].nodeParentPath === dropNodeData.path ) {
+    // move dirents to current path
+    if (dragStartNodeData[0].nodeParentPath && dragStartNodeData[0].nodeParentPath === dropNodeData.path ) {
       return;
     }
 
-
     // move dirents to one of their child. eg: A/B, A/D -> A/B/C
     let isChildPath = direntPaths.some(direntPath => {
-      let direntPathdetail = direntPath.split('/');
-      let flag = this.compareArray(direntPathdetail, destDirentPathDetail);
+      let flag = paths.includes(direntPath);
       return flag;
     });
     if (isChildPath) {
@@ -180,19 +177,6 @@ class TreeView extends React.Component {
     }
 
     this.props.onItemsMove(destRepo, destDirentPath);
-  }
-
-  compareArray = (direntPathdetail, destDirentPathDetail) => {
-    if (destDirentPathDetail.length < direntPathdetail.length) { 
-      return false;
-    } else {
-      for (let i = 0; i < direntPathdetail.length; i++) { 
-        if (direntPathdetail[i] !== destDirentPathDetail[i]) {
-          return false;
-        }
-      }
-    }
-    return true;
   }
 
   freezeItem = () => {

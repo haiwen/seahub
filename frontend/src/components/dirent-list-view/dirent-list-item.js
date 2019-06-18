@@ -359,12 +359,11 @@ class DirentListItem extends React.Component {
     let { selectedDirentList } = this.props;
     let selectedList = [];
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
-      selectedDirentList.map(item => {
-        let nodeRootPath = '';
-        nodeRootPath = this.props.path === '/' ? `${this.props.path}${item.name}` : `${this.props.path}/${item.name}`;
+      selectedList =  selectedDirentList.map(item => {
+        let nodeRootPath = this.getDirentPath(item);
         let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
-        return selectedList.push(dragStartItemData)
-      })
+        return dragStartItemData;
+      });
       selectedList = JSON.stringify(selectedList);
       e.dataTransfer.setData('applicaiton/drag-item-info', selectedList);
       return ;
@@ -414,8 +413,8 @@ class DirentListItem extends React.Component {
     dragStartItemData = JSON.parse(dragStartItemData);
     if (Array.isArray(dragStartItemData)) { //move items
       let direntPaths = [];
-      dragStartItemData.forEach(dirent => {
-        let path = Utils.joinPath(this.props.path, dirent.nodeDirent.name);
+      dragStartItemData.forEach(draggedItem => {
+        let path = Utils.joinPath(this.props.path, draggedItem.nodeDirent.name);
         direntPaths.push(path);
       });
 
