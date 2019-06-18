@@ -417,8 +417,13 @@ class FileUploader extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data;
-      this.uploadInput.current.click();
+      if (Utils.isIEBrower()) {
+        this.uploadInput.current.click();
+      }
     });
+    if (!Utils.isIEBrower()) {
+      this.uploadInput.current.click();
+    }
   }
 
   onFolderUpload = () => {
@@ -426,8 +431,13 @@ class FileUploader extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data;
-      this.uploadInput.current.click();
+      if (Utils.isIEBrower()) {
+        this.uploadInput.current.click();
+      }
     });
+    if (!Utils.isIEBrower()) {
+      this.uploadInput.current.click();
+    }
   }
 
   onDragStart = () => {
