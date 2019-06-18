@@ -136,21 +136,10 @@ class TreeView extends React.Component {
       if (dropNodeData.parentNode.path !== nodeParentPath) {
         let dropNodeDataArr = dropNodeData.path.split('/');
         let nodeRootPathArr = nodeRootPath.split('/');
-        let isFather = '';
-
-        let smallArr = dropNodeDataArr.length > nodeRootPathArr.length ?  nodeRootPathArr : dropNodeDataArr;
-        for (let i = 0; i< smallArr.length; i++) {
-          if (dropNodeDataArr[i] !== nodeRootPathArr[i]) {
-            isFather = smallArr[i];
-            break;
-          }
+        let flag = this.compareArray(nodeRootPathArr, dropNodeDataArr);
+        if (flag) {
+          return ;
         }
-        if (isFather.length === 0) {
-          return;
-        }
-        // if (dropNodeData.path.indexOf(nodeRootPath) !== -1) {
-        //   return;
-        // }
       }
     }
 
@@ -159,7 +148,7 @@ class TreeView extends React.Component {
 
   onMoveItems = (dragStartNodeData, dropNodeData, destRepo, destDirentPath) => {
     let direntPaths = [];
-    let destDirentPathArr = destDirentPath.split('/')
+    let destDirentPathArr = destDirentPath.split('/');
     dragStartNodeData.forEach(dirent => {
       let path = dirent.nodeRootPath;
       direntPaths.push(path);
@@ -189,10 +178,10 @@ class TreeView extends React.Component {
   }
 
   compareArray = (direntPathArr, destDirentPathArr) => {
-    if (destDirentPathArr.length < direntPathArr.length) { // 往上移
+    if (destDirentPathArr.length < direntPathArr.length) { 
       return false;
     } else {
-      for (let i = 0; i < direntPathArr.length; i++) { //往下移
+      for (let i = 0; i < direntPathArr.length; i++) { 
         if (direntPathArr[i] !== destDirentPathArr[i]) {
           return false;
         }
