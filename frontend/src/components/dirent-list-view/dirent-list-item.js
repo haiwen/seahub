@@ -429,7 +429,7 @@ class DirentListItem extends React.Component {
       return ;
     }
 
-    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
+    let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartItemData;
     let dropItemData = this.props.dirent;
 
     if (nodeDirent.name === dropItemData.name) {

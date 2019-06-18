@@ -577,7 +577,8 @@ class DirentListView extends React.Component {
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
 
     if (e.target.className === 'table-container table-drop-active') {
-      if (Array.isArray(dragStartItemData)) {
+
+      if (Array.isArray(dragStartItemData)) { //selected items
         return;
       }
 
