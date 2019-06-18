@@ -360,8 +360,8 @@ class DirentListItem extends React.Component {
     let selectedList = [];
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
       selectedList =  selectedDirentList.map(item => {
-        let nodeRootPath = this.getDirentPath(item);
-        let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
+        let getDirentPath = this.getDirentPath(item);
+        let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: getDirentPath};
         return dragStartItemData;
       });
       selectedList = JSON.stringify(selectedList);
@@ -369,9 +369,8 @@ class DirentListItem extends React.Component {
       return ;
     }
 
-    let nodeRootPath = '';
-    nodeRootPath = this.props.path === '/' ? `${this.props.path}${this.props.dirent.name}` : `${this.props.path}/${this.props.dirent.name}`;
-    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
+    let getDirentPath = this.getDirentPath(this.props.dirent);
+    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: getDirentPath};
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
