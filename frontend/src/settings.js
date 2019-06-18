@@ -116,7 +116,7 @@ class Settings extends React.Component {
             </a>
             <CommonToolbar onSearchedClick={this.onSearchedClick} />
           </div>
-          <div className="flex-auto d-flex">
+          <div className="flex-auto d-flex o-hidden">
             <div className="side-panel o-auto">
               <SideNav data={this.sideNavItems} curItemID={this.state.curItemID} />
             </div>
