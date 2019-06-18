@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import logging
 
 from rest_framework.views import APIView
@@ -17,8 +18,9 @@ from seaserv import seafile_api, edit_repo, check_quota
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.api2.views import get_repo_file, HTTP_443_ABOVE_QUOTA
+from seahub.api2.views import get_repo_file
 from seahub.dtable.models import Workspaces
+from seahub.tags.models import FileUUIDMap
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
@@ -63,6 +65,8 @@ class WorkspacesView(APIView):
             table_objs = seafile_api.list_dir_by_path(repo_id, '/')
             table_list = list()
             for table_obj in table_objs:
+                if table_obj.obj_name[-7:] != FILE_TYPE:
+                    continue
                 table = dict()
                 table["name"] = table_obj.obj_name[:-7]
                 table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
@@ -185,6 +189,8 @@ class WorkspaceView(APIView):
         table_objs = seafile_api.list_dir_by_path(repo_id, '/')
         table_list = list()
         for table_obj in table_objs:
+            if table_obj.obj_name[-7:] != FILE_TYPE:
+                continue
             table = dict()
             table["name"] = table_obj.obj_name[:-7]
             table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
@@ -467,6 +473,23 @@ class DTableView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # delete asset
+        uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, '/', table_file_name, is_dir=False)
+        asset_dir_path = '/asset/' + str(uuid.uuid)
+        asset_dir_id = seafile_api.get_dir_id_by_path(repo_id, asset_dir_path)
+        if asset_dir_id:
+            parent_dir = os.path.dirname(asset_dir_path)
+            file_name = os.path.basename(asset_dir_path)
+            try:
+                seafile_api.del_file(repo_id, parent_dir, file_name, owner)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # delete uuid
+        uuid.delete()
+
         # delete table
         try:
             seafile_api.del_file(repo_id, '/', table_file_name, owner)
@@ -506,12 +529,9 @@ class DTableUpdateLinkView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
-
         try:
             token = seafile_api.get_fileserver_access_token(repo_id, 'dummy', 'update',
-                                                            request.user.username, use_onetime=False)
+                                                            owner, use_onetime=False)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -519,6 +539,66 @@ class DTableUpdateLinkView(APIView):
 
         url = gen_file_upload_url(token, 'update-api')
         return Response(url)
+
+
+class DTableAssetUploadLinkView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, workspace_id):
+        """get table file upload link
+        """
+        # argument check
+        table_name = request.GET.get('name', None)
+        if not table_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        table_file_name = table_name + FILE_TYPE
+
+        # resource check
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = 'Workspace %s not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        owner = workspace.owner
+        if username != owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            token = seafile_api.get_fileserver_access_token(repo_id, 'dummy', 'upload',
+                                                            owner, use_onetime=False)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        upload_link = gen_file_upload_url(token, 'upload-api')
+        uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, '/',
+                                                             table_file_name,
+                                                             is_dir=False)
+
+        # create asset dir
+        asset_dir_path = '/asset/' + str(uuid.uuid)
+        asset_dir_id = seafile_api.get_dir_id_by_path(repo_id, asset_dir_path)
+        if not asset_dir_id:
+            seafile_api.mkdir_with_parents(repo_id, '/', asset_dir_path[1:], owner)
+
+        res = dict()
+        res['upload_link'] = upload_link
+        res['parent_path'] = asset_dir_path
+        return Response(res)
 
 
 @login_required
