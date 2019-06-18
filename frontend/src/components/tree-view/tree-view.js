@@ -102,7 +102,7 @@ class TreeView extends React.Component {
         this.setState({isTreeViewDropTipShow: false});
         return;
       }
-      this.onMoveItems(dragStartNodeData, dropNodeData, this.props.currentRepoInfo, node.path);
+      this.onMoveItems(dragStartNodeData, dropNodeData, this.props.currentRepoInfo, dropNodeData.path);
       return;
     }
 
@@ -148,7 +148,7 @@ class TreeView extends React.Component {
 
   onMoveItems = (dragStartNodeData, dropNodeData, destRepo, destDirentPath) => {
     let direntPaths = [];
-    let destDirentPathArr = destDirentPath.split('/');
+    let destDirentPathDetail = destDirentPath.split('/');
     dragStartNodeData.forEach(dirent => {
       let path = dirent.nodeRootPath;
       direntPaths.push(path);
@@ -163,11 +163,16 @@ class TreeView extends React.Component {
       return;
     }
 
+     // move dirents to current path
+     if (dragStartNodeData[0].nodeParentPath && dragStartNodeData[0].nodeParentPath === dropNodeData.path ) {
+      return;
+    }
+
+
     // move dirents to one of their child. eg: A/B, A/D -> A/B/C
     let isChildPath = direntPaths.some(direntPath => {
-      let direntPathArr = direntPath.split('/');
-
-      let flag = this.compareArray(direntPathArr, destDirentPathArr);
+      let direntPathdetail = direntPath.split('/');
+      let flag = this.compareArray(direntPathdetail, destDirentPathDetail);
       return flag;
     });
     if (isChildPath) {
@@ -177,12 +182,12 @@ class TreeView extends React.Component {
     this.props.onItemsMove(destRepo, destDirentPath);
   }
 
-  compareArray = (direntPathArr, destDirentPathArr) => {
-    if (destDirentPathArr.length < direntPathArr.length) { 
+  compareArray = (direntPathdetail, destDirentPathDetail) => {
+    if (destDirentPathDetail.length < direntPathdetail.length) { 
       return false;
     } else {
-      for (let i = 0; i < direntPathArr.length; i++) { 
-        if (direntPathArr[i] !== destDirentPathArr[i]) {
+      for (let i = 0; i < direntPathdetail.length; i++) { 
+        if (direntPathdetail[i] !== destDirentPathDetail[i]) {
           return false;
         }
       }
