@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-12 11:40+0800\n"
-"PO-Revision-Date: 2019-06-12 03:42+0000\n"
+"POT-Creation-Date: 2019-06-18 11:47+0800\n"
+"PO-Revision-Date: 2019-06-18 03:48+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -191,6 +191,7 @@ msgstr "Выбрать связанный файл для {placeholder}"
 #: frontend/src/components/dialog/create-tag-dialog.js:83
 #: frontend/src/components/dialog/update-tag-dialog.js:87
 #: frontend/src/repo-folder-trash.js:212 frontend/src/repo-history.js:113
+#: frontend/src/repo-snapshot.js:168
 msgid "Back"
 msgstr "Назад"
 
@@ -202,6 +203,7 @@ msgstr "Выбрать файл"
 #: frontend/src/components/dialog/add-related-file-dialog.js:107
 #: frontend/src/components/dialog/confirm-delete-account.js:35
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:35
+#: frontend/src/components/dialog/confirm-restore-repo.js:36
 #: frontend/src/components/dialog/copy-dirent-dialog.js:168
 #: frontend/src/components/dialog/create-file-dialog.js:162
 #: frontend/src/components/dialog/create-folder-dialog.js:102
@@ -389,8 +391,9 @@ msgstr "Успешно изменен пароль библиотеки."
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:218
 #: frontend/src/pages/wikis/wikis.js:54 frontend/src/repo-folder-trash.js:68
 #: frontend/src/repo-folder-trash.js:151 frontend/src/repo-folder-trash.js:336
-#: frontend/src/repo-history.js:63 frontend/src/settings.js:77
-#: frontend/src/shared-dir-view.js:61
+#: frontend/src/repo-history.js:63 frontend/src/repo-snapshot.js:87
+#: frontend/src/repo-snapshot.js:142 frontend/src/repo-snapshot.js:290
+#: frontend/src/settings.js:77 frontend/src/shared-dir-view.js:61
 #: static/scripts/app/views/fileupload.js:18
 #: static/scripts/app/views/fileupload.js:228
 #: static/scripts/app/views/fileupload.js:268
@@ -434,8 +437,9 @@ msgstr "Ошибка"
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:220
 #: frontend/src/pages/wikis/wikis.js:60 frontend/src/repo-folder-trash.js:74
 #: frontend/src/repo-folder-trash.js:157 frontend/src/repo-folder-trash.js:338
-#: frontend/src/repo-history.js:69 frontend/src/settings.js:80
-#: frontend/src/shared-dir-view.js:64
+#: frontend/src/repo-history.js:69 frontend/src/repo-snapshot.js:93
+#: frontend/src/repo-snapshot.js:145 frontend/src/repo-snapshot.js:292
+#: frontend/src/settings.js:80 frontend/src/shared-dir-view.js:64
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
 #: frontend/src/view-file-document.js:76
@@ -484,7 +488,7 @@ msgstr "все"
 
 #: frontend/src/components/dialog/clean-trash.js:45
 msgid "Clean succeeded."
-msgstr ""
+msgstr "Успешно очищено."
 
 #: frontend/src/components/dialog/clean-trash.js:66
 #: frontend/src/repo-folder-trash.js:218
@@ -592,6 +596,25 @@ msgstr "Разъединить"
 msgid "Are you sure you want to disconnect?"
 msgstr "Вы уверены, что хотите разъединить?"
 
+#: frontend/src/components/dialog/confirm-restore-repo.js:31
+#: static/scripts/sysadmin-app/views/trash-repo.js:58
+msgid "Restore Library"
+msgstr "Восстановить библиотеку"
+
+#: frontend/src/components/dialog/confirm-restore-repo.js:33
+msgid "Are you sure you want to restore this library?"
+msgstr "Вы уверены, что хотите восстановить эту библиотеку?"
+
+#: frontend/src/components/dialog/confirm-restore-repo.js:37
+#: frontend/src/components/history-list-view/history-list-item.js:100
+#: frontend/src/pages/file-history-old/history-item.js:121
+#: frontend/src/pages/my-libs/my-libs-deleted.js:160
+#: frontend/src/repo-folder-trash.js:365 frontend/src/repo-folder-trash.js:375
+#: frontend/src/repo-snapshot.js:188 frontend/src/repo-snapshot.js:317
+#: frontend/src/repo-snapshot.js:326
+msgid "Restore"
+msgstr "Восстановить"
+
 #: frontend/src/components/dialog/copy-dirent-dialog.js:50
 #: frontend/src/components/dialog/move-dirent-dialog.js:50
 #: frontend/src/components/dialog/move-dirent-dialog.js:102
@@ -686,7 +709,8 @@ msgstr "Новая библиотека отдела"
 #: frontend/src/pages/share-admin/share-links.js:87
 #: frontend/src/pages/share-admin/upload-links.js:55
 #: frontend/src/pages/shared-libs/shared-libs.js:64
-#: frontend/src/repo-folder-trash.js:250 frontend/src/shared-dir-view.js:271
+#: frontend/src/repo-folder-trash.js:250 frontend/src/repo-snapshot.js:218
+#: frontend/src/shared-dir-view.js:271
 msgid "Name"
 msgstr "Имя"
 
@@ -1298,7 +1322,7 @@ msgstr "Название библиотеки"
 #: frontend/src/pages/search/advanced-search.js:49
 #: frontend/src/pages/search/advanced-search.js:193
 #: frontend/src/pages/shared-libs/shared-libs.js:66
-#: frontend/src/repo-folder-trash.js:252
+#: frontend/src/repo-folder-trash.js:252 frontend/src/repo-snapshot.js:219
 msgid "Size"
 msgstr "Размер"
 
@@ -1731,7 +1755,7 @@ msgstr "Опубликовать библиотеку"
 #: frontend/src/components/shared-file-view/shared-file-view.js:102
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:304
 #: frontend/src/pages/file-history-old/history-item.js:122
-#: frontend/src/shared-dir-view.js:363
+#: frontend/src/repo-snapshot.js:327 frontend/src/shared-dir-view.js:363
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "Скачать"
@@ -1966,13 +1990,6 @@ msgstr "Комментарий"
 msgid "Online view is not applicable to this file format"
 msgstr "Онлайн-просмотр не применим к этому формату файла"
 
-#: frontend/src/components/history-list-view/history-list-item.js:100
-#: frontend/src/pages/file-history-old/history-item.js:121
-#: frontend/src/pages/my-libs/my-libs-deleted.js:160
-#: frontend/src/repo-folder-trash.js:365 frontend/src/repo-folder-trash.js:375
-msgid "Restore"
-msgstr "Восстановить"
-
 #: frontend/src/components/main-side-nav.js:78
 #: frontend/src/pages/org-admin/org-groups.js:81
 msgid "All Groups"
@@ -2109,7 +2126,7 @@ msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "Скачивание файла недоступно: трафик по ссылке превышен."
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:90
-#: frontend/src/repo-folder-trash.js:216
+#: frontend/src/repo-folder-trash.js:216 frontend/src/repo-snapshot.js:186
 msgid "Current path: "
 msgstr " "
 
@@ -2646,6 +2663,7 @@ msgstr "Перемещенная папка"
 #: frontend/src/pages/sys-admin/file-scan-records.js:100
 #: frontend/src/pages/wikis/wikis.js:48 frontend/src/repo-folder-trash.js:62
 #: frontend/src/repo-folder-trash.js:145 frontend/src/repo-history.js:57
+#: frontend/src/repo-snapshot.js:81
 msgid "Permission denied"
 msgstr "Доступ запрещен"
 
@@ -2692,7 +2710,7 @@ msgstr "Разница"
 
 #: frontend/src/pages/file-history/side-panel.js:92
 msgid "Successfully restored."
-msgstr ""
+msgstr "Успешно восстановлено."
 
 #: frontend/src/pages/groups/group-view.js:155
 msgid "No library is shared to this group"
@@ -2724,7 +2742,7 @@ msgstr "Вы можете создать библиотеки, нажав кно
 
 #: frontend/src/pages/groups/group-view.js:225
 #: frontend/src/pages/groups/groups-view.js:59
-#: frontend/src/pages/lib-content-view/lib-content-view.js:609
+#: frontend/src/pages/lib-content-view/lib-content-view.js:629
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:199
 msgid "Successfully deleted {name}."
 msgstr "Удалено {name}."
@@ -2835,49 +2853,49 @@ msgstr "Боковое меню навигации"
 msgid "Search files in this library"
 msgstr "Поиск файлов в библиотеке"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:605
+#: frontend/src/pages/lib-content-view/lib-content-view.js:625
 msgid "Successfully deleted {name} and other {n} items."
 msgstr "Удалено {name} и {n} других объектов."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:614
+#: frontend/src/pages/lib-content-view/lib-content-view.js:634
 msgid "Failed to delete {name} and other {n} items."
 msgstr "Не удалось удалить {name} и {n} других объектов."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:784
-#: frontend/src/pages/lib-content-view/lib-content-view.js:792
+#: frontend/src/pages/lib-content-view/lib-content-view.js:804
+#: frontend/src/pages/lib-content-view/lib-content-view.js:812
 msgid "Renaming {name} failed"
 msgstr "Не удалось переименовать {name}"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:811
-#: frontend/src/pages/lib-content-view/lib-content-view.js:822
+#: frontend/src/pages/lib-content-view/lib-content-view.js:831
+#: frontend/src/pages/lib-content-view/lib-content-view.js:842
 #: frontend/src/pages/org-admin/org-groups.js:67
 #: frontend/src/pages/org-admin/org-libraries.js:69
 msgid "Successfully deleted {name}"
 msgstr "Успешно удалено {name}"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:815
-#: frontend/src/pages/lib-content-view/lib-content-view.js:826
+#: frontend/src/pages/lib-content-view/lib-content-view.js:835
+#: frontend/src/pages/lib-content-view/lib-content-view.js:846
 msgid "Failed to delete {name}"
 msgstr "Не удалось удалить {name}"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:855
+#: frontend/src/pages/lib-content-view/lib-content-view.js:877
 #: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:824
 #: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
 msgid "Successfully moved %(name)s."
 msgstr "Успешно перемещено %(name)s."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:859
+#: frontend/src/pages/lib-content-view/lib-content-view.js:881
 #: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
 msgid "Failed to move %(name)s"
 msgstr "Не удалось переместить %(name)s"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:881
+#: frontend/src/pages/lib-content-view/lib-content-view.js:905
 #: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:809
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr "Успешно скопировано %(name)s."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:885
+#: frontend/src/pages/lib-content-view/lib-content-view.js:909
 #: frontend/src/repo-wiki-mode.js:519 static/scripts/app/views/dir.js:1383
 msgid "Failed to copy %(name)s"
 msgstr "Не удалось скопировать %(name)s"
@@ -2938,6 +2956,7 @@ msgid "Deleted Time"
 msgstr "Время удаления"
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:140
+#: frontend/src/repo-snapshot.js:135
 msgid "Successfully restored the library."
 msgstr "Успешно восстановлена библиотека."
 
@@ -3136,6 +3155,7 @@ msgstr "Дата"
 
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/repo-folder-trash.js:370 frontend/src/repo-folder-trash.js:422
+#: frontend/src/repo-snapshot.js:322
 msgid "File"
 msgstr "Файл"
 
@@ -3427,7 +3447,7 @@ msgstr "Поделиться существующими библиотеками
 
 #: frontend/src/pages/starred/starred.js:21
 msgid "You don't have any favorite items yet"
-msgstr ""
+msgstr "У вас еще нет любимых элементов"
 
 #: frontend/src/pages/starred/starred.js:29
 #: frontend/src/pages/starred/starred.js:40
@@ -3505,17 +3525,18 @@ msgstr "Публичные библиотеки предназначены дл�
 
 #: frontend/src/repo-folder-trash.js:211
 msgid "{placeholder} Trash"
-msgstr ""
+msgstr "{placeholder} Корзина"
 
 #: frontend/src/repo-folder-trash.js:251
 msgid "Delete Time"
 msgstr "Удалить время"
 
-#: frontend/src/repo-folder-trash.js:332
+#: frontend/src/repo-folder-trash.js:332 frontend/src/repo-snapshot.js:286
 msgid "Successfully restored 1 item."
 msgstr "Успешно восстановлен 1 объект."
 
 #: frontend/src/repo-folder-trash.js:360 frontend/src/repo-folder-trash.js:414
+#: frontend/src/repo-snapshot.js:313
 msgid "Directory"
 msgstr "Каталог"
 
@@ -3549,7 +3570,7 @@ msgstr "Метки"
 msgid "None"
 msgstr "Нет"
 
-#: frontend/src/repo-history.js:266
+#: frontend/src/repo-history.js:266 frontend/src/repo-snapshot.js:180
 msgid "Unknown"
 msgstr "Неизвестно"
 
@@ -3560,6 +3581,10 @@ msgstr "Текущая версия"
 #: frontend/src/repo-history.js:297
 msgid "View Snapshot"
 msgstr "Просмотр снимка"
+
+#: frontend/src/repo-snapshot.js:167
+msgid "{placeholder} Snapshot"
+msgstr ""
 
 #: frontend/src/repo-wiki-mode.js:133
 msgid "This folder has been updated. "
@@ -4256,10 +4281,6 @@ msgstr "Вы действительно хотите удалить все %s's 
 #, javascript-format
 msgid "Are you sure you want to delete %s completely?"
 msgstr "Вы действительно хотите полностью удалить %s?"
-
-#: static/scripts/sysadmin-app/views/trash-repo.js:58
-msgid "Restore Library"
-msgstr "Восстановить библиотеку"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format
