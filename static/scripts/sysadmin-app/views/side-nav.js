@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common'
-], function($, _, Backbone, Common) {
+    'common',
+    'simplemodal'
+], function($, _, Backbone, Common, Simplemodal) {
     'use strict';
 
     var sideNavView = Backbone.View.extend({
@@ -26,6 +27,8 @@ define([
             $(window).on('resize', function() {
                 if ($(window).width() >= 768) {
                     _this.show();
+                } else {
+                    _this.hide();
                 }
             });
         },
@@ -44,11 +47,25 @@ define([
         },
 
         show: function() {
+            var _this = this;
             this.$el.css({ 'left':'0px' });
+            if ($(window).width() < 768) {
+                $('').modal({
+                    overlayClose: true,
+                    onClose: function() {
+                        _this.hide();
+                    }});
+                $('#simplemodal-container').css({'display':'none'});
+            } else {
+                $.modal.close();
+            }
         },
 
         hide: function() {
             this.$el.css({ 'left':'-300px' });
+            if ($(window).width() < 768) {
+                $.modal.close();
+            }
         },
 
         events: {

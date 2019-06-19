@@ -8,6 +8,7 @@ import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff } 
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
+import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 
@@ -35,7 +36,8 @@ class SharedRepoListItem extends React.Component {
       isShowSharedDialog: false,
       isRenaming: false,
       isStarred: this.props.repo.starred,
-      isFolderPermissionDialogOpen: false
+      isFolderPermissionDialogOpen: false,
+      isDeleteDialogShow: false
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -161,8 +163,8 @@ class SharedRepoListItem extends React.Component {
     this.props.onItemUnshare(this.props.repo);
   }
 
-  onItemDelete = () => {
-    this.props.onItemDelete(this.props.repo);
+  onItemDeleteToggle = () => {
+    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow})
   }
 
   toggleShareDialog = () => {
@@ -284,7 +286,7 @@ class SharedRepoListItem extends React.Component {
     }
     const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></a>;
     const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
-    const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
+    const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
     
     if (this.isDeparementOnwerGroupMember) {
       return (
@@ -391,6 +393,15 @@ class SharedRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
+        {this.state.isDeleteDialogShow && 
+            <ModalPortal>
+              <DeleteRepoDialog 
+                repo={this.props.repo}
+                onDeleteRepo={this.props.onItemDelete}
+                toggle={this.onItemDeleteToggle}
+              />
+          </ModalPortal>
+        }
       </Fragment>
     );
   }
