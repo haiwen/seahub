@@ -1,27 +1,45 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block extra_style %}
+<style type="text/css">
+.side-nav-con .first-hd {
+    margin-top: 0;
+}
+</style>
+{% endblock %}
+
 {% block main_class %}d-flex ovhd{% endblock %}
 
 {% block main_content %}
 <div class="row flex-1 d-flex">
     <div class="side-textnav col-md-3 side-nav">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
-        <h3 class="hd">{% trans "Desktop Client and Syncing" %}</h3>
-        <ul class="side-textnav-tabs">
-            <li class="tab"><a href="{{ SITE_ROOT }}help/install/">{% trans "Install and sync Files" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/sync_existing/">{% trans "Syncing existing folders" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/selective_sync/">{% trans "Selective sync sub-folders" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/unsync_resync/">{% trans "Unsync and resync libraries" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/sync_interval/">{% trans "Setting sync interval" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/desktop_proxy/">{% trans "Proxy settings" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/conflicts/">{% trans "File conflicts" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/ignore/">{% trans "Excluding files" %}</a></li>
-        </ul>
-        <h3 class="hd">{% trans "Security and Encryption" %}</h3>
-        <ul class="side-textnav-tabs">
-            <li class="tab"><a href="{{ SITE_ROOT }}help/encrypted_libraries/">{% trans "How to use encrypted libraries" %}</a></li>
-        </ul>
+        <div class="hidden-md-up logo-container">
+            <a href="{{ SITE_ROOT }}">
+                {% if seacloud_mode %}
+                <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
+                {% else %}
+                <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
+                {% endif %}
+            </a>
+        </div>
+        <div class="side-nav-con">
+            <h3 class="hd first-hd">{% trans "Desktop Client and Syncing" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/install/">{% trans "Install and sync Files" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/sync_existing/">{% trans "Syncing existing folders" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/selective_sync/">{% trans "Selective sync sub-folders" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/unsync_resync/">{% trans "Unsync and resync libraries" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/sync_interval/">{% trans "Setting sync interval" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/desktop_proxy/">{% trans "Proxy settings" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/conflicts/">{% trans "File conflicts" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/ignore/">{% trans "Excluding files" %}</a></li>
+            </ul>
+            <h3 class="hd">{% trans "Security and Encryption" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/encrypted_libraries/">{% trans "How to use encrypted libraries" %}</a></li>
+            </ul>
+        </div>
     </div>
 
     <div class="help-con article col-md-9 ov-auto flex-1" id="right-panel">{% block help_con %}{% endblock %}</div>

@@ -907,6 +907,11 @@ textarea:-moz-placeholder {/* for FF */
     padding:0;
 }
 /**** side-tabnav ****/
+.logo-container {
+  padding: .5rem 1rem;
+  background: #f4f4f7;
+  border-bottom: 1px solid #e8e8e8;
+}
 .side-textnav .hd,
 .side-info .hd {
     padding-bottom:4px;
@@ -915,13 +920,16 @@ textarea:-moz-placeholder {/* for FF */
 }
 @media (max-width: 767px) {
     .side-nav {
-        background: #f8f8f8;
+        background: #fff;
+        display:flex;
+        flex-direction:column;
         width:300px;
+        max-width: calc(100% - 40px);
         position:fixed;
         left:-300px;
         top:0;
         bottom:0;
-        z-index:1;
+        z-index:1002;
         box-shadow:0 0 4px #ccc;
         -webkit-transition: all 0.3s ease;
         -moz-transition: all 0.3s ease;
@@ -932,7 +940,7 @@ textarea:-moz-placeholder {/* for FF */
     }
 }
 .side-nav {
-    padding:20px;
+    padding:0;
     overflow:hidden;
     border-right:1px solid #eee;
 }
@@ -948,8 +956,13 @@ textarea:-moz-placeholder {/* for FF */
     border-right:1px solid #eee;
 }
 .side-nav-con {
-    overflow:hidden;
     padding:20px;
+    overflow:hidden;
+}
+@media (max-width: 767px) {
+  .side-nav-con {
+    overflow-y:auto;
+  }
 }
 .side-nav-con:hover {
     overflow-y:auto;

@@ -239,16 +239,30 @@ $('#info-bar .close').on('click', function() {
 {% endif %}
 
 if ($('.side-nav').length) {
-     $('#logo').addClass('hidden-sm-down');
-     $('#js-toggle-side-nav').removeClass('hide');
+    $('#logo').addClass('hidden-sm-down');
+    $('#js-toggle-side-nav').removeClass('hide');
 }
 $('#js-toggle-side-nav').on('click', function() {
     $('.side-nav').addClass('side-nav-shown');
+    $('').modal({
+        overlayClose: true,
+        onClose: function() {
+            $('.side-nav').removeClass('side-nav-shown');
+            $.modal.close();
+        }});
+    $('#simplemodal-container').css({'display':'none'});
     return false;
 });
 $('.js-close-side-nav').on('click', function() {
     $('.side-nav').removeClass('side-nav-shown');
     return false;
+});
+$(window).on('resize', function() {
+    if ($(window).width() >= 768) {
+        $.modal.close();
+    } else {
+        $('.side-nav').removeClass('side-nav-shown');
+    }
 });
 </script>
 {% block extra_script %}{% endblock %}
