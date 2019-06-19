@@ -34,8 +34,8 @@ class DeleteRepoDialog extends Component {
           <p dangerouslySetInnerHTML={{__html: message}}></p>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.onDeleteRepo}>{gettext('Delete')}</Button>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.onDeleteRepo}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
     );
