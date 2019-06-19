@@ -1,7 +1,16 @@
 {% load avatar_tags i18n %}
 
 <script type="text/template" id="side-nav-tmpl">
-    <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
+    <div class="hidden-md-up logo-container">
+        <a href="{{ SITE_ROOT }}">
+            {% if seacloud_mode %}
+            <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
+            {% else %}
+            <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
+            {% endif %}
+        </a>
+    </div>
+    <div class="side-nav-con">
     <h3 class="hd">{% trans "System Admin" %}</h3>
     <ul class="side-tabnav-tabs">
 
@@ -137,6 +146,7 @@
             <input type="text" name="name" class="input" value="" placeholder="{% trans "Search groups by name..." %}" title="{% trans "Search groups by name..." %}" aria-label="{% trans "Search groups by name..." %}" />
         </form>
     <% } %>
+    </div>
 </script>
 
 <script type="text/template" id="sysinfo-tmpl">
