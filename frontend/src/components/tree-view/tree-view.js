@@ -18,6 +18,7 @@ const propTypes = {
   onItemMove: PropTypes.func,
   currentRepoInfo: PropTypes.object,
   selectedDirentList: PropTypes.array,
+  onItemsMove: PropTypes.func,
 };
 
 const PADDING_LEFT = 20;
@@ -91,6 +92,20 @@ class TreeView extends React.Component {
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartNodeData;
     let dropNodeData = node;
 
+    if (Array.isArray(dragStartNodeData)) { //move items
+      if (!dropNodeData) { //move items to root
+        if (dragStartNodeData[0].nodeParentPath === '/') {
+          this.setState({isTreeViewDropTipShow: false});
+          return;
+        }
+        this.props.onItemsMove(this.props.currentRepoInfo, '/');
+        this.setState({isTreeViewDropTipShow: false});
+        return;
+      }
+      this.onMoveItems(dragStartNodeData, dropNodeData, this.props.currentRepoInfo, dropNodeData.path);
+      return;
+    }
+
     if (!dropNodeData) {
       if (nodeParentPath === '/') {
         this.setState({isTreeViewDropTipShow: false});
@@ -119,13 +134,47 @@ class TreeView extends React.Component {
     // copy the dirent to it's child. eg: A/B -> A/B/C
     if (dropNodeData.object.type === 'dir' && nodeDirent.type === 'dir') {
       if (dropNodeData.parentNode.path !== nodeParentPath) {
-        if (dropNodeData.path.indexOf(nodeRootPath) !== -1) {
+        let paths = Utils.getPaths(dropNodeData.path);
+        if (paths.includes(nodeRootPath)) {
           return;
         }
       }
     }
 
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, dropNodeData.path, nodeParentPath);
+  }
+
+  onMoveItems = (dragStartNodeData, dropNodeData, destRepo, destDirentPath) => {
+    let direntPaths = [];
+    let paths = Utils.getPaths(destDirentPath);
+    dragStartNodeData.forEach(dirent => {
+      let path = dirent.nodeRootPath;
+      direntPaths.push(path);
+    });
+
+    if (dropNodeData.object.type !== 'dir') {
+      return;
+    }
+
+    // move dirents to one of them. eg: A/B, A/C -> A/B
+    if (direntPaths.some(direntPath => { return direntPath === destDirentPath;})) {
+      return;
+    }
+
+    // move dirents to current path
+    if (dragStartNodeData[0].nodeParentPath && dragStartNodeData[0].nodeParentPath === dropNodeData.path ) {
+      return;
+    }
+
+    // move dirents to one of their child. eg: A/B, A/D -> A/B/C
+    let isChildPath = direntPaths.some(direntPath => {
+      return paths.includes(direntPath);
+    });
+    if (isChildPath) {
+      return;
+    }
+
+    this.props.onItemsMove(destRepo, destDirentPath);
   }
 
   freezeItem = () => {
