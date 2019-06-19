@@ -578,7 +578,7 @@ class DTableAssetUploadLinkView(APIView):
 
         try:
             token = seafile_api.get_fileserver_access_token(repo_id, 'dummy', 'upload',
-                                                            owner, use_onetime=False)
+                                                            '', use_onetime=False)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
