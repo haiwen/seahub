@@ -17,16 +17,17 @@ try:
         repo_id = kwargs['repo_id']
         repo_name = kwargs['repo_name']
 
-
         # Move here to avoid model import during Django setup.
-        # TODO: Don't register signal/hanlders during Seahub start.
+        # TODO: Don't register signal/handlers during Seahub start.
+
         if org_id > 0:
             related_users = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
         else:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
             org_id = -1
 
-        related_users.append(creator)
+        if creator not in related_users:
+            related_users.append(creator)
 
         record = {
             'op_type':'create',
@@ -78,7 +79,8 @@ try:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
             org_id = -1
 
-        related_users.append(repo_owner)
+        if repo_owner not in related_users:
+            related_users.append(repo_owner)
 
         record = {
             'op_type':'delete',
@@ -113,7 +115,9 @@ try:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
             org_id = -1
 
-        related_users.append(repo_owner)
+        if repo_owner not in related_users:
+            related_users.append(repo_owner)
+
         record = {
             'op_type':'clean-up-trash',
             'obj_type':'repo',
@@ -144,7 +148,8 @@ try:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
-        related_users.append(repo_owner)
+        if repo_owner not in related_users:
+            related_users.append(repo_owner)
 
         record = {
             'op_type':'recover',
@@ -154,7 +159,7 @@ try:
             'repo_name': repo.repo_name,
             'path': '/',
             'op_user': operator,
-            'related_users': [related_users],
+            'related_users': related_users,
             'org_id': org_id,
         }
 

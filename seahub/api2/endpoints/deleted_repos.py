@@ -6,8 +6,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from seaserv import seafile_api
 
-from pysearpc import SearpcError
-
 from seahub.signals import repo_restored
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -71,7 +69,7 @@ class DeletedRepos(APIView):
         try:
             seafile_api.restore_repo_from_trash(repo_id)
             repo_restored.send(sender=None, repo_id=repo_id, operator=username)
-        except SearpcError as e:
+        except Exception as e:
             logger.error(e)
             error_msg = "Internal Server Error"
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

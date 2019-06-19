@@ -11,7 +11,8 @@ from seahub.work_weixin.settings import WORK_WEIXIN_CORP_ID, WORK_WEIXIN_AGENT_S
     WORK_WEIXIN_ACCESS_TOKEN_URL, ENABLE_WORK_WEIXIN_DEPARTMENTS, \
     WORK_WEIXIN_DEPARTMENTS_URL, WORK_WEIXIN_DEPARTMENT_MEMBERS_URL, \
     ENABLE_WORK_WEIXIN_OAUTH, WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_AUTHORIZATION_URL, \
-    WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL
+    WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL, \
+    ENABLE_WORK_WEIXIN_NOTIFICATIONS, WORK_WEIXIN_NOTIFICATIONS_URL
 from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
@@ -23,6 +24,8 @@ WORK_WEIXIN_ACCESS_TOKEN_CACHE_KEY = 'WORK_WEIXIN_ACCESS_TOKEN'
 
 
 def get_work_weixin_access_token():
+    """ get global work weixin access_token
+    """
     cache_key = normalize_cache_key(WORK_WEIXIN_ACCESS_TOKEN_CACHE_KEY)
     access_token = cache.get(cache_key, None)
 
@@ -45,6 +48,8 @@ def get_work_weixin_access_token():
 
 
 def handler_work_weixin_api_response(response):
+    """ handler work_weixin response and errcode
+    """
     try:
         response = response.json()
     except ValueError:
@@ -59,6 +64,8 @@ def handler_work_weixin_api_response(response):
 
 
 def work_weixin_base_check():
+    """ work weixin base check
+    """
     if not WORK_WEIXIN_CORP_ID or not WORK_WEIXIN_AGENT_SECRET or not WORK_WEIXIN_ACCESS_TOKEN_URL:
         logger.error('work weixin base relevant settings invalid.')
         logger.error('WORK_WEIXIN_CORP_ID: %s' % WORK_WEIXIN_CORP_ID)
@@ -69,13 +76,14 @@ def work_weixin_base_check():
 
 
 def work_weixin_oauth_check():
-    if not work_weixin_base_check():
-        return False
-
+    """ use for work weixin login and profile bind
+    """
     if not ENABLE_WORK_WEIXIN_OAUTH:
-        logger.error('work weixin oauth not enabled.')
         return False
     else:
+        if not work_weixin_base_check():
+            return False
+
         if not WORK_WEIXIN_AGENT_ID \
                 or not WORK_WEIXIN_GET_USER_INFO_URL \
                 or not WORK_WEIXIN_AUTHORIZATION_URL \
@@ -91,13 +99,14 @@ def work_weixin_oauth_check():
 
 
 def admin_work_weixin_departments_check():
-    if not work_weixin_base_check():
-        return False
-
+    """ use for admin work weixin departments
+    """
     if not ENABLE_WORK_WEIXIN_DEPARTMENTS:
-        logger.error('admin work weixin departments not enabled.')
         return False
     else:
+        if not work_weixin_base_check():
+            return False
+
         if not WORK_WEIXIN_DEPARTMENTS_URL \
                 or not WORK_WEIXIN_DEPARTMENT_MEMBERS_URL:
             logger.error('admin work weixin departments relevant settings invalid.')
@@ -108,12 +117,48 @@ def admin_work_weixin_departments_check():
     return True
 
 
+def work_weixin_notifications_check():
+    """ use for send work weixin notifications
+    """
+    if not ENABLE_WORK_WEIXIN_NOTIFICATIONS:
+        return False
+    else:
+        if not work_weixin_base_check():
+            return False
+
+        if not WORK_WEIXIN_AGENT_ID \
+                or not WORK_WEIXIN_NOTIFICATIONS_URL:
+            logger.error('work weixin notifications relevant settings invalid.')
+            logger.error('WORK_WEIXIN_AGENT_ID: %s' % WORK_WEIXIN_AGENT_ID)
+            logger.error('WORK_WEIXIN_NOTIFICATIONS_URL: %s' % WORK_WEIXIN_NOTIFICATIONS_URL)
+            return False
+
+    return True
+
+
 def update_work_weixin_user_info(api_user):
-    email = api_user.get('username')
-    try:
-        # update additional user info
-        nickname = api_user.get("name", None)
-        if nickname is not None:
-            Profile.objects.add_or_update(email, nickname)
-    except Exception as e:
-        logger.error(e)
+    """ update user profile from work weixin
+
+    use for work weixin departments, login, profile bind
+    """
+    # update additional user info
+    username = api_user.get('username')
+    nickname = api_user.get('name')
+    contact_email = api_user.get('contact_email')
+
+    # make sure the contact_email is unique
+    if contact_email and Profile.objects.get_profile_by_contact_email(contact_email):
+        logger.warning('contact email %s already exists' % contact_email)
+        contact_email = ''
+
+    profile_kwargs = {}
+    if nickname:
+        profile_kwargs['nickname'] = nickname
+    if contact_email:
+        profile_kwargs['contact_email'] = contact_email
+
+    if profile_kwargs:
+        try:
+            Profile.objects.add_or_update(username, **profile_kwargs)
+        except Exception as e:
+            logger.error(e)

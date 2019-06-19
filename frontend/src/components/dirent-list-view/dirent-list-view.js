@@ -577,6 +577,11 @@ class DirentListView extends React.Component {
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
 
     if (e.target.className === 'table-container table-drop-active') {
+
+      if (Array.isArray(dragStartItemData)) { //selected items
+        return;
+      }
+
       if (nodeRootPath === this.props.path || nodeParentPath === this.props.path) {
         return;
       }
@@ -664,6 +669,7 @@ class DirentListView extends React.Component {
                   onFileTagChanged={this.props.onFileTagChanged}
                   getDirentItemMenuList={this.getDirentItemMenuList}
                   showDirentDetail={this.props.showDirentDetail}
+                  onItemsMove={this.props.onItemsMove}
                 />
               );
             })}

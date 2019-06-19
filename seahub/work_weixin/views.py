@@ -17,7 +17,7 @@ from seahub.base.accounts import User
 from seahub.work_weixin.settings import WORK_WEIXIN_AUTHORIZATION_URL, WORK_WEIXIN_CORP_ID, \
     WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_PROVIDER, \
     WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL, WORK_WEIXIN_UID_PREFIX, \
-    AUTO_UPDATE_WORK_WEIXIN_USER_INFO
+    WORK_WEIXIN_USER_INFO_AUTO_UPDATE
 from seahub.work_weixin.utils import work_weixin_oauth_check, get_work_weixin_access_token, \
     handler_work_weixin_api_response, update_work_weixin_user_info
 from seahub.utils.auth import gen_user_virtual_id, VIRTUAL_ID_EMAIL_DOMAIN
@@ -100,8 +100,8 @@ def work_weixin_oauth_callback(request):
         return render_error(
             request, _('Error, new user registration is not allowed, please contact administrator.'))
 
-    if is_new_user or AUTO_UPDATE_WORK_WEIXIN_USER_INFO:
-        # update user info
+    # update user info
+    if is_new_user or WORK_WEIXIN_USER_INFO_AUTO_UPDATE:
         user_info_data = {
             'access_token': access_token,
             'userid': user_id,
@@ -193,8 +193,8 @@ def work_weixin_oauth_connect_callback(request):
 
     SocialAuthUser.objects.add(email, WORK_WEIXIN_PROVIDER, uid)
 
-    if AUTO_UPDATE_WORK_WEIXIN_USER_INFO:
-        # update user info
+    # update user info
+    if WORK_WEIXIN_USER_INFO_AUTO_UPDATE:
         user_info_data = {
             'access_token': access_token,
             'userid': user_id,
