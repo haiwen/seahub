@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-12 11:40+0800\n"
-"PO-Revision-Date: 2019-05-30 03:26+0000\n"
+"POT-Creation-Date: 2019-06-18 11:47+0800\n"
+"PO-Revision-Date: 2019-06-18 03:47+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/haiwen/seahub/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -521,6 +521,10 @@ msgstr ""
 msgid "Error"
 msgstr "Lỗi"
 
+#: seahub/api2/endpoints/repo_commit_revert.py:60
+msgid "This library has not been decrypted."
+msgstr ""
+
 #: seahub/api2/endpoints/repo_send_new_password.py:44
 #: seahub/api2/endpoints/user.py:73 seahub/api2/endpoints/user.py:93
 msgid "Feature disabled."
@@ -551,6 +555,12 @@ msgstr "Lỗi giải mã"
 
 #: seahub/api2/endpoints/repo_set_password.py:127
 msgid "Wrong old password"
+msgstr ""
+
+#: seahub/api2/endpoints/repos_batch.py:1254
+#: seahub/api2/endpoints/repos_batch.py:1464
+#, python-format
+msgid "File %s is locked."
 msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:33
@@ -2014,8 +2024,8 @@ msgstr "Yêu cầu mô tả."
 #: seahub/views/ajax.py:538 seahub/views/ajax.py:668 seahub/views/ajax.py:1164
 #: seahub/views/ajax.py:1205 seahub/views/file.py:1131
 #: seahub/views/file.py:1350 seahub/views/file.py:1537
-#: seahub/views/file.py:2064 seahub/views/repo.py:111 seahub/views/repo.py:175
-#: seahub/views/repo.py:228 seahub/views/repo.py:333
+#: seahub/views/file.py:2064 seahub/views/repo.py:111 seahub/views/repo.py:167
+#: seahub/views/repo.py:219 seahub/views/repo.py:272 seahub/views/repo.py:377
 msgid "Permission denied"
 msgstr "Không có quyền"
 
@@ -2997,7 +3007,8 @@ msgstr ""
 msgid "New notice on %s"
 msgstr "Ghi chú mới trên %s"
 
-#: seahub/notifications/management/commands/send_wxwork_notices.py:152
+#: seahub/notifications/management/commands/send_work_weixin_notifications.py:171
+#: seahub/notifications/management/commands/send_wxwork_notices.py:155
 #: seahub/notifications/templates/notifications/notice_email.html:9
 #, python-format
 msgid ""
@@ -6591,6 +6602,10 @@ msgstr "Bạn có muốn khôi phục thư viện này?"
 msgid "Successfully restored {dirent_name}"
 msgstr ""
 
+#: seahub/templates/repo_snapshot_react.html:5
+msgid "Snapshot"
+msgstr ""
+
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/directory."
@@ -7047,6 +7062,10 @@ msgstr ""
 msgid ""
 "Enable system admin to add Terms and Conditions, and all users will have to "
 "accept the terms."
+msgstr ""
+
+#: seahub/templates/sysadmin/snippets/org_admin_js.html:4
+msgid "Delete organization"
 msgstr ""
 
 #: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:6
@@ -7993,7 +8012,7 @@ msgstr "Lịch sử mà bạn chỉ định không tồn tại"
 msgid "Unknown error"
 msgstr ""
 
-#: seahub/views/__init__.py:983 seahub/views/repo.py:232
+#: seahub/views/__init__.py:983 seahub/views/repo.py:276
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" không tồn tại."
@@ -8154,7 +8173,7 @@ msgid "Unable to view raw file, share link traffic is used up."
 msgstr ""
 
 #: seahub/views/file.py:1281 seahub/views/file.py:1491
-#: seahub/views/repo.py:283
+#: seahub/views/repo.py:327
 #, python-format
 msgid "Share link for %s."
 msgstr ""

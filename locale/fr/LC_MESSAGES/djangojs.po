@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-12 11:40+0800\n"
-"PO-Revision-Date: 2019-06-12 03:42+0000\n"
-"Last-Translator: Gautier Auburtin <gautier.auburtin@campus-condorcet.fr>\n"
+"POT-Creation-Date: 2019-06-18 11:47+0800\n"
+"PO-Revision-Date: 2019-06-18 03:48+0000\n"
+"Last-Translator: Gaspard <info@widelinkpc.be>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -196,6 +196,7 @@ msgstr "Sélectionner un fichier relatif pour {placeholder}"
 #: frontend/src/components/dialog/create-tag-dialog.js:83
 #: frontend/src/components/dialog/update-tag-dialog.js:87
 #: frontend/src/repo-folder-trash.js:212 frontend/src/repo-history.js:113
+#: frontend/src/repo-snapshot.js:168
 msgid "Back"
 msgstr "Retour"
 
@@ -207,6 +208,7 @@ msgstr "Sélectionner un fichier"
 #: frontend/src/components/dialog/add-related-file-dialog.js:107
 #: frontend/src/components/dialog/confirm-delete-account.js:35
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:35
+#: frontend/src/components/dialog/confirm-restore-repo.js:36
 #: frontend/src/components/dialog/copy-dirent-dialog.js:168
 #: frontend/src/components/dialog/create-file-dialog.js:162
 #: frontend/src/components/dialog/create-folder-dialog.js:102
@@ -394,8 +396,9 @@ msgstr "Le mot de passe de la bibliothèque a été modifié avec succès."
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:218
 #: frontend/src/pages/wikis/wikis.js:54 frontend/src/repo-folder-trash.js:68
 #: frontend/src/repo-folder-trash.js:151 frontend/src/repo-folder-trash.js:336
-#: frontend/src/repo-history.js:63 frontend/src/settings.js:77
-#: frontend/src/shared-dir-view.js:61
+#: frontend/src/repo-history.js:63 frontend/src/repo-snapshot.js:87
+#: frontend/src/repo-snapshot.js:142 frontend/src/repo-snapshot.js:290
+#: frontend/src/settings.js:77 frontend/src/shared-dir-view.js:61
 #: static/scripts/app/views/fileupload.js:18
 #: static/scripts/app/views/fileupload.js:228
 #: static/scripts/app/views/fileupload.js:268
@@ -439,8 +442,9 @@ msgstr "Erreur"
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:220
 #: frontend/src/pages/wikis/wikis.js:60 frontend/src/repo-folder-trash.js:74
 #: frontend/src/repo-folder-trash.js:157 frontend/src/repo-folder-trash.js:338
-#: frontend/src/repo-history.js:69 frontend/src/settings.js:80
-#: frontend/src/shared-dir-view.js:64
+#: frontend/src/repo-history.js:69 frontend/src/repo-snapshot.js:93
+#: frontend/src/repo-snapshot.js:145 frontend/src/repo-snapshot.js:292
+#: frontend/src/settings.js:80 frontend/src/shared-dir-view.js:64
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
 #: frontend/src/view-file-document.js:76
@@ -597,6 +601,25 @@ msgstr "Déconnecter"
 msgid "Are you sure you want to disconnect?"
 msgstr "Êtes-vous certain de vouloir vous déconnecter ?"
 
+#: frontend/src/components/dialog/confirm-restore-repo.js:31
+#: static/scripts/sysadmin-app/views/trash-repo.js:58
+msgid "Restore Library"
+msgstr "Restaurer la bibliothèque"
+
+#: frontend/src/components/dialog/confirm-restore-repo.js:33
+msgid "Are you sure you want to restore this library?"
+msgstr "Êtes-vous certain de vouloir restaurer cette bibliothèque ?"
+
+#: frontend/src/components/dialog/confirm-restore-repo.js:37
+#: frontend/src/components/history-list-view/history-list-item.js:100
+#: frontend/src/pages/file-history-old/history-item.js:121
+#: frontend/src/pages/my-libs/my-libs-deleted.js:160
+#: frontend/src/repo-folder-trash.js:365 frontend/src/repo-folder-trash.js:375
+#: frontend/src/repo-snapshot.js:188 frontend/src/repo-snapshot.js:317
+#: frontend/src/repo-snapshot.js:326
+msgid "Restore"
+msgstr "Restaurer"
+
 #: frontend/src/components/dialog/copy-dirent-dialog.js:50
 #: frontend/src/components/dialog/move-dirent-dialog.js:50
 #: frontend/src/components/dialog/move-dirent-dialog.js:102
@@ -691,7 +714,8 @@ msgstr "Nouvelle librairie départementale"
 #: frontend/src/pages/share-admin/share-links.js:87
 #: frontend/src/pages/share-admin/upload-links.js:55
 #: frontend/src/pages/shared-libs/shared-libs.js:64
-#: frontend/src/repo-folder-trash.js:250 frontend/src/shared-dir-view.js:271
+#: frontend/src/repo-folder-trash.js:250 frontend/src/repo-snapshot.js:218
+#: frontend/src/shared-dir-view.js:271
 msgid "Name"
 msgstr "Nom"
 
@@ -1303,7 +1327,7 @@ msgstr "Nom de la bibliothèque"
 #: frontend/src/pages/search/advanced-search.js:49
 #: frontend/src/pages/search/advanced-search.js:193
 #: frontend/src/pages/shared-libs/shared-libs.js:66
-#: frontend/src/repo-folder-trash.js:252
+#: frontend/src/repo-folder-trash.js:252 frontend/src/repo-snapshot.js:219
 msgid "Size"
 msgstr "Taille"
 
@@ -1736,7 +1760,7 @@ msgstr "Publier une bibliothèque"
 #: frontend/src/components/shared-file-view/shared-file-view.js:102
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:304
 #: frontend/src/pages/file-history-old/history-item.js:122
-#: frontend/src/shared-dir-view.js:363
+#: frontend/src/repo-snapshot.js:327 frontend/src/shared-dir-view.js:363
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "Télécharger"
@@ -1971,13 +1995,6 @@ msgstr "Commentaire"
 msgid "Online view is not applicable to this file format"
 msgstr "L'aperçu en ligne n'est pas disponible pour de type de fichier"
 
-#: frontend/src/components/history-list-view/history-list-item.js:100
-#: frontend/src/pages/file-history-old/history-item.js:121
-#: frontend/src/pages/my-libs/my-libs-deleted.js:160
-#: frontend/src/repo-folder-trash.js:365 frontend/src/repo-folder-trash.js:375
-msgid "Restore"
-msgstr "Restaurer"
-
 #: frontend/src/components/main-side-nav.js:78
 #: frontend/src/pages/org-admin/org-groups.js:81
 msgid "All Groups"
@@ -2114,7 +2131,7 @@ msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "Le téléchargement du fichier est désactivé : le trafic du propriétaire du lien de partage est dépassé."
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:90
-#: frontend/src/repo-folder-trash.js:216
+#: frontend/src/repo-folder-trash.js:216 frontend/src/repo-snapshot.js:186
 msgid "Current path: "
 msgstr "Chemin d'accès actuel : "
 
@@ -2651,6 +2668,7 @@ msgstr "Dossier déplacé"
 #: frontend/src/pages/sys-admin/file-scan-records.js:100
 #: frontend/src/pages/wikis/wikis.js:48 frontend/src/repo-folder-trash.js:62
 #: frontend/src/repo-folder-trash.js:145 frontend/src/repo-history.js:57
+#: frontend/src/repo-snapshot.js:81
 msgid "Permission denied"
 msgstr "Autorisation refusée"
 
@@ -2729,7 +2747,7 @@ msgstr "Vous pouvez créer des bibliothèques en cliquant sur le bouton ci-dessu
 
 #: frontend/src/pages/groups/group-view.js:225
 #: frontend/src/pages/groups/groups-view.js:59
-#: frontend/src/pages/lib-content-view/lib-content-view.js:609
+#: frontend/src/pages/lib-content-view/lib-content-view.js:629
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:199
 msgid "Successfully deleted {name}."
 msgstr "{name} a été supprimé avec succès."
@@ -2840,49 +2858,49 @@ msgstr "Menu de navigation sur le côté"
 msgid "Search files in this library"
 msgstr "Recherche de fichiers dans cette bibliothèque"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:605
+#: frontend/src/pages/lib-content-view/lib-content-view.js:625
 msgid "Successfully deleted {name} and other {n} items."
 msgstr "{name} a été supprimé avec succès ainsi que {n} éléments."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:614
+#: frontend/src/pages/lib-content-view/lib-content-view.js:634
 msgid "Failed to delete {name} and other {n} items."
 msgstr "Impossible de supprimer {name} ainsi que {n} autres éléments."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:784
-#: frontend/src/pages/lib-content-view/lib-content-view.js:792
+#: frontend/src/pages/lib-content-view/lib-content-view.js:804
+#: frontend/src/pages/lib-content-view/lib-content-view.js:812
 msgid "Renaming {name} failed"
 msgstr "Impossible de renommer {name}"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:811
-#: frontend/src/pages/lib-content-view/lib-content-view.js:822
+#: frontend/src/pages/lib-content-view/lib-content-view.js:831
+#: frontend/src/pages/lib-content-view/lib-content-view.js:842
 #: frontend/src/pages/org-admin/org-groups.js:67
 #: frontend/src/pages/org-admin/org-libraries.js:69
 msgid "Successfully deleted {name}"
 msgstr "{name} supprimé avec succès"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:815
-#: frontend/src/pages/lib-content-view/lib-content-view.js:826
+#: frontend/src/pages/lib-content-view/lib-content-view.js:835
+#: frontend/src/pages/lib-content-view/lib-content-view.js:846
 msgid "Failed to delete {name}"
 msgstr "Impossible de supprimer {name} "
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:855
+#: frontend/src/pages/lib-content-view/lib-content-view.js:877
 #: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:824
 #: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
 msgid "Successfully moved %(name)s."
 msgstr " %(name)s déplacé avec succès."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:859
+#: frontend/src/pages/lib-content-view/lib-content-view.js:881
 #: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
 msgid "Failed to move %(name)s"
 msgstr "Échec du déplacement de %(name)s"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:881
+#: frontend/src/pages/lib-content-view/lib-content-view.js:905
 #: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:809
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr "%(name)s copié avec succès."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:885
+#: frontend/src/pages/lib-content-view/lib-content-view.js:909
 #: frontend/src/repo-wiki-mode.js:519 static/scripts/app/views/dir.js:1383
 msgid "Failed to copy %(name)s"
 msgstr "Échec de la copie de %(name)s"
@@ -2943,6 +2961,7 @@ msgid "Deleted Time"
 msgstr "Date de suppression"
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:140
+#: frontend/src/repo-snapshot.js:135
 msgid "Successfully restored the library."
 msgstr "Bibliothèque restaurée avec succès"
 
@@ -3141,6 +3160,7 @@ msgstr "Date"
 
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/repo-folder-trash.js:370 frontend/src/repo-folder-trash.js:422
+#: frontend/src/repo-snapshot.js:322
 msgid "File"
 msgstr "Fichier"
 
@@ -3516,11 +3536,12 @@ msgstr ""
 msgid "Delete Time"
 msgstr "Date de suppression"
 
-#: frontend/src/repo-folder-trash.js:332
+#: frontend/src/repo-folder-trash.js:332 frontend/src/repo-snapshot.js:286
 msgid "Successfully restored 1 item."
 msgstr "1 objet a été restauré avec succès."
 
 #: frontend/src/repo-folder-trash.js:360 frontend/src/repo-folder-trash.js:414
+#: frontend/src/repo-snapshot.js:313
 msgid "Directory"
 msgstr "Dossier"
 
@@ -3554,7 +3575,7 @@ msgstr "Étiquettes"
 msgid "None"
 msgstr "Aucun(e)"
 
-#: frontend/src/repo-history.js:266
+#: frontend/src/repo-history.js:266 frontend/src/repo-snapshot.js:180
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -3565,6 +3586,10 @@ msgstr "Version "
 #: frontend/src/repo-history.js:297
 msgid "View Snapshot"
 msgstr "Voir l'instantané"
+
+#: frontend/src/repo-snapshot.js:167
+msgid "{placeholder} Snapshot"
+msgstr ""
 
 #: frontend/src/repo-wiki-mode.js:133
 msgid "This folder has been updated. "
@@ -4261,10 +4286,6 @@ msgstr "Êtes-vous certain de vouloir supprimer toutes les bibliothèques de %s 
 #, javascript-format
 msgid "Are you sure you want to delete %s completely?"
 msgstr "Êtes-vous certain de vouloir supprimer %s complétement ?"
-
-#: static/scripts/sysadmin-app/views/trash-repo.js:58
-msgid "Restore Library"
-msgstr "Restaurer la bibliothèque"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format

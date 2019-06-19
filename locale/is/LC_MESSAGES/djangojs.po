@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-12 11:40+0800\n"
-"PO-Revision-Date: 2019-06-12 03:42+0000\n"
+"POT-Creation-Date: 2019-06-18 11:47+0800\n"
+"PO-Revision-Date: 2019-06-18 03:48+0000\n"
 "Last-Translator: Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>\n"
 "Language-Team: Icelandic (http://www.transifex.com/haiwen/seahub/language/is/)\n"
 "MIME-Version: 1.0\n"
@@ -189,6 +189,7 @@ msgstr ""
 #: frontend/src/components/dialog/create-tag-dialog.js:83
 #: frontend/src/components/dialog/update-tag-dialog.js:87
 #: frontend/src/repo-folder-trash.js:212 frontend/src/repo-history.js:113
+#: frontend/src/repo-snapshot.js:168
 msgid "Back"
 msgstr "Til Baka"
 
@@ -200,6 +201,7 @@ msgstr ""
 #: frontend/src/components/dialog/add-related-file-dialog.js:107
 #: frontend/src/components/dialog/confirm-delete-account.js:35
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:35
+#: frontend/src/components/dialog/confirm-restore-repo.js:36
 #: frontend/src/components/dialog/copy-dirent-dialog.js:168
 #: frontend/src/components/dialog/create-file-dialog.js:162
 #: frontend/src/components/dialog/create-folder-dialog.js:102
@@ -387,8 +389,9 @@ msgstr "Tókst að skipta um lykilorð safns."
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:218
 #: frontend/src/pages/wikis/wikis.js:54 frontend/src/repo-folder-trash.js:68
 #: frontend/src/repo-folder-trash.js:151 frontend/src/repo-folder-trash.js:336
-#: frontend/src/repo-history.js:63 frontend/src/settings.js:77
-#: frontend/src/shared-dir-view.js:61
+#: frontend/src/repo-history.js:63 frontend/src/repo-snapshot.js:87
+#: frontend/src/repo-snapshot.js:142 frontend/src/repo-snapshot.js:290
+#: frontend/src/settings.js:77 frontend/src/shared-dir-view.js:61
 #: static/scripts/app/views/fileupload.js:18
 #: static/scripts/app/views/fileupload.js:228
 #: static/scripts/app/views/fileupload.js:268
@@ -432,8 +435,9 @@ msgstr "Villa"
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:220
 #: frontend/src/pages/wikis/wikis.js:60 frontend/src/repo-folder-trash.js:74
 #: frontend/src/repo-folder-trash.js:157 frontend/src/repo-folder-trash.js:338
-#: frontend/src/repo-history.js:69 frontend/src/settings.js:80
-#: frontend/src/shared-dir-view.js:64
+#: frontend/src/repo-history.js:69 frontend/src/repo-snapshot.js:93
+#: frontend/src/repo-snapshot.js:145 frontend/src/repo-snapshot.js:292
+#: frontend/src/settings.js:80 frontend/src/shared-dir-view.js:64
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
 #: frontend/src/view-file-document.js:76
@@ -590,6 +594,25 @@ msgstr ""
 msgid "Are you sure you want to disconnect?"
 msgstr ""
 
+#: frontend/src/components/dialog/confirm-restore-repo.js:31
+#: static/scripts/sysadmin-app/views/trash-repo.js:58
+msgid "Restore Library"
+msgstr "Endurvekja Safn"
+
+#: frontend/src/components/dialog/confirm-restore-repo.js:33
+msgid "Are you sure you want to restore this library?"
+msgstr "Ertu viss um að þú viljir endurvekja þetta safn?"
+
+#: frontend/src/components/dialog/confirm-restore-repo.js:37
+#: frontend/src/components/history-list-view/history-list-item.js:100
+#: frontend/src/pages/file-history-old/history-item.js:121
+#: frontend/src/pages/my-libs/my-libs-deleted.js:160
+#: frontend/src/repo-folder-trash.js:365 frontend/src/repo-folder-trash.js:375
+#: frontend/src/repo-snapshot.js:188 frontend/src/repo-snapshot.js:317
+#: frontend/src/repo-snapshot.js:326
+msgid "Restore"
+msgstr "Endurheimta"
+
 #: frontend/src/components/dialog/copy-dirent-dialog.js:50
 #: frontend/src/components/dialog/move-dirent-dialog.js:50
 #: frontend/src/components/dialog/move-dirent-dialog.js:102
@@ -684,7 +707,8 @@ msgstr ""
 #: frontend/src/pages/share-admin/share-links.js:87
 #: frontend/src/pages/share-admin/upload-links.js:55
 #: frontend/src/pages/shared-libs/shared-libs.js:64
-#: frontend/src/repo-folder-trash.js:250 frontend/src/shared-dir-view.js:271
+#: frontend/src/repo-folder-trash.js:250 frontend/src/repo-snapshot.js:218
+#: frontend/src/shared-dir-view.js:271
 msgid "Name"
 msgstr "Nafn"
 
@@ -1296,7 +1320,7 @@ msgstr ""
 #: frontend/src/pages/search/advanced-search.js:49
 #: frontend/src/pages/search/advanced-search.js:193
 #: frontend/src/pages/shared-libs/shared-libs.js:66
-#: frontend/src/repo-folder-trash.js:252
+#: frontend/src/repo-folder-trash.js:252 frontend/src/repo-snapshot.js:219
 msgid "Size"
 msgstr "Stærð"
 
@@ -1729,7 +1753,7 @@ msgstr ""
 #: frontend/src/components/shared-file-view/shared-file-view.js:102
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:304
 #: frontend/src/pages/file-history-old/history-item.js:122
-#: frontend/src/shared-dir-view.js:363
+#: frontend/src/repo-snapshot.js:327 frontend/src/shared-dir-view.js:363
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "Niðurhala"
@@ -1964,13 +1988,6 @@ msgstr ""
 msgid "Online view is not applicable to this file format"
 msgstr ""
 
-#: frontend/src/components/history-list-view/history-list-item.js:100
-#: frontend/src/pages/file-history-old/history-item.js:121
-#: frontend/src/pages/my-libs/my-libs-deleted.js:160
-#: frontend/src/repo-folder-trash.js:365 frontend/src/repo-folder-trash.js:375
-msgid "Restore"
-msgstr "Endurheimta"
-
 #: frontend/src/components/main-side-nav.js:78
 #: frontend/src/pages/org-admin/org-groups.js:81
 msgid "All Groups"
@@ -2107,7 +2124,7 @@ msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "Niðurhal skráa er óvirkt: eigandi hlekks hefur klárað netumferðarkvótann sinn fyrir deilda hlekki."
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:90
-#: frontend/src/repo-folder-trash.js:216
+#: frontend/src/repo-folder-trash.js:216 frontend/src/repo-snapshot.js:186
 msgid "Current path: "
 msgstr "Núverandi slóð:"
 
@@ -2644,6 +2661,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/file-scan-records.js:100
 #: frontend/src/pages/wikis/wikis.js:48 frontend/src/repo-folder-trash.js:62
 #: frontend/src/repo-folder-trash.js:145 frontend/src/repo-history.js:57
+#: frontend/src/repo-snapshot.js:81
 msgid "Permission denied"
 msgstr "Aðgangi hafnað"
 
@@ -2722,7 +2740,7 @@ msgstr ""
 
 #: frontend/src/pages/groups/group-view.js:225
 #: frontend/src/pages/groups/groups-view.js:59
-#: frontend/src/pages/lib-content-view/lib-content-view.js:609
+#: frontend/src/pages/lib-content-view/lib-content-view.js:629
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:199
 msgid "Successfully deleted {name}."
 msgstr ""
@@ -2833,49 +2851,49 @@ msgstr ""
 msgid "Search files in this library"
 msgstr "Leita að skrám í þessu safni"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:605
+#: frontend/src/pages/lib-content-view/lib-content-view.js:625
 msgid "Successfully deleted {name} and other {n} items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:614
+#: frontend/src/pages/lib-content-view/lib-content-view.js:634
 msgid "Failed to delete {name} and other {n} items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:784
-#: frontend/src/pages/lib-content-view/lib-content-view.js:792
+#: frontend/src/pages/lib-content-view/lib-content-view.js:804
+#: frontend/src/pages/lib-content-view/lib-content-view.js:812
 msgid "Renaming {name} failed"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:811
-#: frontend/src/pages/lib-content-view/lib-content-view.js:822
+#: frontend/src/pages/lib-content-view/lib-content-view.js:831
+#: frontend/src/pages/lib-content-view/lib-content-view.js:842
 #: frontend/src/pages/org-admin/org-groups.js:67
 #: frontend/src/pages/org-admin/org-libraries.js:69
 msgid "Successfully deleted {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:815
-#: frontend/src/pages/lib-content-view/lib-content-view.js:826
+#: frontend/src/pages/lib-content-view/lib-content-view.js:835
+#: frontend/src/pages/lib-content-view/lib-content-view.js:846
 msgid "Failed to delete {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:855
+#: frontend/src/pages/lib-content-view/lib-content-view.js:877
 #: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:824
 #: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
 msgid "Successfully moved %(name)s."
 msgstr "Tókst að flytja %(name)s."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:859
+#: frontend/src/pages/lib-content-view/lib-content-view.js:881
 #: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
 msgid "Failed to move %(name)s"
 msgstr "Mistókst að færa %(name)s"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:881
+#: frontend/src/pages/lib-content-view/lib-content-view.js:905
 #: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:809
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr "Tókst að afrita %(name)s."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:885
+#: frontend/src/pages/lib-content-view/lib-content-view.js:909
 #: frontend/src/repo-wiki-mode.js:519 static/scripts/app/views/dir.js:1383
 msgid "Failed to copy %(name)s"
 msgstr "Mistókst að afrita %(name)s"
@@ -2936,6 +2954,7 @@ msgid "Deleted Time"
 msgstr "Eyðslutími"
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:140
+#: frontend/src/repo-snapshot.js:135
 msgid "Successfully restored the library."
 msgstr ""
 
@@ -3134,6 +3153,7 @@ msgstr "Dagsetning"
 
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/repo-folder-trash.js:370 frontend/src/repo-folder-trash.js:422
+#: frontend/src/repo-snapshot.js:322
 msgid "File"
 msgstr "Skrá"
 
@@ -3509,11 +3529,12 @@ msgstr ""
 msgid "Delete Time"
 msgstr "Eyða Tíma"
 
-#: frontend/src/repo-folder-trash.js:332
+#: frontend/src/repo-folder-trash.js:332 frontend/src/repo-snapshot.js:286
 msgid "Successfully restored 1 item."
 msgstr ""
 
 #: frontend/src/repo-folder-trash.js:360 frontend/src/repo-folder-trash.js:414
+#: frontend/src/repo-snapshot.js:313
 msgid "Directory"
 msgstr "Mappa"
 
@@ -3547,7 +3568,7 @@ msgstr ""
 msgid "None"
 msgstr "Ekkert"
 
-#: frontend/src/repo-history.js:266
+#: frontend/src/repo-history.js:266 frontend/src/repo-snapshot.js:180
 msgid "Unknown"
 msgstr "Óþekkt"
 
@@ -3558,6 +3579,10 @@ msgstr "Núverandi Útgáfa"
 #: frontend/src/repo-history.js:297
 msgid "View Snapshot"
 msgstr "Skoða Skyndimynd"
+
+#: frontend/src/repo-snapshot.js:167
+msgid "{placeholder} Snapshot"
+msgstr ""
 
 #: frontend/src/repo-wiki-mode.js:133
 msgid "This folder has been updated. "
@@ -4254,10 +4279,6 @@ msgstr "Ertu viss um að þú viljir eyða öllum söfnum sem %s á?"
 #, javascript-format
 msgid "Are you sure you want to delete %s completely?"
 msgstr "Ertu viss um að þú viljir eyða %s algjörlega?"
-
-#: static/scripts/sysadmin-app/views/trash-repo.js:58
-msgid "Restore Library"
-msgstr "Endurvekja Safn"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format
