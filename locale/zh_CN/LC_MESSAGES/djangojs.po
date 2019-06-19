@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-12 11:40+0800\n"
-"PO-Revision-Date: 2019-06-12 03:54+0000\n"
+"POT-Creation-Date: 2019-06-18 11:47+0800\n"
+"PO-Revision-Date: 2019-06-18 04:09+0000\n"
 "Last-Translator: 杨顺强 <ysq9207@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -202,6 +202,7 @@ msgstr "为 {placeholder} 选择相关文件"
 #: frontend/src/components/dialog/create-tag-dialog.js:83
 #: frontend/src/components/dialog/update-tag-dialog.js:87
 #: frontend/src/repo-folder-trash.js:212 frontend/src/repo-history.js:113
+#: frontend/src/repo-snapshot.js:168
 msgid "Back"
 msgstr "返回"
 
@@ -213,6 +214,7 @@ msgstr "选择文件"
 #: frontend/src/components/dialog/add-related-file-dialog.js:107
 #: frontend/src/components/dialog/confirm-delete-account.js:35
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:35
+#: frontend/src/components/dialog/confirm-restore-repo.js:36
 #: frontend/src/components/dialog/copy-dirent-dialog.js:168
 #: frontend/src/components/dialog/create-file-dialog.js:162
 #: frontend/src/components/dialog/create-folder-dialog.js:102
@@ -400,8 +402,9 @@ msgstr "资料库密码重置成功。"
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:218
 #: frontend/src/pages/wikis/wikis.js:54 frontend/src/repo-folder-trash.js:68
 #: frontend/src/repo-folder-trash.js:151 frontend/src/repo-folder-trash.js:336
-#: frontend/src/repo-history.js:63 frontend/src/settings.js:77
-#: frontend/src/shared-dir-view.js:61
+#: frontend/src/repo-history.js:63 frontend/src/repo-snapshot.js:87
+#: frontend/src/repo-snapshot.js:142 frontend/src/repo-snapshot.js:290
+#: frontend/src/settings.js:77 frontend/src/shared-dir-view.js:61
 #: static/scripts/app/views/fileupload.js:18
 #: static/scripts/app/views/fileupload.js:228
 #: static/scripts/app/views/fileupload.js:268
@@ -445,8 +448,9 @@ msgstr "错误"
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:220
 #: frontend/src/pages/wikis/wikis.js:60 frontend/src/repo-folder-trash.js:74
 #: frontend/src/repo-folder-trash.js:157 frontend/src/repo-folder-trash.js:338
-#: frontend/src/repo-history.js:69 frontend/src/settings.js:80
-#: frontend/src/shared-dir-view.js:64
+#: frontend/src/repo-history.js:69 frontend/src/repo-snapshot.js:93
+#: frontend/src/repo-snapshot.js:145 frontend/src/repo-snapshot.js:292
+#: frontend/src/settings.js:80 frontend/src/shared-dir-view.js:64
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
 #: frontend/src/view-file-document.js:76
@@ -603,6 +607,25 @@ msgstr "断开连接"
 msgid "Are you sure you want to disconnect?"
 msgstr "你确定要断开连接吗？"
 
+#: frontend/src/components/dialog/confirm-restore-repo.js:31
+#: static/scripts/sysadmin-app/views/trash-repo.js:58
+msgid "Restore Library"
+msgstr "还原资料库"
+
+#: frontend/src/components/dialog/confirm-restore-repo.js:33
+msgid "Are you sure you want to restore this library?"
+msgstr "确定要还原该资料库？"
+
+#: frontend/src/components/dialog/confirm-restore-repo.js:37
+#: frontend/src/components/history-list-view/history-list-item.js:100
+#: frontend/src/pages/file-history-old/history-item.js:121
+#: frontend/src/pages/my-libs/my-libs-deleted.js:160
+#: frontend/src/repo-folder-trash.js:365 frontend/src/repo-folder-trash.js:375
+#: frontend/src/repo-snapshot.js:188 frontend/src/repo-snapshot.js:317
+#: frontend/src/repo-snapshot.js:326
+msgid "Restore"
+msgstr "还原"
+
 #: frontend/src/components/dialog/copy-dirent-dialog.js:50
 #: frontend/src/components/dialog/move-dirent-dialog.js:50
 #: frontend/src/components/dialog/move-dirent-dialog.js:102
@@ -697,7 +720,8 @@ msgstr "新建部门资料库"
 #: frontend/src/pages/share-admin/share-links.js:87
 #: frontend/src/pages/share-admin/upload-links.js:55
 #: frontend/src/pages/shared-libs/shared-libs.js:64
-#: frontend/src/repo-folder-trash.js:250 frontend/src/shared-dir-view.js:271
+#: frontend/src/repo-folder-trash.js:250 frontend/src/repo-snapshot.js:218
+#: frontend/src/shared-dir-view.js:271
 msgid "Name"
 msgstr "名称"
 
@@ -1309,7 +1333,7 @@ msgstr "资料库名称"
 #: frontend/src/pages/search/advanced-search.js:49
 #: frontend/src/pages/search/advanced-search.js:193
 #: frontend/src/pages/shared-libs/shared-libs.js:66
-#: frontend/src/repo-folder-trash.js:252
+#: frontend/src/repo-folder-trash.js:252 frontend/src/repo-snapshot.js:219
 msgid "Size"
 msgstr "大小"
 
@@ -1742,7 +1766,7 @@ msgstr "发布资料库"
 #: frontend/src/components/shared-file-view/shared-file-view.js:102
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:304
 #: frontend/src/pages/file-history-old/history-item.js:122
-#: frontend/src/shared-dir-view.js:363
+#: frontend/src/repo-snapshot.js:327 frontend/src/shared-dir-view.js:363
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "下载"
@@ -1977,13 +2001,6 @@ msgstr "评论"
 msgid "Online view is not applicable to this file format"
 msgstr "此文件格式不支持云端查看"
 
-#: frontend/src/components/history-list-view/history-list-item.js:100
-#: frontend/src/pages/file-history-old/history-item.js:121
-#: frontend/src/pages/my-libs/my-libs-deleted.js:160
-#: frontend/src/repo-folder-trash.js:365 frontend/src/repo-folder-trash.js:375
-msgid "Restore"
-msgstr "还原"
-
 #: frontend/src/components/main-side-nav.js:78
 #: frontend/src/pages/org-admin/org-groups.js:81
 msgid "All Groups"
@@ -2120,7 +2137,7 @@ msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "文件下载已禁用：外链拥有者的流量已用完。"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:90
-#: frontend/src/repo-folder-trash.js:216
+#: frontend/src/repo-folder-trash.js:216 frontend/src/repo-snapshot.js:186
 msgid "Current path: "
 msgstr "当前路径："
 
@@ -2657,6 +2674,7 @@ msgstr "移动文件夹"
 #: frontend/src/pages/sys-admin/file-scan-records.js:100
 #: frontend/src/pages/wikis/wikis.js:48 frontend/src/repo-folder-trash.js:62
 #: frontend/src/repo-folder-trash.js:145 frontend/src/repo-history.js:57
+#: frontend/src/repo-snapshot.js:81
 msgid "Permission denied"
 msgstr "没有权限"
 
@@ -2735,7 +2753,7 @@ msgstr "你可以点击上面的“新建资料库”按扭创建资料库。"
 
 #: frontend/src/pages/groups/group-view.js:225
 #: frontend/src/pages/groups/groups-view.js:59
-#: frontend/src/pages/lib-content-view/lib-content-view.js:609
+#: frontend/src/pages/lib-content-view/lib-content-view.js:629
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:199
 msgid "Successfully deleted {name}."
 msgstr " {name}  删除成功。"
@@ -2846,49 +2864,49 @@ msgstr "侧边导航菜单"
 msgid "Search files in this library"
 msgstr "在当前资料库搜索文件"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:605
+#: frontend/src/pages/lib-content-view/lib-content-view.js:625
 msgid "Successfully deleted {name} and other {n} items."
 msgstr "成功删除 {name} 和其他 {n} 项内容。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:614
+#: frontend/src/pages/lib-content-view/lib-content-view.js:634
 msgid "Failed to delete {name} and other {n} items."
 msgstr "删除 {name} 以及另外 {n} 项失败。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:784
-#: frontend/src/pages/lib-content-view/lib-content-view.js:792
+#: frontend/src/pages/lib-content-view/lib-content-view.js:804
+#: frontend/src/pages/lib-content-view/lib-content-view.js:812
 msgid "Renaming {name} failed"
 msgstr "重命名{name}失败"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:811
-#: frontend/src/pages/lib-content-view/lib-content-view.js:822
+#: frontend/src/pages/lib-content-view/lib-content-view.js:831
+#: frontend/src/pages/lib-content-view/lib-content-view.js:842
 #: frontend/src/pages/org-admin/org-groups.js:67
 #: frontend/src/pages/org-admin/org-libraries.js:69
 msgid "Successfully deleted {name}"
 msgstr " {name}  删除成功"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:815
-#: frontend/src/pages/lib-content-view/lib-content-view.js:826
+#: frontend/src/pages/lib-content-view/lib-content-view.js:835
+#: frontend/src/pages/lib-content-view/lib-content-view.js:846
 msgid "Failed to delete {name}"
 msgstr "删除 {name} 失败"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:855
+#: frontend/src/pages/lib-content-view/lib-content-view.js:877
 #: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:824
 #: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
 msgid "Successfully moved %(name)s."
 msgstr "成功移动 %(name)s。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:859
+#: frontend/src/pages/lib-content-view/lib-content-view.js:881
 #: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
 msgid "Failed to move %(name)s"
 msgstr "移动 %(name)s 失败"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:881
+#: frontend/src/pages/lib-content-view/lib-content-view.js:905
 #: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:809
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr "成功复制 %(name)s。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:885
+#: frontend/src/pages/lib-content-view/lib-content-view.js:909
 #: frontend/src/repo-wiki-mode.js:519 static/scripts/app/views/dir.js:1383
 msgid "Failed to copy %(name)s"
 msgstr "复制 %(name)s 失败"
@@ -2949,6 +2967,7 @@ msgid "Deleted Time"
 msgstr "删除时间"
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:140
+#: frontend/src/repo-snapshot.js:135
 msgid "Successfully restored the library."
 msgstr "资料库还原成功。"
 
@@ -3147,6 +3166,7 @@ msgstr "日期"
 
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/repo-folder-trash.js:370 frontend/src/repo-folder-trash.js:422
+#: frontend/src/repo-snapshot.js:322
 msgid "File"
 msgstr "文件"
 
@@ -3522,11 +3542,12 @@ msgstr "{placeholder} 回收站"
 msgid "Delete Time"
 msgstr "删除时间"
 
-#: frontend/src/repo-folder-trash.js:332
+#: frontend/src/repo-folder-trash.js:332 frontend/src/repo-snapshot.js:286
 msgid "Successfully restored 1 item."
 msgstr "成功还原一项。"
 
 #: frontend/src/repo-folder-trash.js:360 frontend/src/repo-folder-trash.js:414
+#: frontend/src/repo-snapshot.js:313
 msgid "Directory"
 msgstr "目录"
 
@@ -3560,7 +3581,7 @@ msgstr "标签"
 msgid "None"
 msgstr "无"
 
-#: frontend/src/repo-history.js:266
+#: frontend/src/repo-history.js:266 frontend/src/repo-snapshot.js:180
 msgid "Unknown"
 msgstr "未知"
 
@@ -3571,6 +3592,10 @@ msgstr "当前版本"
 #: frontend/src/repo-history.js:297
 msgid "View Snapshot"
 msgstr "查看镜像"
+
+#: frontend/src/repo-snapshot.js:167
+msgid "{placeholder} Snapshot"
+msgstr "{placeholder} 镜像"
 
 #: frontend/src/repo-wiki-mode.js:133
 msgid "This folder has been updated. "
@@ -4267,10 +4292,6 @@ msgstr "确定要删除所有 %s 的资料库吗？"
 #, javascript-format
 msgid "Are you sure you want to delete %s completely?"
 msgstr "确定要完全删除 %s 吗？"
-
-#: static/scripts/sysadmin-app/views/trash-repo.js:58
-msgid "Restore Library"
-msgstr "还原资料库"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format
