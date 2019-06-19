@@ -458,12 +458,10 @@ class DirentListItem extends React.Component {
   }
 
   renderItemOperation = () => {
-    let { dirent, selectedDirentList, currentRepoInfo } = this.props;
+    let { dirent, selectedDirentList, currentRepoInfo, showShareBtn } = this.props;
     if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
       return '';
     }
-
-    let isShowShareBtn = (dirent.type === 'dir' && this.props.showShareBtn) || canGenerateShareLink;
     
     return (
       <Fragment>
@@ -475,7 +473,7 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
-                  {isShowShareBtn &&
+                  {showShareBtn &&
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>
@@ -505,7 +503,7 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
-                  {isShowShareBtn &&
+                  {showShareBtn &&
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                   </li>
