@@ -308,13 +308,6 @@ class SharedRepoListItem extends React.Component {
               })}
             </DropdownMenu>
           </Dropdown>
-          {this.state.isDeleteDialogShow && 
-            <DeleteRepoDialog 
-              repo={this.props.repo}
-              onDeleteRepo={this.props.onItemDelete}
-              toggle={this.onItemDeleteToggle}
-            />
-          }
         </Fragment>
       );
     } else {
@@ -400,6 +393,15 @@ class SharedRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
+        {this.state.isDeleteDialogShow && 
+            <ModalPortal>
+              <DeleteRepoDialog 
+                repo={this.props.repo}
+                onDeleteRepo={this.props.onItemDelete}
+                toggle={this.onItemDeleteToggle}
+              />
+          </ModalPortal>
+        }
       </Fragment>
     );
   }
