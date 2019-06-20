@@ -2,8 +2,7 @@ import React, { Fragment }  from 'react';
 import PropTypes from 'prop-types';
 import {gettext} from '../../utils/constants';
 import {Modal, ModalHeader, ModalBody, Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap';
-import ShareToUser from "./share-to-user";
-import ShareToGroup from "./share-to-group";
+import ShareWorkspaceToUser from './share-workspace-to-user';
 
 import '../../css/share-link-dialog.css';
 
@@ -55,20 +54,12 @@ class ShareWorkspaceDialog extends React.Component {
           <TabContent activeTab={this.state.activeTab}>
             <Fragment>
               <TabPane tabId="shareToUser">
-                <ShareToUser
-                  itemType={this.props.itemType}
-                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                  itemPath={this.props.itemPath}
-                  repoID={this.props.repoID}
+                <ShareWorkspaceToUser
+                  currentWorkspace={this.props.currentWorkspace}
                 />
               </TabPane>
               <TabPane tabId="shareToGroup">
-                <ShareToGroup
-                  itemType={this.props.itemType}
-                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                  itemPath={this.props.itemPath}
-                  repoID={this.props.repoID}
-                />
+
               </TabPane>
             </Fragment>
           </TabContent>

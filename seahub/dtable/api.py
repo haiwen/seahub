@@ -13,8 +13,8 @@ from seaserv import seafile_api, ccnet_api
 from seahub.base.accounts import User
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
-from seahub.dtable.models import Workspaces, UserShareWorkspace, GroupShareWorkspace
+from seahub.api2.utils import api_error, get_user_common_info
+from seahub.dtable.models import Workspaces, UserShareWorkspace
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_valid_username, is_org_context
@@ -72,23 +72,54 @@ class UserShareWorkspacesView(APIView):
 
         return Response({"workspace_list": workspace_list})
 
-    def post(self, request):
+
+class UserShareWorkspaceView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, workspace_id):
+        """get users from user share workspace
+        """
+        from_user = request.user.username
+
+        # resource check
+        try:
+            workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error.'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        if not workspace:
+            error_msg = 'Workspace %d not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if from_user != workspace.owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            share_queryset = UserShareWorkspace.objects.list_by_workspace_id(workspace_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error.'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        user_list = list()
+        for item in share_queryset:
+            user_info = get_user_common_info(item.to_user)
+            user_info['permission'] = item.permission
+            user_list.append(user_info)
+
+        return Response({"user_list": user_list})
+
+    def post(self, request, workspace_id):
         """share a workspace to user
         """
         from_user = request.user.username
 
         # argument check
-        workspace_id = request.data.get('workspace_id')
-        if not workspace_id:
-            error_msg = 'workspace_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        try:
-            workspace_id = int(workspace_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'workspace_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         to_user = request.data.get('email')
         if not to_user or not is_valid_username(to_user):
             error_msg = 'email invalid.'
@@ -153,12 +184,6 @@ class UserShareWorkspacesView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": True})
-
-
-class UserShareWorkspaceView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
 
     def put(self, request, workspace_id):
         """edit a user share workspace permission
@@ -270,34 +295,3 @@ class UserShareWorkspaceView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": True})
-
-
-class GroupShareWorkspacesView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def get(self, request):
-        """get workspaces from group share
-        """
-        username = request.user.username
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            user_groups = ccnet_api.get_org_groups_by_user(org_id, username)
-        else:
-            user_groups = ccnet_api.get_groups(username, return_ancestors=True)
-
-        group_ids = [group.id for group in user_groups]
-
-        if group_ids:
-            try:
-                share_queryset = GroupShareWorkspace.objects.list_by_group_ids(group_ids)
-            except Exception as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error.'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-            # todo
-
-        return Response()

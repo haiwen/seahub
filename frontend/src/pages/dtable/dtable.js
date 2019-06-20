@@ -151,7 +151,7 @@ const workspacePropTypes = {
   workspace: PropTypes.object.isRequired,
   renameWorkspace: PropTypes.func,
   deleteWorkspace: PropTypes.func,
-  leaveUserShareWorkspace: PropTypes.func,
+  deleteUserShareWorkspace: PropTypes.func,
   isOwner: PropTypes.bool.isRequired,
 };
 
@@ -260,14 +260,14 @@ class Workspace extends Component {
     this.setState({isWorkspaceSharing: !this.state.isWorkspaceSharing});
   }
 
-  onLeaveUserShareWorkspaceCancel = () => {
+  onDeleteUserShareWorkspaceCancel = () => {
     this.setState({isWorkspaceLeaveSharing: !this.state.isWorkspaceLeaveSharing});
   }
 
-  onLeaveUserShareWorkspaceSubmit = () => {
+  onDeleteUserShareWorkspaceSubmit = () => {
     let workspace = this.props.workspace;
-    this.props.leaveUserShareWorkspace(workspace);
-    this.onLeaveUserShareWorkspaceCancel();
+    this.props.deleteUserShareWorkspace(workspace);
+    this.onDeleteUserShareWorkspaceCancel();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -308,7 +308,7 @@ class Workspace extends Component {
                   {isOwner && <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>}
                   {isOwner && <DropdownItem onClick={this.onDeleteWorkspaceCancel}>{gettext('Delete')}</DropdownItem>}
                   {isOwner && <DropdownItem onClick={this.onUserShareWorkspaceCancel}>{gettext('Share')}</DropdownItem>}
-                  {!isOwner && <DropdownItem onClick={this.onLeaveUserShareWorkspaceCancel}>{gettext('Leave Share')}</DropdownItem>}
+                  {!isOwner && <DropdownItem onClick={this.onDeleteUserShareWorkspaceCancel}>{gettext('Leave Share')}</DropdownItem>}
                 </DropdownMenu>
               </Dropdown>
               {this.state.isWorkspaceDeleting &&
@@ -327,8 +327,8 @@ class Workspace extends Component {
               {this.state.isWorkspaceLeaveSharing &&
                 <LeaveShareWorkspaceDialog
                   currentWorkspace={workspace}
-                  leaveUserShareCancel={this.onLeaveUserShareWorkspaceCancel}
-                  handleSubmit={this.onLeaveUserShareWorkspaceSubmit}
+                  leaveUserShareCancel={this.onDeleteUserShareWorkspaceCancel}
+                  handleSubmit={this.onDeleteUserShareWorkspaceSubmit}
                 />
               }
             </span>
@@ -438,9 +438,9 @@ class DTable extends Component {
     });
   }
 
-  leaveUserShareWorkspace= (workspace) => {
+  deleteUserShareWorkspace= (workspace) => {
     let workspaceID = workspace.id;
-    seafileAPI.leaveUserShareWorkspace(workspaceID, username).then(() => {
+    seafileAPI.deleteUserShareWorkspace(workspaceID, username).then(() => {
       let userShareWorkspaceList = this.state.userShareWorkspaceList.filter(workspace => {
         return workspace.id !== workspaceID;
       });
@@ -521,7 +521,7 @@ class DTable extends Component {
                     <Workspace
                       key={index}
                       workspace={workspace}
-                      leaveUserShareWorkspace={this.leaveUserShareWorkspace}
+                      deleteUserShareWorkspace={this.deleteUserShareWorkspace}
                       isOwner={false}
                     />
                   );

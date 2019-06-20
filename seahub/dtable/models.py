@@ -77,6 +77,9 @@ class UserShareWorkspaceManager(models.Manager):
     def list_by_to_user(self, to_user):
         return self.filter(to_user=to_user).select_related('workspace')
 
+    def list_by_workspace_id(self, workspace_id):
+        return self.filter(workspace_id=workspace_id)
+
     def get_by_workspace_id_and_to_user(self, workspace_id, to_user):
         if self.filter(workspace_id=workspace_id, to_user=to_user).exists():
             return self.filter(workspace_id=workspace_id, to_user=to_user)[0]
