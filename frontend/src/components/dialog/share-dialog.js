@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap'; 
-import { gettext, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import GenerateShareLink from './generate-share-link';
 import GenerateUploadLink from './generate-upload-link';
 import '../../css/share-link-dialog.css';
+import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
@@ -24,8 +25,21 @@ class ShareDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: this.getInitialActiveTab()
+      activeTab: this.getInitialActiveTab(),
+      isRepoJudgeMent: false,
+      isRepoOwner: false,
     };
+  }
+
+  componentDidMount() {
+    let repoID = this.props.repoID;
+    seafileAPI.getRepoInfo(repoID).then(res => {
+      let isRepoOwner = res.data.owner_email === username;
+      this.setState({
+        isRepoJudgeMent: true,
+        isRepoOwner: isRepoOwner,
+      });
+    });
   }
 
   getInitialActiveTab = () => {
@@ -112,10 +126,10 @@ class ShareDialog extends React.Component {
             {enableDirPrivateShare &&
               <Fragment>
                 <TabPane tabId="shareToUser">
-                  <ShareToUser itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
+                  <ShareToUser itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner}/>
                 </TabPane>
                 <TabPane tabId="shareToGroup">
-                  <ShareToGroup itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} />
+                  <ShareToGroup itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner}/>
                 </TabPane>
               </Fragment>
             }
@@ -154,6 +168,10 @@ class ShareDialog extends React.Component {
   }
 
   render() {
+
+    if (!this.state.isRepoJudgeMent) {
+      return '';
+    }
     const { itemType, itemName, repoEncrypted } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
     return (

@@ -88,7 +88,8 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
   itemType: PropTypes.string.isRequired,
-  repoID: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  isRepoOwner: PropTypes.bool.isRequired,
 };
 
 class ShareToUser extends React.Component {
@@ -103,8 +104,9 @@ class ShareToUser extends React.Component {
     };
     this.options = [];
     this.permissions = [];
-    if (this.props.itemType === 'library') {
-      this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    let { itemType, isRepoOwner } = props;
+    if (itemType === 'library') {
+      this.permissions = isRepoOwner ? ['rw', 'r', 'admin', 'cloud-edit', 'preview'] : ['rw', 'r', 'cloud-edit', 'preview'];
     } else if (this.props.itemType === 'dir') {
       this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
     }
