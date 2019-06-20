@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import CreateWorkspaceDialog from '../../components/dialog/create-workspace-dialog';
 import DeleteWorkspaceDialog from '../../components/dialog/delete-workspace-dialog';
 import CreateTableDialog from '../../components/dialog/create-table-dialog';
 import DeleteTableDialog from '../../components/dialog/delete-table-dialog';
+import ShareWorkspaceDialog from '../../components/dialog/share-workspace-dialog';
+import LeaveShareWorkspaceDialog from '../../components/dialog/leave-share-workspace-dialog';
 import Rename from '../../components/rename';
 import '../../css/dtable-page.css';
 
@@ -23,6 +25,7 @@ const tablePropTypes = {
   onUnfreezedItem: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  hasWritePermission: PropTypes.bool.isRequired,
 };
 
 class Table extends Component {
@@ -112,7 +115,7 @@ class Table extends Component {
         <td>{table.modifier}</td>
         <td>{moment(table.mtime).fromNow()}</td>
         <td>
-          {this.state.active &&
+          {(this.state.active && this.props.hasWritePermission) &&
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
               <DropdownToggle
                 tag='i'
@@ -146,22 +149,28 @@ Table.propTypes = tablePropTypes;
 
 const workspacePropTypes = {
   workspace: PropTypes.object.isRequired,
-  renameWorkspace: PropTypes.func.isRequired,
-  deleteWorkspace: PropTypes.func.isRequired,
+  renameWorkspace: PropTypes.func,
+  deleteWorkspace: PropTypes.func,
+  leaveUserShareWorkspace: PropTypes.func,
+  isOwner: PropTypes.bool.isRequired,
 };
 
 class Workspace extends Component {
 
   constructor(props) {
     super(props);
+    this.writePermissions = ['rw', 'admin'];
     this.state = {
       tableList: this.props.workspace.table_list,
       errorMsg: '',
       isWorkspaceRenaming: false,
       isWorkspaceDeleting: false,
+      isWorkspaceSharing: false,
+      isWorkspaceLeaveSharing: false,
       isShowAddTableDialog: false,
       dropdownOpen: false,
       isItemFreezed: false,
+      hasWritePermission: this.props.isOwner || (!this.props.isOwner && this.writePermissions.includes(this.props.workspace.permission)),
     };
   }
 
@@ -247,6 +256,20 @@ class Workspace extends Component {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   }
 
+  onUserShareWorkspaceCancel = () => {
+    this.setState({isWorkspaceSharing: !this.state.isWorkspaceSharing});
+  }
+
+  onLeaveUserShareWorkspaceCancel = () => {
+    this.setState({isWorkspaceLeaveSharing: !this.state.isWorkspaceLeaveSharing});
+  }
+
+  onLeaveUserShareWorkspaceSubmit = () => {
+    let workspace = this.props.workspace;
+    this.props.leaveUserShareWorkspace(workspace);
+    this.onLeaveUserShareWorkspaceCancel();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.workspace.table_list !== this.props.workspace.table_list) {
       this.setState({
@@ -256,7 +279,7 @@ class Workspace extends Component {
   }
 
   render() {
-    let workspace = this.props.workspace;
+    let { workspace, isOwner }= this.props;
 
     return(
       <div className="workspace my-2">
@@ -282,8 +305,10 @@ class Workspace extends Component {
                 >
                 </DropdownToggle>
                 <DropdownMenu className="drop-list" right={true}>
-                  <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>
-                  <DropdownItem onClick={this.onDeleteWorkspaceCancel}>{gettext('Delete')}</DropdownItem>
+                  {isOwner && <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>}
+                  {isOwner && <DropdownItem onClick={this.onDeleteWorkspaceCancel}>{gettext('Delete')}</DropdownItem>}
+                  {isOwner && <DropdownItem onClick={this.onUserShareWorkspaceCancel}>{gettext('Share')}</DropdownItem>}
+                  {!isOwner && <DropdownItem onClick={this.onLeaveUserShareWorkspaceCancel}>{gettext('Leave Share')}</DropdownItem>}
                 </DropdownMenu>
               </Dropdown>
               {this.state.isWorkspaceDeleting &&
@@ -293,9 +318,23 @@ class Workspace extends Component {
                   handleSubmit={this.onDeleteWorkspaceSubmit}
                 />
               }
+              {this.state.isWorkspaceSharing &&
+                <ShareWorkspaceDialog
+                  currentWorkspace={workspace}
+                  userShareCancel={this.onUserShareWorkspaceCancel}
+                />
+              }
+              {this.state.isWorkspaceLeaveSharing &&
+                <LeaveShareWorkspaceDialog
+                  currentWorkspace={workspace}
+                  leaveUserShareCancel={this.onLeaveUserShareWorkspaceCancel}
+                  handleSubmit={this.onLeaveUserShareWorkspaceSubmit}
+                />
+              }
             </span>
           }
         </Fragment>
+        {this.state.hasWritePermission &&
         <div className="d-flex add-table-btn-container">
           <div className="add-table-btn cursor-pointer" onClick={this.onAddTable}>
             <i className="fa fa-plus"></i>
@@ -308,6 +347,7 @@ class Workspace extends Component {
           }
           <span>{gettext('Add a DTable')}</span>
         </div>
+        }
         <table width="100%" className="table-vcenter">
           <colgroup>
             <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
@@ -324,6 +364,7 @@ class Workspace extends Component {
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
                   isItemFreezed={this.state.isItemFreezed}
+                  hasWritePermission={this.state.hasWritePermission}
                 />
               );
             })}
@@ -343,6 +384,7 @@ class DTable extends Component {
       loading: true,
       errorMsg: '',
       workspaceList: [],
+      userShareWorkspaceList: [],
       isShowAddWorkspaceDialog: false,
     };
   }
@@ -396,6 +438,20 @@ class DTable extends Component {
     });
   }
 
+  leaveUserShareWorkspace= (workspace) => {
+    let workspaceID = workspace.id;
+    seafileAPI.leaveUserShareWorkspace(workspaceID, username).then(() => {
+      let userShareWorkspaceList = this.state.userShareWorkspaceList.filter(workspace => {
+        return workspace.id !== workspaceID;
+      });
+      this.setState({userShareWorkspaceList: userShareWorkspaceList});
+    }).catch((error) => {
+      if(error.response) {
+        this.setState({errorMsg: gettext('Error')});
+      }
+    });
+  };
+
   componentDidMount() {
     seafileAPI.listWorkspaces().then((res) => {
       this.setState({
@@ -414,6 +470,11 @@ class DTable extends Component {
           errorMsg: gettext('Please check the network.')
         });
       }
+    });
+    seafileAPI.listUserShareWorkspaces().then((res) => {
+      this.setState({
+        userShareWorkspaceList: res.data.workspace_list,
+      });
     });
   }
 
@@ -438,6 +499,7 @@ class DTable extends Component {
                       workspace={workspace}
                       renameWorkspace={this.renameWorkspace}
                       deleteWorkspace={this.deleteWorkspace}
+                      isOwner={true}
                     />
                   );
                 })}
@@ -452,6 +514,18 @@ class DTable extends Component {
                     />
                   }
                 </div>
+                <hr style={{width: '100%'}}/>
+                <div className="sf-heading">{gettext('Shared with me')}</div>
+                {this.state.userShareWorkspaceList.map((workspace, index) => {
+                  return (
+                    <Workspace
+                      key={index}
+                      workspace={workspace}
+                      leaveUserShareWorkspace={this.leaveUserShareWorkspace}
+                      isOwner={false}
+                    />
+                  );
+                })}
               </Fragment>
             }
           </div>
