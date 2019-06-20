@@ -29,12 +29,15 @@ from seahub.views.file import send_file_access_msg
 from seahub.auth.decorators import login_required
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN, \
      SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT
+from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
+from seahub.dtable.utils import check_workspace_permission
 
 
 logger = logging.getLogger(__name__)
 
 
 FILE_TYPE = '.dtable'
+write_permission_tuple = (PERMISSION_ADMIN, PERMISSION_READ_WRITE)
 
 
 class WorkspacesView(APIView):
@@ -291,7 +294,7 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
+        if not check_workspace_permission(workspace, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -331,7 +334,7 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
+        if check_workspace_permission(workspace, username) not in write_permission_tuple:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -346,7 +349,7 @@ class DTableView(APIView):
 
         try:
             seafile_api.post_empty_file(repo_id, '/', table_file_name, owner)
-        except SearpcError, e:
+        except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -405,7 +408,7 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
+        if check_workspace_permission(workspace, username) not in write_permission_tuple:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -463,7 +466,7 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
+        if check_workspace_permission(workspace, username) not in write_permission_tuple:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -525,7 +528,7 @@ class DTableUpdateLinkView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
+        if check_workspace_permission(workspace, username) not in write_permission_tuple:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -572,7 +575,7 @@ class DTableAssetUploadLinkView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
+        if check_workspace_permission(workspace, username) not in write_permission_tuple:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -623,7 +626,7 @@ def dtable_file_view(request, workspace_id, name):
     # permission check
     username = request.user.username
     owner = workspace.owner
-    if username != owner:
+    if not check_workspace_permission(workspace, username):
         return render_permission_error(request, _(u'Unable to view file'))
 
     return_dict = {

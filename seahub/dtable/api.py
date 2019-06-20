@@ -79,7 +79,7 @@ class UserShareWorkspaceView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, workspace_id):
-        """get users from user share workspace
+        """list users from user share workspace
         """
         from_user = request.user.username
 
@@ -183,10 +183,10 @@ class UserShareWorkspaceView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"success": True})
+        return Response({"success": True}, status=status.HTTP_201_CREATED)
 
     def put(self, request, workspace_id):
-        """edit a user share workspace permission
+        """modify user share workspace permission
         """
         from_user = request.user.username
 
@@ -249,7 +249,7 @@ class UserShareWorkspaceView(APIView):
         return Response({"success": True})
 
     def delete(self, request, workspace_id):
-        """unshare a user share workspace
+        """unshare user share workspace
         """
         username = request.user.username
 

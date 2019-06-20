@@ -227,13 +227,13 @@ class ShareWorkspaceToUser extends React.Component {
             <tbody>
               {renderUserList}
             </tbody>
-            { canInvitePeople &&
-              <a href={siteRoot + 'invitations/'} className="invite-link-in-popup">
-                <i className="sf2-icon-invite invite-link-icon-in-popup"></i>
-                <span className="invite-link-icon-in-popup">{gettext('Invite People')}</span>
-              </a>
-            }
           </table>
+          { canInvitePeople &&
+          <a href={siteRoot + 'invitations/'} className="invite-link-in-popup">
+            <i className="sf2-icon-invite invite-link-icon-in-popup"></i>
+            <span className="invite-link-icon-in-popup">{gettext('Invite People')}</span>
+          </a>
+          }
         </div>
       </Fragment>
     );
