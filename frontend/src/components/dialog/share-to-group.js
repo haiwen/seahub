@@ -36,6 +36,7 @@ class GroupItem extends React.Component {
 
   render() {
     let item = this.props.item;
+    let currentPermission = item.is_admin ? 'admin' : item.permission;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className='name'>{item.group_info.name}</td>
@@ -43,7 +44,7 @@ class GroupItem extends React.Component {
           <SharePermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
-            currentPermission={item.permission}
+            currentPermission={currentPermission}
             permissions={this.props.permissions}
             onPermissionChanged={this.onChangeUserPermission}
           />
@@ -251,6 +252,7 @@ class ShareToGroup extends React.Component {
       if (groupID === sharedItemGroupID) {
         sharedItem.permission = permission;
       }
+      sharedItem.is_admin = permission === 'admin' ? true : false;
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
