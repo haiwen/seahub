@@ -116,6 +116,7 @@ class MainPanel extends Component {
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
                 isWiki={true}
+                path={this.props.path}
               />
             )}
             {(!this.props.isDataLoading && !this.props.isViewFile) && (

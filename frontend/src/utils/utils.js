@@ -880,6 +880,21 @@ export const Utils = {
     return password;
   },
 
+  pathNormalize: function(originalPath) {
+    let oldPath = originalPath.split('/');
+    let newPath = [];
+    for (let i = 0; i < oldPath.length; i++) {
+      if (oldPath[i] === '.' || oldPath[i] === '') {
+        continue;
+      } else if (oldPath[i] === '..') {
+        newPath.pop();
+      } else {
+        newPath.push(oldPath[i]);
+      }
+    }
+    return newPath.join('/');
+  },
+
   getEventData: function(event, data) {
     if (event.target.dataset) {
       return event.target.dataset[data];
