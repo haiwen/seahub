@@ -8,12 +8,12 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 from pysearpc import SearpcError
-from seaserv import seafile_api, edit_repo, check_quota
+from seaserv import seafile_api, edit_repo
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -24,7 +24,8 @@ from seahub.tags.models import FileUUIDMap
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
-     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url
+    check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, \
+    gen_file_get_url, get_file_type_and_ext, IMAGE
 from seahub.views.file import send_file_access_msg
 from seahub.auth.decorators import login_required
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN, \
@@ -285,7 +286,7 @@ class DTableView(APIView):
         table_path = normalize_file_path(table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
         if not table_file_id:
-            error_msg = 'Library %s not found.' % repo_id
+            error_msg = 'table %s not found.' % table_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -638,3 +639,34 @@ def dtable_file_view(request, workspace_id, name):
     }
 
     return render(request, 'dtable_file_view_react.html', return_dict)
+
+
+def dtable_asset_access(request, workspace_id, dtable_id, name):
+
+    # resource check
+    workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+    if not workspace:
+        raise Http404
+
+    repo_id = workspace.repo_id
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    asset_file_path = os.path.join('/asset', dtable_id, name)
+    asset_file_id = seafile_api.get_file_id_by_path(repo_id, asset_file_path)
+    if not asset_file_id:
+        raise Http404
+
+    # check file type
+    file_type, file_ext = get_file_type_and_ext(name)
+    if file_type != IMAGE:
+        err_msg = 'Invalid file type'
+        return render_error(request, err_msg)
+
+    token = seafile_api.get_fileserver_access_token(repo_id, asset_file_id,
+                                                    'view', '', use_onetime=False)
+
+    url = gen_file_get_url(token, name)
+
+    return HttpResponseRedirect(url)

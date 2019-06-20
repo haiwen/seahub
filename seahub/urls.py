@@ -89,7 +89,7 @@ from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.dtable import WorkspacesView, WorkspaceView, DTableView, \
-     DTableUpdateLinkView, DTableAssetUploadLinkView, dtable_file_view
+     DTableUpdateLinkView, DTableAssetUploadLinkView, dtable_file_view, dtable_asset_access
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -364,6 +364,7 @@ urlpatterns = [
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-update-link/$', DTableUpdateLinkView.as_view(), name='api-v2.1-workspace-dtable-update-link'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-asset-upload-link/$', DTableAssetUploadLinkView.as_view(), name='api-v2.1-workspace-dtable-asset-upload-link'),
     url(r'^workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/$', dtable_file_view, name='dtable-file-view'),
+    url(r'^workspace/(?P<workspace_id>\d+)/asset/(?P<dtable_id>[-0-9a-f]{36})/(?P<name>.*)/', dtable_asset_access, name='dtable-asset-access'),
 
     # Deprecated
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
