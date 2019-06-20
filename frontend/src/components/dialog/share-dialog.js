@@ -26,7 +26,7 @@ class ShareDialog extends React.Component {
     super(props);
     this.state = {
       activeTab: this.getInitialActiveTab(),
-      isRepoJudgeMent: false,
+      isRepoJudgemented: false,
       isRepoOwner: false,
     };
   }
@@ -36,7 +36,7 @@ class ShareDialog extends React.Component {
     seafileAPI.getRepoInfo(repoID).then(res => {
       let isRepoOwner = res.data.owner_email === username;
       this.setState({
-        isRepoJudgeMent: true,
+        isRepoJudgemented: true,
         isRepoOwner: isRepoOwner,
       });
     });
@@ -169,7 +169,7 @@ class ShareDialog extends React.Component {
 
   render() {
 
-    if (!this.state.isRepoJudgeMent) {
+    if (!this.state.isRepoJudgemented) {
       return '';
     }
     const { itemType, itemName, repoEncrypted } = this.props;
