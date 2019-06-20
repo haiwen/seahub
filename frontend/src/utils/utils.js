@@ -880,6 +880,22 @@ export const Utils = {
     return password;
   },
 
+  pathNormalize: function(filePath, relativePath) {
+    let newPath = relativePath.split('/');
+    let path = filePath.slice(1, filePath.lastIndexOf('/')).split('/');
+    for (let i = 0, len = newPath.length; i < len; i++) {
+      if (newPath[i] === '..') {
+        path.pop();
+        newPath.splice(i, 1);
+        i--;
+      } else if (newPath[i] === '.') {
+        newPath.splice(i, 1);
+        i--;
+      }
+    }
+    return path.concat(newPath).join('/');
+  },
+
   getEventData: function(event, data) {
     if (event.target.dataset) {
       return event.target.dataset[data];
