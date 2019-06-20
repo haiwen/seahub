@@ -140,7 +140,9 @@ class WikiMarkdownViewer extends React.Component {
           let index2 = url.indexOf('?');
           imagePath = url.substring(index + 5, index2);
         } else if (/^\.\.\/*/.test(url) || /^\.\/*/.test(url)) {
-          imagePath = Utils.pathNormalize(this.props.path, url);
+          const path = this.props.path;
+          const originalPath = path.slice(0, path.lastIndexOf('/')) + '/' + url;
+          imagePath = Utils.pathNormalize(originalPath);
         } else {
           return;
         }
