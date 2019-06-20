@@ -36,6 +36,7 @@ class GroupItem extends React.Component {
 
   render() {
     let item = this.props.item;
+    let currentPermission = item.is_admin ? 'admin' : item.permission;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className='name'>{item.group_info.name}</td>
@@ -43,7 +44,7 @@ class GroupItem extends React.Component {
           <SharePermissionEditor 
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
-            currentPermission={item.permission}
+            currentPermission={currentPermission}
             permissions={this.props.permissions}
             onPermissionChanged={this.onChangeUserPermission}
           />
@@ -87,7 +88,8 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
   itemType: PropTypes.string.isRequired,
-  repoID: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  isRepoOwner: PropTypes.bool.isRequired,
 };
 
 const NoOptionsMessage = (props) => {
@@ -108,9 +110,10 @@ class ShareToGroup extends React.Component {
     };
     this.options = [];
     this.permissions = []
-    if (this.props.itemType === 'library') {
-      this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
-    } else if (this.props.itemType === 'dir') {
+    let { itemType, isRepoOwner } = props;
+    if (itemType === 'library') {
+      this.permissions = isRepoOwner ? ['rw', 'r', 'admin', 'cloud-edit', 'preview'] : ['rw', 'r', 'cloud-edit', 'preview'];
+    } else if (itemType === 'dir') {
       this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
     }
     if (this.props.isGroupOwnedRepo || !isPro) {
@@ -251,6 +254,7 @@ class ShareToGroup extends React.Component {
       if (groupID === sharedItemGroupID) {
         sharedItem.permission = permission;
       }
+      sharedItem.is_admin = permission === 'admin' ? true : false;
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
