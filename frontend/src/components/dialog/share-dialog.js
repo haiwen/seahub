@@ -6,8 +6,9 @@ import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import GenerateShareLink from './generate-share-link';
 import GenerateUploadLink from './generate-upload-link';
-import '../../css/share-link-dialog.css';
 import { seafileAPI } from '../../utils/seafile-api';
+import Loading from '../loading';
+import '../../css/share-link-dialog.css';
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
@@ -63,8 +64,12 @@ class ShareDialog extends React.Component {
   }
 
   renderDirContent = () => {
-    let activeTab = this.state.activeTab;
 
+    if (!this.state.isRepoJudgemented) {
+      return <Loading />;
+    }
+
+    let activeTab = this.state.activeTab;
     const {repoEncrypted, userPerm, enableDirPrivateShare} = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
     const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
@@ -168,10 +173,6 @@ class ShareDialog extends React.Component {
   }
 
   render() {
-
-    if (!this.state.isRepoJudgemented) {
-      return '';
-    }
     const { itemType, itemName, repoEncrypted } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
     return (
