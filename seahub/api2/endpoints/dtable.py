@@ -641,7 +641,14 @@ def dtable_file_view(request, workspace_id, name):
     return render(request, 'dtable_file_view_react.html', return_dict)
 
 
-def dtable_asset_access(request, workspace_id, dtable_id, name):
+def dtable_asset_access(request, workspace_id, dtable_id, path):
+
+    # asset file type check
+    asset_name = os.path.basename(normalize_file_path(path))
+    file_type, file_ext = get_file_type_and_ext(asset_name)
+    if file_type != IMAGE:
+        err_msg = 'Invalid file type'
+        return render_error(request, err_msg)
 
     # resource check
     workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
@@ -653,20 +660,20 @@ def dtable_asset_access(request, workspace_id, dtable_id, name):
     if not repo:
         raise Http404
 
-    asset_file_path = os.path.join('/asset', dtable_id, name)
-    asset_file_id = seafile_api.get_file_id_by_path(repo_id, asset_file_path)
-    if not asset_file_id:
+    asset_path = normalize_file_path(os.path.join('/asset', dtable_id, path))
+    asset_id = seafile_api.get_file_id_by_path(repo_id, asset_path)
+    if not asset_id:
         raise Http404
 
-    # check file type
-    file_type, file_ext = get_file_type_and_ext(name)
-    if file_type != IMAGE:
-        err_msg = 'Invalid file type'
-        return render_error(request, err_msg)
+    # permission check
+    username = request.user.username
+    owner = workspace.owner
+    if username != owner:
+        return render_permission_error(request, 'Permission denied.')
 
-    token = seafile_api.get_fileserver_access_token(repo_id, asset_file_id,
-                                                    'view', '', use_onetime=False)
+    token = seafile_api.get_fileserver_access_token(repo_id, asset_id, 'view',
+                                                    '', use_onetime=False)
 
-    url = gen_file_get_url(token, name)
+    url = gen_file_get_url(token, asset_name)
 
     return HttpResponseRedirect(url)
