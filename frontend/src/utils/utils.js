@@ -881,14 +881,15 @@ export const Utils = {
   },
 
   pathNormalize: function(originalPath) {
-    let newPath = originalPath.split('/');
-    for (let i = 0; i < newPath.length; i++) {
-      if (newPath[i] === '.' || newPath[i] === '') {
-        newPath.splice(i, 1);
-        i--;
-      } else if (newPath[i] === '..') {
-        newPath.splice(i - 1, 2);
-        i = i - 2;
+    let oldPath = originalPath.split('/');
+    let newPath = [];
+    for (let i = 0; i < oldPath.length; i++) {
+      if (oldPath[i] === '.' || oldPath[i] === '') {
+        continue;
+      } else if (oldPath[i] === '..') {
+        newPath.pop();
+      } else {
+        newPath.push(oldPath[i]);
       }
     }
     return newPath.join('/');
