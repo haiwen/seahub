@@ -71,7 +71,7 @@ class DirentListView extends React.Component {
       isListDropTipShow: false,
     };
 
-    this.enteredCounter = 0; // Determine whether to enter child elements, avoid dragging bubbling bugs.
+    this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
     this.isAdmin = props.currentRepoInfo.is_admin;
     this.repoEncrypted = props.currentRepoInfo.encrypted;
