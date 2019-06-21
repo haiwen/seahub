@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, username, canGenerateShareLink } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -470,9 +470,11 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
                 <ul className="operation-group">
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                  </li>
+                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    </li>
+                  )}
                   {showShareBtn && (
                     <li className="operation-group-item">
                       <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
@@ -502,9 +504,11 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && 
               <div className="operations">
                 <ul className="operation-group">
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                  </li>
+                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    </li>
+                  )}
                   {showShareBtn && (
                     <li className="operation-group-item">
                       <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
