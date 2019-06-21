@@ -375,11 +375,12 @@ class DirentListItem extends React.Component {
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
   }
 
-  onItemDragEnter = () => {
+  onItemDragEnter = (e) => {
     if (Utils.isIEBrower()) {
       return false;
     }
     if (this.props.dirent.type === 'dir') {
+      e.stopPropagation();
       this.setState({isDropTipshow: true});
     }
   }
@@ -392,9 +393,13 @@ class DirentListItem extends React.Component {
     e.dataTransfer.dropEffect = 'move';
   }
 
-  onItemDragLeave = () => {
+  onItemDragLeave = (e) => {
     if (Utils.isIEBrower()) {
       return false;
+    }
+
+    if (this.props.dirent.type === 'dir') {
+      e.stopPropagation();
     }
     this.setState({isDropTipshow: false});
   }
@@ -406,6 +411,9 @@ class DirentListItem extends React.Component {
     this.setState({isDropTipshow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
+    }
+    if (this.props.dirent.type === 'dir') {
+      e.stopPropagation();
     }
     let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
