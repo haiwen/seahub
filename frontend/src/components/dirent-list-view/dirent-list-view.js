@@ -71,7 +71,7 @@ class DirentListView extends React.Component {
       isListDropTipShow: false,
     };
 
-    this.dragEnterContainerAmount = 0;
+    this.enteredCounter = 0;
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
     this.isAdmin = props.currentRepoInfo.is_admin;
     this.repoEncrypted = props.currentRepoInfo.encrypted;
@@ -541,8 +541,8 @@ class DirentListView extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    this.dragEnterContainerAmount++;
-    if (this.dragEnterContainerAmount !== 0) {
+    this.enteredCounter++;
+    if (this.enteredCounter !== 0) {
       this.setState({isListDropTipShow: true});
     }
   }
@@ -559,8 +559,8 @@ class DirentListView extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    this.dragEnterContainerAmount--;
-    if (this.dragEnterContainerAmount === 0) {
+    this.enteredCounter--;
+    if (this.enteredCounter === 0) {
       this.setState({isListDropTipShow: false});
     }
   }
@@ -570,7 +570,7 @@ class DirentListView extends React.Component {
       return false;
     }
     e.persist();
-    this.dragEnterContainerAmount = 0;
+    this.enteredCounter = 0;
     this.setState({isListDropTipShow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
