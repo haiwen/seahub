@@ -550,11 +550,11 @@ class LibContentView extends React.Component {
     seafileAPI.listDir(repoID, path).then(res => {
       let newDirentList = res.data.dirent_list;
       let newAddedDirents = newDirentList.filter(item => {
-        return !nodeChildrenNames.includes(item.name)
-      })
+        return !nodeChildrenNames.includes(item.name);
+      });
       newAddedDirents.map(item => {
         this.addNodeToTree(item.name, path, item.type);
-      })
+      });
     });
   }
 

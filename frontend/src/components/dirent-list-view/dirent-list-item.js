@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, username, canGenerateShareLink } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -411,7 +411,7 @@ class DirentListItem extends React.Component {
     dragStartItemData = JSON.parse(dragStartItemData);
     if (Array.isArray(dragStartItemData)) { //move items
       let direntPaths =  dragStartItemData.map(draggedItem => {
-        return draggedItem.nodeRootPath
+        return draggedItem.nodeRootPath;
       });
 
       let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
