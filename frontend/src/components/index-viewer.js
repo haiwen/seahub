@@ -218,7 +218,7 @@ class IndexContentViewer extends React.Component {
 
   render() {
     return (
-      <div className="mx-2 o-hidden">
+      <div className="mx-4 o-hidden">
         <FolderItem node={this.treeRoot} bindClickEvent={this.bindClickEvent} currentPath={this.state.currentPath}/>
       </div>
     );

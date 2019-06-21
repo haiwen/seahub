@@ -320,6 +320,10 @@ class DirentListView extends React.Component {
       menuList: menuList,
     };
 
+    if (menuList.length === 0) {
+      return;
+    }
+
     showMenu(showMenuConfig);
   }
 
@@ -467,21 +471,28 @@ class DirentListView extends React.Component {
 
     let menuList = [];
     let contextmenuList = [];
+
     if (isContextmenu) {
       let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
-      contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
+      contextmenuList = this.props.showShareBtn ? [SHARE] : [];
 
-      if (dirent.type === 'file') {
-        contextmenuList =  canGenerateShareLink ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
+      if (dirent.permission === 'rw' || dirent.permission === 'r') {
+        contextmenuList = [...contextmenuList, DOWNLOAD];
       }
+
+      if (dirent.permission === 'rw') {
+        contextmenuList = [...contextmenuList, DELETE];
+      }
+
+      contextmenuList = [...contextmenuList, 'Divider'];
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
       if (can_set_folder_perm) {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
       } else {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
       }
       return menuList;
     }

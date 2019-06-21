@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, username, canGenerateShareLink } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -411,7 +411,7 @@ class DirentListItem extends React.Component {
     dragStartItemData = JSON.parse(dragStartItemData);
     if (Array.isArray(dragStartItemData)) { //move items
       let direntPaths =  dragStartItemData.map(draggedItem => {
-        return draggedItem.nodeRootPath
+        return draggedItem.nodeRootPath;
       });
 
       let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
@@ -462,7 +462,7 @@ class DirentListItem extends React.Component {
     if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
       return '';
     }
-    
+
     return (
       <Fragment>
         {selectedDirentList.length > 1 ? 
@@ -470,17 +470,21 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
                 <ul className="operation-group">
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                  </li>
-                  {showShareBtn &&
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                  </li>
-                  }
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                  </li>
+                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    </li>
+                  )}
+                  {showShareBtn && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                    </li>
+                  )}
+                  {dirent.permission === 'rw' && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    </li>
+                  )}
                   <li className="operation-group-item">
                     <ItemDropdownMenu
                       item={this.props.dirent}
@@ -500,17 +504,21 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && 
               <div className="operations">
                 <ul className="operation-group">
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                  </li>
-                  {showShareBtn &&
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                  </li>
-                  }
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                  </li>
+                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    </li>
+                  )}
+                  {showShareBtn && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                    </li>
+                  )}
+                  {dirent.permission === 'rw' && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    </li>
+                  )}
                   <li className="operation-group-item">
                     <ItemDropdownMenu
                       item={this.props.dirent}

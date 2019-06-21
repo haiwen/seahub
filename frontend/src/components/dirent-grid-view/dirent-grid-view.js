@@ -392,6 +392,10 @@ class DirentGridView extends React.Component{
       menuList: menuList,
     };
 
+    if (menuList.length === 0) {
+      return;
+    }
+
     showMenu(showMenuConfig);
   }
 
@@ -408,11 +412,17 @@ class DirentGridView extends React.Component{
     let contextmenuList = [];
     if (isContextmenu) {
       let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
-      contextmenuList = this.props.showShareBtn ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
+      contextmenuList = this.props.showShareBtn ? [SHARE] : [];
 
-      if (dirent.type === 'file') {
-        contextmenuList =  canGenerateShareLink ? [SHARE, DOWNLOAD, DELETE, 'Divider'] : [DOWNLOAD, DELETE, 'Divider'];
+      if (dirent.permission === 'rw' || dirent.permission === 'r') {
+        contextmenuList = [...contextmenuList, DOWNLOAD];
       }
+
+      if (dirent.permission === 'rw') {
+        contextmenuList = [...contextmenuList, DELETE];
+      }
+
+      contextmenuList = [...contextmenuList, 'Divider'];
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;

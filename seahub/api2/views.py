@@ -641,6 +641,7 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         'random_key': random_key,
         'repo_version': repo_version,
         'head_commit_id': repo.head_cmmt_id,
+        'permission': seafile_api.check_permission_by_path(repo_id, '/', email)
         }
 
     if is_pro_version() and ENABLE_STORAGE_CLASSES:

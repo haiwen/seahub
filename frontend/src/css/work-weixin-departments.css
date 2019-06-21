@@ -1,4 +1,10 @@
+.cur-view-content {
+  position: relative;
+}
 .dir-content-main {
+  position: absolute;
+  right: 0;
+  height: 100%;
   width: 75%;
   overflow-y: hidden;
   padding-right: 1rem;
@@ -17,13 +23,16 @@
   height: 140px;
 }
 .dir-content-nav {
-  width: 24%;
+  position: fixed;
   overflow: hidden;
 }
 .dir-content-nav:hover {
   overflow: auto;
 }
 .dir-content-resize {
+  position: absolute;
+  left: 25%;
+  height: 100%;
   width: 1%;
   border-left: 1px solid #eee;
 }

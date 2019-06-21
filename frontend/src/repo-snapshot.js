@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { navigate } from '@reach/router';
-import moment from 'moment';
 import { Utils } from './utils/utils';
 import { gettext, loginUrl, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
@@ -233,26 +232,26 @@ class Content extends React.Component {
     }
 
     return (
-        <table className="table-hover">
-          <thead>
-            <tr>
-              {this.theadData.map((item, index) => {
-                return <th key={index} width={item.width}>{item.text}</th>;
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {folderItems.map((item, index) => {
-              return <FolderItem 
-                key={index}
-                item={item} 
-                folderPath={folderPath}
-                renderFolder={this.props.renderFolder}
-              />;
-            })
-            }
-          </tbody>
-        </table>
+      <table className="table-hover">
+        <thead>
+          <tr>
+            {this.theadData.map((item, index) => {
+              return <th key={index} width={item.width}>{item.text}</th>;
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {folderItems.map((item, index) => {
+            return <FolderItem 
+              key={index}
+              item={item} 
+              folderPath={folderPath}
+              renderFolder={this.props.renderFolder}
+            />;
+          })
+          }
+        </tbody>
+      </table>
     );
   }
 }

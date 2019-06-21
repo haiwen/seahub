@@ -231,8 +231,8 @@ export const Utils = {
 
   isIEBrower: function() { // is ie <= ie11 not include Edge
     var userAgent = navigator.userAgent;
-    var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
-    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+    var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1;
+    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1;
     return isIE || isIE11;
   },
 
@@ -878,6 +878,21 @@ export const Utils = {
       password += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return password;
+  },
+
+  pathNormalize: function(originalPath) {
+    let oldPath = originalPath.split('/');
+    let newPath = [];
+    for (let i = 0; i < oldPath.length; i++) {
+      if (oldPath[i] === '.' || oldPath[i] === '') {
+        continue;
+      } else if (oldPath[i] === '..') {
+        newPath.pop();
+      } else {
+        newPath.push(oldPath[i]);
+      }
+    }
+    return newPath.join('/');
   },
 
   getEventData: function(event, data) {
