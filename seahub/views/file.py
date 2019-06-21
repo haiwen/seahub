@@ -957,6 +957,11 @@ def view_history_file_common(request, repo_id, ret_dict):
         # Check if can preview file
         fsize = get_file_size(repo.store_id, repo.version, obj_id)
         can_preview, err_msg = can_preview_file(u_filename, fsize, repo)
+
+        # the source file can not preview in browser
+        if filetype in(XMIND,):
+            can_preview, err_msg = False, "File preview unsupported"
+
         if can_preview:
 
             # send file audit message
