@@ -906,9 +906,9 @@ export const Utils = {
   /**
    * Check whether user has permission to share a dirent. 
    * If dirent is none, then check whether the user can share the repo
-   * scence 1: root path or folder path, control the share button in the toolbar
-   * scence 2: selected a dirent, control the share button in the toolbar dropdown-menu
-   * scence 3: dirent list(grid list), control the share button in the dirent-item or righe-menu
+   * scene 1: root path or folder path, control the share button in the toolbar
+   * scene 2: selected a dirent, control the share button in the toolbar dropdown-menu
+   * scene 3: dirent list(grid list), control the share button in the dirent-item or righe-menu
    * 
    * @param {*} repoInfo 
    * @param {*} userDirPermission 
