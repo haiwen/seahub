@@ -561,7 +561,6 @@ class DirentListView extends React.Component {
     }
     this.dragEnterContainerAmount--;
     if (this.dragEnterContainerAmount === 0) {
-    // if (e.target.className === 'table-container table-drop-active') {
       this.setState({isListDropTipShow: false});
     }
   }
