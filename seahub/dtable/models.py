@@ -84,8 +84,9 @@ class ShareDTableManager(models.Manager):
             return qs[0]
         return None
 
-    def add(self, uuid, from_user, to_user, permission):
-        obj = self.model(uuid=uuid, from_user=from_user, to_user=to_user, permission=permission)
+    def add(self, uuid, workspace, from_user, to_user, permission):
+        obj = self.model(uuid=uuid, workspace=workspace,
+                         from_user=from_user, to_user=to_user, permission=permission)
         obj.save()
         return obj
 
