@@ -462,7 +462,7 @@ class DirentListItem extends React.Component {
     if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
       return '';
     }
-    
+
     return (
       <Fragment>
         {selectedDirentList.length > 1 ? 
@@ -473,14 +473,16 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
-                  {showShareBtn &&
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                  </li>
-                  }
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                  </li>
+                  {showShareBtn && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                    </li>
+                  )}
+                  {dirent.permission === 'rw' && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    </li>
+                  )}
                   <li className="operation-group-item">
                     <ItemDropdownMenu
                       item={this.props.dirent}
@@ -503,14 +505,16 @@ class DirentListItem extends React.Component {
                   <li className="operation-group-item">
                     <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                   </li>
-                  {showShareBtn &&
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                  </li>
-                  }
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                  </li>
+                  {showShareBtn && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                    </li>
+                  )}
+                  {dirent.permission === 'rw' && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    </li>
+                  )}
                   <li className="operation-group-item">
                     <ItemDropdownMenu
                       item={this.props.dirent}
