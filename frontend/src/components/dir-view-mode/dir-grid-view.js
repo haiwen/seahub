@@ -26,7 +26,6 @@ const propTypes = {
   isDirentDetailShow: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  showShareBtn: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
@@ -72,7 +71,6 @@ class DirGridView extends React.Component {
           onItemCopy={this.props.onItemCopy}
           isDirentListLoading={this.props.isDirentListLoading}
           updateDirent={this.props.updateDirent}
-          showShareBtn={this.props.showShareBtn}
           onRenameNode={this.props.onRenameNode}
           showDirentDetail={this.props.showDirentDetail}
           onGridItemClick={this.props.onGridItemClick}

@@ -34,7 +34,6 @@ const propTypes = {
   onItemClick: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
-  showShareBtn: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
@@ -407,12 +406,15 @@ class DirentGridView extends React.Component{
 
     let type = dirent.type;
     let permission = dirent.permission;
-
+    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent);
     let menuList = [];
     let contextmenuList = [];
     if (isContextmenu) {
       let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
-      contextmenuList = this.props.showShareBtn ? [SHARE] : [];
+
+      if (showShareBtn) {
+        contextmenuList = [SHARE];
+      }
 
       if (dirent.permission === 'rw' || dirent.permission === 'r') {
         contextmenuList = [...contextmenuList, DOWNLOAD];

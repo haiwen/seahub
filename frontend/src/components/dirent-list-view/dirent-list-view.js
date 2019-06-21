@@ -25,7 +25,6 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
-  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
@@ -469,13 +468,17 @@ class DirentListView extends React.Component {
 
     let type = dirent.type;
     let permission = dirent.permission;
+    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent);
 
     let menuList = [];
     let contextmenuList = [];
 
     if (isContextmenu) {
       let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
-      contextmenuList = this.props.showShareBtn ? [SHARE] : [];
+      
+      if (showShareBtn) {
+        contextmenuList = [SHARE];
+      }
 
       if (dirent.permission === 'rw' || dirent.permission === 'r') {
         contextmenuList = [...contextmenuList, DOWNLOAD];
@@ -486,14 +489,15 @@ class DirentListView extends React.Component {
       }
 
       contextmenuList = [...contextmenuList, 'Divider'];
+
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
       if (can_set_folder_perm) {
-        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
       } else {
-        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
       }
       return menuList;
     }
@@ -660,7 +664,6 @@ class DirentListView extends React.Component {
                   repoEncrypted={this.repoEncrypted}
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
                   isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                  showShareBtn={this.props.showShareBtn}
                   onItemClick={this.props.onItemClick}
                   onItemRenameToggle={this.onItemRenameToggle}
                   onItemSelected={this.onItemSelected}

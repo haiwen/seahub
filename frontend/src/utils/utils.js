@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, canGenerateShareLink, canGenerateUploadLink, username } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 
 export const Utils = {
@@ -901,6 +901,56 @@ export const Utils = {
     }
     return event.target.getAttribute('data-' + data);
     
+  },
+
+  /**
+   * Check whether user has permission to share a dirent. 
+   * If dirent is none, then check whether the user can share the repo
+   * scene 1: root path or folder path, control the share button in the toolbar
+   * scene 2: selected a dirent, control the share button in the toolbar dropdown-menu
+   * scene 3: dirent list(grid list), control the share button in the dirent-item or righe-menu
+   * 
+   * @param {*} repoInfo 
+   * @param {*} userDirPermission 
+   * @param {*} dirent 
+   */
+  isHasPermissionToShare: function(repoInfo, userDirPermission, dirent) {
+    
+    let { is_admin: isAdmin, is_virtual: isVirtual, encrypted: repoEncrypted, owner_email: ownerEmail } = repoInfo;
+    let isRepoOwner = ownerEmail === username;
+
+    if (repoEncrypted) {
+      return false;
+    }
+
+    if (dirent && dirent.type === 'file') {
+      let hasGenerateShareLinkPermission = false;
+      if (canGenerateShareLink && (userDirPermission == 'rw' || userDirPermission == 'r')) {
+        hasGenerateShareLinkPermission = true;
+      }
+      return hasGenerateShareLinkPermission;
+    }
+
+    // the root path or the dirent type is dir
+    let hasGenerateShareLinkPermission = false;
+    if (canGenerateShareLink && (userDirPermission == 'rw' || userDirPermission == 'r')) {
+      hasGenerateShareLinkPermission = true;
+      return hasGenerateShareLinkPermission;
+    }
+
+    let hasGenerateUploadLinkPermission = false;
+    if (canGenerateUploadLink && (userDirPermission == 'rw')) {
+      hasGenerateUploadLinkPermission = true;
+      return hasGenerateUploadLinkPermission;
+    }
+
+    let hasDirPrivateSharePermission = false;
+    if (!isVirtual && (isRepoOwner || isAdmin)) {
+      hasDirPrivateSharePermission = true;
+      return hasDirPrivateSharePermission;
+    }
+
+    return false;
   }
 
 };
