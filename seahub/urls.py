@@ -92,6 +92,8 @@ from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.dtable import WorkspacesView, WorkspaceView, DTableView, \
      DTableUpdateLinkView, DTableAssetUploadLinkView, dtable_file_view, dtable_asset_access
 
+from seahub.dtable.api import ShareDTablesView
+
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
 from seahub.api2.endpoints.admin.login_logs import LoginLogs, AdminLoginLogs
@@ -369,6 +371,8 @@ urlpatterns = [
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-asset-upload-link/$', DTableAssetUploadLinkView.as_view(), name='api-v2.1-workspace-dtable-asset-upload-link'),
     url(r'^workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/$', dtable_file_view, name='dtable-file-view'),
     url(r'^workspace/(?P<workspace_id>\d+)/asset/(?P<dtable_id>[-0-9a-f]{36})/(?P<path>.*)$', dtable_asset_access, name='dtable-asset-access'),
+
+    url(r'^api/v2.1/dtables/share/$', ShareDTablesView.as_view(), name='api-v2.1-dtables-share'),
 
     # Deprecated
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
