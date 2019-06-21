@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, canGenerateShareLink, canGenerateUploadLink, username } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 
 export const Utils = {
@@ -901,6 +901,50 @@ export const Utils = {
     }
     return event.target.getAttribute('data-' + data);
     
+  },
+
+  /**
+   * judgement user is has the permission to share.
+   * one scence: current repo(the root path), in the toolbar
+   * two scence: selected a dirent, in the toolbar
+   * three scence: dirent list(grid list), in the item operation menu;
+   * 
+   * @param {*} repoInfo 
+   * @param {*} userDirPermission 
+   * @param {*} dirent 
+   */
+  isHasPermissionToShare: function(repoInfo, userDirPermission, dirent) {
+    let hasPermissionToShare = false;
+    let hasDirPrivateSharePermission = false;
+    
+    let { is_admin: isAdmin, is_virtual: isVirtual, encrypted: repoEncrypted, owner_email: ownerEmail } = repoInfo;
+    let isRepoOwner = ownerEmail === username;
+
+    // the root path or the dirent type is dir
+    if (!repoEncrypted) {
+      let hasGenerateShareLinkPermission = false;
+      if (canGenerateShareLink && (userDirPermission == 'rw' || userDirPermission == 'r')) {
+        hasGenerateShareLinkPermission = true;
+      }
+      let hasGenerateUploadLinkPermission = false;
+      if (canGenerateUploadLink && (userDirPermission == 'rw')) {
+        hasGenerateUploadLinkPermission = true;
+      }
+
+      if (!isVirtual && (isRepoOwner || isAdmin)) {
+        hasDirPrivateSharePermission = true;
+      }
+
+      if (hasGenerateShareLinkPermission || hasGenerateUploadLinkPermission || hasDirPrivateSharePermission) {
+        hasPermissionToShare = true;
+      }
+    }
+
+    if (dirent && dirent.type === 'file') {
+      return hasPermissionToShare && canGenerateShareLink;
+    }
+
+    return hasPermissionToShare;
   }
 
 };

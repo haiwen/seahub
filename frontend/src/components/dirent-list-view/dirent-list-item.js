@@ -22,7 +22,6 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
-  showShareBtn: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   freezeItem: PropTypes.func.isRequired,
@@ -458,10 +457,11 @@ class DirentListItem extends React.Component {
   }
 
   renderItemOperation = () => {
-    let { dirent, selectedDirentList, currentRepoInfo, showShareBtn } = this.props;
+    let { dirent, selectedDirentList, currentRepoInfo } = this.props;
     if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
       return '';
     }
+    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
 
     return (
       <Fragment>
