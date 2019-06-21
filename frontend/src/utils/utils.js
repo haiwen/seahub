@@ -904,47 +904,53 @@ export const Utils = {
   },
 
   /**
-   * judgement user is has the permission to share.
-   * one scence: current repo(the root path), in the toolbar
-   * two scence: selected a dirent, in the toolbar
-   * three scence: dirent list(grid list), in the item operation menu;
+   * Check whether user has permission to share a dirent. 
+   * If dirent is none, then check whether the user can share the repo
+   * scence 1: root path or folder path, control the share button in the toolbar
+   * scence 2: selected a dirent, control the share button in the toolbar dropdown-menu
+   * scence 3: dirent list(grid list), control the share button in the dirent-item or righe-menu
    * 
    * @param {*} repoInfo 
    * @param {*} userDirPermission 
    * @param {*} dirent 
    */
   isHasPermissionToShare: function(repoInfo, userDirPermission, dirent) {
-    let hasPermissionToShare = false;
-    let hasDirPrivateSharePermission = false;
     
     let { is_admin: isAdmin, is_virtual: isVirtual, encrypted: repoEncrypted, owner_email: ownerEmail } = repoInfo;
     let isRepoOwner = ownerEmail === username;
 
-    // the root path or the dirent type is dir
-    if (!repoEncrypted) {
+    if (repoEncrypted) {
+      return false;
+    }
+
+    if (dirent && dirent.type === 'file') {
       let hasGenerateShareLinkPermission = false;
       if (canGenerateShareLink && (userDirPermission == 'rw' || userDirPermission == 'r')) {
         hasGenerateShareLinkPermission = true;
       }
-      let hasGenerateUploadLinkPermission = false;
-      if (canGenerateUploadLink && (userDirPermission == 'rw')) {
-        hasGenerateUploadLinkPermission = true;
-      }
-
-      if (!isVirtual && (isRepoOwner || isAdmin)) {
-        hasDirPrivateSharePermission = true;
-      }
-
-      if (hasGenerateShareLinkPermission || hasGenerateUploadLinkPermission || hasDirPrivateSharePermission) {
-        hasPermissionToShare = true;
-      }
+      return hasGenerateShareLinkPermission;
     }
 
-    if (dirent && dirent.type === 'file') {
-      return hasPermissionToShare && canGenerateShareLink;
+    // the root path or the dirent type is dir
+    let hasGenerateShareLinkPermission = false;
+    if (canGenerateShareLink && (userDirPermission == 'rw' || userDirPermission == 'r')) {
+      hasGenerateShareLinkPermission = true;
+      return hasGenerateShareLinkPermission;
     }
 
-    return hasPermissionToShare;
+    let hasGenerateUploadLinkPermission = false;
+    if (canGenerateUploadLink && (userDirPermission == 'rw')) {
+      hasGenerateUploadLinkPermission = true;
+      return hasGenerateUploadLinkPermission;
+    }
+
+    let hasDirPrivateSharePermission = false;
+    if (!isVirtual && (isRepoOwner || isAdmin)) {
+      hasDirPrivateSharePermission = true;
+      return hasDirPrivateSharePermission;
+    }
+
+    return false;
   }
 
 };
