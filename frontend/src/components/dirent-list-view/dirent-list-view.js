@@ -71,6 +71,7 @@ class DirentListView extends React.Component {
       isListDropTipShow: false,
     };
 
+    this.enteredCounter = 0;
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
     this.isAdmin = props.currentRepoInfo.is_admin;
     this.repoEncrypted = props.currentRepoInfo.encrypted;
@@ -551,7 +552,8 @@ class DirentListView extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    if (e.target.className === 'table-container ') {
+    this.enteredCounter++;
+    if (this.enteredCounter !== 0) {
       this.setState({isListDropTipShow: true});
     }
   }
@@ -568,7 +570,8 @@ class DirentListView extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    if (e.target.className === 'table-container table-drop-active') {
+    this.enteredCounter--;
+    if (this.enteredCounter === 0) {
       this.setState({isListDropTipShow: false});
     }
   }
@@ -578,6 +581,7 @@ class DirentListView extends React.Component {
       return false;
     }
     e.persist();
+    this.enteredCounter = 0;
     this.setState({isListDropTipShow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
@@ -587,22 +591,19 @@ class DirentListView extends React.Component {
 
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
 
-    if (e.target.className === 'table-container table-drop-active') {
-
-      if (Array.isArray(dragStartItemData)) { //selected items
-        return;
-      }
-
-      if (nodeRootPath === this.props.path || nodeParentPath === this.props.path) {
-        return;
-      }
-
-      if (this.props.path.indexOf(nodeRootPath) !== -1) {
-        return;
-      }
-
-      this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
+    if (Array.isArray(dragStartItemData)) { //selected items
+      return;
     }
+
+    if (nodeRootPath === this.props.path || nodeParentPath === this.props.path) {
+      return;
+    }
+
+    if (this.props.path.indexOf(nodeRootPath) !== -1) {
+      return;
+    }
+
+    this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
   }
 
   render() {
