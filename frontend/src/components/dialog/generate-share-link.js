@@ -42,6 +42,7 @@ class GenerateShareLink extends React.Component {
       'can_download': true
     };
     this.isExpireDaysNoLimit = (parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) === 0);
+    console.log('this.props.itemPath = ' + this.props.itemPath);
   }
 
   componentDidMount() {
@@ -99,11 +100,16 @@ class GenerateShareLink extends React.Component {
         'can_edit': false,
         'can_download': true
       };
-    } else {
+    } else if (permission == 'preview') {
       this.permissions = {
         'can_edit': false,
         'can_download': false
       };     
+    } else if (permission == 'editOnCloudAndDownload'){
+      this.permissions = {
+        'can_edit': true,
+        'can_download': true
+      };
     }
   }
 
@@ -446,6 +452,13 @@ class GenerateShareLink extends React.Component {
               <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
+          {Utils.officeFileCheck(this.props.itemPath) &&
+            <FormGroup check className="permission">
+              <Label>
+                <Input type="radio" name="radio1" onChange={() => this.setPermission('editOnCloudAndDownload')} />{'  '}{gettext('Edit on cloud and download')}
+              </Label>
+            </FormGroup>
+          }
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
           <Button onClick={this.generateShareLink}>{gettext('Generate')}</Button>
         </Form>

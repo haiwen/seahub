@@ -104,6 +104,20 @@ export const Utils = {
     }
   },
 
+  officeFileCheck: function(filename) {
+    // no file ext
+    if (filename.lastIndexOf('.') == -1) {
+      return false;
+    }
+    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    var exts = ['doc', 'ppt', 'xls', 'docx', 'pptx', 'xlsx'];
+    if (exts.indexOf(file_ext) != -1) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
   // check if a file is a video
   videoCheck: function (filename) {
     // no file ext
