@@ -62,7 +62,7 @@ class GroupsTest(BaseTestCase):
         self.login_as(self.admin)
 
         url = reverse('api-v2.1-admin-groups')
-        limit_punctuation = """-'_"""
+        limit_punctuation = """-'_."""
         group_name = randstring(5) + random.choice(limit_punctuation)
 
         data = {
@@ -83,7 +83,7 @@ class GroupsTest(BaseTestCase):
         self.login_as(self.admin)
 
         url = reverse('api-v2.1-admin-groups')
-        other_punctuation = """!"#$%&()*+,./:;<=>?@[\]^`{|}~"""
+        other_punctuation = """!"#$%&()*+,/:;<=>?@[\]^`{|}~"""
         group_name = randstring(5) + random.choice(other_punctuation)
 
         data = {
