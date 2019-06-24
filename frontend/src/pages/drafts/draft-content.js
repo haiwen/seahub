@@ -60,7 +60,7 @@ class DraftContent extends React.Component {
             {this.props.draftList.length === 0 && (
               <EmptyTip>
                 <h2>{gettext('No draft yet')}</h2>
-                <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft be reviewed.')}</p>
+                <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft has been reviewed.')}</p>
               </EmptyTip>
             )}
             {this.props.draftList.length !==0 && (
