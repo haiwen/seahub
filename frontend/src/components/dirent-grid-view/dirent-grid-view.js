@@ -34,6 +34,7 @@ const propTypes = {
   onItemClick: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string, // current path's user permission
   enableDirPrivateShare: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
@@ -353,12 +354,19 @@ class DirentGridView extends React.Component{
   }
 
   onGridContainerContextMenu = (event) => {
+    event.preventDefault();
+    // Display menu items based on the permissions of the current path
+    let permission = this.props.userPerm;
+    if (permission !== 'admin' && permission !== 'rw') {
+      return;
+    }
     let id = 'dirent-grid-container-menu';
     let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
     this.handleContextClick(event, id, menuList);
   }
 
   onGridItemContextMenu = (event, dirent) => {
+    // Display menu items according to the current dirent permission
     let id = 'grid-item-contextmenu';
     let menuList = this.getDirentItemMenuList(dirent, true);
     this.handleContextClick(event, id, menuList, dirent);
@@ -423,27 +431,27 @@ class DirentGridView extends React.Component{
       if (dirent.permission === 'rw') {
         contextmenuList = [...contextmenuList, DELETE];
       }
-
-      contextmenuList = [...contextmenuList, 'Divider'];
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
+      menuList = [...contextmenuList, 'Divider'];
       if (can_set_folder_perm) {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
       } else {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
-      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY] : [];
+      menuList = [...contextmenuList];
+      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : [...menuList];
       return menuList;
     }
 
     if (type === 'file' && permission === 'rw') {
-      menuList = [...contextmenuList];
+      menuList = [...contextmenuList, 'Divider'];
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         menuList.push(RENAME);
         menuList.push(MOVE);
@@ -472,7 +480,7 @@ class DirentGridView extends React.Component{
     }
 
     if (type === 'file' && permission === 'r') {
-      menuList = [...contextmenuList];
+      menuList = [...contextmenuList, 'Divider'];
       if (!currentRepoInfo.encrypted) {
         menuList.push(COPY);
       }

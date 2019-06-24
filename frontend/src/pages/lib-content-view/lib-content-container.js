@@ -20,8 +20,8 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   repoPermission: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
-  userPrem: PropTypes.bool,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   // path func
   onTabNavClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
@@ -159,7 +159,7 @@ class LibContentContainer extends React.Component {
       if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0) {
         isRepoInfoBarShow = true;
       }
-    } 
+    }
 
     return (
       <Fragment>
@@ -194,6 +194,7 @@ class LibContentContainer extends React.Component {
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isRepoInfoBarShow={isRepoInfoBarShow}
                     usedRepoTags={this.props.usedRepoTags}
@@ -232,6 +233,7 @@ class LibContentContainer extends React.Component {
                     currentRepoInfo={this.props.currentRepoInfo}
                     repoPermission={this.props.repoPermission}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     onRenameNode={this.props.onRenameNode}
                     isRepoInfoBarShow={isRepoInfoBarShow}
@@ -262,6 +264,7 @@ class LibContentContainer extends React.Component {
                     currentRepoInfo={this.props.currentRepoInfo}
                     repoPermission={this.props.repoPermission}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isTreeDataLoading={this.props.isTreeDataLoading}
                     treeData={this.props.treeData}

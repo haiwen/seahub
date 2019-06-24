@@ -46,6 +46,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   showDirentDetail: PropTypes.func.isRequired,
 };
 
@@ -294,12 +295,6 @@ class DirentListView extends React.Component {
     event.preventDefault();
     event.stopPropagation();
 
-    let currentRepoInfo = this.props.currentRepoInfo;
-
-    if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
-      return '';
-    }
-
     let x = event.clientX || (event.touches && event.touches[0].pageX);
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
@@ -339,6 +334,13 @@ class DirentListView extends React.Component {
   }
 
   onContainerContextMenu = (event) => {
+    event.preventDefault();
+    // Display menu items based on the permissions of the current path
+    let permission = this.props.userPerm;
+    if (permission !== 'admin' && permission !== 'rw') {
+      return;
+    }
+
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
@@ -419,6 +421,7 @@ class DirentListView extends React.Component {
   }
 
   onItemContextMenu = (event, dirent) => {
+    // Display menu items according to the current dirent permission
     if (this.props.selectedDirentList.length > 1) {
       return;
     }
@@ -488,27 +491,27 @@ class DirentListView extends React.Component {
         contextmenuList = [...contextmenuList, DELETE];
       }
 
-      contextmenuList = [...contextmenuList, 'Divider'];
-
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
+      menuList = [...contextmenuList, 'Divider'];
       if (can_set_folder_perm) {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
       } else {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
-      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY] : [];
+      menuList = [...contextmenuList];
+      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : [...menuList];
       return menuList;
     }
 
     if (type === 'file' && permission === 'rw') {
-      menuList = [...contextmenuList];
+      menuList = [...contextmenuList, 'Divider'];
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         menuList.push(RENAME);
         menuList.push(MOVE);
@@ -538,7 +541,7 @@ class DirentListView extends React.Component {
     }
 
     if (type === 'file' && permission === 'r') {
-      menuList = [...contextmenuList];
+      menuList = [...contextmenuList, 'Divider'];
       if (!currentRepoInfo.encrypted) {
         menuList.push(COPY);
       }

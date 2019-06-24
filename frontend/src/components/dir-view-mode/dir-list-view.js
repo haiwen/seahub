@@ -9,6 +9,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isRepoInfoBarShow: PropTypes.bool.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
@@ -72,6 +73,7 @@ class DirListView extends React.Component {
           currentRepoInfo={this.props.currentRepoInfo}
           repoID={this.props.repoID}
           isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+          userPerm={this.props.userPerm}
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           direntList={this.props.direntList}
           sortBy={this.props.sortBy}
