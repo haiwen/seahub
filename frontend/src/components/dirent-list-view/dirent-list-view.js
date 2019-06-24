@@ -464,7 +464,6 @@ class DirentListView extends React.Component {
   }
 
   getDirentItemMenuList = (dirent, isContextmenu) => {
-    console.log(dirent.permission);
     let isRepoOwner = this.isRepoOwner;
     let currentRepoInfo = this.props.currentRepoInfo;
     let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
