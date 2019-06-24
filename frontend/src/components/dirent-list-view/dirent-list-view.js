@@ -46,6 +46,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   showDirentDetail: PropTypes.func.isRequired,
 };
 
@@ -294,12 +295,6 @@ class DirentListView extends React.Component {
     event.preventDefault();
     event.stopPropagation();
 
-    let currentRepoInfo = this.props.currentRepoInfo;
-
-    if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
-      return '';
-    }
-
     let x = event.clientX || (event.touches && event.touches[0].pageX);
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
@@ -339,6 +334,13 @@ class DirentListView extends React.Component {
   }
 
   onContainerContextMenu = (event) => {
+    event.preventDefault();
+    // Display menu items based on the permissions of the current path
+    let permission = this.props.userPerm;
+    if (permission !== 'admin' && permission !== 'rw') {
+      return;
+    }
+
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
@@ -419,6 +421,7 @@ class DirentListView extends React.Component {
   }
 
   onItemContextMenu = (event, dirent) => {
+    // Display menu items according to the current dirent permission
     if (this.props.selectedDirentList.length > 1) {
       return;
     }
@@ -461,7 +464,7 @@ class DirentListView extends React.Component {
   }
 
   getDirentItemMenuList = (dirent, isContextmenu) => {
-
+    console.log(dirent.permission);
     let isRepoOwner = this.isRepoOwner;
     let currentRepoInfo = this.props.currentRepoInfo;
     let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
@@ -487,9 +490,7 @@ class DirentListView extends React.Component {
       if (dirent.permission === 'rw') {
         contextmenuList = [...contextmenuList, DELETE];
       }
-
-      contextmenuList = [...contextmenuList, 'Divider'];
-
+      contextmenuList = contextmenuList.length > 0 ? [...contextmenuList, 'Divider'] : [];
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
@@ -503,7 +504,8 @@ class DirentListView extends React.Component {
     }
 
     if (type === 'dir' && permission === 'r') {
-      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY] : [];
+      menuList = [...contextmenuList];
+      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : menuList.slice(0, menuList.length - 1);
       return menuList;
     }
 

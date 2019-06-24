@@ -34,6 +34,7 @@ const propTypes = {
   onItemClick: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string, // current path's user permission
   enableDirPrivateShare: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
@@ -353,12 +354,19 @@ class DirentGridView extends React.Component{
   }
 
   onGridContainerContextMenu = (event) => {
+    event.preventDefault();
+    // Display menu items based on the permissions of the current path
+    let permission = this.props.userPerm;
+    if (permission !== 'admin' && permission !== 'rw') {
+      return;
+    }
     let id = 'dirent-grid-container-menu';
     let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
     this.handleContextClick(event, id, menuList);
   }
 
   onGridItemContextMenu = (event, dirent) => {
+    // Display menu items according to the current dirent permission
     let id = 'grid-item-contextmenu';
     let menuList = this.getDirentItemMenuList(dirent, true);
     this.handleContextClick(event, id, menuList, dirent);
@@ -424,7 +432,7 @@ class DirentGridView extends React.Component{
         contextmenuList = [...contextmenuList, DELETE];
       }
 
-      contextmenuList = [...contextmenuList, 'Divider'];
+      contextmenuList = contextmenuList.length > 0 ? [...contextmenuList, 'Divider'] : [];
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
@@ -438,7 +446,8 @@ class DirentGridView extends React.Component{
     }
 
     if (type === 'dir' && permission === 'r') {
-      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY] : [];
+      menuList = [...contextmenuList];
+      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : menuList.slice(0, menuList.length - 1);
       return menuList;
     }
 
