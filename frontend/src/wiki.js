@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { slug, repoID, siteRoot, initialPath, isDir, sharedToken, hasIndex } from './utils/constants';
+import { slug, siteRoot, initialPath, isDir, sharedToken, hasIndex } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Dirent from './models/dirent';

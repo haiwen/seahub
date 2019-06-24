@@ -202,7 +202,7 @@ class DirentDetail extends React.Component {
     }
     let direntName = dirent ? dirent.name : folderDirent.name;
 
-    if (dirent && dirent.type === 'file') {
+    if ((dirent && dirent.type === 'file') || path.lastIndexOf('.') > -1) {
       return (
         <div className="detail-container">
           {this.renderHeader(smallIconUrl, direntName)}
@@ -212,7 +212,7 @@ class DirentDetail extends React.Component {
             <TabPane tabId="comments" className="comments h-100">
               <DetailCommentList
                 repoID={this.props.repoID}
-                filePath={this.props.path + dirent.name}
+                filePath={(dirent && dirent.type === 'file') ? path + dirent.name : path}
               />
             </TabPane>
           </TabContent>
