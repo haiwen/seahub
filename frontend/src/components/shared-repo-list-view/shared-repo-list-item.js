@@ -164,7 +164,7 @@ class SharedRepoListItem extends React.Component {
   }
 
   onItemDeleteToggle = () => {
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow})
+    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
   }
 
   toggleShareDialog = () => {

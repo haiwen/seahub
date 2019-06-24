@@ -4,7 +4,6 @@ import { processor } from '../../utils/seafile-markdown2html';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, draftFilePath, draftRepoID } from '../../utils/constants';
-import Loading from '../../components/loading.js';
 import { username } from '../../utils/constants.js';
 
 import '../../css/review-comments.css';
