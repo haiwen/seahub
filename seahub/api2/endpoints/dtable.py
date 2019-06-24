@@ -13,7 +13,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 from pysearpc import SearpcError
-from seaserv import seafile_api, edit_repo
+from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -23,6 +23,7 @@ from seahub.dtable.models import Workspaces
 from seahub.tags.models import FileUUIDMap
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, \
     gen_file_get_url, get_file_type_and_ext, IMAGE
@@ -47,16 +48,63 @@ class WorkspacesView(APIView):
     def get(self, request):
         """get all workspaces
         """
-        owner = request.user.username
-        try:
-            workspaces = Workspaces.objects.get_workspaces_by_owner(owner)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error.'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        username = request.user.username
 
-        workspace_list = []
-        for workspace in workspaces:
+        org_id = -1
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        if org_id > 0:
+            groups = ccnet_api.get_org_groups_by_user(org_id, username)
+        else:
+            groups = ccnet_api.get_groups(username, return_ancestors=True)
+
+        owners = list()
+        owners.append(username)
+        for group in groups:
+            group_user = '%s@seafile_group' % group.id
+            owners.append(group_user)
+
+        workspace_list = list()
+        for owner in owners:
+            try:
+                workspace = Workspaces.objects.get_workspace_by_owner(owner)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error.'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not workspace:
+                if '@seafile_group' in owner:
+                    continue
+
+                # permission check
+                if not request.user.permissions.can_add_repo():
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+                try:
+                    if org_id > 0:
+                        repo_id = seafile_api.create_org_repo(
+                            _("My Workspace"),
+                            _("My Workspace"),
+                            "dtable@seafile",
+                            org_id
+                        )
+                    else:
+                        repo_id = seafile_api.create_repo(
+                            _("My Workspace"),
+                            _("My Workspace"),
+                            "dtable@seafile"
+                        )
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error.'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                workspace = Workspaces.objects.create_workspace(owner, repo_id)
+
+            # resource check
             repo_id = workspace.repo_id
             repo = seafile_api.get_repo(repo_id)
             if not repo:
@@ -75,24 +123,34 @@ class WorkspacesView(APIView):
                 table_list.append(table)
 
             res = workspace.to_dict()
+            if '@seafile_group' in owner:
+                group_id = int(owner.split('@')[0])
+                owner_name = group_id_to_name(group_id)
+            else:
+                owner_name = email2nickname(owner)
+            res["owner_name"] = owner_name
             res["table_list"] = table_list
             res["updated_at"] = workspace.updated_at
             workspace_list.append(res)
 
-        return Response({"workspace_list": workspace_list}, status=status.HTTP_200_OK)
+        resp = dict()
+        resp["workspace_list"] = workspace_list
+
+        return Response(resp, status=status.HTTP_200_OK)
 
     def post(self, request):
         """create a workspace
         """
         # argument check
-        name = request.POST.get('name')
-        if not name:
-            error_msg = 'name invalid.'
+        owner = request.POST.get('owner')
+        if not owner:
+            error_msg = 'owner invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if not is_valid_dirent_name(name):
-            error_msg = 'name invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        # resource check
+        workspace = Workspaces.objects.get_workspace_by_owner(owner)
+        if workspace:
+            return Response({'success': True}, status=status.HTTP_200_OK)
 
         # permission check
         if not request.user.permissions.can_add_repo():
@@ -105,149 +163,42 @@ class WorkspacesView(APIView):
 
         try:
             if org_id > 0:
-                repo_id = seafile_api.create_org_repo(name, '', "dtable@seafile", org_id)
+                repo_id = seafile_api.create_org_repo(
+                    _("My Workspace"),
+                    _("My Workspace"),
+                    "dtable@seafile",
+                    org_id
+                )
             else:
-                repo_id = seafile_api.create_repo(name, '', "dtable@seafile")
+                repo_id = seafile_api.create_repo(
+                    _("My Workspace"),
+                    _("My Workspace"),
+                    "dtable@seafile"
+                )
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        owner = request.user.username
         try:
-            workspace = Workspaces.objects.create_workspace(name, owner, repo_id)
+            workspace = Workspaces.objects.create_workspace(owner, repo_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if '@seafile_group' in owner:
+            group_id = int(owner.split('@')[0])
+            owner_name = group_id_to_name(group_id)
+        else:
+            owner_name = email2nickname(owner)
 
         res = workspace.to_dict()
+        res["owner_name"] = owner_name
         res["table_list"] = []
         res["updated_at"] = workspace.updated_at
 
         return Response({"workspace": res}, status=status.HTTP_201_CREATED)
-
-
-class WorkspaceView(APIView):
-
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def put(self, request, workspace_id):
-        """rename a workspace
-        """
-        # argument check
-        workspace_name = request.data.get('name')
-        if not workspace_name:
-            error_msg = 'name invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if not is_valid_dirent_name(workspace_name):
-            error_msg = 'name invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
-        if not workspace:
-            error_msg = 'Workspace %s not found.' % workspace_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo_id = workspace.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        username = request.user.username
-        owner = workspace.owner
-        if username != owner:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # repo status check
-        repo_status = repo.status
-        if repo_status != 0:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            edit_repo(repo_id, workspace_name, '', username)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error.'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        try:
-            workspace.name = workspace_name
-            workspace.save()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error.'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        table_objs = seafile_api.list_dir_by_path(repo_id, '/')
-        table_list = list()
-        for table_obj in table_objs:
-            if table_obj.obj_name[-7:] != FILE_TYPE:
-                continue
-            table = dict()
-            table["name"] = table_obj.obj_name[:-7]
-            table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
-            table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
-            table_list.append(table)
-
-        res = workspace.to_dict()
-        res["table_list"] = table_list
-        res["updated_at"] = workspace.updated_at
-
-        return Response({"workspace": res}, status=status.HTTP_200_OK)
-
-    def delete(self, request, workspace_id):
-        """delete a workspace
-        """
-        # resource check
-        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
-        if not workspace:
-            return Response({'success': True}, status=status.HTTP_200_OK)
-
-        repo_id = workspace.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            logger.warning('Library %s not found.' % repo_id)
-
-        # permission check
-        username = request.user.username
-        owner = workspace.owner
-        if username != owner:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if repo:
-
-            # repo status check
-            repo_status = repo.status
-            if repo_status != 0:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            # remove repo
-            try:
-                seafile_api.remove_repo(repo_id)
-            except Exception as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error.'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        try:
-            Workspaces.objects.delete_workspace(workspace_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error.'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        return Response({"success": "true"}, status=status.HTTP_200_OK)
 
 
 class DTableView(APIView):

@@ -9,9 +9,9 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_i
 
 class WorkspacesManager(models.Manager):
 
-    def get_workspaces_by_owner(self, owner):
+    def get_workspace_by_owner(self, owner):
         try:
-            return super(WorkspacesManager, self).filter(owner=owner)
+            return super(WorkspacesManager, self).get(owner=owner)
         except self.model.DoesNotExist:
             return None
 
@@ -21,11 +21,11 @@ class WorkspacesManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
-    def create_workspace(self, name, owner, repo_id):
+    def create_workspace(self, owner, repo_id):
         try:
-            return super(WorkspacesManager, self).get(name=name, owner=owner, repo_id=repo_id)
+            return super(WorkspacesManager, self).get(owner=owner, repo_id=repo_id)
         except self.model.DoesNotExist:
-            workspace = self.model(name=name, owner=owner, repo_id=repo_id)
+            workspace = self.model(owner=owner, repo_id=repo_id)
             workspace.save()
             return workspace
 
@@ -40,15 +40,14 @@ class WorkspacesManager(models.Manager):
 
 class Workspaces(models.Model):
 
-    name = models.CharField(max_length=255)
-    owner = models.CharField(max_length=255)
-    repo_id = models.CharField(max_length=36, db_index=True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    name = models.CharField(max_length=255, null=True)
+    owner = models.CharField(max_length=255, unique=True)
+    repo_id = models.CharField(max_length=36, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     objects = WorkspacesManager()
 
     class Meta:
-        unique_together = (('owner', 'repo_id'),)
         db_table = 'workspaces'
 
     @property
@@ -65,8 +64,6 @@ class Workspaces(models.Model):
 
         return {
             'id': self.pk,
-            'name': self.name,
-            'owner': self.owner,
             'repo_id': self.repo_id,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
         }

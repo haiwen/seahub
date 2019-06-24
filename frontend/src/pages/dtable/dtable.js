@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import MediaQuery from 'react-responsive';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 import Loading from '../../components/loading';
 import CreateWorkspaceDialog from '../../components/dialog/create-workspace-dialog';
-import DeleteWorkspaceDialog from '../../components/dialog/delete-workspace-dialog';
 import CreateTableDialog from '../../components/dialog/create-table-dialog';
 import DeleteTableDialog from '../../components/dialog/delete-table-dialog';
 import Rename from '../../components/rename';
@@ -146,8 +147,6 @@ Table.propTypes = tablePropTypes;
 
 const workspacePropTypes = {
   workspace: PropTypes.object.isRequired,
-  renameWorkspace: PropTypes.func.isRequired,
-  deleteWorkspace: PropTypes.func.isRequired,
 };
 
 class Workspace extends Component {
@@ -157,10 +156,7 @@ class Workspace extends Component {
     this.state = {
       tableList: this.props.workspace.table_list,
       errorMsg: '',
-      isWorkspaceRenaming: false,
-      isWorkspaceDeleting: false,
       isShowAddTableDialog: false,
-      dropdownOpen: false,
       isItemFreezed: false,
     };
   }
@@ -223,30 +219,6 @@ class Workspace extends Component {
     });
   }
 
-  onRenameWorkspaceCancel = () => {
-    this.setState({isWorkspaceRenaming: !this.state.isWorkspaceRenaming});
-  }
-
-  onRenameWorkspaceConfirm = (newName) => {
-    let workspace = this.props.workspace;
-    this.props.renameWorkspace(workspace, newName);
-    this.onRenameWorkspaceCancel();
-  }
-
-  onDeleteWorkspaceCancel = () => {
-    this.setState({isWorkspaceDeleting: !this.state.isWorkspaceDeleting});
-  }
-
-  onDeleteWorkspaceSubmit = () => {
-    let workspace = this.props.workspace;
-    this.props.deleteWorkspace(workspace);
-    this.onDeleteWorkspaceCancel();
-  }
-
-  dropdownToggle = () => {
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.workspace.table_list !== this.props.workspace.table_list) {
       this.setState({
@@ -260,42 +232,7 @@ class Workspace extends Component {
 
     return(
       <div className="workspace my-2">
-        <Fragment>
-          {this.state.isWorkspaceRenaming &&
-            <Rename
-              hasSuffix={false}
-              name={workspace.name}
-              onRenameConfirm={this.onRenameWorkspaceConfirm}
-              onRenameCancel={this.onRenameWorkspaceCancel}
-            />
-          }
-          {!this.state.isWorkspaceRenaming &&
-            <span className="mb-2 workspace-name-container">
-              <span className="workspace-name">{workspace.name}</span>
-              <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
-                <DropdownToggle
-                  caret={true}
-                  tag='i'
-                  title={gettext('More Operations')}
-                  data-toggle="dropdown" 
-                  aria-expanded={this.state.dropdownOpen}
-                >
-                </DropdownToggle>
-                <DropdownMenu className="drop-list" right={true}>
-                  <DropdownItem onClick={this.onRenameWorkspaceCancel}>{gettext('Rename')}</DropdownItem>
-                  <DropdownItem onClick={this.onDeleteWorkspaceCancel}>{gettext('Delete')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-              {this.state.isWorkspaceDeleting &&
-                <DeleteWorkspaceDialog
-                  currentWorkspace={workspace}
-                  deleteCancel={this.onDeleteWorkspaceCancel}
-                  handleSubmit={this.onDeleteWorkspaceSubmit}
-                />
-              }
-            </span>
-          }
-        </Fragment>
+        <div>{workspace.owner_name}</div>
         <div className="d-flex add-table-btn-container">
           <div className="add-table-btn cursor-pointer" onClick={this.onAddTable}>
             <i className="fa fa-plus"></i>
@@ -336,6 +273,12 @@ class Workspace extends Component {
 
 Workspace.propTypes = workspacePropTypes;
 
+
+const dtablePropTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
+};
+
 class DTable extends Component {
   constructor(props) {
     super(props);
@@ -353,8 +296,8 @@ class DTable extends Component {
     });
   }
 
-  createWorkspace = (name) => {
-    seafileAPI.createWorkspace(name).then((res) => {
+  createWorkspace = (owner) => {
+    seafileAPI.createWorkspace(owner).then((res) => {
       this.state.workspaceList.push(res.data.workspace);
       this.setState({workspaceList: this.state.workspaceList});
     }).catch((error) => {
@@ -363,37 +306,6 @@ class DTable extends Component {
       }
     });
     this.onAddWorkspace();
-  }
-
-  renameWorkspace = (workspace, name) => {
-    let workspaceID = workspace.id;
-    seafileAPI.renameWorkspace(workspaceID, name).then((res) => {
-      let workspaceList = this.state.workspaceList.map((workspace) => {
-        if (workspace.id === workspaceID) {
-          workspace = res.data.workspace;
-        }
-        return workspace;
-      });
-      this.setState({workspaceList: workspaceList});
-    }).catch((error) => {
-      if(error.response) {
-        this.setState({errorMsg: gettext('Error')});
-      }
-    });
-  }
-
-  deleteWorkspace = (workspace) => {
-    let workspaceID = workspace.id;
-    seafileAPI.deleteWorkspace(workspaceID).then(() => {
-      let workspaceList = this.state.workspaceList.filter(workspace => {
-        return workspace.id !== workspaceID;
-      });
-      this.setState({workspaceList: workspaceList});
-    }).catch((error) => {
-      if(error.response) {
-        this.setState({errorMsg: gettext('Error')});
-      }
-    });
   }
 
   componentDidMount() {
@@ -419,46 +331,63 @@ class DTable extends Component {
 
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container" id="starred">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">DTable</h3>
-          </div>
-          <div className="cur-view-content">
-            {this.state.loading && <Loading />}
-            {(!this.state.loading && this.state.errorMsg) && 
-              <p className="error text-center">{this.state.errorMsg}</p>
-            }
-            {!this.state.loading &&
+      <Fragment>
+        <div className="main-panel-north border-left-show">
+          <div className="cur-view-toolbar">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+            <div className="operation">
               <Fragment>
-                {this.state.workspaceList.map((workspace, index) => {
-                  return (
-                    <Workspace
-                      key={index}
-                      workspace={workspace}
-                      renameWorkspace={this.renameWorkspace}
-                      deleteWorkspace={this.deleteWorkspace}
-                    />
-                  );
-                })}
-                <div className="my-2">
-                  <span className="add-workspace cursor-pointer" onClick={this.onAddWorkspace}>
-                    <i className="fa fa-plus"></i>{' '}{gettext('Add a Workspace')}
-                  </span>
-                  {this.state.isShowAddWorkspaceDialog &&
-                    <CreateWorkspaceDialog
-                      createWorkspace={this.createWorkspace}
-                      onAddWorkspace={this.onAddWorkspace}
-                    />
-                  }
-                </div>
+                <MediaQuery query="(min-width: 768px)">
+                  <Button className="btn btn-secondary operation-item" onClick={this.onAddWorkspace}>{gettext('New DTable')}</Button>
+                </MediaQuery>
+                <MediaQuery query="(max-width: 767.8px)">
+                  <Button className="btn btn-secondary operation-item my-1" onClick={this.onAddWorkspace}>{gettext('New DTable')}</Button>
+                </MediaQuery>
               </Fragment>
-            }
+            </div>
+          </div>
+          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
+        </div>
+        <div className="main-panel-center">
+          <div className="cur-view-container" id="starred">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">DTable</h3>
+            </div>
+            <div className="cur-view-content">
+              {this.state.loading && <Loading />}
+              {(!this.state.loading && this.state.errorMsg) && 
+                <p className="error text-center">{this.state.errorMsg}</p>
+              }
+              {!this.state.loading &&
+                <Fragment>
+                  {this.state.workspaceList.map((workspace, index) => {
+                    return (
+                      <Workspace
+                        key={index}
+                        workspace={workspace}
+                        renameWorkspace={this.renameWorkspace}
+                        deleteWorkspace={this.deleteWorkspace}
+                      />
+                    );
+                  })}
+                  <div className="my-2">
+                    {this.state.isShowAddWorkspaceDialog &&
+                      <CreateWorkspaceDialog
+                        createWorkspace={this.createWorkspace}
+                        onAddWorkspace={this.onAddWorkspace}
+                      />
+                    }
+                  </div>
+                </Fragment>
+              }
+            </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
+
+DTable.propTypes = dtablePropTypes;
 
 export default DTable;
