@@ -464,7 +464,7 @@ class DirentListView extends React.Component {
   }
 
   getDirentItemMenuList = (dirent, isContextmenu) => {
-
+    console.log(dirent.permission);
     let isRepoOwner = this.isRepoOwner;
     let currentRepoInfo = this.props.currentRepoInfo;
     let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
@@ -490,28 +490,27 @@ class DirentListView extends React.Component {
       if (dirent.permission === 'rw') {
         contextmenuList = [...contextmenuList, DELETE];
       }
-
+      contextmenuList = contextmenuList.length > 0 ? [...contextmenuList, 'Divider'] : [];
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
-      menuList = [...contextmenuList, 'Divider'];
       if (can_set_folder_perm) {
-        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
       } else {
-        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
       menuList = [...contextmenuList];
-      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : [...menuList];
+      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : menuList.slice(0, menuList.length - 1);
       return menuList;
     }
 
     if (type === 'file' && permission === 'rw') {
-      menuList = [...contextmenuList, 'Divider'];
+      menuList = [...contextmenuList];
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         menuList.push(RENAME);
         menuList.push(MOVE);
@@ -541,7 +540,7 @@ class DirentListView extends React.Component {
     }
 
     if (type === 'file' && permission === 'r') {
-      menuList = [...contextmenuList, 'Divider'];
+      menuList = [...contextmenuList];
       if (!currentRepoInfo.encrypted) {
         menuList.push(COPY);
       }
