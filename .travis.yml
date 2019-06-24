@@ -33,8 +33,8 @@ install:
 before_scipt: true
 
 # int & start seahub server, run seahub tests
-script:
-  - .travis/test_seahub_changes.sh; rc=$?; if [[ $rc == 0 ]]; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
+script: true
+# - .travis/test_seahub_changes.sh; rc=$?; if [[ $rc == 0 ]]; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
 
 after_success:
   # notify seafile-docs to rebuild if master is updated
@@ -59,3 +59,4 @@ branches:
     - master
     - 7.0
     - seafile-docs
+    - master-tmp-lian
