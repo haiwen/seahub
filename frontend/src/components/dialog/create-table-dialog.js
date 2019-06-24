@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
+import makeAnimated from 'react-select/lib/animated';
+import { seafileAPI } from '../../utils/seafile-api.js';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
 
 const propTypes = {
-  createTable: PropTypes.func.isRequired,
-  onAddTable: PropTypes.func.isRequired,
+  createDTable: PropTypes.func.isRequired,
+  onAddDTable: PropTypes.func.isRequired,
 };
 
 class CreateTableDialog extends React.Component {
@@ -16,6 +19,8 @@ class CreateTableDialog extends React.Component {
       tableName: '',
       errMessage: '',
       isSubmitBtnActive: false,
+      selectedOption: null,
+      options:[],
     };
     this.newInput = React.createRef();
   }
@@ -23,6 +28,26 @@ class CreateTableDialog extends React.Component {
   componentDidMount() {
     this.newInput.focus();
     this.newInput.setSelectionRange(0,0);
+
+    let options = [];
+    seafileAPI.getAccountInfo().then((res) => {
+      let obj = {};
+      console.log(res);
+      obj.value = 'Personal';
+      obj.email = res.data.email;
+      obj.label = 'Personal';
+      options.push(obj);
+      seafileAPI.listGroups().then((res) => {
+        for (let i = 0 ; i < res.data.length; i++) {
+          let obj = {};
+          obj.value = res.data[i].name;
+          obj.email = res.data[i].id + '@seafile_group';
+          obj.label = res.data[i].name;
+          options.push(obj);
+        }
+        this.setState({options: options});
+      });
+    });
   }
 
   handleChange = (e) => {
@@ -37,6 +62,10 @@ class CreateTableDialog extends React.Component {
     }) ;
   }
 
+  handleSelectChange = (option) => {
+    this.setState({selectedOption: option});
+  }
+
   handleSubmit = () => {
     if (!this.state.isSubmitBtnActive) {
       return;
@@ -45,7 +74,8 @@ class CreateTableDialog extends React.Component {
     let isValid = this.validateInputParams();
     if (isValid) {
       let newName = this.state.tableName.trim();
-      this.props.createTable(newName);
+      let owner = this.state.selectedOption;
+      this.props.createDTable(newName, owner.email);
     }
   }
 
@@ -57,7 +87,7 @@ class CreateTableDialog extends React.Component {
   }
 
   toggle = () => {
-    this.props.onAddTable();
+    this.props.onAddDTable();
   }
 
   validateInputParams = () => {
@@ -94,6 +124,17 @@ class CreateTableDialog extends React.Component {
             </FormGroup>
           </Form>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
+          <Label>{gettext('Belong to')}</Label>
+          <Select
+            isClearable
+            isMulti={false}
+            maxMenuHeight={200}
+            hideSelectedOptions={true}
+            components={makeAnimated()}
+            placeholder=''
+            options={this.state.options}
+            onChange={this.handleSelectChange}
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

@@ -23,7 +23,7 @@ from seahub.dtable.models import Workspaces
 from seahub.tags.models import FileUUIDMap
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.group.utils import group_id_to_name
+from seahub.group.utils import group_id_to_name, is_group_member
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, \
     gen_file_get_url, get_file_type_and_ext, IMAGE
@@ -59,14 +59,14 @@ class WorkspacesView(APIView):
         else:
             groups = ccnet_api.get_groups(username, return_ancestors=True)
 
-        owners = list()
-        owners.append(username)
+        owner_list = list()
+        owner_list.append(username)
         for group in groups:
             group_user = '%s@seafile_group' % group.id
-            owners.append(group_user)
+            owner_list.append(group_user)
 
         workspace_list = list()
-        for owner in owners:
+        for owner in owner_list:
             try:
                 workspace = Workspaces.objects.get_workspace_by_owner(owner)
             except Exception as e:
@@ -111,94 +111,133 @@ class WorkspacesView(APIView):
                 logger.warning('Library %s not found.' % repo_id)
                 continue
 
+            if '@seafile_group' in owner:
+                group_id = int(owner.split('@')[0])
+                owner_name = group_id_to_name(group_id)
+            else:
+                owner_name = email2nickname(owner)
+
             table_objs = seafile_api.list_dir_by_path(repo_id, '/')
             table_list = list()
             for table_obj in table_objs:
                 if table_obj.obj_name[-7:] != FILE_TYPE:
                     continue
                 table = dict()
-                table["name"] = table_obj.obj_name[:-7]
-                table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
-                table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
+                table_file = seafile_api.get_dirent_by_path(repo_id, '/'+table_obj.obj_name)
+                table["name"] = table_file.obj_name[:-7]
+                table["mtime"] = timestamp_to_isoformat_timestr(table_file.mtime)
+                table["modifier"] = email2nickname(table_file.modifier)
                 table_list.append(table)
 
             res = workspace.to_dict()
-            if '@seafile_group' in owner:
-                group_id = int(owner.split('@')[0])
-                owner_name = group_id_to_name(group_id)
-            else:
-                owner_name = email2nickname(owner)
             res["owner_name"] = owner_name
             res["table_list"] = table_list
             res["updated_at"] = workspace.updated_at
             workspace_list.append(res)
 
-        resp = dict()
-        resp["workspace_list"] = workspace_list
+        return Response({"workspace_list": workspace_list}, status=status.HTTP_200_OK)
 
-        return Response(resp, status=status.HTTP_200_OK)
+
+class DTablesView(APIView):
 
     def post(self, request):
-        """create a workspace
+        """create a table file
         """
         # argument check
-        owner = request.POST.get('owner')
-        if not owner:
+        table_owner = request.POST.get('owner')
+        if not table_owner:
             error_msg = 'owner invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        table_name = request.POST.get('name')
+        if not table_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        table_file_name = table_name + FILE_TYPE
+        if not is_valid_dirent_name(table_file_name):
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # resource check
-        workspace = Workspaces.objects.get_workspace_by_owner(owner)
-        if workspace:
-            return Response({'success': True}, status=status.HTTP_200_OK)
+        workspace = Workspaces.objects.get_workspace_by_owner(table_owner)
+        if not workspace:
+            if not request.user.permissions.can_add_repo():
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            org_id = -1
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+
+            try:
+                if org_id > 0:
+                    repo_id = seafile_api.create_org_repo(
+                        _("My Workspace"),
+                        _("My Workspace"),
+                        "dtable@seafile",
+                        org_id
+                    )
+                else:
+                    repo_id = seafile_api.create_repo(
+                        _("My Workspace"),
+                        _("My Workspace"),
+                        "dtable@seafile"
+                    )
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error.'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            try:
+                workspace = Workspaces.objects.create_workspace(table_owner, repo_id)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error.'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not request.user.permissions.can_add_repo():
-            error_msg = 'You do not have permission to create workspace.'
+        username = request.user.username
+        if '@seafile_group' in table_owner:
+            group_id = int(table_owner.split('@')[0])
+            if not is_group_member(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != table_owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # repo status check
+        repo_status = repo.status
+        if repo_status != 0:
+            error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        org_id = -1
-        if is_org_context(request):
-            org_id = request.user.org.org_id
+        # create new empty table
+        table_file_name = check_filename_with_rename(repo_id, '/', table_file_name)
 
         try:
-            if org_id > 0:
-                repo_id = seafile_api.create_org_repo(
-                    _("My Workspace"),
-                    _("My Workspace"),
-                    "dtable@seafile",
-                    org_id
-                )
-            else:
-                repo_id = seafile_api.create_repo(
-                    _("My Workspace"),
-                    _("My Workspace"),
-                    "dtable@seafile"
-                )
-        except Exception as e:
+            seafile_api.post_empty_file(repo_id, '/', table_file_name, username)
+        except SearpcError, e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:
-            workspace = Workspaces.objects.create_workspace(owner, repo_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error.'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        table_path = normalize_file_path(table_file_name)
+        table_obj = seafile_api.get_dirent_by_path(repo_id, table_path)
+        table = dict()
+        table["name"] = table_obj.obj_name[:-7]
+        table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
+        table["modifier"] = email2nickname(table_obj.modifier)
 
-        if '@seafile_group' in owner:
-            group_id = int(owner.split('@')[0])
-            owner_name = group_id_to_name(group_id)
-        else:
-            owner_name = email2nickname(owner)
-
-        res = workspace.to_dict()
-        res["owner_name"] = owner_name
-        res["table_list"] = []
-        res["updated_at"] = workspace.updated_at
-
-        return Response({"workspace": res}, status=status.HTTP_201_CREATED)
+        return Response({"table": table}, status=status.HTTP_201_CREATED)
 
 
 class DTableView(APIView):
@@ -243,9 +282,15 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if '@seafile_group' in owner:
+            group_id = int(owner.split('@')[0])
+            if not is_group_member(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # send stats message
         send_file_access_msg(request, repo, table_path, 'api')
@@ -253,64 +298,6 @@ class DTableView(APIView):
         op = request.GET.get('op', 'download')
         use_onetime = False if reuse == '1' else True
         return get_repo_file(request, repo_id, table_file_id, table_file_name, op, use_onetime)
-
-    def post(self, request, workspace_id):
-        """create a table file
-        """
-        # argument check
-        table_name = request.POST.get('name')
-        if not table_name:
-            error_msg = 'name invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        table_file_name = table_name + FILE_TYPE
-        if not is_valid_dirent_name(table_file_name):
-            error_msg = 'name invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
-        if not workspace:
-            error_msg = 'Workspace %s not found.' % workspace_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo_id = workspace.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        username = request.user.username
-        owner = workspace.owner
-        if username != owner:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # repo status check
-        repo_status = repo.status
-        if repo_status != 0:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # create new empty table
-        table_file_name = check_filename_with_rename(repo_id, '/', table_file_name)
-
-        try:
-            seafile_api.post_empty_file(repo_id, '/', table_file_name, owner)
-        except SearpcError, e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        table_path = normalize_file_path(table_file_name)
-        table_obj = seafile_api.get_dirent_by_path(repo_id, table_path)
-        table = dict()
-        table["name"] = table_obj.obj_name[:-7]
-        table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
-        table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
-
-        return Response({"table": table}, status=status.HTTP_201_CREATED)
 
     def put(self, request, workspace_id):
         """rename a table
@@ -357,9 +344,15 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if '@seafile_group' in owner:
+            group_id = int(owner.split('@')[0])
+            if not is_group_member(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # repo status check
         repo_status = repo.status
@@ -370,7 +363,7 @@ class DTableView(APIView):
         # rename table
         new_table_file_name = check_filename_with_rename(repo_id, '/', new_table_file_name)
         try:
-            seafile_api.rename_file(repo_id, '/', old_table_file_name, new_table_file_name, owner)
+            seafile_api.rename_file(repo_id, '/', old_table_file_name, new_table_file_name, username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -381,7 +374,7 @@ class DTableView(APIView):
         table = dict()
         table["name"] = table_obj.obj_name[:-7]
         table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
-        table["modifier"] = email2nickname(table_obj.modifier) if table_obj.modifier else email2nickname(owner)
+        table["modifier"] = email2nickname(table_obj.modifier)
 
         return Response({"table": table}, status=status.HTTP_200_OK)
 
@@ -415,9 +408,15 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if '@seafile_group' in owner:
+            group_id = int(owner.split('@')[0])
+            if not is_group_member(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # repo status check
         repo_status = repo.status
@@ -477,13 +476,19 @@ class DTableUpdateLinkView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if '@seafile_group' in owner:
+            group_id = int(owner.split('@')[0])
+            if not is_group_member(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             token = seafile_api.get_fileserver_access_token(repo_id, 'dummy', 'update',
-                                                            owner, use_onetime=False)
+                                                            username, use_onetime=False)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -575,8 +580,15 @@ def dtable_file_view(request, workspace_id, name):
     # permission check
     username = request.user.username
     owner = workspace.owner
-    if username != owner:
-        return render_permission_error(request, _(u'Unable to view file'))
+    if '@seafile_group' in owner:
+        group_id = int(owner.split('@')[0])
+        if not is_group_member(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+    else:
+        if username != owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
     return_dict = {
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
