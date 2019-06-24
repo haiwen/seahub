@@ -42,6 +42,7 @@ class EditorUtilities {
     this.contact_email = userInfo.contact_email;
     this.fileName = fileName;
     this.userName = userName;
+    this.server = serviceUrl;
   }
   
   saveContent(content) {
