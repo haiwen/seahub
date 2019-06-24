@@ -25,7 +25,6 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
-  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
@@ -47,6 +46,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   showDirentDetail: PropTypes.func.isRequired,
 };
 
@@ -71,6 +71,7 @@ class DirentListView extends React.Component {
       isListDropTipShow: false,
     };
 
+    this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
     this.isAdmin = props.currentRepoInfo.is_admin;
     this.repoEncrypted = props.currentRepoInfo.encrypted;
@@ -294,12 +295,6 @@ class DirentListView extends React.Component {
     event.preventDefault();
     event.stopPropagation();
 
-    let currentRepoInfo = this.props.currentRepoInfo;
-
-    if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
-      return '';
-    }
-
     let x = event.clientX || (event.touches && event.touches[0].pageX);
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
@@ -339,6 +334,13 @@ class DirentListView extends React.Component {
   }
 
   onContainerContextMenu = (event) => {
+    event.preventDefault();
+    // Display menu items based on the permissions of the current path
+    let permission = this.props.userPerm;
+    if (permission !== 'admin' && permission !== 'rw') {
+      return;
+    }
+
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
@@ -419,6 +421,7 @@ class DirentListView extends React.Component {
   }
 
   onItemContextMenu = (event, dirent) => {
+    // Display menu items according to the current dirent permission
     if (this.props.selectedDirentList.length > 1) {
       return;
     }
@@ -461,20 +464,23 @@ class DirentListView extends React.Component {
   }
 
   getDirentItemMenuList = (dirent, isContextmenu) => {
-
     let isRepoOwner = this.isRepoOwner;
     let currentRepoInfo = this.props.currentRepoInfo;
     let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
 
     let type = dirent.type;
     let permission = dirent.permission;
+    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent);
 
     let menuList = [];
     let contextmenuList = [];
 
     if (isContextmenu) {
       let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
-      contextmenuList = this.props.showShareBtn ? [SHARE] : [];
+      
+      if (showShareBtn) {
+        contextmenuList = [SHARE];
+      }
 
       if (dirent.permission === 'rw' || dirent.permission === 'r') {
         contextmenuList = [...contextmenuList, DOWNLOAD];
@@ -483,22 +489,22 @@ class DirentListView extends React.Component {
       if (dirent.permission === 'rw') {
         contextmenuList = [...contextmenuList, DELETE];
       }
-
-      contextmenuList = [...contextmenuList, 'Divider'];
+      contextmenuList = contextmenuList.length > 0 ? [...contextmenuList, 'Divider'] : [];
     }
 
     let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
       if (can_set_folder_perm) {
-        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
       } else {
-        menuList = [...menuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
       }
       return menuList;
     }
 
     if (type === 'dir' && permission === 'r') {
-      menuList = currentRepoInfo.encrypted ? [...contextmenuList, COPY] : [];
+      menuList = [...contextmenuList];
+      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : menuList.slice(0, menuList.length - 1);
       return menuList;
     }
 
@@ -551,7 +557,8 @@ class DirentListView extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    if (e.target.className === 'table-container ') {
+    this.enteredCounter++;
+    if (this.enteredCounter !== 0) {
       this.setState({isListDropTipShow: true});
     }
   }
@@ -568,7 +575,8 @@ class DirentListView extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    if (e.target.className === 'table-container table-drop-active') {
+    this.enteredCounter--;
+    if (this.enteredCounter === 0) {
       this.setState({isListDropTipShow: false});
     }
   }
@@ -578,6 +586,7 @@ class DirentListView extends React.Component {
       return false;
     }
     e.persist();
+    this.enteredCounter = 0;
     this.setState({isListDropTipShow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
@@ -587,22 +596,19 @@ class DirentListView extends React.Component {
 
     let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
 
-    if (e.target.className === 'table-container table-drop-active') {
-
-      if (Array.isArray(dragStartItemData)) { //selected items
-        return;
-      }
-
-      if (nodeRootPath === this.props.path || nodeParentPath === this.props.path) {
-        return;
-      }
-
-      if (this.props.path.indexOf(nodeRootPath) !== -1) {
-        return;
-      }
-
-      this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
+    if (Array.isArray(dragStartItemData)) { //selected items
+      return;
     }
+
+    if (nodeRootPath === this.props.path || nodeParentPath === this.props.path) {
+      return;
+    }
+
+    if (this.props.path.indexOf(nodeRootPath) !== -1) {
+      return;
+    }
+
+    this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
   }
 
   render() {
@@ -659,7 +665,6 @@ class DirentListView extends React.Component {
                   repoEncrypted={this.repoEncrypted}
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
                   isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                  showShareBtn={this.props.showShareBtn}
                   onItemClick={this.props.onItemClick}
                   onItemRenameToggle={this.onItemRenameToggle}
                   onItemSelected={this.onItemSelected}

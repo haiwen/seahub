@@ -29,7 +29,7 @@ from seahub.utils import is_org_context, send_perm_audit_msg, \
         normalize_dir_path, get_folder_permission_recursively, \
         normalize_file_path, check_filename_with_rename
 from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
-        parse_repo_perm, get_locked_files_by_dir
+        parse_repo_perm, get_locked_files_by_dir, get_sub_folder_permission_by_dir
 
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
@@ -1254,6 +1254,15 @@ class ReposAsyncBatchMoveItemView(APIView):
                 error_msg = _(u'File %s is locked.') % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # check sub folder permission
+        folder_permission_dict = get_sub_folder_permission_by_dir(request,
+                src_repo_id, src_parent_dir)
+        for dirent in src_dirents:
+            if dirent in folder_permission_dict.keys() and \
+                    folder_permission_dict[dirent] != 'rw':
+                error_msg = _(u"Can't move folder %s, please check its permission.") % dirent
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # move file
         result = {}
         formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
@@ -1464,6 +1473,15 @@ class ReposSyncBatchMoveItemView(APIView):
                 error_msg = _(u'File %s is locked.') % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # check sub folder permission
+        folder_permission_dict = get_sub_folder_permission_by_dir(request,
+                src_repo_id, src_parent_dir)
+        for dirent in src_dirents:
+            if dirent in folder_permission_dict.keys() and \
+                    folder_permission_dict[dirent] != 'rw':
+                error_msg = _(u"Can't move folder %s, please check its permission.") % dirent
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # move file
         result = {}
         formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
@@ -1475,6 +1493,90 @@ class ReposSyncBatchMoveItemView(APIView):
                                   dst_repo_id, dst_parent_dir, dst_multi,
                                   replace=False, username=username,
                                   need_progress=0, synchronous=1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = {}
+        result['success'] = True
+        return Response(result)
+
+
+class ReposBatchDeleteItemView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request):
+        """ Multi delete files/folders.
+        Permission checking:
+        1. User must has `rw` permission for parent folder.
+        Parameter:
+        {
+            "repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
+            "parent_dir":"/a/b/c/",
+            "dirents":["1.md", "2.md"],
+        }
+        """
+
+        # argument check
+        repo_id = request.data.get('repo_id', None)
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        parent_dir = request.data.get('parent_dir', None)
+        if not parent_dir:
+            error_msg = 'parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dirents = request.data.get('dirents', None)
+        if not dirents:
+            error_msg = 'dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        # User must has `rw` permission for parent dir.
+        if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check locked files
+        username = request.user.username
+        locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
+        for dirent in dirents:
+            # file is locked and lock owner is not current user
+            if dirent in locked_files.keys() and \
+                    locked_files[dirent] != username:
+                error_msg = _(u'File %s is locked.') % dirent
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check sub folder permission
+        folder_permission_dict = get_sub_folder_permission_by_dir(request, repo_id, parent_dir)
+        for dirent in dirents:
+            if dirent in folder_permission_dict.keys() and \
+                    folder_permission_dict[dirent] != 'rw':
+                error_msg = _(u"Can't delete folder %s, please check its permission.") % dirent
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # delete file
+        result = {}
+        formated_dirents = [dirent.strip('/') for dirent in dirents]
+        multi_dirents_str = "\t".join(formated_dirents)
+
+        try:
+            seafile_api.del_file(repo_id, parent_dir, multi_dirents_str, username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

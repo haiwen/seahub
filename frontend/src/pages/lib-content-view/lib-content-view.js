@@ -1480,32 +1480,10 @@ class LibContentView extends React.Component {
       return '';
     }
 
-    let showShareBtn = false;
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, repoEncrypted, userPerm } = this.state;
-    let isAdmin = currentRepoInfo.is_admin;
-    let isVirtual = currentRepoInfo.is_virtual;
+    let { currentRepoInfo, userPerm } = this.state;
+    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
-
-    if (!repoEncrypted) {
-      let showGenerateShareLinkTab = false;
-      if (canGenerateShareLink && (userPerm == 'rw' || userPerm == 'r')) {
-        showGenerateShareLinkTab = true;
-      }
-      let showGenerateUploadLinkTab = false;
-      if (canGenerateUploadLink && (userPerm == 'rw')) {
-        showGenerateUploadLinkTab = true;
-      }
-
-      if (!isVirtual && (isRepoOwner || isAdmin)) {
-        enableDirPrivateShare = true;
-      }
-
-      if (showGenerateShareLinkTab || showGenerateUploadLinkTab || enableDirPrivateShare) {
-        showShareBtn = true;
-      }
-
-    }
 
     let direntItemsList = this.state.direntList.filter((item, index) => {
       return index < this.state.itemsShowLength;
@@ -1599,7 +1577,6 @@ class LibContentView extends React.Component {
             updateUsedRepoTags={this.updateUsedRepoTags}
             isDirentListLoading={this.state.isDirentListLoading}
             direntList={direntItemsList}
-            showShareBtn={showShareBtn}
             sortBy={this.state.sortBy}
             sortOrder={this.state.sortOrder}
             sortItems={this.sortItems}

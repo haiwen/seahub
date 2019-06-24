@@ -198,6 +198,12 @@ class TreeView extends React.Component {
   }
 
   onContextMenu = (event) => {
+    event.preventDefault();
+  
+    let currentRepoInfo = this.props.currentRepoInfo;
+    if (currentRepoInfo.permission !== 'admin' && currentRepoInfo.permission !== 'rw') {
+      return '';
+    }
     this.handleContextClick(event);
   }
   
@@ -207,12 +213,6 @@ class TreeView extends React.Component {
     
     if (!this.props.isNodeMenuShow) {
       return;
-    }
-
-    let currentRepoInfo = this.props.currentRepoInfo;
-
-    if (currentRepoInfo.permission === 'cloud-edit' || currentRepoInfo.permission === 'preview') {
-      return '';
     }
     
     let x = event.clientX || (event.touches && event.touches[0].pageX);

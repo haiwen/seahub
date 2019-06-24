@@ -9,6 +9,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isRepoInfoBarShow: PropTypes.bool.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
@@ -17,7 +18,6 @@ const propTypes = {
   updateUsedRepoTags: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
-  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
@@ -73,9 +73,9 @@ class DirListView extends React.Component {
           currentRepoInfo={this.props.currentRepoInfo}
           repoID={this.props.repoID}
           isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+          userPerm={this.props.userPerm}
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           direntList={this.props.direntList}
-          showShareBtn={this.props.showShareBtn}
           sortBy={this.props.sortBy}
           sortOrder={this.props.sortOrder}
           sortItems={this.props.sortItems}

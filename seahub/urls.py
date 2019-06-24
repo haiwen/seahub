@@ -46,7 +46,8 @@ from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposBatchCopyDirView, ReposBatchCreateDirView, \
         ReposBatchCopyItemView, ReposBatchMoveItemView, \
         ReposAsyncBatchCopyItemView, ReposAsyncBatchMoveItemView, \
-        ReposSyncBatchCopyItemView, ReposSyncBatchMoveItemView
+        ReposSyncBatchCopyItemView, ReposSyncBatchMoveItemView, \
+        ReposBatchDeleteItemView
 from seahub.api2.endpoints.repos import RepoView, ReposView
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryView
@@ -317,11 +318,14 @@ urlpatterns = [
     url(r'^api/v2.1/revision-tags/tag-names/$', TagNamesView.as_view(), name='api-v2.1-revision-tags-tag-names'),
 
     ## user::repos-batch-operate
+    # for icourt
     url(r'^api/v2.1/repos/batch/$', ReposBatchView.as_view(), name='api-v2.1-repos-batch'),
     url(r'^api/v2.1/repos/batch-copy-dir/$', ReposBatchCopyDirView.as_view(), name='api-v2.1-repos-batch-copy-dir'),
     url(r'^api/v2.1/repos/batch-create-dir/$', ReposBatchCreateDirView.as_view(), name='api-v2.1-repos-batch-create-dir'),
     url(r'^api/v2.1/repos/batch-copy-item/$', ReposBatchCopyItemView.as_view(), name='api-v2.1-repos-batch-copy-item'),
     url(r'^api/v2.1/repos/batch-move-item/$', ReposBatchMoveItemView.as_view(), name='api-v2.1-repos-batch-move-item'),
+
+    url(r'^api/v2.1/repos/batch-delete-item/$', ReposBatchDeleteItemView.as_view(), name='api-v2.1-repos-batch-delete-item'),
     url(r'^api/v2.1/repos/async-batch-copy-item/$', ReposAsyncBatchCopyItemView.as_view(), name='api-v2.1-repos-async-batch-copy-item'),
     url(r'^api/v2.1/repos/async-batch-move-item/$', ReposAsyncBatchMoveItemView.as_view(), name='api-v2.1-repos-async-batch-move-item'),
     url(r'^api/v2.1/repos/sync-batch-copy-item/$', ReposSyncBatchCopyItemView.as_view(), name='api-v2.1-repos-sync-batch-copy-item'),

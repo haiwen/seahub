@@ -20,8 +20,8 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   repoPermission: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
-  userPrem: PropTypes.bool,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   // path func
   onTabNavClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
@@ -58,7 +58,6 @@ const propTypes = {
   // list
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
-  showShareBtn: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
@@ -160,7 +159,7 @@ class LibContentContainer extends React.Component {
       if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0) {
         isRepoInfoBarShow = true;
       }
-    } 
+    }
 
     return (
       <Fragment>
@@ -195,6 +194,7 @@ class LibContentContainer extends React.Component {
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isRepoInfoBarShow={isRepoInfoBarShow}
                     usedRepoTags={this.props.usedRepoTags}
@@ -203,7 +203,6 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
-                    showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}
@@ -234,6 +233,7 @@ class LibContentContainer extends React.Component {
                     currentRepoInfo={this.props.currentRepoInfo}
                     repoPermission={this.props.repoPermission}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     onRenameNode={this.props.onRenameNode}
                     isRepoInfoBarShow={isRepoInfoBarShow}
@@ -250,7 +250,6 @@ class LibContentContainer extends React.Component {
                     onItemCopy={this.props.onItemCopy}
                     updateDirent={this.props.updateDirent}
                     onAddFolder={this.props.onAddFolder}
-                    showShareBtn={this.props.showShareBtn}
                     showDirentDetail={this.props.showDirentDetail}
                     onGridItemClick={this.onGridItemClick}
                     isDirentDetailShow={this.props.isDirentDetailShow}
@@ -265,6 +264,7 @@ class LibContentContainer extends React.Component {
                     currentRepoInfo={this.props.currentRepoInfo}
                     repoPermission={this.props.repoPermission}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                    userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isTreeDataLoading={this.props.isTreeDataLoading}
                     treeData={this.props.treeData}
@@ -295,7 +295,6 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
-                    showShareBtn={this.props.showShareBtn}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}

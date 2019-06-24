@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
+import stat
 import logging
 from collections import namedtuple
 
@@ -207,6 +208,30 @@ def get_locked_files_by_dir(request, repo_id, folder_path):
             locked_files[dirent.obj_name] = dirent.lock_owner
 
     return locked_files
+
+def get_sub_folder_permission_by_dir(request, repo_id, parent_dir):
+    """ Get sub folder permission in a folder
+
+    Returns:
+        A dict contains folder name and permission.
+
+        folder_permission_dict = {
+            'folder_name_1': 'r';
+            'folder_name_2': 'rw';
+            ...
+        }
+    """
+    username = request.user.username
+    dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+    dirents = seafile_api.list_dir_with_perm(repo_id,
+            parent_dir, dir_id, username, -1, -1)
+
+    folder_permission_dict = {}
+    for dirent in dirents:
+        if stat.S_ISDIR(dirent.mode):
+            folder_permission_dict[dirent.obj_name] = dirent.permission
+
+    return folder_permission_dict
 
 def get_shared_groups_by_repo(repo_id, org_id=None):
     if not org_id:
