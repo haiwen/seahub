@@ -20,9 +20,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.views import get_repo_file
 from seahub.dtable.models import Workspaces, DTables
-from seahub.tags.models import FileUUIDMap
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import group_id_to_name, is_group_member
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, \
@@ -128,6 +126,10 @@ class WorkspacesView(APIView):
 
 
 class DTablesView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
 
     def post(self, request):
         """create a table file
