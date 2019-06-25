@@ -101,7 +101,7 @@ class DetailCommentList extends React.Component {
             className="add-comment-input" ref="commentTextarea" placeholder={gettext('Add a comment.')}
             clos="100" rows="3" warp="virtual"
           ></textarea>
-          <Button className="submit-comment" color="success" size="sm" onClick={this.submitComment}>{gettext('Submit')}</Button>
+          <Button className="submit-comment" color="primary" size="sm" onClick={this.submitComment}>{gettext('Submit')}</Button>
         </div>
       </div>
     );
@@ -189,7 +189,7 @@ class CommentItem extends React.Component {
             <textarea className="edit-comment-input" value={this.state.newComment}
               onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"
             ></textarea>
-            <Button className="comment-btn" color="success" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
+            <Button className="comment-btn" color="primary" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
             <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}> {gettext('Cancel')}</Button>
           </div>
         </li>
