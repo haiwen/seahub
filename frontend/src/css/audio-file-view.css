@@ -1,9 +1,9 @@
-.video-js {
+.audio-file-view .video-js {
     width: calc(100% - 40px);
     max-width: 500px;
     height: 3em;
     margin: 0 auto;
 }
-.video-js .vjs-fullscreen-control {
+.audio-file-view .video-js .vjs-fullscreen-control {
     display: none;
 }
