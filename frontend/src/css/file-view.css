@@ -29,11 +29,8 @@ body {
 .file-locked-icon {
   margin-left: .5rem;
 }
-.last-modification {
+.meta-info {
   font-size: .8125rem;
-}
-.last-modification-time {
-  margin-left: .5rem;
 }
 .file-view-content {
   padding: 30px 0;
