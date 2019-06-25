@@ -68,8 +68,8 @@ class InternalLinkDialog extends React.Component {
             </p>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.copyToClipBoard}>{gettext('Copy')}</Button>{' '}
             <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+            <Button color="primary" onClick={this.copyToClipBoard}>{gettext('Copy')}</Button>
           </ModalFooter>
         </Modal>
       </span>
