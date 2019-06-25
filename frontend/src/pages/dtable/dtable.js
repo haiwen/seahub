@@ -211,7 +211,7 @@ class Workspace extends Component {
 
     return(
       <div className="workspace my-2">
-        <div>{workspace.owner_name}</div>
+        <div>{workspace.owner_type === 'Personal' ? gettext('My Tables') : workspace.owner_name}</div>
         <table width="100%" className="table-vcenter">
           <colgroup>
             <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
