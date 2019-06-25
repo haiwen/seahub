@@ -110,7 +110,7 @@ class Table extends Component {
           }
         </td>
         <td>{table.modifier}</td>
-        <td>{moment(table.mtime).fromNow()}</td>
+        <td>{moment(table.updated_at).fromNow()}</td>
         <td>
           {this.state.active &&
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">

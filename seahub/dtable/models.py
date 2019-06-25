@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import uuid
+
 from django.db import models
 
 from seaserv import seafile_api
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 
 class WorkspacesManager(models.Manager):
@@ -65,5 +68,85 @@ class Workspaces(models.Model):
         return {
             'id': self.pk,
             'repo_id': self.repo_id,
+        }
+
+
+class DTablesManager(models.Manager):
+
+    def get_dtable_by_workspace(self, workspace):
+        try:
+            dtables = super(DTablesManager, self).filter(workspace=workspace)
+            dtable_list = list()
+            for dtable in dtables:
+                dtable_dict = dict()
+                dtable_dict['id'] = dtable.pk
+                dtable_dict['workspace_id'] = dtable.workspace_id
+                dtable_dict['uuid'] = dtable.uuid
+                dtable_dict['name'] = dtable.name
+                dtable_dict['creator'] = email2nickname(dtable.creator)
+                dtable_dict['modifier'] = email2nickname(dtable.modifier)
+                dtable_dict['created_at'] = datetime_to_isoformat_timestr(dtable.created_at)
+                dtable_dict['updated_at'] = datetime_to_isoformat_timestr(dtable.updated_at)
+                dtable_list.append(dtable_dict)
+            return dtable_list
+        except self.model.DoesNotExist:
+            return None
+
+    def create_dtable(self, owner, workspace, name):
+        try:
+            return super(DTablesManager, self).get(workspace=workspace, name=name)
+        except self.model.DoesNotExist:
+            dtable = self.model(workspace=workspace, name=name,
+                                creator=owner, modifier=owner)
+            dtable.save()
+            return dtable
+
+    def get_dtable(self, workspace, name):
+        try:
+            return super(DTablesManager, self).get(workspace=workspace, name=name)
+        except self.model.DoesNotExist:
+            return None
+
+    def get_dtable_by_uuid(self, uuid):
+        try:
+            return super(DTablesManager, self).get(uuid=uuid)
+        except self.model.DoesNotExist:
+            return None
+
+    def delete_dtable(self, workspace, name):
+        try:
+            dtable = super(DTablesManager, self).get(workspace=workspace, name=name)
+            dtable.delete()
+            return True
+        except self.model.DoesNotExist:
+            return False
+
+
+class DTables(models.Model):
+
+    workspace = models.ForeignKey(Workspaces, on_delete=models.CASCADE, db_index=True)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4)
+    name = models.CharField(max_length=255)
+    creator = models.CharField(max_length=255)
+    modifier = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = DTablesManager()
+
+    class Meta:
+        unique_together = (('workspace', 'name'),)
+        db_table = 'dtables'
+
+    def to_dict(self):
+
+        return {
+            'id': self.pk,
+            'workspace_id': self.workspace_id,
+            'uuid': self.uuid,
+            'name': self.name,
+            'creator': email2nickname(self.creator),
+            'modifier': email2nickname(self.modifier),
             'created_at': datetime_to_isoformat_timestr(self.created_at),
+            'updated_at': datetime_to_isoformat_timestr(self.updated_at),
         }

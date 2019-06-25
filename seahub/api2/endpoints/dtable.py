@@ -19,7 +19,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.views import get_repo_file
-from seahub.dtable.models import Workspaces
+from seahub.dtable.models import Workspaces, DTables
 from seahub.tags.models import FileUUIDMap
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -117,22 +117,11 @@ class WorkspacesView(APIView):
             else:
                 owner_name = email2nickname(owner)
 
-            table_objs = seafile_api.list_dir_by_path(repo_id, '/')
-            table_list = list()
-            for table_obj in table_objs:
-                if table_obj.obj_name[-7:] != FILE_TYPE:
-                    continue
-                table = dict()
-                table_file = seafile_api.get_dirent_by_path(repo_id, '/'+table_obj.obj_name)
-                table["name"] = table_file.obj_name[:-7]
-                table["mtime"] = timestamp_to_isoformat_timestr(table_file.mtime)
-                table["modifier"] = email2nickname(table_file.modifier)
-                table_list.append(table)
+            table_list = DTables.objects.get_dtable_by_workspace(workspace)
 
             res = workspace.to_dict()
             res["owner_name"] = owner_name
             res["table_list"] = table_list
-            res["updated_at"] = workspace.updated_at
             workspace_list.append(res)
 
         return Response({"workspace_list": workspace_list}, status=status.HTTP_200_OK)
@@ -225,19 +214,19 @@ class DTablesView(APIView):
 
         try:
             seafile_api.post_empty_file(repo_id, '/', table_file_name, username)
-        except SearpcError, e:
+        except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        table_path = normalize_file_path(table_file_name)
-        table_obj = seafile_api.get_dirent_by_path(repo_id, table_path)
-        table = dict()
-        table["name"] = table_obj.obj_name[:-7]
-        table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
-        table["modifier"] = email2nickname(table_obj.modifier)
+        try:
+            dtable = DTables.objects.create_dtable(table_owner, workspace, table_name)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"table": table}, status=status.HTTP_201_CREATED)
+        return Response({"table": dtable.to_dict()}, status=status.HTTP_201_CREATED)
 
 
 class DTableView(APIView):
@@ -272,11 +261,16 @@ class DTableView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         table_file_name = table_name + FILE_TYPE
         table_path = normalize_file_path(table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
         if not table_file_id:
-            error_msg = 'table %s not found.' % table_name
+            error_msg = 'file %s not found.' % table_file_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -334,11 +328,16 @@ class DTableView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        dtable = DTables.objects.get_dtable(workspace, old_table_name)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % old_table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         old_table_file_name = old_table_name + FILE_TYPE
         old_table_path = normalize_file_path(old_table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, old_table_path)
         if not table_file_id:
-            error_msg = 'table %s not found.' % old_table_name
+            error_msg = 'file %s not found.' % old_table_file_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -369,14 +368,16 @@ class DTableView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        new_table_path = normalize_file_path(new_table_file_name)
-        table_obj = seafile_api.get_dirent_by_path(repo_id, new_table_path)
-        table = dict()
-        table["name"] = table_obj.obj_name[:-7]
-        table["mtime"] = timestamp_to_isoformat_timestr(table_obj.mtime)
-        table["modifier"] = email2nickname(table_obj.modifier)
+        try:
+            dtable.name = new_table_name
+            dtable.modifier = username
+            dtable.save()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error.'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"table": table}, status=status.HTTP_200_OK)
+        return Response({"table": dtable.to_dict()}, status=status.HTTP_200_OK)
 
     def delete(self, request, workspace_id):
         """delete a table
@@ -400,10 +401,16 @@ class DTableView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         table_path = normalize_file_path(table_file_name)
         table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
         if not table_file_id:
-            return Response({'success': True}, status=status.HTTP_200_OK)
+            error_msg = 'file %s not found.' % table_file_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
@@ -425,8 +432,7 @@ class DTableView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # delete asset
-        uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, '/', table_file_name, is_dir=False)
-        asset_dir_path = '/asset/' + str(uuid.uuid)
+        asset_dir_path = '/asset/' + str(dtable.uuid)
         asset_dir_id = seafile_api.get_dir_id_by_path(repo_id, asset_dir_path)
         if asset_dir_id:
             parent_dir = os.path.dirname(asset_dir_path)
@@ -438,15 +444,19 @@ class DTableView(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # delete uuid
-        uuid.delete()
-
         # delete table
         try:
             seafile_api.del_file(repo_id, '/', table_file_name, owner)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            DTables.objects.delete_dtable(workspace, table_name)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True}, status=status.HTTP_200_OK)
@@ -461,6 +471,12 @@ class DTableUpdateLinkView(APIView):
     def get(self, request, workspace_id):
         """get table file update link
         """
+        # argument check
+        table_name = request.GET.get('name', None)
+        if not table_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # resource check
         workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
         if not workspace:
@@ -471,6 +487,11 @@ class DTableUpdateLinkView(APIView):
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -494,6 +515,9 @@ class DTableUpdateLinkView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        dtable.modifier = username
+        dtable.save()
+
         url = gen_file_upload_url(token, 'update-api')
         return Response(url)
 
@@ -512,7 +536,6 @@ class DTableAssetUploadLinkView(APIView):
         if not table_name:
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        table_file_name = table_name + FILE_TYPE
 
         # resource check
         workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
@@ -524,6 +547,11 @@ class DTableAssetUploadLinkView(APIView):
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -542,15 +570,15 @@ class DTableAssetUploadLinkView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         upload_link = gen_file_upload_url(token, 'upload-api')
-        uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, '/',
-                                                             table_file_name,
-                                                             is_dir=False)
 
         # create asset dir
-        asset_dir_path = '/asset/' + str(uuid.uuid)
+        asset_dir_path = '/asset/' + str(dtable.uuid)
         asset_dir_id = seafile_api.get_dir_id_by_path(repo_id, asset_dir_path)
         if not asset_dir_id:
             seafile_api.mkdir_with_parents(repo_id, '/', asset_dir_path[1:], owner)
+
+        dtable.modifier = username
+        dtable.save()
 
         res = dict()
         res['upload_link'] = upload_link
@@ -570,6 +598,10 @@ def dtable_file_view(request, workspace_id, name):
     repo = seafile_api.get_repo(repo_id)
     if not repo:
         raise Http404
+
+    dtable = DTables.objects.get_dtable(workspace, name)
+    if not dtable:
+        return render_error(request, _(u'Table does not exist'))
 
     table_file_name = name + FILE_TYPE
     table_path = normalize_file_path(table_file_name)
@@ -621,6 +653,10 @@ def dtable_asset_access(request, workspace_id, dtable_id, path):
     repo_id = workspace.repo_id
     repo = seafile_api.get_repo(repo_id)
     if not repo:
+        raise Http404
+
+    dtable = DTables.objects.get_dtable_by_uuid(dtable_id)
+    if not dtable:
         raise Http404
 
     asset_path = normalize_file_path(os.path.join('/asset', dtable_id, path))
