@@ -167,7 +167,8 @@
 }
 
 .sf-add-related-file .related-file-subtitle {
-  margin-bottom: 4px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
 }
 
 .detail-container .tab-content {
