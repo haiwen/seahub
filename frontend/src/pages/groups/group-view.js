@@ -496,10 +496,11 @@ class GroupView extends React.Component {
           </ModalPortal>
         )}
         {this.state.isCreateRepoDialogShow && this.state.isDepartmentGroup &&
-          <CreateDepartmentRepoDialog 
+          <CreateRepoDialog 
             isAdmin={this.state.isAdmin}
             onCreateToggle={this.onCreateRepoToggle}
             onCreateRepo={this.onCreateRepo}
+            libraryType='department'
           />
         }
         {this.state.showRenameGroupDialog &&

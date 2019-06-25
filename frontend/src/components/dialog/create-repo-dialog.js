@@ -50,6 +50,10 @@ class CreateRepoDialog extends React.Component {
       let password = this.state.encrypt ? this.state.password1 : '';
       let permission= this.state.permission;
       let repo = this.createRepo(repoName, password, permission);
+      if (this.props.libraryType === 'department') {
+        this.props.onCreateRepo(repo, 'department');
+        return;
+      }
       this.props.onCreateRepo(repo);
     }
   } 
@@ -148,6 +152,12 @@ class CreateRepoDialog extends React.Component {
         repo_name: repoName,
         password: password,
         permission: permission,
+      };
+    }
+    if (libraryType === 'department') {
+      repo = {
+        repo_name: repoName,
+        passwd: password,
       };
     }
     return repo;
