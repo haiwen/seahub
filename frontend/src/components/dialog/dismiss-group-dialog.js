@@ -20,13 +20,13 @@ class DismissGroupDialog extends React.Component {
   render() {
     return(
       <Modal isOpen={this.props.showDismissGroupDialog} toggle={this.props.toggleDismissGroupDialog}>
-        <ModalHeader>{gettext('Dismiss Group')}</ModalHeader>
+        <ModalHeader>{gettext('Delete Group')}</ModalHeader>
         <ModalBody>
-          <span>{gettext('Really want to dismiss this group?')}</span>
+          <span>{gettext('Really want to delete this group?')}</span>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleDismissGroupDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.dismissGroup}>{gettext('Dismiss')}</Button>
+          <Button color="primary" onClick={this.dismissGroup}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
     );

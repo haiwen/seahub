@@ -418,7 +418,7 @@ class GroupView extends React.Component {
                           {
                             this.state.isOwner &&
                             <ul className="sf-popover-list">
-                              <li><a href="#" className="sf-popover-item" onClick={this.toggleDismissGroupDialog}>{gettext('Dismiss')}</a></li>
+                              <li><a href="#" className="sf-popover-item" onClick={this.toggleDismissGroupDialog}>{gettext('Delete Group')}</a></li>
                             </ul>
                           }
                         </div>
