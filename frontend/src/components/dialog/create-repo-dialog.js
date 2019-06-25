@@ -158,7 +158,6 @@ class CreateRepoDialog extends React.Component {
       repo = {
         repo_name: repoName,
         passwd: password,
-        permission: 'rw',
       };
     }
     return repo;
