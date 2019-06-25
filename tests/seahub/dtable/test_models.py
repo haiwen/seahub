@@ -6,17 +6,18 @@ from seahub.test_utils import BaseTestCase
 
 class WorkspacesManagerTest(BaseTestCase):
 
-    def test_get_workspaces_by_owner(self):
+    def test_get_workspace_by_owner(self):
         assert len(Workspaces.objects.all()) == 0
-        Workspaces.objects.create_workspace("test_name", self.user.username, self.repo.id)
+        Workspaces.objects.create_workspace(self.user.username, self.repo.id)
 
-        workspace_list = Workspaces.objects.get_workspaces_by_owner(self.user.username)
+        workspace = Workspaces.objects.get_workspace_by_owner(self.user.username)
 
-        assert len(workspace_list) == 1
+        assert workspace is not None
+        assert len(Workspaces.objects.all()) == 1
 
     def test_get_workspace_by_id(self):
         assert len(Workspaces.objects.all()) == 0
-        workspace = Workspaces.objects.create_workspace("test_name", self.user.username, self.repo.id)
+        workspace = Workspaces.objects.create_workspace(self.user.username, self.repo.id)
 
         assert workspace is not None
         workspace_id = workspace.id
@@ -26,7 +27,7 @@ class WorkspacesManagerTest(BaseTestCase):
 
     def test_delete_workspace(self):
         assert len(Workspaces.objects.all()) == 0
-        workspace = Workspaces.objects.create_workspace("test_name", self.user.username, self.repo.id)
+        workspace = Workspaces.objects.create_workspace(self.user.username, self.repo.id)
 
         assert len(Workspaces.objects.all()) == 1
         workspace_id = workspace.id
