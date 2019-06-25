@@ -112,13 +112,16 @@ class WorkspacesView(APIView):
             if '@seafile_group' in owner:
                 group_id = int(owner.split('@')[0])
                 owner_name = group_id_to_name(group_id)
+                owner_type = "Group"
             else:
                 owner_name = email2nickname(owner)
+                owner_type = "Personal"
 
             table_list = DTables.objects.get_dtable_by_workspace(workspace)
 
             res = workspace.to_dict()
             res["owner_name"] = owner_name
+            res["owner_type"] = owner_type
             res["table_list"] = table_list
             workspace_list.append(res)
 
@@ -222,7 +225,7 @@ class DTablesView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
-            dtable = DTables.objects.create_dtable(table_owner, workspace, table_name)
+            dtable = DTables.objects.create_dtable(username, workspace, table_name)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

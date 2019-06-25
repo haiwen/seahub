@@ -32,7 +32,6 @@ class CreateTableDialog extends React.Component {
     let options = [];
     seafileAPI.getAccountInfo().then((res) => {
       let obj = {};
-      console.log(res);
       obj.value = 'Personal';
       obj.email = res.data.email;
       obj.label = 'Personal';

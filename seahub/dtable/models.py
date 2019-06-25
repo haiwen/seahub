@@ -92,12 +92,12 @@ class DTablesManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
-    def create_dtable(self, owner, workspace, name):
+    def create_dtable(self, username, workspace, name):
         try:
             return super(DTablesManager, self).get(workspace=workspace, name=name)
         except self.model.DoesNotExist:
             dtable = self.model(workspace=workspace, name=name,
-                                creator=owner, modifier=owner)
+                                creator=username, modifier=username)
             dtable.save()
             return dtable
 
