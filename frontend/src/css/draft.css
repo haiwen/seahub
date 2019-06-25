@@ -108,6 +108,9 @@
   word-wrap: break-word;
   word-break: normal;
 }
+.dirent-table-container td a:hover {
+  text-decoration: underline;
+}
 .review-side-panel-item {
   border-bottom: 1px solid #e6e6dd;
   padding: 1em 0;
