@@ -16,6 +16,8 @@ from seahub.signals import clean_up_repo_trash
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner
 from seahub.views import check_folder_permission
+from seahub.group.utils import is_group_admin
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -129,7 +131,8 @@ class RepoTrash(APIView):
         """ Clean library's trash.
 
         Permission checking:
-        1. only repo owner can perform this action.
+        1. repo owner can perform this action.
+        2. is group admin.
         """
 
         # argument check
@@ -148,9 +151,19 @@ class RepoTrash(APIView):
         # permission check
         username = request.user.username
         repo_owner = get_repo_owner(request, repo_id)
-        if username != repo_owner or not config.ENABLE_USER_CLEAN_TRASH:
+        if not config.ENABLE_USER_CLEAN_TRASH:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if '@seafile_group' in repo_owner:
+            group_id = get_group_id_by_repo_owner(repo_owner)
+            if not is_group_admin(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != repo_owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             seafile_api.clean_up_repo_history(repo_id, keep_days)
