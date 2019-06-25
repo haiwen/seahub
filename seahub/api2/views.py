@@ -89,7 +89,7 @@ from seahub.utils.timeutils import utc_to_local, \
         timestamp_to_isoformat_timestr
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
-from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
+from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file
 if HAS_FILE_SEARCH:
     from seahub_extra.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT
 from seahub.utils import HAS_OFFICE_CONVERTER
@@ -3156,10 +3156,11 @@ class FileDetailView(APIView):
         entry["last_modifier_contact_email"] = email2contact_email(latest_contributor)
 
         try:
-            entry["size"] = get_file_size(real_repo_id, repo.version, obj_id)
+            file_size = get_file_size(real_repo_id, repo.version, obj_id)
         except Exception as e:
             logger.error(e)
-            entry["size"] = 0
+            file_size = 0
+        entry["size"] = file_size
 
         starred_files = UserStarredFiles.objects.filter(repo_id=repo_id,
                 path=path)
@@ -3167,6 +3168,8 @@ class FileDetailView(APIView):
         file_comments = FileComment.objects.get_by_file_path(repo_id, path)
         comment_total = file_comments.count()
         entry["comment_total"] = comment_total
+
+        entry["can_edit"], _ = can_edit_file(file_name, file_size, repo)
 
         return Response(entry)
 
