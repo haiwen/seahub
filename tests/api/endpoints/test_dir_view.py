@@ -261,7 +261,7 @@ class DirViewTest(BaseTestCase):
         assert len(json_resp['dirent_list']) == 1
         assert json_resp['dirent_list'][0]['type'] == 'file'
         assert json_resp['dirent_list'][0]['name'] == image_file_name
-        assert not json_resp['dirent_list'][0].has_key('encoded_thumbnail_src')
+        assert json_resp['dirent_list'][0].has_key('encoded_thumbnail_src')
 
         file_id = json_resp['dirent_list'][0]['id']
 

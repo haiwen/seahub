@@ -159,6 +159,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                     # if thumbnail has already been created, return its src.
                     # Then web browser will use this src to get thumbnail instead of
                     # recreating it.
+                    file_info['encoded_thumbnail_src'] = ''
                     thumbnail_file_path = os.path.join(THUMBNAIL_ROOT,
                             str(thumbnail_size), file_obj_id)
                     if os.path.exists(thumbnail_file_path):
