@@ -87,7 +87,7 @@ class AddRelatedFileDialog extends React.Component {
     let subtitle = gettext('Select related file for {placeholder}');
     subtitle = subtitle.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     return (
-      <Fragment>
+      <div className="sf-add-related-file">
         <ModalHeader toggle={this.props.onClose}>
           <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.toggle} aria-label={gettext('Back')}></span>
           {gettext('Select File')}
@@ -111,7 +111,7 @@ class AddRelatedFileDialog extends React.Component {
             <Button color="primary" disabled>{gettext('Submit')}</Button>
           }
         </ModalFooter>
-      </Fragment>
+      </div>
     );
   }
 }
