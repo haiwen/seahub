@@ -130,7 +130,7 @@ class CommentPanel extends React.Component {
             placeholder={gettext('Add a comment.')}
             clos="100" rows="3" warp="virtual"></textarea>
           <Button
-            className="submit-comment" color="success"
+            className="submit-comment" color="primary"
             size="sm" onClick={this.submitComment} >
             {gettext('Submit')}</Button>
         </div>
