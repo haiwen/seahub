@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion, filePermission } from './utils/constants';
+import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion, filePermission, serviceURL } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
@@ -56,7 +56,7 @@ class Draft extends React.Component {
       reviewers: [],
       inResizing: false,
       rightPartWidth: 30,
-      draftStatus: window.draft.config.draftStatus,
+      draftStatus: draftStatus,
     };
     this.quote = '';
     this.newIndex = null;
@@ -731,7 +731,7 @@ class Draft extends React.Component {
   }
 
   render() {
-    const { draftInfo, reviewers, originRepoName } = this.state; 
+    const { draftInfo, reviewers, originRepoName, draftStatus } = this.state; 
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
     const showPublishedButton = this.state.draftStatus == 'published';
@@ -807,7 +807,7 @@ class Draft extends React.Component {
                         changedNumber={this.state.changedNodes.length}
                         scrollToChangedNode={this.scrollToChangedNode}/>
                       }
-                      <SidePanelOrigin originRepoName={originRepoName} draftInfo={draftInfo}/>
+                      <SidePanelOrigin originRepoName={originRepoName} draftInfo={draftInfo} draftStatus={draftStatus}/>
                     </div>
                   </TabPane>
                   <TabPane tabId="comments" className="comments">
@@ -917,6 +917,8 @@ class SidePanelOrigin extends React.Component {
   }
 
   render() {
+    const { draftStatus, originRepoName } = this.props;
+    const filePath = serviceURL + '/lib/' + draftRepoID + '/file' + draftOriginFilePath;
     return (
       <div className="dirent-table-container">
         <table className="table-thead-hidden">
@@ -924,7 +926,15 @@ class SidePanelOrigin extends React.Component {
             <tr><th width="25%"></th><th width="75%"></th></tr>
           </thead>
           <tbody>
-            <tr><th>{gettext('Location')}</th><td>{this.props.originRepoName}{draftFilePath}</td></tr>
+            <tr>
+              <th className="align-text-top">{gettext('Location')}</th>
+              <td>
+                {draftStatus === 'open' ?
+                  <span>{originRepoName}{draftFilePath}</span> :
+                  <a href={filePath} className="text-dark">{filePath}</a>
+                }
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -933,7 +943,8 @@ class SidePanelOrigin extends React.Component {
 }
 
 const SidePanelOriginPropTypes = {
-  originRepoName: PropTypes.string.isRequired
+  originRepoName: PropTypes.string.isRequired,
+  draftStatus: PropTypes.string.isRequired,
 };
 
 SidePanelOrigin.propTypes = SidePanelOriginPropTypes;
