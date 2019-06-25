@@ -1,6 +1,16 @@
 table tr .activity-date {
   border-top: 0;
 }
-table td .activity-detail {
+table .activity-detail {
+  word-break: break-word;
+}
+table .activity-detail div {
   display: inline;
+}
+table .activity-detail span {
+  color: #888;
+}
+table .activity-detail span:hover {
+  color: #333;
+  text-decoration: underline;
 }

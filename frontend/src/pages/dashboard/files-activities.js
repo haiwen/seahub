@@ -64,20 +64,7 @@ class ActivityItem extends Component {
     super(props);
     this.state = {
       isListCreatedFiles: false,
-      active: false,
     };
-  }
-
-  onMouseEnter = () => {
-    this.setState({
-      active: true
-    });
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      active: false
-    });
   }
 
   onListCreatedFilesToggle = () => {
@@ -142,9 +129,9 @@ class ActivityItem extends Component {
       firstLine = firstLine.replace('{n}', fileCount);
       op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
       details =
-        <td>
-          <div className="activity-detail" dangerouslySetInnerHTML={{__html: firstLine}}></div>{' '}
-          {this.state.active && <i className="attr-action-icon fas fa-eye" onClick={this.onListCreatedFilesToggle}></i>}
+        <td className="activity-detail">
+          <div dangerouslySetInnerHTML={{__html: firstLine}}></div>{' '}
+          <span onClick={this.onListCreatedFilesToggle} className="cursor-pointer">{gettext('details')}</span>
           <br />{smallLibLink}
         </td>;
     } else if (item.obj_type == 'file') {
@@ -239,7 +226,7 @@ class ActivityItem extends Component {
             <td colSpan='5' className="activity-date">{moment(item.time).format('YYYY-MM-DD')}</td>
           </tr>
         }
-        <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <tr>
           <td className="text-center">
             <img src={item.avatar_url} alt="" width="36px" height="36px" className="avatar" />
           </td>
