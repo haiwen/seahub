@@ -26,6 +26,7 @@ class WorkspacesViewTest(BaseTestCase):
         workspace_id = workspace.id
 
         Workspaces.objects.delete_workspace(workspace_id)
+        self.remove_repo()
 
     def test_can_list(self):
         assert len(Workspaces.objects.all()) == 1
@@ -70,6 +71,8 @@ class DTableTest(BaseTestCase):
 
         Workspaces.objects.delete_workspace(workspace_id)
 
+        self.remove_repo()
+
     def test_can_create(self):
         resp = self.client.post(self.url1, {'name': 'table1', 'owner': self.user.username})
         self.assertEqual(201, resp.status_code)
@@ -82,11 +85,11 @@ class DTableTest(BaseTestCase):
         resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')
         self.assertEqual(200, resp.status_code)
 
-        resp = self.client.post(self.url1, {'name': 'table2'})
+        resp = self.client.post(self.url1, {'name': 'table2', 'owner': self.user.username})
         self.assertEqual(404, resp.status_code)
 
     def test_can_rename(self):
-        resp = self.client.post(self.url1, {'name': 'table1', 'owner': self.user.username})
+        resp = self.client.post(self.url1, {'name': 'table3', 'owner': self.user.username})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
@@ -103,16 +106,15 @@ class DTableTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp["table"]["name"] == 'table4'
 
-    def test_rename_with_invalid_workspace(self):
-        resp = self.client.post(self.url1, {'name': 'table1', 'owner': self.user.username})
+    def test_rename_with_invalid_repo(self):
+        resp = self.client.post(self.url1, {'name': 'table5', 'owner': self.user.username})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
         assert json_resp["table"]["name"] == 'table5'
 
-        url = reverse('api-v2.1-workspace', args=[self.workspace.id])
-        resp = self.client.delete(url, {'name': 'workspace'})
-
+        url = reverse('api2-repo', args=[self.workspace.repo_id])
+        resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')
         self.assertEqual(200, resp.status_code)
 
         resp = self.client.put(
@@ -124,7 +126,7 @@ class DTableTest(BaseTestCase):
         self.assertEqual(404, resp.status_code)
 
     def test_can_delete(self):
-        resp = self.client.post(self.url1, {'name': 'table1', 'owner': self.user.username})
+        resp = self.client.post(self.url1, {'name': 'table7', 'owner': self.user.username})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
@@ -135,7 +137,7 @@ class DTableTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
     def test_delete_with_invalid_permission(self):
-        resp = self.client.post(self.url1, {'name': 'table1', 'owner': self.user.username})
+        resp = self.client.post(self.url1, {'name': 'table8', 'owner': self.user.username})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
@@ -149,7 +151,7 @@ class DTableTest(BaseTestCase):
         self.assertEqual(403, resp.status_code)
 
     def test_delete_with_repo_only_read(self):
-        resp = self.client.post(self.url1, {'name': 'table1', 'owner': self.user.username})
+        resp = self.client.post(self.url1, {'name': 'table9', 'owner': self.user.username})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
