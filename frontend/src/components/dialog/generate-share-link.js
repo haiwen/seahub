@@ -61,7 +61,7 @@ class GenerateShareLink extends React.Component {
     });
 
     seafileAPI.getFileInfo(repoID, path).then((res) => {
-      if (res.data){
+      if (res.data) {
         this.setState({fileInfo: res.data});
       }
     });
@@ -459,7 +459,7 @@ class GenerateShareLink extends React.Component {
               <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
-          {(Utils.officeFileCheck(this.props.itemPath) && fileInfo && fileInfo.can_edit) &&
+          {(Utils.isOfficeFile(this.props.itemPath) && fileInfo && fileInfo.can_edit) &&
             <FormGroup check className="permission">
               <Label>
                 <Input type="radio" name="radio1" onChange={() => this.setPermission('editOnCloudAndDownload')} />{'  '}{gettext('Edit on cloud and download')}

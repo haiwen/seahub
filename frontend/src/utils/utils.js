@@ -104,7 +104,7 @@ export const Utils = {
     }
   },
 
-  officeFileCheck: function(filename) {
+  isOfficeFile: function(filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
