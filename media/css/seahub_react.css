@@ -335,13 +335,14 @@ ul,ol,li {
 }
 
 .op-icon {
-    color: #f89a68;
+    color: #f19645;
 }
 
 .op-icon:focus,
 .op-icon:hover {
     padding-bottom: 0.125rem;
-    border-bottom: 0.125rem solid #f89a68;
+    border-bottom: 0.125rem solid #e0873b;
+    color: #e0873b;
 }
 
 .action-icon,
