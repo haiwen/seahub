@@ -99,7 +99,10 @@ import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
     ENABLE_THUMBNAIL, STORAGE_CLASS_MAPPING_POLICY, \
-    ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
+    ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
+        SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
+
+
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -3323,16 +3326,32 @@ class FileSharedLinkView(APIView):
                 error_msg = 'Can not generate share link.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            expire = request.data.get('expire', None)
-            if expire:
-                try:
-                    expire_days = int(expire)
-                except ValueError:
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid expiration days')
-                else:
-                    expire_date = timezone.now() + relativedelta(days=expire_days)
-            else:
+            try:
+                expire_days = int(request.data.get('expire', 0))
+            except ValueError:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire_days <= 0:
+                if SHARE_LINK_EXPIRE_DAYS_DEFAULT > 0:
+                    expire_days = SHARE_LINK_EXPIRE_DAYS_DEFAULT
+
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                if expire_days < SHARE_LINK_EXPIRE_DAYS_MIN:
+                    error_msg = _('Expire days should be greater or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MIN
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                if expire_days > SHARE_LINK_EXPIRE_DAYS_MAX:
+                    error_msg = _('Expire days should be less than or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MAX
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire_days <= 0:
                 expire_date = None
+            else:
+                expire_date = timezone.now() + relativedelta(days=expire_days)
 
             is_dir = False
             if path == '/':
