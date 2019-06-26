@@ -70,7 +70,7 @@ class StarredItems(APIView):
             repo_id = starred_item.repo_id
             if repo_id not in repo_dict:
                 repo = seafile_api.get_repo(repo_id)
-                if repo:
+                if repo and check_folder_permission(request, repo_id, '/'):
                     repo_dict[repo_id] = repo
 
         starred_repos = []
