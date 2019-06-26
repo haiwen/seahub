@@ -1,0 +1,18 @@
+.file-participants {
+  min-height: 30px;
+}
+.file-participants .avatar {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #fff;
+}
+.file-participants .add-file-participants {
+  position: absolute;
+  cursor: pointer;
+}
+.file-participants .add-file-participants i {
+  font-size: 16px;
+  color: rgb(229, 162, 82);
+  border: 2px solid #fff;
+  border-radius: 50%;
+}

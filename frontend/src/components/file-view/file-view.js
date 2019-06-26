@@ -14,6 +14,8 @@ const propTypes = {
   content: PropTypes.object.isRequired,
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
+  participants: PropTypes.array,
+  onParticipantsChange: PropTypes.func,
 };
 
 const { isStarred, isLocked, lockedByMe,
@@ -95,7 +97,11 @@ class FileView extends React.Component {
         <div className="file-view-body flex-auto d-flex o-hidden">
           {this.props.content}
           {this.state.isCommentPanelOpen &&
-            <CommentPanel toggleCommentPanel={this.toggleCommentPanel} />
+            <CommentPanel
+              toggleCommentPanel={this.toggleCommentPanel}
+              participants={this.props.participants}
+              onParticipantsChange={this.props.onParticipantsChange}
+            />
           }
         </div>
       </div>

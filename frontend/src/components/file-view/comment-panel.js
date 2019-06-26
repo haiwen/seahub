@@ -5,6 +5,7 @@ import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2h
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import ParticipantsList from './participants-list';
 import '../../css/comments-list.css';
 
 const { username, repoID, filePath } = window.app.pageOptions;
@@ -12,6 +13,8 @@ const { username, repoID, filePath } = window.app.pageOptions;
 const CommentPanelPropTypes = {
   toggleCommentPanel: PropTypes.func.isRequired,
   commentsNumber: PropTypes.number,
+  participants: PropTypes.array,
+  onParticipantsChange: PropTypes.func,
 };
 
 class CommentPanel extends React.Component {
@@ -83,6 +86,7 @@ class CommentPanel extends React.Component {
   }
 
   render() {
+    const { participants } = this.props;
     return (
       <div className="seafile-comment">
         <div className="seafile-comment-title">
@@ -125,6 +129,14 @@ class CommentPanel extends React.Component {
             <li className="comment-vacant">{gettext('No comment yet.')}</li>}
         </ul>
         <div className="seafile-comment-footer">
+          {participants &&
+            <ParticipantsList
+              onParticipantsChange={this.props.onParticipantsChange}
+              participants={participants}
+              repoID={repoID}
+              filePath={filePath}
+            />
+          }
           <textarea
             className="add-comment-input" ref="commentTextarea"
             placeholder={gettext('Add a comment.')}

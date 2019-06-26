@@ -1,11 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Modal, ModalHeader, ModalBody, ModalFooter, Button} from 'reactstrap';
-import {gettext} from '../../utils/constants';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import UserSelect from '../user-select';
-import {seafileAPI} from '../../utils/seafile-api';
 import toaster from '../toast';
+import '../../css/add-reviewer-dialog.css';
 
+const fileParticipantListItemPropTypes = {
+  participant: PropTypes.object.isRequired,
+  deleteFileParticipant: PropTypes.func.isRequired,
+};
 
 class FileParticipantListItem extends Component {
 
@@ -17,43 +22,41 @@ class FileParticipantListItem extends Component {
   }
 
   onMouseOver = () => {
-    this.setState({
-      isOperationShow: true,
-    });
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({
-      isOperationShow: false,
-    });
+    this.setState({ isOperationShow: false });
   };
 
   render() {
+    const { participant } = this.props;
     return (
-      <div className="reviewer-select-info" style={{display: 'flex'}} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+      <div className="reviewer-select-info" onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <div className="d-flex">
-          <img className="avatar reviewer-select-avatar" src={this.props.participant.avatar_url} alt=""/>
-          <span className="reviewer-select-name ellipsis">{this.props.participant.name}</span>
+          <img className="avatar reviewer-select-avatar" src={participant.avatar_url} alt=""/>
+          <span className="reviewer-select-name ellipsis">{participant.name}</span>
         </div>
-        {this.state.isOperationShow &&
-        <i
-          className="action-icon sf2-icon-x3"
-          title={gettext('Delete')}
-          onClick={this.props.deleteFileParticipant.bind(this, this.props.participant.email)}
-        ></i>
-        }
+          <i
+            className={`action-icon sf2-icon-x3 ${!this.state.isOperationShow &&'o-hidden'}`}
+            title={gettext('Delete')}
+            onClick={this.props.deleteFileParticipant.bind(this, participant.email)}
+          ></i>
       </div>
     );
   }
 }
 
-const fileParticipantListItemPropTypes = {
-  participant: PropTypes.object.isRequired,
-  deleteFileParticipant: PropTypes.func.isRequired,
-};
-
 FileParticipantListItem.propTypes = fileParticipantListItemPropTypes;
 
+
+const fileParticipantDialogPropTypes = {
+  repoID: PropTypes.string.isRequired,
+  filePath: PropTypes.string.isRequired,
+  toggleFileParticipantDialog: PropTypes.func.isRequired,
+  fileParticipantList: PropTypes.array.isRequired,
+  onParticipantsChange: PropTypes.func,
+};
 
 class FileParticipantDialog extends Component {
 
@@ -65,12 +68,13 @@ class FileParticipantDialog extends Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   deleteFileParticipant = (email) => {
-    seafileAPI.deleteFileParticipant(this.props.repoID, this.props.filePath, email).then((res) => {
-      this.props.onRelatedFileChange(this.props.dirent, this.props.filePath);
+    const { repoID, filePath, dirent } = this.props;
+    seafileAPI.deleteFileParticipant(repoID, filePath, email).then((res) => {
+      this.props.onParticipantsChange(repoID, filePath);
     }).catch((error) => {
       this.handleError(error);
     });
@@ -78,18 +82,17 @@ class FileParticipantDialog extends Component {
   };
 
   addFileParticipant = () => {
-    if (!this.state.selectedOption || this.state.selectedOption.length === 0) {
+    const { selectedOption } = this.state;
+    const { repoID, filePath, dirent } = this.props;
+    if (!selectedOption || selectedOption.length === 0) {
       return;
     }
-    let email = this.state.selectedOption.email;
-    seafileAPI.addFileParticipant(this.props.repoID, this.props.filePath, email).then((res) => {
-      this.props.onRelatedFileChange(this.props.dirent, this.props.filePath);
+    seafileAPI.addFileParticipant(repoID, filePath, selectedOption.email).then((res) => {
+      this.props.onParticipantsChange(repoID, filePath);
     }).catch((error) => {
       this.handleError(error);
     });
-    this.setState({
-      selectedOption: null,
-    });
+    this.setState({ selectedOption: null });
     this.refs.userSelect.clearSelect();
   };
 
@@ -116,35 +119,25 @@ class FileParticipantDialog extends Component {
       <Modal isOpen={true} toggle={this.props.toggleFileParticipantDialog}>
         <ModalHeader toggle={this.props.toggleFileParticipantDialog}>{gettext('Participants')}</ModalHeader>
         <ModalBody>
-          <div className="add-reviewer"  style={{display: 'flex'}}>
-            <div style={{width: '385px'}}>
-              <UserSelect
-                ref="userSelect"
-                isMulti={false}
-                className="reviewer-select"
-                placeholder={gettext('Select users...')}
-                onSelectChange={this.handleSelectChange}
-              />
-            </div>
-            <Button className="btn btn-secondary" onClick={this.addFileParticipant}>{gettext('Submit')}</Button>
+          <div className="add-reviewer">
+            <UserSelect
+              ref="userSelect"
+              isMulti={false}
+              className="reviewer-select"
+              placeholder={gettext('Select users...')}
+              onSelectChange={this.handleSelectChange}
+            />
+            <Button className="btn btn-secondary ml-2" onClick={this.addFileParticipant}>{gettext('Add')}</Button>
           </div>
-          <div>
-            {renderParticipantList}
-          </div>
+          {renderParticipantList}
         </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggleFileParticipantDialog}>{gettext('Close')}</Button>
+        </ModalFooter>
       </Modal>
     );
   }
 }
-
-const fileParticipantDialogPropTypes = {
-  repoID: PropTypes.string.isRequired,
-  filePath: PropTypes.string.isRequired,
-  toggleFileParticipantDialog: PropTypes.func.isRequired,
-  fileParticipantList: PropTypes.array.isRequired,
-  onRelatedFileChange: PropTypes.func.isRequired,
-  dirent: PropTypes.object.isRequired,
-};
 
 FileParticipantDialog.propTypes = fileParticipantDialogPropTypes;
 

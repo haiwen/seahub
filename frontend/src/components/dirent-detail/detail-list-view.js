@@ -6,7 +6,7 @@ import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
-import FileParticipantDialog from '../dialog/file-participant-dialog';
+import ParticipantsList from '../file-view/participants-list';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -29,7 +29,6 @@ class DetailListView extends React.Component {
     this.state = {
       isEditFileTagShow: false,
       showRelatedFileDialog: false,
-      isFileParticipantDialogShow : false,
     };
   }
 
@@ -78,12 +77,6 @@ class DetailListView extends React.Component {
   toggleCancel = () => {
     this.setState({
       showRelatedFileDialog: false,
-    });
-  }
-
-  toggleFileParticipantDialog = () => {
-    this.setState({
-      isFileParticipantDialogShow: !this.state.isFileParticipantDialogShow,
     });
   }
   
@@ -149,16 +142,14 @@ class DetailListView extends React.Component {
               <tr className="file-related-files">
                 <th>{gettext('Participants')}</th>
                 <td>
-                  <ul>
-                    {fileParticipantList.map((fileParticipant, index) => {
-                      return (
-                        <li key={index}>
-                          <span>{fileParticipant.name}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <i className='fa fa-pencil-alt attr-action-icon' onClick={this.toggleFileParticipantDialog}></i>
+                  {fileParticipantList &&
+                    <ParticipantsList
+                      onParticipantsChange={this.props.onParticipantsChange}
+                      participants={fileParticipantList}
+                      repoID={this.props.repoID}
+                      filePath={direntPath}
+                    />
+                  }
                 </td>
               </tr>
             </tbody>
@@ -176,26 +167,16 @@ class DetailListView extends React.Component {
               />
             </ModalPortal>
           }
-          {
-            this.state.isEditFileTagShow &&
-            <EditFileTagDialog
-              repoID={this.props.repoID}
-              fileTagList={fileTagList}
-              filePath={direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-            />
-          }
-          {
-            this.state.isFileParticipantDialogShow &&
-            <FileParticipantDialog
-              repoID={this.props.repoID}
-              filePath={direntPath}
-              dirent={this.props.dirent}
-              toggleFileParticipantDialog={this.toggleFileParticipantDialog}
-              fileParticipantList={this.props.fileParticipantList}
-              onRelatedFileChange={this.props.onRelatedFileChange}
-            />
+          {this.state.isEditFileTagShow &&
+            <ModalPortal>
+              <EditFileTagDialog
+                repoID={this.props.repoID}
+                fileTagList={fileTagList}
+                filePath={direntPath}
+                toggleCancel={this.onEditFileTagToggle}
+                onFileTagChanged={this.onFileTagChanged}
+              />
+            </ModalPortal>
           }
         </Fragment>
       );

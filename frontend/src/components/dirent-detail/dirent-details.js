@@ -77,7 +77,6 @@ class DirentDetail extends React.Component {
     }
   }
 
-
   updateDetailView = (dirent, direntPath) => {
     let repoID = this.props.repoID;
     if (dirent.type === 'file') {
@@ -110,11 +109,7 @@ class DirentDetail extends React.Component {
           });
         }
       });
-      seafileAPI.listFileParticipants(repoID, direntPath).then((res) => {
-        this.setState({
-          fileParticipantList: res.data.participant_list,
-        });
-      });
+      this.listParticipants(repoID, direntPath);
     } else {
       seafileAPI.getDirInfo(repoID, direntPath).then(res => {
         this.setState({
@@ -123,6 +118,16 @@ class DirentDetail extends React.Component {
         });
       });
     }
+  }
+
+  listParticipants = (repoID, filePath) => {
+    seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
+      this.setState({ fileParticipantList: res.data.participant_list });
+    });
+  }
+
+  onParticipantsChange = (repoID, filePath) => {
+    this.listParticipants(repoID, filePath);
   }
 
   onRelatedFileChange = (dirent, direntPath) => {
@@ -187,6 +192,7 @@ class DirentDetail extends React.Component {
                 onFileTagChanged={this.props.onFileTagChanged}
                 onRelatedFileChange={this.onRelatedFileChange}
                 fileParticipantList={this.state.fileParticipantList}
+                onParticipantsChange={this.onParticipantsChange}
               />
             </div>
           }
