@@ -36,6 +36,7 @@ from seahub.utils.repo import parse_repo_perm
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
+        SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
         ENABLE_SHARE_LINK_AUDIT, ENABLE_VIDEO_THUMBNAIL, \
         THUMBNAIL_ROOT
 from seahub.wiki.models import Wiki
@@ -234,7 +235,12 @@ class ShareLinks(APIView):
         try:
             expire_days = int(request.data.get('expire_days', 0))
         except ValueError:
-            expire_days = 0
+            error_msg = 'expire_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if expire_days <= 0:
+            if SHARE_LINK_EXPIRE_DAYS_DEFAULT > 0:
+                expire_days = SHARE_LINK_EXPIRE_DAYS_DEFAULT
 
         if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
             if expire_days < SHARE_LINK_EXPIRE_DAYS_MIN:
