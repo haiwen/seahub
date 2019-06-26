@@ -35,14 +35,6 @@
   width: 15rem;
 }
 
-.search-container .search-input:focus {
-  color: #495057;
-  background-color: #fff;
-  border-color: #1991eb;
-  outline: 0;
-  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
-}
-
 .search-result-container {
   position: absolute;
   top: 2rem;
