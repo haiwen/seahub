@@ -40,7 +40,7 @@
   background-color: #fff;
   border-color: #1991eb;
   outline: 0;
-  box-shadow: 0 0 0 .5px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
 }
 
 .search-result-container {
