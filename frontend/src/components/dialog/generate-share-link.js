@@ -36,6 +36,7 @@ class GenerateShareLink extends React.Component {
       sendLinkEmails: '',
       sendLinkMessage: '',
       sendLinkErrorMessage: '',
+      fileInfo: null,
     };
     this.permissions = {
       'can_edit': false, 
@@ -56,6 +57,12 @@ class GenerateShareLink extends React.Component {
         });
       } else {
         this.setState({isLoading: false});
+      }
+    });
+
+    seafileAPI.getFileInfo(repoID, path).then((res) => {
+      if (res.data) {
+        this.setState({fileInfo: res.data});
       }
     });
   }
@@ -99,11 +106,16 @@ class GenerateShareLink extends React.Component {
         'can_edit': false,
         'can_download': true
       };
-    } else {
+    } else if (permission == 'preview') {
       this.permissions = {
         'can_edit': false,
         'can_download': false
       };     
+    } else if (permission == 'editOnCloudAndDownload'){
+      this.permissions = {
+        'can_edit': true,
+        'can_download': true
+      };
     }
   }
 
@@ -371,6 +383,7 @@ class GenerateShareLink extends React.Component {
         </div>
       );
     } else {
+      let fileInfo = this.state.fileInfo;
       return (
         <Form className="generate-share-link">
           <FormGroup check>
@@ -446,6 +459,13 @@ class GenerateShareLink extends React.Component {
               <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
+          {(Utils.isOfficeFile(this.props.itemPath) && fileInfo && fileInfo.can_edit) &&
+            <FormGroup check className="permission">
+              <Label>
+                <Input type="radio" name="radio1" onChange={() => this.setPermission('editOnCloudAndDownload')} />{'  '}{gettext('Edit on cloud and download')}
+              </Label>
+            </FormGroup>
+          }
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
           <Button onClick={this.generateShareLink}>{gettext('Generate')}</Button>
         </Form>
