@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from mock import patch
+import random
 
 from django.core.urlresolvers import reverse
 from seaserv import seafile_api
@@ -88,6 +89,26 @@ class GroupsTest(BaseTestCase):
 
     def test_can_not_create_group_with_same_name(self):
         resp = self.client.post(self.url, {'group_name': self.group_name})
+        self.assertEqual(400, resp.status_code)
+
+    def test_can_create_by_limit_punctuation(self):
+        limit_punctuation = """-'_."""
+        new_group_name = randstring(2) + random.choice(limit_punctuation) + randstring(2)
+
+        resp = self.client.post(self.url, {'name': new_group_name})
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == new_group_name
+        assert json_resp['owner'] == self.user.email
+
+        self.remove_group(json_resp['id'])
+
+    def test_can_not_create_by_other_punctuation(self):
+        other_punctuation = """!"#$%&()*+,/:;<=>?@[\]^`{|}~"""
+        new_group_name = randstring(2) + random.choice(other_punctuation) + randstring(2)
+
+        resp = self.client.post(self.url, {'name': new_group_name})
         self.assertEqual(400, resp.status_code)
 
     def test_can_not_create_group_with_invalid_name(self):
