@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
 from django.utils.translation import ugettext as _
-from seaserv import seafile_api, ccnet_api
+from seaserv import seafile_api
 
 from seahub.base.accounts import User
 from seahub.api2.authentication import TokenAuthentication
@@ -18,12 +18,12 @@ from seahub.dtable.models import Workspaces, DTables, ShareDTable
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import is_valid_username, is_org_context
 from seahub.api2.endpoints.utils import is_org_user
-from seahub.utils import normalize_dir_path, normalize_file_path
+from seahub.utils import normalize_file_path
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT, \
     PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.api2.endpoints.dtable import FILE_TYPE
-from seahub.group.utils import group_id_to_name, is_group_member
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.group.utils import group_id_to_name
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 permission_tuple = (PERMISSION_ADMIN, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT,
@@ -84,6 +84,7 @@ class ShareDTablesView(APIView):
                 dtable_info['updated_at'] = datetime_to_isoformat_timestr(dtable.updated_at)
                 dtable_info['permission'] = permission
                 dtable_info['from_user'] = from_user
+                dtable_info['from_user_name'] = email2nickname(from_user)
 
                 workspace_info['table_list'].append(dtable_info)
 
