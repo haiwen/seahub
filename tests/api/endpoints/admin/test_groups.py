@@ -63,7 +63,7 @@ class GroupsTest(BaseTestCase):
 
         url = reverse('api-v2.1-admin-groups')
         limit_punctuation = """-'_."""
-        group_name = randstring(5) + random.choice(limit_punctuation)
+        group_name = randstring(2) + random.choice(limit_punctuation) + randstring(2)
 
         data = {
             'group_name': group_name,
@@ -84,7 +84,7 @@ class GroupsTest(BaseTestCase):
 
         url = reverse('api-v2.1-admin-groups')
         other_punctuation = """!"#$%&()*+,/:;<=>?@[\]^`{|}~"""
-        group_name = randstring(5) + random.choice(other_punctuation)
+        group_name = randstring(2) + random.choice(other_punctuation) + randstring(2)
 
         data = {
             'group_name': group_name,
