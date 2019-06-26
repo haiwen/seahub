@@ -34,7 +34,7 @@ class FileContent extends React.Component {
       }]
     };
     return (
-      <div className="file-view-content flex-1">
+      <div className="file-view-content flex-1 audio-file-view">
         <AudioPlayer { ...videoJsOptions } />
       </div>
     );

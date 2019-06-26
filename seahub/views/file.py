@@ -1005,7 +1005,8 @@ def view_history_file(request, repo_id):
     repo = ret_dict['repo']
     ret_dict['zipped'] = gen_path_link(path, repo.name)
 
-    return render(request, 'view_history_file.html', ret_dict)
+    #return render(request, 'view_history_file.html', ret_dict)
+    return render(request, 'history_file_view_react.html', ret_dict)
 
 @repo_passwd_set_required
 def view_trash_file(request, repo_id):
@@ -1030,7 +1031,9 @@ def view_trash_file(request, repo_id):
         tmp_path = posixpath.join(basedir.rstrip('/'), ret_dict['path'].lstrip('/'))
         ret_dict['path'] = tmp_path
 
-    return render(request, 'view_trash_file.html', ret_dict)
+    #return render(request, 'view_trash_file.html', ret_dict)
+    ret_dict['from_trash'] = True
+    return render(request, 'history_file_view_react.html', ret_dict)
 
 @repo_passwd_set_required
 def view_snapshot_file(request, repo_id):
@@ -1052,7 +1055,8 @@ def view_snapshot_file(request, repo_id):
     repo = ret_dict['repo']
     ret_dict['zipped'] = gen_path_link(path, repo.name)
 
-    return render(request, 'view_snapshot_file.html', ret_dict)
+    #return render(request, 'view_snapshot_file.html', ret_dict)
+    return render(request, 'history_file_view_react.html', ret_dict)
 
 def _download_file_from_share_link(request, fileshare):
     """Download shared file.

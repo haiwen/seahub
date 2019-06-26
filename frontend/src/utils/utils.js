@@ -104,6 +104,20 @@ export const Utils = {
     }
   },
 
+  isOfficeFile: function(filename) {
+    // no file ext
+    if (filename.lastIndexOf('.') == -1) {
+      return false;
+    }
+    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    var exts = ['doc', 'ppt', 'xls', 'docx', 'pptx', 'xlsx'];
+    if (exts.indexOf(file_ext) != -1) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
   // check if a file is a video
   videoCheck: function (filename) {
     // no file ext
@@ -329,10 +343,10 @@ export const Utils = {
           title = gettext('Read-Only library');
           break;
         case 'cloud-edit':
-          title = gettext('Preview-Edit-on-Cloud library');
+          title = gettext('Online Read-Write library');
           break;
         case 'preview':
-          title = gettext('Preview-on-Cloud library');
+          title = gettext('Online Read-Only library');
           break;
       }
     }
@@ -349,10 +363,10 @@ export const Utils = {
         title = gettext('Read-Only folder');
         break;
       case 'cloud-edit':
-        title = gettext('Preview-Edit-on-Cloud folder');
+        title = gettext('Online Read-Write folder');
         break;
       case 'preview':
-        title = gettext('Preview-on-Cloud folder');
+        title = gettext('Online Read-Only folder');
         break;
     }
     return title;
@@ -371,10 +385,10 @@ export const Utils = {
         title = gettext('Admin');
         break;
       case 'cloud-edit':
-        title = gettext('Preview-Edit-on-Cloud');
+        title = gettext('Online Read-Write');
         break;
       case 'preview':
-        title = gettext('Preview-on-Cloud');
+        title = gettext('Online Read-Only');
         break;
     }
     return title;

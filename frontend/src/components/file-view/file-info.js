@@ -49,9 +49,9 @@ class FileInfo extends React.PureComponent {
             />
           }
         </h2>
-        <div className="last-modification">
+        <div className="meta-info">
           <a href={`${siteRoot}profile/${encodeURIComponent(latestContributor)}/`}>{latestContributorName}</a>
-          <span className="last-modification-time">{moment(lastModificationTime * 1000).format('YYYY-MM-DD HH:mm')}</span>
+          <span className="ml-2">{moment(lastModificationTime * 1000).format('YYYY-MM-DD HH:mm')}</span>
         </div>
       </div>
     );
