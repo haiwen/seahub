@@ -388,7 +388,10 @@ class GroupView extends React.Component {
                     <span className="path-split">/</span>
                     <span>{currentGroup.name}</span>
                     {currentGroup.parent_group_id !== 0 && (
-                      <span className="department-group-icon fas fa-building" title={gettext('This is a special group representing a department.')}></span>
+                      <Fragment>
+                        <span className="department-group-icon fas fa-building" title={gettext('This is a special group representing a department.')}></span>
+                        <span>{' '}{'（'}{gettext('Used:')}{' '}{Utils.bytesToSize(currentGroup.group_quota_usage)}{'/'}{Utils.bytesToSize(currentGroup.group_quota)}{'）'}</span>
+                      </Fragment>
                     )}
                   </div>
                   <div className="path-tool">
