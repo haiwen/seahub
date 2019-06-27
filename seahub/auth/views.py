@@ -244,11 +244,11 @@ def logout(request, next_page=None,
         shib_logout_return = getattr(settings, 'SHIBBOLETH_LOGOUT_RETURN', '')
         if shib_logout_return:
             shib_logout_url += shib_logout_return
-        return HttpResponseRedirect(shib_logout_url)
+        response = HttpResponseRedirect(shib_logout_url)
 
     # Local logout for cas user.
     if getattr(settings, 'ENABLE_CAS', False):
-        return HttpResponseRedirect(reverse('cas_ng_logout'))
+        response = HttpResponseRedirect(reverse('cas_ng_logout'))
 
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]
@@ -259,14 +259,17 @@ def logout(request, next_page=None,
     if next_page is None:
         redirect_to = request.GET.get(redirect_field_name, '')
         if redirect_to:
-            return HttpResponseRedirect(redirect_to)
+            response = HttpResponseRedirect(redirect_to)
         else:
-            return render(request, template_name, {
+            response = render(request, template_name, {
                 'title': _('Logged out')
             })
     else:
         # Redirect to this page until the session has been cleared.
-        return HttpResponseRedirect(next_page or request.path)
+        response = HttpResponseRedirect(next_page or request.path)
+
+    response.delete_cookie('seahub_auth')
+    return response
 
 def logout_then_login(request, login_url=None):
     "Logs out the user if he is logged in. Then redirects to the log-in page."
