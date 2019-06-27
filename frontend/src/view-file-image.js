@@ -9,7 +9,7 @@ import './css/image-file-view.css';
 
 const {
   repoID, filePath, err,
-  fileName, previousImage, nextImage, rawPath
+  fileName, previousImage, nextImage, rawPath, thumbnailSizeForOriginal,
 } = window.app.pageOptions;
 
 let previousImageUrl, nextImageUrl; 
@@ -30,6 +30,13 @@ class ViewFileImage extends React.Component {
 
 class FileContent extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      thumbnailError: false,
+    };
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', (e) => {
       if (previousImage && e.keyCode == 37) { // press '<-'
@@ -41,10 +48,18 @@ class FileContent extends React.Component {
     });
   }
 
+  handleError = () => {
+    this.setState({
+      thumbnailError: true
+    });
+  };
+
   render() {
-    if (err) {
+    if (err || this.state.thumbnailError) {
       return <FileViewTip />;
     }
+    let thumbnailUrl = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}`;
+
     return (
       <div className="file-view-content flex-1 image-file-view">
         {previousImage && (
@@ -53,7 +68,7 @@ class FileContent extends React.Component {
         {nextImage && (
           <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="fas fa-chevron-right"></span></a>
         )}
-        <img src={rawPath} alt={fileName} id="image-view" />
+        <img src={thumbnailUrl} alt={fileName} id="image-view" onError={this.handleError}/>
       </div>
     );
   }

@@ -531,6 +531,7 @@ def view_lib_file(request, repo_id, path):
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
         'can_download_file': parse_repo_perm(permission).can_download,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
+        'thumbnail_size_for_original': settings.THUMBNAIL_SIZE_FOR_ORIGINAL,
     }
 
     # check whether file is starred
