@@ -4,11 +4,13 @@ import MediaQuery from 'react-responsive';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import Loading from '../../components/loading';
 import CreateTableDialog from '../../components/dialog/create-table-dialog';
 import DeleteTableDialog from '../../components/dialog/delete-table-dialog';
+import LeaveShareTableDialog from '../../components/dialog/leave-share-table-dialog';
+import ShareTableDialog from '../../components/dialog/share-table-dialog'
 import Rename from '../../components/rename';
 import '../../css/dtable-page.css';
 
@@ -20,9 +22,13 @@ const tablePropTypes = {
   workspaceID: PropTypes.number.isRequired,
   renameTable: PropTypes.func.isRequired,
   deleteTable: PropTypes.func.isRequired,
+  leaveShareTable: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  fromShare: PropTypes.bool.isRequired,
+  fromPersonal: PropTypes.bool.isRequired,
+  fromGroup: PropTypes.bool.isRequired,
 };
 
 class Table extends Component {
@@ -32,9 +38,12 @@ class Table extends Component {
     this.state = {
       isTableRenaming: false,
       isTableDeleting: false,
+      isTableSharing: false,
+      isTableLeaveSharing: false,
       dropdownOpen: false,
       active: false,
     };
+    this.writePermissionList = ['rw', 'admin'];
   }
 
   onRenameTableCancel = () => {
@@ -53,10 +62,26 @@ class Table extends Component {
     this.props.onUnfreezedItem();
   }
 
+  onShareTableCancel = () => {
+    this.setState({isTableSharing: !this.state.isTableSharing});
+    this.props.onUnfreezedItem();
+  }
+
+  onLeaveShareTableCancel = () => {
+    this.setState({isTableLeaveSharing: !this.state.isTableLeaveSharing});
+    this.props.onUnfreezedItem();
+  }
+
   onDeleteTableSubmit = () => {
     let tableName = this.props.table.name;
     this.props.deleteTable(tableName);
     this.onDeleteTableCancel();
+  }
+
+  onLeaveShareTableSubmit = () => {
+    let tableName = this.props.table.name;
+    this.props.leaveShareTable(tableName);
+    this.onLeaveShareTableCancel();
   }
 
   dropdownToggle = () => {
@@ -92,6 +117,12 @@ class Table extends Component {
 
     let table = this.props.table;
     let tableHref = siteRoot + 'workspace/' + this.props.workspaceID + '/dtable/' + table.name + '/';
+    let fromShare = this.props.fromShare;
+    let fromPersonal = this.props.fromPersonal;
+    let fromGroup = this.props.fromPersonal;
+
+    let hasWritePermission = !fromShare ? true:
+      this.writePermissionList.includes(this.props.table.permission);
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
@@ -123,8 +154,18 @@ class Table extends Component {
               >
               </DropdownToggle>
               <DropdownMenu className="drop-list" right={true}>
+                {hasWritePermission &&
                 <DropdownItem onClick={this.onRenameTableCancel}>{gettext('Rename')}</DropdownItem>
+                }
+                {hasWritePermission &&
                 <DropdownItem onClick={this.onDeleteTableCancel}>{gettext('Delete')}</DropdownItem>
+                }
+                {fromPersonal &&
+                <DropdownItem onClick={this.onShareTableCancel}>{gettext('Share')}</DropdownItem>
+                }
+                {fromShare &&
+                <DropdownItem onClick={this.onLeaveShareTableCancel}>{gettext('Leave Share')}</DropdownItem>
+                }
               </DropdownMenu>
             </Dropdown>
           }
@@ -133,6 +174,19 @@ class Table extends Component {
               currentTable={table}
               deleteCancel={this.onDeleteTableCancel}
               handleSubmit={this.onDeleteTableSubmit}
+            />
+          }
+          {this.state.isTableLeaveSharing &&
+            <LeaveShareTableDialog
+              currentTable={table}
+              leaveShareCancel={this.onLeaveShareTableCancel}
+              handleSubmit={this.onLeaveShareTableSubmit}
+            />
+          }
+          {this.state.isTableSharing &&
+            <ShareTableDialog
+              currentTable={table}
+              ShareCancel={this.onShareTableCancel}
             />
           }
         </td>
@@ -146,6 +200,7 @@ Table.propTypes = tablePropTypes;
 
 const workspacePropTypes = {
   workspace: PropTypes.object.isRequired,
+  fromShare: PropTypes.bool.isRequired,
 };
 
 class Workspace extends Component {
@@ -198,6 +253,21 @@ class Workspace extends Component {
     });
   }
 
+  leaveShareTable = (tableName) => {
+    let email = username;
+    let workspaceID = this.props.workspace.id;
+    seafileAPI.deleteShareTable(workspaceID, tableName, email).then(() => {
+      let tableList = this.state.tableList.filter(table => {
+        return table.name !== tableName;
+      });
+      this.setState({tableList: tableList});
+    }).catch((error) => {
+      if(error.response) {
+        this.setState({errorMsg: gettext('Error')});
+      }
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.workspace.table_list !== this.props.workspace.table_list) {
       this.setState({
@@ -208,10 +278,16 @@ class Workspace extends Component {
 
   render() {
     let workspace = this.props.workspace;
+    let fromShare = this.props.fromShare;
+    let fromPersonal = !fromShare && workspace.owner_type === 'Personal';
+    let fromGroup = !fromShare && workspace.owner_type === 'Group';
 
     return(
       <div className="workspace my-2">
-        <div>{workspace.owner_type === 'Personal' ? gettext('My Tables') : workspace.owner_name}</div>
+        {fromPersonal ?
+          <div>{gettext('My Tables')}</div> :
+          <div>{workspace.owner_name}</div>
+        }
         <table width="100%" className="table-vcenter">
           <colgroup>
             <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
@@ -225,9 +301,13 @@ class Workspace extends Component {
                   workspaceID={workspace.id}
                   renameTable={this.renameTable}
                   deleteTable={this.deleteTable}
+                  leaveShareTable={this.leaveShareTable}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
                   isItemFreezed={this.state.isItemFreezed}
+                  fromShare={fromShare}
+                  fromPersonal={fromPersonal}
+                  fromGroup={fromGroup}
                 />
               );
             })}
@@ -251,8 +331,10 @@ class DTable extends Component {
     super(props);
     this.state = {
       loading: true,
+      shareTableLoading: true,
       errorMsg: '',
       workspaceList: [],
+      shareTableList: [],
       isShowAddDTableDialog: false,
     };
   }
@@ -295,8 +377,30 @@ class DTable extends Component {
     });
   }
 
+  listShareTable = () => {
+    seafileAPI.listShareTable().then((res) => {
+      this.setState({
+        shareTableLoading: false,
+        shareTableList: res.data.share_list,
+      });
+    }).catch((error) => {
+      if (error.response) {
+        this.setState({
+          loading: false,
+          errorMsg: gettext('Error')
+        });
+      } else {
+        this.setState({
+          loading: false,
+          errorMsg: gettext('Please check the network.')
+        });
+      }
+    });
+  };
+
   componentDidMount() {
     this.listWorkspaces();
+    this.listShareTable();
   }
 
   render() {
@@ -335,6 +439,7 @@ class DTable extends Component {
                       <Workspace
                         key={index}
                         workspace={workspace}
+                        fromShare={false}
                       />
                     );
                   })}
@@ -347,6 +452,20 @@ class DTable extends Component {
                     }
                   </div>
                 </Fragment>
+              }
+              {(!this.state.shareTableLoading && this.state.shareTableList.length > 0) &&
+              <Fragment>
+                <div className="sf-heading">{gettext('Shared with me')}</div>
+                {this.state.shareTableList.map((workspace, index) => {
+                  return (
+                    <Workspace
+                      key={index}
+                      workspace={workspace}
+                      fromShare={true}
+                    />
+                  );})
+                }
+              </Fragment>
               }
             </div>
           </div>
