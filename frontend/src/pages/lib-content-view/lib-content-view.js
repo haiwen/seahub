@@ -1484,7 +1484,11 @@ class LibContentView extends React.Component {
     let { currentRepoInfo, userPerm } = this.state;
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
-
+    let isVirtual = currentRepoInfo.is_virtual;
+    let isAdmin = currentRepoInfo.is_admin;
+    if (!isVirtual && (isRepoOwner || isAdmin)) {
+      enableDirPrivateShare = true;
+    }
     let direntItemsList = this.state.direntList.filter((item, index) => {
       return index < this.state.itemsShowLength;
     });

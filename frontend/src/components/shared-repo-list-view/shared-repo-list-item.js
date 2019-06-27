@@ -277,11 +277,11 @@ class SharedRepoListItem extends React.Component {
     if (this.props.libraryType && this.props.libraryType === 'public') {
       let isRepoOwner = this.props.repo.owner_email === username;
       if (isSystemStaff || isRepoOwner) {
-        operations.push('unshare');
+        operations.push('Unshare');
       }
     } else {
-      // scene one: (share, delete, itemToggle and other operations);
-      // scene two: (share, unshare), (share), (unshare)
+      // scene one: (Share, Delete, itemToggle and other operations);
+      // scene two: (Share, Unshare), (Share), (Unshare)
       operations = this.generatorOperations();
     }
     const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></a>;
@@ -319,11 +319,11 @@ class SharedRepoListItem extends React.Component {
           </Fragment>
         );
       }
-      if (operations.length == 1 && operations[0] === 'share') {
+      if (operations.length == 1 && operations[0] === 'Share') {
         return shareOperation;
       }
 
-      if (operations.length == 1 && operations[0] === 'unshare') {
+      if (operations.length == 1 && operations[0] === 'Unshare') {
         return unshareOperation;
       }
     }
