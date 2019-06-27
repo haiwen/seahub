@@ -94,7 +94,7 @@ class LibHistorySetting extends React.Component {
   render() {
     const itemName = this.props.itemName;
     return (
-      <Modal isOpen={true} centered={true}>
+      <Modal isOpen={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
           <span className="op-target" title={itemName}>{itemName}</span>{' '}
           {gettext('History Setting')}
