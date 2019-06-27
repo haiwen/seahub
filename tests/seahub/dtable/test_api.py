@@ -6,6 +6,12 @@ from seaserv import seafile_api
 
 from seahub.test_utils import BaseTestCase
 from seahub.base.templatetags.seahub_tags import email2nickname
+from tests.common.utils import randstring
+
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
 
 
 class ShareDTablesViewTest(BaseTestCase):
@@ -142,6 +148,9 @@ class ShareDTableViewTest(BaseTestCase):
         self.assertEqual(400, resp.status_code)
 
     def test_can_not_post_with_share_to_org_user(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         assert len(ShareDTable.objects.all()) == 1
         ShareDTable.objects.all().delete()
         assert len(ShareDTable.objects.all()) == 0
@@ -257,10 +266,15 @@ class ShareDTableViewTest(BaseTestCase):
         self.assertEqual(404, resp.status_code)
 
     def test_can_not_delete_with_not_shared_user(self):
-        self.login_as(self.org_user)
+        tmp_user = self.create_user(
+            'user_%s@test.com' % randstring(4), is_staff=False)
+
+        self.login_as(tmp_user)
 
         data = {
             'email': self.admin.username,
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)
+
+        self.remove_user(tmp_user.username)
