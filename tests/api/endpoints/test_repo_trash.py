@@ -9,6 +9,12 @@ from seahub.test_utils import BaseTestCase
 from seahub.group.utils import is_group_admin
 from tests.common.utils import randstring
 
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
+
+
 class RepoTrashTest(BaseTestCase):
 
     def setUp(self):
@@ -89,6 +95,9 @@ class RepoTrashTest(BaseTestCase):
         assert len(json_resp['data']) == 0
 
     def test_can_clean_department_repo_trash(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         # create a department
         group_id = ccnet_api.create_group('department_test', 'system admin', parent_group_id=-1)
         seafile_api.set_group_quota(group_id, -2)
