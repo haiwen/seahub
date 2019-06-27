@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { gettext, shareLinkPasswordMinLength } from '../../utils/constants';
+import { gettext, shareLinkPasswordMinLength, canSendShareLinkEmail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedUploadInfo from '../../models/shared-upload-info';
 import toaster from '../toast';
+import SendLink from '../send-link';
 import SessionExpiredTip from '../session-expired-tip';
 
 const propTypes = {
@@ -24,6 +25,7 @@ class GenerateUploadLink extends React.Component {
       password: '',
       passwdnew: '',
       sharedUploadInfo: null,
+      isSendLinkShown: false
     };
   }
 
@@ -130,7 +132,15 @@ class GenerateUploadLink extends React.Component {
     });
   }
 
+  toggleSendLink = () => {
+    this.setState({
+      isSendLinkShown: !this.state.isSendLinkShown
+    });
+  }
+
   render() {
+
+    const { isSendLinkShown } = this.state;
 
     let passwordLengthTip = gettext('(at least {passwordLength} characters)');
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
@@ -147,7 +157,16 @@ class GenerateUploadLink extends React.Component {
               </dd>
             </FormGroup>
           </Form>
-          <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>
+          {canSendShareLinkEmail && !isSendLinkShown && <Button onClick={this.toggleSendLink} className="mr-2">{gettext('Send')}</Button>}
+          {!isSendLinkShown && <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>}
+          {isSendLinkShown &&
+          <SendLink
+            linkType='uploadLink'
+            token={sharedUploadInfo.token}
+            toggleSendLink={this.toggleSendLink}
+            closeShareDialog={this.props.closeShareDialog}
+          />
+          }
         </div>
       );
     }
