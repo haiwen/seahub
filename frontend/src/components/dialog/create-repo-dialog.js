@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, enableEncryptedLibrary } from '../../utils/constants';
+import { gettext, enableEncryptedLibrary, repoPasswordMinLength } from '../../utils/constants';
 
 const propTypes = {
   libraryType: PropTypes.string.isRequired,
@@ -99,7 +99,7 @@ class CreateRepoDialog extends React.Component {
         this.setState({errMessage: errMessage});
         return false;
       }
-      if (password1.length < 8) {
+      if (password1.length < repoPasswordMinLength) {
         errMessage = gettext('Password is too short');
         this.setState({errMessage: errMessage});
         return false;
@@ -197,7 +197,7 @@ class CreateRepoDialog extends React.Component {
                 {!this.state.disabled && 
                   <FormGroup>
                     {/* todo translate */}
-                    <Label for="passwd1" className="font-weight-bold">{gettext('Password')}</Label><span className="tip">{' '}{gettext('(at least 8 characters)')}</span>
+                    <Label for="passwd1" className="font-weight-bold">{gettext('Password')}</Label><span className="tip">{' '}{gettext('(at least {placeholder} characters)').replace('{placeholder}', repoPasswordMinLength)}</span>
                     <Input 
                       id="passwd1" 
                       type="password"

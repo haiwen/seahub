@@ -54,6 +54,7 @@
             canAddGroup: {% if user.permissions.can_add_group %} true {% else %} false {% endif %},
             canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
             canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
+            canSendShareLinkEmail: {% if user.permissions.can_send_share_link_mail %} true {% else %} false {% endif %},
             canViewOrg:'{{ user.permissions.can_view_org }}',
             fileAuditEnabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
             enableFileComment: {% if enableFileComment %} true {% else %} false {% endif %},

@@ -87,13 +87,14 @@ class LabelRepoStateDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} centered={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Label current state')}</ModalHeader>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
+        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Label Current State')}</ModalHeader>
         <ModalBody>
           <Content data={this.state} handleChange={this.handleInputChange} />
         </ModalBody>
         {this.state.existingLabels && (
           <ModalFooter>
+            <button className="btn btn-secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</button>
             <button className="btn btn-primary" disabled={this.state.submitBtnDisabled} onClick={this.formSubmit}>{gettext('Submit')}</button>
           </ModalFooter>
         )}

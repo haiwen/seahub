@@ -93,7 +93,7 @@ class MylibRepoListItem extends React.Component {
       case 'Folder Permission':
         this.onFolderPermissionToggle();
         break;
-      case 'Label current state':
+      case 'Label Current State':
         this.onLabelToggle();
         break;
       default:

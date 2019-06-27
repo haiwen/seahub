@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkPasswordMinLength } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkPasswordMinLength, canSendShareLinkEmail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharedLinkInfo from '../../models/shared-link-info';
 import toaster from '../toast';
 import Loading from '../loading';
+import SendLink from '../send-link';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -32,11 +33,8 @@ class GenerateShareLink extends React.Component {
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
       isLoading: true,
-      isShowSendLink: false,
-      sendLinkEmails: '',
-      sendLinkMessage: '',
-      sendLinkErrorMessage: '',
       fileInfo: null,
+      isSendLinkShown: false
     };
     this.permissions = {
       'can_edit': false, 
@@ -254,45 +252,8 @@ class GenerateShareLink extends React.Component {
     this.setState({isNoticeMessageShow: !this.state.isNoticeMessageShow});
   }
 
-  onSendLinkEmailsChange = (event) => {
-    if (this.state.sendLinkErrorMessage) this.setState({ sendLinkErrorMessage: '' });
-    this.setState({sendLinkEmails: event.target.value});
-  }
-
-  onSendLinkMessageChange = (event) => {
-    if (this.state.sendLinkErrorMessage) this.setState({ sendLinkErrorMessage: '' });
-    this.setState({sendLinkMessage: event.target.value});
-  }
-
   toggleSendLink = () => {
-    this.setState({ isShowSendLink: !this.state.isShowSendLink });
-  }
-
-  sendShareLink = () => {
-    if (!this.state.sendLinkEmails) return;
-    const token = this.state.sharedLinkInfo.token;
-    const emails = this.state.sendLinkEmails.replace(/\s*/g,'');
-    const message = this.state.sendLinkMessage.trim();
-    this.setState({ isLoading: true });
-    seafileAPI.sendShareLink(token, emails, message).then((res) => {
-      this.props.closeShareDialog();
-      if (res.data.failed.length > 0) {
-        res.data.failed.map(failed => {
-          toaster.warning(gettext('Failed sent link to') + ' ' + failed.email + ', ' + failed.error_msg);
-        });
-      }
-      if (res.data.success.length > 0) {
-        let users = res.data.success.join(',');
-        toaster.success(gettext('Successfully sent link to') + ' ' + users);
-      }
-    }).catch((error) => {
-      if (error.response) {
-        this.setState({
-          sendLinkErrorMessage: error.response.data.error_msg,
-          isLoading: false,
-        });
-      }
-    });
+    this.setState({ isSendLinkShown: !this.state.isSendLinkShown });
   }
 
   render() {
@@ -338,38 +299,18 @@ class GenerateShareLink extends React.Component {
               </FormGroup>
             )}
           </Form>
-          {(!this.state.isShowSendLink && !this.state.isNoticeMessageShow) &&
+          {(canSendShareLinkEmail && !this.state.isSendLinkShown && !this.state.isNoticeMessageShow) &&
             <Button onClick={this.toggleSendLink} className='mr-2'>{gettext('Send')}</Button>
           }
-          {this.state.isShowSendLink &&
-            <Fragment>
-              <Form>
-                <FormGroup>
-                  <Label htmlFor="sendLinkEmails" className="text-secondary font-weight-normal">{gettext('Send to')}{':'}</Label>
-                  <Input 
-                    id="sendLinkEmails"
-                    className="w-75"
-                    value={this.state.sendLinkEmails}
-                    onChange={this.onSendLinkEmailsChange}
-                    placeholder={gettext('Emails, separated by \',\'')}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="sendLinkMessage" className="text-secondary font-weight-normal">{gettext('Message (optional):')}</Label><br/>
-                  <textarea
-                    className="w-75"
-                    id="sendLinkMessage"
-                    value={this.state.sendLinkMessage}
-                    onChange={this.onSendLinkMessageChange}
-                  ></textarea>
-                </FormGroup>
-              </Form>
-              {this.state.sendLinkErrorMessage && <p className="error">{this.state.sendLinkErrorMessage}</p>}
-              <Button color="primary" onClick={this.sendShareLink}>{gettext('Send')}</Button>{' '}
-              <Button color="secondary" onClick={this.toggleSendLink}>{gettext('Cancel')}</Button>{' '}
-            </Fragment>
+          {this.state.isSendLinkShown &&
+          <SendLink
+            linkType='shareLink'
+            token={sharedLinkInfo.token}
+            toggleSendLink={this.toggleSendLink}
+            closeShareDialog={this.props.closeShareDialog}
+          />
           }
-          {(!this.state.isShowSendLink && !this.state.isNoticeMessageShow) &&
+          {(!this.state.isSendLinkShown && !this.state.isNoticeMessageShow) &&
             <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button>
           }
           {this.state.isNoticeMessageShow &&

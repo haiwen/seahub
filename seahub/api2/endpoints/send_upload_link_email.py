@@ -70,7 +70,7 @@ class SendUploadLinkView(APIView):
 
             if not is_valid_email(to_email):
                 failed_info['email'] = to_email
-                failed_info['error_msg'] = 'email invalid.'
+                failed_info['error_msg'] = _(u'email invalid.')
                 result['failed'].append(failed_info)
                 continue
 
@@ -102,7 +102,7 @@ class SendUploadLinkView(APIView):
             except Exception as e:
                 logger.error(e)
                 failed_info['email'] = to_email
-                failed_info['error_msg'] = 'Internal Server Error'
+                failed_info['error_msg'] = _(u'Internal Server Error')
                 result['failed'].append(failed_info)
 
         return Response(result)
