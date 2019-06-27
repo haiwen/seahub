@@ -17,11 +17,13 @@ set +x
 function commit_dist_files() {
   git checkout -b dist-$TRAVIS_BRANCH
   git add -u . && git add -A media/assets && git add -A static/scripts && git add -A frontend && git add -A locale
-  git commit -m "[dist] Travis build: #$TRAVIS_BUILD_NUMBER, based on commit $TRAVIS_COMMIT." -m "https://travis-ci.org/haiwen/seahub/builds/$TRAVIS_BUILD_ID" -m "$TRAVIS_COMMIT_MESSAGE"
+  git commit -m "[dist] Travis build: #$TRAVIS_BUILD_NUMBER, based on commit $TRAVIS_COMMIT." -m "$TRAVIS_COMMIT_MESSAGE"
 }
 
 function upload_files() {
-    git push git@github.com:haiwen/seahub.git dist-$TRAVIS_BRANCH -f
+    echo 'push dist to seahub'
+    git remote add token-origin https://imwhatiam:${GITHUB_PERSONAL_ACCESS_TOKEN}@github.com/haiwen/seahub.git
+    git push -f token-origin dist-$TRAVIS_BRANCH
 }
 
 function make_dist() {

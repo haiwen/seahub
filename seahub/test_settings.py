@@ -10,9 +10,9 @@ from .settings import *
 # enlarge api throttle
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
-        'ping': '600/minute',
-        'anon': '5000/minute',
-        'user': '300/minute',
+        'ping': '90000/minute',
+        'anon': '90000/minute',
+        'user': '90000/minute',
     },
 }
 
