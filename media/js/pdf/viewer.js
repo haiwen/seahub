@@ -4395,7 +4395,7 @@ var defaultOptions = {
     kind: OptionKind.VIEWER
   },
   imageResourcesPath: {
-    value: './images/',
+    value: sf_pdf_images_path,
     kind: OptionKind.VIEWER
   },
   maxCanvasPixels: {

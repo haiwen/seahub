@@ -62,6 +62,7 @@ OfficePreviewer.prototype.check_status = function() {
 var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
 var sf_file_url = '{{ SITE_ROOT }}office-convert/static/{{ repo.id  }}/' + commit_id + '{{ path|urlencode  }}/fake.pdf?token={{shared_token}}';
 var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
+var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
 OfficePreviewer.prototype.load_page = function() {
     $.getScript('{{MEDIA_URL}}js/pdf/viewer.js');
 };
