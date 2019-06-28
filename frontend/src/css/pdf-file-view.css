@@ -86,6 +86,30 @@
   background: #ff0;
   box-shadow: 0px 2px 10px #ff0;
 }
+
+.annotationLayer .textAnnotation img {
+  position: absolute;
+  cursor: pointer;
+}
+
+.annotationLayer .popupWrapper {
+  position: absolute;
+  width: 20em;
+}
+
+.annotationLayer .popup {
+  position: absolute;
+  z-index: 200;
+  max-width: 20em;
+  background-color: #FFFF99;
+  box-shadow: 0px 2px 5px #333;
+  border-radius: 2px;
+  padding: 0.6em;
+  margin-left: 5px;
+  cursor: pointer;
+  font: message-box;
+  word-wrap: break-word;
+}
 /* annotationLayer ends */
 #fileInput {
     display:none;
