@@ -149,6 +149,7 @@ class DetailListView extends React.Component {
                       participants={fileParticipantList}
                       repoID={this.props.repoID}
                       filePath={direntPath}
+                      showIconTip={false}
                     />
                   }
                 </td>

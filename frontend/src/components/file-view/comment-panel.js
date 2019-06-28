@@ -135,6 +135,7 @@ class CommentPanel extends React.Component {
               participants={participants}
               repoID={repoID}
               filePath={filePath}
+              showIconTip={true}
             />
           }
           <textarea
