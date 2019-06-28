@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import UserSelect from '../user-select';
 import toaster from '../toast';
-import '../../css/add-reviewer-dialog.css';
+import '../../css/participants-list.css';
 
 const fileParticipantListItemPropTypes = {
   participant: PropTypes.object.isRequired,
@@ -32,16 +32,16 @@ class FileParticipantListItem extends Component {
   render() {
     const { participant } = this.props;
     return (
-      <div className="reviewer-select-info" onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+      <div className="participant-select-info" onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <div className="d-flex">
-          <img className="avatar reviewer-select-avatar" src={participant.avatar_url} alt=""/>
-          <span className="reviewer-select-name ellipsis">{participant.name}</span>
+          <img className="avatar participant-select-avatar" src={participant.avatar_url} alt=""/>
+          <span className="participant-select-name ellipsis">{participant.name}</span>
         </div>
-          <i
-            className={`action-icon sf2-icon-x3 ${!this.state.isOperationShow &&'o-hidden'}`}
-            title={gettext('Delete')}
-            onClick={this.props.deleteFileParticipant.bind(this, participant.email)}
-          ></i>
+        <i
+          className={`action-icon sf2-icon-x3 ${!this.state.isOperationShow &&'o-hidden'}`}
+          title={gettext('Delete')}
+          onClick={this.props.deleteFileParticipant.bind(this, participant.email)}
+        ></i>
       </div>
     );
   }
@@ -72,7 +72,7 @@ class FileParticipantDialog extends Component {
   };
 
   deleteFileParticipant = (email) => {
-    const { repoID, filePath, dirent } = this.props;
+    const { repoID, filePath } = this.props;
     seafileAPI.deleteFileParticipant(repoID, filePath, email).then((res) => {
       this.props.onParticipantsChange(repoID, filePath);
     }).catch((error) => {
@@ -83,7 +83,7 @@ class FileParticipantDialog extends Component {
 
   addFileParticipant = () => {
     const { selectedOption } = this.state;
-    const { repoID, filePath, dirent } = this.props;
+    const { repoID, filePath } = this.props;
     if (!selectedOption || selectedOption.length === 0) {
       return;
     }
@@ -119,11 +119,11 @@ class FileParticipantDialog extends Component {
       <Modal isOpen={true} toggle={this.props.toggleFileParticipantDialog}>
         <ModalHeader toggle={this.props.toggleFileParticipantDialog}>{gettext('Participants')}</ModalHeader>
         <ModalBody>
-          <div className="add-reviewer">
+          <div className="participant-add">
             <UserSelect
               ref="userSelect"
               isMulti={false}
-              className="reviewer-select"
+              className="participant-select"
               placeholder={gettext('Select users...')}
               onSelectChange={this.handleSelectChange}
             />

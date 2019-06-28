@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ModalPortal from '../modal-portal';
 import FileParticipantDialog from '../dialog/file-participant-dialog';
 import { serviceURL } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import '../../css/participants-list.css';
 
 const propTypes = {
@@ -29,11 +28,11 @@ class ParticipantsList extends React.Component {
   render() {
     const { participants, repoID, filePath } = this.props;
     return (
-      <div className="file-participants mb-2 position-relative">
+      <div className="participants mb-2 position-relative">
         {participants.map((item, index) => {
           return <img src={serviceURL + item.avatar_url} className="avatar" alt="avatar" key={index} style={{left: index * -7 + 'px'}}/>;
         })}
-        <span className="add-file-participants" style={{left: participants.length * 21, top: 8 }} onClick={this.toggleDialog}>
+        <span className="add-participants" style={{left: participants.length * 21, top: 8 }} onClick={this.toggleDialog}>
           <i className="fas fa-plus-circle"></i>
         </span>
         {this.state.showDialog &&

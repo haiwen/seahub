@@ -19,6 +19,7 @@ const propTypes = {
   relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   onRelatedFileChange: PropTypes.func.isRequired,
+  onParticipantsChange: PropTypes.func.isRequired,
   fileParticipantList: PropTypes.array.isRequired,
 };
 

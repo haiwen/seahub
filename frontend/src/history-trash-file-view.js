@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Utils } from './utils/utils';
-import { gettext, siteRoot } from './utils/constants';
 import FileView from './components/history-trash-file-view/file-view';
 import FileViewTip from './components/history-trash-file-view/file-view-tip';
 import Image from './components/file-content-view/image';
