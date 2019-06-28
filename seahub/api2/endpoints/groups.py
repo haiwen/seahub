@@ -68,6 +68,12 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
         "admins": get_group_admins(group.id),
         "wiki_enabled": is_wiki_mod_enabled_for_group(group_id)
     }
+    # parent_group_id = 0: non department group
+    # parent_group_id = -1: top department group
+    # parent_group_id = n(n > 0):  sub department group, n is parent group's id
+    if group.parent_group_id != 0:
+        group_info['group_quota'] = seafile_api.get_group_quota(group_id)
+        group_info['group_quota_usage'] = seafile_api.get_group_quota_usage(group_id)
 
     return group_info
 

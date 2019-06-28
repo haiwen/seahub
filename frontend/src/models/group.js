@@ -9,6 +9,8 @@ class Group {
     this.parent_group_id = object.parent_group_id;
     this.wiki_enabled = object.wiki_enabled;
     this.repos = object.repos || [];
+    this.group_quota = object.group_quota;
+    this.group_quota_usage = object.group_quota_usage;
   }
 }
 

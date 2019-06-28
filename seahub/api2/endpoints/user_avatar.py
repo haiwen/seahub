@@ -2,6 +2,7 @@
 import os
 import logging
 
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,7 +24,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 logger = logging.getLogger(__name__)
 
 class UserAvatarView(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 

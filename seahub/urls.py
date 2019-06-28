@@ -226,6 +226,7 @@ urlpatterns = [
     url(r'^my-libs/$', react_fake_view, name="my_libs"),
     url(r'^groups/$', react_fake_view, name="groups"),
     url(r'^group/(?P<group_id>\d+)/$', react_fake_view, name="group"),
+    url(r'^library/(?P<repo_id>[-0-9a-f]{36})/$', react_fake_view, name="library_view"),
     url(r'^library/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="lib_view"),
     url(r'^my-libs/deleted/$', react_fake_view, name="my_libs_deleted"),
     url(r'^org/$', react_fake_view, name="org"),

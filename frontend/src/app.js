@@ -76,7 +76,20 @@ class App extends Component {
     }
   }
 
+  navigateClientUrlToLib = () =>{
+    if(window.location.hash && window.location.hash.indexOf('common/lib') != -1){
+      let splitUrlArray = window.location.hash.split('/');
+      let repoID = splitUrlArray[splitUrlArray.length - 2];
+      let url = siteRoot + 'library/' + repoID + '/';
+      navigate(url, {repalce: true});
+    }
+  }
+
   componentDidMount() {
+    // url from client  e.g. http://127.0.0.1:8000/#common/lib/34e7fb92-e91d-499d-bcde-c30ea8af9828/
+    // navigate to library page http://127.0.0.1:8000/library/34e7fb92-e91d-499d-bcde-c30ea8af9828/
+    this.navigateClientUrlToLib();
+
     // e.g.  from http://127.0.0.1:8000/drafts/reviews/
     // get reviews  
     // TODO: need refactor later
