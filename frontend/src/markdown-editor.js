@@ -10,6 +10,7 @@ import ModalPortal from './components/modal-portal';
 import ShareDialog from './components/dialog/share-dialog';
 import InsertFileDialog from './components/dialog/insert-file-dialog';
 import InsertRepoImageDialog from './components/dialog/insert-repo-image-dialog';
+import FileParticipantDialog from './components/dialog/file-participant-dialog';
 import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
 import LocalDraftDialog from './components/dialog/local-draft-dialog';
 import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
@@ -252,6 +253,15 @@ class EditorUtilities {
   markdownLint(slateValue) {
     return seafileAPI.markdownLint(slateValue);
   }
+
+  listFileParticipant() {
+    return seafileAPI.listFileParticipants(repoID, filePath);
+  }
+
+  addFileParticipant(email) {
+    return seafileAPI.addFileParticipant(repoID, filePath, email);
+  }
+
 }
 
 const editorUtilities = new EditorUtilities();
@@ -286,6 +296,7 @@ class MarkdownEditor extends React.Component {
       showShareLinkDialog: false,
       showInsertFileDialog: false,
       showInsertRepoImageDialog: false,
+      showFileParticipantDialog: false,
       showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
@@ -301,6 +312,7 @@ class MarkdownEditor extends React.Component {
       showRelatedFileDialog: false,
       showEditFileTagDialog: false,
       viewMode: 'list_related_file',
+      participants: [],
     };
 
     if (this.state.collabServer) {
@@ -400,6 +412,7 @@ class MarkdownEditor extends React.Component {
       showInsertRepoImageDialog: false,
       showRelatedFileDialog: false,
       showEditFileTagDialog: false,
+      showFileParticipantDialog: false,
     });
   }
 
@@ -516,6 +529,12 @@ class MarkdownEditor extends React.Component {
           showMarkdownEditorDialog: true,
         });
         break;
+      case 'add-participant':
+        this.setState({
+          showMarkdownEditorDialog: true,
+          showFileParticipantDialog: true,
+        });
+        break;
       default:
         return;
     }
@@ -596,6 +615,7 @@ class MarkdownEditor extends React.Component {
     this.listRelatedFiles();
     this.listFileTags();
 
+    this.listFileParticipants();
     setTimeout(() => {
       let url = new URL(window.location.href);
       if (url.hash) {
@@ -626,6 +646,16 @@ class MarkdownEditor extends React.Component {
 
   onFileTagChanged = () => {
     this.listFileTags();
+  }
+
+  listFileParticipants = () => {
+    editorUtilities.listFileParticipant().then((res) => {
+      this.setState({ participants: res.data.participant_list });
+    });
+  }
+
+  onParticipantsChange = () => {
+    this.listFileParticipants();
   }
 
   setFileInfoMtime = (fileInfo) => {
@@ -795,6 +825,8 @@ class MarkdownEditor extends React.Component {
             saving={this.state.saving}
             fileTagList={this.state.fileTagList}
             relatedFiles={this.state.relatedFiles}
+            participants={this.state.participants}
+            onParticipantsChange={this.onParticipantsChange}
           />
         </Fragment>
       );
@@ -867,6 +899,17 @@ class MarkdownEditor extends React.Component {
                     onRelatedFileChange={this.onRelatedFileChange}
                     dirent={this.state.fileInfo}
                     viewMode={this.state.viewMode}
+                  />
+                </ModalPortal>
+              }
+              {this.state.showFileParticipantDialog &&
+                <ModalPortal>
+                  <FileParticipantDialog
+                    repoID={repoID}
+                    filePath={filePath}
+                    toggleFileParticipantDialog={this.toggleCancel}
+                    fileParticipantList={this.state.participants}
+                    onParticipantsChange={this.onParticipantsChange}
                   />
                 </ModalPortal>
               }

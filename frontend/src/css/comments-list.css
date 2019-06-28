@@ -108,7 +108,7 @@
   border-top: 1px solid #e5e5e5;
   display: flex;
   flex-direction: column;
-  min-height: 150px;
+  min-height: 182px;
 }
 .seafile-comment-footer .add-comment-input,
 .seafile-edit-comment .edit-comment-input {

@@ -7,6 +7,8 @@ from seaserv import seafile_api, ccnet_api
 from seahub.base.models import FileComment
 from seahub.notifications.models import UserNotification
 from seahub.test_utils import BaseTestCase
+from seahub.file_participants.models import FileParticipant
+from seahub.tags.models import FileUUIDMap
 
 class FileCommentsTest(BaseTestCase):
     def setUp(self):
@@ -86,12 +88,13 @@ class FileCommentsTest(BaseTestCase):
         })
         self.assertEqual(403, resp.status_code)
 
-    def test_can_notify_others(self):
+    def test_can_notify_participant(self):
         assert len(UserNotification.objects.all()) == 0
 
-        username = self.user.username
-        seafile_api.share_repo(self.repo.id, username,
-                               self.admin.username, 'rw')
+        # share repo and add participant
+        seafile_api.share_repo(self.repo.id, self.user.username, self.admin.username, 'rw')
+        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(self.repo.id, self.file, False)
+        FileParticipant.objects.add_participant(file_uuid, self.admin.username)
 
         resp = self.client.post(self.endpoint, {
             'comment': 'new comment'
@@ -100,28 +103,3 @@ class FileCommentsTest(BaseTestCase):
 
         assert len(UserNotification.objects.all()) == 1
         assert UserNotification.objects.all()[0].to_user == self.admin.username
-
-    def test_can_notify_others_including_group(self):
-        self.logout()
-        self.login_as(self.tmp_user)
-
-        assert len(UserNotification.objects.all()) == 0
-
-        # share repo to tmp_user
-        username = self.user.username
-        seafile_api.share_repo(self.repo.id, username,
-                               self.tmp_user.username, 'rw')
-
-        # share repo to group(owner, admin)
-        ccnet_api.group_add_member(self.group.id, username,
-                                   self.admin.username)
-        seafile_api.set_group_repo(self.repo.id, self.group.id,
-                                   username, 'rw')
-
-        # tmp_user comment a file
-        resp = self.client.post(self.endpoint, {
-            'comment': 'new comment'
-        })
-        self.assertEqual(201, resp.status_code)
-
-        assert len(UserNotification.objects.all()) == 2

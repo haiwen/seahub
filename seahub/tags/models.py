@@ -1,11 +1,13 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
+import os
 import uuid
 import hashlib
 
 from django.db import models
 
 from seahub.base.fields import LowerCaseCharField
+from seahub.utils import normalize_file_path,normalize_dir_path
 
 
 ########## Manager
@@ -60,6 +62,19 @@ class FileUUIDMapManager(models.Manager):
             repo_id=repo_id, parent_path=parent_path
         )
         return uuids
+
+    def get_or_create_fileuuidmap_by_path(self, repo_id, path, is_dir):
+        if is_dir:
+            path = normalize_dir_path(path)
+        else:
+            path = normalize_file_path(path)
+
+        path = path.rstrip('/')
+
+        parent_path = os.path.dirname(path)
+        obj_name = os.path.basename(path)
+
+        return self.get_or_create_fileuuidmap(repo_id, parent_path, obj_name, is_dir)
 
 
 class TagsManager(models.Manager):

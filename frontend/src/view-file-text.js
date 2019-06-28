@@ -24,7 +24,7 @@ import 'codemirror/lib/codemirror.css';
 import './css/text-file-view.css';
 
 const {
-  err, fileExt, fileContent, repoID, filePath, fileName, canEditFile
+  err, fileExt, fileContent, repoID, filePath, fileName, canEditFile, username
 } = window.app.pageOptions;
 
 const options = {
@@ -45,8 +45,10 @@ class ViewFileText extends React.Component {
       content: fileContent,
       needSave: false,
       isSaving: false,
+      participants: [],
     };
     this.onSave=this.onSave.bind(this);
+    this.isParticipant = false;
   }
 
 
@@ -58,6 +60,9 @@ class ViewFileText extends React.Component {
   }
 
   onSave () {
+    if (!this.isParticipant) {
+      this.addParticipant();
+    }
     let dirPath = '/';
     return (
       seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
@@ -83,6 +88,33 @@ class ViewFileText extends React.Component {
     );
   }
 
+  addParticipant = () => {
+    seafileAPI.addFileParticipant(repoID, filePath, username).then((res) => {
+      if (res.status === 201) {
+        this.isParticipant = true;
+        this.getParticipants();
+      }
+    });
+  }
+
+  getParticipants = () => {
+    seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
+      const participants = res.data.participant_list;
+      this.setState({ participants: participants });
+      this.isParticipant = participants.every((participant) => {
+        return participant.email == username;
+      });
+    });
+  }
+
+  onParticipantsChange = () => {
+    this.getParticipants();
+  }
+
+  componentDidMount() {
+    this.getParticipants();
+  }
+
   render() {
     return (
       <FileView 
@@ -95,6 +127,8 @@ class ViewFileText extends React.Component {
         isSaving={this.state.isSaving}
         needSave={this.state.needSave}
         onSave={this.onSave}
+        participants={this.state.participants}
+        onParticipantsChange={this.onParticipantsChange}
       />
     );
   }

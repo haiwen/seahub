@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
+import ParticipantsList from '../file-view/participants-list';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -18,6 +19,8 @@ const propTypes = {
   relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   onRelatedFileChange: PropTypes.func.isRequired,
+  onParticipantsChange: PropTypes.func.isRequired,
+  fileParticipantList: PropTypes.array.isRequired,
 };
 
 class DetailListView extends React.Component {
@@ -79,7 +82,7 @@ class DetailListView extends React.Component {
   }
   
   render() {
-    let { direntType, direntDetail, fileTagList, relatedFiles } = this.props;
+    let { direntType, direntDetail, fileTagList, relatedFiles, fileParticipantList } = this.props;
     let position = this.getDirentPostion();
     let direntPath = this.getDirentPath();
     if (direntType === 'dir') {
@@ -137,6 +140,20 @@ class DetailListView extends React.Component {
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onListRelatedFileToggle}></i>
                 </td>
               </tr>
+              <tr className="file-related-files">
+                <th>{gettext('Participants')}</th>
+                <td>
+                  {fileParticipantList &&
+                    <ParticipantsList
+                      onParticipantsChange={this.props.onParticipantsChange}
+                      participants={fileParticipantList}
+                      repoID={this.props.repoID}
+                      filePath={direntPath}
+                      showIconTip={false}
+                    />
+                  }
+                </td>
+              </tr>
             </tbody>
           </table>
           {this.state.showRelatedFileDialog &&
@@ -152,15 +169,16 @@ class DetailListView extends React.Component {
               />
             </ModalPortal>
           }
-          {
-            this.state.isEditFileTagShow &&
-            <EditFileTagDialog
-              repoID={this.props.repoID}
-              fileTagList={fileTagList}
-              filePath={direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-            />
+          {this.state.isEditFileTagShow &&
+            <ModalPortal>
+              <EditFileTagDialog
+                repoID={this.props.repoID}
+                fileTagList={fileTagList}
+                filePath={direntPath}
+                toggleCancel={this.onEditFileTagToggle}
+                onFileTagChanged={this.onFileTagChanged}
+              />
+            </ModalPortal>
           }
         </Fragment>
       );
