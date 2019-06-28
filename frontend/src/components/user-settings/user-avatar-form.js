@@ -1,5 +1,6 @@
 import React from 'react';
 import { gettext, siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
 
 const { avatarURL, csrfToken } = window.app.pageOptions;
@@ -50,7 +51,25 @@ class UserAvatarForm extends React.Component {
       return false;
     }
 
-    this.form.current.submit();
+    //this.form.current.submit();
+    seafileAPI.updateUserAvatar(file, 160).then((res) => {
+      this.setState({
+        avatarSrc: res.data.avatar_url
+      });
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errorMsg = '';
+      if (error.response) {
+        if (error.response.data && error.response.data['error_msg']) {
+          errorMsg = error.response.data['error_msg'];
+        } else {
+          errorMsg = gettext('Error');
+        }
+      } else {
+        errorMsg = gettext('Please check the network.');
+      }
+      toaster.danger(errorMsg);
+    });
   }
 
   openFileInput = () => {
@@ -75,7 +94,7 @@ class UserAvatarForm extends React.Component {
         <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
         <label className="col-sm-1 col-form-label">{gettext('Avatar:')}</label>
         <div className="col-auto position-relative" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <img src={avatarURL} width="80" height="80" alt="" className="user-avatar" />
+          <img src={this.state.avatarSrc} width="80" height="80" alt="" className="user-avatar" />
           <input type="file" name="avatar" className="d-none" onChange={this.fileInputChange} ref={this.fileInput} />
           <span className={`avatar-edit fas fa-edit ${!this.state.isEditShown && 'd-none'}`} onClick={this.openFileInput}></span>
         </div>
