@@ -35,6 +35,7 @@ class FileContent extends React.Component {
     this.state = {
       thumbnailError: false,
     };
+    this.thumbnailSuffixList = ['tiff', 'eps', 'psd'];
   }
 
   componentDidMount() {
@@ -59,6 +60,8 @@ class FileContent extends React.Component {
       return <FileViewTip />;
     }
     let thumbnailUrl = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}`;
+    let imageSuffix = fileName.split('.').pop();
+    let isPreviewThumbnail = this.thumbnailSuffixList.includes(imageSuffix);
 
     return (
       <div className="file-view-content flex-1 image-file-view">
@@ -68,7 +71,10 @@ class FileContent extends React.Component {
         {nextImage && (
           <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="fas fa-chevron-right"></span></a>
         )}
-        <img src={thumbnailUrl} alt={fileName} id="image-view" onError={this.handleError}/>
+        {isPreviewThumbnail ?
+          <img src={thumbnailUrl} alt={fileName} id="image-view" onError={this.handleError}/> :
+          <img src={rawPath} alt={fileName} id="image-view"/>
+        }
       </div>
     );
   }
