@@ -53,7 +53,7 @@ from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_PREVIEW_EDIT
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
-    validate_group_name, is_group_member, group_id_to_name
+    validate_group_name, is_group_member, group_id_to_name, is_group_admin
 from seahub.thumbnail.utils import generate_thumbnail
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
@@ -1417,9 +1417,19 @@ class RepoHistoryLimit(APIView):
 
         username = request.user.username
         # no settings for virtual repo
-        if repo.is_virtual or username != repo_owner:
+        if repo.is_virtual:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if '@seafile_group' in repo_owner:
+            group_id = get_group_id_by_repo_owner(repo_owner)
+            if not is_group_admin(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != repo_owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             keep_days = seafile_api.get_repo_history_limit(repo_id)
@@ -1444,12 +1454,19 @@ class RepoHistoryLimit(APIView):
 
         username = request.user.username
         # no settings for virtual repo
-        if repo.is_virtual or \
-            not config.ENABLE_REPO_HISTORY_SETTING or \
-            username != repo_owner:
-
+        if repo.is_virtual or not config.ENABLE_REPO_HISTORY_SETTING:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if '@seafile_group' in repo_owner:
+            group_id = get_group_id_by_repo_owner(repo_owner)
+            if not is_group_admin(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != repo_owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check arg validation
         keep_days = request.data.get('keep_days', None)
