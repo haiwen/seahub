@@ -37,9 +37,9 @@ class ParticipantsList extends React.Component {
     return (
       <div className="participants mb-2 position-relative">
         {participants.map((item, index) => {
-          return <img src={item.avatar_url} className="avatar" alt="avatar" key={index} style={{left: index * -7 + 'px'}}/>;
+          return <Participant item={item} index={index} key={index}/>;
         })}
-        <span className="add-participants" style={{left: participants.length * 21, top: 8 }} onClick={this.toggleDialog} id="add-participant-icon">
+        <span className="add-participants" onClick={this.toggleDialog} id="add-participant-icon">
           <i className="fas fa-plus-circle"></i>
         </span>
         {showIconTip &&
@@ -64,5 +64,39 @@ class ParticipantsList extends React.Component {
 }
 
 ParticipantsList.propTypes = propTypes;
+
+const ParticipantPropTypes = {
+  index: PropTypes.number.isRequired,
+  item: PropTypes.object.isRequired,
+};
+
+class Participant extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAvatarTooltip: false,
+    };
+  }
+
+  toggleAvatarTooltip = () => {
+    this.setState({ showAvatarTooltip: !this.state.showAvatarTooltip });
+  }
+
+  render() {
+    const { item, index } = this.props;
+    const target = 'participant-avatar-' + index;
+    return (
+      <span className="participant-avatar">
+        <img src={item.avatar_url} className="avatar" id={target} alt="avatar" key={index}/>
+        <Tooltip toggle={this.toggleAvatarTooltip} delay={{show: 0, hide: 0}} target={target} placement='bottom' isOpen={this.state.showAvatarTooltip}>
+          {item.name}
+        </Tooltip>
+      </span>
+    );
+  }
+}
+
+Participant.propTypes = ParticipantPropTypes;
 
 export default ParticipantsList;
