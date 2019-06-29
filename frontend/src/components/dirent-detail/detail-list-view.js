@@ -140,7 +140,7 @@ class DetailListView extends React.Component {
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onListRelatedFileToggle}></i>
                 </td>
               </tr>
-              <tr className="file-related-files">
+              <tr className="file-participants">
                 <th>{gettext('Participants')}</th>
                 <td>
                   {fileParticipantList &&
