@@ -39,7 +39,7 @@ class ParticipantsList extends React.Component {
         {participants.map((item, index) => {
           return <Participant item={item} index={index} key={index}/>;
         })}
-        <span className="add-participants" style={{left: participants.length * 21, top: 8 }} onClick={this.toggleDialog} id="add-participant-icon">
+        <span className="add-participants" onClick={this.toggleDialog} id="add-participant-icon">
           <i className="fas fa-plus-circle"></i>
         </span>
         {showIconTip &&
@@ -87,8 +87,8 @@ class Participant extends React.Component {
     const { item, index } = this.props;
     const target = 'participant-avatar-' + index;
     return (
-      <span>
-        <img src={item.avatar_url} className="avatar" id={target} alt="avatar" key={index} style={{left: index * -7 + 'px'}}/>
+      <span className="participant-avatar">
+        <img src={item.avatar_url} className="avatar" id={target} alt="avatar" key={index}/>
         <Tooltip toggle={this.toggleAvatarTooltip} delay={{show: 0, hide: 0}} target={target} placement='bottom' isOpen={this.state.showAvatarTooltip}>
           {item.name}
         </Tooltip>

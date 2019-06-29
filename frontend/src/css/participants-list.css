@@ -10,12 +10,16 @@
 .participants .add-participants {
   position: absolute;
   cursor: pointer;
+  bottom: -3px;
 }
 .participants .add-participants i {
   font-size: 16px;
   color: rgb(229, 162, 82);
   border: 2px solid #fff;
   border-radius: 50%;
+}
+.participants .participant-avatar, .participants .add-participants {
+  margin-right: -0.5rem;
 }
 /* file-participant-dialog */
 .participant-add {
