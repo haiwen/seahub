@@ -40,13 +40,6 @@ class ShareTableDialog extends React.Component {
                 >{gettext('Share to user')}
                 </NavLink>
               </NavItem>
-              {/*<NavItem>*/}
-              {/*  <NavLink*/}
-              {/*    className={activeTab === 'shareToGroup' ? 'active' : ''}*/}
-              {/*    onClick={this.toggle.bind(this, 'shareToGroup')}*/}
-              {/*  >{gettext('Share to group')}*/}
-              {/*  </NavLink>*/}
-              {/*</NavItem>*/}
             </Fragment>
           </Nav>
         </div>
@@ -58,8 +51,6 @@ class ShareTableDialog extends React.Component {
                   currentTable={this.props.currentTable}
                 />
               </TabPane>
-              {/*<TabPane tabId="shareToGroup">*/}
-              {/*</TabPane>*/}
             </Fragment>
           </TabContent>
         </div>

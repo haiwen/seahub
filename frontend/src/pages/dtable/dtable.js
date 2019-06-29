@@ -43,7 +43,6 @@ class Table extends Component {
       dropdownOpen: false,
       active: false,
     };
-    this.writePermissionList = ['rw', 'admin'];
   }
 
   onRenameTableCancel = () => {
@@ -119,10 +118,7 @@ class Table extends Component {
     let tableHref = siteRoot + 'workspace/' + this.props.workspaceID + '/dtable/' + table.name + '/';
     let fromShare = this.props.fromShare;
     let fromPersonal = this.props.fromPersonal;
-    let fromGroup = this.props.fromPersonal;
-
-    let hasWritePermission = !fromShare ? true:
-      this.writePermissionList.includes(this.props.table.permission);
+    let fromGroup = this.props.fromGroup;
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
@@ -154,10 +150,10 @@ class Table extends Component {
               >
               </DropdownToggle>
               <DropdownMenu className="drop-list" right={true}>
-                {hasWritePermission &&
+                {(fromPersonal || fromGroup) &&
                 <DropdownItem onClick={this.onRenameTableCancel}>{gettext('Rename')}</DropdownItem>
                 }
-                {hasWritePermission &&
+                {(fromPersonal || fromGroup) &&
                 <DropdownItem onClick={this.onDeleteTableCancel}>{gettext('Delete')}</DropdownItem>
                 }
                 {fromPersonal &&
@@ -404,6 +400,14 @@ class DTable extends Component {
   }
 
   render() {
+    let personalWorkspace = this.state.workspaceList.filter(workspace => {
+      return workspace.owner_type === 'Personal';
+    }).pop();
+
+    let groupWorkspaceList = this.state.workspaceList.filter(workspace => {
+      return workspace.owner_type === 'Group';
+    });
+
     return (
       <Fragment>
         <div className="main-panel-north border-left-show">
@@ -433,25 +437,10 @@ class DTable extends Component {
                 <p className="error text-center">{this.state.errorMsg}</p>
               }
               {!this.state.loading &&
-                <Fragment>
-                  {this.state.workspaceList.map((workspace, index) => {
-                    return (
-                      <Workspace
-                        key={index}
-                        workspace={workspace}
-                        fromShare={false}
-                      />
-                    );
-                  })}
-                  <div className="my-2">
-                    {this.state.isShowAddDTableDialog &&
-                      <CreateTableDialog
-                        createDTable={this.createDTable}
-                        onAddDTable={this.onAddDTable}
-                      />
-                    }
-                  </div>
-                </Fragment>
+              <Workspace
+                workspace={personalWorkspace}
+                fromShare={false}
+              />
               }
               {(!this.state.shareTableLoading && this.state.shareTableList.length > 0) &&
               <Fragment>
@@ -466,6 +455,28 @@ class DTable extends Component {
                   );})
                 }
               </Fragment>
+              }
+              {(!this.state.loading && groupWorkspaceList.length > 0) &&
+              <Fragment>
+                <div className="sf-heading">{gettext('Shared with groups')}</div>
+                {groupWorkspaceList.map((workspace, index) => {
+                  return (
+                    <Workspace
+                      key={index}
+                      workspace={workspace}
+                      fromShare={false}
+                    />
+                  );
+                })}
+              </Fragment>
+              }
+              {(!this.state.loading && this.state.isShowAddDTableDialog) &&
+              <div className="my-2">
+                <CreateTableDialog
+                  createDTable={this.createDTable}
+                  onAddDTable={this.onAddDTable}
+                />
+              </div>
               }
             </div>
           </div>

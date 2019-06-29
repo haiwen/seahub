@@ -139,6 +139,10 @@ class DTablesView(APIView):
 
     def post(self, request):
         """create a table file
+
+        Permission:
+        1. owner
+        2. group member
         """
         # argument check
         table_owner = request.POST.get('owner')
@@ -245,6 +249,11 @@ class DTableView(APIView):
 
     def get(self, request, workspace_id):
         """view table file, get table download link
+
+        Permission:
+        1. owner
+        2. group member
+        3. shared user
         """
         # argument check
         table_name = request.GET.get('name', None)
@@ -304,6 +313,10 @@ class DTableView(APIView):
 
     def put(self, request, workspace_id):
         """rename a table
+
+        Permission:
+        1. owner
+        2. group member
         """
         # argument check
         old_table_name = request.data.get('old_name')
@@ -358,8 +371,7 @@ class DTableView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         else:
-            if username != owner and \
-                    check_share_dtable_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+            if username != owner:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -391,6 +403,10 @@ class DTableView(APIView):
 
     def delete(self, request, workspace_id):
         """delete a table
+
+        Permission:
+        1. owner
+        2. group member
         """
         # argument check
         table_name = request.data.get('name')
@@ -431,8 +447,7 @@ class DTableView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         else:
-            if username != owner and \
-                    check_share_dtable_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+            if username != owner:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -481,6 +496,11 @@ class DTableUpdateLinkView(APIView):
 
     def get(self, request, workspace_id):
         """get table file update link
+
+        Permission:
+        1. owner
+        2. group member
+        3. shared user with `rw` or `admin` permission
         """
         # argument check
         table_name = request.GET.get('name', None)
@@ -542,6 +562,11 @@ class DTableAssetUploadLinkView(APIView):
 
     def get(self, request, workspace_id):
         """get table file upload link
+
+        Permission:
+        1. owner
+        2. group member
+        3. shared user with `rw` or `admin` permission
         """
         # argument check
         table_name = request.GET.get('name', None)
@@ -601,7 +626,13 @@ class DTableAssetUploadLinkView(APIView):
 
 @login_required
 def dtable_file_view(request, workspace_id, name):
+    """
 
+    Permission:
+    1. owner
+    2. group member
+    3. shared user
+    """
     # resource check
     workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
     if not workspace:
@@ -651,7 +682,13 @@ def dtable_file_view(request, workspace_id, name):
 
 
 def dtable_asset_access(request, workspace_id, dtable_id, path):
+    """
 
+    Permission:
+    1. owner
+    2. group member
+    3. shared user with `rw` or `admin` permission
+    """
     # asset file type check
     asset_name = os.path.basename(normalize_file_path(path))
     file_type, file_ext = get_file_type_and_ext(asset_name)
