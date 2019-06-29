@@ -87,11 +87,13 @@ class FileParticipantDialog extends Component {
     if (!selectedOption || selectedOption.length === 0) {
       return;
     }
-    seafileAPI.addFileParticipant(repoID, filePath, selectedOption.email).then((res) => {
-      this.props.onParticipantsChange(repoID, filePath);
-    }).catch((error) => {
-      this.handleError(error);
-    });
+    for (let i = 0; i < selectedOption.length; i++) {
+      seafileAPI.addFileParticipant(repoID, filePath, selectedOption[i].email).then((res) => {
+        this.props.onParticipantsChange(repoID, filePath);
+      }).catch((error) => {
+        this.handleError(error);
+      });
+    }
     this.setState({ selectedOption: null });
     this.refs.userSelect.clearSelect();
   };
@@ -122,7 +124,7 @@ class FileParticipantDialog extends Component {
           <div className="participant-add">
             <UserSelect
               ref="userSelect"
-              isMulti={false}
+              isMulti={true}
               className="participant-select"
               placeholder={gettext('Select users...')}
               onSelectChange={this.handleSelectChange}
