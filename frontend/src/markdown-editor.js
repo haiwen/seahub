@@ -616,6 +616,7 @@ class MarkdownEditor extends React.Component {
     this.listFileTags();
 
     this.listFileParticipants();
+    window.showParticipants = true;
     setTimeout(() => {
       let url = new URL(window.location.href);
       if (url.hash) {
