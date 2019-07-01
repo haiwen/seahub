@@ -11,6 +11,7 @@ import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
+import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
 
 const propTypes = {
   currentGroup: PropTypes.object,
@@ -37,7 +38,8 @@ class SharedRepoListItem extends React.Component {
       isRenaming: false,
       isStarred: this.props.repo.starred,
       isFolderPermissionDialogOpen: false,
-      isDeleteDialogShow: false
+      isHistorySettingDialogShow: false,
+      isDeleteDialogShow: false,
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -124,6 +126,9 @@ class SharedRepoListItem extends React.Component {
       case 'Unshare':
         this.onItemUnshare();
         break;
+      case 'History Setting':
+        this.onHistorySettingToggle();
+        break;
       default:
         break;
     }
@@ -149,6 +154,10 @@ class SharedRepoListItem extends React.Component {
 
   onItemFolderPermissionToggle = () => {
     this.setState({isFolderPermissionDialogOpen: !this.state.isFolderPermissionDialogOpen});
+  }
+
+  onHistorySettingToggle = () => {
+    this.setState({isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow});
   }
 
   onItemDetails = () => {
@@ -189,6 +198,9 @@ class SharedRepoListItem extends React.Component {
       case 'Share':
         translateResult = gettext('Share');
         break;
+      case 'History Setting':
+        translateResult = gettext('History Setting');
+        break;
       default:
         break;
     }
@@ -208,7 +220,7 @@ class SharedRepoListItem extends React.Component {
         if (isStaff && repo.owner_email == currentGroup.id + '@seafile_group') { //is a member of this current group,
           this.isDeparementOnwerGroupMember = true;
           if (folderPermEnabled) {
-            operations = ['Rename', 'Folder Permission', 'Details'];
+            operations = ['Rename', 'Folder Permission', 'History Setting', 'Details'];
           } else {
             operations = ['Rename', 'Details'];
           }
@@ -394,14 +406,23 @@ class SharedRepoListItem extends React.Component {
           </ModalPortal>
         )}
         {this.state.isDeleteDialogShow && 
-            <ModalPortal>
-              <DeleteRepoDialog 
-                repo={this.props.repo}
-                onDeleteRepo={this.props.onItemDelete}
-                toggle={this.onItemDeleteToggle}
-              />
+          <ModalPortal>
+            <DeleteRepoDialog
+              repo={this.props.repo}
+              onDeleteRepo={this.props.onItemDelete}
+              toggle={this.onItemDeleteToggle}
+            />
           </ModalPortal>
         }
+        {this.state.isHistorySettingDialogShow && (
+          <ModalPortal>
+            <LibHistorySettingDialog
+              repoID={repo.repo_id}
+              itemName={repo.repo_name}
+              toggleDialog={this.onHistorySettingToggle}
+            />
+          </ModalPortal>
+        )}
       </Fragment>
     );
   }

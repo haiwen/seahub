@@ -221,6 +221,7 @@ class GroupView extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
+      this.loadGroup(groupID);
       let name = repo.repo_name;
       var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
       toaster.success(msg);
@@ -244,6 +245,7 @@ class GroupView extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
+      this.loadGroup(group.id);
     });
   }
 
@@ -362,7 +364,10 @@ class GroupView extends React.Component {
   render() {
     let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
     let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
-    let that = this;
+    let useRate = 0;
+    if (isDepartmentGroup && currentGroup.group_quota) {
+      useRate = currentGroup.group_quota_usage / currentGroup.group_quota * 100 + '%';
+    }
     return (
       <Fragment>
         <div className="main-panel-north border-left-show">
@@ -387,10 +392,13 @@ class GroupView extends React.Component {
                     <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext('Groups')}</Link>
                     <span className="path-split">/</span>
                     <span>{currentGroup.name}</span>
-                    {currentGroup.parent_group_id !== 0 && (
+                    {isDepartmentGroup && currentGroup.group_quota && (
                       <Fragment>
                         <span className="department-group-icon fas fa-building" title={gettext('This is a special group representing a department.')}></span>
-                        <span>{' '}{'（'}{gettext('Used:')}{' '}{Utils.bytesToSize(currentGroup.group_quota_usage)}{'/'}{Utils.bytesToSize(currentGroup.group_quota)}{'）'}</span>
+                        <div className="department-usage">
+                          <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{width: useRate}}></span></span>
+                          <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
+                        </div>
                       </Fragment>
                     )}
                   </div>
@@ -442,21 +450,19 @@ class GroupView extends React.Component {
                       </div>
                       <div className="sf-popover-con">
                         <ul className="sf-popover-list group-member-list">
-                          {
-                            this.state.groupMembers.map(function(item, index) {
-                              return (
-                                <li key={index}>
-                                  <a href="#" className="sf-popover-item user-item d-flex">
-                                    <img src={item.avatar_url} alt="" className="group-member-avatar avatar"/>
-                                    <span className="txt-item ellipsis d-flex">
-                                      <span className="group-member-name ellipsis">{item.name}</span>
-                                      <span className="group-member-admin">{that.translateRole(item.role)}</span>
-                                    </span>
-                                  </a>
-                                </li>
-                              );
-                            })
-                          }
+                          {this.state.groupMembers.map((item, index) => {
+                            return (
+                              <li key={index}>
+                                <a href="#" className="sf-popover-item user-item d-flex">
+                                  <img src={item.avatar_url} alt="" className="group-member-avatar avatar"/>
+                                  <span className="txt-item ellipsis d-flex">
+                                    <span className="group-member-name ellipsis">{item.name}</span>
+                                    <span className="group-member-admin">{this.translateRole(item.role)}</span>
+                                  </span>
+                                </a>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     </Popover>
