@@ -24,6 +24,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
 
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -86,7 +87,10 @@ def base(request):
         custom_favicon_file = os.path.join(MEDIA_ROOT, CUSTOM_FAVICON_PATH)
         if os.path.exists(custom_favicon_file):
             favicon_path = CUSTOM_FAVICON_PATH
-
+        
+        username = request.user.username
+        avatar_url, is_default, date_uploaded = api_avatar_url(username, 72)
+    
     result = {
         'seafile_version': SEAFILE_VERSION,
         'site_title': config.SITE_TITLE,
@@ -130,6 +134,7 @@ def base(request):
         'service_url': get_service_url().rstrip('/'),
         'enable_file_scan': ENABLE_FILE_SCAN,
         'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
+        'avatar_url': request.build_absolute_uri(avatar_url),
     }
 
     if request.user.is_staff:
