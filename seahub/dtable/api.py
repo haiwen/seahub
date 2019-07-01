@@ -48,49 +48,29 @@ class ShareDTablesView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        share_list = list()
-        workspace_ids = set([item.dtable.workspace_id for item in share_queryset])
+        table_list = list()
 
-        for workspace_id in workspace_ids:
-            dtable_share_queryset = share_queryset.filter(dtable__workspace_id=workspace_id)
+        for item in share_queryset:
+            from_user = item.from_user
+            permission = item.permission
+            dtable = item.dtable
 
-            workspace = dtable_share_queryset[0].dtable.workspace
-            if GROUP_DOMAIN in workspace.owner:
-                group_id = int(workspace.owner.split('@')[0])
-                owner_name = group_id_to_name(group_id)
-                owner_type = "Group"
-            else:
-                owner_name = email2nickname(workspace.owner)
-                owner_type = "Personal"
+            dtable_info = dict()
+            dtable_info['id'] = dtable.pk
+            dtable_info['workspace_id'] = dtable.workspace_id
+            dtable_info['uuid'] = dtable.uuid
+            dtable_info['name'] = dtable.name
+            dtable_info['creator'] = email2nickname(dtable.creator)
+            dtable_info['modifier'] = email2nickname(dtable.modifier)
+            dtable_info['created_at'] = datetime_to_isoformat_timestr(dtable.created_at)
+            dtable_info['updated_at'] = datetime_to_isoformat_timestr(dtable.updated_at)
+            dtable_info['permission'] = permission
+            dtable_info['from_user'] = from_user
+            dtable_info['from_user_name'] = email2nickname(from_user)
 
-            workspace_info = workspace.to_dict()
-            workspace_info["owner_name"] = owner_name
-            workspace_info["owner_type"] = owner_type
-            workspace_info['table_list'] = list()
+            table_list.append(dtable_info)
 
-            for item in dtable_share_queryset:
-                from_user = item.from_user
-                permission = item.permission
-                dtable = item.dtable
-
-                dtable_info = dict()
-                dtable_info['id'] = dtable.pk
-                dtable_info['workspace_id'] = dtable.workspace_id
-                dtable_info['uuid'] = dtable.uuid
-                dtable_info['name'] = dtable.name
-                dtable_info['creator'] = email2nickname(dtable.creator)
-                dtable_info['modifier'] = email2nickname(dtable.modifier)
-                dtable_info['created_at'] = datetime_to_isoformat_timestr(dtable.created_at)
-                dtable_info['updated_at'] = datetime_to_isoformat_timestr(dtable.updated_at)
-                dtable_info['permission'] = permission
-                dtable_info['from_user'] = from_user
-                dtable_info['from_user_name'] = email2nickname(from_user)
-
-                workspace_info['table_list'].append(dtable_info)
-
-            share_list.append(workspace_info)
-
-        return Response({'share_list': share_list})
+        return Response({'table_list': table_list})
 
 
 class ShareDTableView(APIView):

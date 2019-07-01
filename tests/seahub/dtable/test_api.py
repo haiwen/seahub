@@ -46,24 +46,19 @@ class ShareDTablesViewTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp["share_list"]
-        assert json_resp["share_list"][0]
-        assert json_resp["share_list"][0]['owner_type'] == 'Personal'
-        assert json_resp["share_list"][0]['repo_id'] == self.repo.id
-        assert json_resp["share_list"][0]['id'] == self.workspace.id
-        assert json_resp["share_list"][0]['owner_name'] == email2nickname(self.user.username)
-        assert json_resp["share_list"][0]['table_list']
-        assert json_resp["share_list"][0]['table_list'][0]['workspace_id'] == self.workspace.id
-        assert json_resp["share_list"][0]['table_list'][0]['uuid']
-        assert json_resp["share_list"][0]['table_list'][0]['creator'] == email2nickname(self.user.username)
-        assert json_resp["share_list"][0]['table_list'][0]['created_at']
-        assert json_resp["share_list"][0]['table_list'][0]['permission'] == 'rw'
-        assert json_resp["share_list"][0]['table_list'][0]['updated_at']
-        assert json_resp["share_list"][0]['table_list'][0]['from_user'] == self.user.username
-        assert json_resp["share_list"][0]['table_list'][0]['from_user_name'] == email2nickname(self.user.username)
-        assert json_resp["share_list"][0]['table_list'][0]['modifier'] == email2nickname(self.user.username)
-        assert json_resp["share_list"][0]['table_list'][0]['id']
-        assert json_resp["share_list"][0]['table_list'][0]['name'] == 'dtable1'
+        assert json_resp["table_list"]
+        assert json_resp["table_list"][0]
+        assert json_resp['table_list'][0]['workspace_id'] == self.workspace.id
+        assert json_resp['table_list'][0]['uuid']
+        assert json_resp['table_list'][0]['creator'] == email2nickname(self.user.username)
+        assert json_resp['table_list'][0]['created_at']
+        assert json_resp['table_list'][0]['permission'] == 'rw'
+        assert json_resp['table_list'][0]['updated_at']
+        assert json_resp['table_list'][0]['from_user'] == self.user.username
+        assert json_resp['table_list'][0]['from_user_name'] == email2nickname(self.user.username)
+        assert json_resp['table_list'][0]['modifier'] == email2nickname(self.user.username)
+        assert json_resp['table_list'][0]['id']
+        assert json_resp['table_list'][0]['name'] == 'dtable1'
 
 
 class ShareDTableViewTest(BaseTestCase):

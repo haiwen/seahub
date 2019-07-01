@@ -158,7 +158,7 @@ class ShareDTableManager(models.Manager):
         return self.filter(dtable=dtable)
 
     def list_by_to_user(self, to_user):
-        return self.filter(to_user=to_user).select_related('dtable', 'dtable__workspace')
+        return self.filter(to_user=to_user).select_related('dtable')
 
     def get_by_dtable_and_to_user(self, dtable, to_user):
         qs = self.filter(dtable=dtable, to_user=to_user)
