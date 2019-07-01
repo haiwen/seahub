@@ -18,6 +18,7 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import Rename from '../../components/dialog/rename-grid-item-dialog';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
+import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 
 import '../../css/grid-view.css';
 
@@ -47,7 +48,7 @@ const propTypes = {
 class DirentGridView extends React.Component{
   constructor(props) {
     super(props);
-    this.state={
+    this.state= {
       isImagePopupOpen: false,
       imageItems: [],
       imageIndex: 0,
@@ -59,6 +60,7 @@ class DirentGridView extends React.Component{
       isRenameDialogShow: false,
       isCreateFolderDialogShow: false,
       isCreateFileDialogShow: false,
+      isPermissionDialogOpen: false,
 
       isMutipleOperation: false,
       isGridItemFreezed: false,
@@ -210,7 +212,7 @@ class DirentGridView extends React.Component{
   }
 
   onPermissionItem = () => {
-
+    this.setState({isPermissionDialogOpen: !this.state.isPermissionDialogOpen});
   }
 
   onLockItem = (currentObject) => {
@@ -613,6 +615,17 @@ class DirentGridView extends React.Component{
             />
           </ModalPortal>
         )}
+        {this.state.isPermissionDialogOpen &&
+          <ModalPortal>
+            <LibSubFolderPermissionDialog
+              toggleDialog={this.onPermissionItem}
+              repoID={this.props.repoID}
+              folderPath={direntPath}
+              folderName={dirent.name}
+              isDepartmentRepo={this.props.isGroupOwnedRepo}
+            />
+          </ModalPortal>
+        }
         {this.state.isImagePopupOpen && (
           <ModalPortal>
             <ImageDialog
