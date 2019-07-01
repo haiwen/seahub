@@ -75,6 +75,8 @@ def base(request):
     favicon_path = FAVICON_PATH
 
     # filter ajax/api request out
+    avatar_url = ''
+    username = request.user.username
     if (not request.is_ajax()) and ("api2/" not in request.path) and \
             ("api/v2.1/" not in request.path):
 
@@ -87,10 +89,8 @@ def base(request):
         custom_favicon_file = os.path.join(MEDIA_ROOT, CUSTOM_FAVICON_PATH)
         if os.path.exists(custom_favicon_file):
             favicon_path = CUSTOM_FAVICON_PATH
-        
-        username = request.user.username
         avatar_url, is_default, date_uploaded = api_avatar_url(username, 72)
-    
+
     result = {
         'seafile_version': SEAFILE_VERSION,
         'site_title': config.SITE_TITLE,
@@ -134,7 +134,7 @@ def base(request):
         'service_url': get_service_url().rstrip('/'),
         'enable_file_scan': ENABLE_FILE_SCAN,
         'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
-        'avatar_url': request.build_absolute_uri(avatar_url),
+        'avatar_url': request.build_absolute_uri(avatar_url) if avatar_url else '',
     }
 
     if request.user.is_staff:
