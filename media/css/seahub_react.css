@@ -474,6 +474,26 @@ ul,ol,li {
     background:#ddd;
 }
 
+/** deparentment-usage **/
+.department-usage {
+    float: right;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    width: 15rem;
+}
+
+.department-usage .department-quota-bar  {
+    flex: 1;
+    margin-right: 0.5rem !important;
+    height: 0.75rem !important;
+}
+
+.department-usage .department-quota-info {
+    font-size: 0.75rem;
+    color: #666;
+}
+
 #notifications .sf2-icon-bell {
     font-size:24px;
     line-height:1;
