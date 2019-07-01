@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
-import editorUtilities from '../../utils/editor-utilties';
-import { siteRoot, gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { siteRoot, gettext, appAvatarURL } from '../../utils/constants';
 
 const propTypes = {
   isAdminPanel: PropTypes.bool,
@@ -21,12 +21,8 @@ class Account extends Component {
       isStaff: false,
       isOrgStaff: false,
       usageRate: '',
-      avatarURL: '',
     };
-  }
-
-  componentDidMount(){
-    this.getAccountInfo();
+    this.isFirstMounted = true;
   }
 
   componentDidUpdate(prevProps) {
@@ -71,24 +67,23 @@ class Account extends Component {
   }
 
   onClickAccount = () => {
-    this.setState({
-      showInfo: !this.state.showInfo,
-    });
-  }
-
-  getAccountInfo = () => {
-    editorUtilities.getAccountInfo().then(resp => {
-      this.setState({
-        userName: resp.data.name,
-        contactEmail: resp.data.email,
-        usageRate: resp.data.space_usage,
-        quotaUsage: Utils.bytesToSize(resp.data.usage),
-        quotaTotal: Utils.bytesToSize(resp.data.total),
-        isStaff: resp.data.is_staff,
-        isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
-        avatarURL: resp.data.avatar_url
+    if (this.isFirstMounted) {
+      seafileAPI.getAccountInfo().then(resp => {
+        this.setState({
+          userName: resp.data.name,
+          contactEmail: resp.data.email,
+          usageRate: resp.data.space_usage,
+          quotaUsage: Utils.bytesToSize(resp.data.usage),
+          quotaTotal: Utils.bytesToSize(resp.data.total),
+          isStaff: resp.data.is_staff,
+          isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
+          showInfo: !this.state.showInfo,
+        });
       });
-    });
+      this.isFirstMounted = false;
+    } else {
+      this.setState({showInfo: !this.state.showInfo});
+    }
   }
 
   renderMenu = () => {
@@ -118,21 +113,14 @@ class Account extends Component {
   }
 
   renderAvatar = () => {
-    if (this.state.avatarURL) {
-      return (
-        <img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} />
-      );
-    }
-    return (
-      <img src="" width="36" height="36" className="avatar" alt={gettext('Avatar')} />
-    );
+    return (<img src={appAvatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} />);
   }
 
   render() {
     return (
       <div id="account">
         <a id="my-info" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label="View profile and more">
-          <span><img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} /></span>
+          <span>{this.renderAvatar()}</span>
           <span className="fas fa-caret-down vam"></span>
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>
