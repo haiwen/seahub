@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import { gettext } from '../../../utils/constants';
 
 const WorkWeixinDepartmentsTreeNodePropTypes = {
   index: PropTypes.number,
@@ -16,6 +18,9 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     super(props);
     this.state = {
       isChildrenShow: false,
+      dropdownOpen: false,
+      isImportDialogShow: false,
+      active: false,
     };
   }
 
@@ -27,6 +32,25 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     });
   };
 
+  dropdownToggle = () => {
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  };
+
+  importDialogToggle = () => {
+    this.setState({ isImportDialogShow: !this.state.isImportDialogShow });
+  };
+
+  onMouseEnter = () => {
+    this.setState({
+      active: true
+    });
+  };
+
+  onMouseLeave = () => {
+    this.setState({
+      active: false
+    });
+  };
   componentDidMount() {
     if (this.props.index === 0) {
       this.setState({ isChildrenShow: true });
@@ -63,9 +87,33 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     return (
       <Fragment>
         {isChildrenShow &&
-          <div className={nodeInnerClass} onClick={() => this.props.onChangeDepartment(department.id)}>
+          <div
+            className={nodeInnerClass}
+            onClick={() => this.props.onChangeDepartment(department.id)}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+          >
             <i className={toggleClass} onClick={(e) => this.toggleChildren(e)}></i>{' '}
             <span className="tree-node-text">{department.name}</span>
+            <Dropdown
+              isOpen={this.state.dropdownOpen}
+              toggle={this.dropdownToggle}
+              direction="down"
+              className="mx-1 old-history-more-operation"
+              style={!this.state.active ? {opacity: 0, display: 'inline'} : {display: 'inline'}}
+            >
+              <DropdownToggle
+                tag='i'
+                className='fa fa-ellipsis-v cursor-pointer attr-action-icon'
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.dropdownOpen}
+              >
+              </DropdownToggle>
+              <DropdownMenu className="drop-list" right={true}>
+                <DropdownItem onClick={this.importDialogToggle} className="edit-comment" id={department.id}>{gettext('Import Department')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         }
         {this.state.isChildrenShow &&
