@@ -100,6 +100,7 @@ class ViewFileText extends React.Component {
   getParticipants = () => {
     seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
       const participants = res.data.participant_list;
+      if (participants.length === 0) return;
       this.setState({ participants: participants });
       this.isParticipant = participants.every((participant) => {
         return participant.email == username;
