@@ -392,13 +392,17 @@ class GroupView extends React.Component {
                     <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext('Groups')}</Link>
                     <span className="path-split">/</span>
                     <span>{currentGroup.name}</span>
-                    {isDepartmentGroup && currentGroup.group_quota && (
+                    {isDepartmentGroup && (
                       <Fragment>
                         <span className="department-group-icon fas fa-building" title={gettext('This is a special group representing a department.')}></span>
-                        <div className="department-usage">
-                          <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{width: useRate}}></span></span>
-                          <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
-                        </div>
+                        {currentGroup.group_quota > 0 &&
+                          <span className="department-usage-container">
+                            <div className="department-usage">
+                              <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{width: useRate}}></span></span>
+                              <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
+                            </div>
+                          </span>
+                        }
                       </Fragment>
                     )}
                   </div>
