@@ -475,18 +475,23 @@ ul,ol,li {
 }
 
 /** deparentment-usage **/
+.department-usage-container {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .department-usage {
-    float: right;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 0 0.75rem;
-    width: 15rem;
 }
 
 .department-usage .department-quota-bar  {
     flex: 1;
     margin-right: 0.5rem !important;
     height: 0.75rem !important;
+    width: 60px;
 }
 
 .department-usage .department-quota-info {
