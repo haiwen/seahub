@@ -217,15 +217,17 @@ class SharedRepoListItem extends React.Component {
     // todo ,shared width me shared width all;
     if (isPro) {
       if (repo.owner_email.indexOf('@seafile_group') != -1) {  //current repo is belong to a group;
-        if (isStaff && repo.owner_email == currentGroup.id + '@seafile_group') { //is a member of this current group,
-          this.isDeparementOnwerGroupMember = true;
-          if (folderPermEnabled) {
-            operations = ['Rename', 'Folder Permission', 'History Setting', 'Details'];
+        if (isStaff) {
+          if (repo.owner_email === currentGroup.id + '@seafile_group') {
+            this.isDeparementOnwerGroupMember = true;
+            if (folderPermEnabled) {
+              operations = ['Rename', 'Folder Permission', 'History Setting', 'Details'];
+            } else {
+              operations = ['Rename', 'Details'];
+            }
           } else {
-            operations = ['Rename', 'Details'];
+            operations.push('Unshare');
           }
-        } else {
-          operations.push('Unshare');
         }
       } else {
         if (isRepoOwner || isAdmin) {
