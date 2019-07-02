@@ -128,6 +128,8 @@ class GenerateShareLink extends React.Component {
       seafileAPI.createShareLink(repoID, itemPath, password, expireDays, permissions).then((res) => {
         let sharedLinkInfo = new SharedLinkInfo(res.data);
         this.setState({sharedLinkInfo: sharedLinkInfo});
+      }).catch((error) => {
+        toaster.danger(error.response.data.error_msg);
       });
     }
   }
