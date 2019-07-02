@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-01 16:08+0800\n"
-"PO-Revision-Date: 2019-07-01 08:09+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"PO-Revision-Date: 2019-07-01 16:36+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -96,7 +96,7 @@ msgstr "Mi Biblioteca"
 msgid ""
 "Group name can only contain letters, numbers, blank, hyphen, dot, single "
 "quote or underscore"
-msgstr ""
+msgstr "El nombre del grupo sólo puede tener letras, números, espacio, guión, punto, comilla simple o guión bajo"
 
 #: seahub/api2/endpoints/admin/groups.py:125
 #: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:292
@@ -528,7 +528,7 @@ msgstr "Error"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:60
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "Esta biblioteca no ha sido desencriptada."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:44
 #: seahub/api2/endpoints/user.py:73 seahub/api2/endpoints/user.py:93
@@ -567,18 +567,18 @@ msgstr "Contraseña anterior errónea"
 #: seahub/api2/endpoints/repos_batch.py:1562
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "El archivo %s está bloqueado."
 
 #: seahub/api2/endpoints/repos_batch.py:1263
 #: seahub/api2/endpoints/repos_batch.py:1482
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr ""
+msgstr "No se puede mover la carpeta %s, por favor verifique los permisos."
 
 #: seahub/api2/endpoints/repos_batch.py:1570
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr ""
+msgstr "No se puede borrar la carpeta %s, por favor verifique los permisos."
 
 #: seahub/api2/endpoints/send_share_link_email.py:33
 #: seahub/api2/endpoints/send_upload_link_email.py:32
@@ -612,7 +612,7 @@ msgstr "Una carpeta fue compartida contigo en %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:73
 msgid "email invalid."
-msgstr ""
+msgstr "email inválido."
 
 #: seahub/api2/endpoints/send_upload_link_email.py:95
 #: seahub/share/views.py:301
@@ -6631,7 +6631,7 @@ msgstr "{dirent_name} restaurado con éxito"
 
 #: seahub/templates/repo_snapshot_react.html:5
 msgid "Snapshot"
-msgstr ""
+msgstr "Instantánea"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
@@ -7093,7 +7093,7 @@ msgstr "Habilitar al administrador del sistema a agregar Términos y Condiciones
 
 #: seahub/templates/sysadmin/snippets/org_admin_js.html:4
 msgid "Delete organization"
-msgstr ""
+msgstr "Borrar organización"
 
 #: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:6
 #: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:7
