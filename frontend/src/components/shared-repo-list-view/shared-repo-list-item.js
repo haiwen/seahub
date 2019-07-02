@@ -41,7 +41,9 @@ class SharedRepoListItem extends React.Component {
       isHistorySettingDialogShow: false,
       isDeleteDialogShow: false,
     };
-    this.isDeparementOnwerGroupMember = false;
+
+    this.isCurrentDepartmentRepo = false;  // is current department owned repo
+    this.isCurrentDepartmentStaff = false; // is one of this department's admin
   }
 
   onMouseEnter = () => {
@@ -209,21 +211,25 @@ class SharedRepoListItem extends React.Component {
 
   generatorOperations = () => {
     let { repo, currentGroup } = this.props;
+    let isCurrentDepartmentRepo = repo.owner_email === currentGroup.id + '@seafile_group'; // is current department owned repo
     //todo this have a bug; use current api is not return admins param;
     let isStaff = currentGroup && currentGroup.admins && currentGroup.admins.indexOf(username) > -1; //for group repolist;
     let isRepoOwner = repo.owner_email === username;
+    
+    this.isCurrentDepartmentRepo = isCurrentDepartmentRepo;
+    this.isCurrentDepartmentStaff = isStaff;
+    
     let isAdmin = repo.is_admin;
     let operations = [];
-    // todo ,shared width me shared width all;
+
     if (isPro) {
       if (repo.owner_email.indexOf('@seafile_group') != -1) {  //current repo is belong to a group;
         if (isStaff) {
-          if (repo.owner_email === currentGroup.id + '@seafile_group') {
-            this.isDeparementOnwerGroupMember = true;
+          if (isCurrentDepartmentRepo) {
             if (folderPermEnabled) {
               operations = ['Rename', 'Folder Permission', 'History Setting', 'Details'];
             } else {
-              operations = ['Rename', 'Details'];
+              operations = ['Rename', 'History Setting', 'Details'];
             }
           } else {
             operations.push('Unshare');
@@ -257,7 +263,7 @@ class SharedRepoListItem extends React.Component {
       }
     } else {
       operations = this.generatorOperations();
-      if (this.isDeparementOnwerGroupMember) {
+      if (this.isCurrentDepartmentRepo && this.isCurrentDepartmentStaff) {
         operations.unshift('Unshare');
         operations.unshift('Share');
       }
@@ -302,7 +308,7 @@ class SharedRepoListItem extends React.Component {
     const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
     const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
     
-    if (this.isDeparementOnwerGroupMember) {
+    if (this.isCurrentDepartmentRepo && this.isCurrentDepartmentStaff) {
       return (
         <Fragment>
           {shareOperation}
