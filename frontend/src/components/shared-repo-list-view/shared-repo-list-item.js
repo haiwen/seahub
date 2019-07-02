@@ -375,7 +375,7 @@ class SharedRepoListItem extends React.Component {
             {!this.state.isStarred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onStarRepo}></i>}
             {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
           </td>
-          <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
+          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td>
             {this.state.isRenaming ? 
               <Rename  name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> : 
