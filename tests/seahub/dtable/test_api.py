@@ -1,7 +1,7 @@
 import json
 
 from django.core.urlresolvers import reverse
-from seahub.dtable.models import Workspaces, ShareDTable, DTables
+from seahub.dtable.models import Workspaces, DTableShare, DTables
 from seaserv import seafile_api
 
 from seahub.test_utils import BaseTestCase
@@ -14,7 +14,7 @@ except ImportError:
     LOCAL_PRO_DEV_ENV = False
 
 
-class ShareDTablesViewTest(BaseTestCase):
+class SharedDTablesViewTest(BaseTestCase):
     def setUp(self):
         # create workspace
         self.workspace = Workspaces.objects.create_workspace(
@@ -27,9 +27,9 @@ class ShareDTablesViewTest(BaseTestCase):
             self.user.username, self.workspace, 'dtable1')
         assert len(DTables.objects.all()) == 1
         # share dtable to admin
-        ShareDTable.objects.add(
+        DTableShare.objects.add(
             self.dtable, self.user.username, self.admin.username, 'rw')
-        assert len(ShareDTable.objects.all()) == 1
+        assert len(DTableShare.objects.all()) == 1
 
         self.url = reverse('api-v2.1-dtables-share')
 
@@ -61,7 +61,7 @@ class ShareDTablesViewTest(BaseTestCase):
         assert json_resp['table_list'][0]['name'] == 'dtable1'
 
 
-class ShareDTableViewTest(BaseTestCase):
+class DTableShareViewTest(BaseTestCase):
     def setUp(self):
         # create workspace
         self.workspace = Workspaces.objects.create_workspace(
@@ -74,9 +74,9 @@ class ShareDTableViewTest(BaseTestCase):
             self.user.username, self.workspace, 'dtable1')
         assert len(DTables.objects.all()) == 1
         # share dtable to admin
-        ShareDTable.objects.add(
+        DTableShare.objects.add(
             self.dtable, self.user.username, self.admin.username, 'rw')
-        assert len(ShareDTable.objects.all()) == 1
+        assert len(DTableShare.objects.all()) == 1
 
         self.url = reverse('api-v2.1-dtable-share', args=[self.workspace.id, self.dtable.name])
 
@@ -88,9 +88,9 @@ class ShareDTableViewTest(BaseTestCase):
         self.remove_repo()
 
     def test_can_post(self):
-        assert len(ShareDTable.objects.all()) == 1
-        ShareDTable.objects.all().delete()
-        assert len(ShareDTable.objects.all()) == 0
+        assert len(DTableShare.objects.all()) == 1
+        DTableShare.objects.all().delete()
+        assert len(DTableShare.objects.all()) == 0
 
         self.login_as(self.user)
 
@@ -100,10 +100,10 @@ class ShareDTableViewTest(BaseTestCase):
         }
         resp = self.client.post(self.url, data)
         self.assertEqual(201, resp.status_code)
-        assert len(ShareDTable.objects.all()) == 1
+        assert len(DTableShare.objects.all()) == 1
 
     def test_can_not_post_with_already_share(self):
-        assert len(ShareDTable.objects.all()) == 1
+        assert len(DTableShare.objects.all()) == 1
 
         self.login_as(self.user)
 
@@ -115,9 +115,9 @@ class ShareDTableViewTest(BaseTestCase):
         self.assertEqual(409, resp.status_code)
 
     def test_can_not_post_with_not_owner(self):
-        assert len(ShareDTable.objects.all()) == 1
-        ShareDTable.objects.all().delete()
-        assert len(ShareDTable.objects.all()) == 0
+        assert len(DTableShare.objects.all()) == 1
+        DTableShare.objects.all().delete()
+        assert len(DTableShare.objects.all()) == 0
 
         self.login_as(self.admin)
 
@@ -129,9 +129,9 @@ class ShareDTableViewTest(BaseTestCase):
         self.assertEqual(403, resp.status_code)
 
     def test_can_not_post_with_share_to_owner(self):
-        assert len(ShareDTable.objects.all()) == 1
-        ShareDTable.objects.all().delete()
-        assert len(ShareDTable.objects.all()) == 0
+        assert len(DTableShare.objects.all()) == 1
+        DTableShare.objects.all().delete()
+        assert len(DTableShare.objects.all()) == 0
 
         self.login_as(self.user)
 
@@ -146,9 +146,9 @@ class ShareDTableViewTest(BaseTestCase):
         if not LOCAL_PRO_DEV_ENV:
             return
 
-        assert len(ShareDTable.objects.all()) == 1
-        ShareDTable.objects.all().delete()
-        assert len(ShareDTable.objects.all()) == 0
+        assert len(DTableShare.objects.all()) == 1
+        DTableShare.objects.all().delete()
+        assert len(DTableShare.objects.all()) == 0
 
         self.login_as(self.user)
 
@@ -190,13 +190,13 @@ class ShareDTableViewTest(BaseTestCase):
         resp = self.client.put(self.url, json.dumps(data), 'application/json')
         self.assertEqual(200, resp.status_code)
 
-        assert ShareDTable.objects.get_by_dtable_and_to_user(
+        assert DTableShare.objects.get_by_dtable_and_to_user(
             self.dtable, self.admin.username).permission == 'r'
 
     def test_can_not_put_with_not_shared(self):
-        assert len(ShareDTable.objects.all()) == 1
-        ShareDTable.objects.all().delete()
-        assert len(ShareDTable.objects.all()) == 0
+        assert len(DTableShare.objects.all()) == 1
+        DTableShare.objects.all().delete()
+        assert len(DTableShare.objects.all()) == 0
 
         self.login_as(self.user)
 
@@ -235,7 +235,7 @@ class ShareDTableViewTest(BaseTestCase):
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(200, resp.status_code)
-        assert len(ShareDTable.objects.all()) == 0
+        assert len(DTableShare.objects.all()) == 0
 
     def test_can_delete_with_share_user(self):
         self.login_as(self.admin)
@@ -245,12 +245,12 @@ class ShareDTableViewTest(BaseTestCase):
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(200, resp.status_code)
-        assert len(ShareDTable.objects.all()) == 0
+        assert len(DTableShare.objects.all()) == 0
 
     def test_can_not_delete_with_not_shared(self):
-        assert len(ShareDTable.objects.all()) == 1
-        ShareDTable.objects.all().delete()
-        assert len(ShareDTable.objects.all()) == 0
+        assert len(DTableShare.objects.all()) == 1
+        DTableShare.objects.all().delete()
+        assert len(DTableShare.objects.all()) == 0
 
         self.login_as(self.user)
 
