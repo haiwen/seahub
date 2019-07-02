@@ -52,7 +52,7 @@ class ShareTableItem extends Component {
             className="action-icon sf2-icon-x3"
             title={gettext('Leave Share')}
             style={!this.state.active ? {opacity: 0} : {}}
-            onClick={this.onLeaveShareTableSubmit.bind(this)}>
+            onClick={this.onLeaveShareTableSubmit}>
           </i>
         </td>
       </tr>

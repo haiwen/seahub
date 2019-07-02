@@ -12,8 +12,8 @@ import '../../css/invitations.css';
 const userItemPropTypes = {
   item: PropTypes.object.isRequired,
   permissions: PropTypes.array.isRequired,
-  deleteShareTable: PropTypes.func.isRequired,
-  changeShareTablePermission: PropTypes.func.isRequired,
+  deleteTableShare: PropTypes.func.isRequired,
+  updateTableShare: PropTypes.func.isRequired,
 };
 
 class UserItem extends React.Component {
@@ -33,12 +33,12 @@ class UserItem extends React.Component {
     this.setState({isOperationShow: false});
   };
 
-  deleteShareTable = () => {
-    this.props.deleteShareTable(this.props.item.email);
+  deleteTableShare = () => {
+    this.props.deleteTableShare(this.props.item.email);
   };
 
-  changeShareTablePermission = (permission) => {
-    this.props.changeShareTablePermission(this.props.item.email, permission);
+  updateTableShare = (permission) => {
+    this.props.updateTableShare(this.props.item.email, permission);
   };
 
   render() {
@@ -53,13 +53,13 @@ class UserItem extends React.Component {
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
             permissions={this.props.permissions}
-            onPermissionChanged={this.changeShareTablePermission}
+            onPermissionChanged={this.updateTableShare}
           />
         </td>
         <td>
           <span
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.deleteShareTable}
+            onClick={this.deleteTableShare}
             title={gettext('Delete')}
           >
           </span>
@@ -90,7 +90,7 @@ class ShareTableToUser extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.listShareTableUser(this.workspaceID, this.tableName).then((res) => {
+    seafileAPI.listTableShares(this.workspaceID, this.tableName).then((res) => {
       this.setState({userList: res.data.user_list});
     });
   }
@@ -111,14 +111,14 @@ class ShareTableToUser extends React.Component {
     }
   };
 
-  addShareTable = () => {
+  addTableShare = () => {
     if (!this.state.selectedOption || this.state.selectedOption.length === 0) {
       return;
     }
     let name = this.state.selectedOption.value;
     let email = this.state.selectedOption.email;
     let permission = this.state.permission;
-    seafileAPI.addShareTable(this.workspaceID, this.tableName, email, permission).then((res) => {
+    seafileAPI.addTableShare(this.workspaceID, this.tableName, email, permission).then((res) => {
       let userList = this.state.userList;
       let userInfo = {
         name: name,
@@ -138,8 +138,8 @@ class ShareTableToUser extends React.Component {
     });
   };
 
-  deleteShareTable = (email) => {
-    seafileAPI.deleteShareTable(this.workspaceID, this.tableName, email).then((res) => {
+  deleteTableShare = (email) => {
+    seafileAPI.deleteTableShare(this.workspaceID, this.tableName, email).then((res) => {
       let userList = this.state.userList.filter(userInfo => {
         return userInfo.email !== email;
       });
@@ -151,8 +151,8 @@ class ShareTableToUser extends React.Component {
     });
   };
 
-  changeShareTablePermission = (email, permission) => {
-    seafileAPI.modifyShareTablePermission(this.workspaceID, this.tableName, email, permission).then((res) => {
+  updateTableShare = (email, permission) => {
+    seafileAPI.updateTableShare(this.workspaceID, this.tableName, email, permission).then((res) => {
       let userList = this.state.userList.filter(userInfo => {
         if (userInfo.email === email) {
           userInfo.permission = permission;
@@ -174,8 +174,8 @@ class ShareTableToUser extends React.Component {
           key={index}
           item={item}
           permissions={this.permissions}
-          deleteShareTable={this.deleteShareTable}
-          changeShareTablePermission={this.changeShareTablePermission}
+          deleteTableShare={this.deleteTableShare}
+          updateTableShare={this.updateTableShare}
         />
       );
     });
@@ -211,7 +211,7 @@ class ShareTableToUser extends React.Component {
                 />
               </td>
               <td>
-                <Button onClick={this.addShareTable}>{gettext('Submit')}</Button>
+                <Button onClick={this.addTableShare}>{gettext('Submit')}</Button>
               </td>
             </tr>
           </tbody>

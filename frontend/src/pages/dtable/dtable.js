@@ -318,8 +318,8 @@ class DTable extends Component {
     });
   }
 
-  listShareTable = () => {
-    seafileAPI.listShareTable().then((res) => {
+  listSharedTables = () => {
+    seafileAPI.listSharedTables().then((res) => {
       this.setState({
         shareTableLoading: false,
         shareTableList: res.data.table_list,
@@ -343,7 +343,7 @@ class DTable extends Component {
     let email = username;
     let tableName = table.name;
     let workspaceID = table.workspace_id;
-    seafileAPI.deleteShareTable(workspaceID, tableName, email).then(() => {
+    seafileAPI.deleteTableShare(workspaceID, tableName, email).then(() => {
       let shareTableList = this.state.shareTableList.filter(table => {
         return table.name !== tableName;
       });
@@ -361,7 +361,7 @@ class DTable extends Component {
 
   componentDidMount() {
     this.listWorkspaces();
-    this.listShareTable();
+    this.listSharedTables();
   }
 
   renderShareTablePanel = () => {
