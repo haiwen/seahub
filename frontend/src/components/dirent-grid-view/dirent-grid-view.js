@@ -15,6 +15,7 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
+import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import Rename from '../../components/dialog/rename-grid-item-dialog';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
@@ -40,6 +41,7 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
+  onFileTagChanged: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
@@ -48,7 +50,7 @@ const propTypes = {
 class DirentGridView extends React.Component{
   constructor(props) {
     super(props);
-    this.state= {
+    this.state = {
       isImagePopupOpen: false,
       imageItems: [],
       imageIndex: 0,
@@ -56,6 +58,7 @@ class DirentGridView extends React.Component{
       isShareDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
+      isEditFileTagShow: false,
       isZipDialogOpen: false,
       isRenameDialogShow: false,
       isCreateFolderDialogShow: false,
@@ -133,6 +136,9 @@ class DirentGridView extends React.Component{
       case 'Copy':
         this.onItemCopyToggle();
         break;
+      case 'Tags':
+        this.onEditFileTagToggle();
+        break;
       case 'Permission':
         this.onPermissionItem();
         break;
@@ -163,6 +169,18 @@ class DirentGridView extends React.Component{
       default:
         break;
     }
+  }
+
+  onEditFileTagToggle = () => {
+    this.setState({
+      isEditFileTagShow: !this.state.isEditFileTagShow
+    });
+  }
+
+  onFileTagChanged = () => {
+    let dirent = this.state.activeDirent ? this.state.activeDirent : '';
+    let direntPath = Utils.joinPath(this.props.path, dirent.name);
+    this.props.onFileTagChanged(dirent, direntPath);
   }
 
   getDirentPath = (dirent) => {
@@ -437,7 +455,7 @@ class DirentGridView extends React.Component{
       contextmenuList = contextmenuList.length > 0 ? [...contextmenuList, 'Divider'] : [];
     }
 
-    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG } = TextTranslation;
+    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
     if (type === 'dir' && permission === 'rw') {
       if (can_set_folder_perm) {
         menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
@@ -460,6 +478,7 @@ class DirentGridView extends React.Component{
         menuList.push(MOVE);
       }
       menuList.push(COPY);
+      menuList.push(TAGS);
       if (isPro) {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
@@ -588,6 +607,15 @@ class DirentGridView extends React.Component{
             onItemCopy={this.props.onItemCopy}
             onCancelCopy={this.onCopyToggle}
             dirent={this.state.activeDirent}
+          />
+        }
+        {this.state.isEditFileTagShow &&
+          <EditFileTagDialog
+            repoID={this.props.repoID}
+            fileTagList={dirent.file_tags}
+            filePath={direntPath}
+            toggleCancel={this.onEditFileTagToggle}
+            onFileTagChanged={this.onFileTagChanged}
           />
         }
         {this.state.isShareDialogShow &&

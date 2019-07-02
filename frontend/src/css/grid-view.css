@@ -35,11 +35,12 @@
 }
 
 .grid-file-img-link .thumbnail {
-  max-width: 96px;
-  max-height: 96px;
+  max-width: 88px;
+  max-height: 88px;
   padding: 1px;
+  background: #fff;
   border: 1px solid #ddd;
-  border-radius: 3px;
+  border-radius: 1px;
 }
 
 .grid-file-img-link::before {

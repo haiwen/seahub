@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import MD5 from 'MD5';
+import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
@@ -136,6 +138,14 @@ class DirentGridItem extends React.Component {
     let iconUrl = Utils.getDirentIcon(dirent, true);
     let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
 
+    let toolTipID = MD5(dirent.name).slice(0, 7);
+    let tagTitle = '';
+    if (dirent.file_tags && dirent.file_tags.length > 0) {
+      dirent.file_tags.forEach(item => {
+        tagTitle += item.name + ' ';
+      });
+    }
+
     let dirHref = '';
     if (this.props.currentRepoInfo) {
       dirHref = siteRoot + 'library/' + this.props.repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
@@ -169,6 +179,21 @@ class DirentGridItem extends React.Component {
             {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
           </div>
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable="true" >
+            {(dirent.type !== 'dir' && dirent.file_tags) && (
+              <Fragment>
+                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-flex">
+                  {dirent.file_tags.map((fileTag, index) => {
+                    let length = dirent.file_tags.length;
+                    return (
+                      <span className="file-tag" key={fileTag.id} style={{zIndex:length - index, backgroundColor:fileTag.color}}></span>
+                    );
+                  })}
+                </div>
+                <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
+                  {tagTitle}
+                </UncontrolledTooltip>
+              </Fragment>
+            )}
             <a className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
           </div>
         </li>
