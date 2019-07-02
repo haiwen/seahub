@@ -722,8 +722,12 @@ def dtable_asset_access(request, workspace_id, dtable_id, path):
             check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
         return render_permission_error(request, 'Permission denied.')
 
-    token = seafile_api.get_fileserver_access_token(repo_id, asset_id, 'view',
-                                                    '', use_onetime=False)
+    dl = request.GET.get('dl', '0') == '1'
+    operation = 'download' if dl else 'view'
+
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, asset_id, operation, '', use_onetime=False
+    )
 
     url = gen_file_get_url(token, asset_name)
 
