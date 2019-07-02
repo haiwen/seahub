@@ -150,3 +150,42 @@ class DTables(models.Model):
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
         }
+
+
+class ShareDTableManager(models.Manager):
+
+    def list_by_dtable(self, dtable):
+        return self.filter(dtable=dtable)
+
+    def list_by_to_user(self, to_user):
+        return self.filter(to_user=to_user).select_related('dtable')
+
+    def get_by_dtable_and_to_user(self, dtable, to_user):
+        qs = self.filter(dtable=dtable, to_user=to_user)
+        if qs.exists():
+            return qs[0]
+        return None
+
+    def add(self, dtable, from_user, to_user, permission):
+        obj = self.model(
+            dtable=dtable, from_user=from_user, to_user=to_user, permission=permission)
+        obj.save()
+        return obj
+
+
+class ShareDTable(models.Model):
+    """Model used to share dtable
+
+     from_user, to_user: user email or group_id@seafile_group
+    """
+    id = models.BigAutoField(primary_key=True)
+    dtable = models.ForeignKey(DTables, on_delete=models.CASCADE)
+    from_user = models.CharField(max_length=255, db_index=True)
+    to_user = models.CharField(max_length=255, db_index=True)
+    permission = models.CharField(max_length=15)
+
+    objects = ShareDTableManager()
+
+    class Meta:
+        unique_together = (('dtable', 'to_user'),)
+        db_table = 'share_dtable'
