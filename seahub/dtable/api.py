@@ -14,7 +14,7 @@ from seahub.base.accounts import User
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, get_user_common_info
-from seahub.dtable.models import Workspaces, DTables, ShareDTable
+from seahub.dtable.models import Workspaces, DTables, DTableShare
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import is_valid_username, is_org_context
 from seahub.api2.endpoints.utils import is_org_user
@@ -31,18 +31,18 @@ permission_tuple = (PERMISSION_ADMIN, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDI
 GROUP_DOMAIN = '@seafile_group'
 
 
-class ShareDTablesView(APIView):
+class SharedDTablesView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        """get dtables from share
+        """list dtables from shared
         """
         to_user = request.user.username
 
         try:
-            share_queryset = ShareDTable.objects.list_by_to_user(to_user)
+            share_queryset = DTableShare.objects.list_by_to_user(to_user)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
@@ -73,7 +73,7 @@ class ShareDTablesView(APIView):
         return Response({'table_list': table_list})
 
 
-class ShareDTableView(APIView):
+class DTableShareView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -148,12 +148,12 @@ class ShareDTableView(APIView):
 
         # main
         try:
-            obj = ShareDTable.objects.get_by_dtable_and_to_user(dtable, to_user)
+            obj = DTableShare.objects.get_by_dtable_and_to_user(dtable, to_user)
             if obj:
                 error_msg = 'table %s already shared to %s.' % (table_name, to_user)
                 return api_error(status.HTTP_409_CONFLICT, error_msg)
 
-            ShareDTable.objects.add(dtable, from_user, to_user, permission)
+            DTableShare.objects.add(dtable, from_user, to_user, permission)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
@@ -162,7 +162,7 @@ class ShareDTableView(APIView):
         return Response({"success": True}, status=status.HTTP_201_CREATED)
 
     def get(self, request, workspace_id, name):
-        """list share users in share dtable
+        """list share users in dtable share
         """
         from_user = request.user.username
         table_name = name
@@ -198,7 +198,7 @@ class ShareDTableView(APIView):
 
         # main
         try:
-            share_queryset = ShareDTable.objects.list_by_dtable(dtable)
+            share_queryset = DTableShare.objects.list_by_dtable(dtable)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
@@ -213,7 +213,7 @@ class ShareDTableView(APIView):
         return Response({"user_list": user_list})
 
     def put(self, request, workspace_id, name):
-        """modify share dtable permission
+        """modify dtable share permission
         """
         from_user = request.user.username
         table_name = name
@@ -270,7 +270,7 @@ class ShareDTableView(APIView):
 
         # main
         try:
-            obj = ShareDTable.objects.get_by_dtable_and_to_user(dtable, to_user)
+            obj = DTableShare.objects.get_by_dtable_and_to_user(dtable, to_user)
             if not obj:
                 error_msg = 'table %s not shared to %s.' % (table_name, to_user)
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -331,7 +331,7 @@ class ShareDTableView(APIView):
 
         # main
         try:
-            obj = ShareDTable.objects.get_by_dtable_and_to_user(dtable, to_user)
+            obj = DTableShare.objects.get_by_dtable_and_to_user(dtable, to_user)
             if not obj:
                 error_msg = 'table %s not shared to %s.' % (table_name, to_user)
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)

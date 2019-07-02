@@ -29,7 +29,7 @@ from seahub.views.file import send_file_access_msg
 from seahub.auth.decorators import login_required
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN, \
      SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT
-from seahub.dtable.utils import check_share_dtable_permission
+from seahub.dtable.utils import check_dtable_share_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 
 
@@ -300,7 +300,7 @@ class DTableView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         else:
             if username != owner and \
-                    not check_share_dtable_permission(dtable, username):
+                    not check_dtable_share_permission(dtable, username):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -535,7 +535,7 @@ class DTableUpdateLinkView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         else:
             if username != owner and \
-                    check_share_dtable_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+                    check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -595,7 +595,7 @@ class DTableAssetUploadLinkView(APIView):
         username = request.user.username
         owner = workspace.owner
         if username != owner and \
-                check_share_dtable_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+                check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -663,7 +663,7 @@ def dtable_file_view(request, workspace_id, name):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
     else:
         if username != owner and \
-                not check_share_dtable_permission(dtable, username):
+                not check_dtable_share_permission(dtable, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -719,7 +719,7 @@ def dtable_asset_access(request, workspace_id, dtable_id, path):
     username = request.user.username
     owner = workspace.owner
     if username != owner and \
-            check_share_dtable_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+            check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
         return render_permission_error(request, 'Permission denied.')
 
     token = seafile_api.get_fileserver_access_token(repo_id, asset_id, 'view',

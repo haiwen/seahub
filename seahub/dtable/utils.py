@@ -1,8 +1,8 @@
-from seahub.dtable.models import ShareDTable
+from seahub.dtable.models import DTableShare
 
 
-def check_share_dtable_permission(dtable, to_user):
-    share_dtable_obj = ShareDTable.objects.get_by_dtable_and_to_user(dtable, to_user)
+def check_dtable_share_permission(dtable, to_user):
+    share_dtable_obj = DTableShare.objects.get_by_dtable_and_to_user(dtable, to_user)
     if share_dtable_obj:
         return share_dtable_obj.permission
 

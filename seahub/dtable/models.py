@@ -152,7 +152,7 @@ class DTables(models.Model):
         }
 
 
-class ShareDTableManager(models.Manager):
+class DTableShareManager(models.Manager):
 
     def list_by_dtable(self, dtable):
         return self.filter(dtable=dtable)
@@ -173,8 +173,8 @@ class ShareDTableManager(models.Manager):
         return obj
 
 
-class ShareDTable(models.Model):
-    """Model used to share dtable
+class DTableShare(models.Model):
+    """Model used to dtable share
 
      from_user, to_user: user email or group_id@seafile_group
     """
@@ -184,8 +184,8 @@ class ShareDTable(models.Model):
     to_user = models.CharField(max_length=255, db_index=True)
     permission = models.CharField(max_length=15)
 
-    objects = ShareDTableManager()
+    objects = DTableShareManager()
 
     class Meta:
         unique_together = (('dtable', 'to_user'),)
-        db_table = 'share_dtable'
+        db_table = 'dtable_share'
