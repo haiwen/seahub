@@ -553,6 +553,7 @@ LOGIN_BG_IMAGE_PATH = 'img/login-bg.jpg'
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
 FAVICON_PATH = 'img/favicon.ico'
+DTABLE_FAVICON_PATH = 'img/dtable-favicon.ico'
 
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'
