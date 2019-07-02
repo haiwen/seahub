@@ -451,6 +451,12 @@ class UploadLinkShare(models.Model):
     def is_owner(self, owner):
         return owner == self.username
 
+    def is_expired(self):
+        if self.expire_date is not None and timezone.now() > self.expire_date:
+            return True
+        else:
+            return False
+
 class PrivateFileDirShareManager(models.Manager):
     def add_private_file_share(self, from_user, to_user, repo_id, path, perm):
         """

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
+import moment from 'moment';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
 import { gettext, shareLinkPasswordMinLength, canSendShareLinkEmail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -25,7 +26,9 @@ class GenerateUploadLink extends React.Component {
       password: '',
       passwdnew: '',
       sharedUploadInfo: null,
-      isSendLinkShown: false
+      isSendLinkShown: false,
+      isExpireChecked: false,
+      expireDays: 0,
     };
   }
 
@@ -90,27 +93,59 @@ class GenerateUploadLink extends React.Component {
   generateUploadLink = () => {
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
+    let { password, expireDays } = this.state;
 
-    if (this.state.showPasswordInput && (this.state.password == '')) {
-      this.setState({
-        errorInfo: gettext('Please enter password')
-      });
-    }
-    else if (this.state.showPasswordInput && (this.state.showPasswordInput && this.state.password.length < shareLinkPasswordMinLength)) {
-      this.setState({
-        errorInfo: gettext('Password is too short')
-      });
-    }
-    else if (this.state.showPasswordInput && (this.state.password !== this.state.passwordnew)) {
-      this.setState({
-        errorInfo: gettext('Passwords don\'t match')
-      });
-    } else {
-      seafileAPI.createUploadLink(repoID, path, this.state.password).then((res) => {
+    let isValid = this.validateParamsInput();
+    if (isValid) {
+      seafileAPI.createUploadLink(repoID, path, password, expireDays).then((res) => {
         let sharedUploadInfo = new SharedUploadInfo(res.data);
         this.setState({sharedUploadInfo: sharedUploadInfo}); 
       });
     }
+  }
+
+  validateParamsInput = () => {
+    let { showPasswordInput , password, passwordnew, isExpireChecked, expireDays } = this.state;
+
+    // check password params
+    if (showPasswordInput) {
+      if (password.length === 0) {
+        this.setState({errorInfo: 'Please enter password'});
+        return false;
+      }
+      if (password.length < shareLinkPasswordMinLength) {
+        this.setState({errorInfo: 'Password is too short'});
+        return false;
+      }
+      if (password !== passwordnew) {
+        this.setState({errorInfo: 'Passwords don\'t match'});
+        return false;
+      }
+    }
+
+    // check expire day params
+    let reg = /^\d+$/;
+    if (isExpireChecked) {
+      if (!expireDays) {
+        this.setState({errorInfo: 'Please enter days'});
+        return false;
+      }
+      if (!reg.test(expireDays)) {
+        this.setState({errorInfo: 'Please enter a non-negative integer'});
+        return false;
+      }
+      this.setState({expireDays: parseInt(expireDays)});
+    }
+    return true;
+  }
+
+  onExpireChecked = (e) => {
+    this.setState({isExpireChecked: e.target.checked});
+  }
+
+  onExpireDaysChanged = (e) => {
+    let day = e.target.value.trim();
+    this.setState({expireDays: day});
   }
 
   onCopyUploadLink = () => {
@@ -156,6 +191,12 @@ class GenerateUploadLink extends React.Component {
                 <span className="far fa-copy action-icon" onClick={this.onCopyUploadLink}></span>
               </dd>
             </FormGroup>
+            {sharedUploadInfo.expire_date && (
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
+                <dd>{moment(sharedUploadInfo.expire_date).format('YYYY-MM-DD hh:mm:ss')}</dd>
+              </FormGroup>
+            )}
           </Form>
           {canSendShareLinkEmail && !isSendLinkShown && <Button onClick={this.toggleSendLink} className="mr-2">{gettext('Send')}</Button>}
           {!isSendLinkShown && <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>}
@@ -190,6 +231,18 @@ class GenerateUploadLink extends React.Component {
             </InputGroup>
             <Label className="font-weight-bold">{gettext('Password again')}</Label>
             <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
+          </FormGroup>
+        }
+        <FormGroup check>
+          <Label check>
+            <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
+          </Label>
+        </FormGroup>
+        {this.state.isExpireChecked &&
+          <FormGroup check>
+            <Label check>
+              <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
+            </Label>
           </FormGroup>
         }
         {this.state.errorInfo && <Alert color="danger" className="mt-2">{this.state.errorInfo}</Alert>}
