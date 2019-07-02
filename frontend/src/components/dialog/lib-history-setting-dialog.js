@@ -61,6 +61,13 @@ class LibHistorySetting extends React.Component {
     }
   }
 
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.submit();
+      e.preventDefault();
+    }
+  }
+
   onChange = (e) => {
     let num = e.target.value;
     this.setState({
@@ -123,6 +130,7 @@ class LibHistorySetting extends React.Component {
                 value={this.state.expireDays}
                 onChange={this.onChange} 
                 disabled={this.state.disabled}
+                onKeyDown={this.handleKeyPress}
               />{' '}
               <Label><span>{gettext('days')}</span></Label>
             </FormGroup>
