@@ -180,7 +180,7 @@ class DirentGridItem extends React.Component {
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable="true" >
             {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
               <Fragment>
-                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-flex">
+                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-block align-middle">
                   {dirent.file_tags.map((fileTag, index) => {
                     let length = dirent.file_tags.length;
                     return (
