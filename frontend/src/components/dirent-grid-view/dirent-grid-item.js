@@ -138,12 +138,11 @@ class DirentGridItem extends React.Component {
     let iconUrl = Utils.getDirentIcon(dirent, true);
     let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
 
-    let toolTipID = MD5(dirent.name).slice(0, 7);
+    let toolTipID = '';
     let tagTitle = '';
     if (dirent.file_tags && dirent.file_tags.length > 0) {
-      dirent.file_tags.forEach(item => {
-        tagTitle += item.name + ' ';
-      });
+      toolTipID = MD5(dirent.name).slice(0, 7);
+      tagTitle = dirent.file_tags.map(item => item.name).join(' ');
     }
 
     let dirHref = '';
@@ -179,7 +178,7 @@ class DirentGridItem extends React.Component {
             {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
           </div>
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable="true" >
-            {(dirent.type !== 'dir' && dirent.file_tags) && (
+            {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
               <Fragment>
                 <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-flex">
                   {dirent.file_tags.map((fileTag, index) => {
