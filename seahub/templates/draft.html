@@ -11,9 +11,9 @@
         config: {
             draftID: '{{ draft_id }}',
             draftRepoID: '{{ draft_repo_id }}',
-            draftFilePath: '{{ draft_file_path }}',
-            draftOriginFilePath: '{{ draft_origin_file_path }}',
-            draftFileName: '{{ draft_file_name }}',
+            draftFilePath: '{{ draft_file_path|escapejs }}',
+            draftOriginFilePath: '{{ draft_origin_file_path|escapejs }}',
+            draftFileName: '{{ draft_file_name|escapejs }}',
             perm: '{{ permission }}',
             author: '{{ author }}',
             authorAvatar: '{{ author_avatar_url }}',
