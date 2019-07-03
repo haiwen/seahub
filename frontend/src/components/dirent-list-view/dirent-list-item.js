@@ -555,12 +555,12 @@ class DirentListItem extends React.Component {
       dirHref = siteRoot + 'library/' + this.props.repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
     }
     let fileHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(direntPath);
-    let toolTipID = MD5(dirent.name).slice(0, 7);
+
+    let toolTipID = '';
     let tagTitle = '';
     if (dirent.file_tags && dirent.file_tags.length > 0) {
-      dirent.file_tags.forEach(item => {
-        tagTitle += item.name + ' ';
-      });
+      toolTipID = MD5(dirent.name).slice(0, 7);
+      tagTitle = dirent.file_tags.map(item => item.name).join(' ');
     }
 
     let iconUrl = Utils.getDirentIcon(dirent);
@@ -613,7 +613,7 @@ class DirentListItem extends React.Component {
             }
           </td>
           <td className="tag-list-title">
-            {(dirent.type !== 'dir' && dirent.file_tags) && (
+            {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
               <Fragment>
                 <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
                   {dirent.file_tags.map((fileTag, index) => {
