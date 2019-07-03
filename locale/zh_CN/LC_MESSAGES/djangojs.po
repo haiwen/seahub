@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-01 16:08+0800\n"
-"PO-Revision-Date: 2019-07-01 08:48+0000\n"
+"PO-Revision-Date: 2019-07-02 08:25+0000\n"
 "Last-Translator: 杨顺强 <ysq9207@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -3686,11 +3686,11 @@ msgstr "只读资料库"
 
 #: frontend/src/utils/utils.js:346
 msgid "Online Read-Write library"
-msgstr "在线读写资料库"
+msgstr "仅云端读写资料库"
 
 #: frontend/src/utils/utils.js:349
 msgid "Online Read-Only library"
-msgstr "在线只读资料库"
+msgstr "仅云端预览资料库"
 
 #: frontend/src/utils/utils.js:360 seahub/templates/priv/ali.js:12
 #: static/scripts/common.js:375
@@ -3704,19 +3704,19 @@ msgstr "只读文件夹"
 
 #: frontend/src/utils/utils.js:366
 msgid "Online Read-Write folder"
-msgstr "在线可读写文件夹"
+msgstr "仅云端读写文件夹"
 
 #: frontend/src/utils/utils.js:369
 msgid "Online Read-Only folder"
-msgstr "在线只读文件夹"
+msgstr "仅云端预览文件夹"
 
 #: frontend/src/utils/utils.js:388
 msgid "Online Read-Write"
-msgstr "在线可读写"
+msgstr "仅云端读写"
 
 #: frontend/src/utils/utils.js:391
 msgid "Online Read-Only"
-msgstr "在线只读"
+msgstr "仅云端预览"
 
 #: frontend/src/utils/utils.js:401
 msgid "User can read, write, upload, download and sync files."

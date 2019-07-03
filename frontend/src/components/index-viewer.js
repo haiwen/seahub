@@ -199,9 +199,9 @@ class IndexContentViewer extends React.Component {
   // translate slate_paragraph_node to treeNode
   transParagraph = (paragraphNode) => {
     let treeNode;
-    if (paragraphNode.nodes[0].type === 'link') {
+    if (paragraphNode.nodes[1] && paragraphNode.nodes[1].type === 'link') {
       // paragraph node is a link node
-      const linkNode = paragraphNode.nodes[0];
+      const linkNode = paragraphNode.nodes[1];
       const textNode = linkNode.nodes[0];
       let name = textNode.leaves[0] ? textNode.leaves[0].text : '';
       treeNode =  new TreeNode({ name: name, href: linkNode.data.href });
