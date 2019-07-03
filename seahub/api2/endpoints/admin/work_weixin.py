@@ -23,7 +23,7 @@ from seahub.base.accounts import User
 from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
 from seahub.utils import is_org_context
-from seahub.group.utils import validate_group_name, check_top_group_name_conflict
+from seahub.group.utils import validate_group_name, admin_check_group_name_conflict
 
 logger = logging.getLogger(__name__)
 WORK_WEIXIN_DEPARTMENT_FIELD = 'department'
@@ -285,12 +285,19 @@ class AdminWorkWeixinDepartmentImport(APIView):
                 department_failed.append({
                     'department_id': tmp_department_id,
                     'department_name': new_group_name,
+                    'error_msg': '部门参数错误',
                 })
                 continue
 
-            if parent_group == -1 and check_top_group_name_conflict(request, new_group_name):
-                error_msg = '部门已存在'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            exist, exist_group = admin_check_group_name_conflict(new_group_name)
+            if exist:
+                tmp_group_id_dic[tmp_department_id] = exist_group.id
+                department_success.append({
+                    'department_id': tmp_department_id,
+                    'department_name': new_group_name,
+                    'group_id': exist_group.id,
+                })
+                continue
 
             # create department
             try:
@@ -315,6 +322,7 @@ class AdminWorkWeixinDepartmentImport(APIView):
                 department_failed.append({
                     'department_id': tmp_department_id,
                     'department_name': new_group_name,
+                    'error_msg': '部门创建失败',
                 })
 
         # list department members from work weixin
@@ -350,15 +358,29 @@ class AdminWorkWeixinDepartmentImport(APIView):
             if social_auth_queryset.filter(uid=uid).exists():
                 email = social_auth_queryset.get(uid=uid).username
             else:
-                # import user
+                # create user
                 email = gen_user_virtual_id()
-                _import_user_from_work_weixin(email, api_user)
+                create_user_success = _import_user_from_work_weixin(email, api_user)
+                if not create_user_success:
+                    user_failed.append({
+                        'email': email,
+                        'nickname': api_user.get('name'),
+                        'error_msg': '创建用户失败',
+                    })
+                    continue
 
             # bind user to department
             api_user_department_list = api_user.get('department')
             for tmp_department_id in api_user_department_list:
                 group_id = tmp_group_id_dic.get(tmp_department_id, None)
                 if group_id is not None:
+                    if ccnet_api.is_group_user(group_id, email):
+                        user_success.append({
+                            'email': email,
+                            'nickname': api_user.get('name'),
+                        })
+                        continue
+
                     try:
                         ccnet_api.group_add_member(group_id, group_owner, email)
                         user_success.append({
@@ -370,6 +392,7 @@ class AdminWorkWeixinDepartmentImport(APIView):
                         user_failed.append({
                             'email': email,
                             'nickname': api_user.get('name'),
+                            'error_msg': '部门导入用户失败',
                         })
 
         return Response({

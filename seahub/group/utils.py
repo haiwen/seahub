@@ -54,22 +54,16 @@ def check_group_name_conflict(request, new_group_name):
 
     return False
 
-def check_top_group_name_conflict(request, new_group_name):
-    """Check if new top group name conflict with existed top group.
 
-    return "True" if conflicted else "False"
-    """
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        checked_groups = ccnet_api.get_org_top_groups(org_id)
-    else:
-        checked_groups = ccnet_api.get_top_groups(including_org=False)
+def admin_check_group_name_conflict(new_group_name):
+    checked_groups = ccnet_api.search_groups(new_group_name, -1, -1)
 
     for g in checked_groups:
         if g.group_name == new_group_name:
-            return True
+            return True, g
 
-    return False
+    return False, None
+
 
 def is_group_member(group_id, email, in_structure=None):
 
