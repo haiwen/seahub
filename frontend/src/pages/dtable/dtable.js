@@ -105,7 +105,7 @@ class Table extends Component {
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
-        <td><img src={siteRoot + 'media/img/data-base.svg'} alt="" width="24"/></td>
+        <td><span className="sf3-font sf3-font-form"></span></td>
         <td>
           {this.state.isTableRenaming &&
             <Rename
@@ -217,6 +217,12 @@ class Workspace extends Component {
     });
   }
 
+  addTable = (e) => {
+    e.preventDefault();
+    this.props.setCurrentWorkspace(this.props.workspace);
+    this.props.onAddDTable();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.workspace.table_list !== this.props.workspace.table_list) {
       this.setState({
@@ -228,32 +234,46 @@ class Workspace extends Component {
   render() {
     let workspace = this.props.workspace;
     let isPersonal = workspace.owner_type === 'Personal';
+    let { tableList, isItemFreezed } = this.state;
 
     return(
       <div className="workspace my-2">
-        <div>{isPersonal ? gettext('My Tables') : workspace.owner_name}</div>
-        <table width="100%" className="table-vcenter">
-          <colgroup>
-            <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
-          </colgroup>
-          <tbody>
-            {this.state.tableList.map((table, index) => {
-              return (
-                <Table
-                  key={index}
-                  table={table}
-                  workspaceID={workspace.id}
-                  renameTable={this.renameTable}
-                  deleteTable={this.deleteTable}
-                  onFreezedItem={this.onFreezedItem}
-                  onUnfreezedItem={this.onUnfreezedItem}
-                  isItemFreezed={this.state.isItemFreezed}
-                  isPersonal={isPersonal}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="table-heading">{isPersonal ? gettext('My Tables') : workspace.owner_name}</div>
+        {tableList.length > 0 ?
+          <table width="100%" className="table-vcenter">
+            <colgroup>
+              <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
+            </colgroup>
+            <tbody>
+              {tableList.map((table, index) => {
+                return (
+                  <Table
+                    key={index}
+                    table={table}
+                    workspaceID={workspace.id}
+                    renameTable={this.renameTable}
+                    deleteTable={this.deleteTable}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
+                    isItemFreezed={isItemFreezed}
+                    isPersonal={isPersonal}
+                  />
+                );
+              })}
+              <tr className={isItemFreezed ? "" : "add-table-range"}>
+                <td><span className="sf3-font sf3-font-add"></span></td>
+                <td><a href="#" onClick={this.addTable}>{gettext('Add a table')}</a></td>
+                <td></td><td></td><td></td>
+              </tr>
+            </tbody>
+          </table>
+          :
+          <table width="100%" className="table-vcenter">
+            <tbody>
+              <tr><th className="text-center">{gettext('No tables')}</th></tr>
+            </tbody>
+          </table>
+        }
       </div>
     );
   }
@@ -277,13 +297,12 @@ class DTable extends Component {
       workspaceList: [],
       shareTableList: [],
       isShowAddDTableDialog: false,
+      currentWorkspace: null,
     };
   }
 
   onAddDTable = () => {
-    this.setState({
-      isShowAddDTableDialog: !this.state.isShowAddDTableDialog,
-    });
+    this.setState({ isShowAddDTableDialog: !this.state.isShowAddDTableDialog });
   }
 
   createDTable = (tableName, owner) => {
@@ -359,6 +378,10 @@ class DTable extends Component {
     });
   };
 
+  setCurrentWorkspace = (currentWorkspace) => {
+    this.setState({ currentWorkspace: currentWorkspace });
+  }
+
   componentDidMount() {
     this.listWorkspaces();
     this.listSharedTables();
@@ -367,7 +390,7 @@ class DTable extends Component {
   renderShareTablePanel = () => {
     return (
       <div className="workspace my-2">
-        <div>{gettext('Shared with me')}</div>
+        <div className="table-heading">{gettext('Shared with me')}</div>
         <table width="100%" className="table-vcenter">
           <colgroup>
             <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
@@ -388,6 +411,13 @@ class DTable extends Component {
     );
   };
 
+  newDtable = () => {
+    if (this.state.currentWorkspace) {
+      this.setState({ currentWorkspace: null });
+    }
+    this.onAddDTable();
+  }
+
   render() {
     let personalWorkspace = this.state.workspaceList.filter(workspace => {
       return workspace.owner_type === 'Personal';
@@ -404,10 +434,10 @@ class DTable extends Component {
             <div className="operation">
               <Fragment>
                 <MediaQuery query="(min-width: 768px)">
-                  <Button className="btn btn-secondary operation-item" onClick={this.onAddDTable}>{gettext('New DTable')}</Button>
+                  <Button className="btn btn-secondary operation-item" onClick={this.newDtable}>{gettext('New DTable')}</Button>
                 </MediaQuery>
                 <MediaQuery query="(max-width: 767.8px)">
-                  <Button className="btn btn-secondary operation-item my-1" onClick={this.onAddDTable}>{gettext('New DTable')}</Button>
+                  <Button className="btn btn-secondary operation-item my-1" onClick={this.newDtable}>{gettext('New DTable')}</Button>
                 </MediaQuery>
               </Fragment>
             </div>
@@ -427,6 +457,8 @@ class DTable extends Component {
               {!this.state.loading &&
               <Workspace
                 workspace={personalWorkspace}
+                onAddDTable={this.onAddDTable}
+                setCurrentWorkspace={this.setCurrentWorkspace}
               />
               }
               {(!this.state.shareTableLoading && this.state.shareTableList.length > 0) &&
@@ -438,6 +470,8 @@ class DTable extends Component {
                     <Workspace
                       key={index}
                       workspace={workspace}
+                      onAddDTable={this.onAddDTable}
+                      setCurrentWorkspace={this.setCurrentWorkspace}
                     />
                   );
                 })
@@ -447,6 +481,7 @@ class DTable extends Component {
                 <CreateTableDialog
                   createDTable={this.createDTable}
                   onAddDTable={this.onAddDTable}
+                  currentWorkspace={this.state.currentWorkspace}
                 />
               </div>
               }
