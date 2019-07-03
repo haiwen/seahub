@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
@@ -10,6 +10,7 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   createDTable: PropTypes.func.isRequired,
   onAddDTable: PropTypes.func.isRequired,
+  currentWorkspace: PropTypes.object,
 };
 
 class CreateTableDialog extends React.Component {
@@ -66,16 +67,22 @@ class CreateTableDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    if (!this.state.isSubmitBtnActive) {
-      return;
+    if (!this.state.isSubmitBtnActive) return;
+    if (!this.validateInputParams()) return;
+    const space = this.props.currentWorkspace;
+    const options = this.state.options;
+    let email;
+    if (space) {
+      for (let i = 0; i < options.length; i++) {
+        if ((space.owner_type === "Personal" && options[i].value === 'Personal') || (space.owner_type === "Group" && options[i].value === space.owner_name)) {
+          email = options[i].email;
+          break;
+        }
+      }
+    } else {
+      email = this.state.selectedOption.email;
     }
-
-    let isValid = this.validateInputParams();
-    if (isValid) {
-      let newName = this.state.tableName.trim();
-      let owner = this.state.selectedOption;
-      this.props.createDTable(newName, owner.email);
-    }
+    this.props.createDTable(this.state.tableName.trim(), email);
   }
 
   handleKeyPress = (e) => {
@@ -106,6 +113,7 @@ class CreateTableDialog extends React.Component {
   }
 
   render() {
+    const { currentWorkspace } = this.props;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('New Table')}</ModalHeader>
@@ -123,17 +131,21 @@ class CreateTableDialog extends React.Component {
             </FormGroup>
           </Form>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
-          <Label>{gettext('Belong to')}</Label>
-          <Select
-            isClearable
-            isMulti={false}
-            maxMenuHeight={200}
-            hideSelectedOptions={true}
-            components={makeAnimated()}
-            placeholder=''
-            options={this.state.options}
-            onChange={this.handleSelectChange}
-          />
+          {!currentWorkspace &&
+            <Fragment>
+              <Label>{gettext('Belong to')}</Label>
+              <Select
+                isClearable
+                isMulti={false}
+                maxMenuHeight={200}
+                hideSelectedOptions={true}
+                components={makeAnimated()}
+                placeholder=''
+                options={this.state.options}
+                onChange={this.handleSelectChange}
+              />
+            </Fragment>
+          }
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

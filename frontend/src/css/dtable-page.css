@@ -45,3 +45,14 @@
 .add-workspace:hover {
   color: #202428;
 }
+.workspace .table-heading {
+  padding: 0.25rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+.workspace .sf3-font {
+  color: #949494;
+  font-size: 20px;
+}
+.workspace .add-table-range:hover {
+  background-color: #f8f8f8;
+}
