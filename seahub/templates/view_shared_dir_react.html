@@ -23,6 +23,8 @@
             sharedBy: '{{ username|email2nickname|escapejs }}',
             path: '{{ path|escapejs }}',
             token: '{{ token }}',
+            mode: '{{ mode }}',
+            thumbnailSize: {{ thumbnail_size }},
             trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
             canDownload: {% if permissions.can_download %}true{% else %}false{% endif %}
         }
