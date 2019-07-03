@@ -391,24 +391,24 @@ class GenerateShareLink extends React.Component {
             </Label>
           </FormGroup>
           <FormGroup check className="permission">
-            <Label check>
+            <Label className="form-check-label">
               <Input type="radio" name="radio1" defaultChecked={true} onChange={() => this.setPermission('previewAndDownload')}/>{'  '}{gettext('Preview and download')}
             </Label>
           </FormGroup>
           <FormGroup check className="permission">
-            <Label>
+            <Label className="form-check-label">
               <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
           {(Utils.isOfficeFile(this.props.itemPath) && fileInfo && fileInfo.can_edit) &&
             <FormGroup check className="permission">
-              <Label>
+              <Label className="form-check-label">
                 <Input type="radio" name="radio1" onChange={() => this.setPermission('editOnCloudAndDownload')} />{'  '}{gettext('Edit on cloud and download')}
               </Label>
             </FormGroup>
           }
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
-          <Button onClick={this.generateShareLink}>{gettext('Generate')}</Button>
+          <Button onClick={this.generateShareLink} className="mt-2">{gettext('Generate')}</Button>
         </Form>
       );
     }
