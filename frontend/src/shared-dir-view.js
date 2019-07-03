@@ -13,9 +13,10 @@ import ZipDownloadDialog from './components/dialog/zip-download-dialog';
 import ImageDialog from './components/dialog/image-dialog';
 
 import './css/shared-dir-view.css';
+import './css/grid-view.css';
 
 let loginUser = window.app.pageOptions.name;
-const { token, trafficOverLimit, dirName, sharedBy, path, canDownload } = window.shared.pageOptions;
+const { token, trafficOverLimit, dirName, sharedBy, path, canDownload, mode, thumbnailSize } = window.shared.pageOptions;
 
 const showDownloadIcon = !trafficOverLimit && canDownload;
 
@@ -44,7 +45,7 @@ class SharedDirView extends React.Component {
       });
     }
 
-    seafileAPI.listSharedDir(token, path).then((res) => {
+    seafileAPI.listSharedDir(token, path, thumbnailSize).then((res) => {
       const items = res.data['dirent_list'];
       this.setState({
         isLoading: false,
@@ -79,7 +80,6 @@ class SharedDirView extends React.Component {
     }
 
     const len = items.length;
-    const thumbnailSize = 48;
     const _this = this;
     let getThumbnail = function(i) {
       const curItem = items[i];
@@ -110,13 +110,13 @@ class SharedDirView extends React.Component {
     let pathList = path.substr(0, path.length -1).split('/');
     return (
       <React.Fragment>
-        <a href="?p=/">{dirName}</a>
+        <a href={`?p=${encodeURIComponent('/')}&mode=${mode}`}>{dirName}</a>
         <span> / </span>
         {pathList.map((item, index) => {
           if (index > 0 && index != pathList.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href={`?p=${encodeURIComponent(pathList.slice(0, index+1).join('/'))}`}>{pathList[index]}</a>
+                <a href={`?p=${encodeURIComponent(pathList.slice(0, index+1).join('/'))}&mode=${mode}`}>{pathList[index]}</a>
                 <span> / </span>
               </React.Fragment>
             );
@@ -199,6 +199,7 @@ class SharedDirView extends React.Component {
   }
 
   render() {
+    const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
     return (
       <React.Fragment>
         <div className="h-100 d-flex flex-column">
@@ -214,9 +215,15 @@ class SharedDirView extends React.Component {
               <p>{gettext('Shared by: ')}{sharedBy}</p>
               <div className="d-flex justify-content-between align-items-center op-bar">
                 <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p>
-                {showDownloadIcon &&
-                <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)}>{gettext('ZIP')}</Button>
-                }
+                <div>
+                  <div className="view-mode btn-group">
+                    <a href={`?p=${encodeURIComponent(path)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')}></a>
+                    <a href={`?p=${encodeURIComponent(path)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')}></a>
+                  </div>
+                  {showDownloadIcon &&
+                  <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)} className="ml-2 zip-btn">{gettext('ZIP')}</Button>
+                  }
+                </div>
               </div>
               <Content
                 data={this.state}
@@ -252,6 +259,7 @@ class SharedDirView extends React.Component {
 }
 
 class Content extends React.Component {
+
   render() {
     const { isLoading, errorMsg, items } = this.props.data;
     
@@ -263,7 +271,7 @@ class Content extends React.Component {
       return <p className="error mt-6 text-center">{errorMsg}</p>;
     }
 
-    return (
+    return mode == 'list' ? (
       <table className="table-hover">
         <thead>
           <tr>
@@ -285,6 +293,17 @@ class Content extends React.Component {
           })}
         </tbody>
       </table>
+    ) : (
+      <ul className="grid-view">
+        {items.map((item, index) => {
+          return <GridItem
+            key={index}
+            item={item}
+            zipDownloadFolder={this.props.zipDownloadFolder}
+            showImagePopup={this.props.showImagePopup}
+          />;
+        })}
+      </ul>
     );
   }
 }
@@ -311,7 +330,7 @@ class Item extends React.Component {
     this.props.zipDownloadFolder.bind(this, this.props.item.folder_path)();
   }
 
-  handleFileNameLinkClick = (e) => {
+  handleFileClick = (e) => {
     const item = this.props.item;
     if (!Utils.imageCheck(item.file_name)) {
       return;
@@ -330,7 +349,7 @@ class Item extends React.Component {
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
           <td>
-            <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}`}>{item.folder_name}</a>
+            <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
           </td>
           <td></td>
           <td>{moment(item.last_modified).format('YYYY-MM-DD')}</td>
@@ -354,7 +373,7 @@ class Item extends React.Component {
             }
           </td>
           <td>
-            <a href={fileURL} onClick={this.handleFileNameLinkClick}>{item.file_name}</a>
+            <a href={fileURL} onClick={this.handleFileClick}>{item.file_name}</a>
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td>{moment(item.last_modified).format('YYYY-MM-DD')}</td>
@@ -365,6 +384,78 @@ class Item extends React.Component {
             }
           </td>
         </tr>
+      );
+    }
+  }
+}
+
+class GridItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isIconShown: false
+    };
+  }
+
+  handleMouseOver = () => {
+    this.setState({isIconShown: true});
+  }
+
+  handleMouseOut = () => {
+    this.setState({isIconShown: false});
+  }
+
+  zipDownloadFolder = (e) => {
+    e.preventDefault();
+    this.props.zipDownloadFolder.bind(this, this.props.item.folder_path)();
+  }
+
+  handleFileClick = (e) => {
+    const item = this.props.item;
+    if (!Utils.imageCheck(item.file_name)) {
+      return;
+    }
+
+    e.preventDefault();
+    this.props.showImagePopup(item);
+  }
+
+  render() {
+    const item = this.props.item;
+    const { isIconShown } = this.state;
+
+    if (item.is_dir) {
+      const folderURL = `?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`;
+      return (
+        <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <a href={folderURL} className="grid-file-img-link d-block">
+            <img src={Utils.getFolderIconUrl(false, 192)} alt="" width="96" height="96" />
+          </a>
+          <a href={folderURL} className="grid-file-name grid-file-name-link">{item.folder_name}</a>
+          {showDownloadIcon &&
+            <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
+            </a>
+          }
+        </li>
+      );
+    } else {
+      const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
+      const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
+      return (
+        <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <a href={fileURL} className="grid-file-img-link d-block" onClick={this.handleFileClick}>
+            {thumbnailURL ?
+              <img className="thumbnail" src={thumbnailURL} alt="" /> :
+              <img src={Utils.getFileIconUrl(item.file_name, 192)} alt="" width="96" height="96" />
+            }
+          </a>
+          <a href={fileURL} className="grid-file-name grid-file-name-link" onClick={this.handleFileClick}>{item.file_name}</a>
+          {showDownloadIcon &&
+            <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
+            </a>
+          }
+        </li>
       );
     }
   }
