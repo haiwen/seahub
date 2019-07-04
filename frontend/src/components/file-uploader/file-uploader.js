@@ -188,7 +188,9 @@ class FileUploader extends React.Component {
       }
     } else {
       this.setUploadFileList(this.resumable.files);
-      this.resumable.upload();
+      if (!enableResumableFileUpload) {
+        this.resumable.upload();
+      }
     }
   }
 
