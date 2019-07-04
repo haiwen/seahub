@@ -1,3 +1,9 @@
+.workspace {
+  margin: 0.5rem 0;
+}
+.workspace:last-child {
+  margin-bottom: 150px;
+}
 .workspace .workspace-name {
   font-weight: 400;
   color: #202428;
