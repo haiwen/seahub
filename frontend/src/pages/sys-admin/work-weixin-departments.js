@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import _ from 'lodash';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, isPro } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Account from '../../components/common/account';
 import { WorkWeixinDepartmentMembersList, WorkWeixinDepartmentsTreePanel } from './work-weixin';
@@ -347,7 +347,7 @@ class WorkWeixinDepartments extends Component {
             </div>
           </div>
         </div>
-        {(this.state.isImportDepartmentDialogShow && !this.state.isTreeLoading && this.state.importDepartment) &&
+        {(isPro && this.state.isImportDepartmentDialogShow && !this.state.isTreeLoading && this.state.importDepartment) &&
           <ImportWorkWeixinDepartmentDialog
             importDepartmentDialogToggle={this.importDepartmentDialogToggle}
             onImportDepartmentSubmit={this.onImportDepartmentSubmit}

@@ -14,6 +14,8 @@ from rest_framework import status
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.api2.permissions import IsProVersion
+
 from seahub.work_weixin.utils import handler_work_weixin_api_response, \
     get_work_weixin_access_token, admin_work_weixin_departments_check, \
     update_work_weixin_user_info
@@ -289,6 +291,8 @@ class AdminWorkWeixinDepartmentsImport(APIView):
 
     def post(self, request):
         """import department from work weixin
+
+        permission: IsProVersion
         """
         # argument check
         department_id = request.data.get('work_weixin_department_id')
@@ -299,8 +303,8 @@ class AdminWorkWeixinDepartmentsImport(APIView):
             error_msg = 'work_weixin_department_ids invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # work weixin check
-        if not admin_work_weixin_departments_check():
+        # is pro version and work weixin check
+        if not IsProVersion or not admin_work_weixin_departments_check():
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -318,7 +322,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
 
         # list department members from work weixin
         api_user_list = self._list_department_members_from_work_weixin(access_token, department_id)
-        if not api_user_list:
+        if api_user_list is None:
             error_msg = '获取企业微信组织架构成员失败'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 

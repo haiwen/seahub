@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
-import { gettext } from '../../../utils/constants';
+import { gettext, isPro } from '../../../utils/constants';
 
 const WorkWeixinDepartmentsTreeNodePropTypes = {
   index: PropTypes.number,
@@ -92,6 +92,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
           >
             <i className={toggleClass} onClick={(e) => this.toggleChildren(e)}></i>{' '}
             <span className="tree-node-text">{department.name}</span>
+            {isPro &&
             <Dropdown
               isOpen={this.state.dropdownOpen}
               toggle={this.dropdownToggle}
@@ -108,9 +109,14 @@ class WorkWeixinDepartmentsTreeNode extends Component {
               >
               </DropdownToggle>
               <DropdownMenu className="drop-list" right={true}>
-                <DropdownItem onClick={this.props.importDepartmentDialogToggle.bind(this, department)} className="edit-comment" id={department.id}>{'导入部门'}</DropdownItem>
+                <DropdownItem
+                  onClick={this.props.importDepartmentDialogToggle.bind(this, department)}
+                  className="edit-comment"
+                  id={department.id}
+                >{'导入部门'}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
+            }
           </div>
         }
         {this.state.isChildrenShow &&
