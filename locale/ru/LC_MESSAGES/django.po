@@ -25,9 +25,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-01 16:08+0800\n"
-"PO-Revision-Date: 2019-07-01 22:01+0000\n"
-"Last-Translator: Vladimir <pash.vld@gmail.com>\n"
+"POT-Creation-Date: 2019-07-04 17:01+0800\n"
+"PO-Revision-Date: 2019-07-04 09:03+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -452,7 +452,7 @@ msgstr "Доступ запрещен"
 msgid "File is not locked."
 msgstr "Файл не заблокирован."
 
-#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:458
+#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:462
 msgid "You can not refresh this file's lock."
 msgstr "Вы не можете обновить блокировку этого файла."
 
@@ -653,6 +653,12 @@ msgstr "Срок действия должен быть больше или ра
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Срок действия должен быть меньше или равен %s"
+
+#: seahub/api2/endpoints/share_links.py:300
+#: seahub/api2/endpoints/share_links.py:309
+#, python-format
+msgid "Share link %s already exists."
+msgstr ""
 
 #: seahub/api2/endpoints/upload_links.py:143
 #: seahub/templates/snippets/repo_create_js.html:50

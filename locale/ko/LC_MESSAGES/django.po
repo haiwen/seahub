@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-01 16:08+0800\n"
-"PO-Revision-Date: 2019-07-01 08:09+0000\n"
+"POT-Creation-Date: 2019-07-04 17:01+0800\n"
+"PO-Revision-Date: 2019-07-04 09:03+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -437,7 +437,7 @@ msgstr "권한이 거부되었습니다."
 msgid "File is not locked."
 msgstr "파일을 잠그지 않았습니다."
 
-#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:458
+#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:462
 msgid "You can not refresh this file's lock."
 msgstr "잠근 파일을 새로 고칠 수 없습니다."
 
@@ -638,6 +638,12 @@ msgstr "유효기간 값은 %s보다 크거나 같아야 합니다."
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "유효기간 값은 %s보다 작거나 같아야 합니다. "
+
+#: seahub/api2/endpoints/share_links.py:300
+#: seahub/api2/endpoints/share_links.py:309
+#, python-format
+msgid "Share link %s already exists."
+msgstr ""
 
 #: seahub/api2/endpoints/upload_links.py:143
 #: seahub/templates/snippets/repo_create_js.html:50

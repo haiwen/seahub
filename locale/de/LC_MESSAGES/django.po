@@ -73,9 +73,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-01 16:08+0800\n"
-"PO-Revision-Date: 2019-07-01 12:51+0000\n"
-"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
+"POT-Creation-Date: 2019-07-04 17:01+0800\n"
+"PO-Revision-Date: 2019-07-04 09:03+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -500,7 +500,7 @@ msgstr "Zugriff verweigert."
 msgid "File is not locked."
 msgstr "Datei ist nicht gesperrt."
 
-#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:458
+#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:462
 msgid "You can not refresh this file's lock."
 msgstr "Sie können die Sperrung der Datei nicht erneuern."
 
@@ -701,6 +701,12 @@ msgstr "Der Freigabe-Link sollte mindestens %s Tage verfügbar sein"
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Der Freigabe-Link sollte höchstens %s Tage verfügbar sein"
+
+#: seahub/api2/endpoints/share_links.py:300
+#: seahub/api2/endpoints/share_links.py:309
+#, python-format
+msgid "Share link %s already exists."
+msgstr ""
 
 #: seahub/api2/endpoints/upload_links.py:143
 #: seahub/templates/snippets/repo_create_js.html:50
