@@ -8,6 +8,7 @@ const WorkWeixinDepartmentsTreePanelPropTypes = {
   departmentsTree: PropTypes.array.isRequired,
   onChangeDepartment: PropTypes.func.isRequired,
   checkedDepartmentId: PropTypes.number.isRequired,
+  importDepartmentDialogToggle: PropTypes.func.isRequired,
 };
 
 class WorkWeixinDepartmentsTreePanel extends Component {
@@ -33,6 +34,7 @@ class WorkWeixinDepartmentsTreePanel extends Component {
                     isChildrenShow={true}
                     onChangeDepartment={this.props.onChangeDepartment}
                     checkedDepartmentId={this.props.checkedDepartmentId}
+                    importDepartmentDialogToggle={this.props.importDepartmentDialogToggle}
                   />
                 );
               })}

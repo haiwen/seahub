@@ -10,6 +10,7 @@ const WorkWeixinDepartmentsTreeNodePropTypes = {
   isChildrenShow: PropTypes.bool.isRequired,
   onChangeDepartment: PropTypes.func.isRequired,
   checkedDepartmentId: PropTypes.number.isRequired,
+  importDepartmentDialogToggle: PropTypes.func.isRequired,
 };
 
 class WorkWeixinDepartmentsTreeNode extends Component {
@@ -19,7 +20,6 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     this.state = {
       isChildrenShow: false,
       dropdownOpen: false,
-      isImportDialogShow: false,
       active: false,
     };
   }
@@ -34,10 +34,6 @@ class WorkWeixinDepartmentsTreeNode extends Component {
 
   dropdownToggle = () => {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  };
-
-  importDialogToggle = () => {
-    this.setState({ isImportDialogShow: !this.state.isImportDialogShow });
   };
 
   onMouseEnter = () => {
@@ -68,6 +64,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
             isChildrenShow={this.state.isChildrenShow}
             onChangeDepartment={this.props.onChangeDepartment}
             checkedDepartmentId={this.props.checkedDepartmentId}
+            importDepartmentDialogToggle={this.props.importDepartmentDialogToggle}
           />
         );
       });
@@ -111,7 +108,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
               >
               </DropdownToggle>
               <DropdownMenu className="drop-list" right={true}>
-                <DropdownItem onClick={this.importDialogToggle} className="edit-comment" id={department.id}>{gettext('Import Department')}</DropdownItem>
+                <DropdownItem onClick={this.props.importDepartmentDialogToggle.bind(this, department)} className="edit-comment" id={department.id}>{'导入部门'}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>

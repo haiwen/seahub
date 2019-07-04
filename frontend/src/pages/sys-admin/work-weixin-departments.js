@@ -6,6 +6,8 @@ import { gettext, siteRoot } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Account from '../../components/common/account';
 import { WorkWeixinDepartmentMembersList, WorkWeixinDepartmentsTreePanel } from './work-weixin';
+import ImportWorkWeixinDepartmentDialog from '../../components/dialog/import-work-weixin-department-dialog';
+
 import '../../css/work-weixin-departments.css';
 
 class WorkWeixinDepartments extends Component {
@@ -22,6 +24,10 @@ class WorkWeixinDepartments extends Component {
       newUsersTempObj: {},
       isCheckedAll: false,
       canCheckUserIds: [],
+      isImportDepartmentDialogShow: false,
+      importDepartment: null,
+      importDepartmentChildrenCount: 0,
+      importDepartmentMembersCount: 0,
     };
   }
 
@@ -50,13 +56,20 @@ class WorkWeixinDepartments extends Component {
     });
   };
 
-  getWorkWeixinDepartmentsList = () => {
-    seafileAPI.adminListWorkWeixinDepartments().then((res) => {
-      let departmentsTree = this.getDepartmentsTree(res.data.department);
-      this.setState({
-        isTreeLoading: false,
-        departmentsTree: departmentsTree,
-      });
+  getWorkWeixinDepartmentsList = (departmentID) => {
+    seafileAPI.adminListWorkWeixinDepartments(departmentID).then((res) => {
+      if (!departmentID) {
+        let departmentsTree = this.getDepartmentsTree(res.data.department);
+        this.setState({
+          isTreeLoading: false,
+          departmentsTree: departmentsTree,
+        });
+      } else {
+        this.setState({
+          importDepartmentChildrenCount: res.data.department.length,
+          importDepartmentMembersCount: this.state.membersTempObj[departmentID].length,
+        });
+      }
     }).catch((error) => {
       this.handleError(error);
       this.setState({
@@ -213,6 +226,68 @@ class WorkWeixinDepartments extends Component {
     });
   }
 
+  importDepartmentDialogToggle = (importDepartment) => {
+    if (importDepartment) {
+      this.setState({
+        isImportDepartmentDialogShow: !this.state.isImportDepartmentDialogShow,
+        importDepartment: importDepartment,
+      }, () => {
+        this.getWorkWeixinDepartmentsList(importDepartment.id);
+      });
+    } else {
+      this.setState({
+        isImportDepartmentDialogShow: !this.state.isImportDepartmentDialogShow,
+        importDepartment: importDepartment,
+      });
+    }
+  };
+
+  onImportDepartmentSubmit = () => {
+    let importDepartment = this.state.importDepartment;
+    if (!importDepartment){
+      return;
+    }
+
+    seafileAPI.adminImportWorkWeixinDepartment(importDepartment.id).then((res) => {
+      this.setState({
+        isMembersListLoading: true,
+        checkedDepartmentId: importDepartment.id,
+        membersTempObj: {},
+        membersList: [],
+        newUsersTempObj: {},
+        isCheckedAll: false,
+        canCheckUserIds: [],
+      });
+      this.getWorkWeixinDepartmentMembersList(importDepartment.id);
+      this.importDepartmentDialogToggle(null);
+
+      if (res.data.success) {
+        this.handleImportDepartmentSubmitSuccess(res.data.success);
+      }
+      if (res.data.failed) {
+        this.handleImportDepartmentSubmitFailed(res.data.failed);
+      }
+    }).catch((error) => {
+      this.handleError(error);
+    });
+  };
+
+  handleImportDepartmentSubmitSuccess = (success) => {
+    for (let i = 0; i < success.length; i++) {
+      let obj = success[i];
+      let msg = obj.type === 'department' ? '部门 ' + obj.department_name + ' 导入成功' : obj.api_user_name + ' 导入成功' ;
+      toaster.success(msg, {duration: 3});
+    }
+  };
+
+  handleImportDepartmentSubmitFailed = (fails) => {
+    for (let i = 0; i < fails.length; i++) {
+      let obj = fails[i];
+      let name = obj.type === 'department' ? obj.department_name : obj.api_user_name;
+      toaster.danger(name + ' ' + obj.msg, {duration: 2});
+    }
+  };
+
   handleError = (e) => {
     if (e.response) {
       toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), {duration: 3});
@@ -222,7 +297,7 @@ class WorkWeixinDepartments extends Component {
   }
 
   componentDidMount() {
-    this.getWorkWeixinDepartmentsList();
+    this.getWorkWeixinDepartmentsList(null);
   }
 
   renderNav() {
@@ -256,6 +331,7 @@ class WorkWeixinDepartments extends Component {
                 isTreeLoading={this.state.isTreeLoading}
                 onChangeDepartment={this.onChangeDepartment}
                 checkedDepartmentId={this.state.checkedDepartmentId}
+                importDepartmentDialogToggle={this.importDepartmentDialogToggle}
               />
               <div className="dir-content-resize"></div>
               <WorkWeixinDepartmentMembersList
@@ -271,6 +347,15 @@ class WorkWeixinDepartments extends Component {
             </div>
           </div>
         </div>
+        {(this.state.isImportDepartmentDialogShow && !this.state.isTreeLoading && this.state.importDepartment) &&
+          <ImportWorkWeixinDepartmentDialog
+            importDepartmentDialogToggle={this.importDepartmentDialogToggle}
+            onImportDepartmentSubmit={this.onImportDepartmentSubmit}
+            departmentsCount={this.state.importDepartmentChildrenCount}
+            membersCount={this.state.importDepartmentMembersCount}
+            importDepartment={this.state.importDepartment}
+          />
+        }
       </Fragment>
     );
   }
