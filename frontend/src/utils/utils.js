@@ -734,6 +734,23 @@ export const Utils = {
     return items;
   },
 
+  /*
+   * only used in the 'catch' part of a seafileAPI request
+   */
+  getErrorMsg: function(error) {
+    let errorMsg = '';
+    if (error.response) {
+      if (error.response.data && error.response.data['error_msg']) {
+        errorMsg = error.response.data['error_msg'];
+      } else {
+        errorMsg = gettext('Error');
+      }
+    } else {
+      errorMsg = gettext('Please check the network.');
+    }
+    return errorMsg;
+  },
+
   changeMarkdownNodes: function(nodes, fn) {
     nodes.map((item) => {
       fn(item); 

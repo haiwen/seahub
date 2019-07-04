@@ -72,7 +72,7 @@ class GroupDiscussions(APIView):
                 "user_name": info["name"],
                 "user_email": info["email"],
                 "user_contact_email": info["contact_email"],
-                "avatar_url": request.build_absolute_uri(info["avatar_url"]),
+                "avatar_url": info["avatar_url"],
                 "content": msg.message,
                 "created_at": isoformat_timestr
             })
@@ -114,7 +114,7 @@ class GroupDiscussions(APIView):
             "user_name": info["name"],
             "user_email": info["email"],
             "user_contact_email": info["contact_email"],
-            "avatar_url": request.build_absolute_uri(info["avatar_url"]),
+            "avatar_url": info["avatar_url"],
             "content": msg.message,
             "created_at": isoformat_timestr
         }, status=201)

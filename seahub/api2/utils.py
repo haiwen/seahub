@@ -427,12 +427,7 @@ def is_seafile_pro():
     return any(['seahub_extra' in app for app in INSTALLED_APPS])
 
 def get_user_common_info(email, avatar_size=AVATAR_DEFAULT_SIZE):
-    try:
-        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
-    except Exception as e:
-        logger.error(e)
-        avatar_url = get_default_avatar_url()
-
+    avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
     return {
         "email": email,
         "name": email2nickname(email),
@@ -442,15 +437,11 @@ def get_user_common_info(email, avatar_size=AVATAR_DEFAULT_SIZE):
 
 def user_to_dict(email, request=None, avatar_size=AVATAR_DEFAULT_SIZE):
     d = get_user_common_info(email, avatar_size)
-    if request is None:
-        avatar_url = '%s%s' % (get_site_scheme_and_netloc(), d['avatar_url'])
-    else:
-        avatar_url = request.build_absolute_uri(d['avatar_url'])
     return {
         'user_name': d['name'],
         'user_email': d['email'],
         'user_contact_email': d['contact_email'],
-        'avatar_url': avatar_url,
+        'avatar_url': d['avatar_url'],
     }
 
 def is_web_request(request):

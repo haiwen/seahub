@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-01 16:08+0800\n"
-"PO-Revision-Date: 2019-07-01 08:51+0000\n"
+"POT-Creation-Date: 2019-07-04 17:01+0800\n"
+"PO-Revision-Date: 2019-07-04 09:13+0000\n"
 "Last-Translator: 杨顺强 <ysq9207@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -448,7 +448,7 @@ msgstr "没有权限"
 msgid "File is not locked."
 msgstr "文件没有被锁定。"
 
-#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:458
+#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:462
 msgid "You can not refresh this file's lock."
 msgstr "不能刷新文件锁。"
 
@@ -649,6 +649,12 @@ msgstr "过期天数需要大于等于 %s"
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "过期天数需要小于等于 %s"
+
+#: seahub/api2/endpoints/share_links.py:300
+#: seahub/api2/endpoints/share_links.py:309
+#, python-format
+msgid "Share link %s already exists."
+msgstr "共享链接 \"%s\" 已存在。"
 
 #: seahub/api2/endpoints/upload_links.py:143
 #: seahub/templates/snippets/repo_create_js.html:50

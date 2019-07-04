@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteName } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
 import CommentPanel from './comment-panel';
@@ -47,12 +49,18 @@ class FileView extends React.Component {
         this.setState({
           isStarred: false
         });
+      }).catch((error) => {
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
       });
     } else {
       seafileAPI.starItem(repoID, filePath).then((res) => {
         this.setState({
           isStarred: true
         });
+      }).catch((error) => {
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
       });
     }
   }
@@ -64,6 +72,9 @@ class FileView extends React.Component {
           isLocked: false, 
           lockedByMe: false 
         });
+      }).catch((error) => {
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
       });
     } else {
       seafileAPI.lockfile(repoID, filePath).then((res) => {
@@ -71,6 +82,9 @@ class FileView extends React.Component {
           isLocked: true,
           lockedByMe: true
         });
+      }).catch((error) => {
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
       });
     }    
   }

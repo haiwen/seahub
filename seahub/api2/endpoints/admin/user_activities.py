@@ -89,7 +89,7 @@ class UserActivitiesView(APIView):
                 avatar_size = 72
 
             url, is_default, date_uploaded = api_avatar_url(e.op_user, avatar_size)
-            d['avatar_url'] = request.build_absolute_uri(url)
+            d['avatar_url'] = url
             d['time'] = utc_datetime_to_isoformat_timestr(e.timestamp)
 
             if e.op_type == 'clean-up-trash':

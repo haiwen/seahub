@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-01 16:08+0800\n"
-"PO-Revision-Date: 2019-07-01 08:09+0000\n"
-"Last-Translator: Bjørn Tore Hoem <bthoem@cloudwalker.no>\n"
+"POT-Creation-Date: 2019-07-04 17:01+0800\n"
+"PO-Revision-Date: 2019-07-04 09:03+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Norwegian Bokmål (Norway) (http://www.transifex.com/haiwen/seahub/language/nb_NO/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +45,7 @@ msgid "Used:"
 msgstr "Forbrukt: "
 
 #: frontend/src/components/common/account.js:142
-#: frontend/src/pages/groups/group-view.js:413
+#: frontend/src/pages/groups/group-view.js:417
 #: frontend/src/pages/sys-admin/side-panel.js:61 frontend/src/settings.js:124
 msgid "Settings"
 msgstr "Innstillinger"
@@ -211,13 +211,13 @@ msgstr ""
 #: frontend/src/components/dialog/delete-dialog.js:32
 #: frontend/src/components/dialog/delete-repo-dialog.js:37
 #: frontend/src/components/dialog/dismiss-group-dialog.js:28
-#: frontend/src/components/dialog/generate-share-link.js:321
+#: frontend/src/components/dialog/generate-share-link.js:323
 #: frontend/src/components/dialog/insert-file-dialog.js:66
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:79
 #: frontend/src/components/dialog/internal-link-dialog.js:71
 #: frontend/src/components/dialog/invite-people-dialog.js:110
 #: frontend/src/components/dialog/label-repo-state-dialog.js:97
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:133
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:141
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:260
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:235
 #: frontend/src/components/dialog/move-dirent-dialog.js:175
@@ -267,7 +267,7 @@ msgstr "Avbryt"
 #: frontend/src/components/dialog/invite-people-dialog.js:111
 #: frontend/src/components/dialog/label-repo-state-dialog.js:98
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:134
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:142
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:261
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:312
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:236
@@ -394,8 +394,8 @@ msgstr ""
 #: frontend/src/repo-folder-trash.js:151 frontend/src/repo-folder-trash.js:336
 #: frontend/src/repo-history.js:63 frontend/src/repo-snapshot.js:86
 #: frontend/src/repo-snapshot.js:141 frontend/src/repo-snapshot.js:289
-#: frontend/src/settings.js:77 frontend/src/shared-dir-view.js:61
-#: static/scripts/app/views/fileupload.js:18
+#: frontend/src/settings.js:77 frontend/src/shared-dir-view.js:62
+#: frontend/src/utils/utils.js:746 static/scripts/app/views/fileupload.js:18
 #: static/scripts/app/views/fileupload.js:228
 #: static/scripts/app/views/fileupload.js:268
 #: static/scripts/app/views/repo-details.js:37
@@ -442,10 +442,10 @@ msgstr "Feil"
 #: frontend/src/repo-folder-trash.js:157 frontend/src/repo-folder-trash.js:338
 #: frontend/src/repo-history.js:69 frontend/src/repo-snapshot.js:92
 #: frontend/src/repo-snapshot.js:144 frontend/src/repo-snapshot.js:291
-#: frontend/src/settings.js:80 frontend/src/shared-dir-view.js:64
+#: frontend/src/settings.js:80 frontend/src/shared-dir-view.js:65
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
-#: frontend/src/view-file-document.js:76
+#: frontend/src/utils/utils.js:749 frontend/src/view-file-document.js:76
 #: frontend/src/view-file-spreadsheet.js:71
 #: static/scripts/app/views/dir.js:503
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:507
@@ -558,8 +558,8 @@ msgstr "Ønsker du virkelig å slette denne kontoen?"
 #: frontend/src/components/dialog/delete-dialog.js:33
 #: frontend/src/components/dialog/delete-repo-dialog.js:38
 #: frontend/src/components/dialog/dismiss-group-dialog.js:29
-#: frontend/src/components/dialog/generate-share-link.js:314
-#: frontend/src/components/dialog/generate-share-link.js:320
+#: frontend/src/components/dialog/generate-share-link.js:316
+#: frontend/src/components/dialog/generate-share-link.js:322
 #: frontend/src/components/dialog/generate-upload-link.js:161
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:64
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:64
@@ -575,7 +575,7 @@ msgstr "Ønsker du virkelig å slette denne kontoen?"
 #: frontend/src/components/draft-list-view/draft-list-item.js:110
 #: frontend/src/components/file-view/comment-panel.js:252
 #: frontend/src/components/review-list-view/review-comments.js:280
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:301
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:309
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:303
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/pages/invitations/invitations-view.js:47
@@ -715,7 +715,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:55
 #: frontend/src/pages/shared-libs/shared-libs.js:64
 #: frontend/src/repo-folder-trash.js:250 frontend/src/repo-snapshot.js:217
-#: frontend/src/shared-dir-view.js:271
+#: frontend/src/shared-dir-view.js:279
 msgid "Name"
 msgstr "Navn"
 
@@ -831,7 +831,7 @@ msgid "Encrypt"
 msgstr "Kryptere"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:200
-#: frontend/src/components/dialog/generate-share-link.js:337
+#: frontend/src/components/dialog/generate-share-link.js:339
 #: frontend/src/components/dialog/generate-upload-link.js:183
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:66
 #: frontend/src/components/dialog/org-add-user-dialog.js:152
@@ -840,7 +840,7 @@ msgid "Password"
 msgstr "Passord"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:213
-#: frontend/src/components/dialog/generate-share-link.js:345
+#: frontend/src/components/dialog/generate-share-link.js:347
 #: frontend/src/components/dialog/generate-upload-link.js:191
 msgid "Password again"
 msgstr "Passord på nytt"
@@ -910,7 +910,7 @@ msgid "Delete Library"
 msgstr "Slett bibliotek"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:23
-#: frontend/src/pages/groups/group-view.js:432
+#: frontend/src/pages/groups/group-view.js:436
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:84
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
@@ -937,100 +937,100 @@ msgstr ""
 msgid "Edit labels"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:138
+#: frontend/src/components/dialog/generate-share-link.js:140
 #: frontend/src/pages/share-admin/share-links.js:55
 #: static/scripts/app/views/share.js:492
 msgid "Share link is copied to the clipboard."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:145
+#: frontend/src/components/dialog/generate-share-link.js:147
 msgid "Direct download link is copied to the clipboard."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:265
+#: frontend/src/components/dialog/generate-share-link.js:267
 #: frontend/src/components/dialog/generate-upload-link.js:145
 msgid "(at least {passwordLength} characters)"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:274
+#: frontend/src/components/dialog/generate-share-link.js:276
 msgid "Link:"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:278
-#: frontend/src/components/dialog/generate-share-link.js:289
+#: frontend/src/components/dialog/generate-share-link.js:280
+#: frontend/src/components/dialog/generate-share-link.js:291
 #: static/scripts/app/views/share.js:189
 msgid "Expired"
 msgstr "Utgått"
 
-#: frontend/src/components/dialog/generate-share-link.js:285
+#: frontend/src/components/dialog/generate-share-link.js:287
 msgid "Direct Download Link:"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:297
+#: frontend/src/components/dialog/generate-share-link.js:299
 msgid "Expiration Date:"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:303
+#: frontend/src/components/dialog/generate-share-link.js:305
 #: frontend/src/components/dialog/generate-upload-link.js:160
 #: frontend/src/components/send-link.js:118
 msgid "Send"
 msgstr "Send"
 
-#: frontend/src/components/dialog/generate-share-link.js:318
+#: frontend/src/components/dialog/generate-share-link.js:320
 msgid "Are you sure you want to delete the share link?"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:319
+#: frontend/src/components/dialog/generate-share-link.js:321
 msgid ""
 "If the share link is deleted, no one will be able to access it any more."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:332
+#: frontend/src/components/dialog/generate-share-link.js:334
 #: frontend/src/components/dialog/generate-upload-link.js:177
 msgid "Add password protection"
 msgstr "Legg til passordbeskyttelse"
 
-#: frontend/src/components/dialog/generate-share-link.js:353
-#: frontend/src/components/dialog/generate-share-link.js:369
+#: frontend/src/components/dialog/generate-share-link.js:355
+#: frontend/src/components/dialog/generate-share-link.js:371
 msgid "Add auto expiration"
 msgstr "Legg til automatisk utløpsdato"
 
-#: frontend/src/components/dialog/generate-share-link.js:359
-#: frontend/src/components/dialog/generate-share-link.js:374
+#: frontend/src/components/dialog/generate-share-link.js:361
 #: frontend/src/components/dialog/generate-share-link.js:376
-#: frontend/src/components/dialog/generate-share-link.js:379
-#: frontend/src/components/dialog/generate-share-link.js:382
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:127
+#: frontend/src/components/dialog/generate-share-link.js:378
+#: frontend/src/components/dialog/generate-share-link.js:381
+#: frontend/src/components/dialog/generate-share-link.js:384
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:135
 msgid "days"
 msgstr "dager"
 
-#: frontend/src/components/dialog/generate-share-link.js:379
+#: frontend/src/components/dialog/generate-share-link.js:381
 msgid "Greater than or equal to"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:382
+#: frontend/src/components/dialog/generate-share-link.js:384
 msgid "Less than or equal to"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:390
+#: frontend/src/components/dialog/generate-share-link.js:392
 msgid "Set permission"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:395
+#: frontend/src/components/dialog/generate-share-link.js:397
 #: frontend/src/components/select-editor/share-links-permission-editor.js:22
 msgid "Preview and download"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:400
+#: frontend/src/components/dialog/generate-share-link.js:402
 #: frontend/src/components/select-editor/share-links-permission-editor.js:18
 msgid "Preview only"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:406
+#: frontend/src/components/dialog/generate-share-link.js:408
 msgid "Edit on cloud and download"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:411
+#: frontend/src/components/dialog/generate-share-link.js:413
 #: frontend/src/components/dialog/generate-upload-link.js:196
 msgid "Generate"
 msgstr "Generere"
@@ -1201,25 +1201,25 @@ msgstr ""
 msgid "Please enter a non-negative integer"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:100
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:202
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:107
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:204
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:87
 msgid "History Setting"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:106
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:113
 msgid "Setting library history is disabled by Admin."
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:111
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:118
 msgid "Keep full history"
 msgstr "Behold full historikk"
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:115
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:122
 msgid "Don't keep history"
 msgstr "Ikke behold historikk"
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:119
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:126
 msgid "Only keep a period of history:"
 msgstr "Bare behold historikk for en periode: "
 
@@ -1331,7 +1331,7 @@ msgstr "Størrelse"
 #: frontend/src/pages/search/advanced-search.js:169
 #: frontend/src/pages/shared-libs/shared-libs.js:67
 #: frontend/src/pages/starred/starred.js:31
-#: frontend/src/shared-dir-view.js:273
+#: frontend/src/shared-dir-view.js:281
 msgid "Last Update"
 msgstr "Siste oppdatering"
 
@@ -1599,8 +1599,8 @@ msgstr "Dele til gruppe"
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:522
 #: frontend/src/components/file-view/file-toolbar.js:93
 #: frontend/src/components/file-view/file-toolbar.js:182
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:199
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:299
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:201
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:307
 #: frontend/src/components/toolbar/cdoc-editor-topbar.js:66
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:173
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:83
@@ -1743,7 +1743,8 @@ msgstr ""
 #: frontend/src/components/shared-file-view/shared-file-view.js:102
 #: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:304
 #: frontend/src/pages/file-history-old/history-item.js:122
-#: frontend/src/repo-snapshot.js:326 frontend/src/shared-dir-view.js:363
+#: frontend/src/repo-snapshot.js:326 frontend/src/shared-dir-view.js:382
+#: frontend/src/shared-dir-view.js:437 frontend/src/shared-dir-view.js:455
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "Nedlasting"
@@ -1816,12 +1817,12 @@ msgstr ""
 msgid "Files"
 msgstr "Filer"
 
-#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:149
+#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:158
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:573
 msgid "locked by {name}"
 msgstr ""
 
-#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:169
+#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:178
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:606
 #: frontend/src/components/file-view/file-info.js:31
 msgid "locked"
@@ -1840,8 +1841,8 @@ msgstr ""
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:111
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:136
 #: frontend/src/components/history-list-view/history-list-item.js:97
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:268
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:312
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:276
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:320
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:118
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:141
 #: frontend/src/pages/org-admin/org-groups.js:226
@@ -2140,7 +2141,7 @@ msgid "Successfully saved"
 msgstr ""
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:49
-#: frontend/src/shared-dir-view.js:42
+#: frontend/src/shared-dir-view.js:43
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "Nedlasting av fil er slått av: Brukeren har brukt opp sin kvote av delingslenker."
 
@@ -2164,25 +2165,25 @@ msgstr ""
 msgid "Anonymous User"
 msgstr "Anonym bruker"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:187
-#: frontend/src/pages/groups/group-view.js:419
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:189
+#: frontend/src/pages/groups/group-view.js:423
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:81
 #: frontend/src/utils/text-translation.js:11
 msgid "Rename"
 msgstr "Omdøpe"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:190
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:192
 msgid "Folder Premission"
 msgstr ""
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:193
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:195
 #: frontend/src/pages/org-admin/org-logs-file-update.js:256
 #: frontend/src/repo-history.js:275 frontend/src/utils/text-translation.js:15
 msgid "Details"
 msgstr "Detaljer"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:196
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:300
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:198
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:308
 #: frontend/src/pages/share-admin/folders.js:162
 #: frontend/src/pages/share-admin/libraries.js:172
 msgid "Unshare"
@@ -2329,6 +2330,7 @@ msgid "Create a draft from this file, instead of editing it directly."
 msgstr ""
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:26
+#: frontend/src/shared-dir-view.js:220
 msgid "List"
 msgstr "Liste"
 
@@ -2787,18 +2789,18 @@ msgstr "Grupper"
 msgid "This is a special group representing a department."
 msgstr ""
 
-#: frontend/src/pages/groups/group-view.js:422
+#: frontend/src/pages/groups/group-view.js:426
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:84
 #: frontend/src/pages/org-admin/org-libraries.js:270
 msgid "Transfer"
 msgstr "Overføre"
 
-#: frontend/src/pages/groups/group-view.js:427
+#: frontend/src/pages/groups/group-view.js:431
 msgid "Manage Members"
 msgstr "Behandle medlemmer"
 
-#: frontend/src/pages/groups/group-view.js:441
-#: frontend/src/pages/groups/group-view.js:447
+#: frontend/src/pages/groups/group-view.js:445
+#: frontend/src/pages/groups/group-view.js:451
 #: frontend/src/pages/org-admin/org-department-item.js:245
 msgid "Members"
 msgstr "Medlemmer"
@@ -2903,7 +2905,7 @@ msgid "Failed to delete {name}"
 msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:877
-#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:838
+#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:855
 #: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
 msgid "Successfully moved %(name)s."
 msgstr "Vellykket flytting av %(name)s."
@@ -2914,7 +2916,7 @@ msgid "Failed to move %(name)s"
 msgstr "Kunne ikke flytte %(name)s"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:905
-#: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:823
+#: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:840
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr "Vellykket kopiering av %(name)s."
@@ -3630,13 +3632,9 @@ msgstr ""
 msgid "Profile Setting"
 msgstr "Profilinstilling"
 
-#: frontend/src/shared-dir-view.js:214
+#: frontend/src/shared-dir-view.js:215
 msgid "Shared by: "
 msgstr "Delt av: "
-
-#: frontend/src/shared-dir-view.js:218
-msgid "ZIP"
-msgstr "ZIP"
 
 #: frontend/src/shared-file-view-document.js:69
 #: frontend/src/shared-file-view-spreadsheet.js:53
@@ -3728,39 +3726,39 @@ msgid ""
 "User can only view files online via browser. Files can't be downloaded."
 msgstr ""
 
-#: frontend/src/utils/utils.js:825 static/scripts/app/views/dir.js:1289
+#: frontend/src/utils/utils.js:842 static/scripts/app/views/dir.js:1289
 #: static/scripts/app/views/dir.js:1450
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Vellykket kopiering av %(name)s og 1 øvrig element."
 
-#: frontend/src/utils/utils.js:827 static/scripts/app/views/dir.js:1291
+#: frontend/src/utils/utils.js:844 static/scripts/app/views/dir.js:1291
 #: static/scripts/app/views/dir.js:1452
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Vellykket kopiering av %(name)s og %(amount)s øvrige elementer."
 
-#: frontend/src/utils/utils.js:840 static/scripts/app/views/dir.js:1280
+#: frontend/src/utils/utils.js:857 static/scripts/app/views/dir.js:1280
 #: static/scripts/app/views/dir.js:1442
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Vellykket sletting av %(name)s samt 1 annet element."
 
-#: frontend/src/utils/utils.js:842 static/scripts/app/views/dir.js:1282
+#: frontend/src/utils/utils.js:859 static/scripts/app/views/dir.js:1282
 #: static/scripts/app/views/dir.js:1444
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Vellykket flytting av %(name)s og %(amount)s øvrige elementer."
 
-#: frontend/src/utils/utils.js:854
+#: frontend/src/utils/utils.js:871
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: frontend/src/utils/utils.js:857
+#: frontend/src/utils/utils.js:874
 msgid "Failed to copy %(name)s."
 msgstr ""
 
-#: frontend/src/utils/utils.js:867
+#: frontend/src/utils/utils.js:884
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: frontend/src/utils/utils.js:870
+#: frontend/src/utils/utils.js:887
 msgid "Failed to move %(name)s."
 msgstr ""
 

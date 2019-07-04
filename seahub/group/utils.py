@@ -95,11 +95,7 @@ def get_group_member_info(request, group_id, email, avatar_size=AVATAR_DEFAULT_S
     else:
         login_id = ''
 
-    try:
-        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
-    except Exception as e:
-        logger.error(e)
-        avatar_url = get_default_avatar_url()
+    avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
 
     role = 'Member'
     group = ccnet_api.get_group(int(group_id))
@@ -115,7 +111,7 @@ def get_group_member_info(request, group_id, email, avatar_size=AVATAR_DEFAULT_S
         'email': email,
         "contact_email": Profile.objects.get_contact_email_by_user(email),
         "login_id": login_id,
-        "avatar_url": request.build_absolute_uri(avatar_url),
+        "avatar_url": avatar_url,
         "is_admin": is_admin,
         "role": role,
     }

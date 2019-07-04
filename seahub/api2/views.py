@@ -318,7 +318,7 @@ class AccountInfo(APIView):
 
         url, _, _ = api_avatar_url(email, int(72))
 
-        info['avatar_url'] = request.build_absolute_uri(url)
+        info['avatar_url'] = url
         info['email'] = email
         info['name'] = email2nickname(email)
         info['total'] = quota_total
@@ -4448,7 +4448,7 @@ class EventsView(APIView):
             d['nick'] = email2nickname(d['author'])
             d['name'] = email2nickname(d['author'])
             d['avatar'] = avatar(d['author'], size)
-            d['avatar_url'] = request.build_absolute_uri(url)
+            d['avatar_url'] = url
             d['time_relative'] = translate_seahub_time(utc_to_local(e.timestamp))
             d['date'] = utc_to_local(e.timestamp).strftime("%Y-%m-%d")
 
@@ -4877,7 +4877,7 @@ class UserAvatarView(APIView):
     def get(self, request, user, size, format=None):
         url, is_default, date_uploaded = api_avatar_url(user, int(size))
         ret = {
-            "url": request.build_absolute_uri(url),
+            "url": url,
             "is_default": is_default,
             "mtime": get_timestamp(date_uploaded) }
         return Response(ret)

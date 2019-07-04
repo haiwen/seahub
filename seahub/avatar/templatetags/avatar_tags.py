@@ -14,6 +14,7 @@ from seahub.avatar.settings import (AVATAR_GRAVATAR_BACKUP, AVATAR_GRAVATAR_DEFA
 from seahub.avatar.util import get_primary_avatar, get_default_avatar_url, \
     cache_result, get_default_avatar_non_registered_url
 from seahub.utils import get_service_url
+from seahub.settings import SITE_ROOT
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ register = template.Library()
 def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
     avatar = get_primary_avatar(user, size=size)
     if avatar:
-        return avatar.avatar_url(size)
+        url = avatar.avatar_url(size)
     else:
         if AVATAR_GRAVATAR_BACKUP:
             params = {'s': str(size)}
@@ -35,7 +36,12 @@ def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
                 hashlib.md5(user.email).hexdigest(),
                 urllib.urlencode(params))
         else:
-            return get_default_avatar_url()
+            url = get_default_avatar_url()
+
+    if SITE_ROOT != '/':
+        return '/%s/%s' % (SITE_ROOT.strip('/'), url.strip('/'))
+    else:
+        return url
 
 @cache_result
 def api_avatar_url(user, size=AVATAR_DEFAULT_SIZE):

@@ -122,7 +122,7 @@ class BishengOfficeView(APIView):
                 'uid': username,
                 'oid': username,
                 'nickName': email2nickname(username),
-                'avatar': request.build_absolute_uri(url),
+                'avatar': url,
                 'privilege': privilege
             },
         }
