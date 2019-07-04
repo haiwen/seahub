@@ -3,7 +3,7 @@ import base64
 from datetime import datetime
 import hashlib
 
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.db import connection, transaction
 
 from seahub.avatar.models import Avatar
@@ -15,7 +15,7 @@ class AvatarNotFoundError(Exception):
     pass
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Migrate avatars from file system to database."
 
     def __init__(self):
@@ -28,7 +28,7 @@ class Command(NoArgsCommand):
 
         super(Command, self).__init__()
 
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         for avatar in Avatar.objects.all():
             try:
                 self._save(avatar.avatar.name, avatar.avatar)
