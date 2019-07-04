@@ -253,20 +253,54 @@ class AdminWorkWeixinDepartmentsBatchImport(APIView):
 
         return api_response_dic[WORK_WEIXIN_DEPARTMENT_MEMBERS_FIELD]
 
+    def _api_department_success_msg(self, department_obj_id, department_obj_name, group_id):
+        return {
+            'type': 'department',
+            'department_id': department_obj_id,
+            'department_name': department_obj_name,
+            'group_id': group_id,
+        }
+
+    def _api_department_failed_msg(self, department_obj_id, department_obj_name, msg):
+        return {
+            'type': 'department',
+            'department_id': department_obj_id,
+            'department_name': department_obj_name,
+            'msg': msg,
+        }
+
+    def _api_user_success_msg(self, email, api_user_name, department_obj_id, group_id):
+        return {
+            'type': 'user',
+            'email': email,
+            'api_user_name': api_user_name,
+            'department_id': department_obj_id,
+            'group_id': group_id,
+        }
+
+    def _api_user_failed_msg(self, email, api_user_name, department_obj_id, msg):
+        return {
+            'type': 'user',
+            'email': email,
+            'api_user_name': api_user_name,
+            'department_id': department_obj_id,
+            'msg': msg,
+        }
+
     def post(self, request):
         """import department from work weixin
         """
         # argument check
-        parent_group = request.data.get('parent_group', -1)
+        parent_group_id = request.data.get('parent_group_id', -1)
         try:
-            parent_group = int(parent_group)
+            parent_group_id = int(parent_group_id)
         except ValueError:
-            error_msg = 'parent_group invalid.'
+            error_msg = 'parent_group_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        department_ids = request.data.get('department_ids')
+        department_ids = request.data.get('work_weixin_department_ids')
         if not isinstance(department_ids, list):
-            error_msg = 'departments invalid.'
+            error_msg = 'work_weixin_department_ids invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         for department_id in department_ids:
@@ -275,7 +309,7 @@ class AdminWorkWeixinDepartmentsBatchImport(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        if parent_group != -1 and not ccnet_api.get_group(parent_group):
+        if parent_group_id != -1 and not ccnet_api.get_group(parent_group_id):
             error_msg = 'Parent Group not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -291,18 +325,8 @@ class AdminWorkWeixinDepartmentsBatchImport(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # main
-        msg = list()
+        success = list()
         failed = list()
-
-        api_department_count = 0
-        department_create_success_count = 0
-        department_exist_count = 0
-        department_create_failed_count = 0
-
-        api_user_count = 0
-        user_bind_department_success_count = 0
-        user_bind_department_exist_count = 0
-        user_bind_department_failed_count = 0
 
         group_owner = DEPARTMENT_OWNER
         # todo filter ccnet User database
@@ -316,55 +340,65 @@ class AdminWorkWeixinDepartmentsBatchImport(APIView):
             # list departments from work weixin
             api_department_list = self._list_departments_from_work_weixin(access_token, department_id)
             if not api_department_list:
-                logger.error('can not get work weixin department %s response' % department_id)
-                failed.append('获取微信部门 %s 数据失败' % department_id)
+                failed_msg = self._api_department_failed_msg(
+                    department_id, '', '获取企业微信组织架构失败')
+                failed.append(failed_msg)
                 continue
-            api_department_count += len(api_department_list)
 
             for index, department_obj in enumerate(api_department_list):
                 # check department argument
                 new_group_name = department_obj.get('name')
                 department_obj_id = department_obj.get('id')
                 if department_obj_id is None or not new_group_name or not validate_group_name(new_group_name):
-                    department_create_failed_count += 1
-                    logger.error('work weixin department argument check failed %s' % new_group_name)
+                    failed_msg = self._api_department_failed_msg(
+                        department_obj_id, new_group_name, '部门参数错误')
+                    failed.append(failed_msg)
                     continue
 
-                # check parent_group
+                # check parent group
                 if index != 0:
-                    parent_group = department_map_to_group_dict.get(department_obj.get('parentid'))
-                if parent_group is None:
-                    department_create_failed_count += 1
-                    logger.error('work weixin department parent group check failed %s' % new_group_name)
+                    parent_group_id = department_map_to_group_dict.get(department_obj.get('parentid'))
+                if parent_group_id is None:
+                    failed_msg = self._api_department_failed_msg(
+                        department_obj_id, new_group_name, '父级部门不存在')
+                    failed.append(failed_msg)
                     continue
 
                 # check department exist by group name
                 exist, exist_group = admin_check_group_name_conflict(new_group_name)
                 if exist:
                     department_map_to_group_dict[department_obj_id] = exist_group.id
-                    department_exist_count += 1
+                    failed_msg = self._api_department_failed_msg(
+                        department_obj_id, new_group_name, '部门已存在')
+                    failed.append(failed_msg)
                     continue
 
-                # create department
+                # import department
                 try:
                     group_id = ccnet_api.create_group(
-                        new_group_name, group_owner, parent_group_id=parent_group)
+                        new_group_name, group_owner, parent_group_id=parent_group_id)
 
                     seafile_api.set_group_quota(group_id, -2)
+
                     department_map_to_group_dict[department_obj_id] = group_id
-                    department_create_success_count += 1
+                    success_msg = self._api_department_success_msg(
+                        department_obj_id, new_group_name, group_id)
+                    success.append(success_msg)
                 except Exception as e:
                     logger.error(e)
-                    department_create_failed_count += 1
+                    failed_msg = self._api_department_failed_msg(
+                        department_obj_id, new_group_name, '部门导入失败')
+                    failed.append(failed_msg)
 
             # list department members from work weixin
             api_user_list = self._list_department_members_from_work_weixin(access_token, department_id)
             if not api_user_list:
-                logger.error('can not get work weixin department %s members response' % department_id)
-                failed.append('获取微信部门 %s 成员数据失败' % department_id)
+                failed_msg = self._api_department_failed_msg(
+                    department_id, '', '获取企业微信组织架构成员失败')
+                failed.append(failed_msg)
                 continue
-            api_user_count += len(api_user_list)
 
+            # import api_user
             for api_user in api_user_list:
                 uid = WORK_WEIXIN_UID_PREFIX + api_user.get('userid', '')
                 api_user['contact_email'] = api_user['email']
@@ -376,39 +410,37 @@ class AdminWorkWeixinDepartmentsBatchImport(APIView):
                     email = gen_user_virtual_id()
                     create_user_success = _import_user_from_work_weixin(email, api_user)
                     if not create_user_success:
-                        user_bind_department_failed_count += 1
-                        failed.append('创建用户 %s 失败' % api_user.get('name'))
+                        failed_msg = self._api_user_failed_msg(
+                            '', api_user.get('name'), department_id, '导入用户失败')
+                        failed.append(failed_msg)
                         continue
 
                 # bind user to department
                 api_user_department_list = api_user.get('department')
                 for department_obj_id in api_user_department_list:
                     group_id = department_map_to_group_dict.get(department_obj_id)
-                    if group_id is not None:
-                        if ccnet_api.is_group_user(group_id, email):
-                            user_bind_department_exist_count += 1
-                            continue
+                    if group_id is None:
+                        # the api_user also exist in the brother department which not import
+                        continue
 
-                        try:
-                            ccnet_api.group_add_member(group_id, group_owner, email)
-                            user_bind_department_success_count += 1
-                        except Exception as e:
-                            logger.error(e)
-                            user_bind_department_failed_count += 1
+                    if ccnet_api.is_group_user(group_id, email):
+                        failed_msg = self._api_user_failed_msg(
+                            email, api_user.get('name'), department_obj_id, '部门用户已存在')
+                        failed.append(failed_msg)
+                        continue
 
-        msg.append('企业微信部门共 %s 个，其中成功导入 %s 个，已存在 %s 个，导入失败 %s 个。' % (
-                api_department_count,
-                department_create_success_count,
-                department_exist_count,
-                department_create_failed_count,
-        ))
-        msg.append('企业微信部门成员共 %s 个，其中成功导入 %s 个，已存在 %s 个，导入失败 %s 个。' % (
-            api_user_count,
-            user_bind_department_success_count,
-            user_bind_department_exist_count,
-            user_bind_department_failed_count,
-        ))
+                    try:
+                        ccnet_api.group_add_member(group_id, group_owner, email)
+                        success_msg = self._api_user_success_msg(
+                            email, api_user.get('name'), department_obj_id, group_id)
+                        success.append(success_msg)
+                    except Exception as e:
+                        logger.error(e)
+                        failed_msg = self._api_user_failed_msg(
+                            email, api_user.get('name'), department_id, '导入部门用户失败')
+                        failed.append(failed_msg)
+
         return Response({
-            'msg': msg,
+            'success': success,
             'failed': failed,
         })
