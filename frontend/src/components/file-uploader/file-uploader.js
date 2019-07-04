@@ -138,6 +138,7 @@ class FileUploader extends React.Component {
         let uploadedBytes = res.data.uploadedBytes;
         let offset = Math.floor(uploadedBytes / (1024 * 1024));
         file.markChunksCompleted(offset);
+        this.resumable.upload();
       });
     }
   }
@@ -181,7 +182,9 @@ class FileUploader extends React.Component {
         });
       } else {
         this.setUploadFileList(this.resumable.files);
-        this.resumable.upload();
+        if (!enableResumableFileUpload) {
+          this.resumable.upload();
+        }
       }
     } else {
       this.setUploadFileList(this.resumable.files);
