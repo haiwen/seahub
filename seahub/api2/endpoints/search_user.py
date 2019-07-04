@@ -170,7 +170,7 @@ def format_searched_user_result(request, users, size):
         url, is_default, date_uploaded = api_avatar_url(email, size)
         results.append({
             "email": email,
-            "avatar_url": request.build_absolute_uri(url),
+            "avatar_url": url,
             "name": email2nickname(email),
             "contact_email": email2contact_email(email),
         })

@@ -46,14 +46,14 @@ def update_notice_detail(request, notices):
                     notice.detail = None
                 else:
                     d.pop('org_id')
-                    share_from_user_email = d.pop('share_from') 
+                    share_from_user_email = d.pop('share_from')
                     url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
                     d['repo_name'] = repo.name
                     d['repo_id'] = repo.id
                     d['share_from_user_name'] = email2nickname(share_from_user_email)
                     d['share_from_user_email'] = share_from_user_email
                     d['share_from_user_contact_email'] = email2contact_email(share_from_user_email)
-                    d['share_from_user_avatar_url'] = request.build_absolute_uri(url)
+                    d['share_from_user_avatar_url'] = url
                     notice.detail = d
 
             except Exception as e:
@@ -82,12 +82,12 @@ def update_notice_detail(request, notices):
                     notice.detail = None
                 else:
                     d.pop('org_id')
-                    share_from_user_email = d.pop('share_from') 
+                    share_from_user_email = d.pop('share_from')
                     url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
                     d['share_from_user_name'] = email2nickname(share_from_user_email)
                     d['share_from_user_email'] = share_from_user_email
-                    d['share_from_user_contact_email'] = email2contact_email(share_from_user_email)                    
-                    d['share_from_user_avatar_url'] = request.build_absolute_uri(url)
+                    d['share_from_user_contact_email'] = email2contact_email(share_from_user_email)
+                    d['share_from_user_avatar_url'] = url
                     d['repo_name'] = repo.name
                     d['repo_id'] = repo.id
                     d['group_name'] = group.group_name
@@ -109,7 +109,7 @@ def update_notice_detail(request, notices):
                     d['group_staff_name'] = email2nickname(group_staff_email)
                     d['group_staff_email'] = group_staff_email
                     d['group_staff_contact_email'] = email2contact_email(group_staff_email)
-                    d['group_staff_avatar_url'] = request.build_absolute_uri(url)
+                    d['group_staff_avatar_url'] = url
                     d['group_name'] = group.group_name
 
                     notice.detail = d
@@ -124,7 +124,7 @@ def update_notice_detail(request, notices):
                 d['author_name'] = email2nickname(author_email)
                 d['author_email'] = author_email
                 d['author_context_email'] = email2contact_email(author_email)
-                d['author_avatar_url'] = request.build_absolute_uri(url)
+                d['author_avatar_url'] = url
 
                 notice.detail = d
             except Exception as e:
@@ -144,7 +144,7 @@ def update_notice_detail(request, notices):
                     d['transfer_from_user_email'] = repo_owner_email
                     d['transfer_from_user_contact_email'] = email2contact_email(repo_owner_email)
                     url, is_default, date_uploaded = api_avatar_url(repo_owner_email, 32)
-                    d['transfer_from_user_avatar_url'] = request.build_absolute_uri(url)
+                    d['transfer_from_user_avatar_url'] = url
                     notice.detail = d
 
             except Exception as e:
@@ -159,7 +159,7 @@ def update_notice_detail(request, notices):
                 d['request_user_name'] = email2nickname(request_user_email)
                 d['request_user_email'] = request_user_email
                 d['request_user_contact_email'] = email2contact_email(request_user_email)
-                d['request_user_avatat_url'] = request.build_absolute_uri(url)
+                d['request_user_avatat_url'] = url
                 notice.detail = d
             except Exception as e:
                 logger.error(e)
@@ -191,7 +191,7 @@ def update_notice_detail(request, notices):
                     d['folder_name'] = name
                     d['file_path'] = file_path
                     url, is_default, date_uploaded = api_avatar_url('', 32)
-                    d['uploaded_user_avatar_url'] = request.build_absolute_uri(url)
+                    d['uploaded_user_avatar_url'] = url
                     notice.detail = d
                 else:
                     notice.detail = None
@@ -218,7 +218,7 @@ def update_notice_detail(request, notices):
                     author_email = d.pop('author')
                     file_name = os.path.basename(file_path)
                     url, is_default, date_uploaded = api_avatar_url(author_email, 32)
-                    d['author_avatar_url'] = request.build_absolute_uri(url)
+                    d['author_avatar_url'] = url
                     d['author_name'] = email2nickname(author_email)
                     d['author_email'] = author_email
                     d['author_contact_email'] = email2contact_email(author_email)

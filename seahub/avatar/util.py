@@ -121,11 +121,9 @@ def get_avatar_file_storage():
     else:
         dbs_options = {
             'table': 'avatar_uploaded',
-            'base_url': '%simage-view/' % settings.SITE_ROOT,
+            'base_url': '/image-view/',
             'name_column': 'filename',
             'data_column': 'data',
             'size_column': 'size',
             }
         return get_storage_class(AVATAR_FILE_STORAGE)(options=dbs_options)
-    
-    

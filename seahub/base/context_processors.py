@@ -134,7 +134,7 @@ def base(request):
         'service_url': get_service_url().rstrip('/'),
         'enable_file_scan': ENABLE_FILE_SCAN,
         'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
-        'avatar_url': request.build_absolute_uri(avatar_url) if avatar_url else '',
+        'avatar_url': avatar_url if avatar_url else '',
     }
 
     if request.user.is_staff:

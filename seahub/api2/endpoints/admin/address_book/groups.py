@@ -130,11 +130,7 @@ class AdminAddressBookGroup(APIView):
     def _get_address_book_group_memeber_info(self, request, group_member_obj, avatar_size):
 
         email = group_member_obj.user_name
-        try:
-            avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
-        except Exception as e:
-            logger.error(e)
-            avatar_url = get_default_avatar_url()
+        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
 
         group_id = group_member_obj.group_id
         group = ccnet_api.get_group(group_member_obj.group_id)
@@ -152,7 +148,7 @@ class AdminAddressBookGroup(APIView):
             'email': email,
             "name": email2nickname(email),
             "contact_email": email2contact_email(email),
-            "avatar_url": request.build_absolute_uri(avatar_url),
+            "avatar_url": avatar_url,
             "is_admin": is_admin,
             "role": role,
         }
