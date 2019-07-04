@@ -110,15 +110,15 @@ class GenerateUploadLink extends React.Component {
     // check password params
     if (showPasswordInput) {
       if (password.length === 0) {
-        this.setState({errorInfo: 'Please enter password'});
+        this.setState({errorInfo: gettext('Please enter password')});
         return false;
       }
       if (password.length < shareLinkPasswordMinLength) {
-        this.setState({errorInfo: 'Password is too short'});
+        this.setState({errorInfo: gettext('Password is too short')});
         return false;
       }
       if (password !== passwordnew) {
-        this.setState({errorInfo: 'Passwords don\'t match'});
+        this.setState({errorInfo: gettext('Passwords don\'t match')});
         return false;
       }
     }
@@ -127,11 +127,11 @@ class GenerateUploadLink extends React.Component {
     let reg = /^\d+$/;
     if (isExpireChecked) {
       if (!expireDays) {
-        this.setState({errorInfo: 'Please enter days'});
+        this.setState({errorInfo: gettext('Please enter days')});
         return false;
       }
       if (!reg.test(expireDays)) {
-        this.setState({errorInfo: 'Please enter a non-negative integer'});
+        this.setState({errorInfo: gettext('Please enter a non-negative integer')});
         return false;
       }
       this.setState({expireDays: parseInt(expireDays)});

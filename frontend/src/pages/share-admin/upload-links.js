@@ -53,10 +53,10 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="4%">{/*icon*/}</th>
-                <th width="35%">{gettext('Name')}</th>
-                <th width="28%">{gettext('Library')}</th>
-                <th width="9%">{gettext('Visits')}</th>
-                <th width="14%">{gettext('Expiration')}</th>
+                <th width="30%">{gettext('Name')}</th>
+                <th width="24%">{gettext('Library')}</th>
+                <th width="16%">{gettext('Visits')}</th>
+                <th width="16%">{gettext('Expiration')}</th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
