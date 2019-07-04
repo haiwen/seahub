@@ -1,17 +1,16 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {gettext, isPro, canInvitePeople, siteRoot, username} from '../../utils/constants';
+import { gettext, canInvitePeople, siteRoot } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import UserSelect from '../user-select';
-import SharePermissionEditor from '../select-editor/share-permission-editor';
+import DtableSharePermissionEditor from '../select-editor/dtable-share-permission-editor';
 import toaster from '../toast';
 
 import '../../css/invitations.css';
 
 const userItemPropTypes = {
   item: PropTypes.object.isRequired,
-  permissions: PropTypes.array.isRequired,
   deleteTableShare: PropTypes.func.isRequired,
   updateTableShare: PropTypes.func.isRequired,
 };
@@ -48,11 +47,10 @@ class UserItem extends React.Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="name">{item.name}</td>
         <td>
-          <SharePermissionEditor
+          <DtableSharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
-            permissions={this.props.permissions}
             onPermissionChanged={this.updateTableShare}
           />
         </td>
@@ -80,11 +78,10 @@ class ShareTableToUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedOptions: null,
       permission: 'rw',
       userList: []
     };
-    this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
     this.workspaceID = this.props.currentTable.workspace_id;
     this.tableName = this.props.currentTable.name;
   }
@@ -95,8 +92,8 @@ class ShareTableToUser extends React.Component {
     });
   }
 
-  handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+  handleSelectChange = (options) => {
+    this.setState({ selectedOptions: options });
   };
 
   setPermission = (permission) => {
@@ -112,30 +109,25 @@ class ShareTableToUser extends React.Component {
   };
 
   addTableShare = () => {
-    if (!this.state.selectedOption || this.state.selectedOption.length === 0) {
-      return;
+    const { selectedOptions, permission, userList } = this.state;
+    if (!selectedOptions || selectedOptions.length === 0) return;
+    for (let i = 0; i < selectedOptions.length; i++) {
+      let name = selectedOptions[i].value;
+      let email = selectedOptions[i].email;
+      seafileAPI.addTableShare(this.workspaceID, this.tableName, email, permission).then((res) => {
+        let userInfo = {
+          name: name,
+          email: email,
+          permission: permission,
+        };
+        userList.push(userInfo);
+        this.setState({ userList: userList });
+      }).catch(error => {
+        this.handleError(error);
+      });
     }
-    let name = this.state.selectedOption.value;
-    let email = this.state.selectedOption.email;
-    let permission = this.state.permission;
-    seafileAPI.addTableShare(this.workspaceID, this.tableName, email, permission).then((res) => {
-      let userList = this.state.userList;
-      let userInfo = {
-        name: name,
-        email: email,
-        permission: permission,
-      };
-      userList.push(userInfo);
-      this.setState({
-        userList: userList,
-        selectedOption: null,
-      });
-    }).catch(error => {
-      this.handleError(error);
-      this.setState({
-        selectedOption: null,
-      });
-    });
+    this.setState({ selectedOption: null });
+    this.refs.userSelect.clearSelect();
   };
 
   deleteTableShare = (email) => {
@@ -173,7 +165,7 @@ class ShareTableToUser extends React.Component {
         <UserItem
           key={index}
           item={item}
-          permissions={this.permissions}
+          permissions={['rw', 'r']}
           deleteTableShare={this.deleteTableShare}
           updateTableShare={this.updateTableShare}
         />
@@ -195,18 +187,17 @@ class ShareTableToUser extends React.Component {
               <td>
                 <UserSelect
                   ref="userSelect"
-                  isMulti={false}
+                  isMulti={true}
                   className="reviewer-select"
                   placeholder={gettext('Select users...')}
                   onSelectChange={this.handleSelectChange}
                 />
               </td>
               <td>
-                <SharePermissionEditor
+                <DtableSharePermissionEditor
                   isTextMode={false}
                   isEditIconShow={false}
-                  currentPermission={this.state.permission}
-                  permissions={this.permissions}
+                  currentOption={this.state.permission}
                   onPermissionChanged={this.setPermission}
                 />
               </td>

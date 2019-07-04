@@ -165,6 +165,8 @@ Table.propTypes = tablePropTypes;
 
 const workspacePropTypes = {
   workspace: PropTypes.object.isRequired,
+  setCurrentWorkspace: PropTypes.func.isRequired,
+  onAddDTable: PropTypes.func.isRequired,
 };
 
 class Workspace extends Component {
@@ -260,7 +262,7 @@ class Workspace extends Component {
                   />
                 );
               })}
-              <tr className={isItemFreezed ? "" : "add-table-range"}>
+              <tr className={isItemFreezed ? '' : 'add-table-range'}>
                 <td><span className="sf3-font sf3-font-add"></span></td>
                 <td><a href="#" onClick={this.addTable}>{gettext('Add a table')}</a></td>
                 <td></td><td></td><td></td>
