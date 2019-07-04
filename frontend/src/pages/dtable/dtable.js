@@ -165,6 +165,8 @@ Table.propTypes = tablePropTypes;
 
 const workspacePropTypes = {
   workspace: PropTypes.object.isRequired,
+  setCurrentWorkspace: PropTypes.func.isRequired,
+  onAddDTable: PropTypes.func.isRequired,
 };
 
 class Workspace extends Component {
@@ -237,7 +239,7 @@ class Workspace extends Component {
     let { tableList, isItemFreezed } = this.state;
 
     return(
-      <div className="workspace my-2">
+      <div className="workspace">
         <div className="table-heading">{isPersonal ? gettext('My Tables') : workspace.owner_name}</div>
         {tableList.length > 0 ?
           <table width="100%" className="table-vcenter">
@@ -260,7 +262,7 @@ class Workspace extends Component {
                   />
                 );
               })}
-              <tr className={isItemFreezed ? "" : "add-table-range"}>
+              <tr className={isItemFreezed ? '' : 'add-table-range'}>
                 <td><span className="sf3-font sf3-font-add"></span></td>
                 <td><a href="#" onClick={this.addTable}>{gettext('Add a table')}</a></td>
                 <td></td><td></td><td></td>
@@ -389,7 +391,7 @@ class DTable extends Component {
 
   renderShareTablePanel = () => {
     return (
-      <div className="workspace my-2">
+      <div className="workspace">
         <div className="table-heading">{gettext('Shared with me')}</div>
         <table width="100%" className="table-vcenter">
           <colgroup>

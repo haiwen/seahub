@@ -43,7 +43,7 @@ class ShareTableItem extends Component {
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
-        <td><img src={siteRoot + 'media/img/data-base.svg'} alt="" width="24"/></td>
+        <td><span className="sf3-font sf3-font-form"></span></td>
         <td><a href={tableHref} target="_blank">{table.name}</a></td>
         <td>{table.from_user_name}</td>
         <td>{moment(table.updated_at).fromNow()}</td>

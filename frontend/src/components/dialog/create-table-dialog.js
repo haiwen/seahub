@@ -74,7 +74,7 @@ class CreateTableDialog extends React.Component {
     let email;
     if (space) {
       for (let i = 0; i < options.length; i++) {
-        if ((space.owner_type === "Personal" && options[i].value === 'Personal') || (space.owner_type === "Group" && options[i].value === space.owner_name)) {
+        if ((space.owner_type === 'Personal' && options[i].value === 'Personal') || (space.owner_type === 'Group' && options[i].value === space.owner_name)) {
           email = options[i].email;
           break;
         }
