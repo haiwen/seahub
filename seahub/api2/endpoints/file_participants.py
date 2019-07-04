@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, get_user_common_info
-from .models import FileParticipant
+from seahub.file_participants.models import FileParticipant
 from seahub.utils import normalize_file_path, is_valid_username
 from seahub.views import check_folder_permission
 from seahub.base.accounts import User

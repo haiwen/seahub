@@ -91,7 +91,7 @@ from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.dtable import WorkspacesView, DTableView, DTablesView, \
      DTableUpdateLinkView, DTableAssetUploadLinkView, dtable_file_view, dtable_asset_access
-from seahub.dtable.api import SharedDTablesView, DTableShareView
+from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -144,7 +144,7 @@ from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch
-from seahub.file_participants.api import FileParticipantsView, FileParticipantView
+from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
