@@ -21,7 +21,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.views import get_repo_file
 from seahub.dtable.models import Workspaces, DTables
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.group.utils import group_id_to_name, is_group_member
+from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, render_error, render_permission_error, gen_file_upload_url, \
     gen_file_get_url, get_file_type_and_ext, IMAGE
@@ -29,7 +29,7 @@ from seahub.views.file import send_file_access_msg
 from seahub.auth.decorators import login_required
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, SHARE_LINK_EXPIRE_DAYS_MIN, \
      SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT
-from seahub.dtable.utils import check_dtable_share_permission
+from seahub.dtable.utils import check_dtable_share_permission, check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 
 
@@ -205,15 +205,9 @@ class DTablesView(APIView):
 
         # permission check
         username = request.user.username
-        if '@seafile_group' in table_owner:
-            group_id = int(table_owner.split('@')[0])
-            if not is_group_member(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if username != table_owner:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not check_dtable_permission(username, table_owner):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # repo status check
         repo_status = repo.status
@@ -293,16 +287,10 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if '@seafile_group' in owner:
-            group_id = int(owner.split('@')[0])
-            if not is_group_member(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if username != owner and \
-                    not check_dtable_share_permission(dtable, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not check_dtable_permission(username, owner) and \
+                not check_dtable_share_permission(dtable, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # send stats message
         send_file_access_msg(request, repo, table_path, 'api')
@@ -365,15 +353,9 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if '@seafile_group' in owner:
-            group_id = int(owner.split('@')[0])
-            if not is_group_member(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if username != owner:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not check_dtable_permission(username, owner):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # repo status check
         repo_status = repo.status
@@ -441,15 +423,9 @@ class DTableView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if '@seafile_group' in owner:
-            group_id = int(owner.split('@')[0])
-            if not is_group_member(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if username != owner:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not check_dtable_permission(username, owner):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # repo status check
         repo_status = repo.status
@@ -528,16 +504,10 @@ class DTableUpdateLinkView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if '@seafile_group' in owner:
-            group_id = int(owner.split('@')[0])
-            if not is_group_member(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if username != owner and \
-                    check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not check_dtable_permission(username, owner) and \
+                check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             token = seafile_api.get_fileserver_access_token(repo_id, 'dummy', 'update',
@@ -594,7 +564,7 @@ class DTableAssetUploadLinkView(APIView):
         # permission check
         username = request.user.username
         owner = workspace.owner
-        if username != owner and \
+        if not check_dtable_permission(username, owner) and \
                 check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -656,16 +626,9 @@ def dtable_file_view(request, workspace_id, name):
     # permission check
     username = request.user.username
     owner = workspace.owner
-    if '@seafile_group' in owner:
-        group_id = int(owner.split('@')[0])
-        if not is_group_member(group_id, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-    else:
-        if username != owner and \
-                not check_dtable_share_permission(dtable, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+    if not check_dtable_permission(username, owner) and \
+            not check_dtable_share_permission(dtable, username):
+        return render_permission_error(request, _(u'Permission denied.'))
 
     return_dict = {
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
@@ -718,9 +681,9 @@ def dtable_asset_access(request, workspace_id, dtable_id, path):
     # permission check
     username = request.user.username
     owner = workspace.owner
-    if username != owner and \
+    if not check_dtable_permission(username, owner) and \
             check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
-        return render_permission_error(request, 'Permission denied.')
+        return render_permission_error(request, _(u'Permission denied.'))
 
     dl = request.GET.get('dl', '0') == '1'
     operation = 'download' if dl else 'view'
