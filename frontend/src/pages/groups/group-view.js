@@ -61,7 +61,7 @@ class GroupView extends React.Component {
       showManageMembersDialog: false,
       groupMembers: [],
       isShowDetails: false,
-      showLeaveGroupDialog: false,
+      isLeaveGroupDialogOpen: false,
     };
   }
 
@@ -311,7 +311,7 @@ class GroupView extends React.Component {
 
   toggleLeaveGroupDialog = () => {
     this.setState({
-      showLeaveGroupDialog: !this.state.showLeaveGroupDialog,
+      isLeaveGroupDialogOpen: !this.state.isLeaveGroupDialogOpen,
       showGroupDropdown: false,
     });
   }
@@ -416,7 +416,7 @@ class GroupView extends React.Component {
                     )}
                   </div>
                   <div className="path-tool">
-                    { (isShowSettingIcon) &&
+                    { isShowSettingIcon &&
                     <React.Fragment>
                       <a href="#" className="sf2-icon-cog1 action-icon group-top-action-icon" title="Settings" id="settings"
                         onClick={this.toggleGroupDropdown}></a>
@@ -452,7 +452,7 @@ class GroupView extends React.Component {
                           {/* gourp owner only can dissmiss group, admin could not quit, department member could not quit */}
                           {(!this.state.isOwner && !this.state.isStaff && !isDepartmentGroup) &&
                           <ul className="sf-popover-list">
-                            <li><a href="#" className="sf-popover-item" onClick={this.toggleLeaveGroupDialog} >{gettext('Leave Group')}</a></li>
+                            <li><a href="#" className="sf-popover-item" onClick={this.toggleLeaveGroupDialog}>{gettext('Leave Group')}</a></li>
                           </ul>
                           }
                         </div>
@@ -576,7 +576,7 @@ class GroupView extends React.Component {
             isOwner={this.state.isOwner}
           />
         }
-        {this.state.showLeaveGroupDialog &&
+        {this.state.isLeaveGroupDialogOpen &&
           <LeaveGroupDialog
             toggleLeaveGroupDialog={this.toggleLeaveGroupDialog}
             groupID={this.props.groupID}
