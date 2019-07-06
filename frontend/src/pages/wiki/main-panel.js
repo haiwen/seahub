@@ -57,7 +57,7 @@ class MainPanel extends Component {
       } else {
         nodePath += '/' + item;
         return (
-          <span key={index} >
+          <Fragment key={index} >
             <span className="path-split">/</span>
             <a 
               className="path-link" 
@@ -65,7 +65,7 @@ class MainPanel extends Component {
               onClick={this.onMainNavBarClick}>
               {item}
             </a>
-          </span>
+          </Fragment>
         );
       }
     });
@@ -116,7 +116,7 @@ class MainPanel extends Component {
         </div>
         <div className="main-panel-center">
           <div className="cur-view-path">
-            <div className="path-containter">
+            <div className="path-container">
               <a href={siteRoot + 'published/' + slug} className="normal">{slug}</a>
               {this.renderNavPath()}
             </div>
