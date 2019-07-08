@@ -5,7 +5,8 @@ import { gettext, siteRoot } from '../../utils/constants';
 import '../../css/image-file-view.css';
 
 const {
-  repoID,
+  repoID, repoEncrypted, fileExt, filePath,
+  thumbnailSizeForOriginal,
   fileName, previousImage, nextImage, rawPath
 } = window.app.pageOptions;
 
@@ -19,6 +20,13 @@ if (nextImage) {
 
 class FileContent extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadFailed: false
+    };
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', (e) => {
       if (previousImage && e.keyCode == 37) { // press '<-'
@@ -30,7 +38,25 @@ class FileContent extends React.Component {
     });
   }
 
+  handleLoadFailure = () => {
+    this.setState({
+      loadFailed: true
+    });
+  }
+
   render() {
+    if (this.state.loadFailed) {
+      return this.props.tip;
+    }
+
+    // request thumbnails for some types of file
+    // only for 'file view'. not for 'history/trash file view'
+    let thumbnailURL = '';
+    const fileExtList = ['tif', 'tiff', 'psd'];
+    if (this.props.canUseThumbnail && !repoEncrypted && fileExtList.includes(fileExt)) {
+      thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}`;
+    }
+
     return (
       <div className="file-view-content flex-1 image-file-view">
         {previousImage && (
@@ -39,7 +65,7 @@ class FileContent extends React.Component {
         {nextImage && (
           <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="fas fa-chevron-right"></span></a>
         )}
-        <img src={rawPath} alt={fileName} id="image-view" />
+        <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} />
       </div>
     );
   }
