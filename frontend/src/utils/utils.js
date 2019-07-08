@@ -133,14 +133,14 @@ export const Utils = {
     }
   },
 
-  // check if a file is a document
-  documentCheck: function (filename) {
+  // check if a file is a pdf
+  pdfCheck: function (filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
     }
     var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var exts = ['pdf', 'xmind'];
+    var exts = ['pdf'];
     if (exts.indexOf(file_ext) != -1) {
       return true;
     } else {

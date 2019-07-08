@@ -291,7 +291,7 @@ def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         return (False, 500)
 
     tmp_img_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id))
-    t1 = timeit.default_timer()
+    timer1 = timeit.default_timer()
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     tmp_file = os.path.join(tempfile.gettempdir(), file_id)
@@ -316,8 +316,8 @@ def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         os.unlink(tmp_file)
         return (False, 500)
 
-    t2 = timeit.default_timer()
-    logger.debug('Extract pdf image [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
+    timer2 = timeit.default_timer()
+    logger.debug('Extract pdf image [%s](size: %s) takes: %s' % (path, file_size, (timer2 - timer1)))
 
     try:
         ret = _create_thumbnail_common(tmp_img_path, thumbnail_file, size)
