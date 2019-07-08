@@ -21,7 +21,7 @@ if HAS_FILE_SEARCH:
 logger = logging.getLogger('seafes')
 
 
-class PublicReposSearchView(APIView):
+class PublishedRepoSearchView(APIView):
     """ Search public repos
     """
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -40,19 +40,19 @@ class PublicReposSearchView(APIView):
             error_msg = 'q invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        search_repo = request.GET.get('search_repo', None)
-        if not is_valid_repo_id_format(search_repo):
-            error_msg = 'search_repo invalid.'
+        repo_id = request.GET.get('repo_id', None)
+        if not is_valid_repo_id_format(repo_id):
+            error_msg = 'repo_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # recourse check
-        repo = seafile_api.get_repo(search_repo)
+        repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = 'Library %s not found.' % search_repo
+            error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        wiki = Wiki.objects.filter(repo_id=search_repo)[0]
+        wiki = Wiki.objects.filter(repo_id=repo_id)[0]
         if not wiki.has_read_perm(request):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -73,7 +73,7 @@ class PublicReposSearchView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo_id_map = {}
-        map_id = repo.origin_repo_id if repo.origin_repo_id else search_repo
+        map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
         repo_id_map[map_id] = repo
         # search file
         try:
