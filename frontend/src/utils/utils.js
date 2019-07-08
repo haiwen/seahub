@@ -240,7 +240,8 @@ export const Utils = {
 
   isSupportUploadFolder: function() {
     return navigator.userAgent.indexOf('Firefox')!=-1 ||
-      navigator.userAgent.indexOf('Chrome') > -1;
+      navigator.userAgent.indexOf('Chrome') > -1 || 
+      navigator.userAgent.indexOf("Safari") > -1;
   },
 
   isIEBrower: function() { // is ie <= ie11 not include Edge

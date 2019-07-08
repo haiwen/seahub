@@ -418,7 +418,7 @@ class FileUploader extends React.Component {
     this.uploadInput.current.removeAttribute('webkitdirectory');
     let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
-      this.resumable.opts.target = res.data;
+      this.resumable.opts.target = res.data + '?ret-json=1';
       if (Utils.isIEBrower()) {
         this.uploadInput.current.click();
       }
@@ -432,7 +432,7 @@ class FileUploader extends React.Component {
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
     let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
-      this.resumable.opts.target = res.data;
+      this.resumable.opts.target = res.data + '?ret-json=1';
       if (Utils.isIEBrower()) {
         this.uploadInput.current.click();
       }
@@ -446,7 +446,7 @@ class FileUploader extends React.Component {
     let repoID = this.props.repoID;
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
-      this.resumable.opts.target = res.data;
+      this.resumable.opts.target = res.data + '?ret-json=1';
     });
   }
 
