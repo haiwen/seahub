@@ -98,7 +98,7 @@ try:
     from seahub.settings import ENABLE_FILE_SCAN
 except ImportError:
     ENABLE_FILE_SCAN = False
-from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN_DEPARTMENTS
+from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 
 
 logger = logging.getLogger(__name__)
@@ -133,7 +133,7 @@ def sysadmin(request):
             'enable_limit_ipaddress': ENABLE_LIMIT_IPADDRESS,
             'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
             'enable_file_scan': ENABLE_FILE_SCAN,
-            'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
+            'enable_work_weixin': ENABLE_WORK_WEIXIN,
             })
 
 @login_required
@@ -148,7 +148,7 @@ def sysadmin_react_fake_view(request):
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'enable_file_scan': ENABLE_FILE_SCAN,
-        'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
+        'enable_work_weixin': ENABLE_WORK_WEIXIN,
     })
 
 @login_required

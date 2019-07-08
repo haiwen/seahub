@@ -186,7 +186,7 @@ def login(request, template_name='registration/login.html',
                  getattr(settings, 'ENABLE_OAUTH', False) or \
                  getattr(settings, 'ENABLE_CAS', False) or \
                  getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False) or \
-                 getattr(settings, 'ENABLE_WORK_WEIXIN_OAUTH', False)
+                 getattr(settings, 'ENABLE_WORK_WEIXIN', False)
 
     login_bg_image_path = get_login_bg_image_path()
 

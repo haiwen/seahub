@@ -8,11 +8,11 @@ import requests
 from django.core.cache import cache
 from seahub.utils import normalize_cache_key
 from seahub.work_weixin.settings import WORK_WEIXIN_CORP_ID, WORK_WEIXIN_AGENT_SECRET, \
-    WORK_WEIXIN_ACCESS_TOKEN_URL, ENABLE_WORK_WEIXIN_DEPARTMENTS, \
+    WORK_WEIXIN_ACCESS_TOKEN_URL, ENABLE_WORK_WEIXIN, \
     WORK_WEIXIN_DEPARTMENTS_URL, WORK_WEIXIN_DEPARTMENT_MEMBERS_URL, \
-    ENABLE_WORK_WEIXIN_OAUTH, WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_AUTHORIZATION_URL, \
+    WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_AUTHORIZATION_URL, \
     WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL, \
-    ENABLE_WORK_WEIXIN_NOTIFICATIONS, WORK_WEIXIN_NOTIFICATIONS_URL
+    WORK_WEIXIN_NOTIFICATIONS_URL
 from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
@@ -66,34 +66,35 @@ def handler_work_weixin_api_response(response):
 def work_weixin_base_check():
     """ work weixin base check
     """
+    if not ENABLE_WORK_WEIXIN:
+        return False
+
     if not WORK_WEIXIN_CORP_ID or not WORK_WEIXIN_AGENT_SECRET or not WORK_WEIXIN_ACCESS_TOKEN_URL:
         logger.error('work weixin base relevant settings invalid.')
         logger.error('WORK_WEIXIN_CORP_ID: %s' % WORK_WEIXIN_CORP_ID)
         logger.error('WORK_WEIXIN_AGENT_SECRET: %s' % WORK_WEIXIN_AGENT_SECRET)
         logger.error('WORK_WEIXIN_ACCESS_TOKEN_URL: %s' % WORK_WEIXIN_ACCESS_TOKEN_URL)
         return False
+
     return True
 
 
 def work_weixin_oauth_check():
     """ use for work weixin login and profile bind
     """
-    if not ENABLE_WORK_WEIXIN_OAUTH:
+    if not work_weixin_base_check():
         return False
-    else:
-        if not work_weixin_base_check():
-            return False
 
-        if not WORK_WEIXIN_AGENT_ID \
-                or not WORK_WEIXIN_GET_USER_INFO_URL \
-                or not WORK_WEIXIN_AUTHORIZATION_URL \
-                or not WORK_WEIXIN_GET_USER_PROFILE_URL:
-            logger.error('work weixin oauth relevant settings invalid.')
-            logger.error('WORK_WEIXIN_AGENT_ID: %s' % WORK_WEIXIN_AGENT_ID)
-            logger.error('WORK_WEIXIN_GET_USER_INFO_URL: %s' % WORK_WEIXIN_GET_USER_INFO_URL)
-            logger.error('WORK_WEIXIN_AUTHORIZATION_URL: %s' % WORK_WEIXIN_AUTHORIZATION_URL)
-            logger.error('WORK_WEIXIN_GET_USER_PROFILE_URL: %s' % WORK_WEIXIN_GET_USER_PROFILE_URL)
-            return False
+    if not WORK_WEIXIN_AGENT_ID \
+            or not WORK_WEIXIN_GET_USER_INFO_URL \
+            or not WORK_WEIXIN_AUTHORIZATION_URL \
+            or not WORK_WEIXIN_GET_USER_PROFILE_URL:
+        logger.error('work weixin oauth relevant settings invalid.')
+        logger.error('WORK_WEIXIN_AGENT_ID: %s' % WORK_WEIXIN_AGENT_ID)
+        logger.error('WORK_WEIXIN_GET_USER_INFO_URL: %s' % WORK_WEIXIN_GET_USER_INFO_URL)
+        logger.error('WORK_WEIXIN_AUTHORIZATION_URL: %s' % WORK_WEIXIN_AUTHORIZATION_URL)
+        logger.error('WORK_WEIXIN_GET_USER_PROFILE_URL: %s' % WORK_WEIXIN_GET_USER_PROFILE_URL)
+        return False
 
     return True
 
@@ -101,18 +102,15 @@ def work_weixin_oauth_check():
 def admin_work_weixin_departments_check():
     """ use for admin work weixin departments
     """
-    if not ENABLE_WORK_WEIXIN_DEPARTMENTS:
+    if not work_weixin_base_check():
         return False
-    else:
-        if not work_weixin_base_check():
-            return False
 
-        if not WORK_WEIXIN_DEPARTMENTS_URL \
-                or not WORK_WEIXIN_DEPARTMENT_MEMBERS_URL:
-            logger.error('admin work weixin departments relevant settings invalid.')
-            logger.error('WORK_WEIXIN_DEPARTMENTS_URL: %s' % WORK_WEIXIN_DEPARTMENTS_URL)
-            logger.error('WORK_WEIXIN_DEPARTMENT_MEMBERS_URL: %s' % WORK_WEIXIN_DEPARTMENT_MEMBERS_URL)
-            return False
+    if not WORK_WEIXIN_DEPARTMENTS_URL \
+            or not WORK_WEIXIN_DEPARTMENT_MEMBERS_URL:
+        logger.error('admin work weixin departments relevant settings invalid.')
+        logger.error('WORK_WEIXIN_DEPARTMENTS_URL: %s' % WORK_WEIXIN_DEPARTMENTS_URL)
+        logger.error('WORK_WEIXIN_DEPARTMENT_MEMBERS_URL: %s' % WORK_WEIXIN_DEPARTMENT_MEMBERS_URL)
+        return False
 
     return True
 
@@ -120,18 +118,15 @@ def admin_work_weixin_departments_check():
 def work_weixin_notifications_check():
     """ use for send work weixin notifications
     """
-    if not ENABLE_WORK_WEIXIN_NOTIFICATIONS:
+    if not work_weixin_base_check():
         return False
-    else:
-        if not work_weixin_base_check():
-            return False
 
-        if not WORK_WEIXIN_AGENT_ID \
-                or not WORK_WEIXIN_NOTIFICATIONS_URL:
-            logger.error('work weixin notifications relevant settings invalid.')
-            logger.error('WORK_WEIXIN_AGENT_ID: %s' % WORK_WEIXIN_AGENT_ID)
-            logger.error('WORK_WEIXIN_NOTIFICATIONS_URL: %s' % WORK_WEIXIN_NOTIFICATIONS_URL)
-            return False
+    if not WORK_WEIXIN_AGENT_ID \
+            or not WORK_WEIXIN_NOTIFICATIONS_URL:
+        logger.error('work weixin notifications relevant settings invalid.')
+        logger.error('WORK_WEIXIN_AGENT_ID: %s' % WORK_WEIXIN_AGENT_ID)
+        logger.error('WORK_WEIXIN_NOTIFICATIONS_URL: %s' % WORK_WEIXIN_NOTIFICATIONS_URL)
+        return False
 
     return True
 
