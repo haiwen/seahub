@@ -110,9 +110,9 @@ class FileChooser extends React.Component {
     }
   }
 
-  onCurrentRepoToggle = () => [
-    this.setState({isCurrentRepoShow: !this.state.isCurrentRepoShow})
-  ]
+  onCurrentRepoToggle = () => {
+    this.setState({isCurrentRepoShow: !this.state.isCurrentRepoShow});
+  }
 
   onDirentItemClick = (repo, filePath, dirent) => {
     this.props.onDirentItemClick(repo, filePath, dirent);
@@ -310,7 +310,7 @@ class FileChooser extends React.Component {
       selectedItemInfo: selectedItemInfo
     });
 
-    if (item.repo_id === this.props.repoID) {
+    if (this.props.repoID && item.repo_id === this.props.repoID) {
       seafileAPI.getRepoInfo(this.props.repoID).then(res => {
         // need to optimized
         let repoInfo = new RepoInfo(res.data);
@@ -323,6 +323,18 @@ class FileChooser extends React.Component {
         });
       });
     } else {
+      if (this.state.repoList.length > 0) {
+        let { repoList } = this.state;
+        let repo = repoList.filter(repoItem => repoItem.repo_id === item.repo_id);
+        let path = item.path.substring(0, (item.path.length - 1));
+        let selectRepo = repo[0];
+        this.setState({
+          repoList: repoList,
+          isOtherRepoShow: true,
+          selectedPath: path,
+          selectedRepo: selectRepo,
+        });
+      }
       if (!this.state.hasRequest) {
         let that = this;
         seafileAPI.listRepos().then(res => {
