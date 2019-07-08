@@ -20,6 +20,7 @@ import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
 // import ImportMembersDialog from '../../components/dialog/import-members-dialog';
 import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
+import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import LibDetail from '../../components/dirent-detail/lib-details';
 
@@ -60,6 +61,7 @@ class GroupView extends React.Component {
       showManageMembersDialog: false,
       groupMembers: [],
       isShowDetails: false,
+      isLeaveGroupDialogOpen: false,
     };
   }
 
@@ -307,6 +309,13 @@ class GroupView extends React.Component {
     });
   }
 
+  toggleLeaveGroupDialog = () => {
+    this.setState({
+      isLeaveGroupDialogOpen: !this.state.isLeaveGroupDialogOpen,
+      showGroupDropdown: false,
+    });
+  }
+
   listGroupMembers = () => {
     seafileAPI.listGroupMembers(this.props.groupID).then((res) => {
       this.setState({
@@ -407,7 +416,7 @@ class GroupView extends React.Component {
                     )}
                   </div>
                   <div className="path-tool">
-                    { (isShowSettingIcon && this.state.isStaff) &&
+                    { isShowSettingIcon &&
                     <React.Fragment>
                       <a href="#" className="sf2-icon-cog1 action-icon group-top-action-icon" title="Settings" id="settings"
                         onClick={this.toggleGroupDropdown}></a>
@@ -419,6 +428,7 @@ class GroupView extends React.Component {
                             onClick={this.toggleGroupDropdown}></a>
                         </div>
                         <div className="sf-popover-con">
+                          {(this.state.isStaff || this.state.isOwner) &&
                           <ul className="sf-popover-list">
                             <li><a href="#" className="sf-popover-item" onClick={this.toggleRenameGroupDialog} >{gettext('Rename')}</a></li>
                             {
@@ -426,15 +436,24 @@ class GroupView extends React.Component {
                               <li><a href="#" className="sf-popover-item" onClick={this.toggleTransferGroupDialog} >{gettext('Transfer')}</a></li>
                             }
                           </ul>
+                          }
+                          {(this.state.isStaff || this.state.isOwner) &&
                           <ul className="sf-popover-list">
                             {/* <li><a href="#" className="sf-popover-item" onClick={this.toggleImportMembersDialog} >{gettext('Import Members')}</a></li> */}
                             <li><a href="#" className="sf-popover-item" onClick={this.toggleManageMembersDialog} >{gettext('Manage Members')}</a></li>
                           </ul>
+                          }
                           {
                             this.state.isOwner &&
                             <ul className="sf-popover-list">
                               <li><a href="#" className="sf-popover-item" onClick={this.toggleDismissGroupDialog}>{gettext('Delete Group')}</a></li>
                             </ul>
+                          }
+                          {/* gourp owner only can dissmiss group, admin could not quit, department member could not quit */}
+                          {(!this.state.isOwner && !this.state.isStaff && !isDepartmentGroup) &&
+                          <ul className="sf-popover-list">
+                            <li><a href="#" className="sf-popover-item" onClick={this.toggleLeaveGroupDialog}>{gettext('Leave Group')}</a></li>
+                          </ul>
                           }
                         </div>
                       </Popover>
@@ -555,6 +574,13 @@ class GroupView extends React.Component {
             groupID={this.props.groupID}
             onGroupChanged={this.props.onGroupChanged}
             isOwner={this.state.isOwner}
+          />
+        }
+        {this.state.isLeaveGroupDialogOpen &&
+          <LeaveGroupDialog
+            toggleLeaveGroupDialog={this.toggleLeaveGroupDialog}
+            groupID={this.props.groupID}
+            onGroupChanged={this.props.onGroupChanged}
           />
         }
       </Fragment>

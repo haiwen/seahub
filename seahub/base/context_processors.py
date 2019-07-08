@@ -50,7 +50,7 @@ try:
     from seahub.settings import ENABLE_FILE_SCAN
 except ImportError:
     ENABLE_FILE_SCAN = False
-from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN_DEPARTMENTS
+from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 
 
 def base(request):
@@ -134,7 +134,7 @@ def base(request):
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
         'service_url': get_service_url().rstrip('/'),
         'enable_file_scan': ENABLE_FILE_SCAN,
-        'enable_work_weixin_departments': ENABLE_WORK_WEIXIN_DEPARTMENTS,
+        'enable_work_weixin': ENABLE_WORK_WEIXIN,
         'avatar_url': avatar_url if avatar_url else '',
     }
 

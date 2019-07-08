@@ -2,6 +2,7 @@
 import os
 import logging
 from constance import config
+from dateutil.relativedelta import relativedelta
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -9,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api
@@ -48,6 +50,11 @@ def get_upload_link_info(uls):
     else:
         ctime = ''
 
+    if uls.expire_date:
+        expire_date = datetime_to_isoformat_timestr(uls.expire_date)
+    else:
+        expire_date = ''
+
     data['repo_id'] = repo_id
     data['repo_name'] = repo.repo_name if repo else ''
     data['path'] = path
@@ -57,6 +64,8 @@ def get_upload_link_info(uls):
     data['link'] = gen_shared_upload_link(token)
     data['token'] = token
     data['username'] = uls.username
+    data['expire_date'] = expire_date
+    data['is_expired'] = uls.is_expired()
 
     return data
 
@@ -143,6 +152,12 @@ class UploadLinks(APIView):
             error_msg = _('Password is too short')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        try:
+            expire_days = int(request.data.get('expire_days', 0))
+        except ValueError:
+            error_msg = 'expire_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -164,11 +179,16 @@ class UploadLinks(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if expire_days <= 0:
+            expire_date = None
+        else:
+            expire_date = timezone.now() + relativedelta(days=expire_days)
+
         username = request.user.username
         uls = UploadLinkShare.objects.get_upload_link_by_path(username, repo_id, path)
         if not uls:
             uls = UploadLinkShare.objects.create_upload_link_share(username,
-                repo_id, path, password)
+                repo_id, path, password, expire_date)
 
         link_info = get_upload_link_info(uls)
         return Response(link_info)

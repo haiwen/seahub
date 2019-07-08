@@ -128,43 +128,31 @@ class FileUploader extends React.Component {
     this.resumable.on('dragstart', this.onDragStart.bind(this));
   }
 
-  onChunkingComplete = (file) => {
-    if (file.relativePath !== file.fileName) {
-      return; // is upload a folder;
-    }
-    if (enableResumableFileUpload) {
-      let repoID = this.props.repoID;
-      seafileAPI.getFileUploadedBytes(repoID, this.props.path, file.fileName).then(res => {
-        let uploadedBytes = res.data.uploadedBytes;
-        let offset = Math.floor(uploadedBytes / (1024 * 1024));
-        file.markChunksCompleted(offset);
-      });
-    }
-  }
-
-  onFileAdded = (resumableFile, files) => {
-    //get parent_dir、relative_path；
+  onChunkingComplete = (resumableFile) => {
+    //get parent_dir relative_path
     let path = this.props.path === '/' ? '/' : this.props.path + '/';
     let fileName = resumableFile.fileName;
     let relativePath = resumableFile.relativePath;
     let isFile = fileName === relativePath;
 
-    //update formdata；
+    //update formdata
     resumableFile.formData = {};
-    if (isFile) {
+    if (isFile) { // upload file
       resumableFile.formData  = {
         parent_dir: path,
       };
-    } else {
+    } else { // upload folder
       let relative_path = relativePath.slice(0, relativePath.lastIndexOf('/') + 1);
       resumableFile.formData  = {
         parent_dir: path,
         relative_path: relative_path
       };
     }
+  }
 
-    //check repetition
-    //uploading is file and only upload one file
+  onFileAdded = (resumableFile, files) => {
+    let isFile = resumableFile.fileName === resumableFile.relativePath;
+    // uploading is file and only upload one file
     if (isFile && files.length === 1) {
       let hasRepetition = false;
       let direntList = this.props.direntList;
@@ -181,12 +169,26 @@ class FileUploader extends React.Component {
         });
       } else {
         this.setUploadFileList(this.resumable.files);
+        this.resumableUpload(resumableFile);
+      }
+    } else { 
+      this.setUploadFileList(this.resumable.files);
+      if (isFile) {
+        this.resumableUpload(resumableFile);
+      } else {
         this.resumable.upload();
       }
-    } else {
-      this.setUploadFileList(this.resumable.files);
-      this.resumable.upload();
     }
+  }
+
+  resumableUpload = (resumableFile) => {
+    let { repoID, path } = this.props;
+    seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName).then(res => {
+      let uploadedBytes = res.data.uploadedBytes;
+      let offset = Math.floor(uploadedBytes / (1024 * 1024));
+      resumableFile.markChunksCompleted(offset);
+      this.resumable.upload();
+    });
   }
 
   filesAddedComplete = (resumable, files) => {
@@ -416,7 +418,7 @@ class FileUploader extends React.Component {
     this.uploadInput.current.removeAttribute('webkitdirectory');
     let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
-      this.resumable.opts.target = res.data;
+      this.resumable.opts.target = res.data + '?ret-json=1';
       if (Utils.isIEBrower()) {
         this.uploadInput.current.click();
       }
@@ -430,7 +432,7 @@ class FileUploader extends React.Component {
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
     let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
-      this.resumable.opts.target = res.data;
+      this.resumable.opts.target = res.data + '?ret-json=1';
       if (Utils.isIEBrower()) {
         this.uploadInput.current.click();
       }
@@ -444,7 +446,7 @@ class FileUploader extends React.Component {
     let repoID = this.props.repoID;
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
-      this.resumable.opts.target = res.data;
+      this.resumable.opts.target = res.data + '?ret-json=1';
     });
   }
 

@@ -303,12 +303,8 @@ SOCIAL_AUTH_PIPELINE = (
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
 
-# allow user scan the work weixin qrcode to login
-ENABLE_WORK_WEIXIN_OAUTH = False
-# allow seafile admin import user from work weixin
-ENABLE_WORK_WEIXIN_DEPARTMENTS = False
-# allow send unread msg to work weixin
-ENABLE_WORK_WEIXIN_NOTIFICATIONS = False
+# enable work weixin
+ENABLE_WORK_WEIXIN = False
 
 # allow user to clean library trash
 ENABLE_USER_CLEAN_TRASH = True
@@ -917,5 +913,5 @@ if ENABLE_REMOTE_USER_AUTHENTICATION:
     MIDDLEWARE_CLASSES += ('seahub.auth.middleware.SeafileRemoteUserMiddleware',)
     AUTHENTICATION_BACKENDS += ('seahub.auth.backends.SeafileRemoteUserBackend',)
 
-if ENABLE_OAUTH or ENABLE_WORK_WEIXIN_OAUTH:
+if ENABLE_OAUTH or ENABLE_WORK_WEIXIN:
     AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)

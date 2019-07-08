@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
+import moment from 'moment';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { gettext, siteRoot, loginUrl, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -52,9 +53,10 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="4%">{/*icon*/}</th>
-                <th width="42%">{gettext('Name')}</th>
-                <th width="30%">{gettext('Library')}</th>
-                <th width="14%">{gettext('Visits')}</th>
+                <th width="30%">{gettext('Name')}</th>
+                <th width="24%">{gettext('Library')}</th>
+                <th width="16%">{gettext('Visits')}</th>
+                <th width="16%">{gettext('Expiration')}</th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
@@ -114,6 +116,24 @@ class Item extends Component {
     return { iconUrl, uploadUrl };
   }
 
+  renderExpriedData = () => {
+    let item = this.props.item;
+    if (!item.expire_date) {
+      return (
+        <Fragment>--</Fragment>
+      );
+    }
+    let expire_date = moment(item.expire_date).format('YYYY-MM-DD');
+    return (
+      <Fragment>
+        {item.is_expired ?
+          <span className="error">{expire_date}</span> :
+          expire_date
+        }
+      </Fragment>
+    );
+  }
+
   render() {
     let item = this.props.item;
     let { iconUrl, uploadUrl } = this.getUploadParams();
@@ -128,6 +148,7 @@ class Item extends Component {
         <td><Link to={uploadUrl}>{item.obj_name}</Link></td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}`}>{item.repo_name}</Link></td>
         <td>{item.view_cnt}</td>
+        <td>{this.renderExpriedData()}</td>
         <td>
           <a href="#" className={linkIconClassName} title={gettext('View')} onClick={this.viewLink}></a>
           <a href="#" className={deleteIconClassName} title={gettext('Remove')} onClick={this.removeLink}></a>

@@ -119,5 +119,5 @@ export const canManageUser = window.sysadmin ? window.sysadmin.pageOptions.admin
 export const canManageGroup = window.sysadmin ? window.sysadmin.pageOptions.admin_permissions.can_manage_group : '';
 export const canViewUserLog = window.sysadmin ? window.sysadmin.pageOptions.admin_permissions.can_view_user_log : '';
 export const canViewAdminLog = window.sysadmin ? window.sysadmin.pageOptions.admin_permissions.can_view_admin_log : '';
-export const enableWorkWeixinDepartments = window.sysadmin ? window.sysadmin.pageOptions.enable_work_weixin_departments : '';
+export const enableWorkWeixin = window.sysadmin ? window.sysadmin.pageOptions.enable_work_weixin : '';
 

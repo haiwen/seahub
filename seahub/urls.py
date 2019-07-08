@@ -89,9 +89,11 @@ from seahub.api2.endpoints.related_files import RelatedFilesView, RelatedFileVie
 from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
+from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.dtable import WorkspacesView, DTableView, DTablesView, \
      DTableUpdateLinkView, DTableAssetUploadLinkView, dtable_file_view, dtable_asset_access
 from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
+
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -365,6 +367,9 @@ urlpatterns = [
 
     # user: markdown-lint
     url(r'^api/v2.1/markdown-lint/$', MarkdownLintView.as_view(), name='api-v2.1-markdown-lint'),
+
+    # public repos search
+    url(r'^api/v2.1/published-repo-search/$', PublishedRepoSearchView.as_view(), name='api-v2.1-published-repo-search'),
 
     # user: workspaces
     url(r'^api/v2.1/workspaces/$', WorkspacesView.as_view(), name='api-v2.1-workspaces'),

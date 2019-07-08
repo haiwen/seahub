@@ -3,13 +3,13 @@
 from django.conf import settings
 
 # # work weixin base
+ENABLE_WORK_WEIXIN = getattr(settings, 'ENABLE_WORK_WEIXIN', False)
 WORK_WEIXIN_CORP_ID = getattr(settings, 'WORK_WEIXIN_CORP_ID', '')
 WORK_WEIXIN_AGENT_SECRET = getattr(settings, 'WORK_WEIXIN_AGENT_SECRET', '')
 WORK_WEIXIN_ACCESS_TOKEN_URL = getattr(settings, 'WORK_WEIXIN_ACCESS_TOKEN_URL',
                                        'https://qyapi.weixin.qq.com/cgi-bin/gettoken')
 
 # # admin work weixin departments
-ENABLE_WORK_WEIXIN_DEPARTMENTS = getattr(settings, 'ENABLE_WORK_WEIXIN_DEPARTMENTS', False)
 WORK_WEIXIN_DEPARTMENTS_URL = getattr(settings, 'WORK_WEIXIN_DEPARTMENTS_URL',
                                       'https://qyapi.weixin.qq.com/cgi-bin/department/list')
 WORK_WEIXIN_DEPARTMENT_MEMBERS_URL = getattr(settings, 'WORK_WEIXIN_DEPARTMENT_MEMBERS_URL',
@@ -17,7 +17,6 @@ WORK_WEIXIN_DEPARTMENT_MEMBERS_URL = getattr(settings, 'WORK_WEIXIN_DEPARTMENT_M
 
 # # work weixin oauth
 WORK_WEIXIN_AGENT_ID = getattr(settings, 'WORK_WEIXIN_AGENT_ID', '')
-ENABLE_WORK_WEIXIN_OAUTH = getattr(settings, 'ENABLE_WORK_WEIXIN_OAUTH', False)
 WORK_WEIXIN_UID_PREFIX = WORK_WEIXIN_CORP_ID + '_'
 WORK_WEIXIN_USER_INFO_AUTO_UPDATE = getattr(settings, 'WORK_WEIXIN_USER_INFO_AUTO_UPDATE', True)
 WORK_WEIXIN_AUTHORIZATION_URL = getattr(settings, 'WORK_WEIXIN_AUTHORIZATION_URL',
@@ -28,7 +27,6 @@ WORK_WEIXIN_GET_USER_PROFILE_URL = getattr(settings, 'WORK_WEIXIN_GET_USER_PROFI
                                            'https://qyapi.weixin.qq.com/cgi-bin/user/get')
 
 # # work weixin notifications
-ENABLE_WORK_WEIXIN_NOTIFICATIONS = getattr(settings, 'ENABLE_WORK_WEIXIN_NOTIFICATIONS', False)
 WORK_WEIXIN_NOTIFICATIONS_URL = getattr(settings, 'WORK_WEIXIN_NOTIFICATIONS_URL',
                                         'https://qyapi.weixin.qq.com/cgi-bin/message/send')
 

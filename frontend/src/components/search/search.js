@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
+import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
 
 const propTypes = {
+  isPublic: PropTypes.bool,
   repoID: PropTypes.string,
   placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
@@ -93,27 +95,53 @@ class Search extends Component {
 
   sendRequest(queryData, cancelToken) {
     var _this = this;
-    editorUtilities.searchFiles(queryData,cancelToken).then(res => {
-      if (!res.data.total) {
+    let isPublic = this.props.isPublic;
+
+    if (isPublic) {
+      seafileAPI.searchFilesInPublishedRepo(queryData.q, queryData.search_repo).then(res => {
+        if (!res.data.total) {
+          _this.setState({
+            resultItems: [],
+            isResultGetted: true
+          });
+          _this.source = null;
+          return;
+        }
+
+        let items = _this.formatResultItems(res.data.results);
         _this.setState({
-          resultItems: [],
+          resultItems: items,
           isResultGetted: true
         });
         _this.source = null;
-        return;
-      }
-
-      let items = _this.formatResultItems(res.data.results);
-      _this.setState({
-        resultItems: items,
-        isResultGetted: true
+      }).catch(res => {
+        /* eslint-disable */
+        console.log(res);
+        /* eslint-enable */
       });
-      _this.source = null;
-    }).catch(res => {
-      /* eslint-disable */
-      console.log(res);
-      /* eslint-enable */
-    });
+    } else {
+      editorUtilities.searchFiles(queryData,cancelToken).then(res => {
+        if (!res.data.total) {
+          _this.setState({
+            resultItems: [],
+            isResultGetted: true
+          });
+          _this.source = null;
+          return;
+        }
+  
+        let items = _this.formatResultItems(res.data.results);
+        _this.setState({
+          resultItems: items,
+          isResultGetted: true
+        });
+        _this.source = null;
+      }).catch(res => {
+        /* eslint-disable */
+        console.log(res);
+        /* eslint-enable */
+      });
+    }
   }
 
   cancelRequest() {

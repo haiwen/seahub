@@ -41,6 +41,7 @@ class GenerateShareLink extends React.Component {
       'can_download': true
     };
     this.isExpireDaysNoLimit = (parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) === 0);
+    this.isOfficeFile = Utils.isOfficeFile(this.props.itemPath);
   }
 
   componentDidMount() {
@@ -57,12 +58,13 @@ class GenerateShareLink extends React.Component {
         this.setState({isLoading: false});
       }
     });
-
-    seafileAPI.getFileInfo(repoID, path).then((res) => {
-      if (res.data) {
-        this.setState({fileInfo: res.data});
-      }
-    });
+    if (this.isOfficeFile) {
+      seafileAPI.getFileInfo(repoID, path).then((res) => {
+        if (res.data) {
+          this.setState({fileInfo: res.data});
+        }
+      });
+    }
   }
 
   onPasswordInputChecked = () => {
@@ -402,7 +404,7 @@ class GenerateShareLink extends React.Component {
               <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
-          {(Utils.isOfficeFile(this.props.itemPath) && fileInfo && fileInfo.can_edit) &&
+          {(this.isOfficeFile && fileInfo && fileInfo.can_edit) &&
             <FormGroup check className="permission">
               <Label className="form-check-label">
                 <Input type="radio" name="radio1" onChange={() => this.setPermission('editOnCloudAndDownload')} />{'  '}{gettext('Edit on cloud and download')}
