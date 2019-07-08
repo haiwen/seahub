@@ -7,6 +7,7 @@ import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
+import Search from '../../components/search/search';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -77,6 +78,21 @@ class MainPanel extends Component {
     return (
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-north panel-top border-left-show">
+          {!username &&
+            <Fragment>
+              <div className="cur-view-toolbar">
+                <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+              </div>
+              <div className="common-toolbar">
+                <Search
+                  isPublic={true}
+                  repoID={repoID}
+                  onSearchedClick={this.props.onSearchedClick}
+                  placeholder={gettext('Search files in this library')}
+                />
+              </div>
+            </Fragment>
+          }
           {username && (
             <Fragment>
               <div className="cur-view-toolbar">
