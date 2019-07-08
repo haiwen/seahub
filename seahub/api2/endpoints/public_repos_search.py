@@ -13,7 +13,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.utils.repo import is_valid_repo_id_format
 from seahub.utils import HAS_FILE_SEARCH
-
+from seahub.wiki.models import Wiki
 if HAS_FILE_SEARCH:
     from seahub_extra.search.utils import search_files
 
@@ -45,6 +45,18 @@ class PublicReposSearchView(APIView):
             error_msg = 'search_repo invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        # recourse check
+        repo = seafile_api.get_repo(search_repo)
+        if not repo:
+            error_msg = 'Library %s not found.' % search_repo
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        wiki = Wiki.objects.filter(repo_id=search_repo)[0]
+        if not wiki.has_read_perm(request):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '10'))
@@ -59,12 +71,6 @@ class PublicReposSearchView(APIView):
         if start < 0 or size < 0:
             error_msg = 'page or per_page invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # recourse check
-        repo = seafile_api.get_repo(search_repo)
-        if not repo:
-            error_msg = 'Library %s not found.' % search_repo
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id_map = {}
         map_id = repo.origin_repo_id if repo.origin_repo_id else search_repo

@@ -360,7 +360,7 @@ urlpatterns = [
     # user: markdown-lint
     url(r'^api/v2.1/markdown-lint/$', MarkdownLintView.as_view(), name='api-v2.1-markdown-lint'),
 
-    # search
+    # public repos search
     url(r'^api/v2.1/public-repos-search/$', PublicReposSearchView.as_view(), name='api-v2.1-public-repos-search'),
 
     # Deprecated

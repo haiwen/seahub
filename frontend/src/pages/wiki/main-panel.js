@@ -82,14 +82,6 @@ class MainPanel extends Component {
             <Fragment>
               <div className="cur-view-toolbar">
                 <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-                <MediaQuery query="(min-width: 768px)">
-                  {this.props.permission === 'rw' &&
-                    <button className="btn btn-secondary operation-item" title="Edit" onClick={this.onEditClick}>{gettext('Edit')}</button>}
-                </MediaQuery>
-                <MediaQuery query="(max-width: 767.8px)">
-                  {this.props.permission === 'rw' &&
-                    <button className="btn btn-secondary operation-item my-1" title="Edit" onClick={this.onEditClick}>{gettext('Edit')}</button>}
-                </MediaQuery>
               </div>
               <div className="common-toolbar">
                 <Search
