@@ -13,6 +13,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.utils.repo import is_valid_repo_id_format
 from seahub.utils import HAS_FILE_SEARCH
+
 if HAS_FILE_SEARCH:
     from seahub_extra.search.utils import search_files
 
@@ -87,7 +88,6 @@ class PublicReposSearchView(APIView):
             result['repo_type'] = 'public'
 
         has_more = True if total > current_page * per_page else False
-        print results
 
         return Response({
             "total": total,
