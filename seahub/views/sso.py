@@ -35,7 +35,7 @@ def sso(request):
     if getattr(settings, 'ENABLE_CAS', False):
         return HttpResponseRedirect(reverse('cas_ng_login') + next_param)
 
-    if getattr(settings, 'ENABLE_WORK_WEIXIN_OAUTH', False):
+    if getattr(settings, 'ENABLE_WORK_WEIXIN', False):
         return HttpResponseRedirect(reverse('work_weixin_oauth_login') + next_param)
 
     return HttpResponseRedirect(next_page)
