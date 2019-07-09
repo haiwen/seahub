@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-04 17:01+0800\n"
+"POT-Creation-Date: 2019-07-09 15:15+0800\n"
 "PO-Revision-Date: 2019-07-04 09:03+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/haiwen/seahub/language/lt/)\n"
@@ -75,11 +75,11 @@ msgstr ""
 msgid "The name already exists."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:233
+#: seahub/api2/endpoints/admin/address_book/groups.py:229
 msgid "There are libraries in this department."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:237
+#: seahub/api2/endpoints/admin/address_book/groups.py:233
 msgid "There are sub-departments in this department."
 msgstr ""
 
@@ -645,7 +645,7 @@ msgstr ""
 msgid "Share link %s already exists."
 msgstr ""
 
-#: seahub/api2/endpoints/upload_links.py:143
+#: seahub/api2/endpoints/upload_links.py:152
 #: seahub/templates/snippets/repo_create_js.html:50
 msgid "Password is too short"
 msgstr "Slaptažodis per trumpas"

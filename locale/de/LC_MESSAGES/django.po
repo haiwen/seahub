@@ -73,9 +73,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-04 17:01+0800\n"
-"PO-Revision-Date: 2019-07-04 09:03+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2019-07-09 15:15+0800\n"
+"PO-Revision-Date: 2019-07-04 11:49+0000\n"
+"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -138,11 +138,11 @@ msgstr "Namen dürfen nur Buchstaben, Zahlen, Leerzeichen, Bindestriche und Unte
 msgid "The name already exists."
 msgstr "Der Name ist schon vergeben."
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:233
+#: seahub/api2/endpoints/admin/address_book/groups.py:229
 msgid "There are libraries in this department."
 msgstr "Der Bereich enthält Bibliotheken."
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:237
+#: seahub/api2/endpoints/admin/address_book/groups.py:233
 msgid "There are sub-departments in this department."
 msgstr "Der Bereich enthält Unterbereiche."
 
@@ -706,9 +706,9 @@ msgstr "Der Freigabe-Link sollte höchstens %s Tage verfügbar sein"
 #: seahub/api2/endpoints/share_links.py:309
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "Freigabe-Link %s ist bereits vorhanden."
 
-#: seahub/api2/endpoints/upload_links.py:143
+#: seahub/api2/endpoints/upload_links.py:152
 #: seahub/templates/snippets/repo_create_js.html:50
 msgid "Password is too short"
 msgstr "Passwort ist zu kurz"
@@ -1327,7 +1327,7 @@ msgstr[1] "vor %(seconds)d Sekunden"
 #: seahub/templates/sysadmin/userinfo.html:196
 #: seahub/templates/sysadmin/userinfo.html:247
 msgid "Read-Write"
-msgstr "Lesen + Schreiben"
+msgstr "Lesen+Schreiben"
 
 #: seahub/base/templatetags/seahub_tags.py:466
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:50
@@ -3042,7 +3042,7 @@ msgstr "Alle Objekte im Papierkorb sind gelöscht."
 #: seahub/notifications/management/commands/send_file_updates.py:122
 #, python-format
 msgid "Removed items older than %s days from trash."
-msgstr "Objekte gelöscht, die sich länger als %s Tage im Papierkorb befanden."
+msgstr "Objekte gelöscht, die sich länger als %s Tage im Papierkorb befunden haben."
 
 #: seahub/notifications/management/commands/send_file_updates.py:130
 msgid "Created file"
@@ -3070,7 +3070,7 @@ msgstr "Aktualisierte Datei"
 
 #: seahub/notifications/management/commands/send_file_updates.py:158
 msgid "Created folder"
-msgstr "Erstellter Ordner"
+msgstr "Ordner erstellt"
 
 #: seahub/notifications/management/commands/send_file_updates.py:161
 msgid "Deleted folder"
@@ -6364,7 +6364,7 @@ msgstr "Über uns"
 
 #: seahub/templates/priv/ali.html:11
 msgid "Read-Write-Sync"
-msgstr "Synchronisieren: Lesen und Schreiben"
+msgstr "Synchronisieren: Lesen+Schreiben"
 
 #: seahub/templates/priv/ali.html:12
 msgid "Read-Only-Sync"
