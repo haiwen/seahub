@@ -46,7 +46,10 @@ class WikiMarkdownViewer extends React.Component {
     this.listRelatedFiles();
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.markdownContent === nextProps.markdownContent) {
+      return;
+    }
     // Unbound event when updating
     this.links.forEach(link => {
       link.removeEventListener('click', this.onLinkClick);
@@ -63,7 +66,7 @@ class WikiMarkdownViewer extends React.Component {
   }
 
   componentWillUnmount() {
-    // Rebinding events when the component is destroyed
+    // Unbound events when the component is destroyed
     this.links.forEach(link => {
       link.removeEventListener('click', this.onLinkClick);
     });
