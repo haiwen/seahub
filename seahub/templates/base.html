@@ -257,13 +257,6 @@ $('.js-close-side-nav').on('click', function() {
     $('.side-nav').removeClass('side-nav-shown');
     return false;
 });
-$(window).on('resize', function() {
-    if ($(window).width() >= 768) {
-        $.modal.close();
-    } else {
-        $('.side-nav').removeClass('side-nav-shown');
-    }
-});
 </script>
 {% block extra_script %}{% endblock %}
 </body>
