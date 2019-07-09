@@ -606,7 +606,7 @@ def view_lib_file(request, repo_id, path):
     # template = 'view_file_%s.html' % filetype.lower()
     template = '%s_file_view_react.html' % filetype.lower()
 
-    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND):
+    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
         template = 'common_file_view_react.html'
 
     if filetype == TEXT or fileext in get_conf_text_ext():

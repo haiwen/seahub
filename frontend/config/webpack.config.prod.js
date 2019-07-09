@@ -82,7 +82,6 @@ module.exports = {
     viewFileText: [require.resolve('./polyfills'), paths.appSrc + "/view-file-text.js"],
     viewFileDocument: [require.resolve('./polyfills'), paths.appSrc + "/view-file-document.js"],
     viewFileSpreadsheet: [require.resolve('./polyfills'), paths.appSrc + "/view-file-spreadsheet.js"],
-    viewFileUnknown: [require.resolve('./polyfills'), paths.appSrc + "/view-file-unknown.js"],
     settings: [require.resolve('./polyfills'), paths.appSrc + "/settings.js"],
     repoHistory: [require.resolve('./polyfills'), paths.appSrc + "/repo-history.js"],
     repoSnapshot: [require.resolve('./polyfills'), paths.appSrc + "/repo-snapshot.js"],
