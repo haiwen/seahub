@@ -43,7 +43,8 @@ class GenerateShareLink extends React.Component {
       'can_edit': false, 
       'can_download': true
     };
-    this.isOfficeFile = Utils.isOfficeFile(this.props.itemPath);
+    this.isExpireDaysNoLimit = (parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) === 0);
+    this.isFileTypeSupportEditOnCloud = Utils.isOfficeFile(this.props.itemPath) || Utils.isMarkdownFile(this.props.itemPath);
   }
 
   componentDidMount() {
@@ -60,7 +61,7 @@ class GenerateShareLink extends React.Component {
         this.setState({isLoading: false});
       }
     });
-    if (this.isOfficeFile) {
+    if (this.isFileTypeSupportEditOnCloud) {
       seafileAPI.getFileInfo(repoID, path).then((res) => {
         if (res.data) {
           this.setState({fileInfo: res.data});
@@ -407,7 +408,9 @@ class GenerateShareLink extends React.Component {
               <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
-          {(this.isOfficeFile && fileInfo && fileInfo.can_edit) &&
+          {/* Only fileType support edit on cloud(office file or md), can send api request and get fileInfo */}
+          {/* two conditions to show this option: 1. fileType support edit 2. fileInfo can_edid */}
+          {(fileInfo && fileInfo.can_edit) &&
             <FormGroup check className="permission">
               <Label className="form-check-label">
                 <Input type="radio" name="radio1" onChange={() => this.setPermission('editOnCloudAndDownload')} />{'  '}{gettext('Edit on cloud and download')}

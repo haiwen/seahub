@@ -57,6 +57,7 @@
       fileType: '{{ filetype }}',
       fileExt: '{{ fileext }}',
       commitID: '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}',
+      canEdit: {% if permissions.can_edit == True %}true{% else %}false{% endif %},
 
       // for 'view file in shared dir'
       {% if zipped %}
