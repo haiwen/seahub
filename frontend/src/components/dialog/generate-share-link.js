@@ -21,14 +21,17 @@ class GenerateShareLink extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.isExpireDaysNoLimit = (parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) === 0 && shareLinkExpireDaysDefault == 0);
+    this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : shareLinkExpireDaysDefault;
     this.state = {
       isValidate: false,
       isShowPasswordInput: false,
       isPasswordVisible: false,
-      isExpireChecked: false,
+      isExpireChecked: !this.isExpireDaysNoLimit,
       password: '',
       passwdnew: '',
-      expireDays: shareLinkExpireDaysDefault,
+      expireDays: this.defaultExpireDays,
       errorInfo: '',
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
@@ -40,7 +43,6 @@ class GenerateShareLink extends React.Component {
       'can_edit': false, 
       'can_download': true
     };
-    this.isExpireDaysNoLimit = (parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) === 0);
     this.isOfficeFile = Utils.isOfficeFile(this.props.itemPath);
   }
 
@@ -124,10 +126,11 @@ class GenerateShareLink extends React.Component {
     if (isValid) {
       this.setState({errorInfo: ''});
       let { itemPath, repoID } = this.props;
-      let { password, expireDays } = this.state;
+      let { password, isExpireChecked, expireDays } = this.state;
       let permissions = this.permissions;
       permissions = JSON.stringify(permissions);
-      seafileAPI.createShareLink(repoID, itemPath, password, expireDays, permissions).then((res) => {
+      const expireDaysSent = isExpireChecked ? expireDays : '';
+      seafileAPI.createShareLink(repoID, itemPath, password, expireDaysSent, permissions).then((res) => {
         let sharedLinkInfo = new SharedLinkInfo(res.data);
         this.setState({sharedLinkInfo: sharedLinkInfo});
       }).catch((error) => {
@@ -157,8 +160,8 @@ class GenerateShareLink extends React.Component {
         password: '',
         passwordnew: '',
         isShowPasswordInput: false,
-        expireDays: shareLinkExpireDaysDefault,
-        isExpireChecked: false,
+        expireDays: this.defaultExpireDays,
+        isExpireChecked: !this.isExpireDaysNoLimit,
         errorInfo: '',
         sharedLinkInfo: null,
         isNoticeMessageShow: false,
@@ -354,13 +357,13 @@ class GenerateShareLink extends React.Component {
             <Fragment>
               <FormGroup check>
                 <Label check>
-                  <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
+                  <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked} />{'  '}{gettext('Add auto expiration')}
                 </Label>
               </FormGroup>
               {this.state.isExpireChecked && 
                 <FormGroup check>
                   <Label check>
-                    <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
+                    <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked} /><span className="expir-span">{gettext('days')}</span>
                   </Label>
                 </FormGroup>
               }
