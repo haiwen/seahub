@@ -1333,6 +1333,11 @@ class ReposSyncBatchCopyItemView(APIView):
             error_msg = 'dst_parent_dir invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        # forbiden sync copy to a different repo
+        if src_repo_id != dst_repo_id:
+            error_msg = _('Use sync copy to a different repo is not allowed.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # resource check
         if not seafile_api.get_repo(src_repo_id):
             error_msg = 'Library %s not found.' % src_repo_id
@@ -1433,6 +1438,11 @@ class ReposSyncBatchMoveItemView(APIView):
         dst_parent_dir = request.data.get('dst_parent_dir', None)
         if not dst_parent_dir:
             error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # forbiden sync move to a different repo
+        if src_repo_id != dst_repo_id:
+            error_msg = _('Use sync move to a different repo is not allowed.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
