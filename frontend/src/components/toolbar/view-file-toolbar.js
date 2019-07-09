@@ -85,7 +85,7 @@ class ViewFileToolbar extends React.Component {
     });
   }
 
-  onIntoHistory = () => {
+  onHistoryClick = () => {
     let historyUrl = siteRoot + 'repo/file_revisions/' + this.props.repoID + '/?p=' + Utils.encodePath(this.props.path);
     location.href = historyUrl;
   }
@@ -119,7 +119,7 @@ class ViewFileToolbar extends React.Component {
                 }
                 <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Tags')}</DropdownItem>
                 <DropdownItem onClick={this.onListRelatedFileToggle}>{gettext('Related Files')}</DropdownItem>
-                <DropdownItem onClick={this.onIntoHistory}>{gettext('History')}</DropdownItem>
+                <DropdownItem onClick={this.onHistoryClick}>{gettext('History')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           )}
