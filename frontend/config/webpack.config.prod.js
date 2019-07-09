@@ -80,7 +80,6 @@ module.exports = {
     historyTrashFileView: [require.resolve('./polyfills'), paths.appSrc + "/history-trash-file-view.js"],
     fileView: [require.resolve('./polyfills'), paths.appSrc + "/file-view.js"],
     viewFileText: [require.resolve('./polyfills'), paths.appSrc + "/view-file-text.js"],
-    viewFileXmind: [require.resolve('./polyfills'), paths.appSrc + "/view-file-xmind.js"],
     viewFileDocument: [require.resolve('./polyfills'), paths.appSrc + "/view-file-document.js"],
     viewFileSpreadsheet: [require.resolve('./polyfills'), paths.appSrc + "/view-file-spreadsheet.js"],
     viewFileUnknown: [require.resolve('./polyfills'), paths.appSrc + "/view-file-unknown.js"],

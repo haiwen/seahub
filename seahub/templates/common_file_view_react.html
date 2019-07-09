@@ -17,6 +17,9 @@ nextImage: {% if img_next %}'{{ img_next|escapejs }}'{% else %}false{% endif %},
 fileExt: '{{ fileext|escapejs }}',
 thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
 {% endif %}
+{% if filetype == 'XMind' %}
+xmindImageSrc: '{{ xmind_image_src|escapejs }}',
+{% endif %}
 rawPath: '{{ raw_path|escapejs }}'
 {% endblock %}
 

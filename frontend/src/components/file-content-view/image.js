@@ -5,9 +5,11 @@ import { gettext, siteRoot } from '../../utils/constants';
 import '../../css/image-file-view.css';
 
 const {
-  repoID, repoEncrypted, fileExt, filePath,
+  repoID, repoEncrypted,
+  fileExt, filePath, fileName,
   thumbnailSizeForOriginal,
-  fileName, previousImage, nextImage, rawPath
+  previousImage, nextImage, rawPath,
+  xmindImageSrc // for xmind file
 } = window.app.pageOptions;
 
 let previousImageUrl, nextImageUrl; 
@@ -49,13 +51,16 @@ class FileContent extends React.Component {
       return this.props.tip;
     }
 
-    // request thumbnails for some types of file
+    // request thumbnails for some files
     // only for 'file view'. not for 'history/trash file view'
     let thumbnailURL = '';
     const fileExtList = ['tif', 'tiff', 'psd'];
     if (this.props.canUseThumbnail && !repoEncrypted && fileExtList.includes(fileExt)) {
       thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}`;
     }
+
+    // for xmind file
+    const xmindSrc = xmindImageSrc ? `${siteRoot}${xmindImageSrc}` : '';
 
     return (
       <div className="file-view-content flex-1 image-file-view">
@@ -65,7 +70,7 @@ class FileContent extends React.Component {
         {nextImage && (
           <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="fas fa-chevron-right"></span></a>
         )}
-        <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} />
+        <img src={xmindSrc || thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} />
       </div>
     );
   }

@@ -159,11 +159,6 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/view-file-text.js",
     ],
-    viewFileXmind: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-xmind.js",
-    ],
     viewFileDocument: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
