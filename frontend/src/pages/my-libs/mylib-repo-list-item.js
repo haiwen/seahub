@@ -298,10 +298,10 @@ class MylibRepoListItem extends React.Component {
     let repo = this.props.repo;
     return (
       <Fragment>
-        <MediaQuery query={"(min-device-width: 768px)"}>
+        <MediaQuery query="(min-width: 768px)">
           {this.renderPCUI()}
         </MediaQuery>
-        <MediaQuery query={"(max-device-width: 767.8px)"}>
+        <MediaQuery query="(max-width: 767.8px)">
           {this.renderMobileUI()}
         </MediaQuery>
         {this.state.isShareDialogShow && (
