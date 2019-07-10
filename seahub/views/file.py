@@ -531,7 +531,6 @@ def view_lib_file(request, repo_id, path):
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
         'can_download_file': parse_repo_perm(permission).can_download,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
-        'thumbnail_size_for_original': settings.THUMBNAIL_SIZE_FOR_ORIGINAL,
     }
 
     # check whether file is starred
@@ -606,6 +605,9 @@ def view_lib_file(request, repo_id, path):
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
     # template = 'view_file_%s.html' % filetype.lower()
     template = '%s_file_view_react.html' % filetype.lower()
+
+    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
+        template = 'common_file_view_react.html'
 
     if filetype == TEXT or fileext in get_conf_text_ext():
 
