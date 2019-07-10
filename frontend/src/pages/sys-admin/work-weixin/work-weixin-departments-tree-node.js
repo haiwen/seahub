@@ -37,16 +37,13 @@ class WorkWeixinDepartmentsTreeNode extends Component {
   };
 
   onMouseEnter = () => {
-    this.setState({
-      active: true
-    });
+    this.setState({ active: true });
   };
 
   onMouseLeave = () => {
-    this.setState({
-      active: false
-    });
+    this.setState({ active: false });
   };
+
   componentDidMount() {
     if (this.props.index === 0) {
       this.setState({ isChildrenShow: true });
@@ -97,8 +94,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
               isOpen={this.state.dropdownOpen}
               toggle={this.dropdownToggle}
               direction="down"
-              className="mx-1 old-history-more-operation"
-              style={!this.state.active ? {opacity: 0, display: 'inline'} : {display: 'inline'}}
+              style={this.state.active ? {} : { opacity: 0 }}
             >
               <DropdownToggle
                 tag='i'
@@ -111,7 +107,6 @@ class WorkWeixinDepartmentsTreeNode extends Component {
               <DropdownMenu className="drop-list" right={true}>
                 <DropdownItem
                   onClick={this.props.importDepartmentDialogToggle.bind(this, department)}
-                  className="edit-comment"
                   id={department.id}
                 >{'导入部门'}</DropdownItem>
               </DropdownMenu>

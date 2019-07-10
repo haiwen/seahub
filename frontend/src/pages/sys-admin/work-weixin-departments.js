@@ -227,27 +227,19 @@ class WorkWeixinDepartments extends Component {
   }
 
   importDepartmentDialogToggle = (importDepartment) => {
-    if (importDepartment) {
-      this.setState({
-        isImportDepartmentDialogShow: !this.state.isImportDepartmentDialogShow,
-        importDepartment: importDepartment,
-      }, () => {
+    this.setState({
+      isImportDepartmentDialogShow: !this.state.isImportDepartmentDialogShow,
+      importDepartment: importDepartment,
+    }, () => {
+      if (importDepartment) {
         this.getWorkWeixinDepartmentsList(importDepartment.id);
-      });
-    } else {
-      this.setState({
-        isImportDepartmentDialogShow: !this.state.isImportDepartmentDialogShow,
-        importDepartment: importDepartment,
-      });
-    }
+      }
+    });
   };
 
   onImportDepartmentSubmit = () => {
     let importDepartment = this.state.importDepartment;
-    if (!importDepartment){
-      return;
-    }
-
+    if (!importDepartment) return;
     seafileAPI.adminImportWorkWeixinDepartment(importDepartment.id).then((res) => {
       this.setState({
         isMembersListLoading: true,
@@ -260,7 +252,6 @@ class WorkWeixinDepartments extends Component {
       });
       this.getWorkWeixinDepartmentMembersList(importDepartment.id);
       this.importDepartmentDialogToggle(null);
-
       if (res.data.success) {
         this.handleImportDepartmentSubmitSuccess(res.data.success);
       }
@@ -272,19 +263,19 @@ class WorkWeixinDepartments extends Component {
     });
   };
 
-  handleImportDepartmentSubmitSuccess = (success) => {
-    for (let i = 0; i < success.length; i++) {
-      let obj = success[i];
-      let msg = obj.type === 'department' ? '部门 ' + obj.department_name + ' 导入成功' : obj.api_user_name + ' 导入成功' ;
-      toaster.success(msg, {duration: 3});
+  handleImportDepartmentSubmitSuccess = (successes) => {
+    for (let i = 0, len = successes.length; i < len; i++) {
+      let success = successes[i];
+      let successMsg = success.type === 'department' ? '部门 ' + success.department_name + ' 导入成功' : success.api_user_name + ' 导入成功' ;
+      toaster.success(successMsg, { duration: 3 });
     }
   };
 
   handleImportDepartmentSubmitFailed = (fails) => {
-    for (let i = 0; i < fails.length; i++) {
-      let obj = fails[i];
-      let name = obj.type === 'department' ? obj.department_name : obj.api_user_name;
-      toaster.danger(name + ' ' + obj.msg, {duration: 2});
+    for (let i = 0, len = fails.length; i < len; i++) {
+      let fail = fails[i];
+      let failName = fail.type === 'department' ? fail.department_name : fail.api_user_name;
+      toaster.danger(failName + ' ' + fail.msg, { duration: 3} );
     }
   };
 
@@ -317,6 +308,8 @@ class WorkWeixinDepartments extends Component {
   }
 
   render() {
+    const { isImportDepartmentDialogShow, isTreeLoading, importDepartment, importDepartmentChildrenCount, importDepartmentMembersCount } = this.state;
+    let canImportDepartment = !!(isPro && isImportDepartmentDialogShow && !isTreeLoading && importDepartment);
     return (
       <Fragment>
         {this.renderNav()}
@@ -347,13 +340,13 @@ class WorkWeixinDepartments extends Component {
             </div>
           </div>
         </div>
-        {(isPro && this.state.isImportDepartmentDialogShow && !this.state.isTreeLoading && this.state.importDepartment) &&
+        {canImportDepartment &&
           <ImportWorkWeixinDepartmentDialog
             importDepartmentDialogToggle={this.importDepartmentDialogToggle}
             onImportDepartmentSubmit={this.onImportDepartmentSubmit}
-            departmentsCount={this.state.importDepartmentChildrenCount}
-            membersCount={this.state.importDepartmentMembersCount}
-            importDepartment={this.state.importDepartment}
+            departmentsCount={importDepartmentChildrenCount}
+            membersCount={importDepartmentMembersCount}
+            departmentName={importDepartment.name}
           />
         }
       </Fragment>
