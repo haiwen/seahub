@@ -87,9 +87,7 @@ class DirTool extends React.Component {
     let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
     let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
     if (permission) {
-      if (isFile) { // isFile
-        //todo
-      } else {
+      if (!isFile) {
         if (name) { // name not '' is not root path
           trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
           return (
