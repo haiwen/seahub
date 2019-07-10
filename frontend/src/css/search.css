@@ -84,8 +84,8 @@
 }
 .search-result-item .item-content {
   flex: 1;
-  width: 0;
   margin-left: 0.25rem;
+  overflow-x: hidden;
 }
 .item-content .item-name a {
   color: #EA8102 !important;
