@@ -55,7 +55,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'unknown_file_view_react.html')
+        self.assertTemplateUsed(resp, 'common_file_view_react.html')
         assert resp.context['err'] == 'File preview unsupported'
 
     @patch('seahub.views.file.FILE_PREVIEW_MAX_SIZE', -1)
@@ -130,7 +130,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'pdf_file_view_react.html')
+        self.assertTemplateUsed(resp, 'common_file_view_react.html')
         assert resp.context['filetype'].lower() == 'pdf'
 
         # token for doc file is one time only
@@ -152,7 +152,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'image_file_view_react.html')
+        self.assertTemplateUsed(resp, 'common_file_view_react.html')
         assert resp.context['filetype'].lower() == 'image'
         assert resp.context['img_next'] == '/foo2.jpg'
         assert resp.context['img_prev'] is None
@@ -173,7 +173,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'video_file_view_react.html')
+        self.assertTemplateUsed(resp, 'common_file_view_react.html')
         assert resp.context['filetype'].lower() == 'video'
 
         raw_path = resp.context['raw_path']
