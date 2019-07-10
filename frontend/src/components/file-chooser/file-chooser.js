@@ -323,18 +323,6 @@ class FileChooser extends React.Component {
         });
       });
     } else {
-      if (this.state.repoList.length > 0) {
-        let { repoList } = this.state;
-        let repo = repoList.filter(repoItem => repoItem.repo_id === item.repo_id);
-        let path = item.path.substring(0, (item.path.length - 1));
-        let selectRepo = repo[0];
-        this.setState({
-          repoList: repoList,
-          isOtherRepoShow: true,
-          selectedPath: path,
-          selectedRepo: selectRepo,
-        });
-      }
       if (!this.state.hasRequest) {
         let that = this;
         seafileAPI.listRepos().then(res => {
