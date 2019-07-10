@@ -61,7 +61,7 @@ class RepoViewToolbar extends React.Component {
               )}
             </div>
           </MediaQuery>
-          <MediaQuery query="(max-width: 768px)">
+          <MediaQuery query="(max-width: 767.8px)">
             <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateToggle}></span>
           </MediaQuery>
         </div>

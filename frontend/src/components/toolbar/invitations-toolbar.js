@@ -31,7 +31,7 @@ class InvitationsToolbar extends React.Component {
               </Button>
             </div>
           </MediaQuery>
-          <MediaQuery query="(max-width: 768px)">
+          <MediaQuery query="(max-width: 767.8px)">
             <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Invite People')}></span>
           </MediaQuery>
         </div>

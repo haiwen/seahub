@@ -288,7 +288,7 @@ class Search extends Component {
             </div>
           </div>
         </MediaQuery>
-        <MediaQuery query="(max-width: 768px)">
+        <MediaQuery query="(max-width: 767.8px)">
           <div className="search-icon-container">
             <i className="search-icon fas fa-search" onClick={this.onSearchToggle}></i>
           </div>
