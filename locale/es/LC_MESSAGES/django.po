@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-04 17:01+0800\n"
-"PO-Revision-Date: 2019-07-04 09:03+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2019-07-09 15:15+0800\n"
+"PO-Revision-Date: 2019-07-05 19:56+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (http://www.transifex.com/haiwen/seahub/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -80,11 +80,11 @@ msgstr "El nombre sólo puede tener letras, números, espacio, guión o guión b
 msgid "The name already exists."
 msgstr "El nombre ya existe."
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:233
+#: seahub/api2/endpoints/admin/address_book/groups.py:229
 msgid "There are libraries in this department."
 msgstr "Hay bibliotecas en este departamento."
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:237
+#: seahub/api2/endpoints/admin/address_book/groups.py:233
 msgid "There are sub-departments in this department."
 msgstr "Hay sub-departamentos en este departamento."
 
@@ -648,9 +648,9 @@ msgstr "Días al vencimiento de be ser menor o igual que %s"
 #: seahub/api2/endpoints/share_links.py:309
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "El enlace de compartir %s ya existe."
 
-#: seahub/api2/endpoints/upload_links.py:143
+#: seahub/api2/endpoints/upload_links.py:152
 #: seahub/templates/snippets/repo_create_js.html:50
 msgid "Password is too short"
 msgstr "Contraseña demasiado corta"
