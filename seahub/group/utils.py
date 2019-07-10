@@ -54,6 +54,15 @@ def check_group_name_conflict(request, new_group_name):
 
     return False
 
+def admin_check_group_name_conflict(new_group_name):
+    checked_groups = ccnet_api.search_groups(new_group_name, -1, -1)
+
+    for g in checked_groups:
+        if g.group_name == new_group_name:
+            return True, g
+
+    return False, None
+
 def is_group_member(group_id, email, in_structure=None):
 
     group_id = int(group_id)
