@@ -460,7 +460,7 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onDirentClick={this.onDirentClick}
         />
-        <MediaQuery query="(max-width: 768px)">
+        <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
         </MediaQuery>
       </div>
