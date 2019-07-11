@@ -24,7 +24,7 @@ from seahub.work_weixin.settings import WORK_WEIXIN_DEPARTMENTS_URL, \
 from seahub.base.accounts import User
 from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
-from seahub.group.utils import validate_group_name, admin_check_group_name_conflict
+from seahub.group.utils import validate_group_name
 
 logger = logging.getLogger(__name__)
 WORK_WEIXIN_DEPARTMENT_FIELD = 'department'
@@ -255,6 +255,15 @@ class AdminWorkWeixinDepartmentsImport(APIView):
 
         return api_response_dic[WORK_WEIXIN_DEPARTMENT_MEMBERS_FIELD]
 
+    def _admin_check_group_name_conflict(self, new_group_name):
+        checked_groups = ccnet_api.search_groups(new_group_name, -1, -1)
+
+        for g in checked_groups:
+            if g.group_name == new_group_name:
+                return True, g
+
+        return False, None
+
     def _api_department_success_msg(self, department_obj_id, department_obj_name, group_id):
         return {
             'type': 'department',
@@ -316,7 +325,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
 
         # list departments from work weixin
         api_department_list = self._list_departments_from_work_weixin(access_token, department_id)
-        if not api_department_list:
+        if api_department_list is None:
             error_msg = '获取企业微信组织架构失败'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -355,7 +364,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
                 continue
 
             # check department exist by group name
-            exist, exist_group = admin_check_group_name_conflict(new_group_name)
+            exist, exist_group = self._admin_check_group_name_conflict(new_group_name)
             if exist:
                 department_map_to_group_dict[department_obj_id] = exist_group.id
                 failed_msg = self._api_department_failed_msg(
