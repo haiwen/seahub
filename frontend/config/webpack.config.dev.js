@@ -149,30 +149,15 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/history-trash-file-view.js",
     ],
+    fileView: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/file-view.js",
+    ],
     viewFileText: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/view-file-text.js",
-    ],
-    viewFileImage: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-image.js",
-    ],
-    viewFileXmind: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-xmind.js",
-    ],
-    viewFileVideo: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-video.js",
-    ],
-    viewFilePDF: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-pdf.js",
     ],
     viewFileDocument: [
       require.resolve('./polyfills'),
@@ -183,21 +168,6 @@ module.exports = {
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/view-file-spreadsheet.js",
-    ],
-    viewFileSVG: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-svg.js",
-    ],
-    viewFileAudio: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-audio.js",
-    ],
-    viewFileUnknown: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-unknown.js",
     ],
     settings: [
       require.resolve('./polyfills'),

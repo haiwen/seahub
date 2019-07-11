@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
@@ -276,7 +276,7 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                 />
-                {this.state.isCloseShow &&
+                {(this.state.isCloseShow && username) &&
                   <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
                     onClick={this.onSearchPage}></i>
                 }
@@ -288,7 +288,7 @@ class Search extends Component {
             </div>
           </div>
         </MediaQuery>
-        <MediaQuery query="(max-width: 768px)">
+        <MediaQuery query="(max-width: 767.8px)">
           <div className="search-icon-container">
             <i className="search-icon fas fa-search" onClick={this.onSearchToggle}></i>
           </div>
@@ -309,7 +309,7 @@ class Search extends Component {
                     onChange={this.onChangeHandler}
                     autoComplete="off"
                   />
-                  {this.state.isCloseShow &&
+                  {(this.state.isCloseShow && username) &&
                     <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
                       onClick={this.onSearchPage}></i>
                   }

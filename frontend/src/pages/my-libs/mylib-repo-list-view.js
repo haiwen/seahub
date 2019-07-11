@@ -126,7 +126,7 @@ class MylibRepoListView extends React.Component {
         <MediaQuery query="(min-width: 768px)">
           {this.renderPCUI()}
         </MediaQuery>
-        <MediaQuery query="(max-width: 768px)">
+        <MediaQuery query="(max-width: 767.8px)">
           {this.renderMobileUI()}
         </MediaQuery>
       </Fragment>

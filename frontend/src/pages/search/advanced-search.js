@@ -225,7 +225,7 @@ class AdvancedSearch extends React.Component {
                 </Col>
               </Row>
             </div>
-            <MediaQuery query="(max-width: 768px)">
+            <MediaQuery query="(max-width: 767.8px)">
               {errorSizeMsg && <div className="error mb-4">{errorSizeMsg}</div>}
               <Button color="primary" onClick={this.props.handleSubmit}>{gettext('Submit')}</Button>
               <Button className="ml-2" onClick={this.props.handleReset}>{gettext('Reset')}</Button>

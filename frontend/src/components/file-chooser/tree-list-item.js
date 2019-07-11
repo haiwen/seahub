@@ -36,7 +36,11 @@ class TreeViewItem extends React.Component {
 
   onItemClick = (e) => {
     e.stopPropagation();  // need prevent event popup
-    let isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
+    let isCurrentRepo = false;
+    if (this.props.selectedRepo) {
+      isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
+    }
+    
     if (isCurrentRepo) {
       if (this.props.selectedPath !== this.state.filePath) {
         this.props.onDirentItemClick(this.state.filePath, this.props.node.object);
@@ -77,7 +81,10 @@ class TreeViewItem extends React.Component {
 
   render() {
     let { node } = this.props;
-    let isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
+    let isCurrentRepo = false;
+    if (this.props.selectedRepo) {
+      isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
+    }
     let isCurrentPath = this.props.selectedPath === this.state.filePath;
 
     const fileName = node.object.name;

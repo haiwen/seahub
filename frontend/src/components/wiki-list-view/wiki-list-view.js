@@ -43,7 +43,7 @@ class WikiListView extends Component {
                 <th width="4%"></th>
                 <th width="36%">{gettext('Name')}</th>
               </MediaQuery>
-              <MediaQuery query="(max-width: 768px)">
+              <MediaQuery query="(max-width: 767.8px)">
                 <th width="10%"></th>
                 <th width="30%">{gettext('Name')}</th>
               </MediaQuery>
