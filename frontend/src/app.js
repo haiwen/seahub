@@ -268,7 +268,7 @@ class App extends Component {
               <InvitationsView path={siteRoot + 'invitations/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             </Router>
           </MainPanel>
-          <MediaQuery query="(max-width: 768px)">
+          <MediaQuery query="(max-width: 767.8px)">
             <Modal isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
           </MediaQuery>
         </div>
