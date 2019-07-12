@@ -1142,8 +1142,8 @@ a.table-sort-op:focus {
       top: 0;
       bottom: 0;
       background: #000;
-      opacity: 0.1;
-      z-index: 3;
+      opacity: 0.4;
+      z-index: 103;
     }
     
     .mobile-operation-menu {
@@ -1154,7 +1154,7 @@ a.table-sort-op:focus {
       padding: .5em 0;
       background: #fff;
       text-align: center;
-      z-index: 4;
+      z-index: 104;
     }
 
     /* toolbar icon */

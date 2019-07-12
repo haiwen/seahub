@@ -69,6 +69,10 @@ class MylibRepoListItem extends React.Component {
 
   onMenuItemClick = (item) => {
     switch(item) {
+      case 'Star':
+      case 'Unstar':
+        this.onStarRepo();
+        break;
       case 'Share':
         this.onShareToggle();
         break;
@@ -109,10 +113,16 @@ class MylibRepoListItem extends React.Component {
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+        if (window.innerWidth < 728) {
+          toaster.success(gettext('Successfully unstarred the library.'));
+        }
       });
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+        if (window.innerWidth < 728) {
+          toaster.success(gettext('Successfully starred the library.'));
+        }
       });
     }
   }
@@ -284,6 +294,7 @@ class MylibRepoListItem extends React.Component {
           {repo.repo_name && (
             <MylibRepoMenu
               repo={this.props.repo}
+              isStarred={this.state.isStarred}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
