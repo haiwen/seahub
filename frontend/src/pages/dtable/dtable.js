@@ -26,7 +26,6 @@ const tablePropTypes = {
   onUnfreezedItem: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
-  isPersonal: PropTypes.bool.isRequired,
 };
 
 class Table extends Component {
@@ -135,9 +134,7 @@ class Table extends Component {
               <DropdownMenu className="drop-list" right={true}>
                 <DropdownItem onClick={this.onRenameTableCancel}>{gettext('Rename')}</DropdownItem>
                 <DropdownItem onClick={this.onDeleteTableCancel}>{gettext('Delete')}</DropdownItem>
-                {this.props.isPersonal &&
                 <DropdownItem onClick={this.onShareTableCancel}>{gettext('Share')}</DropdownItem>
-                }
               </DropdownMenu>
             </Dropdown>
           }
@@ -258,7 +255,6 @@ class Workspace extends Component {
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
                     isItemFreezed={isItemFreezed}
-                    isPersonal={isPersonal}
                   />
                 );
               })}
