@@ -112,20 +112,19 @@ class WorkspacesView(APIView):
                 logger.warning('Library %s not found.' % repo_id)
                 continue
 
-            if '@seafile_group' in owner:
-                group_id = int(owner.split('@')[0])
-                owner_name = group_id_to_name(group_id)
-                owner_type = "Group"
-            else:
-                owner_name = email2nickname(owner)
-                owner_type = "Personal"
+            res = workspace.to_dict()
 
             table_list = DTables.objects.get_dtable_by_workspace(workspace)
-
-            res = workspace.to_dict()
-            res["owner_name"] = owner_name
-            res["owner_type"] = owner_type
             res["table_list"] = table_list
+
+            if '@seafile_group' in owner:
+                group_id = owner.split('@')[0]
+                res["owner_name"] = group_id_to_name(group_id)
+                res["owner_type"] = "Group"
+            else:
+                res["owner_name"] = email2nickname(owner)
+                res["owner_type"] = "Personal"
+
             workspace_list.append(res)
 
         return Response({"workspace_list": workspace_list}, status=status.HTTP_200_OK)

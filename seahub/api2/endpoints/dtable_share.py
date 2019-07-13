@@ -7,7 +7,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
-from django.utils.translation import ugettext as _
+import seaserv
 from seaserv import seafile_api
 
 from seahub.base.accounts import User
@@ -22,7 +22,7 @@ from seahub.utils import normalize_file_path
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT, \
     PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.api2.endpoints.dtable import FILE_TYPE
-from seahub.group.utils import group_id_to_name
+from seahub.group.utils import group_id_to_name, is_group_member
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
@@ -66,7 +66,12 @@ class SharedDTablesView(APIView):
             dtable_info['updated_at'] = datetime_to_isoformat_timestr(dtable.updated_at)
             dtable_info['permission'] = permission
             dtable_info['from_user'] = from_user
-            dtable_info['from_user_name'] = email2nickname(from_user)
+
+            if '@seafile_group' in from_user:
+                group_id = from_user.split('@')[0]
+                dtable_info['from_user_name'] = group_id_to_name(group_id)
+            else:
+                dtable_info['from_user_name'] = email2nickname(from_user)
 
             table_list.append(dtable_info)
 
@@ -108,6 +113,14 @@ class DTableShareView(APIView):
             error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        group_id = ''
+        if '@seafile_group' in workspace.owner:
+            group_id = workspace.owner.split('@')[0]
+            group = seaserv.get_group(group_id)
+            if not group:
+                error_msg = 'Group %s not found.' % group_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         repo_id = workspace.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -126,13 +139,24 @@ class DTableShareView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if from_user != dtable.creator:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        username = request.user.username
+        if group_id:
+            if not is_group_member(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if to_user == from_user:
-            error_msg = 'table %s can not be shared to owner.' % table_name
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if is_group_member(group_id, to_user):
+                error_msg = 'table %s can not be shared to group member.' % table_name
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            from_user = group_id + GROUP_DOMAIN
+        else:
+            if from_user != dtable.creator:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if from_user == to_user:
+                error_msg = 'table %s can not be shared to owner.' % table_name
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # org check
         if is_org_context(request):
@@ -164,7 +188,7 @@ class DTableShareView(APIView):
     def get(self, request, workspace_id, name):
         """list share users in dtable share
         """
-        from_user = request.user.username
+        username = request.user.username
         table_name = name
         table_file_name = table_name + FILE_TYPE
 
@@ -173,6 +197,14 @@ class DTableShareView(APIView):
         if not workspace:
             error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        group_id = ''
+        if '@seafile_group' in workspace.owner:
+            group_id = workspace.owner.split('@')[0]
+            group = seaserv.get_group(group_id)
+            if not group:
+                error_msg = 'Group %s not found.' % group_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = workspace.repo_id
         repo = seafile_api.get_repo(repo_id)
@@ -192,9 +224,14 @@ class DTableShareView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if from_user != dtable.creator:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if group_id:
+            if not is_group_member(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != dtable.creator:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # main
         try:
@@ -215,7 +252,7 @@ class DTableShareView(APIView):
     def put(self, request, workspace_id, name):
         """modify dtable share permission
         """
-        from_user = request.user.username
+        username = request.user.username
         table_name = name
         table_file_name = table_name + FILE_TYPE
 
@@ -242,6 +279,14 @@ class DTableShareView(APIView):
             error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        group_id = ''
+        if '@seafile_group' in workspace.owner:
+            group_id = workspace.owner.split('@')[0]
+            group = seaserv.get_group(group_id)
+            if not group:
+                error_msg = 'Group %s not found.' % group_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         repo_id = workspace.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -260,13 +305,22 @@ class DTableShareView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if from_user != dtable.creator:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if group_id:
+            if not is_group_member(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if to_user == from_user:
-            error_msg = 'table %s can not be shared to owner.' % table_name
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if is_group_member(group_id, to_user):
+                error_msg = 'table %s can not be shared to group member.' % table_name
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        else:
+            if username != dtable.creator:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if username == to_user:
+                error_msg = 'table %s can not be shared to owner.' % table_name
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # main
         try:
@@ -312,6 +366,14 @@ class DTableShareView(APIView):
             error_msg = 'Workspace %s not found.' % workspace_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        group_id = ''
+        if '@seafile_group' in workspace.owner:
+            group_id = workspace.owner.split('@')[0]
+            group = seaserv.get_group(group_id)
+            if not group:
+                error_msg = 'Group %s not found.' % group_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         repo_id = workspace.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -337,9 +399,14 @@ class DTableShareView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if username not in (obj.to_user, obj.from_user):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            if group_id:
+                if not is_group_member(group_id, username) and username != obj.to_user:
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            else:
+                if username not in (obj.to_user, obj.from_user):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             obj.delete()
         except Exception as e:
