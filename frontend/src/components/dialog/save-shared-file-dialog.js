@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'react
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import FileChooser from '../file-chooser/file-chooser';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,
@@ -27,11 +28,8 @@ class SaveSharedFileDialog extends React.Component {
       this.props.toggleCancel();
       this.props.handleSaveSharedFile();
     }).catch((error) => {
-      if (error.response) {
-        this.setState({
-          errMessage: error.response.data.error_msg
-        });
-      }
+      let errMessage = Utils.getErrorMsg(error);
+      this.setState({errMessage: errMessage});
     });
   }
 

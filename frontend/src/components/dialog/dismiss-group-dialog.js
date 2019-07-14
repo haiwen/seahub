@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 class DismissGroupDialog extends React.Component {
 
@@ -14,6 +16,9 @@ class DismissGroupDialog extends React.Component {
     let that = this;
     seafileAPI.deleteGroup(this.props.groupID).then((res)=> {
       that.props.onGroupChanged();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

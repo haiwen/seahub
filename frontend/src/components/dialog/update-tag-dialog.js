@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Button, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   currentTag: PropTypes.object,
@@ -50,6 +52,9 @@ class UpdateTagDialog extends React.Component {
     seafileAPI.updateRepoTag(repoID, tag_id, name, color).then(() => {
       this.props.toggleCancel();
       this.props.updateUsedRepoTags();
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -73,6 +78,9 @@ class UpdateTagDialog extends React.Component {
       if (res.data.success === 'true') {
         this.props.onDeleteRepoTag(tag.id);
       }
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

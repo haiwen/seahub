@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap'; 
 import { gettext, fileServerRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
 const propTypes = {
@@ -43,12 +44,7 @@ class ZipDownloadDialog extends React.Component {
       this.queryZipProgress();
       interval = setInterval(this.queryZipProgress, 1000);
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        errorMsg = error.response.data.error_msg || gettext('Error');
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         isLoading: false,
         errorMsg: errorMsg
@@ -70,12 +66,7 @@ class ZipDownloadDialog extends React.Component {
       }
     }).catch((error) => {
       clearInterval(interval);
-      let errorMsg = ''; 
-      if (error.response) {
-        errorMsg = gettext('Error');
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         isLoading: false,
         errorMsg: errorMsg

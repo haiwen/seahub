@@ -49,11 +49,8 @@ class AddRelatedFileDialog extends React.Component {
       this.props.onRelatedFileChange();
       this.toggle();
     }).catch((error) => {
-      if (error.response) {
-        this.setState({
-          errMessage: error.response.data.error_msg
-        });
-      }
+      let errMessage = Utils.getErrorMsg(error);
+      this.setState({errMessage: errMessage});
     });
   }
 

@@ -83,16 +83,7 @@ class ChangeRepoPasswordDialog extends React.Component {
         this.props.toggleDialog();
         toaster.success(gettext('Successfully changed library password.'));
       }).catch((error) => {
-        let errorMsg = '';
-        if (error.response) {
-          if (error.response.data) {
-            errorMsg = error.response.data.error_msg;
-          } else {
-            errorMsg = gettext('Error');
-          }   
-        } else {
-          errorMsg = gettext('Please check the network.');
-        }   
+        let errorMsg = Utils.getErrorMsg(error);
         this.setState({
           errorMsg: errorMsg,
           submitBtnDisabled: false
