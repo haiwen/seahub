@@ -288,6 +288,7 @@ img[src=""],img:not([src]){ /* for first loading img*/
 
 .path-container {
   display: flex;
+  align-items: center;
   word-break: keep-all;
   width: 90%;
 }
