@@ -1335,7 +1335,7 @@ class ReposSyncBatchCopyItemView(APIView):
 
         # forbiden sync copy to a different repo
         if src_repo_id != dst_repo_id:
-            error_msg = _('Use sync copy to a different repo is not allowed.')
+            error_msg = 'dst_repo_id should be the same as src_repo_id.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -1442,7 +1442,7 @@ class ReposSyncBatchMoveItemView(APIView):
 
         # forbiden sync move to a different repo
         if src_repo_id != dst_repo_id:
-            error_msg = _('Use sync move to a different repo is not allowed.')
+            error_msg = 'dst_repo_id should be the same as src_repo_id.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
