@@ -82,8 +82,8 @@ class AdminAddressBookGroups(APIView):
 
         # Check whether group name is duplicated.
         pattern_matched_groups = ccnet_api.search_groups(group_name, -1, -1)
-        for g in pattern_matched_groups:
-            if g.group_name == group_name:
+        for group in pattern_matched_groups:
+            if group.group_name == group_name:
                 error_msg = _(u'There is already a group with that name.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
