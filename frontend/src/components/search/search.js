@@ -6,6 +6,8 @@ import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   isPublic: PropTypes.bool,
@@ -114,10 +116,9 @@ class Search extends Component {
           isResultGetted: true
         });
         _this.source = null;
-      }).catch(res => {
-        /* eslint-disable */
-        console.log(res);
-        /* eslint-enable */
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       editorUtilities.searchFiles(queryData,cancelToken).then(res => {

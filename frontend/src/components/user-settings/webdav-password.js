@@ -2,6 +2,7 @@ import React from 'react';
 import ModalPortal from '../modal-portal';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UpdateWebdavPassword from '../dialog/update-webdav-password';
 
@@ -32,16 +33,7 @@ class WebdavPassword extends React.Component {
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        if (error.response.data && error.response.data['error_msg']) {
-          errorMsg = error.response.data['error_msg'];
-        } else {
-          errorMsg = gettext('Error');
-        }   
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.toggleDialog();
       toaster.danger(errorMsg);
     }); 

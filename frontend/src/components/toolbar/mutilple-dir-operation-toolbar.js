@@ -14,6 +14,7 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
+import toaster from '../toast';
 
 import '../../css/dirents-menu.css';
 
@@ -171,6 +172,9 @@ class MutipleDirOperationToolbar extends React.Component {
         this.props.updateDirent(dirent, 'locked_by_me', true);
         this.props.unSelectDirent();
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -182,6 +186,9 @@ class MutipleDirOperationToolbar extends React.Component {
         this.props.updateDirent(dirent, 'locked_by_me', false);
         this.props.unSelectDirent();
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -231,6 +238,9 @@ class MutipleDirOperationToolbar extends React.Component {
           viewMode: 'add_related_file',
         });
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -255,6 +265,9 @@ class MutipleDirOperationToolbar extends React.Component {
         showLibContentViewDialogs: true,
         showEditFileTagDialog: true,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -274,6 +287,9 @@ class MutipleDirOperationToolbar extends React.Component {
       this.setState({
         relatedFiles: res.data.related_files
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

@@ -4,6 +4,8 @@ import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, name, draftRepoID, draftFilePath } from '../../utils/constants';
 import { processor } from '../../utils/seafile-markdown2html';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 import '../../css/review-comment-dialog.css';
 
@@ -42,10 +44,16 @@ class ReviewCommentDialog extends React.Component {
       };
       seafileAPI.postComment(draftRepoID, draftFilePath, comment, JSON.stringify(detail)).then(() => {
         this.props.onCommentAdded();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.postComment(draftRepoID, draftFilePath, comment).then(() => {
         this.props.onCommentAdded();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
     this.setState({ comment: '' });

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../toast';
 import WikiMarkdownViewer from '../wiki-markdown-viewer';
 
 const propTypes = {
@@ -44,6 +45,9 @@ class DirColumnFile extends React.Component {
     let { path, repoID } = this.props;
     seafileAPI.createDraft(repoID, path).then(res => {
       window.location.href = siteRoot + 'lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

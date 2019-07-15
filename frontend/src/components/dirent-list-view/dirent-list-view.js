@@ -251,6 +251,9 @@ class DirentListView extends React.Component {
         this.zipToken = res.data['zip_token'];
         this.addDownloadAnimation();
         this.interval = setInterval(this.addDownloadAnimation, 1000);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -273,13 +276,18 @@ class DirentListView extends React.Component {
           _this.setState({isProgressDialogShow: false});
         }, 500);
       }
-
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
   onCancelDownload = () => {
     seafileAPI.cancelZipTask(this.zipToken).then(() => {
       this.setState({isProgressDialogShow: false});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

@@ -17,6 +17,7 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 
 import '../../css/dirent-list-item.css';
+import toaster from '../toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -136,10 +137,16 @@ class DirentListItem extends React.Component {
     if (dirent.starred) {
       seafileAPI.unstarItem(repoID, filePath).then(() => {
         this.props.updateDirent(this.props.dirent, 'starred', false);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.starItem(repoID, filePath).then(() => {
         this.props.updateDirent(this.props.dirent, 'starred', true);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -277,6 +284,9 @@ class DirentListItem extends React.Component {
       this.props.updateDirent(this.props.dirent, 'locked_by_me', true);
       let lockName = username.split('@');
       this.props.updateDirent(this.props.dirent, 'lock_owner_name', lockName[0]);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
   
@@ -287,6 +297,9 @@ class DirentListItem extends React.Component {
       this.props.updateDirent(this.props.dirent, 'is_locked', false);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', false);
       this.props.updateDirent(this.props.dirent, 'lock_owner_name', '');
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
-import Group from '../models/group';
+import { Badge } from 'reactstrap';
 import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
-import { Badge } from 'reactstrap';
+import { Utils } from '../utils/utils';
+import toaster from './toast';
+import Group from '../models/group';
 
 import { canViewOrg, isDocs, isPro } from '../utils/constants';
 
@@ -54,6 +56,9 @@ class MainSideNav extends React.Component {
       _this.setState({
         groupItems: groupList
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
