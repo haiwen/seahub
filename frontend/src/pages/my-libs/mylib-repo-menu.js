@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   isPC: PropTypes.bool,
   repo: PropTypes.object.isRequired,
+  isStarred: PropTypes.bool,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
@@ -71,6 +72,12 @@ class MylibRepoMenu extends React.Component {
   translateOperations = (item) => {
     let translateResult = '';
     switch(item) {
+      case 'Star':
+        translateResult = gettext('Star');
+        break;
+      case 'Unstar':
+        translateResult = gettext('Unstar');
+        break;
       case 'Share':
         translateResult = gettext('Share');
         break;
@@ -130,14 +137,15 @@ class MylibRepoMenu extends React.Component {
     }
 
     // mobile menu
-    operations.unshift('Share');
     operations.unshift('Delete');
+    operations.unshift('Share');
+    this.props.isStarred ? operations.unshift('Unstar') : operations.unshift('Star');
 
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 
           tag="i"
-          className="sf-dropdown-toggle sf2-icon-caret-down ml-0"
+          className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
           title={gettext('More Operations')}
           // onClick={this.clickOperationMenuToggle}
           data-toggle="dropdown" 

@@ -11,6 +11,7 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
 import MylibRepoListView from './mylib-repo-list-view';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -25,6 +26,7 @@ class MyLibraries extends Component {
       isLoading: true,
       repoList: [],
       isShowDetails: false,
+      isSortOptionsDialogOpen: false,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
@@ -67,6 +69,12 @@ class MyLibraries extends Component {
           errorMsg: gettext('Please check the network.')
         });
       }
+    });
+  }
+
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
     });
   }
 
@@ -147,8 +155,9 @@ class MyLibraries extends Component {
         </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('My Libraries')}</h3>
+            <div className="cur-view-path align-items-center">
+              <h3 className="sf-heading m-0">{gettext('My Libraries')}</h3>
+              {(window.innerWidth < 768) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
@@ -168,6 +177,14 @@ class MyLibraries extends Component {
               }
             </div>
           </div>
+          {this.state.isSortOptionsDialogOpen &&
+            <SortOptionsDialog
+              toggleDialog={this.toggleSortOptionsDialog}
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortList={this.sortRepoList}
+            />
+          }
           {this.state.isShowDetails && (
             <div className="cur-view-detail">
               <LibDetail 
