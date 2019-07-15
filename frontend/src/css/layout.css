@@ -286,3 +286,20 @@ img[src=""],img:not([src]){ /* for first loading img*/
   color: #999;
 }
 
+.path-container {
+  display: flex;
+  word-break: keep-all;
+  width: 90%;
+}
+.path-container a {
+  max-height: 50px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+} 
+.path-container span, .path-container a {
+  flex-shrink: 1;
+} 
+.path-container span:first-child, .path-container span:last-child {
+  flex-shrink: 0;
+} 

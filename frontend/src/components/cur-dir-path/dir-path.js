@@ -43,10 +43,10 @@ class DirPath extends React.Component {
       } else {
         nodePath += '/' + item;
         return (
-          <span key={index} >
+          <Fragment key={index} >
             <span className="path-split">/</span>
             <a className="path-link" data-path={nodePath} onClick={this.onPathClick}>{item}</a>
-          </span>
+          </Fragment>
         );
       }
     });
