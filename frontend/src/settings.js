@@ -57,11 +57,12 @@ class Settings extends React.Component {
       this.setState({
         userInfo: res.data
       });
-    }).catch((error) => {
-      // do nothing
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
-
+  
   updateUserInfo = (data) => {
     seafileAPI.updateUserInfo(data).then((res) => {
       this.setState({
@@ -69,17 +70,8 @@ class Settings extends React.Component {
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
-      let errorMsg = '';
-      if (error.response) {
-        if (error.response.data && error.response.data['error_msg']) {
-          errorMsg = error.response.data['error_msg'];
-        } else {
-          errorMsg = gettext('Error');
-        }
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }
-      toaster.danger(errorMsg);
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

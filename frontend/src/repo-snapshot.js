@@ -133,16 +133,7 @@ class RepoSnapshot extends React.Component {
       this.toggleDialog();
       toaster.success(gettext('Successfully restored the library.'));
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        if (error.response.data && error.response.data['error_msg']) {
-          errorMsg = error.response.data['error_msg'];
-        } else {
-          errorMsg = gettext('Error');
-        }   
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.toggleDialog();
       toaster.danger(errorMsg);
     }); 
@@ -284,12 +275,7 @@ class FolderItem extends React.Component {
     request.then((res) => {
       toaster.success(gettext('Successfully restored 1 item.'));
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        errorMsg = error.response.data.error_msg || gettext('Error');
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     }); 
   }

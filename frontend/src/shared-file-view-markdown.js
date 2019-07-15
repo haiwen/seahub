@@ -7,6 +7,7 @@ import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import Loading from './components/loading';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
+import toaster from './components/toast';
 
 const { repoID, sharedToken, rawPath, err } = window.shared.pageOptions;
 
@@ -32,7 +33,10 @@ class FileContent extends React.Component {
         markdownContent: res.data,
         loading: false
       });
-    });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    })
   }
 
   changeImageURL = (innerNode) => {

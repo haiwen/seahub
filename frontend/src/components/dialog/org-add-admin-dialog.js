@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import UserSelect from '../user-select';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';

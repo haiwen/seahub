@@ -7,6 +7,7 @@ import toaster from '../../components/toast';
 import TransferDialog from '../../components/dialog/transfer-dialog';
 import ModalPortal from '../../components/modal-portal';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import { mediaUrl, siteRoot, gettext, orgID } from '../../utils/constants';
 
 class OrgLibraries extends Component {
@@ -37,6 +38,9 @@ class OrgLibraries extends Component {
         pageNext: res.data.page_next,
         page: res.data.page,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -69,6 +73,9 @@ class OrgLibraries extends Component {
       let msg = gettext('Successfully deleted {name}');
       msg = msg.replace('{name}', repo.repoName);
       toaster.success(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -236,9 +243,9 @@ class RepoItem extends React.Component {
       this.props.transferRepoItem(repo.repoID, user);
       let msg = gettext('Successfully transferred the library.');
       toaster.success(msg);
-    }).catch(res => {
-      let msg = gettext('Failed. Please check the network.');
-      toaster.danger(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
     this.toggleTransfer();
   }

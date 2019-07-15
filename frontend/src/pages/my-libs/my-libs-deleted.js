@@ -27,7 +27,10 @@ class MyLibsDeleted extends Component {
         deletedRepoList: res.data,
         isLoading: false,
       });
-    });  
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   }
 
   refreshDeletedRepoList = (repoID) => {
@@ -140,9 +143,12 @@ class DeletedRepoItem extends Component {
       let message = gettext('Successfully restored the library.') + '  ' + repoName;
       toaster.success(message);
       this.props.refreshDeletedRepoList(repoID);
-    }).catch(res => {
-      let message = gettext('Failed. Please check the network.');
-      toaster.danger(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed. Please check the network.');
+      }
+      toaster.danger(errMessage);
     });
   }
 

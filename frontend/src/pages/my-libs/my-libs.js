@@ -4,6 +4,7 @@ import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
@@ -92,6 +93,9 @@ class MyLibraries extends Component {
       };
       this.state.repoList.unshift(repo);
       this.setState({repoList: this.state.repoList});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

@@ -223,6 +223,9 @@ class LibContentView extends React.Component {
           if (res.data.id !== dirID) {
             this.loadDirentList(path);
           }
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       }
     } else {
@@ -230,6 +233,9 @@ class LibContentView extends React.Component {
         if (res.data.id !== dirID) {
           this.loadDirentList(path);
         }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -245,6 +251,9 @@ class LibContentView extends React.Component {
         }
       });
       this.setState({usedRepoTags: usedRepoTags});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -312,6 +321,9 @@ class LibContentView extends React.Component {
         this.setState({
           draftCounts: res.data.draft_counts,
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
     
@@ -353,7 +365,6 @@ class LibContentView extends React.Component {
         });
       }).catch(() => {
         this.setState({isTreeDataLoading: false});
-        // todo show error message
       });
     } else {
       this.loadNodeAndParentsByPath(path);
@@ -394,8 +405,10 @@ class LibContentView extends React.Component {
         let fileTags = res.data.file_tags.map(item => {
           return new FileTag(item);
         });
-
         this.setState({fileTags: fileTags});
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
       
       seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
@@ -555,6 +568,9 @@ class LibContentView extends React.Component {
       newAddedDirents.map(item => {
         this.addNodeToTree(item.name, path, item.type);
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -579,9 +595,12 @@ class LibContentView extends React.Component {
       }
       let message =  Utils.getMoveSuccessMessage(dirNames);
       toaster.success(message);
-    }).catch(() => {
-      let message = Utils.getMoveFailedMessage(dirNames);
-      toaster.danger(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = Utils.getMoveFailedMessage(dirNames);
+      }
+      toaster.danger(errMessage);
     });
   }
 
@@ -601,9 +620,12 @@ class LibContentView extends React.Component {
       }
       let message =  Utils.getCopySuccessfulMessage(dirNames);
       toaster.success(message);
-    }).catch(() => {
-      let message = Utils.getCopyFailedMessage(dirNames);
-      toaster.danger(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = Utils.getCopyFailedMessage(dirNames);
+      }
+      toaster.danger(errMessage);
     });
   }
 
@@ -630,11 +652,14 @@ class LibContentView extends React.Component {
         msg = msg.replace('{name}', dirNames[0]);
       }
       toaster.success(msg);
-    }).catch(() => {
-      var msg = gettext('Failed to delete {name} and other {n} items.');
-      msg = msg.replace('{name}', dirNames[0]);
-      msg = msg.replace('{n}', dirNames.length - 1);
-      toaster.danger(msg);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed to delete {name} and other {n} items.');
+        errMessage = errMessage.replace('{name}', dirNames[0]);
+        errMessage = errMessage.replace('{n}', dirNames.length - 1);
+      }
+      toaster.danger(errMessage);
     });
   }
 
@@ -651,8 +676,9 @@ class LibContentView extends React.Component {
       if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'dir');
       }
-    }).catch(() => {
-      // return error message
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -667,8 +693,9 @@ class LibContentView extends React.Component {
       if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'file', res.data.size);
       }
-    }).catch(() => {
-      // todo
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -799,18 +826,24 @@ class LibContentView extends React.Component {
     if (isDir) {
       seafileAPI.renameDir(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
-      }).catch(() => {
-        let name = Utils.getFileName(path);
-        var msg = gettext('Renaming {name} failed').replace('{name}', name);
-        toaster.danger(msg);
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          let name = Utils.getFileName(path);
+          errMessage = gettext('Renaming {name} failed').replace('{name}', name);
+        }
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.renameFile(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
-      }).catch(() => {
-        let name = Utils.getFileName(path);
-        var msg = gettext('Renaming {name} failed').replace('{name}', name);
-        toaster.danger(msg);
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          let name = Utils.getFileName(path);
+          errMessage = gettext('Renaming {name} failed').replace('{name}', name);
+        }
+        toaster.danger(errMessage);
       });
     }
   }
@@ -830,10 +863,13 @@ class LibContentView extends React.Component {
         let name = Utils.getFileName(path);
         var msg = gettext('Successfully deleted {name}').replace('{name}', name);
         toaster.success(msg);
-      }).catch(() => {
-        let name = Utils.getFileName(path);
-        var msg = gettext('Failed to delete {name}').replace('{name}', name);
-        toaster.danger(msg);
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          let name = Utils.getFileName(path);
+          errMessage = gettext('Failed to delete {name}').replace('{name}', name);
+        }
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.deleteFile(repoID, path).then(() => {
@@ -841,10 +877,13 @@ class LibContentView extends React.Component {
         let name = Utils.getFileName(path);
         var msg = gettext('Successfully deleted {name}').replace('{name}', name);
         toaster.success(msg);
-      }).catch(() => {
-        let name = Utils.getFileName(path);
-        var msg = gettext('Failed to delete {name}').replace('{name}', name);
-        toaster.danger(msg);
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          let name = Utils.getFileName(path);
+          errMessage = gettext('Failed to delete {name}').replace('{name}', name);
+        }
+        toaster.danger(errMessage);
       });
     }
   }
@@ -877,10 +916,13 @@ class LibContentView extends React.Component {
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirName);
       toaster.success(message);
-    }).catch(() => {
-      let message = gettext('Failed to move %(name)s');
-      message = message.replace('%(name)s', dirName);
-      toaster.danger(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed to move %(name)s');
+        errMessage = errMessage.replace('%(name)s', dirName);
+      }
+      toaster.danger(errMessage);
     });
   }
 
@@ -905,10 +947,13 @@ class LibContentView extends React.Component {
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
       toaster.success(message);
-    }).catch(() => {
-      let message = gettext('Failed to copy %(name)s');
-      message = message.replace('%(name)s', dirName);
-      toaster.danger(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed to copy %(name)s');
+        errMessage = errMessage.replace('%(name)s', dirName);
+      }
+      toaster.danger(errMessage);
     });
   }
 
@@ -1022,6 +1067,9 @@ class LibContentView extends React.Component {
         return new FileTag(item);
       });
       this.updateDirent(dirent, 'file_tags', fileTags);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
 
     this.updateUsedRepoTags();
@@ -1176,6 +1224,9 @@ class LibContentView extends React.Component {
           treeData: tree,
           currentNode: node
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       let parentNode = tree.getNodeByPath(node.parentNode.path);
@@ -1233,6 +1284,9 @@ class LibContentView extends React.Component {
           this.addResponseListToNode(res.data.dirent_list, node);
           tree.collapseNode(node);
           this.setState({treeData: tree});
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       }
       if (isLoaded && node.path === this.state.path) {
@@ -1277,6 +1331,9 @@ class LibContentView extends React.Component {
       } else {
         this.showFile(filePath);
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -1293,6 +1350,9 @@ class LibContentView extends React.Component {
       seafileAPI.listDir(repoID, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         this.setState({treeData: tree});
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       tree.expandNode(node);
@@ -1422,6 +1482,9 @@ class LibContentView extends React.Component {
       });
 
       this.setState({fileTags: fileTags});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

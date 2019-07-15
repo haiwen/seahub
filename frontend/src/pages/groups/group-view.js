@@ -229,10 +229,13 @@ class GroupView extends React.Component {
       let name = repo.repo_name;
       var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
       toaster.success(msg);
-    }).catch(() => {
-      let name = repo.repo_name;
-      var msg = gettext('Failed to delete {name}.').replace('{name}', name);
-      toaster.danger(msg);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        let name = repo.repo_name;
+        errMessage = gettext('Failed to delete {name}.').replace('{name}', name);
+      }
+      toaster.danger(errMessage);
     });
   }
 
@@ -250,6 +253,9 @@ class GroupView extends React.Component {
       });
       this.setState({repoList: repoList});
       this.loadGroup(group.id);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -262,8 +268,9 @@ class GroupView extends React.Component {
         return item;
       });
       this.setState({repoList: repoList});
-    }).catch(() => {
-      // todo
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -323,6 +330,9 @@ class GroupView extends React.Component {
       this.setState({
         groupMembers: res.data
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
