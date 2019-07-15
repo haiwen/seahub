@@ -4,18 +4,18 @@
   flex-direction:column;
   overflow:hidden; /* for ff */
   border-right:1px solid #eee;
-  background: #f5f7fa;
 }
 
 .wiki-pages-heading {
   position: relative;
   font-size: 1rem;
   font-weight: normal;
-  text-align:center;
-  padding:.5rem 0rem;
-  border-bottom:1px solid #e8e8e8;
+  padding: 0.5rem 0 0.5rem 2rem;
+  border-bottom: 1px solid #e8e8e8;
   line-height: 1.5;
-  height:40px;
+  height: 38px;
+  background-color: #f9f9f9;
+  margin-bottom: 0;
 }
 .heading-icon {
   position: absolute;
