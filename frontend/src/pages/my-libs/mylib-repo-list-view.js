@@ -99,17 +99,12 @@ class MylibRepoListView extends React.Component {
   }
 
   renderMobileUI = () => {
-    const sortIcon = this.props.sortOrder === 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
     return (
-      <table>
+      <table className="table-thead-hidden">
         <thead>
           <tr>
             <th width="10%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="84%">
-              {gettext('Sort:')}
-              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext('name')} {this.props.sortBy === 'name' && sortIcon}</a>
-              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext('last update')} {this.props.sortBy === 'time' && sortIcon}</a>
-            </th>
+            <th width="84%"></th>
             <th width="6%"><span className="sr-only">{gettext('Actions')}</span></th>
           </tr>
         </thead>
