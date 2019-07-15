@@ -1,8 +1,9 @@
 .wiki-nav-content {
-  margin-bottom: 5px;
+  margin-top: 18px;
 }
 .wiki-nav-content a, .wiki-nav-content span {
-  color: #333;
+  color: #4d5156;
+  font-size: 14px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -17,10 +18,10 @@
   color: #eb8205;
 }
 .switch-btn {
-  width: 1rem;
   position: absolute;
   left: 0;
-  top: 0;
+  top: 4px;
   color: #c0c0c0;
   cursor: pointer;
+  font-size: 12px;
 }
