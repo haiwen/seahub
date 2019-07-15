@@ -91,7 +91,7 @@ from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.dtable import WorkspacesView, DTableView, DTablesView, \
-     DTableUpdateLinkView, DTableAssetUploadLinkView, dtable_file_view, dtable_asset_access
+     DTableUpdateLinkView, DTableAssetUploadLinkView
 from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
 
 
@@ -377,8 +377,6 @@ urlpatterns = [
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/$', DTableView.as_view(), name='api-v2.1-workspace-dtable'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-update-link/$', DTableUpdateLinkView.as_view(), name='api-v2.1-workspace-dtable-update-link'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-asset-upload-link/$', DTableAssetUploadLinkView.as_view(), name='api-v2.1-workspace-dtable-asset-upload-link'),
-    url(r'^workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/$', dtable_file_view, name='dtable-file-view'),
-    url(r'^workspace/(?P<workspace_id>\d+)/asset/(?P<dtable_id>[-0-9a-f]{36})/(?P<path>.*)$', dtable_asset_access, name='dtable-asset-access'),
     url(r'^api/v2.1/dtables/shared/$', SharedDTablesView.as_view(), name='api-v2.1-dtables-share'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/share/$', DTableShareView.as_view(), name='api-v2.1-dtable-share'),
 
@@ -553,6 +551,7 @@ urlpatterns = [
     # Must specify a namespace if specifying app_name.
     url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki-unused')),
     url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
+    url(r'^workspace/', include('seahub.dtable.urls', app_name='dtable', namespace='workspace')),
 
     ## admin::address book
     url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),
