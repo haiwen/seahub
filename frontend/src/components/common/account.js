@@ -79,10 +79,10 @@ class Account extends Component {
           isStaff: resp.data.is_staff,
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
           showInfo: !this.state.showInfo,
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
       this.isFirstMounted = false;
     } else {
