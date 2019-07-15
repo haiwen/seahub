@@ -324,7 +324,7 @@ class FileChooser extends React.Component {
           selectedPath: path,
           isCurrentRepoShow: true,
         });
-      }).catch(res => {
+      }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });

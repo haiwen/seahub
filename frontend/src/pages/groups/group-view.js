@@ -200,8 +200,9 @@ class GroupView extends React.Component {
         let repo = new Repo(object);
         let repoList = this.addRepoItem(repo);
         this.setState({repoList: repoList});
-      }).then(() => {
-        //todo
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
 
     } else {
@@ -209,8 +210,9 @@ class GroupView extends React.Component {
         let repo = new Repo(res.data);
         let repoList = this.addRepoItem(repo);
         this.setState({repoList: repoList});
-      }).catch(() => {
-        //todo
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
     this.onCreateRepoToggle();
