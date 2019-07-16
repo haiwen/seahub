@@ -17,13 +17,15 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 
+from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX
 from seahub.utils import is_valid_username, is_org_context, \
-        is_pro_version, normalize_cache_key, is_valid_email
+        is_pro_version, normalize_cache_key, is_valid_email, \
+        IS_EMAIL_CONFIGURED, send_html_email, get_site_name
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_size import get_file_size_unit
 from seahub.role_permissions.utils import get_available_roles
@@ -131,6 +133,17 @@ def get_user_info(email):
         info['role'] = user.role
 
     return info
+
+def send_user_add_mail(request, email, password):
+    """Send email when add new user."""
+    c = {
+        'user': request.user.username,
+        'email': email,
+        'password': password,
+        }
+    print('ready to send html email')
+    send_html_email(_(u'You are invited to join %s') % get_site_name(),
+            'sysadmin/user_add_email.html', c, None, [email])
 
 
 class AdminUsers(APIView):
@@ -266,6 +279,18 @@ class AdminUsers(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if IS_EMAIL_CONFIGURED:
+            if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
+                try:
+                    print('in send to email = ' + str(email))
+                    send_user_add_mail(request, email, password)
+                except Exception, e:
+                    logger.error(str(e))
+            else:
+                pass
+        else:
+            pass
 
         user_info = get_user_info(email)
 
