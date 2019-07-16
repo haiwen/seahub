@@ -154,7 +154,7 @@ class GenerateShareLink extends React.Component {
   }
   
   onCopyDownloadLink = () => {
-    let downloadLink = this.state.sharedLinkInfo.link + '?dl';
+    let downloadLink = this.state.sharedLinkInfo.link + '?dl=1';
     copy(downloadLink);
     toaster.success(gettext('Direct download link is copied to the clipboard.'));
     this.props.closeShareDialog();
