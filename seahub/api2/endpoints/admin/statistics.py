@@ -248,7 +248,7 @@ class SystemUserTrafficExcelView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % excel_name
+        response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % excel_name
         wb.save(response)
 
         return response
@@ -293,7 +293,7 @@ class SystemUserStorageExcelView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % excel_name
+        response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % excel_name
         wb.save(response)
 
         return response
