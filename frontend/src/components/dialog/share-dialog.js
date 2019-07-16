@@ -8,6 +8,8 @@ import GenerateShareLink from './generate-share-link';
 import GenerateUploadLink from './generate-upload-link';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../loading';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import '../../css/share-link-dialog.css';
 
 const propTypes = {
@@ -40,6 +42,9 @@ class ShareDialog extends React.Component {
         isRepoJudgemented: true,
         isRepoOwner: isRepoOwner,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

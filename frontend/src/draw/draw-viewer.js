@@ -1,4 +1,6 @@
 import { seafileAPI } from '../utils/seafile-api';
+import { Utils } from '../utils/utils';
+import toaster from '../components/toast';
 
 var mxRectangle = window.mxRectangle;
 var mxGraph = window.mxGraph;
@@ -19,6 +21,9 @@ class DrawViewer {
       console.log(doc.documentElement);
       /* eslint-enable */
       this.setGraphXml(doc.documentElement);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

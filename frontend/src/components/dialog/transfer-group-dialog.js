@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import UserSelect from '../user-select';
+import { Utils } from '../../utils/utils';
 
 import '../../css/transfer-group-dialog.css';
 
@@ -38,11 +39,8 @@ class TransferGroupDialog extends React.Component {
       seafileAPI.transferGroup(this.props.groupID, email).then((res) => {
         this.props.toggleTransferGroupDialog();
       }).catch((error) => {
-        if (error.response) {
-          this.setState({
-            errMessage: error.response.data.error_msg
-          });
-        }
+        let errMessage = Utils.getErrorMsg(error);
+        this.setState({errMessage: errMessage});
       });
     }
   }

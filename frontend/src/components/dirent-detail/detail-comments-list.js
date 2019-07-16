@@ -5,6 +5,8 @@ import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2h
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import '../../css/comments-list.css';
 
 const { username } = window.app.pageOptions;
@@ -36,6 +38,9 @@ class DetailCommentList extends React.Component {
   listComments = (filePath) => {
     seafileAPI.listComments(this.props.repoID, (filePath || this.props.filePath)).then((res) => {
       this.setState({ commentsList: res.data.comments });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -49,6 +54,9 @@ class DetailCommentList extends React.Component {
     if (comment.trim()) {
       seafileAPI.postComment(repoID, filePath, comment.trim()).then(() => {
         this.listComments();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
     this.refs.commentTextarea.value = '';
@@ -58,6 +66,9 @@ class DetailCommentList extends React.Component {
     const { repoID } = this.props;
     seafileAPI.updateComment(repoID, event.target.id, 'true').then(() => {
       this.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -65,6 +76,9 @@ class DetailCommentList extends React.Component {
     const { repoID } = this.props;
     seafileAPI.deleteComment(repoID, event.target.id).then(() => {
       this.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -72,6 +86,9 @@ class DetailCommentList extends React.Component {
     const { repoID } = this.props;
     seafileAPI.updateComment(repoID, commentID, null, null, newComment).then(() => {
       this.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

@@ -5,6 +5,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl } from '../../utils/constants';
 import EmptyTip from '../../components/empty-tip';
+import toaster from '../../components/toast';
 
 class Content extends Component {
 
@@ -151,12 +152,10 @@ class Item extends Component {
 
     const data = this.props.data;
     seafileAPI.unstarItem(data.repo_id, data.path).then((res) => {
-      this.setState({
-        unstarred: true
-      });
-      // TODO: show feedback msg
+      this.setState({unstarred: true});
     }).catch((error) => {
-      // TODO: show feedback msg
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

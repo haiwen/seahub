@@ -1,6 +1,7 @@
 import { seafileAPI } from '../utils/seafile-api';
 import DrawViewer from './draw-viewer';
-
+import { Utils } from '../utils/utils';
+import toaster from '../components/toast';
 
 function loadFile(editorUi) {
   return seafileAPI.getFileContent(window.app.config.rawPath).then((res) => {
@@ -9,6 +10,9 @@ function loadFile(editorUi) {
     editorUi.editor.setGraphXml(doc.documentElement);
     editorUi.editor.setModified(false);
     editorUi.editor.undoManager.clear();
+  }).catch(error => {
+    let errMessage = Utils.getErrorMsg(error);
+    toaster.danger(errMessage);
   });
 }
 

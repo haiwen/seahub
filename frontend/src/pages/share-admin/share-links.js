@@ -194,10 +194,14 @@ class Item extends Component {
       this.setState({
         currentPermission: changed_to_permissions,
       });
-      // TODO: show feedback msg
-      // gettext("Successfully modified permission")
+      let message = gettext("Successfully modified permission.");
+      toaster.success(message);
     }).catch((error) => {
-      // TODO: show feedback msg
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext("Failed modified permission.");
+      }
+      toaster.danger(errMessage);
     });
   }
 
@@ -339,10 +343,14 @@ class ShareAdminShareLinks extends Component {
         return uploadItem.token !== item.token;
       });
       this.setState({items: items});
-      // TODO: show feedback msg
-      // gettext("Successfully deleted 1 item")
+      let message = gettext("Successfully deleted share link.");
+      toaster.success(message);
     }).catch((error) => {
-    // TODO: show feedback msg
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext("Failed deleted share link.");
+      }
+      toaster.danger(errMessage);
     });
   }
 

@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils.js';
+import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
 import RoleEditor from '../../components/select-editor/role-editor';
@@ -60,6 +61,9 @@ class OrgDepartmentItem extends React.Component {
   listOrgGroupRepo = (groupID) => {
     seafileAPI.orgAdminListDepartGroupRepos(orgID, groupID).then(res => {
       this.setState({ repos: res.data.libraries });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -71,12 +75,18 @@ class OrgDepartmentItem extends React.Component {
         ancestorGroups: res.data.ancestor_groups,
         groupName: res.data.name,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
   listSubDepartGroups = (groupID) => {
     seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
       this.setState({ groups: res.data.groups });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -384,6 +394,9 @@ class MemberItem extends React.Component {
     let isAdmin = role === 'Admin' ? true : false;
     seafileAPI.orgAdminSetDepartGroupUserRole(orgID, this.props.groupID, this.props.member.email, isAdmin).then((res) => {
       this.props.onMemberChanged();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
     this.setState({
       highlight: false,

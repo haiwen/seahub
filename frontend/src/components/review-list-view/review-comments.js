@@ -5,6 +5,8 @@ import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 're
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, draftFilePath, draftRepoID } from '../../utils/constants';
 import { username } from '../../utils/constants.js';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 import '../../css/review-comments.css';
 
@@ -36,6 +38,9 @@ class ReviewComments extends React.Component {
     if (comment.length > 0) {
       seafileAPI.postComment(draftRepoID, draftFilePath, comment).then(() => {        
         this.props.listComments();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
       this.setState({ comment: '' });
     }
@@ -44,12 +49,18 @@ class ReviewComments extends React.Component {
   resolveComment = (event) => {
     seafileAPI.updateComment(draftRepoID, event.target.id, 'true').then((res) => {
       this.props.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
   editComment = (commentID, newComment) => {
     seafileAPI.updateComment(draftRepoID, commentID, null, null, newComment).then((res) => {
       this.props.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -60,6 +71,9 @@ class ReviewComments extends React.Component {
   deleteComment = (event) => {
     seafileAPI.deleteComment(draftRepoID, event.target.id).then((res) => {
       this.props.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

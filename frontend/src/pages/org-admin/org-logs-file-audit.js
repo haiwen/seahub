@@ -4,6 +4,8 @@ import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, lang } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import OrgLogsFileAuditEvent from '../../models/org-logs-file-audit';
 import '../../css/org-logs.css';
 
@@ -43,6 +45,9 @@ class OrgLogsFileAudit extends React.Component {
         userSelected: res.data.user_selected,
         repoSelected: res.data.repo_selected
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

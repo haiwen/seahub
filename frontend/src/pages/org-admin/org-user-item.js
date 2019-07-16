@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, orgID, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import Toast from '../../components/toast';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import UserStatusEditor from '../../components/select-editor/user-status-editor';
 
 const propTypes = {
@@ -60,7 +61,10 @@ class UserItem extends React.Component {
       msg = gettext('Successfully reset password to %(passwd)s for user %(user)s.');
       msg = msg.replace('%(passwd)s', res.data.new_password);
       msg = msg.replace('%(user)s', email);
-      Toast.success(msg);
+      toaster.success(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -83,9 +87,13 @@ class UserItem extends React.Component {
         highlight: false,
         showMenu: false,
       });
-      Toast.success(gettext('Edit succeeded.'));
-    }).catch(err => {
-      Toast.danger(gettext('Edit failed.'));
+      toaster.success(gettext('Edit succeeded.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Edit failed.');
+      }
+      toaster.danger(errMessage);
     });
   }
 

@@ -5,6 +5,7 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { gettext, siteRoot, loginUrl, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import SharedUploadInfo from '../../models/shared-upload-info';
 import EmptyTip from '../../components/empty-tip';
 
@@ -208,10 +209,14 @@ class ShareAdminUploadLinks extends Component {
         return uploadItem.token !== item.token;
       });
       this.setState({items: items});
-      // TODO: show feedback msg
-      // gettext("Successfully deleted 1 item")
+      let message = gettext("Successfully deleted upload link.");
+      toaster.success(message);
     }).catch((error) => {
-    // TODO: show feedback msg
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext("Failed deleted upload link.");
+      }
+      toaster.danger(errMessage);
     });
   }
 

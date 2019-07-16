@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import moment from 'moment';
 import { gettext, fileServerRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
 const propTypes = {
@@ -31,12 +32,7 @@ class CommitDetails extends React.Component {
         commitDetails: res.data
       }); 
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        errorMsg = error.response.data.error || gettext('Error');
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         isLoading: false,
         errorMsg: errorMsg

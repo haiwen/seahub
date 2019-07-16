@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Label } from 'reactstrap';
 import { seafileAPI } from '../utils/seafile-api';
 import { gettext } from '../utils/constants';
+import { Utils } from '../utils/utils';
 import toaster from './toast';
 
 const propTypes = {
@@ -72,16 +73,7 @@ class SendLink extends React.Component {
         });
       }
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        if (error.response.data && error.response.data['error_msg']) {
-          errorMsg = error.response.data['error_msg'];
-        } else {
-          errorMsg = gettext('Error');
-        }   
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         btnDisabled: false,
         sending: false,

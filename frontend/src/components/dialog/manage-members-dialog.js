@@ -5,6 +5,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'react
 import { seafileAPI } from '../../utils/seafile-api.js';
 import RoleEditor from '../select-editor/role-editor';
 import UserSelect from '../user-select.js';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import '../../css/manage-members-dialog.css';
 
 const propTypes = {
@@ -49,6 +51,9 @@ class ManageMembersDialog extends React.Component {
           errMessage: res.data.failed
         });
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -57,6 +62,9 @@ class ManageMembersDialog extends React.Component {
       this.setState({
         groupMembers: res.data
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -177,6 +185,9 @@ class Member extends React.PureComponent {
   deleteMember = (name) => {
     seafileAPI.deleteGroupMember(this.props.groupID, name).then((res) => {
       this.props.onGroupMembersChange();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

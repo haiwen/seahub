@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, enableRepoHistorySetting } from '../../utils/constants';
-import toaster from '../toast';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { gettext, enableRepoHistorySetting } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
@@ -36,6 +37,9 @@ class LibHistorySetting extends React.Component {
         disabled: res.data.keep_days > 0 ? false : true,
         expireDays: res.data.keep_days > 0 ? res.data.keep_days : 30, 
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -53,6 +57,9 @@ class LibHistorySetting extends React.Component {
         toaster.success(message);
         this.setState({keepDays: res.data.keep_days});
         this.props.toggleDialog();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       this.setState({

@@ -4,6 +4,7 @@ import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
@@ -11,6 +12,7 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
 import MylibRepoListView from './mylib-repo-list-view';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -25,6 +27,7 @@ class MyLibraries extends Component {
       isLoading: true,
       repoList: [],
       isShowDetails: false,
+      isSortOptionsDialogOpen: false,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
@@ -70,6 +73,12 @@ class MyLibraries extends Component {
     });
   }
 
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  }
+
   onCreateRepo = (repo) => {
     let permission = repo.permission;
     seafileAPI.createMineRepo(repo).then((res) => {
@@ -84,6 +93,9 @@ class MyLibraries extends Component {
       };
       this.state.repoList.unshift(repo);
       this.setState({repoList: this.state.repoList});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -147,8 +159,9 @@ class MyLibraries extends Component {
         </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('My Libraries')}</h3>
+            <div className="cur-view-path align-items-center">
+              <h3 className="sf-heading m-0">{gettext('My Libraries')}</h3>
+              {(window.innerWidth < 768) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
@@ -168,6 +181,14 @@ class MyLibraries extends Component {
               }
             </div>
           </div>
+          {this.state.isSortOptionsDialogOpen &&
+            <SortOptionsDialog
+              toggleDialog={this.toggleSortOptionsDialog}
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortList={this.sortRepoList}
+            />
+          }
           {this.state.isShowDetails && (
             <div className="cur-view-detail">
               <LibDetail 

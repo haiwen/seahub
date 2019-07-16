@@ -8,6 +8,7 @@ import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import UploadProgressDialog from './upload-progress-dialog';
 import UploadRemindDialog from '../dialog/upload-remind-dialog';
+import toaster from '../toast';
 import '../../css/file-uploader.css';
 
 const propTypes = {
@@ -188,6 +189,9 @@ class FileUploader extends React.Component {
       let offset = Math.floor(uploadedBytes / (1024 * 1024));
       resumableFile.markChunksCompleted(offset);
       this.resumable.upload();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -422,6 +426,9 @@ class FileUploader extends React.Component {
       if (Utils.isIEBrower()) {
         this.uploadInput.current.click();
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
     if (!Utils.isIEBrower()) {
       this.uploadInput.current.click();
@@ -436,6 +443,9 @@ class FileUploader extends React.Component {
       if (Utils.isIEBrower()) {
         this.uploadInput.current.click();
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
     if (!Utils.isIEBrower()) {
       this.uploadInput.current.click();
@@ -447,6 +457,9 @@ class FileUploader extends React.Component {
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data + '?ret-json=1';
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -500,6 +513,9 @@ class FileUploader extends React.Component {
       this.setState({isUploadRemindDialogShow: false});
       this.setUploadFileList(this.resumable.files);
       this.resumable.upload();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
   

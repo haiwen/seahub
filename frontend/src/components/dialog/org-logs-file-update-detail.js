@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -36,7 +38,10 @@ class FileUpdateDetailDialog extends React.Component {
         newfile: this.state.newfile.concat(res.data.new),
         removed: this.state.removed.concat(res.data.removed),
       });
-    });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    })
   }
 
   renderContentItem = (items) => {

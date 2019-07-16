@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CreatableSelect from 'react-select/lib/Creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
 
@@ -32,12 +33,7 @@ class LabelRepoStateDialog extends React.Component {
         errorMsg: ''
       }); 
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        errorMsg = error.response.data.error_msg || gettext('Error');
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         isLoading: false,
         errorMsg: errorMsg
@@ -72,12 +68,7 @@ class LabelRepoStateDialog extends React.Component {
       toaster.success(msg);
       this.props.toggleDialog();
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        errorMsg = error.response.data.error_msg || gettext('Error');
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         formErrorMsg: errorMsg,
         submitBtnDisabled: false

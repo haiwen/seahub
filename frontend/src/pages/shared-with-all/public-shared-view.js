@@ -88,8 +88,9 @@ class PublicSharedView extends React.Component {
       let repoList = this.addRepoItem(repo);
       this.setState({repoList: repoList});
       this.onCreateRepoToggle();
-    }).catch(() => {
-      // todo
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -98,8 +99,9 @@ class PublicSharedView extends React.Component {
       seafileAPI.selectOwnedRepoToPublic(repo.repo_id, {share_type: 'public', permission: repo.sharePermission}).then(() => {
         let repoList = this.addRepoItem(repo);
         this.setState({repoList: repoList});
-      }).catch(() => {
-        // todo
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     });
   }
@@ -110,7 +112,14 @@ class PublicSharedView extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
-      toaster.success('Successfully unshared 1 item.');
+      let message = gettext('Successfully unshared {name}').replace('{name}', repo.repo_name);
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed unshared {name}').replace('{name}', repo.repo_name);
+      }
+      toaster(errMessage);
     });
   }
 

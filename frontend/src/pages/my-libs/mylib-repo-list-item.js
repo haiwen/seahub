@@ -69,6 +69,10 @@ class MylibRepoListItem extends React.Component {
 
   onMenuItemClick = (item) => {
     switch(item) {
+      case 'Star':
+      case 'Unstar':
+        this.onStarRepo();
+        break;
       case 'Share':
         this.onShareToggle();
         break;
@@ -109,10 +113,22 @@ class MylibRepoListItem extends React.Component {
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+        if (window.innerWidth < 728) {
+          toaster.success(gettext('Successfully unstarred the library.'));
+        }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+        if (window.innerWidth < 728) {
+          toaster.success(gettext('Successfully starred the library.'));
+        }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -168,6 +184,9 @@ class MylibRepoListItem extends React.Component {
     seafileAPI.renameRepo(repoID, newName).then(() => {
       this.props.onRenameRepo(repo, newName);
       this.onRenameCancel();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -198,10 +217,13 @@ class MylibRepoListItem extends React.Component {
       let name = repo.repo_name;
       var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
       toaster.success(msg);
-    }).catch(() => {
-      let name = repo.repo_name;
-      var msg = gettext('Failed to delete {name}.').replace('{name}', name);
-      toaster.danger(msg);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        let name = repo.repo_name;
+        errMessage = gettext('Failed to delete {name}.').replace('{name}', name);
+      }
+      toaster.danger(errMessage);
     });
   }
 
@@ -284,6 +306,7 @@ class MylibRepoListItem extends React.Component {
           {repo.repo_name && (
             <MylibRepoMenu
               repo={this.props.repo}
+              isStarred={this.state.isStarred}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}

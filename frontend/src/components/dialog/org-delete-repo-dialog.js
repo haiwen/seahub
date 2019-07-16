@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 class DeleteRepoDialog extends React.Component {
 
@@ -17,6 +18,9 @@ class DeleteRepoDialog extends React.Component {
         this.props.onRepoChanged();
         this.props.toggle();
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

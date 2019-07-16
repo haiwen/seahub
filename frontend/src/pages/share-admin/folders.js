@@ -6,6 +6,7 @@ import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import EmptyTip from '../../components/empty-tip';
 import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
 import SharedFolderInfo from '../../models/shared-folder-info';
+import toaster from '../../components/toast';
 
 class Content extends Component {
 
@@ -107,10 +108,9 @@ class Item extends Component {
 
     seafileAPI.updateFolderSharePerm(item.repo_id, postData, options).then((res) => {
       this.setState({share_permission: perm});
-      // TODO: show feedback msg
-      // gettext("Successfully modified permission")
     }).catch((error) => {
-      // TODO: show feedback msg
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -260,11 +260,15 @@ class ShareAdminFolders extends Component {
           return folderItem.group_id !== item.group_id;
         }
       });
-      this.setState({items: items});
-      // TODO: show feedback msg
-      // gettext("Successfully deleted 1 item")
-    }).catch((error) => {
-      // TODO: show feedback msg
+      this.setState({items: items}); 
+      let message = gettext('Successfully unshared {name}').replace('{name}', item.folder_name);
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed unshared {name}').replace('{name}', item.folder_name);
+      }
+      toaster(errMessage);
     });
   }
 

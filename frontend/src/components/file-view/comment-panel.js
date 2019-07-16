@@ -6,6 +6,8 @@ import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 're
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import ParticipantsList from './participants-list';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import '../../css/comments-list.css';
 
 const { username, repoID, filePath } = window.app.pageOptions;
@@ -38,6 +40,9 @@ class CommentPanel extends React.Component {
       this.setState({
         commentsList: res.data.comments
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -52,6 +57,9 @@ class CommentPanel extends React.Component {
     if (comment.trim()) {
       seafileAPI.postComment(repoID, filePath, comment).then(() => {
         this.listComments();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
     this.refs.commentTextarea.value = '';
@@ -60,18 +68,27 @@ class CommentPanel extends React.Component {
   resolveComment = (event) => {
     seafileAPI.updateComment(repoID, event.target.id, 'true').then(() => {
       this.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
   deleteComment = (event) => {
     seafileAPI.deleteComment(repoID, event.target.id).then(() => {
       this.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
   editComment = (commentID, newComment) => {
     seafileAPI.updateComment(repoID, commentID, null, null, newComment).then((res) => {
       this.listComments();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

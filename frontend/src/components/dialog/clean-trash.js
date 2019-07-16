@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Select from 'react-select/lib/Creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
 const propTypes = {
@@ -46,12 +47,7 @@ class CleanTrash extends React.Component {
       this.props.refreshTrash();
       this.props.toggleDialog();
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        errorMsg = error.response.data.error_msg || gettext('Error');
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         formErrorMsg: errorMsg,
         submitBtnDisabled: false

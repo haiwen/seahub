@@ -4,8 +4,9 @@ import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer'
 import { gettext, repoID, slug, serviceURL, isPublicWiki, siteRoot } from '../utils/constants';
 import { Card, CardTitle, CardText } from 'reactstrap';
 import Loading from './loading';
-import { Utils } from '../utils/utils';
 import { seafileAPI } from '../utils/seafile-api';
+import { Utils } from '../utils/utils';
+import toaster from './toast';
 import '../css/related-files-list.css';
 
 const propTypes = {
@@ -83,7 +84,10 @@ class WikiMarkdownViewer extends React.Component {
         this.setState({
           relatedFiles: res.data.related_files
         });
-      });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      })
     }
   }
 

@@ -7,6 +7,7 @@ import Dirent from '../../models/dirent';
 import { seafileAPI } from '../../utils/seafile-api';
 import treeHelper from '../../components/tree-view/tree-helper';
 import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
@@ -43,6 +44,9 @@ class RepoListItem extends React.Component {
 
       this.addResponseListToNode(direntList, tree.root);
       this.setState({treeData: tree});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
 
     if (this.props.selectedItemInfo.repoID === this.props.repo.repo_id) {
@@ -79,6 +83,9 @@ class RepoListItem extends React.Component {
         }
         this.addResponseListToNode(direntList, node);
         this.setState({treeData: tree});
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       tree.expandNode(node);
@@ -117,6 +124,9 @@ class RepoListItem extends React.Component {
       this.setState({
         treeData: tree
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

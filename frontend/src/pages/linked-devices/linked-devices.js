@@ -4,6 +4,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
+import { Utils } from '../../utils/utils';
 
 class Content extends Component {
 
@@ -113,9 +114,12 @@ class Item extends Component {
       msg_s = msg_s.replace('%(name)s', data.device_name);
       toaster.success(msg_s);
     }).catch((error) => {
-      let message = gettext('Failed to unlink %(name)s');
-      message = message.replace('%(name)s', data.device_name);
-      toaster.danger(message);
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed to unlink %(name)s');
+        errMessage = errMessage.replace('%(name)s', data.device_name);
+      }
+      toaster.danger(errMessage);
     });
   }
 

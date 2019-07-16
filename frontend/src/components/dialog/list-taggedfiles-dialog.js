@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import moment from 'moment';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import moment from 'moment';
 import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -38,6 +39,9 @@ class ListTaggedFilesDialog extends React.Component {
       this.getTaggedFiles();
       this.props.updateUsedRepoTags();
       if (this.props.onFileTagChanged) this.onFileTagChanged(taggedFile);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -57,6 +61,9 @@ class ListTaggedFilesDialog extends React.Component {
       this.setState({
         taggedFileList: taggedFileList,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

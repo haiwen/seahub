@@ -7,10 +7,11 @@ import AddOrgAdminDialog from '../../components/dialog/org-add-admin-dialog';
 import ModalPortal from '../../components/modal-portal';
 import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog'; 
 import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dialog';
-import Toast from '../../components/toast';
+import toaster from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';
 import { gettext, invitationLink, orgID } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 class OrgUsers extends Component {
 
@@ -53,6 +54,9 @@ class OrgUsers extends Component {
         pageNext: res.data.page_next,
         page: res.data.page,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -66,9 +70,10 @@ class OrgUsers extends Component {
       this.toggleAddOrgUser();
       let msg = gettext('successfully added user %s.');
       msg = msg.replace('%s', email);
-      Toast.success(msg);
-    }).catch(err => {
-      Toast.danger(err.response.data.error_msg);
+      toaster.success(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
       this.toggleAddOrgUser();
     });
   }
@@ -79,7 +84,10 @@ class OrgUsers extends Component {
       this.setState({orgUsers: users});
       let msg = gettext('Successfully deleted %s');
       msg = msg.replace('%s', email);
-      Toast.success(msg);
+      toaster.success(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   } 
 
@@ -89,6 +97,9 @@ class OrgUsers extends Component {
         return new OrgUserInfo(item);
       });
       this.setState({orgAdminUsers: userList});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -99,7 +110,10 @@ class OrgUsers extends Component {
       });
       let msg = gettext('Successfully deleted %s');
       msg = msg.replace('%s', email);
-      Toast.success(msg);
+      toaster.success(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -110,7 +124,10 @@ class OrgUsers extends Component {
       });
       let msg = gettext('Successfully revoke the admin permission of %s');
       msg = msg.replace('%s', res.data.name);
-      Toast.success(msg);
+      toaster.success(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -121,7 +138,7 @@ class OrgUsers extends Component {
     });
     let msg = gettext('Successfully set %s as admin.');
     msg = msg.replace('%s', userInfo.email);
-    Toast.success(msg);
+    toaster.success(msg);
     this.toggleAddOrgAdmin();
   } 
 

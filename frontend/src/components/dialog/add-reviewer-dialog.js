@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import UserSelect from '../user-select.js';
 import '../../css/add-reviewer-dialog.css';
 
@@ -63,6 +65,9 @@ class AddReviewerDialog extends React.Component {
         if (res.data.success.length > 0) {
           this.listReviewers();
         }
+      }).catch(error => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
       });
     }
   }
@@ -79,6 +84,9 @@ class AddReviewerDialog extends React.Component {
         }
         this.setState({ reviewers: newReviewers });
       }
+    }).catch(error => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
     });
   }
 

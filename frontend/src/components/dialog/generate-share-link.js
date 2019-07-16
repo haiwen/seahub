@@ -59,12 +59,18 @@ class GenerateShareLink extends React.Component {
       } else {
         this.setState({isLoading: false});
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
     if (this.isOfficeFile) {
       seafileAPI.getFileInfo(repoID, path).then((res) => {
         if (res.data) {
           this.setState({fileInfo: res.data});
         }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -134,7 +140,8 @@ class GenerateShareLink extends React.Component {
         let sharedLinkInfo = new SharedLinkInfo(res.data);
         this.setState({sharedLinkInfo: sharedLinkInfo});
       }).catch((error) => {
-        toaster.danger(error.response.data.error_msg);
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -170,6 +177,9 @@ class GenerateShareLink extends React.Component {
         'can_edit': false,
         'can_download': true
       };
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

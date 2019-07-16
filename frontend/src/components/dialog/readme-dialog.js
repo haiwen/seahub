@@ -5,6 +5,8 @@ import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer'
 import Loading from '../../components/loading';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -32,6 +34,9 @@ class ReadmeDialog extends React.Component {
           isLoading: false,
         }); 
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

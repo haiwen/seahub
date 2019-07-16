@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -33,7 +34,7 @@ class AddRepoDialog extends React.Component {
         this.props.toggle();
         this.props.onRepoChanged();
       }).catch(error => {
-        let errorMsg = gettext(error.response.data.error_msg);
+        let errorMsg = Utils.getErrorMsg(error);
         this.setState({ errMessage: errorMsg });
       });
     }

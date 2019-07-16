@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, lang } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import OrgLogsFilePermEvent from '../../models/org-logs-perm-audit';
 import '../../css/org-logs.css';
 
@@ -42,6 +43,9 @@ class OrgLogsFileUpdate extends Component {
         pageNext: res.data.page_next,
         page: res.data.page,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
