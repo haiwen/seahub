@@ -226,9 +226,10 @@ class FileChooser extends React.Component {
         isResultGot: true
       });
       this.source = null;
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+    }).catch(res => {
+      /* eslint-disable */
+      console.log(res);
+      /* eslint-enable */
     });
   }
 
