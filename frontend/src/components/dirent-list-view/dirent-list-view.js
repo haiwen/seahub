@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled, canGenerateShareLink } from '../../utils/constants';
+import { siteRoot, gettext, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -16,6 +16,7 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
+import EditFileTagsDialog from '../dialog/edit-filetags-dialog';
 import { hideMenu, showMenu } from '../context-menu/actions';
 
 const propTypes = {
@@ -69,6 +70,7 @@ class DirentListView extends React.Component {
       isMutipleOperation: true,
       activeDirent: null,
       isListDropTipShow: false,
+      isEditFileTagShow: false,
     };
 
     this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
@@ -234,6 +236,10 @@ class DirentListView extends React.Component {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
   }
 
+  onEditFileTagToggle = () => {
+    this.setState({isEditFileTagShow: !this.state.isEditFileTagShow});
+  }
+
   onItemsDownload = () => {
     let { path, repoID, selectedDirentList } = this.props;
     if (selectedDirentList.length) {
@@ -364,7 +370,13 @@ class DirentListView extends React.Component {
         }
       } else {
         let id = 'dirents-menu';
-        let menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        let { selectedDirentList } = this.props;
+        let isSelectedDir =  selectedDirentList.some(item => {
+          return item.type === 'dir';
+        });
+        let defaultMenuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        let tagMenuLsit = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.TAGS, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        let menuList =  isSelectedDir ? defaultMenuList : tagMenuLsit;
         this.handleContextClick(event, id, menuList);
       }
     }
@@ -398,6 +410,9 @@ class DirentListView extends React.Component {
         break;
       case 'Delete':
         this.props.onItemsDelete();
+        break;
+      case 'Tags':
+        this.onEditFileTagToggle();
         break;
       default: 
         break;
@@ -612,8 +627,22 @@ class DirentListView extends React.Component {
   }
 
   render() {
-    const { direntList, sortBy, sortOrder } = this.props;
+    const { direntList, sortBy, sortOrder, selectedDirentList, path } = this.props;
+    
+    let isSelectedDir =  selectedDirentList.some(item => {
+      return item.type === 'dir';
+    });
+    let filePathList = [];
+    let fileTags = [];
+    if (!isSelectedDir) {
+      filePathList = selectedDirentList.map(dirent => {
+        return Utils.joinPath(path, dirent.name);
+      });
 
+      fileTags = selectedDirentList.map(dirent => {
+        return dirent.file_tags
+      });
+    }
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
@@ -758,6 +787,16 @@ class DirentListView extends React.Component {
               isMutipleOperation={this.state.isMutipleOperation}
               onItemsCopy={this.props.onItemsCopy}
               onCancelCopy={this.onCopyToggle}
+            />
+          }
+          {this.state.isEditFileTagShow &&
+            <EditFileTagsDialog
+              repoID={this.props.repoID}
+              filePathList={filePathList}
+              toggleCancel={this.onEditFileTagToggle}
+              fileTags={fileTags}
+              onFileTagChanged={this.props.onFileTagChanged}
+              selectedDirentList={selectedDirentList}
             />
           }
           {this.state.isProgressDialogShow &&

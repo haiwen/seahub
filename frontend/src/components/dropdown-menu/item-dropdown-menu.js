@@ -7,13 +7,14 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   tagName: PropTypes.string,
-  item: PropTypes.object.isRequired,
+  item: PropTypes.object,
   toggleClass: PropTypes.string,
   isHandleContextMenuEvent: PropTypes.bool,
-  getMenuList: PropTypes.func.isRequired,
+  getMenuList: PropTypes.func,
   onMenuItemClick: PropTypes.func.isRequired,
   freezeItem: PropTypes.func,
   unfreezeItem: PropTypes.func,
+  getFilesMenuList: PropTypes.func,
 };
 
 class ItemDropdownMenu extends React.Component {
@@ -35,12 +36,25 @@ class ItemDropdownMenu extends React.Component {
     if (this.props.isHandleContextMenuEvent) {
       this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
     }
+
+    if (this.props.getFilesMenuList && this.props.selectedDirentList) {
+      let { selectedDirentList } = this.props;
+      let menuList = this.props.getFilesMenuList(selectedDirentList);
+      this.setState({menuList: menuList});
+      return;
+    }
     let { item } = this.props;
     let menuList = this.props.getMenuList(item);
     this.setState({menuList: menuList});
   }
 
   componentWillReceiveProps(nextProps) {  // for toolbar item operation
+    if (nextProps.getFilesMenuList && nextProps.selectedDirentList) {
+      let { selectedDirentList } = this.props;
+      let menuList = this.props.getFilesMenuList(selectedDirentList);
+      this.setState({menuList: menuList});
+      return;
+    }
     let { item } = nextProps;
     if (item.name !== this.props.item.name) {
       let menuList = this.props.getMenuList(item);

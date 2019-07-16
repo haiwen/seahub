@@ -11,6 +11,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
+import EditFileTagsDialog from '../dialog/edit-filetags-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
@@ -46,6 +47,7 @@ class MutipleDirOperationToolbar extends React.Component {
       showLibContentViewDialogs: false,
       showShareDialog: false,
       showEditFileTagDialog: false,
+      showEditFilesTagDialog: false,
       fileTagList: [],
       multiFileTagList: [],
       showRelatedFileDialog: false,
@@ -127,6 +129,18 @@ class MutipleDirOperationToolbar extends React.Component {
     }
   }
 
+  getFilesMenuList = (selectedDirentList) => {
+    let menuList = [];
+    const { TAGS } = TextTranslation;
+    let isSelectedDir =  selectedDirentList.some(item => {
+      return item.type === 'dir';
+    });
+    if (!isSelectedDir) {
+      menuList = [TAGS];
+    }
+    return menuList;
+  }
+
   onMenuItemClick = (operation) => {
     const dirents = this.props.selectedDirentList;
     const dirent = dirents[0];
@@ -138,7 +152,7 @@ class MutipleDirOperationToolbar extends React.Component {
         });
         break;
       case 'Tags':
-        this.listFileTags(dirent);
+        dirents.length > 1 ? this.showFileTagsDialog() : this.listFileTags(dirent);
         break;
       case 'Lock':
         this.lockFile(dirent);
@@ -239,6 +253,7 @@ class MutipleDirOperationToolbar extends React.Component {
       showLibContentViewDialogs: false,
       showShareDialog: false,
       showEditFileTagDialog: false,
+      showEditFilesTagDialog: false,
       showRelatedFileDialog: false,
     });
   }
@@ -255,6 +270,13 @@ class MutipleDirOperationToolbar extends React.Component {
         showLibContentViewDialogs: true,
         showEditFileTagDialog: true,
       });
+    });
+  }
+
+  showFileTagsDialog = () => {
+    this.setState({
+      showLibContentViewDialogs: true,
+      showEditFilesTagDialog: true,
     });
   }
 
@@ -287,11 +309,26 @@ class MutipleDirOperationToolbar extends React.Component {
 
   render() {
 
-    const { repoID, userPerm } = this.props;
+    const { repoID, userPerm, selectedDirentList, path } = this.props;
     let direntPath = this.getDirentPath(this.props.selectedDirentList[0]);
 
     if (userPerm !== 'rw' && userPerm !== 'admin') {
       return '';
+    }
+    
+    let isSelectedDir =  selectedDirentList.some(item => {
+      return item.type === 'dir';
+    });
+    let filePathList = [];
+    let fileTags = [];
+    if (!isSelectedDir) {
+      filePathList = selectedDirentList.map(dirent => {
+        return Utils.joinPath(path, dirent.name);
+      });
+
+      fileTags = selectedDirentList.map(dirent => {
+        return dirent.file_tags;
+      });
     }
     
     return (
@@ -311,6 +348,16 @@ class MutipleDirOperationToolbar extends React.Component {
                 getMenuList={this.getDirentMenuList}
               />
             }
+            {!isSelectedDir && this.props.selectedDirentList.length > 1 &&
+              <ItemDropdownMenu 
+                tagName={'button'}
+                toggleClass={'fas fa-ellipsis-v dirents-more-menu'}
+                onMenuItemClick={this.onMenuItemClick}
+                getFilesMenuList={this.getFilesMenuList}
+                selectedDirentList={selectedDirentList}
+              />
+            }
+
           </ButtonGroup>
         </div>
         {this.state.isMoveDialogShow && 
@@ -370,6 +417,18 @@ class MutipleDirOperationToolbar extends React.Component {
                   fileTagList={this.state.fileTagList}
                   toggleCancel={this.toggleCancel}
                   onFileTagChanged={this.onMenuFileTagChanged}
+                />
+              </ModalPortal>
+            }
+            {this.state.showEditFilesTagDialog &&
+              <ModalPortal>
+                <EditFileTagsDialog
+                  repoID={this.props.repoID}
+                  filePathList={filePathList}
+                  toggleCancel={this.toggleCancel}
+                  fileTags={fileTags}
+                  onFileTagChanged={this.props.onFilesTagChanged}
+                  selectedDirentList={selectedDirentList}
                 />
               </ModalPortal>
             }
