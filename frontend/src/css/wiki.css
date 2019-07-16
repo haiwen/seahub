@@ -117,7 +117,7 @@ img[src=""] {
 
 @media (max-width: 991.98px) {
   .cur-view-content .wiki-page-container {
-    padding-right: 1.5rem;
+    padding: 0 14px;
   }
   .cur-view-content .wiki-page-content {
     width: 100%;
