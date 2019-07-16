@@ -290,7 +290,7 @@ img[src=""],img:not([src]){ /* for first loading img*/
   display: flex;
   align-items: center;
   word-break: keep-all;
-  width: 90%;
+  max-width: 80%;
 }
 .path-container a {
   max-height: 50px;
