@@ -226,10 +226,6 @@ class FileChooser extends React.Component {
         isResultGot: true
       });
       this.source = null;
-    }).catch(res => {
-      /* eslint-disable */
-      console.log(res);
-      /* eslint-enable */
     });
   }
 
