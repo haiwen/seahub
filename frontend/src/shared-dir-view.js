@@ -54,16 +54,7 @@ class SharedDirView extends React.Component {
       });
       this.getThumbnails();
     }).catch((error) => {
-      let errorMsg = '';
-      if (error.response) {
-        if (error.response.data && error.response.data['error_msg']) {
-          errorMsg = error.response.data['error_msg'];
-        } else {
-          errorMsg = gettext('Error');
-        }
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }
+      let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         isLoading: false,
         errorMsg: errorMsg

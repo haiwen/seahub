@@ -5,6 +5,8 @@ import Loading from '../../components/loading';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { draftRepoID, draftFilePath, draftOriginFilePath } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 
 import '../../css/file-history.css';
 
@@ -44,7 +46,10 @@ class HistoryList extends React.Component {
           this.setState({
             loading : false
           });
-        });
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        })
       }
     }
   }

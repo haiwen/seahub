@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {gettext, isPro, canInvitePeople, siteRoot} from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import '../../css/invitations.css';
@@ -127,6 +129,9 @@ class ShareToUser extends React.Component {
       if(res.data.length !== 0) {
         this.setState({sharedItems: res.data});
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -215,12 +220,18 @@ class ShareToUser extends React.Component {
         this.setState({
           sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.deleteShareToUserItem(repoID, path, 'user', username).then(res => {
         this.setState({
           sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -232,10 +243,16 @@ class ShareToUser extends React.Component {
     if (this.props.isGroupOwnedRepo) {
       seafileAPI.modifyGroupOwnedRepoUserSharedPermission(repoID, permission, username).then(() => {
         this.updateSharedItems(item, permission);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.updateShareToUserItemPermission(repoID, path, 'user', username, permission).then(() => {
         this.updateSharedItems(item, permission);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }

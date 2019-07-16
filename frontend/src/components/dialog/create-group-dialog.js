@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
+import { Utils } from '../../utils/utils';
 
 class CreateGroupDialog extends React.Component {
 
@@ -46,10 +47,8 @@ class CreateGroupDialog extends React.Component {
       seafileAPI.createGroup(name).then((res)=> {
         that.props.onCreateGroup();
       }).catch((error) => {
-        let errorMsg = gettext(error.response.data.error_msg);
-        this.setState({
-          errorMsg: errorMsg
-        });
+        let errorMsg = Utils.getErrorMsg(error);
+        this.setState({errorMsg: errorMsg});
       });
     } else {
       this.setState({

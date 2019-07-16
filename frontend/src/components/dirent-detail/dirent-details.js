@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import DetailCommentList from './detail-comments-list';
-import { Utils } from '../../utils/utils';
+import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import Dirent from '../../models/dirent';
 import DetailListView from './detail-list-view';
 import FileTag from '../../models/file-tag';
 import '../../css/dirent-detail.css';
-import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -72,7 +73,10 @@ class DirentDetail extends React.Component {
         }
         this.setState({folderDirent: folderDirent});
         this.updateDetailView(folderDirent, path);
-      });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      })
     }
   }
 
@@ -85,6 +89,9 @@ class DirentDetail extends React.Component {
           direntType: 'file',
           direntDetail: res.data,
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
       seafileAPI.listFileTags(repoID, direntPath).then(res => {
         let fileTagList = [];
@@ -93,6 +100,9 @@ class DirentDetail extends React.Component {
           fileTagList.push(file_tag);
         });
         this.setState({fileTagList: fileTagList});
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
       seafileAPI.listRelatedFiles(repoID, direntPath).then(res => {
         let relatedFiles = [];
@@ -115,7 +125,10 @@ class DirentDetail extends React.Component {
           direntType: 'dir',
           direntDetail: res.data
         });
-      });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      })
     }
   }
 

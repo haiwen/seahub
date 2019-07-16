@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, appAvatarURL } from '../../utils/constants';
+import toaster from '../toast';
 
 const propTypes = {
   isAdminPanel: PropTypes.bool,
@@ -79,6 +80,9 @@ class Account extends Component {
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
           showInfo: !this.state.showInfo,
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
       this.isFirstMounted = false;
     } else {

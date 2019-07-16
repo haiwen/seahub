@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import OrgGroupInfo from '../../models/org-group';
-import Toast from '../../components/toast';
-import MainPanelTopbar from './main-panel-topbar';
-import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/seafile-api';
+import toaster from '../../components/toast';
+import OrgGroupInfo from '../../models/org-group';
+import MainPanelTopbar from './main-panel-topbar';
 
 class OrgGroups extends Component {
 
@@ -35,6 +36,9 @@ class OrgGroups extends Component {
         pageNext: res.data.page_next,
         page: res.data.page,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -66,7 +70,10 @@ class OrgGroups extends Component {
       }); 
       let msg = gettext('Successfully deleted {name}');
       msg = msg.replace('{name}', group.groupName);
-      Toast.success(msg);
+      toaster.success(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

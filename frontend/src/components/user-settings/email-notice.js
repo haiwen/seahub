@@ -1,6 +1,7 @@
 import React from 'react';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
 const {
@@ -39,12 +40,7 @@ class EmailNotice extends React.Component {
     seafileAPI.updateEmailNotificationInterval(this.state.currentInterval).then((res) => {
       toaster.success(gettext('Success'));
     }).catch((error) => {
-      let errorMsg = ''; 
-      if (error.response) {
-        errorMsg = error.response.data.error_msg || gettext('Error');
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }   
+      let errorMsg = Utils.getErrorMsg(error); 
       toaster.danger(errorMsg);
     });
   }

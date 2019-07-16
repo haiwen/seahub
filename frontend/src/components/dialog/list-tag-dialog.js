@@ -4,6 +4,7 @@ import { Button, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import RepoTag from '../../models/repo-tag';
 
 import '../../css/repo-tag.css';
@@ -92,6 +93,9 @@ class ListTagDialog extends React.Component {
       this.setState({
         repotagList: repotagList,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

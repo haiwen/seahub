@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, InputGroupAddon, InputGroup } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -35,6 +37,9 @@ class SetGroupQuotaDialog extends React.Component {
       seafileAPI.orgAdminSetGroupQuota(orgID, this.props.groupID, newQuota).then((res) => {
         this.props.toggle();
         this.props.onDepartChanged();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       const err = gettext('Quota is invalid.');

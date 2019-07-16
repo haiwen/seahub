@@ -5,6 +5,8 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { gettext, isPro } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import UserSelect from '../user-select';
 
 const propTypes = {
@@ -42,6 +44,9 @@ class TransferDialog extends React.Component {
         obj.label = res.data[i].name;
         this.options.push(obj);
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

@@ -4,6 +4,8 @@ import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, lang } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import OrgLogsFileUpdateEvent from '../../models/org-logs-file-update';
 import ModalPortal from '../../components/modal-portal';
 import FileUpdateDetailDialog from '../../components/dialog/org-logs-file-update-detail';
@@ -40,13 +42,14 @@ class OrgLogsFileUpdate extends Component {
       let eventList = res.data.log_list.map(item => {
         return new OrgLogsFileUpdateEvent(item);
       });
-
       this.setState({
         eventList: eventList,
         pageNext: res.data.page_next,
         page: res.data.page,
       });
-
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

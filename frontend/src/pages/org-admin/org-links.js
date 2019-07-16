@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, serviceURL } from '../../utils/constants';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 import ViewLinkDialog from '../../components/dialog/view-link-dialog';
 
@@ -56,6 +58,9 @@ class OrgLinks extends React.Component {
       if (res.data.success === true) {
         this.listOrgLinks(this.state.page);
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

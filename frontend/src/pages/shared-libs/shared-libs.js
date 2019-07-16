@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import cookie from 'react-cookies';
 import { Link } from '@reach/router';
+import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import Repo from '../../models/repo';
-import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import ModalPotal from '../../components/modal-portal';
@@ -175,12 +176,15 @@ class Item extends Component {
     }
 
     request.then((res) => {
-      this.setState({
-        unshared: true
-      });
-      // TODO: show feedback msg
-    }).catch((error) => {
-      // TODO: show feedback msg
+      this.setState({unshared: true});
+      let message = gettext('Successfully unshared {name}').replace('{name}', data.repo_name);
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed unshared {name}').replace('{name}', data.repo_name);
+      }
+      toaster(errMessage);
     });
   }
 
@@ -192,10 +196,16 @@ class Item extends Component {
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }

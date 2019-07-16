@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import Dirent from '../../models/dirent';
 import { gettext, siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import '../../css/list-related-file-dialog.css';
 
 const propTypes = {
@@ -31,6 +32,9 @@ class ListRelatedFileDialog extends React.Component {
     let relatedID = item.related_id;
     seafileAPI.deleteRelatedFile(repoID, filePath, relatedID).then((res) => {
       this.props.onRelatedFileChange();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -53,11 +57,9 @@ class ListRelatedFileDialog extends React.Component {
         dirent['related_id'] = item.related_id;
         dirent['link'] = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(item.path);
         direntList.push(dirent);
-        this.setState({
-          direntList: direntList
-        });
       });
     });
+    this.setState({direntList: direntList});
   }
 
   componentWillMount() {

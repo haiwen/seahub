@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
+import Utils from '../../utils/utils';
+import toaster from '../toast';
 
 class RenameGroupDialog extends React.Component {
 
@@ -34,6 +36,9 @@ class RenameGroupDialog extends React.Component {
       seafileAPI.renameGroup(this.props.groupID, name).then((res)=> {
         that.props.loadGroup(this.props.groupID);
         that.props.onGroupChanged(res.data.id);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
     this.setState({

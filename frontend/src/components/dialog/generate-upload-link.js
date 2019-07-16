@@ -100,6 +100,9 @@ class GenerateUploadLink extends React.Component {
       seafileAPI.createUploadLink(repoID, path, password, expireDays).then((res) => {
         let sharedUploadInfo = new SharedUploadInfo(res.data);
         this.setState({sharedUploadInfo: sharedUploadInfo}); 
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -164,6 +167,9 @@ class GenerateUploadLink extends React.Component {
         passwordnew: '',
         sharedUploadInfo: null,
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

@@ -4,6 +4,7 @@ import { Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import RepoInfo from '../../models/repo-info';
 import RepoListView from './repo-list-view';
 import Loading from '../loading';
@@ -54,6 +55,9 @@ class FileChooser extends React.Component {
           selectedRepo: repoInfo
         });
         this.props.onRepoItemClick(repoInfo);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else { // only_all_repos
       seafileAPI.listRepos().then(res => {
@@ -222,10 +226,9 @@ class FileChooser extends React.Component {
         isResultGot: true
       });
       this.source = null;
-    }).catch(res => {
-      /* eslint-disable */
-      console.log(res);
-      /* eslint-enable */
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -321,6 +324,9 @@ class FileChooser extends React.Component {
           selectedPath: path,
           isCurrentRepoShow: true,
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       if (!this.state.hasRequest) {

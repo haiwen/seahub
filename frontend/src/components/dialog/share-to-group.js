@@ -5,6 +5,8 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { gettext, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 
 class GroupItem extends React.Component {
@@ -140,6 +142,9 @@ class ShareToGroup extends React.Component {
         obj.label = res.data[i].name;
         this.options.push(obj);
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -152,6 +157,9 @@ class ShareToGroup extends React.Component {
           sharedItems: res.data
         });
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -194,6 +202,9 @@ class ShareToGroup extends React.Component {
           selectedOption: null,
           permission: 'rw',
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, groups).then(res => {
@@ -210,6 +221,9 @@ class ShareToGroup extends React.Component {
           selectedOption: null,
           permission: 'rw'
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -222,12 +236,18 @@ class ShareToGroup extends React.Component {
         this.setState({
           sharedItems: this.state.sharedItems.filter(item => { return item.group_info.id !== groupID; }) 
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.deleteShareToGroupItem(repoID, path, 'group', groupID).then(() => {
         this.setState({
           sharedItems: this.state.sharedItems.filter(item => { return item.group_info.id !== groupID; }) 
         });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -239,10 +259,16 @@ class ShareToGroup extends React.Component {
     if (this.props.isGroupOwnedRepo) {
       seafileAPI.modifyGroupOwnedRepoGroupSharedPermission(repoID, permission, groupID).then(() => {
         this.updateSharedItems(item, permission);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       seafileAPI.updateShareToGroupItemPermission(repoID, path, 'group', groupID, permission).then(() => {
         this.updateSharedItems(item, permission);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }

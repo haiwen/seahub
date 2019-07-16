@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import RepoTag from '../../models/repo-tag';
 import CreateTagDialog from './create-tag-dialog';
+import toaster from '../toast';
 require('../../css/repo-tag.css');
 
 const TagItemPropTypes = {
@@ -54,6 +55,9 @@ class TagItem extends React.Component {
       seafileAPI.addFileTag(repoID, filePath, id).then(() => {
         repoTagIdList = this.getRepoTagIdList();
         this.props.onFileTagChanged();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     } else {
       let fileTag = null;
@@ -67,6 +71,9 @@ class TagItem extends React.Component {
       seafileAPI.deleteFileTag(repoID, fileTag.id).then(() => {
         repoTagIdList = this.getRepoTagIdList();
         this.props.onFileTagChanged();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -121,9 +128,10 @@ class TagList extends React.Component {
         let repoTag = new RepoTag(item);
         repotagList.push(repoTag);
       });
-      this.setState({
-        repotagList: repotagList,
-      });
+      this.setState({repotagList: repotagList});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -186,6 +194,9 @@ class EditFileTagDialog extends React.Component {
     let {repoID, filePath} = this.props;
     seafileAPI.addFileTag(repoID, filePath, repoTagID).then(() => {
       this.props.onFileTagChanged();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

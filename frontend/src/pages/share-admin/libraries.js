@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
 import SharedRepoInfo from '../../models/shared-repo-info';
@@ -105,10 +106,9 @@ class Item extends Component {
         share_permission: permission == 'admin' ? 'rw' : permission,
         is_admin: permission == 'admin',
       });
-      // TODO: show feedback msg
-      // gettext("Successfully modified permission")
     }).catch((error) => {
-      // TODO: show feedback msg
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -248,10 +248,14 @@ class ShareAdminLibraries extends Component {
         });
       }
       this.setState({items: items});
-      // TODO: show feedback msg
-      // gettext("Successfully deleted 1 item")
-    }).catch((error) => {
-    // TODO: show feedback msg
+      let message = gettext('Successfully unshared {name}').replace('{name}', item.repo_name);
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed unshared {name}').replace('{name}', item.repo_name);
+      }
+      toaster(errMessage);
     });
   }
 

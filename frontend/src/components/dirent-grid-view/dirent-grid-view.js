@@ -20,6 +20,7 @@ import Rename from '../../components/dialog/rename-grid-item-dialog';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
+import toaster from '../toast';
 
 import '../../css/grid-view.css';
 
@@ -241,7 +242,10 @@ class DirentGridView extends React.Component{
       this.props.updateDirent(currentObject, 'locked_by_me', true);
       let lockName = username.split('@');
       this.props.updateDirent(currentObject, 'lock_owner_name', lockName[0]);
-    });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    })
   }
 
   onUnlockItem = (currentObject) => {
@@ -251,6 +255,9 @@ class DirentGridView extends React.Component{
       this.props.updateDirent(currentObject, 'is_locked', false);
       this.props.updateDirent(currentObject, 'locked_by_me', false);
       this.props.updateDirent(currentObject, 'lock_owner_name', '');
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

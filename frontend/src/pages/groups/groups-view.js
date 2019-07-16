@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot, loginUrl, canAddGroup } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
@@ -45,6 +46,9 @@ class RepoListViewPanel extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -58,10 +62,13 @@ class RepoListViewPanel extends React.Component {
       let name = repo.repo_name;
       var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
       toaster.success(msg);
-    }).catch(() => {
-      let name = repo.repo_name;
-      var msg = gettext('Failed to delete {name}.').replace('{name}', name);
-      toaster.danger(msg);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        let name = repo.repo_name;
+        errMessage = gettext('Failed to delete {name}.').replace('{name}', name);
+      }
+      toaster.danger(errMessage);
     });
   }
   
@@ -75,8 +82,9 @@ class RepoListViewPanel extends React.Component {
         return item;
       });
       this.setState({repoList: repoList});
-    }).catch(() => {
-      // todo
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

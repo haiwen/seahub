@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { seafileAPI } from '../utils/seafile-api.js';
 import { gettext } from '../utils/constants';
+import { Utils } from '../utils/utils.js';
+import toaster from './toast';
 
 const propTypes = {
   placeholder: PropTypes.string.isRequired,
@@ -47,6 +49,9 @@ class UserSelect extends React.Component {
           this.options.push(obj);
         }
         callback(this.options);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
