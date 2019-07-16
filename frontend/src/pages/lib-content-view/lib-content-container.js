@@ -133,11 +133,19 @@ class LibContentContainer extends React.Component {
   }
 
   onItemDelete = (dirent) => {
-    let currentDirent = this.state;
-    if (currentDirent && dirent.name === currentDirent.name) {
+    this.checkCurrentDirent(dirent);
+    this.props.onItemDelete(dirent);
+  }
+
+  onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
+    this.checkCurrentDirent(dirent);
+    this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
+  }
+
+  checkCurrentDirent = (deletedDirent) => {
+    if (deletedDirent.name === this.state.currentDirent.name) {
       this.setState({currentDirent: null});
     }
-    this.props.onItemDelete(dirent);
   }
 
   onItemsScroll = (e) => {
@@ -212,7 +220,7 @@ class LibContentContainer extends React.Component {
                     onItemSelected={this.onItemSelected}
                     onItemDelete={this.onItemDelete}
                     onItemRename={this.props.onItemRename}
-                    onItemMove={this.props.onItemMove}
+                    onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     onDirentClick={this.onDirentClick}
                     updateDirent={this.props.updateDirent}
@@ -246,7 +254,7 @@ class LibContentContainer extends React.Component {
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemDelete={this.props.onItemDelete}
-                    onItemMove={this.props.onItemMove}
+                    onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     updateDirent={this.props.updateDirent}
                     onAddFolder={this.props.onAddFolder}
@@ -304,7 +312,7 @@ class LibContentContainer extends React.Component {
                     onItemSelected={this.onItemSelected}
                     onItemDelete={this.onItemDelete}
                     onItemRename={this.props.onItemRename}
-                    onItemMove={this.props.onItemMove}
+                    onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     onDirentClick={this.onDirentClick}
                     updateDirent={this.props.updateDirent}
