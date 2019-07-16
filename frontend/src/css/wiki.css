@@ -73,6 +73,7 @@ img[src=""] {
   display: flex;
   flex: 1;
   padding-left: 30px;
+  overflow-y: auto;
 }
 
 .cur-view-content .wiki-page-container .outline-h2,
