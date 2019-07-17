@@ -143,7 +143,8 @@ class LibContentContainer extends React.Component {
   }
 
   checkCurrentDirent = (deletedDirent) => {
-    if (deletedDirent.name === this.state.currentDirent.name) {
+    let { currentDirent } = this.state;
+    if (currentDirent && deletedDirent.name === currentDirent.name) {
       this.setState({currentDirent: null});
     }
   }

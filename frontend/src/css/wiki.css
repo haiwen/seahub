@@ -39,6 +39,9 @@
 .wiki-pages-container .article {
   padding: 0 20px;
 }
+.wiki-pages-container .tree-view {
+  margin-top: 14px;
+}
 
 .wiki-md-viewer-rendered-content {
   padding: 30px 0 0;
