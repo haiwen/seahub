@@ -7,7 +7,7 @@ const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
-  sortList: PropTypes.func.isRequired
+  sortItems: PropTypes.func.isRequired
 };
 
 class SortOptions extends React.Component {
@@ -38,7 +38,7 @@ class SortOptions extends React.Component {
     });
 
     const [sortBy, sortOrder] = e.target.value.split('-');
-    this.props.sortList(sortBy, sortOrder);
+    this.props.sortItems(sortBy, sortOrder);
     this.props.toggleDialog();
   }
 
