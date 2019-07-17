@@ -35,7 +35,8 @@
     var d = new Date();
     var year = d.getFullYear();
     var month = d.getMonth() + 1;
-    $('#monthly-user-traffic-report [name="month"]').val(year + '' + month);
+    var str = year + (month < 10 ? '0' : '') + month;
+    $('#monthly-user-traffic-report [name="month"]').val(str);
 })();
 
 $('.date-custom-form').on('submit', function() {
