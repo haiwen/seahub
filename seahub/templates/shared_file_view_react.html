@@ -35,6 +35,18 @@
 {% elif filetype == 'Unknown' %}
     {% render_bundle 'sharedFileViewUnknown' 'css' %}
 {% endif %}
+{% if not permissions.can_download %}
+<style type="text/css">
+body {
+  user-select:none;
+}
+@media print {
+  html {
+    display:none;
+  }
+}
+</style>
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}
@@ -51,7 +63,7 @@
       sharedBy: '{{ shared_by|email2nickname }}',
       siteName: '{{ site_name }}',
       enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
-      download: '{{ permissions.can_download }}' == 'True',
+      canDownload: {% if permissions.can_download %}true{% else %}false{% endif %},
       fileContent: '{{ file_content|escapejs }}',
       err: {% if err %}'{{ err }}'{% else %}''{% endif %},
       fileType: '{{ filetype }}',
