@@ -145,7 +145,7 @@ from seahub.api2.endpoints.admin.user_activities import UserActivitiesView
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
-    AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch
+    AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 
 urlpatterns = [
@@ -567,6 +567,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/work-weixin/departments/$', AdminWorkWeixinDepartments.as_view(), name='api-v2.1-admin-work-weixin-departments'),
     url(r'^api/v2.1/admin/work-weixin/departments/(?P<department_id>\d+)/members/$', AdminWorkWeixinDepartmentMembers.as_view(), name='api-v2.1-admin-work-weixin-department-members'),
     url(r'^api/v2.1/admin/work-weixin/users/batch/$', AdminWorkWeixinUsersBatch.as_view(), name='api-v2.1-admin-work-weixin-users'),
+    url(r'^api/v2.1/admin/work-weixin/departments/import/$', AdminWorkWeixinDepartmentsImport.as_view(), name='api-v2.1-admin-work-weixin-department-import'),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),

@@ -23,8 +23,9 @@
   height: 140px;
 }
 .dir-content-nav {
-  position: fixed;
+  position: absolute;
   overflow: hidden;
+  width: 24%;
 }
 .dir-content-nav:hover {
   overflow: auto;
@@ -42,6 +43,8 @@
 }
 .tree-node-inner {
   position: relative;
+  display: flex;
+  padding-right: 1rem;
 }
 .tree-node-inner i {
   position: absolute;

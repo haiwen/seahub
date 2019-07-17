@@ -238,7 +238,7 @@ class DirentDetail extends React.Component {
             <TabPane tabId="comments" className="comments h-100">
               <DetailCommentList
                 repoID={this.props.repoID}
-                filePath={(dirent && dirent.type === 'file') ? path + dirent.name : path}
+                filePath={(dirent && dirent.type === 'file') ? path + '/' + dirent.name : path}
               />
             </TabPane>
           </TabContent>

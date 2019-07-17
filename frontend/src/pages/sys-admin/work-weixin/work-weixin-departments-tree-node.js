@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import { gettext, isPro } from '../../../utils/constants';
 
 const WorkWeixinDepartmentsTreeNodePropTypes = {
   index: PropTypes.number,
@@ -8,6 +10,7 @@ const WorkWeixinDepartmentsTreeNodePropTypes = {
   isChildrenShow: PropTypes.bool.isRequired,
   onChangeDepartment: PropTypes.func.isRequired,
   checkedDepartmentId: PropTypes.number.isRequired,
+  importDepartmentDialogToggle: PropTypes.func.isRequired,
 };
 
 class WorkWeixinDepartmentsTreeNode extends Component {
@@ -16,6 +19,8 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     super(props);
     this.state = {
       isChildrenShow: false,
+      dropdownOpen: false,
+      active: false,
     };
   }
 
@@ -25,6 +30,18 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     this.setState({
       isChildrenShow: !this.state.isChildrenShow,
     });
+  };
+
+  dropdownToggle = () => {
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  };
+
+  onMouseEnter = () => {
+    this.setState({ active: true });
+  };
+
+  onMouseLeave = () => {
+    this.setState({ active: false });
   };
 
   componentDidMount() {
@@ -44,6 +61,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
             isChildrenShow={this.state.isChildrenShow}
             onChangeDepartment={this.props.onChangeDepartment}
             checkedDepartmentId={this.props.checkedDepartmentId}
+            importDepartmentDialogToggle={this.props.importDepartmentDialogToggle}
           />
         );
       });
@@ -63,9 +81,37 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     return (
       <Fragment>
         {isChildrenShow &&
-          <div className={nodeInnerClass} onClick={() => this.props.onChangeDepartment(department.id)}>
+          <div
+            className={nodeInnerClass}
+            onClick={() => this.props.onChangeDepartment(department.id)}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+          >
             <i className={toggleClass} onClick={(e) => this.toggleChildren(e)}></i>{' '}
             <span className="tree-node-text">{department.name}</span>
+            {isPro &&
+            <Dropdown
+              isOpen={this.state.dropdownOpen}
+              toggle={this.dropdownToggle}
+              direction="down"
+              style={this.state.active ? {} : { opacity: 0 }}
+            >
+              <DropdownToggle
+                tag='i'
+                className='fa fa-ellipsis-v cursor-pointer attr-action-icon'
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.dropdownOpen}
+              >
+              </DropdownToggle>
+              <DropdownMenu className="drop-list" right={true}>
+                <DropdownItem
+                  onClick={this.props.importDepartmentDialogToggle.bind(this, department)}
+                  id={department.id}
+                >{'导入部门'}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            }
           </div>
         }
         {this.state.isChildrenShow &&
