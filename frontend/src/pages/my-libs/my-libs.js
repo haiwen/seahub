@@ -186,7 +186,7 @@ class MyLibraries extends Component {
               toggleDialog={this.toggleSortOptionsDialog}
               sortBy={this.state.sortBy}
               sortOrder={this.state.sortOrder}
-              sortList={this.sortRepoList}
+              sortItems={this.sortRepoList}
             />
           }
           {this.state.isShowDetails && (

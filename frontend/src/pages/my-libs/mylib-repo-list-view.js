@@ -103,9 +103,9 @@ class MylibRepoListView extends React.Component {
       <table className="table-thead-hidden">
         <thead>
           <tr>
-            <th width="10%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="84%"></th>
-            <th width="6%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width="12%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width="80%"></th>
+            <th width="8%"><span className="sr-only">{gettext('Actions')}</span></th>
           </tr>
         </thead>
         <tbody>

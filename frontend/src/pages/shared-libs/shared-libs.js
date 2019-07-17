@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import cookie from 'react-cookies';
@@ -12,6 +13,7 @@ import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 
 class Content extends Component {
 
@@ -74,19 +76,15 @@ class Content extends Component {
       const mobileThead = (
         <thead>
           <tr>
-            <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="76%">
-              {gettext('Sort:')}
-              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext('name')} {sortByName && sortIcon}</a>
-              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext('last update')} {sortByTime && sortIcon}</a>
-            </th>
-            <th width="6%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width="12%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width="80%"></th>
+            <th width="8%"><span className="sr-only">{gettext('Actions')}</span></th>
           </tr>
         </thead>
       );
 
       const table = (
-        <table>
+        <table className={window.innerWidth >= 768 ? '' : 'table-thead-hidden'}>
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
@@ -133,33 +131,34 @@ class Item extends Component {
       unshared: false,
       isShowSharedDialog: false,
       isStarred: this.props.data.starred,
+      isOpMenuOpen: false // for mobile
     };
-
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
-
-    this.share = this.share.bind(this);
-    this.leaveShare = this.leaveShare.bind(this);
   }
 
-  handleMouseOver() {
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    });
+  }
+
+  handleMouseOver = () => {
     this.setState({
       showOpIcon: true
     });
   }
 
-  handleMouseOut() {
+  handleMouseOut = () => {
     this.setState({
       showOpIcon: false
     });
   }
 
-  share(e) {
+  share = (e) => {
     e.preventDefault();
     this.setState({isShowSharedDialog: true});
   }
 
-  leaveShare(e) {
+  leaveShare = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -193,9 +192,15 @@ class Item extends Component {
   }
 
   onStarRepo = () => {
+    const repoName = this.props.data.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+        if (window.innerWidth < 768) {
+          const msg = gettext('Successfully unstarred {library_name_placeholder}.')
+            .replace('{library_name_placeholder}', repoName);
+          toaster.success(msg);
+        }
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -203,6 +208,11 @@ class Item extends Component {
     } else {
       seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+        if (window.innerWidth < 768) {
+          const msg = gettext('Successfully starred {library_name_placeholder}.')
+            .replace('{library_name_placeholder}', repoName);
+          toaster.success(msg);
+        }
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -273,10 +283,25 @@ class Item extends Component {
             <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
           </td>
           <td>
-            {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
-            }
-            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} onClick={this.leaveShare}></a>
+            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+              <DropdownToggle
+                tag="i"
+                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isOpMenuOpen}
+              />
+              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                <div className="mobile-operation-menu-bg-layer"></div>
+                <div className="mobile-operation-menu">
+                  <DropdownItem className="mobile-menu-item" onClick={this.onStarRepo}>{this.state.isStarred ? gettext('Unstar') : gettext('Star')}</DropdownItem>
+                  {(isPro && data.is_admin) &&
+                  <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
+                  }
+                  <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+                </div>
+              </div>
+            </Dropdown>
           </td>
         </tr>
         {this.state.isShowSharedDialog && (
@@ -314,12 +339,12 @@ class SharedLibraries extends Component {
       items: [],
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      isSortOptionsDialogOpen: false
     };
   }
 
   componentDidMount() {
     seafileAPI.listRepos({type:'shared'}).then((res) => {
-      // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       let repoList = res.data.repos.map((item) => {
         return new Repo(item);
       });
@@ -361,25 +386,42 @@ class SharedLibraries extends Component {
     });
   }
 
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  }
+
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext('Shared with me')}</h3>
-          </div>
-          <div className="cur-view-content">
-            <Content
-              loading={this.state.loading}
-              errorMsg={this.state.errorMsg}
-              items={this.state.items}
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
-              sortItems={this.sortItems}
-            />
+      <Fragment>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path align-items-center">
+              <h3 className="sf-heading m-0">{gettext('Shared with me')}</h3>
+              {(window.innerWidth < 768) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+            </div>
+            <div className="cur-view-content">
+              <Content
+                loading={this.state.loading}
+                errorMsg={this.state.errorMsg}
+                items={this.state.items}
+                sortBy={this.state.sortBy}
+                sortOrder={this.state.sortOrder}
+                sortItems={this.sortItems}
+              />
+            </div>
           </div>
         </div>
-      </div>
+        {this.state.isSortOptionsDialogOpen &&
+        <SortOptionsDialog
+          toggleDialog={this.toggleSortOptionsDialog}
+          sortBy={this.state.sortBy}
+          sortOrder={this.state.sortOrder}
+          sortItems={this.sortItems}
+        />
+        }
+      </Fragment>
     );
   }
 }
