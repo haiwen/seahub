@@ -134,17 +134,6 @@ def get_user_info(email):
 
     return info
 
-def send_user_add_mail(request, email, password):
-    """Send email when add new user."""
-    c = {
-        'user': request.user.username,
-        'email': email,
-        'password': password,
-        }
-    print('ready to send html email')
-    send_html_email(_(u'You are invited to join %s') % get_site_name(),
-            'sysadmin/user_add_email.html', c, None, [email])
-
 
 class AdminUsers(APIView):
 
@@ -283,14 +272,15 @@ class AdminUsers(APIView):
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
                 try:
-                    print('in send to email = ' + str(email))
-                    send_user_add_mail(request, email, password)
-                except Exception, e:
+                    c = {
+                        'user': request.user.username,
+                        'email': email,
+                        'password': password,
+                        }
+                    send_html_email(_(u'You are invited to join %s') % get_site_name(),
+                            'sysadmin/user_add_email.html', c, None, [email])
+                except Exception as e:
                     logger.error(str(e))
-            else:
-                pass
-        else:
-            pass
 
         user_info = get_user_info(email)
 
