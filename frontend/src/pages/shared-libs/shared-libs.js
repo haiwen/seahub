@@ -11,6 +11,7 @@ import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
+import LibsMobileThead from '../../components/libs-mobile-thead';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -73,19 +74,9 @@ class Content extends Component {
         </thead>
       );
 
-      const mobileThead = (
-        <thead>
-          <tr>
-            <th width="12%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="80%"></th>
-            <th width="8%"><span className="sr-only">{gettext('Actions')}</span></th>
-          </tr>
-        </thead>
-      );
-
       const table = (
         <table className={window.innerWidth >= 768 ? '' : 'table-thead-hidden'}>
-          {window.innerWidth >= 768 ? desktopThead : mobileThead}
+          {window.innerWidth >= 768 ? desktopThead : <LibsMobileThead />}
           <TableBody items={items} />
         </table>
       );

@@ -15,6 +15,7 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -32,6 +33,7 @@ class PublicSharedView extends React.Component {
       repoList: [],
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      isSortOptionsDialogOpen: false,
       libraryType: 'public',
       isCreateMenuShow: false,
       isCreateRepoDialogShow: false,
@@ -169,6 +171,12 @@ class PublicSharedView extends React.Component {
     });
   }
 
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  }
+
   render() {
     let errMessage = this.state.errMessage;
     let emptyTip = (
@@ -207,8 +215,9 @@ class PublicSharedView extends React.Component {
         </div>
         <div className="main-panel-center">
           <div className="cur-view-container">
-            <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('Shared with all')}</h3>
+            <div className="cur-view-path align-items-center">
+              <h3 className="sf-heading m-0">{gettext('Shared with all')}</h3>
+              {(window.innerWidth < 768) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
@@ -228,6 +237,14 @@ class PublicSharedView extends React.Component {
             </div>
           </div>
         </div>
+        {this.state.isSortOptionsDialogOpen &&
+        <SortOptionsDialog
+          toggleDialog={this.toggleSortOptionsDialog}
+          sortBy={this.state.sortBy}
+          sortOrder={this.state.sortOrder}
+          sortItems={this.sortItems}
+        />
+        }
         {this.state.isCreateRepoDialogShow && (
           <ModalPortal>
             <CreateRepoDialog 
