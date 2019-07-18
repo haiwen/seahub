@@ -6,6 +6,11 @@
 {% render_bundle 'viewDataGrid' 'css' %}
 {% endblock %}
 
+{% block extra_data %}
+  workspaceID: '{{ workspace_id }}',
+  dtableUuid: '{{ dtable_uuid }}'
+{% endblock %}
+
 {% block render_bundle %}
 {% render_bundle 'viewDataGrid' 'js' %}
 {% endblock %}
