@@ -270,7 +270,7 @@ class AdminUsers(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if IS_EMAIL_CONFIGURED and SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
-            c = {'user': request.user.username,'email': email,'password': password,}
+            c = {'user': request.user.username, 'email': email, 'password': password}
             try:
                 send_html_email(_(u'You are invited to join %s') % get_site_name(),
                         'sysadmin/user_add_email.html', c, None, [email])
