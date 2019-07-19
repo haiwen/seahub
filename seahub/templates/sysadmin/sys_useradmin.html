@@ -177,7 +177,21 @@ $('#add-user-form').on('submit', function() {
             'is_active': true
         },
         success: function(data) {
-            location.reload(true);
+            let email = data.email
+            let msg = "";
+            {% if is_email_configured %}
+                {% if send_email_on_adding_system_member %}
+                    msg = "{% trans "Successfully added user {placeholder}. An email notification has been sent." %}".replace('{placeholder}', email)
+                {% else %}
+                    msg = "{% trans "Successfully added user {placeholder}." %}".replace('{placeholder}', email)
+                {% endif %}
+            {% else %}
+                msg = "{% trans "Successfully added user {placeholder}. But email notification can not be sent, because Email service is not properly configured." %}".replace('{placeholder}', email)
+            {% endif %}
+            if (msg != "") {
+                localStorage.setItem("add_user_msg",msg);
+            }
+            window.location.reload();
         },  
         error: function(xhr, textStatus, errorThrown) {
             var error_msg = prepareAjaxErrorMsg(xhr);
@@ -187,6 +201,14 @@ $('#add-user-form').on('submit', function() {
     });
     return false;
 });
+
+$(document).ready(function(){
+    if (localStorage.getItem("add_user_msg")) {
+        feedback(localStorage.getItem("add_user_msg"), 'success');
+        localStorage.removeItem("add_user_msg");
+    }
+});
+
 $('#import-users-from-excel-btn').on('click', function () {
     $('#upload-excel-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});

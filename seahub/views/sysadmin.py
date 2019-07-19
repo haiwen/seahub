@@ -393,6 +393,8 @@ def sys_user_admin(request):
             'extra_user_roles': extra_user_roles,
             'show_institution': show_institution,
             'institutions': institutions,
+            'is_email_configured': IS_EMAIL_CONFIGURED,
+            'send_email_on_adding_system_member': SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER,
         })
 
 @login_required
