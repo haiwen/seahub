@@ -26,6 +26,7 @@ class CommentPanel extends React.Component {
     this.state = {
       commentsList: [],
       showResolvedComment: true,
+      participants: null,
     };
   }
 
@@ -92,8 +93,27 @@ class CommentPanel extends React.Component {
     });
   }
 
+  onParticipantsChange = () => {
+    if (this.props.onParticipantsChange) {
+      this.props.onParticipantsChange();
+    } else {
+      this.getParticipants();
+    }
+  }
+
+  getParticipants = () => {
+    if (this.props.participants) {
+      this.setState({ participants: this.props.participants });
+    } else {
+      seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
+        this.setState({ participants: res.data.participant_list });
+      });
+    }
+  }
+
   componentDidMount() {
     this.listComments();
+    this.getParticipants();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -103,7 +123,7 @@ class CommentPanel extends React.Component {
   }
 
   render() {
-    const { participants } = this.props;
+    const { participants } = this.state;
     return (
       <div className="seafile-comment">
         <div className="seafile-comment-title">
@@ -148,7 +168,7 @@ class CommentPanel extends React.Component {
         <div className="seafile-comment-footer">
           {participants &&
             <ParticipantsList
-              onParticipantsChange={this.props.onParticipantsChange}
+              onParticipantsChange={this.onParticipantsChange}
               participants={participants}
               repoID={repoID}
               filePath={filePath}

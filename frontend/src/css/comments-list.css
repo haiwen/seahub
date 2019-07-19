@@ -139,7 +139,7 @@
   margin-top: 0;
 }
 .detail-comments .seafile-comment-footer {
-  min-height: 140px;
+  min-height: 175px;
 }
 .detail-comments .seafile-comment-footer .add-comment-input, .detail-comments .seafile-edit-comment .edit-comment-input {
   width: 100%;
