@@ -146,7 +146,7 @@ class Wikis extends Component {
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
               <div className="path-container">
-                <h3 className="sf-heading">{gettext('Published Libraries')}</h3>
+                <h3 className="sf-heading m-0">{gettext('Published Libraries')}</h3>
               </div>
             </div>
             <div className="cur-view-content">
