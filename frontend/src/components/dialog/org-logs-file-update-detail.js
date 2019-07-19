@@ -41,7 +41,7 @@ class FileUpdateDetailDialog extends React.Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    })
+    });
   }
 
   renderContentItem = (items) => {
