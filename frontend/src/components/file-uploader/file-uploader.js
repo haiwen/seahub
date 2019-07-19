@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
-import { enableResumableFileUpload } from '../../utils/constants';
+import { enableResumableFileUpload, resumableUploadFileBlockSize } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
@@ -66,7 +66,7 @@ class FileUploader extends React.Component {
       testChunks: this.props.testChunks || false,
       headers: this.setHeaders || {},
       withCredentials: this.props.withCredentials || false,
-      chunkSize: this.props.chunkSize,
+      chunkSize: parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1 * 1024 * 1024,
       simultaneousUploads: this.props.simultaneousUploads || 1,
       fileParameterName: this.props.fileParameterName,
       generateUniqueIdentifier: this.generateUniqueIdentifier,
