@@ -179,15 +179,15 @@ $('#add-user-form').on('submit', function() {
         success: function(data) {
             let email = data.email
             let msg = "";
-            if ("{{ is_email_configured }}" == "True"){
-                if("{{ send_email_on_adding_system_member }}" == "True"){
+            {% if is_email_configured %}
+                {% if send_email_on_adding_system_member %}
                     msg = "{% trans "Successfully added user {placeholder}. An email notification has been sent." %}".replace('{placeholder}', email)
-                }else{
+                {% else %}
                     msg = "{% trans "Successfully added user {placeholder}." %}".replace('{placeholder}', email)
-                }
-            }else{
+                {% endif %}
+            {% else %}
                 msg = "{% trans "Successfully added user {placeholder}. But email notification can not be sent, because Email service is not properly configured." %}".replace('{placeholder}', email)
-            }
+            {% endif %}
             if (msg != "") {
                 localStorage.setItem("add_user_msg",msg);
             }
@@ -203,10 +203,9 @@ $('#add-user-form').on('submit', function() {
 });
 
 $(document).ready(function(){
-    if(localStorage.getItem("add_user_msg"))
-    {
+    if (localStorage.getItem("add_user_msg")) {
         feedback(localStorage.getItem("add_user_msg"), 'success');
-        localStorage.clear();
+        localStorage.removeItem("add_user_msg");
     }
 });
 

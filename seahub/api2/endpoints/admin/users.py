@@ -269,18 +269,17 @@ class AdminUsers(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        if IS_EMAIL_CONFIGURED:
-            if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
-                try:
-                    c = {
-                        'user': request.user.username,
-                        'email': email,
-                        'password': password,
-                        }
-                    send_html_email(_(u'You are invited to join %s') % get_site_name(),
-                            'sysadmin/user_add_email.html', c, None, [email])
-                except Exception as e:
-                    logger.error(str(e))
+        if IS_EMAIL_CONFIGURED and SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
+            try:
+                c = {
+                    'user': request.user.username,
+                    'email': email,
+                    'password': password,
+                    }
+                send_html_email(_(u'You are invited to join %s') % get_site_name(),
+                        'sysadmin/user_add_email.html', c, None, [email])
+            except Exception as e:
+                logger.error(str(e))
 
         user_info = get_user_info(email)
 
