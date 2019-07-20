@@ -239,6 +239,8 @@ class DirentDetail extends React.Component {
               <DetailCommentList
                 repoID={this.props.repoID}
                 filePath={(dirent && dirent.type === 'file') ? Utils.joinPath(path, dirent.name) : path}
+                fileParticipantList={this.state.fileParticipantList}
+                onParticipantsChange={this.onParticipantsChange}
               />
             </TabPane>
           </TabContent>

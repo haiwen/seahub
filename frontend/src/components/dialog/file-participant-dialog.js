@@ -33,7 +33,7 @@ class FileParticipantListItem extends Component {
     const { participant } = this.props;
     return (
       <div className="participant-select-info" onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-        <div className="d-flex">
+        <div className="d-flex" style={{maxWidth: '90%'}}>
           <img className="avatar participant-select-avatar" src={participant.avatar_url} alt=""/>
           <span className="participant-select-name ellipsis">{participant.name}</span>
         </div>
