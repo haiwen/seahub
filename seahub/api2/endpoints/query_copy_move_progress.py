@@ -47,10 +47,19 @@ class QueryCopyMoveProgressView(APIView):
             error_msg = _(u'Error')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        failed_reason_msg = {
+            'Quota is full': _('Quota is full'),
+            'Folder or file size is too large': _('Folder or file size is too large'),
+            'Too many files': _('Too many files'),
+            'Invalid arguments': _('Invalid arguments'),
+            'Internal error when copy or move': _('Internal error when copy or move'),
+        }
+
         result = {}
         result['done'] = res.done
         result['total'] = res.total
         result['canceled'] = res.canceled
         result['failed'] = res.failed
         result['successful'] = res.successful
+        result['failed_reason'] = '' if res.successful else failed_reason_msg[res.failed_reason]
         return Response(result)
