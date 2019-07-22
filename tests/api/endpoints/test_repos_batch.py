@@ -1232,7 +1232,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
                 'application/json')
         self.assertEqual(400, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['error_msg'] == 'Use sync copy to a different repo is not allowed.'
+        assert json_resp['error_msg'] == 'dst_repo_id should be the same as src_repo_id.'
 
         self.remove_repo(tmp_repo_id)
 
@@ -1477,7 +1477,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
                 'application/json')
         self.assertEqual(400, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['error_msg'] == 'Use sync move to a different repo is not allowed.'
+        assert json_resp['error_msg'] == 'dst_repo_id should be the same as src_repo_id.'
 
         self.remove_repo(tmp_repo_id)
 
