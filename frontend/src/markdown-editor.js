@@ -44,7 +44,7 @@ class EditorUtilities {
     this.fileName = fileName;
     this.userName = userName;
   }
-  
+
   saveContent(content) {
     return (
       seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
@@ -72,7 +72,7 @@ class EditorUtilities {
     let path = Utils.encodePath(parentPath);
     return this.serviceUrl + '/library/' + this.repoID + '/' + libName + path;
   }
-  
+
   _getImageURL(fileName) {
     const url = this.serviceUrl + '/lib/' + repoID + '/file/images/auto-upload/' + fileName + '?raw=1';
     return url;
@@ -130,12 +130,12 @@ class EditorUtilities {
     }
     return url;
   }
-  
+
   isInternalFileLink(url) {
     var re = new RegExp(this.serviceUrl + '/lib/[0-9a-f-]{36}/file.*');
     return re.test(url);
   }
-  
+
   isInternalDirLink(url) {
     var re = new RegExp(serviceUrl + '/library/' + '[0-9a-f\-]{36}.*');
     return re.test(url);
@@ -217,7 +217,7 @@ class EditorUtilities {
   deleteComment(commentID) {
     return seafileAPI.deleteComment(this.repoID, commentID);
   }
- 
+
   getUserAvatar(size) {
     return seafileAPI.getUserAvatar(userName, size);
   }
@@ -249,7 +249,7 @@ class EditorUtilities {
   listRepoTags = () => {
     return seafileAPI.listRepoTags(repoID);
   }
-  
+
   markdownLint(slateValue) {
     return seafileAPI.markdownLint(slateValue);
   }
@@ -828,6 +828,7 @@ class MarkdownEditor extends React.Component {
             relatedFiles={this.state.relatedFiles}
             participants={this.state.participants}
             onParticipantsChange={this.onParticipantsChange}
+            markdownLint={fileName.toLowerCase() !== 'index.md'}
           />
         </Fragment>
       );
@@ -918,7 +919,7 @@ class MarkdownEditor extends React.Component {
           )}
         </React.Fragment>
       );
-    }   
+    }
   }
 }
 

@@ -102,11 +102,11 @@ class ActivityItem extends Component {
           break;
         case 'clean-up-trash':
           if (item.days == 0) {
-            op = gettext('Removed all items from trash.');
+            details = <td>{gettext('Removed all items from trash.')}<br />{libLink}</td>;
           } else {
-            op = gettext('Removed items older than {n} days from trash.').replace('{n}', item.days);
+            details = <td>{gettext('Removed items older than {n} days from trash.').replace('{n}', item.days)}<br />{libLink}</td>;
           }
-          details = <td>{libLink}</td>;
+          op = gettext('Cleaned trash');
           break;
       }
     } else if (item.obj_type == 'draft') {

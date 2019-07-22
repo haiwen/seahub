@@ -96,7 +96,7 @@ export const Utils = {
       return false;
     }
     var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'];
+    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff'];
     if (image_exts.indexOf(file_ext) != -1) {
       return true;
     } else {

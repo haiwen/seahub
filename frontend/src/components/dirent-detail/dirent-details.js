@@ -77,7 +77,7 @@ class DirentDetail extends React.Component {
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
-      })
+      });
     }
   }
 
@@ -129,7 +129,7 @@ class DirentDetail extends React.Component {
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
-      })
+      });
     }
   }
 
@@ -191,15 +191,15 @@ class DirentDetail extends React.Component {
       <Fragment>
         <div className="detail-body dirent-info">
           <div className="img"><img src={bigIconUrl} className="thumbnail" alt="" /></div>
-          {this.state.direntDetail && 
+          {this.state.direntDetail &&
             <div className="dirent-table-container">
-              <DetailListView 
+              <DetailListView
                 repoInfo={this.props.currentRepoInfo}
                 path={this.props.path}
                 repoID={this.props.repoID}
                 dirent={this.props.dirent || folderDirent}
                 direntType={this.state.direntType}
-                direntDetail={this.state.direntDetail} 
+                direntDetail={this.state.direntDetail}
                 fileTagList={this.state.fileTagList}
                 relatedFiles={this.state.relatedFiles}
                 onFileTagChanged={this.props.onFileTagChanged}

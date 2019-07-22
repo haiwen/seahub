@@ -11,6 +11,7 @@ import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
+import LibsMobileThead from '../../components/libs-mobile-thead';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -40,7 +41,7 @@ class Content extends Component {
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
-    
+
     const emptyTip = (
       <EmptyTip>
         <h2>{gettext('No libraries have been shared with you')}</h2>
@@ -73,24 +74,14 @@ class Content extends Component {
         </thead>
       );
 
-      const mobileThead = (
-        <thead>
-          <tr>
-            <th width="12%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="80%"></th>
-            <th width="8%"><span className="sr-only">{gettext('Actions')}</span></th>
-          </tr>
-        </thead>
-      );
-
       const table = (
         <table className={window.innerWidth >= 768 ? '' : 'table-thead-hidden'}>
-          {window.innerWidth >= 768 ? desktopThead : mobileThead}
+          {window.innerWidth >= 768 ? desktopThead : <LibsMobileThead />}
           <TableBody items={items} />
         </table>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -227,12 +218,12 @@ class Item extends Component {
 
     const data = this.props.data;
 
-    data.icon_url = Utils.getLibIconUrl(data); 
+    data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
     data.url = `${siteRoot}#shared-libs/lib/${data.repo_id}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility; 
+    let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility;
     let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
 
     const desktopItem = (
@@ -256,7 +247,7 @@ class Item extends Component {
         </tr>
         {this.state.isShowSharedDialog && (
           <ModalPotal>
-            <ShareDialog 
+            <ShareDialog
               itemType={'library'}
               itemName={data.repo_name}
               itemPath={'/'}
@@ -306,7 +297,7 @@ class Item extends Component {
         </tr>
         {this.state.isShowSharedDialog && (
           <ModalPotal>
-            <ShareDialog 
+            <ShareDialog
               itemType={'library'}
               itemName={data.repo_name}
               itemPath={'/'}

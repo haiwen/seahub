@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import { gettext, storages } from '../../utils/constants';
 import MylibRepoListItem from './mylib-repo-list-item';
+import LibsMobileThead from '../../components/libs-mobile-thead';
 
 const propTypes = {
   sortBy: PropTypes.string.isRequired,
@@ -27,7 +28,7 @@ class MylibRepoListView extends React.Component {
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
   }
-  
+
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
   }
@@ -58,7 +59,7 @@ class MylibRepoListView extends React.Component {
       <Fragment>
         {this.props.repoList.map(item => {
           return (
-            <MylibRepoListItem 
+            <MylibRepoListItem
               key={item.repo_id}
               repo={item}
               isItemFreezed={this.state.isItemFreezed}
@@ -101,13 +102,7 @@ class MylibRepoListView extends React.Component {
   renderMobileUI = () => {
     return (
       <table className="table-thead-hidden">
-        <thead>
-          <tr>
-            <th width="12%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="80%"></th>
-            <th width="8%"><span className="sr-only">{gettext('Actions')}</span></th>
-          </tr>
-        </thead>
+        <LibsMobileThead />
         <tbody>
           {this.renderRepoListView()}
         </tbody>

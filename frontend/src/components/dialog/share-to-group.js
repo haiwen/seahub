@@ -111,7 +111,7 @@ class ShareToGroup extends React.Component {
       sharedItems: []
     };
     this.options = [];
-    this.permissions = []
+    this.permissions = [];
     let { itemType, isRepoOwner } = props;
     if (itemType === 'library') {
       this.permissions = isRepoOwner ? ['rw', 'r', 'admin', 'cloud-edit', 'preview'] : ['rw', 'r', 'cloud-edit', 'preview'];

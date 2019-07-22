@@ -16,7 +16,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import is_valid_username, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import is_group_member, is_group_admin, \
-        validate_group_name, check_group_name_conflict
+        validate_group_name
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import GROUP_CREATE, GROUP_DELETE, GROUP_TRANSFER
 from seahub.api2.utils import api_error
@@ -121,9 +121,11 @@ class AdminGroups(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
-        if check_group_name_conflict(request, group_name):
-            error_msg = _(u'There is already a group with that name.')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        pattern_matched_groups = ccnet_api.search_groups(group_name, -1, -1)
+        for group in pattern_matched_groups:
+            if group.group_name == group_name:
+                error_msg = _(u'There is already a group with that name.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         group_owner = request.data.get('group_owner', '')
         if group_owner:

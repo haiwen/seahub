@@ -23,6 +23,7 @@ import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import LibDetail from '../../components/dirent-detail/lib-details';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 
 import '../../css/group-view.css';
 
@@ -48,6 +49,7 @@ class GroupView extends React.Component {
       isOwner: false,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      isSortOptionsDialogOpen: false,
       repoList: [],
       libraryType: 'group',
       isCreateRepoDialogShow: false,
@@ -382,6 +384,12 @@ class GroupView extends React.Component {
     }
   }
 
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  }
+
   render() {
     let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
     let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
@@ -501,6 +509,15 @@ class GroupView extends React.Component {
                         </ul>
                       </div>
                     </Popover>
+                    {(window.innerWidth < 768) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+                    {this.state.isSortOptionsDialogOpen &&
+                    <SortOptionsDialog
+                      toggleDialog={this.toggleSortOptionsDialog}
+                      sortBy={this.state.sortBy}
+                      sortOrder={this.state.sortOrder}
+                      sortItems={this.sortItems}
+                    />
+                    }
                   </div>
                 </Fragment>
               )}

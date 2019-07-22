@@ -265,7 +265,7 @@ class SharedRepoListItem extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 
           tag="i" 
-          className="sf-dropdown-toggle sf2-icon-caret-down" 
+          className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
           title={gettext('More Operations')} 
           data-toggle="dropdown" 
           aria-expanded={this.state.isItemMenuShow}
