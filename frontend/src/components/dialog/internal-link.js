@@ -21,10 +21,6 @@ class InternalLink extends React.Component {
   }
 
   componentDidMount() {
-    this.getInternalLink()
-  }
-
-  getInternalLink = () => {
     let repoID = this.props.repoID;
     let path = this.props.path;
     seafileAPI.getInternalLink(repoID, path).then(res => {
