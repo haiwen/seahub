@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link } from '@reach/router';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl } from '../../utils/constants';
 import EmptyTip from '../../components/empty-tip';
+import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 
 class Content extends Component {
@@ -13,7 +15,7 @@ class Content extends Component {
     const {loading, errorMsg, items} = this.props.data;
 
     if (loading) {
-      return <span className="loading-icon loading-tip"></span>;
+      return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
@@ -27,7 +29,7 @@ class Content extends Component {
         <thead>
           <tr>
             <th width="4%"></th>
-            <th width="40%">{gettext('File Name')}</th>
+            <th width="40%">{gettext('Name')}</th>
             <th width="32%">{gettext('Library')}</th>
             <th width="18%">{gettext('Last Update')}</th>
             <th width="6%"></th>
@@ -37,15 +39,15 @@ class Content extends Component {
       const mobileThead = (
         <thead>
           <tr>
-            <th width="4%"></th>
-            <th width="90%">{gettext('File Name')}</th>
-            <th width="6%"></th>
+            <th width="12%"></th>
+            <th width="80%"></th>
+            <th width="8%"></th>
           </tr>
         </thead>
       );
 
       return items.length ? (
-        <table className="table-hover">
+        <table className={`table-hover ${window.innerWidth >= 768 ? '': 'table-thead-hidden'}`}>
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
@@ -100,7 +102,7 @@ class TableBody extends Component {
 
   render() {
 
-    let listFilesActivities = this.state.items.map(function(item, index) {
+    let listItems = this.state.items.map(function(item, index) {
 
       if (item.path === '/') {
         item.item_icon_url = Utils.getDefaultLibIconUrl(false);
@@ -120,7 +122,7 @@ class TableBody extends Component {
     }, this);
 
     return (
-      <tbody>{listFilesActivities}</tbody>
+      <tbody>{listItems}</tbody>
     );
   }
 }
@@ -131,8 +133,15 @@ class Item extends Component {
     super(props);
     this.state = {
       showOpIcon: false,
-      unstarred: false
+      unstarred: false,
+      isOpMenuOpen: false // for mobile
     };
+  }
+
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    });
   }
 
   handleMouseOver = () => {
@@ -147,7 +156,7 @@ class Item extends Component {
     });
   }
 
-  handleClick = (e) => {
+  unstar = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -188,7 +197,7 @@ class Item extends Component {
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
         <td>
-          <a href="#" className={opClasses} title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.handleClick}></a>
+          <a href="#" className={opClasses} title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.unstar}></a>
         </td>
       </tr>
     );
@@ -208,11 +217,25 @@ class Item extends Component {
             <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
           }
           <br />
-          <span className="dirent-meta-info">{data.repo_name}</span>
-          <span className="dirent-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
+          <span className="item-meta-info">{data.repo_name}</span>
+          <span className="item-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
         </td>
         <td>
-          <a href="#" className="sf2-icon-delete unstar action-icon" title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.handleClick}></a>
+          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+            <DropdownToggle
+              tag="i"
+              className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+              title={gettext('More Operations')}
+              data-toggle="dropdown"
+              aria-expanded={this.state.isOpMenuOpen}
+            />
+            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+              <div className="mobile-operation-menu-bg-layer"></div>
+              <div className="mobile-operation-menu">
+                <DropdownItem className="mobile-menu-item" onClick={this.unstar}>{gettext('Unstar')}</DropdownItem>
+              </div>
+            </div>
+          </Dropdown>
         </td>
       </tr>
     );
