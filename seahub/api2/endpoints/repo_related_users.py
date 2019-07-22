@@ -26,6 +26,8 @@ class RepoRelatedUsersView(APIView):
 
     def get(self, request, repo_id, format=None):
         """List all users who can view this library.
+
+        Not support public repo
         """
         # resource check
         repo = seafile_api.get_repo(repo_id)
