@@ -148,6 +148,9 @@ class CommentPanel extends React.Component {
     if (this.props.commentsNumber !== nextProps.commentsNumber) {
       this.listComments();
     }
+    if (this.props.participants !== nextProps.participants) {
+      this.setState({ participants: nextProps.participants });
+    }
   }
 
   render() {
