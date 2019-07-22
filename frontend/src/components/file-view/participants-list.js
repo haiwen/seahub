@@ -22,6 +22,7 @@ class ParticipantsList extends React.Component {
       showDialog : false,
       tooltipOpen: false,
     };
+    this.targetID = 'add-participant-icon';
   }
 
   toggleDialog = () => {
@@ -32,6 +33,10 @@ class ParticipantsList extends React.Component {
     this.setState({ tooltipOpen: !this.state.tooltipOpen });
   }
 
+  componentWillMount() {
+    this.targetID = this.targetID + Math.floor(Math.random() * 1000);
+  }
+
   render() {
     const { participants, repoID, filePath, showIconTip } = this.props;
     return (
@@ -39,11 +44,11 @@ class ParticipantsList extends React.Component {
         {participants.map((item, index) => {
           return <Participant item={item} index={index} key={index}/>;
         })}
-        <span className="add-participants" onClick={this.toggleDialog} id="add-participant-icon">
+        <span className="add-participants" onClick={this.toggleDialog} id={this.targetID}>
           <i className="fas fa-plus-circle"></i>
         </span>
         {showIconTip &&
-          <Tooltip toggle={this.tooltipToggle} delay={{show: 0, hide: 0}} target="add-participant-icon" placement='bottom' isOpen={this.state.tooltipOpen}>
+          <Tooltip toggle={this.tooltipToggle} delay={{show: 0, hide: 0}} target={this.targetID} placement='bottom' isOpen={this.state.tooltipOpen}>
             {gettext('Add participants')}
           </Tooltip>
         }
