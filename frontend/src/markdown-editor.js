@@ -795,6 +795,7 @@ class MarkdownEditor extends React.Component {
             saving={this.state.saving}
             fileTagList={this.state.fileTagList}
             relatedFiles={this.state.relatedFiles}
+            markdownLint={fileName.toLowerCase() !== 'index.md'}
           />
         </Fragment>
       );
