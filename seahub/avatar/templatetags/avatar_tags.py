@@ -2,6 +2,7 @@
 import logging
 import urllib
 import hashlib
+from urlparse import urlparse
 
 from django import template
 from django.core.urlresolvers import reverse
@@ -14,7 +15,7 @@ from seahub.avatar.settings import (AVATAR_GRAVATAR_BACKUP, AVATAR_GRAVATAR_DEFA
 from seahub.avatar.util import get_primary_avatar, get_default_avatar_url, \
     cache_result, get_default_avatar_non_registered_url
 from seahub.utils import get_service_url
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, AVATAR_FILE_STORAGE
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -38,6 +39,10 @@ def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
         else:
             url = get_default_avatar_url()
 
+    # when store avatars in the media directory
+    if not AVATAR_FILE_STORAGE:
+        return url
+
     if SITE_ROOT != '/':
         return '/%s/%s' % (SITE_ROOT.strip('/'), url.strip('/'))
     else:
@@ -47,6 +52,13 @@ def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
 def api_avatar_url(user, size=AVATAR_DEFAULT_SIZE):
     service_url = get_service_url()
     service_url = service_url.rstrip('/')
+
+    # when store avatars in the media directory
+    if not AVATAR_FILE_STORAGE:
+        # urlparse('https://192.157.12.3:89/demo')
+        # ParseResult(scheme='https', netloc='192.157.12.3:89', path='/demo', params='', query='', fragment='')
+        parse_result = urlparse(service_url)
+        service_url = '%s://%s' % (parse_result[0], parse_result[1])
 
     avatar = get_primary_avatar(user, size=size)
     if avatar:

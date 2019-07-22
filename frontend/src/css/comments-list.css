@@ -46,6 +46,7 @@
 .seafile-comment-list .comment-vacant {
   padding: 1em;
   text-align: center;
+  list-style: none;
 }
 .seafile-comment-item {
   padding: 15px 10px;
