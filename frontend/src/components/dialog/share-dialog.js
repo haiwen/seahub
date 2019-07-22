@@ -6,6 +6,7 @@ import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import GenerateShareLink from './generate-share-link';
 import GenerateUploadLink from './generate-upload-link';
+import InternalLink from './internal-link';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../loading';
 import { Utils } from '../../utils/utils';
@@ -78,7 +79,7 @@ class ShareDialog extends React.Component {
     const {repoEncrypted, userPerm, enableDirPrivateShare} = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
     const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
-    
+
     return (
       <Fragment>
         <div className="share-dialog-side">
@@ -150,14 +151,20 @@ class ShareDialog extends React.Component {
   }
 
   renderFileContent = () => {
+    let activeTab = this.state.activeTab;
+
     return (
       <Fragment>
         <div className="share-dialog-side">
           <Nav pills vertical>
             <NavItem>
-              <NavLink
-                className="active" onClick={() => {this.toggle.bind(this, 'shareLink');}}>
+              <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={(this.toggle.bind(this, 'shareLink'))}>
                 {gettext('Share Link')}
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink className={activeTab === 'internalLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'internalLink')}>
+                {gettext('Internal Link')}
               </NavLink>
             </NavItem>
           </Nav>
@@ -169,6 +176,12 @@ class ShareDialog extends React.Component {
                 itemPath={this.props.itemPath} 
                 repoID={this.props.repoID} 
                 closeShareDialog={this.props.toggleDialog}
+              />
+            </TabPane>
+            <TabPane tabId="internalLink">
+              <InternalLink 
+                repoID={this.props.repoID} 
+                path={this.props.itemPath} 
               />
             </TabPane>
           </TabContent>

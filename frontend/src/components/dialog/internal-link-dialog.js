@@ -39,10 +39,10 @@ class InternalLinkDialog extends React.Component {
       this.setState({
         isOpen: true,
         smartLink: res.data.smart_link
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
