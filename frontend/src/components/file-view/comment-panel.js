@@ -28,6 +28,7 @@ class CommentPanel extends React.Component {
       showResolvedComment: true,
       participants: null,
     };
+    this.isParticipant = false;
   }
 
   toggleResolvedComment = () => {
@@ -62,8 +63,20 @@ class CommentPanel extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
+      this.addParticipant();
     }
     this.refs.commentTextarea.value = '';
+  }
+
+  addParticipant = () => {
+    if (this.isParticipant) return;
+    seafileAPI.addFileParticipant(repoID, filePath, username).then((res) => {
+      this.isParticipant = true;
+      this.onParticipantsChange(repoID, filePath);
+    }).catch((err) => {
+      let errMessage = Utils.getErrorMsg(err);
+      toaster.danger(errMessage);
+    });
   }
 
   resolveComment = (event) => {
@@ -103,10 +116,25 @@ class CommentPanel extends React.Component {
 
   getParticipants = () => {
     if (this.props.participants) {
-      this.setState({ participants: this.props.participants });
+      this.setState({ participants: this.props.participants }, () => {
+        this.checkParticipant();
+      });
     } else {
       seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
-        this.setState({ participants: res.data.participant_list });
+        this.setState({ participants: res.data.participant_list }, () => {
+          this.checkParticipant();
+        });
+      });
+    }
+  }
+
+  checkParticipant = () => {
+    const participants = this.state.participants;
+    if (participants.length === 0) {
+      this.isParticipant = false;
+    } else {
+      this.isParticipant = participants.some((participant) => {
+        return participant.email === username;
       });
     }
   }
@@ -119,6 +147,9 @@ class CommentPanel extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.commentsNumber !== nextProps.commentsNumber) {
       this.listComments();
+    }
+    if (this.props.participants !== nextProps.participants) {
+      this.setState({ participants: nextProps.participants });
     }
   }
 

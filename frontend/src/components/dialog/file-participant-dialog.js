@@ -5,6 +5,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import UserSelect from '../user-select';
 import toaster from '../toast';
+import { Utils } from '../../utils/utils';
 import '../../css/participants-list.css';
 
 const fileParticipantListItemPropTypes = {
@@ -75,8 +76,9 @@ class FileParticipantDialog extends Component {
     const { repoID, filePath } = this.props;
     seafileAPI.deleteFileParticipant(repoID, filePath, email).then((res) => {
       this.props.onParticipantsChange(repoID, filePath);
-    }).catch((error) => {
-      this.handleError(error);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
     this.refs.userSelect.clearSelect();
   };
@@ -90,20 +92,13 @@ class FileParticipantDialog extends Component {
     for (let i = 0; i < selectedOption.length; i++) {
       seafileAPI.addFileParticipant(repoID, filePath, selectedOption[i].email).then((res) => {
         this.props.onParticipantsChange(repoID, filePath);
-      }).catch((error) => {
-        this.handleError(error);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
     this.setState({ selectedOption: null });
     this.refs.userSelect.clearSelect();
-  };
-
-  handleError = (e) => {
-    if (e.response) {
-      toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), {duration: 3});
-    } else {
-      toaster.danger(gettext('Please check the network.'), {duration: 3});
-    }
   };
 
   render() {

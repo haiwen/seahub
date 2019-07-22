@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import ParticipantsList from '../file-view/participants-list';
 import '../../css/comments-list.css';
-
-const { username } = window.app.pageOptions;
 
 const DetailCommentListPropTypes = {
   repoID: PropTypes.string.isRequired,
@@ -26,15 +24,28 @@ class DetailCommentList extends React.Component {
     this.state = {
       commentsList: [],
     };
+    this.isParticipant = false;
   }
 
   componentDidMount() {
     this.listComments();
+    this.checkParticipant();
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.filePath !== this.props.filePath) {
       this.listComments(nextProps.filePath);
+    }
+  }
+
+  checkParticipant = () => {
+    const fileParticipantList = this.props.fileParticipantList;
+    if (fileParticipantList.length === 0) {
+      this.isParticipant = false;
+    } else {
+      this.isParticipant = fileParticipantList.some((participant) => {
+        return participant.email === username;
+      });
     }
   }
 
@@ -61,8 +72,21 @@ class DetailCommentList extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
+      this.addParticipant();
     }
     this.refs.commentTextarea.value = '';
+  }
+
+  addParticipant = () => {
+    const { repoID, filePath } = this.props;
+    if (this.isParticipant) return;
+    seafileAPI.addFileParticipant(repoID, filePath, username).then((res) => {
+      this.isParticipant = true;
+      this.props.onParticipantsChange(repoID, filePath);
+    }).catch((err) => {
+      let errMessage = Utils.getErrorMsg(err);
+      toaster.danger(errMessage);
+    });
   }
 
   resolveComment = (event) => {
