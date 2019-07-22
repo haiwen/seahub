@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MediaQuery from 'react-responsive';
 import { gettext } from '../../utils/constants';
 import WikiListItem from './wiki-list-item';
+import LibsMobileThead from '../libs-mobile-thead';
 
 const propTypes = {
   data: PropTypes.object.isRequired,
@@ -35,23 +35,20 @@ class WikiListView extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
+      const desktopThead = (
+        <thead>
+          <tr>
+            <th width="4%"></th>
+            <th width="36%">{gettext('Name')}</th>
+            <th width="25%">{gettext('Owner')}</th>
+            <th width="25%">{gettext('Last Update')}</th>
+            <th width="10%">{/* operation */}</th>
+          </tr>
+        </thead>
+      );
       return (
-        <table>
-          <thead>
-            <tr>
-              <MediaQuery query="(min-width: 768px)">
-                <th width="4%"></th>
-                <th width="36%">{gettext('Name')}</th>
-              </MediaQuery>
-              <MediaQuery query="(max-width: 767.8px)">
-                <th width="10%"></th>
-                <th width="30%">{gettext('Name')}</th>
-              </MediaQuery>
-              <th width="25%">{gettext('Owner')}</th>
-              <th width="25%">{gettext('Last Update')}</th>
-              <th width="10%">{/* operation */}</th>
-            </tr>
-          </thead>
+        <table className={window.innerWidth >= 768 ? '' : 'table-thead-hidden'}>
+          {window.innerWidth >= 768 ? desktopThead : <LibsMobileThead />}
           <tbody>
             {wikis.map((wiki, index) => {
               return (

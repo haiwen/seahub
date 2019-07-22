@@ -135,7 +135,7 @@ class Wikis extends Component {
                   <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>{gettext('Publish a Library')}</Button>
                 </MediaQuery>
                 <MediaQuery query="(max-width: 767.8px)">
-                  <Button className="btn btn-secondary operation-item my-1" onClick={this.onSelectToggle}>{gettext('Publish a Library')}</Button>
+                <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Publish a Library')} onClick={this.onSelectToggle}></span>
                 </MediaQuery>
               </Fragment>}
             </div>
