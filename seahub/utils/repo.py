@@ -262,21 +262,17 @@ def get_related_users_by_repo(repo_id, org_id=None):
 
     users = []
 
-    if org_id:
-        repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        user_shared_to = seafile_api.list_org_repo_shared_to(org_id,
-                repo_owner, repo_id)
+    # 1. users repo has been shared to
+    if org_id > 0:
+        users.extend(seafile_api.org_get_shared_users_by_repo(org_id, repo_id))
+        owner = seafile_api.get_org_repo_owner(repo_id)
     else:
-        repo_owner = seafile_api.get_repo_owner(repo_id)
-        user_shared_to = seafile_api.list_repo_shared_to(
-                repo_owner, repo_id)
+        users.extend(seafile_api.get_shared_users_by_repo(repo_id))
+        owner = seafile_api.get_repo_owner(repo_id)
 
-    # 1. repo owner
-    users.append(repo_owner)
-
-    # 2. users repo has been shared to
-    for user in user_shared_to:
-        users.append(user.user)
+    # 2. repo owner
+    if owner not in users:
+        users.append(owner)
 
     # 3. members of groups repo has been shared to
     groups = get_shared_groups_by_repo(repo_id, org_id)
