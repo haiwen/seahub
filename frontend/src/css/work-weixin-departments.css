@@ -50,8 +50,9 @@
   position: absolute;
   top: 20%;
   left: 0.3rem;
+  color: silver;
 }
-.tree-node-inner:hover {
+.tree-node-inner-hover {
   background-color: #FFEFB2;
   border-radius: 0.25rem;
   cursor: pointer;
@@ -60,6 +61,14 @@
   color: #fff;
   border-radius: 4px;
   background-color: #feac74 !important;
+}
+.tree-node-hight-light i {
+  color: #fff;
+}
+.tree-node-hight-light .attr-action-icon,
+.tree-node-hight-light .attr-action-icon:focus,
+.tree-node-hight-light .attr-action-icon:hover {
+  color: #fff !important;
 }
 .tree-node-text {
   padding-left: 1.3rem;
