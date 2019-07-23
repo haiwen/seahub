@@ -52,7 +52,10 @@ class MainPanel extends Component {
       } 
       if (index === (paths.length - 1)) {
         return (
-          <span key={index}><span className="path-split">/</span>{item}</span>
+          <Fragment key={index}>
+            <span className="path-split">/</span>
+            <span className="path-file-name">{item}</span>
+          </Fragment>
         );
       } else {
         nodePath += '/' + item;

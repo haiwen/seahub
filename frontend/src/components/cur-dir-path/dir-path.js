@@ -38,7 +38,10 @@ class DirPath extends React.Component {
       }
       if (index === (pathList.length - 1)) {
         return (
-          <span key={index}><span className="path-split">/</span>{item}</span>
+          <Fragment key={index}>
+            <span className="path-split">/</span>
+            <span className="path-file-name">{item}</span>
+          </Fragment>
         );
       } else {
         nodePath += '/' + item;
@@ -87,7 +90,7 @@ class DirPath extends React.Component {
           </Fragment>
         )}
         {(currentPath === '/' || currentPath === '') ?
-          <span>{repoName}</span>:
+          <span className="path-repo-name">{repoName}</span>:
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}
