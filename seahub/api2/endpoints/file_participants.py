@@ -54,7 +54,6 @@ class FileParticipantsView(APIView):
 
             for participant in participant_queryset:
                 participant_info = get_user_common_info(participant.username)
-                participant_info['avatar_url'] = request.build_absolute_uri(participant_info['avatar_url'])
                 participant_list.append(participant_info)
         except Exception as e:
             logger.error(e)

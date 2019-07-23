@@ -52,7 +52,6 @@ class RepoRelatedUsersView(APIView):
 
             for email in related_user_list:
                 user_info = get_user_common_info(email)
-                user_info['avatar_url'] = request.build_absolute_uri(user_info['avatar_url'])
                 user_list.append(user_info)
         except Exception as e:
             logger.error(e)
