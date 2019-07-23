@@ -32,7 +32,8 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     });
   };
 
-  dropdownToggle = () => {
+  dropdownToggle = (e) => {
+    e.stopPropagation();
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
 
@@ -41,8 +42,14 @@ class WorkWeixinDepartmentsTreeNode extends Component {
   };
 
   onMouseLeave = () => {
+    if (this.state.dropdownOpen) return;
     this.setState({ active: false });
   };
+
+  importDepartmentDialogToggle = (depart) => {
+    this.setState({ active: false });
+    this.props.importDepartmentDialogToggle(depart);
+  }
 
   componentDidMount() {
     if (this.props.index === 0) {
@@ -61,7 +68,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
             isChildrenShow={this.state.isChildrenShow}
             onChangeDepartment={this.props.onChangeDepartment}
             checkedDepartmentId={this.props.checkedDepartmentId}
-            importDepartmentDialogToggle={this.props.importDepartmentDialogToggle}
+            importDepartmentDialogToggle={this.importDepartmentDialogToggle}
           />
         );
       });
@@ -76,6 +83,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     });
     let nodeInnerClass = classNames({
       'tree-node-inner': true,
+      'tree-node-inner-hover': this.state.active,
       'tree-node-hight-light': checkedDepartmentId === department.id
     });
     return (
@@ -92,7 +100,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
             {isPro &&
             <Dropdown
               isOpen={this.state.dropdownOpen}
-              toggle={this.dropdownToggle}
+              toggle={(e) => this.dropdownToggle(e)}
               direction="down"
               style={this.state.active ? {} : { opacity: 0 }}
             >
@@ -106,7 +114,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
               </DropdownToggle>
               <DropdownMenu className="drop-list" right={true}>
                 <DropdownItem
-                  onClick={this.props.importDepartmentDialogToggle.bind(this, department)}
+                  onClick={this.importDepartmentDialogToggle.bind(this, department)}
                   id={department.id}
                 >{'导入部门'}</DropdownItem>
               </DropdownMenu>
