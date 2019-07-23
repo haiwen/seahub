@@ -597,6 +597,9 @@ class LibContentView extends React.Component {
           });
           let message =  Utils.getMoveSuccessMessage(dirNames);
           toaster.success(message);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       } else {
         direntPaths.forEach((direntPath, index) => {
@@ -639,6 +642,9 @@ class LibContentView extends React.Component {
           }
           let message =  Utils.getCopySuccessfulMessage(dirNames);
           toaster.success(message);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       } else {
         if (this.state.currentMode === 'column') {
@@ -952,6 +958,9 @@ class LibContentView extends React.Component {
           let message = gettext('Successfully moved %(name)s.');
           message = message.replace('%(name)s', dirName);
           toaster.success(message);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       } else {
         if (this.state.currentMode === 'column') {
@@ -1000,6 +1009,9 @@ class LibContentView extends React.Component {
           let message = gettext('Successfully copied %(name)s.');
           message = message.replace('%(name)s', dirName);
           toaster.success(message);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       } else {
         if (this.state.currentMode === 'column') {
