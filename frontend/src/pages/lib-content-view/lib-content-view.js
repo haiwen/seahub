@@ -936,7 +936,6 @@ class LibContentView extends React.Component {
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
-
       if (repoID !== destRepo.repo_id) {
         let taskId = res.data.task_id;
         seafileAPI.queryAsyncOperationProgress(taskId).then(res => {
@@ -949,7 +948,7 @@ class LibContentView extends React.Component {
           if (this.state.currentMode === 'column') {
             this.deleteTreeNode(direntPath);
           }
-          this.moveDirent(direntPath, moveToDirentPath);
+          this.moveDirent(direntPath);
           let message = gettext('Successfully moved %(name)s.');
           message = message.replace('%(name)s', dirName);
           toaster.success(message);
