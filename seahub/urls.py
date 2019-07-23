@@ -69,7 +69,7 @@ from seahub.api2.endpoints.copy_move_task import CopyMoveTaskView
 from seahub.api2.endpoints.query_copy_move_progress import QueryCopyMoveProgressView
 from seahub.api2.endpoints.move_folder_merge import MoveFolderMergeView
 from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchView
-from seahub.api2.endpoints.invitation import InvitationView
+from seahub.api2.endpoints.invitation import InvitationView, InvitationRevokeView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
 from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
@@ -386,6 +386,7 @@ urlpatterns = [
     url(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
     url(r'^api/v2.1/invitations/batch/$', InvitationsBatchView.as_view()),
     url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/$', InvitationView.as_view()),
+    url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/revoke/$', InvitationRevokeView.as_view()),
 
     ## user::avatar
     url(r'^api/v2.1/user-avatar/$', UserAvatarView.as_view(), name='api-v2.1-user-avatar'),

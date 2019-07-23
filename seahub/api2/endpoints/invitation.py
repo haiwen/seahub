@@ -11,6 +11,7 @@ from seahub.api2.permissions import CanInviteGuest
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.invitations.models import Invitation
+from seahub.base.accounts import User
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -50,3 +51,38 @@ class InvitationView(APIView):
 
         return Response({
         }, status=204)
+
+
+class InvitationRevokeView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, CanInviteGuest)
+    throttle_classes = (UserRateThrottle, )
+
+    @invitation_owner_check
+    def delete(self, request, invitation, format=None):
+        """Revoke invitation when the accepter successfully creates an account.
+        And set the account to inactive.
+        """
+        accepter = invitation.accepter
+
+        if invitation.accept_time is None:
+            error_msg = "The email address didn't accept the invitation."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            user = User.objects.get(accepter)
+        except User.DoesNotExist:
+            error_msg = 'User %s not found.' % accepter
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # set the account to inactive.
+        user.is_active = 0
+        result_code = user.save()
+        if result_code == -1:
+            error_msg = 'Fail to update user %s.' % accepter
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # delete an invitation.
+        invitation.delete()
+
+        return Response({'success': True}, status=204)
