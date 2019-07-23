@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
@@ -18,8 +19,8 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext("You do not have connected devices")}</h2>
-          <p>{gettext("Your clients (Desktop/Android/iOS) will be listed here.")}</p>
+          <h2>{gettext('You do not have connected devices')}</h2>
+          <p>{gettext('Your clients (Desktop/Android/iOS) will be listed here.')}</p>
         </EmptyTip>
       );
 
@@ -37,15 +38,14 @@ class Content extends Component {
       const mobileThead = (
         <thead>
           <tr>
-            <th width="25%">{gettext('Platform')}</th>
-            <th width="70%">{gettext('Device Name')}</th>
-            <th width="5%"></th>
+            <th width="92%"></th>
+            <th width="8%"></th>
           </tr>
         </thead>
       );
 
       return items.length ? (
-        <table>
+        <table className={`table-hover ${window.innerWidth >= 768 ? '': 'table-thead-hidden'}`}>
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
@@ -80,28 +80,31 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isOpMenuOpen: false, // for mobile
       showOpIcon: false,
       unlinked: false
     };
-
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleMouseOver() {
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    });
+  }
+
+  handleMouseOver = () => {
     this.setState({
       showOpIcon: true
     });
   }
 
-  handleMouseOut() {
+  handleMouseOut = () => {
     this.setState({
       showOpIcon: false
     });
   }
 
-  handleClick(e) {
+  handleClick = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -147,10 +150,28 @@ class Item extends Component {
 
     const mobileItem = (
       <tr>
-        <td>{data.platform}</td>
-        <td>{data.device_name}</td>
         <td>
-          <a href="#" className={opClasses} title={gettext('Unlink')} aria-label={gettext('Unlink')} onClick={this.handleClick}></a>
+          {data.device_name}<br />
+          <span className="item-meta-info">{data.last_login_ip}</span>
+          <span className="item-meta-info">{moment(data.last_accessed).fromNow()}</span>
+          <span className="item-meta-info">{data.platform}</span>
+        </td>
+        <td>
+          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+            <DropdownToggle
+              tag="i"
+              className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+              title={gettext('More Operations')}
+              data-toggle="dropdown"
+              aria-expanded={this.state.isOpMenuOpen}
+            />
+            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+              <div className="mobile-operation-menu-bg-layer"></div>
+              <div className="mobile-operation-menu">
+                <DropdownItem className="mobile-menu-item" onClick={this.handleClick}>{gettext('Unlink')}</DropdownItem>
+              </div>
+            </div>
+          </Dropdown>
         </td>
       </tr>
     );
@@ -175,7 +196,6 @@ class LinkedDevices extends Component {
 
   componentDidMount() {
     seafileAPI.listLinkedDevices().then((res) => {
-      //res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         loading: false,
         items: res.data
