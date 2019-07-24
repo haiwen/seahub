@@ -362,14 +362,11 @@ class DirentListItem extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-
     e.dataTransfer.effectAllowed = 'move';
-    if (e.dataTransfer && e.dataTransfer.setDragImage) {
-      e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
-    }
-
     let { selectedDirentList } = this.props;
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
+      this.props.onShowImageThumbnail();
+      e.dataTransfer.setDragImage(this.refs.empty_content, 0, 0);
       let selectedList =  selectedDirentList.map(item => {
         let nodeRootPath = this.getDirentPath(item);
         let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
@@ -378,6 +375,10 @@ class DirentListItem extends React.Component {
       selectedList = JSON.stringify(selectedList);
       e.dataTransfer.setData('applicaiton/drag-item-info', selectedList);
       return ;
+    }
+
+    if (e.dataTransfer && e.dataTransfer.setDragImage) {
+      e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
     }
 
     let nodeRootPath = this.getDirentPath(this.props.dirent);
@@ -617,6 +618,7 @@ class DirentListItem extends React.Component {
                 <img ref='drag_icon' src={iconUrl} width="24" alt='' />
               }
               {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
+              <div ref="empty_content" style={{position: 'absolute', width: '1px', height: '1px'}}></div>
             </div>
           </td>
           <td className="name">

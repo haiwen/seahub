@@ -17,6 +17,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
+import Thumbnail from '../draggable/thumbnail';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -69,6 +70,7 @@ class DirentListView extends React.Component {
       isMutipleOperation: true,
       activeDirent: null,
       isListDropTipShow: false,
+      isShowImageThumbnail: false,
     };
 
     this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
@@ -619,6 +621,18 @@ class DirentListView extends React.Component {
     this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
   }
 
+  onShowImageThumbnail = () => {
+    this.setState({
+      isShowImageThumbnail: true,
+    });
+  }
+
+  onHideImageThumbnail = () => {
+    this.setState({
+      isShowImageThumbnail: false
+    });
+  }
+
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
 
@@ -694,6 +708,7 @@ class DirentListView extends React.Component {
                   getDirentItemMenuList={this.getDirentItemMenuList}
                   showDirentDetail={this.props.showDirentDetail}
                   onItemsMove={this.props.onItemsMove}
+                  onShowImageThumbnail={this.onShowImageThumbnail}
                 />
               );
             })}
@@ -714,6 +729,15 @@ class DirentListView extends React.Component {
             id={'dirents-menu'}
             onMenuItemClick={this.onDirentsMenuItemClick}
           />
+          {this.state.isShowImageThumbnail && 
+            <ModalPortal>
+              <Thumbnail 
+                ref={element => this.element = element}
+                selectedDirentList={this.props.selectedDirentList}
+                onHideImageThumbnail={this.onHideImageThumbnail}
+              />
+            </ModalPortal>
+          }
           {this.state.isImagePopupOpen && (
             <ModalPortal>
               <ImageDialog
