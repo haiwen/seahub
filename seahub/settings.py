@@ -746,6 +746,9 @@ ENABLE_SUB_LIBRARY = True
 
 SEAFILE_COLLAB_SERVER = ''
 
+# dtable server url
+DTABLE_SERVER_URL = ''
+
 ############################
 # Settings for Seahub Priv #
 ############################

@@ -11,7 +11,7 @@ from seahub.utils import normalize_file_path, render_error, render_permission_er
     gen_file_get_url, get_file_type_and_ext, IMAGE
 from seahub.auth.decorators import login_required
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, \
-    SHARE_LINK_EXPIRE_DAYS_DEFAULT
+    SHARE_LINK_EXPIRE_DAYS_DEFAULT, DTABLE_SERVER_URL
 from seahub.dtable.utils import check_dtable_share_permission, check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 
@@ -66,6 +66,7 @@ def dtable_file_view(request, workspace_id, name):
         'filetype': 'dtable',
         'workspace_id': workspace_id,
         'dtable_uuid': dtable.uuid.hex,
+        'dtable_server': DTABLE_SERVER_URL,
     }
 
     return render(request, 'dtable_file_view_react.html', return_dict)
