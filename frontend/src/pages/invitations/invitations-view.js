@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {gettext, siteRoot} from '../../utils/constants';
 import InvitationsToolbar from '../../components/toolbar/invitations-toolbar';
 import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
+import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-dialog';
 import {seafileAPI} from '../../utils/seafile-api';
 import {Table} from 'reactstrap';
 import Loading from '../../components/loading';
@@ -42,18 +43,29 @@ class InvitationsListItem extends React.Component {
 
   render() {
     const invitationItem = this.props.invitation;
+    const revokeUserObj = invitationItem.accept_time ? {
+      index: this.props.index,
+      email: invitationItem.accepter,
+      token: invitationItem.token,
+    } : null;
+
     const acceptIcon = <i className="sf2-icon-tick invite-accept-icon"></i>;
     const deleteOperation = <i className="action-icon sf2-icon-x3"
       title={gettext('Delete')}
       style={!this.state.isOperationShow ? {opacity: 0} : {}}
       onClick={this.props.onItemDelete.bind(this, invitationItem.token, this.props.index)}></i>;
+    const revokeOperation = <i className="action-icon fas fa-undo-alt"
+      title={gettext('Revoke Access')}
+      style={!this.state.isOperationShow ? {opacity: 0} : {fontSize: '1rem'}}
+      onClick={this.props.toggleInvitationRevokeDialog.bind(this, revokeUserObj)}></i>;
+
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td>{invitationItem.accepter}</td>
         <td>{moment(invitationItem.invite_time).format('YYYY-MM-DD')}</td>
         <td>{moment(invitationItem.expire_time).format('YYYY-MM-DD')}</td>
         <td>{invitationItem.accept_time && acceptIcon}</td>
-        <td>{!invitationItem.accept_time && deleteOperation}</td>
+        <td>{invitationItem.accept_time ? revokeOperation : deleteOperation}</td>
       </tr>
     );
   }
@@ -62,6 +74,8 @@ class InvitationsListItem extends React.Component {
 const InvitationsListItemPropTypes = {
   invitation: PropTypes.object.isRequired,
   onItemDelete: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  toggleInvitationRevokeDialog: PropTypes.func.isRequired,
 };
 
 InvitationsListItem.propTypes = InvitationsListItemPropTypes;
@@ -93,6 +107,7 @@ class InvitationsListView extends React.Component {
           onItemDelete={this.onItemDelete}
           invitation={invitation}
           index={index}
+          toggleInvitationRevokeDialog={this.props.toggleInvitationRevokeDialog}
         />);
     });
 
@@ -118,6 +133,7 @@ class InvitationsListView extends React.Component {
 const InvitationsListViewPropTypes = {
   invitationsList: PropTypes.array.isRequired,
   onDeleteInvitation: PropTypes.func.isRequired,
+  toggleInvitationRevokeDialog: PropTypes.func.isRequired,
 };
 
 InvitationsListView.propTypes = InvitationsListViewPropTypes;
@@ -128,6 +144,8 @@ class InvitationsView extends React.Component {
     super(props);
     this.state = {
       isInvitePeopleDialogOpen: false,
+      isInvitationRevokeDialogOpen: false,
+      revokeUserObj: null,
       invitationsList: [],
       isLoading: true,
       permissionDeniedMsg: '',
@@ -161,6 +179,26 @@ class InvitationsView extends React.Component {
     });
   }
 
+  revokeInvitation = (token, index) => {
+    seafileAPI.revokeInvitation(token).then((res) => {
+      this.onDeleteInvitation(index);
+      toaster.success(gettext('Success'), {duration: 1});
+    }).catch((error) => {
+      if (error.response){
+        toaster.danger(error.response.data.error_msg || gettext('Error'), {duration: 3});
+      } else {
+        toaster.danger(gettext('Please check the network.'), {duration: 3});
+      }
+    });
+  };
+
+  onRevokeInvitation = () => {
+    let token = this.state.revokeUserObj.token;
+    let index = this.state.revokeUserObj.index;
+    this.revokeInvitation(token, index);
+    this.toggleInvitationRevokeDialog(null);
+  };
+
   onInvitePeople = (invitationsArray) => {
     invitationsArray.push.apply(invitationsArray,this.state.invitationsList);
     this.setState({
@@ -182,6 +220,13 @@ class InvitationsView extends React.Component {
   toggleInvitePeopleDialog = () => {
     this.setState({
       isInvitePeopleDialogOpen: !this.state.isInvitePeopleDialogOpen
+    });
+  }
+
+  toggleInvitationRevokeDialog = (revokeUserObj) => {
+    this.setState({
+      isInvitationRevokeDialogOpen: !this.state.isInvitationRevokeDialogOpen,
+      revokeUserObj: revokeUserObj,
     });
   }
 
@@ -223,6 +268,7 @@ class InvitationsView extends React.Component {
               < InvitationsListView
                 invitationsList={this.state.invitationsList}
                 onDeleteInvitation={this.onDeleteInvitation}
+                toggleInvitationRevokeDialog={this.toggleInvitationRevokeDialog}
               />}
             </div>
           </div>
@@ -232,6 +278,13 @@ class InvitationsView extends React.Component {
           toggleInvitePeopleDialog={this.toggleInvitePeopleDialog}
           isInvitePeopleDialogOpen={this.state.isInvitePeopleDialogOpen}
           onInvitePeople={this.onInvitePeople}
+        />
+        }
+        {this.state.isInvitationRevokeDialogOpen &&
+        <InvitationRevokeDialog
+          toggleInvitationRevokeDialog={this.toggleInvitationRevokeDialog}
+          onRevokeInvitation={this.onRevokeInvitation}
+          revokeUserObj={this.state.revokeUserObj}
         />
         }
       </Fragment>
