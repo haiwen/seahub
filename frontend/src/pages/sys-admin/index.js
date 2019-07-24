@@ -49,15 +49,11 @@ class SysAdmin extends React.Component {
               currentTab={currentTab}
               tabItemClick={this.tabItemClick}
             />
-          </Router>
-          <Router className="reach-router">
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
               tabItemClick={this.tabItemClick}
             />
-          </Router>
-          <Router className="reach-router">
             <WorkWeixinDepartments
               path={siteRoot + 'sys/work-weixin/departments'}
               currentTab={currentTab}
