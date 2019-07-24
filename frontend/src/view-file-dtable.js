@@ -15,6 +15,8 @@ window.dtable = {
   accessToken: '12345678'
 };
 
+window.seafileAPI = seafileAPI;
+
 class ViewFileSDB extends React.Component {
 
   render() {
