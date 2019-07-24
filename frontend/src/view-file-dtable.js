@@ -7,6 +7,7 @@ import './css/view-file-dtable.css';
 class ViewFileSDB extends React.Component {
 
   render() {
+    window.app.pageOptions['dtableServer'] = "http://dev.seafile.com/dtable-server/";
     return (
       <ViewFileDtable seafileAPI={seafileAPI} pageOptions={window.app.pageOptions} />
     );

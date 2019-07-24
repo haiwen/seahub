@@ -65,7 +65,7 @@ def dtable_file_view(request, workspace_id, name):
         'path': table_path,
         'filetype': 'dtable',
         'workspace_id': workspace_id,
-        'dtable_uuid': dtable.uuid,
+        'dtable_uuid': dtable.uuid.hex,
     }
 
     return render(request, 'dtable_file_view_react.html', return_dict)
