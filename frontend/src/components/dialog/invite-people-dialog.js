@@ -12,6 +12,7 @@ class InvitePeopleDialog extends React.Component {
     this.state = {
       emails: '',
       errorMsg: '',
+      loading: false,
     };
   }
 
@@ -45,6 +46,9 @@ class InvitePeopleDialog extends React.Component {
       }
     }
     if (emailsArray.length) {
+      this.setState({
+        loading: true
+      });
       seafileAPI.invitePeople(emailsArray).then((res) => {
         this.setState({
           emails: '',
@@ -108,7 +112,7 @@ class InvitePeopleDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleInvitePeopleDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmitInvite}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmitInvite} disabled={this.state.loading}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
