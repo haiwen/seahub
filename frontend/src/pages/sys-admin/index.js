@@ -6,6 +6,7 @@ import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import FileScanRecords from './file-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
+import Info from './info';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -42,6 +43,13 @@ class SysAdmin extends React.Component {
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab}/>
         <MainPanel>
+          <Router className="reach-router">
+            <Info
+              path={siteRoot + 'sys/info'}
+              currentTab={currentTab}
+              tabItemClick={this.tabItemClick}
+            />
+          </Router>
           <Router className="reach-router">
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
