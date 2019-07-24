@@ -253,7 +253,7 @@ class ShareAdminLibraries extends Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed unshared {name}').replace('{name}', item.repo_name);
+        errMessage = gettext('Failed to unshare {name}').replace('{name}', item.repo_name);
       }
       toaster(errMessage);
     });

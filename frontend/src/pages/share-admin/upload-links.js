@@ -214,7 +214,7 @@ class ShareAdminUploadLinks extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext("Failed deleted upload link.");
+        errMessage = gettext("Failed to delete upload link.");
       }
       toaster.danger(errMessage);
     });
