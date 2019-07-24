@@ -50,6 +50,7 @@ const propTypes = {
   enableDirPrivateShare: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
+  onShowImageThumbnail: PropTypes.func,
 };
 
 class DirentListItem extends React.Component {
