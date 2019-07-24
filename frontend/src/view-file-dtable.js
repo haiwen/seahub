@@ -4,7 +4,7 @@ import { seafileAPI } from './utils/seafile-api';
 import ViewFileDtable from '@seafile/dtable/es';
 import './css/view-file-dtable.css';
 
-const { server, workspaceID, username, userNickName, contactEmail, fileName, filePath, dtableUuid } = window.app.pageOptions;
+const { server, workspaceID, username, userNickName, contactEmail, fileName, filePath, dtableUuid, dtableServer } = window.app.pageOptions;
 window.dtable = {};
 window.dtable = {
   workspaceID: workspaceID,
@@ -12,7 +12,7 @@ window.dtable = {
   name: userNickName,
   contactEmail: contactEmail,
   server: server,
-  dtableServer: "http://dev.seafile.com/dtable-server/",
+  dtableServer: dtableServer,
   filePath: filePath,
   fileName: fileName,
   dtableUuid: dtableUuid,

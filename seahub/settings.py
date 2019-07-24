@@ -915,3 +915,6 @@ if ENABLE_REMOTE_USER_AUTHENTICATION:
 
 if ENABLE_OAUTH or ENABLE_WORK_WEIXIN:
     AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)
+
+# dtable server url
+DTABLE_SERVER_URL = 'https://dev.seafile.com/dtable-server/'
