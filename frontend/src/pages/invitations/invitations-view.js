@@ -5,7 +5,6 @@ import InvitationsToolbar from '../../components/toolbar/invitations-toolbar';
 import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
 import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-dialog';
 import {seafileAPI} from '../../utils/seafile-api';
-import {Table} from 'reactstrap';
 import Loading from '../../components/loading';
 import moment from 'moment';
 import toaster from '../../components/toast';
@@ -112,7 +111,7 @@ class InvitationsListView extends React.Component {
     });
 
     return (
-      <Table hover>
+      <table className="table-hover">
         <thead>
           <tr>
             <th width="25%">{gettext('Email')}</th>
@@ -125,7 +124,7 @@ class InvitationsListView extends React.Component {
         <tbody>
           {invitationsListItems}
         </tbody>
-      </Table>
+      </table>
     );
   }
 }
