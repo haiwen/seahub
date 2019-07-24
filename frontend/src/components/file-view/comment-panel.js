@@ -8,6 +8,9 @@ import { seafileAPI } from '../../utils/seafile-api';
 import ParticipantsList from './participants-list';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import { siteRoot } from '../../utils/constants';
+import { MentionsInput, Mention } from 'react-mentions';
+import { defaultStyle, defaultMentionStyle } from '../../css/react-mentions-default-style';
 import '../../css/comments-list.css';
 
 const { username, repoID, filePath } = window.app.pageOptions;
@@ -27,14 +30,13 @@ class CommentPanel extends React.Component {
       commentsList: [],
       showResolvedComment: true,
       participants: null,
+      relatedUsers: null,
+      comment: '',
     };
-    this.isParticipant = false;
   }
 
   toggleResolvedComment = () => {
-    this.setState({
-      showResolvedComment: !this.state.showResolvedComment
-    });
+    this.setState({ showResolvedComment: !this.state.showResolvedComment });
   }
 
   listComments = () => {
@@ -48,14 +50,21 @@ class CommentPanel extends React.Component {
     });
   }
 
-  handleCommentChange = (event) => {
-    this.setState({
-      comment: event.target.value,
+  listRepoRelatedUsers = () => {
+    seafileAPI.listRepoRelatedUsers(repoID).then((res) => {
+      let users = res.data.user_list.map((item) => {
+        return { id: (siteRoot + 'profile/' + item.email), display: item.name};
+      });
+      this.setState({ relatedUsers: users });
     });
   }
 
+  handleCommentChange = (event) => {
+    this.setState({ comment: event.target.value });
+  }
+
   submitComment = () => {
-    let comment = this.refs.commentTextarea.value;
+    let comment = this.state.comment;
     if (comment.trim()) {
       seafileAPI.postComment(repoID, filePath, comment).then(() => {
         this.listComments();
@@ -63,20 +72,9 @@ class CommentPanel extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
-      this.addParticipant();
+      this.addParticipant(username);
     }
-    this.refs.commentTextarea.value = '';
-  }
-
-  addParticipant = () => {
-    if (this.isParticipant) return;
-    seafileAPI.addFileParticipant(repoID, filePath, username).then((res) => {
-      this.isParticipant = true;
-      this.onParticipantsChange(repoID, filePath);
-    }).catch((err) => {
-      let errMessage = Utils.getErrorMsg(err);
-      toaster.danger(errMessage);
-    });
+    this.setState({ comment: '' });
   }
 
   resolveComment = (event) => {
@@ -116,32 +114,41 @@ class CommentPanel extends React.Component {
 
   getParticipants = () => {
     if (this.props.participants) {
-      this.setState({ participants: this.props.participants }, () => {
-        this.checkParticipant();
-      });
+      this.setState({ participants: this.props.participants });
     } else {
       seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
-        this.setState({ participants: res.data.participant_list }, () => {
-          this.checkParticipant();
-        });
+        this.setState({ participants: res.data.participant_list });
       });
     }
   }
 
-  checkParticipant = () => {
-    const participants = this.state.participants;
-    if (participants.length === 0) {
-      this.isParticipant = false;
-    } else {
-      this.isParticipant = participants.some((participant) => {
-        return participant.email === username;
-      });
-    }
+  checkParticipant = (email) => {
+    return this.state.participants.map((participant) => {return participant.email;}).includes(email);
+  }
+
+  addParticipant = (email) => {
+    if (this.checkParticipant(email)) return;
+    seafileAPI.addFileParticipant(repoID, filePath, email).then((res) => {
+      this.onParticipantsChange(repoID, filePath);
+    }).catch((err) => {
+      let errMessage = Utils.getErrorMsg(err);
+      toaster.danger(errMessage);
+    });
+  }
+
+  renderUserSuggestion = (entry, search, highlightedDisplay, index, focused) => {
+    return <div className={`user ${focused ? 'focused' : ''}`}>{highlightedDisplay}</div>;
+  }
+
+  handleMention = (id, display) => {
+    const email = id.slice(id.lastIndexOf('/') + 1);
+    this.addParticipant(email);
   }
 
   componentDidMount() {
     this.listComments();
     this.getParticipants();
+    this.listRepoRelatedUsers();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -154,18 +161,18 @@ class CommentPanel extends React.Component {
   }
 
   render() {
-    const { participants } = this.state;
+    const { participants, commentsList } = this.state;
     return (
       <div className="seafile-comment">
         <div className="seafile-comment-title">
-          <div onClick={this.props.toggleCommentPanel} className={'seafile-comment-title-close'}>
-            <i className={'fa fa-times-circle'}/>
+          <div onClick={this.props.toggleCommentPanel} className="seafile-comment-title-close">
+            <i className="fa fa-times-circle"/>
           </div>
-          <div className={'seafile-comment-title-text'}>{gettext('Comments')}</div>
+          <div className="seafile-comment-title-text">{gettext('Comments')}</div>
         </div>
         <div className="seafile-comment-toggle-resolved">
-          <div className={'seafile-comment-title-text'}>{gettext('Show resolved comments')}</div>
-          <div className={'seafile-comment-title-toggle d-flex'}>
+          <div className="seafile-comment-title-text">{gettext('Show resolved comments')}</div>
+          <div className="seafile-comment-title-toggle d-flex">
             <label className="custom-switch" id="toggle-resolved-comments">
               <input type="checkbox" name="option" className="custom-switch-input"
                 onChange={this.toggleResolvedComment}
@@ -175,9 +182,9 @@ class CommentPanel extends React.Component {
             </label>
           </div>
         </div>
-        <ul className={'seafile-comment-list'}>
-          {this.state.commentsList.length > 0 &&
-            this.state.commentsList.map((item, index = 0, arr) => {
+        <ul className="seafile-comment-list">
+          {commentsList.length > 0 &&
+            commentsList.map((item, index = 0, arr) => {
               let oldTime = (new Date(item.created_at)).getTime();
               let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
               return (
@@ -193,7 +200,7 @@ class CommentPanel extends React.Component {
               );
             })
           }
-          {(this.state.commentsList.length == 0 ) &&
+          {commentsList.length == 0 &&
             <li className="comment-vacant">{gettext('No comment yet.')}</li>}
         </ul>
         <div className="seafile-comment-footer">
@@ -206,10 +213,20 @@ class CommentPanel extends React.Component {
               showIconTip={true}
             />
           }
-          <textarea
-            className="add-comment-input" ref="commentTextarea"
+          <MentionsInput
+            value={this.state.comment}
+            onChange={this.handleCommentChange}
             placeholder={gettext('Add a comment.')}
-            clos="100" rows="3" warp="virtual"></textarea>
+            style={defaultStyle}
+          >
+            <Mention
+              trigger="@"
+              data={this.state.relatedUsers}
+              renderSuggestion={this.renderUserSuggestion}
+              style={defaultMentionStyle}
+              onAdd={this.handleMention}
+            />
+          </MentionsInput>
           <Button
             className="submit-comment" color="primary"
             size="sm" onClick={this.submitComment} >
