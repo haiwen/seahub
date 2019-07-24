@@ -199,7 +199,7 @@ class Item extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext("Failed to modify permission.");
+        errMessage = gettext("Failed modified permission.");
       }
       toaster.danger(errMessage);
     });
@@ -348,7 +348,7 @@ class ShareAdminShareLinks extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext("Failed to delete share link.");
+        errMessage = gettext("Failed deleted share link.");
       }
       toaster.danger(errMessage);
     });
