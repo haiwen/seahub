@@ -33,6 +33,7 @@
     "react-cookies": "^0.1.0",
     "react-dom": "^16.8.6",
     "react-image-lightbox": "^5.1.0",
+    "react-mentions": "^3.0.2",
     "react-moment": "^0.7.9",
     "react-responsive": "^6.1.2",
     "react-select": "^2.4.1",
