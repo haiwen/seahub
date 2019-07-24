@@ -107,8 +107,6 @@ class DetailCommentList extends React.Component {
         return { id: (siteRoot + 'profile/' + item.email), display: item.name};
       });
       this.setState({ relatedUsers: users });
-    }).catch(err => {
-      toaster.danger(Utils.getErrorMsg(err));
     });
   }
 

@@ -56,9 +56,6 @@ class CommentPanel extends React.Component {
         return { id: (siteRoot + 'profile/' + item.email), display: item.name};
       });
       this.setState({ relatedUsers: users });
-    }).catch(err => {
-      let errMessage = Utils.getErrorMsg(err);
-      toaster.danger(errMessage);
     });
   }
 
