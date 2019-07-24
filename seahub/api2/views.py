@@ -1002,8 +1002,9 @@ class Repos(APIView):
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd, storage_id,
-                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                            repo_desc, username, passwd,
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                            storage_id=storage_id )
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
@@ -1138,8 +1139,9 @@ class PubRepos(APIView):
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd, storage_id,
-                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                            repo_desc, username, passwd,
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                            storage_id=storage_id)
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
