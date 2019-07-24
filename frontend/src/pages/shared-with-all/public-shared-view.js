@@ -119,7 +119,7 @@ class PublicSharedView extends React.Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed to unshare {name}').replace('{name}', repo.repo_name);
+        errMessage = gettext('Failed unshared {name}').replace('{name}', repo.repo_name);
       }
       toaster(errMessage);
     });
