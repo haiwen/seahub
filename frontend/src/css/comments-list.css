@@ -111,7 +111,6 @@
   flex-direction: column;
   min-height: 182px;
 }
-.seafile-comment-footer .add-comment-input,
 .seafile-edit-comment .edit-comment-input {
   border: 1px solid #e6e6dd;
   padding: 5px;
@@ -142,6 +141,6 @@
 .detail-comments .seafile-comment-footer {
   min-height: 175px;
 }
-.detail-comments .seafile-comment-footer .add-comment-input, .detail-comments .seafile-edit-comment .edit-comment-input {
+.detail-comments .seafile-edit-comment .edit-comment-input {
   width: 100%;
 }

@@ -50,8 +50,8 @@ class CommentPanel extends React.Component {
     });
   }
 
-  listRelatedUsers = () => {
-    seafileAPI.listRelatedUsers(repoID).then((res) => {
+  listRepoRelatedUsers = () => {
+    seafileAPI.listRepoRelatedUsers(repoID).then((res) => {
       let users = res.data.user_list.map((item) => {
         return { id: (siteRoot + 'profile/' + item.email), display: item.name};
       });
@@ -151,7 +151,7 @@ class CommentPanel extends React.Component {
   componentDidMount() {
     this.listComments();
     this.getParticipants();
-    this.listRelatedUsers();
+    this.listRepoRelatedUsers();
   }
 
   componentWillReceiveProps(nextProps) {

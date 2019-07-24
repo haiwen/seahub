@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { gettext, username } from '../../utils/constants';
+import { gettext, username, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import ParticipantsList from '../file-view/participants-list';
+import { MentionsInput, Mention } from 'react-mentions';
+import { defaultStyle, defaultMentionStyle } from '../../css/react-mentions-default-style';
 import '../../css/comments-list.css';
 
 const DetailCommentListPropTypes = {
@@ -23,13 +25,15 @@ class DetailCommentList extends React.Component {
     super(props);
     this.state = {
       commentsList: [],
+      relatedUsers: null,
+      comment: '',
     };
-    this.isParticipant = false;
   }
 
   componentDidMount() {
     this.listComments();
     this.checkParticipant();
+    this.listRepoRelatedUsers();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,15 +42,8 @@ class DetailCommentList extends React.Component {
     }
   }
 
-  checkParticipant = () => {
-    const fileParticipantList = this.props.fileParticipantList;
-    if (fileParticipantList.length === 0) {
-      this.isParticipant = false;
-    } else {
-      this.isParticipant = fileParticipantList.some((participant) => {
-        return participant.email === username;
-      });
-    }
+  handleCommentChange = (event) => {
+    this.setState({ comment: event.target.value });
   }
 
   listComments = (filePath) => {
@@ -58,12 +55,8 @@ class DetailCommentList extends React.Component {
     });
   }
 
-  handleCommentChange = (event) => {
-    this.setState({ comment: event.target.value });
-  }
-
   submitComment = () => {
-    let comment = this.refs.commentTextarea.value;
+    let comment = this.state.comment;
     const { repoID, filePath } = this.props;
     if (comment.trim()) {
       seafileAPI.postComment(repoID, filePath, comment.trim()).then(() => {
@@ -72,21 +65,9 @@ class DetailCommentList extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
-      this.addParticipant();
+      this.addParticipant(username);
     }
-    this.refs.commentTextarea.value = '';
-  }
-
-  addParticipant = () => {
-    const { repoID, filePath } = this.props;
-    if (this.isParticipant) return;
-    seafileAPI.addFileParticipant(repoID, filePath, username).then((res) => {
-      this.isParticipant = true;
-      this.props.onParticipantsChange(repoID, filePath);
-    }).catch((err) => {
-      let errMessage = Utils.getErrorMsg(err);
-      toaster.danger(errMessage);
-    });
+    this.setState({ comment: '' });
   }
 
   resolveComment = (event) => {
@@ -117,6 +98,41 @@ class DetailCommentList extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  }
+
+  listRepoRelatedUsers = () => {
+    const { repoID } = this.props;
+    seafileAPI.listRepoRelatedUsers(repoID).then((res) => {
+      let users = res.data.user_list.map((item) => {
+        return { id: (siteRoot + 'profile/' + item.email), display: item.name};
+      });
+      this.setState({ relatedUsers: users });
+    }).catch(err => {
+      toaster.danger(Utils.getErrorMsg(err));
+    });
+  }
+
+  checkParticipant = (email) => {
+    return this.props.fileParticipantList.map((participant) => {return participant.email;}).includes(email);
+  }
+
+  addParticipant = (email) => {
+    if (this.checkParticipant(email)) return;
+    const { repoID, filePath } = this.props;
+    seafileAPI.addFileParticipant(repoID, filePath, email).then((res) => {
+      this.props.onParticipantsChange(repoID, filePath);
+    }).catch((err) => {
+      toaster.danger(Utils.getErrorMsg(err));
+    });
+  }
+
+  renderUserSuggestion = (entry, search, highlightedDisplay, index, focused) => {
+    return <div className={`user ${focused ? 'focused' : ''}`}>{highlightedDisplay}</div>;
+  }
+
+  handleMention = (id, display) => {
+    const email = id.slice(id.lastIndexOf('/') + 1);
+    this.addParticipant(email);
   }
 
   render() {
@@ -151,10 +167,20 @@ class DetailCommentList extends React.Component {
               showIconTip={true}
             />
           }
-          <textarea
-            className="add-comment-input" ref="commentTextarea" placeholder={gettext('Add a comment.')}
-            clos="100" rows="3" warp="virtual"
-          ></textarea>
+          <MentionsInput
+            value={this.state.comment}
+            onChange={this.handleCommentChange}
+            placeholder={gettext('Add a comment.')}
+            style={defaultStyle}
+          >
+            <Mention
+              trigger="@"
+              data={this.state.relatedUsers}
+              renderSuggestion={this.renderUserSuggestion}
+              style={defaultMentionStyle}
+              onAdd={this.handleMention}
+            />
+          </MentionsInput>
           <Button className="submit-comment" color="primary" size="sm" onClick={this.submitComment}>{gettext('Submit')}</Button>
         </div>
       </div>
