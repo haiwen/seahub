@@ -428,6 +428,8 @@ class DirentListItem extends React.Component {
     }
     if (this.props.dirent.type === 'dir') {
       e.stopPropagation();
+    } else {
+      return;
     }
     let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
@@ -452,10 +454,6 @@ class DirentListItem extends React.Component {
     if (nodeDirent.name === dropItemData.name) {
       return;
     }
-
-    if (dropItemData.type !== 'dir') {
-      return;
-    } 
 
     //  copy the dirent to it's child. eg: A/B -> A/B/C
     if (dropItemData.type === 'dir' && nodeDirent.type === 'dir') {

@@ -8,7 +8,7 @@ const propTypes = {
   onHideImageThumbnail: PropTypes.func
 };
 
-class ThumbnailImage extends React.Component {
+class DirentsDraggedImage extends React.Component {
 
   componentDidMount() {
     document.addEventListener('dragover', this.handleDragOver);
@@ -26,8 +26,6 @@ class ThumbnailImage extends React.Component {
   }
 
   handleDrop = (event) => {
-    this.element.style.top = event.clientY + 'px';
-    this.element.style.left = event.clientX + 'px';
     this.element.style.opacity = 0;
     this.props.onHideImageThumbnail();
   }
@@ -60,6 +58,6 @@ class ThumbnailImage extends React.Component {
   }
 }
 
-ThumbnailImage.propTypes = propTypes;
+DirentsDraggedImage.propTypes = propTypes;
 
-export default ThumbnailImage;
+export default DirentsDraggedImage;
