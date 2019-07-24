@@ -76,13 +76,9 @@ class InvitationRevokeView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # set the account to inactive.
-        user.is_active = 0
-        result_code = user.save()
-        if result_code == -1:
-            error_msg = 'Fail to update user %s.' % accepter
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        user.freeze_user()
 
         # delete an invitation.
         invitation.delete()
 
-        return Response({'success': True}, status=204)
+        return Response({'success': True})

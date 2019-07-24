@@ -6,6 +6,7 @@ from seahub.invitations.models import Invitation
 from seahub.test_utils import BaseTestCase
 from seahub.api2.permissions import CanInviteGuest
 from tests.common.utils import randstring
+from seahub.base.accounts import User
 
 
 class InvitationsTest(BaseTestCase):
@@ -86,7 +87,7 @@ class InvitationRevokeTest(BaseTestCase):
         # accept invitation
         self.i.accept()
         self.tmp_user = self.create_user(self.tmp_username, is_staff=False)
-        assert self.tmp_user.is_active == 1
+        assert self.tmp_user.is_active is True
 
     def tearDown(self):
         self.remove_user(self.tmp_username)
@@ -99,7 +100,8 @@ class InvitationRevokeTest(BaseTestCase):
         mock_has_permission.return_val = True
 
         resp = self.client.delete(self.endpoint)
-        self.assertEqual(204, resp.status_code)
+        self.assertEqual(200, resp.status_code)
+        tmp_user = User.objects.get(self.tmp_username)
 
-        assert self.tmp_user.is_active == 0
         assert len(Invitation.objects.all()) == 0
+        assert tmp_user.is_active is False
