@@ -39,6 +39,7 @@ class DirentsDraggedImage extends React.Component {
       display: 'block', 
       left: 0,
       top: 0,
+      zIndex: 101,
     };
     return (
       <div style={inlineStyle} ref={element => this.element = element}>
