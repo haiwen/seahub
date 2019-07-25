@@ -26,11 +26,7 @@ class AdminLicenseTest(BaseTestCase):
             resp = self.client.post(url, {'license': f})
         json_resp = json.loads(resp.content)
 
-        assert json_resp['with_license'] is True
-        assert json_resp['license_expiration'] is not None
-        assert json_resp['license_mode'] is not None
-        assert json_resp['license_maxusers'] is not None
-        assert json_resp['license_to'] is not None
+        assert json_resp['success'] is True
         assert os.path.exists(LICENSE_PATH)
 
     @patch.object(license_api, 'ccnet_api')
