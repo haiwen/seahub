@@ -63,18 +63,15 @@ class AdminLicense(APIView):
             license_dict = {}
 
         if license_dict:
-            with_license = True
             try:
                 max_users = int(license_dict.get('MaxUsers', 3))
             except ValueError as e:
                 logger.error(e)
                 max_users = 0
         else:
-            with_license = False
             max_users = 0
 
         license_info = {
-            'with_license': with_license,
             'license_expiration': license_dict.get('Expiration', ''),
             'license_mode': license_dict.get('Mode', ''),
             'license_maxusers': max_users,
