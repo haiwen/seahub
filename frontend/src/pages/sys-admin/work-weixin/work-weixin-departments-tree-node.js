@@ -75,6 +75,14 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     }
   };
 
+  changeDept = (departmentID) => {
+    const { department, checkedDepartmentId } = this.props;
+    this.props.onChangeDepartment(departmentID);
+    if (checkedDepartmentId === department.id && !this.state.isChildrenShow) {
+      this.setState({ isChildrenShow: true });
+    }
+  }
+
   render() {
     const { isChildrenShow, department, checkedDepartmentId } = this.props;
     let toggleClass = classNames({
@@ -91,11 +99,13 @@ class WorkWeixinDepartmentsTreeNode extends Component {
         {isChildrenShow &&
           <div
             className={nodeInnerClass}
-            onClick={() => this.props.onChangeDepartment(department.id)}
+            onClick={() => this.changeDept(department.id)}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
           >
-            <i className={toggleClass} onClick={(e) => this.toggleChildren(e)}></i>{' '}
+            <span className="tree-node-icon" onClick={(e) => this.toggleChildren(e)}>
+              <i className={toggleClass}></i>
+            </span>
             <span className="tree-node-text">{department.name}</span>
             {isPro &&
             <Dropdown
