@@ -15,7 +15,8 @@ class Info extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      sysInfo: {}
+      sysInfo: {},
+      with_license: false
     };
   }
 
@@ -23,7 +24,8 @@ class Info extends Component {
     seafileAPI.getSysInfo().then((res) => {
       this.setState({
         loading: false,
-        sysInfo: res.data
+        sysInfo: res.data,
+        with_license: res.data.with_license
       });
     }).catch((error) => {
       if (error.response) {
@@ -58,7 +60,8 @@ class Info extends Component {
       let info = this.state.sysInfo;
       Object.assign(info, res.data);
       this.setState({
-        sysInfo: info
+        sysInfo: info,
+        with_license: true
       });
     }).catch((error) => {
       let errMsg = Utils.getErrorMsg(error);
@@ -85,11 +88,11 @@ class Info extends Component {
   }
 
   render() {
-    let { with_license, license_mode, license_to, license_expiration, org_count,
+    let { license_mode, license_to, license_expiration, org_count,
       repos_count, total_files_count, total_storage, total_devices_count, 
       current_connected_devices_count, license_maxusers, multi_tenancy_enabled,
       active_users_count, users_count, groups_count } = this.state.sysInfo;
-    let { loading, errorMsg } = this.state;
+    let { loading, errorMsg, with_license } = this.state;
 
     if (loading) {
       return <Loading />;
