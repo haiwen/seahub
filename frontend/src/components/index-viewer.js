@@ -78,13 +78,14 @@ class IndexContentViewer extends React.Component {
 
   onLinkClick = (event) => {
     event.preventDefault(); 
-    event.stopPropagation();
-    const link = this.getLink(event.target);
-    if (link) this.props.onLinkClick(link);
     const currentPath = event.target.getAttribute('data-path');
-    if (currentPath) {
+    if (currentPath === this.state.currentPath) {
+      return;
+    } else if (currentPath) {
       this.setState({ currentPath: currentPath });
     }
+    const link = this.getLink(event.target);
+    if (link) this.props.onLinkClick(link);
   }
 
   getLink = (node) => {
@@ -248,12 +249,16 @@ class FolderItem extends React.Component {
     });
   }
 
+  expandChildNodes = () => {
+    this.setState({ expanded: true });
+  }
+
   renderLink = (node) => {
     const className = node.path === this.props.currentPath ? 'wiki-nav-content wiki-nav-content-highlight' : 'wiki-nav-content';
     if (node.href && node.name) {
-      return <div className={className}><a href={node.href} data-path={node.path}>{node.name}</a></div>;
+      return <div className={className}><a href={node.href} data-path={node.path} onClick={this.expandChildNodes}>{node.name}</a></div>;
     } else if (node.name) {
-      return <div className="wiki-nav-content"><span>{node.name}</span></div>;
+      return <div className="wiki-nav-content"><span onClick={this.expandChildNodes}>{node.name}</span></div>;
     } else {
       return null;
     }

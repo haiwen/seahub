@@ -32,7 +32,8 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     });
   };
 
-  dropdownToggle = () => {
+  dropdownToggle = (e) => {
+    e.stopPropagation();
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
 
@@ -41,8 +42,14 @@ class WorkWeixinDepartmentsTreeNode extends Component {
   };
 
   onMouseLeave = () => {
+    if (this.state.dropdownOpen) return;
     this.setState({ active: false });
   };
+
+  importDepartmentDialogToggle = (depart) => {
+    this.setState({ active: false });
+    this.props.importDepartmentDialogToggle(depart);
+  }
 
   componentDidMount() {
     if (this.props.index === 0) {
@@ -61,12 +68,20 @@ class WorkWeixinDepartmentsTreeNode extends Component {
             isChildrenShow={this.state.isChildrenShow}
             onChangeDepartment={this.props.onChangeDepartment}
             checkedDepartmentId={this.props.checkedDepartmentId}
-            importDepartmentDialogToggle={this.props.importDepartmentDialogToggle}
+            importDepartmentDialogToggle={this.importDepartmentDialogToggle}
           />
         );
       });
     }
   };
+
+  changeDept = (departmentID) => {
+    const { department, checkedDepartmentId } = this.props;
+    this.props.onChangeDepartment(departmentID);
+    if (checkedDepartmentId === department.id && !this.state.isChildrenShow) {
+      this.setState({ isChildrenShow: true });
+    }
+  }
 
   render() {
     const { isChildrenShow, department, checkedDepartmentId } = this.props;
@@ -76,6 +91,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     });
     let nodeInnerClass = classNames({
       'tree-node-inner': true,
+      'tree-node-inner-hover': this.state.active,
       'tree-node-hight-light': checkedDepartmentId === department.id
     });
     return (
@@ -83,16 +99,18 @@ class WorkWeixinDepartmentsTreeNode extends Component {
         {isChildrenShow &&
           <div
             className={nodeInnerClass}
-            onClick={() => this.props.onChangeDepartment(department.id)}
+            onClick={() => this.changeDept(department.id)}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
           >
-            <i className={toggleClass} onClick={(e) => this.toggleChildren(e)}></i>{' '}
+            <span className="tree-node-icon" onClick={(e) => this.toggleChildren(e)}>
+              <i className={toggleClass}></i>
+            </span>
             <span className="tree-node-text">{department.name}</span>
             {isPro &&
             <Dropdown
               isOpen={this.state.dropdownOpen}
-              toggle={this.dropdownToggle}
+              toggle={(e) => this.dropdownToggle(e)}
               direction="down"
               style={this.state.active ? {} : { opacity: 0 }}
             >
@@ -106,7 +124,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
               </DropdownToggle>
               <DropdownMenu className="drop-list" right={true}>
                 <DropdownItem
-                  onClick={this.props.importDepartmentDialogToggle.bind(this, department)}
+                  onClick={this.importDepartmentDialogToggle.bind(this, department)}
                   id={department.id}
                 >{'导入部门'}</DropdownItem>
               </DropdownMenu>

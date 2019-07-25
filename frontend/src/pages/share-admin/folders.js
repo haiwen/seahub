@@ -266,7 +266,7 @@ class ShareAdminFolders extends Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed unshared {name}').replace('{name}', item.folder_name);
+        errMessage = gettext('Failed to unshare {name}').replace('{name}', item.folder_name);
       }
       toaster(errMessage);
     });

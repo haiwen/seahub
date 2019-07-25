@@ -946,8 +946,8 @@ class LibContentView extends React.Component {
         let taskId = res.data.task_id;
         seafileAPI.queryAsyncOperationProgress(taskId).then(res => {
           if (res.data.failed) {
-            let errMessage = gettext('Failed to moved %(name)s');
-            errMessage = errMessage.replace('%(name)s', dirName);
+            let errMessage = gettext('Failed to move {name}.');
+            errMessage = errMessage.replace('{name}', dirName);
             toaster.danger(errMessage);
             return;
           }
@@ -955,8 +955,8 @@ class LibContentView extends React.Component {
             this.deleteTreeNode(direntPath);
           }
           this.moveDirent(direntPath);
-          let message = gettext('Successfully moved %(name)s.');
-          message = message.replace('%(name)s', dirName);
+          let message = gettext('Successfully moved {name}.');
+          message = message.replace('{name}', dirName);
           toaster.success(message);
         }).catch(error => {
           let errMessage = Utils.getErrorMsg(error);
@@ -969,15 +969,15 @@ class LibContentView extends React.Component {
         }
         this.moveDirent(direntPath, moveToDirentPath);
   
-        let message = gettext('Successfully moved %(name)s.');
-        message = message.replace('%(name)s', dirName);
+        let message = gettext('Successfully moved {name}.');
+        message = message.replace('{name}', dirName);
         toaster.success(message);
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed to move %(name)s');
-        errMessage = errMessage.replace('%(name)s', dirName);
+        errMessage = gettext('Failed to move {name}.');
+        errMessage = errMessage.replace('{name}', dirName);
       }
       toaster.danger(errMessage);
     });

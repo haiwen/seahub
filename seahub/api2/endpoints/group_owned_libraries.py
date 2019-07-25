@@ -132,7 +132,8 @@ class GroupOwnedLibraries(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
-                        permission, password, ENCRYPTED_LIBRARY_VERSION, storage_id)
+                        permission, password, enc_version=ENCRYPTED_LIBRARY_VERSION,
+                        storage_id=storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                 repo_id = SeafileAPI.add_group_owned_repo(
