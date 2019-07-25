@@ -1,16 +1,20 @@
-table tr .activity-date {
-  border-top: 0;
-}
-table .activity-detail {
-  word-break: break-word;
-}
-table .activity-detail div {
-  display: inline;
-}
-table .activity-detail span {
-  color: #888;
-}
-table .activity-detail span:hover {
-  color: #333;
+.activity-details {
   text-decoration: underline;
+  cursor: pointer;
+}
+.activity-details:hover {
+  color: #333;
+}
+.mobile-activity-op {
+  display: inline-block;
+  margin: 0 0 .2em .8em;
+  padding: 0 .5em;
+  background: #ffbd6f;
+  border-radius: 2px;
+  color: #fff;
+  font-size: 0.75rem;
+}
+.mobile-activity-time {
+  display: inline-block;
+  margin-bottom: .2em;
 }

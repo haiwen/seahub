@@ -8,6 +8,7 @@ import Loading from '../../components/loading';
 import Activity from '../../models/activity';
 import ListCreatedFileDialog from '../../components/dialog/list-created-files-dialog';
 import ModalPortal from '../../components/modal-portal';
+
 import '../../css/files-activities.css';
 
 moment.locale(window.app.config.lang);
@@ -17,20 +18,39 @@ const contentPropTypes = {
   items: PropTypes.array.isRequired,
 };
 
+const isDesktop = window.innerWidth >= 768;
+
 class FileActivitiesContent extends Component {
 
   render() {
-    let {items, isLoadingMore} = this.props;
+    let { items, isLoadingMore } = this.props;
+
+    const desktopThead = (
+      <thead>
+        <tr>
+          <th width="8%">{/* avatar */}</th>
+          <th width="15%">{gettext('User')}</th>
+          <th width="20%">{gettext('Operation')}</th>
+          <th width="37%">{gettext('File')} / {gettext('Library')}</th>
+          <th width="20%">{gettext('Time')}</th>
+        </tr>
+      </thead>
+    );
+
+    const mobileThead = (
+      <thead>
+        <tr>
+          <th width="15%"></th>
+          <th width="53%"></th>
+          <th width="32%"></th>
+        </tr>
+      </thead>
+    );
+
     return ( 
       <Fragment>
-        <table width="100%" className="table table-hover table-vcenter">
-          <colgroup>
-            <col width="8%" />
-            <col width="15%" />
-            <col width="20%" />
-            <col width="37%" />
-            <col width="20%" />
-          </colgroup>
+        <table className="table-hover table-thead-hidden">
+          {isDesktop ? desktopThead : mobileThead}
           <tbody>
             {items.map((item, index) => {
               return (
@@ -75,7 +95,7 @@ class ActivityItem extends Component {
 
   render() {
     let {item, index, items} = this.props;
-    let op, details;
+    let op, details, moreDetails = false;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.author_email)}/`;
 
     let libURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + '/';
@@ -86,34 +106,36 @@ class ActivityItem extends Component {
       switch(item.op_type) {
         case 'create':
           op = gettext('Created library');
-          details = <td>{libLink}</td>;
+          details = libLink;
           break;
         case 'rename':
           op = gettext('Renamed library');
-          details = <td>{item.old_repo_name} => {libLink}</td>;
+          details = <span>{item.old_repo_name} => {libLink}</span>;
           break;
         case 'delete':
           op = gettext('Deleted library');
-          details = <td>{item.repo_name}</td>;
+          details = item.repo_name;
           break;
         case 'recover':
           op = gettext('Restored library');
-          details = <td>{libLink}</td>;
+          details = libLink;
           break;
         case 'clean-up-trash':
-          if (item.days == 0) {
-            details = <td>{gettext('Removed all items from trash.')}<br />{libLink}</td>;
-          } else {
-            details = <td>{gettext('Removed items older than {n} days from trash.').replace('{n}', item.days)}<br />{libLink}</td>;
-          }
           op = gettext('Cleaned trash');
+          if (item.days == 0) {
+            details = gettext('Removed all items from trash.');
+          } else {
+            details = gettext('Removed items older than {n} days from trash.').replace('{n}', item.days);
+          }
+          moreDetails = true;
           break;
       }
     } else if (item.obj_type == 'draft') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
       let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
       op = gettext('Publish draft');
-      details = <td>{fileLink}<br />{smallLibLink}</td>;
+      details = fileLink;
+      moreDetails = true;
     } else if (item.obj_type == 'files') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
       if (item.name.endsWith('(draft).md')) {
@@ -124,91 +146,87 @@ class ActivityItem extends Component {
         fileLink = item.name;
       }
       let fileCount = item.createdFilesCount - 1;
-      let firstLine = gettext('{file} and {n} other files');
-      firstLine = firstLine.replace('{file}', fileLink);
-      firstLine = firstLine.replace('{n}', fileCount);
+      let firstLine = gettext('{file} and {n} other files')
+        .replace('{file}', fileLink)
+        .replace('{n}', fileCount);
       op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
-      details =
-        <td className="activity-detail">
-          <div dangerouslySetInnerHTML={{__html: firstLine}}></div>{' '}
-          <span onClick={this.onListCreatedFilesToggle} className="cursor-pointer">{gettext('details')}</span>
-          <br />{smallLibLink}
-        </td>;
+      details = (
+        <Fragment>
+          <p className="m-0 d-inline" dangerouslySetInnerHTML={{__html: firstLine}}></p>
+          {isDesktop && <span onClick={this.onListCreatedFilesToggle} className="activity-details text-secondary ml-2">{gettext('details')}</span>}
+        </Fragment>
+      );
+      moreDetails = true;
     } else if (item.obj_type == 'file') {
-      let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-      if (item.name.endsWith('(draft).md')) {
-        fileURL = serviceURL + '/drafts/' + item.draft_id + '/';
-      }
+      const isDraft = item.name.endsWith('(draft).md');
+      const fileURL = isDraft ? serviceURL + '/drafts/' + item.draft_id + '/' :
+        `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
       let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
-      if (item.name.endsWith('(draft).md') && !item.draft_id) {
+      if (isDraft && !item.draft_id) {
         fileLink = item.name;
       }
-      switch(item.op_type) {
+      switch (item.op_type) {
         case 'create':
-          if (item.name.endsWith('(draft).md')) {
-            op = gettext('Created draft');
-            details = <td>{fileLink}<br />{smallLibLink}</td>;
-            break;
-          }
-          op = gettext('Created file');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          op = isDraft ? gettext('Created draft') : gettext('Created file');
+          details = fileLink;
+          moreDetails = true;
           break;
         case 'delete':
-          if (item.name.endsWith('(draft).md')) {
-            op = gettext('Deleted draft');
-            details = <td>{item.name}<br />{smallLibLink}</td>;
-            break;
-          }
-          op = gettext('Deleted file');
-          details = <td>{item.name}<br />{smallLibLink}</td>;
+          op = isDraft ? gettext('Deleted draft') : gettext('Deleted file');
+          details = item.name;
+          moreDetails = true;
           break;
         case 'recover':
           op = gettext('Restored file');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          details = fileLink;
+          moreDetails = true;
           break;
         case 'rename':
           op = gettext('Renamed file');
-          details = <td>{item.old_name} => {fileLink}<br />{smallLibLink}</td>;
+          details = <span>{item.old_name} => {fileLink}</span>;
+          moreDetails = true;
           break;
         case 'move':
-          var filePathLink = <a href={fileURL}>{item.path}</a>;
+          const filePathLink = <a href={fileURL}>{item.path}</a>;
           op = gettext('Moved file');
-          details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
+          details = <span>{item.old_path} => {filePathLink}</span>;
+          moreDetails = true;
           break;
         case 'edit': // update
-          if (item.name.endsWith('(draft).md')) {
-            op = gettext('Updated draft');
-            details = <td>{fileLink}<br />{smallLibLink}</td>;
-            break;
-          }
-          op = gettext('Updated file');
-          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          op = isDraft ? gettext('Updated draft') : gettext('Updated file');
+          details = fileLink;
+          moreDetails = true;
           break;
       }
     } else { // dir
       let dirURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + Utils.encodePath(item.path);
       let dirLink = <a href={dirURL} target="_blank">{item.name}</a>;
-      switch(item.op_type) {
+      switch (item.op_type) {
         case 'create':
           op = gettext('Created folder');
-          details = <td>{dirLink}<br />{smallLibLink}</td>;
+          details = dirLink;
+          moreDetails = true;
           break;
         case 'delete':
           op = gettext('Deleted folder');
-          details = <td>{item.name}<br />{smallLibLink}</td>;
+          details = item.name;
+          moreDetails = true;
           break;
         case 'recover':
           op = gettext('Restored folder');
-          details = <td>{dirLink}<br />{smallLibLink}</td>;
+          details = dirLink;
+          moreDetails = true;
           break;
         case 'rename':
           op = gettext('Renamed folder');
-          details = <td>{item.old_name} => {dirLink}<br />{smallLibLink}</td>;
+          details = <span>{item.old_name} => {dirLink}</span>;
+          moreDetails = true;
           break;
         case 'move':
-          var dirPathLink = <a href={dirURL}>{item.path}</a>;
+          const dirPathLink = <a href={dirURL}>{item.path}</a>;
           op = gettext('Moved folder');
-          details = <td>{item.old_path} => {dirPathLink}<br />{smallLibLink}</td>;
+          details = <span>{item.old_path} => {dirPathLink}</span>;
+          moreDetails = true;
           break;
       }
     }
@@ -221,24 +239,49 @@ class ActivityItem extends Component {
 
     return (
       <Fragment>
-        { isShowDate &&
+        {isShowDate &&
           <tr>
-            <td colSpan='5' className="activity-date">{moment(item.time).format('YYYY-MM-DD')}</td>
+            <td colSpan={isDesktop ? 5 : 3} className="border-top-0">{moment(item.time).format('YYYY-MM-DD')}</td>
           </tr>
         }
-        <tr>
-          <td className="text-center">
-            <img src={item.avatar_url} alt="" width="36px" height="36px" className="avatar" />
-          </td>
-          <td>
-            <a href={userProfileURL}>{item.author_name}</a>
-          </td>
-          <td><span className="activity-op">{op}</span></td>
-          {details}
-          <td className="text-secondary">
-            <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
-          </td>
-        </tr>
+        {isDesktop ? (
+          <tr>
+            <td className="text-center">
+              <img src={item.avatar_url} alt="" width="32" height="32" className="avatar" />
+            </td>
+            <td>
+              <a href={userProfileURL}>{item.author_name}</a>
+            </td>
+            <td>{op}</td>
+            <td>
+              {details}
+              {moreDetails && <br /> }
+              {moreDetails && smallLibLink}
+            </td>
+            <td className="text-secondary">
+              <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
+            </td>
+          </tr>
+        ) : (
+          <tr>
+            <td className="text-center">
+              <img src={item.avatar_url} alt="" width="32" height="32" className="avatar" />
+            </td>
+            <td>
+              <a href={userProfileURL}>{item.author_name}</a>
+              <span className="mobile-activity-op">{op}</span>
+              <br />{details}
+            </td>
+            <td className="text-right align-top">
+              <span className="text-secondary mobile-activity-time">
+                <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
+              </span>
+              {moreDetails && <br /> }
+              {moreDetails && libLink}
+            </td>
+          </tr>
+
+        )}
         {this.state.isListCreatedFiles &&
           <ModalPortal>
             <ListCreatedFileDialog
