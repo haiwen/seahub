@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-24 10:08+0800\n"
+"POT-Creation-Date: 2019-07-25 09:38+0800\n"
 "PO-Revision-Date: 2019-07-24 02:09+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Greek (http://www.transifex.com/haiwen/seahub/language/el/)\n"
@@ -64,6 +64,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "Το πεδίο όριο χώρου είναι πολύ μκρό (μικρότερη τιμή είναι 0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
+#: seahub/organizations/api/admin/users.py:311
 #: seahub/organizations/views.py:1023 seahub/views/sysadmin.py:876
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
@@ -112,12 +113,12 @@ msgstr ""
 msgid "System library can not be deleted."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:345 seahub/api2/views.py:1599
+#: seahub/api2/endpoints/admin/libraries.py:345 seahub/api2/views.py:1601
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:366 seahub/api2/views.py:1604
+#: seahub/api2/endpoints/admin/libraries.py:366 seahub/api2/views.py:1606
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -137,8 +138,8 @@ msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου 
 #: seahub/api2/endpoints/admin/shares.py:263
 #: seahub/api2/endpoints/dir_shared_items.py:332
 #: seahub/api2/endpoints/dir_shared_items.py:431
-#: seahub/api2/endpoints/group_owned_libraries.py:932
-#: seahub/api2/endpoints/group_owned_libraries.py:1200
+#: seahub/api2/endpoints/group_owned_libraries.py:933
+#: seahub/api2/endpoints/group_owned_libraries.py:1201
 #, python-format
 msgid "This item has been shared to %s."
 msgstr ""
@@ -386,11 +387,11 @@ msgstr "Εσφαλμένη διαδρομή προορισμού"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1742
-#: seahub/api2/views.py:1778 seahub/api2/views.py:1826
-#: seahub/api2/views.py:1870 seahub/api2/views.py:1915
-#: seahub/api2/views.py:1963 seahub/api2/views.py:2374
-#: seahub/api2/views.py:2488 seahub/templates/js/templates.html:470
+#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1744
+#: seahub/api2/views.py:1780 seahub/api2/views.py:1828
+#: seahub/api2/views.py:1872 seahub/api2/views.py:1917
+#: seahub/api2/views.py:1965 seahub/api2/views.py:2376
+#: seahub/api2/views.py:2490 seahub/templates/js/templates.html:470
 #: seahub/views/ajax.py:715 seahub/views/ajax.py:799 seahub/views/ajax.py:872
 msgid "Out of quota."
 msgstr ""
@@ -414,13 +415,13 @@ msgstr "Αποτυχία ακύρωσης"
 
 #: seahub/api2/endpoints/dir_shared_items.py:316
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:916
+#: seahub/api2/endpoints/group_owned_libraries.py:917
 msgid "username invalid."
 msgstr ""
 
 #: seahub/api2/endpoints/dir_shared_items.py:325
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:925
+#: seahub/api2/endpoints/group_owned_libraries.py:926
 #: seahub/oauth/views.py:177
 #, python-format
 msgid "User %s not found."
@@ -477,14 +478,14 @@ msgid "User %s is already a group member."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:100
-#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1584
+#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1586
 #: seahub/views/ajax.py:1347
 #, python-format
 msgid "User %s not found in organization."
 msgstr ""
 
-#: seahub/api2/endpoints/group_owned_libraries.py:371
-#: seahub/api2/endpoints/group_owned_libraries.py:643
+#: seahub/api2/endpoints/group_owned_libraries.py:372
+#: seahub/api2/endpoints/group_owned_libraries.py:644
 msgid "Permission already exists."
 msgstr ""
 
@@ -550,16 +551,16 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3787
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3789
 msgid "Wrong password"
 msgstr "Λάθος κωδικός"
 
-#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3790
+#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3792
 #: seahub/views/ajax.py:710 seahub/views/sysadmin.py:2232
 msgid "Internal server error"
 msgstr "Εσωτερικό σφάλμα διακομιστή"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3793
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3795
 msgid "Decrypt library error"
 msgstr "Πρόβλημα αποκρυπτογράφησης βιβλιοθήκης"
 
@@ -635,12 +636,12 @@ msgstr ""
 msgid "Password is too short."
 msgstr "Το συνθηματικό είναι πολύ μικρό"
 
-#: seahub/api2/endpoints/share_links.py:247 seahub/api2/views.py:3358
+#: seahub/api2/endpoints/share_links.py:247 seahub/api2/views.py:3360
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:253 seahub/api2/views.py:3364
+#: seahub/api2/endpoints/share_links.py:253 seahub/api2/views.py:3366
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""

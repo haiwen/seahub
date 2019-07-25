@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-24 10:09+0800\n"
-"PO-Revision-Date: 2019-07-24 08:24+0000\n"
+"POT-Creation-Date: 2019-07-25 09:38+0800\n"
+"PO-Revision-Date: 2019-07-25 01:44+0000\n"
 "Last-Translator: 杨顺强 <ysq9207@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -2950,20 +2950,14 @@ msgid "Failed to delete {name}"
 msgstr "删除 {name} 失败"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:949
-msgid "Failed to moved %(name)s"
-msgstr "移动 %(name)s 失败"
+#: frontend/src/pages/lib-content-view/lib-content-view.js:979
+msgid "Failed to move {name}."
+msgstr "移动 {name} 失败。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:958
 #: frontend/src/pages/lib-content-view/lib-content-view.js:972
-#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:856
-#: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
-msgid "Successfully moved %(name)s."
-msgstr "成功移动 %(name)s。"
-
-#: frontend/src/pages/lib-content-view/lib-content-view.js:979
-#: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
-msgid "Failed to move %(name)s"
-msgstr "移动 %(name)s 失败"
+msgid "Successfully moved {name}."
+msgstr "成功移动 {name}。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1001
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1030
@@ -3464,8 +3458,8 @@ msgstr "成功取消共享 {name}"
 #: frontend/src/pages/share-admin/libraries.js:256
 #: frontend/src/pages/shared-libs/shared-libs.js:175
 #: frontend/src/pages/shared-with-all/public-shared-view.js:122
-msgid "Failed unshared {name}"
-msgstr "取消共享{name}失败"
+msgid "Failed to unshare {name}"
+msgstr "{name} 取消共享失败"
 
 #: frontend/src/pages/share-admin/libraries.js:30
 msgid "You have not shared any libraries"
@@ -3502,7 +3496,7 @@ msgid "Successfully modified permission."
 msgstr "成功更改权限。"
 
 #: frontend/src/pages/share-admin/share-links.js:202
-msgid "Failed modified permission."
+msgid "Failed to modify permission."
 msgstr "更改权限失败。"
 
 #: frontend/src/pages/share-admin/share-links.js:238
@@ -3515,7 +3509,7 @@ msgid "Successfully deleted share link."
 msgstr "成功删除共享链接。"
 
 #: frontend/src/pages/share-admin/share-links.js:351
-msgid "Failed deleted share link."
+msgid "Failed to delete share link."
 msgstr "删除共享链接失败。"
 
 #: frontend/src/pages/share-admin/share-links.js:364
@@ -3543,7 +3537,7 @@ msgid "Successfully deleted upload link."
 msgstr "成功删除上传链接"
 
 #: frontend/src/pages/share-admin/upload-links.js:217
-msgid "Failed deleted upload link."
+msgid "Failed to delete upload link."
 msgstr "删除上传链接失败。"
 
 #: frontend/src/pages/shared-libs/shared-libs.js:47
@@ -3709,6 +3703,15 @@ msgstr "{placeholder} 镜像"
 #: frontend/src/repo-wiki-mode.js:133
 msgid "This folder has been updated. "
 msgstr "当前目录已更新。"
+
+#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:856
+#: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
+msgid "Successfully moved %(name)s."
+msgstr "成功移动 %(name)s。"
+
+#: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
+msgid "Failed to move %(name)s"
+msgstr "移动 %(name)s 失败"
 
 #: frontend/src/settings.js:39
 msgid "Profile"

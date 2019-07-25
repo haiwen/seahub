@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-24 10:09+0800\n"
-"PO-Revision-Date: 2019-07-24 02:11+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2019-07-25 09:38+0800\n"
+"PO-Revision-Date: 2019-07-25 01:39+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1658,27 +1658,27 @@ msgstr "Библиотека не может быть передана влад�
 
 #: frontend/src/components/dialog/sort-options.js:18
 msgid "By name ascending"
-msgstr ""
+msgstr "По имени в порядке возрастания"
 
 #: frontend/src/components/dialog/sort-options.js:19
 msgid "By name descending"
-msgstr ""
+msgstr "По имени в порядке убывания"
 
 #: frontend/src/components/dialog/sort-options.js:20
 msgid "By size ascending"
-msgstr ""
+msgstr "По размеру в порядке возрастания"
 
 #: frontend/src/components/dialog/sort-options.js:21
 msgid "By size descending"
-msgstr ""
+msgstr "По размеру в порядке убывания"
 
 #: frontend/src/components/dialog/sort-options.js:22
 msgid "By time ascending"
-msgstr ""
+msgstr "По времени в порядке возрастания"
 
 #: frontend/src/components/dialog/sort-options.js:23
 msgid "By time descending"
-msgstr ""
+msgstr "По времени в порядке убывания"
 
 #: frontend/src/components/dialog/transfer-dialog.js:62
 msgid "Transfer Library {library_name}"
@@ -2632,7 +2632,7 @@ msgstr "Из корзины удалены объекты старше {n} дн�
 
 #: frontend/src/pages/dashboard/files-activities.js:109
 msgid "Cleaned trash"
-msgstr ""
+msgstr "Корзина очищена"
 
 #: frontend/src/pages/dashboard/files-activities.js:127
 msgid "{file} and {n} other files"
@@ -2939,20 +2939,14 @@ msgid "Failed to delete {name}"
 msgstr "Не удалось удалить {name}"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:949
-msgid "Failed to moved %(name)s"
+#: frontend/src/pages/lib-content-view/lib-content-view.js:979
+msgid "Failed to move {name}."
 msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:958
 #: frontend/src/pages/lib-content-view/lib-content-view.js:972
-#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:856
-#: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
-msgid "Successfully moved %(name)s."
-msgstr "Успешно перемещено %(name)s."
-
-#: frontend/src/pages/lib-content-view/lib-content-view.js:979
-#: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
-msgid "Failed to move %(name)s"
-msgstr "Не удалось переместить %(name)s"
+msgid "Successfully moved {name}."
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1001
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1030
@@ -3048,12 +3042,12 @@ msgstr "Вы можете создавать библиотеки для орг�
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:118
 #: frontend/src/pages/shared-libs/shared-libs.js:191
 msgid "Successfully unstarred {library_name_placeholder}."
-msgstr ""
+msgstr "Отметка снята с {library_name_placeholder}."
 
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:130
 #: frontend/src/pages/shared-libs/shared-libs.js:203
 msgid "Successfully starred {library_name_placeholder}."
-msgstr ""
+msgstr "Отмечено {library_name_placeholder}."
 
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:207
 #: frontend/src/pages/org-admin/org-libraries.js:244
@@ -3447,13 +3441,13 @@ msgstr "Вы можете открыть доступ к отдельной па
 #: frontend/src/pages/shared-libs/shared-libs.js:170
 #: frontend/src/pages/shared-with-all/public-shared-view.js:117
 msgid "Successfully unshared {name}"
-msgstr ""
+msgstr "Закрыт доступ к {name}"
 
 #: frontend/src/pages/share-admin/folders.js:269
 #: frontend/src/pages/share-admin/libraries.js:256
 #: frontend/src/pages/shared-libs/shared-libs.js:175
 #: frontend/src/pages/shared-with-all/public-shared-view.js:122
-msgid "Failed unshared {name}"
+msgid "Failed to unshare {name}"
 msgstr ""
 
 #: frontend/src/pages/share-admin/libraries.js:30
@@ -3488,10 +3482,10 @@ msgstr "Посещения"
 
 #: frontend/src/pages/share-admin/share-links.js:197
 msgid "Successfully modified permission."
-msgstr ""
+msgstr "Разрешения изменены."
 
 #: frontend/src/pages/share-admin/share-links.js:202
-msgid "Failed modified permission."
+msgid "Failed to modify permission."
 msgstr ""
 
 #: frontend/src/pages/share-admin/share-links.js:238
@@ -3501,10 +3495,10 @@ msgstr "Удалить"
 
 #: frontend/src/pages/share-admin/share-links.js:346
 msgid "Successfully deleted share link."
-msgstr ""
+msgstr "Общедоступная ссылка удалена."
 
 #: frontend/src/pages/share-admin/share-links.js:351
-msgid "Failed deleted share link."
+msgid "Failed to delete share link."
 msgstr ""
 
 #: frontend/src/pages/share-admin/share-links.js:364
@@ -3529,10 +3523,10 @@ msgstr "Вы можете создать ссылку для загрузки в
 
 #: frontend/src/pages/share-admin/upload-links.js:212
 msgid "Successfully deleted upload link."
-msgstr ""
+msgstr "Ссылка для загрузки удалена."
 
 #: frontend/src/pages/share-admin/upload-links.js:217
-msgid "Failed deleted upload link."
+msgid "Failed to delete upload link."
 msgstr ""
 
 #: frontend/src/pages/shared-libs/shared-libs.js:47
@@ -3698,6 +3692,15 @@ msgstr "{placeholder} Снимок"
 #: frontend/src/repo-wiki-mode.js:133
 msgid "This folder has been updated. "
 msgstr "Эта папка была обновлена."
+
+#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:856
+#: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
+msgid "Successfully moved %(name)s."
+msgstr "Успешно перемещено %(name)s."
+
+#: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
+msgid "Failed to move %(name)s"
+msgstr "Не удалось переместить %(name)s"
 
 #: frontend/src/settings.js:39
 msgid "Profile"
