@@ -42,11 +42,7 @@ class InvitationsListItem extends React.Component {
 
   render() {
     const invitationItem = this.props.invitation;
-    const revokeUserObj = invitationItem.accept_time ? {
-      index: this.props.index,
-      email: invitationItem.accepter,
-      token: invitationItem.token,
-    } : null;
+    const revokeUserObj = invitationItem.accept_time ? invitationItem  : null;
 
     const acceptIcon = <i className="sf2-icon-tick invite-accept-icon"></i>;
     const deleteOperation = <i className="action-icon sf2-icon-x3"
@@ -178,26 +174,6 @@ class InvitationsView extends React.Component {
     });
   }
 
-  revokeInvitation = (token, index) => {
-    seafileAPI.revokeInvitation(token).then((res) => {
-      this.onDeleteInvitation(index);
-      toaster.success(gettext('Success'), {duration: 1});
-    }).catch((error) => {
-      if (error.response){
-        toaster.danger(error.response.data.error_msg || gettext('Error'), {duration: 3});
-      } else {
-        toaster.danger(gettext('Please check the network.'), {duration: 3});
-      }
-    });
-  };
-
-  onRevokeInvitation = () => {
-    let token = this.state.revokeUserObj.token;
-    let index = this.state.revokeUserObj.index;
-    this.revokeInvitation(token, index);
-    this.toggleInvitationRevokeDialog(null);
-  };
-
   onInvitePeople = (invitationsArray) => {
     invitationsArray.push.apply(invitationsArray,this.state.invitationsList);
     this.setState({
@@ -282,7 +258,7 @@ class InvitationsView extends React.Component {
         {this.state.isInvitationRevokeDialogOpen &&
         <InvitationRevokeDialog
           toggleInvitationRevokeDialog={this.toggleInvitationRevokeDialog}
-          onRevokeInvitation={this.onRevokeInvitation}
+          onDeleteInvitation={this.onDeleteInvitation}
           revokeUserObj={this.state.revokeUserObj}
         />
         }

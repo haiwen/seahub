@@ -4,6 +4,7 @@ import {gettext} from '../../utils/constants';
 import {seafileAPI} from '../../utils/seafile-api';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Input, Button} from 'reactstrap';
 import toaster from '../toast';
+import Loading from '../loading';
 
 class InvitePeopleDialog extends React.Component {
 
@@ -108,6 +109,7 @@ class InvitePeopleDialog extends React.Component {
             onChange={this.handleEmailsChange}
             onKeyDown={this.handleKeyDown}
           />
+          {this.state.loading && <Loading/>}
           <span className="error">{this.state.errorMsg}</span>
         </ModalBody>
         <ModalFooter>
