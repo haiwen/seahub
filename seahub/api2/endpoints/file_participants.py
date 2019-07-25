@@ -62,103 +62,9 @@ class FileParticipantsView(APIView):
         return Response({'participant_list': participant_list})
 
     def post(self, request, repo_id, format=None):
-        """Post a participant of a file.
+        """batch add participants of a file.
         """
         # argument check
-        path = request.data.get('path')
-        if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
-        path = normalize_file_path(path)
-
-        email = request.data.get('email')
-        if not email or not is_valid_username(email):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
-
-        # resource check
-        file_id = seafile_api.get_file_id_by_path(repo_id, path)
-        if not file_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File %s not found.' % path)
-
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return api_error(status.HTTP_404_NOT_FOUND, 'User %s not found.' % email)
-
-        # permission check
-        if not check_folder_permission(request, repo_id, '/'):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        if not seafile_api.check_permission_by_path(repo_id, '/', user.username):
-            return api_error(status.HTTP_403_FORBIDDEN, _('%s Permission denied.') % email)
-
-        # main
-        try:
-            file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(repo_id, path, False)
-
-            if FileParticipant.objects.get_participant(file_uuid, email):
-                return api_error(status.HTTP_409_CONFLICT, _('Participant %s already exists.') % email)
-
-            FileParticipant.objects.add_participant(file_uuid, email)
-            participant = get_user_common_info(email)
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
-
-        return Response(participant, status=201)
-
-
-class FileParticipantView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def delete(self, request, repo_id, format=None):
-        """Delete a participant
-        """
-        # argument check
-        path = request.data.get('path')
-        if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
-        path = normalize_file_path(path)
-
-        email = request.data.get('email')
-        if not email or not is_valid_username(email):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
-
-        # resource check
-        file_id = seafile_api.get_file_id_by_path(repo_id, path)
-        if not file_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File %s not found.' % path)
-
-        # permission check
-        if not check_folder_permission(request, repo_id, '/'):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        # main
-        try:
-            file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(repo_id, path, False)
-
-            if not FileParticipant.objects.get_participant(file_uuid, email):
-                return api_error(status.HTTP_404_NOT_FOUND, 'Participant %s not found.' % email)
-
-            FileParticipant.objects.delete_participant(file_uuid, email)
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
-
-        return Response({'success': True})
-
-
-class FileParticipantsBatchAddView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def post(self, request, repo_id, format=None):
-        """Batch add participants of a file.
-        """
-        # argument check
-
         path = request.data.get('path')
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
@@ -220,3 +126,46 @@ class FileParticipantsBatchAddView(APIView):
                 continue
 
         return Response({'success': success, 'failed': failed})
+
+
+
+class FileParticipantView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def delete(self, request, repo_id, format=None):
+        """Delete a participant
+        """
+        # argument check
+        path = request.data.get('path')
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
+        path = normalize_file_path(path)
+
+        email = request.data.get('email')
+        if not email or not is_valid_username(email):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
+
+        # resource check
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File %s not found.' % path)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        # main
+        try:
+            file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(repo_id, path, False)
+
+            if not FileParticipant.objects.get_participant(file_uuid, email):
+                return api_error(status.HTTP_404_NOT_FOUND, 'Participant %s not found.' % email)
+
+            FileParticipant.objects.delete_participant(file_uuid, email)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
+
+        return Response({'success': True})

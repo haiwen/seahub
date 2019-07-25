@@ -146,8 +146,7 @@ from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
-from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView, \
-    FileParticipantsBatchAddView
+from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 
 urlpatterns = [
@@ -361,7 +360,6 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-tags/(?P<file_tag_id>\d+)/$', RepoFileTagView.as_view(), name='api-v2.1-file-tag'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tagged-files/(?P<repo_tag_id>\d+)/$', TaggedFilesView.as_view(), name='api-v2.1-tagged-files'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participants/$', FileParticipantsView.as_view(), name='api-v2.1-file-participants'),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participants/batch-add/$', FileParticipantsBatchAddView.as_view(), name='api-v2.1-file-participants-batch-add'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participant/$', FileParticipantView.as_view(), name='api-v2.1-file-participant'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/related-users/$', RepoRelatedUsersView.as_view(), name='api-v2.1-related-user'),
 
