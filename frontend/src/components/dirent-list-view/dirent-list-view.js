@@ -70,7 +70,7 @@ class DirentListView extends React.Component {
       isMutipleOperation: true,
       activeDirent: null,
       isListDropTipShow: false,
-      isShowImageThumbnail: false,
+      isShowDirentsDraggableImage: false,
     };
 
     this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
@@ -621,16 +621,23 @@ class DirentListView extends React.Component {
     this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
   }
 
-  onShowImageThumbnail = () => {
+  onShowDirentsDraggableImage = () => {
     this.setState({
-      isShowImageThumbnail: true,
+      isShowDirentsDraggableImage: true,
     });
   }
 
-  onHideImageThumbnail = () => {
+  onHideDirentsDraggableImage = () => {
     this.setState({
-      isShowImageThumbnail: false
+      isShowDirentsDraggableImage: false
     });
+  }
+
+  shouldComponentUpdate = (nextProps, nextStates) => {
+    if (nextStates.isShowDirentsDraggableImage && this.state.isShowDirentsDraggableImage) {
+      return false;
+    }
+    return true;
   }
 
   render() {
@@ -708,7 +715,7 @@ class DirentListView extends React.Component {
                   getDirentItemMenuList={this.getDirentItemMenuList}
                   showDirentDetail={this.props.showDirentDetail}
                   onItemsMove={this.props.onItemsMove}
-                  onShowImageThumbnail={this.onShowImageThumbnail}
+                  onShowDirentsDraggableImage={this.onShowDirentsDraggableImage}
                 />
               );
             })}
@@ -729,12 +736,12 @@ class DirentListView extends React.Component {
             id={'dirents-menu'}
             onMenuItemClick={this.onDirentsMenuItemClick}
           />
-          {this.state.isShowImageThumbnail && 
+          {this.state.isShowDirentsDraggableImage && 
             <ModalPortal>
               <DirentsDraggedImage 
                 ref={element => this.element = element}
                 selectedDirentList={this.props.selectedDirentList}
-                onHideImageThumbnail={this.onHideImageThumbnail}
+                onHideDirentsDraggableImage={this.onHideDirentsDraggableImage}
               />
             </ModalPortal>
           }

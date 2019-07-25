@@ -50,7 +50,7 @@ const propTypes = {
   enableDirPrivateShare: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
-  onShowImageThumbnail: PropTypes.func,
+  onShowDirentsDraggableImage: PropTypes.func,
 };
 
 class DirentListItem extends React.Component {
@@ -366,7 +366,7 @@ class DirentListItem extends React.Component {
     e.dataTransfer.effectAllowed = 'move';
     let { selectedDirentList } = this.props;
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
-      this.props.onShowImageThumbnail();
+      this.props.onShowDirentsDraggableImage();
       e.dataTransfer.setDragImage(this.refs.empty_content, 0, 0);
       let selectedList =  selectedDirentList.map(item => {
         let nodeRootPath = this.getDirentPath(item);
@@ -590,7 +590,7 @@ class DirentListItem extends React.Component {
       <Fragment>
         <tr 
           className={trClass} 
-          draggable="true" 
+          draggable="true"
           onMouseEnter={this.onMouseEnter} 
           onMouseOver={this.onMouseOver} 
           onMouseLeave={this.onMouseLeave} 

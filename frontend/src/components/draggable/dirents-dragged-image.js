@@ -5,10 +5,10 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   selectedDirentList: PropTypes.array,
-  onHideImageThumbnail: PropTypes.func
+  onHideDirentsDraggableImage: PropTypes.func
 };
 
-class DirentsDraggedImage extends React.Component {
+class DirentsDraggedPreview extends React.Component {
 
   componentDidMount() {
     document.addEventListener('dragover', this.handleDragOver);
@@ -21,16 +21,24 @@ class DirentsDraggedImage extends React.Component {
   }
 
   handleDragOver = (event) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    // console.log(this.element.style.top)
+
     this.element.style.top = event.clientY + 'px';
     this.element.style.left = event.clientX + 'px';
   }
 
   handleDrop = (event) => {
     this.element.style.opacity = 0;
-    this.props.onHideImageThumbnail();
+    this.props.onHideDirentsDraggableImage();
   }
 
   render() {
+    // console.log(123)
     let{ selectedDirentList } = this.props;
     const inlineStyle = { 
       position: 'absolute', 
@@ -43,12 +51,12 @@ class DirentsDraggedImage extends React.Component {
     };
     return (
       <div style={inlineStyle} ref={element => this.element = element}>
-        {selectedDirentList.map((thumbnailImgUrl, index) => {
-          let iconUrl = Utils.getDirentIcon(thumbnailImgUrl);
+        {selectedDirentList.map((dirent, index) => {
+          let iconUrl = Utils.getDirentIcon(dirent);
           return (
             <div key={index}>
-              {thumbnailImgUrl.encoded_thumbnail_src ?
-                <img src={`${siteRoot}${thumbnailImgUrl.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
+              {dirent.encoded_thumbnail_src ?
+                <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
                 <img src={iconUrl} width="24" alt='' />
               }
             </div>
@@ -59,6 +67,6 @@ class DirentsDraggedImage extends React.Component {
   }
 }
 
-DirentsDraggedImage.propTypes = propTypes;
+DirentsDraggedPreview.propTypes = propTypes;
 
-export default DirentsDraggedImage;
+export default DirentsDraggedPreview;
