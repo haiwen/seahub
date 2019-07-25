@@ -31,12 +31,12 @@ class SidePanel extends React.Component {
               <h3 className="sf-heading">{gettext('System Admin')}</h3>
               <ul className="nav nav-pills flex-column nav-container">
                 {canViewSystemInfo &&
-                <li className="nav-item">
-                  <Link className='nav-link ellipsis' to={siteRoot + 'sys/info/'}>
-                    <span className="sf2-icon-info" aria-hidden="true"></span>
-                    <span className="nav-text">{gettext('Info')}</span>
-                  </Link>
-                </li>
+                  <li className="nav-item">
+                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#dashboard/'}>
+                      <span className="sf2-icon-info" aria-hidden="true"></span>
+                      <span className="nav-text">{gettext('Info')}</span>
+                    </a>
+                  </li>
                 }
                 {isPro && canViewStatistic &&
                   <li className="nav-item">

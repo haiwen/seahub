@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-  children: PropTypes.object.isRequired,
+  children: PropTypes.array.isRequired,
 };
 
 class MainPanel extends Component {
