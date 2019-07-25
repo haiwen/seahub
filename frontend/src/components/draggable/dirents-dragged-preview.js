@@ -5,7 +5,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   selectedDirentList: PropTypes.array,
-  onHideDirentsDraggablePreivew: PropTypes.func
+  onHideDirentsDraggablePreview: PropTypes.func
 };
 
 class DirentsDraggedPreview extends React.Component {
@@ -33,7 +33,7 @@ class DirentsDraggedPreview extends React.Component {
 
   handleDrop = (event) => {
     this.element.style.opacity = 0;
-    this.props.onHideDirentsDraggablePreivew();
+    this.props.onHideDirentsDraggablePreview();
   }
 
   render() {
