@@ -26,7 +26,6 @@ class DirentsDraggedPreview extends React.Component {
     }
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-    // console.log(this.element.style.top)
 
     this.element.style.top = event.clientY + 'px';
     this.element.style.left = event.clientX + 'px';
@@ -38,7 +37,6 @@ class DirentsDraggedPreview extends React.Component {
   }
 
   render() {
-    // console.log(123)
     let{ selectedDirentList } = this.props;
     const inlineStyle = { 
       position: 'absolute', 

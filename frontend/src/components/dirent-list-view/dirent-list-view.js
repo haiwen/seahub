@@ -17,7 +17,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
-import DirentsDraggedImage from '../draggable/dirents-dragged-image';
+import DirentsDraggedPreview from '../draggable/dirents-dragged-preview';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -738,8 +738,7 @@ class DirentListView extends React.Component {
           />
           {this.state.isShowDirentsDraggableImage && 
             <ModalPortal>
-              <DirentsDraggedImage 
-                ref={element => this.element = element}
+              <DirentsDraggedPreview 
                 selectedDirentList={this.props.selectedDirentList}
                 onHideDirentsDraggableImage={this.onHideDirentsDraggableImage}
               />
