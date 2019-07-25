@@ -70,9 +70,11 @@
 .tree-node-hight-light .attr-action-icon:hover {
   color: #fff !important;
 }
+.tree-node-icon {
+  padding-right: 1.5rem;
+}
 .tree-node-text {
-  padding-left: 1.3rem;
-  width: calc(100% - 1.3rem);
+  width: calc(100% - 2.5rem);
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
