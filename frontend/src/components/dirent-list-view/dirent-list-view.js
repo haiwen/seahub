@@ -70,7 +70,7 @@ class DirentListView extends React.Component {
       isMutipleOperation: true,
       activeDirent: null,
       isListDropTipShow: false,
-      isShowDirentsDraggableImage: false,
+      isShowDirentsDraggablePreview: false,
     };
 
     this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
@@ -621,20 +621,20 @@ class DirentListView extends React.Component {
     this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
   }
 
-  onShowDirentsDraggableImage = () => {
+  onShowDirentsDraggablePreview = () => {
     this.setState({
-      isShowDirentsDraggableImage: true,
+      isShowDirentsDraggablePreview: true,
     });
   }
 
-  onHideDirentsDraggableImage = () => {
+  onHideDirentsDraggablePreview = () => {
     this.setState({
-      isShowDirentsDraggableImage: false
+      isShowDirentsDraggablePreview: false
     });
   }
 
   shouldComponentUpdate = (nextProps, nextStates) => {
-    if (nextStates.isShowDirentsDraggableImage && this.state.isShowDirentsDraggableImage) {
+    if (nextStates.isShowDirentsDraggablePreview && this.state.isShowDirentsDraggablePreview) {
       return false;
     }
     return true;
@@ -715,7 +715,7 @@ class DirentListView extends React.Component {
                   getDirentItemMenuList={this.getDirentItemMenuList}
                   showDirentDetail={this.props.showDirentDetail}
                   onItemsMove={this.props.onItemsMove}
-                  onShowDirentsDraggableImage={this.onShowDirentsDraggableImage}
+                  onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
                 />
               );
             })}
@@ -736,11 +736,11 @@ class DirentListView extends React.Component {
             id={'dirents-menu'}
             onMenuItemClick={this.onDirentsMenuItemClick}
           />
-          {this.state.isShowDirentsDraggableImage && 
+          {this.state.isShowDirentsDraggablePreview && 
             <ModalPortal>
               <DirentsDraggedPreview 
                 selectedDirentList={this.props.selectedDirentList}
-                onHideDirentsDraggableImage={this.onHideDirentsDraggableImage}
+                onHideDirentsDraggablePreview={this.onHideDirentsDraggablePreview}
               />
             </ModalPortal>
           }

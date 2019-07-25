@@ -50,7 +50,7 @@ const propTypes = {
   enableDirPrivateShare: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
-  onShowDirentsDraggableImage: PropTypes.func,
+  onShowDirentsDraggablePreview: PropTypes.func,
 };
 
 class DirentListItem extends React.Component {
@@ -366,8 +366,8 @@ class DirentListItem extends React.Component {
     e.dataTransfer.effectAllowed = 'move';
     let { selectedDirentList } = this.props;
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
-      this.props.onShowDirentsDraggableImage();
-      e.dataTransfer.setDragImage(this.refs.empty_content, 0, 0);
+      this.props.onShowDirentsDraggablePreview();
+      e.dataTransfer.setDragImage(this.refs.empty_content, 0, 0); // Show an empty content
       let selectedList =  selectedDirentList.map(item => {
         let nodeRootPath = this.getDirentPath(item);
         let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
