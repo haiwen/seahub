@@ -78,12 +78,14 @@ class IndexContentViewer extends React.Component {
 
   onLinkClick = (event) => {
     event.preventDefault(); 
-    const link = this.getLink(event.target);
-    if (link) this.props.onLinkClick(link);
     const currentPath = event.target.getAttribute('data-path');
-    if (currentPath) {
+    if (currentPath === this.state.currentPath) {
+      return;
+    } else if (currentPath) {
       this.setState({ currentPath: currentPath });
     }
+    const link = this.getLink(event.target);
+    if (link) this.props.onLinkClick(link);
   }
 
   getLink = (node) => {
