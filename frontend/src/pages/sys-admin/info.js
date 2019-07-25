@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro } from '../../utils/constants';
+import { gettext, isPro, isDefaultAdmin } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
+import Loading from '../../components/loading';
 
 class Info extends Component {
 
@@ -52,14 +53,12 @@ class Info extends Component {
     if (!this.fileInput.current.files.length) {
       return;
     }
-
     const file = this.fileInput.current.files[0];
-
     seafileAPI.uploadLicense(file).then((res) => {
       let info = this.state.sysInfo;
       Object.assign(info, res.data);
       this.setState({
-        sysInfo:info,
+        sysInfo: info
       });
     }).catch((error) => {
       let errMsg = Utils.getErrorMsg(error);
@@ -73,23 +72,15 @@ class Info extends Component {
 
   renderLicenseDescString = (license_mode, license_to, license_expiration) => {
     if (license_mode == 'life-time') {
-      if (window.app.config.lang == 'zh-cn'){
-        return '永久授权给 ' + license_to + ' 技术支持服务至 ' + license_expiration + ' 到期';
-      }else{
-        return gettext('Licensed to {placeholder_license_to}, upgrade service expired in {placeholder_license_expiration}')
+      if (window.app.config.lang == 'zh-cn') {
+        return '永久授权给 ' + license_to + '，技术支持服务至 ' + license_expiration + ' 到期';
+      } else {
+        return gettext('licensed to {placeholder_license_to}, upgrade service expired in {placeholder_license_expiration}')
           .replace('{placeholder_license_to}', license_to).replace('{placeholder_license_expiration}', license_expiration);
       }
     } else {
-      return gettext('Licensed to {placeholder_license_to}, expires on {placeholder_license_expiration}')
+      return gettext('licensed to {placeholder_license_to}, expires on {placeholder_license_expiration}')
         .replace('{placeholder_license_to}', license_to).replace('{placeholder_license_expiration}', license_expiration);
-    }
-  }
-
-  renderUserDescString = (active_users_count, users_count, license_maxusers, with_license) => {
-    if (with_license) {
-      return active_users_count + ' / ' + users_count + ' / ' + license_maxusers;
-    } else {
-      return active_users_count + ' / ' + users_count + ' / --';
     }
   }
 
@@ -97,11 +88,11 @@ class Info extends Component {
     let { with_license, license_mode, license_to, license_expiration, org_count,
       repos_count, total_files_count, total_storage, total_devices_count, 
       current_connected_devices_count, license_maxusers, multi_tenancy_enabled,
-      active_users_count, users_count, groups_count  } = this.state.sysInfo;
-    let {loading, errorMsg} = this.state;
+      active_users_count, users_count, groups_count } = this.state.sysInfo;
+    let { loading, errorMsg } = this.state;
 
     if (loading) {
-      return <span className="loading-icon loading-tip"></span>;
+      return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
@@ -129,12 +120,16 @@ class Info extends Component {
                       {with_license &&
                         ' ' + this.renderLicenseDescString(license_mode, license_to, license_expiration)
                       }<br/>
-                      <Button htmlFor="inputFile" type="button" className="license-file-upload-btn" onClick={this.openFileInput}>{gettext('Upload licence')}</Button>
-                      <input id="inputFile" style={{visibility:'hidden', display:'none'}} type="file" onChange={this.uploadLicenseFile} ref={this.fileInput} />
+                      {isDefaultAdmin &&
+                        <Fragment>
+                          <Button type="button" className="mt-2" onClick={this.openFileInput}>{gettext('Upload license')}</Button>
+                          <input className="d-none" type="file" onChange={this.uploadLicenseFile} ref={this.fileInput} />
+                        </Fragment>
+                      }
                     </dd> :
                     <dd>
                       {gettext('Community Edition')}
-                      <a href="http://manual.seafile.com/deploy_pro/migrate_from_seafile_community_server.html" target="_blank">{gettext('Upgrade to Pro Edition')}</a>
+                      <a className="ml-1" href="http://manual.seafile.com/deploy_pro/migrate_from_seafile_community_server.html" target="_blank">{gettext('Upgrade to Pro Edition')}</a>
                     </dd>
                   }
                   <dt>{gettext('Libraries')} / {gettext('Files')}</dt>
@@ -149,8 +144,8 @@ class Info extends Component {
                   {isPro ?
                     <Fragment>
                       <dt>{gettext('Activated Users')} / {gettext('Total Users')} / {gettext('Limits')}</dt>
-                      <dd>{this.renderUserDescString(active_users_count, users_count, license_maxusers, with_license)}</dd>
-                    </Fragment>: 
+                      <dd>{active_users_count}{' / '}{users_count}{' / '}{with_license ? license_maxusers : '--'}</dd>
+                    </Fragment> :
                     <Fragment>
                       <dt>{gettext('Activated Users')} / {gettext('Total Users')}</dt>
                       <dd>{active_users_count} / {users_count}</dd>
