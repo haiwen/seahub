@@ -143,3 +143,37 @@ class FileParticipantTest(BaseTestCase):
         resp = self.client.delete(self.url, data, 'application/x-www-form-urlencoded')
 
         self.assertEqual(403, resp.status_code)
+
+
+class FileParticipantsBatchAddTest(BaseTestCase):
+    def setUp(self):
+        self.tmp_user = self.create_user()
+
+        self.login_as(self.user)
+        self.url = reverse('api-v2.1-file-participants-batch-add', args=[self.repo.id])
+
+        # share repo and add participant
+        seafile_api.share_repo(self.repo.id, self.user.username, self.tmp_user.username, 'rw')
+        self.file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(self.repo.id, self.file, False)
+        FileParticipant.objects.add_participant(self.file_uuid, self.user.username)
+        assert FileParticipant.objects.filter(uuid=self.file_uuid).count() == 1
+
+    def tearDown(self):
+        self.remove_repo()
+        self.remove_user(self.tmp_user.email)
+
+    def test_can_post(self):
+        resp = self.client.post(self.url, {
+            'emails': [self.tmp_user.username, self.admin.username],
+            'path': self.file,
+        })
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['success']) == 1
+        assert json_resp['success'][0]['email'] == self.tmp_user.username
+
+        assert len(json_resp['failed']) == 1
+        assert json_resp['failed'][0]['email'] == self.admin.username
+
+        assert FileParticipant.objects.filter(uuid=self.file_uuid).count() == 2
