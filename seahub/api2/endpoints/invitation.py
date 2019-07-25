@@ -115,6 +115,6 @@ class InvitationRevokeView(APIView):
             priority=MAIL_PRIORITY.now
         )
         if m.status != STATUS.sent:
-            logger.warning('send revoke invitation message to %s failed')
+            logger.warning('send revoke access email to %s failed')
 
         return Response({'success': True})

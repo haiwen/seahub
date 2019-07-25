@@ -99,7 +99,7 @@ class InvitationRevokeTest(BaseTestCase):
         mock_can_invite_guest.return_val = True
         mock_has_permission.return_val = True
 
-        resp = self.client.delete(self.endpoint)
+        resp = self.client.post(self.endpoint)
         self.assertEqual(200, resp.status_code)
         tmp_user = User.objects.get(self.tmp_username)
 
