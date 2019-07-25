@@ -75,7 +75,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
     }
   };
 
-  onChangeDepartment = (departmentID) => {
+  changeDept = (departmentID) => {
     const { department, checkedDepartmentId } = this.props;
     this.props.onChangeDepartment(departmentID);
     if (checkedDepartmentId === department.id && !this.state.isChildrenShow) {
@@ -99,7 +99,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
         {isChildrenShow &&
           <div
             className={nodeInnerClass}
-            onClick={() => this.onChangeDepartment(department.id)}
+            onClick={() => this.changeDept(department.id)}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
           >
