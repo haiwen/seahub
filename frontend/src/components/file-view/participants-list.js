@@ -82,19 +82,23 @@ class Participant extends React.Component {
     this.state = {
       showAvatarTooltip: false,
     };
+    this.targetID = 'participant-avatar-';
   }
 
   toggleAvatarTooltip = () => {
     this.setState({ showAvatarTooltip: !this.state.showAvatarTooltip });
   }
 
+  componentWillMount() {
+    this.targetID = this.targetID + this.props.index + Math.floor(Math.random() * 1000);
+  }
+
   render() {
     const { item, index } = this.props;
-    const target = 'participant-avatar-' + index;
     return (
       <span className="participant-avatar">
-        <img src={item.avatar_url} className="avatar" id={target} alt="avatar" key={index}/>
-        <Tooltip toggle={this.toggleAvatarTooltip} delay={{show: 0, hide: 0}} target={target} placement='bottom' isOpen={this.state.showAvatarTooltip}>
+        <img src={item.avatar_url} className="avatar" id={this.targetID} alt="avatar" key={index}/>
+        <Tooltip toggle={this.toggleAvatarTooltip} delay={{show: 0, hide: 0}} target={this.targetID} placement='bottom' isOpen={this.state.showAvatarTooltip}>
           {item.name}
         </Tooltip>
       </span>
