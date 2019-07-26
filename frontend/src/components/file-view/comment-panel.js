@@ -8,7 +8,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import ParticipantsList from './participants-list';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import { siteRoot } from '../../utils/constants';
 import { MentionsInput, Mention } from 'react-mentions';
 import { defaultStyle, defaultMentionStyle } from '../../css/react-mentions-default-style';
 import '../../css/comments-list.css';
@@ -33,6 +32,7 @@ class CommentPanel extends React.Component {
       relatedUsers: null,
       comment: '',
     };
+    this.toBeAddedParticipant = [];
   }
 
   toggleResolvedComment = () => {
@@ -53,7 +53,7 @@ class CommentPanel extends React.Component {
   listRepoRelatedUsers = () => {
     seafileAPI.listRepoRelatedUsers(repoID).then((res) => {
       let users = res.data.user_list.map((item) => {
-        return { id: (siteRoot + 'profile/' + item.email), display: item.name};
+        return { id: item.email, display: item.name};
       });
       this.setState({ relatedUsers: users });
     });
@@ -63,18 +63,29 @@ class CommentPanel extends React.Component {
     this.setState({ comment: event.target.value });
   }
 
-  submitComment = () => {
-    let comment = this.state.comment;
-    if (comment.trim()) {
-      seafileAPI.postComment(repoID, filePath, comment).then(() => {
-        this.listComments();
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-      this.addParticipant(username);
-    }
+  addComment = () => {
+    if (!this.state.comment.trim()) return;
+    seafileAPI.postComment(repoID, filePath, this.state.comment.trim()).then(() => {
+      this.listComments();
+    }).catch(err => {
+      toaster.danger(Utils.getErrorMsg(err));
+    });
     this.setState({ comment: '' });
+  } 
+
+  onSubmit = () => {
+    this.addParticipant(username);
+    if (this.toBeAddedParticipant.length === 0) {
+      this.addComment();
+    } else {
+      seafileAPI.addFileParticipants(repoID, filePath, this.toBeAddedParticipant).then((res) => {
+        this.onParticipantsChange(repoID, filePath);
+        this.toBeAddedParticipant = [];
+        this.addComment();
+      }).catch((err) => {
+        toaster.danger(Utils.getErrorMsg(err));
+      });
+    }
   }
 
   resolveComment = (event) => {
@@ -128,21 +139,11 @@ class CommentPanel extends React.Component {
 
   addParticipant = (email) => {
     if (this.checkParticipant(email)) return;
-    seafileAPI.addFileParticipant(repoID, filePath, email).then((res) => {
-      this.onParticipantsChange(repoID, filePath);
-    }).catch((err) => {
-      let errMessage = Utils.getErrorMsg(err);
-      toaster.danger(errMessage);
-    });
+    this.toBeAddedParticipant.push(email);
   }
 
   renderUserSuggestion = (entry, search, highlightedDisplay, index, focused) => {
     return <div className={`user ${focused ? 'focused' : ''}`}>{highlightedDisplay}</div>;
-  }
-
-  handleMention = (id, display) => {
-    const email = id.slice(id.lastIndexOf('/') + 1);
-    this.addParticipant(email);
   }
 
   componentDidMount() {
@@ -221,15 +222,14 @@ class CommentPanel extends React.Component {
           >
             <Mention
               trigger="@"
+              displayTransform={(username, display) => `@${display}`}
               data={this.state.relatedUsers}
               renderSuggestion={this.renderUserSuggestion}
               style={defaultMentionStyle}
-              onAdd={this.handleMention}
+              onAdd={(id, display) => {this.addParticipant(id);}}
             />
           </MentionsInput>
-          <Button
-            className="submit-comment" color="primary"
-            size="sm" onClick={this.submitComment} >
+          <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>
             {gettext('Submit')}</Button>
         </div>
       </div>

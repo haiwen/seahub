@@ -28,6 +28,7 @@ class DetailCommentList extends React.Component {
       relatedUsers: null,
       comment: '',
     };
+    this.toBeAddedParticipant = [];
   }
 
   componentDidMount() {
@@ -55,19 +56,31 @@ class DetailCommentList extends React.Component {
     });
   }
 
-  submitComment = () => {
-    let comment = this.state.comment;
+  addComment = () => {
     const { repoID, filePath } = this.props;
-    if (comment.trim()) {
-      seafileAPI.postComment(repoID, filePath, comment.trim()).then(() => {
-        this.listComments();
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-      this.addParticipant(username);
-    }
+    if (!this.state.comment.trim()) return;
+    seafileAPI.postComment(repoID, filePath, this.state.comment.trim()).then(() => {
+      this.listComments();
+    }).catch(err => {
+      toaster.danger(Utils.getErrorMsg(err));
+    });
     this.setState({ comment: '' });
+  }
+
+  onSubmit = () => {
+    this.addParticipant(username);
+    if (this.toBeAddedParticipant.length === 0) {
+      this.addComment();
+    } else {
+      const { repoID, filePath } = this.props;
+      seafileAPI.addFileParticipants(repoID, filePath, this.toBeAddedParticipant).then((res) => {
+        this.props.onParticipantsChange(repoID, filePath);
+        this.toBeAddedParticipant = [];
+        this.addComment();
+      }).catch((err) => {
+        toaster.danger(Utils.getErrorMsg(err));
+      });
+    }
   }
 
   resolveComment = (event) => {
@@ -104,7 +117,7 @@ class DetailCommentList extends React.Component {
     const { repoID } = this.props;
     seafileAPI.listRepoRelatedUsers(repoID).then((res) => {
       let users = res.data.user_list.map((item) => {
-        return { id: (siteRoot + 'profile/' + item.email), display: item.name};
+        return { id: item.email, display: item.name};
       });
       this.setState({ relatedUsers: users });
     });
@@ -116,21 +129,11 @@ class DetailCommentList extends React.Component {
 
   addParticipant = (email) => {
     if (this.checkParticipant(email)) return;
-    const { repoID, filePath } = this.props;
-    seafileAPI.addFileParticipant(repoID, filePath, email).then((res) => {
-      this.props.onParticipantsChange(repoID, filePath);
-    }).catch((err) => {
-      toaster.danger(Utils.getErrorMsg(err));
-    });
+    this.toBeAddedParticipant.push(email);
   }
 
   renderUserSuggestion = (entry, search, highlightedDisplay, index, focused) => {
     return <div className={`user ${focused ? 'focused' : ''}`}>{highlightedDisplay}</div>;
-  }
-
-  handleMention = (id, display) => {
-    const email = id.slice(id.lastIndexOf('/') + 1);
-    this.addParticipant(email);
   }
 
   render() {
@@ -173,13 +176,14 @@ class DetailCommentList extends React.Component {
           >
             <Mention
               trigger="@"
+              displayTransform={(username, display) => `@${display}`}
               data={this.state.relatedUsers}
               renderSuggestion={this.renderUserSuggestion}
               style={defaultMentionStyle}
-              onAdd={this.handleMention}
+              onAdd={(id, display) => {this.addParticipant(id);}}
             />
           </MentionsInput>
-          <Button className="submit-comment" color="primary" size="sm" onClick={this.submitComment}>{gettext('Submit')}</Button>
+          <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>{gettext('Submit')}</Button>
         </div>
       </div>
     );
