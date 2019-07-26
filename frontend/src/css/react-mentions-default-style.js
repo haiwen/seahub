@@ -26,20 +26,24 @@ const defaultStyle = {
   },
   '&multiLine': {
     control: {
-      fontFamily: 'monospace',
-      border: '1px solid silver',
     },
     highlighter: {
       padding: 9,
     },
     input: {
-      padding: 5,
+      padding: '8px 6px',
       minHeight: 90,
       height: 90,
-      outline: 0,
       border: '1px solid #e6e6dd',
-      backgroundColor: '#fff',
-      overfflowY: 'auto'
+      borderRadius: '5px',
+      overfflowY: 'auto',
+      '&focused': {
+        backgroundColor: '#cee4e5',
+        outlineOffset: '-2px',
+        outlineColor: '-webkit-focus-ring-color',
+        outlineStyle: 'auto',
+        outlineWidth: '5px',
+      },
     },
   },
   suggestions: {
@@ -54,16 +58,18 @@ const defaultStyle = {
     },
     item: {
       padding: '5px 15px',
+      minWidth: '50px',
       borderBottom: '1px solid rgba(0,0,0,0.15)',
       '&focused': {
-        backgroundColor: '#cee4e5',
+        backgroundColor: '#f19654',
+        color: '#fff',
+        fontWeight: '700',
       },
     },
   },
 };
 
 const defaultMentionStyle = {
-  backgroundColor: '#cee4e5'
 };
 
 export { defaultStyle, defaultMentionStyle };
