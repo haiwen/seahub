@@ -88,6 +88,13 @@ class FileParticipantsView(APIView):
         success = list()
         failed = list()
 
+        try:
+            uuid = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(repo_id, path, False)
+            participants_queryset = FileParticipant.objects.get_participants(uuid)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
+
         for email in emails:
             if not is_valid_username(email):
                 error_dic = {'email': email, 'error_msg': 'email invalid.', 'error_code': 400}
@@ -109,14 +116,12 @@ class FileParticipantsView(APIView):
 
             # main
             try:
-                file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(repo_id, path, False)
-
-                if FileParticipant.objects.get_participant(file_uuid, email):
+                if participants_queryset.filter(uuid=uuid, username=email).count() > 0:
                     error_dic = {'email': email, 'error_msg': 'Participant already exists.', 'error_code': 409}
                     failed.append(error_dic)
                     continue
 
-                FileParticipant.objects.add_participant(file_uuid, email)
+                FileParticipant.objects.add_participant(uuid, email)
                 participant = get_user_common_info(email)
                 success.append(participant)
             except Exception as e:
@@ -126,7 +131,6 @@ class FileParticipantsView(APIView):
                 continue
 
         return Response({'success': success, 'failed': failed})
-
 
 
 class FileParticipantView(APIView):
