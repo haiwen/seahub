@@ -569,6 +569,9 @@ class DirentListView extends React.Component {
     }
     this.enteredCounter++;
     if (this.enteredCounter !== 0) {
+      if (this.state.isListDropTipShow) {
+        return ;
+      }
       this.setState({isListDropTipShow: true});
     }
   }
@@ -631,13 +634,6 @@ class DirentListView extends React.Component {
     this.setState({
       isShowDirentsDraggablePreview: false
     });
-  }
-
-  shouldComponentUpdate = (nextProps, nextStates) => {
-    if (nextStates.isShowDirentsDraggablePreview && this.state.isShowDirentsDraggablePreview) {
-      return false;
-    }
-    return true;
   }
 
   render() {
@@ -741,6 +737,7 @@ class DirentListView extends React.Component {
               <DirentsDraggedPreview 
                 selectedDirentList={this.props.selectedDirentList}
                 onHideDirentsDraggablePreview={this.onHideDirentsDraggablePreview}
+                dragStartPosition={this.state.dragStartPosition}
               />
             </ModalPortal>
           }

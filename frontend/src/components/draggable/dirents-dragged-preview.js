@@ -13,11 +13,18 @@ class DirentsDraggedPreview extends React.Component {
   componentDidMount() {
     document.addEventListener('dragover', this.handleDragOver);
     document.addEventListener('drop', this.handleDrop);
+    document.addEventListener('dragend', this.handleDragEnd);
   }
 
   componentWillUnmount() {
     document.removeEventListener('dragover', this.handleDragOver);
     document.removeEventListener('drop', this.handleDrop);
+    document.removeEventListener('dragend', this.handleDragEnd);
+  }
+
+  handleDragEnd = () => {
+    this.element.style.opacity = 0;
+    this.props.onHideDirentsDraggablePreview();
   }
 
   handleDragOver = (event) => {
@@ -43,9 +50,11 @@ class DirentsDraggedPreview extends React.Component {
       opacity: 1, 
       pointerEvents: 'none', 
       display: 'block', 
-      left: 0,
-      top: 0,
+      left: '-9999px',
+      top: '-9999px',
       zIndex: 101,
+      maxHeight: document.documentElement.clientHeight,
+      overflow: 'hidden'
     };
     return (
       <div style={inlineStyle} ref={element => this.element = element}>
