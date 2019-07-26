@@ -89,14 +89,12 @@ class FileParticipantDialog extends Component {
     if (!selectedOption || selectedOption.length === 0) {
       return;
     }
-    for (let i = 0; i < selectedOption.length; i++) {
-      seafileAPI.addFileParticipant(repoID, filePath, selectedOption[i].email).then((res) => {
-        this.props.onParticipantsChange(repoID, filePath);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
+    let emails = selectedOption.map((option) => {return option.email;});
+    seafileAPI.addFileParticipants(repoID, filePath, emails).then((res) => {
+      this.props.onParticipantsChange(repoID, filePath);
+    }).catch(error => {
+      toaster.danger(Utils.getErrorMsg(error));
+    });
     this.setState({ selectedOption: null });
     this.refs.userSelect.clearSelect();
   };
