@@ -268,14 +268,10 @@ class CommentItem extends React.Component {
   }
 
   convertComment = (mdFile) => {
-    processor.process(mdFile).then(
-      (result) => {
-        let html = String(result);
-        this.setState({
-          html: html
-        });
-      }
-    );
+    processor.process(mdFile).then((result) => {
+      let html = String(result);
+      this.setState({ html: html });
+    });
   }
 
   toggleEditComment = () => {
@@ -296,6 +292,15 @@ class CommentItem extends React.Component {
     this.setState({
       newComment: event.target.value,
     });
+  }
+
+  onCommentClick = (e) => {
+    // click participant link, page shouldn't jump
+    if (e.target.nodeName !== 'A') return;
+    const preNode = e.target.previousSibling;
+    if (preNode && preNode.nodeType === 3 && preNode.nodeValue.slice(-1) === '@') {
+      e.preventDefault();
+    }
   }
 
   componentWillMount() {
@@ -324,7 +329,7 @@ class CommentItem extends React.Component {
           <div className="seafile-edit-comment">
             <textarea className="edit-comment-input" value={this.state.newComment} onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"></textarea>
             <Button className="comment-btn" color="success" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
-            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}> {gettext('Cancel')}</Button>
+            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}>{gettext('Cancel')}</Button>
           </div>
         </li>
       );
@@ -344,24 +349,25 @@ class CommentItem extends React.Component {
               <i className="fas fa-ellipsis-v"></i>
             </DropdownToggle>
             <DropdownMenu>
-              {
-                (item.user_email === username) &&
+              {(item.user_email === username) &&
                 <DropdownItem onClick={this.props.deleteComment} className="delete-comment"
                   id={item.id}>{gettext('Delete')}</DropdownItem>}
-              {
-                (item.user_email === username) &&
-                  <DropdownItem onClick={this.toggleEditComment}
-                    className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>
+              {(item.user_email === username) &&
+                <DropdownItem onClick={this.toggleEditComment}
+                  className="edit-comment" id={item.id}>{gettext('Edit')}</DropdownItem>
               }
-              {
-                !item.resolved &&
+              {!item.resolved &&
                 <DropdownItem onClick={this.props.resolveComment} className="seafile-comment-resolved"
                   id={item.id}>{gettext('Mark as resolved')}</DropdownItem>
               }
             </DropdownMenu>
           </Dropdown>
         </div>
-        <div className="seafile-comment-content" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+        <div
+          className="seafile-comment-content"
+          dangerouslySetInnerHTML={{ __html: this.state.html }}
+          onClick={e => this.onCommentClick(e)}
+        ></div>
       </li>
     );
   }

@@ -70,7 +70,6 @@ const defaultStyle = {
 };
 
 const defaultMentionStyle = {
-  backgroundColor: '#e5a252',
 };
 
 export { defaultStyle, defaultMentionStyle };

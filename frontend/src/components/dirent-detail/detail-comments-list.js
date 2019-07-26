@@ -247,6 +247,15 @@ class CommentItem extends React.Component {
     this.setState({ newComment: event.target.value });
   }
 
+  onCommentClick = (e) => {
+    // click participant link, page shouldn't jump
+    if (e.target.nodeName !== 'A') return;
+    const preNode = e.target.previousSibling;
+    if (preNode && preNode.nodeType === 3 && preNode.nodeValue.slice(-1) === '@') {
+      e.preventDefault();
+    }
+  }
+
   renderInfo = (item) => {
     return (
       <Fragment>
@@ -297,7 +306,11 @@ class CommentItem extends React.Component {
             </DropdownMenu>
           </Dropdown>
         </div>
-        <div className="seafile-comment-content" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+        <div
+          className="seafile-comment-content"
+          dangerouslySetInnerHTML={{ __html: this.state.html }}
+          onClick={e => this.onCommentClick(e)}
+        ></div>
       </li>
     );
   }
