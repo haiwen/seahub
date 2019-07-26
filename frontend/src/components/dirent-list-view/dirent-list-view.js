@@ -17,6 +17,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
+import DirentsDraggedPreview from '../draggable/dirents-dragged-preview';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -69,6 +70,7 @@ class DirentListView extends React.Component {
       isMutipleOperation: true,
       activeDirent: null,
       isListDropTipShow: false,
+      isShowDirentsDraggablePreview: false,
     };
 
     this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
@@ -567,6 +569,9 @@ class DirentListView extends React.Component {
     }
     this.enteredCounter++;
     if (this.enteredCounter !== 0) {
+      if (this.state.isListDropTipShow) {
+        return ;
+      }
       this.setState({isListDropTipShow: true});
     }
   }
@@ -617,6 +622,18 @@ class DirentListView extends React.Component {
     }
 
     this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
+  }
+
+  onShowDirentsDraggablePreview = () => {
+    this.setState({
+      isShowDirentsDraggablePreview: true,
+    });
+  }
+
+  onHideDirentsDraggablePreview = () => {
+    this.setState({
+      isShowDirentsDraggablePreview: false
+    });
   }
 
   render() {
@@ -694,6 +711,7 @@ class DirentListView extends React.Component {
                   getDirentItemMenuList={this.getDirentItemMenuList}
                   showDirentDetail={this.props.showDirentDetail}
                   onItemsMove={this.props.onItemsMove}
+                  onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
                 />
               );
             })}
@@ -714,6 +732,15 @@ class DirentListView extends React.Component {
             id={'dirents-menu'}
             onMenuItemClick={this.onDirentsMenuItemClick}
           />
+          {this.state.isShowDirentsDraggablePreview && 
+            <ModalPortal>
+              <DirentsDraggedPreview 
+                selectedDirentList={this.props.selectedDirentList}
+                onHideDirentsDraggablePreview={this.onHideDirentsDraggablePreview}
+                dragStartPosition={this.state.dragStartPosition}
+              />
+            </ModalPortal>
+          }
           {this.state.isImagePopupOpen && (
             <ModalPortal>
               <ImageDialog

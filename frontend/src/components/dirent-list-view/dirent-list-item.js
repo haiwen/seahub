@@ -50,6 +50,7 @@ const propTypes = {
   enableDirPrivateShare: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
+  onShowDirentsDraggablePreview: PropTypes.func,
 };
 
 class DirentListItem extends React.Component {
@@ -362,14 +363,11 @@ class DirentListItem extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-
     e.dataTransfer.effectAllowed = 'move';
-    if (e.dataTransfer && e.dataTransfer.setDragImage) {
-      e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
-    }
-
     let { selectedDirentList } = this.props;
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
+      this.props.onShowDirentsDraggablePreview();
+      e.dataTransfer.setDragImage(this.refs.empty_content, 0, 0); // Show an empty content
       let selectedList =  selectedDirentList.map(item => {
         let nodeRootPath = this.getDirentPath(item);
         let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
@@ -378,6 +376,10 @@ class DirentListItem extends React.Component {
       selectedList = JSON.stringify(selectedList);
       e.dataTransfer.setData('applicaiton/drag-item-info', selectedList);
       return ;
+    }
+
+    if (e.dataTransfer && e.dataTransfer.setDragImage) {
+      e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
     }
 
     let nodeRootPath = this.getDirentPath(this.props.dirent);
@@ -426,6 +428,8 @@ class DirentListItem extends React.Component {
     }
     if (this.props.dirent.type === 'dir') {
       e.stopPropagation();
+    } else {
+      return;
     }
     let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
@@ -450,10 +454,6 @@ class DirentListItem extends React.Component {
     if (nodeDirent.name === dropItemData.name) {
       return;
     }
-
-    if (dropItemData.type !== 'dir') {
-      return;
-    } 
 
     //  copy the dirent to it's child. eg: A/B -> A/B/C
     if (dropItemData.type === 'dir' && nodeDirent.type === 'dir') {
@@ -590,7 +590,7 @@ class DirentListItem extends React.Component {
       <Fragment>
         <tr 
           className={trClass} 
-          draggable="true" 
+          draggable="true"
           onMouseEnter={this.onMouseEnter} 
           onMouseOver={this.onMouseOver} 
           onMouseLeave={this.onMouseLeave} 
@@ -617,6 +617,7 @@ class DirentListItem extends React.Component {
                 <img ref='drag_icon' src={iconUrl} width="24" alt='' />
               }
               {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
+              <div ref="empty_content" style={{position: 'absolute', width: '1px', height: '1px'}}></div>
             </div>
           </td>
           <td className="name">
