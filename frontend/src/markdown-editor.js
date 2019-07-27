@@ -258,8 +258,8 @@ class EditorUtilities {
     return seafileAPI.listFileParticipants(repoID, filePath);
   }
 
-  addFileParticipant(email) {
-    return seafileAPI.addFileParticipant(repoID, filePath, email);
+  addFileParticipants(emails) {
+    return seafileAPI.addFileParticipants(repoID, filePath, emails);
   }
 
 }
