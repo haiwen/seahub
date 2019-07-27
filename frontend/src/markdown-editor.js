@@ -262,6 +262,9 @@ class EditorUtilities {
     return seafileAPI.addFileParticipants(repoID, filePath, emails);
   }
 
+  listRepoRelatedUsers() {
+    return seafileAPI.listRepoRelatedUsers(repoID);
+  }
 }
 
 const editorUtilities = new EditorUtilities();
