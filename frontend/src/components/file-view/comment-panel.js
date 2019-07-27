@@ -227,6 +227,7 @@ class CommentPanel extends React.Component {
               renderSuggestion={this.renderUserSuggestion}
               style={defaultMentionStyle}
               onAdd={(id, display) => {this.addParticipant(id);}}
+              appendSpaceOnAdd={true}
             />
           </MentionsInput>
           <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>
