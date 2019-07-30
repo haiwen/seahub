@@ -1,7 +1,6 @@
 import i18n from 'i18next';
 import XHR from 'i18next-xhr-backend';
-
-let siteRoot = window.app.config.siteRoot;
+import { mediaUrl } from './utils/constants';
 
 i18n
   .use(XHR)
@@ -14,7 +13,7 @@ i18n
     whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
 
     backend: {
-      loadPath: siteRoot + 'media/assets/frontend/locales/{{ lng }}/{{ ns }}.json',
+      loadPath: mediaUrl + 'assets/frontend/locales/{{ lng }}/{{ ns }}.json',
       // loadPath: '/media/locales/{{lng}}/{{ns}}.json',
     },
 
