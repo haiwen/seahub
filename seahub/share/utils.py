@@ -12,29 +12,39 @@ logger = logging.getLogger(__name__)
 
 def is_repo_admin(username, repo_id):
 
-    repo_owner = seafile_api.get_repo_owner(repo_id)
-
+    # repo is shared to user with admin permission
     try:
-        if '@seafile_group' in repo_owner:
-            # is group owned repo
-            group_id = int(repo_owner.split('@')[0])
+        user_share_permission = ExtraSharePermission.objects. \
+            get_user_permission(repo_id, username)
+        if user_share_permission == PERMISSION_ADMIN:
+            return True
+
+        # get all groups that repo is shared to with admin permission
+        group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
+        for group_id in group_ids:
             if is_group_admin(group_id, username):
                 return True
-        else:
-            user_share_permission = ExtraSharePermission.objects.\
-                    get_user_permission(repo_id, username)
-            if user_share_permission == PERMISSION_ADMIN:
-                return True
-
-            # get all groups that repo is shared to with admin permission
-            group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
-            for group_id in group_ids:
-                if is_group_admin(group_id, username):
-                    return True
-        return False
     except Exception as e:
         logger.error(e)
         return False
+
+    repo_owner = seafile_api.get_repo_owner(repo_id) or seafile_api.get_org_repo_owner(repo_id)
+    if not repo_owner:
+        logger.error('repo %s owner is None' % repo_id)
+        return False
+
+    # repo owner
+    if username == repo_owner:
+        return True
+
+    # user is department admin
+    if '@seafile_group' in repo_owner:
+        # is group owned repo
+        group_id = int(repo_owner.split('@')[0])
+        if is_group_admin(group_id, username):
+            return True
+
+    return False
 
 def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_id=None):
     # Share  repo or subdir to user with permission(r, rw, admin).
