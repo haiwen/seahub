@@ -49,7 +49,7 @@ class InvitationsListItem extends React.Component {
       title={gettext('Delete')}
       style={!this.state.isOperationShow ? {opacity: 0} : {}}
       onClick={this.props.onItemDelete.bind(this, invitationItem.token, this.props.index)}></i>;
-    const revokeOperation = <i className="action-icon fas fa-undo-alt"
+    const revokeOperation = <i className="action-icon sf3-font sf3-font-cancel-invitation"
       title={gettext('Revoke Access')}
       style={!this.state.isOperationShow ? {opacity: 0} : {fontSize: '1rem'}}
       onClick={this.props.toggleInvitationRevokeDialog.bind(this, revokeUserObj)}></i>;
