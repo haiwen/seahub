@@ -11,10 +11,16 @@ from django.utils.encoding import force_bytes
 from seaserv import seafile_api
 
 from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
-        get_site_scheme_and_netloc
+        get_site_scheme_and_netloc, normalize_cache_key
 
 from seahub.settings import ENABLE_WATERMARK
-from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL
+from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
+        ONLYOFFICE_FORCE_SAVE
+
+def generate_onlyoffice_cache_key(repo_id, file_path):
+    prefix = "ONLYOFFICE_"
+    value = "%s_%s" % (repo_id, file_path)
+    return normalize_cache_key(value, prefix)
 
 def get_onlyoffice_dict(username, repo_id, file_path,
         file_id='', can_edit=False, can_download=True):
@@ -47,8 +53,15 @@ def get_onlyoffice_dict(username, repo_id, file_path,
     else:
         document_type = 'text'
 
+    cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
+    doc_key = cache.get(cache_key)
+    if not doc_key:
+        doc_key = cache.get(cache_key)
+
+    if not doc_key:
+        doc_key = hashlib.md5(force_bytes(origin_repo_id + origin_file_path + file_id)).hexdigest()[:20]
+
     doc_info = json.dumps({'repo_id': repo_id, 'file_path': file_path, 'username': username})
-    doc_key = hashlib.md5(force_bytes(origin_repo_id + origin_file_path + file_id)).hexdigest()[:20]
     cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
 
     file_name = os.path.basename(file_path.rstrip('/'))
@@ -71,6 +84,7 @@ def get_onlyoffice_dict(username, repo_id, file_path,
         'can_edit': can_edit,
         'can_download': can_download,
         'username': username,
+        'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE,
         'enable_watermark': ENABLE_WATERMARK and not can_edit,
     }
 
