@@ -6,6 +6,8 @@ import {Modal, ModalHeader, ModalBody, ModalFooter, Input, Button} from 'reactst
 import toaster from '../toast';
 import Loading from '../loading';
 
+import '../../css/invitations.css';
+
 class InvitePeopleDialog extends React.Component {
 
   constructor(props) {
@@ -97,8 +99,10 @@ class InvitePeopleDialog extends React.Component {
   }
 
   render() {
+    const { loading } = this.state;
+
     return (
-      <Modal isOpen={this.props.isInvitePeopleDialogOpen} toggle={this.props.toggleInvitePeopleDialog}>
+      <Modal isOpen={this.props.isInvitePeopleDialogOpen} toggle={this.props.toggleInvitePeopleDialog} className="invite-people-dialog">
         <ModalHeader toggle={this.props.toggleInvitePeopleDialog}>{gettext('Invite People')}</ModalHeader>
         <ModalBody>
           <label htmlFor="emails">{gettext('Emails')}</label>
@@ -109,12 +113,11 @@ class InvitePeopleDialog extends React.Component {
             onChange={this.handleEmailsChange}
             onKeyDown={this.handleKeyDown}
           />
-          {this.state.loading && <Loading/>}
           <span className="error">{this.state.errorMsg}</span>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleInvitePeopleDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmitInvite} disabled={this.state.loading}>{gettext('Submit')}</Button>
+          <Button className="submit-btn" color="primary" onClick={this.handleSubmitInvite} disabled={loading}>{loading ? <Loading/> :gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
