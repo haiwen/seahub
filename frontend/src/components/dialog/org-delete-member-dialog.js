@@ -21,7 +21,7 @@ class DeleteMemberDialog extends React.Component {
 
   deleteMember = () => {
     const userEmail = this.props.member.email;
-    seafileAPI.orgAdminDeleteDepartGroupUser(orgID, this.props.groupID, userEmail).then((res) => {
+    seafileAPI.orgAdminDeleteGroupUser(orgID, this.props.groupID, userEmail).then((res) => {
       if (res.data.success) {
         this.props.onMemberChanged();
         this.props.toggle();
