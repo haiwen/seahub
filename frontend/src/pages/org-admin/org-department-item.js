@@ -392,7 +392,7 @@ class MemberItem extends React.Component {
 
   onChangeUserRole = (role) => {
     let isAdmin = role === 'Admin' ? true : false;
-    seafileAPI.orgAdminSetMemberRole(orgID, this.props.groupID, this.props.member.email, isAdmin).then((res) => {
+    seafileAPI.orgAdminSetGroupMemberRole(orgID, this.props.groupID, this.props.member.email, isAdmin).then((res) => {
       this.props.onMemberChanged();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
