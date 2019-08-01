@@ -34,7 +34,7 @@ class AddMemberDialog extends React.Component {
     const email = this.state.selectedOption.email;
     this.refs.orgSelect.clearSelect();
     this.setState({ errMessage: [] });
-    seafileAPI.orgAdminAddGroupUser(orgID, this.props.groupID, email).then((res) => {
+    seafileAPI.orgAdminAddMember(orgID, this.props.groupID, email).then((res) => {
       this.setState({ selectedOption: null });
       if (res.data.failed.length > 0) {
         this.setState({ errMessage: res.data.failed[0].error_msg });
