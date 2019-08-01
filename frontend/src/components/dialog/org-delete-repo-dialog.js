@@ -13,7 +13,7 @@ class DeleteRepoDialog extends React.Component {
   }
 
   deleteRepo = () => {
-    seafileAPI.orgAdminDeleteDepartGroupRepo(orgID, this.props.groupID, this.props.repo.repo_id).then((res) => {
+    seafileAPI.orgAdminDeleteDepartmentRepo(orgID, this.props.groupID, this.props.repo.repo_id).then((res) => {
       if (res.data.success) {
         this.props.onRepoChanged();
         this.props.toggle();
