@@ -9,6 +9,9 @@ import OrgUserProfile from './org-user-profile';
 import OrgUserRepos from './org-user-repos';
 import OrgUserSharedRepos from './org-user-shared-repos';
 import OrgGroups from './org-groups';
+import OrgGroupInfo from './org-group-info';
+import OrgGroupRepos from './org-group-repos';
+import OrgGroupMembers from './org-group-members';
 import OrgLibraries from './org-libraries';
 import OrgInfo from './org-info';
 import OrgLinks from './org-links';
@@ -67,7 +70,10 @@ class Org extends React.Component {
             <OrgUserProfile path={siteRoot + 'org/useradmin/info/:email/'} />
             <OrgUserRepos path={siteRoot + 'org/useradmin/info/:email/repos/'} />
             <OrgUserSharedRepos path={siteRoot + 'org/useradmin/info/:email/shared-repos/'} />
-            <OrgGroups path={siteRoot + 'org/groupadmin'}/>
+            <OrgGroups path={siteRoot + 'org/groupadmin'} />
+            <OrgGroupInfo path={siteRoot + 'org/groupadmin/:groupID/'} />
+            <OrgGroupRepos path={siteRoot + 'org/groupadmin/:groupID/repos/'} />
+            <OrgGroupMembers path={siteRoot + 'org/groupadmin/:groupID/members/'} />
             <OrgLibraries path={siteRoot + 'org/repoadmin'}/>
             <OrgLinks path={siteRoot + 'org/publinkadmin'}/>
             <OrgDepartments path={siteRoot + 'org/departmentadmin'}>
