@@ -53,6 +53,7 @@ class FileUploader extends React.Component {
     this.timestamp = null;
     this.loaded = 0;
     this.bitrateInterval = 500; // Interval in milliseconds to calculate the bitrate
+    window.onbeforeunload = this.onbeforeunload;
   }
 
   componentDidMount() {
@@ -86,8 +87,17 @@ class FileUploader extends React.Component {
   }
 
   componentWillUnmount = () => {
+    window.onbeforeunload = null;
     if (this.props.dragAndDrop === true) {
       this.resumable.disableDropOnDocument();
+    }
+  }
+
+  onbeforeunload = () => {
+    if (window.uploader && 
+        window.uploader.isUploadProgressDialogShow && 
+        window.uploader.totalProgress !== 100) {
+      return '';
     }
   }
 
@@ -207,6 +217,7 @@ class FileUploader extends React.Component {
       isUploadProgressDialogShow: true,
       uploadFileList: uploadFileList,
     });
+    Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', true);
   }
 
   buildCustomFileObj = (resumableFile) => {
@@ -261,6 +272,7 @@ class FileUploader extends React.Component {
       totalProgress: progress,
       uploadBitrate: uploadBitrate
     });
+    Utils.registerGlobalVariable('uploader', 'totalProgress', progress);
   }
 
   onFileUploadSuccess = (resumableFile, message) => {
@@ -466,6 +478,7 @@ class FileUploader extends React.Component {
   onCloseUploadDialog = () => {
     this.resumable.files = [];
     this.setState({isUploadProgressDialogShow: false, uploadFileList: []});
+    Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', false);
   }
 
   onUploadCancel = (uploadingItem) => {
@@ -529,6 +542,7 @@ class FileUploader extends React.Component {
     }, () => {
       this.resumable.upload();
     });
+    Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', true);
   }
 
   cancelFileUpload = () => {

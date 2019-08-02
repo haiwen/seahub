@@ -24,7 +24,17 @@ class DirPath extends React.Component {
     this.props.onPathClick(path);
   }
 
-  onTabNavClick = (tabName, id) => {
+  onTabNavClick = (e, tabName, id) => {
+    if (window.uploader && 
+      window.uploader.isUploadProgressDialogShow && 
+      window.uploader.totalProgress !== 100) {
+        if (!window.confirm(gettext('A file is being uploaded. Are you sure you want to leave this page?'))) {
+          e.preventDefault();
+          return false;
+        } else {
+          window.uploader.isUploadProgressDialogShow = false;
+        }
+    }
     this.props.onTabNavClick(tabName, id);
   }
 
@@ -72,20 +82,20 @@ class DirPath extends React.Component {
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
           return (
             <Fragment key={index}>
-              <Link to={item.url} className="normal" onClick={() => this.onTabNavClick(item.name, item.id)}>{gettext(item.showName)}</Link>
+              <Link to={item.url} className="normal" onClick={(e) => this.onTabNavClick(e, item.name, item.id)}>{gettext(item.showName)}</Link>
               <span className="path-split">/</span>
             </Fragment>
           );
         })}
         {this.props.pathPrefix && this.props.pathPrefix.length === 0 && (
           <Fragment>
-            <Link to={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick('my-libs')}>{gettext('Libraries')}</Link>
+            <Link to={siteRoot + 'my-libs/'} className="normal" onClick={(e) => this.onTabNavClick(e, 'my-libs')}>{gettext('Libraries')}</Link>
             <span className="path-split">/</span>
           </Fragment>
         )}
         {!this.props.pathPrefix && (
           <Fragment>
-            <Link href={siteRoot + 'my-libs/'} className="normal" onClick={() => this.onTabNavClick('my-libs')}>{gettext('Libraries')}</Link>
+            <Link href={siteRoot + 'my-libs/'} className="normal" onClick={(e) => this.onTabNavClick(e, 'my-libs')}>{gettext('Libraries')}</Link>
             <span className="path-split">/</span>
           </Fragment>
         )}
