@@ -48,7 +48,7 @@ def token_view(request, token):
                 user.set_password(passwd)
                 user.is_active = True
                 user.save()
-                user = authenticate(remote_user=i.accepter)
+                user = authenticate(username=user.username, password=passwd)
 
         except User.DoesNotExist:
             # Create user, set that user as guest.
