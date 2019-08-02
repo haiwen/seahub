@@ -983,6 +983,13 @@ export const Utils = {
     }
 
     return false;
+  },
+
+  registerGlobalVariable(namespace, key, value) {
+    if (!window[namespace]) {
+      window[namespace] = {};
+    }
+    window[namespace][key] = value;
   }
 
 };
