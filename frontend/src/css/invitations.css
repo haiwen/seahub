@@ -22,16 +22,8 @@
     vertical-align: middle;
 }
 
-.invitation-revoke-dialog .submit-btn,
-.invite-people-dialog .submit-btn
-{
-    height: 37px;
-}
-
-.invitation-revoke-dialog .submit-btn .loading-tip,
-.invite-people-dialog .submit-btn .loading-tip
-{
-    margin: 3px auto;
-    width: 18px;
-    height: 18px;
+.submit-btn .loading-icon {
+    margin: 1px auto;
+    width: 21px;
+    height: 21px;
 }

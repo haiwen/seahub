@@ -2,17 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Loading from '../loading';
-import {seafileAPI} from '../../utils/seafile-api';
-import toaster from '../toast';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-
-import '../../css/invitations.css';
+import Loading from '../loading';
+import toaster from '../toast';
 
 const propTypes = {
-  toggleInvitationRevokeDialog: PropTypes.func.isRequired,
-  onDeleteInvitation: PropTypes.func.isRequired,
-  revokeUserObj: PropTypes.object.isRequired,
+  accepter: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
+  revokeInvitation: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired
 };
 
 class InvitationRevokeDialog extends React.Component {
@@ -20,52 +19,42 @@ class InvitationRevokeDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
+      isSubmitting: false
     };
   }
 
-  toggle = () => {
-    this.props.toggleInvitationRevokeDialog(null);
-  };
-
   onRevokeInvitation = () => {
     this.setState({
-      loading: true,
+      isSubmitting: true,
     });
-    const revokeUserObj = this.props.revokeUserObj;
-    const token = revokeUserObj.token;
-    const index = revokeUserObj.index;
 
-    seafileAPI.revokeInvitation(token).then((res) => {
-      this.props.onDeleteInvitation(index);
-      this.props.toggleInvitationRevokeDialog(null);
-      toaster.success(gettext('Success'), {duration: 1});
+    seafileAPI.revokeInvitation(this.props.token).then((res) => {
+      this.props.revokeInvitation();
+      this.props.toggleDialog();
+      const msg = gettext('Successfully revoked access of user {placeholder}.').replace('{placeholder}', this.props.accepter);
+      toaster.success(msg);
     }).catch((error) => {
-      this.props.toggleInvitationRevokeDialog(null);
-      if (error.response){
-        toaster.danger(error.response.data.error_msg || gettext('Error'), {duration: 3});
-      } else {
-        toaster.danger(gettext('Please check the network.'), {duration: 3});
-      }
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      this.props.toggleDialog();
     });
   };
 
   render() {
-    let accepter = this.props.revokeUserObj.accepter;
-    const { loading } = this.state;
-    const email =  '<span class="op-target">' + Utils.HTMLescape(accepter) + '</span>';
-    let msg = gettext('Are you sure to revoke access of user %s ?');
-    msg = msg.replace('%s', email);
+    const { accepter, toggleDialog } = this.props;
+    const { isSubmitting } = this.state;
+    const email = '<span class="op-target">' + Utils.HTMLescape(this.props.accepter) + '</span>';
+    const content = gettext('Are you sure to revoke access of user {placeholder} ?').replace('{placeholder}', email);
 
     return (
-      <Modal isOpen={true} toggle={this.toggle} className="invitation-revoke-dialog">
-        <ModalHeader toggle={this.toggle}>{gettext('Revoke Access')}</ModalHeader>
+      <Modal isOpen={true} toggle={toggleDialog}>
+        <ModalHeader toggle={toggleDialog}>{gettext('Revoke Access')}</ModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{__html: msg}}></p>
+          <p dangerouslySetInnerHTML={{__html: content}}></p>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button className="submit-btn" color="primary" onClick={this.onRevokeInvitation} disabled={loading}>{loading ? <Loading/> :gettext('Submit')}</Button>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>
+          <Button className="submit-btn" color="primary" onClick={this.onRevokeInvitation} disabled={isSubmitting}>{isSubmitting ? <Loading /> : gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
