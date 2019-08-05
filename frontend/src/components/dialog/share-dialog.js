@@ -103,7 +103,6 @@ class ShareDialog extends React.Component {
                 {gettext('Internal Link')}
               </NavLink>
             </NavItem>
-
             {enableDirPrivateShare &&
               <Fragment>
                 <NavItem>
@@ -141,12 +140,12 @@ class ShareDialog extends React.Component {
               </TabPane>
             }
             <TabPane tabId="internalLink">
-                <InternalLink 
-                  path={this.props.itemPath} 
-                  repoID={this.props.repoID} 
-                  direntType={itemType}
-                />
-              </TabPane>
+              <InternalLink 
+                path={this.props.itemPath} 
+                repoID={this.props.repoID} 
+                direntType={itemType}
+              />
+            </TabPane>
             {enableDirPrivateShare &&
               <Fragment>
                 <TabPane tabId="shareToUser">
