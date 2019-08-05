@@ -45,14 +45,17 @@ class InvitationsListItem extends React.Component {
     const revokeUserObj = invitationItem.accept_time ? invitationItem  : null;
 
     const acceptIcon = <i className="sf2-icon-tick invite-accept-icon"></i>;
-    const deleteOperation = <i className="action-icon sf2-icon-x3"
-      title={gettext('Delete')}
-      style={!this.state.isOperationShow ? {opacity: 0} : {}}
-      onClick={this.props.onItemDelete.bind(this, invitationItem.token, this.props.index)}></i>;
-    const revokeOperation = <i className="action-icon sf3-font sf3-font-cancel-invitation"
-      title={gettext('Revoke Access')}
-      style={!this.state.isOperationShow ? {opacity: 0} : {fontSize: '1rem'}}
-      onClick={this.props.toggleInvitationRevokeDialog.bind(this, revokeUserObj)}></i>;
+    const operation = invitationItem.accept_time ?
+      <i
+        className="action-icon sf3-font sf3-font-cancel-invitation"
+        title={gettext('Revoke Access')}
+        onClick={this.props.toggleInvitationRevokeDialog.bind(this, revokeUserObj)}>
+      </i> :
+      <i
+        className="action-icon sf2-icon-x3"
+        title={gettext('Delete')}
+        onClick={this.props.onItemDelete.bind(this, invitationItem.token, this.props.index)}>
+      </i>;
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -60,7 +63,7 @@ class InvitationsListItem extends React.Component {
         <td>{moment(invitationItem.invite_time).format('YYYY-MM-DD')}</td>
         <td>{moment(invitationItem.expire_time).format('YYYY-MM-DD')}</td>
         <td>{invitationItem.accept_time && acceptIcon}</td>
-        <td>{invitationItem.accept_time ? revokeOperation : deleteOperation}</td>
+        <td>{this.state.isOperationShow && operation}</td>
       </tr>
     );
   }
