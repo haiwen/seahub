@@ -59,14 +59,13 @@ class InvitationsView(APIView):
                              _('%s is already invited.') % accepter)
 
         try:
-            User.objects.get(accepter)
-            user_exists = True
+            user = User.objects.get(accepter)
+            # user is active return exist
+            if user.is_active is True:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 _('User %s already exists.') % accepter)
         except User.DoesNotExist:
-            user_exists = False
-
-        if user_exists:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             _('User %s already exists.') % accepter)
+            pass
 
         i = Invitation.objects.add(inviter=request.user.username,
                                    accepter=accepter)
@@ -127,22 +126,26 @@ class InvitationsBatchView(APIView):
                 continue
 
             try:
-                User.objects.get(accepter)
-                result['failed'].append({
-                    'email': accepter,
-                    'error_msg': _('User %s already exists.') % accepter
-                    })
-                continue
-            except User.DoesNotExist:
-                i = Invitation.objects.add(inviter=request.user.username,
-                        accepter=accepter)
-                m = i.send_to(email=accepter)
-                if m.status == STATUS.sent:
-                    result['success'].append(i.to_dict())
-                else:
+                user = User.objects.get(accepter)
+                # user is active return exist
+                if user.is_active is True:
                     result['failed'].append({
                         'email': accepter,
-                        'error_msg': _('Internal Server Error'),
-                    })
+                        'error_msg': _('User %s already exists.') % accepter
+                        })
+                    continue
+            except User.DoesNotExist:
+                pass
+
+            i = Invitation.objects.add(inviter=request.user.username,
+                    accepter=accepter)
+            m = i.send_to(email=accepter)
+            if m.status == STATUS.sent:
+                result['success'].append(i.to_dict())
+            else:
+                result['failed'].append({
+                    'email': accepter,
+                    'error_msg': _('Internal Server Error'),
+                })
 
         return Response(result)

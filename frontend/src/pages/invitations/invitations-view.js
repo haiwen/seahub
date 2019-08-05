@@ -1,103 +1,149 @@
-import React, {Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {gettext, siteRoot} from '../../utils/constants';
+import moment from 'moment';
+import { gettext, siteRoot, loginUrl, canInvitePeople } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
 import InvitationsToolbar from '../../components/toolbar/invitations-toolbar';
 import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
-import {seafileAPI} from '../../utils/seafile-api';
-import {Table} from 'reactstrap';
+import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-dialog';
 import Loading from '../../components/loading';
-import moment from 'moment';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 
 import '../../css/invitations.css';
 
-class InvitationsListItem extends React.Component {
+if (!canInvitePeople) {
+  location.href = siteRoot;
+}
+
+class Item extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false,
+      isOpIconShown: false, 
+      isRevokeDialogOpen: false
     };
   }
 
-  onMouseEnter = (event) => {
-    event.preventDefault();
+  onMouseEnter = () => {
     this.setState({
-      isOperationShow: true,
-    });
-  }
-
-  onMouseOver = () => {
-    this.setState({
-      isOperationShow: true,
+      isOpIconShown: true
     });
   }
 
   onMouseLeave = () => {
     this.setState({
-      isOperationShow: false,
+      isOpIconShown: false  
+    });
+  }
+
+  deleteItem = () => {
+    // make the icon avoid being clicked repeatedly
+    this.setState({
+      isOpIconShown: false  
+    });
+    const token = this.props.invitation.token;
+    seafileAPI.deleteInvitation(token).then((res) => {
+      this.setState({deleted: true});
+      toaster.success(gettext('Successfully deleted 1 item.'));
+    }).catch((error) => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      this.setState({
+        isOpIconShown: true 
+      });
+    });
+  }
+
+  revokeItem = () => {
+    this.setState({deleted: true});
+  }
+
+  toggleRevokeDialog = () => {
+    this.setState({
+      isRevokeDialogOpen: !this.state.isRevokeDialogOpen
     });
   }
 
   render() {
+    const { isOpIconShown, deleted, isRevokeDialogOpen } = this.state;
+
+    if (deleted) {
+      return null;
+    }
+
     const invitationItem = this.props.invitation;
-    const acceptIcon = <i className="sf2-icon-tick invite-accept-icon"></i>;
-    const deleteOperation = <i className="action-icon sf2-icon-x3"
-      title={gettext('Delete')}
-      style={!this.state.isOperationShow ? {opacity: 0} : {}}
-      onClick={this.props.onItemDelete.bind(this, invitationItem.token, this.props.index)}></i>;
+    const operation = invitationItem.accept_time ?
+      <i
+        className="action-icon sf3-font sf3-font-cancel-invitation"
+        title={gettext('Revoke Access')}
+        onClick={this.toggleRevokeDialog}>
+      </i> :
+      <i
+        className="action-icon sf2-icon-x3"
+        title={gettext('Delete')}
+        onClick={this.deleteItem}>
+      </i>;
+
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-        <td>{invitationItem.accepter}</td>
-        <td>{moment(invitationItem.invite_time).format('YYYY-MM-DD')}</td>
-        <td>{moment(invitationItem.expire_time).format('YYYY-MM-DD')}</td>
-        <td>{invitationItem.accept_time && acceptIcon}</td>
-        <td>{!invitationItem.accept_time && deleteOperation}</td>
-      </tr>
+      <Fragment>
+        <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td>{invitationItem.accepter}</td>
+          <td>{moment(invitationItem.invite_time).format('YYYY-MM-DD')}</td>
+          <td>{moment(invitationItem.expire_time).format('YYYY-MM-DD')}</td>
+          <td>{invitationItem.accept_time && <i className="sf2-icon-tick invite-accept-icon"></i>}</td>
+          <td>{isOpIconShown && operation}</td>
+        </tr>
+        {isRevokeDialogOpen &&
+        <InvitationRevokeDialog
+          accepter={invitationItem.accepter}
+          token={invitationItem.token}
+          revokeInvitation={this.revokeItem}
+          toggleDialog={this.toggleRevokeDialog}
+        />
+        }
+      </Fragment>
     );
   }
 }
 
-const InvitationsListItemPropTypes = {
+const ItemPropTypes = {
   invitation: PropTypes.object.isRequired,
-  onItemDelete: PropTypes.func.isRequired,
 };
 
-InvitationsListItem.propTypes = InvitationsListItemPropTypes;
+Item.propTypes = ItemPropTypes;
 
-class InvitationsListView extends React.Component {
+class Content extends Component {
 
   constructor(props) {
     super(props);
   }
 
-  onItemDelete = (token, index) => {
-    seafileAPI.deleteInvitation(token).then((res) => {
-      this.props.onDeleteInvitation(index);
-      toaster.success(gettext('Successfully deleted 1 item.'), {duration: 1});
-    }).catch((error) => {
-      if (error.response){
-        toaster.danger(error.response.data.detail || gettext('Error'), {duration: 3});
-      } else {
-        toaster.danger(gettext('Please check the network.'), {duration: 3});
-      }
-    });
-  }
-
   render() {
-    const invitationsListItems = this.props.invitationsList.map((invitation, index) => {
-      return (
-        <InvitationsListItem
-          key={index}
-          onItemDelete={this.onItemDelete}
-          invitation={invitation}
-          index={index}
-        />);
-    });
+    const {
+      loading, errorMsg, invitationsList 
+    } = this.props.data;
+
+    if (loading) {
+      return <Loading />;
+    }
+
+    if (errorMsg) {
+      return <p className="error text-center mt-2">{errorMsg}</p>;
+    }
+
+    if (!invitationsList.length) {
+      return ( 
+        <EmptyTip>
+          <h2>{gettext('You have not invited any people.')}</h2>
+        </EmptyTip>
+      );
+    }
 
     return (
-      <Table hover>
+      <table className="table-hover">
         <thead>
           <tr>
             <th width="25%">{gettext('Email')}</th>
@@ -108,98 +154,72 @@ class InvitationsListView extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {invitationsListItems}
+          {invitationsList.map((invitation, index) => {
+            return (
+              <Item
+              key={index}
+              invitation={invitation}
+              />
+            );
+          })}
         </tbody>
-      </Table>
+      </table>
     );
   }
 }
-
-const InvitationsListViewPropTypes = {
-  invitationsList: PropTypes.array.isRequired,
-  onDeleteInvitation: PropTypes.func.isRequired,
-};
-
-InvitationsListView.propTypes = InvitationsListViewPropTypes;
 
 class InvitationsView extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isInvitePeopleDialogOpen: false,
+      loading: true,
+      errorMsg: '',
       invitationsList: [],
-      isLoading: true,
-      permissionDeniedMsg: '',
-      showEmptyTip: false,
+      isInvitePeopleDialogOpen: false
     };
   }
 
-  listInvitations = () => {
+  componentDidMount() {
     seafileAPI.listInvitations().then((res) => {
       this.setState({
         invitationsList: res.data,
-        showEmptyTip: true,
-        isLoading: false,
+        loading: false
       });
     }).catch((error) => {
-      this.setState({
-        isLoading: false,
-      });
-      if (error.response){
-        if (error.response.status === 403){
-          let permissionDeniedMsg = gettext('Permission error');
+      if (error.response) {
+        if (error.response.status == 403) {
           this.setState({
-            permissionDeniedMsg: permissionDeniedMsg,
-          });
-        } else{
-          toaster.danger(error.response.data.detail || gettext('Error'), {duration: 3});
+            loading: false,
+            errorMsg: gettext('Permission denied')
+          }); 
+          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
+        } else {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Error')
+          }); 
         }
       } else {
-        toaster.danger(gettext('Please check the network.'), {duration: 3});
+        this.setState({
+          loading: false,
+          errorMsg: gettext('Please check the network.')
+        });
       }
-    });
+    }); 
   }
 
   onInvitePeople = (invitationsArray) => {
-    invitationsArray.push.apply(invitationsArray,this.state.invitationsList);
+    invitationsArray.push.apply(invitationsArray, this.state.invitationsList);
     this.setState({
       invitationsList: invitationsArray,
     });
-  }
-
-  onDeleteInvitation = (index) => {
-    this.state.invitationsList.splice(index, 1);
-    this.setState({
-      invitationsList: this.state.invitationsList,
-    });
-  }
-
-  componentDidMount() {
-    this.listInvitations();
   }
 
   toggleInvitePeopleDialog = () => {
     this.setState({
       isInvitePeopleDialogOpen: !this.state.isInvitePeopleDialogOpen
     });
-  }
-
-  emptyTip = () => {
-    return (
-      <EmptyTip>
-        <h2>{gettext('You have not invited any people.')}</h2>
-      </EmptyTip>
-    );
-  }
-
-  handlePermissionDenied = () => {
-    window.location = siteRoot;
-    return(
-      <div className="error mt-6 text-center">
-        <span>{this.state.permissionDeniedMsg}</span>
-      </div>
-    );
   }
 
   render() {
@@ -216,22 +236,14 @@ class InvitationsView extends React.Component {
               <h3 className="sf-heading">{gettext('Invite People')}</h3>
             </div>
             <div className="cur-view-content">
-              {this.state.isLoading && <Loading/>}
-              {(!this.state.isLoading && this.state.permissionDeniedMsg !== '') && this.handlePermissionDenied() }
-              {(!this.state.isLoading && this.state.showEmptyTip && this.state.invitationsList.length === 0) && this.emptyTip()}
-              {(!this.state.isLoading && this.state.invitationsList.length !== 0) &&
-              < InvitationsListView
-                invitationsList={this.state.invitationsList}
-                onDeleteInvitation={this.onDeleteInvitation}
-              />}
+              <Content data={this.state} />
             </div>
           </div>
         </div>
         {this.state.isInvitePeopleDialogOpen &&
         <InvitePeopleDialog
-          toggleInvitePeopleDialog={this.toggleInvitePeopleDialog}
-          isInvitePeopleDialogOpen={this.state.isInvitePeopleDialogOpen}
           onInvitePeople={this.onInvitePeople}
+          toggleDialog={this.toggleInvitePeopleDialog}
         />
         }
       </Fragment>

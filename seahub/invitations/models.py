@@ -31,6 +31,13 @@ class InvitationManager(models.Manager):
     def delete_all_expire_invitation(self):
         super(InvitationManager, self).filter(expire_time__lte=timezone.now()).delete()
 
+    def get_by_token(self, token):
+        qs = self.filter(token=token)
+        if qs.count() > 0:
+            return qs[0]
+        return None
+
+
 class Invitation(models.Model):
     INVITE_TYPE_CHOICES = (
         (GUEST, _('Guest')),
