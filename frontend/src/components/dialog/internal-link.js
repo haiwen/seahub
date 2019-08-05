@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  direntType: PropTypes.string
 };
 
 class InternalLink extends React.Component {
@@ -21,9 +22,8 @@ class InternalLink extends React.Component {
   }
 
   componentDidMount() {
-    let repoID = this.props.repoID;
-    let path = this.props.path;
-    seafileAPI.getInternalLink(repoID, path).then(res => {
+    let { repoID, path, direntType } = this.props;
+    seafileAPI.getInternalLink(repoID, path, direntType).then(res => {
       this.setState({
         smartLink: res.data.smart_link
       });

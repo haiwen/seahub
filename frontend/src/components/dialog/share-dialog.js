@@ -76,7 +76,7 @@ class ShareDialog extends React.Component {
     }
 
     let activeTab = this.state.activeTab;
-    const {repoEncrypted, userPerm, enableDirPrivateShare} = this.props;
+    const {repoEncrypted, userPerm, enableDirPrivateShare, itemType} = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
     const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
 
@@ -98,6 +98,12 @@ class ShareDialog extends React.Component {
                 </NavLink>
               </NavItem>
             }
+            <NavItem>
+              <NavLink className={activeTab === 'internalLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'internalLink')}>
+                {gettext('Internal Link')}
+              </NavLink>
+            </NavItem>
+
             {enableDirPrivateShare &&
               <Fragment>
                 <NavItem>
@@ -134,6 +140,13 @@ class ShareDialog extends React.Component {
                 />
               </TabPane>
             }
+            <TabPane tabId="internalLink">
+                <InternalLink 
+                  path={this.props.itemPath} 
+                  repoID={this.props.repoID} 
+                  direntType={itemType}
+                />
+              </TabPane>
             {enableDirPrivateShare &&
               <Fragment>
                 <TabPane tabId="shareToUser">
