@@ -41,10 +41,14 @@ class Org extends React.Component {
   componentDidMount() {
     let href = window.location.href.split('/');
     let currentTab = href[href.length - 2];
-    if (currentTab == 'useradmin') {
+
+    if (location.href.indexOf(`${siteRoot}org/useradmin`) != -1) {
       currentTab = 'users';
     }
-    if (currentTab > 0) {
+    if (location.href.indexOf(`${siteRoot}org/groupadmin`) != -1) {
+      currentTab = 'groupadmin';
+    }
+    if (location.href.indexOf(`${siteRoot}org/departmentadmin`) != -1) {
       currentTab = 'departmentadmin';
     }
     this.setState({currentTab: currentTab});
@@ -81,9 +85,9 @@ class Org extends React.Component {
               <OrgDepartmentItem path='groups/:groupID'/>
             </OrgDepartments>
             <OrgLogs path={siteRoot + 'org/logadmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}>
-              <OrgLogsFileAudit path='/'/>
-              <OrgLogsFileUpdate path={siteRoot + 'file-update'}/>
-              <OrgLogsPermAudit path={siteRoot + 'perm-audit'}/>
+              <OrgLogsFileAudit path='/' />
+              <OrgLogsFileUpdate path='file-update' />
+              <OrgLogsPermAudit path='perm-audit' />
             </OrgLogs>
           </Router>
         </div>
