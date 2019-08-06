@@ -50,7 +50,9 @@ class DirentDetail extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let { dirent, path, repoID } = nextProps;
-    this.loadDirentInfo(dirent, path, repoID);
+    if (this.props.dirent !== nextProps.dirent) {
+      this.loadDirentInfo(dirent, path, repoID);
+    }
     if (this.props.direntDetailPanelTab) {
       this.tabItemClick(this.props.direntDetailPanelTab);
     }
