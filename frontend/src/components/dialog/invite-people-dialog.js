@@ -1,9 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {gettext} from '../../utils/constants';
-import {seafileAPI} from '../../utils/seafile-api';
-import {Modal, ModalHeader, ModalBody, ModalFooter, Input, Button} from 'reactstrap';
+import { Utils } from '../../utils/utils';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
 import toaster from '../toast';
+import Loading from '../loading';
+
+const InvitePeopleDialogPropTypes = {
+  onInvitePeople: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
+};
 
 class InvitePeopleDialog extends React.Component {
 
@@ -12,11 +19,12 @@ class InvitePeopleDialog extends React.Component {
     this.state = {
       emails: '',
       errorMsg: '',
+      isSubmitting: false
     };
   }
 
-  handleEmailsChange = (event) => {
-    let emails = event.target.value;
+  handleInputChange = (e) => {
+    let emails = e.target.value;
     this.setState({
       emails: emails
     });
@@ -36,90 +44,87 @@ class InvitePeopleDialog extends React.Component {
 
   handleSubmitInvite = () => {
     let emails = this.state.emails.trim();
+    if (!emails) {
+      this.setState({
+        errorMsg: gettext('It is required.')
+      });
+      return false;
+    }
+
     let emailsArray = [];
-    emails = emails.split(',');
-    for (let i = 0; i < emails.length; i++) {
+    emails = emails.split(',');  
+    for (let i = 0, len = emails.length; i < len; i++) {
       let email = emails[i].trim();
       if (email) {
         emailsArray.push(email);
       }
     }
-    if (emailsArray.length) {
-      seafileAPI.invitePeople(emailsArray).then((res) => {
-        this.setState({
-          emails: '',
-        });
-        this.props.toggleInvitePeopleDialog();
-        // success messages
-        let successMsg = '';
-        if (res.data.success.length === 1) {
-          successMsg = gettext('Successfully invited %(email).')
-            .replace('%(email)', res.data.success[0].accepter);
-        } else if(res.data.success.length > 1) {
-          successMsg = gettext('Successfully invited %(email) and %(num) other people.')
-            .replace('%(email)', res.data.success[0].accepter)
-            .replace('%(num)', res.data.success.length - 1);
-        }
-        if (successMsg) {
-          toaster.success(successMsg, {duration: 2});
-          this.props.onInvitePeople(res.data.success);
-        }
-        // failed messages
-        if (res.data.failed.length) {
-          for (let i = 0; i< res.data.failed.length; i++){
-            let failedMsg = res.data.failed[i].email + ': ' + res.data.failed[i].error_msg;
-            toaster.danger(failedMsg, {duration: 3});}
-        }
-      }).catch((error) => {
-        this.props.toggleInvitePeopleDialog();
-        if (error.response){
-          toaster.danger(error.response.data.detail || gettext('Error'), {duration: 3});
-        } else {
-          toaster.danger(gettext('Please check the network.'), {duration: 3});
-        }
+
+    if (!emailsArray.length) {
+      this.setState({
+        errorMsg: gettext('Email is invalid.')
       });
-    } else {
-      if (this.state.emails){
-        this.setState({
-          errorMsg: gettext('Email is invalid.')
-        });
-      } else {
-        this.setState({
-          errorMsg: gettext('It is required.')
-        });
-      }
+      return false;
     }
+
+    this.setState({
+      isSubmitting: true
+    });
+    seafileAPI.invitePeople(emailsArray).then((res) => {
+      this.props.toggleDialog();
+      const success = res.data.success;
+      if (success.length) {
+        let successMsg = '';
+        if (success.length == 1) {
+          successMsg = gettext('Successfully invited %(email).')
+            .replace('%(email)', success[0].accepter);
+        } else {
+          successMsg = gettext('Successfully invited %(email) and %(num) other people.')
+            .replace('%(email)', success[0].accepter)
+            .replace('%(num)', success.length - 1);
+        }
+        toaster.success(successMsg);
+        this.props.onInvitePeople(success);
+      }
+      const failed = res.data.failed;
+      if (failed.length) {
+        for (let i = 0, len = failed.length; i < len; i++) {
+          let failedMsg = failed[i].email + ': ' + failed[i].error_msg;
+          toaster.danger(failedMsg);
+        }
+      }
+    }).catch((error) => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      this.props.toggleDialog();
+    });
   }
 
   render() {
+    const { isSubmitting } = this.state;
     return (
-      <Modal isOpen={this.props.isInvitePeopleDialogOpen} toggle={this.props.toggleInvitePeopleDialog}>
-        <ModalHeader toggle={this.props.toggleInvitePeopleDialog}>{gettext('Invite People')}</ModalHeader>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
+        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Invite People')}</ModalHeader>
         <ModalBody>
           <label htmlFor="emails">{gettext('Emails')}</label>
           <Input
-            type="text" id="emails"
+            type="text"
+            id="emails"
             placeholder={gettext('Emails, separated by \',\'')}
             value={this.state.emails}
-            onChange={this.handleEmailsChange}
+            onChange={this.handleInputChange}
             onKeyDown={this.handleKeyDown}
           />
-          <span className="error">{this.state.errorMsg}</span>
+          <p className="error mt-2">{this.state.errorMsg}</p>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleInvitePeopleDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmitInvite}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
+          <Button className="submit-btn" color="primary" onClick={this.handleSubmitInvite} disabled={isSubmitting}>{isSubmitting ? <Loading /> : gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
   }
 }
-
-const InvitePeopleDialogPropTypes = {
-  toggleInvitePeopleDialog: PropTypes.func.isRequired,
-  isInvitePeopleDialogOpen: PropTypes.bool.isRequired,
-  onInvitePeople: PropTypes.func.isRequired,
-};
 
 InvitePeopleDialog.propTypes = InvitePeopleDialogPropTypes;
 

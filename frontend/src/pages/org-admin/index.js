@@ -5,7 +5,13 @@ import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
 import OrgUsers from './org-users';
+import OrgUserProfile from './org-user-profile';
+import OrgUserRepos from './org-user-repos';
+import OrgUserSharedRepos from './org-user-shared-repos';
 import OrgGroups from './org-groups';
+import OrgGroupInfo from './org-group-info';
+import OrgGroupRepos from './org-group-repos';
+import OrgGroupMembers from './org-group-members';
 import OrgLibraries from './org-libraries';
 import OrgInfo from './org-info';
 import OrgLinks from './org-links';
@@ -35,10 +41,14 @@ class Org extends React.Component {
   componentDidMount() {
     let href = window.location.href.split('/');
     let currentTab = href[href.length - 2];
-    if (currentTab == 'useradmin') {
+
+    if (location.href.indexOf(`${siteRoot}org/useradmin`) != -1) {
       currentTab = 'users';
     }
-    if (currentTab > 0) {
+    if (location.href.indexOf(`${siteRoot}org/groupadmin`) != -1) {
+      currentTab = 'groupadmin';
+    }
+    if (location.href.indexOf(`${siteRoot}org/departmentadmin`) != -1) {
       currentTab = 'departmentadmin';
     }
     this.setState({currentTab: currentTab});
@@ -61,7 +71,13 @@ class Org extends React.Component {
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>
             <OrgUsers path={siteRoot + 'org/useradmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
-            <OrgGroups path={siteRoot + 'org/groupadmin'}/>
+            <OrgUserProfile path={siteRoot + 'org/useradmin/info/:email/'} />
+            <OrgUserRepos path={siteRoot + 'org/useradmin/info/:email/repos/'} />
+            <OrgUserSharedRepos path={siteRoot + 'org/useradmin/info/:email/shared-repos/'} />
+            <OrgGroups path={siteRoot + 'org/groupadmin'} />
+            <OrgGroupInfo path={siteRoot + 'org/groupadmin/:groupID/'} />
+            <OrgGroupRepos path={siteRoot + 'org/groupadmin/:groupID/repos/'} />
+            <OrgGroupMembers path={siteRoot + 'org/groupadmin/:groupID/members/'} />
             <OrgLibraries path={siteRoot + 'org/repoadmin'}/>
             <OrgLinks path={siteRoot + 'org/publinkadmin'}/>
             <OrgDepartments path={siteRoot + 'org/departmentadmin'}>
@@ -69,9 +85,9 @@ class Org extends React.Component {
               <OrgDepartmentItem path='groups/:groupID'/>
             </OrgDepartments>
             <OrgLogs path={siteRoot + 'org/logadmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}>
-              <OrgLogsFileAudit path='/'/>
-              <OrgLogsFileUpdate path={siteRoot + 'file-update'}/>
-              <OrgLogsPermAudit path={siteRoot + 'perm-audit'}/>
+              <OrgLogsFileAudit path='/' />
+              <OrgLogsFileUpdate path='file-update' />
+              <OrgLogsPermAudit path='perm-audit' />
             </OrgLogs>
           </Router>
         </div>

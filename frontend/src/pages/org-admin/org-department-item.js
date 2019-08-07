@@ -59,7 +59,7 @@ class OrgDepartmentItem extends React.Component {
   }
 
   listOrgGroupRepo = (groupID) => {
-    seafileAPI.orgAdminListDepartGroupRepos(orgID, groupID).then(res => {
+    seafileAPI.orgAdminListGroupRepos(orgID, groupID).then(res => {
       this.setState({ repos: res.data.libraries });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -392,7 +392,7 @@ class MemberItem extends React.Component {
 
   onChangeUserRole = (role) => {
     let isAdmin = role === 'Admin' ? true : false;
-    seafileAPI.orgAdminSetDepartGroupUserRole(orgID, this.props.groupID, this.props.member.email, isAdmin).then((res) => {
+    seafileAPI.orgAdminSetGroupMemberRole(orgID, this.props.groupID, this.props.member.email, isAdmin).then((res) => {
       this.props.onMemberChanged();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
