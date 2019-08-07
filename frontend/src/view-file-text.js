@@ -89,8 +89,8 @@ class ViewFileText extends React.Component {
   }
 
   addParticipant = () => {
-    seafileAPI.addFileParticipant(repoID, filePath, username).then((res) => {
-      if (res.status === 201) {
+    seafileAPI.addFileParticipants(repoID, filePath, [username]).then((res) => {
+      if (res.status === 200) {
         this.isParticipant = true;
         this.getParticipants();
       }
@@ -100,11 +100,12 @@ class ViewFileText extends React.Component {
   getParticipants = () => {
     seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
       const participants = res.data.participant_list;
-      if (participants.length === 0) return;
       this.setState({ participants: participants });
-      this.isParticipant = participants.every((participant) => {
-        return participant.email == username;
-      });
+      if (participants.length > 0) {
+        this.isParticipant = participants.every((participant) => {
+          return participant.email == username;
+        });
+      }
     });
   }
 
