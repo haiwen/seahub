@@ -999,7 +999,7 @@ class Repos(APIView):
                     storage_id = request.data.get("storage_id", None)
                     if storage_id and storage_id not in [s['storage_id'] for s in storages]:
                         error_msg = 'storage_id invalid.'
-                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                        return None, api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd,
@@ -1043,7 +1043,7 @@ class Repos(APIView):
             salt = request.data.get('salt', '')
             if not salt:
                 error_msg = 'salt invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                return None, api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if len(magic) != 64 or len(random_key) != 96 or enc_version < 0:
             return None, api_error(status.HTTP_400_BAD_REQUEST,
