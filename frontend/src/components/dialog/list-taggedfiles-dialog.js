@@ -38,7 +38,7 @@ class ListTaggedFilesDialog extends React.Component {
     seafileAPI.deleteFileTag(repoID, fileTagID).then(res => {
       this.getTaggedFiles();
       this.props.updateUsedRepoTags();
-      if (this.props.onFileTagChanged) this.onFileTagChanged(taggedFile);
+      if ((this.props.onFileTagChanged) && !taggedFile.file_deleted) this.onFileTagChanged(taggedFile);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
