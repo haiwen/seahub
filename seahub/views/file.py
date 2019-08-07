@@ -422,6 +422,8 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
     dirent_path = posixpath.join(parent_path, dirent_name_from_uuid_map.strip('/'))
     if not is_dir:
         redirect_to = reverse('view_lib_file', args=[repo_id, dirent_path])
+        if request.GET.get('dl', '') == '1':
+            redirect_to = redirect_to + '?dl=1'
     else:
         redirect_to = '%s#common/lib/%s/%s' % (settings.SITE_ROOT, repo_id, dirent_path.strip('/'))
 
