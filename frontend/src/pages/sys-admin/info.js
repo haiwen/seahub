@@ -23,8 +23,7 @@ class Info extends Component {
     seafileAPI.getSysInfo().then((res) => {
       this.setState({
         loading: false,
-        sysInfo: res.data,
-        with_license: res.data.with_license
+        sysInfo: res.data
       });
     }).catch((error) => {
       if (error.response) {
@@ -57,8 +56,7 @@ class Info extends Component {
     const file = this.fileInput.current.files[0];
     seafileAPI.uploadLicense(file).then((res) => {
       let info = this.state.sysInfo;
-      Object.assign(info, res.data);
-      info.with_license = true;
+      Object.assign(info, res.data, {with_license: true});
       this.setState({
         sysInfo: info
       });
@@ -110,7 +108,7 @@ class Info extends Component {
             </div>
             <div className="cur-view-content">
               {loading && <Loading />}
-              {errorMsg && <p className="error text-center">{errorMsg}</p>}
+              {errorMsg && <p className="error text-center mt-4">{errorMsg}</p>}
               {(!loading && !errorMsg) &&
               <dl>
                 <dt>{gettext('System Info')}</dt>
