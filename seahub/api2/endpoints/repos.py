@@ -17,16 +17,18 @@ from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_own
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.signals import repo_deleted
+from seahub.signals import repo_deleted, repo_created
 from seahub.views import check_folder_permission, list_inner_pub_repos
 from seahub.share.models import ExtraSharePermission
 from seahub.group.utils import group_id_to_name
-from seahub.utils import is_org_context, is_pro_version
+from seahub.utils import is_org_context, is_pro_version, is_valid_dirent_name
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
-        repo_has_been_shared_out, get_related_users_by_repo, normalize_repo_status_code
+        repo_has_been_shared_out, get_related_users_by_repo, \
+        normalize_repo_status_code, get_library_storages, add_encrypted_repo_secret_key_to_database
 
-from seahub.settings import ENABLE_STORAGE_CLASSES
+from seahub.settings import ENABLE_STORAGE_CLASSES, ENABLE_ENCRYPTED_LIBRARY, \
+    ENCRYPTED_LIBRARY_VERSION, STORAGE_CLASS_MAPPING_POLICY, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
 
 from seaserv import seafile_api, send_message
 
@@ -281,6 +283,101 @@ class ReposView(APIView):
             logger.error('Error when sending user-login message: %s' % str(e))
 
         return Response({'repos': repo_info_list})
+
+    def post(self, request):
+        """ create a new repo.
+
+        Permission checking:
+        1. all authenticated user can perform this action.
+        """
+
+        # permission check
+        if not request.user.permissions.can_add_repo():
+            error_msg = 'You do not have permission to create library.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # params check
+        username = request.user.username
+        repo_name = request.data.get("repo_name", None)
+        if not repo_name:
+            error_msg = 'Library name is required.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not is_valid_dirent_name(repo_name):
+            error_msg = 'Name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_desc = request.data.get("desc", '')
+
+        org_id = -1
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        passwd = request.data.get("passwd", None)
+        # to avoid 'Bad magic' error when create repo, passwd should be 'None'
+        # not an empty string when create unencrypted repo
+        if not passwd:
+            passwd = None
+        if (not ENABLE_ENCRYPTED_LIBRARY) and (passwd is not None):
+            error_msg = 'NOT allow to create encrypted library.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # create repo for org user
+        if org_id > 0:
+            try:
+                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                      username, org_id, passwd,
+                                                      enc_version=ENCRYPTED_LIBRARY_VERSION)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal server error.'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        else:
+            storage_id = None
+            if (is_pro_version() and
+                    ENABLE_STORAGE_CLASSES and
+                    STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT', 'ROLE_BASED')):
+                storages = get_library_storages(request)
+                storage_id = request.data.get("storage_id", None)
+                if storage_id and storage_id not in [s['storage_id'] for s in storages]:
+                    error_msg = 'storage_id invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            try:
+                if storage_id is not None:
+                    repo_id = seafile_api.create_repo(repo_name,
+                                                      repo_desc, username, passwd,
+                                                      enc_version=ENCRYPTED_LIBRARY_VERSION,
+                                                      storage_id=storage_id)
+                else:
+                    repo_id = seafile_api.create_repo(repo_name,
+                                                      repo_desc, username, passwd,
+                                                      enc_version=ENCRYPTED_LIBRARY_VERSION)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal server error.'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if passwd and ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+            add_encrypted_repo_secret_key_to_database(repo_id, passwd)
+
+        library_template = request.data.get("library_template", '')
+        repo_created.send(sender=None,
+                          org_id=org_id,
+                          creator=username,
+                          repo_id=repo_id,
+                          repo_name=repo_name,
+                          library_template=library_template)
+
+        repo = seafile_api.get_repo(repo_id)
+        result = {}
+        result['repo_id'] = repo_id
+        result['repo_name'] = repo.name
+        result['repo_size'] = repo.size
+        result['mtime'] = repo.last_modified
+        result['email'] = username
+        result['encrypted'] = repo.encrypted
+
+        return Response(result)
 
 
 class RepoView(APIView):

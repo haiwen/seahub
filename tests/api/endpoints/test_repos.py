@@ -1,9 +1,128 @@
 import json
+import random
+import copy
+import string
+from mock import patch
 from django.core.urlresolvers import reverse
 from seaserv import seafile_api
+from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
 from seahub.test_utils import BaseTestCase
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
+
+TEST_CAN_ADD_REPO_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
+TEST_CAN_ADD_REPO_FALSE['default']['can_add_repo'] = False
+
+def getRandomValidRepoName():
+    random_name_len = random.randrange(1, 257)
+    return ''.join([random.choice(string.ascii_letters + string.digits) for n in range(random_name_len)])
+
+def getRandomInvalidRepoName():
+    random_name_len = random.randrange(1, 256)
+    random_position = random.randrange(0, random_name_len)
+    name = [random.choice(string.ascii_letters + string.digits) for n in range(random_name_len)]
+    name[random_position] = '/'
+    return ''.join(name)
+
+def getRandomRepoPassword():
+    random_name_len = random.randrange(1, 257)
+    return ''.join([random.choice(string.ascii_letters + string.digits) for n in range(random_name_len)])
+
+def getRandomStorageID():
+    return random.randint(1, 10)
+
+class ReposViewTest(BaseTestCase):
+
+    def setUp(self):
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
+        self.url = reverse('api-v2.1-repos-view')
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def test_can_create_repo(self):
+        self.login_as(self.user)
+        repo_name = getRandomValidRepoName()
+        data = {
+            'repo_name': repo_name,
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 6
+        assert json_resp['repo_name'] == repo_name
+
+    def test_can_create_repo_in_org_context(self):
+        self.login_as(self.org_user)
+        repo_name = getRandomValidRepoName()
+        data = {
+            'repo_name': repo_name,
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 6
+        assert json_resp['repo_name'] == repo_name
+
+    def test_create_repo_with_no_permission(self):
+        self.login_as(self.user)
+        repo_name = getRandomValidRepoName()
+        data = {
+            'repo_name': repo_name,
+        }
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_ADD_REPO_FALSE):
+            resp = self.client.post(self.url, data)
+            self.assertEqual(403, resp.status_code)
+
+    def test_create_repo_with_invalid_name(self):
+        self.login_as(self.user)
+        repo_name_invalid = getRandomInvalidRepoName()
+        data = {
+            'repo_name': repo_name_invalid,
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            'repo_name': '',
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(400, resp.status_code)
+
+    def test_create_repo_with_passwd(self):
+        self.login_as(self.user)
+        repo_name = getRandomValidRepoName()
+        data = {
+            'repo_name': repo_name,
+            'passwd': getRandomRepoPassword()
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
+
+    @patch('seahub.api2.endpoints.repos.ENABLE_ENCRYPTED_LIBRARY', False)
+    def test_create_repo_not_enable_encrypt(self):
+        self.login_as(self.user)
+        repo_name = getRandomValidRepoName()
+        data = {
+            'repo_name': repo_name,
+            'passwd': getRandomRepoPassword()
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(403, resp.status_code)
+
+    @patch('seahub.api2.endpoints.repos.ENABLE_STORAGE_CLASSES', True)
+    def test_enable_multiple_storage_with_no_storage_id(self):
+        self.login_as(self.user)
+        repo_name = getRandomValidRepoName()
+        data = {
+            'repo_name': repo_name,
+            'storage_id': getRandomStorageID()
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(400, resp.status_code)
+
+
 
 class RepoViewTest(BaseTestCase):
 
