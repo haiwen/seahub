@@ -400,6 +400,9 @@ class DirentListItem extends React.Component {
   }
   
   onItemDragOver = (e) => {
+    if (e.dataTransfer.dropEffect === 'copy') {
+      return;
+    }
     if (Utils.isIEBrower()) {
       return false;
     }
