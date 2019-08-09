@@ -55,6 +55,9 @@ def get_onlyoffice_dict(username, repo_id, file_path,
 
     cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
     doc_key = cache.get(cache_key)
+
+    # temporary solution when failed to get data from cache(django_pylibmc)
+    # when init process for the first time
     if not doc_key:
         doc_key = cache.get(cache_key)
 

@@ -74,7 +74,9 @@ def onlyoffice_editor_callback(request):
     post_data = json.loads(request.body)
     status = int(post_data.get('status', -1))
 
-    # When forcesave is initiated, document editing service performs request to the callback handler with the link to the document as the url parameter and with the 6 value for the status parameter.
+    # When forcesave is initiated, document editing service performs request to
+    # the callback handler with the link to the document as the url parameter and
+    # with the 6 value for the status parameter.
     if status in (2, 6):
 
         # Defines the link to the edited document to be saved with the document storage service.
