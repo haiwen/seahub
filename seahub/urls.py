@@ -91,7 +91,7 @@ from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.dtable import WorkspacesView, DTableView, DTablesView, \
-     DTableUpdateLinkView, DTableAssetUploadLinkView
+     DTableUpdateLinkView, DTableAssetUploadLinkView, DTableAccessTokenView
 from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
 from seahub.api2.endpoints.dtable_related_users import DTableRelatedUsersView
 
@@ -374,7 +374,7 @@ urlpatterns = [
     # public repos search
     url(r'^api/v2.1/published-repo-search/$', PublishedRepoSearchView.as_view(), name='api-v2.1-published-repo-search'),
 
-    # user: workspaces
+    # user: dtable
     url(r'^api/v2.1/workspaces/$', WorkspacesView.as_view(), name='api-v2.1-workspaces'),
     url(r'^api/v2.1/dtables/$', DTablesView.as_view(), name='api-v2.1-dtables'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/$', DTableView.as_view(), name='api-v2.1-workspace-dtable'),
@@ -383,6 +383,7 @@ urlpatterns = [
     url(r'^api/v2.1/dtables/shared/$', SharedDTablesView.as_view(), name='api-v2.1-dtables-share'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/share/$', DTableShareView.as_view(), name='api-v2.1-dtable-share'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/related-users/$', DTableRelatedUsersView.as_view(), name='api-v2.1-dtable-related-users'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/access-token/$', DTableAccessTokenView.as_view(), name='api-v2.1-dtable-access-token'),
 
     # Deprecated
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
