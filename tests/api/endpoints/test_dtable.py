@@ -162,3 +162,32 @@ class DTableTest(BaseTestCase):
         data = 'name=%s' % 'table9'
         resp = self.client.delete(self.url2, data, 'application/x-www-form-urlencoded')
         self.assertEqual(403, resp.status_code)
+
+    def test_can_get_access_token(self):
+        resp = self.client.post(self.url1, {'name': 'table10', 'owner': self.user.username})
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp["table"]["name"] == 'table10'
+
+        url = reverse('api-v2.1-dtable-access-token', args=[self.workspace.id, 'table10'])
+        resp = self.client.get(url, {}, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        self.assertIsNotNone(json_resp["access_token"])
+
+    def test_get_access_token_with_invalid_repo(self):
+        resp = self.client.post(self.url1, {'name': 'table11', 'owner': self.user.username})
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp["table"]["name"] == 'table11'
+
+        url3 = reverse('api2-repo', args=[self.workspace.repo_id])
+        resp = self.client.delete(url3, {}, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        url4 = reverse('api-v2.1-dtable-access-token', args=[self.workspace.id, 'table11'])
+        resp = self.client.get(url4, {}, 'application/x-www-form-urlencoded')
+        self.assertEqual(404, resp.status_code)
