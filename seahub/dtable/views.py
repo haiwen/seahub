@@ -82,12 +82,7 @@ def dtable_asset_access(request, workspace_id, dtable_id, path):
     2. group member
     3. shared user with `rw` or `admin` permission
     """
-    # asset file type check
     asset_name = os.path.basename(normalize_file_path(path))
-    file_type, file_ext = get_file_type_and_ext(asset_name)
-    if file_type != IMAGE:
-        err_msg = 'Invalid file type'
-        return render_error(request, err_msg)
 
     # resource check
     workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
