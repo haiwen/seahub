@@ -577,11 +577,11 @@ class DirentListView extends React.Component {
   }
 
   onTableDragOver = (e) => {
-    if (e.dataTransfer.dropEffect === 'copy') {
-      return;
-    }
     if (Utils.isIEBrower()) {
       return false;
+    }
+    if (e.dataTransfer.dropEffect === 'copy') {
+      return;
     }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
