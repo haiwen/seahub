@@ -12,12 +12,12 @@ window.dtable = {
   name: userNickName,
   contactEmail: contactEmail,
   server: server,
-  dtableServer: dtableServer,
-  dtableSocket: dtableSocket,
+  dtableServer: "http://127.0.0.1:5000/",
+  dtableSocket: "http://127.0.0.1:5000/",
   filePath: filePath,
   fileName: fileName,
   dtableUuid: dtableUuid,
-  accessToken: '12345678'
+  accessToken: ''
 };
 
 window.seafileAPI = seafileAPI;
