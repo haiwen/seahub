@@ -59,16 +59,28 @@ class Command(BaseCommand):
                 _("Library Name"), _("Library ID"), _("Library Owner"), _("File Path"),]
         data_list = []
 
+        repo_obj_dict = {}
+        repo_owner_dict = {}
+
         events.sort(lambda x, y: cmp(y.timestamp, x.timestamp))
         for ev in events:
             event_type, ev.show_device = generate_file_audit_event_type(ev)
 
             repo_id = ev.repo_id
-            repo = seafile_api.get_repo(repo_id)
+            if repo_id not in repo_obj_dict:
+                repo = seafile_api.get_repo(repo_id)
+                repo_obj_dict[repo_id] = repo
+            else:
+                repo = repo_obj_dict[repo_id]
+
             if repo:
                 repo_name = repo.name
-                repo_owner = seafile_api.get_repo_owner(repo_id) or \
-                        seafile_api.get_org_repo_owner(repo_id)
+                if repo_id not in repo_owner_dict:
+                    repo_owner = seafile_api.get_repo_owner(repo_id) or \
+                            seafile_api.get_org_repo_owner(repo_id)
+                    repo_owner_dict[repo_id] = repo_owner
+                else:
+                    repo_owner = repo_owner_dict[repo_id]
             else:
                 repo_name = _('Deleted')
                 repo_owner = '--'
@@ -81,7 +93,6 @@ class Command(BaseCommand):
                    date, repo_name, ev.repo_id, repo_owner, ev.file_path]
             data_list.append(row)
 
-        print 123
         excel_name = 'file-access-logs.xlsx'
         wb = write_xls(_('file-access-logs'), head, data_list)
         wb.save(posixpath.join(path, excel_name)) if path else wb.save(excel_name)
