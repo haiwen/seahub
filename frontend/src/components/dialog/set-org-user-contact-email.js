@@ -37,7 +37,7 @@ class SetOrgUserContactEmail extends React.Component {
       submitBtnDisabled: true 
     });
 
-    seafileAPI.setOrgUserContactEmail(orgID, email, contactEmail).then((res) => {
+    seafileAPI.orgAdminSetOrgUserContactEmail(orgID, email, contactEmail).then((res) => {
       const newContactEmail = contactEmail ? res.data.contact_email : '';
       this.props.updateContactEmail(newContactEmail);
       this.props.toggleDialog();

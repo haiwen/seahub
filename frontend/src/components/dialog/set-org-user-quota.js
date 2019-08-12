@@ -46,7 +46,7 @@ class SetOrgUserQuota extends React.Component {
       submitBtnDisabled: true 
     });
 
-    seafileAPI.setOrgUserQuota(orgID, email, quota).then((res) => {
+    seafileAPI.orgAdminSetOrgUserQuota(orgID, email, quota).then((res) => {
       this.props.updateQuota(res.data.quota_total);
       this.props.toggleDialog();
     }).catch((error) => {

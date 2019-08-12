@@ -57,7 +57,7 @@ class UserItem extends React.Component {
   toggleResetPW = () => {
     const email = this.props.user.email;
     toaster.success(gettext('Resetting user\'s password, please wait for a moment.'));
-    seafileAPI.resetOrgUserPassword(orgID, email).then(res => {
+    seafileAPI.orgAdminResetOrgUserPassword(orgID, email).then(res => {
       let msg;
       msg = gettext('Successfully reset password to %(passwd)s for user %(user)s.');
       msg = msg.replace('%(passwd)s', res.data.new_password);
@@ -84,7 +84,7 @@ class UserItem extends React.Component {
       statusCode = 0;
     }
 
-    seafileAPI.changeOrgUserStatus(this.props.user.id, statusCode).then(res => {
+    seafileAPI.orgAdminChangeOrgUserStatus(this.props.user.id, statusCode).then(res => {
       this.setState({
         currentStatus: statusCode == 1 ? 'active' : 'inactive',
         highlight: false,

@@ -45,7 +45,7 @@ class OrgUsers extends Component {
   }
 
   initOrgUsersData = (page) => {
-    seafileAPI.listOrgUsers(orgID, '', page).then(res => {
+    seafileAPI.orgAdminListOrgUsers(orgID, '', page).then(res => {
       let userList = res.data.user_list.map(item => {
         return new OrgUserInfo(item);
       });
@@ -61,7 +61,7 @@ class OrgUsers extends Component {
   }
 
   addOrgUser = (email, name, password) => {
-    seafileAPI.addOrgUser(orgID, email, name, password).then(res => {
+    seafileAPI.orgAdminAddOrgUser(orgID, email, name, password).then(res => {
       let userInfo = new OrgUserInfo(res.data);
       this.state.orgUsers.unshift(userInfo);
       this.setState({
@@ -79,7 +79,7 @@ class OrgUsers extends Component {
   }
 
   toggleOrgUsersDelete = (email) => {
-    seafileAPI.deleteOrgUser(orgID, email).then(res => {
+    seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       let users = this.state.orgUsers.filter(item => item.email != email);
       this.setState({orgUsers: users});
       let msg = gettext('Successfully deleted %s');
@@ -92,7 +92,7 @@ class OrgUsers extends Component {
   } 
 
   initOrgAdmin = () => {
-    seafileAPI.listOrgUsers(orgID, true).then(res => {
+    seafileAPI.orgAdminListOrgUsers(orgID, true).then(res => {
       let userList = res.data.user_list.map(item => {
         return new OrgUserInfo(item);
       });
@@ -104,7 +104,7 @@ class OrgUsers extends Component {
   }
 
   toggleOrgAdminDelete = (email) => {
-    seafileAPI.deleteOrgUser(orgID, email).then(res => {
+    seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       this.setState({
         orgAdminUsers: this.state.orgAdminUsers.filter(item => item.email != email)
       });
@@ -118,7 +118,7 @@ class OrgUsers extends Component {
   }
 
   toggleRevokeAdmin = (email) => {
-    seafileAPI.setOrgAdmin(orgID, email, false).then(res => {
+    seafileAPI.orgAdminSetOrgAdmin(orgID, email, false).then(res => {
       this.setState({
         orgAdminUsers: this.state.orgAdminUsers.filter(item => item.email != email)
       });

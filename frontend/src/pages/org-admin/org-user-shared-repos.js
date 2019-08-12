@@ -22,7 +22,7 @@ class OrgUserSharedRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.getOrgUserBesharedRepos(orgID, this.props.email).then((res) => {
+    seafileAPI.orgAdminGetOrgUserBesharedRepos(orgID, this.props.email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data)); 
