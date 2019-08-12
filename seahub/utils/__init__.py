@@ -842,6 +842,10 @@ if EVENTS_CONFIG_FILE:
         records = seafevents_api.get_content_scan_results(start, limit)
         return records if records else []
 
+    def get_user_activities_by_timestamp(username, start, end):
+        events = seafevents.get_user_activities_by_timestamp(username, start, end)
+        return events if events else []
+
 else:
     EVENTS_ENABLED = False
     def get_user_events():
@@ -882,6 +886,9 @@ else:
         pass
     def get_file_scan_record():
         pass
+    def get_user_activities_by_timestamp():
+        pass
+
 
 def calc_file_path_hash(path, bits=12):
     if isinstance(path, unicode):
