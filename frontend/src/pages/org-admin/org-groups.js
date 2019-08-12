@@ -26,7 +26,7 @@ class OrgGroups extends Component {
   }
 
   initData = (page) => {
-    seafileAPI.listOrgGroups(orgID, page).then(res => {
+    seafileAPI.orgAdminListOrgGroups(orgID, page).then(res => {
       let orgGroups = res.data.groups.map(item => {
         return new OrgGroupInfo(item);
       });
@@ -64,7 +64,7 @@ class OrgGroups extends Component {
   }
 
   deleteGroupItem = (group) => {
-    seafileAPI.deleteOrgGroup(orgID, group.id).then(res => {
+    seafileAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
       this.setState({
         orgGroups: this.state.orgGroups.filter(item => item.id != group.id)
       }); 

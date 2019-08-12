@@ -39,7 +39,7 @@ class SetOrgUserName extends React.Component {
 
     // when name is '', api returns the previous name
     // but newName needs to be ''
-    seafileAPI.setOrgUserName(orgID, email, name).then((res) => {
+    seafileAPI.orgAdminSetOrgUserName(orgID, email, name).then((res) => {
       const newName = name ? res.data.name : '';
       this.props.updateName(newName);
       this.props.toggleDialog();

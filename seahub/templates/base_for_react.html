@@ -67,7 +67,6 @@
             resumableUploadFileBlockSize: '{{ resumable_upload_file_block_size }}',
             // storage backends
             storages: (function () {
-              // for 'create repo' & 'storage backend' column in 'my libs'
               var storages = [];
               {% for storage in storages %}
               storages.push({

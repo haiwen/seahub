@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, enableEncryptedLibrary, repoPasswordMinLength } from '../../utils/constants';
+import { gettext, enableEncryptedLibrary, repoPasswordMinLength, storages } from '../../utils/constants';
 
 const propTypes = {
   libraryType: PropTypes.string.isRequired,
@@ -20,6 +21,7 @@ class CreateRepoDialog extends React.Component {
       password2: '',
       errMessage: '',
       permission: 'rw',
+      storage_id: storages.length ? storages[0].id : '',
       isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
@@ -44,17 +46,14 @@ class CreateRepoDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    let isValid= this.validateInputParams();
+    let isValid = this.validateInputParams();
     if (isValid) {
-      let repoName = this.state.repoName.trim();
-      let password = this.state.encrypt ? this.state.password1 : '';
-      let permission= this.state.permission;
-      let repo = this.createRepo(repoName, password, permission);
+      let repoData = this.prepareRepoData();
       if (this.props.libraryType === 'department') {
-        this.props.onCreateRepo(repo, 'department');
+        this.props.onCreateRepo(repoData, 'department');
         return;
       }
-      this.props.onCreateRepo(repo);
+      this.props.onCreateRepo(repoData);
     }
   } 
 
@@ -118,6 +117,10 @@ class CreateRepoDialog extends React.Component {
     this.setState({permission: permission});
   }
 
+  handleStorageInputChange = (selectedItem) => {
+    this.setState({storage_id: selectedItem.value});
+  }
+
   onEncrypted = (e) => {
     let isChecked = e.target.checked;
     this.setState({
@@ -126,25 +129,18 @@ class CreateRepoDialog extends React.Component {
     });
   }
 
-  createRepo = (repoName, password, permission) => {
+  prepareRepoData = () => {
     let libraryType = this.props.libraryType;
-    let encrypt = password ? true : false;
+
+    let repoName = this.state.repoName.trim();
+    let password = this.state.encrypt ? this.state.password1 : '';
+    let permission = this.state.permission;
+
     let repo = null;
     if (libraryType === 'mine' || libraryType === 'public') {
       repo = {
-        id: null,
         name: repoName,
-        desc: '',
-        encrypted: encrypt,
-        passwd: password,
-        passwd1: password,
-        passwd2: password,
-        mtime: 0,
-        mtime_relative: '',
-        owner: '-',
-        owner_nickname: '-',
-        permission: 'rw',
-        storage_name: '-',
+        passwd: password
       };
     }
     if (libraryType === 'group') {
@@ -160,6 +156,12 @@ class CreateRepoDialog extends React.Component {
         passwd: password,
       };
     }
+  
+    const storage_id = this.state.storage_id;
+    if (storage_id) {
+      repo.storage_id = storage_id;
+    }
+
     return repo;
   }
 
@@ -179,6 +181,17 @@ class CreateRepoDialog extends React.Component {
                 onChange={this.handleRepoNameChange}
               />
             </FormGroup>
+            {storages.length > 0 && (
+              <FormGroup>
+                <Label for="storage-backend">{gettext('Storage Backend')}</Label>
+                <Select
+                  id="storage-backend"
+                  defaultValue={{value: storages[0].id, label: storages[0].name}}
+                  options={storages.map((item, index) => { return {value: item.id, label: item.name}; })}
+                  onChange={this.handleStorageInputChange}
+                /> 
+              </FormGroup>
+            )}
             {this.props.libraryType === 'group' && (
               <FormGroup>
                 <Label for="exampleSelect">{gettext('Permission')}</Label>
@@ -191,7 +204,7 @@ class CreateRepoDialog extends React.Component {
             {enableEncryptedLibrary &&
               <div>
                 <FormGroup check>
-                  <Input type="checkbox" id="encrypt" onChange={this.onEncrypted}/>
+                  <Input type="checkbox" id="encrypt" onChange={this.onEncrypted} />
                   <Label for="encrypt">{gettext('Encrypt')}</Label>
                 </FormGroup>
                 {!this.state.disabled && 

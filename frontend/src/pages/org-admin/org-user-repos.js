@@ -24,7 +24,7 @@ class OrgUserOwnedRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.getOrgUserOwnedRepos(orgID, this.props.email).then((res) => {
+    seafileAPI.orgAdminGetOrgUserOwnedRepos(orgID, this.props.email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data)); 
@@ -147,7 +147,7 @@ class Item extends Component {
 
   deleteRepo = () => {
     const repo = this.props.data;
-    seafileAPI.deleteOrgRepo(orgID, repo.repo_id).then((res) => {
+    seafileAPI.orgAdminDeleteOrgRepo(orgID, repo.repo_id).then((res) => {
       this.setState({
         deleted: true
       });

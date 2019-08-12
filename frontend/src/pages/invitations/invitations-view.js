@@ -13,10 +13,6 @@ import EmptyTip from '../../components/empty-tip';
 
 import '../../css/invitations.css';
 
-if (!canInvitePeople) {
-  location.href = siteRoot;
-}
-
 class Item extends React.Component {
 
   constructor(props) {
@@ -192,7 +188,7 @@ class InvitationsView extends React.Component {
           this.setState({
             loading: false,
             errorMsg: gettext('Permission denied')
-          }); 
+          });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
