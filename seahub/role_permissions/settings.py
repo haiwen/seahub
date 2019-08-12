@@ -74,11 +74,6 @@ ENABLED_ROLE_PERMISSIONS = merge_roles(
     DEFAULT_ENABLED_ROLE_PERMISSIONS, custom_role_permissions
 )
 
-if settings.DEBUG and custom_role_permissions:
-    from pprint import pprint
-    print('=== ENABLED ROLE PERMISSIONS ===')
-    pprint(ENABLED_ROLE_PERMISSIONS)
-
 # role permission for administraror
 
 # 1, Admin without a role or with a role of `default_admin` can view ALL pages.
