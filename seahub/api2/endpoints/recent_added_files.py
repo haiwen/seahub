@@ -25,7 +25,7 @@ class RecentAddedFilesView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
-        """get recently added files by date
+        """get recent added files by date
         """
         if not EVENTS_ENABLED:
             error_msg = 'Events not enabled'
@@ -51,7 +51,7 @@ class RecentAddedFilesView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        recently_files = list()
+        recent_added_files = list()
         for event in events:
             if event.op_type != 'create' or event.obj_type != 'file':
                 continue
@@ -75,6 +75,6 @@ class RecentAddedFilesView(APIView):
                 except Draft.DoesNotExist:
                     pass
 
-            recently_files.append(file_dict)
+            recent_added_files.append(file_dict)
 
-        return Response({'recently_files': recently_files})
+        return Response({'recent_added_files': recent_added_files})
