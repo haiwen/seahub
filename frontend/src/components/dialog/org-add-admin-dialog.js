@@ -34,7 +34,7 @@ class AddOrgAdminDialog extends React.Component {
   addOrgAdmin = () => {
     if (!this.state.selectedOption) return;
     const userEmail = this.state.selectedOption.email;
-    seafileAPI.setOrgAdmin(orgID, userEmail, true).then(res => {
+    seafileAPI.orgAdminSetOrgAdmin(orgID, userEmail, true).then(res => {
       let userInfo = new OrgUserInfo(res.data);
       this.props.onAddedOrgAdmin(userInfo);
     }).catch(error => {

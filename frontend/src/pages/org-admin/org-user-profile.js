@@ -24,7 +24,7 @@ class OrgUserProfile extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.getOrgUserInfo(orgID, this.props.email).then((res) => {
+    seafileAPI.orgAdminGetOrgUserInfo(orgID, this.props.email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data)); 
