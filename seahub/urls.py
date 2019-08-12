@@ -646,6 +646,7 @@ urlpatterns = [
     url(r'^useradmin/batchadduser/example/$', batch_add_user_example, name='batch_add_user_example'),
 
     url(r'^sys/info/$', sysadmin_react_fake_view, name="sys_info"),
+    url(r'^sys/devices/$', sysadmin_react_fake_view, name="sys_devices"),
     url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),

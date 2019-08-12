@@ -48,10 +48,10 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#desktop-devices/'}>
+                    <Link className='nav-link ellipsis' to={siteRoot + 'sys/devices/'}>
                       <span className="sf2-icon-monitor" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Devices')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {constanceEnabled && canConfigSystem &&

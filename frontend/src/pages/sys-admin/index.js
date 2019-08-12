@@ -7,6 +7,7 @@ import MainPanel from './main-panel';
 import FileScanRecords from './file-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 import Info from './info';
+import Devices from './devices/devices';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -46,6 +47,11 @@ class SysAdmin extends React.Component {
           <Router className="reach-router">
             <Info
               path={siteRoot + 'sys/info'}
+              currentTab={currentTab}
+              tabItemClick={this.tabItemClick}
+            />
+            <Devices
+              path={siteRoot + 'sys/devices'}
               currentTab={currentTab}
               tabItemClick={this.tabItemClick}
             />
