@@ -17,7 +17,7 @@ window.dtable = {
   filePath: filePath,
   fileName: fileName,
   dtableUuid: dtableUuid,
-  accessToken: '12345678'
+  accessToken: ''
 };
 
 window.seafileAPI = seafileAPI;

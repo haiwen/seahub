@@ -2,6 +2,8 @@
 
 import os
 import logging
+import time
+import jwt
 
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
@@ -23,7 +25,7 @@ from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, gen_file_upload_url
 from seahub.views.file import send_file_access_msg
-from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN
+from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, DTABLE_PRIVATE_KEY
 from seahub.dtable.utils import check_dtable_share_permission, check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 
@@ -434,7 +436,7 @@ class DTableView(APIView):
             parent_dir = os.path.dirname(asset_dir_path)
             file_name = os.path.basename(asset_dir_path)
             try:
-                seafile_api.del_file(repo_id, parent_dir, file_name, owner)
+                seafile_api.del_file(repo_id, parent_dir, file_name, username)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -442,7 +444,7 @@ class DTableView(APIView):
 
         # delete table
         try:
-            seafile_api.del_file(repo_id, '/', table_file_name, owner)
+            seafile_api.del_file(repo_id, '/', table_file_name, username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -577,7 +579,7 @@ class DTableAssetUploadLinkView(APIView):
         asset_dir_path = '/asset/' + str(dtable.uuid)
         asset_dir_id = seafile_api.get_dir_id_by_path(repo_id, asset_dir_path)
         if not asset_dir_id:
-            seafile_api.mkdir_with_parents(repo_id, '/', asset_dir_path[1:], owner)
+            seafile_api.mkdir_with_parents(repo_id, '/', asset_dir_path[1:], username)
 
         dtable.modifier = username
         dtable.save()
@@ -586,3 +588,65 @@ class DTableAssetUploadLinkView(APIView):
         res['upload_link'] = upload_link
         res['parent_path'] = asset_dir_path
         return Response(res)
+
+
+class DTableAccessTokenView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, workspace_id, name):
+        """get dtable access token
+        """
+
+        table_name = name
+        table_file_name = table_name + FILE_TYPE
+
+        # resource check
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = 'Workspace %s not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        table_path = normalize_file_path(table_file_name)
+        table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
+        if not table_file_id:
+            error_msg = 'file %s not found.' % table_file_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        owner = workspace.owner
+        if not check_dtable_permission(username, owner) and \
+                not check_dtable_share_permission(dtable, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # generate json web token
+        payload = {
+            'exp': int(time.time()) + 86400 * 3,
+            'dtable_uuid': dtable.uuid.hex,
+        }
+
+        try:
+            access_token = jwt.encode(
+                payload, DTABLE_PRIVATE_KEY, algorithm='HS256'
+            )
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'access_token': access_token})
