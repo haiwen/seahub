@@ -20,7 +20,7 @@ class Info extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.getSysInfo().then((res) => {
+    seafileAPI.sysAdminGetSysInfo().then((res) => {
       this.setState({
         loading: false,
         sysInfo: res.data
@@ -54,7 +54,7 @@ class Info extends Component {
       return;
     }
     const file = this.fileInput.current.files[0];
-    seafileAPI.uploadLicense(file).then((res) => {
+    seafileAPI.sysAdminUploadLicense(file).then((res) => {
       let info = this.state.sysInfo;
       Object.assign(info, res.data, {with_license: true});
       this.setState({
