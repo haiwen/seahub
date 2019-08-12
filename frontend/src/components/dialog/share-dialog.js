@@ -141,6 +141,13 @@ class ShareDialog extends React.Component {
                 />
               </TabPane>
             }
+            {itemType === 'dir' && activeTab === 'internalLink' &&
+              <InternalLink 
+                path={this.props.itemPath} 
+                repoID={this.props.repoID} 
+                direntType={itemType}
+              />
+            }
             {enableDirPrivateShare &&
               <Fragment>
                 <TabPane tabId="shareToUser">
@@ -152,13 +159,6 @@ class ShareDialog extends React.Component {
               </Fragment>
             }
           </TabContent>
-          {itemType === 'dir' && activeTab === 'internalLink' &&
-            <InternalLink 
-              path={this.props.itemPath} 
-              repoID={this.props.repoID} 
-              direntType={itemType}
-            />
-          }
         </div>
       </Fragment>
     );
@@ -192,12 +192,12 @@ class ShareDialog extends React.Component {
                 closeShareDialog={this.props.toggleDialog}
               />
             </TabPane>
-            <TabPane tabId="internalLink">
+            {activeTab === 'internalLink' &&
               <InternalLink 
-                repoID={this.props.repoID} 
                 path={this.props.itemPath} 
+                repoID={this.props.repoID} 
               />
-            </TabPane>
+            }
           </TabContent>
         </div>
       </Fragment>

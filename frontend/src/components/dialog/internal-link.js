@@ -6,6 +6,7 @@ import copy from '@seafile/seafile-editor/dist/utils/copy-to-clipboard';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import Loading from '../loading';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -18,6 +19,7 @@ class InternalLink extends React.Component {
     super(props);
     this.state = {
       smartLink: '',
+      isInternalLoding: true,
     };
   }
 
@@ -25,7 +27,8 @@ class InternalLink extends React.Component {
     let { repoID, path, direntType } = this.props;
     seafileAPI.getInternalLink(repoID, path, direntType).then(res => {
       this.setState({
-        smartLink: res.data.smart_link
+        smartLink: res.data.smart_link,
+        isInternalLoding: false
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -42,6 +45,9 @@ class InternalLink extends React.Component {
   }
 
   render() {
+    if (this.state.isInternalLoding) {
+      return(<Loading />);
+    }
     return (
       <div>
         <p className="tip mb-1">
