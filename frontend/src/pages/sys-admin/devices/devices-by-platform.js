@@ -201,7 +201,7 @@ class DevicesByPlatform extends Component {
 
   unlinkDevice = (deviceInfo, isWipeDevice) => {
     let { platform, device_id, user } = deviceInfo;
-    seafileAPI.sysAdminUnlinkDevices(platform, device_id, user, isWipeDevice).then((res) => {
+    seafileAPI.sysAdminUnlinkDevice(platform, device_id, user, isWipeDevice).then((res) => {
       let items = this.state.devicesData.filter(eachItem => {
         return eachItem.platform !== platform || eachItem.device_id !== device_id || eachItem.user !== user;
       });

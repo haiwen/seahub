@@ -104,7 +104,7 @@ class DevicesErrors extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminListDevicesErrors().then((res) => {
+    seafileAPI.sysAdminListDeviceErrors().then((res) => {
       this.setState({
         devicesErrors: res.data,
         loading: false

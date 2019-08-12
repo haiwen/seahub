@@ -33,7 +33,7 @@ class Devices extends Component {
   }
 
   clearDevicesAdmin = () => {
-    seafileAPI.sysAdminClearDevicesErrors().then((res) => {
+    seafileAPI.sysAdminClearDeviceErrors().then((res) => {
       this.setState({devicesErrors: {}});
       let message = gettext('Successfully cleaned all errors.');
       toaster.success(message);
