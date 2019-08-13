@@ -681,7 +681,7 @@ class MarkdownEditor extends React.Component {
     }
   }
 
-  backToParentDirectory = () => {
+  openParentDirectory = () => {
     window.location.href = editorUtilities.getParentDectionaryUrl();
   }
 
@@ -749,7 +749,7 @@ class MarkdownEditor extends React.Component {
             collabUsers={this.state.collabUsers}
             fileInfo={this.state.fileInfo}
             toggleStar={this.toggleStar}
-            backToParentDirectory={this.backToParentDirectory}
+            openParentDirectory={this.openParentDirectory}
             openDialogs={this.openDialogs}
             toggleShareLinkDialog={this.toggleShareLinkDialog}
             onEdit={this.onEdit}

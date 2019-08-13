@@ -18,7 +18,7 @@ const propTypes = {
   onEdit: PropTypes.func.isRequired,
   toggleNewDraft: PropTypes.func.isRequired,
   toggleStar: PropTypes.func.isRequired,
-  backToParentDirectory: PropTypes.func.isRequired,
+  openParentDirectory: PropTypes.func.isRequired,
   openDialogs: PropTypes.func.isRequired,
   showFileHistory: PropTypes.bool.isRequired,
   toggleHistory: PropTypes.func.isRequired,
@@ -39,7 +39,7 @@ const MoreMenuPropTypes = {
   editorMode: PropTypes.string.isRequired,
   isSmallScreen: PropTypes.bool,
   toggleShareLinkDialog: PropTypes.func,
-  backToParentDirectory: PropTypes.func,
+  openParentDirectory: PropTypes.func,
   showFileHistory: PropTypes.bool,
   toggleHistory: PropTypes.func,
 };
@@ -81,7 +81,7 @@ class MoreMenu extends React.PureComponent {
             <DropdownItem onMouseDown={this.props.openDialogs.bind(this, 'help')}>{gettext('Help')}</DropdownItem>
           }
           {isSmall && canGenerateShareLink && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
-          {isSmall && <DropdownItem onMouseDown={this.props.backToParentDirectory}>{gettext('Back to parent directory')}</DropdownItem>}
+          {isSmall && <DropdownItem onMouseDown={this.props.openParentDirectory}>{gettext('Open parent directory')}</DropdownItem>}
           {(isSmall && this.props.showFileHistory) &&
             <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('File History')}</DropdownItem>
           }
@@ -148,8 +148,8 @@ class MarkdownViewerToolbar extends React.Component {
                 />
               }
               <ButtonGroup>
-                <IconButton text={gettext('Back to parent directory')} id={'parentDirectory'}
-                  icon={'fa fa-folder-open'} onMouseDown={this.props.backToParentDirectory}/>
+                <IconButton text={gettext('Open parent directory')} id={'parentDirectory'}
+                  icon={'fa fa-folder-open'} onMouseDown={this.props.openParentDirectory}/>
                 {(canLockUnlockFile && !isLocked) &&
                   <IconButton id="lock-unlock-file" icon='fa fa-lock' text={gettext('Lock')} onMouseDown={this.props.toggleLockFile}/>
                 }
@@ -204,7 +204,7 @@ class MarkdownViewerToolbar extends React.Component {
                 editorMode={this.props.editorMode}
                 onEdit={this.props.onEdit}
                 toggleShareLinkDialog={this.props.toggleShareLinkDialog}
-                backToParentDirectory={this.props.backToParentDirectory}
+                openParentDirectory={this.props.openParentDirectory}
                 showFileHistory={this.props.showFileHistory}
                 toggleHistory={this.props.toggleHistory}
                 isSmallScreen={true}
