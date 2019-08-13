@@ -10,6 +10,7 @@ const propTypes = {
   onCloseUploadDialog: PropTypes.func.isRequired,
   onCancelAllUploading: PropTypes.func.isRequired,
   onUploadCancel: PropTypes.func.isRequired,
+  onUploadRetry: PropTypes.func.isRequired,
   allFilesUploaded: PropTypes.bool.isRequired,
 };
 
@@ -65,8 +66,9 @@ class UploadProgressDialog extends React.Component {
           <table className="table-thead-hidden">
             <thead>
               <tr>
-                <th width="45%">{gettext('name')}</th>
-                <th width="40%">{gettext('progress')}</th>
+                <th width="35%">{gettext('name')}</th>
+                <th width="15%">{gettext('size')}</th>
+                <th width="35%">{gettext('progress')}</th>
                 <th width="15%">{gettext('state')}</th>
               </tr>
             </thead>
@@ -75,9 +77,14 @@ class UploadProgressDialog extends React.Component {
                 <tr><td className="text-right" colSpan={3}><span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span></td></tr>
               }
               {
-                this.props.uploadFileList.map((item, index) => {
+                this.props.uploadFileList.map((resumableFile, index) => {
                   return (
-                    <UploadListItem key={index} item={item} onUploadCancel={this.props.onUploadCancel}/>
+                    <UploadListItem 
+                      key={index} 
+                      resumableFile={resumableFile} 
+                      onUploadCancel={this.props.onUploadCancel}
+                      onUploadRetry={this.props.onUploadRetry}
+                    />
                   );
                 })
               }
