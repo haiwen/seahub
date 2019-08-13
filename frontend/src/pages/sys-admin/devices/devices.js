@@ -55,7 +55,7 @@ class Devices extends Component {
     let topbarChildren;
     if(this.state.activeTab === 'errors' && this.state.isShowErrorCleanBtn){
       topbarChildren = (
-        <Button className="float-right" onClick={this.clearDevicesAdmin}>{gettext('Clean')}</Button>
+        <Button className="btn btn-secondary operation-item" onClick={this.clearDevicesAdmin}>{gettext('Clean')}</Button>
       );
     }
     return (
