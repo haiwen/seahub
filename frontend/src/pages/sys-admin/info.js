@@ -6,6 +6,7 @@ import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import Loading from '../../components/loading';
+import '../../css/system-info.css';
 
 class Info extends Component {
 
@@ -93,7 +94,7 @@ class Info extends Component {
 
     return (
       <Fragment>
-        <div className="main-panel-north border-left-show">
+        <div className="main-panel-north">
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
           </div>
@@ -103,65 +104,66 @@ class Info extends Component {
         </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('Info')}</h3>
-            </div>
-            <div className="cur-view-content">
-              {loading && <Loading />}
-              {errorMsg && <p className="error text-center mt-4">{errorMsg}</p>}
-              {(!loading && !errorMsg) &&
-              <dl>
-                <dt>{gettext('System Info')}</dt>
+            <h2 className="heading">{gettext('Info')}</h2>
+            {loading && <Loading />}
+            {errorMsg && <p className="error text-center mt-4">{errorMsg}</p>}
+            {(!loading && !errorMsg) &&
+            <div className="content position-relative">
+              <div className="info-item">
+                <h3 className="info-item-heading">{gettext('System Info')}</h3>
                 {isPro ?
-                  <dd>
+                  <Fragment>
                     {gettext('Professional Edition')}
-                    {with_license &&
-                      ' ' + this.renderLicenseDescString(license_mode, license_to, license_expiration)
-                    }<br/>
+                    {with_license && ' ' + this.renderLicenseDescString(license_mode, license_to, license_expiration)}
+                    <br/>
                     {isDefaultAdmin &&
                       <Fragment>
-                        <Button type="button" className="mt-2" onClick={this.openFileInput}>{gettext('Upload license')}</Button>
+                        <button className="btn btn-outline-primary" onClick={this.openFileInput}>{gettext('Upload license')}</button>
                         <input className="d-none" type="file" onChange={this.uploadLicenseFile} ref={this.fileInput} />
                       </Fragment>
                     }
-                  </dd> :
-                  <dd>
-                    {gettext('Community Edition')}
-                    <a className="ml-1" href="http://manual.seafile.com/deploy_pro/migrate_from_seafile_community_server.html" target="_blank">{gettext('Upgrade to Pro Edition')}</a>
-                  </dd>
-                }
-                <dt>{gettext('Libraries')} / {gettext('Files')}</dt>
-                <dd>{repos_count} / {total_files_count}</dd>
-
-                <dt>{gettext('Storage Used')}</dt>
-                <dd>{Utils.bytesToSize(total_storage)}</dd>
-
-                <dt>{gettext('Total Devices')} / {gettext('Current Connected Devices')}</dt>
-                <dd>{total_devices_count} / {current_connected_devices_count}</dd>
-
-                {isPro ?
-                  <Fragment>
-                    <dt>{gettext('Activated Users')} / {gettext('Total Users')} / {gettext('Limits')}</dt>
-                    <dd>{active_users_count}{' / '}{users_count}{' / '}{with_license ? license_maxusers : '--'}</dd>
                   </Fragment> :
                   <Fragment>
-                    <dt>{gettext('Activated Users')} / {gettext('Total Users')}</dt>
-                    <dd>{active_users_count} / {users_count}</dd>
+                    {gettext('Community Edition')}
+                    <a href="http://manual.seafile.com/deploy_pro/migrate_from_seafile_community_server.html"
+                      className="ml-1" target="_blank" rel="noopener noreferrer">{gettext('Upgrade to Pro Edition')}</a>
                   </Fragment>
                 }
-
-                <dt>{gettext('Groups')}</dt>
-                <dd>{groups_count}</dd>
-
-                {multi_tenancy_enabled &&
-                  <Fragment>
-                    <dt>{gettext('Organizations')}</dt>
-                    <dd>{org_count}</dd>
-                  </Fragment>
-                }
-              </dl>
+              </div>
+              <div className="info-item">
+                <h3 className="info-item-heading">{gettext('Libraries')} / {gettext('Files')}</h3>
+                <span>{repos_count} / {total_files_count}</span>
+              </div>
+              <div className="info-item">
+                <h3 className="info-item-heading">{gettext('Storage Used')}</h3>
+                <span>{Utils.bytesToSize(total_storage)}</span>
+              </div>
+              <div className="info-item">
+                <h3 className="info-item-heading">{gettext('Total Devices')} / {gettext('Current Connected Devices')}</h3>
+                <span>{total_devices_count} / {current_connected_devices_count}</span>
+              </div>
+              {isPro ?
+                <div className="info-item">
+                  <h3 className="info-item-heading">{gettext('Activated Users')} / {gettext('Total Users')} / {gettext('Limits')}</h3>
+                  <span>{active_users_count}{' / '}{users_count}{' / '}{with_license ? license_maxusers : '--'}</span>
+                </div> :
+                <div>
+                  <h3 className="info-item-heading">{gettext('Activated Users')} / {gettext('Total Users')}</h3>
+                  <span>{active_users_count} / {users_count}</span>
+                </div>
+              }
+              <div className="info-item">
+                <h3 className="info-item-heading">{gettext('Groups')}</h3>
+                <span>{groups_count}</span>
+              </div>
+              {multi_tenancy_enabled &&
+                <div className="info-item">
+                  <h3 className="info-item-heading">{gettext('Organizations')}</h3>
+                  <span>{org_count}</span>
+                </div>
               }
             </div>
+            }
           </div>
         </div>
       </Fragment>

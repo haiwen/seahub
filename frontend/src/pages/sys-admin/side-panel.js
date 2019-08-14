@@ -32,7 +32,7 @@ class SidePanel extends React.Component {
               <ul className="nav nav-pills flex-column nav-container">
                 {canViewSystemInfo &&
                 <li className="nav-item">
-                  <Link className='nav-link ellipsis' to={siteRoot + 'sys/info/'}>
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('info')}`} to={siteRoot + 'sys/info/'}>
                     <span className="sf2-icon-info" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('Info')}</span>
                   </Link>
