@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import { Link } from '@reach/router';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -7,6 +8,7 @@ import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
 import SharedRepoInfo from '../../models/shared-repo-info';
+import PermSelect from '../../components/dialog/perm-select';
 
 class Content extends Component {
 
@@ -36,20 +38,34 @@ class Content extends Component {
       const sortByName = sortBy == 'name';
       const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
+      const isDesktop = Utils.isDesktop();
       const table = (
-        <table className="table-hover">
+        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
           <thead>
-            <tr>
-              <th width="4%">{/*icon*/}</th>
-              <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-              <th width="30%">{gettext('Share To')}</th>
-              <th width="24%">{gettext('Permission')}</th>
-              <th width="8%"></th>
-            </tr>
+            {isDesktop ? (
+              <tr>
+                <th width="4%">{/*icon*/}</th>
+                <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                <th width="30%">{gettext('Share To')}</th>
+                <th width="24%">{gettext('Permission')}</th>
+                <th width="8%"></th>
+              </tr>
+            ) : (
+              <tr>
+                <th width="12%"></th>
+                <th width="80%"></th>
+                <th width="8%"></th>
+              </tr>
+            )}
           </thead>
           <tbody>
             {items.map((item, index) => {
-              return (<Item key={index} item={item} unshareFolder={this.props.unshareFolder}/>);
+              return (<Item 
+                key={index}
+                isDesktop={isDesktop}
+                item={item}
+                unshareItem={this.props.unshareItem}
+              />);
             })}
           </tbody>
         </table>
@@ -69,21 +85,40 @@ class Item extends Component {
     this.state = {
       share_permission: item.share_permission,
       is_admin: item.is_admin,
-      showOpIcon: false,
+      isOpIconShown: false,
+      isOpMenuOpen: false, // for mobile
+      isPermSelectDialogOpen: false, // for mobile
       unshared: false
     };
-    this.permissions = ['rw', 'r'];
+    let permissions = ['rw', 'r'];
+    this.permissions = permissions;
+    this.showAdmin = isPro && (item.share_type !== 'public');
+    if (this.showAdmin) {
+      permissions.push('admin');
+    }
     if (isPro) {
-      this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+      permissions.push('cloud-edit', 'preview');
     }
   }
 
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    });
+  }
+
+  togglePermSelectDialog = () => {
+    this.setState({
+      isPermSelectDialogOpen: !this.state.isPermSelectDialogOpen
+    });
+  }
+
   onMouseEnter = () => {
-    this.setState({showOpIcon: true});
+    this.setState({isOpIconShown: true});
   }
 
   onMouseLeave = () => {
-    this.setState({showOpIcon: false});
+    this.setState({isOpIconShown: false});
   }
 
   changePerm = (permission) => {
@@ -97,8 +132,6 @@ class Item extends Component {
       options.user = item.user_email;
     } else if (share_type == 'group') {
       options.group_id = item.group_id;
-    } else if (share_type === 'public') {
-      // nothing todo
     }
 
     seafileAPI.updateRepoSharePerm(item.repo_id, options).then(() => {
@@ -106,72 +139,102 @@ class Item extends Component {
         share_permission: permission == 'admin' ? 'rw' : permission,
         is_admin: permission == 'admin',
       });
+      toaster.success(gettext('Successfully modified permission.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
   }
 
-  unshare = () => {
-    this.props.unshareFolder(this.props.item);
-  }
-
-  getRepoParams = () => {
-    let item = this.props.item;
-    
-    let iconUrl = Utils.getLibIconUrl(item); 
-    let iconTitle = Utils.getLibIconTitle(item);
-    let repoUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}/`;
-
-    return { iconUrl, iconTitle, repoUrl };
+  unshare = (e) => {
+    e.preventDefault();
+    this.props.unshareItem(this.props.item);
   }
 
   render() {
 
-    let { iconUrl, iconTitle, repoUrl } = this.getRepoParams();
     let item = this.props.item;
-    let { share_permission, is_admin } = this.state;
+    let iconUrl = Utils.getLibIconUrl(item); 
+    let iconTitle = Utils.getLibIconTitle(item);
+    let repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`;
+
+    let { share_permission, is_admin, isOpIconShown, isPermSelectDialogOpen } = this.state;
 
     let shareTo;
     const shareType = item.share_type;
     if (shareType == 'personal') {
-      shareTo = <td title={item.contact_email}>{item.user_name}</td>;
+      shareTo = item.user_name;
     } else if (shareType == 'group') {
-      shareTo = <td>{item.group_name}</td>;
+      shareTo = item.group_name;
     } else if (shareType == 'public') {
-      shareTo = <td>{gettext('all members')}</td>;
+      shareTo = gettext('all members');
     }
 
-    // show 'admin' perm or not
-    let showAdmin = isPro && (item.share_type !== 'public'); 
-    if (showAdmin && is_admin) {
+    if (this.showAdmin && is_admin) {
       share_permission = 'admin';
     }
 
-    let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let unshareIconClassName = 'unshare action-icon sf2-icon-x3' + iconVisibility;
-
-    if (showAdmin && this.permissions.indexOf('admin') === -1) {
-      this.permissions.splice(2, 0, 'admin'); // add a item after 'r' permission;
-    }
-
-    return (
+    const desktopItem = (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td><Link to={repoUrl}>{item.repo_name}</Link></td>
-        {shareTo}
+        <td>
+          {item.share_type == 'personal' ? <span title={item.contact_email}>{shareTo}</span> : shareTo}
+        </td>
         <td>
           <SharePermissionEditor 
             isTextMode={true}
-            isEditIconShow={this.state.showOpIcon}
+            isEditIconShow={this.state.isOpIconShown}
             currentPermission={share_permission}
             permissions={this.permissions}
             onPermissionChanged={this.changePerm}
           />
         </td>
-        <td><a href="#" className={unshareIconClassName} title={gettext('Unshare')} onClick={this.unshare}></a></td>
+        <td><a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '': 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
     );
+
+    const mobileItem = (
+      <Fragment>
+        <tr>
+          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+          <td>
+            <Link to={repoUrl}>{item.repo_name}</Link>
+            <span className="item-meta-info-highlighted">{Utils.sharePerms(share_permission)}</span>
+            <br />
+            <span className="item-meta-info">{`${gettext('Share To:')} ${shareTo}`}</span>
+          </td>
+          <td>
+            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+              <DropdownToggle
+                tag="i"
+                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isOpMenuOpen}
+              />
+              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                <div className="mobile-operation-menu-bg-layer"></div>
+                <div className="mobile-operation-menu">
+                  <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
+                  <DropdownItem className="mobile-menu-item" onClick={this.unshare}>{gettext('Unshare')}</DropdownItem>
+                </div>
+              </div>
+            </Dropdown>
+          </td>
+        </tr>
+        {isPermSelectDialogOpen &&
+        <PermSelect
+          currentPerm={share_permission}
+          permissions={this.permissions}
+          changePerm={this.changePerm}
+          toggleDialog={this.togglePermSelectDialog}
+        />
+        }
+      </Fragment>
+    );
+
+    return this.props.isDesktop ? desktopItem : mobileItem;
   }
 }
 
@@ -221,7 +284,7 @@ class ShareAdminLibraries extends Component {
     });
   }
 
-  unshareFolder = (item) => {
+  unshareItem = (item) => {
     const share_type = item.share_type;
     let options = {
       'share_type': share_type
@@ -282,7 +345,7 @@ class ShareAdminLibraries extends Component {
               sortBy={this.state.sortBy}
               sortOrder={this.state.sortOrder}
               sortItems={this.sortItems}
-              unshareFolder={this.unshareFolder}
+              unshareItem={this.unshareItem}
             />
           </div>
         </div>
