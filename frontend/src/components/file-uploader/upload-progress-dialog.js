@@ -2,15 +2,18 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import UploadListItem from './upload-list-item';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   uploadBitrate: PropTypes.string.isRequired,
   totalProgress: PropTypes.number.isRequired,
+  retryFileList: PropTypes.array.isRequired,
   uploadFileList: PropTypes.array.isRequired,
   onCloseUploadDialog: PropTypes.func.isRequired,
   onCancelAllUploading: PropTypes.func.isRequired,
   onUploadCancel: PropTypes.func.isRequired,
   onUploadRetry: PropTypes.func.isRequired,
+  onUploadRetryAll: PropTypes.func.isRequired,
   allFilesUploaded: PropTypes.bool.isRequired,
 };
 
@@ -38,8 +41,10 @@ class UploadProgressDialog extends React.Component {
   }
 
   render() {
+
+    let uploadBitrate = Utils.formatBitRate(this.props.uploadBitrate)
     let uploadedMessage = gettext('File Upload');
-    let uploadingMessage = gettext('File Uploading...') + ' ' + this.props.totalProgress + '%' + ' (' + this.props.uploadBitrate + ')';
+    let uploadingMessage = gettext('File Uploading...') + ' ' + this.props.totalProgress + '%' + ' (' + uploadBitrate + ')';
 
     let uploadingOptions = (<span className="sf2-icon-minus" onClick={this.onMinimizeUpload}></span>);
 
@@ -73,9 +78,28 @@ class UploadProgressDialog extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {(!allFilesUploaded) && 
-                <tr><td className="text-right" colSpan={3}><span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span></td></tr>
-              }
+              {(!allFilesUploaded || this.props.retryFileList.length > 0) && (
+                <tr>
+                  {this.props.retryFileList.length > 0 && 
+                    <Fragment>
+                      {!allFilesUploaded ? 
+                        <td className="text-right" colSpan={3}><span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span></td>
+                        :
+                        <td className="text-right" colSpan={4}><span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span></td>
+                      }
+                    </Fragment>
+                  }
+                  {!allFilesUploaded && 
+                    <Fragment>
+                      {this.props.retryFileList.length > 0 ?
+                        <td className="text-right" ><span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span></td>
+                        :
+                        <td className="text-right" colSpan={4}><span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span></td>
+                      }
+                    </Fragment>
+                  }
+                </tr>
+              )}
               {
                 this.props.uploadFileList.map((resumableFile, index) => {
                   return (

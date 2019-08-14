@@ -86,7 +86,12 @@ class UploadListItem extends React.Component {
               <div className="progress">
                 <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
               </div>
-              <span>{gettext('last:')}{' '}{resumableFile.lastTime}</span>
+              {(resumableFile.size > (100 * 1000 * 1000)) &&  resumableFile.isUploading() && (
+                <Fragment>
+                  {resumableFile.lastTime === 0 && <span>{gettext('Preparing to upload...')}</span>}
+                  {resumableFile.lastTime !== 0 && <span>{gettext('last:')}{' '}{resumableFile.lastTime}</span>}
+                </Fragment>
+              )}
             </Fragment>
           }
           {this.state.uploadState === UPLOAD_ERROR && (
