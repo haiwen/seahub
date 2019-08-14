@@ -89,7 +89,7 @@ class UploadListItem extends React.Component {
               {(resumableFile.size > (100 * 1000 * 1000)) &&  resumableFile.isUploading() && (
                 <Fragment>
                   {resumableFile.lastTime === 0 && <span>{gettext('Preparing to upload...')}</span>}
-                  {resumableFile.lastTime !== 0 && <span>{gettext('last:')}{' '}{resumableFile.lastTime}</span>}
+                  {resumableFile.lastTime !== 0 && <span>{gettext('Last:')}{' '}{resumableFile.lastTime}</span>}
                 </Fragment>
               )}
             </Fragment>
