@@ -269,7 +269,7 @@ class ActivityItem extends Component {
             </td>
             <td>
               <a href={userProfileURL}>{item.author_name}</a>
-              <span className="mobile-activity-op">{op}</span>
+              <span className="item-meta-info-highlighted">{op}</span>
               <br />{details}
             </td>
             <td className="text-right align-top">
