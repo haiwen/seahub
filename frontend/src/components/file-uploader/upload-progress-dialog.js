@@ -55,7 +55,7 @@ class UploadProgressDialog extends React.Component {
       </Fragment>
     );
 
-    let { totalProgress, allFilesUploaded } = this.props;
+    let { totalProgress, allFilesUploaded, retryFileList } = this.props;
 
     return (
       <div className="uploader-list-view" style={{height: this.state.isMinimized ? '2.25rem' : '20rem'}}>
@@ -78,25 +78,17 @@ class UploadProgressDialog extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {(!allFilesUploaded || this.props.retryFileList.length > 0) && (
+              {(!allFilesUploaded || retryFileList.length > 0) && (
                 <tr>
-                  {this.props.retryFileList.length > 0 && 
-                    <Fragment>
-                      {!allFilesUploaded ? 
-                        <td className="text-right" colSpan={3}><span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span></td>
-                        :
-                        <td className="text-right" colSpan={4}><span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span></td>
-                      }
-                    </Fragment>
+                  {retryFileList.length > 0 && 
+                    <td className="text-right" colSpan={!allFilesUploaded ? 3 : 4}>
+                      <span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span>
+                    </td>
                   }
                   {!allFilesUploaded && 
-                    <Fragment>
-                      {this.props.retryFileList.length > 0 ?
-                        <td className="text-right" ><span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span></td>
-                        :
-                        <td className="text-right" colSpan={4}><span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span></td>
-                      }
-                    </Fragment>
+                    <td className="text-right" colSpan={retryFileList.length > 0 ? 1 : 4}>
+                      <span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span>
+                    </td>
                   }
                 </tr>
               )}
