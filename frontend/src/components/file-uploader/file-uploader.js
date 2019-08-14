@@ -375,6 +375,8 @@ class FileUploader extends React.Component {
       }
       return item;
     });
+
+    this.loaded = 0;  // reset loaded data;
     this.setState({
       retryFileList: this.state.retryFileList,
       uploadFileList: uploadFileList
@@ -506,7 +508,7 @@ class FileUploader extends React.Component {
 
     if (!this.resumable.isUploading()) {
       this.setState({
-        totalProgress: 100,
+        totalProgress: '100',
         allFilesUploaded: true,
       });
       this.loaded = 0;
@@ -528,7 +530,7 @@ class FileUploader extends React.Component {
 
     this.setState({
       allFilesUploaded: true,
-      totalProgress: 100,
+      totalProgress: '100',
       uploadFileList: uploadFileList
     });
   }

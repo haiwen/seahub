@@ -83,15 +83,33 @@ class UploadListItem extends React.Component {
         <td className="upload-progress">
           {this.state.uploadState === UPLOAD_UPLOADING &&
             <Fragment>
-              <div className="progress">
-                <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              {(resumableFile.size > (100 * 1000 * 1000)) &&  resumableFile.isUploading() && (
+              {resumableFile.size >= (100 * 1000 * 1000) &&
                 <Fragment>
-                  {resumableFile.lastTime === 0 && <span>{gettext('Preparing to upload...')}</span>}
-                  {resumableFile.lastTime !== 0 && <span>{gettext('Last:')}{' '}{resumableFile.lastTime}</span>}
+                  {resumableFile.isUploading() && (
+                    <div className="progress-container">
+                      <div className="progress">
+                        <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      {resumableFile.lastTime === 0 && <div className="progress-text">{gettext('Preparing to upload...')}</div>}
+                      {resumableFile.lastTime !== 0 && <div className="progress-text">{gettext('Remaining')}{' '}{resumableFile.lastTime}</div>}
+                    </div>
+                  )}
+                  {!resumableFile.isUploading() && (
+                    <div className="progress-container d-flex align-items-center">
+                      <div className="progress">
+                        <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  )}
                 </Fragment>
-              )}
+              }
+              {(resumableFile.size < (100 * 1000 * 1000)) &&
+                <div className="progress-container d-flex align-items-center">
+                  <div className="progress">
+                    <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              }
             </Fragment>
           }
           {this.state.uploadState === UPLOAD_ERROR && (

@@ -78,20 +78,22 @@ class UploadProgressDialog extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {(!allFilesUploaded || retryFileList.length > 0) && (
-                <tr>
-                  {retryFileList.length > 0 && 
-                    <td className="text-right" colSpan={!allFilesUploaded ? 3 : 4}>
-                      <span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span>
-                    </td>
+              <tr>
+                <td className="text-right" colSpan={3}>
+                  {retryFileList.length > 0 ? 
+                    <span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span>
+                    :
+                    <span className="cursor-pointer disabled-link">{gettext('Retry All')}</span>
                   }
-                  {!allFilesUploaded && 
-                    <td className="text-right" colSpan={retryFileList.length > 0 ? 1 : 4}>
-                      <span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span>
-                    </td>
+                </td>
+                <td className="text-right" colSpan={1}>
+                  {!allFilesUploaded ?
+                    <span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span>
+                    :
+                    <span className="cursor-pointer disabled-link" >{gettext('Cancel All')}</span>
                   }
-                </tr>
-              )}
+                </td>
+              </tr>
               {
                 this.props.uploadFileList.map((resumableFile, index) => {
                   return (
