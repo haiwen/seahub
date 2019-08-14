@@ -24,16 +24,15 @@ class InvitationsToolbar extends React.Component {
         <div className="cur-view-toolbar">
           <span title="Side Nav Menu" onClick={onShowSidePanel} className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
           </span>
-          <MediaQuery query="(min-width: 768px)">
+          {window.innerWidth >= 768 ? (
             <div className="operation">
               <Button color="btn btn-secondary operation-item" onClick={toggleInvitePeopleDialog}>
                 <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite People')}
               </Button>
             </div>
-          </MediaQuery>
-          <MediaQuery query="(max-width: 767.8px)">
-            <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Invite People')}></span>
-          </MediaQuery>
+          ) : (
+            <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Invite People')} onClick={toggleInvitePeopleDialog}></span>
+          )}
         </div>
         <CommonToolbar searchPlaceholder={this.props.searchPlaceholder} onSearchedClick={onSearchedClick}/>
       </div>

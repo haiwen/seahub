@@ -33,6 +33,10 @@ export const Utils = {
     }
   },
 
+  isDesktop: function() {
+    return window.innerWidth >= 768;
+  },
+
   FILEEXT_ICON_MAP: {
 
     // text file
@@ -90,7 +94,7 @@ export const Utils = {
   },
 
   // check if a file is an image
-  imageCheck: function (filename) {
+  imageCheck: function(filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
@@ -119,7 +123,7 @@ export const Utils = {
   },
 
   // check if a file is a video
-  videoCheck: function (filename) {
+  videoCheck: function(filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
