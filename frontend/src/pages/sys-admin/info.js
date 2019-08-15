@@ -118,7 +118,7 @@ class Info extends Component {
                     <br/>
                     {isDefaultAdmin &&
                       <Fragment>
-                        <button className="btn btn-outline-primary" onClick={this.openFileInput}>{gettext('Upload license')}</button>
+                        <button className="btn btn-outline-primary mt-2" onClick={this.openFileInput}>{gettext('Upload license')}</button>
                         <input className="d-none" type="file" onChange={this.uploadLicenseFile} ref={this.fileInput} />
                       </Fragment>
                     }
