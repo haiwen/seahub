@@ -232,7 +232,7 @@ class FileUploader extends React.Component {
         if (uploadBitrate) {
           let lastSize = (item.size - (item.size * item.progress())) * 8;
           let time = Math.ceil(lastSize / uploadBitrate);
-          item.lastTime = time;
+          item.remainingTime = time;
         }
       }
       return item;
@@ -306,7 +306,7 @@ class FileUploader extends React.Component {
         if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
           item.newFileName = relative_path + message.name;
           item.isSaved = true;
-          item.lastTime = 0;
+          item.remainingTime = 0;
         }
         return item;
       });
@@ -329,7 +329,7 @@ class FileUploader extends React.Component {
         if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
           item.newFileName = fileName;
           item.isSaved = true;
-          item.lastTime = 0;
+          item.remainingTime = 0;
         }
         return item;
       });
@@ -352,7 +352,7 @@ class FileUploader extends React.Component {
       if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
         item.newFileName = message.name;
         item.isSaved = true;
-        item.lastTime = 0;
+        item.remainingTime = 0;
       }
       return item;
     });
