@@ -64,7 +64,6 @@ class Content extends Component {
                 key={index}
                 isDesktop={isDesktop}
                 item={item}
-                unshareItem={this.props.unshareItem}
               />);
             })}
           </tbody>
@@ -148,17 +147,46 @@ class Item extends Component {
 
   unshare = (e) => {
     e.preventDefault();
-    this.props.unshareItem(this.props.item);
+
+    const item = this.props.item;
+    const share_type = item.share_type;
+    let options = {
+      'share_type': share_type
+    };
+    if (share_type == 'personal') {
+      options.user = item.user_email;
+    } else if (share_type == 'group') {
+      options.group_id = item.group_id;
+    } 
+
+    seafileAPI.unshareRepo(item.repo_id, options).then((res) => {
+      this.setState({
+        unshared: true
+      });
+      let message = gettext('Successfully unshared {name}').replace('{name}', item.repo_name);
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster(errMessage);
+    });
   }
 
   render() {
+    if (this.state.unshared) {
+      return null;
+    }
 
+    let { share_permission, is_admin, isOpIconShown, isPermSelectDialogOpen } = this.state;
     let item = this.props.item;
+    Object.assign(item, {
+      share_permission: share_permission,
+      is_admin: is_admin
+    });
+
     let iconUrl = Utils.getLibIconUrl(item); 
     let iconTitle = Utils.getLibIconTitle(item);
     let repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`;
 
-    let { share_permission, is_admin, isOpIconShown, isPermSelectDialogOpen } = this.state;
 
     let shareTo;
     const shareType = item.share_type;
@@ -284,44 +312,6 @@ class ShareAdminLibraries extends Component {
     });
   }
 
-  unshareItem = (item) => {
-    const share_type = item.share_type;
-    let options = {
-      'share_type': share_type
-    };
-    if (share_type == 'personal') {
-      options.user = item.user_email;
-    } else if (share_type == 'group') {
-      options.group_id = item.group_id;
-    } 
-
-    seafileAPI.unshareRepo(item.repo_id, options).then((res) => {
-      let items = [];
-      if (item.share_type === 'personal') {
-        items = this.state.items.filter(repoItem => {
-          return !(repoItem.user_email === item.user_email && repoItem.repo_id === item.repo_id);
-        });
-      } else if (item.share_type === 'group') {
-        items = this.state.items.filter(repoItem => {
-          return !(repoItem.group_id === item.group_id && repoItem.repo_id === item.repo_id);
-        });
-      } else if (item.share_type === 'public') {
-        items = this.state.items.filter(repoItem => {
-          return !(repoItem.share_type === 'public' && repoItem.repo_id === item.repo_id);
-        });
-      }
-      this.setState({items: items});
-      let message = gettext('Successfully unshared {name}').replace('{name}', item.repo_name);
-      toaster.success(message);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed to unshare {name}').replace('{name}', item.repo_name);
-      }
-      toaster(errMessage);
-    });
-  }
-
   sortItems = (sortBy, sortOrder) => {
     this.setState({
       sortBy: sortBy,
@@ -345,7 +335,6 @@ class ShareAdminLibraries extends Component {
               sortBy={this.state.sortBy}
               sortOrder={this.state.sortOrder}
               sortItems={this.sortItems}
-              unshareItem={this.unshareItem}
             />
           </div>
         </div>

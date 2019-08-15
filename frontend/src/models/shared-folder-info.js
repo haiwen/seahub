@@ -11,7 +11,6 @@ class SharedFolderInfo {
       this.group_id = object.group_id;
       this.group_name = object.group_name;
     } else {
-      this.share_type = 'user'; // change personal to user;
       this.user_name = object.user_name;
       this.user_email = object.user_email;
       this.contact_email = object.contact_email;
