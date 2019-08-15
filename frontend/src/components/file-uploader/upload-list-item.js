@@ -1,17 +1,55 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  item: PropTypes.object.isRequired,
+  resumableFile: PropTypes.object.isRequired,
   onUploadCancel: PropTypes.func.isRequired,
+  onUploadRetry: PropTypes.func.isRequired,
 };
+
+const UPLOAD_UPLOADING = 'uploading';
+const UPLOAD_ERROR = 'error';
+const UPLOAD_ISSAVING = 'isSaving';
+const UPLOAD_UPLOADED = 'uploaded';
 
 class UploadListItem extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      uploadState: UPLOAD_UPLOADING
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let { resumableFile } = nextProps;
+    let uploadState = UPLOAD_UPLOADING;
+
+    if (resumableFile.error) {
+      uploadState = UPLOAD_ERROR;
+    } else {
+      if (resumableFile.progress() === 1 && !resumableFile.isSaved) {
+        uploadState = UPLOAD_ISSAVING;
+      }
+  
+      if (resumableFile.isSaved) {
+        uploadState = UPLOAD_UPLOADED;
+      }
+    }
+
+    this.setState({uploadState: uploadState});
+  }
+
   onUploadCancel = (e) => {
     e.preventDefault();
-    this.props.onUploadCancel(this.props.item);
+    this.props.onUploadCancel(this.props.resumableFile);
+  }
+
+  onUploadRetry = (e) => {
+    e.preventDefault();
+    this.props.onUploadRetry(this.props.resumableFile)
   }
 
   formatFileSize = (size) => {
@@ -31,38 +69,69 @@ class UploadListItem extends React.Component {
   }
 
   render() {
-    let { item } = this.props;
-    let progress = Math.round(item.resumableFile.progress() * 100);
-    let error = item.resumableFile.error;
+    let { resumableFile } = this.props;
+    let progress = Math.round(resumableFile.progress() * 100);
+    let error = resumableFile.error;
 
     return (
       <tr className="file-upload-item">
         <td className="upload-name">
-          <div className="ellipsis">{item.resumableFile.relativePath}</div>
-          <div className="message err-message ml-0" dangerouslySetInnerHTML={{__html: error}}></div>
+          <div className="ellipsis">{resumableFile.newFileName}</div>
+        </td>
+        <td>
+          <span className="file-size">{this.formatFileSize(resumableFile.size)}</span>
         </td>
         <td className="upload-progress">
-          <span className="file-size">{this.formatFileSize(item.resumableFile.size)}</span>
-          {!item.resumableFile.error && progress !== 100 &&
-            <div className="progress">
-              <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+          {this.state.uploadState === UPLOAD_UPLOADING &&
+            <Fragment>
+              {resumableFile.size >= (100 * 1000 * 1000) &&
+                <Fragment>
+                  {resumableFile.isUploading() && (
+                    <div className="progress-container">
+                      <div className="progress">
+                        <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      {resumableFile.remainingTime === 0 && <div className="progress-text">{gettext('Preparing to upload...')}</div>}
+                      {resumableFile.remainingTime !== 0 && <div className="progress-text">{gettext('Remaining')}{' '}{Utils.formatTime(resumableFile.remainingTime)}</div>}
+                    </div>
+                  )}
+                  {!resumableFile.isUploading() && (
+                    <div className="progress-container d-flex align-items-center">
+                      <div className="progress">
+                        <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  )}
+                </Fragment>
+              }
+              {(resumableFile.size < (100 * 1000 * 1000)) &&
+                <div className="progress-container d-flex align-items-center">
+                  <div className="progress">
+                    <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              }
+            </Fragment>
           }
+          {this.state.uploadState === UPLOAD_ERROR && (
+            <div className="message err-message ml-0" dangerouslySetInnerHTML={{__html: error}}></div>
+          )}
         </td>
         <td className="upload-operation">
-          {!item.resumableFile.error && (
-            <Fragment>
-              {(!item.isSaved && progress !== 100) && (
-                <a href="#" onClick={this.onUploadCancel}>{gettext('cancel')}</a>
-              )}
-              {(!item.isSaved && progress === 100) && (
-                <span className="saving">{gettext('saving...')}</span>
-              )}
-              {item.isSaved && (
-                <span className="uploaded">{gettext('uploaded')}</span>
-              )}
-            </Fragment>
-          )}
+          <Fragment>
+            {this.state.uploadState === UPLOAD_UPLOADING && (
+              <a href="#" onClick={this.onUploadCancel}>{gettext('Cancel')}</a>
+            )}
+            {this.state.uploadState === UPLOAD_ERROR && (
+              <a href="#" onClick={this.onUploadRetry}>{gettext('Retry')}</a>
+            )}
+            {this.state.uploadState === UPLOAD_ISSAVING && (
+              <span className="saving">{gettext('Saving...')}</span>
+            )}
+            {this.state.uploadState === UPLOAD_UPLOADED && (
+              <span className="uploaded">{gettext('Uploaded')}</span>
+            )}
+          </Fragment>
         </td>
       </tr>
     );
