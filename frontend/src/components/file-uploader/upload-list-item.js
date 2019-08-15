@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   resumableFile: PropTypes.object.isRequired,
@@ -91,7 +92,7 @@ class UploadListItem extends React.Component {
                         <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                       {resumableFile.lastTime === 0 && <div className="progress-text">{gettext('Preparing to upload...')}</div>}
-                      {resumableFile.lastTime !== 0 && <div className="progress-text">{gettext('Remaining')}{' '}{resumableFile.lastTime}</div>}
+                      {resumableFile.lastTime !== 0 && <div className="progress-text">{gettext('Remaining')}{' '}{Utils.formatTime(resumableFile.lastTime)}</div>}
                     </div>
                   )}
                   {!resumableFile.isUploading() && (

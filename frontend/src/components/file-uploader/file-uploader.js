@@ -232,7 +232,6 @@ class FileUploader extends React.Component {
         if (uploadBitrate) {
           let lastSize = (item.size - (item.size * item.progress())) * 8;
           let time = Math.ceil(lastSize / uploadBitrate);
-          time = Utils.formatTime(time);
           item.lastTime = time;
         }
       }
