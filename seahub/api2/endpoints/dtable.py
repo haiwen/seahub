@@ -18,13 +18,11 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.api2.views import get_repo_file
 from seahub.dtable.models import Workspaces, DTables
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, gen_file_upload_url
-from seahub.views.file import send_file_access_msg
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, DTABLE_PRIVATE_KEY
 from seahub.dtable.utils import check_dtable_share_permission, check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
@@ -237,64 +235,6 @@ class DTableView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, workspace_id):
-        """view table file, get table download link
-
-        Permission:
-        1. owner
-        2. group member
-        3. shared user
-        """
-        # argument check
-        table_name = request.GET.get('name', None)
-        if not table_name:
-            error_msg = 'name invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        reuse = request.GET.get('reuse', '0')
-        if reuse not in ('1', '0'):
-            error_msg = 'reuse invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
-        if not workspace:
-            error_msg = 'Workspace %s not found.' % workspace_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo_id = workspace.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        dtable = DTables.objects.get_dtable(workspace, table_name)
-        if not dtable:
-            error_msg = 'dtable %s not found.' % table_name
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        table_file_name = table_name + FILE_TYPE
-        table_path = normalize_file_path(table_file_name)
-        table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
-        if not table_file_id:
-            error_msg = 'file %s not found.' % table_file_name
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        username = request.user.username
-        owner = workspace.owner
-        if not check_dtable_permission(username, owner) and \
-                not check_dtable_share_permission(dtable, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # send stats message
-        send_file_access_msg(request, repo, table_path, 'api')
-
-        op = request.GET.get('op', 'download')
-        use_onetime = False if reuse == '1' else True
-        return get_repo_file(request, repo_id, table_file_id, table_file_name, op, use_onetime)
-
     def put(self, request, workspace_id):
         """rename a table
 
@@ -458,66 +398,6 @@ class DTableView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True}, status=status.HTTP_200_OK)
-
-
-class DTableUpdateLinkView(APIView):
-
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def get(self, request, workspace_id):
-        """get table file update link
-
-        Permission:
-        1. owner
-        2. group member
-        3. shared user with `rw` or `admin` permission
-        """
-        # argument check
-        table_name = request.GET.get('name', None)
-        if not table_name:
-            error_msg = 'name invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
-        if not workspace:
-            error_msg = 'Workspace %s not found.' % workspace_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo_id = workspace.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        dtable = DTables.objects.get_dtable(workspace, table_name)
-        if not dtable:
-            error_msg = 'dtable %s not found.' % table_name
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        username = request.user.username
-        owner = workspace.owner
-        if not check_dtable_permission(username, owner) and \
-                check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            token = seafile_api.get_fileserver_access_token(repo_id, 'dummy', 'update',
-                                                            username, use_onetime=False)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        dtable.modifier = username
-        dtable.save()
-
-        url = gen_file_upload_url(token, 'update-api')
-        return Response(url)
 
 
 class DTableAssetUploadLinkView(APIView):
