@@ -8,7 +8,7 @@ from seaserv import seafile_api
 
 from seahub.dtable.models import Workspaces, DTables
 from seahub.utils import normalize_file_path, render_error, render_permission_error, \
-    gen_file_get_url, get_file_type_and_ext, IMAGE
+    gen_file_get_url
 from seahub.auth.decorators import login_required
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, DTABLE_SERVER_URL, SEAFILE_COLLAB_SERVER, MEDIA_URL
