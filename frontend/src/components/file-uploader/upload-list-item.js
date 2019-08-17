@@ -30,7 +30,7 @@ class UploadListItem extends React.Component {
     if (resumableFile.error) {
       uploadState = UPLOAD_ERROR;
     } else {
-      if (resumableFile.progress() === 1 && !resumableFile.isSaved) {
+      if (resumableFile.remainingTime === 0 && !resumableFile.isSaved) {
         uploadState = UPLOAD_ISSAVING;
       }
   
@@ -82,7 +82,7 @@ class UploadListItem extends React.Component {
           <span className="file-size">{this.formatFileSize(resumableFile.size)}</span>
         </td>
         <td className="upload-progress">
-          {this.state.uploadState === UPLOAD_UPLOADING &&
+          {(this.state.uploadState === UPLOAD_UPLOADING || this.state.uploadState === UPLOAD_ISSAVING) &&
             <Fragment>
               {resumableFile.size >= (100 * 1000 * 1000) &&
                 <Fragment>
@@ -91,8 +91,9 @@ class UploadListItem extends React.Component {
                       <div className="progress">
                         <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
-                      {resumableFile.remainingTime === 0 && <div className="progress-text">{gettext('Preparing to upload...')}</div>}
-                      {resumableFile.remainingTime !== 0 && <div className="progress-text">{gettext('Remaining')}{' '}{Utils.formatTime(resumableFile.remainingTime)}</div>}
+                      {(resumableFile.remainingTime === -1) && <div className="progress-text">{gettext('Preparing to upload...')}</div>}
+                      {(resumableFile.remainingTime > 0) && <div className="progress-text">{gettext('Remaining')}{' '}{Utils.formatTime(resumableFile.remainingTime)}</div>}
+                      {(resumableFile.remainingTime === 0) && <div className="progress-text">{gettext('Indexing...')}</div>}
                     </div>
                   )}
                   {!resumableFile.isUploading() && (

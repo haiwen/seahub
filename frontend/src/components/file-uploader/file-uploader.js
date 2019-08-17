@@ -203,7 +203,8 @@ class FileUploader extends React.Component {
     let { repoID, path } = this.props;
     seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName).then(res => {
       let uploadedBytes = res.data.uploadedBytes;
-      let offset = Math.floor(uploadedBytes / (1024 * 1024));
+      let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
+      let offset = Math.floor(uploadedBytes / blockSize);
       resumableFile.markChunksCompleted(offset);
       this.resumable.upload();
     }).catch(error => {
@@ -231,7 +232,7 @@ class FileUploader extends React.Component {
       if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
         if (uploadBitrate) {
           let lastSize = (item.size - (item.size * item.progress())) * 8;
-          let time = Math.ceil(lastSize / uploadBitrate);
+          let time = Math.floor(lastSize / uploadBitrate);
           item.remainingTime = time;
         }
       }
@@ -306,7 +307,6 @@ class FileUploader extends React.Component {
         if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
           item.newFileName = relative_path + message.name;
           item.isSaved = true;
-          item.remainingTime = 0;
         }
         return item;
       });
@@ -329,7 +329,6 @@ class FileUploader extends React.Component {
         if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
           item.newFileName = fileName;
           item.isSaved = true;
-          item.remainingTime = 0;
         }
         return item;
       });
@@ -352,7 +351,6 @@ class FileUploader extends React.Component {
       if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
         item.newFileName = message.name;
         item.isSaved = true;
-        item.remainingTime = 0;
       }
       return item;
     });
@@ -393,7 +391,8 @@ class FileUploader extends React.Component {
   }
 
   onError = (message) => {
-
+    // After the error, the user can switch windows
+    Utils.registerGlobalVariable('uploader', 'totalProgress', 100);
   }
 
   onFileRetry = () => {
@@ -545,7 +544,7 @@ class FileUploader extends React.Component {
       let uploadFileList = this.state.uploadFileList.map(item => {
         if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
           item.error = null;
-          item.retry();
+          this.retryUploadFile(item);
         }
         return item;
       });
@@ -565,8 +564,8 @@ class FileUploader extends React.Component {
     seafileAPI.getUploadLink(this.props.repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data;
       this.state.retryFileList.forEach(item => {
-        item.retry();
         item.error = false;
+        this.retryUploadFile(item);
       });
       
       let uploadFileList = this.state.uploadFileList.slice(0);
@@ -579,6 +578,39 @@ class FileUploader extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  }
+
+  retryUploadFile = (resumableFile) => {
+    let { repoID, path } = this.props;
+    let fileName = resumableFile.fileName;
+    let isFile = resumableFile.fileName === resumableFile.relativePath;
+    if (!isFile) {
+      let relative_path = resumableFile.formData.relative_path;
+      let prefix = path === '/' ? (path + relative_path) : (path + '/' + relative_path);
+      fileName = prefix + fileName;
+    }
+    
+    resumableFile.bootstrap();
+    var firedRetry = false;
+    resumableFile.resumableObj.on('chunkingComplete', () => {
+      if(!firedRetry) {
+        console.log(path);
+        seafileAPI.getFileUploadedBytes(repoID, path, fileName).then(res => {
+          let uploadedBytes = res.data.uploadedBytes;
+          let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
+          let offset = Math.floor(uploadedBytes / blockSize);
+          resumableFile.markChunksCompleted(offset);
+    
+          resumableFile.resumableObj.upload();
+    
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+      }
+      firedRetry = true;
+    });
+    
   }
 
   replaceRepetitionFile = () => {
