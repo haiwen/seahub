@@ -518,6 +518,7 @@ class DTableAccessTokenView(APIView):
         payload = {
             'exp': int(time.time()) + 86400 * 3,
             'dtable_uuid': dtable.uuid.hex,
+            'username': username,
         }
 
         try:
