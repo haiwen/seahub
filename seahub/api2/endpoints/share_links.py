@@ -88,24 +88,7 @@ def get_share_link_info(fileshare):
     data['permissions'] = fileshare.get_permissions()
     return data
 
-def check_permissions_arg(request):
-    permissions = request.data.get('permissions', None)
-    if permissions is not None:
-        if isinstance(permissions, dict):
-            perm_dict = permissions
-        elif isinstance(permissions, basestring):
-            import json
-            try:
-                perm_dict = json.loads(permissions)
-            except ValueError:
-                error_msg = 'permissions invalid: %s' % permissions
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        else:
-            error_msg = 'permissions invalid: %s' % permissions
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-    else:
-        perm_dict = None
-
+def check_permissions_arg(perm_dict):
     can_download = True
     can_edit = False
 
@@ -259,7 +242,24 @@ class ShareLinks(APIView):
         else:
             expire_date = timezone.now() + relativedelta(days=expire_days)
 
-        perm = check_permissions_arg(request)
+        permissions = request.data.get('permissions', None)
+        if permissions:
+            if isinstance(permissions, dict):
+                perm_dict = permissions
+            elif isinstance(permissions, basestring):
+                import json
+                try:
+                    perm_dict = json.loads(permissions)
+                except ValueError:
+                    error_msg = 'permissions invalid: %s' % permissions
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            else:
+                error_msg = 'permissions invalid: %s' % permissions
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        else:
+            perm_dict = None
+
+        perm = check_permissions_arg(perm_dict)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -357,7 +357,20 @@ class ShareLink(APIView):
 
         permissions = request.data.get('permissions', None)
         if permissions:
-            perm = check_permissions_arg(request)
+            if isinstance(permissions, dict):
+                perm_dict = permissions
+            elif isinstance(permissions, basestring):
+                import json
+                try:
+                    perm_dict = json.loads(permissions)
+                except ValueError:
+                    error_msg = 'permissions invalid: %s' % permissions
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            else:
+                error_msg = 'permissions invalid: %s' % permissions
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            perm = check_permissions_arg(perm_dict)
             fs.permission = perm
             fs.save()
 
