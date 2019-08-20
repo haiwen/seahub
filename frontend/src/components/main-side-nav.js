@@ -199,7 +199,7 @@ class MainSideNav extends React.Component {
           <h3 className="sf-heading">{gettext('Database')}</h3>
           <ul className="nav nav-pills flex-column nav-container">
             <li className="nav-item">
-              <Link className={`nav-link ellipsis ${this.getActiveClass('dtable')}`} to={siteRoot + 'dtable/'} title='DTable' onClick={() => this.tabItemClick('dtable')}>
+              <Link className={`nav-link ellipsis ${this.getActiveClass('dtable')}`} to={siteRoot + 'dtable/'} title='DTable' onClick={(e) => this.tabItemClick(e, 'dtable')}>
                 <span className="sf3-font-dtable-logo sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">DTable</span>
               </Link>
