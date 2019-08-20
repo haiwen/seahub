@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkPasswordMinLength, canSendShareLinkEmail } from '../../utils/constants';
+import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkPasswordMinLength, canSendShareLinkEmail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import SharedLinkInfo from '../../models/shared-link-info';
+import ShareLink from '../../models/share-link';
 import toaster from '../toast';
 import Loading from '../loading';
 import SendLink from '../send-link';
@@ -43,7 +43,7 @@ class GenerateShareLink extends React.Component {
       'can_edit': false, 
       'can_download': true
     };
-    this.isOfficeFile = Utils.isOfficeFile(this.props.itemPath);
+    this.isOfficeFile = Utils.isEditableOfficeFile(this.props.itemPath);
   }
 
   componentDidMount() {
@@ -51,7 +51,7 @@ class GenerateShareLink extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.getShareLink(repoID, path).then((res) => {
       if (res.data.length !== 0) {
-        let sharedLinkInfo = new SharedLinkInfo(res.data[0]);
+        let sharedLinkInfo = new ShareLink(res.data[0]);
         this.setState({
           isLoading: false,
           sharedLinkInfo: sharedLinkInfo
@@ -133,11 +133,10 @@ class GenerateShareLink extends React.Component {
       this.setState({errorInfo: ''});
       let { itemPath, repoID } = this.props;
       let { password, isExpireChecked, expireDays } = this.state;
-      let permissions = this.permissions;
-      permissions = JSON.stringify(permissions);
+      let permissions = isPro ? JSON.stringify(this.permissions) : '';
       const expireDaysSent = isExpireChecked ? expireDays : '';
       seafileAPI.createShareLink(repoID, itemPath, password, expireDaysSent, permissions).then((res) => {
-        let sharedLinkInfo = new SharedLinkInfo(res.data);
+        let sharedLinkInfo = new ShareLink(res.data);
         this.setState({sharedLinkInfo: sharedLinkInfo});
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
@@ -402,6 +401,8 @@ class GenerateShareLink extends React.Component {
               </FormGroup>
             </Fragment>
           )}
+          {isPro && ( 
+            <Fragment>
           <FormGroup check>
             <Label check>
               <span>{'  '}{gettext('Set permission')}</span>
@@ -424,6 +425,8 @@ class GenerateShareLink extends React.Component {
               </Label>
             </FormGroup>
           }
+            </Fragment>
+          )}
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
           <Button onClick={this.generateShareLink} className="mt-2">{gettext('Generate')}</Button>
         </Form>
