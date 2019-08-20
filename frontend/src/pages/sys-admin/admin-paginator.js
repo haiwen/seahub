@@ -13,7 +13,7 @@ const propTypes = {
   resetPerPage: PropTypes.func
 };
 
-class AdminPagenator extends Component {
+class AdminPaginator extends Component {
 
   resetPerPage = (perPage) => {
     this.props.resetPerPage(perPage);
@@ -43,6 +43,6 @@ class AdminPagenator extends Component {
   }
 }
 
-AdminPagenator.propTypes = propTypes;
+AdminPaginator.propTypes = propTypes;
 
-export default AdminPagenator;
+export default AdminPaginator;

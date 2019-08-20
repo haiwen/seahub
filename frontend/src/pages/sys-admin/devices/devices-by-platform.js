@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, ModalBody, ModalHeader, ModalFooter, Button, Label, Input, Form, FormGroup } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
@@ -7,37 +6,16 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import moment from 'moment';
 import Loading from '../../../components/loading';
-import AdminPagenator from '../admin-paginator';
+import AdminPaginator from '../admin-paginator';
+import SysAdminDeleteDeviceDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-device-dialog';
 
 class Content extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      modalOpen: false,
-      isWipeDevice: false,
-      currentDeviceInfo: {},
+      currentDeviceInfo: {}
     };
-  }
-
-  // // required by `Modal`, and can only set the 'open' state
-  toggleModal = () => {
-    this.props.toggleModal();
-  }
-
-  showModal = (deviceInfo) => {
-    this.props.toggleModal();
-    this.setState({
-      currentDeviceInfo: deviceInfo
-    });
-  }
-
-  checkWipeDevice = (e) => {
-    this.setState({isWipeDevice: e.target.checked});
-  }
-
-  unlinkDevice = () => {
-    this.props.unlinkDevice(this.state.currentDeviceInfo, this.state.isWipeDevice);
   }
 
   getPreviousPageDevicesList = () => {
@@ -76,7 +54,7 @@ class Content extends Component {
             {items && 
               <tbody>
                 {items.map((item, index) => {
-                  return (<Item key={index} item={item} showModal={this.showModal}/>);
+                  return (<Item key={index} item={item} unlinkDevice={this.props.unlinkDevice}/>);
                 })}
               </tbody>
             }
@@ -84,7 +62,7 @@ class Content extends Component {
           {/* this page has no reset perpage option in old version, if new version need 
           this option, just uncomment this.props.resetPerPage, 
           and set canResetPerPage to true */}
-          <AdminPagenator
+          <AdminPaginator
             gotoPreviousPage={this.getPreviousPageDevicesList}
             gotoNextPage={this.getNextPageDevicesList}
             currentPage={pageInfo.current_page}
@@ -92,24 +70,6 @@ class Content extends Component {
             canResetPerPage={false}
             //resetPerPage={this.props.resetPerPage}
           />
-          <Modal isOpen={this.props.modalOpen} toggle={this.toggleModal} centered={true}>
-            <ModalHeader toggle={this.toggleModal}>{gettext('Unlink device')}</ModalHeader>
-            <ModalBody>
-              <Form>
-                <FormGroup>
-                  <p>{gettext('Are you sure you want to unlink this device?')}</p>
-                  <Label check>
-                    <Input style={{'marginLeft':'0'}} type="checkbox" onChange={this.checkWipeDevice}/>
-                    <span className="ml-4">{'  '}{gettext('Delete files from this device the next time it comes online.')}</span>
-                  </Label>
-                </FormGroup>
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={this.unlinkDevice}>{gettext('Yes')}</Button>{' '}
-              <Button color="secondary" onClick={this.toggleModal}>{gettext('No')}</Button>
-            </ModalFooter>
-          </Modal>
         </Fragment>
       );
 
@@ -124,6 +84,8 @@ class Item extends Component {
     super(props);
     this.state = {
       showOpIcon: false,
+      isShowUnlinkDeviceDialog: false,
+      isWipeDevice: false,
     };
   }
 
@@ -135,33 +97,47 @@ class Item extends Component {
     this.setState({showOpIcon: false});
   }
 
-  showUnlinkDeviceModal = (e) => {
-    e.preventDefault();
-    let deviceInfo = {
-      platform: this.props.item.platform,
-      device_id: this.props.item.device_id,
-      user: this.props.item.user
-    };
-    this.props.showModal(deviceInfo);
+  toggleUnlinkDeviceDialog = () => {
+    this.setState({isShowUnlinkDeviceDialog: !this.state.isShowUnlinkDeviceDialog});
+  }
+
+  toggleIsWipeDevice = () => {
+    this.setState({isWipeDevice: !this.state.isWipeDevice});
+  }
+
+  unlinkDevice = () => {
+    this.props.unlinkDevice(this.props.item, this.state.isWipeDevice);
+    this.toggleUnlinkDeviceDialog();
   }
 
   render() {
-    let item = this.props.item;
+    let { isShowUnlinkDeviceDialog, isWipeDevice } = this.state;
+    let { item } = this.props;
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible'; 
     let deleteIconClassName = 'sf2-icon-delete action-icon' + iconVisibility;
     return (
-      <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <td>{item.user}</td>
-        <td>{item.platform}{' / '}{item.client_version}</td>
-        <td>{item.device_name}</td>
-        <td>{item.last_login_ip}</td>
-        <td>
-          <span className="item-meta-info" title={moment(item.last_accessed).format('llll')}>{moment(item.last_accessed).fromNow()}</span>
-        </td>
-        <td>
-          <a href="#" className={deleteIconClassName} title={gettext('Remove')} onClick={this.showUnlinkDeviceModal}></a>
-        </td>
-      </tr>
+      <Fragment>
+        <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+          <td>{item.user}</td>
+          <td>{item.platform}{' / '}{item.client_version}</td>
+          <td>{item.device_name}</td>
+          <td>{item.last_login_ip}</td>
+          <td>
+            <span className="item-meta-info" title={moment(item.last_accessed).format('llll')}>{moment(item.last_accessed).fromNow()}</span>
+          </td>
+          <td>
+            <a href="#" className={deleteIconClassName} title={gettext('Remove')} onClick={this.toggleUnlinkDeviceDialog}></a>
+          </td>
+        </tr>
+        {isShowUnlinkDeviceDialog &&
+          <SysAdminDeleteDeviceDialog
+            toggle={this.toggleUnlinkDeviceDialog}
+            toggleIsWipeDevice={this.toggleIsWipeDevice}
+            isWipeDevice={isWipeDevice}
+            unlinkDevice={this.unlinkDevice}
+          />
+        }
+      </Fragment>
     );
   }
 }
@@ -171,7 +147,6 @@ class DevicesByPlatform extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalOpen: false,
       loading: true,
       errorMsg: '',
       devicesData: {},
@@ -199,25 +174,18 @@ class DevicesByPlatform extends Component {
     });
   }
 
-  unlinkDevice = (deviceInfo, isWipeDevice) => {
-    let { platform, device_id, user } = deviceInfo;
+  unlinkDevice = (item, isWipeDevice) => {
+    let { platform, device_id, user } = item;
     seafileAPI.sysAdminUnlinkDevice(platform, device_id, user, isWipeDevice).then((res) => {
       let items = this.state.devicesData.filter(eachItem => {
         return eachItem.platform !== platform || eachItem.device_id !== device_id || eachItem.user !== user;
       });
       this.setState({devicesData: items});
-      this.toggleModal();
-      let message = gettext("Successfully unlinked the device.");
+      let message = gettext('Successfully unlinked the device.');
       toaster.success(message);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    });
-  }
-
-  toggleModal = () => {
-    this.setState({
-      modalOpen: !this.state.modalOpen
     });
   }
 
@@ -241,7 +209,6 @@ class DevicesByPlatform extends Component {
           unlinkDevice={this.unlinkDevice}
           toggleModal={this.toggleModal}
           resetPerPage={this.resetPerPage}
-          modalOpen={this.state.modalOpen}
           loading={this.state.loading}
           errorMsg={this.state.errorMsg}
           items={this.state.devicesData}
