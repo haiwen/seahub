@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-25 09:38+0800\n"
-"PO-Revision-Date: 2019-07-24 02:09+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2019-08-20 15:43+0800\n"
+"PO-Revision-Date: 2019-08-20 07:45+0000\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,7 +61,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "공간 제한 용량이 너무 적습니다(최소 값은 0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:311
+#: seahub/organizations/api/admin/users.py:350
 #: seahub/organizations/views.py:1023 seahub/views/sysadmin.py:876
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
@@ -126,7 +126,7 @@ msgstr "%s 사용자는 이미 라이브러리 소유자입니다."
 
 #: seahub/api2/endpoints/admin/shares.py:188
 #: seahub/api2/endpoints/invitations.py:50
-#: seahub/api2/endpoints/invitations.py:110
+#: seahub/api2/endpoints/invitations.py:109
 #, python-format
 msgid "Email %s invalid."
 msgstr "%s 전자메일 주소가 잘못되었습니다."
@@ -142,6 +142,7 @@ msgid "This item has been shared to %s."
 msgstr "이 항목은 %s에 공유했습니다."
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:22
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:23
@@ -155,6 +156,8 @@ msgid "Time"
 msgstr "시간"
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
 #: seahub/organizations/templates/organizations/org_file_audit.html:23
 #: seahub/organizations/templates/organizations/org_file_update.html:23
@@ -172,34 +175,41 @@ msgid "User"
 msgstr "사용자"
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/templates/sysadmin/sys_trafficadmin.html:60
 msgid "Web Download"
 msgstr "웹 다운로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:224
+#: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/templates/sysadmin/sys_trafficadmin.html:48
 msgid "Sync Download"
 msgstr "동기화 다운로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:224
+#: seahub/base/management/commands/export_user_traffic_report.py:46
 msgid "Link Download"
 msgstr "링크 다운로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:225
+#: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/templates/sysadmin/sys_trafficadmin.html:54
 msgid "Web Upload"
 msgstr "웹 업로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:225
+#: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 msgid "Sync Upload"
 msgstr "동기화 업로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:226
+#: seahub/base/management/commands/export_user_traffic_report.py:48
 msgid "Link Upload"
 msgstr "링크 업로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:268
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/contacts/templates/contacts/contact_list.html:44
@@ -233,6 +243,7 @@ msgid "Email"
 msgstr "전자메일"
 
 #: seahub/api2/endpoints/admin/statistics.py:268
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/contacts/templates/contacts/contact_list.html:18
@@ -329,6 +340,7 @@ msgid "Name"
 msgstr "이름"
 
 #: seahub/api2/endpoints/admin/statistics.py:268 seahub/auth/forms.py:243
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:16
@@ -343,6 +355,7 @@ msgid "Contact Email"
 msgstr "연락 전자메일"
 
 #: seahub/api2/endpoints/admin/statistics.py:269
+#: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
 #: seahub/views/sysadmin.py:425 seahub/views/sysadmin.py:429
@@ -350,6 +363,7 @@ msgid "Space Usage"
 msgstr "사용 용량"
 
 #: seahub/api2/endpoints/admin/statistics.py:269
+#: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
 #: seahub/views/sysadmin.py:425 seahub/views/sysadmin.py:429
@@ -446,8 +460,8 @@ msgid "You can not refresh this file's lock."
 msgstr "잠근 파일을 새로 고칠 수 없습니다."
 
 #: seahub/api2/endpoints/file_tag.py:175
-#: seahub/api2/endpoints/invitations.py:78
-#: seahub/api2/endpoints/invitations.py:145
+#: seahub/api2/endpoints/invitations.py:77
+#: seahub/api2/endpoints/invitations.py:148
 #: seahub/api2/endpoints/send_upload_link_email.py:105
 #: seahub/api2/endpoints/wiki_pages.py:106
 #: seahub/api2/endpoints/wiki_pages.py:119
@@ -476,7 +490,9 @@ msgstr "%s 사용자는 이미 그룹 구성원입니다."
 
 #: seahub/api2/endpoints/group_members.py:100
 #: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1586
-#: seahub/views/ajax.py:1347
+#: seahub/organizations/api/admin/user_repos.py:50
+#: seahub/organizations/api/admin/user_repos.py:103
+#: seahub/organizations/api/admin/users.py:241 seahub/views/ajax.py:1347
 #, python-format
 msgid "User %s not found in organization."
 msgstr "%s 사용자는 조직에 없습니다."
@@ -491,19 +507,24 @@ msgid ""
 "Group name can only contain letters, numbers, blank, hyphen or underscore"
 msgstr "그룹 이름에는 문자, 숫자, 공백, 음수 기호, 밑줄 기호만 넣을 수 있습니다"
 
+#: seahub/api2/endpoints/invitation.py:104
+#, python-format
+msgid "%(user)s revoke your access to %(site_name)s."
+msgstr ""
+
 #: seahub/api2/endpoints/invitations.py:54
-#: seahub/api2/endpoints/invitations.py:117
+#: seahub/api2/endpoints/invitations.py:116
 msgid "The email address is not allowed to be invited as a guest."
 msgstr "외부 손님으로 초대하도록 허용한 전자메일 주소가 아닙니다."
 
 #: seahub/api2/endpoints/invitations.py:59
-#: seahub/api2/endpoints/invitations.py:125
+#: seahub/api2/endpoints/invitations.py:124
 #, python-format
 msgid "%s is already invited."
 msgstr "%s은(는) 이미 초대했습니다."
 
-#: seahub/api2/endpoints/invitations.py:69
-#: seahub/api2/endpoints/invitations.py:133 seahub/base/accounts.py:794
+#: seahub/api2/endpoints/invitations.py:66
+#: seahub/api2/endpoints/invitations.py:134 seahub/base/accounts.py:794
 #, python-format
 msgid "User %s already exists."
 msgstr "%s 사용자가 이미 있습니다."
@@ -816,8 +837,9 @@ msgstr "입력하신 이전 암호가 틀립니다. 다시 입력하세요."
 msgid "Password (again)"
 msgstr "암호(다시 입력)"
 
-#: seahub/auth/forms.py:249 seahub/forms.py:35 seahub/invitations/views.py:31
-#: seahub/organizations/forms.py:47 seahub/profile/forms.py:46
+#: seahub/auth/forms.py:249 seahub/forms.py:35 seahub/invitations/views.py:29
+#: seahub/invitations/views.py:44 seahub/organizations/forms.py:47
+#: seahub/profile/forms.py:46
 msgid "A user with this email already exists."
 msgstr "이 전자메일 사용자가 이미 있습니다."
 
@@ -949,6 +971,76 @@ msgstr "이 라이브러리의 파일은 온라인에서 볼 수 없습니다."
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
 msgstr "올바른 전자메일 주소를 입력하세요."
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:24
+#: seahub/templates/file_access.html:25
+#: seahub/templates/sysadmin/sys_invitations_admin.html:18
+#: seahub/templates/sysadmin/userinfo.html:274
+msgid "Type"
+msgstr "형식"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:25
+#: seahub/templates/file_access.html:26
+#: seahub/templates/js/sysadmin-templates.html:258
+#: seahub/templates/js/sysadmin-templates.html:312
+#: seahub/templates/js/sysadmin-templates.html:1002
+#: seahub/templates/libraries.html:186
+msgid "IP"
+msgstr "IP"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/templates/js/sysadmin-templates.html:311
+#: seahub/templates/repo_history.html:35 seahub/templates/repo_history.html:42
+msgid "Device"
+msgstr "장치"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:26
+#: seahub/organizations/templates/organizations/org_file_update.html:24
+#: seahub/organizations/templates/organizations/org_perm_audit.html:29
+#: seahub/templates/file_access.html:27
+msgid "Date"
+msgstr "날짜"
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library Name"
+msgstr "라이브러리 이름"
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library ID"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library Owner"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "File Path"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:85
+#: seahub/base/templatetags/seahub_tags.py:126
+#: seahub/organizations/templates/organizations/org_file_audit.html:80
+#: seahub/organizations/templates/organizations/org_file_update.html:65
+#: seahub/organizations/templates/organizations/org_perm_audit.html:67
+#: seahub/organizations/templates/organizations/org_perm_audit.html:102
+msgid "Deleted"
+msgstr "삭제함"
+
+#: seahub/base/management/commands/export_file_access_log.py:88
+#: seahub/organizations/templates/organizations/org_file_audit.html:50
+#: seahub/organizations/templates/organizations/org_file_update.html:49
+#: seahub/organizations/templates/organizations/org_perm_audit.html:52
+#: seahub/templates/file_access.html:37
+#: seahub/templates/snippets/add_watermark.html:10
+msgid "Anonymous User"
+msgstr "손님 사용자"
+
+#: seahub/base/management/commands/export_file_access_log.py:97
+msgid "file-access-logs"
+msgstr ""
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -1094,7 +1186,7 @@ msgid "Yes"
 msgstr "예"
 
 #: seahub/base/management/commands/export_users.py:132
-#: seahub/invitations/models.py:15 seahub/invitations/models.py:36
+#: seahub/invitations/models.py:15 seahub/invitations/models.py:43
 #: seahub/templates/sysadmin/sys_useradmin.html:53
 #: seahub/templates/sysadmin/useradmin_table.html:59
 #: seahub/templates/sysadmin/useradmin_table.html:69
@@ -1117,14 +1209,6 @@ msgstr "기본"
 #: seahub/base/templatetags/seahub_tags.py:125
 msgid "Added"
 msgstr "추가함"
-
-#: seahub/base/templatetags/seahub_tags.py:126
-#: seahub/organizations/templates/organizations/org_file_audit.html:80
-#: seahub/organizations/templates/organizations/org_file_update.html:65
-#: seahub/organizations/templates/organizations/org_perm_audit.html:67
-#: seahub/organizations/templates/organizations/org_perm_audit.html:102
-msgid "Deleted"
-msgstr "삭제함"
 
 #: seahub/base/templatetags/seahub_tags.py:127
 msgid "Removed"
@@ -2903,12 +2987,13 @@ msgstr "%s 삭제에 성공했습니다"
 msgid "Failed to delete: the user does not exist"
 msgstr "삭제 실패: 사용자가 없습니다"
 
-#: seahub/invitations/models.py:90
+#: seahub/invitations/models.py:97
 #, python-format
 msgid "%(user)s invited you to join %(site_name)s."
 msgstr "%(user)s님께서 %(site_name)s 사이트 참여를 초대하셨습니다."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
+#: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
 #: seahub/notifications/templates/notifications/file_updates_email.html:7
 #: seahub/notifications/templates/notifications/notify_virus.html:10
 #: seahub/notifications/templates/notifications/notify_virus.html:17
@@ -2931,6 +3016,11 @@ msgstr "안녕하세요,"
 msgid ""
 "%(inviter)s invited you to join %(site_name)s. Please click the link below:"
 msgstr "%(inviter)s 님이 %(site_name)s 사이트 가입을 초대하셨습니다. 아래 링크를 누르세요:"
+
+#: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
+#, python-format
+msgid "%(inviter)s revoke your access to %(site_name)s."
+msgstr ""
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -3511,29 +3601,6 @@ msgstr "파일 업데이트"
 msgid "Permission"
 msgstr "권한"
 
-#: seahub/organizations/templates/organizations/org_file_audit.html:24
-#: seahub/templates/file_access.html:25
-#: seahub/templates/sysadmin/sys_invitations_admin.html:18
-#: seahub/templates/sysadmin/userinfo.html:274
-msgid "Type"
-msgstr "형식"
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:25
-#: seahub/templates/file_access.html:26
-#: seahub/templates/js/sysadmin-templates.html:258
-#: seahub/templates/js/sysadmin-templates.html:312
-#: seahub/templates/js/sysadmin-templates.html:1002
-#: seahub/templates/libraries.html:186
-msgid "IP"
-msgstr "IP"
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:26
-#: seahub/organizations/templates/organizations/org_file_update.html:24
-#: seahub/organizations/templates/organizations/org_perm_audit.html:29
-#: seahub/templates/file_access.html:27
-msgid "Date"
-msgstr "날짜"
-
 #: seahub/organizations/templates/organizations/org_file_audit.html:42
 #: seahub/organizations/templates/organizations/org_file_audit.html:75
 #: seahub/organizations/templates/organizations/org_file_update.html:41
@@ -3542,14 +3609,6 @@ msgstr "날짜"
 #: seahub/organizations/templates/organizations/org_perm_audit.html:97
 msgid "Only Show"
 msgstr "보기 전용"
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:50
-#: seahub/organizations/templates/organizations/org_file_update.html:49
-#: seahub/organizations/templates/organizations/org_perm_audit.html:52
-#: seahub/templates/file_access.html:37
-#: seahub/templates/snippets/add_watermark.html:10
-msgid "Anonymous User"
-msgstr "손님 사용자"
 
 #: seahub/organizations/templates/organizations/org_file_audit.html:91
 msgid "No File Access Information"
@@ -5319,11 +5378,6 @@ msgstr "링크 끊기"
 #: seahub/templates/repo_dir_recycle_view.html:65
 msgid "Clean"
 msgstr "지우기"
-
-#: seahub/templates/js/sysadmin-templates.html:311
-#: seahub/templates/repo_history.html:35 seahub/templates/repo_history.html:42
-msgid "Device"
-msgstr "장치"
 
 #: seahub/templates/js/sysadmin-templates.html:323
 msgid "No sync errors"
