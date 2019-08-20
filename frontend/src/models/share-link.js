@@ -1,4 +1,4 @@
-class SharedLinkInfo {
+class ShareLink {
 
   constructor(object) {
     this.repo_id = object.repo_id;
@@ -18,4 +18,4 @@ class SharedLinkInfo {
 
 }
 
-export default SharedLinkInfo;
+export default ShareLink;

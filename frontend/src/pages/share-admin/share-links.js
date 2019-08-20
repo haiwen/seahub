@@ -1,15 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import copy from '@seafile/seafile-editor/dist//utils/copy-to-clipboard';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, loginUrl, canGenerateUploadLink } from '../../utils/constants';
-import SharedLinkInfo from '../../models/shared-link-info';
-import ShareLinksPermissionEditor from '../../components/select-editor/share-links-permission-editor';
+import { isPro, gettext, siteRoot, loginUrl, canGenerateUploadLink } from '../../utils/constants';
+import ShareLink from '../../models/share-link';
+import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
+import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
+import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
 
 class Content extends Component {
 
@@ -62,7 +65,7 @@ class Content extends Component {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
 
     if (loading) {
-      return <span className="loading-icon loading-tip"></span>;
+      return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
@@ -78,23 +81,34 @@ class Content extends Component {
       const sortByTime = sortBy == 'time';
       const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
+      const isDesktop = Utils.isDesktop();
+      // only for some columns
+      const columnWidths = isPro ? ['14%', '7%', '14%'] : ['21%', '14%', '20%'];
       const table = (
         <React.Fragment>
-          <table className="table-hover">
+          <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
             <thead>
-              <tr>
-                <th width="4%">{/*icon*/}</th>
-                <th width="31%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th width="14%">{gettext('Library')}</th>
-                <th width="20%">{gettext('Permission')}</th>
-                <th width="7%">{gettext('Visits')}</th>
-                <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
-                <th width="10%">{/*Operations*/}</th>
-              </tr>
+              {isDesktop ? (
+                <tr>
+                  <th width="4%">{/*icon*/}</th>
+                  <th width="31%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                  <th width={columnWidths[0]}>{gettext('Library')}</th>
+                  {isPro && <th width="20%">{gettext('Permission')}</th>}
+                  <th width={columnWidths[1]}>{gettext('Visits')}</th>
+                  <th width={columnWidths[2]}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
+                  <th width="10%">{/*Operations*/}</th>
+                </tr>
+              ) : ( 
+                <tr>
+                  <th width="12%"></th>
+                  <th width="80%"></th>
+                  <th width="8%"></th>
+                </tr>
+              )}  
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item key={index} item={item} showModal={this.showModal} onRemoveLink={this.props.onRemoveLink}/>);
+                return (<Item key={index} isDesktop={isDesktop} item={item} showModal={this.showModal} onRemoveLink={this.props.onRemoveLink}/>);
               })}
             </tbody>
           </table>
@@ -121,20 +135,76 @@ class Item extends Component {
   constructor(props) {
     super(props);
 
-    let item = this.props.item;
+    const item = this.props.item;
+
+    if (isPro) {
+      this.editOption = 'edit_download';
+      this.permissionOptions = ['preview_download', 'preview_only'];
+      this.updatePermissionOptions();
+    }
+
     this.state = {
-      currentPermission: item.permissions.can_download ? 'Preview and download' : 'Preview only',
-      showOpIcon: false,
+      currentPermission: isPro ? this.getCurrentPermission() : '',
+      isOpIconShown: false,
+      isOpMenuOpen: false, // for mobile
+      isPermSelectDialogOpen: false // for mobile
     };
-    this.permissionOptions = ['Preview only', 'Preview and download'];
+  }
+
+  updatePermissionOptions = () => {
+    const item = this.props.item;
+    let options = this.permissionOptions;
+  
+    if (!Utils.isEditableOfficeFile(item.obj_name)) {
+      return ;
+    }
+
+    if (item.permissions.can_edit) {
+      options.push(this.editOption);
+      return ;
+    }
+
+    seafileAPI.getFileInfo(item.repo_id, item.path).then((res) => {
+      if (res.data.can_edit) {
+        options.push(this.editOption);
+        return ;
+      }
+    }).catch(error => {
+      return ;
+    });
+  }
+
+  getCurrentPermission = () => {
+    const options = this.permissionOptions;
+    const { can_edit, can_download } = this.props.item.permissions;
+    switch (`${can_edit} ${can_download}`) {
+      case 'false true':
+        return options[0];
+      case 'false false':
+        return options[1];
+      case 'true true':
+        return this.editOption;
+    }
+  }
+
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    }); 
+  }
+
+  togglePermSelectDialog = () => {
+    this.setState({
+      isPermSelectDialogOpen: !this.state.isPermSelectDialogOpen
+    }); 
   }
 
   handleMouseOver = () => {
-    this.setState({showOpIcon: true});
+    this.setState({isOpIconShown: true});
   }
 
   handleMouseOut = () => {
-    this.setState({showOpIcon: false});
+    this.setState({isOpIconShown: false});
   }
 
   viewLink = (e) => {
@@ -145,22 +215,6 @@ class Item extends Component {
   removeLink = (e) => {
     e.preventDefault();
     this.props.onRemoveLink(this.props.item);
-  }
-
-  getLinkParams = () => {
-    let item = this.props.item;
-    let iconUrl = '';
-    let linkUrl = '';
-    if (item.is_dir) {
-      let path = item.path === '/' ? '/' : item.path.slice(0, item.path.length - 1);
-      iconUrl = Utils.getFolderIconUrl(false);
-      linkUrl = `${siteRoot}library/${item.repo_id}/${item.repo_name}${Utils.encodePath(path)}`;
-    } else {
-      iconUrl = Utils.getFileIconUrl(item.obj_name); 
-      linkUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-    }
-
-    return { iconUrl, linkUrl };
   }
 
   renderExpriedData = () => {
@@ -181,64 +235,112 @@ class Item extends Component {
     );
   }
 
-  changePerm = (changed_to_permissions) => {
+  changePerm = (permission) => {
     const item = this.props.item;
-    let permissions = item.permissions;
-
-    if (changed_to_permissions === 'Preview only')
-      permissions.can_download = false;
-    else if (changed_to_permissions === 'Preview and download')
-      permissions.can_download = true;
-
-    seafileAPI.updateShareLink(item.token, JSON.stringify(permissions)).then(() => {
+    const permissionDetails = Utils.getShareLinkPermissionObject(permission).permissionDetails;
+    seafileAPI.updateShareLink(item.token, JSON.stringify(permissionDetails)).then(() => {
       this.setState({
-        currentPermission: changed_to_permissions,
+        currentPermission: permission 
       });
-      let message = gettext("Successfully modified permission.");
+      let message = gettext('Successfully modified permission.');
       toaster.success(message);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = gettext("Failed to modify permission.");
-      }
       toaster.danger(errMessage);
     });
   }
 
   render() {
     const item = this.props.item;
-    let { iconUrl, linkUrl } = this.getLinkParams();
+    const { currentPermission, isOpIconShown, isPermSelectDialogOpen } = this.state;
 
-    let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let linkIconClassName = 'sf2-icon-link action-icon' + iconVisibility; 
-    let deleteIconClassName = 'sf2-icon-delete action-icon' + iconVisibility;
-    return (
+    let iconUrl, linkUrl;
+    if (item.is_dir) {
+      let path = item.path === '/' ? '/' : item.path.slice(0, item.path.length - 1);
+      iconUrl = Utils.getFolderIconUrl(false);
+      linkUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}${Utils.encodePath(path)}`;
+    } else {
+      iconUrl = Utils.getFileIconUrl(item.obj_name); 
+      linkUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
+    }
+
+    const desktopItem = (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <td><img src={iconUrl} width="24" alt=""/></td>
+        <td><img src={iconUrl} width="24" alt="" /></td>
         <td>
           {item.is_dir ?
             <Link to={linkUrl}>{item.obj_name}</Link> :
             <a href={linkUrl} target="_blank">{item.obj_name}</a>
           }
         </td>
-        <td><Link to={`${siteRoot}library/${item.repo_id}/${item.repo_name}/`}>{item.repo_name}</Link></td>
+        <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
+        {isPro &&
         <td>
-          <ShareLinksPermissionEditor 
+          <ShareLinkPermissionEditor 
             isTextMode={true}
-            isEditIconShow={this.state.showOpIcon}
-            currentPermission={this.state.currentPermission}
+            isEditIconShow={isOpIconShown && !item.is_expired}
+            currentPermission={currentPermission}
             permissionOptions={this.permissionOptions}
             onPermissionChanged={this.changePerm}
           />
         </td>
+        }
         <td>{item.view_cnt}</td>
         <td>{this.renderExpriedData()}</td> 
         <td>
-          <a href="#" className={linkIconClassName} title={gettext('View')} onClick={this.viewLink}></a>
-          <a href="#" className={deleteIconClassName} title={gettext('Remove')} onClick={this.removeLink}></a>
+          <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} onClick={this.viewLink}></a>
+          <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('Remove')} onClick={this.removeLink}></a>
         </td>
       </tr>
     );
+
+    const mobileItem = ( 
+      <Fragment>
+        <tr>
+          <td><img src={iconUrl} alt="" width="24" /></td>
+          <td>
+            {item.is_dir ?
+              <Link to={linkUrl}>{item.obj_name}</Link> :
+              <a href={linkUrl} target="_blank">{item.obj_name}</a>
+            }
+            {isPro && <span className="item-meta-info-highlighted">{Utils.getShareLinkPermissionObject(currentPermission).text}</span>}
+            <br />
+            <span>{item.repo_name}</span><br />
+            <span className="item-meta-info">{item.view_cnt}<span className="small text-secondary">({gettext('Visits')})</span></span>
+            <span className="item-meta-info">{this.renderExpriedData()}<span className="small text-secondary">({gettext('Expiration')})</span></span>
+          </td>
+          <td>
+            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+              <DropdownToggle
+                tag="i"
+                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isOpMenuOpen}
+              />  
+              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                <div className="mobile-operation-menu-bg-layer"></div>
+                <div className="mobile-operation-menu">
+                  {(isPro && !item.is_expired) && <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>}
+                  <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>
+                  <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
+                </div>
+              </div>
+            </Dropdown>
+          </td>
+        </tr>
+        {isPermSelectDialogOpen &&
+        <ShareLinkPermissionSelect
+          currentPerm={currentPermission}
+          permissions={this.permissionOptions}
+          changePerm={this.changePerm}
+          toggleDialog={this.togglePermSelectDialog}
+        />
+        }
+      </Fragment>
+    );
+
+    return this.props.isDesktop ? desktopItem : mobileItem;
   }
 }
 
@@ -305,9 +407,8 @@ class ShareAdminShareLinks extends Component {
 
   componentDidMount() {
     seafileAPI.listShareLinks().then((res) => {
-      // res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       let items = res.data.map(item => {
-        return new SharedLinkInfo(item);
+        return new ShareLink(item);
       });
       this.setState({
         loading: false,
@@ -327,7 +428,6 @@ class ShareAdminShareLinks extends Component {
             errorMsg: gettext('Error')
           });
         }
-
       } else {
         this.setState({
           loading: false,
@@ -343,13 +443,10 @@ class ShareAdminShareLinks extends Component {
         return uploadItem.token !== item.token;
       });
       this.setState({items: items});
-      let message = gettext("Successfully deleted share link.");
+      let message = gettext('Successfully deleted 1 item.');
       toaster.success(message);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = gettext("Failed to delete share link.");
-      }
       toaster.danger(errMessage);
     });
   }
