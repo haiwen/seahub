@@ -53,6 +53,8 @@
 }
 .workspace .table-heading {
   padding: 0.25rem;
+}
+.table-heading-border {
   border-bottom: 1px solid #e6e6e6;
 }
 .workspace .sf3-font {
@@ -61,4 +63,33 @@
 }
 .workspace .add-table-range:hover {
   background-color: #f8f8f8;
+}
+.table-item-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.table-item {
+  width: 48%;
+  height: 2.5625rem;
+  padding: 0.5rem 0.625rem;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border-radius: 4px
+}
+.table-icon {
+  width: 10%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.table-name {
+  width: 75%;
+  height: 100%;
+}
+.table-dropdown-menu {
+  width: 15%;
+  height: 100%;
+  text-align: right;
 }

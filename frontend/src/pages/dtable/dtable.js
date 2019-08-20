@@ -103,9 +103,9 @@ class Table extends Component {
     let tableHref = siteRoot + 'workspace/' + this.props.workspaceID + '/dtable/' + table.name + '/';
 
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
-        <td><span className="sf3-font sf3-font-form"></span></td>
-        <td>
+      <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={ `table-item ${this.state.active ? 'tr-highlight' : ''}`}>
+        <div className="table-icon"><span className="sf3-font sf3-font-form"></span></div>
+        <div className="table-name">
           {this.state.isTableRenaming &&
             <Rename
               hasSuffix={true}
@@ -117,10 +117,8 @@ class Table extends Component {
           {!this.state.isTableRenaming &&
             <a href={tableHref} target="_blank">{table.name}</a>
           }
-        </td>
-        <td>{table.modifier}</td>
-        <td>{moment(table.updated_at).fromNow()}</td>
-        <td>
+        </div>
+        <div className="table-dropdown-menu">
           {this.state.active &&
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
               <DropdownToggle
@@ -151,14 +149,13 @@ class Table extends Component {
               ShareCancel={this.onShareTableCancel}
             />
           }
-        </td>
-      </tr>
+        </div>
+      </div>
     );
   }
 }
 
 Table.propTypes = tablePropTypes;
-
 
 const workspacePropTypes = {
   workspace: PropTypes.object.isRequired,
@@ -237,34 +234,29 @@ class Workspace extends Component {
 
     return(
       <div className="workspace">
-        <div className="table-heading">{isPersonal ? gettext('My Tables') : workspace.owner_name}</div>
+        <div className={`table-heading ${tableList.length > 0 ? '' : 'table-heading-border'}`}>{isPersonal ? gettext('My Tables') : workspace.owner_name}</div>
         {tableList.length > 0 ?
-          <table width="100%" className="table-vcenter">
-            <colgroup>
-              <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
-            </colgroup>
-            <tbody>
-              {tableList.map((table, index) => {
-                return (
-                  <Table
-                    key={index}
-                    table={table}
-                    workspaceID={workspace.id}
-                    renameTable={this.renameTable}
-                    deleteTable={this.deleteTable}
-                    onFreezedItem={this.onFreezedItem}
-                    onUnfreezedItem={this.onUnfreezedItem}
-                    isItemFreezed={isItemFreezed}
-                  />
-                );
-              })}
-              <tr className={isItemFreezed ? '' : 'add-table-range'}>
-                <td><span className="sf3-font sf3-font-add"></span></td>
-                <td><a href="#" onClick={this.addTable}>{gettext('Add a table')}</a></td>
-                <td></td><td></td><td></td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="table-item-container">
+            {tableList.map((table, index) => {
+              return (
+                <Table
+                  key={index}
+                  table={table}
+                  workspaceID={workspace.id}
+                  renameTable={this.renameTable}
+                  deleteTable={this.deleteTable}
+                  onFreezedItem={this.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
+                  isItemFreezed={isItemFreezed}
+                />
+              );
+            })}
+            <div className={`table-item ${isItemFreezed ? '' : 'add-table-range'}`}>
+              <div className="table-icon"><span className="sf3-font sf3-font-add"></span></div>
+              <div className="table-name"><a href="#" onClick={this.addTable}>{gettext('Add a table')}</a></div>
+              <div className="table-dropdown-menu"></div>
+            </div>
+          </div>
           :
           <table width="100%" className="table-vcenter">
             <tbody>
@@ -286,6 +278,7 @@ const dtablePropTypes = {
 };
 
 class DTable extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -389,22 +382,17 @@ class DTable extends Component {
     return (
       <div className="workspace">
         <div className="table-heading">{gettext('Shared with me')}</div>
-        <table width="100%" className="table-vcenter">
-          <colgroup>
-            <col width="4%"/><col width="31%"/><col width="30%"/><col width="27%"/><col width="8%"/>
-          </colgroup>
-          <tbody>
-            {this.state.shareTableList.map((table, index) => {
-              return (
-                <ShareTableItem
-                  key={index}
-                  table={table}
-                  leaveShareTable={this.leaveShareTable}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="table-item-container">
+          {this.state.shareTableList.map((table, index) => {
+            return (
+              <ShareTableItem
+                key={index}
+                table={table}
+                leaveShareTable={this.leaveShareTable}
+              />
+            );
+          })}
+        </div>
       </div>
     );
   };
