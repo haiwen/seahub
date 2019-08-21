@@ -419,11 +419,15 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
     dirent_name_from_uuid_map = uuid_map.filename
     is_dir = uuid_map.is_dir
 
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
     dirent_path = posixpath.join(parent_path, dirent_name_from_uuid_map.strip('/'))
     if not is_dir:
         redirect_to = reverse('view_lib_file', args=[repo_id, dirent_path])
     else:
-        redirect_to = '%s#common/lib/%s/%s' % (settings.SITE_ROOT, repo_id, dirent_path.strip('/'))
+        redirect_to = reverse('lib_view', args=[repo_id, repo.name, dirent_path.strip('/')])
 
     return HttpResponseRedirect(redirect_to)
 
