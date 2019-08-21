@@ -15,10 +15,18 @@ class Workspace extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableList: this.props.workspace.table_list,
+      tableList: props.workspace.table_list,
       errorMsg: '',
       isItemFreezed: false,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.workspace.table_list !== this.props.workspace.table_list) {
+      this.setState({
+        tableList: nextProps.workspace.table_list
+      });
+    }
   }
 
   onFreezedItem = () => {
@@ -64,14 +72,6 @@ class Workspace extends React.Component {
     e.preventDefault();
     this.props.setCurrentWorkspace(this.props.workspace);
     this.props.onAddDTable();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.workspace.table_list !== this.props.workspace.table_list) {
-      this.setState({
-        tableList: nextProps.workspace.table_list
-      });
-    }
   }
 
   render() {

@@ -29,6 +29,28 @@ class ListTableItem extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.isItemFreezed) {
+      this.setState({ active: false });
+    }
+  }
+
+  onMouseEnter = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        active: true
+      });
+    }
+  }
+
+  onMouseLeave = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        active: false
+      });
+    }
+  }
+
   onRenameTableCancel = () => {
     this.setState({isTableRenaming: !this.state.isTableRenaming});
     this.props.onUnfreezedItem();
@@ -63,26 +85,6 @@ class ListTableItem extends React.Component {
       this.props.onFreezedItem();
     }
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  }
-
-  onMouseEnter = () => {
-    if (this.props.isItemFreezed) return;
-    this.setState({
-      active: true
-    });
-  }
-
-  onMouseLeave = () => {
-    if (this.props.isItemFreezed) return;
-    this.setState({
-      active: false
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.isItemFreezed) {
-      this.setState({ active: false });
-    }
   }
 
   render() {

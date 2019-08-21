@@ -32,8 +32,24 @@ class DTable extends Component {
     };
   }
 
+  componentDidMount() {
+    this.listWorkspaces();
+    this.listSharedTables();
+  }
+
   onAddDTable = () => {
     this.setState({ isShowAddDTableDialog: !this.state.isShowAddDTableDialog });
+  }
+
+  newDtable = () => {
+    if (this.state.currentWorkspace) {
+      this.setState({ currentWorkspace: null });
+    }
+    this.onAddDTable();
+  }
+  
+  setCurrentWorkspace = (currentWorkspace) => {
+    this.setState({ currentWorkspace: currentWorkspace });
   }
 
   createDTable = (tableName, owner) => {
@@ -87,7 +103,7 @@ class DTable extends Component {
         });
       }
     });
-  };
+  }
 
   leaveShareTable = (table) => {
     let email = username;
@@ -107,15 +123,6 @@ class DTable extends Component {
         });
       }
     });
-  };
-
-  setCurrentWorkspace = (currentWorkspace) => {
-    this.setState({ currentWorkspace: currentWorkspace });
-  }
-
-  componentDidMount() {
-    this.listWorkspaces();
-    this.listSharedTables();
   }
 
   renderShareTablePanel = () => {
@@ -135,22 +142,22 @@ class DTable extends Component {
         </div>
       </div>
     );
-  };
-
-  newDtable = () => {
-    if (this.state.currentWorkspace) {
-      this.setState({ currentWorkspace: null });
-    }
-    this.onAddDTable();
   }
 
   render() {
-    let personalWorkspace = this.state.workspaceList.filter(workspace => {
+    const { workspaceList, loading } = this.state;
+
+    let personalWorkspaceList = workspaceList.filter(workspace => {
       return workspace.owner_type === 'Personal';
     }).pop();
-    let groupWorkspaceList = this.state.workspaceList.filter(workspace => {
+
+    let groupWorkspaceList = workspaceList.filter(workspace => {
       return workspace.owner_type === 'Group';
     });
+
+    if (loading) {
+      return(<Loading />);
+    }
 
     return (
       <Fragment>
@@ -176,21 +183,18 @@ class DTable extends Component {
               <h3 className="sf-heading">DTable</h3>
             </div>
             <div className="cur-view-content">
-              {this.state.loading && <Loading />}
-              {(!this.state.loading && this.state.errorMsg) &&
+              {this.state.errorMsg &&
                 <p className="error text-center">{this.state.errorMsg}</p>
               }
-              {!this.state.loading &&
               <Workspace
-                workspace={personalWorkspace}
+                workspace={personalWorkspaceList}
                 onAddDTable={this.onAddDTable}
                 setCurrentWorkspace={this.setCurrentWorkspace}
               />
-              }
               {(!this.state.shareTableLoading && this.state.shareTableList.length > 0) &&
-              this.renderShareTablePanel()
+                this.renderShareTablePanel()
               }
-              {!this.state.loading &&
+              {
                 groupWorkspaceList.map((workspace, index) => {
                   return (
                     <Workspace
@@ -202,14 +206,14 @@ class DTable extends Component {
                   );
                 })
               }
-              {(!this.state.loading && this.state.isShowAddDTableDialog) &&
-              <div className="my-2">
-                <CreateTableDialog
-                  createDTable={this.createDTable}
-                  onAddDTable={this.onAddDTable}
-                  currentWorkspace={this.state.currentWorkspace}
-                />
-              </div>
+              {this.state.isShowAddDTableDialog &&
+                <div className="my-2">
+                  <CreateTableDialog
+                    createDTable={this.createDTable}
+                    onAddDTable={this.onAddDTable}
+                    currentWorkspace={this.state.currentWorkspace}
+                  />
+                </div>
               }
             </div>
           </div>
