@@ -108,13 +108,13 @@ export const Utils = {
     }
   },
 
-  isOfficeFile: function(filename) {
+  isEditableOfficeFile: function(filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
     }
     var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var exts = ['doc', 'ppt', 'xls', 'docx', 'pptx', 'xlsx'];
+    var exts = ['docx', 'pptx', 'xlsx'];
     if (exts.indexOf(file_ext) != -1) {
       return true;
     } else {
@@ -419,6 +419,38 @@ export const Utils = {
         break;
     }
     return title;
+  },
+
+  getShareLinkPermissionObject: function(permission) {
+    switch (permission) {
+      case 'preview_download':
+        return {
+          value: permission, 
+          text: gettext('Preview and download'), 
+          permissionDetails: {
+            'can_edit': false,
+            "can_download": true
+          }
+        };
+      case 'preview_only':
+        return {
+          value: permission, 
+          text: gettext('Preview only'), 
+          permissionDetails: {
+            'can_edit': false,
+            "can_download": false 
+          }
+        };
+      case 'edit_download':
+        return {
+          value: permission,
+          text: gettext('Edit on cloud and download'), 
+          permissionDetails: {
+            'can_edit': true,
+            "can_download": true
+          }
+        };
+    }
   },
 
   formatSize: function(options) {

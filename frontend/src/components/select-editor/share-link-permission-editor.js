@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import SelectEditor from './select-editor';
 
 const propTypes = {
@@ -11,16 +11,10 @@ const propTypes = {
   onPermissionChanged: PropTypes.func.isRequired
 };
 
-class ShareLinksPermissionEditor extends React.Component {
+class ShareLinkPermissionEditor extends React.Component {
 
   translatePermission = (permission) => {
-    if (permission === 'Preview only') {
-      return gettext('Preview only');
-    }
-      
-    if (permission === 'Preview and download') {
-      return gettext('Preview and download');
-    }
+    return Utils.getShareLinkPermissionObject(permission).text;
   }
 
   render() {
@@ -37,6 +31,6 @@ class ShareLinksPermissionEditor extends React.Component {
   }
 }
 
-ShareLinksPermissionEditor.propTypes = propTypes;
+ShareLinkPermissionEditor.propTypes = propTypes;
 
-export default ShareLinksPermissionEditor;
+export default ShareLinkPermissionEditor;

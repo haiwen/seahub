@@ -41,9 +41,8 @@ def sso(request):
     return HttpResponseRedirect(next_page)
 
 def shib_login(request):
-    if REDIRECT_FIELD_NAME in request.GET:
-        next_page = request.GET[REDIRECT_FIELD_NAME]
-        next_param = '?%s=' % REDIRECT_FIELD_NAME + urlquote(next_page)
-        return HttpResponseRedirect(reverse('sso') + next_param)
-    else:
-        return HttpResponseRedirect(reverse('sso'))
+    # client platform args used to create api v2 token
+    next_page = request.GET.get(REDIRECT_FIELD_NAME, '')
+    query_string = request.META.get('QUERY_STRING', '')
+    params = '?%s=%s&%s' % (REDIRECT_FIELD_NAME, urlquote(next_page), query_string)
+    return HttpResponseRedirect(reverse('sso') + params)

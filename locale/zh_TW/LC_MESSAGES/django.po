@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-25 09:38+0800\n"
-"PO-Revision-Date: 2019-07-24 02:09+0000\n"
+"POT-Creation-Date: 2019-08-20 15:43+0800\n"
+"PO-Revision-Date: 2019-08-20 07:45+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "容量太小(最小為0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:311
+#: seahub/organizations/api/admin/users.py:350
 #: seahub/organizations/views.py:1023 seahub/views/sysadmin.py:876
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
@@ -130,7 +130,7 @@ msgstr "用戶 %s 已經是資料庫擁有者。"
 
 #: seahub/api2/endpoints/admin/shares.py:188
 #: seahub/api2/endpoints/invitations.py:50
-#: seahub/api2/endpoints/invitations.py:110
+#: seahub/api2/endpoints/invitations.py:109
 #, python-format
 msgid "Email %s invalid."
 msgstr "電子郵件 %s 含有無效字元"
@@ -146,6 +146,7 @@ msgid "This item has been shared to %s."
 msgstr "已經與%s共享此項目"
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:22
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:23
@@ -159,6 +160,8 @@ msgid "Time"
 msgstr "時間"
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
 #: seahub/organizations/templates/organizations/org_file_audit.html:23
 #: seahub/organizations/templates/organizations/org_file_update.html:23
@@ -176,34 +179,41 @@ msgid "User"
 msgstr "用戶"
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/templates/sysadmin/sys_trafficadmin.html:60
 msgid "Web Download"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:224
+#: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/templates/sysadmin/sys_trafficadmin.html:48
 msgid "Sync Download"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:224
+#: seahub/base/management/commands/export_user_traffic_report.py:46
 msgid "Link Download"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:225
+#: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/templates/sysadmin/sys_trafficadmin.html:54
 msgid "Web Upload"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:225
+#: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 msgid "Sync Upload"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:226
+#: seahub/base/management/commands/export_user_traffic_report.py:48
 msgid "Link Upload"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:268
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/contacts/templates/contacts/contact_list.html:44
@@ -237,6 +247,7 @@ msgid "Email"
 msgstr "電子郵件"
 
 #: seahub/api2/endpoints/admin/statistics.py:268
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/contacts/templates/contacts/contact_list.html:18
@@ -333,6 +344,7 @@ msgid "Name"
 msgstr "名稱"
 
 #: seahub/api2/endpoints/admin/statistics.py:268 seahub/auth/forms.py:243
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:16
@@ -347,6 +359,7 @@ msgid "Contact Email"
 msgstr "聯繫電郵"
 
 #: seahub/api2/endpoints/admin/statistics.py:269
+#: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
 #: seahub/views/sysadmin.py:425 seahub/views/sysadmin.py:429
@@ -354,6 +367,7 @@ msgid "Space Usage"
 msgstr "已用空間"
 
 #: seahub/api2/endpoints/admin/statistics.py:269
+#: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
 #: seahub/views/sysadmin.py:425 seahub/views/sysadmin.py:429
@@ -450,8 +464,8 @@ msgid "You can not refresh this file's lock."
 msgstr ""
 
 #: seahub/api2/endpoints/file_tag.py:175
-#: seahub/api2/endpoints/invitations.py:78
-#: seahub/api2/endpoints/invitations.py:145
+#: seahub/api2/endpoints/invitations.py:77
+#: seahub/api2/endpoints/invitations.py:148
 #: seahub/api2/endpoints/send_upload_link_email.py:105
 #: seahub/api2/endpoints/wiki_pages.py:106
 #: seahub/api2/endpoints/wiki_pages.py:119
@@ -480,7 +494,9 @@ msgstr "用戶 %s 已經是群組的成員"
 
 #: seahub/api2/endpoints/group_members.py:100
 #: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1586
-#: seahub/views/ajax.py:1347
+#: seahub/organizations/api/admin/user_repos.py:50
+#: seahub/organizations/api/admin/user_repos.py:103
+#: seahub/organizations/api/admin/users.py:241 seahub/views/ajax.py:1347
 #, python-format
 msgid "User %s not found in organization."
 msgstr "組織內無用戶 %s 。"
@@ -495,19 +511,24 @@ msgid ""
 "Group name can only contain letters, numbers, blank, hyphen or underscore"
 msgstr "群組名稱只能包含中英文字元，數字及底線。"
 
+#: seahub/api2/endpoints/invitation.py:104
+#, python-format
+msgid "%(user)s revoke your access to %(site_name)s."
+msgstr ""
+
 #: seahub/api2/endpoints/invitations.py:54
-#: seahub/api2/endpoints/invitations.py:117
+#: seahub/api2/endpoints/invitations.py:116
 msgid "The email address is not allowed to be invited as a guest."
 msgstr "此郵箱不能被邀請為訪客用戶。"
 
 #: seahub/api2/endpoints/invitations.py:59
-#: seahub/api2/endpoints/invitations.py:125
+#: seahub/api2/endpoints/invitations.py:124
 #, python-format
 msgid "%s is already invited."
 msgstr "%s 已被邀請。"
 
-#: seahub/api2/endpoints/invitations.py:69
-#: seahub/api2/endpoints/invitations.py:133 seahub/base/accounts.py:794
+#: seahub/api2/endpoints/invitations.py:66
+#: seahub/api2/endpoints/invitations.py:134 seahub/base/accounts.py:794
 #, python-format
 msgid "User %s already exists."
 msgstr "用戶 %s 已存在。"
@@ -820,8 +841,9 @@ msgstr "舊密碼輸入錯誤。請重新輸入。"
 msgid "Password (again)"
 msgstr "請再次輸入密碼"
 
-#: seahub/auth/forms.py:249 seahub/forms.py:35 seahub/invitations/views.py:31
-#: seahub/organizations/forms.py:47 seahub/profile/forms.py:46
+#: seahub/auth/forms.py:249 seahub/forms.py:35 seahub/invitations/views.py:29
+#: seahub/invitations/views.py:44 seahub/organizations/forms.py:47
+#: seahub/profile/forms.py:46
 msgid "A user with this email already exists."
 msgstr "這個電子郵件已被註冊"
 
@@ -953,6 +975,76 @@ msgstr "該資料庫中的檔案無法線上查看。"
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
 msgstr "請輸入有效的電子郵件地址。"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:24
+#: seahub/templates/file_access.html:25
+#: seahub/templates/sysadmin/sys_invitations_admin.html:18
+#: seahub/templates/sysadmin/userinfo.html:274
+msgid "Type"
+msgstr "類型"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:25
+#: seahub/templates/file_access.html:26
+#: seahub/templates/js/sysadmin-templates.html:258
+#: seahub/templates/js/sysadmin-templates.html:312
+#: seahub/templates/js/sysadmin-templates.html:1002
+#: seahub/templates/libraries.html:186
+msgid "IP"
+msgstr "IP"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/templates/js/sysadmin-templates.html:311
+#: seahub/templates/repo_history.html:35 seahub/templates/repo_history.html:42
+msgid "Device"
+msgstr "設備"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:26
+#: seahub/organizations/templates/organizations/org_file_update.html:24
+#: seahub/organizations/templates/organizations/org_perm_audit.html:29
+#: seahub/templates/file_access.html:27
+msgid "Date"
+msgstr "日期"
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library Name"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library ID"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library Owner"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "File Path"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:85
+#: seahub/base/templatetags/seahub_tags.py:126
+#: seahub/organizations/templates/organizations/org_file_audit.html:80
+#: seahub/organizations/templates/organizations/org_file_update.html:65
+#: seahub/organizations/templates/organizations/org_perm_audit.html:67
+#: seahub/organizations/templates/organizations/org_perm_audit.html:102
+msgid "Deleted"
+msgstr "刪除了"
+
+#: seahub/base/management/commands/export_file_access_log.py:88
+#: seahub/organizations/templates/organizations/org_file_audit.html:50
+#: seahub/organizations/templates/organizations/org_file_update.html:49
+#: seahub/organizations/templates/organizations/org_perm_audit.html:52
+#: seahub/templates/file_access.html:37
+#: seahub/templates/snippets/add_watermark.html:10
+msgid "Anonymous User"
+msgstr "匿名用戶"
+
+#: seahub/base/management/commands/export_file_access_log.py:97
+msgid "file-access-logs"
+msgstr ""
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -1098,7 +1190,7 @@ msgid "Yes"
 msgstr "確定"
 
 #: seahub/base/management/commands/export_users.py:132
-#: seahub/invitations/models.py:15 seahub/invitations/models.py:36
+#: seahub/invitations/models.py:15 seahub/invitations/models.py:43
 #: seahub/templates/sysadmin/sys_useradmin.html:53
 #: seahub/templates/sysadmin/useradmin_table.html:59
 #: seahub/templates/sysadmin/useradmin_table.html:69
@@ -1121,14 +1213,6 @@ msgstr "預設"
 #: seahub/base/templatetags/seahub_tags.py:125
 msgid "Added"
 msgstr "新增了"
-
-#: seahub/base/templatetags/seahub_tags.py:126
-#: seahub/organizations/templates/organizations/org_file_audit.html:80
-#: seahub/organizations/templates/organizations/org_file_update.html:65
-#: seahub/organizations/templates/organizations/org_perm_audit.html:67
-#: seahub/organizations/templates/organizations/org_perm_audit.html:102
-msgid "Deleted"
-msgstr "刪除了"
 
 #: seahub/base/templatetags/seahub_tags.py:127
 msgid "Removed"
@@ -2907,12 +2991,13 @@ msgstr "%s 刪除成功。"
 msgid "Failed to delete: the user does not exist"
 msgstr "刪除失敗：該用戶不存在"
 
-#: seahub/invitations/models.py:90
+#: seahub/invitations/models.py:97
 #, python-format
 msgid "%(user)s invited you to join %(site_name)s."
 msgstr "%(user)s 邀請你加入 %(site_name)s."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
+#: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
 #: seahub/notifications/templates/notifications/file_updates_email.html:7
 #: seahub/notifications/templates/notifications/notify_virus.html:10
 #: seahub/notifications/templates/notifications/notify_virus.html:17
@@ -2935,6 +3020,11 @@ msgstr "你好，"
 msgid ""
 "%(inviter)s invited you to join %(site_name)s. Please click the link below:"
 msgstr "%(inviter)s 邀請你加入 %(site_name)s。請按下以下網址："
+
+#: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
+#, python-format
+msgid "%(inviter)s revoke your access to %(site_name)s."
+msgstr ""
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -3515,29 +3605,6 @@ msgstr ""
 msgid "Permission"
 msgstr "讀寫權限"
 
-#: seahub/organizations/templates/organizations/org_file_audit.html:24
-#: seahub/templates/file_access.html:25
-#: seahub/templates/sysadmin/sys_invitations_admin.html:18
-#: seahub/templates/sysadmin/userinfo.html:274
-msgid "Type"
-msgstr "類型"
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:25
-#: seahub/templates/file_access.html:26
-#: seahub/templates/js/sysadmin-templates.html:258
-#: seahub/templates/js/sysadmin-templates.html:312
-#: seahub/templates/js/sysadmin-templates.html:1002
-#: seahub/templates/libraries.html:186
-msgid "IP"
-msgstr "IP"
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:26
-#: seahub/organizations/templates/organizations/org_file_update.html:24
-#: seahub/organizations/templates/organizations/org_perm_audit.html:29
-#: seahub/templates/file_access.html:27
-msgid "Date"
-msgstr "日期"
-
 #: seahub/organizations/templates/organizations/org_file_audit.html:42
 #: seahub/organizations/templates/organizations/org_file_audit.html:75
 #: seahub/organizations/templates/organizations/org_file_update.html:41
@@ -3546,14 +3613,6 @@ msgstr "日期"
 #: seahub/organizations/templates/organizations/org_perm_audit.html:97
 msgid "Only Show"
 msgstr ""
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:50
-#: seahub/organizations/templates/organizations/org_file_update.html:49
-#: seahub/organizations/templates/organizations/org_perm_audit.html:52
-#: seahub/templates/file_access.html:37
-#: seahub/templates/snippets/add_watermark.html:10
-msgid "Anonymous User"
-msgstr "匿名用戶"
 
 #: seahub/organizations/templates/organizations/org_file_audit.html:91
 msgid "No File Access Information"
@@ -5323,11 +5382,6 @@ msgstr "斷開連接"
 #: seahub/templates/repo_dir_recycle_view.html:65
 msgid "Clean"
 msgstr "清空"
-
-#: seahub/templates/js/sysadmin-templates.html:311
-#: seahub/templates/repo_history.html:35 seahub/templates/repo_history.html:42
-msgid "Device"
-msgstr "設備"
 
 #: seahub/templates/js/sysadmin-templates.html:323
 msgid "No sync errors"

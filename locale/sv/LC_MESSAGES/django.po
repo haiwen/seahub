@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Radapompa <radapompa@gmail.com>, 2015-2016
-# Radapompa <radapompa@gmail.com>, 2016-2018
+# Radapompa <radapompa@gmail.com>, 2016-2019
 # Robert Högberg <robert.hogberg@gmail.com>, 2016-2017
 # tompa <tompatulpan@gmail.com>, 2014
 # ugusta <ugusta@hotmail.com>, 2014
@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-25 09:38+0800\n"
-"PO-Revision-Date: 2019-07-24 02:09+0000\n"
+"POT-Creation-Date: 2019-08-20 15:43+0800\n"
+"PO-Revision-Date: 2019-08-20 07:45+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -63,7 +63,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "Utrymmeskvot är för lågt (minsta värde är 0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:311
+#: seahub/organizations/api/admin/users.py:350
 #: seahub/organizations/views.py:1023 seahub/views/sysadmin.py:876
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
@@ -82,11 +82,11 @@ msgstr "Det finns redan en annan grupp med detta namn."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:231
 msgid "There are libraries in this department."
-msgstr ""
+msgstr "Det är kataloger i denna avdelning."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:235
 msgid "There are sub-departments in this department."
-msgstr ""
+msgstr "Det är underavdelningar i denna avdelning."
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
@@ -100,7 +100,7 @@ msgstr "Mitt bibliotek"
 msgid ""
 "Group name can only contain letters, numbers, blank, hyphen, dot, single "
 "quote or underscore"
-msgstr ""
+msgstr "Gruppnamnet kan enbart innehålla bokstäver, nummer, mellanslag, bindestreck, punkt, single citat eller understreck."
 
 #: seahub/api2/endpoints/admin/groups.py:203
 #: seahub/api2/endpoints/groups.py:317
@@ -115,11 +115,11 @@ msgstr "Systembibliotek kan inte tas bort."
 #: seahub/api2/endpoints/admin/libraries.py:345 seahub/api2/views.py:1601
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
-msgstr ""
+msgstr "Överföring misslyckades: rolen för %s är %s, kan inte lägga till katalog."
 
 #: seahub/api2/endpoints/admin/libraries.py:366 seahub/api2/views.py:1606
 msgid "Library can not be transferred to owner."
-msgstr ""
+msgstr "Katalogen kan inte överföras till ägaren."
 
 #: seahub/api2/endpoints/admin/shares.py:180
 #, python-format
@@ -128,7 +128,7 @@ msgstr "Användaren %s äger redan biblioteket."
 
 #: seahub/api2/endpoints/admin/shares.py:188
 #: seahub/api2/endpoints/invitations.py:50
-#: seahub/api2/endpoints/invitations.py:110
+#: seahub/api2/endpoints/invitations.py:109
 #, python-format
 msgid "Email %s invalid."
 msgstr "Mejladressen %s är ogiltig."
@@ -144,6 +144,7 @@ msgid "This item has been shared to %s."
 msgstr "Denna fil har delats med %s."
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:22
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:23
@@ -157,6 +158,8 @@ msgid "Time"
 msgstr "Tid"
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
 #: seahub/organizations/templates/organizations/org_file_audit.html:23
 #: seahub/organizations/templates/organizations/org_file_update.html:23
@@ -174,34 +177,41 @@ msgid "User"
 msgstr "Användare"
 
 #: seahub/api2/endpoints/admin/statistics.py:223
+#: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/templates/sysadmin/sys_trafficadmin.html:60
 msgid "Web Download"
-msgstr ""
+msgstr "Webb-nedladdning"
 
 #: seahub/api2/endpoints/admin/statistics.py:224
+#: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/templates/sysadmin/sys_trafficadmin.html:48
 msgid "Sync Download"
-msgstr ""
+msgstr "Synk-nedladdning"
 
 #: seahub/api2/endpoints/admin/statistics.py:224
+#: seahub/base/management/commands/export_user_traffic_report.py:46
 msgid "Link Download"
-msgstr ""
+msgstr "Länk-nedladdning"
 
 #: seahub/api2/endpoints/admin/statistics.py:225
+#: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/templates/sysadmin/sys_trafficadmin.html:54
 msgid "Web Upload"
-msgstr ""
+msgstr "Webb-uppladdning"
 
 #: seahub/api2/endpoints/admin/statistics.py:225
+#: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 msgid "Sync Upload"
-msgstr ""
+msgstr "Synk-uppladdning"
 
 #: seahub/api2/endpoints/admin/statistics.py:226
+#: seahub/base/management/commands/export_user_traffic_report.py:48
 msgid "Link Upload"
-msgstr ""
+msgstr "Länk-uppladdning"
 
 #: seahub/api2/endpoints/admin/statistics.py:268
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/contacts/templates/contacts/contact_list.html:44
@@ -235,6 +245,7 @@ msgid "Email"
 msgstr "Email"
 
 #: seahub/api2/endpoints/admin/statistics.py:268
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/contacts/templates/contacts/contact_list.html:18
@@ -331,6 +342,7 @@ msgid "Name"
 msgstr "Namn"
 
 #: seahub/api2/endpoints/admin/statistics.py:268 seahub/auth/forms.py:243
+#: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:16
@@ -345,6 +357,7 @@ msgid "Contact Email"
 msgstr "Kontakt Mejladress"
 
 #: seahub/api2/endpoints/admin/statistics.py:269
+#: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
 #: seahub/views/sysadmin.py:425 seahub/views/sysadmin.py:429
@@ -352,6 +365,7 @@ msgid "Space Usage"
 msgstr "Använt utrymme"
 
 #: seahub/api2/endpoints/admin/statistics.py:269
+#: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
 #: seahub/views/sysadmin.py:425 seahub/views/sysadmin.py:429
@@ -441,15 +455,15 @@ msgstr "Åtkomst nekas"
 
 #: seahub/api2/endpoints/file.py:583 seahub/api2/endpoints/file.py:601
 msgid "File is not locked."
-msgstr ""
+msgstr "Filen är inte låst."
 
 #: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:462
 msgid "You can not refresh this file's lock."
-msgstr ""
+msgstr "Du kan inte uppdatera denna fillåsning."
 
 #: seahub/api2/endpoints/file_tag.py:175
-#: seahub/api2/endpoints/invitations.py:78
-#: seahub/api2/endpoints/invitations.py:145
+#: seahub/api2/endpoints/invitations.py:77
+#: seahub/api2/endpoints/invitations.py:148
 #: seahub/api2/endpoints/send_upload_link_email.py:105
 #: seahub/api2/endpoints/wiki_pages.py:106
 #: seahub/api2/endpoints/wiki_pages.py:119
@@ -478,7 +492,9 @@ msgstr "Användaren %s är redan medlem i gruppen."
 
 #: seahub/api2/endpoints/group_members.py:100
 #: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1586
-#: seahub/views/ajax.py:1347
+#: seahub/organizations/api/admin/user_repos.py:50
+#: seahub/organizations/api/admin/user_repos.py:103
+#: seahub/organizations/api/admin/users.py:241 seahub/views/ajax.py:1347
 #, python-format
 msgid "User %s not found in organization."
 msgstr "Kan inte hitta användaren %s i organisationen."
@@ -493,19 +509,24 @@ msgid ""
 "Group name can only contain letters, numbers, blank, hyphen or underscore"
 msgstr "Gruppnamn kan enbart innehålla bokstäver, nummer, blanksteg, bindestreck eller understreck"
 
+#: seahub/api2/endpoints/invitation.py:104
+#, python-format
+msgid "%(user)s revoke your access to %(site_name)s."
+msgstr ""
+
 #: seahub/api2/endpoints/invitations.py:54
-#: seahub/api2/endpoints/invitations.py:117
+#: seahub/api2/endpoints/invitations.py:116
 msgid "The email address is not allowed to be invited as a guest."
 msgstr "Mejladressen är inte tillåten att bli inbjuden som gäst."
 
 #: seahub/api2/endpoints/invitations.py:59
-#: seahub/api2/endpoints/invitations.py:125
+#: seahub/api2/endpoints/invitations.py:124
 #, python-format
 msgid "%s is already invited."
 msgstr "%s är redan inbjuden."
 
-#: seahub/api2/endpoints/invitations.py:69
-#: seahub/api2/endpoints/invitations.py:133 seahub/base/accounts.py:794
+#: seahub/api2/endpoints/invitations.py:66
+#: seahub/api2/endpoints/invitations.py:134 seahub/base/accounts.py:794
 #, python-format
 msgid "User %s already exists."
 msgstr "Användaren %s existerar redan."
@@ -533,22 +554,22 @@ msgstr "Fel"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:60
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "Denna katalog har inte blivit krypterad."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:44
 #: seahub/api2/endpoints/user.py:73 seahub/api2/endpoints/user.py:93
 msgid "Feature disabled."
-msgstr ""
+msgstr "Tillägg avstängd."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:65
 #: seahub/api2/endpoints/repo_set_password.py:160
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "Can inte återställa denna katalogs lösenord."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:72
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "Nytt lösenord för katalog %s"
 
 #: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3789
 msgid "Wrong password"
@@ -572,18 +593,18 @@ msgstr "Felaktigt gammalt lösenord"
 #: seahub/api2/endpoints/repos_batch.py:1562
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "Filen %s är låst."
 
 #: seahub/api2/endpoints/repos_batch.py:1263
 #: seahub/api2/endpoints/repos_batch.py:1482
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr ""
+msgstr "Kan inte flytta %s, vänligen kontrollera dess rättigheter."
 
 #: seahub/api2/endpoints/repos_batch.py:1570
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr ""
+msgstr "Kan inte ta bort katalogen %s, vänligen kontrollera dess rättigheter."
 
 #: seahub/api2/endpoints/send_share_link_email.py:33
 #: seahub/api2/endpoints/send_upload_link_email.py:32
@@ -617,7 +638,7 @@ msgstr "En katalog är delad med dig på %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:73
 msgid "email invalid."
-msgstr ""
+msgstr "mailadress ogiltig."
 
 #: seahub/api2/endpoints/send_upload_link_email.py:95
 #: seahub/share/views.py:301
@@ -638,18 +659,18 @@ msgstr "Lösenordet är för kort."
 #: seahub/api2/endpoints/share_links.py:247 seahub/api2/views.py:3360
 #, python-format
 msgid "Expire days should be greater or equal to %s"
-msgstr ""
+msgstr "Utgångsdatum ska vara större eller lika med %s"
 
 #: seahub/api2/endpoints/share_links.py:253 seahub/api2/views.py:3366
 #, python-format
 msgid "Expire days should be less than or equal to %s"
-msgstr ""
+msgstr "Utgångsdagar ska vara minde än eller lika med %s"
 
 #: seahub/api2/endpoints/share_links.py:300
 #: seahub/api2/endpoints/share_links.py:309
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "Delningslänk %s existerar redan."
 
 #: seahub/api2/endpoints/upload_links.py:152
 #: seahub/templates/snippets/repo_create_js.html:50
@@ -659,11 +680,11 @@ msgstr "Lösenordet är för kort"
 #: seahub/api2/endpoints/user.py:99
 #, python-format
 msgid "Contact email %s already exists."
-msgstr ""
+msgstr "Kontaktmail %s existerar redan."
 
 #: seahub/api2/endpoints/user.py:113
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr ""
+msgstr "telefon är för lång (max är 100 tecken)."
 
 #: seahub/api2/endpoints/user_avatar.py:49 seahub/utils/error_msg.py:8
 #, python-format
@@ -704,7 +725,7 @@ msgstr "%s är tagen av någon annan, testa ett annat namn."
 
 #: seahub/api2/endpoints/wikis.py:197
 msgid "Wiki not found."
-msgstr ""
+msgstr "Wiki hittas inte."
 
 #: seahub/api2/endpoints/wikis.py:206
 #: seahub/group/templates/group/group_wiki.html:158
@@ -818,8 +839,9 @@ msgstr "Ditt gamla lösenord stämmer inte. Försök igen."
 msgid "Password (again)"
 msgstr "Lösenord (igen)"
 
-#: seahub/auth/forms.py:249 seahub/forms.py:35 seahub/invitations/views.py:31
-#: seahub/organizations/forms.py:47 seahub/profile/forms.py:46
+#: seahub/auth/forms.py:249 seahub/forms.py:35 seahub/invitations/views.py:29
+#: seahub/invitations/views.py:44 seahub/organizations/forms.py:47
+#: seahub/profile/forms.py:46
 msgid "A user with this email already exists."
 msgstr "En användare med denna e-postadress finns redan."
 
@@ -951,6 +973,76 @@ msgstr "Filer i detta bibliotek kan inte visas online."
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
 msgstr "Ange en giltig email-adress"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:24
+#: seahub/templates/file_access.html:25
+#: seahub/templates/sysadmin/sys_invitations_admin.html:18
+#: seahub/templates/sysadmin/userinfo.html:274
+msgid "Type"
+msgstr "Typ"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:25
+#: seahub/templates/file_access.html:26
+#: seahub/templates/js/sysadmin-templates.html:258
+#: seahub/templates/js/sysadmin-templates.html:312
+#: seahub/templates/js/sysadmin-templates.html:1002
+#: seahub/templates/libraries.html:186
+msgid "IP"
+msgstr "IP"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/templates/js/sysadmin-templates.html:311
+#: seahub/templates/repo_history.html:35 seahub/templates/repo_history.html:42
+msgid "Device"
+msgstr "Enhet"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/organizations/templates/organizations/org_file_audit.html:26
+#: seahub/organizations/templates/organizations/org_file_update.html:24
+#: seahub/organizations/templates/organizations/org_perm_audit.html:29
+#: seahub/templates/file_access.html:27
+msgid "Date"
+msgstr "Datum"
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library Name"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library ID"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library Owner"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "File Path"
+msgstr ""
+
+#: seahub/base/management/commands/export_file_access_log.py:85
+#: seahub/base/templatetags/seahub_tags.py:126
+#: seahub/organizations/templates/organizations/org_file_audit.html:80
+#: seahub/organizations/templates/organizations/org_file_update.html:65
+#: seahub/organizations/templates/organizations/org_perm_audit.html:67
+#: seahub/organizations/templates/organizations/org_perm_audit.html:102
+msgid "Deleted"
+msgstr "Borttagen"
+
+#: seahub/base/management/commands/export_file_access_log.py:88
+#: seahub/organizations/templates/organizations/org_file_audit.html:50
+#: seahub/organizations/templates/organizations/org_file_update.html:49
+#: seahub/organizations/templates/organizations/org_perm_audit.html:52
+#: seahub/templates/file_access.html:37
+#: seahub/templates/snippets/add_watermark.html:10
+msgid "Anonymous User"
+msgstr "Anonnym användare"
+
+#: seahub/base/management/commands/export_file_access_log.py:97
+msgid "file-access-logs"
+msgstr ""
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -1096,7 +1188,7 @@ msgid "Yes"
 msgstr "Ja"
 
 #: seahub/base/management/commands/export_users.py:132
-#: seahub/invitations/models.py:15 seahub/invitations/models.py:36
+#: seahub/invitations/models.py:15 seahub/invitations/models.py:43
 #: seahub/templates/sysadmin/sys_useradmin.html:53
 #: seahub/templates/sysadmin/useradmin_table.html:59
 #: seahub/templates/sysadmin/useradmin_table.html:69
@@ -1119,14 +1211,6 @@ msgstr "Standard"
 #: seahub/base/templatetags/seahub_tags.py:125
 msgid "Added"
 msgstr "Tillagd"
-
-#: seahub/base/templatetags/seahub_tags.py:126
-#: seahub/organizations/templates/organizations/org_file_audit.html:80
-#: seahub/organizations/templates/organizations/org_file_update.html:65
-#: seahub/organizations/templates/organizations/org_perm_audit.html:67
-#: seahub/organizations/templates/organizations/org_perm_audit.html:102
-msgid "Deleted"
-msgstr "Borttagen"
 
 #: seahub/base/templatetags/seahub_tags.py:127
 msgid "Removed"
@@ -2910,12 +2994,13 @@ msgstr "Tog bort %s"
 msgid "Failed to delete: the user does not exist"
 msgstr "Misslyckades ta bort: användaren existerar inte"
 
-#: seahub/invitations/models.py:90
+#: seahub/invitations/models.py:97
 #, python-format
 msgid "%(user)s invited you to join %(site_name)s."
 msgstr "%(user)s bjöd in dig till att gå med %(site_name)s."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
+#: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
 #: seahub/notifications/templates/notifications/file_updates_email.html:7
 #: seahub/notifications/templates/notifications/notify_virus.html:10
 #: seahub/notifications/templates/notifications/notify_virus.html:17
@@ -2938,6 +3023,11 @@ msgstr "Hej,"
 msgid ""
 "%(inviter)s invited you to join %(site_name)s. Please click the link below:"
 msgstr "%(inviter)s bjöd in dig till att gå med i %(site_name)s. Vänligen klicka på länken nedan:"
+
+#: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
+#, python-format
+msgid "%(inviter)s revoke your access to %(site_name)s."
+msgstr ""
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -2967,7 +3057,7 @@ msgstr "Virus detekterad på %s"
 
 #: seahub/notifications/management/commands/send_file_updates.py:110
 msgid "Renamed library"
-msgstr ""
+msgstr "Döpte om katalog"
 
 #: seahub/notifications/management/commands/send_file_updates.py:113
 #: seahub/templates/js/templates.html:2019
@@ -2976,7 +3066,7 @@ msgstr "Bibliotek borttaget"
 
 #: seahub/notifications/management/commands/send_file_updates.py:116
 msgid "Restored library"
-msgstr ""
+msgstr "Återställt katalog"
 
 #: seahub/notifications/management/commands/send_file_updates.py:120
 msgid "Removed all items from trash."
@@ -2985,56 +3075,56 @@ msgstr "Rensade alla objekt från papperskorgen."
 #: seahub/notifications/management/commands/send_file_updates.py:122
 #, python-format
 msgid "Removed items older than %s days from trash."
-msgstr ""
+msgstr "Tagit bort filer äldre än %s dagar från papperskorgen."
 
 #: seahub/notifications/management/commands/send_file_updates.py:130
 msgid "Created file"
-msgstr ""
+msgstr "Skapat fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:133
 msgid "Deleted file"
-msgstr ""
+msgstr "Tagit bort fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:136
 msgid "Restored file"
-msgstr ""
+msgstr "Återställt fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:139
 msgid "Renamed file"
-msgstr ""
+msgstr "Döpt om fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:145
 msgid "Moved file"
-msgstr ""
+msgstr "Flyttat fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:151
 msgid "Updated file"
-msgstr ""
+msgstr "Uppdaterat fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:158
 msgid "Created folder"
-msgstr ""
+msgstr "Skapat katalog"
 
 #: seahub/notifications/management/commands/send_file_updates.py:161
 msgid "Deleted folder"
-msgstr ""
+msgstr "Tagit bort katalog"
 
 #: seahub/notifications/management/commands/send_file_updates.py:164
 msgid "Restored folder"
-msgstr ""
+msgstr "Återställt katalog"
 
 #: seahub/notifications/management/commands/send_file_updates.py:167
 msgid "Renamed folder"
-msgstr ""
+msgstr "Döpt om katalog"
 
 #: seahub/notifications/management/commands/send_file_updates.py:172
 msgid "Moved folder"
-msgstr ""
+msgstr "Flyttat katalog"
 
 #: seahub/notifications/management/commands/send_file_updates.py:260
 #, python-format
 msgid "New file updates on %s"
-msgstr ""
+msgstr "Nya filer uppdaterad på %s"
 
 #: seahub/notifications/management/commands/send_notices.py:326
 #, python-format
@@ -3116,14 +3206,14 @@ msgstr "Filen <a href='%(file_url)s'>%(file_name)s</a> har en ny kommentar från
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "<a href='%(file_url)s'>Förslag #%(draft_id)s</a> har en ny kommentar från användare %(author)s"
 
 #: seahub/notifications/models.py:826
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr ""
+msgstr "%(from_user)s har skickat en förfrågan för <a href='%(file_url)s'>förlsag #%(draft_id)s</a>"
 
 #: seahub/notifications/models.py:849
 #: seahub/notifications/templates/notifications/notice_email.html:69
@@ -3138,7 +3228,7 @@ msgstr "Gästen %(user)s accepterade din <a href=\"%(url_base)s%(inv_url)s\">inb
 msgid ""
 "%(user)s has transfered a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s har överfört katalogen <a href=\"%(repo_url)s\">%(repo_name)s</a> till dig."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -3148,8 +3238,8 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "\nDu har 1 ny fil uppdaterad på %(site_name)s:\n"
+msgstr[1] "\nDu har fått %(num)s filer uppdaterade på %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 #: seahub/templates/js/sysadmin-templates.html:962
@@ -3520,29 +3610,6 @@ msgstr "Filuppdatering"
 msgid "Permission"
 msgstr "Behörighet"
 
-#: seahub/organizations/templates/organizations/org_file_audit.html:24
-#: seahub/templates/file_access.html:25
-#: seahub/templates/sysadmin/sys_invitations_admin.html:18
-#: seahub/templates/sysadmin/userinfo.html:274
-msgid "Type"
-msgstr "Typ"
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:25
-#: seahub/templates/file_access.html:26
-#: seahub/templates/js/sysadmin-templates.html:258
-#: seahub/templates/js/sysadmin-templates.html:312
-#: seahub/templates/js/sysadmin-templates.html:1002
-#: seahub/templates/libraries.html:186
-msgid "IP"
-msgstr "IP"
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:26
-#: seahub/organizations/templates/organizations/org_file_update.html:24
-#: seahub/organizations/templates/organizations/org_perm_audit.html:29
-#: seahub/templates/file_access.html:27
-msgid "Date"
-msgstr "Datum"
-
 #: seahub/organizations/templates/organizations/org_file_audit.html:42
 #: seahub/organizations/templates/organizations/org_file_audit.html:75
 #: seahub/organizations/templates/organizations/org_file_update.html:41
@@ -3552,17 +3619,9 @@ msgstr "Datum"
 msgid "Only Show"
 msgstr "Visa Enbart"
 
-#: seahub/organizations/templates/organizations/org_file_audit.html:50
-#: seahub/organizations/templates/organizations/org_file_update.html:49
-#: seahub/organizations/templates/organizations/org_perm_audit.html:52
-#: seahub/templates/file_access.html:37
-#: seahub/templates/snippets/add_watermark.html:10
-msgid "Anonymous User"
-msgstr "Anonnym användare"
-
 #: seahub/organizations/templates/organizations/org_file_audit.html:91
 msgid "No File Access Information"
-msgstr ""
+msgstr "Ingen Filaccess Inforrmation"
 
 #: seahub/organizations/templates/organizations/org_file_update.html:26
 msgid "Action"
@@ -3593,7 +3652,7 @@ msgstr "Detaljer"
 
 #: seahub/organizations/templates/organizations/org_file_update.html:82
 msgid "No File Update Information"
-msgstr ""
+msgstr "Ingen Filuppdaterings Information"
 
 #: seahub/organizations/templates/organizations/org_group_admin.html:6
 #: seahub/templates/home_base.html:26 seahub/templates/js/templates.html:1507
@@ -3671,11 +3730,11 @@ msgstr "Lägg till"
 
 #: seahub/organizations/templates/organizations/org_perm_audit.html:74
 msgid "Modify"
-msgstr ""
+msgstr "Ändra"
 
 #: seahub/organizations/templates/organizations/org_perm_audit.html:120
 msgid "No Library Permission Information"
-msgstr ""
+msgstr "Ingen Katalog Rättighetsinformation"
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:6
 msgid "All Public Links"
@@ -4256,7 +4315,7 @@ msgstr "Språk"
 
 #: seahub/profile/templates/profile/set_profile.html:27
 msgid "Email Notification"
-msgstr ""
+msgstr "Mailnotis"
 
 #: seahub/profile/templates/profile/set_profile.html:31
 #: seahub/profile/templates/profile/set_profile.html:160
@@ -4268,7 +4327,7 @@ msgstr "Tvåfaktorsautentisering"
 #: seahub/profile/templates/profile/set_profile.html:35
 #: seahub/profile/templates/profile/set_profile.html:186
 msgid "Social Login"
-msgstr ""
+msgstr "Social Login"
 
 #: seahub/profile/templates/profile/set_profile.html:39
 #: seahub/profile/templates/profile/set_profile.html:207
@@ -4320,7 +4379,7 @@ msgstr "Telefon"
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:12
 msgid "Set Password"
-msgstr ""
+msgstr "Sätt lösenord"
 
 #: seahub/profile/templates/profile/set_profile.html:99
 #: seahub/profile/templates/profile/set_profile.html:112
@@ -4345,27 +4404,27 @@ msgstr "Språkinställning"
 
 #: seahub/profile/templates/profile/set_profile.html:145
 msgid "Email Notification of File Changes"
-msgstr ""
+msgstr "Mailnot för filändringar"
 
 #: seahub/profile/templates/profile/set_profile.html:148
 msgid "Don't send emails"
-msgstr ""
+msgstr "Skicka inga mail"
 
 #: seahub/profile/templates/profile/set_profile.html:149
 msgid "Per hour"
-msgstr ""
+msgstr "Per timme"
 
 #: seahub/profile/templates/profile/set_profile.html:150
 msgid "Per 4 hours"
-msgstr ""
+msgstr "Var fjärde timme"
 
 #: seahub/profile/templates/profile/set_profile.html:151
 msgid "Per day"
-msgstr ""
+msgstr "Varje dag"
 
 #: seahub/profile/templates/profile/set_profile.html:152
 msgid "Per week"
-msgstr ""
+msgstr "Varje vecka"
 
 #: seahub/profile/templates/profile/set_profile.html:162
 #: seahub/templates/sysadmin/userinfo.html:115
@@ -4410,11 +4469,11 @@ msgstr "Aktivera tvåfaktorsautentisering"
 #: seahub/profile/templates/profile/set_profile.html:196
 #: seahub/profile/templates/profile/set_profile.html:411
 msgid "Disconnect"
-msgstr ""
+msgstr "Avsluta anslutning"
 
 #: seahub/profile/templates/profile/set_profile.html:198
 msgid "Connect"
-msgstr ""
+msgstr "Anslut"
 
 #: seahub/profile/templates/profile/set_profile.html:208
 msgid "This operation will not be reverted. Please think twice!"
@@ -4450,7 +4509,7 @@ msgstr "Lyckades"
 
 #: seahub/profile/templates/profile/set_profile.html:412
 msgid "Are you sure you want to disconnect?"
-msgstr ""
+msgstr "Är det säker på att du vill avsluta anslutning?"
 
 #: seahub/profile/views.py:40
 msgid "Successfully edited profile."
@@ -4986,7 +5045,7 @@ msgstr "Bjud in personer"
 
 #: seahub/templates/home_base.html:56 seahub/templates/js/templates.html:1578
 msgid "Drafts"
-msgstr ""
+msgstr "Förslag"
 
 #: seahub/templates/home_base.html:59 seahub/templates/js/templates.html:1582
 msgid "Share Admin"
@@ -5206,7 +5265,7 @@ msgstr "Institutioner"
 #: seahub/templates/js/sysadmin-templates.html:97
 #: seahub/templates/sysadmin/base.html:108
 msgid "File Scan"
-msgstr ""
+msgstr "Fil Scan"
 
 #: seahub/templates/js/sysadmin-templates.html:103
 #: seahub/templates/sysadmin/base.html:114
@@ -5330,11 +5389,6 @@ msgstr "Avlänka"
 msgid "Clean"
 msgstr "Rensa"
 
-#: seahub/templates/js/sysadmin-templates.html:311
-#: seahub/templates/repo_history.html:35 seahub/templates/repo_history.html:42
-msgid "Device"
-msgstr "Enhet"
-
 #: seahub/templates/js/sysadmin-templates.html:323
 msgid "No sync errors"
 msgstr "Inga synkroniseringsfel"
@@ -5417,7 +5471,7 @@ msgstr "Historik Inställning"
 msgid ""
 "Tip: libraries deleted %(trash_repos_expire_days)s days ago will be cleaned "
 "automatically."
-msgstr ""
+msgstr "Tips: kataloger borttagna %(trash_repos_expire_days)s dagar sen kommer tas bort automatiskt."
 
 #: seahub/templates/js/sysadmin-templates.html:518
 #: seahub/templates/js/templates.html:1923
@@ -5712,7 +5766,7 @@ msgstr "senaste uppdatering"
 #: seahub/templates/js/templates.html:873
 #: seahub/templates/js/templates.html:2870
 msgid "Internal link"
-msgstr ""
+msgstr "Intern länk"
 
 #: seahub/templates/js/templates.html:615
 #: seahub/templates/js/templates.html:792
@@ -5765,7 +5819,7 @@ msgstr "Lås"
 #: seahub/templates/js/templates.html:777
 #: seahub/templates/js/templates.html:922
 msgid "New Draft"
-msgstr ""
+msgstr "Nytt Förslag"
 
 #: seahub/templates/js/templates.html:782
 #: seahub/templates/js/templates.html:804
@@ -5795,7 +5849,7 @@ msgstr "Taggar"
 
 #: seahub/templates/js/templates.html:1182
 msgid "Share Link"
-msgstr ""
+msgstr "Dela Länk"
 
 #: seahub/templates/js/templates.html:1186
 msgid "Upload Link"
@@ -5815,33 +5869,33 @@ msgstr "(åtminstone %(share_link_password_min_length)s tecken)"
 #: seahub/templates/js/templates.html:1226
 #, python-format
 msgid "(%(share_link_expire_days_min)s - %(share_link_expire_days_max)s days)"
-msgstr ""
+msgstr "(%(share_link_expire_days_min)s - %(share_link_expire_days_max)s dagar)"
 
 #: seahub/templates/js/templates.html:1228
 #, python-format
 msgid "(Greater than or equal to %(share_link_expire_days_min)s days)"
-msgstr ""
+msgstr "(Större än eller lika med %(share_link_expire_days_min)s dagar)"
 
 #: seahub/templates/js/templates.html:1230
 #, python-format
 msgid "(Less than or equal to %(share_link_expire_days_max)s days)"
-msgstr ""
+msgstr "(Mindre än eller lika med %(share_link_expire_days_max)s dagar)"
 
 #: seahub/templates/js/templates.html:1250
 msgid "Set permission"
-msgstr ""
+msgstr "Sätt rättigheter"
 
 #: seahub/templates/js/templates.html:1255
 msgid "Preview and download"
-msgstr ""
+msgstr "Förhandsgranska och ladda ner"
 
 #: seahub/templates/js/templates.html:1259
 msgid "Preview only"
-msgstr ""
+msgstr "Förhandsgranska enbart"
 
 #: seahub/templates/js/templates.html:1263
 msgid "Edit on cloud and download"
-msgstr ""
+msgstr "Ändra i molnet och ladda ner"
 
 #: seahub/templates/js/templates.html:1269
 #: seahub/templates/js/templates.html:1335
@@ -5858,7 +5912,7 @@ msgstr "Direkt nedladdningslänk:"
 
 #: seahub/templates/js/templates.html:1287
 msgid "Expiration Date: "
-msgstr ""
+msgstr "Utgångsdatum:"
 
 #: seahub/templates/js/templates.html:1291
 #: seahub/templates/js/templates.html:1347
@@ -5867,12 +5921,12 @@ msgstr "Skicka"
 
 #: seahub/templates/js/templates.html:1295
 msgid "Are you sure you want to remove the share link?"
-msgstr ""
+msgstr "Är du säker på att du vill ta bort den delade länken?"
 
 #: seahub/templates/js/templates.html:1296
 msgid ""
 "If the share link is removed, no one will be able to access it any more."
-msgstr ""
+msgstr "Om delningslänken är borttagen, så kan ingen använda den längre."
 
 #: seahub/templates/js/templates.html:1301
 #: seahub/templates/js/templates.html:1351
@@ -5914,7 +5968,7 @@ msgstr "Uppladdningslänk"
 #: seahub/templates/js/templates.html:2596
 #: seahub/templates/js/templates.html:2624 seahub/templates/priv/ali.html:7
 msgid "Preview-Edit-on-Cloud"
-msgstr ""
+msgstr "Förhandsgranska-Ändra-i-Molnet"
 
 #: seahub/templates/js/templates.html:1393
 #: seahub/templates/js/templates.html:1433
@@ -5931,7 +5985,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:2597
 #: seahub/templates/js/templates.html:2625 seahub/templates/priv/ali.html:8
 msgid "Preview-on-Cloud"
-msgstr ""
+msgstr "Förhandsgranska-i-Molnet"
 
 #: seahub/templates/js/templates.html:1458
 #: seahub/templates/js/templates.html:1478
@@ -6160,13 +6214,13 @@ msgstr "Utgångsdatum"
 
 #: seahub/templates/js/templates.html:2691
 msgid "You don't have any share links"
-msgstr ""
+msgstr "Du har inga delningslänkgar"
 
 #: seahub/templates/js/templates.html:2692
 msgid ""
 "You can generate a share link for a folder or a file. Anyone who receives "
 "this link can view the folder or the file online."
-msgstr ""
+msgstr "Du kan generera en delningslänk för en katalog eller fil. Alla som får denna länk kan se katalogen eller filen online."
 
 #: seahub/templates/js/templates.html:2727
 msgid "You don't have any upload links"
@@ -6204,7 +6258,7 @@ msgstr "Lägg till kommentar..."
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
-msgstr ""
+msgstr "En intern länk är en länk till en fil eller katalog som kan öppnas av en användare med läs rättigheter till filen eller katalogen."
 
 #: seahub/templates/libraries.html:27
 msgid "You have not created any libraries"
@@ -6307,41 +6361,41 @@ msgstr "Om Oss"
 
 #: seahub/templates/priv/ali.html:11
 msgid "Read-Write-Sync"
-msgstr ""
+msgstr "Läs-Skriv-Synk"
 
 #: seahub/templates/priv/ali.html:12
 msgid "Read-Only-Sync"
-msgstr ""
+msgstr "Läs-Enbart-Synk"
 
 #: seahub/templates/priv/ali.html:13
 msgid "Co-Owner"
-msgstr ""
+msgstr "Delägare"
 
 #: seahub/templates/priv/ali.html:14
 msgid "Edit-on-Cloud"
-msgstr ""
+msgstr "Ända-i-Molnet"
 
 #: seahub/templates/priv/ali.html:15
 msgid "View-on-Cloud"
-msgstr ""
+msgstr "Läs-i-Molnet"
 
 #: seahub/templates/priv/seaf-docs.html:5
 msgid "Login with: "
-msgstr ""
+msgstr "Logga in med:"
 
 #: seahub/templates/priv/seaf-docs.html:6
 msgid "Invite user"
-msgstr ""
+msgstr "Bjud in användare"
 
 #: seahub/templates/priv/seaf-docs.html:7
 msgid ""
 "Send the invitation link to the others, and they will be able to join the "
 "organization via scanning the QR code."
-msgstr ""
+msgstr "Skicka en inbjudningskönk till andra, och de kommer att kunna gå med i organisationen genom att skanna QR koden."
 
 #: seahub/templates/priv/seaf-docs.html:8
 msgid "Invitation link is copied."
-msgstr ""
+msgstr "Inbjudningslänk kopierad."
 
 #: seahub/templates/registration/activation_email.html:12
 #, python-format
@@ -6544,7 +6598,7 @@ msgstr "Registreringsfunktionen är inte aktiverad."
 #: seahub/work_weixin/views.py:101
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr ""
+msgstr "Fel, ny användarregistrering är inte tillåttet, vänligen kontakta administratör."
 
 #: seahub/templates/remote_user/not_active.html:6
 #: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:119
@@ -6642,7 +6696,7 @@ msgstr "Återställde {dirent_name}"
 
 #: seahub/templates/repo_snapshot_react.html:5
 msgid "Snapshot"
-msgstr ""
+msgstr "Snapshot"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
@@ -6671,7 +6725,7 @@ msgstr "Spara till:"
 #: seahub/templates/view_file_image.html:38
 #: seahub/templates/view_history_file.html:46
 msgid "This file cannot be viewed online."
-msgstr ""
+msgstr "Denna fil kan inte visas online."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -6708,7 +6762,7 @@ msgstr "du kan också trycka → "
 #: seahub/templates/snippets/file_content_html.html:63
 #: seahub/templates/view_file_base.html:73
 msgid "Online view is not applicable to this file format"
-msgstr ""
+msgstr "Online-visning är inte tillgängligt för detta filformat"
 
 #: seahub/templates/snippets/file_encoding.html:5
 #: seahub/templates/view_file_text.html:29
@@ -6777,7 +6831,7 @@ msgstr "Ange lösenord"
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr ""
+msgstr "Nya lösenordet för katalogen %(repo_name)s är %(password)s. Vänligen ändra det så snart som möjligt."
 
 #: seahub/templates/snippets/search_form.html:19
 #: seahub/templates/snippets/search_form.html:23
@@ -7070,7 +7124,7 @@ msgstr "Tillåt användare att skapa organisationsbibliotek. Annars kan enbart s
 
 #: seahub/templates/sysadmin/settings.html:169
 msgid "Allow user to clean library trash"
-msgstr ""
+msgstr "Tillåt användare att rensa katalogskräp"
 
 #: seahub/templates/sysadmin/settings.html:173
 msgid "Online Preview"
@@ -7104,7 +7158,7 @@ msgstr "Tillåt system admin till att lägga till Villkor, samt att alla använd
 
 #: seahub/templates/sysadmin/snippets/org_admin_js.html:4
 msgid "Delete organization"
-msgstr ""
+msgstr "Ta bort organisation"
 
 #: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:6
 #: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:7
@@ -7117,7 +7171,7 @@ msgstr "Utrymme"
 
 #: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:8
 msgid "Reports"
-msgstr ""
+msgstr "Rapporter"
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
@@ -7350,22 +7404,22 @@ msgstr "Ladda ner"
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:271
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:283
 msgid "Total Traffic"
-msgstr ""
+msgstr "Total trafik"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:278
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:290
 msgid "Share Link Traffic"
-msgstr ""
+msgstr "Delningslänk Trafik"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:285
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:297
 msgid "Sync Traffic"
-msgstr ""
+msgstr "Synk Trafik"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:292
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:304
 msgid "Web Traffic"
-msgstr ""
+msgstr "Webb Trafik"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:365
 #: seahub/templates/sysadmin/sys_statistic_file.html:280
@@ -7397,7 +7451,7 @@ msgstr "Tips: Du kan söka på nyckelord i namn, skapare eller båda."
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:8
 msgid "Search share links by token..."
-msgstr ""
+msgstr "Sök delningslänkar med tecken..."
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:174
 msgctxt "files visited"
@@ -7425,7 +7479,7 @@ msgstr "Filåtgärder"
 
 #: seahub/templates/sysadmin/sys_statistic_reports.html:13
 msgid "Monthly User Traffic"
-msgstr ""
+msgstr "Månadsvis användartrafik"
 
 #: seahub/templates/sysadmin/sys_statistic_reports.html:15
 #: seahub/templates/sysadmin/sys_trafficadmin.html:26
@@ -7435,20 +7489,20 @@ msgstr "Månad:"
 #: seahub/templates/sysadmin/sys_statistic_reports.html:17
 #: seahub/templates/sysadmin/sys_statistic_reports.html:25
 msgid "Create Report"
-msgstr ""
+msgstr "Skapa rapport"
 
 #: seahub/templates/sysadmin/sys_statistic_reports.html:23
 msgid "User Storage"
-msgstr ""
+msgstr "Användarutrymme"
 
 #: seahub/templates/sysadmin/sys_statistic_reports.html:56
 msgid "Invalid month, should be yyyymm."
-msgstr ""
+msgstr "Felaktig månad, ska vara yyyymm."
 
 #: seahub/templates/sysadmin/sys_statistic_storage.html:168
 #: seahub/templates/sysadmin/sys_statistic_storage.html:180
 msgid "Total Storage"
-msgstr ""
+msgstr "Total Yta"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:18
 #: seahub/templates/sysadmin/sys_terms_admin.html:61
@@ -7486,11 +7540,11 @@ msgstr "Uppdatera villkor"
 
 #: seahub/templates/sysadmin/sys_trafficadmin.html:66
 msgid "Share link upload"
-msgstr ""
+msgstr "Delningslänk uppladdat"
 
 #: seahub/templates/sysadmin/sys_trafficadmin.html:72
 msgid "Share link download"
-msgstr ""
+msgstr "Delningslänk nedladdat"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:16
 #: seahub/templates/sysadmin/sys_useradmin.html:14
@@ -7553,19 +7607,19 @@ msgstr "Vänligen välj en .xlsx fil."
 #, python-brace-format
 msgid ""
 "Successfully added user {placeholder}. An email notification has been sent."
-msgstr ""
+msgstr "Lyckats lägga till användare {placeholder}. En mailnotis har skickats."
 
 #: seahub/templates/sysadmin/sys_useradmin.html:186
 #, python-brace-format
 msgid "Successfully added user {placeholder}."
-msgstr ""
+msgstr "Lyckats lägga till användare {placeholder}."
 
 #: seahub/templates/sysadmin/sys_useradmin.html:189
 #, python-brace-format
 msgid ""
 "Successfully added user {placeholder}. But email notification can not be "
 "sent, because Email service is not properly configured."
-msgstr ""
+msgstr "Lyckats lägga till användare {placeholder}. Men mailnotisen har inte skickat, på grund av mailtjänstine inte är korrekt konfigurerad."
 
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:8
 msgid "Virus Scan Records"
@@ -7694,7 +7748,7 @@ msgstr "Referens ID"
 
 #: seahub/templates/sysadmin/userinfo.html:126
 msgid "Force Two-Factor Authentication"
-msgstr ""
+msgstr "Tvinga Tvåfaktors Autensiering"
 
 #: seahub/templates/sysadmin/userinfo.html:141
 msgid "Set user department"
@@ -7747,7 +7801,7 @@ msgstr "uppdaterade denna fil"
 
 #: seahub/templates/view_file_base.html:79
 msgid "Please install the desktop client to open file via client."
-msgstr ""
+msgstr "Vänligen installera skrivbordsklienten för att öppna filen via klienten."
 
 #: seahub/templates/view_file_base.html:92
 msgid "Back to top"
@@ -7798,7 +7852,7 @@ msgstr "Öppna i ny tabb"
 #: seahub/templates/view_shared_dir.html:186
 #, python-format
 msgid "<a href='%%url%%' target='_blank'>The image</a> could not be loaded."
-msgstr ""
+msgstr "<a href='%%url%%' target='_blank'>Bilden</a> kan inte laddas."
 
 #: seahub/templates/view_shared_dir.html:212
 msgid "Packaging..."
@@ -7879,7 +7933,7 @@ msgstr "Starta"
 
 #: seahub/templates/view_shared_upload_link.html:227
 msgid "Network error"
-msgstr ""
+msgstr "Nätverksfel"
 
 #: seahub/templates/view_trash_file.html:6
 msgid "Current Path: "
@@ -7908,7 +7962,7 @@ msgstr "Ny Wiki"
 
 #: seahub/templates/wiki/wiki_list.html:42
 msgid "Create Wiki from a library"
-msgstr ""
+msgstr "Skapa Wiki från en katalog"
 
 #: seahub/templates/wiki/wiki_list.html:89
 #: seahub/templates/wiki/wiki_list.html:90
@@ -7917,7 +7971,7 @@ msgstr "Lägg till Wiki"
 
 #: seahub/templates/wiki/wiki_list.html:93
 msgid "Choose a library as Wiki"
-msgstr ""
+msgstr "Välj en katalog som Wiki"
 
 #: seahub/templates/wiki/wiki_list.html:146
 #: seahub/templates/wiki/wiki_list.html:205
@@ -8232,7 +8286,7 @@ msgstr "Kan inte visa råfil, all delningslänktrafik har använts. "
 #: seahub/views/repo.py:327
 #, python-format
 msgid "Share link for %s."
-msgstr ""
+msgstr "Dela länk för %s."
 
 #: seahub/views/file.py:1555
 msgid "The library does not exist."
@@ -8337,10 +8391,10 @@ msgstr "Du har inte rättigheter att skapa wiki"
 
 #: seahub/wiki/views.py:73
 msgid "Unable to view Wiki"
-msgstr ""
+msgstr "Kan inte visa Wiki"
 
 #: seahub/work_weixin/views.py:36 seahub/work_weixin/views.py:55
 #: seahub/work_weixin/views.py:138 seahub/work_weixin/views.py:158
 #: seahub/work_weixin/views.py:218
 msgid "Feature is not enabled."
-msgstr ""
+msgstr "Tillägg är inte aktiverat."
