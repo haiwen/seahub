@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import {gettext, siteRoot} from '../../utils/constants';
 
 import '../../css/dtable-page.css';
-
 
 const shareTableItemPropTypes = {
   table: PropTypes.object.isRequired,
