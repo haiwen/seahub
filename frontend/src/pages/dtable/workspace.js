@@ -107,7 +107,7 @@ class Workspace extends React.Component {
           :
           <table width="100%" className="table-vcenter">
             <tbody>
-              <tr><th className="text-center">{gettext('No tables')}</th></tr>
+              <tr><th className="text-center">{gettext('No Tables')}</th></tr>
             </tbody>
           </table>
         }
