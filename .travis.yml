@@ -37,7 +37,7 @@ script:
 
 after_success:
   # making dist assets if current branch(master/7.0) is updated
-  - test $TRAVIS_PULL_REQUEST = "false" && .travis/dist_and_push.sh
+  - travis_wait 30 test $TRAVIS_PULL_REQUEST = "false" && .travis/dist_and_push.sh
 
 after_failure: true
 
