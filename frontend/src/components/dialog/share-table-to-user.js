@@ -197,7 +197,7 @@ class ShareTableToUser extends React.Component {
                 <DtableSharePermissionEditor
                   isTextMode={false}
                   isEditIconShow={false}
-                  currentOption={this.state.permission}
+                  currentPermission={this.state.permission}
                   onPermissionChanged={this.setPermission}
                 />
               </td>

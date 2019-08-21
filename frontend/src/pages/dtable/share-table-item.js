@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import {gettext, siteRoot} from '../../utils/constants';
 
 import '../../css/dtable-page.css';
-
 
 const shareTableItemPropTypes = {
   table: PropTypes.object.isRequired,
@@ -42,20 +40,21 @@ class ShareTableItem extends Component {
     let tableHref = siteRoot + 'workspace/' + table.workspace_id + '/dtable/' + table.name + '/';
 
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
-        <td><span className="sf3-font sf3-font-form"></span></td>
-        <td><a href={tableHref} target="_blank">{table.name}</a></td>
-        <td>{table.from_user_name}</td>
-        <td>{moment(table.updated_at).fromNow()}</td>
-        <td>
+
+      <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={ `table-item ${this.state.active ? 'tr-highlight' : ''}`}>
+        <div className="table-icon"><span className="sf3-font sf3-font-form"></span></div>
+        <div className="table-name">
+          <a href={tableHref} target="_blank">{table.name}</a>
+        </div>
+        <div className="table-dropdown-menu">
           <i
             className="action-icon sf2-icon-x3"
             title={gettext('Leave Share')}
             style={!this.state.active ? {opacity: 0} : {}}
             onClick={this.onLeaveShareTableSubmit}>
           </i>
-        </td>
-      </tr>
+        </div>
+      </div>
     );
   }
 }
