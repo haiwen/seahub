@@ -54,7 +54,7 @@
 .workspace .table-heading {
   padding: 0.25rem;
 }
-.table-heading-border {
+.workspace .table-heading-border {
   border-bottom: 1px solid #e6e6e6;
 }
 .workspace .sf3-font {
@@ -64,12 +64,12 @@
 .workspace .add-table-range:hover {
   background-color: #f8f8f8;
 }
-.table-item-container {
+.workspace .table-item-container {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.table-item {
+.workspace .table-item-container .table-item {
   width: 48%;
   height: 2.5625rem;
   padding: 0.5rem 0.625rem;
@@ -78,17 +78,17 @@
   display: flex;
   border-radius: 4px
 }
-.table-icon {
+.workspace .table-item .table-icon {
   width: 10%;
   height: 100%;
   display: flex;
   align-items: center;
 }
-.table-name {
+.workspace .table-item .table-name {
   width: 75%;
   height: 100%;
 }
-.table-dropdown-menu {
+.workspace .table-item .table-dropdown-menu {
   width: 15%;
   height: 100%;
   text-align: right;
