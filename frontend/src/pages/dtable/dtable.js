@@ -149,8 +149,8 @@ class DTable extends Component {
 
     let personalWorkspaceList = workspaceList.filter(workspace => {
       return workspace.owner_type === 'Personal';
-    }).pop();
-
+    });
+    personalWorkspaceList = personalWorkspaceList[0];
     let groupWorkspaceList = workspaceList.filter(workspace => {
       return workspace.owner_type === 'Group';
     });
