@@ -2,8 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import copy from '@seafile/seafile-editor/dist//utils/copy-to-clipboard';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, loginUrl, canGenerateUploadLink } from '../../utils/constants';
@@ -13,6 +11,7 @@ import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
+import ShareAdminLink from '../../components/dialog/share-admin-link';
 
 class Content extends Component {
 
@@ -28,37 +27,6 @@ class Content extends Component {
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalOpen: false,
-      modalContent: ''
-    };
-  }
-
-  // required by `Modal`, and can only set the 'open' state
-  toggleModal = () => {
-    this.setState({
-      modalOpen: !this.state.modalOpen
-    });
-  }
-
-  showModal = (options) => {
-    this.toggleModal();
-    this.setState({modalContent: options.content});
-  }
-
-  copyToClipboard = () => {
-    copy(this.state.modalContent);
-    this.setState({
-      modalOpen: false
-    });
-    let message = gettext('Share link is copied to the clipboard.');
-    toaster.success(message), {
-      duration: 2
-    };
   }
 
   render() {
@@ -85,44 +53,32 @@ class Content extends Component {
       // only for some columns
       const columnWidths = isPro ? ['14%', '7%', '14%'] : ['21%', '14%', '20%'];
       const table = (
-        <React.Fragment>
-          <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
-            <thead>
-              {isDesktop ? (
-                <tr>
-                  <th width="4%">{/*icon*/}</th>
-                  <th width="31%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                  <th width={columnWidths[0]}>{gettext('Library')}</th>
-                  {isPro && <th width="20%">{gettext('Permission')}</th>}
-                  <th width={columnWidths[1]}>{gettext('Visits')}</th>
-                  <th width={columnWidths[2]}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
-                  <th width="10%">{/*Operations*/}</th>
-                </tr>
-              ) : ( 
-                <tr>
-                  <th width="12%"></th>
-                  <th width="80%"></th>
-                  <th width="8%"></th>
-                </tr>
-              )}  
-            </thead>
-            <tbody>
-              {items.map((item, index) => {
-                return (<Item key={index} isDesktop={isDesktop} item={item} showModal={this.showModal} onRemoveLink={this.props.onRemoveLink}/>);
-              })}
-            </tbody>
-          </table>
-          <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal} centered={true}>
-            <ModalHeader toggle={this.toggleModal}>{gettext('Link')}</ModalHeader>
-            <ModalBody>
-              <a href={this.state.modalContent}>{this.state.modalContent}</a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={this.copyToClipboard}>{gettext('Copy')}</Button>{' '}
-              <Button color="secondary" onClick={this.toggleModal}>{gettext('Close')}</Button>
-            </ModalFooter>
-          </Modal>
-        </React.Fragment>
+        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+          <thead>
+            {isDesktop ? (
+              <tr>
+                <th width="4%">{/*icon*/}</th>
+                <th width="31%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                <th width={columnWidths[0]}>{gettext('Library')}</th>
+                {isPro && <th width="20%">{gettext('Permission')}</th>}
+                <th width={columnWidths[1]}>{gettext('Visits')}</th>
+                <th width={columnWidths[2]}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
+                <th width="10%">{/*Operations*/}</th>
+              </tr>
+            ) : ( 
+              <tr>
+                <th width="12%"></th>
+                <th width="80%"></th>
+                <th width="8%"></th>
+              </tr>
+            )}  
+          </thead>
+          <tbody>
+            {items.map((item, index) => {
+              return (<Item key={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink} />);
+            })}
+          </tbody>
+        </table>
       );
 
       return items.length ? table : emptyTip; 
@@ -147,7 +103,8 @@ class Item extends Component {
       currentPermission: isPro ? this.getCurrentPermission() : '',
       isOpIconShown: false,
       isOpMenuOpen: false, // for mobile
-      isPermSelectDialogOpen: false // for mobile
+      isPermSelectDialogOpen: false, // for mobile
+      isLinkDialogOpen: false
     };
   }
 
@@ -199,6 +156,12 @@ class Item extends Component {
     }); 
   }
 
+  toggleLinkDialog = () => {
+    this.setState({
+      isLinkDialogOpen: !this.state.isLinkDialogOpen
+    }); 
+  }
+
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
   }
@@ -209,7 +172,7 @@ class Item extends Component {
 
   viewLink = (e) => {
     e.preventDefault();
-    this.props.showModal({content: this.props.item.link});
+    this.toggleLinkDialog();
   }
   
   removeLink = (e) => {
@@ -217,7 +180,7 @@ class Item extends Component {
     this.props.onRemoveLink(this.props.item);
   }
 
-  renderExpriedData = () => {
+  renderExpiration = () => {
     let item = this.props.item;
     if (!item.expire_date) {
       return (
@@ -228,8 +191,7 @@ class Item extends Component {
     return (
       <Fragment>
         {item.is_expired ? 
-          <span className="error">{expire_date}</span> :
-          expire_date
+          <span className="error">{expire_date}</span> : expire_date
         }
       </Fragment>
     );
@@ -252,16 +214,16 @@ class Item extends Component {
 
   render() {
     const item = this.props.item;
-    const { currentPermission, isOpIconShown, isPermSelectDialogOpen } = this.state;
+    const { currentPermission, isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
 
-    let iconUrl, linkUrl;
+    let iconUrl, objUrl;
     if (item.is_dir) {
       let path = item.path === '/' ? '/' : item.path.slice(0, item.path.length - 1);
       iconUrl = Utils.getFolderIconUrl(false);
-      linkUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}${Utils.encodePath(path)}`;
+      objUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}${Utils.encodePath(path)}`;
     } else {
       iconUrl = Utils.getFileIconUrl(item.obj_name); 
-      linkUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
+      objUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 
     const desktopItem = (
@@ -269,8 +231,8 @@ class Item extends Component {
         <td><img src={iconUrl} width="24" alt="" /></td>
         <td>
           {item.is_dir ?
-            <Link to={linkUrl}>{item.obj_name}</Link> :
-            <a href={linkUrl} target="_blank">{item.obj_name}</a>
+            <Link to={objUrl}>{item.obj_name}</Link> :
+            <a href={objUrl} target="_blank">{item.obj_name}</a>
           }
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
@@ -286,9 +248,9 @@ class Item extends Component {
         </td>
         }
         <td>{item.view_cnt}</td>
-        <td>{this.renderExpriedData()}</td> 
+        <td>{this.renderExpiration()}</td> 
         <td>
-          <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} onClick={this.viewLink}></a>
+          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} onClick={this.viewLink}></a>}
           <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('Remove')} onClick={this.removeLink}></a>
         </td>
       </tr>
@@ -300,14 +262,14 @@ class Item extends Component {
           <td><img src={iconUrl} alt="" width="24" /></td>
           <td>
             {item.is_dir ?
-              <Link to={linkUrl}>{item.obj_name}</Link> :
-              <a href={linkUrl} target="_blank">{item.obj_name}</a>
+              <Link to={objUrl}>{item.obj_name}</Link> :
+              <a href={objUrl} target="_blank">{item.obj_name}</a>
             }
             {isPro && <span className="item-meta-info-highlighted">{Utils.getShareLinkPermissionObject(currentPermission).text}</span>}
             <br />
             <span>{item.repo_name}</span><br />
             <span className="item-meta-info">{item.view_cnt}<span className="small text-secondary">({gettext('Visits')})</span></span>
-            <span className="item-meta-info">{this.renderExpriedData()}<span className="small text-secondary">({gettext('Expiration')})</span></span>
+            <span className="item-meta-info">{this.renderExpiration()}<span className="small text-secondary">({gettext('Expiration')})</span></span>
           </td>
           <td>
             <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
@@ -322,7 +284,7 @@ class Item extends Component {
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">
                   {(isPro && !item.is_expired) && <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>}
-                  <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>
+                  {!item.is_expired && <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>}
                   <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
                 </div>
               </div>
@@ -340,7 +302,17 @@ class Item extends Component {
       </Fragment>
     );
 
-    return this.props.isDesktop ? desktopItem : mobileItem;
+    return (
+      <Fragment>
+        {this.props.isDesktop ? desktopItem : mobileItem}
+        {isLinkDialogOpen &&
+        <ShareAdminLink
+          link={item.link}
+          toggleDialog={this.toggleLinkDialog}
+        />
+        }
+      </Fragment>
+    );
   }
 }
 
