@@ -79,13 +79,13 @@
   border-radius: 4px
 }
 .workspace .table-item .table-icon {
-  width: 10%;
+  width: 9%;
   height: 100%;
   display: flex;
   align-items: center;
 }
 .workspace .table-item .table-name {
-  width: 75%;
+  width: 76%;
   height: 100%;
 }
 .workspace .table-item .table-dropdown-menu {

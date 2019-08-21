@@ -120,7 +120,7 @@ class Table extends Component {
         </div>
         <div className="table-dropdown-menu">
           {this.state.active &&
-            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
+            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="old-history-more-operation">
               <DropdownToggle
                 tag='i'
                 className='fa fa-ellipsis-v cursor-pointer attr-action-icon table-dropdown-menu-icon'
