@@ -123,7 +123,7 @@ class Table extends Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
               <DropdownToggle
                 tag='i'
-                className='fa fa-ellipsis-v cursor-pointer attr-action-icon'
+                className='fa fa-ellipsis-v cursor-pointer attr-action-icon table-dropdown-menu-icon'
                 title={gettext('More Operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.dropdownOpen}

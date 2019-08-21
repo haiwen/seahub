@@ -72,7 +72,7 @@
 .workspace .table-item-container .table-item {
   width: 48%;
   height: 2.5625rem;
-  padding: 0.5rem 0.625rem;
+  padding: 0.5rem;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -92,4 +92,11 @@
   width: 15%;
   height: 100%;
   text-align: right;
+}
+.workspace .table-item .table-dropdown-menu .table-dropdown-menu-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
