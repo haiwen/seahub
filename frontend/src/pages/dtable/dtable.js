@@ -150,7 +150,7 @@ class DTable extends Component {
     let personalWorkspaceList = workspaceList.filter(workspace => {
       return workspace.owner_type === 'Personal';
     });
-    personalWorkspaceList = personalWorkspaceList[0];
+    let personalWorkspaceMessage = personalWorkspaceList[0];
     let groupWorkspaceList = workspaceList.filter(workspace => {
       return workspace.owner_type === 'Group';
     });
@@ -187,7 +187,7 @@ class DTable extends Component {
                 <p className="error text-center">{this.state.errorMsg}</p>
               }
               <Workspace
-                workspace={personalWorkspaceList}
+                workspace={personalWorkspaceMessage}
                 onAddDTable={this.onAddDTable}
                 setCurrentWorkspace={this.setCurrentWorkspace}
               />
