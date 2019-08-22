@@ -49,7 +49,7 @@ class Wiki extends Component {
   }
 
   componentWillMount() {
-    if (window.screen.width <= 768) {
+    if (!Utils.isDesktop()) {
       this.setState({ closeSideBar: true });
     }
   }

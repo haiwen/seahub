@@ -44,34 +44,18 @@ class Content extends Component {
         </thead>
       );
 
+      const isDesktop = Utils.isDesktop();
       return items.length ? (
-        <table className={`table-hover ${window.innerWidth >= 768 ? '': 'table-thead-hidden'}`}>
-          {window.innerWidth >= 768 ? desktopThead : mobileThead}
-          <TableBody items={items} />
+        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+          {isDesktop ? desktopThead : mobileThead}
+          <tbody>
+            {items.map((item, index) => {
+              return <Item key={index} data={item} isDesktop={isDesktop} />;
+            })}
+          </tbody>
         </table>
       ): emptyTip;
     }
-  }
-}
-
-class TableBody extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: this.props.items
-    };
-  }
-
-  render() {
-
-    let listLinkedDevices = this.state.items.map(function(item, index) {
-      return <Item key={index} data={item} />;
-    }, this);
-
-    return (
-      <tbody>{listLinkedDevices}</tbody>
-    );
   }
 }
 
@@ -113,15 +97,11 @@ class Item extends Component {
       this.setState({
         unlinked: true
       });
-      let msg_s = gettext('Successfully unlink %(name)s.');
+      let msg_s = gettext('Successfully unlinked %(name)s.');
       msg_s = msg_s.replace('%(name)s', data.device_name);
       toaster.success(msg_s);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed to unlink %(name)s');
-        errMessage = errMessage.replace('%(name)s', data.device_name);
-      }
       toaster.danger(errMessage);
     });
   }
@@ -176,11 +156,7 @@ class Item extends Component {
       </tr>
     );
 
-    if (window.innerWidth >= 768) {
-      return desktopItem;
-    } else {
-      return mobileItem;
-    }
+    return this.props.isDesktop ? desktopItem : mobileItem;
   }
 }
 

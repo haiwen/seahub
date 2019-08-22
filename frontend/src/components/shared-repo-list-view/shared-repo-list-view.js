@@ -141,7 +141,7 @@ class SharedRepoListView extends React.Component {
   }
 
   render() {
-    if (window.innerWidth >= 768) {
+    if (Utils.isDesktop()) {
       return this.renderPCUI();
     } else {
       return this.renderMobileUI();
