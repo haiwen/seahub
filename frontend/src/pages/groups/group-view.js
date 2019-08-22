@@ -404,9 +404,13 @@ class GroupView extends React.Component {
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
               {((!isDepartmentGroup && canAddRepo) || (isDepartmentGroup && isStaff)) && (
+                Utils.isDesktop() ? (
                 <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
                   <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
                 </button>
+                ) : (
+                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateRepoToggle}></span>
+                )
               )}
             </div>
           </div>
@@ -509,7 +513,7 @@ class GroupView extends React.Component {
                         </ul>
                       </div>
                     </Popover>
-                    {(window.innerWidth < 768) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+                    {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
                     {this.state.isSortOptionsDialogOpen &&
                     <SortOptionsDialog
                       toggleDialog={this.toggleSortOptionsDialog}

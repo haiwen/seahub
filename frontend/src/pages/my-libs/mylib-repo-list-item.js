@@ -114,11 +114,9 @@ class MylibRepoListItem extends React.Component {
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-        if (window.innerWidth < 768) {
           const msg = gettext('Successfully unstarred {library_name_placeholder}.')
             .replace('{library_name_placeholder}', repoName);
           toaster.success(msg);
-        }
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -126,11 +124,9 @@ class MylibRepoListItem extends React.Component {
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-        if (window.innerWidth < 768) {
           const msg = gettext('Successfully starred {library_name_placeholder}.')
             .replace('{library_name_placeholder}', repoName);
           toaster.success(msg);
-        }
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);

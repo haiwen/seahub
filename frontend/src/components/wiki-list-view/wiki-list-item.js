@@ -3,13 +3,12 @@ import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { siteRoot, gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 // import { seafileAPI } from '../../utils/seafile-api';
 // import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
 // import Rename from '../rename';
-
-import { Utils } from '../../utils/utils';
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
@@ -186,7 +185,7 @@ class WikiListItem extends Component {
 
     return (
       <Fragment>
-        {window.innerWidth >= 768 ? desktopItem : mobileItem}
+        {Utils.isDesktop() ? desktopItem : mobileItem}
         {this.state.isShowDeleteDialog &&
           <ModalPortal>
             <WikiDeleteDialog

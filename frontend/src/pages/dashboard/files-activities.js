@@ -18,11 +18,10 @@ const contentPropTypes = {
   items: PropTypes.array.isRequired,
 };
 
-const isDesktop = window.innerWidth >= 768;
-
 class FileActivitiesContent extends Component {
 
   render() {
+    const isDesktop = Utils.isDesktop();
     let { items, isLoadingMore } = this.props;
 
     const desktopThead = (
@@ -56,6 +55,7 @@ class FileActivitiesContent extends Component {
               return (
                 <ActivityItem 
                   key={index}
+                  isDesktop={isDesktop}
                   item={item}
                   index={index}
                   items={items}
@@ -94,6 +94,7 @@ class ActivityItem extends Component {
   }
 
   render() {
+    const isDesktop = this.props.isDesktop;
     let {item, index, items} = this.props;
     let op, details, moreDetails = false;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.author_email)}/`;

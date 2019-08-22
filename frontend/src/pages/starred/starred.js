@@ -46,9 +46,10 @@ class Content extends Component {
         </thead>
       );
 
+      const isDesktop = Utils.isDesktop();
       return items.length ? (
-        <table className={`table-hover ${window.innerWidth >= 768 ? '': 'table-thead-hidden'}`}>
-          {window.innerWidth >= 768 ? desktopThead : mobileThead}
+        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+          {isDesktop ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
       ) : emptyTip;
@@ -240,11 +241,7 @@ class Item extends Component {
       </tr>
     );
 
-    if (window.innerWidth >= 768) {
-      return desktopItem;
-    } else {
-      return mobileItem;
-    }
+    return Utils.isDesktop() ? desktopItem : mobileItem;
   }
 }
 
@@ -260,7 +257,6 @@ class Starred extends Component {
 
   componentDidMount() {
     seafileAPI.listStarredItems().then((res) => {
-      //res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         loading: false,
         items: res.data.starred_item_list

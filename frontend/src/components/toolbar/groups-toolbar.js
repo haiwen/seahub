@@ -32,9 +32,7 @@ class GroupsToolbar extends React.Component {
                 </Button>
               </MediaQuery>
               <MediaQuery query="(max-width: 767.8px)">
-                <Button color="btn btn-secondary operation-item my-1" onClick={this.props.toggleAddGroupModal}>
-                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Group')}
-                </Button>
+                <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Group')} onClick={this.props.toggleAddGroupModal}></span>
               </MediaQuery>
             </div>
           )}
