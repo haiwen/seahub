@@ -43,7 +43,7 @@ class FileUploader extends React.Component {
       isUploadProgressDialogShow: false,
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
-      uploadBitrate: '0',
+      uploadBitrate: 0,
       allFilesUploaded: false,
     };
 
@@ -74,6 +74,7 @@ class FileUploader extends React.Component {
       generateUniqueIdentifier: this.generateUniqueIdentifier,
       forceChunkSize: true,
       maxChunkRetries: 3,
+      minFileSize: 0,
     });
 
     this.resumable.assignBrowse(this.uploadInput.current, true);
@@ -423,6 +424,13 @@ class FileUploader extends React.Component {
       'Content-Disposition': 'attachment; filename="' + encodeURI(resumableFile.fileName) + '"',
       'Content-Range': 'bytes ' + startByte + '-' + endByte + '/' + fileSize,
     };
+
+    if (fileSize === 0) {
+      headers = {
+        'Accept': 'application/json; text/javascript, */*; q=0.01',
+        'Content-Disposition': 'attachment; filename="' + encodeURI(resumableFile.fileName) + '"',
+      };
+    }
 
     return headers;
   }
