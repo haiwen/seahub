@@ -5,7 +5,7 @@ import UploadListItem from './upload-list-item';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  uploadBitrate: PropTypes.string.isRequired,
+  uploadBitrate: PropTypes.number.isRequired,
   totalProgress: PropTypes.number.isRequired,
   retryFileList: PropTypes.array.isRequired,
   uploadFileList: PropTypes.array.isRequired,
