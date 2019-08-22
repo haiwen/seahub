@@ -411,7 +411,7 @@ class FileUploader extends React.Component {
   setHeaders = (resumableFile, resumable) => {
     let offset = resumable.offset;
     let chunkSize = resumable.getOpt('chunkSize');
-    let fileSize = resumableFile.size;
+    let fileSize = resumableFile.size === 0 ? 1 : resumableFile.size;
     let startByte = offset !== 0 ? offset * chunkSize : 0;
     let endByte = Math.min(fileSize, (offset + 1) * chunkSize) - 1;
 
@@ -424,13 +424,6 @@ class FileUploader extends React.Component {
       'Content-Disposition': 'attachment; filename="' + encodeURI(resumableFile.fileName) + '"',
       'Content-Range': 'bytes ' + startByte + '-' + endByte + '/' + fileSize,
     };
-
-    if (fileSize === 0) {
-      headers = {
-        'Accept': 'application/json; text/javascript, */*; q=0.01',
-        'Content-Disposition': 'attachment; filename="' + encodeURI(resumableFile.fileName) + '"',
-      };
-    }
 
     return headers;
   }
@@ -602,7 +595,6 @@ class FileUploader extends React.Component {
     var firedRetry = false;
     resumableFile.resumableObj.on('chunkingComplete', () => {
       if(!firedRetry) {
-        console.log(path);
         seafileAPI.getFileUploadedBytes(repoID, path, fileName).then(res => {
           let uploadedBytes = res.data.uploadedBytes;
           let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
