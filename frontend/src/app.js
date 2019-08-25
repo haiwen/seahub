@@ -69,7 +69,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    if (window.screen.width <= 768) {
+    if (!Utils.isDesktop()) {
       this.setState({
         isSidePanelClosed: true
       });
@@ -166,7 +166,7 @@ class App extends Component {
       let { currentTab, pathPrefix } = this.state;
       window.history.replaceState({currentTab: currentTab, pathPrefix: pathPrefix}, null);
     });
-    if (window.screen.width <= 768 && !this.state.isSidePanelClosed) {
+    if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
       this.setState({ isSidePanelClosed: true });
     }
   } 

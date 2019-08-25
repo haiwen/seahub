@@ -43,7 +43,7 @@ class FileUploader extends React.Component {
       isUploadProgressDialogShow: false,
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
-      uploadBitrate: '0',
+      uploadBitrate: 0,
       allFilesUploaded: false,
     };
 
@@ -74,6 +74,7 @@ class FileUploader extends React.Component {
       generateUniqueIdentifier: this.generateUniqueIdentifier,
       forceChunkSize: true,
       maxChunkRetries: 3,
+      minFileSize: 0,
     });
 
     this.resumable.assignBrowse(this.uploadInput.current, true);
@@ -410,7 +411,7 @@ class FileUploader extends React.Component {
   setHeaders = (resumableFile, resumable) => {
     let offset = resumable.offset;
     let chunkSize = resumable.getOpt('chunkSize');
-    let fileSize = resumableFile.size;
+    let fileSize = resumableFile.size === 0 ? 1 : resumableFile.size;
     let startByte = offset !== 0 ? offset * chunkSize : 0;
     let endByte = Math.min(fileSize, (offset + 1) * chunkSize) - 1;
 
@@ -594,7 +595,6 @@ class FileUploader extends React.Component {
     var firedRetry = false;
     resumableFile.resumableObj.on('chunkingComplete', () => {
       if(!firedRetry) {
-        console.log(path);
         seafileAPI.getFileUploadedBytes(repoID, path, fileName).then(res => {
           let uploadedBytes = res.data.uploadedBytes;
           let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;

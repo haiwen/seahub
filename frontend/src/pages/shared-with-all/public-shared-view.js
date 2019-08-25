@@ -195,13 +195,15 @@ class PublicSharedView extends React.Component {
                 <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
                   <MediaQuery query="(min-width: 768px)">
                     <DropdownToggle className='btn btn-secondary operation-item'>
-                      <i className="fas fa-plus-square text-secondary"></i>{gettext('Add Library')}
+                      <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
                     </DropdownToggle>
                   </MediaQuery>
                   <MediaQuery query="(max-width: 767.8px)">
-                    <DropdownToggle className='btn btn-secondary operation-item my-1'>
-                      <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
-                    </DropdownToggle>
+                    <DropdownToggle 
+                      tag="span"
+                      className="sf2-icon-plus mobile-toolbar-icon"
+                      title={gettext('Add Library')}
+                    />
                   </MediaQuery>
                   <DropdownMenu>
                     <DropdownItem onClick={this.onSelectRepoToggle}>{gettext('Share existing libraries')}</DropdownItem>
@@ -217,7 +219,7 @@ class PublicSharedView extends React.Component {
           <div className="cur-view-container">
             <div className="cur-view-path align-items-center">
               <h3 className="sf-heading m-0">{gettext('Shared with all')}</h3>
-              {(window.innerWidth < 768) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+              {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}

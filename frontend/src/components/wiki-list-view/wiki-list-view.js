@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import WikiListItem from './wiki-list-item';
 import LibsMobileThead from '../libs-mobile-thead';
 
@@ -35,6 +36,7 @@ class WikiListView extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
+      const isDesktop = Utils.isDesktop();
       const desktopThead = (
         <thead>
           <tr>
@@ -47,8 +49,8 @@ class WikiListView extends Component {
         </thead>
       );
       return (
-        <table className={window.innerWidth >= 768 ? '' : 'table-thead-hidden'}>
-          {window.innerWidth >= 768 ? desktopThead : <LibsMobileThead />}
+        <table className={isDesktop ? '' : 'table-thead-hidden'}>
+          {isDesktop ? desktopThead : <LibsMobileThead />}
           <tbody>
             {wikis.map((wiki, index) => {
               return (

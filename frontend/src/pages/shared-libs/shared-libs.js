@@ -74,10 +74,15 @@ class Content extends Component {
         </thead>
       );
 
+      const isDesktop = Utils.isDesktop();
       const table = (
-        <table className={window.innerWidth >= 768 ? '' : 'table-thead-hidden'}>
-          {window.innerWidth >= 768 ? desktopThead : <LibsMobileThead />}
-          <TableBody items={items} />
+        <table className={isDesktop ? '' : 'table-thead-hidden'}>
+          {isDesktop ? desktopThead : <LibsMobileThead />}
+          <tbody>
+            {items.map((item, index) => {
+              return <Item key={index} data={item} isDesktop={isDesktop} />;
+            })}
+          </tbody>
         </table>
       );
 
@@ -93,24 +98,6 @@ Content.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired
-};
-
-class TableBody extends Component {
-
-  render() {
-
-    let listItems = this.props.items.map(function(item, index) {
-      return <Item key={index} data={item} />;
-    }, this);
-
-    return (
-      <tbody>{listItems}</tbody>
-    );
-  }
-}
-
-TableBody.propTypes = {
-  items: PropTypes.array.isRequired
 };
 
 class Item extends Component {
@@ -187,11 +174,9 @@ class Item extends Component {
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-        if (window.innerWidth < 768) {
-          const msg = gettext('Successfully unstarred {library_name_placeholder}.')
-            .replace('{library_name_placeholder}', repoName);
-          toaster.success(msg);
-        }
+        const msg = gettext('Successfully unstarred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -199,11 +184,9 @@ class Item extends Component {
     } else {
       seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-        if (window.innerWidth < 768) {
-          const msg = gettext('Successfully starred {library_name_placeholder}.')
-            .replace('{library_name_placeholder}', repoName);
-          toaster.success(msg);
-        }
+        const msg = gettext('Successfully starred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -313,11 +296,12 @@ class Item extends Component {
       </Fragment>
     );
 
-    return window.innerWidth >= 768 ? desktopItem : mobileItem;
+    return this.props.isDesktop ? desktopItem : mobileItem;
   }
 }
 
 Item.propTypes = {
+  isDesktop: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired
 };
 
@@ -390,7 +374,7 @@ class SharedLibraries extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path align-items-center">
               <h3 className="sf-heading m-0">{gettext('Shared with me')}</h3>
-              {(window.innerWidth < 768) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+              {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
             <div className="cur-view-content">
               <Content
