@@ -1,0 +1,169 @@
+{
+  "bold": "Tučně",
+  "italic": "Kurzíva",
+  "inline_code": "Kód",
+  "header_one": "Záhlaví 1",
+  "header_two": "Záhlaví 2",
+  "header_three": "Záhlaví 3",
+  "header_four": "Záhlaví 4",
+  "header_five": "Záhlaví 5",
+  "header_six": "Záhlaví 6",
+  "paragraph": "Odstavec",
+  "quote": "Citace",
+  "ordered_list": "Číslovaný seznam",
+  "unordered_list": "Nečíslovaný seznam",
+  "check_list_item": "Zkontrolovat položku seznamu",
+  "insert_image": "Vložit obrázek",
+  "code": "Řádkový kód",
+  "code_block": "Blok kódu",
+  "insert_link": "Vložit odkaz",
+  "insert_table": "Vložit tabulku",
+  "save": "Uložit",
+  "more": "Více",
+  "invalid_url": "Chybná URL",
+  "link_address": "Adresa odkazu",
+  "image_address": "Adresa obrázku",
+  "submit": "Odeslat",
+  "cancel": "Storno",
+  "switch_to_plain_text_editor": "Přepnout do textového editoru",
+  "switch_to_rich_text_editor": "Přepnout do rozšířeného textového editoru",
+  "switch_to_viewer": "Přepnout do značkovacího prohlížeče",
+  "help": "Pomoc",
+  "remove_table": "Odebrat tabulku",
+  "column": "Sloupec",
+  "row": "Řádek",
+  "set_align": "Nastavit zarovnání",
+  "left": "Vlevo",
+  "center": "Střed",
+  "right": "Vpravo",
+  "file_saved": "Soubor uložen",
+  "file_failed_to_save": "Soubor nebyl uložen",
+  "star": "Přidat hvězdičku",
+  "unstar": "Odebrat hvězdičku",
+  "back_to_parent_directory":"Zpět do nadřazeného adresáře",
+  "edit":"editovat",
+  "copy": "Kopírovat",
+  "copied": "Zkopírováno",
+  "internal_link": "Interní odkaz",
+  "copy_internal_link": "Interní odkaz byl zkopírován do schránky",
+  "internal_link_desc": "Interní odkaz směřuje na soubor nebo složku u které má uživatel oprávnění ke čtení.",
+  "share": "Sdílet",
+  "share_link": "Veřejný odkaz",
+  "generate": "Generovat",
+  "add_password_protection": "Přidat ochranu heslem",
+  "password": "Heslo",
+  "at_least_8_characters": "nejméně 8 znaků",
+  "password_again": "Heslo znovu",
+  "add_auto_expiration": "Přidat automatickou expiraci",
+  "days": "dní",
+  "please_enter_password": "Zadejte heslo",
+  "greater_than_or_equal_to": "Vyšší nebo rovno",
+  "less_than_or_equal_to": "Nižší nebo rovno",
+  "set_permission": "Nastavit oprávnění",
+  "preview_and_download": "Zobrazit a stáhnout",
+  "preview_only": "Pouze zobrazit",
+  "please_enter_valid_days": "Zadejte platné dny",
+  "please_enter_a_non-negative_integer": "Vložte prosím nezáporné celé číslo",
+  "please_enter_days": "Prosím zadejte dny",
+  "password_is_too_short": "Heslo je příliš krátké.",
+  "passwords_do_not_match": "Hesla nesouhlasí",
+  "return_to_wiki_page": "Návrat na stránku Wiki",
+  "insert_network_image": "Vložit síťový obrázek",
+  "upload_local_image": "Nahrát lokální obrázek",
+  "add_link": "Přidat odkaz",
+  "file_history": "Historie souboru",
+  "history_version": "Historie verzí",
+  "back_to_viewer": "Zpět na prohlížeč",
+  "link_title": "Název odkazu",
+  "local_draft": "Místní koncept",
+  "use_draft": "Použít koncept",
+  "delete_draft": "Smazat koncept",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "Máte neuložený koncept. Chcete ho použít?",
+  "local_draft_saved": "Místní koncept byl uložen",
+  "new_draft": "Nový návrh",
+  "edit_draft": "Upravit návrh",
+  "this_file_has_a_draft": "Tento soubor má koncept.", 
+  "delete": "Smazat",
+  "comments": "Komentáře",
+  "add_a_comment": "Přidat komentář…",
+  "no_comment_yet": "Žádné komentáře",
+  "Mark_as_Resolved": "Označit jako vyřešené",
+  "ask_for_review": "Požádat o kontrolu",
+  "review_already_exists": "Kontrola již existuje. ",
+  "view_review": "Zobrazit kontrolu",
+  "there_is_an_associated_review_with_this_file": "K tomuto souboru je přiřazená kontrola",
+  "start_review": "Začít kontrolu",
+  "this_file_is_in_draft_stage": "Tento soubor je ve fázi návrhu.",
+  "this_file_is_in_review_stage": "Tento soubor je ve fázi kontroly.",
+  "this_file_has_been_updated": "Tento soubor byl aktualizován.",
+  "refresh": "Obnovit",
+  "related_files": "související soubory",
+  "related_file": "související soubor",
+  "no_tags": "Žádné značky",
+  "no_related_files": "Žádné související soubory",
+  "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "",
+  "userHelp": {
+    "title": "Klávesové zkratky",
+    "userHelpData": [
+      {
+        "shortcutType":"Seznam zkratek",
+        "shortcutData": {
+          "Make_list": "Vytvořit seznam",
+          "Make_ordered_list": "Vytvořit číslovaný seznam",
+          "Insert_new_item": "Vložit novou položku",
+          "Insert_child_in_item": "Vložit podpoložku",
+          "Increase_depth": "Zvýšit hloubku"
+        }
+      }, {
+        "shortcutType": "Zkratky záhlaví",
+        "shortcutData": {
+          "Heading_1": "Záhlaví 1",
+          "Heading_2": "Záhlaví 2",
+          "Heading_3": "Záhlaví 3",
+          "Heading_4": "Záhlaví 4",
+          "Heading_5": "Záhlaví 5",
+          "Heading_6": "Záhlaví 6"
+        }
+      }, {
+        "shortcutType": "Zkratky bloků kódu",
+        "shortcutData": {
+          "Make_code_block": "Vytvořit blok kódu",
+          "Insert_new_line": "Vložit novou řádku",
+          "Escape_code_block": "Opustit blok kódu",
+          "Insert_indent": "Vložit odrážku"
+        }
+      }, {
+        "shortcutType": "Zkratky bloku citace",
+        "shortcutData": {
+          "Make_Block_quote": "Vytvořit blokovou citaci",
+          "Escape_Block_quote": "Opustit blokovou citaci"
+        }
+      }, {
+        "shortcutType": "Zkratky tabulky",
+        "shortcutData": {
+          "Insert_Table_Row": "Vložit řádku tabulky",
+          "Escape_table": "Opustit tabulku"
+        }
+      }, {
+        "shortcutType":"Řádkové zkratky",
+        "shortcutData": {
+          "Bold": "Tučně",
+          "Italic": "Kurzíva",
+          "Italic_Bold": "Tučná kurzíva",
+          "Inline_code": "Řádkový kód"
+        }
+      }, {
+        "shortcutType": "Uložit zkratky",
+        "shortcutData": {
+          "Save_file": "Uložit soubor"
+        }
+      }, {
+        "shortcutType": "Zkratky obrázku",
+        "shortcutData": {
+          "Paste_screen_shot": "Vložit snímek obrazovky",
+          "Drag_image_from_anywhere_to_upload_it": "Přetáhnout obrázek odkudkoliv k jeho nahrání"
+        }
+      }
+    ]
+  }
+}
