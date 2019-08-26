@@ -249,12 +249,12 @@ class FolderItem extends React.Component {
     });
   }
 
-  renderLink = (node) => {
-    const className = node.path === this.props.currentPath ? 'wiki-nav-content wiki-nav-content-highlight' : 'wiki-nav-content';
-    if (node.href && node.name) {
-      return <div className={className}><a href={node.href} data-path={node.path} onClick={this.toggleExpanded}>{node.name}</a></div>;
-    } else if (node.name) {
-      return <div className="wiki-nav-content"><span onClick={this.toggleExpanded}>{node.name}</span></div>;
+  renderLink = ({ href, name, path }) => {
+    const className = `wiki-nav-content ${path === this.props.currentPath ? 'wiki-nav-content-highlight' : ''}`;
+    if (href && name) {
+      return <div className={className}><a href={href} data-path={path} onClick={this.toggleExpanded} title={name}>{name}</a></div>;
+    } else if (name) {
+      return <div className="wiki-nav-content"><span onClick={this.toggleExpanded} title={name}>{name}</span></div>;
     } else {
       return null;
     }
