@@ -241,7 +241,7 @@ class UserStarredFilesManager(models.Manager):
                 logger.error(e)
                 sfile.last_modified = 0
 
-        ret.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+        ret.sort(key=lambda x: x.last_modified, reverse=True)
 
         return ret
 
