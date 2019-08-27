@@ -22,7 +22,7 @@ def star_file(email, repo_id, path, is_dir, org_id=-1):
                          is_dir=is_dir)
     try:
         f.save()
-    except IntegrityError, e:
+    except IntegrityError as e:
         logger.warn(e)
 
 def unstar_file(email, repo_id, path):

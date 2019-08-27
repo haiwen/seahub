@@ -25,9 +25,9 @@ def json_response(func):
     def wrapped(*a, **kw):
         try:
             result = func(*a, **kw)
-        except BadRequestException, e:
+        except BadRequestException as e:
             return HttpResponseBadRequest(e.message)
-        except RequestForbbiddenException, e:
+        except RequestForbbiddenException as e:
             return HttpResponseForbidden(e.messages)
         if isinstance(result, HttpResponse):
             return result

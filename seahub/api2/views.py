@@ -1196,7 +1196,7 @@ def set_repo_password(request, repo, password):
         if ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
             add_encrypted_repo_secret_key_to_database(repo_id, password)
 
-    except SearpcError, e:
+    except SearpcError as e:
         if e.msg == 'Bad arguments':
             return api_error(status.HTTP_400_BAD_REQUEST, e.msg)
         elif e.msg == 'Repo is not encrypted':
@@ -2042,7 +2042,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
         dirs = seafile_api.list_dir_with_perm(repo.id, path, dir_id,
                 username, -1, -1)
         dirs = dirs if dirs else []
-    except SearpcError, e:
+    except SearpcError as e:
         logger.error(e)
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
@@ -2142,7 +2142,7 @@ def get_shared_link(request, repo_id, path):
 
         try:
             fs.save()
-        except IntegrityError, e:
+        except IntegrityError as e:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
     http_or_https = request.is_secure() and 'https' or 'http'
@@ -2207,7 +2207,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op,
 def reloaddir(request, repo, parent_dir):
     try:
         dir_id = seafile_api.get_dir_id_by_path(repo.id, parent_dir)
-    except SearpcError, e:
+    except SearpcError as e:
         logger.error(e)
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to get dir id by path")
@@ -2849,7 +2849,7 @@ class FileView(APIView):
             try:
                 seafile_api.rename_file(repo_id, parent_dir, oldname, newname,
                                         username)
-            except SearpcError,e:
+            except SearpcError as e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to rename file: %s" % e)
 
@@ -2892,7 +2892,7 @@ class FileView(APIView):
                                       dst_dir, new_filename,
                                       replace=False, username=username,
                                       need_progress=0, synchronous=1)
-            except SearpcError, e:
+            except SearpcError as e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
 
@@ -2984,7 +2984,7 @@ class FileView(APIView):
             try:
                 seafile_api.post_empty_file(repo_id, parent_dir,
                                             new_file_name, username)
-            except SearpcError, e:
+            except SearpcError as e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to create file.')
 
@@ -3038,7 +3038,7 @@ class FileView(APIView):
             try:
                 seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
                 return Response('success', status=status.HTTP_200_OK)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
 
@@ -3052,7 +3052,7 @@ class FileView(APIView):
             try:
                 seafile_api.unlock_file(repo_id, path.lstrip('/'))
                 return Response('success', status=status.HTTP_200_OK)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
         else:
@@ -3646,7 +3646,7 @@ class DirView(APIView):
                 seafile_api.rename_file(repo_id, parent_dir, old_dir_name,
                                         checked_newname, username)
                 return Response('success', status=status.HTTP_200_OK)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to rename folder.')
@@ -3960,7 +3960,7 @@ class SharedFileDetailView(APIView):
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
             commits = get_file_revisions_after_renamed(repo_id, path)
             c = commits[0]
-        except SearpcError, e:
+        except SearpcError as e:
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get file id by path.")
 
@@ -4089,7 +4089,7 @@ class SharedDirView(APIView):
             dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, real_path, dir_id,
                     username, -1, -1)
             dirs = dirs if dirs else []
-        except SearpcError, e:
+        except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED, "Failed to list dir.")
 
@@ -4298,7 +4298,7 @@ class SharedRepo(APIView):
                 try:
                     seafile_api.share_repo(repo_id, username, u, permission)
                     shared_users.append(u)
-                except SearpcError, e:
+                except SearpcError as e:
                     logger.error(e)
                     notsharable_errors.append(e)
 
@@ -4313,7 +4313,7 @@ class SharedRepo(APIView):
                 for s_user in shared_users:
                     try:
                         remove_share(repo_id, username, s_user)
-                    except SearpcError, e:
+                    except SearpcError as e:
                         # ignoring this error, go to next unsharing
                         continue
 
@@ -4348,7 +4348,7 @@ class SharedRepo(APIView):
             try:
                 seafile_api.set_group_repo(repo_id,
                         group_id, username, permission)
-            except SearpcError, e:
+            except SearpcError as e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "Searpc Error: " + e.msg)
             try:
@@ -4555,7 +4555,7 @@ class Groups(APIView):
             group_id = ccnet_api.create_group(group_name, username)
             return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
                                 content_type=content_type)
-        except SearpcError, e:
+        except SearpcError as e:
             result['error'] = e.msg
             return HttpResponse(json.dumps(result), status=500,
                                 content_type=content_type)
@@ -4648,7 +4648,7 @@ class GroupMembers(APIView):
 
         try:
             ccnet_threaded_rpc.group_add_member(group.id, request.user.username, user_name)
-        except SearpcError, e:
+        except SearpcError as e:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to add user to group')
 
         return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
@@ -4673,7 +4673,7 @@ class GroupMembers(APIView):
 
         try:
             ccnet_threaded_rpc.group_remove_member(group.id, request.user.username, user_name)
-        except SearpcError, e:
+        except SearpcError as e:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to add user to group')
 
         return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
@@ -4949,7 +4949,7 @@ class OfficeConvertQueryStatus(APIView):
                 else:
                     ret['success'] = True
                     ret['status'] = d.status
-            except Exception, e:
+            except Exception as e:
                 logging.exception('failed to call query_office_convert_status')
                 ret['error'] = str(e)
 

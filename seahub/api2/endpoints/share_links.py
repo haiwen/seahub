@@ -454,7 +454,7 @@ class ShareLinkOnlineOfficeLock(APIView):
             # refresh lock file
             try:
                 seafile_api.refresh_file_lock(repo_id, path)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

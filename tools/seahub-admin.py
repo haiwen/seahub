@@ -34,7 +34,7 @@ c = conn.cursor()
 sql = "SELECT email FROM EmailUser WHERE is_staff = 1"
 try:
     c.execute(sql)
-except sqlite3.Error, e:
+except sqlite3.Error as e:
     print "An error orrured:", e.args[0]
     sys.exit(1)
 
@@ -50,7 +50,7 @@ if staff_list:
         sql = "DELETE FROM EmailUser WHERE is_staff = 1"
         try:
             c.execute(sql)
-        except sqlite3.Error, e:
+        except sqlite3.Error as e:
             print "An error orrured:", e.args[0]
             sys.exit(1)
         else:
@@ -80,7 +80,7 @@ try:
     c = conn.cursor()
     c.execute(sql)
     conn.commit()
-except sqlite3.Error, e:
+except sqlite3.Error as e:
     print "An error occured:", e.args[0]
     sys.exit(1)
 else:

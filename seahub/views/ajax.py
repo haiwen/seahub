@@ -102,7 +102,7 @@ def get_dirents(request, repo_id):
             ele_path = '/'.join(path_eles[:i+1]) + '/'
             try:
                 ele_path_dirents = seafile_api.list_dir_by_path(repo_id, ele_path.encode('utf-8'))
-            except SearpcError, e:
+            except SearpcError as e:
                 ele_path_dirents = []
             ds = []
             for d in ele_path_dirents:
@@ -118,7 +118,7 @@ def get_dirents(request, repo_id):
     # get dirents in path
     try:
         dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
-    except SearpcError, e:
+    except SearpcError as e:
         return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
 
@@ -492,7 +492,7 @@ def rename_dirent(request, repo_id):
     # rename file/dir
     try:
         seafile_api.rename_file(repo_id, parent_dir, oldname, newname, username)
-    except SearpcError, e:
+    except SearpcError as e:
         result['error'] = str(e)
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
@@ -558,7 +558,7 @@ def delete_dirent(request, repo_id):
         seafile_api.del_file(repo_id, parent_dir, dirent_name, username)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
-    except SearpcError, e:
+    except SearpcError as e:
         logger.error(e)
         err_msg = _(u'Internal error. Failed to delete %s.') % escape(dirent_name)
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -620,7 +620,7 @@ def delete_dirents(request, repo_id):
 
     try:
         seafile_api.del_file(repo_id, parent_dir, multi_files, username)
-    except SearpcError, e:
+    except SearpcError as e:
         logger.error(e)
 
     return HttpResponse(json.dumps({'deleted': deleted, 'undeleted': undeleted}),

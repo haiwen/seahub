@@ -79,7 +79,7 @@ def share_to_group(request, repo, group, permission):
             seafile_api.set_group_repo(repo_id, group_id, from_user,
                                        permission)
         return True
-    except Exception, e:
+    except Exception as e:
         logger.error(e)
         return False
 

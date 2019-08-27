@@ -445,7 +445,7 @@ class DirView(APIView):
                 dir_info = self.get_dir_info(repo_id, new_dir_path)
                 resp = Response(dir_info)
                 return resp
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

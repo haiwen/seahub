@@ -1200,7 +1200,7 @@ if HAS_OFFICE_CONVERTER:
         try:
             ret = do_urlopen(url, headers=headers)
             data = ret.read()
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             if timestamp and e.code == 304:
                 return HttpResponseNotModified()
             else:

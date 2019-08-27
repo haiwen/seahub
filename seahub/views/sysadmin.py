@@ -1148,7 +1148,7 @@ def user_reset(request, email):
                     msg = _('Successfully reset password to %(passwd)s, an email has been sent to %(user)s.') % \
                         {'passwd': new_password, 'user': contact_email}
                     messages.success(request, msg)
-                except Exception, e:
+                except Exception as e:
                     logger.error(str(e))
                     msg = _('Successfully reset password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration.') % \
                         {'passwd':new_password, 'user': user.email}
@@ -1235,7 +1235,7 @@ def user_add(request):
                 try:
                     send_user_add_mail(request, email, password)
                     messages.success(request, _(u'Successfully added user %s. An email notification has been sent.') % email)
-                except Exception, e:
+                except Exception as e:
                     logger.error(str(e))
                     messages.success(request, _(u'Successfully added user %s. An error accurs when sending email notification, please check your email configuration.') % email)
             else:
@@ -1248,7 +1248,7 @@ def user_add(request):
                     try:
                         send_user_add_mail(request, email, password)
                         messages.success(request, _(u'Successfully added user %s. An email notification has been sent.') % email)
-                    except Exception, e:
+                    except Exception as e:
                         logger.error(str(e))
                         messages.success(request, _(u'Successfully added user %s. An error accurs when sending email notification, please check your email configuration.') % email)
                 else:

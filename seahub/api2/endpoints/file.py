@@ -199,7 +199,7 @@ class FileView(APIView):
 
             try:
                 seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, username)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -572,7 +572,7 @@ class FileView(APIView):
             expire = request.data.get('expire', FILE_LOCK_EXPIRATION_DAYS)
             try:
                 seafile_api.lock_file(repo_id, path, username, expire)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -587,7 +587,7 @@ class FileView(APIView):
                 # unlock file
                 try:
                     seafile_api.unlock_file(repo_id, path)
-                except SearpcError, e:
+                except SearpcError as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -605,7 +605,7 @@ class FileView(APIView):
                 # refresh lock file
                 try:
                     seafile_api.refresh_file_lock(repo_id, path)
-                except SearpcError, e:
+                except SearpcError as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

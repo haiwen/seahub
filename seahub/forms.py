@@ -123,7 +123,7 @@ class RepoRenameDirentForm(forms.Form):
                 raise forms.ValidationError(error_msg)
             else:
                 return newname
-        except SearpcError, e:
+        except SearpcError as e:
             raise forms.ValidationError(str(e))
 
 class RepoNewDirentForm(forms.Form):
@@ -144,7 +144,7 @@ class RepoNewDirentForm(forms.Form):
                 raise forms.ValidationError(error_msg)
             else:
                 return dirent_name
-        except SearpcError, e:
+        except SearpcError as e:
             raise forms.ValidationError(str(e))
 
 class SetUserQuotaForm(forms.Form):

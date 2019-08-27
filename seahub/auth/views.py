@@ -313,7 +313,7 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 opts['domain_override'] = get_current_site(request).domain
             try:
                 form.save(**opts)
-            except Exception, e:
+            except Exception as e:
                 logger.error(str(e))
                 messages.error(request, _(u'Failed to send email, please contact administrator.'))
                 return render(request, template_name, {

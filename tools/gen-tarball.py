@@ -78,14 +78,14 @@ def must_copy(src, dst):
     '''Copy src to dst, exit on failure'''
     try:
         shutil.copy(src, dst)
-    except Exception, e:
+    except Exception as e:
         error('failed to copy %s to %s: %s' % (src, dst, e))
 
 def must_move(src, dst):
     '''Copy src to dst, exit on failure'''
     try:
         shutil.move(src, dst)
-    except Exception, e:
+    except Exception as e:
         error('failed to move %s to %s: %s' % (src, dst, e))
 
 usage = '''\

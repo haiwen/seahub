@@ -489,7 +489,7 @@ def repo_history(request, repo_id):
             ret = seafserv_rpc.is_passwd_set(repo_id, username)
             if ret == 1:
                 password_set = True
-        except SearpcError, e:
+        except SearpcError as e:
             return render_error(request, e.msg)
 
         if not password_set:
@@ -577,7 +577,7 @@ def repo_revert_history(request, repo_id):
             ret = seafserv_rpc.is_passwd_set(repo_id, username)
             if ret == 1:
                 password_set = True
-        except SearpcError, e:
+        except SearpcError as e:
             return render_error(request, e.msg)
 
         if not password_set:
@@ -591,7 +591,7 @@ def repo_revert_history(request, repo_id):
     try:
         seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, request.user.username)
         messages.success(request, _('Successfully restored the library.'))
-    except SearpcError, e:
+    except SearpcError as e:
         if e.msg == 'Bad arguments':
             return render_error(request, _(u'Invalid arguments.'))
         elif e.msg == 'No such repo':
@@ -997,7 +997,7 @@ def repo_download_dir(request, repo_id):
         try:
             total_size = seafile_api.get_dir_size(repo.store_id,
                 repo.version, dir_id)
-        except Exception, e:
+        except Exception as e:
             logger.error(str(e))
             return render_error(request, _(u'Internal Error'))
 
