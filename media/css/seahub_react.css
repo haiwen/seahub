@@ -546,6 +546,12 @@ ul,ol,li {
     color: #fff;
     border: none;
 }
+.cur-view-path.tab-nav-container {
+  padding: 0 16px;
+}
+.cur-view-path.tab-nav-container .nav .nav-item .nav-link {
+  margin: 0 0.75rem;
+}
 
 /* side-panel */
 .side-panel {
