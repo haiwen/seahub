@@ -794,14 +794,3 @@ if getattr(settings, 'ENABLE_CAS', False):
         url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),
         url(r'^accounts/cas-callback/$', cas_callback, name='cas_ng_proxy_callback'),
     ]
-
-from seahub.social_core.views import (
-    weixin_work_cb, weixin_work_3rd_app_install, weixin_work_3rd_app_install_cb
-)
-
-urlpatterns += [
-    url(r'^weixin-work/callback/$', weixin_work_cb),
-    url(r'^weixin-work/3rd-app-install/$', weixin_work_3rd_app_install),
-    url(r'^weixin-work/3rd-app-install/callback/$',
-        weixin_work_3rd_app_install_cb, name='weixin_work_3rd_app_install_cb'),
-]
