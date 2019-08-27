@@ -217,7 +217,7 @@ def login_simple_check(request):
         raise Http404
 
     today = datetime.now().strftime('%Y-%m-%d')
-    expect = hashlib.md5(settings.SECRET_KEY+username+today).hexdigest()
+    expect = hashlib.md5((settings.SECRET_KEY+username+today).encode('utf-8')).hexdigest()
     if expect == random_key:
         try:
             user = User.objects.get(email=username)

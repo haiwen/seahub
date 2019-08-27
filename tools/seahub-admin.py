@@ -73,7 +73,7 @@ if passwd != passwd2:
     sys.exit(1)
     
 mySha1 = hashlib.sha1()
-mySha1.update(passwd)
+mySha1.update(passwd.encode('utf-8'))
 enc_passwd = mySha1.hexdigest()
 sql = "INSERT INTO EmailUser(email, passwd, is_staff, is_active, ctime) VALUES ('%s', '%s', 1, 1, '%d');" % (username, enc_passwd, time.time()*1000000)
 try:

@@ -50,7 +50,7 @@ class Command(BaseCommand):
         in the name will be converted to forward '/'.
         """
         name = name.replace('\\', '/')
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         try:
             binary = content.read()
         except AttributeError as IOError:
@@ -78,7 +78,7 @@ class Command(BaseCommand):
         return name
 
     def exists(self, name):
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         query = 'SELECT COUNT(*) FROM %(table)s WHERE %(name_md5_column)s = %%s'
         query %= self.__dict__
         cursor = connection.cursor()

@@ -39,7 +39,7 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
     if isinstance(instance, Avatar):
         tmppath = [AVATAR_STORAGE_DIR]
         if AVATAR_HASH_USERDIRNAMES:
-            tmp = hashlib.md5(instance.emailuser).hexdigest()
+            tmp = hashlib.md5(instance.emailuser.encode('utf-8')).hexdigest()
             tmppath.extend([tmp[0], tmp[1], tmp[2:]])
         else:
             tmppath.append(instance.emailuser)
@@ -63,7 +63,7 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
         # File doesn't exist yet
         if AVATAR_HASH_FILENAMES:
             (root, ext) = os.path.splitext(filename)
-            filename = hashlib.md5(smart_str(filename)).hexdigest()
+            filename = hashlib.md5(smart_str(filename).encode('utf-8')).hexdigest()
             filename = filename + ext
     if size:
         tmppath.extend(['resized', str(size)])

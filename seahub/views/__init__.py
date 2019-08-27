@@ -1166,7 +1166,7 @@ def image_view(request, filename):
         raise Http404
 
     # read file from cache, if hit
-    filename_md5 = hashlib.md5(filename).hexdigest()
+    filename_md5 = hashlib.md5(filename.encode('utf-8')).hexdigest()
     cache_key = 'image_view__%s' % filename_md5
     file_content = cache.get(cache_key)
     if file_content is None:

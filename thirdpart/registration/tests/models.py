@@ -183,7 +183,7 @@ class RegistrationModelTests(TestCase):
         """
         # Due to the way activation keys are constructed during
         # registration, this will never be a valid key.
-        invalid_key = hashlib.sha1('foo').hexdigest()
+        invalid_key = hashlib.sha1('foo'.encode('utf-8')).hexdigest()
         self.assertFalse(RegistrationProfile.objects.activate_user(invalid_key))
 
     def test_expired_user_deletion(self):
