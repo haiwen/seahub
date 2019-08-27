@@ -202,8 +202,8 @@ class ShareLinks(APIView):
             dir_list = [x for x in links_info if x['is_dir']]
             file_list = [x for x in links_info if not x['is_dir']]
 
-            dir_list.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
-            file_list.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
+            dir_list.sort(key=lambda x: x['obj_name'])
+            file_list.sort(key=lambda x: x['obj_name'])
 
             result = dir_list + file_list
 
