@@ -33,7 +33,6 @@ DEPARTMENT_OWNER = 'system admin'
 
 
 # # uid = corpid + '_' + userid
-# from social_django.models import UserSocialAuth
 # get departments: https://work.weixin.qq.com/api/doc#90000/90135/90208
 # get members: https://work.weixin.qq.com/api/doc#90000/90135/90200
 

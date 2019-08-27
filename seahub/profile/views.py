@@ -89,7 +89,6 @@ def edit_profile(request):
     if work_weixin_oauth_check():
         enable_wechat_work = True
 
-        # from social_django.models import UserSocialAuth
         from seahub.auth.models import SocialAuthUser
         from seahub.work_weixin.settings import WORK_WEIXIN_PROVIDER
         social_connected = SocialAuthUser.objects.filter(

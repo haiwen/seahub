@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 WORK_WEIXIN_ACCESS_TOKEN_CACHE_KEY = 'WORK_WEIXIN_ACCESS_TOKEN'
 
 
-# from social_django.models import UserSocialAuth
 # get access_token: https://work.weixin.qq.com/api/doc#90000/90135/91039
 
 

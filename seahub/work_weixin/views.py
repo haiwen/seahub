@@ -28,7 +28,6 @@ logger = logging.getLogger(__name__)
 
 
 # # uid = corpid + '_' + userid
-# from social_django.models import UserSocialAuth
 
 
 def work_weixin_oauth_login(request):

@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 
 
 # https://work.weixin.qq.com/api/doc#90000/90135/90236/
-# from social_django.models import UserSocialAuth
 
 ########## Utility Functions ##########
 def wrap_div(s):
