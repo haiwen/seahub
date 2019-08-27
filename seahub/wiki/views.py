@@ -34,7 +34,7 @@ def wiki_list(request):
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
     if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        joined_groups.sort(key=lambda x: x.group_name.lower())
 
     return render(request, "wiki/wiki_list.html", {
         "grps": joined_groups,
