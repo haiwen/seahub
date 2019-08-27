@@ -158,7 +158,6 @@ urlpatterns = [
     url(r'^sso/$', sso, name='sso'),
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
-    url(r'^social/', include('social_django.urls', namespace='social')),
 
     url(r'^$', libraries, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
