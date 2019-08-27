@@ -21,7 +21,7 @@ from django.views.decorators.http import condition
 
 import seaserv
 from seaserv import get_repo, get_commits, \
-    seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, \
+    seafserv_threaded_rpc, is_repo_owner, \
     get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
     seafile_api, ccnet_api
 from pysearpc import SearpcError
@@ -486,7 +486,7 @@ def repo_history(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, username)
+            ret = seafile_api.is_password_set(repo_id, username)
             if ret == 1:
                 password_set = True
         except SearpcError as e:
@@ -574,7 +574,7 @@ def repo_revert_history(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, username)
+            ret = seafile_api.is_password_set(repo_id, username)
             if ret == 1:
                 password_set = True
         except SearpcError as e:
