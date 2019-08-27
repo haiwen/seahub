@@ -62,7 +62,7 @@ class Command(BaseCommand):
         repo_obj_dict = {}
         repo_owner_dict = {}
 
-        events.sort(lambda x, y: cmp(y.timestamp, x.timestamp))
+        events.sort(key=lambda x: x.timestamp, reverse=True)
         for ev in events:
             event_type, ev.show_device = generate_file_audit_event_type(ev)
 
