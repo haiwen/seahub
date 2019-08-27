@@ -1,4 +1,6 @@
 import json
+from functools import cmp_to_key
+
 from mock import patch
 from django.core.urlresolvers import reverse
 from django.test import override_settings
@@ -44,33 +46,33 @@ class DeviceAccessibleIpSetting(BaseTestCase):
 
     def test_cmp_ip(self):
         ip_list = [{'ip': '200.1.1.1'}, {'ip': '192.1.1.1'}, {'ip': '111.1.1.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list[::-1]
 
         ip_list = [{'ip': '192.1.1.1'}, {'ip': '192.*.1.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list
 
         ip_list = [{'ip': '192.*.1.1'}, {'ip': '192.1.1.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list[::-1]
 
         ip_list = [{'ip': '111.1.1.1'}, {'ip': '111.8.1.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list
 
         ip_list = [{'ip': '111.1.*.2'}, {'ip': '111.1.*.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list[::-1]
 
         ip_list = [{'ip': '111.1.*.2'}, {'ip': '111.2.*.1'}, {'ip': '111.1.*.2'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == [ip_list[0], ip_list[2], ip_list[1]]
 
         ip_list = [{'ip': '111.1.*.2'}, {'ip': '112.2.*.1'}, {'ip': '110.1.*.2'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == [ip_list[2], ip_list[0], ip_list[1]]
 
         ip_list = [{'ip': '111.1.*.2'}, {'ip': '111.1.*.*'}, {'ip': '111.*.*.2'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == [ip_list[0], ip_list[1], ip_list[2]]
