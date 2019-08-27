@@ -148,4 +148,4 @@ class Command(BaseCommand):
                 sys.exit(1)
         
         User.objects.create_superuser(email, password)
-        print "Superuser created successfully."
+        print("Superuser created successfully.")

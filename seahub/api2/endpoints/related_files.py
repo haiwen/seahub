@@ -215,7 +215,7 @@ class RelatedFileView(APIView):
 
         # permission check
         if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
-            print check_folder_permission(request, repo_id, file_path)
+            print(check_folder_permission(request, repo_id, file_path))
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

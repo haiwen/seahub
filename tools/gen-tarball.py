@@ -24,7 +24,7 @@ def highlight(content, is_error=False):
         return '\x1b[1;32m%s\x1b[m' % content
 
 def info(msg):
-    print highlight('[INFO] ') + msg
+    print(highlight('[INFO] ') + msg)
 
 def exist_in_path(prog):
     '''Test whether prog exists in system path'''
@@ -40,9 +40,9 @@ def exist_in_path(prog):
 
 def error(msg=None, usage=None):
     if msg:
-        print highlight('[ERROR] ') + msg
+        print(highlight('[ERROR] ') + msg)
     if usage:
-        print usage
+        print(usage)
     sys.exit(1)
 
 def run(cmdline, cwd=None, env=None, suppress_stdout=False, suppress_stderr=False):
@@ -109,7 +109,7 @@ def parse_args():
     usage = parser.format_help()
     options, remain = parser.parse_args()
     if remain or options.version == None or options.branch == None:
-        print usage
+        print(usage)
         sys.exit(1)
 
     return options.version, options.branch

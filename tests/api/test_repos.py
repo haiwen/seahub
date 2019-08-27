@@ -212,7 +212,7 @@ class NewReposApiTest(BaseTestCase):
             'random_key': enc_info.random_key,
         }
         res = self.client.post(REPOS_URL, data=data)
-        print res
+        print(res)
         assert res.status_code == 400
 
 #        repo = res.json()

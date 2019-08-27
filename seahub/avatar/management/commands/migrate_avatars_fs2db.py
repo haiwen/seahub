@@ -32,9 +32,9 @@ class Command(BaseCommand):
         for avatar in Avatar.objects.all():
             try:
                 self._save(avatar.avatar.name, avatar.avatar)
-                print "SUCCESS: migrated Avatar path=%s user=%s" % (avatar.avatar.name, avatar.emailuser)
+                print("SUCCESS: migrated Avatar path=%s user=%s" % (avatar.avatar.name, avatar.emailuser))
             except AvatarNotFoundError:
-                print "ERROR: Avatar file not found: path=%s user=%s. Skip." % (avatar.avatar.name, avatar.emailuser)
+                print("ERROR: Avatar file not found: path=%s user=%s. Skip." % (avatar.avatar.name, avatar.emailuser))
                 continue
 
             # try:

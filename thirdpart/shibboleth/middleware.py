@@ -106,7 +106,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
     def process_response(self, request, response):
         if getattr(request, 'shib_login', False):
-            print '%s: set shibboleth cookie!' % id(self)
+            print('%s: set shibboleth cookie!' % id(self))
             self._set_auth_cookie(request, response)
         return response
 

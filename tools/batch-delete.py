@@ -59,5 +59,5 @@ if __name__=="__main__":
         do_delete(app_name)
     do_delete('django')
     
-    print '[Delete seahub tables...Done]'
+    print('[Delete seahub tables...Done]')
         

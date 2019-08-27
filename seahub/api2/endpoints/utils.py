@@ -113,7 +113,7 @@ def get_group_dict(group_id_list):
         if group_id not in group_dict:
             group_dict[group_id] = ''
             group = ccnet_api.get_group(int(group_id))
-            print group
+            print(group)
             if group:
                 group_dict[group_id] = group
 

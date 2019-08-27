@@ -72,6 +72,6 @@ class SearchTest(BaseTestCase):
         self.login_as(self.user)
         resp = self.client.get(self.url + '?q=lian&search_repo=%s&search_path=%s' % (self.repo_id, '/'))
         json_resp = json.loads(resp.content)
-        print json_resp
+        print(json_resp)
         assert json_resp['total'] == self.mock_total
         assert json_resp['results'][0]['repo_id'] == self.mock_results[0]['repo_id']

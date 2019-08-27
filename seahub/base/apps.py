@@ -14,6 +14,6 @@ class BaseConfig(AppConfig):
         try:
             _ = list(FileComment.objects.all()[:1].values('uuid_id'))
         except:
-            print '''
+            print('''
 Warning: File comment has changed since version 6.3, while table `base_filecomment` is not migrated yet, please consider migrate it according to v6.3.0 release note, otherwise the file comment feature will not work correctly.
-            '''
+            ''')

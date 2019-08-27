@@ -50,4 +50,4 @@ if __name__ == "__main__":
         fp.write("SECRET_KEY = \"%s\"\n" % key)
         fp.close()
     else:
-        print key
+        print(key)

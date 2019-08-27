@@ -15,13 +15,13 @@ class Command(BaseCommand):
     label = "wiki_migrate_personal_wiki"
 
     def handle(self, *args, **options):
-        print 'Start to migrate...'
+        print('Start to migrate...')
         for r in PersonalWiki.objects.all():
             try:
                 Wiki.objects.add(wiki_name=r.username.split('@')[0],
                                  username=r.username, repo_id=r.repo_id)
             except DuplicateWikiNameError:
-                print 'Multiple personal wiki records found, user: %s, repo_id: %s. Skip.' % (r.username, r.repo_id)
+                print('Multiple personal wiki records found, user: %s, repo_id: %s. Skip.' % (r.username, r.repo_id))
                 continue
 
-        print 'Done.'
+        print('Done.')

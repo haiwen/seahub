@@ -41,7 +41,7 @@ for row in rows:
     try:
         statinfo = os.stat(avatar_full_path)
     except OSError as e:
-        print e
+        print(e)
         continue
     size = statinfo.st_size
     mtime = statinfo.st_mtime

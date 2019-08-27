@@ -18,7 +18,7 @@ def make(default=True, lang='en'):
         b2 = f.readline()
 
     if b1 != b2:
-        print 'Error: inconsistent Git branch names.'
+        print('Error: inconsistent Git branch names.')
         return
 
 
@@ -63,7 +63,7 @@ def compile():
 def _inplace_change(filename, old_string, new_string):
     s = open(filename).read()
     if old_string in s:
-        print(green('Changing "{old_string}" to "{new_string}" in "{filename}"'.format(**locals())))
+        print((green('Changing "{old_string}" to "{new_string}" in "{filename}"'.format(**locals()))))
         s = s.replace(old_string, new_string)
         f = open(filename, 'w')
         f.write(s)
@@ -71,4 +71,4 @@ def _inplace_change(filename, old_string, new_string):
         f.close()
 
 def _debug(msg):
-    print(red('Running: {msg}'.format(**locals())))
+    print((red('Running: {msg}'.format(**locals()))))

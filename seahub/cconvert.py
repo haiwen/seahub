@@ -27,7 +27,7 @@ class CConvert:
 		try:
 			fp=open(os.path.join(os.path.dirname(__file__), 'convert-utf-8.txt'))
 		except IOError:
-			print "Can't load data from convert-utf-8.txt\nPlease make sure this file exists."
+			print("Can't load data from convert-utf-8.txt\nPlease make sure this file exists.")
 			sys.exit(1)
 		else:
 			self.data=fp.read().decode("utf-8")# decoded data to unicode

@@ -11,5 +11,5 @@ class Command(BaseCommand):
     def handle(self, **options):
         for avatar in Avatar.objects.all():
             for size in AUTO_GENERATE_AVATAR_SIZES:
-                print "Rebuilding Avatar id=%s at size %s." % (avatar.id, size)
+                print("Rebuilding Avatar id=%s at size %s." % (avatar.id, size))
                 avatar.create_thumbnail(size)

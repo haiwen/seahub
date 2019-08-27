@@ -21,7 +21,7 @@ else:
 # Test usermgr.db exists
 usermgr_db = os.path.join(ccnet_dir, 'PeerMgr/usermgr.db')
 if not os.path.exists(usermgr_db):
-    print '%s DOES NOT exist. FAILED' % usermgr_db
+    print('%s DOES NOT exist. FAILED' % usermgr_db)
     sys.exit(1)
 
 # Connect db
@@ -35,26 +35,26 @@ sql = "SELECT email FROM EmailUser WHERE is_staff = 1"
 try:
     c.execute(sql)
 except sqlite3.Error as e:
-    print "An error orrured:", e.args[0]
+    print("An error orrured:", e.args[0])
     sys.exit(1)
 
 staff_list = c.fetchall()
 if staff_list:
-    print "Admin is already in database. Email as follows: "
-    print '--------------------'
+    print("Admin is already in database. Email as follows: ")
+    print('--------------------')
     for e in staff_list:
-        print e[0]
-    print '--------------------'
+        print(e[0])
+    print('--------------------')
     choice = raw_input('Previous admin would be deleted, would you like to continue?[y/n] ')
     if choice == 'y':
         sql = "DELETE FROM EmailUser WHERE is_staff = 1"
         try:
             c.execute(sql)
         except sqlite3.Error as e:
-            print "An error orrured:", e.args[0]
+            print("An error orrured:", e.args[0])
             sys.exit(1)
         else:
-            print 'Previous admin is deleted.'
+            print('Previous admin is deleted.')
     else:
         conn.close()
         sys.exit(0)
@@ -69,7 +69,7 @@ username = raw_input('E-mail address:')
 passwd = getpass.getpass('Password:')
 passwd2 = getpass.getpass('Password (again):')
 if passwd != passwd2:
-    print "Two passwords NOT same."
+    print("Two passwords NOT same.")
     sys.exit(1)
     
 mySha1 = hashlib.sha1()
@@ -81,10 +81,10 @@ try:
     c.execute(sql)
     conn.commit()
 except sqlite3.Error as e:
-    print "An error occured:", e.args[0]
+    print("An error occured:", e.args[0])
     sys.exit(1)
 else:
-    print "Admin user created successfully."
+    print("Admin user created successfully.")
     
 # Close db    
 conn.close()
