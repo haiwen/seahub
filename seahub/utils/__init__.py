@@ -335,7 +335,7 @@ def check_filename_with_rename(repo_id, parent_dir, obj_name):
         return ''
     # TODO: what if parrent_dir does not exist?
     dirents = seafile_api.list_dir_by_commit_and_path(repo_id,
-            latest_commit.id, parent_dir.encode('utf-8'))
+            latest_commit.id, parent_dir)
 
     exist_obj_names = [dirent.obj_name for dirent in dirents]
     return get_no_duplicate_obj_name(obj_name, exist_obj_names)
