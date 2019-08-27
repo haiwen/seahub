@@ -3,7 +3,7 @@ import os
 import re
 import time
 import urllib
-import urlparse
+import urllib.parse
 import requests
 import hashlib
 import logging
@@ -142,7 +142,7 @@ def get_wopi_dict(request_user, repo_id, file_path,
     fake_file_id = hashlib.sha1(repo_path_info.encode('utf8')).hexdigest()
     base_url = get_site_scheme_and_netloc()
     check_file_info_endpoint = reverse('WOPIFilesView', args=[fake_file_id])
-    WOPISrc = urlparse.urljoin(base_url, check_file_info_endpoint)
+    WOPISrc = urllib.parse.urljoin(base_url, check_file_info_endpoint)
 
     query_dict = {'WOPISrc': WOPISrc}
     if action_url[-1] in ('?', '&'):

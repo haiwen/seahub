@@ -10,11 +10,11 @@ import logging
 import hashlib
 import tempfile
 import locale
-import ConfigParser
+import configparser
 import mimetypes
 import contextlib
 from datetime import datetime
-from urlparse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
 import json
 
 import ccnet
@@ -88,7 +88,7 @@ def is_pro_version():
         return False
 
 def is_cluster_mode():
-    cfg = ConfigParser.ConfigParser()
+    cfg = configparser.ConfigParser()
     if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
         confdir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
     else:
@@ -554,7 +554,7 @@ def is_org_context(request):
 
 # events related
 if EVENTS_CONFIG_FILE:
-    parsed_events_conf = ConfigParser.ConfigParser()
+    parsed_events_conf = configparser.ConfigParser()
     parsed_events_conf.read(EVENTS_CONFIG_FILE)
 
     try:

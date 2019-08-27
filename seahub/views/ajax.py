@@ -7,7 +7,7 @@ import json
 import posixpath
 import csv
 import chardet
-import StringIO
+import io
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
@@ -1295,7 +1295,7 @@ def ajax_group_members_import(request, group_id):
         if encoding != 'utf-8':
             content = content.decode(encoding, 'replace').encode('utf-8')
 
-        filestream = StringIO.StringIO(content)
+        filestream = io.StringIO(content)
         reader = csv.reader(filestream)
     except Exception as e:
         logger.error(e)

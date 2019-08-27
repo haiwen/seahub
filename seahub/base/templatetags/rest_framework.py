@@ -5,7 +5,7 @@ from django.http import QueryDict
 from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.safestring import SafeData, mark_safe
-from urlparse import urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 import re
 import string
 

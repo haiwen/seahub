@@ -10,8 +10,8 @@ from django.db import connection, transaction
 
 import base64
 import hashlib
-import StringIO
-import urlparse
+import io
+import urllib.parse
 from datetime import datetime
 
 from seahub.utils.timeutils import value_to_db_datetime
@@ -148,7 +148,7 @@ class DatabaseStorage(Storage):
         if row is None:
             return None
 
-        inMemFile = StringIO.StringIO(base64.b64decode(row[0]))
+        inMemFile = io.StringIO(base64.b64decode(row[0]))
         inMemFile.name = name
         inMemFile.mode = mode
 
@@ -207,7 +207,7 @@ class DatabaseStorage(Storage):
     def url(self, name):
         if self.base_url is None:
             raise ValueError("This file is not accessible via a URL.")
-        result = urlparse.urljoin(self.base_url, name).replace('\\', '/')
+        result = urllib.parse.urljoin(self.base_url, name).replace('\\', '/')
         return result
 
     def size(self, name):

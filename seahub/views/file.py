@@ -15,7 +15,7 @@ import logging
 import posixpath
 import re
 import mimetypes
-import urlparse
+import urllib.parse
 import datetime
 
 from django.core import signing
@@ -1944,8 +1944,8 @@ def _check_office_convert_perm(request, repo_id, path, ret):
         # Work around for the images embedded in excel files
         referer = request.META.get('HTTP_REFERER', '')
         if referer:
-            token = urlparse.parse_qs(
-                urlparse.urlparse(referer).query).get('token', [''])[0]
+            token = urllib.parse.parse_qs(
+                urllib.parse.urlparse(referer).query).get('token', [''])[0]
     if token:
         fileshare = FileShare.objects.get_valid_file_link_by_token(token)
         if not fileshare or fileshare.repo_id != repo_id:

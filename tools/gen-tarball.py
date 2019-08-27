@@ -6,7 +6,7 @@ import sys
 import os
 import tempfile
 import shutil
-import commands
+import subprocess
 import subprocess
 import atexit
 import optparse
@@ -123,7 +123,7 @@ def main():
         error('django-admin scripts not found in PATH')
 
     # Note: we double % to escape it in a format string
-    latest_commit_info = commands.getoutput('git log --format="%%H" %s -1' % branch)
+    latest_commit_info = subprocess.getoutput('git log --format="%%H" %s -1' % branch)
 
     # begin
     tmpdir = tempfile.mkdtemp()

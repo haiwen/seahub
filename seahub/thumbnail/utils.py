@@ -5,7 +5,7 @@ import timeit
 import tempfile
 import urllib2
 import logging
-from StringIO import StringIO
+from io import StringIO
 import zipfile
 try: # Py2 and Py3 compatibility
     from urllib import urlretrieve

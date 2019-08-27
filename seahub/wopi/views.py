@@ -7,7 +7,7 @@ import logging
 import urllib2
 import requests
 import hashlib
-import urlparse
+import urllib.parse
 import posixpath
 import datetime
 
@@ -197,7 +197,7 @@ class WOPIFilesView(APIView):
             result['IsAnonymousUser'] = True
 
         absolute_uri = request.build_absolute_uri('/')
-        result['PostMessageOrigin'] = urlparse.urljoin(absolute_uri, SITE_ROOT).strip('/')
+        result['PostMessageOrigin'] = urllib.parse.urljoin(absolute_uri, SITE_ROOT).strip('/')
         result['HideSaveOption'] = True
         result['HideExportOption'] = True
         result['EnableOwnerTermination'] = True

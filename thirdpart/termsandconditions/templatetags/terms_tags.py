@@ -7,7 +7,7 @@ from django.conf import settings
 try:
     from urllib.parse import urlparse
 except ImportError:
-    from urlparse import urlparse
+    from urllib.parse import urlparse
 
 register = template.Library()
 DEFAULT_HTTP_PATH_FIELD = 'PATH_INFO'

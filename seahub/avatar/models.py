@@ -14,10 +14,10 @@ from django.utils.encoding import smart_str
 from django.db.models import signals
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
     dir(StringIO) # Placate PyFlakes
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 try:
     from PIL import Image

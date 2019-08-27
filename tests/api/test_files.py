@@ -7,7 +7,7 @@ import posixpath
 import pytest
 import urllib
 from urllib import urlencode, quote
-import urlparse
+import urllib.parse
 from nose.tools import assert_in
 
 from tests.common.utils import randstring, urljoin
@@ -51,8 +51,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in(tmp_file, res.text)
 
@@ -69,8 +69,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file (1).txt', res.text)
 
@@ -81,8 +81,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file (2).txt', res.text)
 
@@ -92,8 +92,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'move',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file%20%283%29.txt', res.text)
 
@@ -118,8 +118,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in(tmp_file, res.text)
 
@@ -136,8 +136,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file (1).txt', res.text)
 
@@ -148,8 +148,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file (2).txt', res.text)
 
