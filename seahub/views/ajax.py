@@ -101,7 +101,7 @@ def get_dirents(request, repo_id):
         for i, x in enumerate(path_eles):
             ele_path = '/'.join(path_eles[:i+1]) + '/'
             try:
-                ele_path_dirents = seafile_api.list_dir_by_path(repo_id, ele_path.encode('utf-8'))
+                ele_path_dirents = seafile_api.list_dir_by_path(repo_id, ele_path)
             except SearpcError as e:
                 ele_path_dirents = []
             ds = []
@@ -117,7 +117,7 @@ def get_dirents(request, repo_id):
 
     # get dirents in path
     try:
-        dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
+        dirents = seafile_api.list_dir_by_path(repo_id, path)
     except SearpcError as e:
         return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
