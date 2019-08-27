@@ -1881,8 +1881,6 @@ def text_diff(request, repo_id):
     if not prev_commit:
         return render_error('bad commit id')
 
-    path = path.encode('utf-8')
-
     current_content, err = get_file_content_by_commit_and_path(request, \
                                     repo_id, current_commit.id, path, file_enc)
     if err:
