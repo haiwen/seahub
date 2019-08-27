@@ -14,7 +14,7 @@ if len(sys.argv) >= 2:
     ccnet_dir = sys.argv[1]
 else:    
     home_dir = os.path.join(os.path.expanduser('~'), '.ccnet')
-    ccnet_dir = raw_input("Enter ccnet directory:(leave blank for %s) " % home_dir)
+    ccnet_dir = input("Enter ccnet directory:(leave blank for %s) " % home_dir)
     if not ccnet_dir:
         ccnet_dir = home_dir
 
@@ -45,7 +45,7 @@ if staff_list:
     for e in staff_list:
         print(e[0])
     print('--------------------')
-    choice = raw_input('Previous admin would be deleted, would you like to continue?[y/n] ')
+    choice = input('Previous admin would be deleted, would you like to continue?[y/n] ')
     if choice == 'y':
         sql = "DELETE FROM EmailUser WHERE is_staff = 1"
         try:
@@ -60,12 +60,12 @@ if staff_list:
         sys.exit(0)
 
 # Create admin user
-choice = raw_input('Would you like to create admin user?[y/n]')
+choice = input('Would you like to create admin user?[y/n]')
 if choice != 'y':
     conn.close()
     sys.exit(0)
 
-username = raw_input('E-mail address:')
+username = input('E-mail address:')
 passwd = getpass.getpass('Password:')
 passwd2 = getpass.getpass('Password (again):')
 if passwd != passwd2:

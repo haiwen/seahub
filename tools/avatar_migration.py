@@ -16,16 +16,16 @@ import MySQLdb
 
 
 if len(sys.argv) != 2:
-    seahub_root = raw_input("Please enter root path of seahub: ")
+    seahub_root = input("Please enter root path of seahub: ")
 else:
     seahub_root = sys.argv[1]
 
-host = raw_input("Please enter MySQL host:(leave blank for localhost) ")
+host = input("Please enter MySQL host:(leave blank for localhost) ")
 if not host:
     host = 'localhost'
-user = raw_input("Please enter MySQL user: ")
-passwd = raw_input("Please enter password: ")
-db = raw_input("Please enter seahub database: ")
+user = input("Please enter MySQL user: ")
+passwd = input("Please enter password: ")
+db = input("Please enter seahub database: ")
     
 '''Read user's avatar path from MySQL-avatar_avatar and avatar_groupavatar'''
 db = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)

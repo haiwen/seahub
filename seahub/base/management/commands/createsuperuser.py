@@ -120,7 +120,7 @@ class Command(BaseCommand):
                 # Get an email
                 while True:
                     if not email:
-                        email = raw_input('E-mail address: ')
+                        email = input('E-mail address: ')
                     try:
                         is_valid_email(email)
                     except exceptions.ValidationError:
