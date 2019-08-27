@@ -702,7 +702,7 @@ class Repos(APIView):
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
-            owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in owned_repos:
                 # do not return virtual repos
                 if r.is_virtual:
@@ -761,7 +761,7 @@ class Repos(APIView):
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
-            shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
                 if q and q.lower() not in r.name.lower():
                     continue
@@ -816,7 +816,7 @@ class Repos(APIView):
             else:
                 group_repos = seafile_api.get_group_repos_by_user(email)
 
-            group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            group_repos.sort(key=lambda x: x.last_modify, reverse=True)
 
             # Reduce memcache fetch ops.
             share_from_set = {x.user for x in group_repos}
@@ -2108,8 +2108,8 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
         if normalize_file_path(file_path) in starred_files:
             e['starred'] = True
 
-    dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    dir_list.sort(key=lambda x: x['name'].lower())
+    file_list.sort(key=lambda x: x['name'].lower())
 
     if request_type == 'f':
         dentrys = file_list
@@ -4115,8 +4115,8 @@ class SharedDirView(APIView):
             else:
                 file_list.append(entry)
 
-        dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-        file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+        dir_list.sort(key=lambda x: x['name'].lower())
+        file_list.sort(key=lambda x: x['name'].lower())
         dentrys = dir_list + file_list
 
         content_type = 'application/json; charset=utf-8'
@@ -4783,7 +4783,7 @@ class GroupRepos(APIView):
         else:
             repos = seafile_api.get_repos_by_group(group.id)
 
-        repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+        repos.sort(key=lambda x: x.last_modified, reverse=True)
         group.is_staff = is_group_staff(group, request.user)
 
         # Use dict to reduce memcache fetch cost in large for-loop.
