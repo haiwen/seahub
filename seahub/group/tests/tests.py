@@ -49,7 +49,7 @@ class GroupMessageTest(GroupTestCase):
         response = self.client.post('/group/1/', {
                 'message': '',
                 })
-        self.failUnlessEqual(GroupMessage.objects.all().count(), 0)
+        self.assertEqual(GroupMessage.objects.all().count(), 0)
         
     def test_leave_500_chars_msg(self):
         f = open(os.path.join(self.testdatapath, "valid_message"), "rb")
@@ -67,7 +67,7 @@ class GroupMessageTest(GroupTestCase):
         response = self.client.post('/group/1/', {
                 'message': message,
                 })
-        self.failUnlessEqual(GroupMessage.objects.all().count(), 0)
+        self.assertEqual(GroupMessage.objects.all().count(), 0)
 
 class ReplyMessageTest(GroupTestCase):
     fixtures = ['groupmessage.json']
@@ -118,9 +118,9 @@ class GroupRecommendTest(GroupTestCase):
                 'attach_type': 'file',
                 }, follow=True)
 
-        self.assertEquals(len(response.context['messages']), 1)
+        self.assertEqual(len(response.context['messages']), 1)
         for message in response.context['messages']:
-            self.assert_('请检查群组名称' in str(message))
+            self.assertTrue('请检查群组名称' in str(message))
             
         
     def test_recommend_file_to_unparticipated_group(self):
@@ -132,6 +132,6 @@ class GroupRecommendTest(GroupTestCase):
                 'attach_type': 'file',
                 }, follow=True)
 
-        self.assertEquals(len(response.context['messages']), 1)
+        self.assertEqual(len(response.context['messages']), 1)
         for message in response.context['messages']:
-            self.assert_('请检查是否参加了该群组' in str(message))
+            self.assertTrue('请检查是否参加了该群组' in str(message))

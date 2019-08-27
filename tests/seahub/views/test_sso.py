@@ -21,4 +21,4 @@ class SSOTest(BaseTestCase):
         assert resp.get('location') == '/foo'
 
         resp = self.client.get(self.url + '?next=' + urlquote('http://testserver\@example.com'))
-        self.assertRegexpMatches(resp['Location'], settings.LOGIN_REDIRECT_URL)
+        self.assertRegex(resp['Location'], settings.LOGIN_REDIRECT_URL)

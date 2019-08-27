@@ -95,7 +95,7 @@ class InvitationsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
 
         self.assertEqual(len(Email.objects.all()), 1)
-        self.assertRegexpMatches(Email.objects.all()[0].html_message,
+        self.assertRegex(Email.objects.all()[0].html_message,
                                  json_resp['token'])
         assert Email.objects.all()[0].status == 0
 
@@ -210,9 +210,9 @@ class BatchInvitationsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
 
         self.assertEqual(len(Email.objects.all()), 2)
-        self.assertRegexpMatches(Email.objects.all()[0].html_message,
+        self.assertRegex(Email.objects.all()[0].html_message,
                                  json_resp['success'][0]['token'])
-        self.assertRegexpMatches(Email.objects.all()[1].html_message,
+        self.assertRegex(Email.objects.all()[1].html_message,
                                  json_resp['success'][1]['token'])
         assert Email.objects.all()[0].status == 0
         assert Email.objects.all()[1].status == 0

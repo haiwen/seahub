@@ -68,11 +68,11 @@ class NotificationTest(NotificationTestCase):
         
         # check it's showed in top bar
         r = self.client.get('/sys/notificationadmin/')
-        self.assert_('This is a new notification!' in str(r))
+        self.assertTrue('This is a new notification!' in str(r))
 
         # and it's still there when reach other pages
         r = self.client.get('/home/my/')
-        self.assert_('This is a new notification!' in str(r))
+        self.assertTrue('This is a new notification!' in str(r))
 
     def test_close_notification(self):
         n = Notification()
@@ -82,7 +82,7 @@ class NotificationTest(NotificationTestCase):
 
         self.login()
         r = self.client.get('/home/my/')
-        self.assert_('This is a new notification!' in str(r))
+        self.assertTrue('This is a new notification!' in str(r))
 
         # now close notification
         r = self.client.get(reverse('notification_close', args=[1]), {})
@@ -90,9 +90,9 @@ class NotificationTest(NotificationTestCase):
         self.assertEqual(r.status_code, 302)
 
         # it's gone
-        self.assert_('This is a new notification!' not in str(r))
+        self.assertTrue('This is a new notification!' not in str(r))
 
         # and it's gone when reach other pages
         r = self.client.get('/home/my/')
-        self.assert_('This is a new notification!' not in str(r))
+        self.assertTrue('This is a new notification!' not in str(r))
 

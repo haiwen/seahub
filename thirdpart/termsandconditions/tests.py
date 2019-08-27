@@ -74,22 +74,22 @@ class TermsAndConditionsTests(TestCase):
         UserTermsAndConditions.objects.create(user=self.user1, terms=self.terms1)
         UserTermsAndConditions.objects.create(user=self.user2, terms=self.terms3)
 
-        self.assertEquals(1.0, self.user1.userterms.get().terms.version_number)
-        self.assertEquals(1.5, self.user2.userterms.get().terms.version_number)
+        self.assertEqual(1.0, self.user1.userterms.get().terms.version_number)
+        self.assertEqual(1.5, self.user2.userterms.get().terms.version_number)
 
-        self.assertEquals('user1', self.terms1.users.all()[0].username)
+        self.assertEqual('user1', self.terms1.users.all()[0].username)
 
         # Testing the get_active static method of TermsAndConditions
-        self.assertEquals(2.0, TermsAndConditions.get_active(slug='site-terms').version_number)
-        self.assertEquals(1.5, TermsAndConditions.get_active(slug='contrib-terms').version_number)
+        self.assertEqual(2.0, TermsAndConditions.get_active(slug='site-terms').version_number)
+        self.assertEqual(1.5, TermsAndConditions.get_active(slug='contrib-terms').version_number)
 
         # Testing the agreed_to_latest static method of TermsAndConditions
-        self.assertEquals(False, TermsAndConditions.agreed_to_latest(user=self.user1, slug='site-terms'))
-        self.assertEquals(True, TermsAndConditions.agreed_to_latest(user=self.user2, slug='contrib-terms'))
+        self.assertEqual(False, TermsAndConditions.agreed_to_latest(user=self.user1, slug='site-terms'))
+        self.assertEqual(True, TermsAndConditions.agreed_to_latest(user=self.user2, slug='contrib-terms'))
 
         # Testing the unicode method of TermsAndConditions
-        self.assertEquals('site-terms-2.00', str(TermsAndConditions.get_active(slug='site-terms')))
-        self.assertEquals('contrib-terms-1.50', str(TermsAndConditions.get_active(slug='contrib-terms')))
+        self.assertEqual('site-terms-2.00', str(TermsAndConditions.get_active(slug='site-terms')))
+        self.assertEqual('contrib-terms-1.50', str(TermsAndConditions.get_active(slug='contrib-terms')))
 
     def test_middleware_redirect(self):
         """Validate that a user is redirected to the terms accept page if they are logged in, and decorator is on method"""
@@ -141,7 +141,7 @@ class TermsAndConditionsTests(TestCase):
         chained_terms_response = self.client.post('/terms/accept/', {'terms': 2, 'returnTo': '/secure/'}, follow=True)
         self.assertContains(chained_terms_response, "Contributor")
 
-        self.assertEquals(True, TermsAndConditions.agreed_to_latest(user=self.user1, slug='site-terms'))
+        self.assertEqual(True, TermsAndConditions.agreed_to_latest(user=self.user1, slug='site-terms'))
 
         LOGGER.debug('Test /terms/accept/contrib-terms/1.5/ post')
         accept_version_response = self.client.get('/terms/accept/contrib-terms/1.5/', follow=True)
@@ -176,7 +176,7 @@ class TermsAndConditionsTests(TestCase):
         TermsAndConditions.objects.all().delete()
 
         num_terms = TermsAndConditions.objects.count()
-        self.assertEquals(0, num_terms)
+        self.assertEqual(0, num_terms)
 
         LOGGER.debug('Test user1 login for autocreate')
         login_response = self.client.login(username='user1', password='user1password')
@@ -188,14 +188,14 @@ class TermsAndConditionsTests(TestCase):
 
         LOGGER.debug('Test TermsAndConditions Object Was Created')
         num_terms = TermsAndConditions.objects.count()
-        self.assertEquals(1, num_terms)
+        self.assertEqual(1, num_terms)
 
         terms = TermsAndConditions.objects.get()
-        self.assertEquals('site-terms-1.00', str(terms))
+        self.assertEqual('site-terms-1.00', str(terms))
 
         LOGGER.debug('Test Not Creating Non-Default TermsAndConditions')
         non_default_response = self.client.get('/terms/accept/contrib-terms/', follow=True)
-        self.assertEquals(404, non_default_response.status_code)
+        self.assertEqual(404, non_default_response.status_code)
 
     def test_terms_upgrade(self):
         """Validate a user is prompted to accept terms again when new version comes out"""

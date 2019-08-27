@@ -124,7 +124,7 @@ class BaseTest(LiveServerTestCase):
         repodesc_field = self.browser.find_element_by_name('repo_desc')
         repodesc_field.send_keys(desc)
         if encrypt:
-            self.assertNotEquals(passwd, None)
+            self.assertNotEqual(passwd, None)
             self.browser.find_element_by_name('encryption').click()
             self.browser.find_element_by_name('passwd').send_keys(passwd)
             self.browser.find_element_by_name('passwd_again').send_keys(passwd)
@@ -138,7 +138,7 @@ class BaseTest(LiveServerTestCase):
         # He is returned to the myhome page, where he can see his new repo,
         # listed as a clickable link
         new_repo_links = self.browser.find_elements_by_link_text(name)
-        self.assertNotEquals(len(new_repo_links), 0)
+        self.assertNotEqual(len(new_repo_links), 0)
         
     def test_can_create_new_library(self):
         self._login_user()
@@ -218,9 +218,9 @@ class BaseTest(LiveServerTestCase):
 
         # He creates two folders
         self._create_new_folder('dir1')
-        self.assertNotEquals(self.browser.find_elements_by_link_text('dir1'), None)
+        self.assertNotEqual(self.browser.find_elements_by_link_text('dir1'), None)
         self._create_new_folder('dir2')
-        self.assertNotEquals(self.browser.find_elements_by_link_text('dir2'), None)
+        self.assertNotEqual(self.browser.find_elements_by_link_text('dir2'), None)
 
         '''Moving folder from one to another'''
         # He clicks more op icon

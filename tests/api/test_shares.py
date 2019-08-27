@@ -56,7 +56,7 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.assertRegexpMatches(resp._headers['location'][1],
+        self.assertRegex(resp._headers['location'][1],
                                  r'http(.*)/f/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -72,7 +72,7 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.assertRegexpMatches(resp._headers['location'][1],
+        self.assertRegex(resp._headers['location'][1],
                                  r'http(.*)/f/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -89,7 +89,7 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.assertRegexpMatches(resp._headers['location'][1],
+        self.assertRegex(resp._headers['location'][1],
                                  r'http(.*)/f/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -106,7 +106,7 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.assertRegexpMatches(resp._headers['location'][1],
+        self.assertRegex(resp._headers['location'][1],
                                  r'http(.*)/f/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -125,7 +125,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
-        self.assertRegexpMatches(self.dir_link_location,
+        self.assertRegex(self.dir_link_location,
                                  r'http(.*)/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -142,7 +142,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
-        self.assertRegexpMatches(self.dir_link_location,
+        self.assertRegex(self.dir_link_location,
                                  r'http(.*)/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -160,7 +160,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
-        self.assertRegexpMatches(self.dir_link_location,
+        self.assertRegex(self.dir_link_location,
                                  r'http(.*)/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -178,7 +178,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
-        self.assertRegexpMatches(self.dir_link_location,
+        self.assertRegex(self.dir_link_location,
                                  r'http(.*)/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -197,7 +197,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
-        self.assertRegexpMatches(self.dir_link_location,
+        self.assertRegex(self.dir_link_location,
                                  r'http(.*)/u/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
@@ -214,7 +214,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
-        self.assertRegexpMatches(self.dir_link_location,
+        self.assertRegex(self.dir_link_location,
                                  r'http(.*)/u/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]

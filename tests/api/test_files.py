@@ -23,7 +23,7 @@ class FilesApiTest(ApiTestBase):
                 'newname': name + randstring(),
             }
             res = self.post(furl, data=data)
-            self.assertRegexpMatches(res.text, r'"http(.*)"')
+            self.assertRegex(res.text, r'"http(.*)"')
 
     def test_remove_file(self):
         with self.get_tmp_repo() as repo:
@@ -157,13 +157,13 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             fname, furl = self.create_file(repo)
             res = self.get(furl)
-            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+            self.assertRegex(res.text, '"http(.*)/%s"' % quote(fname))
 
     def test_download_file_without_reuse_token(self):
         with self.get_tmp_repo() as repo:
             fname, furl = self.create_file(repo)
             res = self.get(furl)
-            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+            self.assertRegex(res.text, '"http(.*)/%s"' % quote(fname))
 
             # download for the first time
             url = urllib.urlopen(res.text.strip('"'))
@@ -179,7 +179,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             fname, furl = self.create_file(repo)
             res = self.get(furl + '&reuse=1')
-            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+            self.assertRegex(res.text, '"http(.*)/%s"' % quote(fname))
 
             # download for the first time
             url = urllib.urlopen(res.text.strip('"'))
@@ -205,7 +205,7 @@ class FilesApiTest(ApiTestBase):
             }
             query = '?' + urlencode(data)
             res = self.get(repo.file_url + query)
-            self.assertRegexpMatches(res.text, r'"http(.*)/%s"' % quote(fname))
+            self.assertRegex(res.text, r'"http(.*)/%s"' % quote(fname))
 
     def test_get_file_detail(self):
         with self.get_tmp_repo() as repo:
@@ -252,7 +252,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             upload_url = urljoin(repo.repo_url, 'upload-link')
             res = self.get(upload_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/upload-api/[^/]+"')
+            self.assertRegex(res.text, r'"http(.*)/upload-api/[^/]+"')
 
     def test_get_upload_link_with_invalid_repo_id(self):
         repo_url = urljoin(REPOS_URL, '12345678-1234-1234-1234-12345678901b')
@@ -263,7 +263,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             update_url = urljoin(repo.repo_url, 'update-link')
             res = self.get(update_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/update-api/[^/]+"')
+            self.assertRegex(res.text, r'"http(.*)/update-api/[^/]+"')
 
     def test_get_update_link_with_invalid_repo_id(self):
         repo_url = urljoin(REPOS_URL, '12345678-1234-1234-1234-12345678901b')
@@ -303,7 +303,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             upload_blks_url = urljoin(repo.repo_url, 'upload-blks-link')
             res = self.get(upload_blks_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/upload-blks-api/[^/]+"')
+            self.assertRegex(res.text, r'"http(.*)/upload-blks-api/[^/]+"')
 
     def test_get_upload_blocks_link_with_invalid_repo_id(self):
         repo_url = urljoin(REPOS_URL, '12345678-1234-1234-1234-12345678901b')
@@ -314,7 +314,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             update_blks_url = urljoin(repo.repo_url, 'update-blks-link')
             res = self.get(update_blks_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/update-blks-api/[^/]+"')
+            self.assertRegex(res.text, r'"http(.*)/update-blks-api/[^/]+"')
 
     def test_get_update_blocks_link_with_invalid_repo_id(self):
         repo_url = urljoin(REPOS_URL, '12345678-1234-1234-1234-12345678901b')

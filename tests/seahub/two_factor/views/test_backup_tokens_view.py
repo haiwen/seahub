@@ -24,5 +24,5 @@ class BackupTokensViewTest(BaseTestCase):
     def test_user_2fa_not_enabled(self):
         resp = self.client.get(self.url)
         # redirect to 2fa setup page
-        self.assertRegexpMatches(resp['Location'],
+        self.assertRegex(resp['Location'],
                                  r'/profile/two_factor_authentication/setup/')

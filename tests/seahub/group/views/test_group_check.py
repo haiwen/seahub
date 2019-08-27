@@ -14,7 +14,7 @@ class GroupCheckTest(BaseTestCase):
         self.fake_request.user = AnonymousUser()
         resp = a_view(self.fake_request, self.group.id)
         self.assertEqual(resp.status_code, 302)
-        self.assertRegexpMatches(resp['Location'], '/accounts/login')
+        self.assertRegex(resp['Location'], '/accounts/login')
 
     def test_group_user(self):
         self.fake_request.user = self.user
