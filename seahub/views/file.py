@@ -540,7 +540,7 @@ def view_lib_file(request, repo_id, path):
     }
 
     # check whether file is starred
-    is_starred = is_file_starred(username, repo_id, path.encode('utf-8'), org_id)
+    is_starred = is_file_starred(username, repo_id, path, org_id)
     return_dict['is_starred'] = is_starred
 
     # check file lock info
