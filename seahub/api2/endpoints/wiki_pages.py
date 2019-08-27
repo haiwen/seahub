@@ -66,8 +66,8 @@ class WikiPagesView(APIView):
             wiki_pages_object.append(wiki_page_object)
 
         # sort pages by name
-        wiki_pages_object.sort(lambda x, y: cmp(x['name'].lower(),
-                                                y['name'].lower()))
+        wiki_pages_object.sort(
+            key=lambda x: x['name'].lower())
 
         return Response({
                 "data": wiki_pages_object
