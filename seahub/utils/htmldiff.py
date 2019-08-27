@@ -911,7 +911,7 @@ class Differ:
             elif tag == 'equal':
                 g = self._dump(' ', a, alo, ahi)
             else:
-                raise ValueError, 'unknown tag %r' % (tag,)
+                raise ValueError('unknown tag %r' % (tag,))
 
             for line in g:
                 yield line
@@ -1023,7 +1023,7 @@ class Differ:
                     atags += ' ' * la
                     btags += ' ' * lb
                 else:
-                    raise ValueError, 'unknown tag %r' % (tag,)
+                    raise ValueError('unknown tag %r' % (tag,))
             for line in self._qformat(aelt, belt, atags, btags):
                 yield line
         else:
@@ -2043,7 +2043,7 @@ def restore(delta, which):
     try:
         tag = {1: "- ", 2: "+ "}[int(which)]
     except KeyError:
-        raise ValueError, ('unknown delta choice (must be 1 or 2): %r'
+        raise ValueError('unknown delta choice (must be 1 or 2): %r'
                            % which)
     prefixes = ("  ", tag)
     for line in delta:

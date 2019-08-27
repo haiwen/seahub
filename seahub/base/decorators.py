@@ -49,7 +49,7 @@ def repo_passwd_set_required(func):
     def _decorated(request, *args, **kwargs):
         repo_id = kwargs.get('repo_id', None)
         if not repo_id:
-            raise Exception, 'Repo id is not found in url.'
+            raise Exception('Repo id is not found in url.')
         repo = get_repo(repo_id)
         if not repo:
             raise Http404

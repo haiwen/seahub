@@ -89,14 +89,14 @@ class UserManager(object):
 
     def get(self, email=None, id=None):
         if not email and not id:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         if email:
             emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if id:
             emailuser = ccnet_threaded_rpc.get_emailuser_by_id(id)
         if not emailuser:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         user = User(emailuser.email)
         user.id = emailuser.id
@@ -543,7 +543,7 @@ class AuthBackend(object):
     def get_user_with_import(self, username):
         emailuser = seaserv.get_emailuser_with_import(username)
         if not emailuser:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         user = User(emailuser.email)
         user.id = emailuser.id
