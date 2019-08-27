@@ -312,7 +312,7 @@ class BatchAddUserHelpTest(BaseTestCase):
         assert wb.sheetnames[0] == 'sample'
         rows = wb.worksheets[0].rows
         i = 0
-        rows.next()
+        next(rows)
         for r in rows:
             assert r[0].value == 'test' + str(i) + '@example.com'
             assert r[1].value == '123456'
