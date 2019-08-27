@@ -278,7 +278,7 @@ def translate_commit_desc_escape(value):
 
 @register.filter(name='translate_seahub_time')
 def translate_seahub_time(value, autoescape=None):
-    if isinstance(value, int) or isinstance(value, long): # check whether value is int
+    if isinstance(value, int) or isinstance(value, int): # check whether value is int
         try:
             val = datetime.fromtimestamp(value) # convert timestamp to datetime
         except ValueError as e:
