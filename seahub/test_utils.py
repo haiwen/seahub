@@ -175,7 +175,7 @@ class Fixtures(Exam):
         fd, tmp_file = mkstemp()
 
         try:
-            bytesWritten = os.write(fd, content)
+            bytesWritten = os.write(fd, content.encode('utf-8'))
         except:
             bytesWritten = -1
         finally:
