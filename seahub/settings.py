@@ -127,7 +127,6 @@ MIDDLEWARE_CLASSES = (
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 
 
@@ -154,9 +153,6 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
-
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
 
                 'seahub.auth.context_processors.auth',
                 'seahub.base.context_processors.base',
@@ -229,7 +225,6 @@ INSTALLED_APPS = (
     'post_office',
     'termsandconditions',
     'webpack_loader',
-    'social_django',
 
     'seahub.api2',
     'seahub.avatar',
