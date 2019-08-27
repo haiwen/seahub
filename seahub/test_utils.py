@@ -356,7 +356,7 @@ class BaseTestCase(TestCase, Fixtures):
         self.remove_repo(self.enc_repo.id)
 
     def login_as(self, user, password=None):
-        if isinstance(user, basestring):
+        if isinstance(user, str):
             login = user
         elif isinstance(user, User):
             login = user.username

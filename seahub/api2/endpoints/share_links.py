@@ -93,7 +93,7 @@ def check_permissions_arg(request):
     if permissions is not None:
         if isinstance(permissions, dict):
             perm_dict = permissions
-        elif isinstance(permissions, basestring):
+        elif isinstance(permissions, str):
             import json
             try:
                 perm_dict = json.loads(permissions)
