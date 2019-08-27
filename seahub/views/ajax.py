@@ -111,7 +111,7 @@ def get_dirents(request, repo_id):
                         'name': d.obj_name,
                         'parent_dir': ele_path 
                     })
-            ds.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+            ds.sort(key=lambda x: x['name'].lower())
             all_dirents.extend(ds)
         return HttpResponse(json.dumps(all_dirents), content_type=content_type)
 
@@ -139,8 +139,8 @@ def get_dirents(request, repo_id):
                     }
                 f_list.append(f)
 
-    d_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
-    f_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    d_list.sort(key=lambda x: x['name'].lower())
+    f_list.sort(key=lambda x: x['name'].lower())
     return HttpResponse(json.dumps(d_list + f_list), content_type=content_type)
 
 @login_required_ajax
@@ -178,7 +178,7 @@ def get_unenc_group_repos(request, group_id):
             if not repo.encrypted:
                 repo_list.append({"name": repo.name, "id": repo.id})
 
-    repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    repo_list.sort(key=lambda x: x['name'].lower())
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required_ajax
@@ -195,7 +195,7 @@ def unenc_rw_repos(request):
     for repo in acc_repos:
         repo_list.append({"name": repo.name, "id": repo.id})
 
-    repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    repo_list.sort(key=lambda x: x['name'].lower())
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 def convert_repo_path_when_can_not_view_folder(request, repo_id, path):
@@ -1411,8 +1411,8 @@ def ajax_repo_dir_recycle_more(request, repo_id):
                 dirent.is_dir = False
 
         # Entries sort by deletion time in descending order.
-        deleted_entries.sort(lambda x, y : cmp(y.delete_time,
-                                               x.delete_time))
+        deleted_entries.sort(
+            key=lambda x: x.delete_time, reverse=True)
 
         ctx = {
             'show_recycle_root': True,
