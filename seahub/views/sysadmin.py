@@ -724,7 +724,7 @@ def user_info(request, email):
                                                           ret_corrupted=True)
         in_repos = seafile_api.get_org_share_in_repo_list(org_id, email, -1, -1)
 
-    owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
+    owned_repos = [r for r in owned_repos if not r.is_virtual]
 
     # get user profile
     profile = Profile.objects.get_profile_by_user(email)

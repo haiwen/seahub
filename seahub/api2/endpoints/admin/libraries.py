@@ -138,8 +138,8 @@ class AdminLibraries(APIView):
             has_next_page = False
 
         default_repo_id = get_system_default_repo_id()
-        repos_all = filter(lambda r: not r.is_virtual, repos_all)
-        repos_all = filter(lambda r: r.repo_id != default_repo_id, repos_all)
+        repos_all = [r for r in repos_all if not r.is_virtual]
+        repos_all = [r for r in repos_all if r.repo_id != default_repo_id]
 
         return_results = []
 

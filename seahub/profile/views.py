@@ -75,7 +75,7 @@ def edit_profile(request):
         default_repo = None
 
     owned_repos = get_owned_repo_list(request)
-    owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
+    owned_repos = [r for r in owned_repos if not r.is_virtual]
 
     if settings.ENABLE_WEBDAV_SECRET:
         decoded = UserOptions.objects.get_webdav_decoded_secret(username)

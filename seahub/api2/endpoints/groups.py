@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 def get_group_admins(group_id):
     members = seaserv.get_group_members(group_id)
-    admin_members = filter(lambda m: m.is_staff, members)
+    admin_members = [m for m in members if m.is_staff]
 
     admins = []
     for u in admin_members:

@@ -164,7 +164,7 @@ class ShareLinks(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # filter share links by repo
-            fileshares = filter(lambda fs: fs.repo_id == repo_id, fileshares)
+            fileshares = [fs for fs in fileshares if fs.repo_id == repo_id]
 
             path = request.GET.get('path', None)
             if path:
@@ -189,7 +189,7 @@ class ShareLinks(APIView):
                 if s_type == 'd' and path[-1] != '/':
                     path = path + '/'
 
-                fileshares = filter(lambda fs: fs.path == path, fileshares)
+                fileshares = [fs for fs in fileshares if fs.path == path]
 
         links_info = []
         for fs in fileshares:
@@ -199,8 +199,8 @@ class ShareLinks(APIView):
         if len(links_info) == 1:
             result = links_info
         else:
-            dir_list = filter(lambda x: x['is_dir'], links_info)
-            file_list = filter(lambda x: not x['is_dir'], links_info)
+            dir_list = [x for x in links_info if x['is_dir']]
+            file_list = [x for x in links_info if not x['is_dir']]
 
             dir_list.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
             file_list.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
