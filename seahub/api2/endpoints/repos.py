@@ -97,7 +97,7 @@ class ReposView(APIView):
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
-            owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in owned_repos:
 
                 # do not return virtual repos
@@ -149,7 +149,7 @@ class ReposView(APIView):
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
-            shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
 
                 owner_email = r.user
@@ -198,7 +198,7 @@ class ReposView(APIView):
             else:
                 group_repos = seafile_api.get_group_repos_by_user(email)
 
-            group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            group_repos.sort(key=lambda x: x.last_modify, reverse=True)
 
             # Reduce memcache fetch ops.
             share_from_set = {x.user for x in group_repos}
