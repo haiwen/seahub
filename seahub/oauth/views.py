@@ -141,7 +141,7 @@ def oauth_callback(request):
         user_info = {}
         user_info_json = user_info_resp.json()
 
-        for item, attr in ATTRIBUTE_MAP.items():
+        for item, attr in list(ATTRIBUTE_MAP.items()):
             required, user_attr = attr
             value = user_info_json.get(item, '')
 

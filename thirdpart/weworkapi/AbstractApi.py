@@ -74,7 +74,7 @@ class AbstractApi(object) :
         if args is None :
             return url
 
-        for key, value in args.items() : 
+        for key, value in list(args.items()) : 
             if '?' in url : 
                 url += ('&' + key + '=' + value)
             else :

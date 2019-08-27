@@ -450,7 +450,7 @@ def rename_dirent(request, repo_id):
         oldname = form.cleaned_data["oldname"]
         newname = form.cleaned_data["newname"]
     else:
-        result['error'] = str(form.errors.values()[0])
+        result['error'] = str(list(form.errors.values())[0])
         return HttpResponse(json.dumps(result), status=400,
                             content_type=content_type)
 
@@ -599,7 +599,7 @@ def delete_dirents(request, repo_id):
         undeleted += dirents_names
     else:
         for dirent_name in dirents_names:
-            if dirent_name not in locked_files.keys():
+            if dirent_name not in list(locked_files.keys()):
                 # file is not locked
                 allowed_dirents_names.append(dirent_name)
             elif locked_files[dirent_name] == username:
@@ -747,7 +747,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
         failed += obj_file_names
     else:
         for file_name in obj_file_names:
-            if file_name not in locked_files.keys():
+            if file_name not in list(locked_files.keys()):
                 # file is not locked
                 allowed_files.append(file_name)
             elif locked_files[file_name] == username:

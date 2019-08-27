@@ -140,7 +140,7 @@ class Command(BaseCommand, CommandLogMixin):
         qs = UserNotification.objects.filter(
             timestamp__gt=last_check_dt
         ).filter(seen=False).filter(
-            to_user__in=user_uid_map.keys()
+            to_user__in=list(user_uid_map.keys())
         )
         self.log_info('Found %d notices' % qs.count())
         if qs.count() == 0:

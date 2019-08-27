@@ -55,7 +55,7 @@ class AdminFileScanRecords(APIView):
             else:
                 record["repo_name"] = repo.name
             record_detail = json.loads(record['detail'])
-            detail_dict = record_detail.values()[0]
+            detail_dict = list(record_detail.values())[0]
             detail = dict()
             detail["suggestion"] = detail_dict["suggestion"]
             detail["label"] = detail_dict["label"]

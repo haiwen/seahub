@@ -35,7 +35,7 @@ class AdminOrgStatsTraffic(APIView):
             init_data[dt].update({op_type: count})
 
         res_data = []
-        for k, v in init_data.items():
+        for k, v in list(init_data.items()):
             res = {'datetime': datetime_to_isoformat_timestr(k)}
             res.update(v)
             res_data.append(res)

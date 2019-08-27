@@ -224,7 +224,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         shib_attrs = {}
         error = False
         meta = request.META
-        for header, attr in SHIB_ATTRIBUTE_MAP.items():
+        for header, attr in list(SHIB_ATTRIBUTE_MAP.items()):
             required, name = attr
             value = meta.get(header, None)
             shib_attrs[name] = value

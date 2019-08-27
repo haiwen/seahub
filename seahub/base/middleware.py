@@ -185,7 +185,7 @@ class UserPermissionMiddleware(object):
 
         request_path = request.path
         def get_permission_by_request_path(request_path, permission_url):
-            for permission, url_list in permission_url.iteritems():
+            for permission, url_list in permission_url.items():
                 for url in url_list:
                     if url in request_path:
                         return permission

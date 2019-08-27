@@ -121,7 +121,7 @@ class ReposApiTest(ApiTestBase):
                 assert ra.repo_id in tokens
                 assert rb.repo_id in tokens
                 assert fake_repo_id not in tokens
-                for repo_id, token in tokens.iteritems():
+                for repo_id, token in tokens.items():
                     self._get_repo_info(token, repo_id)
 
     def test_generate_repo_tokens_reject_invalid_params(self):

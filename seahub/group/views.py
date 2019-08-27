@@ -328,7 +328,7 @@ def group_wiki_create(request, group):
 
     form = WikiCreateForm(request.POST)
     if not form.is_valid():
-        return json_error(str(form.errors.values()[0]))
+        return json_error(str(list(form.errors.values())[0]))
 
     # create group repo in user context
     repo_name = form.cleaned_data['repo_name']

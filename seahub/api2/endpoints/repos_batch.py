@@ -1249,7 +1249,7 @@ class ReposAsyncBatchMoveItemView(APIView):
         locked_files = get_locked_files_by_dir(request, src_repo_id, src_parent_dir)
         for dirent in src_dirents:
             # file is locked and lock owner is not current user
-            if dirent in locked_files.keys() and \
+            if dirent in list(locked_files.keys()) and \
                     locked_files[dirent] != username:
                 error_msg = _(u'File %s is locked.') % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -1258,7 +1258,7 @@ class ReposAsyncBatchMoveItemView(APIView):
         folder_permission_dict = get_sub_folder_permission_by_dir(request,
                 src_repo_id, src_parent_dir)
         for dirent in src_dirents:
-            if dirent in folder_permission_dict.keys() and \
+            if dirent in list(folder_permission_dict.keys()) and \
                     folder_permission_dict[dirent] != 'rw':
                 error_msg = _(u"Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -1468,7 +1468,7 @@ class ReposSyncBatchMoveItemView(APIView):
         locked_files = get_locked_files_by_dir(request, src_repo_id, src_parent_dir)
         for dirent in src_dirents:
             # file is locked and lock owner is not current user
-            if dirent in locked_files.keys() and \
+            if dirent in list(locked_files.keys()) and \
                     locked_files[dirent] != username:
                 error_msg = _(u'File %s is locked.') % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -1477,7 +1477,7 @@ class ReposSyncBatchMoveItemView(APIView):
         folder_permission_dict = get_sub_folder_permission_by_dir(request,
                 src_repo_id, src_parent_dir)
         for dirent in src_dirents:
-            if dirent in folder_permission_dict.keys() and \
+            if dirent in list(folder_permission_dict.keys()) and \
                     folder_permission_dict[dirent] != 'rw':
                 error_msg = _(u"Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -1557,7 +1557,7 @@ class ReposBatchDeleteItemView(APIView):
         locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
         for dirent in dirents:
             # file is locked and lock owner is not current user
-            if dirent in locked_files.keys() and \
+            if dirent in list(locked_files.keys()) and \
                     locked_files[dirent] != username:
                 error_msg = _(u'File %s is locked.') % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -1565,7 +1565,7 @@ class ReposBatchDeleteItemView(APIView):
         # check sub folder permission
         folder_permission_dict = get_sub_folder_permission_by_dir(request, repo_id, parent_dir)
         for dirent in dirents:
-            if dirent in folder_permission_dict.keys() and \
+            if dirent in list(folder_permission_dict.keys()) and \
                     folder_permission_dict[dirent] != 'rw':
                 error_msg = _(u"Can't delete folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)

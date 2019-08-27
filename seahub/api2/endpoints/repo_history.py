@@ -136,7 +136,7 @@ class RepoHistory(APIView):
 
         for item in items:
             item['tags'] = []
-            for commit_id, tags in commit_tag_dict.items():
+            for commit_id, tags in list(commit_tag_dict.items()):
                 if commit_id == item['commit_id']:
                     item['tags'] = tags
 

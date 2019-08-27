@@ -98,7 +98,7 @@ class FileOperationsView(APIView):
                 ops_modified_dict[e[0]] = e[2]
 
         res_data = []
-        for k, v in ops_added_dict.items():
+        for k, v in list(ops_added_dict.items()):
             res_data.append({'datetime': datetime_to_isoformat_timestr(k), 
                          'added': v, 
                          'visited': ops_visited_dict[k], 
@@ -120,7 +120,7 @@ class TotalStorageView(APIView):
         init_data = get_init_data(start_time, end_time)
         for e in data:
             init_data[e[0]] = e[1]
-        for k, v in init_data.items():
+        for k, v in list(init_data.items()):
             res_data.append({'datetime': datetime_to_isoformat_timestr(k), 'total_storage': v})
 
         return Response(sorted(res_data, key=lambda x: x['datetime']))
@@ -139,7 +139,7 @@ class ActiveUsersView(APIView):
         init_data = get_init_data(start_time, end_time)
         for e in data:
             init_data[e[0]] = e[1]
-        for k, v in init_data.items():
+        for k, v in list(init_data.items()):
             res_data.append({'datetime': datetime_to_isoformat_timestr(k), 'count': v})
 
         return Response(sorted(res_data, key=lambda x: x['datetime']))
@@ -165,7 +165,7 @@ class SystemTrafficView(APIView):
             init_data[dt].update({op_type: count})
 
         res_data = []
-        for k, v in init_data.items():
+        for k, v in list(init_data.items()):
             res = {'datetime': datetime_to_isoformat_timestr(k)}
             res.update(v)
             res_data.append(res)

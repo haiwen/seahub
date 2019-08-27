@@ -57,7 +57,7 @@ class TwilioCallApp(View):
     def create_response(self, template):
         with translation.override(self.get_locale()):
             prompt_context = self.get_prompt_context()
-            template_context = dict((k, v % prompt_context) for k, v in self.prompts.items())
+            template_context = dict((k, v % prompt_context) for k, v in list(self.prompts.items()))
             template_context['locale'] = self.get_twilio_locale()
             return HttpResponse(template % template_context, 'text/xml')
 

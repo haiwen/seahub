@@ -47,7 +47,7 @@ class WikisView(APIView):
         rtype = request.GET.get('type', "")
         if not rtype:
             # set all to True, no filter applied
-            filter_by = filter_by.fromkeys(filter_by.iterkeys(), True)
+            filter_by = filter_by.fromkeys(iter(filter_by.keys()), True)
 
         for f in rtype.split(','):
             f = f.strip()

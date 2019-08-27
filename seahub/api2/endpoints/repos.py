@@ -56,7 +56,7 @@ class ReposView(APIView):
         request_type_list = request.GET.getlist('type', "")
         if not request_type_list:
             # set all to True, no filter applied
-            filter_by = filter_by.fromkeys(filter_by.iterkeys(), True)
+            filter_by = filter_by.fromkeys(iter(filter_by.keys()), True)
 
         for request_type in request_type_list:
             request_type = request_type.strip()

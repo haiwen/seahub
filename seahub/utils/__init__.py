@@ -145,7 +145,7 @@ def gen_fileext_type_map():
 
     """
     d = {}
-    for filetype in PREVIEW_FILEEXT.keys():
+    for filetype in list(PREVIEW_FILEEXT.keys()):
         for fileext in PREVIEW_FILEEXT.get(filetype):
             d[fileext] = filetype
 

@@ -164,7 +164,7 @@ def translate_commit_desc(value):
     else:
         # Use regular expression to translate commit description.
         # Commit description has two forms, e.g., 'Added "foo.txt" and 3 more files.' or 'Added "foo.txt".'
-        operations = '|'.join(COMMIT_MSG_TRANSLATION_MAP.keys())
+        operations = '|'.join(list(COMMIT_MSG_TRANSLATION_MAP.keys()))
         patt = r'(%s) "(.*)"\s?(and ([0-9]+) more (files|directories))?' % operations
 
         ret_list = []
@@ -235,7 +235,7 @@ def translate_commit_desc_escape(value):
     else:
         # Use regular expression to translate commit description.
         # Commit description has two forms, e.g., 'Added "foo.txt" and 3 more files.' or 'Added "foo.txt".'
-        operations = '|'.join(COMMIT_MSG_TRANSLATION_MAP.keys())
+        operations = '|'.join(list(COMMIT_MSG_TRANSLATION_MAP.keys()))
         patt = r'(%s) "(.*)"\s?(and ([0-9]+) more (files|directories))?' % operations
 
         for e in value.split('\n'):

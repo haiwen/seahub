@@ -35,7 +35,7 @@ def get_file_size_unit(unit_type):
     }
 
     unit_type = unit_type.lower()
-    if unit_type not in table.keys():
+    if unit_type not in list(table.keys()):
         raise TypeError('Invalid unit type')
 
     return table.get(unit_type)

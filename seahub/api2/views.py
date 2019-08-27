@@ -670,7 +670,7 @@ class Repos(APIView):
         rtype = request.GET.get('type', "")
         if not rtype:
             # set all to True, no filter applied
-            filter_by = filter_by.fromkeys(filter_by.iterkeys(), True)
+            filter_by = filter_by.fromkeys(iter(filter_by.keys()), True)
 
         for f in rtype.split(','):
             f = f.strip()
@@ -2260,7 +2260,7 @@ class OpDeleteView(APIView):
         allowed_file_names = []
         locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
         for file_name in file_names.split(':'):
-            if file_name not in locked_files.keys():
+            if file_name not in list(locked_files.keys()):
                 # file is not locked
                 allowed_file_names.append(file_name)
             elif locked_files[file_name] == username:
@@ -2333,7 +2333,7 @@ class OpMoveView(APIView):
         allowed_obj_names = []
         locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
         for file_name in obj_names.split(':'):
-            if file_name not in locked_files.keys():
+            if file_name not in list(locked_files.keys()):
                 # file is not locked
                 allowed_obj_names.append(file_name)
             elif locked_files[file_name] == username:

@@ -61,7 +61,7 @@ class WikiPagesView(APIView):
 
         pages = get_wiki_pages(repo)
         wiki_pages_object = []
-        for _, page_name in pages.iteritems():
+        for _, page_name in pages.items():
             wiki_page_object = get_wiki_page_object(wiki, page_name)
             wiki_pages_object.append(wiki_page_object)
 

@@ -885,7 +885,7 @@ def user_set_quota(request, email):
         result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
-        result['error'] = str(f.errors.values()[0])
+        result['error'] = str(list(f.errors.values())[0])
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
 @login_required_ajax
@@ -1258,7 +1258,7 @@ def user_add(request):
 
             return HttpResponse(json.dumps({'success': True}), content_type=content_type)
     else:
-        return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({'error': str(list(form.errors.values())[0])}), status=400, content_type=content_type)
 
 @login_required
 @sys_staff_required
@@ -1816,7 +1816,7 @@ def user_search(request):
         user_emails.append(user.user)
 
     # remove duplicate emails
-    user_emails = {}.fromkeys(user_emails).keys()
+    user_emails = list({}.fromkeys(user_emails).keys())
 
     users = []
     for user_email in user_emails:
@@ -2662,7 +2662,7 @@ def sys_terms_admin(request):
                                 content_type=content_type)
         else:
             return HttpResponse(json.dumps({
-                'error': str(form.errors.values()[0])
+                'error': str(list(form.errors.values())[0])
             }), status=400, content_type=content_type)
 
     tc_list = TermsAndConditions.objects.all().order_by('-date_created')

@@ -377,7 +377,7 @@ def can_preview_file(file_name, file_size, repo):
                 return False, error_msg
     else:
         # NOT depends on Seafile settings
-        if filetype not in PREVIEW_FILEEXT.keys():
+        if filetype not in list(PREVIEW_FILEEXT.keys()):
             error_msg = "File preview unsupported"
             return False, error_msg
 
