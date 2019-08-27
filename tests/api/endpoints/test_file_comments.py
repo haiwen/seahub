@@ -22,7 +22,7 @@ class FileCommentsTest(BaseTestCase):
         self.remove_user(self.tmp_user.email)
 
     def test_can_list(self):
-        for i in xrange(10):
+        for i in range(10):
             o = FileComment.objects.add_by_file_path(repo_id=self.repo.id,
                                                      file_path=self.file,
                                                      author=self.tmp_user.username,

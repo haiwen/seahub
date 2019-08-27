@@ -25,7 +25,7 @@ def do_update(filename):
     with open(filename) as f:
         # try read first line of file
         try:
-            head = [next(f) for x in xrange(1)]
+            head = [next(f) for x in range(1)]
         except StopIteration:
             print('%s is empty, skip' % filename)
             return
@@ -78,7 +78,7 @@ def do_check(filename):
     with open(filename) as f:
         # try read first line of file
         try:
-            head = [next(f) for x in xrange(1)]
+            head = [next(f) for x in range(1)]
         except StopIteration:
             return
 

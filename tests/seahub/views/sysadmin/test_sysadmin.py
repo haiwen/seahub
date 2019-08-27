@@ -175,7 +175,7 @@ class BatchAddUserTest(BaseTestCase):
         self.excel_file = os.path.join(os.getcwd(), 'tests/seahub/views/sysadmin/batch_add_user.xlsx')
         data_list = []
         data_list.append(['email', 'password', 'username', 'role', 'quota'])
-        for i in xrange(20):
+        for i in range(20):
             username = "username@test" + str(i) +".com"
             password = "password"
             name = "name_test" + str(i)
