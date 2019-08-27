@@ -7,7 +7,9 @@ import MainPanel from './main-panel';
 import FileScanRecords from './file-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 import Info from './info';
-import Devices from './devices/devices';
+import DesktopDevices from './devices/desktop-devices';
+import MobileDevices from './devices/mobile-devices';
+import DeviceErrors from './devices/devices-errors';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -26,7 +28,24 @@ class SysAdmin extends React.Component {
 
   componentDidMount() {
     let href = window.location.href.split('/');
-    this.setState({currentTab: href[href.length - 2]});
+    let currentTab = href[href.length - 2];
+    let tmpTab;
+
+    const devicesUrlParts = ['desktop-devices', 'mobile-devices', 'device-errors'];
+    const devicesTab = 'devices';
+    tmpTab = this.getCurrentTabForPageList(devicesUrlParts, devicesTab);
+    currentTab = tmpTab ? tmpTab : currentTab;
+
+    this.setState({currentTab: currentTab});
+  }
+
+  getCurrentTabForPageList = (pageUrlPartList, curTab) => {
+    const urlBase = `${siteRoot}sys/`;
+    for (let i = 0, len = pageUrlPartList.length; i < len; i++) {
+      if (location.href.indexOf(`${urlBase}${pageUrlPartList[i]}`) != -1) {
+        return curTab;
+      }
+    }
   }
 
   onCloseSidePanel = () => {
@@ -38,23 +57,17 @@ class SysAdmin extends React.Component {
   }  
 
   render() {
-    let { currentTab, isSidePanelClosed,  } = this.state;
+    let { currentTab, isSidePanelClosed } = this.state;
 
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab}/>
         <MainPanel>
           <Router className="reach-router">
-            <Info
-              path={siteRoot + 'sys/info'}
-              currentTab={currentTab}
-              tabItemClick={this.tabItemClick}
-            />
-            <Devices
-              path={siteRoot + 'sys/devices'}
-              currentTab={currentTab}
-              tabItemClick={this.tabItemClick}
-            />
+            <Info path={siteRoot + 'sys/info'} />
+            <DesktopDevices path={siteRoot + 'sys/desktop-devices'} />
+            <MobileDevices path={siteRoot + 'sys/mobile-devices'} />
+            <DeviceErrors path={siteRoot + 'sys/device-errors'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 

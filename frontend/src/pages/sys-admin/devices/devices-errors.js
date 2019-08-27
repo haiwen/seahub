@@ -1,21 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext } from '../../../utils/constants';
+import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import moment from 'moment';
 import Loading from '../../../components/loading';
 import { Link } from '@reach/router';
+import DevicesNav from './devices-nav';
+import MainPanelTopbar from '../main-panel-topbar';
 
 class Content extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      currentDeviceInfo: {},
-    };
   }
 
   render() {
@@ -43,13 +42,11 @@ class Content extends Component {
                 <th width="16%">{gettext('Time')}</th>
               </tr>
             </thead>
-            {items.length && 
-              <tbody>
-                {items.map((item, index) => {
-                  return (<Item key={index} item={item} showModal={this.showModal}/>);
-                })}
-              </tbody>
-            }
+            <tbody>
+              {items.map((item, index) => {
+                return (<Item key={index} item={item} />);
+              })}
+            </tbody>
           </table>
         </Fragment>
       );
@@ -63,26 +60,26 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOpIcon: false,
+      isOpIconShown: false,
     };
   }
 
   handleMouseOver = () => {
-    this.setState({showOpIcon: true});
+    this.setState({isOpIconShown: true});
   }
 
   handleMouseOut = () => {
-    this.setState({showOpIcon: false});
+    this.setState({isOpIconShown: false});
   }
 
   render() {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <td><Link to={'/useradmin/info/' + item.email}>{item.name}</Link></td>
+        <td><Link to={`${siteRoot}useradmin/info/${encodeURIComponent(item.email)}/`}>{item.name}</Link></td>
         <td>{item.device_name}{' / '}{item.client_version}</td>
         <td>{item.device_ip}</td>
-        <td><Link to={'/sysadmin/#libs/' + item.repo_id}>{item.repo_name}</Link></td>
+        <td><Link to={`${siteRoot}sysadmin/#libs/${item.repo_id}`}>{item.repo_name}</Link></td>
         <td>{item.error_msg}</td>
         <td>
           <span className="item-meta-info" title={moment(item.last_accessed).format('llll')}>{moment(item.error_time).fromNow()}</span>
@@ -92,50 +89,87 @@ class Item extends Component {
   }
 }
 
-class DevicesErrors extends Component {
+class DeviceErrors extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
       errorMsg: '',
-      devicesErrors: []
+      devicesErrors: [],
+      isCleanBtnShown: false
     };
   }
 
   componentDidMount () {
     seafileAPI.sysAdminListDeviceErrors().then((res) => {
       this.setState({
+        loading: false,
         devicesErrors: res.data,
-        loading: false
-      }, () => {
-        if (this.state.devicesErrors.length > 0) {
-          this.props.handleErrorsCleanBtnShow(true);
-        } else {
-          this.props.handleErrorsCleanBtnShow(false);
-        }
+        isCleanBtnShown: res.data.length > 0
       });
+    }).catch((error) => {
+      if (error.response) {
+        if (error.response.status == 403) {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Permission denied')
+          }); 
+          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
+        } else {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Error')
+          }); 
+        }   
+      } else {
+        this.setState({
+          loading: false,
+          errorMsg: gettext('Please check the network.')
+        }); 
+      }   
+    });
+  }
+
+  clean = () => {
+    seafileAPI.sysAdminClearDeviceErrors().then((res) => {
+      this.setState({
+        devicesErrors: [],
+        isCleanBtnShown: false
+      });
+      let message = gettext('Successfully cleaned all errors.');
+      toaster.success(message);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-
   }
 
   render() {
     return (
       <Fragment>
-        <div className="cur-view-content">
-          <Content
-            unlinkDevice={this.unlinkDevice}
-            loading={this.state.loading}
-            errorMsg={this.state.errorMsg}
-            items={this.state.devicesErrors}
-          />
+        {this.state.isCleanBtnShown ? (
+          <MainPanelTopbar>
+            <Button className="operation-item" onClick={this.clean}>{gettext('Clean')}</Button>
+          </MainPanelTopbar>
+        ) : (
+          <MainPanelTopbar />
+        )}
+        <div className="main-panel-center flex-row">
+          <div className="cur-view-container">
+            <DevicesNav currentItem="errors" />
+            <div className="cur-view-content">
+              <Content
+                loading={this.state.loading}
+                errorMsg={this.state.errorMsg}
+                items={this.state.devicesErrors}
+              />
+            </div>
+          </div>
         </div>
       </Fragment>
     );
   }
 }
 
-export default DevicesErrors;
+export default DeviceErrors;
