@@ -124,7 +124,7 @@ class UploadLinks(APIView):
         if len(result) == 1:
             result = result
         else:
-            result.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
+            result.sort(key=lambda x: x['obj_name'])
 
         return Response(result)
 
