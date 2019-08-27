@@ -49,7 +49,7 @@ class SharedFolders(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         returned_result = []
-        shared_repos.sort(lambda x, y: cmp(x.repo_name, y.repo_name))
+        shared_repos.sort(key=lambda x: x.repo_name)
         for repo in shared_repos:
             if not repo.is_virtual:
                     continue
