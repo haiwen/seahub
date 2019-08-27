@@ -216,17 +216,17 @@ def save_shared_link(request):
     dst_repo_id = request.POST.get('dst_repo', '')
     dst_path = request.POST.get('dst_path', '')
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = SITE_ROOT
 
     if not dst_repo_id or not dst_path:
         messages.error(request, _('Please choose a directory.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
         messages.error(request, _('Permission denied'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     try:
         fs = FileShare.objects.get(token=token)
@@ -244,7 +244,7 @@ def save_shared_link(request):
                           need_progress=0)
 
     messages.success(request, _('Successfully saved.'))
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required_ajax
 def send_shared_upload_link(request):
