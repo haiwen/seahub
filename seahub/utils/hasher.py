@@ -26,8 +26,8 @@ pad = lambda s: s + (16 - len(s) % 16) * PADDING
 
 # one-liners to encrypt/encode and decrypt/decode a string
 # encrypt with AES, encode with base64
-EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s)))
-DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e)).rstrip(PADDING)
+EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s).encode('utf-8'))).decode('utf-8')
+DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e)).decode('utf-8').rstrip(PADDING)
 
 class AESPasswordHasher:
     algorithm = 'aes'
@@ -36,7 +36,7 @@ class AESPasswordHasher:
         if not secret:
             secret = settings.SECRET_KEY[:BLOCK_SIZE]
 
-        self.cipher = AES.new(secret, AES.MODE_ECB)
+        self.cipher = AES.new(secret.encode('utf-8'), AES.MODE_ECB)
 
     def encode(self, password):
         password = force_str(password)
@@ -49,5 +49,6 @@ class AESPasswordHasher:
         algorithm, data = encoded.split('$', 1)
         if algorithm != self.algorithm:
             raise AESPasswordDecodeError
+        data = data.encode('utf-8')
 
         return DecodeAES(self.cipher, data)
