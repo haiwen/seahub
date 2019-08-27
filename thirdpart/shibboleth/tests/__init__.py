@@ -1,1 +1,1 @@
-from shib import *
+from .shib import *

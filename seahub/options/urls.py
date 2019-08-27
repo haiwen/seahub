@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import url
 
-from views import *
+from .views import *
 
 urlpatterns = [
     url(r'^save/$', save_options, name='options_save'),

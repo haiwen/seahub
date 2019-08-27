@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import url
 
-from views import WOPIFilesView, WOPIFilesContentsView
+from .views import WOPIFilesView, WOPIFilesContentsView
 
 urlpatterns = [
     # RESTful API

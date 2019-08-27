@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from seahub.utils import is_valid_dirent_name
 
-from utils import clean_page_name
+from .utils import clean_page_name
 
 class WikiCreateForm(forms.Form):
     """

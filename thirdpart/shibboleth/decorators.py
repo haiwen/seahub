@@ -3,7 +3,7 @@ Decorators to use with Shibboleth.
 """
 from django.conf import settings
 from django.contrib import auth
-from middleware import ShibbolethRemoteUserMiddleware
+from .middleware import ShibbolethRemoteUserMiddleware
 
 def login_optional(func):
   """

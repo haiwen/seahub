@@ -15,7 +15,7 @@ from seahub.utils import calc_file_path_hash, within_time_range, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.tags.models import FileUUIDMap
-from fields import LowerCaseCharField
+from .fields import LowerCaseCharField
 
 
 # Get an instance of a logger

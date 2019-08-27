@@ -11,8 +11,8 @@ from django.utils.translation import ugettext as _
 import seaserv
 from seaserv import seafile_api
 
-from forms import DetailedProfileForm
-from models import Profile, DetailedProfile
+from .forms import DetailedProfileForm
+from .models import Profile, DetailedProfile
 from seahub.auth.decorators import login_required
 from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User, UNUSABLE_PASSWORD

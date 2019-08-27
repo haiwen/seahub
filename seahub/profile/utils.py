@@ -1,8 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.core.cache import cache
 
-from models import Profile
-from settings import NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT, \
+from .models import Profile
+from .settings import NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT, \
         CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import normalize_cache_key

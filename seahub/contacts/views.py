@@ -12,7 +12,7 @@ from django.forms.models import modelformset_factory
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 
-from models import Contact, ContactAddForm, ContactEditForm
+from .models import Contact, ContactAddForm, ContactEditForm
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.decorators import user_mods_check
 from seahub.profile.models import Profile

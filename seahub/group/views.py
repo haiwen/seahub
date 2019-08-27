@@ -23,8 +23,8 @@ from seaserv import ccnet_threaded_rpc, seafile_api, \
     remove_repo, get_file_id_by_path, post_empty_file, del_file
 from pysearpc import SearpcError
 
-from models import PublicGroup
-from forms import MessageForm, WikiCreateForm
+from .models import PublicGroup
+from .forms import MessageForm, WikiCreateForm
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.group.utils import validate_group_name, BadGroupNameError, \

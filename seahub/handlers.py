@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 
 import logging
-import settings
+from . import settings
 import datetime
 
 from seaserv import seafile_api, get_org_id_by_repo_id
@@ -41,7 +41,7 @@ try:
             'org_id': org_id,
         }
 
-        from utils import SeafEventsSession
+        from .utils import SeafEventsSession
         session = SeafEventsSession()
         seafevents.save_user_activity(session, record)
         session.close()
@@ -94,7 +94,7 @@ try:
             'org_id': org_id if org_id > 0 else -1,
         }
 
-        from utils import SeafEventsSession
+        from .utils import SeafEventsSession
         session = SeafEventsSession()
         seafevents.save_user_activity(session, record)
         session.close()
@@ -131,7 +131,7 @@ try:
             'org_id': org_id,
         }
 
-        from utils import SeafEventsSession
+        from .utils import SeafEventsSession
         session = SeafEventsSession()
         seafevents.save_user_activity(session, record)
         session.close()
@@ -163,7 +163,7 @@ try:
             'org_id': org_id,
         }
 
-        from utils import SeafEventsSession
+        from .utils import SeafEventsSession
         session = SeafEventsSession()
         seafevents.save_user_activity(session, record)
         session.close()

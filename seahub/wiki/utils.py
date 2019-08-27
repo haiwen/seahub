@@ -19,7 +19,7 @@ from seahub.utils import gen_file_get_url, get_file_type_and_ext, \
     gen_inner_file_get_url, get_site_scheme_and_netloc
 from seahub.utils.file_types import IMAGE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
+from .models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 
 logger = logging.getLogger(__name__)
 

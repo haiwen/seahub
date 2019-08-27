@@ -2,7 +2,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 
-from models import Notification
+from .models import Notification
 from base.accounts import User
 
 class NotificationTestCase(TestCase):
