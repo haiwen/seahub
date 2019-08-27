@@ -1,5 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from __future__ import unicode_literals
+
 
 def avoid_wrapping(value):
     """

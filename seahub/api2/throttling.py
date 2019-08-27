@@ -2,7 +2,7 @@
 """
 Provides various throttling policies.
 """
-from __future__ import unicode_literals
+
 from django.conf import settings
 from django.core.cache import cache as default_cache
 from django.core.exceptions import ImproperlyConfigured

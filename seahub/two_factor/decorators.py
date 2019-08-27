@@ -1,5 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 
 
 from seahub.auth.decorators import user_passes_test
