@@ -46,7 +46,7 @@ class AdminLicense(APIView):
                 error_msg = 'path %s invalid.' % LICENSE_PATH
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            with open(LICENSE_PATH, 'w') as fd:
+            with open(LICENSE_PATH, 'wb') as fd:
                 fd.write(license_file.read())
 
             ccnet_api.reload_license()
