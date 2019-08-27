@@ -203,7 +203,7 @@ def sys_statistic_traffic(request):
         'link_file_upload', 'link_file_download',
     ]
     if order_by not in filters and \
-       order_by not in map(lambda x: x + '_desc', filters):
+       order_by not in [x + '_desc' for x in filters]:
         order_by = 'link_file_download_desc'
 
     if req_type == 'user':
