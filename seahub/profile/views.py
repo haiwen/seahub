@@ -201,8 +201,8 @@ def get_user_profile(request, user):
 def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT:
         messages.error(request, _('Permission denied.'))
-        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-        return HttpResponseRedirect(next)
+        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next_page)
 
     if request.method != 'POST':
         raise Http404
@@ -211,8 +211,8 @@ def delete_user_account(request):
 
     if username == 'demo@seafile.com':
         messages.error(request, _('Demo account can not be deleted.'))
-        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-        return HttpResponseRedirect(next)
+        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next_page)
 
     user = User.objects.get(email=username)
     user.delete()
@@ -232,18 +232,18 @@ def default_repo(request):
 
     repo_id = request.POST.get('dst_repo', '')
     referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
+    next_page = settings.SITE_ROOT if referer is None else referer
 
     repo = seafile_api.get_repo(repo_id)
     if repo is None:
         messages.error(request, _('Failed to set default library.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     if repo.encrypted:
         messages.error(request, _('Can not set encrypted library as default library.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     username = request.user.username
     UserOptions.objects.set_default_repo(username, repo.id)
     messages.success(request, _('Successfully set "%s" as your default library.') % repo.name)
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
