@@ -72,7 +72,7 @@ class AcceptTermsView(CreateView):
         else:  #Get user out of saved pipeline from django-socialauth
             # no support for social auth right now.
             assert False, 'TODO'
-            if self.request.session.has_key('partial_pipeline'):
+            if 'partial_pipeline' in self.request.session:
                 user_pk = self.request.session['partial_pipeline']['kwargs']['user']['pk']
                 form.instance.user = User.objects.get(id=user_pk)
             else:

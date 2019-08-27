@@ -41,7 +41,7 @@ class FileViewTest(BaseTestCase):
 
         if len(json_resp['dirent_list']) > 0:
             for dirent in json_resp['dirent_list']:
-                if dirent.has_key('is_file') and dirent['is_file']:
+                if 'is_file' in dirent and dirent['is_file']:
                     return dirent['obj_name']
                 else:
                     continue

@@ -524,7 +524,7 @@ class Search(APIView):
             suffixes = []
             if len(custom_ftypes) > 0:
                 for ftp in custom_ftypes:
-                    if SEARCH_FILEEXT.has_key(ftp):
+                    if ftp in SEARCH_FILEEXT:
                         for ext in SEARCH_FILEEXT[ftp]:
                             suffixes.append(ext)
 
@@ -590,7 +590,7 @@ class Search(APIView):
                 e['permission'] = permission
 
             # get repo type
-            if repo_type_map.has_key(repo_id):
+            if repo_id in repo_type_map:
                 e['repo_type'] = repo_type_map[repo_id]
             else:
                 e['repo_type'] = ''

@@ -228,7 +228,7 @@ def convert_repo_path_when_can_not_view_folder(request, repo_id, path):
                             status=404, content_type=content_type)
 
     group_id = ''
-    if converted_repo_path.has_key('group_id'):
+    if 'group_id' in converted_repo_path:
         group_id = converted_repo_path['group_id']
         if not ccnet_api.get_group(group_id):
             err_msg = 'Group not found.'

@@ -740,7 +740,7 @@ if EVENTS_CONFIG_FILE:
             'seadrive-download-file': ('seadrive-download', e.device),
         }
 
-        if not event_type_dict.has_key(e.etype):
+        if e.etype not in event_type_dict:
             event_type_dict[e.etype] = (e.etype, e.device if e.device else '')
 
         return event_type_dict[e.etype]
@@ -1418,7 +1418,7 @@ def get_system_admins():
     return admins
 
 def is_windows_operating_system(request):
-    if not request.META.has_key('HTTP_USER_AGENT'):
+    if 'HTTP_USER_AGENT' not in request.META:
         return False
 
     if 'windows' in request.META['HTTP_USER_AGENT'].lower():

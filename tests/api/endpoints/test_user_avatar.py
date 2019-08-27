@@ -20,7 +20,7 @@ class AvatarApiTest(ApiTestBase):
         with open(avatar_file) as f:
             json_resp = self.post(avatar_url, files={'avatar': f}, data={'avatar_size': random_avatar_size}).json()
 
-        assert json_resp.has_key('avatar_url')
+        assert 'avatar_url' in json_resp
         response_url = json_resp['avatar_url']
         list_url = response_url.split('/')
         assert str(random_avatar_size) in list_url

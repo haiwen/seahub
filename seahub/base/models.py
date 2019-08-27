@@ -192,7 +192,7 @@ class UserStarredFilesManager(models.Manager):
         repo_cache = {}
         for sfile in starred_files:
             # repo still exists?
-            if repo_cache.has_key(sfile.repo_id):
+            if sfile.repo_id in repo_cache:
                 repo = repo_cache[sfile.repo_id]
             else:
                 try:

@@ -77,7 +77,7 @@ class AccountTest(BaseTestCase):
         assert json_resp['contact_email'] == email2contact_email(self.user_name)
         assert json_resp['telephone'] == d_profile.telephone
         assert json_resp['login_id'] == profile.login_id
-        assert json_resp.has_key('list_in_address_book')
+        assert 'list_in_address_book' in json_resp
 
     def test_update_user_nickname(self):
 

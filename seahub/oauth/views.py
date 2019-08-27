@@ -117,7 +117,7 @@ def oauth_callback(request):
             client_secret=CLIENT_SECRET,
             authorization_response=request.get_full_path())
 
-        if session._client.__dict__['token'].has_key('user_id'):
+        if 'user_id' in session._client.__dict__['token']:
             # used for sjtu.edu.cn
             # https://xjq12311.gitbooks.io/sjtu-engtc/content/
             user_id = session._client.__dict__['token']['user_id']
@@ -182,9 +182,9 @@ def oauth_callback(request):
     auth.login(request, user)
 
     # update user's profile
-    name = user_info['name'] if user_info.has_key('name') else ''
+    name = user_info['name'] if 'name' in user_info else ''
     contact_email = user_info['contact_email'] if \
-            user_info.has_key('contact_email') else ''
+            'contact_email' in user_info else ''
 
     profile = Profile.objects.get_profile_by_user(email)
     if not profile:

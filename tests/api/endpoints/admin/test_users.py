@@ -36,16 +36,16 @@ class AdminUsersTest(BaseTestCase):
         assert json_resp['total_count'] > 0
         assert len(json_resp['data']) == json_resp['total_count']
 
-        assert json_resp['data'][0].has_key('email')
-        assert json_resp['data'][0].has_key('name')
-        assert json_resp['data'][0].has_key('contact_email')
-        assert json_resp['data'][0].has_key('is_staff')
-        assert json_resp['data'][0].has_key('is_active')
-        assert json_resp['data'][0].has_key('create_time')
-        assert json_resp['data'][0].has_key('department')
-        assert json_resp['data'][0].has_key('quota_total')
-        assert json_resp['data'][0].has_key('quota_usage')
-        assert json_resp['data'][0].has_key('create_time')
+        assert 'email' in json_resp['data'][0]
+        assert 'name' in json_resp['data'][0]
+        assert 'contact_email' in json_resp['data'][0]
+        assert 'is_staff' in json_resp['data'][0]
+        assert 'is_active' in json_resp['data'][0]
+        assert 'create_time' in json_resp['data'][0]
+        assert 'department' in json_resp['data'][0]
+        assert 'quota_total' in json_resp['data'][0]
+        assert 'quota_usage' in json_resp['data'][0]
+        assert 'create_time' in json_resp['data'][0]
 
     def test_get_with_invalid_user_permission(self):
         self.login_as(self.user)
@@ -119,15 +119,15 @@ class AdminUserTest(BaseTestCase):
 
         assert json_resp['email'] == self.tmp_email
 
-        assert json_resp.has_key('email')
-        assert json_resp.has_key('name')
-        assert json_resp.has_key('contact_email')
-        assert json_resp.has_key('is_staff')
-        assert json_resp.has_key('is_active')
-        assert json_resp.has_key('create_time')
-        assert json_resp.has_key('department')
-        assert json_resp.has_key('quota_total')
-        assert json_resp.has_key('quota_usage')
+        assert 'email' in json_resp
+        assert 'name' in json_resp
+        assert 'contact_email' in json_resp
+        assert 'is_staff' in json_resp
+        assert 'is_active' in json_resp
+        assert 'create_time' in json_resp
+        assert 'department' in json_resp
+        assert 'quota_total' in json_resp
+        assert 'quota_usage' in json_resp
 
     def test_get_with_invalid_user_permission(self):
         self.login_as(self.user)

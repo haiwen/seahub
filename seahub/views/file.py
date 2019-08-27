@@ -455,7 +455,7 @@ def convert_repo_path_when_can_not_view_file(request, repo_id, path):
         return render_error(request, _(u'File does not exist'))
 
     group_id = ''
-    if converted_repo_path.has_key('group_id'):
+    if 'group_id' in converted_repo_path:
         group_id = converted_repo_path['group_id']
         if not ccnet_api.get_group(group_id):
             return render_error(request, _(u'Group does not exist'))
@@ -991,7 +991,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     ret_dict['raw_path'] = raw_path
     ret_dict['enable_watermark'] = ENABLE_WATERMARK
     ret_dict['can_download_file'] = parse_repo_perm(user_perm).can_download
-    if not ret_dict.has_key('filetype'):
+    if 'filetype' not in ret_dict:
         ret_dict['filetype'] = filetype
 
 @repo_passwd_set_required
@@ -1001,11 +1001,11 @@ def view_history_file(request, repo_id):
     if not request.user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
-    if ret_dict.has_key('wopi_dict'):
+    if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
         return render(request, 'view_file_wopi.html', wopi_dict)
 
-    if ret_dict.has_key('onlyoffice_dict'):
+    if 'onlyoffice_dict' in ret_dict:
         onlyoffice_dict = ret_dict['onlyoffice_dict']
         return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
 
@@ -1024,11 +1024,11 @@ def view_trash_file(request, repo_id):
     if not request.user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
-    if ret_dict.has_key('wopi_dict'):
+    if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
         return render(request, 'view_file_wopi.html', wopi_dict)
 
-    if ret_dict.has_key('onlyoffice_dict'):
+    if 'onlyoffice_dict' in ret_dict:
         onlyoffice_dict = ret_dict['onlyoffice_dict']
         return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
 
@@ -1051,11 +1051,11 @@ def view_snapshot_file(request, repo_id):
     if not request.user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
-    if ret_dict.has_key('wopi_dict'):
+    if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
         return render(request, 'view_file_wopi.html', wopi_dict)
 
-    if ret_dict.has_key('onlyoffice_dict'):
+    if 'onlyoffice_dict' in ret_dict:
         onlyoffice_dict = ret_dict['onlyoffice_dict']
         return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
 

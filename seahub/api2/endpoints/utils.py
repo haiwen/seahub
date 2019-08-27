@@ -79,7 +79,7 @@ def get_user_contact_email_dict(email_list):
     email_list = set(email_list)
     user_contact_email_dict = {}
     for email in email_list:
-        if not user_contact_email_dict.has_key(email):
+        if email not in user_contact_email_dict:
             user_contact_email_dict[email] = email2contact_email(email)
 
     return user_contact_email_dict
@@ -88,7 +88,7 @@ def get_user_name_dict(email_list):
     email_list = set(email_list)
     user_name_dict = {}
     for email in email_list:
-        if not user_name_dict.has_key(email):
+        if email not in user_name_dict:
             user_name_dict[email] = email2nickname(email)
 
     return user_name_dict
@@ -97,7 +97,7 @@ def get_repo_dict(repo_id_list):
     repo_id_list = set(repo_id_list)
     repo_dict = {}
     for repo_id in repo_id_list:
-        if not repo_dict.has_key(repo_id):
+        if repo_id not in repo_dict:
             repo_dict[repo_id] = ''
             repo = seafile_api.get_repo(repo_id)
             if repo:
@@ -110,7 +110,7 @@ def get_group_dict(group_id_list):
     group_id_list = set(group_id_list)
     group_dict = {}
     for group_id in group_id_list:
-        if not group_dict.has_key(group_id):
+        if group_id not in group_dict:
             group_dict[group_id] = ''
             group = ccnet_api.get_group(int(group_id))
             print group

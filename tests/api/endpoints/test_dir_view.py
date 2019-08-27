@@ -34,7 +34,7 @@ class DirViewTest(BaseTestCase):
 
         if len(json_resp['dirent_list']) > 0:
             for dirent in json_resp['dirent_list']:
-                if dirent.has_key('is_dir') and dirent['is_dir']:
+                if 'is_dir' in dirent and dirent['is_dir']:
                     return dirent['obj_name']
                 else:
                     continue
@@ -222,7 +222,7 @@ class DirViewTest(BaseTestCase):
         assert len(json_resp['dirent_list']) == 1
         assert json_resp['dirent_list'][0]['type'] == 'file'
         assert json_resp['dirent_list'][0]['name'] == self.file_name
-        assert not json_resp['dirent_list'][0].has_key('file_tags')
+        assert 'file_tags' not in json_resp['dirent_list'][0]
 
         # add file tag
         tag_name = randstring(6)
@@ -261,7 +261,7 @@ class DirViewTest(BaseTestCase):
         assert len(json_resp['dirent_list']) == 1
         assert json_resp['dirent_list'][0]['type'] == 'file'
         assert json_resp['dirent_list'][0]['name'] == image_file_name
-        assert not json_resp['dirent_list'][0].has_key('encoded_thumbnail_src')
+        assert 'encoded_thumbnail_src' not in json_resp['dirent_list'][0]
 
         file_id = json_resp['dirent_list'][0]['id']
 

@@ -109,7 +109,7 @@ def file_icon_filter(value, size=None):
     else:
         file_ext = None
 
-    if file_ext and FILEEXT_ICON_MAP.has_key(file_ext):
+    if file_ext and file_ext in FILEEXT_ICON_MAP:
         if size == 192:
             return '192/' + FILEEXT_ICON_MAP.get(file_ext)
         else:

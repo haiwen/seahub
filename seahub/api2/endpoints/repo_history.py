@@ -129,7 +129,7 @@ class RepoHistory(APIView):
                 revision_tags = []
 
             for tag in revision_tags:
-                if commit_tag_dict.has_key(tag.revision_id):
+                if tag.revision_id in commit_tag_dict:
                     commit_tag_dict[tag.revision_id].append(tag.tag.name)
                 else:
                     commit_tag_dict[tag.revision_id] = [tag.tag.name]

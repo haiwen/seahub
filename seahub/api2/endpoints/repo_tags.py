@@ -70,7 +70,7 @@ class RepoTagsView(APIView):
         for repo_tag in repo_tag_list:
             res = repo_tag.to_dict()
             repo_tag_id = res["repo_tag_id"]
-            if files_count.has_key(repo_tag_id):
+            if repo_tag_id in files_count:
                 res["files_count"] = files_count[repo_tag_id]
             else:
                 res["files_count"] = 0
