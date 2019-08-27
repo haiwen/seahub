@@ -105,9 +105,9 @@ class StarredItems(APIView):
             else:
                 starred_files.append(item_info)
 
-        starred_repos.sort(lambda x, y: cmp(y['mtime'], x['mtime']))
-        starred_folders.sort(lambda x, y: cmp(y['mtime'], x['mtime']))
-        starred_files.sort(lambda x, y: cmp(y['mtime'], x['mtime']))
+        starred_repos.sort(key=lambda x: x['mtime'], reverse=True)
+        starred_folders.sort(key=lambda x: x['mtime'], reverse=True)
+        starred_files.sort(key=lambda x: x['mtime'], reverse=True)
 
         return Response({'starred_item_list': starred_repos + \
                 starred_folders + starred_files})
