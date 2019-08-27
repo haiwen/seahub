@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+from functools import cmp_to_key
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -83,7 +84,7 @@ class AdminDeviceTrustedIP(APIView):
     @check_parameter
     def get(self, request, format=None):
         ip_list = [ip.to_dict() for ip in TrustedIP.objects.all()]
-        ip_list = sorted(ip_list, cmp=cmp_ip)
+        ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         return Response(ip_list)
 
     @check_parameter
