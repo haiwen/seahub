@@ -185,7 +185,7 @@ def user_remove(request, email):
     """Remove a institution user.
     """
     referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('institutions:useradmin') if referer is None else referer
+    next_page = reverse('institutions:useradmin') if referer is None else referer
 
     try:
         user = User.objects.get(email=email)
@@ -194,7 +194,7 @@ def user_remove(request, email):
     except User.DoesNotExist:
         messages.error(request, _('Failed to delete: the user does not exist'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required_ajax
 @require_POST
