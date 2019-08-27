@@ -53,7 +53,7 @@ def personal_wiki(request, page_name="home"):
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
     if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        joined_groups.sort(key=lambda x: x.group_name.lower())
 
     wiki_exists = True
     try:
@@ -125,7 +125,7 @@ def personal_wiki_pages(request):
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
     if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        joined_groups.sort(key=lambda x: x.group_name.lower())
 
     try:
         repo = get_personal_wiki_repo(username)
