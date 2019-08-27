@@ -5,8 +5,8 @@ Test file/dir operations.
 
 import posixpath
 import pytest
-import urllib
-from urllib import urlencode, quote
+import urllib.request, urllib.parse, urllib.error
+from urllib.parse import urlencode, quote
 import urllib.parse
 from nose.tools import assert_in
 
@@ -166,12 +166,12 @@ class FilesApiTest(ApiTestBase):
             self.assertRegex(res.text, '"http(.*)/%s"' % quote(fname))
 
             # download for the first time
-            url = urllib.urlopen(res.text.strip('"'))
+            url = urllib.request.urlopen(res.text.strip('"'))
             code = url.getcode()
             self.assertEqual(code, 200)
 
             # download for the second time
-            url = urllib.urlopen(res.text.strip('"'))
+            url = urllib.request.urlopen(res.text.strip('"'))
             code = url.getcode()
             self.assertEqual(code, 400)
 
@@ -182,12 +182,12 @@ class FilesApiTest(ApiTestBase):
             self.assertRegex(res.text, '"http(.*)/%s"' % quote(fname))
 
             # download for the first time
-            url = urllib.urlopen(res.text.strip('"'))
+            url = urllib.request.urlopen(res.text.strip('"'))
             code = url.getcode()
             self.assertEqual(code, 200)
 
             # download for the second time
-            url = urllib.urlopen(res.text.strip('"'))
+            url = urllib.request.urlopen(res.text.strip('"'))
             code = url.getcode()
             self.assertEqual(code, 200)
 

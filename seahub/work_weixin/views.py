@@ -4,7 +4,7 @@
 import uuid
 import logging
 import requests
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
@@ -44,7 +44,7 @@ def work_weixin_oauth_login(request):
         'redirect_uri': get_site_scheme_and_netloc() + reverse('work_weixin_oauth_callback'),
         'state': state,
     }
-    authorization_url = WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.urlencode(data)
+    authorization_url = WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data)
 
     return HttpResponseRedirect(authorization_url)
 
@@ -146,7 +146,7 @@ def work_weixin_oauth_connect(request):
         'redirect_uri': get_site_scheme_and_netloc() + reverse('work_weixin_oauth_connect_callback'),
         'state': state,
     }
-    authorization_url = WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.urlencode(data)
+    authorization_url = WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data)
 
     return HttpResponseRedirect(authorization_url)
 

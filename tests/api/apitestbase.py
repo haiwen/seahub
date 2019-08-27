@@ -4,7 +4,7 @@ import requests
 import unittest
 from contextlib import contextmanager
 from nose.tools import assert_equal, assert_in # pylint: disable=E0611
-from urllib import quote
+from urllib.parse import quote
 
 from tests.common.common import USERNAME, PASSWORD, \
     ADMIN_USERNAME, ADMIN_PASSWORD

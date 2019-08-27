@@ -4,7 +4,7 @@
 import os
 import json
 import logging
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import requests
 import hashlib
 import urllib.parse
@@ -352,8 +352,8 @@ class WOPIFilesContentsView(APIView):
         inner_path = gen_inner_file_get_url(fileserver_token, file_name)
 
         try:
-            file_content = urllib2.urlopen(inner_path).read()
-        except urllib2.URLError as e:
+            file_content = urllib.request.urlopen(inner_path).read()
+        except urllib.error.URLError as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
                                 content_type=json_content_type)

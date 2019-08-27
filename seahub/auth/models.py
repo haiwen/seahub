@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import datetime
 import hashlib
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import logging
 
 # import auth

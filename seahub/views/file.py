@@ -9,7 +9,7 @@ import sys
 import os
 import json
 import stat
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import chardet
 import logging
 import posixpath
@@ -178,13 +178,13 @@ def repo_file_get(raw_path, file_enc):
         encoding = file_enc
 
     try:
-        file_response = urllib2.urlopen(raw_path)
+        file_response = urllib.request.urlopen(raw_path)
         content = file_response.read()
-    except urllib2.HTTPError as e:
+    except urllib.error.HTTPError as e:
         logger.error(e)
         err = _('HTTPError: failed to open file online')
         return err, '', None
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
         logger.error(e)
         err = _('URLError: failed to open file online')
         return err, '', None
@@ -1643,7 +1643,7 @@ def file_edit(request, repo_id):
     if path[-1] == '/':
         path = path[:-1]
     u_filename = os.path.basename(path)
-    filename = urllib2.quote(u_filename.encode('utf-8'))
+    filename = urllib.parse.quote(u_filename.encode('utf-8'))
     parent_dir = os.path.dirname(path)
 
     if parse_repo_perm(check_folder_permission(

@@ -8,7 +8,7 @@ from os import urandom
 try:
     from urllib.parse import quote, urlencode
 except ImportError:
-    from urllib import quote, urlencode
+    from urllib.parse import quote, urlencode
 
 from django.conf import settings
 from django.core.exceptions import ValidationError

@@ -11,8 +11,8 @@ import logging
 import json
 import stat
 import tempfile
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import chardet
 
 from django.core.urlresolvers import reverse
@@ -250,7 +250,7 @@ def personal_wiki_page_edit(request, page_name="home"):
     filepath = "/" + page_name + ".md"
     url = "%s?p=%s&from=personal_wiki_page_edit" % (
             reverse('file_edit', args=[repo.id]),
-            urllib2.quote(filepath.encode('utf-8')))
+            urllib.parse.quote(filepath.encode('utf-8')))
 
     return HttpResponseRedirect(url)
 

@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import posixpath
 
 import seaserv
@@ -134,7 +134,7 @@ def edit_page(request, slug, page_name="home"):
     filepath = "/" + page_name + ".md"
     url = "%s?p=%s&from=wikis_wiki_page_edit&wiki_slug=%s" % (
             reverse('file_edit', args=[wiki.repo_id]),
-            urllib2.quote(filepath.encode('utf-8')),
+            urllib.parse.quote(filepath.encode('utf-8')),
             slug)
 
     return HttpResponseRedirect(url)

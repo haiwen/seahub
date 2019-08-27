@@ -3,7 +3,7 @@
 import logging
 import os
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -414,7 +414,7 @@ def group_wiki_page_new(request, group, page_name="home"):
 
         url = "%s?p=%s&from=wiki_page_new&gid=%s" % (
             reverse('file_edit', args=[repo.id]),
-            urllib2.quote(filepath.encode('utf-8')), group.id)
+            urllib.parse.quote(filepath.encode('utf-8')), group.id)
         return HttpResponseRedirect(url)
 
 
@@ -431,7 +431,7 @@ def group_wiki_page_edit(request, group, page_name="home"):
     filepath = "/" + page_name + ".md"
     url = "%s?p=%s&from=wiki_page_edit&gid=%s" % (
             reverse('file_edit', args=[repo.id]),
-            urllib2.quote(filepath.encode('utf-8')), group.id)
+            urllib.parse.quote(filepath.encode('utf-8')), group.id)
 
     return HttpResponseRedirect(url)
 

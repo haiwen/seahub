@@ -2,7 +2,7 @@
 import os
 import re
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import urllib.parse
 import requests
 import hashlib
@@ -146,11 +146,11 @@ def get_wopi_dict(request_user, repo_id, file_path,
 
     query_dict = {'WOPISrc': WOPISrc}
     if action_url[-1] in ('?', '&'):
-        full_action_url = action_url + urllib.urlencode(query_dict)
+        full_action_url = action_url + urllib.parse.urlencode(query_dict)
     elif '?' in action_url:
-        full_action_url = action_url + '&' + urllib.urlencode(query_dict)
+        full_action_url = action_url + '&' + urllib.parse.urlencode(query_dict)
     else:
-        full_action_url = action_url + '?' + urllib.urlencode(query_dict)
+        full_action_url = action_url + '?' + urllib.parse.urlencode(query_dict)
 
     # key, collected from seahub/settings.py
     # value, collected from https://wopi.readthedocs.io/en/latest/faq/languages.html#languages

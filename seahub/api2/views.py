@@ -9,7 +9,7 @@ import datetime
 import posixpath
 import re
 from dateutil.relativedelta import relativedelta
-from urllib2 import quote
+from urllib.parse import quote
 
 from rest_framework import parsers
 from rest_framework import status

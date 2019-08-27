@@ -3,8 +3,8 @@
 from functools import partial
 import os
 import re
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import uuid
 import logging
 import hashlib
@@ -894,7 +894,7 @@ def calc_file_path_hash(path, bits=12):
     if isinstance(path, str):
         path = path.encode('UTF-8')
 
-    path_hash = hashlib.md5(urllib2.quote(path)).hexdigest()[:bits]
+    path_hash = hashlib.md5(urllib.parse.quote(path)).hexdigest()[:bits]
 
     return path_hash
 
@@ -1168,7 +1168,7 @@ if HAS_OFFICE_CONVERTER:
 
     def delegate_add_office_convert_task(file_id, doctype, raw_path):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/add-task/')
-        data = urllib.urlencode({
+        data = urllib.parse.urlencode({
             'file_id': file_id,
             'doctype': doctype,
             'raw_path': raw_path,
@@ -1200,7 +1200,7 @@ if HAS_OFFICE_CONVERTER:
         try:
             ret = do_urlopen(url, headers=headers)
             data = ret.read()
-        except urllib2.HTTPError as e:
+        except urllib.error.HTTPError as e:
             if timestamp and e.code == 304:
                 return HttpResponseNotModified()
             else:
@@ -1356,8 +1356,8 @@ def do_md5(s):
 
 def do_urlopen(url, data=None, headers=None):
     headers = headers or {}
-    req = urllib2.Request(url, data=data, headers=headers)
-    ret = urllib2.urlopen(req)
+    req = urllib.request.Request(url, data=data, headers=headers)
+    ret = urllib.request.urlopen(req)
     return ret
 
 def clear_token(username):

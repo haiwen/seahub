@@ -2,7 +2,7 @@
 import re
 import datetime
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import logging
 
 from rest_framework import status
@@ -161,22 +161,22 @@ def generate_links_header_for_paginator(base_url, page, per_page, total_count, o
     query_dict.update(option_dict)
 
     # generate first page url
-    first_page_url = base_url + '?' + urllib.urlencode(query_dict)
+    first_page_url = base_url + '?' + urllib.parse.urlencode(query_dict)
 
     # generate last page url
     last_page_query_dict = {'page': (total_count / per_page) + 1}
     query_dict.update(last_page_query_dict)
-    last_page_url = base_url + '?' + urllib.urlencode(query_dict)
+    last_page_url = base_url + '?' + urllib.parse.urlencode(query_dict)
 
     # generate next page url
     next_page_query_dict = {'page': page + 1}
     query_dict.update(next_page_query_dict)
-    next_page_url = base_url + '?' + urllib.urlencode(query_dict)
+    next_page_url = base_url + '?' + urllib.parse.urlencode(query_dict)
 
     # generate prev page url
     prev_page_query_dict = {'page': page - 1}
     query_dict.update(prev_page_query_dict)
-    prev_page_url = base_url + '?' + urllib.urlencode(query_dict)
+    prev_page_url = base_url + '?' + urllib.parse.urlencode(query_dict)
 
     # generate `Links` header
     links_header = ''

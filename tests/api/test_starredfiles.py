@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from django.core.urlresolvers import reverse
 
@@ -22,7 +22,7 @@ class StarredFileTest(BaseTestCase, Fixtures):
         self.remove_repo()
 
     def js_encodeURIComponent(self, string):
-        return urllib2.quote(string.encode('utf-8'), safe='~()*!.\'')
+        return urllib.parse.quote(string.encode('utf-8'), safe='~()*!.\'')
 
     ########## test cases ##########
     def test_can_list(self):
@@ -90,6 +90,6 @@ class StarredFileTest(BaseTestCase, Fixtures):
 
         resp = self.client.delete(reverse('starredfiles') + '?repo_id=' +
                                   self.repo.id + '&p=' +
-                                  urllib2.quote(self.unicode_file.encode('utf-8')))
+                                  urllib.parse.quote(self.unicode_file.encode('utf-8')))
         self.assertEqual(200, resp.status_code)
         self.assertEqual(1, len(UserStarredFiles.objects.all()))
