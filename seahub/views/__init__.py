@@ -299,8 +299,8 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
     except SearpcError as e:
         logger.error(e)
         referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
-        return HttpResponseRedirect(next)
+        next_page = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next_page)
 
     if not commit:
         raise Http404
@@ -361,8 +361,8 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
     except SearpcError as e:
         logger.error(e)
         referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
-        return HttpResponseRedirect(next)
+        next_page = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next_page)
 
     if not commit:
         raise Http404
@@ -546,14 +546,14 @@ def repo_history(request, repo_id):
 @require_POST
 def repo_revert_history(request, repo_id):
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = settings.SITE_ROOT
 
     repo = get_repo(repo_id)
     if not repo:
         messages.error(request, _("Library does not exist"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     # perm check
     perm = check_folder_permission(request, repo_id, '/')
@@ -562,7 +562,7 @@ def repo_revert_history(request, repo_id):
 
     if perm is None or repo_owner != username:
         messages.error(request, _("Permission denied"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
@@ -601,7 +601,7 @@ def repo_revert_history(request, repo_id):
         else:
             return render_error(request, _('Unknown error'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
@@ -947,7 +947,7 @@ def i18n(request):
 
     """
     from django.conf import settings
-    next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+    next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
     lang = request.GET.get('lang', settings.LANGUAGE_CODE)
     if lang not in [e[0] for e in settings.LANGUAGES]:
@@ -965,7 +965,7 @@ def i18n(request):
             Profile.objects.add_or_update(request.user.username, '', '', lang)
 
     # set language code to client
-    res = HttpResponseRedirect(next)
+    res = HttpResponseRedirect(next_page)
     res.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, max_age=30*24*60*60)
     return res
 
@@ -1137,7 +1137,7 @@ def toggle_modules(request):
         raise Http404
 
     referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
+    next_page = settings.SITE_ROOT if referer is None else referer
 
     username = request.user.username
     personal_wiki = request.POST.get('personal_wiki', 'off')
@@ -1147,10 +1147,10 @@ def toggle_modules(request):
     else:
         disable_mod_for_user(username, MOD_PERSONAL_WIKI)
         if referer.find('wiki') > 0:
-            next = settings.SITE_ROOT
+            next_page = settings.SITE_ROOT
         messages.success(request, _('Successfully disable "Personal Wiki".'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):
