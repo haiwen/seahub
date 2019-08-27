@@ -154,7 +154,7 @@ def generate_links_header_for_paginator(base_url, page, per_page, total_count, o
         else:
             return False
 
-    if type(option_dict) is not dict:
+    if not isinstance(option_dict, dict):
         return ''
 
     query_dict = {'page': 1, 'per_page': per_page}

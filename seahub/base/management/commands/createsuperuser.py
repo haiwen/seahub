@@ -118,7 +118,7 @@ class Command(BaseCommand):
                 #         username = None
             
                 # Get an email
-                while 1:
+                while True:
                     if not email:
                         email = raw_input('E-mail address: ')
                     try:
@@ -130,7 +130,7 @@ class Command(BaseCommand):
                         break
             
                 # Get a password
-                while 1:
+                while True:
                     if not password:
                         password = getpass.getpass()
                         password2 = getpass.getpass('Password (again): ')
