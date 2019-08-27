@@ -34,11 +34,11 @@ def _get_next(request):
     3. If Django can determine the previous page from the HTTP headers, the view will
     redirect to that previous page.
     """
-    next = request.POST.get('next', request.GET.get('next',
+    next_page = request.POST.get('next', request.GET.get('next',
         request.META.get('HTTP_REFERER', None)))
-    if not next:
-        next = request.path
-    return next
+    if not next_page:
+        next_page = request.path
+    return next_page
 
 def _get_avatars(user):
     # Default set. Needs to be sliced, but that's it. Keep the natural order.
