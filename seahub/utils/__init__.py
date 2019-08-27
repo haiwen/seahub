@@ -59,6 +59,8 @@ try:
 except ImportError:
     CHECK_SHARE_LINK_TRAFFIC = False
 
+logger = logging.getLogger(__name__)
+
 # init Seafevents API
 if EVENTS_CONFIG_FILE:
     try:
