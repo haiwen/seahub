@@ -30,6 +30,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='wiki',
-            unique_together=set([('username', 'repo_id')]),
+            unique_together={('username', 'repo_id')},
         ),
     ]

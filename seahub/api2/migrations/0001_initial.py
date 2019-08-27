@@ -41,6 +41,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='tokenv2',
-            unique_together=set([('user', 'platform', 'device_id')]),
+            unique_together={('user', 'platform', 'device_id')},
         ),
     ]

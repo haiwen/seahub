@@ -47,6 +47,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='usertermsandconditions',
-            unique_together=set([('username', 'terms')]),
+            unique_together={('username', 'terms')},
         ),
     ]

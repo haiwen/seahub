@@ -28,6 +28,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='dtableshare',
-            unique_together=set([('dtable', 'to_user')]),
+            unique_together={('dtable', 'to_user')},
         ),
     ]

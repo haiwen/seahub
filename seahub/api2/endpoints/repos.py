@@ -90,7 +90,7 @@ class ReposView(APIView):
                         ret_corrupted=True)
 
             # Reduce memcache fetch ops.
-            modifiers_set = set([x.last_modifier for x in owned_repos])
+            modifiers_set = {x.last_modifier for x in owned_repos}
             for e in modifiers_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -141,8 +141,8 @@ class ReposView(APIView):
                     get_repos_with_admin_permission(email)
 
             # Reduce memcache fetch ops.
-            owners_set = set([x.user for x in shared_repos])
-            modifiers_set = set([x.last_modifier for x in shared_repos])
+            owners_set = {x.user for x in shared_repos}
+            modifiers_set = {x.last_modifier for x in shared_repos}
             for e in owners_set | modifiers_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -201,8 +201,8 @@ class ReposView(APIView):
             group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
 
             # Reduce memcache fetch ops.
-            share_from_set = set([x.user for x in group_repos])
-            modifiers_set = set([x.last_modifier for x in group_repos])
+            share_from_set = {x.user for x in group_repos}
+            modifiers_set = {x.last_modifier for x in group_repos}
             for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -243,8 +243,8 @@ class ReposView(APIView):
 
             # Reduce memcache fetch ops.
             owner_set = set(all_repo_owner)
-            share_from_set = set([x.user for x in public_repos])
-            modifiers_set = set([x.last_modifier for x in public_repos])
+            share_from_set = {x.user for x in public_repos}
+            modifiers_set = {x.last_modifier for x in public_repos}
             for e in modifiers_set | share_from_set | owner_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)

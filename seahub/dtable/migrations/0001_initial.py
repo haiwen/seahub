@@ -50,6 +50,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='dtables',
-            unique_together=set([('workspace', 'name')]),
+            unique_together={('workspace', 'name')},
         ),
     ]

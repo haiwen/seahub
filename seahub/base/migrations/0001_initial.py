@@ -126,6 +126,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='devicetoken',
-            unique_together=set([('token', 'user')]),
+            unique_together={('token', 'user')},
         ),
     ]

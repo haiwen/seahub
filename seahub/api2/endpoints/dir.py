@@ -83,8 +83,8 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
         contact_email_dict = {}
-        modifier_set = set([x.modifier for x in file_list])
-        lock_owner_set = set([x.lock_owner for x in file_list])
+        modifier_set = {x.modifier for x in file_list}
+        lock_owner_set = {x.lock_owner for x in file_list}
         for e in modifier_set | lock_owner_set:
             if e not in nickname_dict:
                 nickname_dict[e] = email2nickname(e)

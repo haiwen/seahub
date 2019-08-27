@@ -695,7 +695,7 @@ class Repos(APIView):
                         ret_corrupted=True)
 
             # Reduce memcache fetch ops.
-            modifiers_set = set([x.last_modifier for x in owned_repos])
+            modifiers_set = {x.last_modifier for x in owned_repos}
             for e in modifiers_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -753,8 +753,8 @@ class Repos(APIView):
                     get_repos_with_admin_permission(email)
 
             # Reduce memcache fetch ops.
-            owners_set = set([x.user for x in shared_repos])
-            modifiers_set = set([x.last_modifier for x in shared_repos])
+            owners_set = {x.user for x in shared_repos}
+            modifiers_set = {x.last_modifier for x in shared_repos}
             for e in owners_set | modifiers_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -819,8 +819,8 @@ class Repos(APIView):
             group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
 
             # Reduce memcache fetch ops.
-            share_from_set = set([x.user for x in group_repos])
-            modifiers_set = set([x.last_modifier for x in group_repos])
+            share_from_set = {x.user for x in group_repos}
+            modifiers_set = {x.last_modifier for x in group_repos}
             for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -863,8 +863,8 @@ class Repos(APIView):
             public_repos = list_inner_pub_repos(request)
 
             # Reduce memcache fetch ops.
-            share_from_set = set([x.user for x in public_repos])
-            modifiers_set = set([x.last_modifier for x in public_repos])
+            share_from_set = {x.user for x in public_repos}
+            modifiers_set = {x.last_modifier for x in public_repos}
             for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -2012,7 +2012,7 @@ def get_dir_file_recursively(username, repo_id, path, all_dirs):
         file_list =  [item for item in all_dirs if item['type'] == 'file']
         contact_email_dict = {}
         nickname_dict = {}
-        modifiers_set = set([x['modifier_email'] for x in file_list])
+        modifiers_set = {x['modifier_email'] for x in file_list}
         for e in modifiers_set:
             if e not in contact_email_dict:
                 contact_email_dict[e] = email2contact_email(e)
@@ -2084,7 +2084,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
     # Use dict to reduce memcache fetch cost in large for-loop.
     contact_email_dict = {}
     nickname_dict = {}
-    modifiers_set = set([x['modifier_email'] for x in file_list])
+    modifiers_set = {x['modifier_email'] for x in file_list}
     for e in modifiers_set:
         if e not in contact_email_dict:
             contact_email_dict[e] = email2contact_email(e)
@@ -4789,8 +4789,8 @@ class GroupRepos(APIView):
         # Use dict to reduce memcache fetch cost in large for-loop.
         contact_email_dict = {}
         nickname_dict = {}
-        owner_set = set([x.user for x in repos])
-        modifiers_set = set([x.modifier for x in repos])
+        owner_set = {x.user for x in repos}
+        modifiers_set = {x.modifier for x in repos}
         for e in owner_set | modifiers_set:
             if e not in contact_email_dict:
                 contact_email_dict[e] = email2contact_email(e)
