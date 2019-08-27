@@ -136,7 +136,7 @@ def gen_path_link(path, repo_name):
         paths.insert(0, repo_name)
         links.insert(0, '/')
 
-    zipped = zip(paths, links)
+    zipped = list(zip(paths, links))
 
     return zipped
 
