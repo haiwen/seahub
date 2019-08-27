@@ -272,27 +272,7 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
-    'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2',
     'seahub.base.accounts.AuthBackend',
-)
-
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_VERIFY_SSL = True
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/profile/'
-SOCIAL_AUTH_WEIXIN_WORK_AGENTID = ''
-SOCIAL_AUTH_WEIXIN_WORK_KEY = ''
-SOCIAL_AUTH_WEIXIN_WORK_SECRET = ''
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'seahub.social_core.pipeline.social_auth.social_user',
-    'seahub.social_core.pipeline.user.get_username',
-    'seahub.social_core.pipeline.user.create_user',
-    'seahub.social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    # 'social_core.pipeline.user.user_details',
-    'seahub.social_core.pipeline.user.save_profile',
 )
 
 ENABLE_OAUTH = False
