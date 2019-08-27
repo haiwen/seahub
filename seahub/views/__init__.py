@@ -937,7 +937,7 @@ def list_inner_pub_repos(request):
         return seaserv.list_org_inner_pub_repos(org_id, username)
 
     if not request.cloud_mode:
-        return seaserv.list_inner_pub_repos(username)
+        return seafile_api.get_inner_pub_repo_list(username)
 
     return []
 

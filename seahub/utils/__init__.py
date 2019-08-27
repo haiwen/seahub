@@ -351,7 +351,7 @@ def get_user_repos(username, org_id=None):
         if CLOUD_MODE:
             public_repos = []
         else:
-            public_repos = seaserv.list_inner_pub_repos(username)
+            public_repos = seafile_api.get_inner_pub_repo_list(username)
 
         for r in shared_repos + public_repos:
             # collumn names in shared_repo struct are not same as owned or group
