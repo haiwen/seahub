@@ -167,8 +167,8 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
             file_info_list.append(file_info)
 
-    dir_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    file_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    dir_info_list.sort(key=lambda x: x['name'].lower())
+    file_info_list.sort(key=lambda x: x['name'].lower())
 
     return dir_info_list, file_info_list
 
