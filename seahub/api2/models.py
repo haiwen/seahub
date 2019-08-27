@@ -27,7 +27,7 @@ class Token(models.Model):
 
     def generate_key(self):
         unique = str(uuid.uuid4())
-        return hmac.new(unique, digestmod=sha1).hexdigest()
+        return hmac.new(unique.encode('utf-8'), digestmod=sha1).hexdigest()
 
     def __unicode__(self):
         return self.key
@@ -172,7 +172,7 @@ class TokenV2(models.Model):
 
     def generate_key(self):
         unique = str(uuid.uuid4())
-        return hmac.new(unique, digestmod=sha1).hexdigest()
+        return hmac.new(unique.encode('utf-8'), digestmod=sha1).hexdigest()
 
     def __unicode__(self):
         return "TokenV2{user=%(user)s,device=%(device_name)s}" % \

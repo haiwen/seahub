@@ -14,7 +14,7 @@ from seahub.bisheng_office.settings import BISHENG_OFFICE_HOST_DOMAIN
 
 
 def get_hmac_hexdigest(key, msg):
-    hmac_obj = hmac.new(key, msg)
+    hmac_obj = hmac.new(key.encode('utf-8'), msg.encode('utf-8'))
     return hmac_obj.hexdigest()
 
 
