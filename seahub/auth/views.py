@@ -86,15 +86,18 @@ def _handle_login_form_valid(request, user, redirect_to, remember_me):
 @csrf_protect
 @never_cache
 def login(request, template_name='registration/login.html',
-          redirect_if_logged_in=None,
+          redirect_if_logged_in='libraries',
           redirect_field_name=REDIRECT_FIELD_NAME,
           authentication_form=AuthenticationForm):
     """Displays the login form and handles the login action."""
 
-    if request.user.is_authenticated() and redirect_if_logged_in:
-        return HttpResponseRedirect(reverse(redirect_if_logged_in))
-
     redirect_to = request.GET.get(redirect_field_name, '')
+    if request.user.is_authenticated():
+        if redirect_to:
+            return HttpResponseRedirect(redirect_to)
+        else:
+            return HttpResponseRedirect(reverse(redirect_if_logged_in))
+
     ip = get_remote_ip(request)
 
     if request.method == "POST":
