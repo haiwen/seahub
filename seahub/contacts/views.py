@@ -17,7 +17,6 @@ from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.decorators import user_mods_check
 from seahub.profile.models import Profile
 from seahub.utils import render_error, is_valid_email
-from seaserv import ccnet_rpc, ccnet_threaded_rpc
 from seahub.views import is_registered_user
 from seahub.settings import SITE_ROOT
 
