@@ -192,11 +192,11 @@ class Account(APIView):
         if name is not None:
             if len(name) > 64:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u'Name is too long (maximum is 64 characters)'))
+                        _('Name is too long (maximum is 64 characters)'))
 
             if "/" in name:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u"Name should not include '/'."))
+                        _("Name should not include '/'."))
 
         # argument check for list_in_address_book
         list_in_address_book = request.data.get("list_in_address_book", None)
@@ -211,18 +211,18 @@ class Account(APIView):
             loginid = loginid.strip()
             if loginid == "":
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                            _(u"Login id can't be empty"))
+                            _("Login id can't be empty"))
             usernamebyloginid = Profile.objects.get_username_by_login_id(loginid)
             if usernamebyloginid is not None:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                          _(u"Login id %s already exists." % loginid))
+                          _("Login id %s already exists." % loginid))
 
         # argument check for department
         department = request.data.get("department", None)
         if department is not None:
             if len(department) > 512:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u'Department is too long (maximum is 512 characters)'))
+                        _('Department is too long (maximum is 512 characters)'))
 
         # argument check for institution
         institution = request.data.get("institution", None)
@@ -256,7 +256,7 @@ class Account(APIView):
                         get_file_size_unit('MB')
                 if space_quota_mb > org_quota_mb:
                     return api_error(status.HTTP_400_BAD_REQUEST, \
-                            _(u'Failed to set quota: maximum quota is %d MB' % org_quota_mb))
+                            _('Failed to set quota: maximum quota is %d MB' % org_quota_mb))
 
         # argument check for is_trial
         is_trial = request.data.get("is_trial", None)

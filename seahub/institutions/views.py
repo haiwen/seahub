@@ -190,9 +190,9 @@ def user_remove(request, email):
     try:
         user = User.objects.get(email=email)
         user.delete()
-        messages.success(request, _(u'Successfully deleted %s') % user.username)
+        messages.success(request, _('Successfully deleted %s') % user.username)
     except User.DoesNotExist:
-        messages.error(request, _(u'Failed to delete: the user does not exist'))
+        messages.error(request, _('Failed to delete: the user does not exist'))
 
     return HttpResponseRedirect(next)
 
@@ -208,7 +208,7 @@ def user_set_quota(request, email):
     available_quota = get_institution_available_quota(request.user.institution)
     if available_quota < quota:
         result = {}
-        result['error'] = _(u'Failed to set quota: maximum quota is %d MB' % \
+        result['error'] = _('Failed to set quota: maximum quota is %d MB' % \
                             (available_quota / 10 ** 6))
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 

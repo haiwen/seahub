@@ -208,12 +208,12 @@ class Groups(APIView):
 
         # Check whether group name is validate.
         if not validate_group_name(group_name):
-            error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen, dot, single quote or underscore')
+            error_msg = _('Group name can only contain letters, numbers, blank, hyphen, dot, single quote or underscore')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
         if check_group_name_conflict(request, group_name):
-            error_msg = _(u'There is already a group with that name.')
+            error_msg = _('There is already a group with that name.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # create group.
@@ -284,12 +284,12 @@ class Group(APIView):
 
                 # Check whether group name is validate.
                 if not validate_group_name(new_group_name):
-                    error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
+                    error_msg = _('Group name can only contain letters, numbers, blank, hyphen or underscore')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 # Check whether group name is duplicated.
                 if check_group_name_conflict(request, new_group_name):
-                    error_msg = _(u'There is already a group with that name.')
+                    error_msg = _('There is already a group with that name.')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 seaserv.ccnet_threaded_rpc.set_group_name(group_id, new_group_name)
@@ -314,7 +314,7 @@ class Group(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 if is_group_owner(group_id, new_owner):
-                    error_msg = _(u'User %s is already group owner.') % new_owner
+                    error_msg = _('User %s is already group owner.') % new_owner
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 # transfer a group

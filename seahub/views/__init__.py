@@ -394,7 +394,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
 def repo_recycle_view(request, repo_id):
     if not seafile_api.get_dir_id_by_path(repo_id, '/') or \
         check_folder_permission(request, repo_id, '/') != 'rw':
-        return render_permission_error(request, _(u'Unable to view recycle page'))
+        return render_permission_error(request, _('Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
     referer = request.GET.get('referer', '') # for back to 'dir view' page
@@ -409,7 +409,7 @@ def dir_recycle_view(request, repo_id):
 
     if not seafile_api.get_dir_id_by_path(repo_id, dir_path) or \
         check_folder_permission(request, repo_id, dir_path) != 'rw':
-        return render_permission_error(request, _(u'Unable to view recycle page'))
+        return render_permission_error(request, _('Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
     referer = request.GET.get('referer', '') # for back to 'dir view' page
@@ -424,7 +424,7 @@ def repo_folder_trash(request, repo_id):
 
     if not seafile_api.get_dir_id_by_path(repo_id, path) or \
         check_folder_permission(request, repo_id, path) != 'rw':
-        return render_permission_error(request, _(u'Unable to view recycle page'))
+        return render_permission_error(request, _('Unable to view recycle page'))
 
     repo = get_repo(repo_id)
     if not repo:
@@ -469,7 +469,7 @@ def repo_history(request, repo_id):
     """
     user_perm = check_folder_permission(request, repo_id, '/')
     if not user_perm:
-        return render_permission_error(request, _(u'Unable to view library modification'))
+        return render_permission_error(request, _('Unable to view library modification'))
 
     repo = get_repo(repo_id)
     if not repo:
@@ -586,20 +586,20 @@ def repo_revert_history(request, repo_id):
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return render_error(request, _(u'Please specify history ID'))
+        return render_error(request, _('Please specify history ID'))
 
     try:
         seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, request.user.username)
         messages.success(request, _('Successfully restored the library.'))
     except SearpcError as e:
         if e.msg == 'Bad arguments':
-            return render_error(request, _(u'Invalid arguments.'))
+            return render_error(request, _('Invalid arguments.'))
         elif e.msg == 'No such repo':
-            return render_error(request, _(u'Library does not exist'))
+            return render_error(request, _('Library does not exist'))
         elif e.msg == "Commit doesn't exist":
-            return render_error(request, _(u'History you specified does not exist'))
+            return render_error(request, _('History you specified does not exist'))
         else:
-            return render_error(request, _(u'Unknown error'))
+            return render_error(request, _('Unknown error'))
 
     return HttpResponseRedirect(next)
 
@@ -814,12 +814,12 @@ def file_revisions(request, repo_id):
     """
     repo = get_repo(repo_id)
     if not repo:
-        error_msg = _(u"Library does not exist")
+        error_msg = _("Library does not exist")
         return render_error(request, error_msg)
 
     # perm check
     if not check_folder_permission(request, repo_id, '/'):
-        error_msg = _(u"Permission denied.")
+        error_msg = _("Permission denied.")
         return render_error(request, error_msg)
 
     path = request.GET.get('p', '/')
@@ -973,7 +973,7 @@ def i18n(request):
 def repo_download_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
-        return render_error(request, _(u'Library does not exist'))
+        return render_error(request, _('Library does not exist'))
 
     path = request.GET.get('p', '/')
     if path[-1] != '/':         # Normalize dir path
@@ -999,10 +999,10 @@ def repo_download_dir(request, repo_id):
                 repo.version, dir_id)
         except Exception as e:
             logger.error(str(e))
-            return render_error(request, _(u'Internal Error'))
+            return render_error(request, _('Internal Error'))
 
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
+            return render_error(request, _('Unable to download directory "%s": size is too large.') % dirname)
 
         is_windows = 0
         if is_windows_operating_system(request):
@@ -1018,10 +1018,10 @@ def repo_download_dir(request, repo_id):
                 repo_id, json.dumps(fake_obj_id), 'download-dir', request.user.username)
 
         if not token:
-            return render_error(request, _(u'Internal Server Error'))
+            return render_error(request, _('Internal Server Error'))
 
     else:
-        return render_error(request, _(u'Unable to download "%s"') % dirname )
+        return render_error(request, _('Unable to download "%s"') % dirname )
 
     url = gen_file_get_url(token, dirname)
     from seahub.views.file import send_file_access_msg

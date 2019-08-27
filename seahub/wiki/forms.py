@@ -14,18 +14,18 @@ class WikiCreateForm(forms.Form):
     """
     repo_name = forms.CharField(max_length=settings.MAX_FILE_NAME,
                                 error_messages={
-            'required': _(u'Name can\'t be empty'),
-            'max_length': _(u'Name is too long (maximum is 255 characters)')
+            'required': _('Name can\'t be empty'),
+            'max_length': _('Name is too long (maximum is 255 characters)')
             })
     repo_desc = forms.CharField(max_length=100, error_messages={
-            'required': _(u'Description can\'t be empty'),
-            'max_length': _(u'Description is too long (maximum is 100 characters)')
+            'required': _('Description can\'t be empty'),
+            'max_length': _('Description is too long (maximum is 100 characters)')
             })
 
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
         if not is_valid_dirent_name(repo_name):
-            error_msg = _(u'"%s" is not a valid name') % repo_name
+            error_msg = _('"%s" is not a valid name') % repo_name
             raise forms.ValidationError(error_msg)
         else:
             return repo_name

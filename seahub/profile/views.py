@@ -37,11 +37,11 @@ def edit_profile(request):
         form = form_class(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _(u'Successfully edited profile.'))
+            messages.success(request, _('Successfully edited profile.'))
 
             return HttpResponseRedirect(reverse('edit_profile'))
         else:
-            messages.error(request, _(u'Failed to edit profile'))
+            messages.error(request, _('Failed to edit profile'))
     else:
         profile = Profile.objects.get_profile_by_user(username)
         d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
@@ -186,7 +186,7 @@ def get_user_profile(request, user):
             data['user_nickname'] = profile.nickname
             data['user_intro'] = profile.intro
     else:
-        data['user_intro'] = _(u'Has not accepted invitation yet')
+        data['user_intro'] = _('Has not accepted invitation yet')
 
     if user == request.user.username or \
             Contact.objects.filter(user_email=request.user.username,
@@ -200,7 +200,7 @@ def get_user_profile(request, user):
 @login_required
 def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT:
-        messages.error(request, _(u'Permission denied.'))
+        messages.error(request, _('Permission denied.'))
         next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
         return HttpResponseRedirect(next)
 
@@ -210,7 +210,7 @@ def delete_user_account(request):
     username = request.user.username
 
     if username == 'demo@seafile.com':
-        messages.error(request, _(u'Demo account can not be deleted.'))
+        messages.error(request, _('Demo account can not be deleted.'))
         next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
         return HttpResponseRedirect(next)
 

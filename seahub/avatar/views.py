@@ -148,10 +148,10 @@ def delete(request, extra_context=None, next_override=None, *args, **kwargs):
     if request.method == 'POST':
         if delete_avatar_form.is_valid():
             ids = delete_avatar_form.cleaned_data['choices']
-            if unicode(avatar.id) in ids and avatars.count() > len(ids):
+            if str(avatar.id) in ids and avatars.count() > len(ids):
                 # Find the next best avatar, and set it as the new primary
                 for a in avatars:
-                    if unicode(a.id) not in ids:
+                    if str(a.id) not in ids:
                         a.primary = True
                         a.save()
                         avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)

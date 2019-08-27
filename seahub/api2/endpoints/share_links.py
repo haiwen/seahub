@@ -297,7 +297,7 @@ class ShareLinks(APIView):
         if s_type == 'f':
             fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
             if fs:
-                error_msg = _(u'Share link %s already exists.' % fs.token)
+                error_msg = _('Share link %s already exists.' % fs.token)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                     password, expire_date,
@@ -306,7 +306,7 @@ class ShareLinks(APIView):
         elif s_type == 'd':
             fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
             if fs:
-                error_msg = _(u'Share link %s already exists.' % fs.token)
+                error_msg = _('Share link %s already exists.' % fs.token)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             fs = FileShare.objects.create_dir_link(username, repo_id, path,
                                                     password, expire_date,

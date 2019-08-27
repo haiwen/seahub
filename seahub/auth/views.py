@@ -315,7 +315,7 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 form.save(**opts)
             except Exception as e:
                 logger.error(str(e))
-                messages.error(request, _(u'Failed to send email, please contact administrator.'))
+                messages.error(request, _('Failed to send email, please contact administrator.'))
                 return render(request, template_name, {
                         'form': form,
                         })

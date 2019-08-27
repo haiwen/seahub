@@ -41,7 +41,7 @@ class AddUserForm(forms.Form):
         should not include '/'
         """
         if "/" in self.cleaned_data["name"]:
-            raise forms.ValidationError(_(u"Name should not include '/'."))
+            raise forms.ValidationError(_("Name should not include '/'."))
 
         return self.cleaned_data["name"]
 
@@ -65,12 +65,12 @@ class RepoCreateForm(forms.Form):
     """
     repo_name = forms.CharField(max_length=settings.MAX_FILE_NAME,
                                 error_messages={
-            'required': _(u'Name can\'t be empty'),
-            'max_length': _(u'Name is too long (maximum is 255 characters)')
+            'required': _('Name can\'t be empty'),
+            'max_length': _('Name is too long (maximum is 255 characters)')
             })
     repo_desc = forms.CharField(max_length=100, error_messages={
-            'required': _(u'Description can\'t be empty'),
-            'max_length': _(u'Description is too long (maximum is 100 characters)')
+            'required': _('Description can\'t be empty'),
+            'max_length': _('Description is too long (maximum is 100 characters)')
             })
     encryption = forms.CharField(max_length=1)
     uuid = forms.CharField(required=False)
@@ -80,7 +80,7 @@ class RepoCreateForm(forms.Form):
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
         if not is_valid_dirent_name(repo_name):
-            error_msg = _(u"Name %s is not valid") % repo_name
+            error_msg = _("Name %s is not valid") % repo_name
             raise forms.ValidationError(error_msg)
         else:
             return repo_name
@@ -119,7 +119,7 @@ class RepoRenameDirentForm(forms.Form):
         newname = self.cleaned_data['newname']
         try:
             if not is_valid_dirent_name(newname):
-                error_msg = _(u'Name "%s" is not valid') % newname
+                error_msg = _('Name "%s" is not valid') % newname
                 raise forms.ValidationError(error_msg)
             else:
                 return newname
@@ -140,7 +140,7 @@ class RepoNewDirentForm(forms.Form):
         dirent_name = self.cleaned_data['dirent_name']
         try:
             if not is_valid_dirent_name(dirent_name):
-                error_msg = _(u'Name "%s" is not valid') % dirent_name
+                error_msg = _('Name "%s" is not valid') % dirent_name
                 raise forms.ValidationError(error_msg)
             else:
                 return dirent_name
@@ -166,7 +166,7 @@ class RepoSettingForm(forms.Form):
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
         if not is_valid_dirent_name(repo_name):
-            error_msg = _(u"Name %s is not valid") % repo_name
+            error_msg = _("Name %s is not valid") % repo_name
             raise forms.ValidationError(error_msg)
         else:
             return repo_name

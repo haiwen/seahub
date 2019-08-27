@@ -141,7 +141,7 @@ class Avatar(models.Model, AvatarBase):
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
     
     def __unicode__(self):
-        return _(u'Avatar for %s') % self.emailuser
+        return _('Avatar for %s') % self.emailuser
     
     def save(self, *args, **kwargs):
         avatars = Avatar.objects.filter(emailuser=self.emailuser)
@@ -169,7 +169,7 @@ class GroupAvatar(models.Model, AvatarBase):
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
     
     def __unicode__(self):
-        return _(u'Avatar for %s') % self.group_id
+        return _('Avatar for %s') % self.group_id
 
     def save(self, *args, **kwargs):
         super(GroupAvatar, self).save(*args, **kwargs)

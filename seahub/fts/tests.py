@@ -51,12 +51,12 @@ class BaseTest(LiveServerTestCase):
 
         # He is returned to myhome page
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn(u'Libraries', body.text)
+        self.assertIn('Libraries', body.text)
 
     def _logout_user(self, username=None, remove_user=True):
         if not username:
             username = self.username
-        self.browser.find_elements_by_link_text(u'Log out')[0].click()
+        self.browser.find_elements_by_link_text('Log out')[0].click()
         if remove_user:
             self._teardown_new_user(username)
         
@@ -67,7 +67,7 @@ class BaseTest(LiveServerTestCase):
 
         # He sees the login heading
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn(u'Log In', body.text)
+        self.assertIn('Log In', body.text)
 
         # He types username and password
         username_field = self.browser.find_element_by_name('username')
@@ -78,12 +78,12 @@ class BaseTest(LiveServerTestCase):
 
         # He is returned to myhome page
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn(u'Libraries', body.text)
+        self.assertIn('Libraries', body.text)
 
         # He logout
-        self.browser.find_elements_by_link_text(u'Log out')[0].click()
+        self.browser.find_elements_by_link_text('Log out')[0].click()
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn(u'Log In', body.text)
+        self.assertIn('Log In', body.text)
 
         self._teardown_new_user(self.username)
 
@@ -92,10 +92,10 @@ class BaseTest(LiveServerTestCase):
 
         self.browser.find_element_by_css_selector('.home-profile .avatar').click()
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn(u'Profile Setting', body.text)
+        self.assertIn('Profile Setting', body.text)
 
         nickname_field = self.browser.find_element_by_name('nickname')
-        nickname_field.send_keys(u'test_nickname2012')
+        nickname_field.send_keys('test_nickname2012')
 
         intro_field = self.browser.find_element_by_name('intro')
         intro_field.send_keys('Hi, My name is test.')
@@ -103,7 +103,7 @@ class BaseTest(LiveServerTestCase):
         self.browser.find_element_by_css_selector('.submit').click()
 
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn(u'Successfully', body.text)
+        self.assertIn('Successfully', body.text)
 
         self._logout_user()
 
@@ -115,8 +115,8 @@ class BaseTest(LiveServerTestCase):
 
         # He sees some input fields for "Name" and "description", etc
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn(u'Name', body.text)
-        self.assertIn(u'Description', body.text)
+        self.assertIn('Name', body.text)
+        self.assertIn('Description', body.text)
 
         # He types in an test repo
         reponame_field = self.browser.find_element_by_name('repo_name')

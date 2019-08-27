@@ -22,7 +22,7 @@ def escape(html):
     Returns the given HTML with ampersands, quotes and angle brackets encoded.
     """
     return mark_safe(force_unicode(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;'))
-escape = allow_lazy(escape, unicode)
+escape = allow_lazy(escape, str)
 
 ## modification of django's urlize, add '%' to safe:
 ##   urlquote('http://%s' % middle, safe='/&=:;#?+*%')
@@ -83,5 +83,5 @@ def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
             words[i] = mark_safe(word)
         elif autoescape:
             words[i] = escape(word)
-    return u''.join(words)
-urlize = allow_lazy(urlize, unicode)
+    return ''.join(words)
+urlize = allow_lazy(urlize, str)

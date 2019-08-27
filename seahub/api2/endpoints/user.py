@@ -70,7 +70,7 @@ class User(APIView):
         email = request.user.username
 
         if not ENABLE_UPDATE_USER_INFO:
-            error_msg = _(u'Feature disabled.')
+            error_msg = _('Feature disabled.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # argument check for name
@@ -78,11 +78,11 @@ class User(APIView):
         if name:
             name = name.strip()
             if len(name) > 64:
-                error_msg = _(u'Name is too long (maximum is 64 characters)')
+                error_msg = _('Name is too long (maximum is 64 characters)')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if "/" in name:
-                error_msg = _(u"Name should not include '/'.")
+                error_msg = _("Name should not include '/'.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # argument check for contact_email
@@ -90,7 +90,7 @@ class User(APIView):
         if contact_email:
             
             if not ENABLE_USER_SET_CONTACT_EMAIL:
-                error_msg = _(u'Feature disabled.')
+                error_msg = _('Feature disabled.')
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             profile = Profile.objects.get_profile_by_contact_email(contact_email)

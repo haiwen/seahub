@@ -147,7 +147,7 @@ class CopyMoveTaskView(APIView):
 
             # check if above quota for dst repo
             if seafile_api.check_quota(dst_repo_id, current_size) < 0:
-                return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+                return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         new_dirent_name = check_filename_with_rename(dst_repo_id,
                 dst_parent_dir, src_dirent_name)
@@ -162,7 +162,7 @@ class CopyMoveTaskView(APIView):
             if dirent_type == 'dir' and src_repo_id == dst_repo_id and \
                     dst_parent_dir.startswith(src_dirent_path + '/'):
 
-                error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
+                error_msg = _('Can not move directory %(src)s to its subdirectory %(des)s') \
                     % {'src': escape(src_dirent_path), 'des': escape(dst_parent_dir)}
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

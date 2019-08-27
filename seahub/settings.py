@@ -165,8 +165,8 @@ TEMPLATES = [
 
 LANGUAGES = (
     # ('bg', gettext_noop(u'български език')),
-    ('ca', u'Català'),
-    ('cs', u'Čeština'),
+    ('ca', 'Català'),
+    ('cs', 'Čeština'),
     ('de', 'Deutsch'),
     ('en', 'English'),
     ('es', 'Español'),

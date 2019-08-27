@@ -112,7 +112,7 @@ class RegistrationManager(models.Manager):
         """
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
         username = user.username
-        if isinstance(username, unicode):
+        if isinstance(username, str):
             username = username.encode('utf-8')
         activation_key = hashlib.sha1(salt+username).hexdigest()
         return self.create(emailuser_id=user.id,
@@ -184,7 +184,7 @@ class RegistrationProfile(models.Model):
     account registration and activation.
     
     """
-    ACTIVATED = u"ALREADY_ACTIVATED"
+    ACTIVATED = "ALREADY_ACTIVATED"
     
 #    user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
     emailuser_id = models.IntegerField()
@@ -197,7 +197,7 @@ class RegistrationProfile(models.Model):
         verbose_name_plural = _('registration profiles')
     
     def __unicode__(self):
-        return u"Registration information for %s" % self.emailuser_id
+        return "Registration information for %s" % self.emailuser_id
     
     def activation_key_expired(self):
         """

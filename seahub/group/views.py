@@ -190,7 +190,7 @@ def send_group_member_add_mail(request, group, from_user, to_user):
         'group': group,
         }
 
-    subject = _(u'You are invited to join a group on %s') % get_site_name()
+    subject = _('You are invited to join a group on %s') % get_site_name()
     send_html_email(subject, 'group/add_member_email.html', c, None, [to_user])
 
 ########## wiki
@@ -338,20 +338,20 @@ def group_wiki_create(request, group):
 
     repo_id = seafile_api.create_repo(repo_name, repo_desc, user)
     if not repo_id:
-        return json_error(_(u'Failed to create'), 500)
+        return json_error(_('Failed to create'), 500)
 
     try:
         seafile_api.set_group_repo(repo_id, group.id, user, permission)
     except SearpcError as e:
         remove_repo(repo_id)
-        return json_error(_(u'Failed to create: internal error.'), 500)
+        return json_error(_('Failed to create: internal error.'), 500)
 
     GroupWiki.objects.save_group_wiki(group_id=group.id, repo_id=repo_id)
 
     # create home page
     page_name = "home.md"
     if not post_empty_file(repo_id, "/", page_name, user):
-        return json_error(_(u'Failed to create home page. Please retry later'), 500)
+        return json_error(_('Failed to create home page. Please retry later'), 500)
 
     next = reverse('group_wiki', args=[group.id])
     return HttpResponse(json.dumps({'href': next}), content_type=content_type)

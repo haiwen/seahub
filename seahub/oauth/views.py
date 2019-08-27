@@ -174,7 +174,7 @@ def oauth_callback(request):
     if not user or not user.is_active:
         logger.error('User %s not found or inactive.' % email)
         # a page for authenticate user failed
-        return render_error(request, _(u'User %s not found.') % email)
+        return render_error(request, _('User %s not found.') % email)
 
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.

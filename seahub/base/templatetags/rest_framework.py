@@ -97,7 +97,7 @@ def add_class(value, css_class):
     In the case of REST Framework, the filter is used to add Bootstrap-specific
     classes to the forms.
     """
-    html = unicode(value)
+    html = str(value)
     match = class_re.search(html)
     if match:
         m = re.search(r'^%s$|^%s\s|\s%s\s|\s%s$' % (css_class, css_class,
@@ -167,4 +167,4 @@ def urlize_quoted_links(text, trim_url_limit=None, nofollow=True, autoescape=Tru
             words[i] = mark_safe(word)
         elif autoescape:
             words[i] = escape(word)
-    return mark_safe(u''.join(words))
+    return mark_safe(''.join(words))

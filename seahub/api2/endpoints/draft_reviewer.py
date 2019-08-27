@@ -67,7 +67,7 @@ class DraftReviewerView(APIView):
             if not is_valid_username(reviewer):
                 result['failed'].append({
                     'email': reviewer,
-                    'error_msg': _(u'username invalid.')
+                    'error_msg': _('username invalid.')
                     })
                 continue
 
@@ -76,7 +76,7 @@ class DraftReviewerView(APIView):
             except User.DoesNotExist:
                 result['failed'].append({
                     'email': reviewer,
-                    'error_msg': _(u'User %s not found.') % reviewer
+                    'error_msg': _('User %s not found.') % reviewer
                     })
                 continue
 
@@ -93,7 +93,7 @@ class DraftReviewerView(APIView):
             origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
             # check perm
             if seafile_api.check_permission_by_path(d.origin_repo_id, origin_file_path, reviewer) != 'rw':
-                error_msg = _(u'Permission denied.')
+                error_msg = _('Permission denied.')
                 result['failed'].append({
                     'email': reviewer,
                     'error_msg': error_msg
@@ -101,7 +101,7 @@ class DraftReviewerView(APIView):
                 continue
 
             if DraftReviewer.objects.filter(draft=d, reviewer=reviewer):
-                error_msg = u'Reviewer %s has existed.' % reviewer
+                error_msg = 'Reviewer %s has existed.' % reviewer
                 result['failed'].append({
                     'email': reviewer,
                     'error_msg': error_msg

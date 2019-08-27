@@ -15,7 +15,7 @@ class StarredFileTest(BaseTestCase, Fixtures):
                          is_dir=False).save()
         self.unicode_file = self.create_file(repo_id=self.repo.id,
                                              parent_dir='/',
-                                             filename=u'März_中文_%2F_FG2_SW#1a.jpg',
+                                             filename='März_中文_%2F_FG2_SW#1a.jpg',
                                              username=self.user.username)
 
     def tearDown(self):

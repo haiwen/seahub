@@ -106,11 +106,11 @@ class AccountsApiTest(ApiTestBase):
 
     def test_auth_ping(self):
         res = self.get(AUTH_PING_URL)
-        self.assertRegex(res.text, u'"pong"')
+        self.assertRegex(res.text, '"pong"')
         res = requests.get(AUTH_PING_URL)
         self.assertEqual(res.status_code, 403)
 
     def test_ping(self):
         res = requests.get(PING_URL)
-        self.assertRegex(res.text, u'"pong"')
+        self.assertRegex(res.text, '"pong"')
         self.assertEqual(res.status_code, 200)

@@ -186,14 +186,14 @@ def translate_commit_desc(value):
 
             if has_more:
                 if translation.get_language() == 'zh-cn':
-                    typ = u'文件' if more_type == 'files' else u'目录'
-                    ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个' + typ + '.'
+                    typ = '文件' if more_type == 'files' else '目录'
+                    ret = op_trans + ' "' + file_name + '"以及另外' + n_files + '个' + typ + '.'
                 # elif translation.get_language() == 'ru':
                 #     ret = ...
                 else:
                     ret = e
             else:
-                ret = op_trans + u' "' + file_name + u'".'
+                ret = op_trans + ' "' + file_name + '".'
             ret_list.append(ret)
 
         return '\n'.join(ret_list)
@@ -258,14 +258,14 @@ def translate_commit_desc_escape(value):
 
             if has_more:
                 if translation.get_language() == 'zh-cn':
-                    typ = u'文件' if more_type == 'files' else u'目录'
-                    ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个' + typ + '.'
+                    typ = '文件' if more_type == 'files' else '目录'
+                    ret = op_trans + ' "' + file_name + '"以及另外' + n_files + '个' + typ + '.'
                 # elif translation.get_language() == 'ru':
                 #     ret = ...
                 else:
                     ret = e
             else:
-                ret = op_trans + u' "' + file_name + u'".'
+                ret = op_trans + ' "' + file_name + '".'
 
             # if not match, this commit desc will not convert link, so
             # escape it
@@ -461,9 +461,9 @@ def char2pinyin(value):
 @register.filter(name='translate_permission')
 def translate_permission(value):
     if value == 'rw':
-        return _(u'Read-Write')
+        return _('Read-Write')
     elif value == 'r':
-        return _(u'Read-Only')
+        return _('Read-Only')
     else:
         return ''
 

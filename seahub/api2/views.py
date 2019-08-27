@@ -345,11 +345,11 @@ class AccountInfo(APIView):
         if name is not None:
             if len(name) > 64:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u'Name is too long (maximum is 64 characters)'))
+                        _('Name is too long (maximum is 64 characters)'))
 
             if "/" in name:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u"Name should not include '/'."))
+                        _("Name should not include '/'."))
 
         email_interval = request.data.get("email_notification_interval", None)
         if email_interval is not None:
@@ -1583,7 +1583,7 @@ class RepoOwner(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
-            error_msg = _(u'User %s not found in organization.') % new_owner
+            error_msg = _('User %s not found in organization.') % new_owner
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -1598,12 +1598,12 @@ class RepoOwner(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not new_owner_obj.permissions.can_add_repo():
-            error_msg = _(u'Transfer failed: role of %s is %s, can not add library.') % \
+            error_msg = _('Transfer failed: role of %s is %s, can not add library.') % \
                     (new_owner, new_owner_obj.role)
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if new_owner == repo_owner:
-            error_msg = _(u"Library can not be transferred to owner.")
+            error_msg = _("Library can not be transferred to owner.")
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         pub_repos = []
@@ -1741,7 +1741,7 @@ class FileBlockDownloadLinkView(APIView):
                     'You do not have permission to access this repo.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, 'downloadblks', request.user.username)
@@ -1777,7 +1777,7 @@ class UploadLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1825,7 +1825,7 @@ class UpdateLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update', request.user.username, use_onetime=False)
@@ -1869,7 +1869,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
@@ -1914,7 +1914,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1962,7 +1962,7 @@ class UpdateBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update-blks-api', request.user.username, use_onetime=False)
@@ -2373,7 +2373,7 @@ class OpMoveView(APIView):
 
             # check if above quota for dst repo
             if seafile_api.check_quota(dst_repo, total_size) < 0:
-                return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+                return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
@@ -2487,7 +2487,7 @@ class OpCopyView(APIView):
 
         # check if above quota for dst repo
         if seafile_api.check_quota(dst_repo, total_size) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
@@ -3786,13 +3786,13 @@ class DirSubRepoView(APIView):
                         error_msg = 'Bad arguments'
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                     elif e.msg == 'Incorrect password':
-                        error_msg = _(u'Wrong password')
+                        error_msg = _('Wrong password')
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                     elif e.msg == 'Internal server error':
-                        error_msg = _(u'Internal server error')
+                        error_msg = _('Internal server error')
                         return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
                     else:
-                        error_msg = _(u'Decrypt library error')
+                        error_msg = _('Decrypt library error')
                         return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             # create sub-lib for encrypted repo

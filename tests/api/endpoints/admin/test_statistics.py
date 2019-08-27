@@ -18,10 +18,10 @@ class FileOperationsInfoText(BaseTestCase):
     @patch("seahub.api2.endpoints.admin.statistics.get_file_ops_stats_by_day")
     def test_can_get_file_audit_stats(self, mock_get_file_audit_stats_by_day, mock_is_pro, mock_events_enabled):
         mock_get_file_audit_stats_by_day.return_value = [
-            (datetime.datetime(2017, 6, 2, 4, 2), u'Added', 2),
-            (datetime.datetime(2017, 6, 2, 4, 2), u'Deleted', 2),
-            (datetime.datetime(2017, 6, 2, 4, 2), u'Visited', 2),
-            (datetime.datetime(2017, 6, 2, 4, 2), u'Modified', 2),
+            (datetime.datetime(2017, 6, 2, 4, 2), 'Added', 2),
+            (datetime.datetime(2017, 6, 2, 4, 2), 'Deleted', 2),
+            (datetime.datetime(2017, 6, 2, 4, 2), 'Visited', 2),
+            (datetime.datetime(2017, 6, 2, 4, 2), 'Modified', 2),
         ]
         mock_is_pro.return_value = True
         mock_events_enabled = True
@@ -72,8 +72,8 @@ class FileOperationsInfoText(BaseTestCase):
     @patch("seahub.api2.endpoints.admin.statistics.get_system_traffic_by_day")
     def test_can_get_system_traffic(self, mock_get_system_traffic_by_day, mock_is_pro, mock_events_enabled):
         mock_get_system_traffic_by_day.return_value = [
-            (datetime.datetime(2018, 8, 23, 0, 0), u'sync-file-download', 131793),
-            (datetime.datetime(2018, 8, 23, 0, 0), u'web-file-download', 13),
+            (datetime.datetime(2018, 8, 23, 0, 0), 'sync-file-download', 131793),
+            (datetime.datetime(2018, 8, 23, 0, 0), 'web-file-download', 13),
         ]
         mock_is_pro.return_value = True
         mock_events_enabled = True

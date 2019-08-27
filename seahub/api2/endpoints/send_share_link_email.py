@@ -30,7 +30,7 @@ class SendShareLinkView(APIView):
     def post(self, request):
 
         if not IS_EMAIL_CONFIGURED:
-            error_msg = _(u'Sending shared link failed. Email service is not properly configured, please contact administrator.')
+            error_msg = _('Sending shared link failed. Email service is not properly configured, please contact administrator.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check args
@@ -97,11 +97,11 @@ class SendShareLinkView(APIView):
             template = 'shared_link_email.html'
 
             if link.s_type == 'f':
-                c['file_shared_type'] = _(u"file")
-                title = _(u'A file is shared to you on %s') % get_site_name()
+                c['file_shared_type'] = _("file")
+                title = _('A file is shared to you on %s') % get_site_name()
             else:
-                c['file_shared_type'] = _(u"directory")
-                title = _(u'A directory is shared to you on %s') % get_site_name()
+                c['file_shared_type'] = _("directory")
+                title = _('A directory is shared to you on %s') % get_site_name()
 
             # send email
             try:

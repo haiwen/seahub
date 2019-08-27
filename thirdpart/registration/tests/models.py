@@ -41,7 +41,7 @@ class RegistrationModelTests(TestCase):
         self.assertEqual(RegistrationProfile.objects.count(), 1)
         self.assertEqual(profile.user.id, new_user.id)
         self.assertTrue(re.match('^[a-f0-9]{40}$', profile.activation_key))
-        self.assertEqual(unicode(profile),
+        self.assertEqual(str(profile),
                          "Registration information for alice")
 
     def test_activation_email(self):

@@ -57,7 +57,7 @@ class FilesApiTest(ApiTestBase):
             assert_in(tmp_file, res.text)
 
             # get info of copied file in dst dir('/')
-            fdurl = repo.file_url + u'detail/?p=/%s' % quote(tmp_file)
+            fdurl = repo.file_url + 'detail/?p=/%s' % quote(tmp_file)
             detail = self.get(fdurl).json()
             self.assertIsNotNone(detail)
             self.assertIsNotNone(detail['id'])
@@ -124,7 +124,7 @@ class FilesApiTest(ApiTestBase):
             assert_in(tmp_file, res.text)
 
             # get info of copied file in dst dir('/')
-            fdurl = repo.file_url + u'detail/?p=/%s' % quote(tmp_file)
+            fdurl = repo.file_url + 'detail/?p=/%s' % quote(tmp_file)
             detail = self.get(fdurl).json()
             self.assertIsNotNone(detail)
             self.assertIsNotNone(detail['id'])
@@ -210,7 +210,7 @@ class FilesApiTest(ApiTestBase):
     def test_get_file_detail(self):
         with self.get_tmp_repo() as repo:
             fname, _ = self.create_file(repo)
-            fdurl = repo.file_url + u'detail/?p=/%s' % quote(fname)
+            fdurl = repo.file_url + 'detail/?p=/%s' % quote(fname)
             detail = self.get(fdurl).json()
             self.assertIsNotNone(detail)
             self.assertIsNotNone(detail['id'])
@@ -226,7 +226,7 @@ class FilesApiTest(ApiTestBase):
     def test_get_file_history(self):
         with self.get_tmp_repo() as repo:
             fname, _ = self.create_file(repo)
-            fhurl = repo.file_url + u'history/?p=%s' % quote(fname)
+            fhurl = repo.file_url + 'history/?p=%s' % quote(fname)
             history = self.get(fhurl).json()
             for commit in history['commits']:
                 self.assertIsNotNone(commit['rev_file_size'])
@@ -395,13 +395,13 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             _, durl = self.create_dir(repo)
             res = self.delete(durl)
-            self.assertEqual(res.text, u'"success"')
+            self.assertEqual(res.text, '"success"')
             self.get(durl, expected=404)
 
     @pytest.mark.xfail
     def test_create_dir_with_parents(self):
         with self.get_tmp_repo() as repo:
-            path = u'/level1/level 2/level_3/目录4'
+            path = '/level1/level 2/level_3/目录4'
             self.create_dir_with_parents(repo, path)
 
     def create_dir_with_parents(self, repo, path):

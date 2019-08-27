@@ -65,7 +65,7 @@ class AnonymousUser(object):
         return 'AnonymousUser'
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __eq__(self, other):
         return isinstance(other, self.__class__)

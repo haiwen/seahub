@@ -21,10 +21,10 @@ class ProfileForm(forms.Form):
         Validates that nickname should not include '/'
         """
         if not ENABLE_UPDATE_USER_INFO:
-            raise forms.ValidationError(_(u"Permission denied."))
+            raise forms.ValidationError(_("Permission denied."))
 
         if "/" in self.cleaned_data["nickname"]:
-            raise forms.ValidationError(_(u"Name should not include '/'."))
+            raise forms.ValidationError(_("Name should not include '/'."))
 
         return self.cleaned_data["nickname"]
 

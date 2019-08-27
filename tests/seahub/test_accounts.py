@@ -26,7 +26,7 @@ class LoginTest(TestCase):
         })
         assert resp.status_code == 200
         assert resp.context['form'].errors['__all__'] == [
-            u'Please enter a correct email/username and password. Note that both fields are case-sensitive.'
+            'Please enter a correct email/username and password. Note that both fields are case-sensitive.'
         ]
 
 

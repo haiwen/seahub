@@ -5,12 +5,12 @@ TOKEN_URL = apiurl('/api2/auth-token/')
 AUTH_PING_URL = apiurl('/api2/auth/ping/')
 
 ACCOUNTS_URL = apiurl('/api2/accounts/')
-AVATAR_BASE_URL = apiurl(u'/api2/avatars/')
+AVATAR_BASE_URL = apiurl('/api2/avatars/')
 
 REPOS_URL = apiurl('/api2/repos/')
 GET_REPO_TOKENS_URL = apiurl('/api2/repo-tokens/')
 
-GROUPS_URL = apiurl(u'/api2/groups/')
+GROUPS_URL = apiurl('/api2/groups/')
 
 USERMSGS_COUNT_URL = apiurl('/api2/unseen_messages/')
 

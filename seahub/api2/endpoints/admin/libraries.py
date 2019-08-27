@@ -342,7 +342,7 @@ class AdminLibrary(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             if not new_owner_obj.permissions.can_add_repo():
-                error_msg = _(u'Transfer failed: role of %s is %s, can not add library.') % \
+                error_msg = _('Transfer failed: role of %s is %s, can not add library.') % \
                         (new_owner, new_owner_obj.role)
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -363,7 +363,7 @@ class AdminLibrary(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
             if new_owner == repo_owner:
-                error_msg = _(u"Library can not be transferred to owner.")
+                error_msg = _("Library can not be transferred to owner.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             # get repo shared to user/group list

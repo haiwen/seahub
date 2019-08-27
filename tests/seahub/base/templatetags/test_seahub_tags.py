@@ -35,7 +35,7 @@ class Email2nicknameTest(BaseTestCase):
 
 class SeahubFilesizeformatTest(BaseTestCase):
     def test_seahub_filesizeformat(self):
-        assert seahub_filesizeformat(1) == u'1\xa0byte'
-        assert seahub_filesizeformat(1000) == u'1.0\xa0KB'
-        assert seahub_filesizeformat(1000000) == u'1.0\xa0MB'
-        assert seahub_filesizeformat(1000000000) == u'1.0\xa0GB'
+        assert seahub_filesizeformat(1) == '1\xa0byte'
+        assert seahub_filesizeformat(1000) == '1.0\xa0KB'
+        assert seahub_filesizeformat(1000000) == '1.0\xa0MB'
+        assert seahub_filesizeformat(1000000000) == '1.0\xa0GB'

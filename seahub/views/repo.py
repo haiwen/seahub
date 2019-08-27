@@ -108,7 +108,7 @@ def repo_history_view(request, repo_id):
     path = get_path_from_request(request)
     user_perm = check_folder_permission(request, repo.id, '/')
     if user_perm is None:
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
@@ -164,7 +164,7 @@ def repo_snapshot(request, repo_id):
     username = request.user.username
     user_perm = check_folder_permission(request, repo.id, '/')
     if user_perm is None:
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
@@ -216,7 +216,7 @@ def view_lib_as_wiki(request, repo_id, path):
 
     user_perm = check_folder_permission(request, repo.id, '/')
     if user_perm is None:
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     if user_perm == 'rw':
         user_can_write = True
@@ -269,7 +269,7 @@ def view_shared_dir(request, fileshare):
 
     if repo.encrypted or not \
             seafile_api.check_permission_by_path(repo_id, '/', username):
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     # Check path still exist, otherwise show error
     if not seafile_api.get_dir_id_by_path(repo.id, fileshare.path):
@@ -324,7 +324,7 @@ def view_shared_dir(request, fileshare):
     template = 'view_shared_dir_react.html'
 
     dir_share_link = request.path
-    desc_for_ogp = _(u'Share link for %s.') % dir_name
+    desc_for_ogp = _('Share link for %s.') % dir_name
 
     return render(request, template, {
             'repo': repo,
@@ -374,7 +374,7 @@ def view_shared_upload_link(request, uploadlink):
 
     if repo.encrypted or \
             seafile_api.check_permission_by_path(repo_id, '/', username) != 'rw':
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     uploadlink.view_cnt = F('view_cnt') + 1
     uploadlink.save()

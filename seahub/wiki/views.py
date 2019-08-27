@@ -70,7 +70,7 @@ def slug(request, slug, file_path="home.md"):
         return redirect('auth_login')
     else:
         if not wiki.has_read_perm(request):
-            return render_permission_error(request, _(u'Unable to view Wiki'))
+            return render_permission_error(request, _('Unable to view Wiki'))
 
     file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
     if file_type == IMAGE:

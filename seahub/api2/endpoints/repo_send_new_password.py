@@ -41,7 +41,7 @@ class RepoSendNewPassword(APIView):
 
         if not ENABLE_RESET_ENCRYPTED_REPO_PASSWORD or \
                 not IS_EMAIL_CONFIGURED:
-            error_msg = _(u'Feature disabled.')
+            error_msg = _('Feature disabled.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
@@ -62,14 +62,14 @@ class RepoSendNewPassword(APIView):
 
         secret_key =  RepoSecretKey.objects.get_secret_key(repo_id)
         if not secret_key:
-            error_msg = _(u"Can not reset this library's password.")
+            error_msg = _("Can not reset this library's password.")
             return api_error(HTTP_520_OPERATION_FAILED, error_msg)
 
         new_password = get_random_string(10)
         try:
             seafile_api.reset_repo_passwd(repo_id, username, secret_key, new_password)
             content = {'repo_name': repo.name, 'password': new_password,}
-            send_html_email(_(u'New password of library %s') % repo.name,
+            send_html_email(_('New password of library %s') % repo.name,
                     'snippets/reset_repo_password.html', content,
                     None, [email2contact_email(username)])
         except Exception as e:

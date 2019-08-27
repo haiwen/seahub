@@ -171,14 +171,14 @@ def personal_wiki_create(request):
 
     repo_id = seafile_api.create_repo(repo_name, repo_desc, username)
     if not repo_id:
-        return json_error(_(u'Failed to create'), 500)
+        return json_error(_('Failed to create'), 500)
 
     PersonalWiki.objects.save_personal_wiki(username=username, repo_id=repo_id)
 
     # create home page
     page_name = "home.md"
     if not seaserv.post_empty_file(repo_id, "/", page_name, username):
-        return json_error(_(u'Failed to create home page. Please retry later'), 500)
+        return json_error(_('Failed to create home page. Please retry later'), 500)
 
     next = reverse('personal_wiki', args=[])
     return HttpResponse(json.dumps({'href': next}), content_type=content_type)

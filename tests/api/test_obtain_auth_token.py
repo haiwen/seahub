@@ -58,7 +58,7 @@ class ObtainAuthTokenTest(BaseTestCase):
 
         self.assertEqual(400, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['username'] == [u'This field may not be blank.']
+        assert json_resp['username'] == ['This field may not be blank.']
 
     def test_can_obtain_token_v2(self):
         resp = self.client.post(TOKEN_URL, {

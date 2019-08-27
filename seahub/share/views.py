@@ -131,7 +131,7 @@ def send_shared_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error':_(u'Sending shared link failed. Email service is not properly configured, please contact administrator.')})
+        data = json.dumps({'error':_('Sending shared link failed. Email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
     form = FileLinkShareForm(request.POST)
@@ -180,15 +180,15 @@ def send_shared_link(request):
 
             try:
                 if file_shared_type == 'f':
-                    c['file_shared_type'] = _(u"file")
-                    send_html_email(_(u'A file is shared to you on %s') % get_site_name(),
+                    c['file_shared_type'] = _("file")
+                    send_html_email(_('A file is shared to you on %s') % get_site_name(),
                                     'shared_link_email.html',
                                     c, from_email, [to_email],
                                     reply_to=reply_to
                                     )
                 else:
-                    c['file_shared_type'] = _(u"directory")
-                    send_html_email(_(u'A directory is shared to you on %s') % get_site_name(),
+                    c['file_shared_type'] = _("directory")
+                    send_html_email(_('A directory is shared to you on %s') % get_site_name(),
                                     'shared_link_email.html',
                                     c, from_email, [to_email],
                                     reply_to=reply_to)
@@ -221,7 +221,7 @@ def save_shared_link(request):
         next = SITE_ROOT
 
     if not dst_repo_id or not dst_path:
-        messages.error(request, _(u'Please choose a directory.'))
+        messages.error(request, _('Please choose a directory.'))
         return HttpResponseRedirect(next)
 
     if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
@@ -243,7 +243,7 @@ def save_shared_link(request):
                           dst_repo_id, dst_path, new_obj_name, username,
                           need_progress=0)
 
-    messages.success(request, _(u'Successfully saved.'))
+    messages.success(request, _('Successfully saved.'))
     return HttpResponseRedirect(next)
 
 @login_required_ajax
@@ -257,7 +257,7 @@ def send_shared_upload_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error':_(u'Sending shared upload link failed. Email service is not properly configured, please contact administrator.')})
+        data = json.dumps({'error':_('Sending shared upload link failed. Email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
     form = UploadLinkShareForm(request.POST)
@@ -298,7 +298,7 @@ def send_shared_upload_link(request):
                 reply_to = None
 
             try:
-                send_html_email(_(u'An upload link is shared to you on %s') % get_site_name(),
+                send_html_email(_('An upload link is shared to you on %s') % get_site_name(),
                                 'shared_upload_link_email.html',
                                 c, from_email, [to_email],
                                 reply_to=reply_to)
@@ -329,11 +329,11 @@ def ajax_private_share_dir(request):
 
     repo = seafile_api.get_repo(repo_id)
     if not repo:
-        result['error'] = _(u'Library does not exist.')
+        result['error'] = _('Library does not exist.')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     if seafile_api.get_dir_id_by_path(repo_id, path) is None:
-        result['error'] = _(u'Directory does not exist.')
+        result['error'] = _('Directory does not exist.')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     if path != '/':
@@ -382,7 +382,7 @@ def ajax_private_share_dir(request):
     # Test whether user is the repo owner.
     if not seafile_api.is_repo_owner(username, shared_repo_id) and \
             not is_org_repo_owner(username, shared_repo_id):
-        result['error'] = _(u'Only the owner of the library has permission to share it.')
+        result['error'] = _('Only the owner of the library has permission to share it.')
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
     # Parsing input values.

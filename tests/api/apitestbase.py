@@ -198,7 +198,7 @@ class ApiTestBase(unittest.TestCase):
         dpath = '/目录 %s' % randstring()
         durl = repo.get_dirpath_url(dpath)
         res = self.post(durl, data=data, expected=201)
-        self.assertEqual(res.text, u'"success"')
+        self.assertEqual(res.text, '"success"')
         return dpath, durl
 
 

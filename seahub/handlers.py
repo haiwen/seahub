@@ -50,7 +50,7 @@ try:
         library_template = kwargs['library_template']
 
         if LIBRARY_TEMPLATES and library_template:
-            if isinstance(library_template, unicode):
+            if isinstance(library_template, str):
                 library_template = library_template.encode('utf-8')
 
             try:
