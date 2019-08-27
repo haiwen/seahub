@@ -2214,7 +2214,7 @@ def sys_settings(request):
                 result['error'] = _('Invalid value')
                 return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-            if key == 'USER_PASSWORD_STRENGTH_LEVEL' and value not in (1,2,3,4):
+            if key == 'USER_PASSWORD_STRENGTH_LEVEL' and value not in (1, 2, 3, 4):
                 result['error'] = _('Invalid value')
                 return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 

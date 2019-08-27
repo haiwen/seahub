@@ -10,7 +10,7 @@ from django.db import models
 from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.utils import normalize_file_path,normalize_dir_path
+from seahub.utils import normalize_file_path, normalize_dir_path
 
 
 ########## Manager

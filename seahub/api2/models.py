@@ -176,7 +176,7 @@ class TokenV2(models.Model):
 
     def __unicode__(self):
         return "TokenV2{user=%(user)s,device=%(device_name)s}" % \
-            dict(user=self.user,device_name=self.device_name)
+            dict(user=self.user, device_name=self.device_name)
 
     def is_desktop_client(self):
         return str(self.platform) in ('windows', 'linux', 'mac')

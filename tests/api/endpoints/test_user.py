@@ -20,13 +20,13 @@ def generate_random_parammeter(min_len, max_len, param_type):
         return random_nickname, random_nickname_length
 
     elif param_type == 'telephone':
-        random_telephone_length = random.randint(min_len,max_len)
+        random_telephone_length = random.randint(min_len, max_len)
         random_telephone = ''.join(random.choice(string.digits) for _ in range(random_telephone_length))
         return random_telephone, random_telephone_length
 
     elif param_type == 'contact_email':
-        random_pre_length = random.randint(1,50)
-        random_post_length = random.randint(1,20)
+        random_pre_length = random.randint(1, 50)
+        random_post_length = random.randint(1, 20)
         random_contact_email = ''.join(random.choice(string.digits + string.ascii_letters) for _ in range(random_pre_length))\
             + '@' \
             + ''.join(random.choice(string.digits + string.ascii_letters) for _ in range(random_pre_length))\
@@ -34,7 +34,7 @@ def generate_random_parammeter(min_len, max_len, param_type):
         return random_contact_email
 
     elif param_type == 'contact_email_invalid':
-        random_contact_email_length = random.randint(1,100)
+        random_contact_email_length = random.randint(1, 100)
         random_contact_email = ''.join(random.choice(string.digits + string.ascii_letters) for _ in range(random_contact_email_length))
         return random_contact_email
 
@@ -56,7 +56,7 @@ class AccountTest(BaseTestCase):
 
         self.login_as(self.user)
 
-        random_login_id = generate_random_parammeter(0,0,'login_id')
+        random_login_id = generate_random_parammeter(0, 0, 'login_id')
         random_telephone, _ = generate_random_parammeter(1, 100, 'telephone')
 
         Profile.objects.add_or_update(
@@ -107,7 +107,7 @@ class AccountTest(BaseTestCase):
 
         self.login_as(self.user)
         Profile.objects.add_or_update(self.user_name)
-        DetailedProfile.objects.add_or_update(self.user_name, department='' ,telephone='')
+        DetailedProfile.objects.add_or_update(self.user_name, department='', telephone='')
 
         # test can successfully change telephone
         random_telephone, _ = generate_random_parammeter(1, 100, 'telephone')

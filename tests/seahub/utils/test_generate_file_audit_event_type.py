@@ -31,7 +31,7 @@ class GenerateFileAuditEventTypeTest(BaseTestCase):
             'unknow-type-no-device': '',
         }
 
-        for key,value in list(event_type_device.items()):
+        for key, value in list(event_type_device.items()):
 
             e = Events(key, value)
 

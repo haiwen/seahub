@@ -104,12 +104,12 @@ def get_groups(email):
         if len(msg) >= 1:
             mtime = get_timestamp(msg[0].timestamp)
         group = {
-            "id":g.id,
-            "name":g.group_name,
-            "creator":g.creator_name,
-            "ctime":g.timestamp,
-            "mtime":mtime,
-            "msgnum":grpmsgs[g.id],
+            "id": g.id,
+            "name": g.group_name,
+            "creator": g.creator_name,
+            "ctime": g.timestamp,
+            "mtime": mtime,
+            "msgnum": grpmsgs[g.id],
             }
         group_json.append(group)
 
@@ -227,11 +227,11 @@ def group_msg_to_json(msg, get_all_replies):
     replies = []
     for reply in msg.replies:
         r = {
-            'from_email' : reply.from_email,
-            'nickname' : email2nickname(reply.from_email),
-            'timestamp' : get_timestamp(reply.timestamp),
-            'msg' : reply.message,
-            'msgid' : reply.id,
+            'from_email': reply.from_email,
+            'nickname': email2nickname(reply.from_email),
+            'timestamp': get_timestamp(reply.timestamp),
+            'msg': reply.message,
+            'msgid': reply.id,
             }
         replies.append(r)
 

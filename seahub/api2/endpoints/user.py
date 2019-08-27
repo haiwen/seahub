@@ -54,7 +54,7 @@ class User(APIView):
 
         # update account telephone
         if info_dict['telephone']:
-            DetailedProfile.objects.add_or_update(email, department=None , telephone=info_dict['telephone'])
+            DetailedProfile.objects.add_or_update(email, department=None, telephone=info_dict['telephone'])
 
         # update user list_in_address_book
         if info_dict['list_in_address_book']:

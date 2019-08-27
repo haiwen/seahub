@@ -129,7 +129,7 @@ class FileTagTest(BaseTestCase):
         assert "test_tagnm天".decode('utf-8') in tags_names
         #test delete all filetag and add specifiy tag
         data = 'names=test_zm-.&path=%s&is_dir=%s' % (self.test_filepath, False)
-        response = self.client.put(self.endpoint, data,'application/x-www-form-urlencoded')
+        response = self.client.put(self.endpoint, data, 'application/x-www-form-urlencoded')
         assert response.status_code == 200
         response = self.client.get(self.endpoint, { 'path': self.test_filepath,
                 'is_dir': False,
@@ -141,7 +141,7 @@ class FileTagTest(BaseTestCase):
         assert "test_zm-." in tags_names
         #delete delete all filetag 
         data = 'names=&path=%s&is_dir=%s' % (self.test_filepath, False)
-        response = self.client.put(self.endpoint, data,'application/x-www-form-urlencoded')
+        response = self.client.put(self.endpoint, data, 'application/x-www-form-urlencoded')
         tags_names = [tags["name"] for tags in response.data["tags"]]
         assert response.status_code == 200
         assert "test_zm" not in tags_names

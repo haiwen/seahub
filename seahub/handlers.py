@@ -30,8 +30,8 @@ try:
             related_users.append(creator)
 
         record = {
-            'op_type':'create',
-            'obj_type':'repo',
+            'op_type': 'create',
+            'obj_type': 'repo',
             'timestamp': datetime.datetime.utcnow(),
             'repo_id': repo_id,
             'repo_name': repo_name,
@@ -83,8 +83,8 @@ try:
             related_users.append(repo_owner)
 
         record = {
-            'op_type':'delete',
-            'obj_type':'repo',
+            'op_type': 'delete',
+            'obj_type': 'repo',
             'timestamp': datetime.datetime.utcnow(),
             'repo_id': repo_id,
             'repo_name': repo_name,
@@ -119,8 +119,8 @@ try:
             related_users.append(repo_owner)
 
         record = {
-            'op_type':'clean-up-trash',
-            'obj_type':'repo',
+            'op_type': 'clean-up-trash',
+            'obj_type': 'repo',
             'timestamp': datetime.datetime.utcnow(),
             'repo_id': repo_id,
             'repo_name': repo_name,
@@ -152,8 +152,8 @@ try:
             related_users.append(repo_owner)
 
         record = {
-            'op_type':'recover',
-            'obj_type':'repo',
+            'op_type': 'recover',
+            'obj_type': 'repo',
             'timestamp': datetime.datetime.utcnow(),
             'repo_id': repo_id,
             'repo_name': repo.repo_name,

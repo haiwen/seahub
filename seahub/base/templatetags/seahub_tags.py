@@ -53,23 +53,23 @@ FILEEXT_ICON_MAP = {
     'txt': 'txt.png',
 
     # pdf file
-    'pdf' : 'pdf.png',
+    'pdf': 'pdf.png',
 
     # document file
-    'doc' : 'word.png',
-    'docx' : 'word.png',
-    'odt' : 'word.png',
-    'fodt' : 'word.png',
+    'doc': 'word.png',
+    'docx': 'word.png',
+    'odt': 'word.png',
+    'fodt': 'word.png',
 
-    'ppt' : 'ppt.png',
-    'pptx' : 'ppt.png',
-    'odp' : 'ppt.png',
-    'fodp' : 'ppt.png',
+    'ppt': 'ppt.png',
+    'pptx': 'ppt.png',
+    'odp': 'ppt.png',
+    'fodp': 'ppt.png',
 
-    'xls' : 'excel.png',
-    'xlsx' : 'excel.png',
-    'ods' : 'excel.png',
-    'fods' : 'excel.png',
+    'xls': 'excel.png',
+    'xlsx': 'excel.png',
+    'ods': 'excel.png',
+    'fods': 'excel.png',
 
     # video
     'mp4': 'video.png',
@@ -81,25 +81,25 @@ FILEEXT_ICON_MAP = {
     'rmvb': 'video.png',
 
     # music file
-    'mp3' : 'music.png',
-    'oga' : 'music.png',
-    'ogg' : 'music.png',
-    'flac' : 'music.png',
-    'aac' : 'music.png',
-    'ac3' : 'music.png',
-    'wma' : 'music.png',
+    'mp3': 'music.png',
+    'oga': 'music.png',
+    'ogg': 'music.png',
+    'flac': 'music.png',
+    'aac': 'music.png',
+    'ac3': 'music.png',
+    'wma': 'music.png',
 
     # image file
-    'jpg' : 'pic.png',
-    'jpeg' : 'pic.png',
-    'png' : 'pic.png',
-    'svg' : 'pic.png',
-    'gif' : 'pic.png',
-    'bmp' : 'pic.png',
-    'ico' : 'pic.png',
+    'jpg': 'pic.png',
+    'jpeg': 'pic.png',
+    'png': 'pic.png',
+    'svg': 'pic.png',
+    'gif': 'pic.png',
+    'bmp': 'pic.png',
+    'ico': 'pic.png',
 
     # default
-    'default' : 'file.png',
+    'default': 'file.png',
 }
 @register.filter(name='file_icon_filter')
 def file_icon_filter(value, size=None):
@@ -122,17 +122,17 @@ def file_icon_filter(value, size=None):
 
 # This way of translation looks silly, but works well.
 COMMIT_MSG_TRANSLATION_MAP = {
-    'Added' : _('Added'),
-    'Deleted' : _('Deleted'),
-    'Removed' : _('Removed'),
-    'Modified' : _('Modified'),
-    'Renamed' : _('Renamed'),
-    'Moved' : _('Moved'),
-    'Added directory' : _('Added directory'),
-    'Removed directory' : _('Removed directory'),
-    'Renamed directory' : _('Renamed directory'),
-    'Moved directory' : _('Moved directory'),
-    'Added or modified' : _('Added or modified'),
+    'Added': _('Added'),
+    'Deleted': _('Deleted'),
+    'Removed': _('Removed'),
+    'Modified': _('Modified'),
+    'Renamed': _('Renamed'),
+    'Moved': _('Moved'),
+    'Added directory': _('Added directory'),
+    'Removed directory': _('Removed directory'),
+    'Renamed directory': _('Renamed directory'),
+    'Moved directory': _('Moved directory'),
+    'Added or modified': _('Added or modified'),
 }
 @register.filter(name='translate_commit_desc')
 def translate_commit_desc(value):

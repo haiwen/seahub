@@ -15,7 +15,7 @@ class AvatarApiTest(ApiTestBase):
         avatar_url = urljoin(BASE_URL, avatar_url)
         avatar_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        random_avatar_size = random.randint(12,128)
+        random_avatar_size = random.randint(12, 128)
 
         with open(avatar_file) as f:
             json_resp = self.post(avatar_url, files={'avatar': f}, data={'avatar_size': random_avatar_size}).json()

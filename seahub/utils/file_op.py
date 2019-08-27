@@ -33,7 +33,7 @@ def check_file_lock(repo_id, file_path, username):
     if return_value == 0:
         return (False, False)
     elif return_value == 1:
-        return (True , False)
+        return (True, False)
     elif return_value == 2:
         return (True, True)
     else:

@@ -457,7 +457,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
 
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
@@ -494,7 +494,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
 
         data = {
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -503,16 +503,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
 
         data = {
             "src_repo_id": self.src_repo_id,
-            "src_dirents":[self.folder_name, self.file_name],
-            "dst_repo_id": self.dst_repo_id,
-            "dst_parent_dir": '/',
-        }
-        resp = self.client.post(self.url, json.dumps(data), 'application/json')
-        self.assertEqual(400, resp.status_code)
-
-        data = {
-            "src_repo_id": self.src_repo_id,
-            "src_parent_dir": '/',
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -522,7 +513,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
@@ -531,7 +522,16 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
@@ -545,7 +545,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": invalid_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -556,7 +556,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": invalid_repo_id,
             "dst_parent_dir": '/',
         }
@@ -570,7 +570,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": 'invalid_folder',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -580,7 +580,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": 'invalid_folder',
         }
@@ -596,7 +596,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": tmp_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -606,7 +606,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": tmp_repo_id,
             "dst_parent_dir": '/',
         }
@@ -627,7 +627,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -642,7 +642,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -661,7 +661,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -679,7 +679,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -694,7 +694,7 @@ class ReposAsyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -737,7 +737,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
 
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
@@ -774,7 +774,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
 
         data = {
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -783,16 +783,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
 
         data = {
             "src_repo_id": self.src_repo_id,
-            "src_dirents":[self.folder_name, self.file_name],
-            "dst_repo_id": self.dst_repo_id,
-            "dst_parent_dir": '/',
-        }
-        resp = self.client.post(self.url, json.dumps(data), 'application/json')
-        self.assertEqual(400, resp.status_code)
-
-        data = {
-            "src_repo_id": self.src_repo_id,
-            "src_parent_dir": '/',
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -802,7 +793,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
@@ -811,7 +802,16 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
@@ -825,7 +825,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": invalid_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -836,7 +836,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": invalid_repo_id,
             "dst_parent_dir": '/',
         }
@@ -850,7 +850,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": 'invalid_folder',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -860,7 +860,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": 'invalid_folder',
         }
@@ -876,7 +876,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": tmp_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -886,7 +886,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": tmp_repo_id,
             "dst_parent_dir": '/',
         }
@@ -904,7 +904,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -922,7 +922,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -937,7 +937,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -956,7 +956,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -973,7 +973,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -987,7 +987,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1016,7 +1016,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[admin_file_name],
+            "src_dirents": [admin_file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1047,7 +1047,7 @@ class ReposAsyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[admin_folder_name],
+            "src_dirents": [admin_folder_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1091,7 +1091,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
 
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
@@ -1115,7 +1115,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
 
         data = {
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1124,16 +1124,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
 
         data = {
             "src_repo_id": self.src_repo_id,
-            "src_dirents":[self.folder_name, self.file_name],
-            "dst_repo_id": self.dst_repo_id,
-            "dst_parent_dir": '/',
-        }
-        resp = self.client.post(self.url, json.dumps(data), 'application/json')
-        self.assertEqual(400, resp.status_code)
-
-        data = {
-            "src_repo_id": self.src_repo_id,
-            "src_parent_dir": '/',
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1143,7 +1134,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
@@ -1152,7 +1143,16 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
@@ -1166,7 +1166,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": invalid_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1177,7 +1177,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": invalid_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1191,7 +1191,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": 'invalid_folder',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1201,7 +1201,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": 'invalid_folder',
         }
@@ -1217,7 +1217,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": tmp_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1227,7 +1227,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": tmp_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1248,7 +1248,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1263,7 +1263,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1282,7 +1282,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1300,7 +1300,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1315,7 +1315,7 @@ class ReposSyncBatchCopyItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1358,7 +1358,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
 
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
@@ -1382,7 +1382,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
 
         data = {
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1391,16 +1391,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
 
         data = {
             "src_repo_id": self.src_repo_id,
-            "src_dirents":[self.folder_name, self.file_name],
-            "dst_repo_id": self.dst_repo_id,
-            "dst_parent_dir": '/',
-        }
-        resp = self.client.post(self.url, json.dumps(data), 'application/json')
-        self.assertEqual(400, resp.status_code)
-
-        data = {
-            "src_repo_id": self.src_repo_id,
-            "src_parent_dir": '/',
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1410,7 +1401,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
@@ -1419,7 +1410,16 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
+            "dst_parent_dir": '/',
+        }
+        resp = self.client.post(self.url, json.dumps(data), 'application/json')
+        self.assertEqual(400, resp.status_code)
+
+        data = {
+            "src_repo_id": self.src_repo_id,
+            "src_parent_dir": '/',
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
         }
         resp = self.client.post(self.url, json.dumps(data), 'application/json')
@@ -1433,7 +1433,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": invalid_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1444,7 +1444,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": invalid_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1458,7 +1458,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": 'invalid_folder',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1468,7 +1468,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": 'invalid_folder',
         }
@@ -1484,7 +1484,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": tmp_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1494,7 +1494,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": tmp_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1512,7 +1512,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1530,7 +1530,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1545,7 +1545,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": self.src_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1564,7 +1564,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1581,7 +1581,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1595,7 +1595,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": self.src_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[self.folder_name, self.file_name],
+            "src_dirents": [self.folder_name, self.file_name],
             "dst_repo_id": admin_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1624,7 +1624,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[admin_file_name],
+            "src_dirents": [admin_file_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1655,7 +1655,7 @@ class ReposSyncBatchMoveItemView(BaseTestCase):
         data = {
             "src_repo_id": admin_repo_id,
             "src_parent_dir": '/',
-            "src_dirents":[admin_folder_name],
+            "src_dirents": [admin_folder_name],
             "dst_repo_id": self.dst_repo_id,
             "dst_parent_dir": '/',
         }
@@ -1700,7 +1700,7 @@ class ReposBatchDeleteItemView(BaseTestCase):
         data = {
             "repo_id": self.repo_id,
             "parent_dir": '/',
-            "dirents":[self.folder_name, self.file_name],
+            "dirents": [self.folder_name, self.file_name],
         }
 
         resp = self.client.delete(self.url, json.dumps(data),
@@ -1717,14 +1717,14 @@ class ReposBatchDeleteItemView(BaseTestCase):
 
         data = {
             "parent_dir": '/',
-            "dirents":[self.folder_name, self.file_name],
+            "dirents": [self.folder_name, self.file_name],
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(400, resp.status_code)
 
         data = {
             "repo_id": self.repo_id,
-            "dirents":[self.folder_name, self.file_name],
+            "dirents": [self.folder_name, self.file_name],
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(400, resp.status_code)
@@ -1744,7 +1744,7 @@ class ReposBatchDeleteItemView(BaseTestCase):
         data = {
             "repo_id": invalid_repo_id,
             "parent_dir": '/',
-            "dirents":[self.folder_name, self.file_name],
+            "dirents": [self.folder_name, self.file_name],
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(404, resp.status_code)
@@ -1756,7 +1756,7 @@ class ReposBatchDeleteItemView(BaseTestCase):
         data = {
             "repo_id": self.repo_id,
             "parent_dir": 'invalid_folder',
-            "dirents":[self.folder_name, self.file_name],
+            "dirents": [self.folder_name, self.file_name],
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(404, resp.status_code)
@@ -1770,7 +1770,7 @@ class ReposBatchDeleteItemView(BaseTestCase):
         data = {
             "repo_id": tmp_repo_id,
             "parent_dir": '/',
-            "dirents":[self.folder_name, self.file_name],
+            "dirents": [self.folder_name, self.file_name],
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)
@@ -1786,7 +1786,7 @@ class ReposBatchDeleteItemView(BaseTestCase):
         data = {
             "repo_id": admin_repo_id,
             "parent_dir": '/',
-            "dirents":[self.folder_name, self.file_name],
+            "dirents": [self.folder_name, self.file_name],
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)
@@ -1814,7 +1814,7 @@ class ReposBatchDeleteItemView(BaseTestCase):
         data = {
             "repo_id": admin_repo_id,
             "parent_dir": '/',
-            "dirents":[admin_file_name],
+            "dirents": [admin_file_name],
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)
@@ -1843,7 +1843,7 @@ class ReposBatchDeleteItemView(BaseTestCase):
         data = {
             "repo_id": admin_repo_id,
             "parent_dir": '/',
-            "dirents":[admin_folder_name],
+            "dirents": [admin_folder_name],
         }
         resp = self.client.delete(self.url, json.dumps(data), 'application/json')
         self.assertEqual(403, resp.status_code)

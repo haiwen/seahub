@@ -204,7 +204,7 @@ class Fixtures(Exam):
     def create_org_group(self, **kwargs):
         group_name = kwargs['group_name']
         username = kwargs['username']
-        org_group_id = ccnet_threaded_rpc.create_org_group(self.org.org_id ,group_name, username)
+        org_group_id = ccnet_threaded_rpc.create_org_group(self.org.org_id, group_name, username)
         org_groups = ccnet_threaded_rpc.get_org_groups(self.org.org_id, -1, -1)
         res_group = None
         for group in org_groups:

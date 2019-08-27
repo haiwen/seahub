@@ -38,10 +38,10 @@ class TestRegistrationForm(TestCase):
         mock_user_number_over_limit.return_value = False
 
         user_info = {
-            'email':'%s@%s.com' % (randstring(10), randstring(10)) ,
+            'email': '%s@%s.com' % (randstring(10), randstring(10)),
             'userid': randstring(40),
-            'password1':'password',
-            'password2':'password',
+            'password1': 'password',
+            'password2': 'password',
         }
 
         f = RegistrationForm(data = user_info)
@@ -55,10 +55,10 @@ class TestRegistrationForm(TestCase):
 
         user_info = {
             # invalid email without `@`
-            'email':'%s%s.com' % (randstring(10), randstring(10)) ,
+            'email': '%s%s.com' % (randstring(10), randstring(10)),
             'userid': randstring(40),
-            'password1':'password',
-            'password2':'password',
+            'password1': 'password',
+            'password2': 'password',
         }
 
         f = RegistrationForm(data = user_info)
@@ -71,10 +71,10 @@ class TestRegistrationForm(TestCase):
         mock_user_number_over_limit.return_value = True
 
         user_info = {
-            'email':'%s@%s.com' % (randstring(10), randstring(10)) ,
+            'email': '%s@%s.com' % (randstring(10), randstring(10)),
             'userid': randstring(40),
-            'password1':'password',
-            'password2':'password',
+            'password1': 'password',
+            'password2': 'password',
         }
 
         f = RegistrationForm(data = user_info)
@@ -90,8 +90,8 @@ class TestRegistrationForm(TestCase):
             # invalid email
             'email': USERNAME,
             'userid': randstring(40),
-            'password1':'password',
-            'password2':'password',
+            'password1': 'password',
+            'password2': 'password',
         }
 
         f = RegistrationForm(data = user_info)
@@ -104,11 +104,11 @@ class TestRegistrationForm(TestCase):
         mock_user_number_over_limit.return_value = False
 
         user_info = {
-            'email':'%s@%s.com' % (randstring(10), randstring(10)) ,
+            'email': '%s@%s.com' % (randstring(10), randstring(10)),
             # invalid userid length < 40
             'userid': randstring(10),
-            'password1':'password',
-            'password2':'password',
+            'password1': 'password',
+            'password2': 'password',
         }
 
         f = RegistrationForm(data = user_info)
@@ -121,11 +121,11 @@ class TestRegistrationForm(TestCase):
         mock_user_number_over_limit.return_value = False
 
         user_info = {
-            'email':'%s@%s.com' % (randstring(10), randstring(10)) ,
+            'email': '%s@%s.com' % (randstring(10), randstring(10)),
             'userid': randstring(40),
             # invalid password
-            'password1':'password1',
-            'password2':'password2',
+            'password1': 'password1',
+            'password2': 'password2',
         }
 
         f = RegistrationForm(data = user_info)

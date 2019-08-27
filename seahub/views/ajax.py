@@ -955,7 +955,7 @@ def download_enc_file(request, repo_id, file_id):
     blklist = []
 
     if file_id == EMPTY_SHA1:
-        result = { 'blklist':blklist, 'url':None, }
+        result = { 'blklist': blklist, 'url': None, }
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     try:
@@ -976,8 +976,8 @@ def download_enc_file(request, repo_id, file_id):
 
     url = gen_block_get_url(token, None)
     result = {
-        'blklist':blklist,
-        'url':url,
+        'blklist': blklist,
+        'url': url,
         }
     return HttpResponse(json.dumps(result), content_type=content_type)
 

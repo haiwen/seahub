@@ -15,7 +15,7 @@
 #####################################
 
 # python.
-import sys,os
+import sys, os
 import re
 import string
 class CConvert:
@@ -95,7 +95,7 @@ class CConvert:
 			else:
 				if not self.has_shengdiao: p = p[:-1]
 				pinyin += self.spliter + p + self.spliter
-		pinyin = pinyin.replace(' ','') \
-				.replace(self.spliter+self.spliter,self.spliter) \
-				.strip(self.spliter+' ').replace(self.spliter+self.spliter,self.spliter)
+		pinyin = pinyin.replace(' ', '') \
+				.replace(self.spliter+self.spliter, self.spliter) \
+				.strip(self.spliter+' ').replace(self.spliter+self.spliter, self.spliter)
 		return pinyin

@@ -1254,14 +1254,14 @@ class Repo(APIView):
         root_id = current_commit.root_id if current_commit else None
 
         repo_json = {
-            "type":"repo",
-            "id":repo.id,
-            "owner":owner,
-            "name":repo.name,
-            "mtime":repo.latest_modify,
-            "size":repo.size,
-            "encrypted":repo.encrypted,
-            "root":root_id,
+            "type": "repo",
+            "id": repo.id,
+            "owner": owner,
+            "name": repo.name,
+            "mtime": repo.latest_modify,
+            "size": repo.size,
+            "encrypted": repo.encrypted,
+            "root": root_id,
             "permission": check_permission(repo.id, username),
             "modifier_email": repo.last_modifier,
             "modifier_contact_email": email2contact_email(repo.last_modifier),

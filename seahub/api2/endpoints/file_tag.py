@@ -300,7 +300,7 @@ class FileTagView(APIView):
             error_msg = _('Tag can only contain letters, numbers, dot, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         if FileTag.objects.delete_file_tag_by_path(repo_id,
-                parent_path,filename,is_dir,name):
+                parent_path, filename, is_dir, name):
             return Response({"success": True}, status=status.HTTP_200_OK)
         else:
             return Response({"success": True}, status=status.HTTP_202_ACCEPTED)

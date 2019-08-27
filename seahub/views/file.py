@@ -1518,7 +1518,7 @@ def view_file_via_shared_dir(request, fileshare):
             'err': ret_dict['err'],
             'file_content': ret_dict['file_content'],
             'encoding': ret_dict['encoding'],
-            'file_encoding_list':ret_dict['file_encoding_list'],
+            'file_encoding_list': ret_dict['file_encoding_list'],
             'filetype': ret_dict['filetype'],
             'zipped': zipped,
             'img_prev': img_prev,
@@ -1704,18 +1704,18 @@ def file_edit(request, repo_id):
         cancel_url = reverse('wiki:slug', args=[wiki_slug, wiki_page_name])
 
     return render(request, 'file_edit.html', {
-        'repo':repo,
-        'u_filename':u_filename,
+        'repo': repo,
+        'u_filename': u_filename,
         'wiki_name': wiki_name,
-        'path':path,
-        'zipped':zipped,
-        'filetype':filetype,
-        'fileext':fileext,
-        'op':op,
-        'err':err,
-        'file_content':file_content,
+        'path': path,
+        'zipped': zipped,
+        'filetype': filetype,
+        'fileext': fileext,
+        'op': op,
+        'err': err,
+        'file_content': file_content,
         'encoding': encoding,
-        'file_encoding_list':file_encoding_list,
+        'file_encoding_list': file_encoding_list,
         'head_id': head_id,
         'from': page_from,
         'gid': gid,
@@ -1907,7 +1907,7 @@ def text_diff(request, repo_id):
     referer = request.GET.get('referer', '')
 
     return render(request, 'text_diff.html', {
-        'u_filename':u_filename,
+        'u_filename': u_filename,
         'repo': repo,
         'path': path,
         'zipped': zipped,

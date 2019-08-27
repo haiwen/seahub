@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseBadRequest, \
-    HttpResponseRedirect , Http404
+    HttpResponseRedirect, Http404
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.utils.translation import ugettext as _

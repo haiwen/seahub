@@ -210,7 +210,7 @@ def group_wiki(request, group, page_name="home"):
         group_repos = get_group_repos(group.id, username)
         group_repos = [r for r in group_repos if not r.encrypted]
         return render(request, "group/group_wiki.html", {
-                "group" : group,
+                "group": group,
                 "is_staff": group.is_staff,
                 "wiki_exists": wiki_exists,
                 "mods_enabled": mods_enabled,
@@ -257,7 +257,7 @@ def group_wiki(request, group, page_name="home"):
             wiki_index_exists = False
 
         return render(request, "group/group_wiki.html", {
-            "group" : group,
+            "group": group,
             "is_staff": group.is_staff,
             "wiki_exists": wiki_exists,
             "content": content,

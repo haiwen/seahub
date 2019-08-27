@@ -733,7 +733,7 @@ if EVENTS_CONFIG_FILE:
 
         event_type_dict = {
             'file-download-web': ('web', ''),
-            'file-download-share-link': ('share-link',''),
+            'file-download-share-link': ('share-link', ''),
             'file-download-api': ('API', e.device),
             'repo-download-sync': ('download-sync', e.device),
             'repo-upload-sync': ('upload-sync', e.device),
