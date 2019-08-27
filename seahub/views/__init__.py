@@ -720,7 +720,7 @@ def libraries(request):
 
     if joined_groups:
         try:
-            joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+            joined_groups.sort(key=lambda x: x.group_name.lower())
         except Exception as e:
             logger.error(e)
             joined_groups = []
