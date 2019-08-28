@@ -54,7 +54,9 @@ class MainSideNav extends React.Component {
 
       this.groupsHeight = (groupList.length + 1) * _this.listHeight;
       _this.setState({
-        groupItems: groupList
+        groupItems: groupList.sort((a, b) => {
+          return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        })
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
