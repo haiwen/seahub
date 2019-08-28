@@ -1071,7 +1071,7 @@ def _download_file_from_share_link(request, fileshare):
     """Download shared file.
     `path` need to be provided by frontend, if missing, use `fileshare.path`
     """
-    next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+    next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
     repo = get_repo(fileshare.repo_id)
     if not repo:
@@ -1083,7 +1083,7 @@ def _download_file_from_share_link(request, fileshare):
         req_path = request.GET.get('p', '')
         if not req_path:
             messages.error(request, _('Unable to download file, invalid file path'))
-            return HttpResponseRedirect(next)
+            return HttpResponseRedirect(next_page)
         real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
     else:
         real_path = fileshare.path
@@ -1092,12 +1092,12 @@ def _download_file_from_share_link(request, fileshare):
     obj_id = seafile_api.get_file_id_by_path(repo.id, real_path)
     if not obj_id:
         messages.error(request, _('Unable to download file, wrong file path'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     # check whether owner's traffic over the limit
     if user_traffic_over_limit(fileshare.username):
         messages.error(request, _('Unable to download file, share link traffic is used up.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     dl_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'download-link', fileshare.username, use_onetime=False)
@@ -1176,8 +1176,8 @@ def view_shared_file(request, fileshare):
         # check whether owner's traffic over the limit
         if user_traffic_over_limit(shared_by):
             messages.error(request, _('Unable to view raw file, share link traffic is used up.'))
-            next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-            return HttpResponseRedirect(next)
+            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+            return HttpResponseRedirect(next_page)
 
         # send file audit message
         send_file_access_msg(request, repo, path, 'share-link')
@@ -1386,8 +1386,8 @@ def view_file_via_shared_dir(request, fileshare):
         # check whether owner's traffic over the limit
         if user_traffic_over_limit(shared_by):
             messages.error(request, _('Unable to view raw file, share link traffic is used up.'))
-            next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-            return HttpResponseRedirect(next)
+            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+            return HttpResponseRedirect(next_page)
 
         # send file audit message
         send_file_access_msg(request, repo, real_path, 'share-link')
@@ -1607,16 +1607,16 @@ def file_edit_submit(request, repo_id):
             gid = 0
 
         wiki_name = os.path.splitext(os.path.basename(path))[0]
-        next = reverse('group_wiki', args=[gid, wiki_name])
+        next_page = reverse('group_wiki', args=[gid, wiki_name])
     elif req_from == 'personal_wiki_page_edit' or req_from == 'personal_wiki_page_new':
         wiki_name = os.path.splitext(os.path.basename(path))[0]
-        next = reverse('personal_wiki', args=[wiki_name])
+        next_page = reverse('personal_wiki', args=[wiki_name])
     elif req_from == 'wikis_wiki_page_edit' or req_from == 'wikis_wiki_page_new':
         wiki_slug = request.GET.get('wiki_slug', '')
         wiki_page_name = os.path.splitext(os.path.basename(path))[0]
-        next = reverse('wiki:slug', args=[wiki_slug, wiki_page_name])
+        next_page = reverse('wiki:slug', args=[wiki_slug, wiki_page_name])
     else:
-        next = reverse('view_lib_file', args=[repo_id, path])
+        next_page = reverse('view_lib_file', args=[repo_id, path])
 
     parent_dir = os.path.dirname(path).encode('utf-8')
     filename = os.path.basename(path).encode('utf-8')
@@ -1624,7 +1624,7 @@ def file_edit_submit(request, repo_id):
         seafserv_threaded_rpc.put_file(repo_id, tmpfile, parent_dir,
                                  filename, username, head_id)
         remove_tmp_file()
-        return HttpResponse(json.dumps({'href': next}),
+        return HttpResponse(json.dumps({'href': next_page}),
                             content_type=content_type)
     except SearpcError as e:
         remove_tmp_file()
@@ -1810,13 +1810,13 @@ def download_file(request, repo_id, obj_id):
 
         if not token:
             messages.error(request, _('Unable to download file'))
-            next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-            return HttpResponseRedirect(next)
+            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+            return HttpResponseRedirect(next_page)
 
     else:
         messages.error(request, _('Unable to download file'))
-        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-        return HttpResponseRedirect(next)
+        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next_page)
 
     path = request.GET.get('p', '')
     send_file_access_msg(request, repo, path, 'web') # send stats message
@@ -2052,26 +2052,26 @@ def file_access(request, repo_id):
         raise Http404
 
     referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
+    next_page = settings.SITE_ROOT if referer is None else referer
 
     repo = get_repo(repo_id)
     if not repo:
         messages.error(request, _("Library does not exist"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     path = request.GET.get('p', None)
     if not path:
         messages.error(request, _("Argument missing"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     if not seafile_api.get_file_id_by_path(repo_id, path):
         messages.error(request, _("File does not exist"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     # perm check
     if check_folder_permission(request, repo_id, path) != 'rw':
         messages.error(request, _("Permission denied"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     # Make sure page request is an int. If not, deliver first page.
     try:
