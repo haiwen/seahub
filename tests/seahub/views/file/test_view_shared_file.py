@@ -13,7 +13,7 @@ class ViewSharedFileTest(TestCase, Fixtures):
 
     def setUp(self):
         share_file_info = {
-            'username': self.user,
+            'username': self.user.username,
             'repo_id': self.repo.id,
             'path': self.file,
             'password': None,
