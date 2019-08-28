@@ -6,7 +6,7 @@ from django.utils.http import urlquote
 
 class FpathToLinkTest(BaseTestCase):
     def test_fpath_to_link(self):
-        path = '/海文/'.decode('utf-8')
+        path = '/海文/'
         resp = fpath_to_link(self.repo.id, path, is_dir=True)
         url = '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {'repo_id': self.repo.id,
                                     'repo_name': self.repo.name,
