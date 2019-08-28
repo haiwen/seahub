@@ -156,7 +156,7 @@ class SocialAuthUser(models.Model):
 
     class Meta:
         """Meta data"""
-        app_label = "auth"
+        app_label = "base"
         unique_together = ('provider', 'uid')
         db_table = 'social_auth_usersocialauth'
 
