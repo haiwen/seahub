@@ -40,7 +40,10 @@ class GetRepoSharedUsersTest(BaseTestCase):
         # user share a repo to group
         seafile_api.set_group_repo(self.repo.id, self.group.id,
                                    username, 'rw')
-        assert get_repo_shared_users(self.repo.id, owner) == [self.admin.username, self.user2.username]
+        # assert get_repo_shared_users(self.repo.id, owner) == [self.admin.username, self.user2.username]
+        assert len(get_repo_shared_users(self.repo.id, owner)) == 2
+        assert self.admin.username in get_repo_shared_users(self.repo.id, owner)
+        assert self.user2.username in get_repo_shared_users(self.repo.id, owner)
 
 
 class TestParseRepoPerm(BaseTestCase):
