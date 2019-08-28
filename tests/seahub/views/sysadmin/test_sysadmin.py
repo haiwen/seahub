@@ -201,7 +201,7 @@ class BatchAddUserTest(BaseTestCase):
                 r = None
             assert r is None
 
-        with open(self.excel_file) as f:
+        with open(self.excel_file, 'rb') as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -225,7 +225,7 @@ class BatchAddUserTest(BaseTestCase):
                 r = None
             assert r is None
 
-        with open(self.excel_file) as f:
+        with open(self.excel_file, 'rb') as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -250,7 +250,7 @@ class BatchAddUserTest(BaseTestCase):
                 r = None
             assert r is None
 
-        with open(self.excel_file) as f:
+        with open(self.excel_file, 'rb') as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -273,7 +273,7 @@ class BatchAddUserTest(BaseTestCase):
                 r = None
             assert r is None
 
-        with open(self.excel_file) as f:
+        with open(self.excel_file, 'rb') as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -284,7 +284,7 @@ class BatchAddUserTest(BaseTestCase):
     def test_can_send_email(self):
         self.assertEqual(0, len(Email.objects.all()))
 
-        with open(self.excel_file) as f:
+        with open(self.excel_file, 'rb') as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })

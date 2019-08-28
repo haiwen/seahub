@@ -27,7 +27,7 @@ class AdminFaviconTest(BaseTestCase):
         logo_url = urljoin(BASE_URL, logo_url)
         logo_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        with open(logo_file) as f:
+        with open(logo_file, 'rb') as f:
             resp = self.client.post(logo_url, {'favicon': f})
 
         assert resp.status_code == 200
@@ -45,7 +45,7 @@ class AdminFaviconTest(BaseTestCase):
         logo_url = urljoin(BASE_URL, logo_url)
         logo_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        with open(logo_file) as f:
+        with open(logo_file, 'rb') as f:
             resp = self.client.post(logo_url, {'favicon': f})
         assert resp.status_code == 403
 
@@ -57,7 +57,7 @@ class AdminFaviconTest(BaseTestCase):
         logo_url = urljoin(BASE_URL, logo_url)
         logo_file = os.path.join(os.getcwd(), 'test.noico')
 
-        with open(logo_file) as f:
+        with open(logo_file, 'rb') as f:
             resp = self.client.post(logo_url, {'favicon': f})
         json_resp = json.loads(resp.content)
         assert resp.status_code == 400

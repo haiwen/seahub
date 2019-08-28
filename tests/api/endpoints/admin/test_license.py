@@ -22,7 +22,7 @@ class AdminLicenseTest(BaseTestCase):
         url = reverse('api-v2.1-admin-license')
         url = urljoin(BASE_URL, url)
         with open(
-                os.path.join(os.getcwd(), 'tests/seahub/utils/seafile-license.txt')) as f:
+                os.path.join(os.getcwd(), 'tests/seahub/utils/seafile-license.txt'), 'rb') as f:
             resp = self.client.post(url, {'license': f})
         json_resp = json.loads(resp.content)
 
@@ -42,7 +42,7 @@ class AdminLicenseTest(BaseTestCase):
             f.write('1')
 
         with open(
-                os.path.join(os.getcwd(), 'temp.notxt')) as f:
+                os.path.join(os.getcwd(), 'temp.notxt'), 'rb') as f:
             resp = self.client.post(url, {'license': f})
         json_resp = json.loads(resp.content)
         assert 400 == resp.status_code

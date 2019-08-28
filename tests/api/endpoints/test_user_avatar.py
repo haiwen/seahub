@@ -17,7 +17,7 @@ class AvatarApiTest(ApiTestBase):
 
         random_avatar_size = random.randint(12, 128)
 
-        with open(avatar_file) as f:
+        with open(avatar_file, 'rb') as f:
             json_resp = self.post(avatar_url, files={'avatar': f}, data={'avatar_size': random_avatar_size}).json()
 
         assert 'avatar_url' in json_resp
