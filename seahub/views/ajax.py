@@ -1215,7 +1215,7 @@ def repo_history_changes(request, repo_id):
 
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-            and not seafile_api.is_passwd_set(repo_id, username):
+            and not seafile_api.is_password_set(repo_id, username):
         err_msg = _('Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)

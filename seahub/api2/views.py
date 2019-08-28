@@ -775,7 +775,7 @@ class Repos(APIView):
                     if not is_web_request(request):
                         continue
 
-                r.password_need = seafile_api.is_passwd_set(r.repo_id, email)
+                r.password_need = seafile_api.is_password_set(r.repo_id, email)
                 repo = {
                     "type": "srepo",
                     "id": r.repo_id,

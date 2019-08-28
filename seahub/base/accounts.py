@@ -510,7 +510,7 @@ class User(object):
         passwd_setted_repos = []
         for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
-                    seafile_api.is_passwd_set(r.id, self.email):
+                    seafile_api.is_password_set(r.id, self.email):
                 passwd_setted_repos.append(r)
 
         for r in passwd_setted_repos:
@@ -532,7 +532,7 @@ class User(object):
         passwd_setted_repos = []
         for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
-                    seafile_api.is_passwd_set(r.id, self.email):
+                    seafile_api.is_password_set(r.id, self.email):
                 passwd_setted_repos.append(r)
 
         for r in passwd_setted_repos:

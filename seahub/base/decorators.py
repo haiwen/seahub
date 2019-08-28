@@ -62,7 +62,7 @@ def repo_passwd_set_required(func):
                         })
 
             if (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-                    and not seafile_api.is_passwd_set(repo_id, username):
+                    and not seafile_api.is_password_set(repo_id, username):
                 return render(request, 'decrypt_repo_form.html', {
                         'repo': repo,
                         'next': request.get_full_path(),
