@@ -403,9 +403,9 @@ def sys_useradmin_export_excel(request):
     """ Export all users from database to excel
     """
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = SITE_ROOT
 
     try:
         users = ccnet_api.get_emailusers('DB', -1, -1) + \
@@ -413,7 +413,7 @@ def sys_useradmin_export_excel(request):
     except Exception as e:
         logger.error(e)
         messages.error(request, _('Failed to export Excel'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     if is_pro_version():
         is_pro = True
@@ -519,7 +519,7 @@ def sys_useradmin_export_excel(request):
     wb = write_xls('users', head, data_list)
     if not wb:
         messages.error(request, _('Failed to export Excel'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=users.xlsx'
@@ -917,7 +917,7 @@ def sys_org_set_quota(request, org_id):
 def user_remove(request, email):
     """Remove user"""
     referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('sys_useradmin') if referer is None else referer
+    next_page = reverse('sys_useradmin') if referer is None else referer
 
     try:
         user = User.objects.get(email=email)
@@ -925,7 +925,7 @@ def user_remove(request, email):
         if org:
             if org[0].creator == user.email:
                 messages.error(request, _('Failed to delete: the user is an organization creator'))
-                return HttpResponseRedirect(next)
+                return HttpResponseRedirect(next_page)
 
         user.delete()
         messages.success(request, _('Successfully deleted %s') % user.username)
@@ -940,7 +940,7 @@ def user_remove(request, email):
     except User.DoesNotExist:
         messages.error(request, _('Failed to delete: the user does not exist'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required
 @sys_staff_required
@@ -955,12 +955,12 @@ def remove_trial(request, user_or_org):
         raise Http404
 
     referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('sys_useradmin') if referer is None else referer
+    next_page = reverse('sys_useradmin') if referer is None else referer
 
     TrialAccount.objects.filter(user_or_org=user_or_org).delete()
 
     messages.success(request, _('Successfully remove trial for: %s') % user_or_org)
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 # @login_required
 # @sys_staff_required
@@ -993,9 +993,9 @@ def user_remove_admin(request, email):
         messages.error(request, _('Failed to revoke admin: the user does not exist'))
 
     referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('sys_useradmin') if referer is None else referer
+    next_page = reverse('sys_useradmin') if referer is None else referer
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 # @login_required
 # @sys_staff_required
@@ -1164,9 +1164,9 @@ def user_reset(request, email):
         messages.error(request, msg)
 
     referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('sys_useradmin') if referer is None else referer
+    next_page = reverse('sys_useradmin') if referer is None else referer
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 def send_user_add_mail(request, email, password):
     """Send email when add new user."""
@@ -1266,16 +1266,16 @@ def sys_group_admin_export_excel(request):
     """ Export all groups to excel
     """
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = SITE_ROOT
 
     try:
         groups = ccnet_threaded_rpc.get_all_groups(-1, -1)
     except Exception as e:
         logger.error(e)
         messages.error(request, _('Failed to export Excel'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     head = [_("Name"), _("Creator"), _("Create At")]
     data_list = []
@@ -1287,7 +1287,7 @@ def sys_group_admin_export_excel(request):
     wb = write_xls('groups', head, data_list)
     if not wb:
         messages.error(request, _('Failed to export Excel'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=groups.xlsx'
@@ -1444,7 +1444,7 @@ def sys_org_rename(request, org_id):
         raise Http404
 
     referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('sys_org_admin') if referer is None else referer
+    next_page = reverse('sys_org_admin') if referer is None else referer
 
     new_name = request.POST.get('new_name', None)
     if new_name:
@@ -1455,7 +1455,7 @@ def sys_org_rename(request, org_id):
             logger.error(e)
             messages.error(request, _('Failed to rename organization'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required
 @require_POST
@@ -1486,8 +1486,8 @@ def sys_org_remove(request, org_id):
     messages.success(request, _('Successfully deleted.'))
 
     referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('sys_org_admin') if referer is None else referer
-    return HttpResponseRedirect(next)
+    next_page = reverse('sys_org_admin') if referer is None else referer
+    return HttpResponseRedirect(next_page)
 
 @login_required_ajax
 @sys_staff_required
@@ -1868,13 +1868,13 @@ def user_search(request):
 def sys_repo_delete(request, repo_id):
     """Delete a repo.
     """
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = HASH_URLS['SYS_REPO_ADMIN']
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = HASH_URLS['SYS_REPO_ADMIN']
 
     if get_system_default_repo_id() == repo_id:
         messages.error(request, _('System library can not be deleted.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     repo = seafile_api.get_repo(repo_id)
     if repo:                    # Handle the case that repo is `None`.
@@ -1898,7 +1898,7 @@ def sys_repo_delete(request, repo_id):
             repo_name=repo_name)
 
     messages.success(request, _('Successfully deleted.'))
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required
 @sys_staff_required
@@ -2001,9 +2001,9 @@ def batch_user_make_admin(request):
 def batch_add_user_example(request):
     """ get example file.
     """
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = SITE_ROOT
     data_list = []
     head = [_('Email'), _('Password'), _('Name')+ '(' + _('Optional') + ')', 
             _('Role') + '(' + _('Optional') + ')', _('Space Quota') + '(MB, ' + _('Optional') + ')']
@@ -2018,7 +2018,7 @@ def batch_add_user_example(request):
     wb = write_xls('sample', head, data_list)
     if not wb:
         messages.error(request, _('Failed to export Excel'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=users.xlsx'
@@ -2033,14 +2033,14 @@ def batch_add_user(request):
     if request.method != 'POST':
         raise Http404
 
-    next = request.META.get('HTTP_REFERER', reverse(sys_user_admin))
+    next_page = request.META.get('HTTP_REFERER', reverse(sys_user_admin))
 
     form = BatchAddUserForm(request.POST, request.FILES)
     if form.is_valid():
         content = request.FILES['file'].read()
         if str(request.FILES['file']).split('.')[-1].lower() != 'xlsx':
             messages.error(request, _('Please choose a .xlsx file.'))
-            return HttpResponseRedirect(next)
+            return HttpResponseRedirect(next_page)
 
         try:
             fs = BytesIO(content)
@@ -2048,7 +2048,7 @@ def batch_add_user(request):
         except Exception as e:
             logger.error(e)
             messages.error(request, _('Internal Server Error'))
-            return HttpResponseRedirect(next)
+            return HttpResponseRedirect(next_page)
 
         rows = wb.worksheets[0].rows
         records = []
@@ -2061,7 +2061,7 @@ def batch_add_user(request):
 
         if user_number_over_limit(new_users=len(records)):
             messages.error(request, _('The number of users exceeds the limit.'))
-            return HttpResponseRedirect(next)
+            return HttpResponseRedirect(next_page)
 
         for row in records:
             try:
@@ -2124,7 +2124,7 @@ def batch_add_user(request):
     else:
         messages.error(request, _('Please choose a .xlsx file.'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required
 def sys_sudo_mode(request):
@@ -2135,7 +2135,7 @@ def sys_sudo_mode(request):
     if not request.user.is_staff:
         raise Http404
 
-    next = request.GET.get('next', reverse('sys_useradmin'))
+    next_page = request.GET.get('next', reverse('sys_useradmin'))
     password_error = False
     if request.method == 'POST':
         password = request.POST.get('password')
@@ -2149,7 +2149,7 @@ def sys_sudo_mode(request):
                 from seahub.auth.utils import clear_login_failed_attempts
                 clear_login_failed_attempts(request, username)
 
-                return HttpResponseRedirect(next)
+                return HttpResponseRedirect(next_page)
         password_error = True
 
         from seahub.auth.utils import get_login_failed_attempts, incr_login_failed_attempts
@@ -2168,7 +2168,7 @@ def sys_sudo_mode(request):
         'sysadmin/sudo_mode.html', {
             'password_error': password_error,
             'enable_sso': enable_shib_login or enable_adfs_login,
-            'next': next,
+            'next': next_page,
         })
 
 @login_required
@@ -2520,9 +2520,9 @@ def sys_inst_toggle_admin(request, inst_id, email):
     except Institution.DoesNotExist:
         raise Http404
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('sys_inst_info_users', args=[inst.pk])
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = reverse('sys_inst_info_users', args=[inst.pk])
 
     try:
         u = User.objects.get(email=email)
@@ -2532,7 +2532,7 @@ def sys_inst_toggle_admin(request, inst_id, email):
     if u.is_staff:
         messages.error(
             request, 'Can not assign institutional administration roles to global administrators')
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     res = InstitutionAdmin.objects.filter(institution=inst, user=email)
     if len(res) == 0:
@@ -2544,7 +2544,7 @@ def sys_inst_toggle_admin(request, inst_id, email):
         assert False
 
     messages.success(request, _('Success'))
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required
 @sys_staff_required
@@ -2556,9 +2556,9 @@ def sys_inst_set_quota(request, inst_id):
     except Institution.DoesNotExist:
         raise Http404
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('sys_inst_info_users', args=[inst.pk])
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = reverse('sys_inst_info_users', args=[inst.pk])
 
     quota_mb = int(request.POST.get('space_quota', ''))
     quota = quota_mb * get_file_size_unit('MB')
