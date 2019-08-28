@@ -1021,12 +1021,8 @@ def mkstemp():
 
     '''
     fd, path = tempfile.mkstemp()
-    system_encoding = locale.getdefaultlocale()[1]
-    if system_encoding is not None:
-        path_utf8 = path.decode(system_encoding).encode('UTF-8')
-        return fd, path_utf8
-    else:
-        return fd, path
+
+    return fd, path
 
 # File or directory operations
 FILE_OP = ('Added or modified', 'Added', 'Modified', 'Renamed', 'Moved',
