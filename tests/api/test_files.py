@@ -171,9 +171,15 @@ class FilesApiTest(ApiTestBase):
             self.assertEqual(code, 200)
 
             # download for the second time
-            url = urllib.request.urlopen(res.text.strip('"'))
-            code = url.getcode()
-            self.assertEqual(code, 400)
+            try:
+                url = urllib.request.urlopen(res.text.strip('"'))
+            except Exception as e:
+                assert 'HTTP Error 400: Bad Request' in str(e)
+
+            # url = urllib.request.urlopen(res.text.strip('"'))
+            # code = url.getcode()
+            # self.assertEqual(code, 400)
+
 
     def test_download_file_with_reuse_token(self):
         with self.get_tmp_repo() as repo:
