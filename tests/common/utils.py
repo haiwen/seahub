@@ -7,7 +7,7 @@ from .common import BASE_URL
 def randstring(length=0):
     if length == 0:
         length = random.randint(1, 30)
-    return ''.join(random.choice(string.lowercase) for i in range(length))
+    return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
 
 def urljoin(base, *args):
     url = base
