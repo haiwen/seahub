@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
@@ -123,7 +124,7 @@ class LibContentToolbar extends React.Component {
               />
             }
           </div>
-          <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
+          {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
         </div>
         <CommonToolbar repoID={this.props.repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
       </Fragment>
