@@ -3883,7 +3883,7 @@ class BeSharedRepos(APIView):
                 shared_repos.append(r)
 
         if not CLOUD_MODE:
-            shared_repos += seafile_api.get_inner_pub_repo_list(username)
+            shared_repos += seafile_api.list_inner_pub_repos_by_owner(username)
 
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
