@@ -117,7 +117,7 @@ class FileTagTest(BaseTestCase):
         tags_names = [tags["name"] for tags in response.data["tags"]]
         assert "test_tagname" in tags_names
         assert "test_tagname1" in tags_names
-        assert "test_tagnm天".decode('utf-8') in tags_names
+        assert "test_tagnm天" in tags_names
         assert response.data["tags"][0]["creator"] == self.user.username
         response = self.client.get(self.endpoint, {
                 'path': self.test_filepath,
@@ -126,7 +126,7 @@ class FileTagTest(BaseTestCase):
         tags_names = [tags["name"] for tags in response.data["tags"]]
         assert "test_tagname" in tags_names
         assert "test_tagname1" in tags_names
-        assert "test_tagnm天".decode('utf-8') in tags_names
+        assert "test_tagnm天" in tags_names
         #test delete all filetag and add specifiy tag
         data = 'names=test_zm-.&path=%s&is_dir=%s' % (self.test_filepath, False)
         response = self.client.put(self.endpoint, data, 'application/x-www-form-urlencoded')
