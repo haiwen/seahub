@@ -16,7 +16,7 @@ class AccountsApiTest(ApiTestBase):
         # Normal user can not list accounts
         self.get(ACCOUNTS_URL, expected=403)
         accounts = self.admin_get(ACCOUNTS_URL).json()
-        self.assertGreaterEqual(accounts, 2)
+        self.assertGreaterEqual(len(accounts), 2)
         # TODO: check returned json, test start/limit param
 
     def test_create_delete_account(self):
