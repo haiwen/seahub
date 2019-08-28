@@ -130,7 +130,7 @@ from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
 from seaserv import seafserv_threaded_rpc, \
     get_personal_groups_by_user, is_personal_repo, \
-    get_repo, check_permission, get_commits, is_passwd_set,\
+    get_repo, check_permission, get_commits,\
     check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
     remove_share, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
@@ -775,7 +775,7 @@ class Repos(APIView):
                     if not is_web_request(request):
                         continue
 
-                r.password_need = is_passwd_set(r.repo_id, email)
+                r.password_need = seafile_api.is_passwd_set(r.repo_id, email)
                 repo = {
                     "type": "srepo",
                     "id": r.repo_id,

@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 import seaserv
-from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
+from seaserv import ccnet_threaded_rpc, unset_repo_passwd, \
     seafile_api, ccnet_api
 from constance import config
 from registration import signals
@@ -510,7 +510,7 @@ class User(object):
         passwd_setted_repos = []
         for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
-                    is_passwd_set(r.id, self.email):
+                    seafile_api.is_passwd_set(r.id, self.email):
                 passwd_setted_repos.append(r)
 
         for r in passwd_setted_repos:
@@ -532,7 +532,7 @@ class User(object):
         passwd_setted_repos = []
         for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
-                    is_passwd_set(r.id, self.email):
+                    seafile_api.is_passwd_set(r.id, self.email):
                 passwd_setted_repos.append(r)
 
         for r in passwd_setted_repos:

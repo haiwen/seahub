@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render
 
 from django.utils.http import urlquote
-from seaserv import get_repo, is_passwd_set
+from seaserv import get_repo, seafile_api
 
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 
@@ -62,7 +62,7 @@ def repo_passwd_set_required(func):
                         })
 
             if (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-                    and not is_passwd_set(repo_id, username):
+                    and not seafile_api.is_passwd_set(repo_id, username):
                 return render(request, 'decrypt_repo_form.html', {
                         'repo': repo,
                         'next': request.get_full_path(),

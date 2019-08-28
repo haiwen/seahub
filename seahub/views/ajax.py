@@ -20,7 +20,7 @@ from django.conf import settings as dj_settings
 from django.template.defaultfilters import filesizeformat
 
 import seaserv
-from seaserv import seafile_api, is_passwd_set, ccnet_api, \
+from seaserv import seafile_api, ccnet_api, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
@@ -1215,7 +1215,7 @@ def repo_history_changes(request, repo_id):
 
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-            and not is_passwd_set(repo_id, username):
+            and not seafile_api.is_passwd_set(repo_id, username):
         err_msg = _('Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
