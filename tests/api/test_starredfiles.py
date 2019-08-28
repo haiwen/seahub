@@ -41,7 +41,7 @@ class StarredFileTest(BaseTestCase, Fixtures):
             'p': self.file
         })
         self.assertEqual(201, resp.status_code)
-        self.assertEqual('"success"', resp.content)
+        self.assertEqual(b'"success"', resp.content)
 
     def test_cannot_add_random_filename(self):
         self.login_as(self.user)
@@ -75,7 +75,7 @@ class StarredFileTest(BaseTestCase, Fixtures):
             'p': self.unicode_file,
         })
         self.assertEqual(201, resp.status_code)
-        self.assertEqual('"success"', resp.content)
+        self.assertEqual(b'"success"', resp.content)
         self.assertEqual(2, len(UserStarredFiles.objects.all()))
 
     def test_can_delete_unicode(self):
