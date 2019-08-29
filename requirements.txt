@@ -17,4 +17,4 @@ djangorestframework
 python-dateutil
 requests
 pillow
-jwt
+pyjwt
