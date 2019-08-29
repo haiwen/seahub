@@ -67,5 +67,11 @@ class BeSharedReposTest(BaseTestCase):
         resp = self.client.get('/api2/beshared-repos/')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp[0]['repo_id'] == self.sub_repo_id
-        assert json_resp[0]['share_type'] == 'public'
+        # assert json_resp[0]['repo_id'] == self.sub_repo_id
+        # assert json_resp[0]['share_type'] == 'public'
+        public_repo_success = False
+        for repo_info in json_resp:
+            if repo_info['repo_id'] == self.sub_repo_id and \
+                    repo_info['share_type'] == 'public':
+                public_repo_success = True
+        assert public_repo_success
