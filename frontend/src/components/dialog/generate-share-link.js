@@ -24,6 +24,12 @@ class GenerateShareLink extends React.Component {
 
     this.isExpireDaysNoLimit = (parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) === 0 && shareLinkExpireDaysDefault == 0);
     this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : shareLinkExpireDaysDefault;
+
+    if (isPro) {
+      this.editOption = 'edit_download';
+      this.permissionOptions = ['preview_download', 'preview_only'];
+    }   
+
     this.state = {
       isValidate: false,
       isShowPasswordInput: false,
@@ -36,14 +42,9 @@ class GenerateShareLink extends React.Component {
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
       isLoading: true,
-      fileInfo: null,
+      currentPermission: isPro ? this.permissionOptions[0] : '',
       isSendLinkShown: false
     };
-    this.permissions = {
-      'can_edit': false, 
-      'can_download': true
-    };
-    this.isOfficeFile = Utils.isEditableOfficeFile(this.props.itemPath);
   }
 
   componentDidMount() {
@@ -63,10 +64,11 @@ class GenerateShareLink extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-    if (this.isOfficeFile) {
+
+    if (isPro && Utils.isEditableOfficeFile(path)) {
       seafileAPI.getFileInfo(repoID, path).then((res) => {
-        if (res.data) {
-          this.setState({fileInfo: res.data});
+        if (res.data.can_edit) {
+          this.permissionOptions.push(this.editOption);
         }
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -108,23 +110,8 @@ class GenerateShareLink extends React.Component {
     this.setState({passwdnew: passwd});
   }
 
-  setPermission = (permission) => {
-    if (permission == 'previewAndDownload') {
-      this.permissions = {
-        'can_edit': false,
-        'can_download': true
-      };
-    } else if (permission == 'preview') {
-      this.permissions = {
-        'can_edit': false,
-        'can_download': false
-      };     
-    } else if (permission == 'editOnCloudAndDownload'){
-      this.permissions = {
-        'can_edit': true,
-        'can_download': true
-      };
-    }
+  setPermission = (e) => {
+    this.setState({currentPermission: e.target.value});
   }
 
   generateShareLink = () => {
@@ -133,7 +120,11 @@ class GenerateShareLink extends React.Component {
       this.setState({errorInfo: ''});
       let { itemPath, repoID } = this.props;
       let { password, isExpireChecked, expireDays } = this.state;
-      let permissions = isPro ? JSON.stringify(this.permissions) : '';
+      let permissions;
+      if (isPro) {
+        const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
+        permissions = JSON.stringify(permissionDetails);
+      }
       const expireDaysSent = isExpireChecked ? expireDays : '';
       seafileAPI.createShareLink(repoID, itemPath, password, expireDaysSent, permissions).then((res) => {
         let sharedLinkInfo = new ShareLink(res.data);
@@ -172,10 +163,6 @@ class GenerateShareLink extends React.Component {
         sharedLinkInfo: null,
         isNoticeMessageShow: false,
       });
-      this.permissions = {
-        'can_edit': false,
-        'can_download': true
-      };
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -340,7 +327,6 @@ class GenerateShareLink extends React.Component {
         </div>
       );
     } else {
-      let fileInfo = this.state.fileInfo;
       return (
         <Form className="generate-share-link">
           <FormGroup check>
@@ -403,28 +389,21 @@ class GenerateShareLink extends React.Component {
           )}
           {isPro && ( 
             <Fragment>
-          <FormGroup check>
-            <Label check>
-              <span>{'  '}{gettext('Set permission')}</span>
-            </Label>
-          </FormGroup>
-          <FormGroup check className="permission">
-            <Label className="form-check-label">
-              <Input type="radio" name="radio1" defaultChecked={true} onChange={() => this.setPermission('previewAndDownload')}/>{'  '}{gettext('Preview and download')}
-            </Label>
-          </FormGroup>
-          <FormGroup check className="permission">
-            <Label className="form-check-label">
-              <Input type="radio" name="radio1" onChange={() => this.setPermission('preview')} />{'  '}{gettext('Preview only')}
-            </Label>
-          </FormGroup>
-          {(this.isOfficeFile && fileInfo && fileInfo.can_edit) &&
-            <FormGroup check className="permission">
-              <Label className="form-check-label">
-                <Input type="radio" name="radio1" onChange={() => this.setPermission('editOnCloudAndDownload')} />{'  '}{gettext('Edit on cloud and download')}
-              </Label>
-            </FormGroup>
-          }
+              <FormGroup check>
+                <Label check>
+                  <span>{gettext('Set permission')}</span>
+                </Label>
+              </FormGroup>
+              {this.permissionOptions.map((item, index) => {
+                return (
+                  <FormGroup check className="permission" key={index}>
+                    <Label className="form-check-label">
+                      <Input type="radio" name="permission" value={item} checked={this.state.currentPermission == item} onChange={this.setPermission} className="mr-1" />
+                      {Utils.getShareLinkPermissionObject(item).text}
+                    </Label>
+                  </FormGroup>
+                );
+              })}
             </Fragment>
           )}
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}

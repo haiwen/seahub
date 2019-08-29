@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
@@ -35,6 +36,7 @@ class DirOperationToolbar extends React.Component {
       isCreateMenuShow: false,
       isShareDialogShow: false,
       operationMenuStyle: '',
+      isMobileOpMenuOpen: false
     };
   }
 
@@ -44,6 +46,10 @@ class DirOperationToolbar extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('click', this.hideOperationMenu);
+  }
+
+  toggleMobileOpMenu = () => {
+    this.setState({isMobileOpMenuOpen: !this.state.isMobileOpMenuOpen});
   }
 
   hideOperationMenu = () => {
@@ -161,17 +167,34 @@ class DirOperationToolbar extends React.Component {
 
     let itemType = path === '/' ? 'library' : 'dir';
     let itemName = path == '/' ? repoName : Utils.getFolderName(path);
+
+    const content = Utils.isDesktop() ? (
+      <Fragment>
+        {Utils.isSupportUploadFolder() ?
+          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
+          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
+        <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
+        {this.props.showShareBtn &&
+          <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>}
+      </Fragment>
+    ) : (
+      <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu}>
+        <DropdownToggle
+          tag="span"
+          className="sf2-icon-plus mobile-toolbar-icon"
+        />
+        <DropdownMenu>
+          <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
+          <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
+          <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    );
+
     return (
       <Fragment>
         <div className="operation">
-          {Utils.isSupportUploadFolder() ?
-            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>
-          }
-          <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
-          {this.props.showShareBtn &&
-          <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
-          }
+          {content}
         </div>
         {this.state.isUploadMenuShow && (
           <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
