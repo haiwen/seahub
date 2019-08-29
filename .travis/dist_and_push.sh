@@ -19,7 +19,7 @@ function commit_dist_files() {
   git add -u . && git add -A media/assets && git add -A static/scripts && git add -A frontend && git add -A locale
   git config --global user.email "drone@seafile.com"
   git config --global user.name "drone"
-  git commit -m "[dist] Drone CI build: #$DRONE_BUILD_NUMBER, based on commit $DRONE_COMMIT." -m "$DRONE_COMMIT_MESSAGE"
+  git commit -m "[dist][CI SKIP] Drone CI build: #$DRONE_BUILD_NUMBER, based on commit $DRONE_COMMIT." -m "$DRONE_COMMIT_MESSAGE"
 }
 
 function upload_files() {
