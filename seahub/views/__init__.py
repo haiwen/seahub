@@ -934,7 +934,7 @@ def list_inner_pub_repos(request):
     username = request.user.username
     if is_org_context(request):
         org_id = request.user.org.org_id
-        return seafile_api.list_org_inner_pub_repos_by_owner(org_id, username)
+        return seafile_api.list_org_inner_pub_repos(org_id)
 
     if not request.cloud_mode:
         return seafile_api.list_inner_pub_repos_by_owner(username)
