@@ -9,7 +9,6 @@ SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
 
 cd "$SEAHUB_SRCDIR"
 
-sudo apt-get install -y nginx
 sudo mv /etc/nginx/sites-enabled/default /etc/nginx/default.backup
 cat <<'EOF' >/tmp/seafile.conf
 server {
@@ -26,5 +25,5 @@ server {
 }
 EOF
 
-sudo mv /tmp/seafile.conf /etc/nginx/sites-enabled/
+sudo mv /tmp/seafile.conf /etc/nginx/sites-enabled/default
 sudo service nginx restart
