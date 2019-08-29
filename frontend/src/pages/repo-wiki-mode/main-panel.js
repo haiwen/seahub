@@ -8,7 +8,7 @@ import RepoInfo from '../../models/repo-info';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
-import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
+import MultipleDirOperationToolbar from '../../components/toolbar/multiple-dir-operation-toolbar';
 import CurDirPath from '../../components/cur-dir-path';
 import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
@@ -170,7 +170,7 @@ class MainPanel extends Component {
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
             <div className="dir-operation">
               {this.props.isDirentSelected ?
-                <MutipleDirOperationToolbar
+                <MultipleDirOperationToolbar
                   repoID={repoID} 
                   path={this.props.path}
                   selectedDirentList={this.props.selectedDirentList}

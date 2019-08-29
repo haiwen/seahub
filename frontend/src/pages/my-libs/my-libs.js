@@ -159,7 +159,7 @@ class MyLibraries extends Component {
         </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <div className="cur-view-path align-items-center">
+            <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('My Libraries')}</h3>
               {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
