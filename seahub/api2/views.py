@@ -784,7 +784,6 @@ class Repos(APIView):
                     "owner_contact_email": contact_email_dict.get(r.user, ''),
                     "name": r.repo_name,
                     "owner_nickname": nickname_dict.get(r.user, ''),
-                    "owner_name": nickname_dict.get(r.user, ''),
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "modifier_email": r.last_modifier,
