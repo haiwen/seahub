@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
-import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
+import MultipleDirOperationToolbar from '../../components/toolbar/multiple-dir-operation-toolbar';
 import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
 
 const propTypes = {
@@ -89,7 +89,7 @@ class LibContentToolbar extends React.Component {
           <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onSideNavMenuClick}></span>
           <div className="dir-operation">
             {this.props.isDirentSelected ?
-              <MutipleDirOperationToolbar
+              <MultipleDirOperationToolbar
                 repoID={this.props.repoID} 
                 path={this.props.path}
                 userPerm={this.props.userPerm}
