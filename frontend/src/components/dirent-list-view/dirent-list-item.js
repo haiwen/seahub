@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -70,6 +71,7 @@ class DirentListItem extends React.Component {
       isDropTipshow: false,
       isEditFileTagShow: false,
       isPermissionDialogOpen: false,
+      isOpMenuOpen: false // for mobile
     };
   }
 
@@ -84,6 +86,12 @@ class DirentListItem extends React.Component {
         }
       });
     }
+  }
+
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    });
   }
 
   //UI Interactive
@@ -184,6 +192,11 @@ class DirentListItem extends React.Component {
 
   closeSharedDialog = () => {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+  }
+
+  onMobileMenuItemClick = (e) => {
+    const operation = e.target.getAttribute('data-op');
+    this.onMenuItemClick(operation, e);
   }
 
   onMenuItemClick = (operation, event) => {
@@ -586,70 +599,121 @@ class DirentListItem extends React.Component {
     trClass += (activeDirent && activeDirent.name === dirent.name)  ? 'tr-active' : '';
     trClass += dirent.isSelected? 'tr-active' : '';
 
-    let lockedInfo = gettext('locked by {name}');
-    lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
+    let lockedInfo = gettext('locked by {name}').replace('{name}', dirent.lock_owner_name);
+
+    const isDesktop = Utils.isDesktop();
+    const desktopItem = (
+      <tr 
+        className={trClass} 
+        draggable="true"
+        onMouseEnter={this.onMouseEnter} 
+        onMouseOver={this.onMouseOver} 
+        onMouseLeave={this.onMouseLeave} 
+        onClick={this.onDirentClick} 
+        onDragStart={this.onItemDragStart} 
+        onDragEnter={this.onItemDragEnter} 
+        onDragOver={this.onItemDragOver} 
+        onDragLeave={this.onItemDragLeave} 
+        onDrop={this.onItemDragDrop}
+        onMouseDown={this.onItemMouseDown}
+        onContextMenu={this.onItemContextMenu}
+      >
+        <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
+          <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
+        </td>
+        <td className="pl10">
+          {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onItemStarred}></i>}
+          {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star cursor-pointer" onClick={this.onItemStarred}></i>}
+        </td>
+        <td className="pl10">
+          <div className="dir-icon">
+            {dirent.encoded_thumbnail_src ?
+              <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+              <img ref='drag_icon' src={iconUrl} width="24" alt='' />
+            }
+            {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
+            <div ref="empty_content" style={{position: 'absolute', width: '1px', height: '1px'}}></div>
+          </div>
+        </td>
+        <td className="name">
+          {this.state.isRenameing ?
+            <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
+            <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+          }
+        </td>
+        <td className="tag-list-title">
+          {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
+            <Fragment>
+              <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
+                {dirent.file_tags.map((fileTag, index) => {
+                  let length = dirent.file_tags.length;
+                  return (
+                    <span className="file-tag" key={fileTag.id} style={{zIndex:length - index, backgroundColor:fileTag.color}}></span>
+                  );
+                })}
+              </div>
+              <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
+                {tagTitle}
+              </UncontrolledTooltip>
+            </Fragment>
+          )} 
+        </td>
+        <td className="operation">{this.renderItemOperation()}</td>
+        <td className="file-size">{dirent.size && dirent.size}</td>
+        <td className="last-update">{dirent.mtime_relative}</td>
+      </tr>
+    ); 
+    const mobileItem = (
+      <tr>
+        <td>
+          <div className="dir-icon">
+            {dirent.encoded_thumbnail_src ?
+              <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+              <img src={iconUrl} width="24" alt="" />
+            }
+            {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
+          </div>
+        </td>
+        <td>
+          {this.state.isRenameing ?
+            <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
+            <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+          }
+          <br />
+          {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
+          <span className="item-meta-info">{dirent.mtime_relative}</span>
+        </td>
+        <td>
+          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+            <DropdownToggle
+              tag="i"
+              className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+              title={gettext('More Operations')}
+              data-toggle="dropdown"
+              aria-expanded={this.state.isOpMenuOpen}
+            />
+            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+              <div className="mobile-operation-menu-bg-layer"></div>
+              <div className="mobile-operation-menu">
+                {dirent.starred !== undefined &&
+                <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>{dirent.starred ? gettext('Unstar') : gettext('Star')}</DropdownItem>}
+                {this.props.getDirentItemMenuList(dirent, true).map((item, index) => {
+                  if (item != 'Divider' && item.key != 'Open via Client') {
+                    return (
+                      <DropdownItem className="mobile-menu-item" key={index} data-op={item.key} onClick={this.onMobileMenuItemClick}>{item.value}</DropdownItem>
+                    );
+                  }
+                })}
+              </div>
+            </div>
+          </Dropdown>
+        </td>
+      </tr>
+    ); 
 
     return (
       <Fragment>
-        <tr 
-          className={trClass} 
-          draggable="true"
-          onMouseEnter={this.onMouseEnter} 
-          onMouseOver={this.onMouseOver} 
-          onMouseLeave={this.onMouseLeave} 
-          onClick={this.onDirentClick} 
-          onDragStart={this.onItemDragStart} 
-          onDragEnter={this.onItemDragEnter} 
-          onDragOver={this.onItemDragOver} 
-          onDragLeave={this.onItemDragLeave} 
-          onDrop={this.onItemDragDrop}
-          onMouseDown={this.onItemMouseDown}
-          onContextMenu={this.onItemContextMenu}
-        >
-          <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
-            <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
-          </td>
-          <td className="pl10">
-            {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onItemStarred}></i>}
-            {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star cursor-pointer" onClick={this.onItemStarred}></i>}
-          </td>
-          <td className="pl10">
-            <div className="dir-icon">
-              {dirent.encoded_thumbnail_src ?
-                <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
-                <img ref='drag_icon' src={iconUrl} width="24" alt='' />
-              }
-              {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
-              <div ref="empty_content" style={{position: 'absolute', width: '1px', height: '1px'}}></div>
-            </div>
-          </td>
-          <td className="name">
-            {this.state.isRenameing ?
-              <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
-            }
-          </td>
-          <td className="tag-list-title">
-            {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
-              <Fragment>
-                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
-                  {dirent.file_tags.map((fileTag, index) => {
-                    let length = dirent.file_tags.length;
-                    return (
-                      <span className="file-tag" key={fileTag.id} style={{zIndex:length - index, backgroundColor:fileTag.color}}></span>
-                    );
-                  })}
-                </div>
-                <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
-                  {tagTitle}
-                </UncontrolledTooltip>
-              </Fragment>
-            )} 
-          </td>
-          <td className="operation">{this.renderItemOperation()}</td>
-          <td className="file-size">{dirent.size && dirent.size}</td>
-          <td className="last-update">{dirent.mtime_relative}</td>
-        </tr>
+        {isDesktop ? desktopItem : mobileItem} 
         {this.state.isMoveDialogShow &&
           <ModalPortal>
             <MoveDirentDialog

@@ -652,6 +652,8 @@ class DirentListView extends React.Component {
     const sortBySize = sortBy == 'size';
     const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
+    const isDesktop = Utils.isDesktop();
+
     return (
       <div 
         className={`table-container ${this.state.isListDropTipShow ? 'table-drop-active' : ''}`}
@@ -663,7 +665,8 @@ class DirentListView extends React.Component {
         onDragLeave={this.onTableDragLeave}
         onDrop={this.tableDrop}
       >
-        <table>
+        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+          {isDesktop ? (
           <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
             <tr>
               <th width="3%" className="pl10">
@@ -678,6 +681,15 @@ class DirentListView extends React.Component {
               <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             </tr>
           </thead>
+          ) : (
+            <thead>
+              <tr>
+                <th width="12%"></th>
+                <th width="80%"></th>
+                <th width="8%"></th>
+              </tr>
+            </thead>
+          )}
           <tbody>
             {direntList.map((dirent, index) => {
               return (
