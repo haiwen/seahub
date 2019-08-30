@@ -191,6 +191,10 @@ class LibContentContainer extends React.Component {
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               fileTags={this.props.fileTags}
               onDeleteRepoTag={this.props.onDeleteRepoTag}
+              direntList={this.props.direntList}
+              sortBy={this.props.sortBy}
+              sortOrder={this.props.sortOrder}
+              sortItems={this.props.sortItems}
             />
           </div>
           <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>

@@ -35,7 +35,7 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
 };
 
-class MutipleDirOperationToolbar extends React.Component {
+class MultipleDirOperationToolbar extends React.Component {
 
   constructor(props) {
     super(props);
@@ -409,6 +409,6 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 }
 
-MutipleDirOperationToolbar.propTypes = propTypes;
+MultipleDirOperationToolbar.propTypes = propTypes;
 
-export default MutipleDirOperationToolbar;
+export default MultipleDirOperationToolbar;
