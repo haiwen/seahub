@@ -9,10 +9,8 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './index.css';
 
-let lang = window.app.pageOptions.lang;
-
 ReactDOM.render(
-  <I18nextProvider i18n={ i18n } initialLanguage={ lang } >
+  <I18nextProvider i18n={ i18n } >
     <MarkdownEditor />
   </I18nextProvider>,
   document.getElementById('root')

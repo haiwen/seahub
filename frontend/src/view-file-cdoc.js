@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
@@ -12,7 +12,8 @@ import { Value } from 'slate';
 import CDOCTopbar from './components/toolbar/cdoc-editor-topbar';
 import ShareDialog from './components/dialog/share-dialog';
 import { Utils } from './utils/utils';
-import { translate } from 'react-i18next';
+import Loading from './components/loading';
+import { withTranslation } from 'react-i18next';
 
 import { EditorUtilities } from '@seafile/seafile-editor/dist/editorUtilities';
 import toaster from './components/toast';
@@ -25,8 +26,6 @@ import './assets/css/fontawesome.css';
 import './index.css';
 
 const CryptoJS = require('crypto-js');
-
-const lang = window.app.config.lang;
 
 const { repoID, repoName, filePath, fileName, username, contactEmail } = window.app.pageOptions;
 const { siteRoot, seafileCollabServer, serviceURL } = window.app.config;
@@ -266,11 +265,13 @@ class CDOCEditor extends React.Component {
   }
 }
 
-const TranslatedCDOCEditor = translate('translations')(CDOCEditor);
+const TranslatedCDOCEditor = withTranslation('translations')(CDOCEditor);
 
 ReactDOM.render(
-  <I18nextProvider i18n={i18n} initialLanguage={lang} >
-    <TranslatedCDOCEditor />
+  <I18nextProvider i18n={i18n} >
+    <Suspense fallback={<Loading />}>
+      <TranslatedCDOCEditor />
+    </Suspense>
   </I18nextProvider>
   ,
   document.getElementById('wrapper')
