@@ -1,12 +1,16 @@
 import i18n from 'i18next';
-import XHR from 'i18next-xhr-backend';
-import { mediaUrl } from './utils/constants';
+import Backend from 'i18next-xhr-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
+import { mediaUrl, lang } from './utils/constants';
 
 i18n
-  .use(XHR)
+  .use(Backend)
+  .use(LanguageDetector)
+  .use(initReactI18next)
   .init({
+    lng: lang,
     fallbackLng: 'en',
-
     ns: ['translations'],
     defaultNS: 'translations',
 
