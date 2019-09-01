@@ -59,6 +59,7 @@ tags
 
 frontend/webpack-stats.dev.json
 frontend/node_modules
+frontend/build
 frontend/package-lock.json
 
 /.idea
