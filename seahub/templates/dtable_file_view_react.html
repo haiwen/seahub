@@ -30,6 +30,7 @@
         },
         pageOptions: {
             server: '{{ service_url }}',
+            lang: '{{ LANGUAGE_CODE }}',
             csrfToken: "{{ csrf_token }}",
             name: "{{request.user.username|email2nickname|escapejs}}",
             username: "{{request.user.username|escapejs}}",
