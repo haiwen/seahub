@@ -79,7 +79,7 @@ class MainPanel extends Component {
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     return (
       <div className="main-panel wiki-main-panel o-hidden">
-        <div className="main-panel-north panel-top border-left-show">
+        <div className={`main-panel-north panel-top ${this.props.permission === 'rw' ? 'border-left-show' : ''}`}>
           {!username &&
             <Fragment>
               <div className="cur-view-toolbar">
