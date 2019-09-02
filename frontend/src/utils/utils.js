@@ -1,5 +1,6 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, canGenerateShareLink, canGenerateUploadLink, username } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
+import TextTranslation from './text-translation';
 
 export const Utils = {
 
@@ -375,6 +376,95 @@ export const Utils = {
         break;
     }
     return title;
+  },
+
+  getDirentOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
+
+    let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
+
+    let type = dirent.type;
+    let permission = dirent.permission;
+    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent);
+
+    let menuList = [];
+    let contextmenuList = [];
+
+    if (isContextmenu) {
+      let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
+    
+      if (showShareBtn) {
+        contextmenuList = [SHARE];
+      }   
+
+      if (dirent.permission === 'rw' || dirent.permission === 'r') {
+        contextmenuList = [...contextmenuList, DOWNLOAD];
+      }   
+
+      if (dirent.permission === 'rw') {
+        contextmenuList = [...contextmenuList, DELETE];
+      }   
+      contextmenuList = contextmenuList.length > 0 ? [...contextmenuList, 'Divider'] : []; 
+    }   
+
+    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
+    if (type === 'dir' && permission === 'rw') {
+      if (can_set_folder_perm) {
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
+      } else {
+        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
+      }   
+      return menuList;
+    }   
+
+    if (type === 'dir' && permission === 'r') {
+      menuList = [...contextmenuList];
+      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : menuList.slice(0, menuList.length - 1); 
+      return menuList;
+    }   
+
+    if (type === 'file' && permission === 'rw') {
+      menuList = [...contextmenuList];
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        menuList.push(RENAME);
+        menuList.push(MOVE);
+      }   
+      menuList.push(COPY);
+      menuList.push(TAGS);
+      if (isPro) {
+        if (dirent.is_locked) {
+          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
+            menuList.push(UNLOCK);
+          }   
+        } else {
+          menuList.push(LOCK);
+        }   
+      }   
+      menuList.push('Divider');
+      if (enableFileComment) {
+        menuList.push(COMMENT);
+      }   
+      menuList.push(HISTORY);
+      if (isPro && fileAuditEnabled) {
+        menuList.push(ACCESS_LOG);
+      }   
+      menuList.push('Divider');
+      menuList.push(OPEN_VIA_CLIENT);
+      return menuList;
+    }   
+
+    if (type === 'file' && permission === 'r') {
+      menuList = [...contextmenuList];
+      if (!currentRepoInfo.encrypted) {
+        menuList.push(COPY);
+      }
+      if (enableFileComment) {
+        menuList.push(COMMENT);
+      }
+      menuList.push(HISTORY);
+      return menuList;
+    }
+
+    return [];
   },
 
   sharePerms: function(permission) {

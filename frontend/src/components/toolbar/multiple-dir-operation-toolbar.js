@@ -88,44 +88,21 @@ class MultipleDirOperationToolbar extends React.Component {
   }
 
   getDirentMenuList = (dirent) => {
-    let menuList = [];
-    let currentRepoInfo = this.props.currentRepoInfo;
-    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
-
-    const { SHARE, TAGS, RELATED_FILES, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, LOCK, UNLOCK } = TextTranslation;
-
-    if (dirent.type === 'dir') {
-      if (showShareBtn) {
-        menuList = [SHARE];
-      }
-      return menuList;
-    } 
-
-    if (dirent.type === 'file') {
-      let shareBtn = showShareBtn ? [SHARE] : [];
-
-      menuList = [...shareBtn, TAGS, RELATED_FILES, 'Divider', HISTORY, ACCESS_LOG, 'Divider', OPEN_VIA_CLIENT];
-      if (!Utils.isMarkdownFile(dirent.name)) {
-        menuList = menuList.filter(menu => {
-          return menu !== RELATED_FILES;
-        });
-      }
-      if (!isPro || !fileAuditEnabled) {
-        menuList = menuList.filter(menu => {
-          return menu !== ACCESS_LOG;
-        });
-      }
-      if (isPro) {
-        if (dirent.is_locked) {
-          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && currentRepoInfo.permission === 'rw')) {
-            menuList.splice(1, 0, UNLOCK);
-          }
-        } else {
-          menuList.splice(1, 0, LOCK);
-        }
-      }
-      return menuList;
+    const isRepoOwner = this.props.isRepoOwner;
+    const currentRepoInfo = this.props.currentRepoInfo;
+    const isContextmenu = true;
+    let opList = Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+    const list = ['Move', 'Copy', 'Delete', 'Download'];
+    if (dirent.type == 'dir') {
+      opList = opList.filter((item, index) => {
+        return list.indexOf(item.key) == -1 && item != 'Divider';
+      });
+    } else {
+      opList = opList.filter((item, index) => {
+        return list.indexOf(item.key) == -1;
+      });
     }
+    return opList;
   }
 
   onMenuItemClick = (operation) => {
