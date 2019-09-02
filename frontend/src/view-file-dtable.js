@@ -6,7 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n-dtable';
 import './css/view-file-dtable.css';
 
-const { server, workspaceID, username, userNickName, contactEmail, fileName, filePath, dtableUuid, dtableServer, dtableSocket, mediaUrl } = window.app.pageOptions;
+const { server, workspaceID, username, userNickName, contactEmail, fileName, filePath, dtableUuid, dtableServer, dtableSocket, mediaUrl, lang } = window.app.pageOptions;
 window.dtable = {};
 window.dtable = {
   workspaceID: workspaceID,
@@ -14,13 +14,14 @@ window.dtable = {
   name: userNickName,
   contactEmail: contactEmail,
   server: server,
-  dtableServer: "http://127.0.0.1:5000/",
-  dtableSocket: "http://127.0.0.1:5000/",
+  dtableServer: dtableServer,
+  dtableSocket: dtableSocket,
   filePath: filePath,
   fileName: fileName,
   dtableUuid: dtableUuid,
   mediaUrl: mediaUrl,
-  accessToken: ''
+  accessToken: '',
+  lang: lang
 };
 
 window.seafileAPI = seafileAPI;
