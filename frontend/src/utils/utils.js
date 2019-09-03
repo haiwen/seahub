@@ -138,6 +138,12 @@ export const Utils = {
     }
   },
 
+  checkDuplicatedNameInList: function(list, targetName) {
+    return list.some(object => {
+      return object.name === targetName;
+    });
+  },
+
   encodePath: function(path) {
     // IE8 does not support 'map()'
     /*

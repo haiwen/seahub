@@ -16,7 +16,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import Rename from '../../components/dialog/rename-grid-item-dialog';
+import Rename from '../../components/dialog/rename-dirent';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
@@ -150,7 +150,7 @@ class DirentGridView extends React.Component{
         this.onLockItem(currentObject);
         break;
       case 'Comment':
-        this.onComnentItem();
+        this.onCommentItem();
         break;
       case 'History':
         this.onHistory(currentObject);
@@ -261,7 +261,7 @@ class DirentGridView extends React.Component{
     });
   }
 
-  onComnentItem = () => {
+  onCommentItem = () => {
     this.props.showDirentDetail('comments');
   }
 
@@ -286,12 +286,8 @@ class DirentGridView extends React.Component{
   }
 
   onItemRename = (newName) => {
-    this.setState({
-      isRenameDialogShow: !this.state.isRenameDialogShow,
-    });
     this.props.onItemRename(this.state.activeDirent, newName);
   }
-
 
   prepareImageItem = (item) => {
     const useThumbnail = !this.repoEncrypted;
@@ -351,11 +347,7 @@ class DirentGridView extends React.Component{
   }
 
   checkDuplicatedName = (newName) => {
-    let direntList = this.props.direntList;
-    let isDuplicated = direntList.some(object => {
-      return object.name === newName;
-    });
-    return isDuplicated;
+    return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
   }
 
   // common contextmenu handle

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
-import { gettext, siteRoot, canGenerateShareLink, isPro, fileAuditEnabled } from '../../utils/constants';
+import { gettext, siteRoot, canGenerateShareLink, isPro, fileAuditEnabled, name } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -12,6 +12,9 @@ import ShareDialog from '../dialog/share-dialog';
 import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
+import Rename from '../dialog/rename-dirent';
+import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
+
 import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
@@ -51,6 +54,8 @@ class MultipleDirOperationToolbar extends React.Component {
       multiFileTagList: [],
       showRelatedFileDialog: false,
       viewMode: 'list_related_file',     
+      isRenameDialogOpen: false,
+      isPermissionDialogOpen: false
     };
   }
 
@@ -87,6 +92,26 @@ class MultipleDirOperationToolbar extends React.Component {
     });
   }
 
+  checkDuplicatedName = (newName) => {
+    return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
+  }
+
+  onItemRename = (newName) => {
+    const dirent = this.props.selectedDirentList[0];
+    this.props.onItemRename(dirent, newName);
+  }
+
+  onPermissionItem = () => {
+    this.setState({
+      showLibContentViewDialogs: !this.state.showLibContentViewDialogs,
+      isPermissionDialogOpen: !this.state.isPermissionDialogOpen
+    });
+  }
+
+  onCommentItem = () => {
+    this.props.showDirentDetail('comments');
+  }
+
   getDirentMenuList = (dirent) => {
     const isRepoOwner = this.props.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
@@ -108,12 +133,21 @@ class MultipleDirOperationToolbar extends React.Component {
   onMenuItemClick = (operation) => {
     const dirents = this.props.selectedDirentList;
     const dirent = dirents[0];
-    switch(operation) {
+    switch (operation) {
       case 'Share':
         this.setState({
           showLibContentViewDialogs: true,
           showShareDialog: true,
         });
+        break;
+      case 'Rename':
+        this.setState({
+          showLibContentViewDialogs: true,
+          isRenameDialogOpen: true
+        });
+        break;
+      case 'Permission':
+        this.onPermissionItem();
         break;
       case 'Tags':
         this.listFileTags(dirent);
@@ -123,6 +157,9 @@ class MultipleDirOperationToolbar extends React.Component {
         break;
       case 'Unlock':
         this.unlockFile(dirent);
+        break;
+      case 'Comment':
+        this.onCommentItem();
         break;
       case 'Related Files':
         this.openRelatedFilesDialog(dirent);
@@ -147,6 +184,7 @@ class MultipleDirOperationToolbar extends React.Component {
       if (res.data.is_locked) {
         this.props.updateDirent(dirent, 'is_locked', true);
         this.props.updateDirent(dirent, 'locked_by_me', true);
+        this.props.updateDirent(dirent, 'lock_owner_name', name);
         this.props.unSelectDirent();
       }
     }).catch(error => {
@@ -161,6 +199,7 @@ class MultipleDirOperationToolbar extends React.Component {
       if (!res.data.is_locked) {
         this.props.updateDirent(dirent, 'is_locked', false);
         this.props.updateDirent(dirent, 'locked_by_me', false);
+        this.props.updateDirent(dirent, 'lock_owner_name', '');
         this.props.unSelectDirent();
       }
     }).catch(error => {
@@ -177,7 +216,6 @@ class MultipleDirOperationToolbar extends React.Component {
       filePath: filePath
     });
     location.href = url;
-    this.props.unSelectDirent();
   }
 
   onHistory = (dirent) => {
@@ -227,6 +265,8 @@ class MultipleDirOperationToolbar extends React.Component {
       showShareDialog: false,
       showEditFileTagDialog: false,
       showRelatedFileDialog: false,
+      isRenameDialogOpen: false,
+      isPermissionDialogOpen: false,
     });
   }
 
@@ -281,7 +321,9 @@ class MultipleDirOperationToolbar extends React.Component {
   render() {
 
     const { repoID, userPerm } = this.props;
-    let direntPath = this.getDirentPath(this.props.selectedDirentList[0]);
+    const dirent = this.props.selectedDirentList[0];
+
+    let direntPath = this.getDirentPath(dirent);
 
     if (userPerm !== 'rw' && userPerm !== 'admin') {
       return '';
@@ -343,15 +385,36 @@ class MultipleDirOperationToolbar extends React.Component {
             {this.state.showShareDialog &&
               <ModalPortal>
                 <ShareDialog
-                  itemType={this.props.selectedDirentList[0].type}
-                  itemName={this.props.selectedDirentList[0].name}
+                  itemType={dirent.type}
+                  itemName={dirent.name}
                   itemPath={direntPath}
-                  userPerm={this.props.selectedDirentList[0].permission}
+                  userPerm={dirent.permission}
                   repoID={repoID}
                   repoEncrypted={false}
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
-                  isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                   toggleDialog={this.toggleCancel}
+                />
+              </ModalPortal>
+            }
+            {this.state.isRenameDialogOpen &&
+              <ModalPortal>
+                <Rename
+                  dirent={dirent}
+                  onRename={this.onItemRename}
+                  checkDuplicatedName={this.checkDuplicatedName}
+                  toggleCancel={this.toggleCancel}
+                />
+              </ModalPortal>
+            }
+            {this.state.isPermissionDialogOpen &&
+              <ModalPortal>
+                <LibSubFolderPermissionDialog
+                  toggleDialog={this.toggleCancel}
+                  repoID={repoID}
+                  folderPath={direntPath}
+                  folderName={dirent.name}
+                  isDepartmentRepo={this.props.isGroupOwnedRepo}
                 />
               </ModalPortal>
             }
