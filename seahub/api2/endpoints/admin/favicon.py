@@ -12,8 +12,9 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT, \
-        CUSTOM_FAVICON_PATH
-from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT
+        CUSTOM_FAVICON_PATH, MEDIA_URL
+from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT, \
+    get_service_url
 from seahub.utils.file_types import IMAGE
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
@@ -70,4 +71,4 @@ class AdminFavicon(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        return Response({'favicon_path': get_service_url() + MEDIA_URL + CUSTOM_FAVICON_PATH})

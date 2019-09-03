@@ -5,10 +5,10 @@ from tests.common.common import BASE_URL
 from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
-from seahub.utils import PREVIEW_FILEEXT
+from seahub.utils import PREVIEW_FILEEXT, get_service_url
 from seahub.utils.file_types import IMAGE
 from seahub.utils.error_msg import file_type_error_msg
-from seahub.settings import MEDIA_ROOT, CUSTOM_FAVICON_PATH
+from seahub.settings import MEDIA_ROOT, CUSTOM_FAVICON_PATH, MEDIA_URL
 
 class AdminFaviconTest(BaseTestCase):
     def setUp(self):
@@ -32,7 +32,7 @@ class AdminFaviconTest(BaseTestCase):
 
         assert resp.status_code == 200
         json_resp = json.loads(resp.content)
-        assert json_resp['success'] == True
+        assert json_resp['favicon_path'] == get_service_url() + MEDIA_URL + CUSTOM_FAVICON_PATH
         assert os.path.exists(custom_symlink)
         assert os.path.islink(custom_symlink)
 

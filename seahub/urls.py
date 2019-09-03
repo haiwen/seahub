@@ -104,6 +104,7 @@ from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
+from seahub.api2.endpoints.admin.web_settings import AdminWebSettings
 from seahub.api2.endpoints.admin.statistics import (
     FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
     SystemUserTrafficExcelView, SystemUserStorageExcelView
@@ -447,6 +448,9 @@ urlpatterns = [
     ## admin::sysinfo
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
 
+    ## admin:web settings
+    url(r'^api/v2.1/admin/web-settings/$', AdminWebSettings.as_view(), name='api-v2.1-web-settings'),
+
     ## admin::revision-tags
     url(r'^api/v2.1/admin/revision-tags/tagged-items/$', AdminTaggedItemsView.as_view(), name='api-v2.1-admin-revision-tags-tagged-items'),
 
@@ -649,6 +653,7 @@ urlpatterns = [
     url(r'^sys/desktop-devices/$', sysadmin_react_fake_view, name="sys_desktop_devices"),
     url(r'^sys/mobile-devices/$', sysadmin_react_fake_view, name="sys_mobile_devices"),
     url(r'^sys/device-errors/$', sysadmin_react_fake_view, name="sys_device_errors"),
+    url(r'^sys/web-settings/$', sysadmin_react_fake_view, name="sys_web_settings"),
     url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
