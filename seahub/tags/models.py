@@ -3,8 +3,11 @@
 import os
 import uuid
 import hashlib
+import posixpath
 
 from django.db import models
+
+from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path,normalize_dir_path
@@ -29,6 +32,7 @@ class FileUUIDMapManager(models.Manager):
             return:
                 uuid of filemap
         """
+        repo_id, parent_path = self.model.get_origin_repo_id_and_parent_path(repo_id, parent_path)
         uuid = self.get_fileuuidmap_by_path(repo_id, parent_path, filename, is_dir)
         if not uuid:
             uuid = self.model(repo_id=repo_id, parent_path=parent_path,
@@ -46,6 +50,7 @@ class FileUUIDMapManager(models.Manager):
             return:
                 return uuid if it's exist,otherwise return None
         """
+        repo_id, parent_path = self.model.get_origin_repo_id_and_parent_path(repo_id, parent_path)
         md5_repo_id_parent_path = self.model.md5_repo_id_parent_path(repo_id, parent_path)
         uuid = super(FileUUIDMapManager, self).filter(
             repo_id_parent_path_md5=md5_repo_id_parent_path,
@@ -57,6 +62,7 @@ class FileUUIDMapManager(models.Manager):
             return None
 
     def get_fileuuidmaps_by_parent_path(self, repo_id, parent_path):
+        repo_id, parent_path = self.model.get_origin_repo_id_and_parent_path(repo_id, parent_path)
         parent_path = FileUUIDMap.normalize_path(parent_path)
         uuids = super(FileUUIDMapManager, self).filter(
             repo_id=repo_id, parent_path=parent_path
@@ -195,6 +201,14 @@ class FileUUIDMap(models.Model):
     @classmethod
     def normalize_path(self, path):
         return path.rstrip('/') if path != '/' else '/'
+
+    @classmethod
+    def get_origin_repo_id_and_parent_path(cls, repo_id, parent_path):
+        repo = seafile_api.get_repo(repo_id)
+        if repo.is_virtual:
+            repo_id = repo.origin_repo_id
+            parent_path = posixpath.join(repo.origin_path, parent_path.strip('/'))
+        return repo_id, parent_path
 
     def save(self, *args, **kwargs):
         self.parent_path = self.normalize_path(self.parent_path)
