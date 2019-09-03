@@ -142,6 +142,9 @@ ul,ol,li {
     font-weight: normal;
     line-height: 1.5;
 }
+.cur-view-path .sf-heading {
+  margin: 0;
+}
 
 .vh {
     visibility: hidden;
