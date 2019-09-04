@@ -61,7 +61,12 @@ class SysAdmin extends React.Component {
 
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab}/>
+        <SidePanel
+          isSidePanelClosed={isSidePanelClosed}
+          onCloseSidePanel={this.onCloseSidePanel}
+          currentTab={currentTab}
+          tabItemClick={this.tabItemClick}
+        />
         <MainPanel>
           <Router className="reach-router">
             <Info path={siteRoot + 'sys/info'} />

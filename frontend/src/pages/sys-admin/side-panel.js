@@ -11,6 +11,7 @@ const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
   onCloseSidePanel: PropTypes.func.isRequired,
   currentTab: PropTypes.string.isRequired,
+  tabItemClick: PropTypes.func.isRequired
 };
 
 class SidePanel extends React.Component {
@@ -32,7 +33,11 @@ class SidePanel extends React.Component {
               <ul className="nav nav-pills flex-column nav-container">
                 {canViewSystemInfo &&
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('info')}`} to={siteRoot + 'sys/info/'}>
+                  <Link
+                    className={`nav-link ellipsis ${this.getActiveClass('info')}`}
+                    to={siteRoot + 'sys/info/'}
+                    onClick={() => this.props.tabItemClick('info')}
+                  >
                     <span className="sf2-icon-info" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('Info')}</span>
                   </Link>
@@ -48,7 +53,11 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin &&
                   <li className="nav-item">
-                    <Link className={`nav-link ellipsis ${this.getActiveClass('devices')}`} to={siteRoot + 'sys/desktop-devices/'}>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('devices')}`}
+                      to={siteRoot + 'sys/desktop-devices/'}
+                      onClick={() => this.props.tabItemClick('devices')}
+                    >
                       <span className="sf2-icon-monitor" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Devices')}</span>
                     </Link>
@@ -136,7 +145,11 @@ class SidePanel extends React.Component {
                 }
                 {isPro && isDefaultAdmin && enableFileScan &&
                   <li className="nav-item">
-                    <Link className='nav-link ellipsis' to={siteRoot + 'sys/file-scan-records/'}>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('file-scan-records')}`}
+                      to={siteRoot + 'sys/file-scan-records/'}
+                      onClick={() => this.props.tabItemClick('file-scan-records')}
+                    >
                       <span className="sf2-icon-security" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('File Scan')}</span>
                     </Link>
@@ -176,7 +189,11 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin && enableWorkWeixin &&
                   <li className="nav-item">
-                    <Link className={`nav-link ellipsis ${this.getActiveClass('departments')}`} to={siteRoot + 'sys/work-weixin/departments/'}>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('work-weixin')}`}
+                      to={siteRoot + 'sys/work-weixin/'}
+                      onClick={() => this.props.tabItemClick('work-weixin')}
+                    >
                       <span className="sf3-font-enterprise-wechat sf3-font" aria-hidden="true"></span>
                       <span className="nav-text">{'企业微信集成'}</span>
                     </Link>
