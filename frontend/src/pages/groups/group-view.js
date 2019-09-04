@@ -391,8 +391,17 @@ class GroupView extends React.Component {
   }
 
   render() {
-    let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff, isOwner } = this.state;
-    let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1 && !isOwner);
+    let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
+    let isShowSettingIcon = false;
+    if (currentGroup) { // group message is loaded  
+      if (currentGroup.parent_group_id === 0) {
+        isShowSettingIcon = true; 
+      } else {
+        if (currentGroup.admins.indexOf(username) > -1) {
+          isShowSettingIcon = true; 
+        }
+      }
+    }
     let useRate = 0;
     if (isDepartmentGroup && currentGroup.group_quota) {
       useRate = currentGroup.group_quota_usage / currentGroup.group_quota * 100 + '%';
