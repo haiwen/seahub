@@ -16,7 +16,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import Rename from '../../components/dialog/rename-grid-item-dialog';
+import Rename from '../../components/dialog/rename-dirent';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
@@ -150,7 +150,7 @@ class DirentGridView extends React.Component{
         this.onLockItem(currentObject);
         break;
       case 'Comment':
-        this.onComnentItem();
+        this.onCommentItem();
         break;
       case 'History':
         this.onHistory(currentObject);
@@ -261,7 +261,7 @@ class DirentGridView extends React.Component{
     });
   }
 
-  onComnentItem = () => {
+  onCommentItem = () => {
     this.props.showDirentDetail('comments');
   }
 
@@ -286,12 +286,8 @@ class DirentGridView extends React.Component{
   }
 
   onItemRename = (newName) => {
-    this.setState({
-      isRenameDialogShow: !this.state.isRenameDialogShow,
-    });
     this.props.onItemRename(this.state.activeDirent, newName);
   }
-
 
   prepareImageItem = (item) => {
     const useThumbnail = !this.repoEncrypted;
@@ -351,11 +347,7 @@ class DirentGridView extends React.Component{
   }
 
   checkDuplicatedName = (newName) => {
-    let direntList = this.props.direntList;
-    let isDuplicated = direntList.some(object => {
-      return object.name === newName;
-    });
-    return isDuplicated;
+    return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
   }
 
   // common contextmenu handle
@@ -434,93 +426,9 @@ class DirentGridView extends React.Component{
   }
 
   getDirentItemMenuList = (dirent, isContextmenu) => {
-
-    let isRepoOwner = this.isRepoOwner;
-    let currentRepoInfo = this.props.currentRepoInfo;
-    let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin);
-
-    let type = dirent.type;
-    let permission = dirent.permission;
-    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent);
-    let menuList = [];
-    let contextmenuList = [];
-    if (isContextmenu) {
-      let { SHARE, DOWNLOAD, DELETE } = TextTranslation;
-
-      if (showShareBtn) {
-        contextmenuList = [SHARE];
-      }
-
-      if (dirent.permission === 'rw' || dirent.permission === 'r') {
-        contextmenuList = [...contextmenuList, DOWNLOAD];
-      }
-
-      if (dirent.permission === 'rw') {
-        contextmenuList = [...contextmenuList, DELETE];
-      }
-
-      contextmenuList = contextmenuList.length > 0 ? [...contextmenuList, 'Divider'] : [];
-    }
-
-    let { RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, LOCK, UNLOCK, COMMENT, HISTORY, ACCESS_LOG, TAGS } = TextTranslation;
-    if (type === 'dir' && permission === 'rw') {
-      if (can_set_folder_perm) {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', PERMISSION, 'Divider', OPEN_VIA_CLIENT];
-      } else {
-        menuList = [...contextmenuList, RENAME, MOVE, COPY, 'Divider', OPEN_VIA_CLIENT];
-      }
-      return menuList;
-    }
-
-    if (type === 'dir' && permission === 'r') {
-      menuList = [...contextmenuList];
-      menuList = currentRepoInfo.encrypted ? [...menuList, COPY] : menuList.slice(0, menuList.length - 1);
-      return menuList;
-    }
-
-    if (type === 'file' && permission === 'rw') {
-      menuList = [...contextmenuList];
-      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-        menuList.push(RENAME);
-        menuList.push(MOVE);
-      }
-      menuList.push(COPY);
-      menuList.push(TAGS);
-      if (isPro) {
-        if (dirent.is_locked) {
-          if (dirent.locked_by_me || (dirent.lock_owner === 'OnlineOffice' && permission === 'rw')) {
-            menuList.push(UNLOCK);
-          }
-        } else {
-          menuList.push(LOCK);
-        }
-      }
-      menuList.push('Divider');
-      if (enableFileComment) {
-        menuList.push(COMMENT);
-      }
-      menuList.push(HISTORY);
-      if (isPro && fileAuditEnabled) {
-        menuList.push(ACCESS_LOG);
-      }
-      menuList.push('Divider');
-      menuList.push(OPEN_VIA_CLIENT);
-      return menuList;
-    }
-
-    if (type === 'file' && permission === 'r') {
-      menuList = [...contextmenuList];
-      if (!currentRepoInfo.encrypted) {
-        menuList.push(COPY);
-      }
-      if (enableFileComment) {
-        menuList.push(COMMENT);
-      }
-      menuList.push(HISTORY);
-      return menuList;
-    }
-
-    return [];
+    const isRepoOwner = this.isRepoOwner;
+    const currentRepoInfo = this.props.currentRepoInfo;
+    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   }
 
   render() {

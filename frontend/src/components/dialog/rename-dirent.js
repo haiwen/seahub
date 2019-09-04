@@ -66,6 +66,7 @@ class Rename extends React.Component {
         this.setState({errMessage: errMessage});
       } else {
         this.props.onRename(this.state.newName);
+        this.props.toggleCancel();
       }
     }
   }
@@ -116,7 +117,7 @@ class Rename extends React.Component {
         <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</ModalHeader>
         <ModalBody>
           <p>{type === 'file' ? gettext('New file name'): gettext('New folder name')}</p>
-          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
+          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} value={this.state.newName} onChange={this.handleChange} />
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>

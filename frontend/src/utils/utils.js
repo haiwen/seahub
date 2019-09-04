@@ -1,5 +1,6 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, canGenerateShareLink, canGenerateUploadLink, username } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
+import TextTranslation from './text-translation';
 
 export const Utils = {
 
@@ -135,6 +136,12 @@ export const Utils = {
     } else {
       return false;
     }
+  },
+
+  checkDuplicatedNameInList: function(list, targetName) {
+    return list.some(object => {
+      return object.name === targetName;
+    });
   },
 
   encodePath: function(path) {
@@ -375,6 +382,111 @@ export const Utils = {
         break;
     }
     return title;
+  },
+
+  getFolderOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
+
+    let list = [];
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT } = TextTranslation;
+    const permission = dirent.permission;
+
+    if (isContextmenu) {
+      if (permission == 'rw' || permission == 'r') {
+        list.push(DOWNLOAD);
+      }
+
+      if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
+        list.push(SHARE);
+      }
+
+      if (permission == 'rw') {
+        list.push(DELETE, 'Divider');
+      }
+    }
+
+    if (permission == 'rw') {
+      list.push(RENAME, MOVE, COPY);
+      if (folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin)) {
+        list.push('Divider', PERMISSION);
+      }
+      list.push('Divider', OPEN_VIA_CLIENT);
+    }
+
+    if (permission == 'r' && !currentRepoInfo.encrypted) {
+      list.push(COPY);
+    }
+
+    return list;
+  },
+
+  getFileOperationList: function(currentRepoInfo, dirent, isContextmenu) {
+    let list = [];
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, 
+      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
+    const permission = dirent.permission;
+
+    if (isContextmenu) {
+      if (permission == 'rw' || permission == 'r') {
+        list.push(DOWNLOAD);
+      }
+
+      if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
+        list.push(SHARE);
+      }
+
+      if (permission == 'rw') {
+        if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+          list.push(DELETE);
+        }
+      }
+
+      list.push('Divider');
+    }
+ 
+    if (permission == 'rw') {
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        list.push(RENAME, MOVE);
+      }
+      list.push(COPY, TAGS);
+
+      if (isPro) {
+        if (dirent.is_locked) {
+          if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice') {
+            list.push(UNLOCK);
+          }   
+        } else {
+          list.push(LOCK);
+        }
+      }
+
+      list.push('Divider');
+      if (enableFileComment) {
+        list.push(COMMENT);
+      }   
+      list.push(HISTORY);
+      if (isPro && fileAuditEnabled) {
+        list.push(ACCESS_LOG);
+      }   
+      list.push('Divider', OPEN_VIA_CLIENT);
+    }
+
+    if (permission == 'r') {
+      if (!currentRepoInfo.encrypted) {
+        list.push(COPY);
+      }
+      if (enableFileComment) {
+        list.push(COMMENT);
+      }   
+      list.push(HISTORY);
+    }
+
+    return list;
+  },
+
+  getDirentOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
+    return dirent.type == 'dir' ?
+      Utils.getFolderOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu) :
+      Utils.getFileOperationList(currentRepoInfo, dirent, isContextmenu);
   },
 
   sharePerms: function(permission) {
