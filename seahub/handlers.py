@@ -20,7 +20,7 @@ try:
         # Move here to avoid model import during Django setup.
         # TODO: Don't register signal/handlers during Seahub start.
 
-        if org_id > 0:
+        if org_id and org_id > 0:
             related_users = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
         else:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
@@ -73,7 +73,7 @@ try:
         repo_id = kwargs['repo_id']
         repo_name = kwargs['repo_name']
 
-        if org_id > 0:
+        if org_id and org_id > 0:
             related_users = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
         else:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
@@ -91,7 +91,7 @@ try:
             'path': '/',
             'op_user': operator,
             'related_users': related_users,
-            'org_id': org_id if org_id > 0 else -1,
+            'org_id': org_id if org_id and org_id > 0 else -1,
         }
 
         from .utils import SeafEventsSession
@@ -109,7 +109,7 @@ try:
         repo_name = kwargs['repo_name']
         repo_owner = kwargs['repo_owner']
 
-        if org_id > 0:
+        if org_id and org_id > 0:
             related_users = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
         else:
             related_users = seafile_api.get_shared_users_by_repo(repo_id)
@@ -141,7 +141,7 @@ try:
         operator = kwargs['operator']
         repo = seafile_api.get_repo(repo_id)
         org_id = get_org_id_by_repo_id(repo_id)
-        if org_id > 0:
+        if org_id and org_id > 0:
             related_users = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
         else:

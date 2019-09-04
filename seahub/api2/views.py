@@ -984,7 +984,7 @@ class Repos(APIView):
             return None, api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
 
-        if org_id > 0:
+        if org_id and org_id > 0:
             repo_id = seafile_api.create_org_repo(repo_name,
                     repo_desc, username, org_id, passwd,
                     enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
@@ -1048,7 +1048,7 @@ class Repos(APIView):
             return None, api_error(status.HTTP_400_BAD_REQUEST,
                              'You must provide magic, random_key and enc_version.')
 
-        if org_id > 0:
+        if org_id and org_id > 0:
             repo_id = seafile_api.create_org_enc_repo(repo_id, repo_name, repo_desc,
                                                       username, magic, random_key,
                                                       salt, enc_version, org_id)

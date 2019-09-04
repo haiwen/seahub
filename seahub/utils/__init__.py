@@ -652,7 +652,7 @@ if EVENTS_CONFIG_FILE:
         valid_events = []
         next_start = start
         while True:
-            if org_id > 0:
+            if org_id and org_id > 0:
                 events = seafevents.get_org_user_events(ev_session, org_id,
                                                         username, next_start,
                                                         limit)

@@ -75,7 +75,7 @@ def remove_group_common(group_id, username, org_id=None):
     """
     seaserv.ccnet_threaded_rpc.remove_group(group_id, username)
     seaserv.seafserv_threaded_rpc.remove_repo_group(group_id)
-    if org_id is not None and org_id > 0:
+    if org_id and org_id > 0:
         seaserv.ccnet_threaded_rpc.remove_org_group(org_id, group_id)
     # remove record of share to group when group deleted
     ExtraGroupsSharePermission.objects.filter(group_id=group_id).delete()

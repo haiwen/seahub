@@ -50,7 +50,7 @@ class WorkspacesView(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
 
-        if org_id > 0:
+        if org_id and org_id > 0:
             groups = ccnet_api.get_org_groups_by_user(org_id, username)
         else:
             groups = ccnet_api.get_groups(username, return_ancestors=True)
@@ -80,7 +80,7 @@ class WorkspacesView(APIView):
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
                 try:
-                    if org_id > 0:
+                    if org_id and org_id > 0:
                         repo_id = seafile_api.create_org_repo(
                             _("My Workspace"),
                             _("My Workspace"),
@@ -166,7 +166,7 @@ class DTablesView(APIView):
                 org_id = request.user.org.org_id
 
             try:
-                if org_id > 0:
+                if org_id and org_id > 0:
                     repo_id = seafile_api.create_org_repo(
                         _("My Workspace"),
                         _("My Workspace"),

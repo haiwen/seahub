@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def create_user_draft_repo(username, org_id=-1):
     repo_name = 'Drafts'
-    if org_id > 0:
+    if org_id and org_id > 0:
         repo_id = seafile_api.create_org_repo(repo_name, '', username, org_id)
     else:
         repo_id = seafile_api.create_repo(repo_name, '', username)

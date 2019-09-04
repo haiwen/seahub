@@ -1886,7 +1886,7 @@ def sys_repo_delete(request, repo_id):
     try:
         org_id = seafile_api.get_org_id_by_repo_id(repo_id)
         usernames = get_related_users_by_repo(repo_id,
-                org_id if org_id > 0 else None)
+                org_id if org_id and org_id > 0 else None)
     except Exception as e:
         logger.error(e)
         org_id = -1
