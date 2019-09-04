@@ -14,10 +14,10 @@ from django.utils.encoding import smart_str
 from django.db.models import signals
 
 try:
-    from io import StringIO
-    dir(StringIO) # Placate PyFlakes
+    from io import BytesIO
+    dir(BytesIO) # Placate PyFlakes
 except ImportError:
-    from io import StringIO
+    from io import BytesIO
 
 try:
     from PIL import Image
@@ -92,7 +92,7 @@ class AvatarBase(object):
 
         try:
             orig = self.avatar.storage.open(self.avatar.name, 'rb').read()
-            image = Image.open(StringIO(orig))
+            image = Image.open(BytesIO(orig))
 
             quality = quality or AVATAR_THUMB_QUALITY
             (w, h) = image.size
@@ -106,7 +106,7 @@ class AvatarBase(object):
                 if image.mode != "RGBA":
                     image = image.convert("RGBA")
                 image = image.resize((size, size), AVATAR_RESIZE_METHOD)
-                thumb = StringIO()
+                thumb = BytesIO()
                 image.save(thumb, AVATAR_THUMB_FORMAT, quality=quality)
                 thumb_file = ContentFile(thumb.getvalue())
             else:
