@@ -95,9 +95,11 @@ class LibContentToolbar extends React.Component {
                 userPerm={this.props.userPerm}
                 repoEncrypted={this.props.repoEncrypted}
                 selectedDirentList={this.props.selectedDirentList}
+                direntList={this.props.direntList}
                 onItemsMove={this.props.onItemsMove}
                 onItemsCopy={this.props.onItemsCopy}
                 onItemsDelete={this.props.onItemsDelete}
+                onItemRename={this.props.onItemRename}
                 isRepoOwner={this.props.isRepoOwner}
                 currentRepoInfo={this.props.currentRepoInfo}
                 enableDirPrivateShare={this.props.enableDirPrivateShare}
@@ -106,6 +108,8 @@ class LibContentToolbar extends React.Component {
                 unSelectDirent={this.props.unSelectDirent}
                 onFilesTagChanged={this.props.onFilesTagChanged}
                 showShareBtn={this.props.showShareBtn}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                showDirentDetail={this.props.showDirentDetail}
               /> :
               <DirOperationToolBar 
                 path={this.props.path}

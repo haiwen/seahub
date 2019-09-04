@@ -1653,6 +1653,7 @@ class LibContentView extends React.Component {
             onItemsMove={this.onMoveItems}
             onItemsCopy={this.onCopyItems}
             onItemsDelete={this.onDeleteItems}
+            onItemRename={this.onMainPanelItemRename}
             direntList={this.state.direntList}
             repoName={this.state.repoName}
             repoEncrypted={this.state.repoEncrypted}
