@@ -21,7 +21,7 @@ from seahub.settings import SEAFILE_VERSION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
-    CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ILLEGAL
+    CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE
 
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
@@ -143,7 +143,7 @@ def base(request):
 
     if request.user.is_staff:
         result['is_default_admin'] = request.user.admin_role == DEFAULT_ADMIN
-        result['enable_share_link_report_illegal'] = ENABLE_SHARE_LINK_REPORT_ILLEGAL
+        result['enable_share_link_report_abuse'] = ENABLE_SHARE_LINK_REPORT_ABUSE
 
     return result
 

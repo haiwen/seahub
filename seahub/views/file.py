@@ -88,7 +88,7 @@ import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
-    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ILLEGAL
+    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE
 
 
 # wopi
@@ -1317,7 +1317,7 @@ def view_shared_file(request, fileshare):
             'file_share_link': file_share_link,
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
-            'enable_share_link_report_illegal': ENABLE_SHARE_LINK_REPORT_ILLEGAL,
+            'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
             })
 
 @share_link_audit
@@ -1531,7 +1531,7 @@ def view_file_via_shared_dir(request, fileshare):
             'file_share_link': file_share_link,
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
-            'enable_share_link_report_illegal': ENABLE_SHARE_LINK_REPORT_ILLEGAL,
+            'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
             })
 
 def file_edit_submit(request, repo_id):
