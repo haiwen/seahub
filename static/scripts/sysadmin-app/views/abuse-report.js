@@ -8,13 +8,13 @@ define([
 ], function($, _, Backbone, Common, Moment, HLItemView) {
     'use strict';
 
-    var IllegalReportView = HLItemView.extend({
+    var AbuseReportView = HLItemView.extend({
         tagName: 'tr',
 
-        template: _.template($('#illegal-report-item-tmpl').html()),
+        template: _.template($('#abuse-report-item-tmpl').html()),
 
         events: {
-            'click .illegal-report-handle': 'handleReport'
+            'click .abuse-report-handle': 'handleReport'
         },
 
         initialize: function() {
@@ -23,25 +23,25 @@ define([
         },
 
         render: function() {
-            var data = this.model.toJSON(), illegal_type_output,
+            var data = this.model.toJSON(), abuse_type_output,
                 icon_size = Common.isHiDPI() ? 48 : 24,
                 icon_url = this.model.getIconUrl(icon_size),
                 time = Moment(data['time']);
 
-            if (data['illegal_type'] == 'copyright') {
-                illegal_type_output = gettext('Copyright infringement');
-            } else if (data['illegal_type'] == 'virus') {
-                illegal_type_output = gettext('Virus');
-            } else if (data['illegal_type'] == 'illegal_content') {
-                illegal_type_output = gettext('Illegal content');
-            } else if (data['illegal_type'] == 'other') {
-                illegal_type_output = gettext('Other');
+            if (data['abuse_type'] == 'copyright') {
+                abuse_type_output = gettext('Copyright infringement');
+            } else if (data['abuse_type'] == 'virus') {
+                abuse_type_output = gettext('Virus');
+            } else if (data['abuse_type'] == 'abuse_content') {
+                abuse_type_output = gettext('Abuse content');
+            } else if (data['abuse_type'] == 'other') {
+                abuse_type_output = gettext('Other');
             }
 
             data['time'] = time.format('LLLL');
             data['time_from_now'] = Common.getRelativeTimeStr(time);
             data['icon_url'] = icon_url;
-            data['illegal_type_output'] = illegal_type_output;
+            data['abuse_type_output'] = abuse_type_output;
 
             this.$el.html(this.template(data));
 
@@ -61,7 +61,7 @@ define([
 
             $.ajax({
                 url: Common.getUrl({
-                    'name':'admin-illegal-report',
+                    'name':'admin-abuse-report',
                     'report_id': report_id
                 }),
                 type: 'PUT',
@@ -85,5 +85,5 @@ define([
 
         }
     });
-    return IllegalReportView;
+    return AbuseReportView;
 });

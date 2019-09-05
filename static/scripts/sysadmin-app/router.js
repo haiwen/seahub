@@ -27,7 +27,7 @@ define([
     'sysadmin-app/views/admin-operation-logs',
     'sysadmin-app/views/admin-login-logs',
     'sysadmin-app/views/device-trusted-ipaddresses',
-    'sysadmin-app/views/illegal-reports',
+    'sysadmin-app/views/abuse-reports',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
@@ -35,7 +35,7 @@ define([
     SearchTrashReposView, DirView, AddressBookView, AddressBookGroupView,
     GroupsView, SearchGroupsView, GroupReposView, GroupMembersView,
     AdminOperationLogsview, AdminLoginLogsView, DeviceTrustedIPView,
-    IllegalReportsView, AccountView) {
+    AbuseReportsView, AccountView) {
 
     "use strict";
 
@@ -47,7 +47,7 @@ define([
             'mobile-devices/': 'showMobileDevices',
             'device-errors/': 'showDeviceErrors',
             'device-trusted-ip/': 'showDeviceTrustedIP',
-            'illegal-reports/': 'showIllegalReports',
+            'abuse-reports/': 'showAbuseReports',
 
             'all-libs/': 'showLibraries',
             'search-libs/': 'showSearchLibraries',
@@ -87,7 +87,7 @@ define([
             this.deviceErrorsView = new DeviceErrorsView();
             this.deviceTrustedIPView = new DeviceTrustedIPView();
 
-            this.illegalReportsView = new IllegalReportsView();
+            this.abuseReportsView = new AbuseReportsView();
 
             this.reposView = new ReposView();
             this.searchReposView = new SearchReposView();
@@ -391,10 +391,10 @@ define([
             this.adminLoginLogsView.show({'current_page': current_page});
         },
 
-        showIllegalReports: function() {
-            this.switchCurrentView(this.illegalReportsView);
-            this.sideNavView.setCurTab('illegal-reports');
-            this.illegalReportsView.show();
+        showAbuseReports: function() {
+            this.switchCurrentView(this.abuseReportsView);
+            this.sideNavView.setCurTab('abuse-reports');
+            this.abuseReportsView.show();
         }
 
     });

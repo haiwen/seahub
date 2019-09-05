@@ -3,21 +3,21 @@ define([
     'underscore',
     'backbone',
     'common',
-    'sysadmin-app/views/illegal-report',
-    'sysadmin-app/collection/illegal-reports'
-], function($, _, Backbone, Common, IllegalReportView, IllegalReportsCollection) {
+    'sysadmin-app/views/abuse-report',
+    'sysadmin-app/collection/abuse-reports'
+], function($, _, Backbone, Common, AbuseReportView, AbuseReportsCollection) {
     'use strict';
 
-    var IllegalReportsView = Backbone.View.extend({
+    var AbuseReportsView = Backbone.View.extend({
 
-        id: 'admin-illegal-reports',
+        id: 'admin-abuse-reports',
 
-        template: _.template($("#illegal-reports-tmpl").html()),
+        template: _.template($("#abuse-reports-tmpl").html()),
 
         initialize: function() {
-            this.illegalReportsCollection = new IllegalReportsCollection();
-            this.listenTo(this.illegalReportsCollection, 'add', this.addOne);
-            this.listenTo(this.illegalReportsCollection, 'reset', this.reset);
+            this.abuseReportsCollection = new AbuseReportsCollection();
+            this.listenTo(this.abuseReportsCollection, 'add', this.addOne);
+            this.listenTo(this.abuseReportsCollection, 'reset', this.reset);
             this.render();
         },
 
@@ -56,7 +56,7 @@ define([
             this.initPage();
             var _this = this;
 
-            this.illegalReportsCollection.fetch({
+            this.abuseReportsCollection.fetch({
                 cache: false,
                 reset: true,
                 error: function(collection, response, opts) {
@@ -67,7 +67,7 @@ define([
         },
 
         addOne: function(report) {
-            var view = new IllegalReportView({model: report});
+            var view = new AbuseReportView({model: report});
             this.$tableBody.append(view.render().el);
         },
 
@@ -75,13 +75,13 @@ define([
             this.initPage();
 
             this.$loadingTip.hide();
-            if (this.illegalReportsCollection.length > 0) {
-                this.illegalReportsCollection.each(this.addOne, this);
+            if (this.abuseReportsCollection.length > 0) {
+                this.abuseReportsCollection.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
             }
         }
     });
-    return IllegalReportsView;
+    return AbuseReportsView;
 });

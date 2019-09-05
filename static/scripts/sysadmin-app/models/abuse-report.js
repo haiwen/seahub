@@ -5,7 +5,7 @@ define([
 ], function(_, Backbone, Common) {
     'use strict';
 
-    var IllegalReportModel = Backbone.Model.extend({
+    var AbuseReportModel = Backbone.Model.extend({
 
         getIconUrl: function(size) {
             return Common.getLibIconUrl(false, false, size);
@@ -13,5 +13,5 @@ define([
 
     });
 
-    return IllegalReportModel;
+    return AbuseReportModel;
 });

@@ -125,9 +125,9 @@
         </li>
         {% endif %}
 
-        {% if is_default_admin and enable_share_link_report_illegal %}
-        <li class="tab<% if (cur_tab == 'illegal-reports') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}sysadmin/#illegal-reports/"><span class="sf2-icon-monitor"></span>{% trans "Illegal Reports" %}</a>
+        {% if is_default_admin and enable_share_link_report_abuse %}
+        <li class="tab<% if (cur_tab == 'abuse-reports') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}sysadmin/#abuse-reports/"><span class="sf2-icon-monitor"></span>{% trans "Abuse Reports" %}</a>
         </li>
         {% endif %}
 
@@ -1032,9 +1032,9 @@
     <td><time title="<%- time %>"><%- time_from_now %></time></td>
 </script>
 
-<script type="text/template" id="illegal-reports-tmpl">
+<script type="text/template" id="abuse-reports-tmpl">
     <div class="hd ovhd">
-        <h3 class="fleft">{% trans "Illegal Reports" %}</h3>
+        <h3 class="fleft">{% trans "Abuse Reports" %}</h3>
     </div>
     <span class="loading-icon loading-tip"></span>
     <table>
@@ -1044,7 +1044,7 @@
                 <th width="15%">{% trans "Library" %}</th>
                 <th width="20%">{% trans "File" %}</th>
                 <th width="10%">{% trans "Reporter" %}</th>
-                <th width="15%">{% trans "Illegal Type" %}</th>
+                <th width="15%">{% trans "Abuse Type" %}</th>
                 <th width="15%">{% trans "Description" %}</th>
                 <th width="10%">{% trans "Time" %}</th>
                 <th width="5%">{% trans "Handled" %}</th>
@@ -1054,12 +1054,12 @@
         </tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No illegal reports" %}</h2>
+        <h2 class="alc">{% trans "No abuse reports" %}</h2>
     </div>
     <p class="error error-tip hide"></p>
 </script>
 
-<script type="text/template" id="illegal-report-item-tmpl">
+<script type="text/template" id="abuse-report-item-tmpl">
     <td>
         <img src="<%= icon_url %>" width="24" />
     </td>
@@ -1072,7 +1072,7 @@
         --
     <% } %>
     </td>
-    <td><%- illegal_type_output %></td>
+    <td><%- abuse_type_output %></td>
     <td>
     <% if (description) { %>
         <%- description %>
@@ -1081,5 +1081,5 @@
     <% } %>
     </td>
     <td><time title="<%= time %>"><%= time_from_now %></time></td>
-    <td class='illegal-report-handle cspt' ><%- handled %></td>
+    <td class='abuse-report-handle cspt' ><%- handled %></td>
 </script>
