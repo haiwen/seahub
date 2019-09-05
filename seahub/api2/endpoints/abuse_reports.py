@@ -16,16 +16,15 @@ from seahub.api2.throttling import AnonRateThrottle
 from seahub.share.models import FileShare
 from seahub.utils import normalize_file_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.settings import ENABLE_SHARE_LINK_REPORT_ILLEGAL
+from seahub.settings import ENABLE_SHARE_LINK_REPORT_ABUSE
 
-from seahub.illegal_reports.models import COPYRIGHT_ISSUE, \
-        VIRUS_ISSUE, ILLEGAL_CONTENT_ISSUE, OTHER_ISSUE, IllegalReport
+from seahub.abuse_reports.models import COPYRIGHT_ISSUE, \
+    VIRUS_ISSUE, ABUSE_CONTENT_ISSUE, OTHER_ISSUE, AbuseReport
 
 logger = logging.getLogger(__name__)
 
 
-def get_illegal_report_info(report):
-
+def get_abuse_report_info(report):
     data = {}
 
     file_path = report.file_path
@@ -37,25 +36,25 @@ def get_illegal_report_info(report):
     data['file_path'] = file_path
     data['file_name'] = os.path.basename(file_path)
     data['time'] = datetime_to_isoformat_timestr(report.time)
-    data['illegal_type'] = report.illegal_type
+    data['abuse_type'] = report.abuse_type
     data['description'] = report.description
     data['handled'] = report.handled
 
     return data
 
-class IllegalReportsView(APIView):
 
+class AbuseReportsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    throttle_classes = (AnonRateThrottle, )
+    throttle_classes = (AnonRateThrottle,)
 
     def post(self, request):
-        """ Create illegal report.
+        """ Create abuse report.
 
         Permission checking:
         1. all user;
         """
 
-        if not ENABLE_SHARE_LINK_REPORT_ILLEGAL:
+        if not ENABLE_SHARE_LINK_REPORT_ABUSE:
             error_msg = 'Feature not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -65,14 +64,14 @@ class IllegalReportsView(APIView):
             error_msg = 'share_link_token invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        illegal_type = request.data.get('illegal_type', '')
-        if not illegal_type:
-            error_msg = 'illegal_type invalid.'
+        abuse_type = request.data.get('abuse_type', '')
+        if not abuse_type:
+            error_msg = 'abuse_type invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if illegal_type not in (COPYRIGHT_ISSUE, VIRUS_ISSUE,
-                ILLEGAL_CONTENT_ISSUE, OTHER_ISSUE):
-            error_msg = 'illegal_type invalid.'
+        if abuse_type not in (COPYRIGHT_ISSUE, VIRUS_ISSUE,
+                              ABUSE_CONTENT_ISSUE, OTHER_ISSUE):
+            error_msg = 'abuse_type invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         reporter = request.data.get('reporter', '')
@@ -109,12 +108,12 @@ class IllegalReportsView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            report = IllegalReport.objects.add_illegal_report(reporter, repo_id,
-                    repo.repo_name, file_path, illegal_type, description)
+            report = AbuseReport.objects.add_abuse_report(
+                reporter, repo_id, repo.repo_name, file_path, abuse_type, description)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        info = get_illegal_report_info(report)
+        info = get_abuse_report_info(report)
         return Response(info)

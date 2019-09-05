@@ -11,31 +11,30 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 
-from seahub.api2.endpoints.illegal_reports import get_illegal_report_info
-from seahub.illegal_reports.models import IllegalReport
-from seahub.settings import ENABLE_SHARE_LINK_REPORT_ILLEGAL
+from seahub.api2.endpoints.abuse_reports import get_abuse_report_info
+from seahub.abuse_reports.models import AbuseReport
+from seahub.settings import ENABLE_SHARE_LINK_REPORT_ABUSE
 
 logger = logging.getLogger(__name__)
 
 
-class AdminIllegalReportsView(APIView):
-
+class AdminAbuseReportsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        """ Get all illegal reports.
+        """ Get all abuse reports.
 
         Permission checking:
         1. only admin can perform this action.
         """
 
-        if not ENABLE_SHARE_LINK_REPORT_ILLEGAL:
+        if not ENABLE_SHARE_LINK_REPORT_ABUSE:
             error_msg = 'Feature not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        illegal_type = request.GET.get('illegal_type', '')
+        abuse_type = request.GET.get('abuse_type', '')
         handled = request.GET.get('handled', '')
 
         if handled:
@@ -46,8 +45,8 @@ class AdminIllegalReportsView(APIView):
             handled = to_python_boolean(handled)
 
         try:
-            reports = IllegalReport.objects.get_illegal_reports(illegal_type=illegal_type,
-                    handled=handled)
+            reports = AbuseReport.objects.get_abuse_reports(
+                abuse_type=abuse_type, handled=handled)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -55,26 +54,25 @@ class AdminIllegalReportsView(APIView):
 
         info_list = []
         for report in reports:
-            info = get_illegal_report_info(report)
+            info = get_abuse_report_info(report)
             info_list.append(info)
 
-        return Response({'illegal_report_list': info_list,})
+        return Response({'abuse_report_list': info_list, })
 
 
-class AdminIllegalReportView(APIView):
-
+class AdminAbuseReportView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser,)
     throttle_classes = (UserRateThrottle,)
 
     def put(self, request, pk):
-        """ Mark an illegal report handled.
+        """ Mark an abuse report handled.
 
         Permission checking:
         1. only admin can perform this action.
         """
 
-        if not ENABLE_SHARE_LINK_REPORT_ILLEGAL:
+        if not ENABLE_SHARE_LINK_REPORT_ABUSE:
             error_msg = 'Feature not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -89,13 +87,13 @@ class AdminIllegalReportView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        report = IllegalReport.objects.get_illegal_report_by_id(pk)
+        report = AbuseReport.objects.get_abuse_report_by_id(pk)
         if not report:
-            error_msg = 'Illegal report  %d not found.' % pk
+            error_msg = 'abuse report  %d not found.' % pk
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         report.handled = to_python_boolean(handled)
         report.save()
 
-        info = get_illegal_report_info(report)
+        info = get_abuse_report_info(report)
         return Response(info)

@@ -92,10 +92,10 @@ from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
 from seahub.api2.endpoints.repo_api_tokens import RepoAPITokensView, RepoAPITokenView
 from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLinkView
-from seahub.api2.endpoints.illegal_reports import IllegalReportsView
+from seahub.api2.endpoints.abuse_reports import AbuseReportsView
 
 # Admin
-from seahub.api2.endpoints.admin.illegal_reports import AdminIllegalReportsView, AdminIllegalReportView
+from seahub.api2.endpoints.admin.abuse_reports import AdminAbuseReportsView, AdminAbuseReportView
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
 from seahub.api2.endpoints.admin.login_logs import LoginLogs, AdminLoginLogs
 from seahub.api2.endpoints.admin.file_audit import FileAudit
@@ -447,14 +447,14 @@ urlpatterns = [
     # admin: activities
     url(r'^api/v2.1/admin/user-activities/$', UserActivitiesView.as_view(), name='api-v2.1-admin-user-activity'),
 
-    ## user::illegal-report
-    # user report an illegal file
-    url(r'^api/v2.1/illegal-reports/$', IllegalReportsView.as_view(), name='api-v2.1-illegal-reports'),
+    ## user::abuse-report
+    # user report an abuse file
+    url(r'^api/v2.1/abuse-reports/$', AbuseReportsView.as_view(), name='api-v2.1-abuse-reports'),
 
-    ## admin::illegal-reports
-    # admin get all illegal reports
-    url(r'^api/v2.1/admin/illegal-reports/$', AdminIllegalReportsView.as_view(), name='api-v2.1-admin-illegal-reports'),
-    url(r'^api/v2.1/admin/illegal-reports/(?P<pk>\d+)/$', AdminIllegalReportView.as_view(), name='api-v2.1-admin-illegal-report'),
+    ## admin::abuse-reports
+    # admin get all abuse reports
+    url(r'^api/v2.1/admin/abuse-reports/$', AdminAbuseReportsView.as_view(), name='api-v2.1-admin-abuse-reports'),
+    url(r'^api/v2.1/admin/abuse-reports/(?P<pk>\d+)/$', AdminAbuseReportView.as_view(), name='api-v2.1-admin-abuse-report'),
 
 
     ## admin::sysinfo
