@@ -5,7 +5,7 @@ import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle
 import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
-import AddIllegalReportDialog from '../../components/dialog/add-illegal-report-dialog';
+import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
 import toaster from '../toast';
 import watermark from 'watermark-dom';
 
@@ -16,7 +16,7 @@ const propTypes = {
 };
 
 let loginUser = window.app.pageOptions.name;
-const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload, zipped, filePath, enableShareLinkReportIllegal } = window.shared.pageOptions;
+const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload, zipped, filePath, enableShareLinkReportAbuse } = window.shared.pageOptions;
 
 class SharedFileView extends React.Component {
 
@@ -24,7 +24,7 @@ class SharedFileView extends React.Component {
     super(props);
     this.state = {
       showSaveSharedFileDialog: false,
-      isAddIllegalReportDialogOpen: false
+      isAddAbuseReportDialogOpen: false
     };
   }
 
@@ -46,9 +46,9 @@ class SharedFileView extends React.Component {
     });
   }
 
-  toggleAddIllegalReportDialog = () => {
+  toggleAddAbuseReportDialog = () => {
     this.setState({
-      isAddIllegalReportDialogOpen: !this.state.isAddIllegalReportDialogOpen
+      isAddAbuseReportDialogOpen: !this.state.isAddAbuseReportDialogOpen
     });
   }
 
@@ -123,9 +123,9 @@ class SharedFileView extends React.Component {
               {(canDownload && !trafficOverLimit) &&
                 <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
               }{' '}
-              {enableShareLinkReportIllegal &&
+              {enableShareLinkReportAbuse &&
                 <Button
-                  onClick={this.toggleAddIllegalReportDialog}>{gettext('Report')}
+                  onClick={this.toggleAddAbuseReportDialog}>{gettext('Report Abuse')}
                 </Button>
               }
             </div>
@@ -140,12 +140,12 @@ class SharedFileView extends React.Component {
             handleSaveSharedFile={this.handleSaveSharedFile}
           />
         }
-        {(this.state.isAddIllegalReportDialogOpen && enableShareLinkReportIllegal) &&
-          <AddIllegalReportDialog
+        {(this.state.isAddAbuseReportDialogOpen && enableShareLinkReportAbuse) &&
+          <AddAbuseReportDialog
             sharedToken={sharedToken}
             filePath={filePath}
-            toggleAddIllegalReportDialog={this.toggleAddIllegalReportDialog}
-            isAddIllegalReportDialogOpen={this.state.isAddIllegalReportDialogOpen}
+            toggleAddAbuseReportDialog={this.toggleAddAbuseReportDialog}
+            isAddAbuseReportDialogOpen={this.state.isAddAbuseReportDialogOpen}
           />
         }
       </div>

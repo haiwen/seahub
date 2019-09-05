@@ -8,25 +8,25 @@ import toaster from '../toast';
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,
   filePath: PropTypes.string.isRequired,
-  toggleAddIllegalReportDialog: PropTypes.func.isRequired,
-  isAddIllegalReportDialogOpen: PropTypes.bool.isRequired,
+  toggleAddAbuseReportDialog: PropTypes.func.isRequired,
+  isAddAbuseReportDialogOpen: PropTypes.bool.isRequired,
 };
 
-class AddIllegalReportDialog extends React.Component {
+class AddAbuseReportDialog extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      illegalType: 'copyright',
+      abuseType: 'copyright',
       description: '',
       reporter: '',
       errMessage: '',
     };
   }
 
-  onIllegalReport = () => {
-    seafileAPI.addIllegalReport(this.props.sharedToken, this.state.illegalType, this.state.description, this.state.reporter, this.props.filePath).then((res) => {
-      this.props.toggleAddIllegalReportDialog();
+  onAbuseReport = () => {
+    seafileAPI.addAbuseReport(this.props.sharedToken, this.state.abuseType, this.state.description, this.state.reporter, this.props.filePath).then((res) => {
+      this.props.toggleAddAbuseReportDialog();
       toaster.success(gettext('Success'), {duration: 2});
     }).catch((error) => {
       if (error.response) {
@@ -37,16 +37,16 @@ class AddIllegalReportDialog extends React.Component {
     });
   };
 
-  onIllegalTypeChange = (event) => {
+  onAbuseTypeChange = (event) => {
     let type = event.target.value;
     if (type === 'copyright') {
-      this.setState({illegalType: 'copyright'});
+      this.setState({abuseType: 'copyright'});
     } else if (type === 'virus') {
-      this.setState({illegalType: 'virus'});
-    } else if (type === 'illegal_content') {
-      this.setState({illegalType: 'illegal_content'});
+      this.setState({abuseType: 'virus'});
+    } else if (type === 'abuse_content') {
+      this.setState({abuseType: 'abuse_content'});
     } else if (type === 'other') {
-      this.setState({illegalType: 'other'});
+      this.setState({abuseType: 'other'});
     }
   };
 
@@ -62,16 +62,16 @@ class AddIllegalReportDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={this.props.isAddIllegalReportDialogOpen} toggle={this.props.toggleAddIllegalReportDialog}>
-        <ModalHeader toggle={this.props.toggleAddIllegalReportDialog}>{gettext('Report')}</ModalHeader>
+      <Modal isOpen={this.props.isAddAbuseReportDialogOpen} toggle={this.props.toggleAddAbuseReportDialog}>
+        <ModalHeader toggle={this.props.toggleAddAbuseReportDialog}>{gettext('Report Abuse')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="illegal-type-select">{gettext('Illegal Type')}</Label>
-              <Input type="select" id="illegal-type-select" onChange={(event) => this.onIllegalTypeChange(event)}>
+              <Label for="abuse-type-select">{gettext('Abuse Type')}</Label>
+              <Input type="select" id="abuse-type-select" onChange={(event) => this.onAbuseTypeChange(event)}>
                 <option value='copyright'>{gettext('Copyright infringement')}</option>
                 <option value='virus'>{gettext('Virus')}</option>
-                <option value='illegal_content'>{gettext('Illegal content')}</option>
+                <option value='abuse_content'>{gettext('Abuse content')}</option>
                 <option value='other'>{gettext('Other')}</option>
               </Input>
             </FormGroup>
@@ -87,14 +87,14 @@ class AddIllegalReportDialog extends React.Component {
           {this.state.errMessage && <Alert color="danger">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleAddIllegalReportDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.onIllegalReport}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.props.toggleAddAbuseReportDialog}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.onAbuseReport}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
   }
 }
 
-AddIllegalReportDialog.propTypes = propTypes;
+AddAbuseReportDialog.propTypes = propTypes;
 
-export default AddIllegalReportDialog;
+export default AddAbuseReportDialog;
