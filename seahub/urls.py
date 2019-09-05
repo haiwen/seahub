@@ -694,12 +694,6 @@ if HAS_FILE_SEARCH:
         url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
     ]
 
-if getattr(settings, 'ENABLE_PAYMENT', False):
-    urlpatterns += [
-        url(r'^pay/', include('seahub_extra.pay.urls')),
-    ]
-
-
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
     from seahub_extra.sysadmin_extra.views import sys_login_admin, \
         sys_log_file_audit, sys_log_file_update, sys_log_perm_audit, \
