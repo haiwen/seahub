@@ -7,13 +7,13 @@ from seahub.test_utils import BaseTestCase
 from seahub.share.models import FileShare
 
 
-class IllegalReportsTest(BaseTestCase):
+class AbuseReportsTest(BaseTestCase):
 
     def setUp(self):
         self.repo_id = self.repo.id
         self.file_path = self.file
         self.folder_path = self.folder
-        self.url = reverse('api-v2.1-illegal-reports')
+        self.url = reverse('api-v2.1-abuse-reports')
         self.inner_file_path = self.create_file(
             repo_id=self.repo.id,
             parent_dir='/folder/',
@@ -39,14 +39,14 @@ class IllegalReportsTest(BaseTestCase):
         link = FileShare.objects.get(token=token)
         link.delete()
 
-    @patch('seahub.api2.endpoints.illegal_reports.ENABLE_SHARE_LINK_REPORT_ILLEGAL', MagicMock(return_value=True))
+    @patch('seahub.api2.endpoints.abuse_reports.ENABLE_SHARE_LINK_REPORT_ABUSE', MagicMock(return_value=True))
     def test_file_share_link_can_report(self):
         self.login_as(self.user)
         shared_token = self._add_file_share_link()
 
         data = {
             'share_link_token': shared_token,
-            'illegal_type': 'copyright',
+            'abuse_type': 'copyright',
             'description': '',
             'reporter': '',
             'file_path': self.file_path,
@@ -66,18 +66,18 @@ class IllegalReportsTest(BaseTestCase):
         assert data['file_path'] == json_resp['file_path']
         assert data['reporter'] == json_resp['reporter']
         assert data['description'] == json_resp['description']
-        assert data['illegal_type'] == json_resp['illegal_type']
+        assert data['abuse_type'] == json_resp['abuse_type']
 
         self._remove_share_link(shared_token)
 
-    @patch('seahub.api2.endpoints.illegal_reports.ENABLE_SHARE_LINK_REPORT_ILLEGAL', MagicMock(return_value=True))
+    @patch('seahub.api2.endpoints.abuse_reports.ENABLE_SHARE_LINK_REPORT_ABUSE', MagicMock(return_value=True))
     def test_dir_share_link_can_report(self):
         self.login_as(self.user)
         shared_token = self._add_file_share_link()
 
         data = {
             'share_link_token': shared_token,
-            'illegal_type': 'copyright',
+            'abuse_type': 'copyright',
             'description': '',
             'reporter': '',
             'file_path': self.inner_file_path,
@@ -97,6 +97,6 @@ class IllegalReportsTest(BaseTestCase):
 
         assert data['reporter'] == json_resp['reporter']
         assert data['description'] == json_resp['description']
-        assert data['illegal_type'] == json_resp['illegal_type']
+        assert data['abuse_type'] == json_resp['abuse_type']
 
         self._remove_share_link(shared_token)
