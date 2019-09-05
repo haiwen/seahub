@@ -11,15 +11,19 @@
   padding: 0rem 1rem 8rem;
   overflow: auto;
 }
-.info-item {
-  margin: 1em 0 3em;
+.system-admin-info dt,
+.system-admin-info dd {
+  color: inherit;
 }
-.info-item .info-item-heading {
+.info-item-heading {
   font-size: 1rem;
   font-weight: normal;
   padding-bottom: 0.2em;
   border-bottom: 1px solid #ddd;
   margin-bottom: 0.7em;
+}
+.info-item-content {
+  margin-bottom: 2em;
 }
 .btn {
   min-width: 60px;
