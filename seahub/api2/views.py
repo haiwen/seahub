@@ -135,7 +135,7 @@ from seaserv import seafserv_threaded_rpc, \
     remove_share, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
-    create_org, ccnet_api, send_message
+    create_org, ccnet_api
 
 from constance import config
 
@@ -905,7 +905,7 @@ class Repos(APIView):
             org_id = request.user.org.org_id
 
         try:
-            send_message('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
+            seafile_api.publish_event('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
         except Exception as e:
             logger.error('Error when sending user-login message: %s' % str(e))
         response = HttpResponse(json.dumps(repos_json), status=200,
