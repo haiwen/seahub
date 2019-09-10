@@ -34,7 +34,7 @@ from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api, ccnet_api
-from seaserv import get_repo, send_message, get_commits, \
+from seaserv import get_repo, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
@@ -1773,10 +1773,9 @@ def send_file_access_msg(request, repo, path, access_from):
 
     msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s' % \
         (access_from, username, ip, user_agent, repo.id, path)
-    msg_utf8 = msg.encode('utf-8')
 
     try:
-        send_message('seahub.audit', msg_utf8)
+        seafile_api.publish_event('seahub.audit', msg)
     except Exception as e:
         logger.error("Error when sending file-download-%s message: %s" %
                      (access_from, str(e)))
