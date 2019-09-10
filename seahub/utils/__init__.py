@@ -1380,10 +1380,9 @@ def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     """
     msg = 'perm-change\t%s\t%s\t%s\t%s\t%s\t%s' % \
         (etype, from_user, to, repo_id, path, perm)
-    msg_utf8 = msg.encode('utf-8')
 
     try:
-        seaserv.send_message('seahub.audit', msg_utf8)
+        seafile_api.publish_event('seahub.audit', msg)
     except Exception as e:
         logger.error("Error when sending perm-audit-%s message: %s" %
                      (etype, str(e)))
