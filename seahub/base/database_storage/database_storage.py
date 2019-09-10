@@ -161,7 +161,7 @@ class DatabaseStorage(Storage):
         """
         name = name.replace('\\', '/')
         name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
-        binary = content.read().encode('utf-8')
+        binary = content.read()
 
         size = len(binary)
         encoded = base64.b64encode(binary)
