@@ -28,7 +28,7 @@ from seahub.utils.repo import get_repo_owner, is_repo_admin, \
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
-from seaserv import seafile_api, send_message
+from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
 
@@ -276,7 +276,7 @@ class ReposView(APIView):
         timestamp = utc_dt.strftime('%Y-%m-%d %H:%M:%S')
         org_id = request.user.org.org_id if is_org_context(request) else -1
         try:
-            send_message('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
+            seafile_api.publish_event('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
         except Exception as e:
             logger.error('Error when sending user-login message: %s' % str(e))
 
