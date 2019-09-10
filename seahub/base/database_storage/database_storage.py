@@ -148,7 +148,7 @@ class DatabaseStorage(Storage):
         if row is None:
             return None
 
-        inMemFile = io.StringIO(base64.b64decode(row[0]))
+        inMemFile = io.BytesIO(base64.b64decode(row[0]))
         inMemFile.name = name
         inMemFile.mode = mode
 
