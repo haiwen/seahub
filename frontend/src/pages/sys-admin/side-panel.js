@@ -97,10 +97,10 @@ class SidePanel extends React.Component {
                 }
                 {canManageGroup &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#groups/'}>
+                    <Link className='nav-link ellipsis' to={siteRoot + 'sys/groups/'}>
                       <span className="sf2-icon-group" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Groups')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {isPro && canManageGroup &&
