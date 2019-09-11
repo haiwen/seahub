@@ -913,3 +913,14 @@ if ENABLE_REMOTE_USER_AUTHENTICATION:
 
 if ENABLE_OAUTH or ENABLE_WORK_WEIXIN:
     AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)
+
+#####################
+# Custom Nav Items  #
+#####################
+# an example:
+# CUSTOM_NAV_ITEMS = [
+#     {'icon': 'sf2-icon-star',
+#      'desc': 'test custom name',
+#      'link': 'http://127.0.0.1:8000/shared-libs/',
+#      },
+# ]

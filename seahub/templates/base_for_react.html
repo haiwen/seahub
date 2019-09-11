@@ -91,6 +91,7 @@
             repoPasswordMinLength: {{repo_password_min_length}},
             canAddPublicRepo: {% if can_add_public_repo %} true {% else %} false {% endif %},
             canInvitePeople: {% if enable_guest_invitation and user.permissions.can_invite_guest %} true {% else %} false {% endif %},
+            customNavItems: JSON.parse('{{ custom_nav_items | escapejs }}'),
 
             {% if request.user.is_authenticated and request.cur_note %}
             curNoteMsg: '{{ request.cur_note.message|urlize }}',
