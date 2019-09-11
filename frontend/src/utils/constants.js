@@ -54,7 +54,7 @@ export const repoPasswordMinLength = window.app.pageOptions.repoPasswordMinLengt
 export const canAddPublicRepo = window.app.pageOptions.canAddPublicRepo;
 export const canInvitePeople = window.app.pageOptions.canInvitePeople;
 export const canLockUnlockFile = window.app.pageOptions.canLockUnlockFile;
-export const customNavItems = JSON.parse(window.app.pageOptions.customNavItems);
+export const customNavItems = window.app.pageOptions.customNavItems;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
