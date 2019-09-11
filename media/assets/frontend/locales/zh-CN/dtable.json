@@ -38,6 +38,7 @@
   "Select_a_color": "选择一个颜色",
   "No_option": "没有标签",
   "Edit_option": "编辑标签",
+  "Delete_option": "删除标签",
   "New_View": "新建视图",
   "Rename_View": "重命名视图",
   "Delete_View": "删除视图",
@@ -201,5 +202,6 @@
   "Advanced_count": "高级计数",
   "This_method_is_not_supported_for_the_time_being": "暂不支持该方法的统计.",
   "Amount": "数量",
-  "null": "空"
+  "null": "空",
+  "Share": "共享"
 }
