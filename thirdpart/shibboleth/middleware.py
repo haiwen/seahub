@@ -1,6 +1,8 @@
 from collections import OrderedDict
 from fnmatch import fnmatch
 import logging
+import os
+import sys
 
 from django.conf import settings
 from django.contrib.auth.middleware import RemoteUserMiddleware
@@ -21,6 +23,13 @@ from seahub.utils.user_permissions import get_user_role
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+conf_dir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
+sys.path.append(conf_dir)
+try:
+    from seahub_custom_functions import custom_shibboleth_get_user_role
+    CUSTOM_SHIBBOLETH_GET_USER_ROLE = True
+except ImportError as e:
+    CUSTOM_SHIBBOLETH_GET_USER_ROLE = False
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
@@ -97,9 +106,19 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             user.save()
             # call make profile.
             self.make_profile(user, shib_meta)
-            user_role = self.update_user_role(user, shib_meta)
+
+            if CUSTOM_SHIBBOLETH_GET_USER_ROLE:
+                user_role = custom_shibboleth_get_user_role(shib_meta)
+                if user_role:
+                    ccnet_api.update_role_emailuser(user.email, user_role)
+                else:
+                    user_role = self.update_user_role(user, shib_meta)
+            else:
+                user_role = self.update_user_role(user, shib_meta)
+
             if user_role:
                 self.update_user_quota(user, user_role)
+
             #setup session.
             self.setup_session(request)
             request.shib_login = True
