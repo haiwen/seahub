@@ -8,7 +8,11 @@ class Dirent {
     this.name = json.name;
     this.type = json.type;
     this.mtime = json.mtime;
-    this.mtime_relative = moment.unix(json.mtime).fromNow();
+    if (json.mtime == 0) {
+      this.mtime_relative = '';
+    } else {
+      this.mtime_relative = moment.unix(json.mtime).fromNow();
+    }
     this.permission = json.permission || 'rw';
     this.isSelected = false; // is check or not
     this.starred = json.starred || false;

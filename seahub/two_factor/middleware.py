@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from . import DEVICE_ID_SESSION_KEY
 from .models import Device
 from seahub.options.models import UserOptions
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, ENABLE_FORCE_2FA_TO_ALL_USERS
 
 
 class IsVerified(object):
@@ -85,10 +85,11 @@ class ForceTwoFactorAuthMiddleware(object):
         if not self.filter_request(request):
             return None
 
-        if not UserOptions.objects.is_force_2fa(user.username):
-            return None
-
         if user.otp_device is not None:
             return None
 
-        return HttpResponseRedirect(reverse('two_factor:setup'))
+        if ENABLE_FORCE_2FA_TO_ALL_USERS or UserOptions.objects.is_force_2fa(user.username):
+            return HttpResponseRedirect(reverse('two_factor:setup'))
+
+        return None
+

@@ -66,7 +66,7 @@ class DirentListView extends React.Component {
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isProgressDialogShow: false,
-      progress: 0,
+      downloadItems: [],
       isMutipleOperation: true,
       activeDirent: null,
       isListDropTipShow: false,
@@ -245,52 +245,20 @@ class DirentListView extends React.Component {
         location.href= url;
         return;
       }
+
       let selectedDirentNames = selectedDirentList.map(dirent => {
         return dirent.name;
       });
-      this.setState({isProgressDialogShow: true, progress: 0});
-      seafileAPI.zipDownload(repoID, path, selectedDirentNames).then(res => {
-        this.zipToken = res.data['zip_token'];
-        this.addDownloadAnimation();
-        this.interval = setInterval(this.addDownloadAnimation, 1000);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
+
+      this.setState({
+        isProgressDialogShow: true, 
+        downloadItems: selectedDirentNames
       });
     }
   }
 
-  addDownloadAnimation = () => {
-    let _this = this;
-    let token = this.zipToken;
-    seafileAPI.queryZipProgress(token).then(res => {
-      let data = res.data;
-      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
-      this.setState({progress: parseInt(progress)});
-
-      if (data['total'] === data['zipped']) {
-        this.setState({
-          progress: 100
-        });
-        clearInterval(this.interval);
-        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
-        setTimeout(function() {
-          _this.setState({isProgressDialogShow: false});
-        }, 500);
-      }
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
-  onCancelDownload = () => {
-    seafileAPI.cancelZipTask(this.zipToken).then(() => {
-      this.setState({isProgressDialogShow: false});
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+  onCloseZipDownloadDialog = () => {
+    this.setState({isProgressDialogShow: false});
   }
 
   // common contextmenu handle
@@ -727,7 +695,12 @@ class DirentListView extends React.Component {
             />
           }
           {this.state.isProgressDialogShow &&
-            <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload} />
+            <ZipDownloadDialog 
+              repoID={this.props.repoID}
+              path={this.props.path}
+              target={this.state.downloadItems}
+              toggleDialog={this.onCloseZipDownloadDialog} 
+            />
           }
         </Fragment>
       </div>

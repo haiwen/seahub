@@ -748,6 +748,7 @@ CLOUD_DEMO_USER = 'demo@seafile.com'
 ENABLE_TWO_FACTOR_AUTH = False
 OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
 TWO_FACTOR_DEVICE_REMEMBER_DAYS = 90
+ENABLE_FORCE_2FA_TO_ALL_USERS = False
 
 # Enable personal wiki, group wiki
 ENABLE_WIKI = True
