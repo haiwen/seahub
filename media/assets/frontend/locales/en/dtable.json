@@ -38,6 +38,7 @@
   "Select_a_color": "Select a color",
   "No_option": "No option",
   "Edit_option": "Edit option",
+  "Delete_option": "Delete option",
   "New_View": "New View",
   "Rename_View": "Rename View",
   "Delete_View": "Delete View",
@@ -201,5 +202,6 @@
   "Advanced_count": "Advanced count",
   "This_method_is_not_supported_for_the_time_being": "This method is not supported for the time being.",
   "Amount": "Amount",
-  "null": "null"
+  "null": "null",
+  "Share": "Share"
 }
