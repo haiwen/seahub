@@ -106,7 +106,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
     def process_response(self, request, response):
         if getattr(request, 'shib_login', False):
-            print '%s: set shibboleth cookie!' % id(self)
+            print('%s: set shibboleth cookie!' % id(self))
             self._set_auth_cookie(request, response)
         return response
 
@@ -224,7 +224,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         shib_attrs = {}
         error = False
         meta = request.META
-        for header, attr in SHIB_ATTRIBUTE_MAP.items():
+        for header, attr in list(SHIB_ATTRIBUTE_MAP.items()):
             required, name = attr
             value = meta.get(header, None)
             shib_attrs[name] = value

@@ -2,7 +2,7 @@ import hmac
 import base64
 import hashlib
 
-import urlparse
+import urllib.parse
 
 from django.core.urlresolvers import reverse
 from django.utils.encoding import force_bytes
@@ -14,7 +14,7 @@ from seahub.bisheng_office.settings import BISHENG_OFFICE_HOST_DOMAIN
 
 
 def get_hmac_hexdigest(key, msg):
-    hmac_obj = hmac.new(key, msg)
+    hmac_obj = hmac.new(key.encode('utf-8'), msg.encode('utf-8'))
     return hmac_obj.hexdigest()
 
 
@@ -22,7 +22,7 @@ def get_bisheng_dict(username, repo_id, file_path):
     doc_id = hashlib.md5(force_bytes(repo_id + file_path)).hexdigest()
 
     base_url = get_site_scheme_and_netloc()
-    bisheng_url = urlparse.urljoin(base_url,
+    bisheng_url = urllib.parse.urljoin(base_url,
                                    reverse('api-v2.1-bisheng-office'))
     bisheng_url += '?doc_id=%s' % doc_id
 

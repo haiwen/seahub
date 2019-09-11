@@ -45,7 +45,7 @@ class WikisViewTest(BaseTestCase):
         assert json_resp['data'][0]['name'] == wiki.name
         assert 'published/test-wiki' in json_resp['data'][0]['link']
         assert json_resp['data'][0]['owner'] == self.user.username
-        print json_resp['data'][0]['created_at']
+        print(json_resp['data'][0]['created_at'])
         assert json_resp['data'][0]['created_at'] is not None
 
     def test_can_list_others(self):

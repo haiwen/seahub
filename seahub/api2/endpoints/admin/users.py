@@ -272,7 +272,7 @@ class AdminUsers(APIView):
         if IS_EMAIL_CONFIGURED and SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
             c = {'user': request.user.username, 'email': email, 'password': password}
             try:
-                send_html_email(_(u'You are invited to join %s') % get_site_name(),
+                send_html_email(_('You are invited to join %s') % get_site_name(),
                         'sysadmin/user_add_email.html', c, None, [email])
             except Exception as e:
                 logger.error(str(e))
@@ -343,7 +343,7 @@ class AdminUser(APIView):
             username_by_login_id = Profile.objects.get_username_by_login_id(login_id)
             if username_by_login_id is not None:
                 return api_error(status.HTTP_400_BAD_REQUEST, 
-                                 _(u"Login id %s already exists." % login_id))
+                                 _("Login id %s already exists." % login_id))
 
         contact_email = request.data.get("contact_email", None)
         if contact_email is not None and contact_email.strip() != '':

@@ -138,8 +138,8 @@ class AdminLibraries(APIView):
             has_next_page = False
 
         default_repo_id = get_system_default_repo_id()
-        repos_all = filter(lambda r: not r.is_virtual, repos_all)
-        repos_all = filter(lambda r: r.repo_id != default_repo_id, repos_all)
+        repos_all = [r for r in repos_all if not r.is_virtual]
+        repos_all = [r for r in repos_all if r.repo_id != default_repo_id]
 
         return_results = []
 
@@ -253,7 +253,7 @@ class AdminLibrary(APIView):
             try:
                 org_id = seafile_api.get_org_id_by_repo_id(repo_id)
                 related_usernames = get_related_users_by_repo(repo_id,
-                        org_id if org_id > 0 else None)
+                        org_id if org_id and org_id > 0 else None)
             except Exception as e:
                 logger.error(e)
                 org_id = -1
@@ -342,7 +342,7 @@ class AdminLibrary(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             if not new_owner_obj.permissions.can_add_repo():
-                error_msg = _(u'Transfer failed: role of %s is %s, can not add library.') % \
+                error_msg = _('Transfer failed: role of %s is %s, can not add library.') % \
                         (new_owner, new_owner_obj.role)
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -363,7 +363,7 @@ class AdminLibrary(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
             if new_owner == repo_owner:
-                error_msg = _(u"Library can not be transferred to owner.")
+                error_msg = _("Library can not be transferred to owner.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             # get repo shared to user/group list

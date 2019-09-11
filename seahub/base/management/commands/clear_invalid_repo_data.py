@@ -27,7 +27,7 @@ class Command(BaseCommand):
                        'ExtraSharePermission': ExtraSharePermission,
                        'UploadLinkShare': UploadLinkShare}
 
-        for table in self.tables.items():
+        for table in list(self.tables.items()):
             self.clear_table(table[0], table[1])
 
         self.stdout.write('All invalid repo data are deleted')

@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from urllib import quote
+from urllib.parse import quote
 
 def login_link(request):
     """
@@ -17,7 +17,7 @@ def logout_link(request, *args):
     and uses the 'target' url parameter.
     e.g: https://school.edu/Shibboleth.sso/Login
     """
-    from app_settings import LOGOUT_URL, LOGOUT_REDIRECT_URL
+    from .app_settings import LOGOUT_URL, LOGOUT_REDIRECT_URL
     #LOGOUT_REDIRECT_URL specifies a default logout page that will always be used when
     #users logout from Shibboleth.
     target = LOGOUT_REDIRECT_URL or quote(request.build_absolute_uri())

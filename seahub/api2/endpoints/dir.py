@@ -83,8 +83,8 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
         contact_email_dict = {}
-        modifier_set = set([x.modifier for x in file_list])
-        lock_owner_set = set([x.lock_owner for x in file_list])
+        modifier_set = {x.modifier for x in file_list}
+        lock_owner_set = {x.lock_owner for x in file_list}
         for e in modifier_set | lock_owner_set:
             if e not in nickname_dict:
                 nickname_dict[e] = email2nickname(e)
@@ -167,8 +167,8 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
             file_info_list.append(file_info)
 
-    dir_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    file_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    dir_info_list.sort(key=lambda x: x['name'].lower())
+    file_info_list.sort(key=lambda x: x['name'].lower())
 
     return dir_info_list, file_info_list
 
@@ -445,7 +445,7 @@ class DirView(APIView):
                 dir_info = self.get_dir_info(repo_id, new_dir_path)
                 resp = Response(dir_info)
                 return resp
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

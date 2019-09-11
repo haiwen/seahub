@@ -19,15 +19,15 @@ def check(path):
 
 def do_update(filename):
     if 'migrations' in filename:
-        print 'skip migration file: %s' % filename
+        print('skip migration file: %s' % filename)
         return
 
     with open(filename) as f:
         # try read first line of file
         try:
-            head = [next(f) for x in xrange(1)]
+            head = [next(f) for x in range(1)]
         except StopIteration:
-            print '%s is empty, skip' % filename
+            print('%s is empty, skip' % filename)
             return
 
     copy_str = '# Copyright (c) 2012-2016 Seafile Ltd.'
@@ -39,11 +39,11 @@ def do_update(filename):
             need_update = False
 
     if not need_update:
-        print '%s is ok.' % filename
+        print('%s is ok.' % filename)
         return
 
     line_prepender(filename, copy_str)
-    print '%s Done.' % filename
+    print('%s Done.' % filename)
 
 def path_to_pyfile_list(path):
     is_dir = False
@@ -78,7 +78,7 @@ def do_check(filename):
     with open(filename) as f:
         # try read first line of file
         try:
-            head = [next(f) for x in xrange(1)]
+            head = [next(f) for x in range(1)]
         except StopIteration:
             return
 
@@ -89,4 +89,4 @@ def do_check(filename):
             need_update = False
 
     if need_update:
-        print 'No copyright info in %s.' % filename
+        print('No copyright info in %s.' % filename)

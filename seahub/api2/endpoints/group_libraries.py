@@ -82,7 +82,7 @@ class GroupLibraries(APIView):
         else:
             group_repos = seafile_api.get_repos_by_group(group_id)
 
-        group_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+        group_repos.sort(key=lambda x: x.last_modified, reverse=True)
 
         # get repo id owner dict
         all_repo_owner = []

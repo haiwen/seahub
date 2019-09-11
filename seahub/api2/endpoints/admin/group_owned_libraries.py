@@ -100,7 +100,7 @@ class AdminGroupOwnedLibraries(APIView):
                         storage_id=storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
-                if org_id > 0:
+                if org_id and org_id > 0:
                     repo_id = seafile_api.org_add_group_owned_repo(
                         org_id, group_id, repo_name, permission, password,
                         ENCRYPTED_LIBRARY_VERSION)
@@ -109,7 +109,7 @@ class AdminGroupOwnedLibraries(APIView):
                         group_id, repo_name, permission, password,
                         ENCRYPTED_LIBRARY_VERSION)
         else:
-            if org_id > 0:
+            if org_id and org_id > 0:
                 repo_id = seafile_api.org_add_group_owned_repo(
                     org_id, group_id, repo_name, permission, password,
                     ENCRYPTED_LIBRARY_VERSION)

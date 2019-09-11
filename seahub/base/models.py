@@ -15,7 +15,7 @@ from seahub.utils import calc_file_path_hash, within_time_range, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.tags.models import FileUUIDMap
-from fields import LowerCaseCharField
+from .fields import LowerCaseCharField
 
 
 # Get an instance of a logger
@@ -192,7 +192,7 @@ class UserStarredFilesManager(models.Manager):
         repo_cache = {}
         for sfile in starred_files:
             # repo still exists?
-            if repo_cache.has_key(sfile.repo_id):
+            if sfile.repo_id in repo_cache:
                 repo = repo_cache[sfile.repo_id]
             else:
                 try:
@@ -241,7 +241,7 @@ class UserStarredFilesManager(models.Manager):
                 logger.error(e)
                 sfile.last_modified = 0
 
-        ret.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+        ret.sort(key=lambda x: x.last_modified, reverse=True)
 
         return ret
 

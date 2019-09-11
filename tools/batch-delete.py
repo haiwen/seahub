@@ -22,7 +22,7 @@ def check_settings():
         sys.exit(1)
         
 def do_create():
-    root_passwd = raw_input("Please enter root password to create database %s: " % dbname)
+    root_passwd = input("Please enter root password to create database %s: " % dbname)
 
     conn = MySQLdb.Connect(host='localhost', user='root', passwd=root_passwd)
     cursor = conn.cursor()
@@ -59,5 +59,5 @@ if __name__=="__main__":
         do_delete(app_name)
     do_delete('django')
     
-    print '[Delete seahub tables...Done]'
+    print('[Delete seahub tables...Done]')
         

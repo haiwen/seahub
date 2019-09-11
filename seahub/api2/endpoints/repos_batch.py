@@ -488,7 +488,7 @@ class ReposBatchCopyDirView(APIView):
 
         # check if above quota for dst repo
         if seafile_api.check_quota(dst_repo_id, total_size) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA,  _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA,  _("Out of quota."))
 
         result = {}
         result['failed'] = []
@@ -1249,18 +1249,18 @@ class ReposAsyncBatchMoveItemView(APIView):
         locked_files = get_locked_files_by_dir(request, src_repo_id, src_parent_dir)
         for dirent in src_dirents:
             # file is locked and lock owner is not current user
-            if dirent in locked_files.keys() and \
+            if dirent in list(locked_files.keys()) and \
                     locked_files[dirent] != username:
-                error_msg = _(u'File %s is locked.') % dirent
+                error_msg = _('File %s is locked.') % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check sub folder permission
         folder_permission_dict = get_sub_folder_permission_by_dir(request,
                 src_repo_id, src_parent_dir)
         for dirent in src_dirents:
-            if dirent in folder_permission_dict.keys() and \
+            if dirent in list(folder_permission_dict.keys()) and \
                     folder_permission_dict[dirent] != 'rw':
-                error_msg = _(u"Can't move folder %s, please check its permission.") % dirent
+                error_msg = _("Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # move file
@@ -1468,18 +1468,18 @@ class ReposSyncBatchMoveItemView(APIView):
         locked_files = get_locked_files_by_dir(request, src_repo_id, src_parent_dir)
         for dirent in src_dirents:
             # file is locked and lock owner is not current user
-            if dirent in locked_files.keys() and \
+            if dirent in list(locked_files.keys()) and \
                     locked_files[dirent] != username:
-                error_msg = _(u'File %s is locked.') % dirent
+                error_msg = _('File %s is locked.') % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check sub folder permission
         folder_permission_dict = get_sub_folder_permission_by_dir(request,
                 src_repo_id, src_parent_dir)
         for dirent in src_dirents:
-            if dirent in folder_permission_dict.keys() and \
+            if dirent in list(folder_permission_dict.keys()) and \
                     folder_permission_dict[dirent] != 'rw':
-                error_msg = _(u"Can't move folder %s, please check its permission.") % dirent
+                error_msg = _("Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # move file
@@ -1557,17 +1557,17 @@ class ReposBatchDeleteItemView(APIView):
         locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
         for dirent in dirents:
             # file is locked and lock owner is not current user
-            if dirent in locked_files.keys() and \
+            if dirent in list(locked_files.keys()) and \
                     locked_files[dirent] != username:
-                error_msg = _(u'File %s is locked.') % dirent
+                error_msg = _('File %s is locked.') % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check sub folder permission
         folder_permission_dict = get_sub_folder_permission_by_dir(request, repo_id, parent_dir)
         for dirent in dirents:
-            if dirent in folder_permission_dict.keys() and \
+            if dirent in list(folder_permission_dict.keys()) and \
                     folder_permission_dict[dirent] != 'rw':
-                error_msg = _(u"Can't delete folder %s, please check its permission.") % dirent
+                error_msg = _("Can't delete folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # delete file

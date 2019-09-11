@@ -451,7 +451,7 @@ class UserNotification(models.Model):
         try:
             detail = json.loads(self.detail)
         except ValueError:
-            raise self.InvalidDetailError, 'Wrong detail format of group message'
+            raise self.InvalidDetailError('Wrong detail format of group message')
         else:
             if isinstance(detail, int): # Compatible with existing records
                 group_id = detail
@@ -466,7 +466,7 @@ class UserNotification(models.Model):
                 else:
                     return {'group_id': group_id, 'msg_from': msg_from}
             else:
-                raise self.InvalidDetailError, 'Wrong detail format of group message'
+                raise self.InvalidDetailError('Wrong detail format of group message')
 
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
@@ -526,7 +526,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         filename = d['file_name']
         repo_id = d['repo_id']
@@ -544,14 +544,14 @@ class UserNotification(models.Model):
                 name = os.path.basename(uploaded_to)
             file_link = reverse('view_lib_file', args=[repo_id, file_path])
 
-            msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
+            msg = _("A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
                 'file_link': file_link,
                 'file_name': escape(filename),
                 'link': link,
                 'name': escape(name),
                 }
         else:
-            msg = _(u"A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
+            msg = _("A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
                 'file_name': escape(filename),
                 }
 
@@ -567,7 +567,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
@@ -618,7 +618,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
@@ -674,7 +674,7 @@ class UserNotification(models.Model):
             d = self.group_message_detail_to_dict()
         except self.InvalidDetailError as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         group_id = d.get('group_id')
         group = ccnet_api.get_group(group_id)
@@ -685,11 +685,11 @@ class UserNotification(models.Model):
         msg_from = d.get('msg_from')
 
         if msg_from is None:
-            msg = _(u"<a href='%(href)s'>%(group_name)s</a> has a new discussion.") % {
+            msg = _("<a href='%(href)s'>%(group_name)s</a> has a new discussion.") % {
                 'href': HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id},
                 'group_name': group.group_name}
         else:
-            msg = _(u"%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>.") % {
+            msg = _("%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>.") % {
                 'href': HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id},
                 'user': escape(email2nickname(msg_from)),
                 'group_name': escape(group.group_name)
@@ -706,7 +706,7 @@ class UserNotification(models.Model):
             d = self.group_message_detail_to_dict()
         except self.InvalidDetailError as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         message = d.get('message')
         if message is not None:
@@ -724,7 +724,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         username = d['username']
         group_id = d['group_id']
@@ -735,7 +735,7 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
+        msg = _("User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
             'user_profile': reverse('user_profile', args=[username]),
             'username': username,
             'href': HASH_URLS['GROUP_MEMBERS'] % {'group_id': group_id},
@@ -754,7 +754,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         group_staff = d['group_staff']
         group_id = d['group_id']
@@ -764,7 +764,7 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group <a href='%(href)s'>%(group_name)s</a>") % {
+        msg = _("User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group <a href='%(href)s'>%(group_name)s</a>") % {
             'user_profile': reverse('user_profile', args=[group_staff]),
             'group_staff': escape(email2nickname(group_staff)),
             'href': reverse('group', args=[group_id]),
@@ -776,7 +776,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         repo_id = d['repo_id']
         file_path = d['file_path']
@@ -802,7 +802,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         draft_id = d['draft_id']
         author = d['author']
@@ -819,7 +819,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         draft_id = d['draft_id']
         from_user = d['from_user']
@@ -836,7 +836,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         inv_id = d['invitation_id']
         try:
@@ -865,7 +865,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal error")
 
         repo_owner_name = email2nickname(d['repo_owner'])
         repo_id = d['repo_id']

@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import url
 
-from views import group_wiki, group_wiki_create, \
+from .views import group_wiki, group_wiki_create, \
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
     group_wiki_page_delete, group_wiki_use_lib, group_remove
 

@@ -127,10 +127,10 @@ def user_notification_remove(request):
     UserNotification.objects.remove_user_notifications(request.user.username)
 
     messages.success(request, _("Successfully cleared all notices."))
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
-    return HttpResponseRedirect(next)
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = settings.SITE_ROOT
+    return HttpResponseRedirect(next_page)
 
 def add_notice_from_info(notices):
     '''Add 'msg_from' or 'default_avatar_url' to notice.

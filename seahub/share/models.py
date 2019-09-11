@@ -15,6 +15,7 @@ from seahub.utils import normalize_file_path, normalize_dir_path, gen_token,\
     get_service_url
 from seahub.constants import PERMISSION_READ, PERMISSION_ADMIN
 from seahub.utils import is_valid_org_id
+from functools import reduce
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)

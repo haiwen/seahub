@@ -95,7 +95,7 @@ class UploadLinks(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # filter share links by repo
-            upload_link_shares = filter(lambda ufs: ufs.repo_id==repo_id, upload_link_shares)
+            upload_link_shares = [ufs for ufs in upload_link_shares if ufs.repo_id==repo_id]
 
             path = request.GET.get('path', None)
             if path:
@@ -114,7 +114,7 @@ class UploadLinks(APIView):
                     path = path + '/'
 
                 # filter share links by path
-                upload_link_shares = filter(lambda ufs: ufs.path==path, upload_link_shares)
+                upload_link_shares = [ufs for ufs in upload_link_shares if ufs.path==path]
 
         result = []
         for uls in upload_link_shares:
@@ -124,7 +124,7 @@ class UploadLinks(APIView):
         if len(result) == 1:
             result = result
         else:
-            result.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
+            result.sort(key=lambda x: x['obj_name'])
 
         return Response(result)
 

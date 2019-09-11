@@ -1,7 +1,7 @@
 import os
 import json
 import hashlib
-import urlparse
+import urllib.parse
 import posixpath
 
 from django.core.cache import cache
@@ -72,7 +72,7 @@ def get_onlyoffice_dict(username, repo_id, file_path,
 
     base_url = get_site_scheme_and_netloc()
     onlyoffice_editor_callback_url = reverse('onlyoffice_editor_callback')
-    calllback_url = urlparse.urljoin(base_url, onlyoffice_editor_callback_url)
+    calllback_url = urllib.parse.urljoin(base_url, onlyoffice_editor_callback_url)
 
     return_dict = {
         'repo_id': repo_id,

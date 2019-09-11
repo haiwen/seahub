@@ -56,7 +56,7 @@ class AdminLoginBgImage(APIView):
             custom_login_bg_image_file = os.path.join(SEAHUB_DATA_ROOT,
                     custom_login_bg_image_path)
             # save login background image file to custom dir
-            with open(custom_login_bg_image_file, 'w') as fd:
+            with open(custom_login_bg_image_file, 'wb') as fd:
                 fd.write(image_file.read())
 
             custom_symlink = os.path.join(MEDIA_ROOT,

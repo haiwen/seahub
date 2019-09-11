@@ -9,7 +9,7 @@ import datetime
 import posixpath
 import re
 from dateutil.relativedelta import relativedelta
-from urllib2 import quote
+from urllib.parse import quote
 
 from rest_framework import parsers
 from rest_framework import status
@@ -129,13 +129,13 @@ except ImportError:
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
 from seaserv import seafserv_threaded_rpc, \
-    get_personal_groups_by_user, get_session_info, is_personal_repo, \
-    get_repo, check_permission, get_commits, is_passwd_set,\
+    get_personal_groups_by_user, is_personal_repo, \
+    get_repo, check_permission, get_commits,\
     check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
     remove_share, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
-    create_org, ccnet_api, send_message
+    create_org, ccnet_api
 
 from constance import config
 
@@ -345,11 +345,11 @@ class AccountInfo(APIView):
         if name is not None:
             if len(name) > 64:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u'Name is too long (maximum is 64 characters)'))
+                        _('Name is too long (maximum is 64 characters)'))
 
             if "/" in name:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u"Name should not include '/'."))
+                        _("Name should not include '/'."))
 
         email_interval = request.data.get("email_notification_interval", None)
         if email_interval is not None:
@@ -524,7 +524,7 @@ class Search(APIView):
             suffixes = []
             if len(custom_ftypes) > 0:
                 for ftp in custom_ftypes:
-                    if SEARCH_FILEEXT.has_key(ftp):
+                    if ftp in SEARCH_FILEEXT:
                         for ext in SEARCH_FILEEXT[ftp]:
                             suffixes.append(ext)
 
@@ -590,7 +590,7 @@ class Search(APIView):
                 e['permission'] = permission
 
             # get repo type
-            if repo_type_map.has_key(repo_id):
+            if repo_id in repo_type_map:
                 e['repo_type'] = repo_type_map[repo_id]
             else:
                 e['repo_type'] = ''
@@ -605,7 +605,7 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
     # generate download url for client
-    relay_id = get_session_info().id
+    relay_id = 0
     addr, port = get_ccnet_server_addr_port()
     email = request.user.username
     if gen_sync_token:
@@ -670,7 +670,7 @@ class Repos(APIView):
         rtype = request.GET.get('type', "")
         if not rtype:
             # set all to True, no filter applied
-            filter_by = filter_by.fromkeys(filter_by.iterkeys(), True)
+            filter_by = filter_by.fromkeys(iter(filter_by.keys()), True)
 
         for f in rtype.split(','):
             f = f.strip()
@@ -695,14 +695,14 @@ class Repos(APIView):
                         ret_corrupted=True)
 
             # Reduce memcache fetch ops.
-            modifiers_set = set([x.last_modifier for x in owned_repos])
+            modifiers_set = {x.last_modifier for x in owned_repos}
             for e in modifiers_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
-            owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in owned_repos:
                 # do not return virtual repos
                 if r.is_virtual:
@@ -753,15 +753,15 @@ class Repos(APIView):
                     get_repos_with_admin_permission(email)
 
             # Reduce memcache fetch ops.
-            owners_set = set([x.user for x in shared_repos])
-            modifiers_set = set([x.last_modifier for x in shared_repos])
+            owners_set = {x.user for x in shared_repos}
+            modifiers_set = {x.last_modifier for x in shared_repos}
             for e in owners_set | modifiers_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
-            shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
                 if q and q.lower() not in r.name.lower():
                     continue
@@ -775,7 +775,7 @@ class Repos(APIView):
                     if not is_web_request(request):
                         continue
 
-                r.password_need = is_passwd_set(r.repo_id, email)
+                r.password_need = seafile_api.is_password_set(r.repo_id, email)
                 repo = {
                     "type": "srepo",
                     "id": r.repo_id,
@@ -784,7 +784,6 @@ class Repos(APIView):
                     "owner_contact_email": contact_email_dict.get(r.user, ''),
                     "name": r.repo_name,
                     "owner_nickname": nickname_dict.get(r.user, ''),
-                    "owner_name": nickname_dict.get(r.user, ''),
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "modifier_email": r.last_modifier,
@@ -816,11 +815,11 @@ class Repos(APIView):
             else:
                 group_repos = seafile_api.get_group_repos_by_user(email)
 
-            group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            group_repos.sort(key=lambda x: x.last_modify, reverse=True)
 
             # Reduce memcache fetch ops.
-            share_from_set = set([x.user for x in group_repos])
-            modifiers_set = set([x.last_modifier for x in group_repos])
+            share_from_set = {x.user for x in group_repos}
+            modifiers_set = {x.last_modifier for x in group_repos}
             for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -863,8 +862,8 @@ class Repos(APIView):
             public_repos = list_inner_pub_repos(request)
 
             # Reduce memcache fetch ops.
-            share_from_set = set([x.user for x in public_repos])
-            modifiers_set = set([x.last_modifier for x in public_repos])
+            share_from_set = {x.user for x in public_repos}
+            modifiers_set = {x.last_modifier for x in public_repos}
             for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -906,7 +905,7 @@ class Repos(APIView):
             org_id = request.user.org.org_id
 
         try:
-            send_message('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
+            seafile_api.publish_event('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
         except Exception as e:
             logger.error('Error when sending user-login message: %s' % str(e))
         response = HttpResponse(json.dumps(repos_json), status=200,
@@ -985,7 +984,7 @@ class Repos(APIView):
             return None, api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
 
-        if org_id > 0:
+        if org_id and org_id > 0:
             repo_id = seafile_api.create_org_repo(repo_name,
                     repo_desc, username, org_id, passwd,
                     enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
@@ -1049,7 +1048,7 @@ class Repos(APIView):
             return None, api_error(status.HTTP_400_BAD_REQUEST,
                              'You must provide magic, random_key and enc_version.')
 
-        if org_id > 0:
+        if org_id and org_id > 0:
             repo_id = seafile_api.create_org_enc_repo(repo_id, repo_name, repo_desc,
                                                       username, magic, random_key,
                                                       salt, enc_version, org_id)
@@ -1196,7 +1195,7 @@ def set_repo_password(request, repo, password):
         if ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
             add_encrypted_repo_secret_key_to_database(repo_id, password)
 
-    except SearpcError, e:
+    except SearpcError as e:
         if e.msg == 'Bad arguments':
             return api_error(status.HTTP_400_BAD_REQUEST, e.msg)
         elif e.msg == 'Repo is not encrypted':
@@ -1254,14 +1253,14 @@ class Repo(APIView):
         root_id = current_commit.root_id if current_commit else None
 
         repo_json = {
-            "type":"repo",
-            "id":repo.id,
-            "owner":owner,
-            "name":repo.name,
-            "mtime":repo.latest_modify,
-            "size":repo.size,
-            "encrypted":repo.encrypted,
-            "root":root_id,
+            "type": "repo",
+            "id": repo.id,
+            "owner": owner,
+            "name": repo.name,
+            "mtime": repo.latest_modify,
+            "size": repo.size,
+            "encrypted": repo.encrypted,
+            "root": root_id,
             "permission": check_permission(repo.id, username),
             "modifier_email": repo.last_modifier,
             "modifier_contact_email": email2contact_email(repo.last_modifier),
@@ -1583,7 +1582,7 @@ class RepoOwner(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
-            error_msg = _(u'User %s not found in organization.') % new_owner
+            error_msg = _('User %s not found in organization.') % new_owner
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -1598,12 +1597,12 @@ class RepoOwner(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not new_owner_obj.permissions.can_add_repo():
-            error_msg = _(u'Transfer failed: role of %s is %s, can not add library.') % \
+            error_msg = _('Transfer failed: role of %s is %s, can not add library.') % \
                     (new_owner, new_owner_obj.role)
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if new_owner == repo_owner:
-            error_msg = _(u"Library can not be transferred to owner.")
+            error_msg = _("Library can not be transferred to owner.")
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         pub_repos = []
@@ -1741,7 +1740,7 @@ class FileBlockDownloadLinkView(APIView):
                     'You do not have permission to access this repo.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, 'downloadblks', request.user.username)
@@ -1777,7 +1776,7 @@ class UploadLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1825,7 +1824,7 @@ class UpdateLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update', request.user.username, use_onetime=False)
@@ -1869,7 +1868,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
@@ -1914,7 +1913,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1962,7 +1961,7 @@ class UpdateBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update-blks-api', request.user.username, use_onetime=False)
@@ -2012,7 +2011,7 @@ def get_dir_file_recursively(username, repo_id, path, all_dirs):
         file_list =  [item for item in all_dirs if item['type'] == 'file']
         contact_email_dict = {}
         nickname_dict = {}
-        modifiers_set = set([x['modifier_email'] for x in file_list])
+        modifiers_set = {x['modifier_email'] for x in file_list}
         for e in modifiers_set:
             if e not in contact_email_dict:
                 contact_email_dict[e] = email2contact_email(e)
@@ -2042,7 +2041,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
         dirs = seafile_api.list_dir_with_perm(repo.id, path, dir_id,
                 username, -1, -1)
         dirs = dirs if dirs else []
-    except SearpcError, e:
+    except SearpcError as e:
         logger.error(e)
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
@@ -2084,7 +2083,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
     # Use dict to reduce memcache fetch cost in large for-loop.
     contact_email_dict = {}
     nickname_dict = {}
-    modifiers_set = set([x['modifier_email'] for x in file_list])
+    modifiers_set = {x['modifier_email'] for x in file_list}
     for e in modifiers_set:
         if e not in contact_email_dict:
             contact_email_dict[e] = email2contact_email(e)
@@ -2108,8 +2107,8 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
         if normalize_file_path(file_path) in starred_files:
             e['starred'] = True
 
-    dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    dir_list.sort(key=lambda x: x['name'].lower())
+    file_list.sort(key=lambda x: x['name'].lower())
 
     if request_type == 'f':
         dentrys = file_list
@@ -2142,7 +2141,7 @@ def get_shared_link(request, repo_id, path):
 
         try:
             fs.save()
-        except IntegrityError, e:
+        except IntegrityError as e:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
     http_or_https = request.is_secure() and 'https' or 'http'
@@ -2207,7 +2206,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op,
 def reloaddir(request, repo, parent_dir):
     try:
         dir_id = seafile_api.get_dir_id_by_path(repo.id, parent_dir)
-    except SearpcError, e:
+    except SearpcError as e:
         logger.error(e)
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to get dir id by path")
@@ -2260,7 +2259,7 @@ class OpDeleteView(APIView):
         allowed_file_names = []
         locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
         for file_name in file_names.split(':'):
-            if file_name not in locked_files.keys():
+            if file_name not in list(locked_files.keys()):
                 # file is not locked
                 allowed_file_names.append(file_name)
             elif locked_files[file_name] == username:
@@ -2333,7 +2332,7 @@ class OpMoveView(APIView):
         allowed_obj_names = []
         locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
         for file_name in obj_names.split(':'):
-            if file_name not in locked_files.keys():
+            if file_name not in list(locked_files.keys()):
                 # file is not locked
                 allowed_obj_names.append(file_name)
             elif locked_files[file_name] == username:
@@ -2373,7 +2372,7 @@ class OpMoveView(APIView):
 
             # check if above quota for dst repo
             if seafile_api.check_quota(dst_repo, total_size) < 0:
-                return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+                return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
@@ -2487,7 +2486,7 @@ class OpCopyView(APIView):
 
         # check if above quota for dst repo
         if seafile_api.check_quota(dst_repo, total_size) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
@@ -2849,7 +2848,7 @@ class FileView(APIView):
             try:
                 seafile_api.rename_file(repo_id, parent_dir, oldname, newname,
                                         username)
-            except SearpcError,e:
+            except SearpcError as e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to rename file: %s" % e)
 
@@ -2892,7 +2891,7 @@ class FileView(APIView):
                                       dst_dir, new_filename,
                                       replace=False, username=username,
                                       need_progress=0, synchronous=1)
-            except SearpcError, e:
+            except SearpcError as e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
 
@@ -2984,7 +2983,7 @@ class FileView(APIView):
             try:
                 seafile_api.post_empty_file(repo_id, parent_dir,
                                             new_file_name, username)
-            except SearpcError, e:
+            except SearpcError as e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to create file.')
 
@@ -3038,7 +3037,7 @@ class FileView(APIView):
             try:
                 seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
                 return Response('success', status=status.HTTP_200_OK)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
 
@@ -3052,7 +3051,7 @@ class FileView(APIView):
             try:
                 seafile_api.unlock_file(repo_id, path.lstrip('/'))
                 return Response('success', status=status.HTTP_200_OK)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
         else:
@@ -3617,7 +3616,7 @@ class DirView(APIView):
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('DirView', args=[repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(
-                    parent_dir.encode('utf-8') + '/' + new_dir_name.encode('utf-8'))
+                    parent_dir.encode('utf-8') + '/'.encode('utf-8') + new_dir_name.encode('utf-8'))
             return resp
 
         elif operation.lower() == 'rename':
@@ -3646,7 +3645,7 @@ class DirView(APIView):
                 seafile_api.rename_file(repo_id, parent_dir, old_dir_name,
                                         checked_newname, username)
                 return Response('success', status=status.HTTP_200_OK)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to rename folder.')
@@ -3786,13 +3785,13 @@ class DirSubRepoView(APIView):
                         error_msg = 'Bad arguments'
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                     elif e.msg == 'Incorrect password':
-                        error_msg = _(u'Wrong password')
+                        error_msg = _('Wrong password')
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                     elif e.msg == 'Internal server error':
-                        error_msg = _(u'Internal server error')
+                        error_msg = _('Internal server error')
                         return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
                     else:
-                        error_msg = _(u'Decrypt library error')
+                        error_msg = _('Decrypt library error')
                         return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             # create sub-lib for encrypted repo
@@ -3883,7 +3882,7 @@ class BeSharedRepos(APIView):
                 shared_repos.append(r)
 
         if not CLOUD_MODE:
-            shared_repos += seaserv.list_inner_pub_repos(username)
+            shared_repos += seafile_api.get_inner_pub_repo_list()
 
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
@@ -3960,7 +3959,7 @@ class SharedFileDetailView(APIView):
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
             commits = get_file_revisions_after_renamed(repo_id, path)
             c = commits[0]
-        except SearpcError, e:
+        except SearpcError as e:
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get file id by path.")
 
@@ -4089,7 +4088,7 @@ class SharedDirView(APIView):
             dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, real_path, dir_id,
                     username, -1, -1)
             dirs = dirs if dirs else []
-        except SearpcError, e:
+        except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED, "Failed to list dir.")
 
@@ -4115,8 +4114,8 @@ class SharedDirView(APIView):
             else:
                 file_list.append(entry)
 
-        dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-        file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+        dir_list.sort(key=lambda x: x['name'].lower())
+        file_list.sort(key=lambda x: x['name'].lower())
         dentrys = dir_list + file_list
 
         content_type = 'application/json; charset=utf-8'
@@ -4298,7 +4297,7 @@ class SharedRepo(APIView):
                 try:
                     seafile_api.share_repo(repo_id, username, u, permission)
                     shared_users.append(u)
-                except SearpcError, e:
+                except SearpcError as e:
                     logger.error(e)
                     notsharable_errors.append(e)
 
@@ -4313,7 +4312,7 @@ class SharedRepo(APIView):
                 for s_user in shared_users:
                     try:
                         remove_share(repo_id, username, s_user)
-                    except SearpcError, e:
+                    except SearpcError as e:
                         # ignoring this error, go to next unsharing
                         continue
 
@@ -4348,7 +4347,7 @@ class SharedRepo(APIView):
             try:
                 seafile_api.set_group_repo(repo_id,
                         group_id, username, permission)
-            except SearpcError, e:
+            except SearpcError as e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "Searpc Error: " + e.msg)
             try:
@@ -4555,7 +4554,7 @@ class Groups(APIView):
             group_id = ccnet_api.create_group(group_name, username)
             return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
                                 content_type=content_type)
-        except SearpcError, e:
+        except SearpcError as e:
             result['error'] = e.msg
             return HttpResponse(json.dumps(result), status=500,
                                 content_type=content_type)
@@ -4648,7 +4647,7 @@ class GroupMembers(APIView):
 
         try:
             ccnet_threaded_rpc.group_add_member(group.id, request.user.username, user_name)
-        except SearpcError, e:
+        except SearpcError as e:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to add user to group')
 
         return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
@@ -4673,7 +4672,7 @@ class GroupMembers(APIView):
 
         try:
             ccnet_threaded_rpc.group_remove_member(group.id, request.user.username, user_name)
-        except SearpcError, e:
+        except SearpcError as e:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to add user to group')
 
         return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
@@ -4783,14 +4782,14 @@ class GroupRepos(APIView):
         else:
             repos = seafile_api.get_repos_by_group(group.id)
 
-        repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+        repos.sort(key=lambda x: x.last_modified, reverse=True)
         group.is_staff = is_group_staff(group, request.user)
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         contact_email_dict = {}
         nickname_dict = {}
-        owner_set = set([x.user for x in repos])
-        modifiers_set = set([x.modifier for x in repos])
+        owner_set = {x.user for x in repos}
+        modifiers_set = {x.modifier for x in repos}
         for e in owner_set | modifiers_set:
             if e not in contact_email_dict:
                 contact_email_dict[e] = email2contact_email(e)
@@ -4949,7 +4948,7 @@ class OfficeConvertQueryStatus(APIView):
                 else:
                     ret['success'] = True
                     ret['status'] = d.status
-            except Exception, e:
+            except Exception as e:
                 logging.exception('failed to call query_office_convert_status')
                 ret['error'] = str(e)
 

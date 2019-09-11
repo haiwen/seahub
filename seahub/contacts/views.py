@@ -12,12 +12,11 @@ from django.forms.models import modelformset_factory
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 
-from models import Contact, ContactAddForm, ContactEditForm
+from .models import Contact, ContactAddForm, ContactEditForm
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.decorators import user_mods_check
 from seahub.profile.models import Profile
 from seahub.utils import render_error, is_valid_email
-from seaserv import ccnet_rpc, ccnet_threaded_rpc
 from seahub.views import is_registered_user
 from seahub.settings import SITE_ROOT
 
@@ -65,12 +64,12 @@ def contact_add(request):
     contact_email = request.POST.get('contact_email', '')
     if not is_valid_email(contact_email):
         result['success'] = False
-        messages.error(request, _(u"%s is not a valid email.") % contact_email)
+        messages.error(request, _("%s is not a valid email.") % contact_email)
         return HttpResponseBadRequest(json.dumps(result), content_type=content_type)
 
     if Contact.objects.get_contact_by_user(username, contact_email) is not None:
         result['success'] = False
-        messages.error(request, _(u"%s is already in your contacts.") % contact_email)
+        messages.error(request, _("%s is already in your contacts.") % contact_email)
         return HttpResponseBadRequest(json.dumps(result), content_type=content_type)
 
     contact_name = request.POST.get('contact_name', '')
@@ -79,12 +78,12 @@ def contact_add(request):
     try:
         Contact.objects.add_contact(username, contact_email, contact_name, note)
         result['success'] = True
-        messages.success(request, _(u"Successfully added %s to contacts.") % contact_email)
+        messages.success(request, _("Successfully added %s to contacts.") % contact_email)
         return HttpResponse(json.dumps(result), content_type=content_type)
     except Exception as e:
         logger.error(e)
         result['success'] = False
-        messages.error(request, _(u"Failed to add %s to contacts.") % contact_email)
+        messages.error(request, _("Failed to add %s to contacts.") % contact_email)
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
 @login_required_ajax
@@ -105,7 +104,7 @@ def contact_edit(request):
         contact.note = note
         contact.save()
         result['success'] = True
-        messages.success(request, _(u'Successfully edited %s.') % contact_email)
+        messages.success(request, _('Successfully edited %s.') % contact_email)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -118,6 +117,6 @@ def contact_delete(request):
     contact_email = request.GET.get('email')
 
     Contact.objects.filter(user_email=user_email, contact_email=contact_email).delete()
-    messages.success(request, _(u'Successfully Deleted %s') % contact_email)
+    messages.success(request, _('Successfully Deleted %s') % contact_email)
     
     return HttpResponseRedirect(reverse("contact_list"))

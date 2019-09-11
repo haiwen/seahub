@@ -3,7 +3,7 @@
 import logging
 import os
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -23,8 +23,8 @@ from seaserv import ccnet_threaded_rpc, seafile_api, \
     remove_repo, get_file_id_by_path, post_empty_file, del_file
 from pysearpc import SearpcError
 
-from models import PublicGroup
-from forms import MessageForm, WikiCreateForm
+from .models import PublicGroup
+from .forms import MessageForm, WikiCreateForm
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
@@ -75,7 +75,7 @@ def remove_group_common(group_id, username, org_id=None):
     """
     seaserv.ccnet_threaded_rpc.remove_group(group_id, username)
     seaserv.seafserv_threaded_rpc.remove_repo_group(group_id)
-    if org_id is not None and org_id > 0:
+    if org_id and org_id > 0:
         seaserv.ccnet_threaded_rpc.remove_org_group(org_id, group_id)
     # remove record of share to group when group deleted
     ExtraGroupsSharePermission.objects.filter(group_id=group_id).delete()
@@ -139,16 +139,16 @@ def group_remove(request, group_id):
     operation.
     """
     # Request header may missing HTTP_REFERER, we need to handle that case.
-    next = request.META.get('HTTP_REFERER', SITE_ROOT)
+    next_page = request.META.get('HTTP_REFERER', SITE_ROOT)
 
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     remove_group_common(group_id_int, request.user.username)
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 def rename_group_with_new_name(request, group_id, new_group_name):
     """Rename a group with new name.
@@ -190,7 +190,7 @@ def send_group_member_add_mail(request, group, from_user, to_user):
         'group': group,
         }
 
-    subject = _(u'You are invited to join a group on %s') % get_site_name()
+    subject = _('You are invited to join a group on %s') % get_site_name()
     send_html_email(subject, 'group/add_member_email.html', c, None, [to_user])
 
 ########## wiki
@@ -210,7 +210,7 @@ def group_wiki(request, group, page_name="home"):
         group_repos = get_group_repos(group.id, username)
         group_repos = [r for r in group_repos if not r.encrypted]
         return render(request, "group/group_wiki.html", {
-                "group" : group,
+                "group": group,
                 "is_staff": group.is_staff,
                 "wiki_exists": wiki_exists,
                 "mods_enabled": mods_enabled,
@@ -257,7 +257,7 @@ def group_wiki(request, group, page_name="home"):
             wiki_index_exists = False
 
         return render(request, "group/group_wiki.html", {
-            "group" : group,
+            "group": group,
             "is_staff": group.is_staff,
             "wiki_exists": wiki_exists,
             "content": content,
@@ -328,7 +328,7 @@ def group_wiki_create(request, group):
 
     form = WikiCreateForm(request.POST)
     if not form.is_valid():
-        return json_error(str(form.errors.values()[0]))
+        return json_error(str(list(form.errors.values())[0]))
 
     # create group repo in user context
     repo_name = form.cleaned_data['repo_name']
@@ -338,23 +338,23 @@ def group_wiki_create(request, group):
 
     repo_id = seafile_api.create_repo(repo_name, repo_desc, user)
     if not repo_id:
-        return json_error(_(u'Failed to create'), 500)
+        return json_error(_('Failed to create'), 500)
 
     try:
         seafile_api.set_group_repo(repo_id, group.id, user, permission)
     except SearpcError as e:
         remove_repo(repo_id)
-        return json_error(_(u'Failed to create: internal error.'), 500)
+        return json_error(_('Failed to create: internal error.'), 500)
 
     GroupWiki.objects.save_group_wiki(group_id=group.id, repo_id=repo_id)
 
     # create home page
     page_name = "home.md"
     if not post_empty_file(repo_id, "/", page_name, user):
-        return json_error(_(u'Failed to create home page. Please retry later'), 500)
+        return json_error(_('Failed to create home page. Please retry later'), 500)
 
-    next = reverse('group_wiki', args=[group.id])
-    return HttpResponse(json.dumps({'href': next}), content_type=content_type)
+    next_page = reverse('group_wiki', args=[group.id])
+    return HttpResponse(json.dumps({'href': next_page}), content_type=content_type)
 
 @group_check
 def group_wiki_use_lib(request, group):
@@ -364,15 +364,15 @@ def group_wiki_use_lib(request, group):
         raise Http404
     repo_id = request.POST.get('dst_repo', '')
     username = request.user.username
-    next = reverse('group_wiki', args=[group.id])
+    next_page = reverse('group_wiki', args=[group.id])
     repo = seafile_api.get_repo(repo_id)
     if repo is None:
         messages.error(request, _('Failed to set wiki library.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     if check_folder_permission(request, repo_id, '/') != 'rw':
         messages.error(request, _('Permission denied.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     GroupWiki.objects.save_group_wiki(group_id=group.id, repo_id=repo_id)
 
@@ -382,7 +382,7 @@ def group_wiki_use_lib(request, group):
         if not seaserv.post_empty_file(repo_id, "/", page_name, username):
             messages.error(request, _('Failed to create home page. Please retry later'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @group_check
 def group_wiki_page_new(request, group, page_name="home"):
@@ -414,7 +414,7 @@ def group_wiki_page_new(request, group, page_name="home"):
 
         url = "%s?p=%s&from=wiki_page_new&gid=%s" % (
             reverse('file_edit', args=[repo.id]),
-            urllib2.quote(filepath.encode('utf-8')), group.id)
+            urllib.parse.quote(filepath.encode('utf-8')), group.id)
         return HttpResponseRedirect(url)
 
 
@@ -431,7 +431,7 @@ def group_wiki_page_edit(request, group, page_name="home"):
     filepath = "/" + page_name + ".md"
     url = "%s?p=%s&from=wiki_page_edit&gid=%s" % (
             reverse('file_edit', args=[repo.id]),
-            urllib2.quote(filepath.encode('utf-8')), group.id)
+            urllib.parse.quote(filepath.encode('utf-8')), group.id)
 
     return HttpResponseRedirect(url)
 

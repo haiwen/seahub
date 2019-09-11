@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import posixpath
 
 import seaserv
@@ -34,7 +34,7 @@ def wiki_list(request):
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
     if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        joined_groups.sort(key=lambda x: x.group_name.lower())
 
     return render(request, "wiki/wiki_list.html", {
         "grps": joined_groups,
@@ -70,7 +70,7 @@ def slug(request, slug, file_path="home.md"):
         return redirect('auth_login')
     else:
         if not wiki.has_read_perm(request):
-            return render_permission_error(request, _(u'Unable to view Wiki'))
+            return render_permission_error(request, _('Unable to view Wiki'))
 
     file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
     if file_type == IMAGE:
@@ -134,7 +134,7 @@ def edit_page(request, slug, page_name="home"):
     filepath = "/" + page_name + ".md"
     url = "%s?p=%s&from=wikis_wiki_page_edit&wiki_slug=%s" % (
             reverse('file_edit', args=[wiki.repo_id]),
-            urllib2.quote(filepath.encode('utf-8')),
+            urllib.parse.quote(filepath.encode('utf-8')),
             slug)
 
     return HttpResponseRedirect(url)

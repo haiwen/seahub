@@ -14,10 +14,10 @@ from django.utils.encoding import smart_str
 from django.db.models import signals
 
 try:
-    from cStringIO import StringIO
-    dir(StringIO) # Placate PyFlakes
+    from io import BytesIO
+    dir(BytesIO) # Placate PyFlakes
 except ImportError:
-    from StringIO import StringIO
+    from io import BytesIO
 
 try:
     from PIL import Image
@@ -39,7 +39,7 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
     if isinstance(instance, Avatar):
         tmppath = [AVATAR_STORAGE_DIR]
         if AVATAR_HASH_USERDIRNAMES:
-            tmp = hashlib.md5(instance.emailuser).hexdigest()
+            tmp = hashlib.md5(instance.emailuser.encode('utf-8')).hexdigest()
             tmppath.extend([tmp[0], tmp[1], tmp[2:]])
         else:
             tmppath.append(instance.emailuser)
@@ -63,7 +63,7 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
         # File doesn't exist yet
         if AVATAR_HASH_FILENAMES:
             (root, ext) = os.path.splitext(filename)
-            filename = hashlib.md5(smart_str(filename)).hexdigest()
+            filename = hashlib.md5(smart_str(filename).encode('utf-8')).hexdigest()
             filename = filename + ext
     if size:
         tmppath.extend(['resized', str(size)])
@@ -92,7 +92,7 @@ class AvatarBase(object):
 
         try:
             orig = self.avatar.storage.open(self.avatar.name, 'rb').read()
-            image = Image.open(StringIO(orig))
+            image = Image.open(BytesIO(orig))
 
             quality = quality or AVATAR_THUMB_QUALITY
             (w, h) = image.size
@@ -106,7 +106,7 @@ class AvatarBase(object):
                 if image.mode != "RGBA":
                     image = image.convert("RGBA")
                 image = image.resize((size, size), AVATAR_RESIZE_METHOD)
-                thumb = StringIO()
+                thumb = BytesIO()
                 image.save(thumb, AVATAR_THUMB_FORMAT, quality=quality)
                 thumb_file = ContentFile(thumb.getvalue())
             else:
@@ -141,7 +141,7 @@ class Avatar(models.Model, AvatarBase):
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
     
     def __unicode__(self):
-        return _(u'Avatar for %s') % self.emailuser
+        return _('Avatar for %s') % self.emailuser
     
     def save(self, *args, **kwargs):
         avatars = Avatar.objects.filter(emailuser=self.emailuser)
@@ -169,7 +169,7 @@ class GroupAvatar(models.Model, AvatarBase):
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
     
     def __unicode__(self):
-        return _(u'Avatar for %s') % self.group_id
+        return _('Avatar for %s') % self.group_id
 
     def save(self, *args, **kwargs):
         super(GroupAvatar, self).save(*args, **kwargs)

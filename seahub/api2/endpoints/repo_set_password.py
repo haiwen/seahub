@@ -64,13 +64,13 @@ class RepoSetPassword(APIView):
                 error_msg = 'Bad arguments'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             elif e.msg == 'Incorrect password':
-                error_msg = _(u'Wrong password')
+                error_msg = _('Wrong password')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             elif e.msg == 'Internal server error':
-                error_msg = _(u'Internal server error')
+                error_msg = _('Internal server error')
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             else:
-                error_msg = _(u'Decrypt library error')
+                error_msg = _('Decrypt library error')
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
@@ -124,7 +124,7 @@ class RepoSetPassword(APIView):
                 seafile_api.change_repo_passwd(repo_id, old_password, new_password, username)
             except Exception as e:
                 if e.msg == 'Incorrect password':
-                    error_msg = _(u'Wrong old password')
+                    error_msg = _('Wrong old password')
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
                 else:
                     logger.error(e)
@@ -157,7 +157,7 @@ class RepoSetPassword(APIView):
 
             secret_key =  RepoSecretKey.objects.get_secret_key(repo_id)
             if not secret_key:
-                error_msg = _(u"Can not reset this library's password.")
+                error_msg = _("Can not reset this library's password.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             try:

@@ -229,7 +229,7 @@ class Command(BaseCommand):
                 continue
 
             # remove my activities
-            res = filter(lambda x: x.op_user != username, res)
+            res = [x for x in res if x.op_user != username]
             if not res:
                 continue
 

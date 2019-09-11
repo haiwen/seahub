@@ -217,7 +217,7 @@ def login_simple_check(request):
         raise Http404
 
     today = datetime.now().strftime('%Y-%m-%d')
-    expect = hashlib.md5(settings.SECRET_KEY+username+today).hexdigest()
+    expect = hashlib.md5((settings.SECRET_KEY+username+today).encode('utf-8')).hexdigest()
     if expect == random_key:
         try:
             user = User.objects.get(email=username)
@@ -313,9 +313,9 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 opts['domain_override'] = get_current_site(request).domain
             try:
                 form.save(**opts)
-            except Exception, e:
+            except Exception as e:
                 logger.error(str(e))
-                messages.error(request, _(u'Failed to send email, please contact administrator.'))
+                messages.error(request, _('Failed to send email, please contact administrator.'))
                 return render(request, template_name, {
                         'form': form,
                         })

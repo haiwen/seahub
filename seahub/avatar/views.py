@@ -34,11 +34,11 @@ def _get_next(request):
     3. If Django can determine the previous page from the HTTP headers, the view will
     redirect to that previous page.
     """
-    next = request.POST.get('next', request.GET.get('next',
+    next_page = request.POST.get('next', request.GET.get('next',
         request.META.get('HTTP_REFERER', None)))
-    if not next:
-        next = request.path
-    return next
+    if not next_page:
+        next_page = request.path
+    return next_page
 
 def _get_avatars(user):
     # Default set. Needs to be sliced, but that's it. Keep the natural order.
@@ -148,10 +148,10 @@ def delete(request, extra_context=None, next_override=None, *args, **kwargs):
     if request.method == 'POST':
         if delete_avatar_form.is_valid():
             ids = delete_avatar_form.cleaned_data['choices']
-            if unicode(avatar.id) in ids and avatars.count() > len(ids):
+            if str(avatar.id) in ids and avatars.count() > len(ids):
                 # Find the next best avatar, and set it as the new primary
                 for a in avatars:
-                    if unicode(a.id) not in ids:
+                    if str(a.id) not in ids:
                         a.primary = True
                         a.save()
                         avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)

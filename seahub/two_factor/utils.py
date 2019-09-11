@@ -1,5 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 
 import sys
 from binascii import hexlify, unhexlify
@@ -8,7 +8,7 @@ from os import urandom
 try:
     from urllib.parse import quote, urlencode
 except ImportError:
-    from urllib import quote, urlencode
+    from urllib.parse import quote, urlencode
 
 from django.conf import settings
 from django.core.exceptions import ValidationError

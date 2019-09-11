@@ -122,7 +122,7 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
         if not user:
             if not getattr(settings, 'REMOTE_USER_CREATE_UNKNOWN_USER', True):
                 return render(request, 'remote_user/create_unknown_user_false.html')
-	    return render(request, 'remote_user/error.html')
+            return render(request, 'remote_user/error.html')
 
         if user:
             if not user.is_active:

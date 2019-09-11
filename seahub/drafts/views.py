@@ -28,7 +28,7 @@ def draft(request, pk):
     origin_repo_id = d.origin_repo_id
     permission = check_folder_permission(request, origin_repo_id, '/')
     if not permission:
-        return render_permission_error(request, _(u'Permission denied.'))
+        return render_permission_error(request, _('Permission denied.'))
 
     origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
     origin_file = seafile_api.get_file_id_by_path(origin_repo_id, origin_file_path)

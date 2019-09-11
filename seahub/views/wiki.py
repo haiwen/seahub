@@ -11,8 +11,8 @@ import logging
 import json
 import stat
 import tempfile
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import chardet
 
 from django.core.urlresolvers import reverse
@@ -53,7 +53,7 @@ def personal_wiki(request, page_name="home"):
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
     if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        joined_groups.sort(key=lambda x: x.group_name.lower())
 
     wiki_exists = True
     try:
@@ -125,7 +125,7 @@ def personal_wiki_pages(request):
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
     if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        joined_groups.sort(key=lambda x: x.group_name.lower())
 
     try:
         repo = get_personal_wiki_repo(username)
@@ -161,7 +161,7 @@ def personal_wiki_create(request):
 
     form = WikiCreateForm(request.POST)
     if not form.is_valid():
-        return json_error(str(form.errors.values()[0]))
+        return json_error(str(list(form.errors.values())[0]))
 
     # create group repo in user context
     repo_name = form.cleaned_data['repo_name']
@@ -171,17 +171,17 @@ def personal_wiki_create(request):
 
     repo_id = seafile_api.create_repo(repo_name, repo_desc, username)
     if not repo_id:
-        return json_error(_(u'Failed to create'), 500)
+        return json_error(_('Failed to create'), 500)
 
     PersonalWiki.objects.save_personal_wiki(username=username, repo_id=repo_id)
 
     # create home page
     page_name = "home.md"
     if not seaserv.post_empty_file(repo_id, "/", page_name, username):
-        return json_error(_(u'Failed to create home page. Please retry later'), 500)
+        return json_error(_('Failed to create home page. Please retry later'), 500)
 
-    next = reverse('personal_wiki', args=[])
-    return HttpResponse(json.dumps({'href': next}), content_type=content_type)
+    next_page = reverse('personal_wiki', args=[])
+    return HttpResponse(json.dumps({'href': next_page}), content_type=content_type)
 
 @login_required
 def personal_wiki_use_lib(request):
@@ -190,15 +190,15 @@ def personal_wiki_use_lib(request):
 
     repo_id = request.POST.get('dst_repo', '')
     username = request.user.username
-    next = reverse('personal_wiki', args=[])
+    next_page = reverse('personal_wiki', args=[])
     repo = seafile_api.get_repo(repo_id)
     if repo is None:
         messages.error(request, _('Failed to set wiki library.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     if check_folder_permission(request, repo_id, '/') != 'rw':
         messages.error(request, _('Permission denied.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     PersonalWiki.objects.save_personal_wiki(username=username, repo_id=repo_id)
 
@@ -208,7 +208,7 @@ def personal_wiki_use_lib(request):
         if not seaserv.post_empty_file(repo_id, "/", page_name, username):
             messages.error(request, _('Failed to create home page. Please retry later'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required
 def personal_wiki_page_new(request, page_name="home"):
@@ -250,7 +250,7 @@ def personal_wiki_page_edit(request, page_name="home"):
     filepath = "/" + page_name + ".md"
     url = "%s?p=%s&from=personal_wiki_page_edit" % (
             reverse('file_edit', args=[repo.id]),
-            urllib2.quote(filepath.encode('utf-8')))
+            urllib.parse.quote(filepath.encode('utf-8')))
 
     return HttpResponseRedirect(url)
 

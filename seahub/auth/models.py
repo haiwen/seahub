@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import datetime
 import hashlib
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import logging
 
 # import auth
@@ -21,7 +21,7 @@ def get_hexdigest(algorithm, salt, raw_password):
     Returns a string of the hexdigest of the given plaintext password and salt
     using the given algorithm ('md5', 'sha1' or 'crypt').
     """
-    raw_password, salt = smart_str(raw_password), smart_str(salt)
+    raw_password, salt = smart_str(raw_password).encode('utf-8'), smart_str(salt).encode('utf-8')
     if algorithm == 'crypt':
         try:
             import crypt
@@ -65,7 +65,7 @@ class AnonymousUser(object):
         return 'AnonymousUser'
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __eq__(self, other):
         return isinstance(other, self.__class__)
@@ -156,7 +156,7 @@ class SocialAuthUser(models.Model):
 
     class Meta:
         """Meta data"""
-        app_label = "seahub.work_weixin"
+        app_label = "base"
         unique_together = ('provider', 'uid')
         db_table = 'social_auth_usersocialauth'
 

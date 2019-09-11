@@ -49,7 +49,7 @@ class SysSettingsTest(BaseTestCase):
             'password': 'xxx',
         })
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], r'accounts/login/')
+        self.assertRegex(resp['Location'], r'accounts/login/')
 
     def test_can_clear_login_attempt_cache(self):
         # first invalid login

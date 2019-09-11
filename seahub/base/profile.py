@@ -26,10 +26,10 @@ THE SOFTWARE.
 try:
     import cProfile as profile
 except ImportError:
-    import profile
+    from . import profile
 
 import pstats
-from cStringIO import StringIO
+from io import StringIO
 from django.conf import settings
 
 class ProfilerMiddleware(object):

@@ -27,7 +27,7 @@ class AdminOrgStatsTraffic(APIView):
                         'link-file-upload', 'link-file-download']
         init_count = [0] * 6
         init_data = get_init_data(start_time, end_time,
-                                  dict(zip(op_type_list, init_count)))
+                                  dict(list(zip(op_type_list, init_count))))
 
         for e in get_org_traffic_by_day(org_id, start_time, end_time,
                                         get_time_offset()):
@@ -35,7 +35,7 @@ class AdminOrgStatsTraffic(APIView):
             init_data[dt].update({op_type: count})
 
         res_data = []
-        for k, v in init_data.items():
+        for k, v in list(init_data.items()):
             res = {'datetime': datetime_to_isoformat_timestr(k)}
             res.update(v)
             res_data.append(res)

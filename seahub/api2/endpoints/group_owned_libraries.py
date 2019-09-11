@@ -369,7 +369,7 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
             if permission:
                 result['failed'].append({
                     'user_email': user,
-                    'error_msg': _(u'Permission already exists.')
+                    'error_msg': _('Permission already exists.')
                 })
                 continue
 
@@ -641,7 +641,7 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
             if permission:
                 result['failed'].append({
                     'group_id': group_id,
-                    'error_msg': _(u'Permission already exists.')
+                    'error_msg': _('Permission already exists.')
                 })
                 continue
 
@@ -914,7 +914,7 @@ class GroupOwnedLibraryUserShare(APIView):
             if not is_valid_username(to_user):
                 result['failed'].append({
                     'email': to_user,
-                    'error_msg': _(u'username invalid.')
+                    'error_msg': _('username invalid.')
                     })
                 continue
 
@@ -923,14 +923,14 @@ class GroupOwnedLibraryUserShare(APIView):
             except User.DoesNotExist:
                 result['failed'].append({
                     'email': to_user,
-                    'error_msg': _(u'User %s not found.') % to_user
+                    'error_msg': _('User %s not found.') % to_user
                     })
                 continue
 
             if self.has_shared_to_user(request, repo_id, path, to_user):
                 result['failed'].append({
                     'email': to_user,
-                    'error_msg': _(u'This item has been shared to %s.') % to_user
+                    'error_msg': _('This item has been shared to %s.') % to_user
                     })
                 continue
 
@@ -1198,7 +1198,7 @@ class GroupOwnedLibraryGroupShare(APIView):
             if self.has_shared_to_group(request, repo_id, path, gid):
                 result['failed'].append({
                     'group_name': group.group_name,
-                    'error_msg': _(u'This item has been shared to %s.') % group.group_name
+                    'error_msg': _('This item has been shared to %s.') % group.group_name
                     })
                 continue
 

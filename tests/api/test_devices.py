@@ -12,7 +12,7 @@ class DevicesTest(BaseTestCase, Fixtures):
         self.platform = 'android'
         self.device_id = '4a0d62c1f27b3b74'
         TokenV2.objects.get_or_create_token(self.user.username, self.platform,
-            self.device_id, u'PLK-AL10', u'2.0.3', u'5.0.2', '192.168.1.208')
+            self.device_id, 'PLK-AL10', '2.0.3', '5.0.2', '192.168.1.208')
 
     def tearDown(self):
         self.remove_repo()

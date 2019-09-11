@@ -105,7 +105,7 @@ class SetupView(CheckTwoFactorEnabledMixin, IdempotentSessionWizardView):
         """
         In the validation step, ask the device to generate a challenge.
         """
-        next_step = self.steps.next
+        next_step = self.steps.__next__
         if next_step == 'validation':
             try:
                 self.get_device().generate_challenge()

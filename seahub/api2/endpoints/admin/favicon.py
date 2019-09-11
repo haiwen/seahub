@@ -56,7 +56,7 @@ class AdminFavicon(APIView):
                     CUSTOM_FAVICON_PATH)
 
             # save favicon file to custom dir
-            with open(custom_favicon_file, 'w') as fd:
+            with open(custom_favicon_file, 'wb') as fd:
                 fd.write(favicon_file.read())
 
             custom_symlink = os.path.join(MEDIA_ROOT,

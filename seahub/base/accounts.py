@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 import seaserv
-from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
+from seaserv import ccnet_threaded_rpc, unset_repo_passwd, \
     seafile_api, ccnet_api
 from constance import config
 from registration import signals
@@ -89,14 +89,14 @@ class UserManager(object):
 
     def get(self, email=None, id=None):
         if not email and not id:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         if email:
             emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if id:
             emailuser = ccnet_threaded_rpc.get_emailuser_by_id(id)
         if not emailuser:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         user = User(emailuser.email)
         user.id = emailuser.id
@@ -510,7 +510,7 @@ class User(object):
         passwd_setted_repos = []
         for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
-                    is_passwd_set(r.id, self.email):
+                    seafile_api.is_password_set(r.id, self.email):
                 passwd_setted_repos.append(r)
 
         for r in passwd_setted_repos:
@@ -532,7 +532,7 @@ class User(object):
         passwd_setted_repos = []
         for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
-                    is_passwd_set(r.id, self.email):
+                    seafile_api.is_password_set(r.id, self.email):
                 passwd_setted_repos.append(r)
 
         for r in passwd_setted_repos:
@@ -543,7 +543,7 @@ class AuthBackend(object):
     def get_user_with_import(self, username):
         emailuser = seaserv.get_emailuser_with_import(username)
         if not emailuser:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         user = User(emailuser.email)
         user.id = emailuser.id

@@ -67,13 +67,13 @@ class FileCommentTest(BaseTestCase):
 
     def test_md5_repo_id_parent_path(self):
         md5 = FileUUIDMap.md5_repo_id_parent_path(self.repo_id, '/')
-        assert md5 == hashlib.md5(self.repo_id + '/').hexdigest()
+        assert md5 == hashlib.md5((self.repo_id + '/').encode('utf-8')).hexdigest()
 
         md5 = FileUUIDMap.md5_repo_id_parent_path(self.repo_id, '/foo')
-        assert md5 == hashlib.md5(self.repo_id + '/foo').hexdigest()
+        assert md5 == hashlib.md5((self.repo_id + '/foo').encode('utf-8')).hexdigest()
 
         md5 = FileUUIDMap.md5_repo_id_parent_path(self.repo_id, '/foo/')
-        assert md5 == hashlib.md5(self.repo_id + '/foo').hexdigest()
+        assert md5 == hashlib.md5((self.repo_id + '/foo').encode('utf-8')).hexdigest()
 
     def test_normalize_path(self):
         o = FileComment.objects.add(repo_id=self.repo_id, parent_path='/foo/bar/',

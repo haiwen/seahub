@@ -16,7 +16,7 @@ from seahub.views.file import view_history_file, view_trash_file,\
     view_media_file_via_public_wiki
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
-from notifications.views import notification_list
+from .notifications.views import notification_list
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete, personal_wiki_use_lib
@@ -158,7 +158,6 @@ urlpatterns = [
     url(r'^sso/$', sso, name='sso'),
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
-    url(r'^social/', include('social_django.urls', namespace='social')),
 
     url(r'^$', libraries, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
@@ -695,12 +694,6 @@ if HAS_FILE_SEARCH:
         url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
     ]
 
-if getattr(settings, 'ENABLE_PAYMENT', False):
-    urlpatterns += [
-        url(r'^pay/', include('seahub_extra.pay.urls')),
-    ]
-
-
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
     from seahub_extra.sysadmin_extra.views import sys_login_admin, \
         sys_log_file_audit, sys_log_file_update, sys_log_perm_audit, \
@@ -795,14 +788,3 @@ if getattr(settings, 'ENABLE_CAS', False):
         url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),
         url(r'^accounts/cas-callback/$', cas_callback, name='cas_ng_proxy_callback'),
     ]
-
-from seahub.social_core.views import (
-    weixin_work_cb, weixin_work_3rd_app_install, weixin_work_3rd_app_install_cb
-)
-
-urlpatterns += [
-    url(r'^weixin-work/callback/$', weixin_work_cb),
-    url(r'^weixin-work/3rd-app-install/$', weixin_work_3rd_app_install),
-    url(r'^weixin-work/3rd-app-install/callback/$',
-        weixin_work_3rd_app_install_cb, name='weixin_work_3rd_app_install_cb'),
-]

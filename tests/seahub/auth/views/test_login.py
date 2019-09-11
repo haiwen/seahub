@@ -22,7 +22,7 @@ class LoginTest(BaseTestCase):
         )
 
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], settings.LOGIN_REDIRECT_URL)
+        self.assertRegex(resp['Location'], settings.LOGIN_REDIRECT_URL)
 
     def test_can_login_with_login_id(self):
         p = Profile.objects.add_or_update(self.user.username, 'nickname')
@@ -36,7 +36,7 @@ class LoginTest(BaseTestCase):
                                     'password': self.user_password}
         )
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], settings.LOGIN_REDIRECT_URL)
+        self.assertRegex(resp['Location'], settings.LOGIN_REDIRECT_URL)
 
     def test_redirect_to_after_success_login(self):
         resp = self.client.post(
@@ -46,7 +46,7 @@ class LoginTest(BaseTestCase):
         )
 
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], r'/foo/')
+        self.assertRegex(resp['Location'], r'/foo/')
 
     def test_bad_redirect_to_after_success_login(self):
         from django.utils.http import urlquote
@@ -57,7 +57,7 @@ class LoginTest(BaseTestCase):
         )
 
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], settings.LOGIN_REDIRECT_URL)
+        self.assertRegex(resp['Location'], settings.LOGIN_REDIRECT_URL)
 
     def test_bad_redirect2_to_after_success_login(self):
         from django.utils.http import urlquote
@@ -68,7 +68,7 @@ class LoginTest(BaseTestCase):
         )
 
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], settings.LOGIN_REDIRECT_URL)
+        self.assertRegex(resp['Location'], settings.LOGIN_REDIRECT_URL)
 
     def test_redirect_to_other_host_after_success_login(self):
         from django.utils.http import urlquote
@@ -79,7 +79,7 @@ class LoginTest(BaseTestCase):
         )
 
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], settings.LOGIN_REDIRECT_URL)
+        self.assertRegex(resp['Location'], settings.LOGIN_REDIRECT_URL)
 
     def test_force_passwd_change_when_login(self):
         UserOptions.objects.set_force_passwd_change(self.user.username)

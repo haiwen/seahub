@@ -6,7 +6,7 @@ from seahub.test_utils import BaseTestCase
 class SharedUploadLinkTest(BaseTestCase):
     def setUp(self):
         share_file_info = {
-            'username': self.user,
+            'username': self.user.username,
             'repo_id': self.repo.id,
             'path': '/',
             'password': None,

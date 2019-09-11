@@ -29,7 +29,7 @@ class SendUploadLinkView(APIView):
     def post(self, request):
 
         if not IS_EMAIL_CONFIGURED:
-            error_msg = _(u'Sending shared link failed. Email service is not properly configured, please contact administrator.')
+            error_msg = _('Sending shared link failed. Email service is not properly configured, please contact administrator.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check args
@@ -70,7 +70,7 @@ class SendUploadLinkView(APIView):
 
             if not is_valid_email(to_email):
                 failed_info['email'] = to_email
-                failed_info['error_msg'] = _(u'email invalid.')
+                failed_info['error_msg'] = _('email invalid.')
                 result['failed'].append(failed_info)
                 continue
 
@@ -92,7 +92,7 @@ class SendUploadLinkView(APIView):
                 reply_to = None
 
             c['shared_upload_link'] = gen_shared_upload_link(token)
-            title = _(u'An upload link is shared to you on %s') % get_site_name()
+            title = _('An upload link is shared to you on %s') % get_site_name()
             template = 'shared_upload_link_email.html'
 
             # send email
@@ -102,7 +102,7 @@ class SendUploadLinkView(APIView):
             except Exception as e:
                 logger.error(e)
                 failed_info['email'] = to_email
-                failed_info['error_msg'] = _(u'Internal Server Error')
+                failed_info['error_msg'] = _('Internal Server Error')
                 result['failed'].append(failed_info)
 
         return Response(result)

@@ -121,7 +121,7 @@ class ReposApiTest(ApiTestBase):
                 assert ra.repo_id in tokens
                 assert rb.repo_id in tokens
                 assert fake_repo_id not in tokens
-                for repo_id, token in tokens.iteritems():
+                for repo_id, token in tokens.items():
                     self._get_repo_info(token, repo_id)
 
     def test_generate_repo_tokens_reject_invalid_params(self):
@@ -212,7 +212,7 @@ class NewReposApiTest(BaseTestCase):
             'random_key': enc_info.random_key,
         }
         res = self.client.post(REPOS_URL, data=data)
-        print res
+        print(res)
         assert res.status_code == 400
 
 #        repo = res.json()

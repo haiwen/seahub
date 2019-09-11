@@ -21,7 +21,7 @@ from django.views.decorators.http import condition
 
 import seaserv
 from seaserv import get_repo, get_commits, \
-    seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, \
+    seafserv_threaded_rpc, is_repo_owner, \
     get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
     seafile_api, ccnet_api
 from pysearpc import SearpcError
@@ -136,7 +136,7 @@ def gen_path_link(path, repo_name):
         paths.insert(0, repo_name)
         links.insert(0, '/')
 
-    zipped = zip(paths, links)
+    zipped = list(zip(paths, links))
 
     return zipped
 
@@ -299,8 +299,8 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
     except SearpcError as e:
         logger.error(e)
         referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
-        return HttpResponseRedirect(next)
+        next_page = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next_page)
 
     if not commit:
         raise Http404
@@ -361,8 +361,8 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
     except SearpcError as e:
         logger.error(e)
         referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
-        return HttpResponseRedirect(next)
+        next_page = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next_page)
 
     if not commit:
         raise Http404
@@ -394,7 +394,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
 def repo_recycle_view(request, repo_id):
     if not seafile_api.get_dir_id_by_path(repo_id, '/') or \
         check_folder_permission(request, repo_id, '/') != 'rw':
-        return render_permission_error(request, _(u'Unable to view recycle page'))
+        return render_permission_error(request, _('Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
     referer = request.GET.get('referer', '') # for back to 'dir view' page
@@ -409,7 +409,7 @@ def dir_recycle_view(request, repo_id):
 
     if not seafile_api.get_dir_id_by_path(repo_id, dir_path) or \
         check_folder_permission(request, repo_id, dir_path) != 'rw':
-        return render_permission_error(request, _(u'Unable to view recycle page'))
+        return render_permission_error(request, _('Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
     referer = request.GET.get('referer', '') # for back to 'dir view' page
@@ -424,7 +424,7 @@ def repo_folder_trash(request, repo_id):
 
     if not seafile_api.get_dir_id_by_path(repo_id, path) or \
         check_folder_permission(request, repo_id, path) != 'rw':
-        return render_permission_error(request, _(u'Unable to view recycle page'))
+        return render_permission_error(request, _('Unable to view recycle page'))
 
     repo = get_repo(repo_id)
     if not repo:
@@ -469,7 +469,7 @@ def repo_history(request, repo_id):
     """
     user_perm = check_folder_permission(request, repo_id, '/')
     if not user_perm:
-        return render_permission_error(request, _(u'Unable to view library modification'))
+        return render_permission_error(request, _('Unable to view library modification'))
 
     repo = get_repo(repo_id)
     if not repo:
@@ -486,10 +486,10 @@ def repo_history(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, username)
+            ret = seafile_api.is_password_set(repo_id, username)
             if ret == 1:
                 password_set = True
-        except SearpcError, e:
+        except SearpcError as e:
             return render_error(request, e.msg)
 
         if not password_set:
@@ -546,14 +546,14 @@ def repo_history(request, repo_id):
 @require_POST
 def repo_revert_history(request, repo_id):
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = settings.SITE_ROOT
 
     repo = get_repo(repo_id)
     if not repo:
         messages.error(request, _("Library does not exist"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     # perm check
     perm = check_folder_permission(request, repo_id, '/')
@@ -562,7 +562,7 @@ def repo_revert_history(request, repo_id):
 
     if perm is None or repo_owner != username:
         messages.error(request, _("Permission denied"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
@@ -574,10 +574,10 @@ def repo_revert_history(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, username)
+            ret = seafile_api.is_password_set(repo_id, username)
             if ret == 1:
                 password_set = True
-        except SearpcError, e:
+        except SearpcError as e:
             return render_error(request, e.msg)
 
         if not password_set:
@@ -586,22 +586,22 @@ def repo_revert_history(request, repo_id):
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return render_error(request, _(u'Please specify history ID'))
+        return render_error(request, _('Please specify history ID'))
 
     try:
         seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, request.user.username)
         messages.success(request, _('Successfully restored the library.'))
-    except SearpcError, e:
+    except SearpcError as e:
         if e.msg == 'Bad arguments':
-            return render_error(request, _(u'Invalid arguments.'))
+            return render_error(request, _('Invalid arguments.'))
         elif e.msg == 'No such repo':
-            return render_error(request, _(u'Library does not exist'))
+            return render_error(request, _('Library does not exist'))
         elif e.msg == "Commit doesn't exist":
-            return render_error(request, _(u'History you specified does not exist'))
+            return render_error(request, _('History you specified does not exist'))
         else:
-            return render_error(request, _(u'Unknown error'))
+            return render_error(request, _('Unknown error'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
@@ -720,7 +720,7 @@ def libraries(request):
 
     if joined_groups:
         try:
-            joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+            joined_groups.sort(key=lambda x: x.group_name.lower())
         except Exception as e:
             logger.error(e)
             joined_groups = []
@@ -766,7 +766,7 @@ def libraries(request):
             'joined_groups_exclude_address_book': joined_groups_exclude_address_book,
             'storages': get_library_storages(request),
             'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
-            'library_templates': LIBRARY_TEMPLATES.keys() if \
+            'library_templates': list(LIBRARY_TEMPLATES.keys()) if \
                     isinstance(LIBRARY_TEMPLATES, dict) else [],
             'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS,
             'enable_group_discussion': settings.ENABLE_GROUP_DISCUSSION,
@@ -814,12 +814,12 @@ def file_revisions(request, repo_id):
     """
     repo = get_repo(repo_id)
     if not repo:
-        error_msg = _(u"Library does not exist")
+        error_msg = _("Library does not exist")
         return render_error(request, error_msg)
 
     # perm check
     if not check_folder_permission(request, repo_id, '/'):
-        error_msg = _(u"Permission denied.")
+        error_msg = _("Permission denied.")
         return render_error(request, error_msg)
 
     path = request.GET.get('p', '/')
@@ -934,10 +934,10 @@ def list_inner_pub_repos(request):
     username = request.user.username
     if is_org_context(request):
         org_id = request.user.org.org_id
-        return seaserv.list_org_inner_pub_repos(org_id, username)
+        return seafile_api.list_org_inner_pub_repos(org_id)
 
     if not request.cloud_mode:
-        return seaserv.list_inner_pub_repos(username)
+        return seafile_api.get_inner_pub_repo_list()
 
     return []
 
@@ -947,7 +947,7 @@ def i18n(request):
 
     """
     from django.conf import settings
-    next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+    next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
     lang = request.GET.get('lang', settings.LANGUAGE_CODE)
     if lang not in [e[0] for e in settings.LANGUAGES]:
@@ -965,7 +965,7 @@ def i18n(request):
             Profile.objects.add_or_update(request.user.username, '', '', lang)
 
     # set language code to client
-    res = HttpResponseRedirect(next)
+    res = HttpResponseRedirect(next_page)
     res.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, max_age=30*24*60*60)
     return res
 
@@ -973,7 +973,7 @@ def i18n(request):
 def repo_download_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
-        return render_error(request, _(u'Library does not exist'))
+        return render_error(request, _('Library does not exist'))
 
     path = request.GET.get('p', '/')
     if path[-1] != '/':         # Normalize dir path
@@ -997,12 +997,12 @@ def repo_download_dir(request, repo_id):
         try:
             total_size = seafile_api.get_dir_size(repo.store_id,
                 repo.version, dir_id)
-        except Exception, e:
+        except Exception as e:
             logger.error(str(e))
-            return render_error(request, _(u'Internal Error'))
+            return render_error(request, _('Internal Error'))
 
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
+            return render_error(request, _('Unable to download directory "%s": size is too large.') % dirname)
 
         is_windows = 0
         if is_windows_operating_system(request):
@@ -1018,10 +1018,10 @@ def repo_download_dir(request, repo_id):
                 repo_id, json.dumps(fake_obj_id), 'download-dir', request.user.username)
 
         if not token:
-            return render_error(request, _(u'Internal Server Error'))
+            return render_error(request, _('Internal Server Error'))
 
     else:
-        return render_error(request, _(u'Unable to download "%s"') % dirname )
+        return render_error(request, _('Unable to download "%s"') % dirname )
 
     url = gen_file_get_url(token, dirname)
     from seahub.views.file import send_file_access_msg
@@ -1137,7 +1137,7 @@ def toggle_modules(request):
         raise Http404
 
     referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
+    next_page = settings.SITE_ROOT if referer is None else referer
 
     username = request.user.username
     personal_wiki = request.POST.get('personal_wiki', 'off')
@@ -1147,10 +1147,10 @@ def toggle_modules(request):
     else:
         disable_mod_for_user(username, MOD_PERSONAL_WIKI)
         if referer.find('wiki') > 0:
-            next = settings.SITE_ROOT
+            next_page = settings.SITE_ROOT
         messages.success(request, _('Successfully disable "Personal Wiki".'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):
@@ -1166,7 +1166,7 @@ def image_view(request, filename):
         raise Http404
 
     # read file from cache, if hit
-    filename_md5 = hashlib.md5(filename).hexdigest()
+    filename_md5 = hashlib.md5(filename.encode('utf-8')).hexdigest()
     cache_key = 'image_view__%s' % filename_md5
     file_content = cache.get(cache_key)
     if file_content is None:

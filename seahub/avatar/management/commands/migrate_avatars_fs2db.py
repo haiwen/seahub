@@ -32,9 +32,9 @@ class Command(BaseCommand):
         for avatar in Avatar.objects.all():
             try:
                 self._save(avatar.avatar.name, avatar.avatar)
-                print "SUCCESS: migrated Avatar path=%s user=%s" % (avatar.avatar.name, avatar.emailuser)
+                print("SUCCESS: migrated Avatar path=%s user=%s" % (avatar.avatar.name, avatar.emailuser))
             except AvatarNotFoundError:
-                print "ERROR: Avatar file not found: path=%s user=%s. Skip." % (avatar.avatar.name, avatar.emailuser)
+                print("ERROR: Avatar file not found: path=%s user=%s. Skip." % (avatar.avatar.name, avatar.emailuser))
                 continue
 
             # try:
@@ -50,10 +50,10 @@ class Command(BaseCommand):
         in the name will be converted to forward '/'.
         """
         name = name.replace('\\', '/')
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         try:
             binary = content.read()
-        except AttributeError, IOError:
+        except AttributeError as IOError:
             raise AvatarNotFoundError
 
         size = len(binary)
@@ -78,7 +78,7 @@ class Command(BaseCommand):
         return name
 
     def exists(self, name):
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         query = 'SELECT COUNT(*) FROM %(table)s WHERE %(name_md5_column)s = %%s'
         query %= self.__dict__
         cursor = connection.cursor()

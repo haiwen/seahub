@@ -127,7 +127,6 @@ MIDDLEWARE_CLASSES = (
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 
 
@@ -155,9 +154,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
 
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
-
                 'seahub.auth.context_processors.auth',
                 'seahub.base.context_processors.base',
                 'seahub.base.context_processors.debug',
@@ -169,8 +165,8 @@ TEMPLATES = [
 
 LANGUAGES = (
     # ('bg', gettext_noop(u'български език')),
-    ('ca', u'Català'),
-    ('cs', u'Čeština'),
+    ('ca', 'Català'),
+    ('cs', 'Čeština'),
     ('de', 'Deutsch'),
     ('en', 'English'),
     ('es', 'Español'),
@@ -229,7 +225,6 @@ INSTALLED_APPS = (
     'post_office',
     'termsandconditions',
     'webpack_loader',
-    'social_django',
 
     'seahub.api2',
     'seahub.avatar',
@@ -277,27 +272,7 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
-    'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2',
     'seahub.base.accounts.AuthBackend',
-)
-
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_VERIFY_SSL = True
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/profile/'
-SOCIAL_AUTH_WEIXIN_WORK_AGENTID = ''
-SOCIAL_AUTH_WEIXIN_WORK_KEY = ''
-SOCIAL_AUTH_WEIXIN_WORK_SECRET = ''
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'seahub.social_core.pipeline.social_auth.social_user',
-    'seahub.social_core.pipeline.user.get_username',
-    'seahub.social_core.pipeline.user.create_user',
-    'seahub.social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    # 'social_core.pipeline.user.user_details',
-    'seahub.social_core.pipeline.user.save_profile',
 )
 
 ENABLE_OAUTH = False
@@ -878,31 +853,31 @@ INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
 CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
 CONSTANCE_CONFIG = {
-    'SERVICE_URL': (SERVICE_URL,''),
-    'FILE_SERVER_ROOT': (FILE_SERVER_ROOT,''),
-    'DISABLE_SYNC_WITH_ANY_FOLDER': (DISABLE_SYNC_WITH_ANY_FOLDER,''),
+    'SERVICE_URL': (SERVICE_URL, ''),
+    'FILE_SERVER_ROOT': (FILE_SERVER_ROOT, ''),
+    'DISABLE_SYNC_WITH_ANY_FOLDER': (DISABLE_SYNC_WITH_ANY_FOLDER, ''),
 
-    'ENABLE_SIGNUP': (ENABLE_SIGNUP,''),
-    'ACTIVATE_AFTER_REGISTRATION': (ACTIVATE_AFTER_REGISTRATION,''),
-    'REGISTRATION_SEND_MAIL': (REGISTRATION_SEND_MAIL ,''),
-    'LOGIN_REMEMBER_DAYS': (LOGIN_REMEMBER_DAYS,''),
+    'ENABLE_SIGNUP': (ENABLE_SIGNUP, ''),
+    'ACTIVATE_AFTER_REGISTRATION': (ACTIVATE_AFTER_REGISTRATION, ''),
+    'REGISTRATION_SEND_MAIL': (REGISTRATION_SEND_MAIL, ''),
+    'LOGIN_REMEMBER_DAYS': (LOGIN_REMEMBER_DAYS, ''),
     'LOGIN_ATTEMPT_LIMIT': (LOGIN_ATTEMPT_LIMIT, ''),
     'FREEZE_USER_ON_LOGIN_FAILED': (FREEZE_USER_ON_LOGIN_FAILED, ''),
 
     'ENABLE_USER_CREATE_ORG_REPO': (ENABLE_USER_CREATE_ORG_REPO, ''),
 
-    'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY,''),
-    'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH,''),
-    'ENABLE_REPO_HISTORY_SETTING': (ENABLE_REPO_HISTORY_SETTING,''),
+    'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY, ''),
+    'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH, ''),
+    'ENABLE_REPO_HISTORY_SETTING': (ENABLE_REPO_HISTORY_SETTING, ''),
     'FORCE_PASSWORD_CHANGE': (FORCE_PASSWORD_CHANGE, ''),
 
-    'USER_STRONG_PASSWORD_REQUIRED': (USER_STRONG_PASSWORD_REQUIRED,''),
-    'USER_PASSWORD_MIN_LENGTH': (USER_PASSWORD_MIN_LENGTH,''),
-    'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL,''),
+    'USER_STRONG_PASSWORD_REQUIRED': (USER_STRONG_PASSWORD_REQUIRED, ''),
+    'USER_PASSWORD_MIN_LENGTH': (USER_PASSWORD_MIN_LENGTH, ''),
+    'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL, ''),
 
     'SHARE_LINK_TOKEN_LENGTH': (SHARE_LINK_TOKEN_LENGTH, ''),
-    'SHARE_LINK_PASSWORD_MIN_LENGTH': (SHARE_LINK_PASSWORD_MIN_LENGTH,''),
-    'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH,''),
+    'SHARE_LINK_PASSWORD_MIN_LENGTH': (SHARE_LINK_PASSWORD_MIN_LENGTH, ''),
+    'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH, ''),
 
     'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),
     'ENABLE_SHARE_TO_ALL_GROUPS': (ENABLE_SHARE_TO_ALL_GROUPS, ''),

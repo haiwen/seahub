@@ -3,18 +3,18 @@
 from functools import partial
 import os
 import re
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import uuid
 import logging
 import hashlib
 import tempfile
 import locale
-import ConfigParser
+import configparser
 import mimetypes
 import contextlib
 from datetime import datetime
-from urlparse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
 import json
 
 import ccnet
@@ -59,6 +59,8 @@ try:
 except ImportError:
     CHECK_SHARE_LINK_TRAFFIC = False
 
+logger = logging.getLogger(__name__)
+
 # init Seafevents API
 if EVENTS_CONFIG_FILE:
     try:
@@ -88,7 +90,7 @@ def is_pro_version():
         return False
 
 def is_cluster_mode():
-    cfg = ConfigParser.ConfigParser()
+    cfg = configparser.ConfigParser()
     if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
         confdir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
     else:
@@ -145,7 +147,7 @@ def gen_fileext_type_map():
 
     """
     d = {}
-    for filetype in PREVIEW_FILEEXT.keys():
+    for filetype in list(PREVIEW_FILEEXT.keys()):
         for fileext in PREVIEW_FILEEXT.get(filetype):
             d[fileext] = filetype
 
@@ -333,7 +335,7 @@ def check_filename_with_rename(repo_id, parent_dir, obj_name):
         return ''
     # TODO: what if parrent_dir does not exist?
     dirents = seafile_api.list_dir_by_commit_and_path(repo_id,
-            latest_commit.id, parent_dir.encode('utf-8'))
+            latest_commit.id, parent_dir)
 
     exist_obj_names = [dirent.obj_name for dirent in dirents]
     return get_no_duplicate_obj_name(obj_name, exist_obj_names)
@@ -351,7 +353,7 @@ def get_user_repos(username, org_id=None):
         if CLOUD_MODE:
             public_repos = []
         else:
-            public_repos = seaserv.list_inner_pub_repos(username)
+            public_repos = seafile_api.get_inner_pub_repo_list()
 
         for r in shared_repos + public_repos:
             # collumn names in shared_repo struct are not same as owned or group
@@ -554,7 +556,7 @@ def is_org_context(request):
 
 # events related
 if EVENTS_CONFIG_FILE:
-    parsed_events_conf = ConfigParser.ConfigParser()
+    parsed_events_conf = configparser.ConfigParser()
     parsed_events_conf.read(EVENTS_CONFIG_FILE)
 
     try:
@@ -650,7 +652,7 @@ if EVENTS_CONFIG_FILE:
         valid_events = []
         next_start = start
         while True:
-            if org_id > 0:
+            if org_id and org_id > 0:
                 events = seafevents.get_org_user_events(ev_session, org_id,
                                                         username, next_start,
                                                         limit)
@@ -733,14 +735,14 @@ if EVENTS_CONFIG_FILE:
 
         event_type_dict = {
             'file-download-web': ('web', ''),
-            'file-download-share-link': ('share-link',''),
+            'file-download-share-link': ('share-link', ''),
             'file-download-api': ('API', e.device),
             'repo-download-sync': ('download-sync', e.device),
             'repo-upload-sync': ('upload-sync', e.device),
             'seadrive-download-file': ('seadrive-download', e.device),
         }
 
-        if not event_type_dict.has_key(e.etype):
+        if e.etype not in event_type_dict:
             event_type_dict[e.etype] = (e.etype, e.device if e.device else '')
 
         return event_type_dict[e.etype]
@@ -891,10 +893,10 @@ else:
 
 
 def calc_file_path_hash(path, bits=12):
-    if isinstance(path, unicode):
+    if isinstance(path, str):
         path = path.encode('UTF-8')
 
-    path_hash = hashlib.md5(urllib2.quote(path)).hexdigest()[:bits]
+    path_hash = hashlib.md5(urllib.parse.quote(path)).hexdigest()[:bits]
 
     return path_hash
 
@@ -1019,12 +1021,8 @@ def mkstemp():
 
     '''
     fd, path = tempfile.mkstemp()
-    system_encoding = locale.getdefaultlocale()[1]
-    if system_encoding is not None:
-        path_utf8 = path.decode(system_encoding).encode('UTF-8')
-        return fd, path_utf8
-    else:
-        return fd, path
+
+    return fd, path
 
 # File or directory operations
 FILE_OP = ('Added or modified', 'Added', 'Modified', 'Renamed', 'Moved',
@@ -1168,7 +1166,7 @@ if HAS_OFFICE_CONVERTER:
 
     def delegate_add_office_convert_task(file_id, doctype, raw_path):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/add-task/')
-        data = urllib.urlencode({
+        data = urllib.parse.urlencode({
             'file_id': file_id,
             'doctype': doctype,
             'raw_path': raw_path,
@@ -1200,7 +1198,7 @@ if HAS_OFFICE_CONVERTER:
         try:
             ret = do_urlopen(url, headers=headers)
             data = ret.read()
-        except urllib2.HTTPError, e:
+        except urllib.error.HTTPError as e:
             if timestamp and e.code == 304:
                 return HttpResponseNotModified()
             else:
@@ -1255,7 +1253,7 @@ if HAS_OFFICE_CONVERTER:
             add_office_convert_task(obj_id, doctype, raw_path)
         except:
             logging.exception('failed to add_office_convert_task:')
-            return _(u'Internal error')
+            return _('Internal error')
         return None
 
 # search realted
@@ -1350,14 +1348,14 @@ def calculate_bitwise(num):
     return level
 
 def do_md5(s):
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode('UTF-8')
     return hashlib.md5(s).hexdigest()
 
 def do_urlopen(url, data=None, headers=None):
     headers = headers or {}
-    req = urllib2.Request(url, data=data, headers=headers)
-    ret = urllib2.urlopen(req)
+    req = urllib.request.Request(url, data=data, headers=headers)
+    ret = urllib.request.urlopen(req)
     return ret
 
 def clear_token(username):
@@ -1382,10 +1380,9 @@ def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     """
     msg = 'perm-change\t%s\t%s\t%s\t%s\t%s\t%s' % \
         (etype, from_user, to, repo_id, path, perm)
-    msg_utf8 = msg.encode('utf-8')
 
     try:
-        seaserv.send_message('seahub.audit', msg_utf8)
+        seafile_api.publish_event('seahub.audit', msg)
     except Exception as e:
         logger.error("Error when sending perm-audit-%s message: %s" %
                      (etype, str(e)))
@@ -1418,7 +1415,7 @@ def get_system_admins():
     return admins
 
 def is_windows_operating_system(request):
-    if not request.META.has_key('HTTP_USER_AGENT'):
+    if 'HTTP_USER_AGENT' not in request.META:
         return False
 
     if 'windows' in request.META['HTTP_USER_AGENT'].lower():
@@ -1432,7 +1429,7 @@ def get_folder_permission_recursively(username, repo_id, path):
     Ger permission from the innermost layer of subdirectories to root
     directory.
     """
-    if not path or not isinstance(path, basestring):
+    if not path or not isinstance(path, str):
         raise Exception('path invalid.')
 
     if not seafile_api.get_dir_id_by_path(repo_id, path):

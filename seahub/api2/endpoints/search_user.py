@@ -120,7 +120,7 @@ class SearchUser(APIView):
         ## search finished, now filter out some users
 
         # remove duplicate emails
-        email_list = {}.fromkeys(email_list).keys()
+        email_list = list({}.fromkeys(email_list).keys())
 
         email_result = []
 

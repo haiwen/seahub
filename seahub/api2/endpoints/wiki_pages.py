@@ -2,7 +2,7 @@
 
 import os
 import logging
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import posixpath
 
 from rest_framework import status
@@ -61,13 +61,13 @@ class WikiPagesView(APIView):
 
         pages = get_wiki_pages(repo)
         wiki_pages_object = []
-        for _, page_name in pages.iteritems():
+        for _, page_name in pages.items():
             wiki_page_object = get_wiki_page_object(wiki, page_name)
             wiki_pages_object.append(wiki_page_object)
 
         # sort pages by name
-        wiki_pages_object.sort(lambda x, y: cmp(x['name'].lower(),
-                                                y['name'].lower()))
+        wiki_pages_object.sort(
+            key=lambda x: x['name'].lower())
 
         return Response({
                 "data": wiki_pages_object
@@ -161,7 +161,7 @@ class WikiPageView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         url = get_inner_file_url(repo, wiki_dirent.obj_id, wiki_dirent.obj_name)
-        file_response = urllib2.urlopen(url)
+        file_response = urllib.request.urlopen(url)
         content = file_response.read()
 
         wiki_page_object = get_wiki_page_object(wiki, page_name)
@@ -332,7 +332,7 @@ class WikiPageContentView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         url = gen_inner_file_get_url(token, file_name)
-        file_response = urllib2.urlopen(url)
+        file_response = urllib.request.urlopen(url)
         content = file_response.read()
         
         try:

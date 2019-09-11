@@ -112,7 +112,7 @@ class PasswordResetForm(forms.Form):
         Validates that a user exists with the given e-mail address.
         """
         if not IS_EMAIL_CONFIGURED:
-            raise forms.ValidationError(_(u'Failed to send email, email service is not properly configured, please contact administrator.'))
+            raise forms.ValidationError(_('Failed to send email, email service is not properly configured, please contact administrator.'))
 
         email = self.cleaned_data["email"].lower().strip()
 

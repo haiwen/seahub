@@ -118,9 +118,9 @@ class Command(BaseCommand):
                 #         username = None
             
                 # Get an email
-                while 1:
+                while True:
                     if not email:
-                        email = raw_input('E-mail address: ')
+                        email = input('E-mail address: ')
                     try:
                         is_valid_email(email)
                     except exceptions.ValidationError:
@@ -130,7 +130,7 @@ class Command(BaseCommand):
                         break
             
                 # Get a password
-                while 1:
+                while True:
                     if not password:
                         password = getpass.getpass()
                         password2 = getpass.getpass('Password (again): ')
@@ -148,4 +148,4 @@ class Command(BaseCommand):
                 sys.exit(1)
         
         User.objects.create_superuser(email, password)
-        print "Superuser created successfully."
+        print("Superuser created successfully.")

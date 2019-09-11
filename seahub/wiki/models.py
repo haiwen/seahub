@@ -71,7 +71,7 @@ class WikiManager(models.Manager):
 
         now = timezone.now()
         if repo_id is None:     # create new repo to store the wiki pages
-            if org_id > 0:
+            if org_id and org_id > 0:
                 repo_id = seafile_api.create_org_repo(wiki_name, '', username, org_id)
             else:
                 repo_id = seafile_api.create_repo(wiki_name, '', username)

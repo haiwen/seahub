@@ -76,7 +76,7 @@ class GroupsTest(BaseTestCase):
         self.remove_group(json_resp['id'])
 
     def test_create_group_with_cn_name(self):
-        new_group_name = u'中文' + randstring(6)
+        new_group_name = '中文' + randstring(6)
         resp = self.client.post(self.url, {'name': new_group_name})
         self.assertEqual(201, resp.status_code)
 

@@ -11,8 +11,8 @@ from django.utils.translation import ugettext as _
 import seaserv
 from seaserv import seafile_api
 
-from forms import DetailedProfileForm
-from models import Profile, DetailedProfile
+from .forms import DetailedProfileForm
+from .models import Profile, DetailedProfile
 from seahub.auth.decorators import login_required
 from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
@@ -37,11 +37,11 @@ def edit_profile(request):
         form = form_class(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _(u'Successfully edited profile.'))
+            messages.success(request, _('Successfully edited profile.'))
 
             return HttpResponseRedirect(reverse('edit_profile'))
         else:
-            messages.error(request, _(u'Failed to edit profile'))
+            messages.error(request, _('Failed to edit profile'))
     else:
         profile = Profile.objects.get_profile_by_user(username)
         d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
@@ -75,7 +75,7 @@ def edit_profile(request):
         default_repo = None
 
     owned_repos = get_owned_repo_list(request)
-    owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
+    owned_repos = [r for r in owned_repos if not r.is_virtual]
 
     if settings.ENABLE_WEBDAV_SECRET:
         decoded = UserOptions.objects.get_webdav_decoded_secret(username)
@@ -89,7 +89,6 @@ def edit_profile(request):
     if work_weixin_oauth_check():
         enable_wechat_work = True
 
-        # from social_django.models import UserSocialAuth
         from seahub.auth.models import SocialAuthUser
         from seahub.work_weixin.settings import WORK_WEIXIN_PROVIDER
         social_connected = SocialAuthUser.objects.filter(
@@ -187,7 +186,7 @@ def get_user_profile(request, user):
             data['user_nickname'] = profile.nickname
             data['user_intro'] = profile.intro
     else:
-        data['user_intro'] = _(u'Has not accepted invitation yet')
+        data['user_intro'] = _('Has not accepted invitation yet')
 
     if user == request.user.username or \
             Contact.objects.filter(user_email=request.user.username,
@@ -201,9 +200,9 @@ def get_user_profile(request, user):
 @login_required
 def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT:
-        messages.error(request, _(u'Permission denied.'))
-        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-        return HttpResponseRedirect(next)
+        messages.error(request, _('Permission denied.'))
+        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next_page)
 
     if request.method != 'POST':
         raise Http404
@@ -211,9 +210,9 @@ def delete_user_account(request):
     username = request.user.username
 
     if username == 'demo@seafile.com':
-        messages.error(request, _(u'Demo account can not be deleted.'))
-        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-        return HttpResponseRedirect(next)
+        messages.error(request, _('Demo account can not be deleted.'))
+        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next_page)
 
     user = User.objects.get(email=username)
     user.delete()
@@ -233,18 +232,18 @@ def default_repo(request):
 
     repo_id = request.POST.get('dst_repo', '')
     referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
+    next_page = settings.SITE_ROOT if referer is None else referer
 
     repo = seafile_api.get_repo(repo_id)
     if repo is None:
         messages.error(request, _('Failed to set default library.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     if repo.encrypted:
         messages.error(request, _('Can not set encrypted library as default library.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     username = request.user.username
     UserOptions.objects.set_default_repo(username, repo.id)
     messages.success(request, _('Successfully set "%s" as your default library.') % repo.name)
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)

@@ -7,7 +7,7 @@ import json
 import posixpath
 import csv
 import chardet
-import StringIO
+import io
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
@@ -20,7 +20,7 @@ from django.conf import settings as dj_settings
 from django.template.defaultfilters import filesizeformat
 
 import seaserv
-from seaserv import seafile_api, is_passwd_set, ccnet_api, \
+from seaserv import seafile_api, ccnet_api, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
@@ -82,7 +82,7 @@ def get_dirents(request, repo_id):
     # permission checking
     user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
-        err_msg = _(u"You don't have permission to access the library.")
+        err_msg = _("You don't have permission to access the library.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                             content_type=content_type)
 
@@ -90,7 +90,7 @@ def get_dirents(request, repo_id):
     dir_only = request.GET.get('dir_only', False)
     all_dir = request.GET.get('all_dir', False)
     if not path:
-        err_msg = _(u"No path.")
+        err_msg = _("No path.")
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
@@ -101,8 +101,8 @@ def get_dirents(request, repo_id):
         for i, x in enumerate(path_eles):
             ele_path = '/'.join(path_eles[:i+1]) + '/'
             try:
-                ele_path_dirents = seafile_api.list_dir_by_path(repo_id, ele_path.encode('utf-8'))
-            except SearpcError, e:
+                ele_path_dirents = seafile_api.list_dir_by_path(repo_id, ele_path)
+            except SearpcError as e:
                 ele_path_dirents = []
             ds = []
             for d in ele_path_dirents:
@@ -111,14 +111,14 @@ def get_dirents(request, repo_id):
                         'name': d.obj_name,
                         'parent_dir': ele_path 
                     })
-            ds.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+            ds.sort(key=lambda x: x['name'].lower())
             all_dirents.extend(ds)
         return HttpResponse(json.dumps(all_dirents), content_type=content_type)
 
     # get dirents in path
     try:
-        dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
-    except SearpcError, e:
+        dirents = seafile_api.list_dir_by_path(repo_id, path)
+    except SearpcError as e:
         return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
 
@@ -139,8 +139,8 @@ def get_dirents(request, repo_id):
                     }
                 f_list.append(f)
 
-    d_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
-    f_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    d_list.sort(key=lambda x: x['name'].lower())
+    f_list.sort(key=lambda x: x['name'].lower())
     return HttpResponse(json.dumps(d_list + f_list), content_type=content_type)
 
 @login_required_ajax
@@ -155,13 +155,13 @@ def get_unenc_group_repos(request, group_id):
     group_id_int = int(group_id)
     group = get_group(group_id_int)
     if not group:
-        err_msg = _(u"The group doesn't exist")
+        err_msg = _("The group doesn't exist")
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
     joined = is_group_member(group_id_int, request.user.username)
     if not joined and not request.user.is_staff:
-        err_msg = _(u"Permission denied")
+        err_msg = _("Permission denied")
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
 
@@ -178,7 +178,7 @@ def get_unenc_group_repos(request, group_id):
             if not repo.encrypted:
                 repo_list.append({"name": repo.name, "id": repo.id})
 
-    repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    repo_list.sort(key=lambda x: x['name'].lower())
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required_ajax
@@ -195,7 +195,7 @@ def unenc_rw_repos(request):
     for repo in acc_repos:
         repo_list.append({"name": repo.name, "id": repo.id})
 
-    repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    repo_list.sort(key=lambda x: x['name'].lower())
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 def convert_repo_path_when_can_not_view_folder(request, repo_id, path):
@@ -206,7 +206,7 @@ def convert_repo_path_when_can_not_view_folder(request, repo_id, path):
     username = request.user.username
     converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
     if not converted_repo_path:
-        err_msg = _(u'Permission denied.')
+        err_msg = _('Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
@@ -228,7 +228,7 @@ def convert_repo_path_when_can_not_view_folder(request, repo_id, path):
                             status=404, content_type=content_type)
 
     group_id = ''
-    if converted_repo_path.has_key('group_id'):
+    if 'group_id' in converted_repo_path:
         group_id = converted_repo_path['group_id']
         if not ccnet_api.get_group(group_id):
             err_msg = 'Group not found.'
@@ -236,13 +236,13 @@ def convert_repo_path_when_can_not_view_folder(request, repo_id, path):
                                 status=404, content_type=content_type)
 
         if not is_group_member(group_id, username):
-            err_msg = _(u'Permission denied.')
+            err_msg = _('Permission denied.')
             return HttpResponse(json.dumps({'error': err_msg}),
                                 status=403, content_type=content_type)
 
     user_perm = check_folder_permission(request, repo_id, path)
     if not user_perm:
-        err_msg = _(u'Permission denied.')
+        err_msg = _('Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
@@ -263,7 +263,7 @@ def list_lib_dir(request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        err_msg = _(u'Library does not exist.')
+        err_msg = _('Library does not exist.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=400, content_type=content_type)
 
@@ -284,13 +284,13 @@ def list_lib_dir(request, repo_id):
 
     if repo.encrypted \
             and not seafile_api.is_password_set(repo.id, username):
-        err_msg = _(u'Library is encrypted.')
+        err_msg = _('Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg, 'lib_need_decrypt': True}),
                             status=403, content_type=content_type)
 
     head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
     if not head_commit:
-        err_msg = _(u'Error: no head commit id')
+        err_msg = _('Error: no head commit id')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=500, content_type=content_type)
 
@@ -433,7 +433,7 @@ def rename_dirent(request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        result['error'] = _(u'Library does not exist.')
+        result['error'] = _('Library does not exist.')
         return HttpResponse(json.dumps(result), status=400,
                             content_type=content_type)
 
@@ -450,7 +450,7 @@ def rename_dirent(request, repo_id):
         oldname = form.cleaned_data["oldname"]
         newname = form.cleaned_data["newname"]
     else:
-        result['error'] = str(form.errors.values()[0])
+        result['error'] = str(list(form.errors.values())[0])
         return HttpResponse(json.dumps(result), status=400,
                             content_type=content_type)
 
@@ -492,7 +492,7 @@ def rename_dirent(request, repo_id):
     # rename file/dir
     try:
         seafile_api.rename_file(repo_id, parent_dir, oldname, newname, username)
-    except SearpcError, e:
+    except SearpcError as e:
         result['error'] = str(e)
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
@@ -510,7 +510,7 @@ def delete_dirent(request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        err_msg = _(u'Library does not exist.')
+        err_msg = _('Library does not exist.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
 
@@ -518,7 +518,7 @@ def delete_dirent(request, repo_id):
     parent_dir = request.GET.get("parent_dir", None)
     dirent_name = request.GET.get("name", None)
     if not (parent_dir and dirent_name):
-        err_msg = _(u'Argument missing.')
+        err_msg = _('Argument missing.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
 
@@ -558,9 +558,9 @@ def delete_dirent(request, repo_id):
         seafile_api.del_file(repo_id, parent_dir, dirent_name, username)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
-    except SearpcError, e:
+    except SearpcError as e:
         logger.error(e)
-        err_msg = _(u'Internal error. Failed to delete %s.') % escape(dirent_name)
+        err_msg = _('Internal error. Failed to delete %s.') % escape(dirent_name)
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=500, content_type=content_type)
 
@@ -574,7 +574,7 @@ def delete_dirents(request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        err_msg = _(u'Library does not exist.')
+        err_msg = _('Library does not exist.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
 
@@ -582,7 +582,7 @@ def delete_dirents(request, repo_id):
     parent_dir = request.GET.get("parent_dir")
     dirents_names = request.POST.getlist('dirents_names')
     if not (parent_dir and dirents_names):
-        err_msg = _(u'Argument missing.')
+        err_msg = _('Argument missing.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
 
@@ -599,7 +599,7 @@ def delete_dirents(request, repo_id):
         undeleted += dirents_names
     else:
         for dirent_name in dirents_names:
-            if dirent_name not in locked_files.keys():
+            if dirent_name not in list(locked_files.keys()):
                 # file is not locked
                 allowed_dirents_names.append(dirent_name)
             elif locked_files[dirent_name] == username:
@@ -620,7 +620,7 @@ def delete_dirents(request, repo_id):
 
     try:
         seafile_api.del_file(repo_id, parent_dir, multi_files, username)
-    except SearpcError, e:
+    except SearpcError as e:
         logger.error(e)
 
     return HttpResponse(json.dumps({'deleted': deleted, 'undeleted': undeleted}),
@@ -640,7 +640,7 @@ def dirents_copy_move_common():
 
             repo = get_repo(repo_id)
             if not repo:
-                result['error'] = _(u'Library does not exist.')
+                result['error'] = _('Library does not exist.')
                 return HttpResponse(json.dumps(result), status=400,
                                     content_type=content_type)
 
@@ -707,7 +707,7 @@ def dirents_copy_move_common():
                         out_of_quota = False
             except Exception as e:
                 logger.error(e)
-                result['error'] = _(u'Internal server error')
+                result['error'] = _('Internal server error')
                 return HttpResponse(json.dumps(result), status=500,
                                 content_type=content_type)
 
@@ -747,7 +747,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
         failed += obj_file_names
     else:
         for file_name in obj_file_names:
-            if file_name not in locked_files.keys():
+            if file_name not in list(locked_files.keys()):
                 # file is not locked
                 allowed_files.append(file_name)
             elif locked_files[file_name] == username:
@@ -759,7 +759,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
     for obj_name in obj_dir_names:
         src_dir = posixpath.join(src_path, obj_name)
         if dst_path.startswith(src_dir + '/'):
-            error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
+            error_msg = _('Can not move directory %(src)s to its subdirectory %(des)s') \
                 % {'src': escape(src_dir), 'des': escape(dst_path)}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
@@ -796,7 +796,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
 
         # check if above quota for dst repo
         if seafile_api.check_quota(dst_repo_id, total_size) < 0:
-            return HttpResponse(json.dumps({'error': _(u"Out of quota.")}),
+            return HttpResponse(json.dumps({'error': _("Out of quota.")}),
                                 status=443, content_type=content_type)
 
     success = []
@@ -831,7 +831,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
 
     if parse_repo_perm(check_folder_permission(
             request, src_repo_id, src_path)).can_copy is False:
-        error_msg = _(u'You do not have permission to copy files/folders in this directory')
+        error_msg = _('You do not have permission to copy files/folders in this directory')
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=403, content_type=content_type)
 
@@ -840,7 +840,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
         src_dir = posixpath.join(src_path, obj_name)
         src_dir = normalize_dir_path(src_dir)
         if dst_path.startswith(src_dir):
-            error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
+            error_msg = _('Can not copy directory %(src)s to its subdirectory %(des)s') \
                 % {'src': escape(src_dir), 'des': escape(dst_path)}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
@@ -869,7 +869,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
 
     # check if above quota for dst repo
     if seafile_api.check_quota(dst_repo_id, total_size) < 0:
-        return HttpResponse(json.dumps({'error': _(u"Out of quota.")}),
+        return HttpResponse(json.dumps({'error': _("Out of quota.")}),
                             status=443, content_type=content_type)
 
     failed = []
@@ -902,14 +902,14 @@ def get_current_commit(request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        err_msg = _(u'Library does not exist.')
+        err_msg = _('Library does not exist.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=400, content_type=content_type)
 
     username = request.user.username
     user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
-        err_msg = _(u'Permission denied.')
+        err_msg = _('Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
@@ -922,13 +922,13 @@ def get_current_commit(request, repo_id):
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not seafile_api.is_password_set(repo.id, username):
-        err_msg = _(u'Library is encrypted.')
+        err_msg = _('Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
     head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
     if not head_commit:
-        err_msg = _(u'Error: no head commit id')
+        err_msg = _('Error: no head commit id')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=500, content_type=content_type)
 
@@ -955,14 +955,14 @@ def download_enc_file(request, repo_id, file_id):
     blklist = []
 
     if file_id == EMPTY_SHA1:
-        result = { 'blklist':blklist, 'url':None, }
+        result = { 'blklist': blklist, 'url': None, }
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     try:
         blks = seafile_api.list_blocks_by_file_id(repo_id, file_id)
     except SearpcError as e:
         logger.error(e)
-        result['error'] = _(u'Failed to get file block list')
+        result['error'] = _('Failed to get file block list')
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     blklist = blks.split('\n')
@@ -971,13 +971,13 @@ def download_enc_file(request, repo_id, file_id):
             file_id, op, request.user.username)
 
     if not token:
-        result['error'] = _(u'FileServer access token invalid.')
+        result['error'] = _('FileServer access token invalid.')
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     url = gen_block_get_url(token, None)
     result = {
-        'blklist':blklist,
-        'url':url,
+        'blklist': blklist,
+        'url': url,
         }
     return HttpResponse(json.dumps(result), content_type=content_type)
 
@@ -1193,7 +1193,7 @@ def repo_history_changes(request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        err_msg = _(u'Library does not exist.')
+        err_msg = _('Library does not exist.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
 
@@ -1202,7 +1202,7 @@ def repo_history_changes(request, repo_id):
         if request.user.is_staff is True:
             pass # Allow system staff to check repo changes
         else:
-            err_msg = _(u"Permission denied")
+            err_msg = _("Permission denied")
             return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
 
@@ -1215,14 +1215,14 @@ def repo_history_changes(request, repo_id):
 
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-            and not is_passwd_set(repo_id, username):
-        err_msg = _(u'Library is encrypted.')
+            and not seafile_api.is_password_set(repo_id, username):
+        err_msg = _('Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        err_msg = _(u'Argument missing')
+        err_msg = _('Argument missing')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=400, content_type=content_type)
 
@@ -1295,7 +1295,7 @@ def ajax_group_members_import(request, group_id):
         if encoding != 'utf-8':
             content = content.decode(encoding, 'replace').encode('utf-8')
 
-        filestream = StringIO.StringIO(content)
+        filestream = io.StringIO(content)
         reader = csv.reader(filestream)
     except Exception as e:
         logger.error(e)
@@ -1335,7 +1335,7 @@ def ajax_group_members_import(request, group_id):
         if is_group_member(group_id, email, in_structure=False):
             result['failed'].append({
                 'email': email,
-                'error_msg': _(u'User %s is already a group member.') % email
+                'error_msg': _('User %s is already a group member.') % email
                 })
             continue
 
@@ -1344,7 +1344,7 @@ def ajax_group_members_import(request, group_id):
             seaserv.ccnet_threaded_rpc.org_user_exists(org_id, email):
             result['failed'].append({
                 'email': email,
-                'error_msg': _(u'User %s not found in organization.') % email
+                'error_msg': _('User %s not found in organization.') % email
                 })
             continue
 
@@ -1411,8 +1411,8 @@ def ajax_repo_dir_recycle_more(request, repo_id):
                 dirent.is_dir = False
 
         # Entries sort by deletion time in descending order.
-        deleted_entries.sort(lambda x, y : cmp(y.delete_time,
-                                               x.delete_time))
+        deleted_entries.sort(
+            key=lambda x: x.delete_time, reverse=True)
 
         ctx = {
             'show_recycle_root': True,

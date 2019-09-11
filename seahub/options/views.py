@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseBadRequest, \
-    HttpResponseRedirect , Http404
+    HttpResponseRedirect, Http404
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.utils.translation import ugettext as _
@@ -25,11 +25,11 @@ def save_options(request):
     else:
         UserOptions.objects.disable_server_crypto(username)
 
-    next = request.META.get('HTTP_REFERER', None)
-    if next is None:
-        next = SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if next_page is None:
+        next_page = SITE_ROOT
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required
 @require_POST
@@ -47,8 +47,8 @@ def sub_lib_enable_set(request):
     else:
         UserOptions.objects.disable_sub_lib(username)
 
-    next = request.META.get('HTTP_REFERER', None)
-    if next is None:
-        next = SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if next_page is None:
+        next_page = SITE_ROOT
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)

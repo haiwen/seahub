@@ -263,7 +263,7 @@ def get_related_users_by_repo(repo_id, org_id=None):
     users = []
 
     # 1. users repo has been shared to
-    if org_id > 0:
+    if org_id and org_id > 0:
         users.extend(seafile_api.org_get_shared_users_by_repo(org_id, repo_id))
         owner = seafile_api.get_org_repo_owner(repo_id)
     else:

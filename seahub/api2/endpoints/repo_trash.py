@@ -112,8 +112,8 @@ class RepoTrash(APIView):
             entries_without_scan_stat = deleted_entries[0:-1]
 
             # sort entry by delete time
-            entries_without_scan_stat.sort(lambda x, y : cmp(y.delete_time,
-                                                             x.delete_time))
+            entries_without_scan_stat.sort(
+                key=lambda x: x.delete_time, reverse=True)
 
             for item in entries_without_scan_stat:
                 item_info = self.get_item_info(item)

@@ -73,14 +73,14 @@ class AdminOrganizationsTest(BaseTestCase):
 
         users = json_resp['organizations']
         assert len(users) > 0
-        assert users[0].has_key('org_id')
-        assert users[0].has_key('org_name')
-        assert users[0].has_key('ctime')
-        assert users[0].has_key('org_url_prefix')
-        assert users[0].has_key('creator_email')
-        assert users[0].has_key('creator_name')
-        assert users[0].has_key('creator_contact_email')
-        assert users[0].has_key('quota')
+        assert 'org_id' in users[0]
+        assert 'org_name' in users[0]
+        assert 'ctime' in users[0]
+        assert 'org_url_prefix' in users[0]
+        assert 'creator_email' in users[0]
+        assert 'creator_name' in users[0]
+        assert 'creator_contact_email' in users[0]
+        assert 'quota' in users[0]
 
     def test_can_not_get_orgs_if_not_admin(self):
 

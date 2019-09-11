@@ -93,7 +93,7 @@ def check_permissions_arg(request):
     if permissions is not None:
         if isinstance(permissions, dict):
             perm_dict = permissions
-        elif isinstance(permissions, basestring):
+        elif isinstance(permissions, str):
             import json
             try:
                 perm_dict = json.loads(permissions)
@@ -164,7 +164,7 @@ class ShareLinks(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # filter share links by repo
-            fileshares = filter(lambda fs: fs.repo_id == repo_id, fileshares)
+            fileshares = [fs for fs in fileshares if fs.repo_id == repo_id]
 
             path = request.GET.get('path', None)
             if path:
@@ -189,7 +189,7 @@ class ShareLinks(APIView):
                 if s_type == 'd' and path[-1] != '/':
                     path = path + '/'
 
-                fileshares = filter(lambda fs: fs.path == path, fileshares)
+                fileshares = [fs for fs in fileshares if fs.path == path]
 
         links_info = []
         for fs in fileshares:
@@ -199,11 +199,11 @@ class ShareLinks(APIView):
         if len(links_info) == 1:
             result = links_info
         else:
-            dir_list = filter(lambda x: x['is_dir'], links_info)
-            file_list = filter(lambda x: not x['is_dir'], links_info)
+            dir_list = [x for x in links_info if x['is_dir']]
+            file_list = [x for x in links_info if not x['is_dir']]
 
-            dir_list.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
-            file_list.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
+            dir_list.sort(key=lambda x: x['obj_name'])
+            file_list.sort(key=lambda x: x['obj_name'])
 
             result = dir_list + file_list
 
@@ -297,7 +297,7 @@ class ShareLinks(APIView):
         if s_type == 'f':
             fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
             if fs:
-                error_msg = _(u'Share link %s already exists.' % fs.token)
+                error_msg = _('Share link %s already exists.' % fs.token)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                     password, expire_date,
@@ -306,7 +306,7 @@ class ShareLinks(APIView):
         elif s_type == 'd':
             fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
             if fs:
-                error_msg = _(u'Share link %s already exists.' % fs.token)
+                error_msg = _('Share link %s already exists.' % fs.token)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             fs = FileShare.objects.create_dir_link(username, repo_id, path,
                                                     password, expire_date,
@@ -454,7 +454,7 @@ class ShareLinkOnlineOfficeLock(APIView):
             # refresh lock file
             try:
                 seafile_api.refresh_file_lock(repo_id, path)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

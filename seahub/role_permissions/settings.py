@@ -124,15 +124,15 @@ except AttributeError:
 
 def get_enabled_admin_role_permissions():
     permissions = {}
-    for role, perms in admin_role_permissions.iteritems():
+    for role, perms in admin_role_permissions.items():
         # check admin role permission syntax
         default_admin_permissions = DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS[DEFAULT_ADMIN]
-        for k in perms.keys():
-            if k not in default_admin_permissions.keys():
+        for k in list(perms.keys()):
+            if k not in list(default_admin_permissions.keys()):
                 logger.warn('"%s" is not valid permission, please review the ENABLED_ADMIN_ROLE_PERMISSIONS setting.' % k)
 
         all_false_permission = {}
-        for permission in default_admin_permissions.keys():
+        for permission in list(default_admin_permissions.keys()):
             all_false_permission[permission] = False
 
         all_false_permission.update(perms)

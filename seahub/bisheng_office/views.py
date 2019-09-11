@@ -4,7 +4,7 @@ import os
 import json
 import copy
 import logging
-import urlparse
+import urllib.parse
 import requests
 
 from rest_framework import status
@@ -166,7 +166,7 @@ class BishengOfficeView(APIView):
 
         # get content of new editted file
         data = post_data.get('data')
-        file_url = urlparse.urljoin(BISHENG_OFFICE_HOST_DOMAIN, data.get('docURL'))
+        file_url = urllib.parse.urljoin(BISHENG_OFFICE_HOST_DOMAIN, data.get('docURL'))
         files = {
             'file': requests.get(file_url).content,
             'file_name': os.path.basename(file_path),

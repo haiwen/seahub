@@ -194,7 +194,7 @@ class SeafileRemoteUserBackend(AuthBackend):
         """
         user_info = {}
 
-        for header, user_info_key in self.remote_user_attribute_map.items():
+        for header, user_info_key in list(self.remote_user_attribute_map.items()):
             value = request.META.get(header, None)
             if value:
                 user_info[user_info_key] = value

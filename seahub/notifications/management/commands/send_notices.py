@@ -248,7 +248,7 @@ class Command(BaseCommand):
             else:
                 email_ctx[notice.to_user] = 1
 
-        for to_user, count in email_ctx.items():
+        for to_user, count in list(email_ctx.items()):
             # save current language
             cur_language = translation.get_language()
 
