@@ -248,6 +248,18 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
+                {isDefaultAdmin && enableShareLinkReportAbuse &&
+                  <li className="nav-item">
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('abuse-reports')}`}
+                      to={siteRoot + 'sys/abuse-reports/'}
+                      onClick={() => this.props.tabItemClick('abuse-reports')}
+                    >
+                      <span className="sf2-icon-monitor" aria-hidden="true"></span>
+                      <span className="nav-text">{gettext('Abuse Reports')}</span>
+                    </Link>
+                  </li>
+                }
               </ul>
             </div>
           </div>
