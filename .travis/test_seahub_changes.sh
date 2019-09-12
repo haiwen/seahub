@@ -26,6 +26,9 @@ test_fn()
     patt=".drone.yml"
     [[ $FN == $patt ]] && return 0
 
+    patt=".travis*"
+    [[ $FN == $patt ]] && return 0
+
     return 1
 }
 
