@@ -1,7 +1,5 @@
 #!/bin/bash
 
-exit 1
-
 test_fn()
 {
     FN=$1
@@ -35,10 +33,16 @@ do
 
     if [ "$retval" == 1 ]; then
         echo "File changes need to trigger tests."
-        exit 0
+        ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh
+        retval=$?
+        if [ "$retval" == 1 ]; then
+          exit 1
+        else
+          exit 0
+        fi
     fi
 
 done
 
 echo "Static/media file changes should not trigger tests."
-exit 1
+exit 0
