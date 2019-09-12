@@ -17,5 +17,5 @@ pipeline:
       - cd /drone/src/github.com/haiwen/seahub
       - ./tests/install-deps.sh
       - pip install -r test-requirements.txt
-      - .travis/test_seahub_changes.sh; rc=$?; if test "$rc" -eq 0; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
+      - if .travis/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
       - if test $DRONE_COMMIT_BRANCH = "master"; then .travis/dist_and_push.sh; else true; fi
