@@ -1,5 +1,7 @@
 #!/bin/bash
 
+exit 1
+
 test_fn()
 {
     FN=$1
@@ -21,7 +23,7 @@ test_fn()
     # locale* -> 0
     patt="locale*"
     [[ $FN == $patt ]] && return 0
-    
+
     return 1
 }
 
