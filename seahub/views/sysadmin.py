@@ -138,7 +138,7 @@ def sysadmin(request):
 
 @login_required
 @sys_staff_required
-def sysadmin_react_fake_view(request):
+def sysadmin_react_fake_view(request, **kwargs):
 
     return render(request, 'sysadmin/sysadmin_react_app.html', {
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,

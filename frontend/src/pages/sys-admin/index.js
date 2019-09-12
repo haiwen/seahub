@@ -10,6 +10,10 @@ import Info from './info';
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
+import ReposAll from './repos/repos-all';
+import ReposSystem from './repos/repos-system';
+import ReposTrash from './repos/repos-trash';
+import ReposTemplate from './repos/repos-template';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -53,7 +57,7 @@ class SysAdmin extends React.Component {
   }
 
   tabItemClick = (param) => {
-    this.setState({currentTab: param});          
+    this.setState({currentTab: param});
   }  
 
   render() {
@@ -73,6 +77,10 @@ class SysAdmin extends React.Component {
             <DesktopDevices path={siteRoot + 'sys/desktop-devices'} />
             <MobileDevices path={siteRoot + 'sys/mobile-devices'} />
             <DeviceErrors path={siteRoot + 'sys/device-errors'} />
+            <ReposAll path={siteRoot + 'sys/libraries-all'} />
+            <ReposSystem path={siteRoot + 'sys/libraries-system'} />
+            <ReposTrash path={siteRoot + 'sys/libraries-trash'} />
+            <ReposTemplate path={siteRoot + 'sys/libraries/:repoID/*'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
