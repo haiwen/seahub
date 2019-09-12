@@ -6,8 +6,6 @@ pipeline:
     when:
       branch:
         event: [ push, pull_request ]
-        include: [ master, python3-master ]
-        exclude: []
 
     commands:
       - cd /tmp/seafile-test-deploy && git fetch origin python3:python3 && git checkout python3
