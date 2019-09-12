@@ -10,5 +10,5 @@ pipeline:
         exclude: []
 
     commands:
-      - .travis/test_seahub_changes.sh; rc=$?; if test "$rc" -eq 0; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
+      - .travis/test_seahub_changes.sh; echo "hello"; rc=$?; if test "$rc" -eq 0; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
       - echo "hello"
