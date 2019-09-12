@@ -5,7 +5,8 @@ import Logo from '../../components/logo';
 import { gettext, siteRoot, isPro, isDefaultAdmin, canViewSystemInfo, canViewStatistic,
   canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
   canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
-  enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin } from '../../utils/constants';
+  enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin,
+  enableShareLinkReportAbuse } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,

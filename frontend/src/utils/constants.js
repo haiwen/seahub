@@ -126,3 +126,4 @@ export const canViewAdminLog = window.sysadmin ? window.sysadmin.pageOptions.adm
 export const enableWorkWeixin = window.sysadmin ? window.sysadmin.pageOptions.enable_work_weixin : '';
 export const enableSysAdminViewRepo = window.sysadmin ? window.sysadmin.pageOptions.enableSysAdminViewRepo : '';
 export const haveLDAP = window.sysadmin ? window.sysadmin.pageOptions.haveLDAP : '';
+export const enableShareLinkReportAbuse = window.sysadmin ? window.sysadmin.pageOptions.enable_share_link_report_abuse : '';
