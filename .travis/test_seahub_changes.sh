@@ -21,7 +21,11 @@ test_fn()
     # locale* -> 0
     patt="locale*"
     [[ $FN == $patt ]] && return 0
-    
+
+    # .drone.yml -> 0
+    patt=".drone.yml"
+    [[ $FN == $patt ]] && return 0
+
     return 1
 }
 
