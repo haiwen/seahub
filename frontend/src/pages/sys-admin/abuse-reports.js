@@ -15,7 +15,7 @@ class AbuseReports extends Component {
     };
   }
 
-  adminListAbuseReports = () => {
+  listAbuseReports = () => {
     seafileAPI.sysAdminListAbuseReports().then((res) => {
       this.setState({
         abuseReportList: res.data.abuse_report_list,
@@ -25,8 +25,8 @@ class AbuseReports extends Component {
     });
   };
 
-  adminHandlerAbuseReport = (handled, abuseReportId) => {
-    seafileAPI.sysAdminHandlerAbuseReport(handled, abuseReportId).then((res) => {
+  updateAbuseReport = (handled, abuseReportId) => {
+    seafileAPI.sysAdminUpdateAbuseReport(handled, abuseReportId).then((res) => {
       const abuseReportList = this.state.abuseReportList.filter((item, index) => {
         if (item.id === abuseReportId) {
           item.handled = res.data.handled;
@@ -50,7 +50,7 @@ class AbuseReports extends Component {
   };
 
   componentDidMount() {
-    this.adminListAbuseReports();
+    this.listAbuseReports();
   }
 
   render() {
@@ -68,7 +68,7 @@ class AbuseReports extends Component {
           <td>{item.abuse_type}</td>
           <td>{item.description}</td>
           <td>{moment(item.time).format('YYYY-MM-DD')}</td>
-          <td><p onClick={this.adminHandlerAbuseReport.bind(this, handled, abuseReportId)}
+          <td><p onClick={this.updateAbuseReport.bind(this, handled, abuseReportId)}
                  className="op-target ellipsis ellipsis-op-target cursor-pointer"
           >{gettext(item.handled.toString())}</p></td>
         </tr>
