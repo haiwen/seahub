@@ -125,4 +125,9 @@ export const canManageGroup = window.sysadmin ? window.sysadmin.pageOptions.admi
 export const canViewUserLog = window.sysadmin ? window.sysadmin.pageOptions.admin_permissions.can_view_user_log : '';
 export const canViewAdminLog = window.sysadmin ? window.sysadmin.pageOptions.admin_permissions.can_view_admin_log : '';
 export const enableWorkWeixin = window.sysadmin ? window.sysadmin.pageOptions.enable_work_weixin : '';
+export const sendEmailOnResettingUserPasswd = window.sysadmin ? window.sysadmin.pageOptions.send_email_on_resetting_user_passwd : '';
+export const isEmailConfiguredInSysAdmin = window.sysadmin ? window.sysadmin.pageOptions.is_email_configured : ''; 
 
+// sys admin org page
+export const sendEmailOnResettingOrgUserPasswd = window.sysAdminOrg ? window.sysAdminOrg.pageOptions.send_email_on_resetting_user_passwd : '';
+export const isEmailConfiguredInSysAdminOrg = window.sysAdminOrg ? window.sysAdminOrg.pageOptions.is_email_configured : ''; 

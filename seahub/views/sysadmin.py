@@ -176,6 +176,15 @@ def sysadmin_org_react_fake_view(request, **kwargs):
 
 @login_required
 @sys_staff_required
+def sysadmin_org_react_fake_view(request, **kwargs):
+    return render(request, 'sysadmin/sysadmin_org_react_app.html', {
+        'org_id': kwargs['org_id'],
+        'is_email_configured': IS_EMAIL_CONFIGURED,
+        'send_email_on_resetting_user_passwd': SEND_EMAIL_ON_RESETTING_USER_PASSWD,
+    })
+
+@login_required
+@sys_staff_required
 def sys_statistic_file(request):
 
     return render(request, 'sysadmin/sys_statistic_file.html', {

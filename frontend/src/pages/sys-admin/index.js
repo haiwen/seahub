@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
@@ -10,6 +10,7 @@ import Info from './info';
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
+import OrgsAll from './orgs/orgs-all';
 
 import AllRepos from './repos/all-repos';
 import SystemRepo from './repos/system-repo';
@@ -97,6 +98,7 @@ class SysAdmin extends React.Component {
     let { currentTab, isSidePanelClosed } = this.state;
 
     return (
+
       <div id="main">
         <SidePanel
           isSidePanelClosed={isSidePanelClosed}
@@ -125,6 +127,7 @@ class SysAdmin extends React.Component {
             </Departments>
             <ShareLinks path={siteRoot + 'sys/share-links'} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} />
+            <OrgsAll path={siteRoot + 'sys/organizations-all'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 

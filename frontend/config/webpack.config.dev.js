@@ -199,6 +199,11 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/pages/sys-admin",
     ],
+    sysAdminOrg: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/pages/sys-admin/orgs",
+    ],
     viewCdoc: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
