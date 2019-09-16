@@ -1,17 +1,80 @@
 import React, {Component, Fragment} from 'react';
 import Account from '../../components/common/account';
-import {gettext} from '../../utils/constants';
+import {gettext, siteRoot} from '../../utils/constants';
 import {Utils} from '../../utils/utils';
+import {seafileAPI} from '../../utils/seafile-api';
+import toaster from '../../components/toast';
+import moment from 'moment';
 
 class AbuseReports extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      abuseReportList: [],
+    };
+  }
+
+  adminListAbuseReports = () => {
+    seafileAPI.sysAdminListAbuseReports().then((res) => {
+      this.setState({
+        abuseReportList: res.data.abuse_report_list,
+      });
+    }).catch((error) => {
+      this.handleError(error);
+    });
+  };
+
+  adminHandlerAbuseReport = (handled, abuseReportId) => {
+    seafileAPI.sysAdminHandlerAbuseReport(handled, abuseReportId).then((res) => {
+      const abuseReportList = this.state.abuseReportList.filter((item, index) => {
+        if (item.id === abuseReportId) {
+          item.handled = res.data.handled;
+        }
+        return item;
+      });
+      this.setState({
+        abuseReportList: abuseReportList,
+      });
+    }).catch((error) => {
+      this.handleError(error);
+    });
+  };
+
+  handleError = (e) => {
+    if (e.response) {
+      toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), {duration: 3});
+    } else {
+      toaster.danger(gettext('Please check the network.'), {duration: 3});
+    }
+  };
+
+  componentDidMount() {
+    this.adminListAbuseReports();
   }
 
   render() {
     const isDesktop = Utils.isDesktop();
+    const AbuseReportList = this.state.abuseReportList.map((item, index) => {
+      const handled = (!item.handled).toString();
+      const abuseReportId = item.id;
+      const fileUrl = siteRoot + 'lib/' + item.repo_id + '/file' + item.file_path;
+      return (
+        <tr key={index}>
+          <td><img src="/media/img/lib/48/lib.png" width="24"/></td>
+          <td>{item.repo_name}</td>
+          <td><a href={fileUrl} target="_blank">{item.file_path}</a></td>
+          <td>{item.reporter}</td>
+          <td>{item.abuse_type}</td>
+          <td>{item.description}</td>
+          <td>{moment(item.time).format('YYYY-MM-DD')}</td>
+          <td><p onClick={this.adminHandlerAbuseReport.bind(this, handled, abuseReportId)}
+                 className="op-target ellipsis ellipsis-op-target cursor-pointer"
+          >{gettext(item.handled.toString())}</p></td>
+        </tr>
+      );
+    });
+
     return (
       <Fragment>
         <div className="main-panel-north">
@@ -49,7 +112,7 @@ class AbuseReports extends Component {
                 }
                 </thead>
                 <tbody>
-
+                {AbuseReportList}
                 </tbody>
               </table>
             </div>
