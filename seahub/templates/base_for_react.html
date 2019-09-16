@@ -94,7 +94,7 @@
             customNavItems: JSON.parse('{{ custom_nav_items | escapejs }}'),
 
             {% if request.user.is_authenticated and request.cur_note %}
-            curNoteMsg: '{{ request.cur_note.message|urlize }}',
+            curNoteMsg: '{{ request.cur_note.message|urlize|escapejs }}',
             curNoteID: '{{ request.cur_note.id }}',
             {% endif %}
         }
