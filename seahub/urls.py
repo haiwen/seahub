@@ -666,6 +666,7 @@ urlpatterns = [
     url(r'^sys/desktop-devices/$', sysadmin_react_fake_view, name="sys_desktop_devices"),
     url(r'^sys/mobile-devices/$', sysadmin_react_fake_view, name="sys_mobile_devices"),
     url(r'^sys/device-errors/$', sysadmin_react_fake_view, name="sys_device_errors"),
+    url(r'^sys/notifications/$', sysadmin_react_fake_view, name="sys_device_errors"),
     url(r'^sys/web-settings/$', sysadmin_react_fake_view, name="sys_web_settings"),
     url(r'^sys/all-libraries/$', sysadmin_react_fake_view, name="sys_all_libraries"),
     url(r'^sys/system-library/$', sysadmin_react_fake_view, name="sys_system_library"),
