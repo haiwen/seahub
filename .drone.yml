@@ -8,6 +8,8 @@ pipeline:
         event: [ push, pull_request ]
 
     commands:
+      - echo $TRAVIS
+      - echo $GITHUB_TOKEN
       - cd /tmp/seafile-test-deploy && git fetch origin python3:python3 && git checkout python3
       - ./bootstrap.sh && cd -
       - export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
