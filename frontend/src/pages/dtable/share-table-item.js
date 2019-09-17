@@ -42,7 +42,7 @@ class ShareTableItem extends Component {
     return (
 
       <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={ `table-item ${this.state.active ? 'tr-highlight' : ''}`}>
-        <div className="table-icon"><span className="sf3-font sf3-font-form"></span></div>
+        <div className="table-icon"><span className="sf3-font sf3-font-table"></span></div>
         <div className="table-name">
           <a href={tableHref} target="_blank">{table.name}</a>
         </div>
