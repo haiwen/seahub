@@ -189,3 +189,20 @@ class DTableShare(models.Model):
     class Meta:
         unique_together = (('dtable', 'to_user'),)
         db_table = 'dtable_share'
+
+
+class DTableApiToken(models.Model):
+    """dtable api token for thirdpart apps to get dtable-server access token
+    """
+    dtable_uuid = models.UUIDField(db_index=True)
+    app_name = models.CharField(max_length=255, db_index=True)
+    token = models.CharField(unique=True, max_length=40)
+    generated_at = models.DateTimeField(auto_now_add=True)
+    generated_by = models.CharField(max_length=255)
+    last_access = models.DateTimeField(auto_now=True)
+
+    objects = DTableShareManager()
+
+    class Meta:
+        unique_together = (('dtable_uuid', 'app_name'),)
+        db_table = 'dtable_api_token'
