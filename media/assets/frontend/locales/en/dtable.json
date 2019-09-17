@@ -142,6 +142,7 @@
   "greater_or_equal": "\u2265",
   "is_empty": "is empty",
   "is_not_empty": "is not empty",
+  "include_me": "include me",
   "is_within": "is within...",
   "is_before": "is before...",
   "is_after": "is after...",
@@ -203,5 +204,10 @@
   "This_method_is_not_supported_for_the_time_being": "This method is not supported for the time being.",
   "Amount": "Amount",
   "null": "null",
-  "Share": "Share"
+  "Share": "Share",
+  "Default_View": "Default View",
+  "External_sharing_link": "External sharing link",
+  "The_share_link_has_been_copied": "The share link has been copied.",
+  "Failed_to_get_share_link": "Failed to get share link.",
+  "Server_is_not_connected_Operation_will_be_sent_to_server_later": "Server is not connected. Operation will be sent to server later."
 }
