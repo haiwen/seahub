@@ -77,6 +77,7 @@ class Account extends Component {
           quotaUsage: Utils.bytesToSize(resp.data.usage),
           quotaTotal: Utils.bytesToSize(resp.data.total),
           isStaff: resp.data.is_staff,
+          isInstAdmin: resp.data.is_inst_admin,
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
           showInfo: !this.state.showInfo,
         });
@@ -91,29 +92,47 @@ class Account extends Component {
   }
 
   renderMenu = () => {
-    if (this.state.isStaff && this.props.isAdminPanel) {
-      return (
-        <a href={siteRoot} title={gettext('Exit Admin Panel')} className="item">{gettext('Exit Admin Panel')}</a>
-      );
+    let data;
+    const { isStaff, isOrgStaff, isInstAdmin } = this.state;
+
+    if (this.props.isAdminPanel) {
+      if (isStaff) {
+        data = {
+          url: siteRoot,
+          text: gettext('Exit System Admin')
+        };
+      } else if (isOrgStaff) {
+        data = {
+          url: siteRoot,
+          text: gettext('Exit Organization Admin')
+        };
+      } else if (isInstAdmin) {
+        data = {
+          url: siteRoot,
+          text: gettext('Exit Institution Admin')
+        };
+      }
+
+    } else {
+      if (isStaff) {
+        data = {
+          url: `${siteRoot}sys/useradmin/`,
+          text: gettext('System Admin')
+        };
+      } else if (isOrgStaff) {
+        data = {
+          url: `${siteRoot}org/useradmin/`,
+          text: gettext('Organization Admin')
+        };
+      } else if (isInstAdmin) {
+        data = {
+          url: `${siteRoot}inst/useradmin/`,
+          text: gettext('Institution Admin')
+        };
+      }
     }
 
-    if (this.state.isOrgStaff && this.props.isAdminPanel) {
-      return (
-        <a href={siteRoot} title={gettext('Exit Organization Admin')} className="item">{gettext('Exit Organization Admin')}</a>
-      );
-    }
-
-    if (this.state.isStaff) {
-      return (
-        <a href={siteRoot + 'sys/useradmin/'} title={gettext('System Admin')} className="item">{gettext('System Admin')}</a>
-      );
-    }
-
-    if (this.state.isOrgStaff) {
-      return (
-        <a href={siteRoot + 'org/useradmin/'} title={gettext('Organization Admin')} className="item">{gettext('Organization Admin')}</a>
-      );
-    }
+    return data && <a href={data.url} title={data.text} className="item">{data.text}</a>;
   }
 
   renderAvatar = () => {
