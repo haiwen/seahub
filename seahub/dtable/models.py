@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import uuid
+import hmac
+from hashlib import sha1
+import datetime
 
 from django.db import models
 
@@ -42,7 +45,6 @@ class WorkspacesManager(models.Manager):
 
 
 class Workspaces(models.Model):
-
     name = models.CharField(max_length=255, null=True)
     owner = models.CharField(max_length=255, unique=True)
     repo_id = models.CharField(max_length=36, unique=True)
@@ -64,7 +66,6 @@ class Workspaces(models.Model):
         return timestamp_to_isoformat_timestr(repo.last_modify)
 
     def to_dict(self):
-
         return {
             'id': self.pk,
             'repo_id': self.repo_id,
@@ -123,7 +124,6 @@ class DTablesManager(models.Manager):
 
 
 class DTables(models.Model):
-
     workspace = models.ForeignKey(Workspaces, on_delete=models.CASCADE, db_index=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     name = models.CharField(max_length=255)
@@ -139,7 +139,6 @@ class DTables(models.Model):
         db_table = 'dtables'
 
     def to_dict(self):
-
         return {
             'id': self.pk,
             'workspace_id': self.workspace_id,
@@ -191,6 +190,39 @@ class DTableShare(models.Model):
         db_table = 'dtable_share'
 
 
+class DTableApiTokenManager(models.Manager):
+
+    def get_by_token(self, token):
+        qs = self.filter(token=token)
+        if qs.exists():
+            return qs[0]
+        return None
+
+    def get_by_dtable_and_app_name(self, dtable, app_name):
+        qs = self.filter(dtable=dtable.uuid, app_name=app_name)
+        if qs.exists():
+            return qs[0]
+        return None
+
+    def list_by_dtable(self, dtable):
+        return self.filter(dtable_uuid=dtable.uuid)
+
+    def generate_key(self):
+        unique = str(uuid.uuid4())
+        return hmac.new(unique.encode('utf-8'), digestmod=sha1).hexdigest()
+
+    def add(self, dtable, app_name, email):
+
+        obj = self.model(
+            dtable_uuid=dtable.uuid,
+            app_name=app_name,
+            generated_by=email
+        )
+        obj.token = self.generate_key()
+        obj.save()
+        return obj
+
+
 class DTableApiToken(models.Model):
     """dtable api token for thirdpart apps to get dtable-server access token
     """
@@ -201,8 +233,12 @@ class DTableApiToken(models.Model):
     generated_by = models.CharField(max_length=255)
     last_access = models.DateTimeField(auto_now=True)
 
-    objects = DTableShareManager()
+    objects = DTableApiTokenManager()
 
     class Meta:
         unique_together = (('dtable_uuid', 'app_name'),)
         db_table = 'dtable_api_token'
+
+    def update_last_access(self):
+        self.last_access = datetime.datetime.now
+        self.save(update_fields=['last_access'])

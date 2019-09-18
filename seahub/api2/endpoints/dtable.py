@@ -15,31 +15,30 @@ from django.utils.translation import ugettext as _
 from pysearpc import SearpcError
 from seaserv import seafile_api, ccnet_api
 
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.dtable.models import Workspaces, DTables
+from seahub.dtable.models import Workspaces, DTables, DTableApiToken
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, gen_file_upload_url
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, DTABLE_PRIVATE_KEY
-from seahub.dtable.utils import check_dtable_permission
+from seahub.dtable.utils import check_dtable_permission, \
+    check_dtable_admin_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 
-
 logger = logging.getLogger(__name__)
-
 
 FILE_TYPE = '.dtable'
 WRITE_PERMISSION_TUPLE = (PERMISSION_READ_WRITE, PERMISSION_ADMIN)
 
 
 class WorkspacesView(APIView):
-
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
         """get all workspaces
@@ -126,10 +125,9 @@ class WorkspacesView(APIView):
 
 
 class DTablesView(APIView):
-
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
         """create a table file
@@ -230,10 +228,9 @@ class DTablesView(APIView):
 
 
 class DTableView(APIView):
-
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
 
     def put(self, request, workspace_id):
         """rename a table
@@ -399,7 +396,6 @@ class DTableView(APIView):
 
 
 class DTableAssetUploadLinkView(APIView):
-
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -467,7 +463,6 @@ class DTableAssetUploadLinkView(APIView):
 
 
 class DTableAccessTokenView(APIView):
-
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -525,3 +520,157 @@ class DTableAccessTokenView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'access_token': access_token})
+
+
+class DTableApiTokenView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def _resource_check(self, workspace_id, table_name, table_file_name):
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = 'Workspace %s not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg), None, None
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg), None, None
+
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg), None, None
+
+        table_path = normalize_file_path(table_file_name)
+        table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
+        if not table_file_id:
+            error_msg = 'file %s not found.' % table_file_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg), None, None
+
+        return None, workspace, dtable
+
+    def _permission_check(self, username, owner):
+        # only owner or group admin
+        if not check_dtable_admin_permission(username, owner):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        return None
+
+    def get(self, request, workspace_id, name):
+        """list dtable api token for thirdpart app
+        """
+        table_name = name
+        table_file_name = table_name + FILE_TYPE
+        username = request.user.username
+
+        # resource check
+        error, workspace, dtable = self._resource_check(workspace_id, table_name, table_file_name)
+        if error:
+            return error
+
+        # permission check
+        owner = workspace.owner
+        error = self._permission_check(username, owner)
+        if error:
+            return error
+
+        # main
+        api_tokens = list()
+        api_token_queryset = DTableApiToken.objects.list_by_dtable(dtable)
+        for obj in api_token_queryset:
+            data = {
+                'app_name': obj.app_name,
+                'api_token': obj.token,
+                'generated_by': obj.generated_by,
+                'generated_at': datetime_to_isoformat_timestr(obj.generated_at),
+                'last_access': datetime_to_isoformat_timestr(obj.last_access),
+            }
+            api_tokens.append(data)
+
+        return Response({'api_tokens': api_tokens})
+
+    def post(self, request, workspace_id, name):
+        """generate dtable api token for thirdpart app
+        """
+        table_name = name
+        table_file_name = table_name + FILE_TYPE
+        username = request.user.username
+
+        app_name = request.data.get('app_name')
+        if not app_name:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'app_name invalid.')
+
+        # resource check
+        error, workspace, dtable = self._resource_check(workspace_id, table_name, table_file_name)
+        if error:
+            return error
+
+        # permission check
+        owner = workspace.owner
+        error = self._permission_check(username, owner)
+        if error:
+            return error
+
+        # main
+        exist_obj = DTableApiToken.objects.get_by_dtable_and_app_name(dtable, app_name)
+        if exist_obj is not None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'api token already exist.')
+
+        obj = DTableApiToken.objects.add(dtable, app_name, username)
+
+        return Response({'api_token': obj.token}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, workspace_id, name):
+        """delete dtable api token
+        """
+        table_name = name
+        table_file_name = table_name + FILE_TYPE
+        username = request.user.username
+
+        app_name = request.data.get('app_name')
+        if not app_name:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'app_name invalid.')
+
+        # resource check
+        error, workspace, dtable = self._resource_check(workspace_id, table_name, table_file_name)
+        if error:
+            return error
+
+        # permission check
+        owner = workspace.owner
+        error = self._permission_check(username, owner)
+        if error:
+            return error
+
+        # main
+        obj = DTableApiToken.objects.get_by_dtable_and_app_name(dtable, app_name)
+        if obj is None:
+            return api_error(status.HTTP_404_NOT_FOUND, 'api_token not found.')
+
+        obj.delete()
+        return Response({'success': True})
+
+
+class DTableApiTokenToAccessTokenView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, workspace_id, name):
+        """dtable api token to get access token
+        """
+        token = request.GET.get('api_token')
+        if not token:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'api_token invalid.')
+
+        # main
+        obj = DTableApiToken.objects.get_by_token(token)
+        if obj is None:
+            return api_error(status.HTTP_404_NOT_FOUND, 'api_token not found.')
+
+        obj.update_last_access()
+
+        return DTableAccessTokenView().get(request, workspace_id, name)
