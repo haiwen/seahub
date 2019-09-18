@@ -91,7 +91,8 @@ from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.dtable import WorkspacesView, DTableView, DTablesView, \
-     DTableAssetUploadLinkView, DTableAccessTokenView
+     DTableAssetUploadLinkView, DTableAccessTokenView, \
+    DTableApiTokenView, DTableApiTokenToAccessTokenView
 from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
 from seahub.api2.endpoints.dtable_related_users import DTableRelatedUsersView
 from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
@@ -386,6 +387,8 @@ urlpatterns = [
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/share/$', DTableShareView.as_view(), name='api-v2.1-dtable-share'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/related-users/$', DTableRelatedUsersView.as_view(), name='api-v2.1-dtable-related-users'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/access-token/$', DTableAccessTokenView.as_view(), name='api-v2.1-dtable-access-token'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/api-token/$', DTableApiTokenView.as_view(), name='api-v2.1-dtable-api-token'),
+    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/api-token-to-access-token/$', DTableApiTokenToAccessTokenView.as_view(),name='api-v2.1-dtable-api-token-to-access-token'),
 
     url(r'^api/v2.1/recent-added-files/$', RecentAddedFilesView.as_view(), name='api-v2.1-recent-added-files'),
 

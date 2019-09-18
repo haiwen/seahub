@@ -656,7 +656,6 @@ class DTableApiTokenView(APIView):
 
 
 class DTableApiTokenToAccessTokenView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, workspace_id, name):
