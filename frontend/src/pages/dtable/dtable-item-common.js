@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { gettext, siteRoot } from '../../utils/constants';
+import DeleteTableDialog from '../../components/dialog/delete-table-dialog';
+import ShareTableDialog from '../../components/dialog/share-table-dialog';
+import TableAPITokenDialog from '../../components/dialog/table-api-token-dialog';
 import Rename from '../../components/rename';
-
-const gettext = window.gettext;
-const siteRoot = window.app.config.siteRoot;
 
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
@@ -22,6 +23,9 @@ class DTableItemCommon extends React.Component {
     super(props);
     this.state = {
       isTableRenaming: false,
+      isTableDeleting: false,
+      isTableSharing: false,
+      isTableAPITokenShowing: false,
       dropdownOpen: false,
       active: false,
     };
@@ -56,6 +60,11 @@ class DTableItemCommon extends React.Component {
 
   onShareTableToggle = () => {
     this.props.onShareTableToggle(this.props.table);
+  }
+
+  onTableAPITokenShowCancel = () => {
+    this.setState({isTableAPITokenShowing: !this.state.isTableAPITokenShowing});
+    this.props.onUnfreezedItem();
   }
 
   dropdownToggle = () => {
@@ -98,12 +107,33 @@ class DTableItemCommon extends React.Component {
               >
               </DropdownToggle>
               <DropdownMenu className="drop-list" right={true}>
-                <DropdownItem onClick={this.onRenameTableToggle}>{gettext('Rename')}</DropdownItem>
-                <DropdownItem onClick={this.onDeleteTableToggle}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.onShareTableToggle}>{gettext('Share')}</DropdownItem>
+
+                <DropdownItem onClick={this.onRenameTableCancel}>{gettext('Rename')}</DropdownItem>
+                <DropdownItem onClick={this.onDeleteTableCancel}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.onShareTableCancel}>{gettext('Share')}</DropdownItem>
+                <DropdownItem onClick={this.onTableAPITokenShowCancel}>{gettext('Token')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           )}
+          {this.state.isTableDeleting &&
+            <DeleteTableDialog
+              currentTable={table}
+              deleteCancel={this.onDeleteTableCancel}
+              handleSubmit={this.onDeleteTableSubmit}
+            />
+          }
+          {this.state.isTableSharing &&
+            <ShareTableDialog
+              currentTable={table}
+              ShareCancel={this.onShareTableCancel}
+            />
+          }
+          {this.state.isTableAPITokenShowing &&
+            <TableAPITokenDialog
+              currentTable={table}
+              TableAPITokenShowCancel={this.onTableAPITokenShowCancel}
+            />
+          }
         </div>
       </div>
     );
