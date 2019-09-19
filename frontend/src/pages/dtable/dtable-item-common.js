@@ -111,7 +111,7 @@ class DTableItemCommon extends React.Component {
                 <DropdownItem onClick={this.onRenameTableCancel}>{gettext('Rename')}</DropdownItem>
                 <DropdownItem onClick={this.onDeleteTableCancel}>{gettext('Delete')}</DropdownItem>
                 <DropdownItem onClick={this.onShareTableCancel}>{gettext('Share')}</DropdownItem>
-                <DropdownItem onClick={this.onTableAPITokenShowCancel}>{gettext('Token')}</DropdownItem>
+                <DropdownItem onClick={this.onTableAPITokenShowCancel}>{gettext('API Token')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           )}
