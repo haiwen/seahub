@@ -190,10 +190,10 @@ class DTableShare(models.Model):
         db_table = 'dtable_share'
 
 
-class DTableApiTokenManager(models.Manager):
+class DTableAPITokenManager(models.Manager):
 
     def get_by_token(self, token):
-        qs = self.filter(token=token).select_related('dtable', 'dtable__workspace')
+        qs = self.filter(token=token)
         if qs.exists():
             return qs[0]
         return None
@@ -224,7 +224,7 @@ class DTableApiTokenManager(models.Manager):
         return obj
 
 
-class DTableApiToken(models.Model):
+class DTableAPIToken(models.Model):
     """dtable api token for thirdpart apps to get dtable-server access token
     """
     dtable = models.ForeignKey(DTables, on_delete=models.CASCADE)
@@ -235,7 +235,7 @@ class DTableApiToken(models.Model):
     last_access = models.DateTimeField(auto_now=True)
     permission = models.CharField(max_length=15)
 
-    objects = DTableApiTokenManager()
+    objects = DTableAPITokenManager()
 
     class Meta:
         unique_together = (('dtable', 'app_name'),)
