@@ -17,7 +17,7 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.throttling import UserRateThrottle, AnonRateThrottle
 from seahub.api2.utils import api_error
 from seahub.dtable.models import Workspaces, DTables, DTableApiToken
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -667,7 +667,7 @@ class DTableApiTokenView(APIView):
 
 
 class DTableApiTokenToAccessTokenView(APIView):
-    throttle_classes = (UserRateThrottle,)
+    throttle_classes = (AnonRateThrottle,)
 
     def get(self, request, workspace_id, name):
         """dtable api token to get access token
