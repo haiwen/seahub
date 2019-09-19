@@ -92,6 +92,7 @@ module.exports = {
     viewCdoc: [require.resolve('./polyfills'), paths.appSrc + "/view-file-cdoc.js"],
     search: [require.resolve('./polyfills'), paths.appSrc + "/pages/search"],
     appDTable: [require.resolve('./polyfills'), paths.appSrc + "/app-dtable"],
+    dtableAssetFileView: [require.resolve('./polyfills'), paths.appSrc + "/dtable-asset-file-view.js"],
   },
 
   output: {
