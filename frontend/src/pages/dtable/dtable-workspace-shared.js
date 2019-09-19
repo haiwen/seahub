@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DtableItemShared from './dtable-item-shared';
+import DTableItemShared from './dtable-item-shared';
 import Loading from '../../components/loading';
 import { seafileAPI } from '../../utils/seafile-api';
 
@@ -11,7 +11,7 @@ const propTypes = {
   tableList: PropTypes.array.isRequired,
 };
 
-class DtableWorkspaceShared extends React.Component {
+class DTableWorkspaceShared extends React.Component {
 
   constructor(props) {
     super(props);
@@ -64,7 +64,7 @@ class DtableWorkspaceShared extends React.Component {
         <div className="table-item-container">
           {this.state.tableList.map((table, index) => {
             return (
-              <DtableItemShared key={index} table={table} leaveShareTable={this.leaveShareTable} />
+              <DTableItemShared key={index} table={table} leaveShareTable={this.leaveShareTable} />
             );
           })}
         </div>
@@ -73,6 +73,6 @@ class DtableWorkspaceShared extends React.Component {
   }
 }
 
-DtableWorkspaceShared.propTypes = propTypes;
+DTableWorkspaceShared.propTypes = propTypes;
 
-export default DtableWorkspaceShared;
+export default DTableWorkspaceShared;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Router } from '@reach/router'
-import MainPanelDtables from './main-panel-dtables';
+import MainPanelDTables from './main-panel-dtables';
 import MainPanelApps from './main-panel-apps';
 import MainPanelTempletes from './main-panel-templetes';
 
@@ -26,7 +26,7 @@ class MainPanel extends React.Component {
           </div>
         </div>
         <Router className="reach-router">
-          <MainPanelDtables path={siteRoot + 'dtable/'} />
+          <MainPanelDTables path={siteRoot + 'dtable/'} />
           <MainPanelApps path={siteRoot + 'dtable/apps/'} />
           <MainPanelTempletes path={siteRoot + 'dtable/templetes/'} />
         </Router>

@@ -9,7 +9,7 @@ const propTypes = {
   leaveShareTable: PropTypes.func.isRequired,
 };
 
-class DtableItemShared extends React.Component {
+class DTableItemShared extends React.Component {
 
   constructor(props) {
     super(props);
@@ -56,6 +56,6 @@ class DtableItemShared extends React.Component {
   }
 }
 
-DtableItemShared.propTypes = propTypes;
+DTableItemShared.propTypes = propTypes;
 
-export default DtableItemShared;
+export default DTableItemShared;

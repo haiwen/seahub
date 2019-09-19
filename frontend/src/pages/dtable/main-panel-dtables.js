@@ -4,15 +4,15 @@ import Loading from '../../components/loading';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Workspace from './model/workspace';
-import DtableWorkspaceCommon from './dtable-workspace-common';
-import DtableWorkspaceShared from './dtable-workspace-shared';
+import DTableWorkspaceCommon from './dtable-workspace-common';
+import DTableWorkspaceShared from './dtable-workspace-shared';
 import CreateTableDialog from '../../components/dialog/create-table-dialog';
 
 const propTypes = {
 
 };
 
-class MainPanelDtables extends React.Component {
+class MainPanelDTables extends React.Component {
 
   constructor(props) {
     super(props);
@@ -112,10 +112,10 @@ class MainPanelDtables extends React.Component {
               }
               {!this.state.errorMsg && (
                 <Fragment>
-                  <DtableWorkspaceCommon workspace={personalWorkspace} />
-                  <DtableWorkspaceShared tableList={sharedTableList} />
+                  <DTableWorkspaceCommon workspace={personalWorkspace} />
+                  <DTableWorkspaceShared tableList={sharedTableList} />
                   {groupWorkspaceList.length > 0 && groupWorkspaceList.map((workspace, index) => {
-                    return (<DtableWorkspaceCommon key={index} workspace={workspace} />)
+                    return (<DTableWorkspaceCommon key={index} workspace={workspace} />)
                   })}
                   <button className="btn btn-secondary dtable-add-btn mb-4" onClick={this.onCreateTableToggle}>{gettext('New DTable')}</button>
                 </Fragment>
@@ -134,6 +134,6 @@ class MainPanelDtables extends React.Component {
   }
 }
 
-MainPanelDtables.propTypes = propTypes;
+MainPanelDTables.propTypes = propTypes;
 
-export default MainPanelDtables;
+export default MainPanelDTables;

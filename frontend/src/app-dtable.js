@@ -7,7 +7,7 @@ import './css/layout.css';
 import './css/side-panel.css';
 import './css/dtable.css';
 
-class AppDtable extends React.Component {
+class AppDTable extends React.Component {
 
   constructor(props) {
     super(props);
@@ -17,8 +17,10 @@ class AppDtable extends React.Component {
   }
 
   componentDidMount() {
+    const seletedTabs = ['apps', 'templetes'];
     let paths = location.href.split('/');
-    let currentTab = paths[paths.indexOf('dtable') + 1] || 'dtable';
+    let tab = paths[paths.indexOf('dtable') + 1];
+    let currentTab = seletedTabs.indexOf(tab) > -1 ? tab : 'dtable';
     this.setState({currentTab: currentTab});
   }
 
@@ -39,6 +41,6 @@ class AppDtable extends React.Component {
 }
 
 ReactDOM.render(
-  <AppDtable />,
+  <AppDTable />,
   document.getElementById('wrapper')
 );

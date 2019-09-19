@@ -15,7 +15,7 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/dtable-font.css" />
-{% render_bundle 'appDtable' 'css' %}
+{% render_bundle 'appDTable' 'css' %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
 </head>
@@ -49,7 +49,7 @@
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
 {% render_bundle 'commons' %}
-{% render_bundle 'appDtable' 'js' %}
+{% render_bundle 'appDTable' 'js' %}
 </body>
 </html>
 

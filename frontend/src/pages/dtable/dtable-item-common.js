@@ -16,7 +16,7 @@ const propTypes = {
   onUnfreezedItem: PropTypes.func.isRequired,
 };
 
-class DtableItemCommon extends React.Component {
+class DTableItemCommon extends React.Component {
 
   constructor(props) {
     super(props);
@@ -110,7 +110,7 @@ class DtableItemCommon extends React.Component {
   }
 }
 
-DtableItemCommon.propTypes = propTypes;
+DTableItemCommon.propTypes = propTypes;
 
-export default DtableItemCommon;
+export default DTableItemCommon;
 

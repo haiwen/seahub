@@ -91,7 +91,7 @@ module.exports = {
     viewDataGrid: [require.resolve('./polyfills'), paths.appSrc + "/view-file-dtable.js"],
     viewCdoc: [require.resolve('./polyfills'), paths.appSrc + "/view-file-cdoc.js"],
     search: [require.resolve('./polyfills'), paths.appSrc + "/pages/search"],
-    appDtable: [require.resolve('./polyfills'), paths.appSrc + "/app-dtable"],
+    appDTable: [require.resolve('./polyfills'), paths.appSrc + "/app-dtable"],
   },
 
   output: {

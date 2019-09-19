@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
-import DtableItemCommon from './dtable-item-common';
+import DTableItemCommon from './dtable-item-common';
 import CreateTableDialog from '../../components/dialog/create-table-dialog';
 import DeleteTableDialog from '../../components/dialog/delete-table-dialog';
 import ShareTableDialog from '../../components/dialog/share-table-dialog';
@@ -13,7 +13,7 @@ const propTypes = {
   workspace: PropTypes.object.isRequired,
 };
 
-class DtableWorkspaceCommon extends React.Component {
+class DTableWorkspaceCommon extends React.Component {
 
   constructor(props) {
     super(props);
@@ -142,7 +142,7 @@ class DtableWorkspaceCommon extends React.Component {
           <div className="table-item-container">
             {tableList.map((table, index) => {
               return (
-                <DtableItemCommon
+                <DTableItemCommon
                   key={index}
                   table={table}
                   isItemFreezed={isItemFreezed}
@@ -187,6 +187,6 @@ class DtableWorkspaceCommon extends React.Component {
 }
 
 
-DtableWorkspaceCommon.propTypes = propTypes;
+DTableWorkspaceCommon.propTypes = propTypes;
 
-export default DtableWorkspaceCommon;
+export default DTableWorkspaceCommon;
