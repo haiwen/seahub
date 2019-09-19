@@ -1,4 +1,4 @@
-import React, { Fragment }  from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import {gettext} from '../../utils/constants';
 import {Modal, ModalHeader, ModalBody, Button, Input} from 'reactstrap';
@@ -8,7 +8,6 @@ import toaster from '../toast';
 import copy from 'copy-to-clipboard';
 
 import '../../css/share-link-dialog.css';
-
 
 
 const apiTokenItemPropTypes = {
@@ -22,7 +21,7 @@ class APITokenItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false
+      isOperationShow: false,
     };
   }
 
@@ -50,7 +49,7 @@ class APITokenItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let currentPermission = item.permission;
+
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="name">{item.app_name}</td>
@@ -58,7 +57,7 @@ class APITokenItem extends React.Component {
           <DtableSharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
-            currentPermission={currentPermission}
+            currentPermission={item.permission}
             onPermissionChanged={this.updateAPIToken}
           />
         </td>
@@ -93,6 +92,7 @@ class TableAPITokenDialog extends React.Component {
     super(props);
     this.state = {
       apiTokenList: [],
+      permission: 'rw',
     };
     this.workspaceID = this.props.currentTable.workspace_id;
     this.tableName = this.props.currentTable.name;
@@ -112,6 +112,18 @@ class TableAPITokenDialog extends React.Component {
     });
   };
 
+  deleteAPIToken = (api_token) => {
+
+  };
+
+  updateAPIToken = (api_token, permission) => {
+
+  };
+
+  setPermission = (permission) => {
+    this.setState({permission: permission});
+  };
+
   handleError = (e) => {
     if (e.response) {
       toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), {duration: 3});
@@ -120,7 +132,7 @@ class TableAPITokenDialog extends React.Component {
     }
   };
 
-  componentDidMount () {
+  componentDidMount() {
     this.listAPITokens();
   }
 
@@ -141,47 +153,47 @@ class TableAPITokenDialog extends React.Component {
       <div className='h-100 mx-5'>
         <table>
           <thead>
-            <tr>
-              <th width="45%">{gettext('App Name')}</th>
-              <th width="40%">{gettext('Permission')}</th>
-              <th width="15%"></th>
-            </tr>
+          <tr>
+            <th width="45%">{gettext('App Name')}</th>
+            <th width="40%">{gettext('Permission')}</th>
+            <th width="15%"></th>
+          </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <Input
-                />
-              </td>
-              <td>
-                <DtableSharePermissionEditor
-                  isTextMode={false}
-                  isEditIconShow={false}
-                  currentPermission={this.state.permission}
-                  onPermissionChanged={this.setPermission}
-                />
-              </td>
-              <td>
-                <Button onClick={this.addTableShare}>{gettext('Submit')}</Button>
-              </td>
-            </tr>
+          <tr>
+            <td>
+              <Input
+              />
+            </td>
+            <td>
+              <DtableSharePermissionEditor
+                isTextMode={false}
+                isEditIconShow={false}
+                currentPermission={this.state.permission}
+                onPermissionChanged={this.setPermission}
+              />
+            </td>
+            <td>
+              <Button onClick={this.addTableShare}>{gettext('Submit')}</Button>
+            </td>
+          </tr>
           </tbody>
         </table>
         <div className="share-list-container">
           <table>
             {this.state.apiTokenList.length !== 0 &&
             <thead>
-              <tr>
-                <th width="25%">{gettext('App Name')}</th>
-                <th width="15%">{gettext('Permission')}</th>
-                <th width="50%">{gettext('Access Token')}</th>
-                <th width="5%"></th>
-                <th width="5%"></th>
-              </tr>
+            <tr>
+              <th width="25%">{gettext('App Name')}</th>
+              <th width="15%">{gettext('Permission')}</th>
+              <th width="50%">{gettext('Access Token')}</th>
+              <th width="5%"></th>
+              <th width="5%"></th>
+            </tr>
             </thead>
             }
             <tbody>
-              {renderAPITokenList}
+            {renderAPITokenList}
             </tbody>
           </table>
         </div>
@@ -194,8 +206,10 @@ class TableAPITokenDialog extends React.Component {
     let name = currentTable.name;
 
     return (
-      <Modal isOpen={true} toggle={this.props.TableAPITokenShowCancel} style={{maxWidth: '720px'}} className="share-dialog" >
-        <ModalHeader toggle={this.props.TableAPITokenShowCancel}>{gettext('API Token')} <span className="op-target" title={name}>{name}</span></ModalHeader>
+      <Modal isOpen={true} toggle={this.props.TableAPITokenShowCancel} style={{maxWidth: '720px'}}
+             className="share-dialog">
+        <ModalHeader toggle={this.props.TableAPITokenShowCancel}>{gettext('API Token')} <span className="op-target"
+                                                                                              title={name}>{name}</span></ModalHeader>
         <ModalBody className="share-dialog-content">
           {this.renderContent()}
         </ModalBody>
