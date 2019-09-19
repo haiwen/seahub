@@ -77,6 +77,11 @@ class MainSideNav extends React.Component {
     this.props.tabItemClick(param, id);
   }
 
+  onDtableClick = () => {
+    let url = siteRoot + 'dtable/'
+    location.href = url;
+  }
+  
   getActiveClass = (tab) => {
     return this.props.currentTab === tab ? 'active' : '';
   }
@@ -198,15 +203,6 @@ class MainSideNav extends React.Component {
             </li>
           </ul>
 
-          <h3 className="sf-heading">{gettext('Database')}</h3>
-          <ul className="nav nav-pills flex-column nav-container">
-            <li className="nav-item">
-              <Link className={`nav-link ellipsis ${this.getActiveClass('dtable')}`} to={siteRoot + 'dtable/'} title='DTable' onClick={(e) => this.tabItemClick(e, 'dtable')}>
-                <span className="sf3-font-dtable-logo sf3-font" aria-hidden="true"></span>
-                <span className="nav-text">DTable</span>
-              </Link>
-            </li>
-          </ul>
 
           <h3 className="sf-heading">{gettext('Tools')}</h3>
           <ul className="nav nav-pills flex-column nav-container">
@@ -266,6 +262,12 @@ class MainSideNav extends React.Component {
               {this.renderSharedAdmin()}
             </li>
           </ul>
+        </div>
+
+        <div className="side-nav-link" onClick={this.onDtableClick}>
+          <span className="link-icon icon-left sf3-font sf3-font-dtable-logo" aria-hidden="true"></span>
+          <span className="link-text">Database</span>
+          <span className="link-icon icon-right sf3-font sf3-font-arrow" href=""></span>
         </div>
       </div>
     );

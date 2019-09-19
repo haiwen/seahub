@@ -1,3 +1,89 @@
+.side-panel-north, .main-panel-north {
+  background-color: #fff;
+  box-shadow: 0 2px 3px #eee;
+}
+
+.dtable-header {
+  height: 50px;
+}
+
+.dtable-header .dtable-logo {
+  padding-right: 6px;
+  font-size: 36px;
+  line-height: 36px;
+  color: #FEAC74;
+}
+
+.dtable-header .dtable-text {
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  color: #555555;
+}
+
+.dtable-side-nav {
+  padding: 12px;
+}
+
+.dtable-nav-title {
+  font-size: 1rem;
+  color: #322;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.dtable-side-nav .dtable-nav-list {
+  flex-wrap: inherit;
+  height: auto;
+  border-bottom: none;
+}
+
+.dtable-nav-list .dtable-nav-item {
+  line-height: 38px;
+  border-radius: 0.25rem;
+}
+
+.dtable-nav-list .dtable-nav-item .dtable-nav-link {
+  margin: 0;
+  width: 100%;
+  color: #000;
+}
+
+.dtable-nav-list .dtable-nav-item .dtable-nav-link:hover {
+  background-color: #f5f5f5;
+}
+
+.dtable-nav-list .dtable-nav-item.active .dtable-nav-link {
+  color: #fff;
+  background-color: #F4A74C;
+}
+
+.dtable-nav-list .dtable-nav-link .nav-icon {
+  padding-right: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.dtable-header .common-toolbar {
+  display: flex;
+  margin-left: auto;
+}
+
+.dtable-header .common-toolbar>div {
+  padding-right: 1rem;
+  cursor: pointer;
+}
+
+.dtable-center .cur-view-title {
+  line-height: 50px;
+  font-size: 1.5rem;
+  padding-left: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.dtable-center .dtable-add-btn {
+  width: 8rem;
+}
+
 .workspace {
   margin: 0.5rem 0;
 }
@@ -110,3 +196,6 @@
 .table-item-more-operation i:hover {
   color: #666;
 }
+
+
+

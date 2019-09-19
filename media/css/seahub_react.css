@@ -579,6 +579,37 @@ ul,ol,li {
     padding:12px;
 }
 
+.side-nav-link {
+    display: flex;
+    margin: 24px 12px;
+    color: #FFFFFF;
+    border-radius: 0.25rem;
+    background-color: #FEAC74;
+}
+
+.side-nav-link:hover {
+    background-color: #F3985A;
+    cursor: pointer;
+}
+
+.side-nav-link .link-icon {
+    padding: 0 0.5rem;
+    font-size: 1.5rem;
+}
+
+.side-nav-link .link-icon.icon-right {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.side-nav-link .link-text {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    padding-left: 0.25rem;
+}
+
 .side-nav-footer {
     display:flex;
     flex-shrink:0;
