@@ -193,19 +193,19 @@ class DTableShare(models.Model):
 class DTableApiTokenManager(models.Manager):
 
     def get_by_token(self, token):
-        qs = self.filter(token=token)
+        qs = self.filter(token=token).select_related('dtable', 'dtable__workspace')
         if qs.exists():
             return qs[0]
         return None
 
     def get_by_dtable_and_app_name(self, dtable, app_name):
-        qs = self.filter(dtable=dtable.uuid, app_name=app_name)
+        qs = self.filter(dtable=dtable, app_name=app_name)
         if qs.exists():
             return qs[0]
         return None
 
     def list_by_dtable(self, dtable):
-        return self.filter(dtable_uuid=dtable.uuid)
+        return self.filter(dtable=dtable)
 
     def generate_key(self):
         unique = str(uuid.uuid4())
@@ -214,7 +214,7 @@ class DTableApiTokenManager(models.Manager):
     def add(self, dtable, app_name, email):
 
         obj = self.model(
-            dtable_uuid=dtable.uuid,
+            dtable=dtable,
             app_name=app_name,
             generated_by=email
         )
@@ -226,7 +226,7 @@ class DTableApiTokenManager(models.Manager):
 class DTableApiToken(models.Model):
     """dtable api token for thirdpart apps to get dtable-server access token
     """
-    dtable_uuid = models.UUIDField(db_index=True)
+    dtable = models.ForeignKey(DTables, on_delete=models.CASCADE)
     app_name = models.CharField(max_length=255, db_index=True)
     token = models.CharField(unique=True, max_length=40)
     generated_at = models.DateTimeField(auto_now_add=True)
@@ -236,7 +236,7 @@ class DTableApiToken(models.Model):
     objects = DTableApiTokenManager()
 
     class Meta:
-        unique_together = (('dtable_uuid', 'app_name'),)
+        unique_together = (('dtable', 'app_name'),)
         db_table = 'dtable_api_token'
 
     def update_last_access(self):

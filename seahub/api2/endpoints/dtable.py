@@ -28,6 +28,7 @@ from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, DTABLE_PRIVATE_KEY
 from seahub.dtable.utils import check_dtable_permission, \
     check_dtable_admin_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
+from seahub.base.accounts import User
 
 logger = logging.getLogger(__name__)
 
@@ -671,5 +672,17 @@ class DTableApiTokenToAccessTokenView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'api_token not found.')
 
         obj.update_last_access()
+
+        # get user for dtable server
+        email = obj.generated_by
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, 'user not found.')
+
+        if not user.is_active:
+            return api_error(status.HTTP_403_FORBIDDEN, 'User account is disabled.')
+
+        request.user = user
 
         return DTableAccessTokenView().get(request, workspace_id, name)
