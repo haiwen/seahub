@@ -110,7 +110,7 @@ class DTableAPITokensView(APIView):
         return Response({'api_tokens': api_tokens})
 
     def post(self, request, workspace_id, name):
-        """generate dtable api token for thirdpart app
+        """generate dtable api token
         """
         table_name = name
         table_file_name = table_name + FILE_TYPE
@@ -240,7 +240,7 @@ class DTableAppAccessTokenView(APIView):
     throttle_classes = (AnonRateThrottle,)
 
     def get(self, request, workspace_id, name):
-        """dtable api token to get access token
+        """thirdpart app use dtable api token to get access token
         """
         table_name = name
         table_file_name = table_name + FILE_TYPE
