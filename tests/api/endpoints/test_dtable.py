@@ -230,7 +230,7 @@ class DTableApiTokenTest(BaseTestCase):
         self.remove_repo()
 
     def test_can_create(self):
-        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client'})
+        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client', 'permission': 'rw'})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
@@ -241,7 +241,7 @@ class DTableApiTokenTest(BaseTestCase):
 
         self.login_as(self.admin)
 
-        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client'})
+        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client', 'permission': 'rw'})
         self.assertEqual(403, resp.status_code)
 
     def test_can_create_by_group_admin(self):
@@ -267,7 +267,7 @@ class DTableApiTokenTest(BaseTestCase):
         self.login_as(self.admin)
 
         self.api_token_url = reverse('api-v2.1-dtable-api-token', args=[workspace.id, 'table11'])
-        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client'})
+        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client', 'permission': 'rw'})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
@@ -296,7 +296,7 @@ class DTableApiTokenTest(BaseTestCase):
 
         self.login_as(self.admin)
 
-        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client'})
+        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client', 'permission': 'rw'})
         self.assertEqual(403, resp.status_code)
 
         Workspaces.objects.delete_workspace(workspace.id)
@@ -304,7 +304,7 @@ class DTableApiTokenTest(BaseTestCase):
 
     def test_can_list(self):
         # create
-        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client'})
+        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client', 'permission': 'rw'})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
@@ -325,7 +325,7 @@ class DTableApiTokenTest(BaseTestCase):
 
     def test_can_delete(self):
         # create
-        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client'})
+        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client', 'permission': 'rw'})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
@@ -338,7 +338,7 @@ class DTableApiTokenTest(BaseTestCase):
 
     def test_can_get_access_token_by_api_token(self):
         # create
-        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client'})
+        resp = self.client.post(self.api_token_url, {'app_name': 'mail_client', 'permission': 'rw'})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)

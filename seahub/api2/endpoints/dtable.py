@@ -27,10 +27,13 @@ from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_pa
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, DTABLE_PRIVATE_KEY
 from seahub.dtable.utils import check_dtable_permission, \
     check_dtable_admin_permission
-from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
+from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, PERMISSION_READ, \
+    PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
 from seahub.base.accounts import User
 
 logger = logging.getLogger(__name__)
+permission_tuple = (PERMISSION_ADMIN, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT,
+                    PERMISSION_READ, PERMISSION_READ_WRITE)
 
 FILE_TYPE = '.dtable'
 WRITE_PERMISSION_TUPLE = (PERMISSION_READ_WRITE, PERMISSION_ADMIN)
@@ -582,13 +585,14 @@ class DTableApiTokenView(APIView):
         # main
         api_tokens = list()
         api_token_queryset = DTableApiToken.objects.list_by_dtable(dtable)
-        for obj in api_token_queryset:
+        for api_token_obj in api_token_queryset:
             data = {
-                'app_name': obj.app_name,
-                'api_token': obj.token,
-                'generated_by': obj.generated_by,
-                'generated_at': datetime_to_isoformat_timestr(obj.generated_at),
-                'last_access': datetime_to_isoformat_timestr(obj.last_access),
+                'app_name': api_token_obj.app_name,
+                'api_token': api_token_obj.token,
+                'generated_by': api_token_obj.generated_by,
+                'generated_at': datetime_to_isoformat_timestr(api_token_obj.generated_at),
+                'last_access': datetime_to_isoformat_timestr(api_token_obj.last_access),
+                'permission': api_token_obj.permission,
             }
             api_tokens.append(data)
 
@@ -604,6 +608,12 @@ class DTableApiTokenView(APIView):
         app_name = request.data.get('app_name')
         if not app_name:
             return api_error(status.HTTP_400_BAD_REQUEST, 'app_name invalid.')
+
+        # argument check
+        permission = request.data.get('permission')
+        if not permission or permission not in permission_tuple:
+            error_msg = 'permission invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         error, workspace, dtable = self._resource_check(workspace_id, table_name, table_file_name)
@@ -621,9 +631,9 @@ class DTableApiTokenView(APIView):
         if exist_obj is not None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'api token already exist.')
 
-        obj = DTableApiToken.objects.add(dtable, app_name, username)
+        api_token_obj = DTableApiToken.objects.add(dtable, app_name, username, permission)
 
-        return Response({'api_token': obj.token}, status=status.HTTP_201_CREATED)
+        return Response({'api_token': api_token_obj.token}, status=status.HTTP_201_CREATED)
 
     def delete(self, request, workspace_id, name):
         """delete dtable api token
@@ -648,11 +658,11 @@ class DTableApiTokenView(APIView):
             return error
 
         # main
-        obj = DTableApiToken.objects.get_by_dtable_and_app_name(dtable, app_name)
-        if obj is None:
+        api_token_obj = DTableApiToken.objects.get_by_dtable_and_app_name(dtable, app_name)
+        if api_token_obj is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'api_token not found.')
 
-        obj.delete()
+        api_token_obj.delete()
         return Response({'success': True})
 
 
@@ -662,27 +672,59 @@ class DTableApiTokenToAccessTokenView(APIView):
     def get(self, request, workspace_id, name):
         """dtable api token to get access token
         """
+        table_name = name
+        table_file_name = table_name + FILE_TYPE
+
         token = request.GET.get('api_token')
         if not token:
             return api_error(status.HTTP_400_BAD_REQUEST, 'api_token invalid.')
 
+        # resource check
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = 'Workspace %s not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        table_path = normalize_file_path(table_file_name)
+        table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
+        if not table_file_id:
+            error_msg = 'file %s not found.' % table_file_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         # main
-        obj = DTableApiToken.objects.get_by_token(token)
-        if obj is None:
+        api_token_obj = DTableApiToken.objects.get_by_token(token)
+        if api_token_obj is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'api_token not found.')
 
-        obj.update_last_access()
+        api_token_obj.update_last_access()
 
-        # get user for dtable server
-        email = obj.generated_by
+        # generate json web token
+        payload = {
+            'exp': int(time.time()) + 86400 * 3,
+            'dtable_uuid': dtable.uuid.hex,
+            'username': api_token_obj.generated_by,
+            'permission': api_token_obj.permission,
+            'app_name': api_token_obj.app_name,
+        }
+
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+            access_token = jwt.encode(
+                payload, DTABLE_PRIVATE_KEY, algorithm='HS256'
+            )
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        if not user.is_active:
-            return api_error(status.HTTP_403_FORBIDDEN, 'User account is disabled.')
-
-        request.user = user
-
-        return DTableAccessTokenView().get(request, workspace_id, name)
+        return Response({'access_token': access_token})

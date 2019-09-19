@@ -211,12 +211,13 @@ class DTableApiTokenManager(models.Manager):
         unique = str(uuid.uuid4())
         return hmac.new(unique.encode('utf-8'), digestmod=sha1).hexdigest()
 
-    def add(self, dtable, app_name, email):
+    def add(self, dtable, app_name, email, permission):
 
         obj = self.model(
             dtable=dtable,
             app_name=app_name,
-            generated_by=email
+            generated_by=email,
+            permission=permission,
         )
         obj.token = self.generate_key()
         obj.save()
@@ -232,6 +233,7 @@ class DTableApiToken(models.Model):
     generated_at = models.DateTimeField(auto_now_add=True)
     generated_by = models.CharField(max_length=255)
     last_access = models.DateTimeField(auto_now=True)
+    permission = models.CharField(max_length=15)
 
     objects = DTableApiTokenManager()
 
