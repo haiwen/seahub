@@ -1,46 +1,25 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import Loading from './components/loading';
-import FileViewTip from './components/file-view/file-view-tip';
 import Account from './components/common/account';
-import AudioPlayer from './components/audio-player';
-import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
+import FileViewTip from './components/file-view/file-view-tip';
 import PDFViewer from './components/pdf-viewer';
-import CodeMirror from 'react-codemirror';
-import VideoPlayer from './components/video-player';
+import Audio from './components/file-content-view/audio';
+import Image from './components/file-content-view/image';
+import Markdown from './components/file-content-view/markdown';
+import PDF from './components/file-content-view/pdf';
+import SVG from './components/file-content-view/svg';
+import Text from './components/file-content-view/text';
+import Video from './components/file-content-view/video';
 
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/css/css';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/php/php';
-import 'codemirror/mode/sql/sql';
-import 'codemirror/mode/vue/vue';
-import 'codemirror/mode/xml/xml';
-import 'codemirror/mode/go/go';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/lib/codemirror.css';
-import './css/text-file-view.css';
 import './css/shared-file-view.css';
 
 let loginUser = window.app.pageOptions.name;
 const {
-  fileType, fileExt, rawPath, fileContent, err, fileName, filePath, repoID, commitID
+  fileType, err, fileName, filePath, repoID, commitID
 } = window.app.pageOptions;
-
-const options = {
-  lineNumbers: true,
-  mode: Utils.chooseLanguage(fileExt),
-  extraKeys: {'Ctrl': 'autocomplete'},
-  theme: 'default',
-  textWrapping: true,
-  lineWrapping: true,
-  readOnly: true,
-  cursorBlinkRate: -1,
-};
 
 class FileContent extends React.Component {
   constructor(props) {
@@ -113,14 +92,15 @@ class FileContent extends React.Component {
     }
     return (
       <Fragment>
-        { fileType === 'Document' && 
-          <div className="shared-file-view-body pdf-file-view">
-            <PDFViewer />
-          </div> }
-        { fileType === 'SpreadSheet' &&
-          <div className="shared-file-view-body spreadsheet-file-view">
-            <iframe id="spreadsheet-container" title={fileName} src={`${siteRoot}office-convert/static/${repoID}/${commitID}${encodeURIComponent(filePath)}/index.html`} onLoad={this.setIframeHeight}></iframe>
-          </div> }
+        {
+          fileType === 'Document' ?
+            <div className="shared-file-view-body pdf-file-view">
+              <PDFViewer />
+            </div> :
+            <div className="shared-file-view-body spreadsheet-file-view">
+              <iframe id="spreadsheet-container" title={fileName} src={`${siteRoot}office-convert/static/${repoID}/${commitID}${encodeURIComponent(filePath)}/index.html`} onLoad={this.setIframeHeight}></iframe>
+            </div>
+        }
       </Fragment>
     );
   }
@@ -129,104 +109,42 @@ class FileContent extends React.Component {
 class DTableAssetFileView extends React.Component {
 
   render() {
-    if (err) {
-      return (
-        <FileViewTip errorMsg={err} />
-      );
-    }
-
     let renderItem;
-    switch (fileType) {
-      case 'Audio':
-        renderItem = (
-          <div className="shared-file-view-body d-flex">
-            <div className="flex-1">
-              <AudioPlayer
-                autoplay={false}
-                controls={true}
-                preload="auto"
-                sources={[{
-                  src: rawPath
-                }]}
-              />
-            </div>
-          </div>
-        );
-        break;
-      case 'Document':
-      case 'SpreadSheet':
-        renderItem = (
-          <FileContent />
-        );
-        break;
-      case 'Image':
-        renderItem = (
-          <div className="shared-file-view-body d-flex text-center">
-            <div className="image-file-view flex-1">
-              <img src={rawPath} alt={fileName} id="image-view" />
-            </div>
-          </div>
-        );
-        break;
-      case 'Markdown':
-        renderItem = (
-          <div className="shared-file-view-body">
-            <div className="md-view">
-              <MarkdownViewer
-                markdownContent={fileContent}
-                showTOC={false}
-              />          
-            </div>
-          </div>
-        );
-        break;
-      case 'PDF':
-        renderItem = (
-          <div className="shared-file-view-body pdf-file-view">
-            <PDFViewer />
-          </div>
-        );
-        break;
-      case 'SVG':
-        renderItem = (
-          <div className="shared-file-view-body d-flex">
-            <div className="svg-file-view flex-1">
-              <img src={rawPath} alt={fileName} id="svg-view" />
-            </div>
-          </div>
-        );
-        break;
-      case 'Text':
-        renderItem = (
-          <div className="shared-file-view-body text-file-view">
-            <CodeMirror
-              ref="code-mirror-editor"
-              value={fileContent}
-              options={options}
-            />
-          </div>
-        );
-        break;
-      case 'Video':
-        renderItem = (
-          <div className="shared-file-view-body d-flex">
-            <div className="flex-1">
-              <VideoPlayer
-                autoplay={false}
-                controls={true}
-                preload="auto"
-                sources={[{
-                  src: rawPath
-                }]}
-              />
-            </div>
-          </div>
-        );
-        break;
-      default:
-        renderItem = (
-          <FileViewTip err='File preview unsupported'/>
-        );
+
+    if (err) {
+      renderItem = <FileViewTip />;
+    } else {
+      switch (fileType) {
+        case 'Audio':
+          renderItem = <Audio />;
+          break;
+        case 'Document':
+        case 'SpreadSheet':
+          renderItem = <FileContent />;
+          break;
+        case 'Image':
+          renderItem = <Image />;
+          break;
+        case 'Markdown':
+          renderItem = <Markdown />;
+          break;
+        case 'PDF':
+          renderItem = <PDF />;
+          break;
+        case 'SVG':
+          renderItem = <SVG />;
+          break;
+        case 'Text':
+          renderItem = <Text />;
+          break;
+        case 'Video':
+          renderItem = <Video />;
+          break;
+        default:
+          renderItem = (
+            <FileViewTip />
+          );
+      }
     }
 
     return (

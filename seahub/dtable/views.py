@@ -178,7 +178,7 @@ def dtable_asset_file_view(request, workspace_id, dtable_id, path):
         'file_ext': file_ext,
         'raw_path': raw_path,
         'file_content': file_content,
-        'err': error_msg,
+        'err': 'File preview unsupported' if file_type == 'Unknown' else error_msg,
     }
 
     return render(request, 'dtable_asset_file_view_react.html', return_dict)

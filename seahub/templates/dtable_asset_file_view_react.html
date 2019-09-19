@@ -29,6 +29,7 @@
         rawPath: '{{ raw_path|escapejs }}',
         fileContent: '{{ file_content|escapejs }}',
         err: {% if err %}'{{ err }}'{% else %}''{% endif %},
+        name: '{{request.user.username|email2nickname|escapejs}}',
     };
 </script>
 {% render_bundle 'dtableAssetFileView' 'js' %}
@@ -50,5 +51,4 @@
     </script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
 {% endif %}
-
 {% endblock %}
