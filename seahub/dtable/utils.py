@@ -1,5 +1,5 @@
 from seahub.dtable.models import DTableShare
-from seahub.group.utils import is_group_member, is_group_admin
+from seahub.group.utils import is_group_member, is_group_admin_or_owner
 from seahub.constants import PERMISSION_READ_WRITE
 
 from seaserv import ccnet_api
@@ -33,7 +33,7 @@ def check_dtable_admin_permission(username, owner):
     """
     if '@seafile_group' in owner:
         group_id = int(owner.split('@')[0])
-        if not is_group_admin(group_id, username):
+        if not is_group_admin_or_owner(group_id, username):
             return None
         else:
             return PERMISSION_READ_WRITE

@@ -678,7 +678,7 @@ class DTableApiTokenToAccessTokenView(APIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return api_error(status.HTTP_404_NOT_FOUND, 'user not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
 
         if not user.is_active:
             return api_error(status.HTTP_403_FORBIDDEN, 'User account is disabled.')
