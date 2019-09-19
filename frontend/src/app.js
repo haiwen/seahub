@@ -12,7 +12,6 @@ import DraftsView from './pages/drafts/drafts-view';
 import DraftContent from './pages/drafts/draft-content';
 import FilesActivities from './pages/dashboard/files-activities';
 import Starred from './pages/starred/starred';
-import DTable from './pages/dtable/dtable';
 import LinkedDevices from './pages/linked-devices/linked-devices';
 import editUtilties from './utils/editor-utilties';
 import ShareAdminLibraries from './pages/share-admin/libraries';
@@ -247,7 +246,6 @@ class App extends Component {
                 />
               </DraftsViewWrapper>
               <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <DTable path={siteRoot + 'dtable'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <LinkedDevicesWrapper path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <ShareAdminLibrariesWrapper path={siteRoot + 'share-admin-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <ShareAdminFoldersWrapper path={siteRoot + 'share-admin-folders'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />

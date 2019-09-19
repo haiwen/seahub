@@ -213,6 +213,11 @@ module.exports = {
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/pages/search",
+    ],
+    appDTable: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/app-dtable",
     ]
   },
 

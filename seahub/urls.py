@@ -237,7 +237,9 @@ urlpatterns = [
     url(r'^my-libs/deleted/$', react_fake_view, name="my_libs_deleted"),
     url(r'^org/$', react_fake_view, name="org"),
     url(r'^invitations/$', react_fake_view, name="invitations"),
-    url(r'^dtable/$', react_fake_view, name='dtable'),
+    url(r'^dtable/$', dtable_fake_view, name='dtable'),
+    url(r'^dtable/apps/$', dtable_fake_view, name='dtable'),
+    url(r'^dtable/templetes/$', dtable_fake_view, name='dtable'),
 
     ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),

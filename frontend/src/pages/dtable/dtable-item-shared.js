@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {gettext, siteRoot} from '../../utils/constants';
 
-import '../../css/dtable-page.css';
+const gettext = window.gettext;
+const { siteRoot } = window.app.config;
 
-const shareTableItemPropTypes = {
+const propTypes = {
   table: PropTypes.object.isRequired,
   leaveShareTable: PropTypes.func.isRequired,
 };
 
-class ShareTableItem extends Component {
+class DTableItemShared extends React.Component {
 
   constructor(props) {
     super(props);
@@ -18,23 +18,20 @@ class ShareTableItem extends Component {
     };
   }
 
+  
+  onMouseEnter = () => {
+    this.setState({active: true});
+  };
+  
+  onMouseLeave = () => {
+    this.setState({active: false});
+  };
+  
   onLeaveShareTableSubmit = () => {
     let table = this.props.table;
     this.props.leaveShareTable(table);
   };
-
-  onMouseEnter = () => {
-    this.setState({
-      active: true
-    });
-  };
-
-  onMouseLeave = () => {
-    this.setState({
-      active: false
-    });
-  };
-
+  
   render() {
     let table = this.props.table;
     let tableHref = siteRoot + 'workspace/' + table.workspace_id + '/dtable/' + table.name + '/';
@@ -59,6 +56,6 @@ class ShareTableItem extends Component {
   }
 }
 
-ShareTableItem.propTypes = shareTableItemPropTypes;
+DTableItemShared.propTypes = propTypes;
 
-export default ShareTableItem;
+export default DTableItemShared;
