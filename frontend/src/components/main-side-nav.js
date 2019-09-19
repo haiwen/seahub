@@ -79,7 +79,7 @@ class MainSideNav extends React.Component {
 
   onDtableClick = () => {
     let url = siteRoot + 'dtable/'
-    location.href = url;
+    window.open(url);
   }
   
   getActiveClass = (tab) => {
@@ -267,7 +267,7 @@ class MainSideNav extends React.Component {
         <div className="side-nav-link" onClick={this.onDtableClick}>
           <span className="link-icon icon-left sf3-font sf3-font-dtable-logo" aria-hidden="true"></span>
           <span className="link-text">Database</span>
-          <span className="link-icon icon-right sf3-font sf3-font-arrow" href=""></span>
+          <span className="link-icon icon-right sf3-font sf3-font-arrow"></span>
         </div>
       </div>
     );

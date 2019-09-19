@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 
+const gettext = window.gettext;
 const siteRoot = window.app.config.siteRoot;
 
 const propTypes = {
@@ -29,30 +30,29 @@ class SidePanel extends React.Component {
         </div>
         <div className="side-panel-center">
           <div className="dtable-side-nav">
-            <h3 className="dtable-nav-title">Main</h3>
+            <h3 className="dtable-nav-title">{gettext('Main')}</h3>
             <ul className="nav nav-pills flex-column dtable-nav-list">
-              <li className={`nav-item dtable-nav-item ${this.getActiveClass('dtable')}`} title={'Dtable'} onClick={this.onTabClick.bind(this, 'dtable')}>
+              <li className={`nav-item dtable-nav-item ${this.getActiveClass('dtable')}`} title={gettext('DTable')} onClick={this.onTabClick.bind(this, 'dtable')}>
                 <Link to={siteRoot + 'dtable/'} className="nav-link dtable-nav-link">
                   <span className="sf3-font sf3-font-dtable-logo nav-icon"></span>
-                  <span className="nav-text">Dtable</span>
+                  <span className="nav-text">{gettext('DTable')}</span>
                 </Link>
               </li>
-              <li className={`nav-item dtable-nav-item ${this.getActiveClass('apps')}`} title={'Apps'} onClick={this.onTabClick.bind(this, 'apps')}>
+              <li className={`nav-item dtable-nav-item ${this.getActiveClass('apps')}`} title={gettext('Apps')} onClick={this.onTabClick.bind(this, 'apps')}>
                 <Link to={siteRoot + 'dtable/apps/'} className="nav-link dtable-nav-link">
                   <span className="dtable-font dtable-icon-apps nav-icon"></span>
-                  <span className="nav-text">Apps</span>
+                  <span className="nav-text">{gettext('Apps')}</span>
                 </Link>
               </li>
-              <li className={`nav-item dtable-nav-item ${this.getActiveClass('templetes')}`} title={'Templetes'} onClick={this.onTabClick.bind(this, 'templetes')}>
+              <li className={`nav-item dtable-nav-item ${this.getActiveClass('templetes')}`} title={gettext('Templetes')} onClick={this.onTabClick.bind(this, 'templetes')}>
                 <Link to={siteRoot + 'dtable/templetes/'} className="nav-link dtable-nav-link">
                   <span className="dtable-font dtable-icon-templates nav-icon"></span>
-                  <span className="nav-text">Templetes</span>
+                  <span className="nav-text">{gettext('Templetes')}</span>
                 </Link>
               </li>
             </ul>
           </div>
         </div>
-        <div className="side-panel-footer">footer</div>
       </div>
     );
   }

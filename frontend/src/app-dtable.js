@@ -18,8 +18,8 @@ class AppDtable extends React.Component {
 
   componentDidMount() {
     let paths = location.href.split('/');
-    let currentTab = paths[paths.indexOf('dtable') + 1];
-    this.setState({currentTab: currentTab.toLocaleLowerCase()});
+    let currentTab = paths[paths.indexOf('dtable') + 1] || 'dtable';
+    this.setState({currentTab: currentTab});
   }
 
   onTabClick = (tab) => {
