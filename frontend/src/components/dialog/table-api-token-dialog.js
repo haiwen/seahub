@@ -35,11 +35,11 @@ class APITokenItem extends React.Component {
   };
 
   onDeleteAPIToken = () => {
-    this.props.deleteAPIToken(this.props.item.api_token);
+    this.props.deleteAPIToken(this.props.item.id);
   };
 
   onUpdateAPIToken = (permission) => {
-    this.props.updateAPIToken(this.props.item.api_token, permission);
+    this.props.updateAPIToken(this.props.item.id, permission);
   };
 
   onCopyAPIToken = () => {
@@ -162,10 +162,10 @@ class TableAPITokenDialog extends React.Component {
     });
   };
 
-  deleteAPIToken = (apiToken) => {
-    seafileAPI.deleteTableAPIToken(this.workspaceID, this.tableName, apiToken).then((res) => {
+  deleteAPIToken = (tokenID) => {
+    seafileAPI.deleteTableAPIToken(this.workspaceID, this.tableName, tokenID.toString()).then((res) => {
       const apiTokenList = this.state.apiTokenList.filter(item => {
-        return item.api_token !== apiToken;
+        return item.id !== tokenID;
       });
       this.setState({
         apiTokenList: apiTokenList,
@@ -175,10 +175,10 @@ class TableAPITokenDialog extends React.Component {
     });
   };
 
-  updateAPIToken = (apiToken, permission) => {
-    seafileAPI.updateTableAPIToken(this.workspaceID, this.tableName, apiToken, permission).then((res) => {
+  updateAPIToken = (tokenID, permission) => {
+    seafileAPI.updateTableAPIToken(this.workspaceID, this.tableName, tokenID.toString(), permission).then((res) => {
       let userList = this.state.apiTokenList.filter(item => {
-        if (item.api_token === apiToken) {
+        if (item.id === tokenID) {
           item.permission = permission;
         }
         return item;
