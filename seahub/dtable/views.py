@@ -8,12 +8,14 @@ from seaserv import seafile_api
 
 from seahub.dtable.models import Workspaces, DTables
 from seahub.utils import normalize_file_path, render_error, render_permission_error, \
-    gen_file_get_url
+     gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url
 from seahub.auth.decorators import login_required
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, \
-    SHARE_LINK_EXPIRE_DAYS_DEFAULT, DTABLE_SERVER_URL, SEAFILE_COLLAB_SERVER, MEDIA_URL
-from seahub.dtable.utils import check_dtable_share_permission, check_dtable_permission
+     SHARE_LINK_EXPIRE_DAYS_DEFAULT, DTABLE_SERVER_URL, SEAFILE_COLLAB_SERVER, MEDIA_URL, \
+     FILE_ENCODING_LIST
+from seahub.dtable.utils import check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
+from seahub.views.file import get_file_content
 
 
 FILE_TYPE = '.dtable'
@@ -51,9 +53,7 @@ def dtable_file_view(request, workspace_id, name):
 
     # permission check
     username = request.user.username
-    owner = workspace.owner
-    if not check_dtable_permission(username, owner) and \
-            not check_dtable_share_permission(dtable, username):
+    if not check_dtable_permission(username, workspace, dtable):
         return render_permission_error(request, _('Permission denied.'))
 
     return_dict = {
@@ -106,9 +106,7 @@ def dtable_asset_access(request, workspace_id, dtable_id, path):
 
     # permission check
     username = request.user.username
-    owner = workspace.owner
-    if not check_dtable_permission(username, owner) and \
-            check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+    if check_dtable_permission(username, workspace, dtable) not in WRITE_PERMISSION_TUPLE:
         return render_permission_error(request, _('Permission denied.'))
 
     dl = request.GET.get('dl', '0') == '1'
@@ -121,3 +119,60 @@ def dtable_asset_access(request, workspace_id, dtable_id, path):
     url = gen_file_get_url(token, asset_name)
 
     return HttpResponseRedirect(url)
+
+
+@login_required
+def dtable_asset_file_view(request, workspace_id, dtable_id, path):
+
+    # resource check
+    workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+    if not workspace:
+        return render_error(request, 'Workspace does not exist.')
+
+    repo_id = workspace.repo_id
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        return render_error(request, 'Library does not exist.')
+
+    dtable = DTables.objects.get_dtable_by_uuid(dtable_id)
+    if not dtable:
+        return render_error(request, 'DTable does not exist.')
+
+    asset_path = normalize_file_path(os.path.join('/asset', dtable_id, path))
+    asset_id = seafile_api.get_file_id_by_path(repo_id, asset_path)
+    if not asset_id:
+        return render_error(request, 'Asset file does not exist.')
+
+    # permission check
+    username = request.user.username
+    if not check_dtable_permission(username, workspace, dtable):
+        return render_permission_error(request, _('Permission denied.'))
+
+    file_enc = request.GET.get('file_enc', 'auto')
+    if file_enc not in FILE_ENCODING_LIST:
+        file_enc = 'auto'
+
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, asset_id, 'view', '', use_onetime=False
+    )
+
+    file_name = os.path.basename(normalize_file_path(path))
+    file_type, file_ext = get_file_type_and_ext(file_name)
+
+    inner_path = gen_inner_file_get_url(token, file_name)
+    error_msg, file_content, encoding = get_file_content(file_type, inner_path, file_enc)
+
+    raw_path = gen_file_get_url(token, file_name)
+
+    return_dict = {
+        'repo': repo,
+        'filename': file_name,
+        'file_path': asset_path,
+        'file_type': file_type,
+        'file_ext': file_ext,
+        'raw_path': raw_path,
+        'file_content': file_content,
+        'err': 'File preview unsupported' if file_type == 'Unknown' else error_msg,
+    }
+
+    return render(request, 'dtable_asset_file_view_react.html', return_dict)

@@ -5,29 +5,27 @@ from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
 
 
-def check_dtable_share_permission(dtable, to_user):
-    share_dtable_obj = DTableShare.objects.get_by_dtable_and_to_user(dtable, to_user)
-    if share_dtable_obj:
-        return share_dtable_obj.permission
-
-    return None
-
-
-def check_dtable_permission(username, owner):
+def check_dtable_permission(username, workspace, dtable=None):
     """Check workspace/dtable access permission of a user.
     """
+    owner = workspace.owner
+
+    if dtable:
+        dtable_share = DTableShare.objects.get_by_dtable_and_to_user(dtable, username)
+        if dtable_share:
+            return dtable_share.permission
+
     if '@seafile_group' in owner:
         group_id = int(owner.split('@')[0])
-        if not is_group_member(group_id, username):
-            return None
-        else:
+        if is_group_member(group_id, username):
             return PERMISSION_READ_WRITE
-
+        else:
+            return None
     else:
-        if username != owner:
-            return None
-        else:
+        if username == owner:
             return PERMISSION_READ_WRITE
+        else:
+            return None
 
 
 def list_dtable_related_users(workspace, dtable):

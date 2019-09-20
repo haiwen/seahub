@@ -14,8 +14,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, get_user_common_info
 from seahub.dtable.models import Workspaces, DTables
-from seahub.dtable.utils import check_dtable_permission, check_dtable_share_permission, \
-    list_dtable_related_users
+from seahub.dtable.utils import check_dtable_permission, list_dtable_related_users
 from seahub.utils import normalize_file_path
 from seahub.api2.endpoints.dtable import FILE_TYPE
 
@@ -65,9 +64,7 @@ class DTableRelatedUsersView(APIView):
 
         # permission check
         username = request.user.username
-        owner = workspace.owner
-        if not check_dtable_permission(username, owner) and \
-                not check_dtable_share_permission(dtable, username):
+        if not check_dtable_permission(username, workspace, dtable):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
