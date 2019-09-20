@@ -6,6 +6,7 @@ import DtableSharePermissionEditor from '../select-editor/dtable-share-permissio
 import {seafileAPI} from '../../utils/seafile-api';
 import toaster from '../toast';
 import copy from 'copy-to-clipboard';
+import Loading from '../loading';
 
 import '../../css/share-link-dialog.css';
 
@@ -33,11 +34,11 @@ class APITokenItem extends React.Component {
     this.setState({isOperationShow: false});
   };
 
-  deleteAPIToken = () => {
+  onDeleteAPIToken = () => {
     this.props.deleteAPIToken(this.props.item.api_token);
   };
 
-  updateAPIToken = (permission) => {
+  onUpdateAPIToken = (permission) => {
     this.props.updateAPIToken(this.props.item.api_token, permission);
   };
 
@@ -58,7 +59,7 @@ class APITokenItem extends React.Component {
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
-            onPermissionChanged={this.updateAPIToken}
+            onPermissionChanged={this.onUpdateAPIToken}
           />
         </td>
         <td>{item.api_token}</td>
@@ -71,7 +72,7 @@ class APITokenItem extends React.Component {
         <td>
           <span
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.deleteAPIToken}
+            onClick={this.onDeleteAPIToken}
             title={gettext('Delete')}
           />
         </td>
@@ -93,6 +94,10 @@ class TableAPITokenDialog extends React.Component {
     this.state = {
       apiTokenList: [],
       permission: 'rw',
+      appName: '',
+      errorMsg: '',
+      loading: true,
+      isSubmitBtnActive: true,
     };
     this.workspaceID = this.props.currentTable.workspace_id;
     this.tableName = this.props.currentTable.name;
@@ -102,26 +107,88 @@ class TableAPITokenDialog extends React.Component {
     seafileAPI.listTableAPITokens(this.workspaceID, this.tableName).then((res) => {
       this.setState({
         apiTokenList: res.data.api_tokens,
+        loading: false,
       });
     }).catch(error => {
-      if (error.status === 403) {
-        toaster.danger(gettext('Permission denied'), {duration: 3});
+      if (error.response.status === 403) {
+        this.setState({
+          errorMsg: gettext('Permission denied'),
+        });
       } else {
         this.handleError(error);
       }
     });
   };
 
-  deleteAPIToken = (api_token) => {
-
+  onInputChange = (e) => {
+    let appName = e.target.value;
+    this.setState({
+      appName: appName,
+    });
   };
 
-  updateAPIToken = (api_token, permission) => {
-
+  onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this.addAPIToken();
+    }
   };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
+  };
+
+  addAPIToken = () => {
+    if (!this.state.appName) {
+      return;
+    }
+
+    this.setState({
+      isSubmitBtnActive: false,
+    });
+    const {appName, permission, apiTokenList} = this.state;
+
+    seafileAPI.addTableAPIToken(this.workspaceID, this.tableName, appName, permission).then((res) => {
+      apiTokenList.push(res.data);
+      this.setState({
+        apiTokenList: apiTokenList,
+        isSubmitBtnActive: true,
+      });
+    }).catch(error => {
+      this.handleError(error);
+      this.setState({
+        isSubmitBtnActive: true,
+      });
+    });
+  };
+
+  deleteAPIToken = (apiToken) => {
+    seafileAPI.deleteTableAPIToken(this.workspaceID, this.tableName, apiToken).then((res) => {
+      const apiTokenList = this.state.apiTokenList.filter(item => {
+        return item.api_token !== apiToken;
+      });
+      this.setState({
+        apiTokenList: apiTokenList,
+      });
+    }).catch(error => {
+      this.handleError(error);
+    });
+  };
+
+  updateAPIToken = (apiToken, permission) => {
+    seafileAPI.updateTableAPIToken(this.workspaceID, this.tableName, apiToken, permission).then((res) => {
+      let userList = this.state.apiTokenList.filter(item => {
+        if (item.api_token === apiToken) {
+          item.permission = permission;
+        }
+        return item;
+      });
+      this.setState({
+        userList: userList,
+      });
+    }).catch(error => {
+      this.handleError(error);
+    });
   };
 
   handleError = (e) => {
@@ -142,7 +209,6 @@ class TableAPITokenDialog extends React.Component {
         <APITokenItem
           key={index}
           item={item}
-          permissions={['rw', 'r']}
           deleteAPIToken={this.deleteAPIToken}
           updateAPIToken={this.updateAPIToken}
         />
@@ -150,54 +216,73 @@ class TableAPITokenDialog extends React.Component {
     });
 
     return (
-      <div className='h-100 mx-5'>
-        <table>
-          <thead>
-          <tr>
-            <th width="45%">{gettext('App Name')}</th>
-            <th width="40%">{gettext('Permission')}</th>
-            <th width="15%"></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>
-              <Input
-              />
-            </td>
-            <td>
-              <DtableSharePermissionEditor
-                isTextMode={false}
-                isEditIconShow={false}
-                currentPermission={this.state.permission}
-                onPermissionChanged={this.setPermission}
-              />
-            </td>
-            <td>
-              <Button onClick={this.addTableShare}>{gettext('Submit')}</Button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <div className="share-list-container">
+      <Fragment>
+        {this.state.errorMsg &&
+        <div className='w-100'>
+          <p className="error text-center">{this.state.errorMsg}</p>
+        </div>
+        }
+        {!this.state.errorMsg &&
+        <div className='mx-5 mb-5' style={{height: 'auto'}}>
           <table>
-            {this.state.apiTokenList.length !== 0 &&
             <thead>
-            <tr>
-              <th width="25%">{gettext('App Name')}</th>
-              <th width="15%">{gettext('Permission')}</th>
-              <th width="50%">{gettext('Access Token')}</th>
-              <th width="5%"></th>
-              <th width="5%"></th>
-            </tr>
+              <tr>
+                <th width="45%">{gettext('App Name')}</th>
+                <th width="40%">{gettext('Permission')}</th>
+                <th width="15%"></th>
+              </tr>
             </thead>
-            }
             <tbody>
-            {renderAPITokenList}
+              <tr>
+                <td>
+                  <Input
+                    type="text"
+                    id="appName"
+                    value={this.state.appName}
+                    onChange={this.onInputChange}
+                    onKeyDown={this.onKeyDown}
+                  />
+                </td>
+                <td>
+                  <DtableSharePermissionEditor
+                    isTextMode={false}
+                    isEditIconShow={false}
+                    currentPermission={this.state.permission}
+                    onPermissionChanged={this.setPermission}
+                  />
+                </td>
+                <td>
+                  <Button onClick={this.addAPIToken} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
+                </td>
+              </tr>
             </tbody>
           </table>
+          {this.state.apiTokenList.length !== 0 &&
+          <div className='o-auto' style={{height: 'calc(100% - 91px)'}}>
+            <div className="h-100" style={{maxHeight: '18rem'}}>
+              <table>
+                <thead>
+                  <tr>
+                    <th width="22%">{gettext('App Name')}</th>
+                    <th width="15%">{gettext('Permission')}</th>
+                    <th width="53%">{gettext('Access Token')}</th>
+                    <th width="5%"></th>
+                    <th width="5%"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {renderAPITokenList}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          }
+          {this.state.loading &&
+          <Loading/>
+          }
         </div>
-      </div>
+        }
+      </Fragment>
     );
   };
 
@@ -206,10 +291,12 @@ class TableAPITokenDialog extends React.Component {
     let name = currentTable.name;
 
     return (
-      <Modal isOpen={true} toggle={this.props.TableAPITokenShowCancel} style={{maxWidth: '720px'}}
-             className="share-dialog">
-        <ModalHeader toggle={this.props.TableAPITokenShowCancel}>{gettext('API Token')} <span className="op-target"
-                                                                                              title={name}>{name}</span></ModalHeader>
+      <Modal
+        isOpen={true} className="share-dialog" style={{maxWidth: '720px'}}
+        toggle={this.props.TableAPITokenShowCancel}
+      >
+        <ModalHeader toggle={this.props.TableAPITokenShowCancel}>
+          {gettext('API Token')} <span className="op-target" title={name}>{name}</span></ModalHeader>
         <ModalBody className="share-dialog-content">
           {this.renderContent()}
         </ModalBody>
