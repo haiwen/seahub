@@ -192,6 +192,12 @@ class DTableShare(models.Model):
 
 class DTableAPITokenManager(models.Manager):
 
+    def get_by_pk(self, pk):
+        qs = self.filter(pk=pk)
+        if qs.exists():
+            return qs[0]
+        return None
+
     def get_by_token(self, token):
         qs = self.filter(token=token)
         if qs.exists():

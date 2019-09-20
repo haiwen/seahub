@@ -55,6 +55,7 @@ def _permission_check_for_api_token(username, owner):
 
 def _api_token_obj_to_dict(api_token_obj):
     return {
+        'id': api_token_obj.pk,
         'app_name': api_token_obj.app_name,
         'api_token': api_token_obj.token,
         'generated_by': api_token_obj.generated_by,
@@ -150,7 +151,7 @@ class DTableAPITokenView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def delete(self, request, workspace_id, name, api_token):
+    def delete(self, request, workspace_id, name, api_token_id):
         """delete dtable api token
         """
         table_name = name
@@ -169,7 +170,7 @@ class DTableAPITokenView(APIView):
 
         # main
         try:
-            api_token_obj = DTableAPIToken.objects.get_by_token(api_token)
+            api_token_obj = DTableAPIToken.objects.get_by_pk(api_token_id)
             if api_token_obj is None:
                 return api_error(status.HTTP_404_NOT_FOUND, 'api token not found.')
 
@@ -181,7 +182,7 @@ class DTableAPITokenView(APIView):
 
         return Response({'success': True})
 
-    def put(self, request, workspace_id, name, api_token):
+    def put(self, request, workspace_id, name, api_token_id):
         """update dtable api token
         """
         table_name = name
@@ -206,7 +207,7 @@ class DTableAPITokenView(APIView):
 
         # main
         try:
-            api_token_obj = DTableAPIToken.objects.get_by_token(api_token)
+            api_token_obj = DTableAPIToken.objects.get_by_pk(api_token_id)
             if api_token_obj is None:
                 return api_error(status.HTTP_404_NOT_FOUND, 'api token not found.')
 
@@ -234,9 +235,11 @@ class DTableAppAccessTokenView(APIView):
         table_name = name
 
         # argument check
-        token = request.GET.get('api_token')
-        if not token:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'api_token invalid.')
+        token_list = request.META.get('HTTP_AUTHORIZATION', '').split()
+        if not token_list or token_list[0].lower() != 'token' or len(token_list) != 2:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        api_token = token_list[1]
 
         # resource check
         error, workspace, dtable = _resource_check(workspace_id, table_name)
@@ -245,9 +248,9 @@ class DTableAppAccessTokenView(APIView):
 
         # main
         try:
-            api_token_obj = DTableAPIToken.objects.get_by_token(token)
+            api_token_obj = DTableAPIToken.objects.get_by_token(api_token)
             if api_token_obj is None:
-                return api_error(status.HTTP_404_NOT_FOUND, 'api_token not found.')
+                return api_error(status.HTTP_404_NOT_FOUND, 'api token not found.')
 
             api_token_obj.update_last_access()
         except Exception as e:
