@@ -22,10 +22,11 @@ const {
 } = window.app.pageOptions;
 
 class FileContent extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: !err,
+      isLoading: true,
       errorMsg: '',
     };
   }
@@ -53,12 +54,6 @@ class FileContent extends React.Component {
               isLoading: false,
               errorMsg: ''
             });
-            if (fileType === 'Document') {
-              let scriptNode = document.createElement('script');
-              scriptNode.type = 'text/javascript';
-              scriptNode.src = `${mediaUrl}js/pdf/viewer.js`;
-              document.body.append(scriptNode);            
-            }
         }
       }).catch((error) => {
         if (error.response) {

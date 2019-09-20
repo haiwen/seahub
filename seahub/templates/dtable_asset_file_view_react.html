@@ -1,4 +1,4 @@
-{% extends "base_for_react.html" %}
+{% extends "file_view_react.html" %}
 {% load seahub_tags i18n %}
 {% load render_bundle from webpack_loader %}
 
@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block extra_style %}
-{% if filetype == 'PDF' or filetype == 'Document' %}
+{% if file_type == 'PDF' or file_type == 'Document' %}
     <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
 {% endif %}
 {% endblock %}
@@ -22,7 +22,7 @@
     window.app.pageOptions = {
         repoID: '{{ repo.id }}',
         commitID: '{{ repo.head_cmmt_id }}',
-        fileName: '{{ file_name|escapejs }}',
+        fileName: '{{ filename|escapejs }}',
         filePath: '{{ file_path|escapejs }}',
         fileType: '{{ file_type }}',
         fileExt: '{{ file_ext }}',
@@ -50,5 +50,6 @@
       let sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
     </script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
 {% endif %}
 {% endblock %}

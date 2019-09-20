@@ -172,7 +172,7 @@ def dtable_asset_file_view(request, workspace_id, dtable_id, path):
 
     return_dict = {
         'repo': repo,
-        'file_name': file_name,
+        'filename': file_name,
         'file_path': asset_path,
         'file_type': file_type,
         'file_ext': file_ext,
