@@ -285,4 +285,7 @@ class DTableAppAccessTokenView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'access_token': access_token})
+        return Response({
+            'access_token': access_token,
+            'dtable_uuid': dtable.uuid.hex,
+        })
