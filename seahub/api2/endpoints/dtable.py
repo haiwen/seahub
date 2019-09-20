@@ -24,12 +24,12 @@ from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, gen_file_upload_url
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, DTABLE_PRIVATE_KEY
-from seahub.dtable.utils import check_dtable_permission, \
-    check_dtable_admin_permission
-from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, PERMISSION_READ, \
-    PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
+from seahub.dtable.utils import check_dtable_permission
+from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
+
 
 logger = logging.getLogger(__name__)
+
 
 FILE_TYPE = '.dtable'
 WRITE_PERMISSION_TUPLE = (PERMISSION_READ_WRITE, PERMISSION_ADMIN)
