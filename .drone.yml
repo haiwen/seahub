@@ -2,12 +2,13 @@ pipeline:
   build:
     image: docker.seafile.top/drone/seafile-pro-builder:v4
     pull: true
-    secrets: [ github_token, npm_token, travis ]
+    secrets: [ github_token, npm_token ]
     when:
       branch:
         event: [ push, pull_request ]
 
     commands:
+      - export TRAVIS=1
       - cd /tmp/seafile-test-deploy && git fetch origin python3:python3 && git checkout python3
       - ./bootstrap.sh && cd -
       - export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
