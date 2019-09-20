@@ -13,7 +13,7 @@ from seahub.auth.decorators import login_required
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, \
      SHARE_LINK_EXPIRE_DAYS_DEFAULT, DTABLE_SERVER_URL, SEAFILE_COLLAB_SERVER, MEDIA_URL, \
      FILE_ENCODING_LIST
-from seahub.dtable.utils import check_dtable_share_permission, check_dtable_permission
+from seahub.dtable.utils import check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 from seahub.views.file import get_file_content
 
@@ -53,9 +53,7 @@ def dtable_file_view(request, workspace_id, name):
 
     # permission check
     username = request.user.username
-    owner = workspace.owner
-    if not check_dtable_permission(username, owner) and \
-            not check_dtable_share_permission(dtable, username):
+    if not check_dtable_permission(username, workspace, dtable):
         return render_permission_error(request, _('Permission denied.'))
 
     return_dict = {
@@ -108,9 +106,7 @@ def dtable_asset_access(request, workspace_id, dtable_id, path):
 
     # permission check
     username = request.user.username
-    owner = workspace.owner
-    if not check_dtable_permission(username, owner) and \
-            check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+    if check_dtable_permission(username, workspace, dtable) not in WRITE_PERMISSION_TUPLE:
         return render_permission_error(request, _('Permission denied.'))
 
     dl = request.GET.get('dl', '0') == '1'
@@ -149,9 +145,7 @@ def dtable_asset_file_view(request, workspace_id, dtable_id, path):
 
     # permission check
     username = request.user.username
-    owner = workspace.owner
-    if not check_dtable_permission(username, owner) and \
-            not check_dtable_share_permission(dtable, username):
+    if not check_dtable_permission(username, workspace, dtable):
         return render_permission_error(request, _('Permission denied.'))
 
     file_enc = request.GET.get('file_enc', 'auto')

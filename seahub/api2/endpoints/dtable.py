@@ -24,7 +24,7 @@ from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
     check_filename_with_rename, gen_file_upload_url
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, DTABLE_PRIVATE_KEY
-from seahub.dtable.utils import check_dtable_share_permission, check_dtable_permission
+from seahub.dtable.utils import check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 
 
@@ -199,7 +199,7 @@ class DTablesView(APIView):
 
         # permission check
         username = request.user.username
-        if not check_dtable_permission(username, table_owner):
+        if not check_dtable_permission(username, workspace):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -288,8 +288,7 @@ class DTableView(APIView):
 
         # permission check
         username = request.user.username
-        owner = workspace.owner
-        if not check_dtable_permission(username, owner):
+        if not check_dtable_permission(username, workspace):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -358,8 +357,7 @@ class DTableView(APIView):
 
         # permission check
         username = request.user.username
-        owner = workspace.owner
-        if not check_dtable_permission(username, owner):
+        if not check_dtable_permission(username, workspace):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -439,9 +437,7 @@ class DTableAssetUploadLinkView(APIView):
 
         # permission check
         username = request.user.username
-        owner = workspace.owner
-        if not check_dtable_permission(username, owner) and \
-                check_dtable_share_permission(dtable, username) not in WRITE_PERMISSION_TUPLE:
+        if check_dtable_permission(username, workspace, dtable) not in WRITE_PERMISSION_TUPLE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -508,9 +504,7 @@ class DTableAccessTokenView(APIView):
 
         # permission check
         username = request.user.username
-        owner = workspace.owner
-        if not check_dtable_permission(username, owner) and \
-                not check_dtable_share_permission(dtable, username):
+        if not check_dtable_permission(username, workspace, dtable):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
