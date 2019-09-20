@@ -33,16 +33,16 @@ def check_dtable_admin_permission(username, owner):
     """
     if '@seafile_group' in owner:
         group_id = int(owner.split('@')[0])
-        if not is_group_admin_or_owner(group_id, username):
-            return None
+        if is_group_admin_or_owner(group_id, username):
+            return True
         else:
-            return PERMISSION_READ_WRITE
+            return False
 
     else:
-        if username != owner:
-            return None
+        if username == owner:
+            return True
         else:
-            return PERMISSION_READ_WRITE
+            return False
 
 
 def list_dtable_related_users(workspace, dtable):

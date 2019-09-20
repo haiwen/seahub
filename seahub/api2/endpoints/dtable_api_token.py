@@ -16,16 +16,15 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle, AnonRateThrottle
 from seahub.api2.utils import api_error
 from seahub.dtable.models import Workspaces, DTables, DTableAPIToken
-from seahub.utils import normalize_file_path
 from seahub.settings import DTABLE_PRIVATE_KEY
 from seahub.dtable.utils import check_dtable_admin_permission
-from seahub.api2.endpoints.dtable import FILE_TYPE
-from seahub.api2.endpoints.dtable_share import permission_tuple
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 
 logger = logging.getLogger(__name__)
+API_TOKEN_PERMISSION_TUPLE = (PERMISSION_READ, PERMISSION_READ_WRITE)
 
 
-def _resource_check(workspace_id, table_name, table_file_name):
+def _resource_check(workspace_id, table_name):
     workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
     if not workspace:
         error_msg = 'Workspace %s not found.' % workspace_id
@@ -40,12 +39,6 @@ def _resource_check(workspace_id, table_name, table_file_name):
     dtable = DTables.objects.get_dtable(workspace, table_name)
     if not dtable:
         error_msg = 'dtable %s not found.' % table_name
-        return api_error(status.HTTP_404_NOT_FOUND, error_msg), None, None
-
-    table_path = normalize_file_path(table_file_name)
-    table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
-    if not table_file_id:
-        error_msg = 'file %s not found.' % table_file_name
         return api_error(status.HTTP_404_NOT_FOUND, error_msg), None, None
 
     return None, workspace, dtable
@@ -80,11 +73,10 @@ class DTableAPITokensView(APIView):
         """list dtable api token for thirdpart app
         """
         table_name = name
-        table_file_name = table_name + FILE_TYPE
         username = request.user.username
 
         # resource check
-        error, workspace, dtable = _resource_check(workspace_id, table_name, table_file_name)
+        error, workspace, dtable = _resource_check(workspace_id, table_name)
         if error:
             return error
 
@@ -113,7 +105,6 @@ class DTableAPITokensView(APIView):
         """generate dtable api token
         """
         table_name = name
-        table_file_name = table_name + FILE_TYPE
         username = request.user.username
 
         # argument check
@@ -122,12 +113,12 @@ class DTableAPITokensView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'app_name invalid.')
 
         permission = request.data.get('permission')
-        if not permission or permission not in permission_tuple:
+        if not permission or permission not in API_TOKEN_PERMISSION_TUPLE:
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        error, workspace, dtable = _resource_check(workspace_id, table_name, table_file_name)
+        error, workspace, dtable = _resource_check(workspace_id, table_name)
         if error:
             return error
 
@@ -163,11 +154,10 @@ class DTableAPITokenView(APIView):
         """delete dtable api token
         """
         table_name = name
-        table_file_name = table_name + FILE_TYPE
         username = request.user.username
 
         # resource check
-        error, workspace, dtable = _resource_check(workspace_id, table_name, table_file_name)
+        error, workspace, dtable = _resource_check(workspace_id, table_name)
         if error:
             return error
 
@@ -195,17 +185,16 @@ class DTableAPITokenView(APIView):
         """update dtable api token
         """
         table_name = name
-        table_file_name = table_name + FILE_TYPE
         username = request.user.username
 
         # argument check
         permission = request.data.get('permission')
-        if not permission or permission not in permission_tuple:
+        if not permission or permission not in API_TOKEN_PERMISSION_TUPLE:
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        error, workspace, dtable = _resource_check(workspace_id, table_name, table_file_name)
+        error, workspace, dtable = _resource_check(workspace_id, table_name)
         if error:
             return error
 
@@ -243,7 +232,6 @@ class DTableAppAccessTokenView(APIView):
         """thirdpart app use dtable api token to get access token
         """
         table_name = name
-        table_file_name = table_name + FILE_TYPE
 
         # argument check
         token = request.GET.get('api_token')
@@ -251,7 +239,7 @@ class DTableAppAccessTokenView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'api_token invalid.')
 
         # resource check
-        error, workspace, dtable = _resource_check(workspace_id, table_name, table_file_name)
+        error, workspace, dtable = _resource_check(workspace_id, table_name)
         if error:
             return error
 
