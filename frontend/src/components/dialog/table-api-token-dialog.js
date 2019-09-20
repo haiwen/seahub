@@ -85,7 +85,7 @@ APITokenItem.propTypes = apiTokenItemPropTypes;
 
 const propTypes = {
   currentTable: PropTypes.object.isRequired,
-  TableAPITokenShowCancel: PropTypes.func.isRequired,
+  onTableAPITokenToggle: PropTypes.func.isRequired,
 };
 
 class TableAPITokenDialog extends React.Component {
@@ -293,9 +293,9 @@ class TableAPITokenDialog extends React.Component {
     return (
       <Modal
         isOpen={true} className="share-dialog" style={{maxWidth: '720px'}}
-        toggle={this.props.TableAPITokenShowCancel}
+        toggle={this.props.onTableAPITokenToggle}
       >
-        <ModalHeader toggle={this.props.TableAPITokenShowCancel}>
+        <ModalHeader toggle={this.props.onTableAPITokenToggle}>
           {gettext('API Token')} <span className="op-target" title={name}>{name}</span></ModalHeader>
         <ModalBody className="share-dialog-content">
           {this.renderContent()}
