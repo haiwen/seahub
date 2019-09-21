@@ -186,11 +186,17 @@
   "Euro": "Euro",
   "Failed_to_execute_operation_on_server": "Failed to execute operation on server: ",
   "Statistics": "Statistics",
+  "Forms": "Forms",
   "Create_a_new_statistic": "Create a new statistic",
+  "Add_a_new_form": "Add a new form",
+  "No_forms_added": "No forms added",
+  "Set_form": "Set form",
+  "Create_form": "Create form",
   "Find_an_option": "Find an option",
   "No_options_available": "No options available.",
   "Table": "Table",
   "Views": "Views",
+  "Filter_field": "Filter field",
   "Group_By": "Group By",
   "Summarize_Method": "Summarize Method",
   "Summarized_Field": "Summarized Field",
@@ -209,5 +215,8 @@
   "External_sharing_link": "External sharing link",
   "The_share_link_has_been_copied": "The share link has been copied.",
   "Failed_to_get_share_link": "Failed to get share link.",
-  "Server_is_not_connected_Operation_will_be_sent_to_server_later": "Server is not connected. Operation will be sent to server later."
+  "Server_is_not_connected_Operation_will_be_sent_to_server_later": "Server is not connected. Operation will be sent to server later.",
+  "US": "US",
+  "European": "European",
+  "ISO": "ISO"
 }
