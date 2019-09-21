@@ -18,7 +18,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.dtable.models import Workspaces, DTables
+from seahub.dtable.models import Workspaces, DTables, DTableRowShares
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
@@ -276,7 +276,7 @@ class DTableView(APIView):
 
         dtable = DTables.objects.get_dtable(workspace, old_table_name)
         if not dtable:
-            error_msg = 'dtable %s not found.' % old_table_name
+            error_msg = 'DTable %s not found.' % old_table_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         old_table_file_name = old_table_name + FILE_TYPE
@@ -346,7 +346,7 @@ class DTableView(APIView):
 
         dtable = DTables.objects.get_dtable(workspace, table_name)
         if not dtable:
-            error_msg = 'dtable %s not found.' % table_name
+            error_msg = 'DTable %s not found.' % table_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         table_path = normalize_file_path(table_file_name)
@@ -432,7 +432,7 @@ class DTableAssetUploadLinkView(APIView):
 
         dtable = DTables.objects.get_dtable(workspace, table_name)
         if not dtable:
-            error_msg = 'dtable %s not found.' % table_name
+            error_msg = 'DTable %s not found.' % table_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -475,9 +475,7 @@ class DTableAccessTokenView(APIView):
     def get(self, request, workspace_id, name):
         """get dtable access token
         """
-
         table_name = name
-        table_file_name = table_name + FILE_TYPE
 
         # resource check
         workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
@@ -493,13 +491,7 @@ class DTableAccessTokenView(APIView):
 
         dtable = DTables.objects.get_dtable(workspace, table_name)
         if not dtable:
-            error_msg = 'dtable %s not found.' % table_name
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        table_path = normalize_file_path(table_file_name)
-        table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
-        if not table_file_id:
-            error_msg = 'file %s not found.' % table_file_name
+            error_msg = 'DTable %s not found.' % table_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -525,3 +517,182 @@ class DTableAccessTokenView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'access_token': access_token})
+
+
+class DTableRowSharesView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request):
+        """get a dtable row share link
+
+        Permission:
+        1. owner
+        2. group member
+        3. shared user with `rw` or `admin` permission
+        """
+        # argument check
+        workspace_id = request.GET.get('workspace_id', None)
+        if not workspace_id:
+            error_msg = 'workspace_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        table_name = request.GET.get('name', None)
+        if not table_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        table_id = request.GET.get('table_id', None)
+        if not table_id:
+            error_msg = 'table_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        row_id = request.GET.get('row_id', None)
+        if not row_id:
+            error_msg = 'row_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = 'Workspace %s not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'DTable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not check_dtable_permission(username, workspace):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        dtable = DTables.objects.get_dtable(workspace, name)
+        dtable_uuid = dtable.uuid.hex
+        try:
+            row_share = DTableRowShares.objects.get_dtable_row_share(
+                username, workspace_id, dtable_uuid, table_id, row_id
+            )
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({"row_share": row_share}, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        """create a dtable row share link
+
+        Permission:
+        1. owner
+        2. group member
+        3. shared user with `rw` or `admin` permission
+        """
+        # argument check
+        workspace_id = request.POST.get('workspace_id')
+        if not workspace_id:
+            error_msg = 'workspace_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        table_name = request.POST.get('name')
+        if not table_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        table_id = request.POST.get('table_id')
+        if not table_id:
+            error_msg = 'table_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        row_id = request.POST.get('row_id')
+        if not row_id:
+            error_msg = 'row_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = 'Workspace %s not found.' % workspace_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = workspace.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not dtable:
+            error_msg = 'DTable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        owner = workspace.owner
+        dtable = DTables.objects.get_dtable(workspace, table_name)
+        if not check_dtable_permission(username, owner) and \
+                not check_dtable_share_permission(dtable, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        dtable_uuid = dtable.uuid.hex
+        row_share = DTableRowShares.objects.get_dtable_row_share(
+            username, workspace_id, dtable_uuid, table_id, row_id
+        )
+        if row_share:
+            error_msg = 'Row share link %s already exists.' % row_share['token']
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        try:
+            row_share = DTableRowShares.objects.add_dtable_row_share(
+                username, workspace_id, dtable_uuid, table_id, row_id
+            )
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({"row_share": row_share}, status=status.HTTP_201_CREATED)
+
+
+class DTableRowShareView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, token):
+        """ Delete share link.
+
+        Permission:
+        1. dtable row share owner;
+        """
+        # resource check
+        row_share = DTableRowShares.objects.get_dtable_row_share_by_token(token)
+        if not row_share:
+            return Response({'success': True}, status=status.HTTP_200_OK)
+
+        # permission check
+        username = request.user.username
+        row_share_owner = row_share.username
+        if username != row_share_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            DTableRowShares.objects.delete_dtable_row_share(token)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True}, status=status.HTTP_200_OK)

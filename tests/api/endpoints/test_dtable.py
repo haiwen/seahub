@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import uuid
 
 from django.core.urlresolvers import reverse
 
@@ -7,6 +8,7 @@ from seaserv import seafile_api
 
 from seahub.dtable.models import Workspaces
 from seahub.test_utils import BaseTestCase
+from tests.common.utils import randstring
 
 
 class WorkspacesViewTest(BaseTestCase):
@@ -191,3 +193,24 @@ class DTableTest(BaseTestCase):
         url4 = reverse('api-v2.1-dtable-access-token', args=[self.workspace.id, 'table11'])
         resp = self.client.get(url4, {}, 'application/x-www-form-urlencoded')
         self.assertEqual(404, resp.status_code)
+
+    def test_create_dtable_row_share(self):
+        resp = self.client.post(self.url1, {'name': 'table12', 'owner': self.user.username})
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp["table"]["name"] == 'table12'
+
+        url4 = reverse('api-v2.1-dtable-row-shares')
+        resp = self.client.post(
+            url4,
+            {
+                'workspace_id': self.workspace.id,
+                'name': 'table12',
+                'table_id': randstring(4),
+                'row_id': uuid.uuid4()
+            }
+        )
+        self.assertEqual(201, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertIsNotNone(json_resp["row_share"])

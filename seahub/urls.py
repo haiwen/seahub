@@ -91,7 +91,7 @@ from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.dtable import WorkspacesView, DTableView, DTablesView, \
-     DTableAssetUploadLinkView, DTableAccessTokenView
+     DTableAssetUploadLinkView, DTableAccessTokenView, DTableRowSharesView, DTableRowSharesView, DTableRowShareView
 from seahub.api2.endpoints.dtable_api_token import DTableAPITokensView, DTableAPITokenView, DTableAppAccessTokenView
 from seahub.api2.endpoints.dtable_forms import DTableFormLinksView, DTableFormLinkView
 from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
@@ -396,6 +396,8 @@ urlpatterns = [
     url(r'^api/v2.1/dtable/app-access-token/$', DTableAppAccessTokenView.as_view(), name='api-v2.1-dtable-app-access-token'),
     url(r'^api/v2.1/dtable-form-links/$', DTableFormLinksView.as_view(), name='api-v2.1-dtable-form-links'),
     url(r'^api/v2.1/dtable-form-links/(?P<token>[-0-9a-f]{36})/$', DTableFormLinkView.as_view(), name='api-v2.1-dtable-form-link'),
+    url(r'^api/v2.1/dtable-row-shares/$', DTableRowSharesView.as_view(), name='api-v2.1-dtable-row-shares'),
+    url(r'^api/v2.1/dtable-row-shares/(?P<token>[-0-9a-f]{36})/$', DTableRowShareView.as_view(), name='api-v2.1-dtable-row-share'),
 
     url(r'^api/v2.1/recent-added-files/$', RecentAddedFilesView.as_view(), name='api-v2.1-recent-added-files'),
 
