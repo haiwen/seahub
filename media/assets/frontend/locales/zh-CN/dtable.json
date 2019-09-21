@@ -188,9 +188,15 @@
   "Statistics": "统计",
   "Create_a_new_statistic": "创建一张新的统计表",
   "Find_an_option": "查找标签",
+  "Forms": "表单",
+  "Add_a_new_form": "添加新表单",
+  "No_forms_added": "没有表单被添加",
   "No_options_available": "没有找到标签。",
   "Table": "表格",
   "Views": "视图",
+  "Set_form": "设置表单",
+  "Create_form": "创建表单",
+  "Filter_field": "筛选字段",
   "Group_By": "分类字段",
   "Summarize_Method": "归总方法",
   "Summarized_Field": "归总字段",
@@ -209,5 +215,8 @@
   "External_sharing_link": "外部共享链接",
   "The_share_link_has_been_copied": "共享链接已被复制。",
   "Failed_to_get_share_link": "获取共享链接失败。",
-  "Server_is_not_connected_Operation_will_be_sent_to_server_later": "服务器未连接。 操作稍后将发送到服务器。"
+  "Server_is_not_connected_Operation_will_be_sent_to_server_later": "服务器未连接。 操作稍后将发送到服务器。",
+  "US": "美国格式",
+  "European": "欧洲格式",
+  "ISO": "国际标准格式"
 }
