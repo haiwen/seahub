@@ -6,6 +6,7 @@ import DTableItemCommon from './dtable-item-common';
 import CreateTableDialog from '../../components/dialog/create-table-dialog';
 import DeleteTableDialog from '../../components/dialog/delete-table-dialog';
 import ShareTableDialog from '../../components/dialog/share-table-dialog';
+import TableAPITokenDialog from '../../components/dialog/table-api-token-dialog';
 
 const gettext = window.gettext;
 
@@ -24,6 +25,7 @@ class DTableWorkspaceCommon extends React.Component {
       isShowCreateDialog: false,
       isShowDeleteDialog: false,
       isShowSharedDialog: false,
+      isShowAPITokenDialog: false,
       currentTable: null,
     }
   }
@@ -74,6 +76,14 @@ class DTableWorkspaceCommon extends React.Component {
   onShareTableToggle = (table) => {
     this.setState({
       isShowSharedDialog: !this.state.isShowSharedDialog,
+      currentTable: table
+    });
+    this.onUnfreezedItem();
+  }
+
+  onTableAPITokenToggle = (table) => {
+    this.setState({
+      isShowAPITokenDialog: !this.state.isShowAPITokenDialog,
       currentTable: table
     });
     this.onUnfreezedItem();
@@ -149,6 +159,7 @@ class DTableWorkspaceCommon extends React.Component {
                   renameTable={this.renameTable}
                   onShareTableToggle={this.onShareTableToggle}
                   onDeleteTableToggle={this.onDeleteTableToggle}
+                  onTableAPITokenToggle={this.onTableAPITokenToggle}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
                 />
@@ -179,6 +190,12 @@ class DTableWorkspaceCommon extends React.Component {
           <ShareTableDialog 
             currentTable={this.state.currentTable} 
             ShareCancel={this.onShareTableToggle} 
+          />
+        }
+        {this.state.isShowAPITokenDialog &&
+          <TableAPITokenDialog
+            currentTable={this.state.currentTable}
+            onTableAPITokenToggle={this.onTableAPITokenToggle}
           />
         }
       </Fragment>

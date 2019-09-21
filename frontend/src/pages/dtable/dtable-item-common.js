@@ -12,6 +12,7 @@ const propTypes = {
   renameTable: PropTypes.func.isRequired,
   onDeleteTableToggle: PropTypes.func.isRequired,
   onShareTableToggle: PropTypes.func.isRequired,
+  onTableAPITokenToggle: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
 };
@@ -38,13 +39,13 @@ class DTableItemCommon extends React.Component {
       this.setState({active: false});
     }
   }
-  
+
   onRenameTableConfirm = (newTableName) => {
     let oldTableName = this.props.table.name;
     this.props.renameTable(oldTableName, newTableName);
     this.onRenameTableToggle();
   }
-  
+
   onRenameTableToggle = () => {
     this.setState({isTableRenaming: !this.state.isTableRenaming});
     this.props.onUnfreezedItem();
@@ -56,6 +57,10 @@ class DTableItemCommon extends React.Component {
 
   onShareTableToggle = () => {
     this.props.onShareTableToggle(this.props.table);
+  }
+
+  onTableAPITokenToggle = () => {
+    this.props.onTableAPITokenToggle(this.props.table);
   }
 
   dropdownToggle = () => {
@@ -101,6 +106,7 @@ class DTableItemCommon extends React.Component {
                 <DropdownItem onClick={this.onRenameTableToggle}>{gettext('Rename')}</DropdownItem>
                 <DropdownItem onClick={this.onDeleteTableToggle}>{gettext('Delete')}</DropdownItem>
                 <DropdownItem onClick={this.onShareTableToggle}>{gettext('Share')}</DropdownItem>
+                <DropdownItem onClick={this.onTableAPITokenToggle}>{gettext('API Token')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           )}
