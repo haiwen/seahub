@@ -55,7 +55,6 @@ def _permission_check_for_api_token(username, owner):
 
 def _api_token_obj_to_dict(api_token_obj):
     return {
-        'id': api_token_obj.pk,
         'app_name': api_token_obj.app_name,
         'api_token': api_token_obj.token,
         'generated_by': api_token_obj.generated_by,
@@ -151,7 +150,7 @@ class DTableAPITokenView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def delete(self, request, workspace_id, name, api_token_id):
+    def delete(self, request, workspace_id, name, app_name):
         """delete dtable api token
         """
         table_name = name
@@ -170,7 +169,7 @@ class DTableAPITokenView(APIView):
 
         # main
         try:
-            api_token_obj = DTableAPIToken.objects.get_by_pk(api_token_id)
+            api_token_obj = DTableAPIToken.objects.get_by_dtable_and_app_name(dtable, app_name)
             if api_token_obj is None:
                 return api_error(status.HTTP_404_NOT_FOUND, 'api token not found.')
 
@@ -182,7 +181,7 @@ class DTableAPITokenView(APIView):
 
         return Response({'success': True})
 
-    def put(self, request, workspace_id, name, api_token_id):
+    def put(self, request, workspace_id, name, app_name):
         """update dtable api token
         """
         table_name = name
@@ -207,7 +206,7 @@ class DTableAPITokenView(APIView):
 
         # main
         try:
-            api_token_obj = DTableAPIToken.objects.get_by_pk(api_token_id)
+            api_token_obj = DTableAPIToken.objects.get_by_dtable_and_app_name(dtable, app_name)
             if api_token_obj is None:
                 return api_error(status.HTTP_404_NOT_FOUND, 'api token not found.')
 

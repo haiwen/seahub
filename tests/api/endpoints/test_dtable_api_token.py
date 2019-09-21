@@ -48,7 +48,6 @@ class DTableAPITokensTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert json_resp['id']
         assert json_resp['api_token']
         assert json_resp['app_name'] == 'mail_client'
         assert json_resp['api_token']
@@ -92,7 +91,6 @@ class DTableAPITokensTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert json_resp['id']
         assert json_resp['api_token']
         assert json_resp['app_name'] == 'mail_client'
         assert json_resp['api_token']
@@ -137,7 +135,6 @@ class DTableAPITokensTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert json_resp['id']
         assert json_resp['api_token']
         assert json_resp['app_name'] == 'mail_client'
         assert json_resp['api_token']
@@ -153,7 +150,6 @@ class DTableAPITokensTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['api_tokens']
         assert json_resp['api_tokens'][0]
-        assert json_resp['api_tokens'][0]['id']
         assert json_resp['api_tokens'][0]['app_name'] == 'mail_client'
         assert json_resp['api_tokens'][0]['api_token']
         assert json_resp['api_tokens'][0]['generated_by'] == self.user.username
@@ -189,7 +185,6 @@ class DTableAPITokenTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert json_resp['id']
         assert json_resp['api_token']
         assert json_resp['app_name'] == 'mail_client'
         assert json_resp['api_token']
@@ -199,10 +194,10 @@ class DTableAPITokenTest(BaseTestCase):
         assert json_resp['permission'] == 'rw'
 
         self.api_token = json_resp['api_token']
-        self.api_token_id = json_resp['id']
+        self.app_name = json_resp['app_name']
 
         # url
-        self.api_token_url = reverse('api-v2.1-dtable-api-token', args=[self.workspace.id, 'table8', self.api_token_id])
+        self.api_token_url = reverse('api-v2.1-dtable-api-token', args=[self.workspace.id, 'table8', self.app_name])
 
     def tearDown(self):
         assert len(Workspaces.objects.all()) == 1
@@ -276,7 +271,6 @@ class DTableAppAccessTokenTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert json_resp['id']
         assert json_resp['api_token']
         assert json_resp['app_name'] == 'mail_client'
         assert json_resp['api_token']
