@@ -462,6 +462,8 @@ urlpatterns = patterns(
     url(r'^useradmin/batchadduser/example/$', batch_add_user_example, name='batch_add_user_example'),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
+
+    url(r'^dbviewer/', include('seahub.dbviewer.urls'), name='dbviewer'),
 )
 
 from seahub.utils import EVENTS_ENABLED

@@ -1,0 +1,173 @@
+{% load seahub_tags i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<!--代码由www.magicalcoder.com可视化布局器拖拽生成-->
+<head>
+    <meta charset="UTF-8">
+    <title>{{ filename }}</title>
+    <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}custom/dbviewer/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}custom/dbviewer/css/load.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+    <script src="{{ MEDIA_URL }}custom/dbviewer/js/json3.min.js"></script>
+    <script src="{{ MEDIA_URL }}custom/dbviewer/js/layui.all.js"></script>
+    <script src="{{ MEDIA_URL }}custom/dbviewer/js/echarts.min.js"></script>
+    <script src="{{ MEDIA_URL }}rest_framework/js/jquery-1.8.1-min.js"></script>
+    <!--layui的table col操作列自定义的模板 您可以根据自己的实际情况改动-->
+    <script type="text/html" id="tableToolbar">
+        <div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>
+        <div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>
+        <div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>
+    </script>
+    <script type="text/html" id="tableColToolbar">
+        <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+        <!-- <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a> -->
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</head>
+
+<body class="layui-form" style="background-color:#eee;padding: 20px;">
+
+<select lay-search id="db-table">
+</select>
+
+<script>
+
+</script>
+
+<!-- My custom script -->
+<script type="text/javascript" src="{% static "scripts/lib/jquery.ui.tabs.js" %}"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1510651325"></script>
+<script src="{{ MEDIA_URL }}custom/dbviewer/js/layui.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}custom/dbviewer/js/alert.js"></script>
+<script>
+    var encoded_path = encodePath('{{ path|escapejs }}');
+
+    function load_table() {
+        var current_table = $("#db-table").val();
+        var db_table_html_head = '<div class="magicalcoder-table" mc-attr-bool-loading="true" mc-attr-str-url="/dbviewer/{{ repo.id }}/query_data/' +
+            current_table + encoded_path + '"' +
+            '     mc-attr-str-toolbar="#tableToolbar"\n' +
+            '     mc-attr-json-default-toolbar="[&quot;exports&quot;,&quot;print&quot;,&quot;filter&quot;]" mc-attr-bool-page="true"\n' +
+            '     mc-attr-bool-total-row="false" mc-attr-str-method="get">\n'
+
+        var content = '';
+        var db_table_html_foot = '<span class="magicalcoder-table-th" mc-attr-str-toolbar="#tableColToolbar">操作</span></div>';
+
+        $.ajax({
+            url: '{{ SITE_ROOT }}dbviewer/{{ repo.id }}/columns/' + current_table + encoded_path,
+            async: false,
+            success: function (result) {
+                $.each(JSON.parse(result), function (index, value) {
+                    content += '<span class="magicalcoder-table-th" mc-attr-str-field="{value}" mc-attr-bool-sort="true">{value}</span>'.replace(/{value}/g, value);
+                })
+            }
+        })
+
+        $("div.layui-table-view").remove();
+        var db_table_html = db_table_html_head + content + db_table_html_foot;
+        $("body").append(db_table_html);
+    }
+
+    // 获取URL参数
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var cache = {};
+    // 全屏遮罩函数
+    $.mask_fullscreen = function (timeout) {
+        if ($(".mask[ele=full_screen]").length > 0) {
+            return;
+        }
+        //禁止滚动
+        $("body").addClass("scroll-off");
+        // 天下元素
+        var mask = '<div style="z-index: 1000;" class="mask" ele="full_screen"><div>数据加载中...</div></div>';
+        $("body").append(mask);
+        // 清除原有的定时器
+        clearTimeout(cache["full_screen"]);
+        if (timeout && timeout > 0) {
+            var s = setTimeout(function () {
+                // 清除mask
+                $(".mask[ele=full_screen]").remove();
+                $("body").removeClass("scroll-off");
+            }, timeout);
+            cache["full_screen"] = s;
+        }
+    }
+    // 加载动画
+    $.mask_fullscreen();
+
+    var src_path = '{{ SITE_ROOT }}dbviewer/{{ repo.id }}/query_table' + encoded_path;
+
+    // 发送Ajax请求，getJSON不能发送同步请求
+    // 请求数据表
+    $.ajax({
+        url: src_path,
+        success: function (result) {
+            // 清除遮罩
+            $(".mask[ele=full_screen]").remove();
+            $("body").removeClass("scroll-off");
+
+            //JSON.parse()把字符串转json
+            $.each(JSON.parse(result), function (index, value) {
+                // /str/g 表示全文匹配，并替换，如果用 /str/ 则只匹配和替换第一个
+                $("#db-table").append('<option value="{value}">{value}</option>'.replace(/{value}/g, value));
+            })
+            var current_table = GetQueryString("table");
+            // 将下拉框显示为当前查看的表
+            // $("#db-table").find('option[value="'+current_table+'"]').attr("selected", "");
+            load_table();
+
+            magicalDragLayuiUtil.rebuildLayUiControls();
+        }
+    })
+
+    // 获取下拉框选择的元素
+    $("dd").click(load_table)
+
+    // 判断使用的浏览器
+    function myBrowser(){
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+        var isOpera = userAgent.indexOf("Opera") > -1;
+        if (isOpera) {
+            return "Opera"
+        } //判断是否Opera浏览器
+        if (userAgent.indexOf("Firefox") > -1) {
+            return "FF";
+        } //判断是否Firefox浏览器
+        if (userAgent.indexOf("Chrome") > -1){
+            return "Chrome";
+        }
+        if (userAgent.indexOf("Safari") > -1) {
+            return "Safari";
+        } //判断是否Safari浏览器
+        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+            return "IE";
+        } //判断是否IE浏览器
+        if (userAgent.indexOf("Trident") > -1) {
+            return "Trident";
+        }
+    }
+
+    //判断使用的浏览器
+    var mb = myBrowser();
+    if ("IE" === mb || "Trident" === mb) {
+        var notic_message = "检测到你的浏览器版本较低，页面显示可能不正常，建议切换其他浏览器进行浏览";
+        $("body").prepend("<div class=\"alert alert-warning fade in\">\n" +
+            "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n" +
+            "    {content}\n".replace(/{content}/g, notic_message) +
+            "</div>\n")
+    }
+</script>
+<!-- My custom script -->
+
+</body>
+</html>
