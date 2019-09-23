@@ -6,18 +6,19 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   title: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
-  toggle: PropTypes.func.isRequired,
+  confirmBtnText: PropTypes.string,
   executeOperation: PropTypes.func.isRequired,
-  confirmBtnText: PropTypes.string
+  toggleDialog: PropTypes.func.isRequired
 };
 
-class CommonOperationDialog extends Component {
+class CommonOperationConfirmationDialog extends Component {
 
   toggle = () => {
-    this.props.toggle();
+    this.props.toggleDialog();
   }
 
   executeOperation = () => {
+    this.toggle();
     this.props.executeOperation();
   }
 
@@ -31,13 +32,13 @@ class CommonOperationDialog extends Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.executeOperation}>{confirmBtnText ? confirmBtnText : gettext('Confirm')}</Button>
+          <Button color="primary" onClick={this.executeOperation}>{confirmBtnText || gettext('Confirm')}</Button>
         </ModalFooter>
       </Modal>
     );
   }
 }
 
-CommonOperationDialog.propTypes = propTypes;
+CommonOperationConfirmationDialog.propTypes = propTypes;
 
-export default CommonOperationDialog;
+export default CommonOperationConfirmationDialog;

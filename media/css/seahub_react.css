@@ -553,6 +553,7 @@ ul,ol,li {
   padding: 0 16px;
 }
 .cur-view-path.tab-nav-container .nav .nav-item .nav-link {
+  justify-content: center; /* make short word like 'All' in the center */
   margin: 0 0.75rem;
 }
 

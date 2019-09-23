@@ -7,7 +7,7 @@ import UserSelect from '../../user-select';
 
 const propTypes = {
   createRepo: PropTypes.func.isRequired,
-  createRepoDialogToggle: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
 };
 
 class SysAdminCreateRepoDialog extends React.Component {
@@ -16,7 +16,6 @@ class SysAdminCreateRepoDialog extends React.Component {
     this.state = {
       repoName: '',
       ownerEmail: '',
-      disabled: true,
       errMessage: '',
       isSubmitBtnActive: false
     };
@@ -34,13 +33,15 @@ class SysAdminCreateRepoDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    let repoName = this.state.repoName.trim();
-    this.props.createRepo(repoName, this.state.ownerEmail);
+    const { repoName, ownerEmail } = this.state;
+    this.props.createRepo(repoName.trim(), ownerEmail);
+    this.toggle();
   }
 
-  handleSelectChange = (value) => {
+  handleSelectChange = (option) => {
+    // option can be null
     this.setState({
-      ownerEmail: value.email
+      ownerEmail: option ? option.email : ''
     });
   }
 
@@ -52,7 +53,7 @@ class SysAdminCreateRepoDialog extends React.Component {
   }
 
   toggle = () => {
-    this.props.createRepoDialogToggle();
+    this.props.toggleDialog();
   }
 
   componentDidMount() {
@@ -74,12 +75,17 @@ class SysAdminCreateRepoDialog extends React.Component {
                 value={this.state.repoName} 
                 onChange={this.handleRepoNameChange}
               />
-              <Label for="userSelect" className="mt-2">{gettext('Owner')}</Label>
+            </FormGroup>
+            <FormGroup>
+              <Label for="userSelect">
+                {gettext('Owner')}
+                <span className="small text-secondary">{gettext('(If left blank, owner will be admin)')}</span>
+              </Label>
               <UserSelect
                 id="userSelect"
                 isMulti={false}
                 className="reviewer-select"
-                placeholder={gettext('Select user...')}
+                placeholder={gettext('Select a user')}
                 onSelectChange={this.handleSelectChange}
               />
             </FormGroup>

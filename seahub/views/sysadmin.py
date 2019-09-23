@@ -140,6 +140,12 @@ def sysadmin(request):
 @sys_staff_required
 def sysadmin_react_fake_view(request, **kwargs):
 
+    try:
+        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
+    except Exception as e:
+        logger.error(e)
+        expire_days = -1
+
     return render(request, 'sysadmin/sysadmin_react_app.html', {
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'multi_tenancy': MULTI_TENANCY,
@@ -149,6 +155,8 @@ def sysadmin_react_fake_view(request, **kwargs):
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'enable_file_scan': ENABLE_FILE_SCAN,
         'enable_work_weixin': ENABLE_WORK_WEIXIN,
+        'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
+        'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
     })
 
 @login_required

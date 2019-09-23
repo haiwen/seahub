@@ -13,6 +13,7 @@ const propTypes = {
   itemName: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
+  canTransferToDept: PropTypes.bool
 };
 
 class TransferDialog extends React.Component {
@@ -61,6 +62,11 @@ class TransferDialog extends React.Component {
     const innerSpan = '<span class="op-target" title=' + itemName + '>' + itemName +'</span>';
     let msg = gettext('Transfer Library {library_name}');
     let message = msg.replace('{library_name}', innerSpan);
+
+    let canTransferToDept = true;
+    if (this.props.canTransferToDept != undefined) {
+      canTransferToDept = this.props.canTransferToDept;
+    }
     return (
       <Modal isOpen={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
@@ -72,7 +78,7 @@ class TransferDialog extends React.Component {
               ref="userSelect"
               isMulti={false}
               className="reviewer-select"
-              placeholder={gettext('Search users')}
+              placeholder={gettext('Select a user')}
               onSelectChange={this.handleSelectChange}
             /> :
             <Select
@@ -86,7 +92,7 @@ class TransferDialog extends React.Component {
               onChange={this.handleSelectChange}
             />
           }
-          {isPro &&
+          {isPro && canTransferToDept &&
             <span className="action-link" onClick={this.onClick}>{this.state.transferToUser ?
               gettext('Transfer to department'): gettext('Transfer to user')}
             </span>

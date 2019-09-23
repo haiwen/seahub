@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
-import { gettext } from '../../../utils/constants';
+import { isPro, gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api.js';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -111,7 +111,10 @@ class SysAdminShareToGroup extends React.Component {
       sharedItems: []
     };
     this.options = [];
-    this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    this.permissions = ['rw', 'r'];
+    if (isPro) {
+      this.permissions.push('admin', 'cloud-edit', 'preview');
+    }
   }
 
   handleSelectChange = (option) => {

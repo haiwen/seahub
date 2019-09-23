@@ -5,25 +5,23 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 
 const propTypes = {
-  isPC: PropTypes.bool,
   repo: PropTypes.object.isRequired,
-  isStarred: PropTypes.bool,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
 };
 
-class AdminRepoMenu extends React.Component {
+class RepoOpMenu extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isItemMenuShow: false,
+      isItemMenuShow: false
     };
   }
 
   onMenuItemClick = (e) => {
-    let operation = Utils.getEventData(e, 'toggle');
+    let operation = Utils.getEventData(e, 'op');
     this.props.onMenuItemClick(operation);
   }
 
@@ -32,12 +30,6 @@ class AdminRepoMenu extends React.Component {
   }
 
   toggleOperationMenu = (e) => {
-    let dataset = e.target ? e.target.dataset : null;
-    if (dataset && dataset.toggle && dataset.toggle === 'Rename') {
-      this.setState({isItemMenuShow: !this.state.isItemMenuShow});
-      return;
-    }
-    
     this.setState(
       {isItemMenuShow: !this.state.isItemMenuShow},
       () => {
@@ -48,10 +40,6 @@ class AdminRepoMenu extends React.Component {
         }
       }
     );
-  }
-
-  generatorOperations = () => {
-    return ['Share', 'History Setting'];
   }
 
   translateOperations = (item) => {
@@ -77,19 +65,25 @@ class AdminRepoMenu extends React.Component {
   }
 
   render() {
-    let operations = this.generatorOperations();
+    const repo = this.props.repo;
+    let operations = ['Delete', 'Transfer'];
+    if (!repo.encrypted) {
+      operations.push('Share');
+    }
+    operations.push('History Setting');
+
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 
           tag="i"
-          className="sf-dropdown-toggle sf2-icon-caret-down"
+          className="sf-dropdown-toggle fa fa-ellipsis-v"
           title={gettext('More Operations')}
           data-toggle="dropdown" 
           aria-expanded={this.state.isItemMenuShow}
         />
-        <DropdownMenu>
+        <DropdownMenu className="mt-2 mr-2">
           {operations.map((item, index )=> {
-            return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
+            return (<DropdownItem key={index} data-op={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
           })}
         </DropdownMenu>
       </Dropdown>
@@ -97,6 +91,6 @@ class AdminRepoMenu extends React.Component {
   }
 }
 
-AdminRepoMenu.propTypes = propTypes;
+RepoOpMenu.propTypes = propTypes;
 
-export default AdminRepoMenu;
+export default RepoOpMenu;

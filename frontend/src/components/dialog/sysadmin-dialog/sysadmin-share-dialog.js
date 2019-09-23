@@ -14,7 +14,7 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool,
   userPerm: PropTypes.string,
-  enableDirPrivateShare: PropTypes.bool,
+  enableDirPrivateShare: PropTypes.bool
 };
 
 class SysAdminShareDialog extends React.Component {
@@ -22,7 +22,7 @@ class SysAdminShareDialog extends React.Component {
     super(props);
     this.state = {
       activeTab: this.getInitialActiveTab(),
-      isRepoOwner: false,
+      isRepoOwner: false
     };
   }
 

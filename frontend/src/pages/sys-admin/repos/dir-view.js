@@ -1,30 +1,29 @@
 import React, { Component, Fragment } from 'react';
-import { siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import { gettext } from '../../../utils/constants';
-import MainPanelTopbar from '../../org-admin/main-panel-topbar';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../../utils/seafile-api';
-import toaster from '../../../components/toast';
-import DirentAdminTemplate from '../../../models/dirent-admin-template';
-import RepoTemplatePath from './repos-template-path';
-import RepoTemplateDirListView from './repos-template-dir-list-view';
 import { post } from 'axios';
+import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { loginUrl, siteRoot, gettext } from '../../../utils/constants';
+import toaster from '../../../components/toast';
 import CreateFolderDialog from '../../../components/dialog/create-folder-dialog';
+import Dirent from '../../../models/system-admin/dirent';
+import MainPanelTopbar from '../main-panel-topbar';
+import DirPathBar from './dir-path-bar';
+import DirContent from './dir-content';
 
-
-class ReposTemplate extends Component {
+class DirView extends Component {
 
   constructor(props) {
     super(props);
-    this.uploadInput = React.createRef();
+    this.fileInput = React.createRef();
     this.state = {
       loading: true,
       errorMsg: '',
-      direntList: [],
+      isSystemRepo: false,
       repoName: '',
-      isNewFolderDialogOpen: false,
-      path: ''
+      path: '',
+      direntList: [],
+      isNewFolderDialogOpen: false
     };
   }
 
@@ -43,9 +42,9 @@ class ReposTemplate extends Component {
   createNewFolder = (path) => {
     let folderName = Utils.getFileName(path);
     seafileAPI.sysAdminCreateSysRepoFolder(this.props.repoID, this.state.path, folderName).then(res => {
-      let new_dirent = new DirentAdminTemplate(res.data);
+      let new_dirent = new Dirent(res.data);
       let direntList = this.state.direntList;
-      direntList.push(new_dirent);
+      direntList.unshift(new_dirent);
       this.setState({
         direntList: direntList
       });
@@ -64,30 +63,51 @@ class ReposTemplate extends Component {
   }
 
   loadDirentList = (path) => {
-    let repoID = this.props.repoID;
+    const repoID = this.props.repoID;
     seafileAPI.sysAdminListRepoDirents(repoID, path).then(res => {
+      const { is_system_library: isSystemRepo, repo_name: repoName, dirent_list } = res.data;
       let direntList = [];
-      res.data.dirent_list.forEach(item => {
-        let dirent = new DirentAdminTemplate(item);
+      dirent_list.forEach(item => {
+        let dirent = new Dirent(item);
         direntList.push(dirent);
       });
       this.setState({
-        repoName: res.data.repo_name,
-        direntList: Utils.sortDirents(direntList, 'name', 'asc'),
+        loading: false,
+        repoName: repoName,
+        isSystemRepo: isSystemRepo, 
+        direntList: direntList, 
         path: path,
       }, () => {
         let url = siteRoot + 'sys/libraries/' + repoID + '/' + encodeURIComponent(this.state.repoName) + Utils.encodePath(path);
         window.history.replaceState({url: url, path: path}, path, url);
       });
-    }).catch((err) => {
-      let errMessage = Utils.getErrorMsg(err);
-      toaster.danger(errMessage);
+    }).catch((error) => {
+      if (error.response) {
+        if (error.response.status == 403) {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Permission denied')
+          });
+          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
+        } else {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Error')
+          });
+        }
+      } else {
+        this.setState({
+          loading: false,
+          errorMsg: gettext('Please check the network.')
+        });
+      }
     });
   }
 
   deleteDirent = (dirent) => {
-    let path = this.state.path + dirent.name;
+    let path = Utils.joinPath(this.state.path, dirent.name);
     seafileAPI.sysAdminDeleteRepoDirent(this.props.repoID, path).then(res => {
+      toaster.success(gettext('Successfully deleted 1 item.'));
       let direntList = this.state.direntList.filter(item => {
         return item.name != dirent.name;
       });
@@ -100,8 +120,8 @@ class ReposTemplate extends Component {
     });
   }
 
-  downloadItem = (dirent) => {
-    let path = this.state.path + dirent.name;
+  downloadDirent = (dirent) => {
+    let path = Utils.joinPath(this.state.path, dirent.name);
     seafileAPI.sysAdminGetRepoFileDownloadURL(this.props.repoID, path).then(res => {
       location.href = res.data.download_url;
     }).catch((err) => {
@@ -110,31 +130,34 @@ class ReposTemplate extends Component {
     });
   }
 
-  choseItemToUpload = () => {
-    this.uploadInput.current.click();
+  openFileInput = () => {
+    this.fileInput.current.click();
   }
 
-  uploadDirOrFile = () => {
-    // get upload url -> 
-    // send upload post request this file -> 
-    // get new file info, add it to direntList
+  onFileInputChange = () => {
+    if (!this.fileInput.current.files.length) {
+      return;
+    }
+    const file = this.fileInput.current.files[0];
+
     let { path } = this.state;
     seafileAPI.sydAdminGetSysRepoItemUploadURL(path).then(res => {
-      if (!this.uploadInput.current.files.length) {
-        return;
-      }
-      const file = this.uploadInput.current.files[0];
       let formData = new FormData();
       formData.append('parent_dir', path);
       formData.append('file', file);
       post(res.data.upload_link, formData).then(res => {
-        seafileAPI.sysAdminGetSysRepoItemInfo(this.props.repoID, path + res.data[0].name).then(res => {
-          let new_dirent = new DirentAdminTemplate(res.data);
-          let direntList = this.state.direntList;
-          direntList.push(new_dirent);
-          this.setState({
-            direntList: direntList
-          });
+        const fileObj = res.data[0];
+        let newDirent = new Dirent({
+          'is_file': true,
+          'obj_name': fileObj.name,
+          'file_size': Utils.bytesToSize(fileObj.size),
+          'last_update': (new Date()).getTime()
+        });
+        let direntList = this.state.direntList;
+        const dirs = direntList.filter(item => { return !item.is_file; });
+        direntList.splice(dirs.length, 0, newDirent);
+        this.setState({
+          direntList: direntList
         });
       });
     }).catch((err) => {
@@ -152,34 +175,42 @@ class ReposTemplate extends Component {
   }
 
   render() {
-    let { repoName, direntList, path, isNewFolderDialogOpen } = this.state;
-    let { repoID } = this.props;
+    const { loading, errorMsg, 
+      repoName, direntList, isSystemRepo, path, 
+      isNewFolderDialogOpen } = this.state;
+    const { repoID } = this.props;
 
     return (
       <Fragment>
-        <MainPanelTopbar>
-          <Fragment>
-            <input className="d-none" type="file" onChange={this.uploadDirOrFile} ref={this.uploadInput} />
-            <Button className={'btn btn-secondary operation-item'} onClick={this.choseItemToUpload}>{gettext('Upload')}</Button>
-            <Button className={'btn btn-secondary operation-item'} onClick={this.toggleNewFolderDialog}>{gettext('New Folder')}</Button>
-          </Fragment>
-        </MainPanelTopbar>
+        {isSystemRepo ?
+          <MainPanelTopbar>
+            <Fragment>
+              <input className="d-none" type="file" onChange={this.onFileInputChange} ref={this.fileInput} />
+              <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>
+              <Button className="operation-item" onClick={this.toggleNewFolderDialog}>{gettext('New Folder')}</Button>
+            </Fragment>
+          </MainPanelTopbar> : <MainPanelTopbar /> 
+        }
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path align-items-center">
-              <RepoTemplatePath 
+              <DirPathBar 
+                isSystemRepo={isSystemRepo}
+                repoID={repoID}
                 repoName={repoName}
                 currentPath={path}
                 onPathClick={this.onPathClick}
-                repoID={repoID}
               />
             </div>
             <div className="cur-view-content">
-              <RepoTemplateDirListView
+              <DirContent
+                loading={loading}
+                errorMsg={errorMsg}
+                fromSystemRepo={isSystemRepo}
                 direntList={direntList}
                 openFolder={this.openFolder}
                 deleteDirent={this.deleteDirent}
-                downloadItem={this.downloadItem}
+                downloadDirent={this.downloadDirent}
               />
             </div>
           </div>
@@ -197,4 +228,4 @@ class ReposTemplate extends Component {
   }
 }
 
-export default ReposTemplate;
+export default DirView;

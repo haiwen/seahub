@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {gettext, canInvitePeople, siteRoot} from '../../../utils/constants';
+import { isPro, gettext, siteRoot } from '../../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api.js';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import UserSelect from '../../user-select';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
-import '../../../css/invitations.css';
 
 class UserItem extends React.Component {
 
@@ -90,8 +89,7 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
   itemType: PropTypes.string.isRequired,
-  repoID: PropTypes.string.isRequired,
-  isRepoOwner: PropTypes.bool.isRequired,
+  repoID: PropTypes.string.isRequired
 };
 
 class SysAdminShareToUser extends React.Component {
@@ -105,7 +103,10 @@ class SysAdminShareToUser extends React.Component {
       sharedItems: []
     };
     this.options = [];
-    this.permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    this.permissions = ['rw', 'r'];
+    if (isPro) {
+      this.permissions.push('admin', 'cloud-edit', 'preview');
+    }
   }
 
   handleSelectChange = (option) => {
@@ -270,12 +271,6 @@ class SysAdminShareToUser extends React.Component {
               onChangeUserPermission={this.onChangeUserPermission}
             />
           </table>
-          {canInvitePeople &&
-            <a href={siteRoot + 'invitations/'} className="invite-link-in-popup">
-              <i className="sf2-icon-invite invite-link-icon-in-popup"></i>
-              <span className="invite-link-icon-in-popup">{gettext('Invite People')}</span>
-            </a>
-          }
         </div>
       </Fragment>
     );

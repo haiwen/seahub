@@ -10,7 +10,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
 };
 
-class RepoTemplatePath extends React.Component {
+class DirPath extends React.Component {
 
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
@@ -46,12 +46,15 @@ class RepoTemplatePath extends React.Component {
   }
 
   render() {
-    let { currentPath, repoName } = this.props;
+    let { isSystemRepo, currentPath, repoName } = this.props;
     let pathElem = this.turnPathToLink(currentPath);
 
     return (
       <div className="path-container">
-        <a href={siteRoot + 'sys/libraries-system/'} className="normal">{gettext('System')}</a>
+        {isSystemRepo ?
+        <a href={`${siteRoot}sys/system-library/`}>{gettext('System')}</a> :
+        <a href={`${siteRoot}sys/all-libraries/`}>{gettext('All')}</a>
+        }
         <span className="path-split">/</span>
         {(currentPath === '/' || currentPath === '') ?
           <span className="path-repo-name">{repoName}</span>:
@@ -63,6 +66,6 @@ class RepoTemplatePath extends React.Component {
   }
 }
 
-RepoTemplatePath.propTypes = propTypes;
+DirPath.propTypes = propTypes;
 
-export default RepoTemplatePath;
+export default DirPath;

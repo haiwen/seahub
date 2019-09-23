@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot } from '../../../utils/constants';
-import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
-import EmptyTip from '../../../components/empty-tip';
-import Loading from '../../../components/loading';
 import { Link } from '@reach/router';
-import ReposNav from './repos-nav';
+import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { loginUrl, gettext, siteRoot } from '../../../utils/constants';
+import toaster from '../../../components/toast';
+import Loading from '../../../components/loading';
+import EmptyTip from '../../../components/empty-tip';
 import MainPanelTopbar from '../main-panel-topbar';
+import ReposNav from './repos-nav';
 
 class Content extends Component {
 
@@ -54,24 +54,13 @@ class Item extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isOpIconShown: false,
-    };
-  }
-
-  handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
-  }
-
-  handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
   }
 
   render() {
-    let item = this.props.item;
+    const item = this.props.item;
     return (
-      <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <td><Link to={siteRoot + 'sys/libraries/' + item.id + '/'}>{item.name}</Link></td>
+      <tr>
+        <td><Link to={`${siteRoot}sys/libraries/${item.id}/`}>{item.name}</Link></td>
         <td>{item.id}</td>
         <td>{item.description}</td>
       </tr>
@@ -79,33 +68,45 @@ class Item extends Component {
   }
 }
 
-class ReposSystem extends Component {
+class SystemRepo extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
       errorMsg: '',
-      sysRepoTmplates: []
+      items: []
     };
   }
 
   componentDidMount () {
     seafileAPI.sysAdminGetSystemRepoInfo().then((res) => {
-      let items = this.state.sysRepoTmplates;
-      let new_item = {
-        name: res.data.name,
-        id: res.data.id,
-        description: res.data.description
-      };
-      items = items.concat(new_item);
+      let items = [];
+      items.push(res.data);
       this.setState({
-        sysRepoTmplates: items,
+        items: items,
         loading: false
       });
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      if (error.response) {
+        if (error.response.status == 403) {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Permission denied')
+          }); 
+          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
+        } else {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Error')
+          }); 
+        }   
+      } else {
+        this.setState({
+          loading: false,
+          errorMsg: gettext('Please check the network.')
+        }); 
+      }   
     });
   }
 
@@ -120,7 +121,7 @@ class ReposSystem extends Component {
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
-                items={this.state.sysRepoTmplates}
+                items={this.state.items}
               />
             </div>
           </div>
@@ -130,4 +131,4 @@ class ReposSystem extends Component {
   }
 }
 
-export default ReposSystem;
+export default SystemRepo;
