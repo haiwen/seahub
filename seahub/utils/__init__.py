@@ -984,6 +984,14 @@ def gen_shared_upload_link(token):
     service_url = service_url.rstrip('/')
     return '%s/u/d/%s/' % (service_url, token)
 
+
+def gen_share_dtable_link(token):
+    service_url = get_service_url()
+    assert service_url is not None
+    service_url = service_url.rstrip('/')
+    return '%s/dtable/link/%s' % (service_url, token)
+
+
 def show_delete_days(request):
     if request.method == 'GET':
         days_str = request.GET.get('days', '')

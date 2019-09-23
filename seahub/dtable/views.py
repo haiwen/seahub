@@ -176,3 +176,11 @@ def dtable_asset_file_view(request, workspace_id, dtable_id, path):
     }
 
     return render(request, 'dtable_asset_file_view_react.html', return_dict)
+
+
+def share_dtable_link_view(request, token):
+    return render(request, 'view_shared_dtable_react.html', {
+        'table_name': 'table_name',
+        'username': 'username',
+        'token': token
+    })
