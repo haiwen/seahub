@@ -184,7 +184,7 @@ def dtable_asset_file_view(request, workspace_id, dtable_id, path):
 
 
 @login_required
-def dtable_forms_view(request, token):
+def dtable_form_view(request, token):
 
     # resource check
     dtable_form_link = DTableFormLinks.objects.get_dtable_form_link_by_token(token)
