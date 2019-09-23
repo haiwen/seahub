@@ -9,7 +9,7 @@ import datetime
 from django.db import models
 from constance import config
 
-from seaserv import seafile_api
+from seaserv import seafile_api, SERVICE_URL
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
@@ -286,3 +286,71 @@ class DTableShareLinks(models.Model):
 
     class Meta:
         db_table = 'dtable_share_links'
+
+
+class DTableFormLinksManager(models.Manager):
+
+    def add_dtable_form_link(self, username, workspace_id, dtable_uuid, form_id):
+        token = uuid.uuid4()
+        form_link_obj = self.model(
+            username=username,
+            workspace_id=workspace_id,
+            dtable_uuid=dtable_uuid,
+            form_id=form_id,
+            token=token
+        )
+        form_link_obj.save()
+        form_link = form_link_obj.to_dict()
+        form_link["form_link"] = "%s/dtable/forms/%s" % (SERVICE_URL, token)
+        return form_link
+
+    def get_dtable_form_link(self, dtable_uuid, form_id):
+        form_links = self.filter(dtable_uuid=dtable_uuid, form_id=form_id)
+        if len(form_links) > 0:
+            form_link_obj = form_links[0]
+            form_link = form_link_obj.to_dict()
+            form_link["form_link"] = "%s/dtable/forms/%s" % \
+                                     (SERVICE_URL, form_link_obj.token)
+            return form_link
+        else:
+            return None
+
+    def get_dtable_form_link_by_token(self, token):
+        try:
+            return self.get(token=token)
+        except self.model.DoesNotExist:
+            return None
+
+    def delete_dtable_form_link(self, token):
+        try:
+            form_link = self.get(token=token)
+            form_link.delete()
+            return True
+        except self.model.DoesNotExist:
+            return False
+
+
+class DTableFormLinks(models.Model):
+
+    username = models.CharField(max_length=255, db_index=True)
+    workspace_id = models.IntegerField(db_index=True)
+    dtable_uuid = models.CharField(max_length=36, db_index=True)
+    form_id = models.CharField(max_length=36)
+    token = models.CharField(max_length=36, unique=True)
+
+    objects = DTableFormLinksManager()
+
+    class Meta:
+        unique_together = (('dtable_uuid', 'form_id'),)
+        db_table = 'dtable_form_links'
+
+    def to_dict(self):
+
+        return {
+            'id': self.pk,
+            'username': self.username,
+            'workspace_id': self.workspace_id,
+            'dtable_uuid': self.dtable_uuid,
+            'form_id': self.form_id,
+            'token': self.token,
+        }
