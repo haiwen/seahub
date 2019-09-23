@@ -17,7 +17,6 @@ from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.utils import gen_token
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.settings import SERVICE_URL
 
 
 class WorkspacesManager(models.Manager):

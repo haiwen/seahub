@@ -5,7 +5,7 @@ import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import './css/text-file-view.css';
 
-const { fileContent } = window.shared.pageOptions;
+const { rowContent, columns } = window.shared.pageOptions;
 
 class SharedDTableRowView extends React.Component {
   render() {
@@ -13,7 +13,7 @@ class SharedDTableRowView extends React.Component {
       <div className="shared-file-view-body text-file-view">
         <CodeMirror
           ref="code-mirror-editor"
-          value={fileContent}
+          value={rowContent + columns}
         />
       </div>
     );
