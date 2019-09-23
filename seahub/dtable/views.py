@@ -16,7 +16,7 @@ from seahub.utils import normalize_file_path, render_error, render_permission_er
      gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url
 from seahub.auth.decorators import login_required
 from seahub.settings import DTABLE_SERVER_URL, SEAFILE_COLLAB_SERVER, MEDIA_URL, \
-     FILE_ENCODING_LIST, DTABLE_PRIVATE_KEY
+     DTABLE_PRIVATE_KEY, FILE_ENCODING_LIST
 from seahub.dtable.utils import check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 from seahub.views.file import get_file_content

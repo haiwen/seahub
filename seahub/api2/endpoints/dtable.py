@@ -573,11 +573,10 @@ class DTableRowSharesView(APIView):
 
         # permission check
         username = request.user.username
-        if not check_dtable_permission(username, workspace):
+        if check_dtable_permission(username, workspace, dtable) not in WRITE_PERMISSION_TUPLE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        dtable = DTables.objects.get_dtable(workspace, name)
         dtable_uuid = dtable.uuid.hex
         try:
             row_share = DTableRowShares.objects.get_dtable_row_share(
@@ -638,10 +637,7 @@ class DTableRowSharesView(APIView):
 
         # permission check
         username = request.user.username
-        owner = workspace.owner
-        dtable = DTables.objects.get_dtable(workspace, table_name)
-        if not check_dtable_permission(username, owner) and \
-                not check_dtable_share_permission(dtable, username):
+        if check_dtable_permission(username, workspace, dtable) not in WRITE_PERMISSION_TUPLE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
