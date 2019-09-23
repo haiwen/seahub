@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.0",
-    "@seafile/dtable": "0.0.165",
+    "@seafile/dtable": "0.0.167",
     "@seafile/resumablejs": "^1.1.13",
     "@seafile/seafile-editor": "^0.2.72",
     "MD5": "^1.3.0",
