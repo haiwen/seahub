@@ -251,21 +251,21 @@ class DTableAPIToken(models.Model):
         self.save(update_fields=['last_access'])
 
 
-class ShareDTableLinksManager(models.Manager):
+class DTableShareLinksManager(models.Manager):
 
     def create_link(self, dtable_id, username,
                     password=None, expire_date=None, permission=None):
         if password:
             password = make_password(password)
         token = gen_token(max_length=config.SHARE_LINK_TOKEN_LENGTH)
-        sdl = super(ShareDTableLinksManager, self).create(dtable_id=dtable_id, username=username,
+        sdl = super(DTableShareLinksManager, self).create(dtable_id=dtable_id, username=username,
                                                           token=token,
                                                           permission=permission,
                                                           expire_date=expire_date, password=password)
         return sdl
 
 
-class DTableShareLink(models.Model):
+class DTableShareLinks(models.Model):
 
     PERMISSION_CHOICES = (
         (PERMISSION_READ, 'read only'),
@@ -282,7 +282,7 @@ class DTableShareLink(models.Model):
                                   choices=PERMISSION_CHOICES,
                                   default=PERMISSION_READ)
 
-    objects = ShareDTableLinksManager()
+    objects = DTableShareLinksManager()
 
     class Meta:
         db_table = 'dtable_share_links'

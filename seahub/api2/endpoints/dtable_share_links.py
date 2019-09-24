@@ -14,7 +14,7 @@ from seahub.api2.endpoints.dtable import WRITE_PERMISSION_TUPLE
 from seahub.api2.permissions import CanGenerateShareLink
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.dtable.models import DTables, DTableShareLink, Workspaces
+from seahub.dtable.models import DTables, DTableShareLinks, Workspaces
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT, SHARE_LINK_PASSWORD_MIN_LENGTH
 from seahub.dtable.utils import gen_share_dtable_link, check_dtable_permission
@@ -88,7 +88,7 @@ class DTableShareLinksView(APIView):
             expire_date = timezone.now() + relativedelta(days=expire_days)
 
         link_permission = request.data.get('permission')
-        if link_permission and link_permission not in [perm[0] for perm in DTableShareLink.PERMISSION_CHOICES]:
+        if link_permission and link_permission not in [perm[0] for perm in DTableShareLinks.PERMISSION_CHOICES]:
             error_msg = _('Permission invalid')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -112,15 +112,15 @@ class DTableShareLinksView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
-        sdl = DTableShareLink.objects.filter(username=username, dtable=dtable.id).first()
+        sdl = DTableShareLinks.objects.filter(username=username, dtable=dtable.id).first()
         if sdl:
             error_msg = _('Share link %(token)s already exists.' % {'token': sdl.token})
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         try:
-            sdl = DTableShareLink.objects.create_link(dtable.id, username,
-                                                      password=password,
-                                                      expire_date=expire_date,
-                                                      permission=link_permission)
+            sdl = DTableShareLinks.objects.create_link(dtable.id, username,
+                                                       password=password,
+                                                       expire_date=expire_date,
+                                                       permission=link_permission)
         except Exception as e:
             logger.error(e)
             error_msg = _('Internal Server Error')
