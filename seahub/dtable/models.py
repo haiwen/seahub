@@ -2,13 +2,18 @@
 
 import uuid
 import hmac
+from django.contrib.auth.hashers import make_password
 from hashlib import sha1
 import datetime
 
 from django.db import models
+from constance import config
 
 from seaserv import seafile_api
 
+from seahub.base.fields import LowerCaseCharField
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
+from seahub.utils import gen_token
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname
 
@@ -244,3 +249,40 @@ class DTableAPIToken(models.Model):
     def update_last_access(self):
         self.last_access = datetime.datetime.now
         self.save(update_fields=['last_access'])
+
+
+class DTableShareLinksManager(models.Manager):
+
+    def create_link(self, dtable_id, username,
+                    password=None, expire_date=None, permission=None):
+        if password:
+            password = make_password(password)
+        token = gen_token(max_length=config.SHARE_LINK_TOKEN_LENGTH)
+        sdl = super(DTableShareLinksManager, self).create(dtable_id=dtable_id, username=username,
+                                                          token=token,
+                                                          permission=permission,
+                                                          expire_date=expire_date, password=password)
+        return sdl
+
+
+class DTableShareLinks(models.Model):
+
+    PERMISSION_CHOICES = (
+        (PERMISSION_READ, 'read only'),
+        (PERMISSION_READ_WRITE, 'read and write')
+    )
+
+    dtable = models.ForeignKey(DTables, on_delete=models.CASCADE, db_index=True, db_column='dtable_id')
+    username = LowerCaseCharField(max_length=255, db_index=True)
+    token = models.CharField(max_length=100, unique=True)
+    ctime = models.DateTimeField(default=datetime.datetime.now)
+    password = models.CharField(max_length=128, null=True)
+    expire_date = models.DateTimeField(null=True)
+    permission = models.CharField(max_length=50, db_index=True,
+                                  choices=PERMISSION_CHOICES,
+                                  default=PERMISSION_READ)
+
+    objects = DTableShareLinksManager()
+
+    class Meta:
+        db_table = 'dtable_share_links'

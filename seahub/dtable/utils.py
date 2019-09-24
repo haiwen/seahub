@@ -4,6 +4,8 @@ from seahub.constants import PERMISSION_READ_WRITE
 
 from seaserv import ccnet_api
 
+from seahub.utils import get_service_url
+
 
 def check_dtable_permission(username, workspace, dtable=None):
     """Check workspace/dtable access permission of a user.
@@ -73,3 +75,10 @@ def list_dtable_related_users(workspace, dtable):
                 user_list.append(member.user_name)
 
     return user_list
+
+
+def gen_share_dtable_link(token):
+    service_url = get_service_url()
+    assert service_url is not None
+    service_url = service_url.rstrip('/')
+    return '%s/dtable/link/%s' % (service_url, token)
