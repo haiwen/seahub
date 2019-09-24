@@ -9,7 +9,6 @@ import uuid
 import logging
 import hashlib
 import tempfile
-import locale
 import configparser
 import mimetypes
 import contextlib
@@ -25,7 +24,7 @@ from seaserv import seafile_api
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
 from django.shortcuts import render
-from django.template import Context, loader
+from django.template import loader
 from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
 from django.utils.http import urlquote
@@ -35,7 +34,7 @@ from django.views.static import serve as django_static_serve
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
 import seahub.settings
-from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH, \
+from seahub.settings import MEDIA_URL, LOGO_PATH, \
         MEDIA_ROOT, CUSTOM_LOGO_PATH
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
@@ -983,13 +982,6 @@ def gen_shared_upload_link(token):
 
     service_url = service_url.rstrip('/')
     return '%s/u/d/%s/' % (service_url, token)
-
-
-def gen_share_dtable_link(token):
-    service_url = get_service_url()
-    assert service_url is not None
-    service_url = service_url.rstrip('/')
-    return '%s/dtable/link/%s' % (service_url, token)
 
 
 def show_delete_days(request):

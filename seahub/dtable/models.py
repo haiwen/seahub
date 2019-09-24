@@ -264,7 +264,7 @@ class ShareDTableLinksManager(models.Manager):
         return sdl
 
 
-class ShareDTableLink(models.Model):
+class DTableShareLink(models.Model):
 
     READ_ONLY = 'read-only'
     READ_WRITE = 'read-write'

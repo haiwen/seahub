@@ -4,7 +4,7 @@ from django.conf.urls import url, include
 # from django.views.generic.simple import direct_to_template
 from django.views.generic import TemplateView
 
-from seahub.api2.endpoints.dtable_share_links import ShareDTableLinkView
+from seahub.api2.endpoints.dtable_share_links import DTableShareLinksView
 from seahub.dtable.views import share_dtable_link_view
 from seahub.views import *
 from seahub.views.sysadmin import *
@@ -387,7 +387,7 @@ urlpatterns = [
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/$', DTableView.as_view(), name='api-v2.1-workspace-dtable'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-asset-upload-link/$', DTableAssetUploadLinkView.as_view(), name='api-v2.1-workspace-dtable-asset-upload-link'),
     url(r'^api/v2.1/dtables/shared/$', SharedDTablesView.as_view(), name='api-v2.1-dtables-share'),
-    url(r'^api/v2.1/dtables/share-link/$', ShareDTableLinkView.as_view(), name='api-v2.1-dtables-share-links'),
+    url(r'^api/v2.1/dtables/share-links/$', DTableShareLinksView.as_view(), name='api-v2.1-dtables-share-links'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/share/$', DTableShareView.as_view(), name='api-v2.1-dtable-share'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/related-users/$', DTableRelatedUsersView.as_view(), name='api-v2.1-dtable-related-users'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/access-token/$', DTableAccessTokenView.as_view(), name='api-v2.1-dtable-access-token'),
