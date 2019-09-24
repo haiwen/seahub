@@ -23,7 +23,7 @@ class DeleteRepoDialog extends Component {
   render() {
 
     const repo = this.props.repo;
-    const repoName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name) + '</span>';
+    const repoName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name || repo.name) + '</span>';
     let message = gettext('Are you sure you want to delete %s ?');
     message = message.replace('%s', repoName);
 

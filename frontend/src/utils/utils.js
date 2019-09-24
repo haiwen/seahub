@@ -312,6 +312,16 @@ export const Utils = {
     }
   },
 
+  getAdminTemplateDirentIcon: function (dirent, isBig) {
+    let size = this.isHiDPI() ? 48 : 24;
+    size = isBig ? 192 : size;
+    if (dirent.is_file) {
+      return this.getFileIconUrl(dirent.obj_name, size);
+    } else {
+      return this.getFolderIconUrl();
+    }
+  },
+
   getFolderIconUrl: function(readonly = false, size) {
     if (!size) {
       size = Utils.isHiDPI() ? 48 : 24;

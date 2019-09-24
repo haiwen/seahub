@@ -16,6 +16,8 @@
 			is_default_admin: {% if is_default_admin %} true {% else %} false {% endif %},
       enable_file_scan: {% if enable_file_scan %} true {% else %} false {% endif %},
       enable_work_weixin: {% if enable_work_weixin %} true {% else %} false {% endif %},
+      enableSysAdminViewRepo: {% if enable_sys_admin_view_repo %} true {% else %} false {% endif %},
+      trashReposExpireDays: {{ trash_repos_expire_days }},
 			admin_permissions: {
         "can_view_system_info": {% if user.admin_permissions.can_view_system_info %} true {% else %} false {% endif %},
         "can_view_statistic": {% if user.admin_permissions.can_view_statistic %} true {% else %} false {% endif %},

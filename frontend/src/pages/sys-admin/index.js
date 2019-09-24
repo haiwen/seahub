@@ -7,9 +7,15 @@ import MainPanel from './main-panel';
 import FileScanRecords from './file-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 import Info from './info';
+
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
+
+import AllRepos from './repos/all-repos';
+import SystemRepo from './repos/system-repo';
+import TrashRepos from './repos/trash-repos';
+import DirView from './repos/dir-view';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -29,21 +35,33 @@ class SysAdmin extends React.Component {
   componentDidMount() {
     let href = window.location.href.split('/');
     let currentTab = href[href.length - 2];
-    let tmpTab;
 
-    const devicesUrlParts = ['desktop-devices', 'mobile-devices', 'device-errors'];
-    const devicesTab = 'devices';
-    tmpTab = this.getCurrentTabForPageList(devicesUrlParts, devicesTab);
+    const pageList = [
+      {
+        tab: 'devices',
+        urlPartList: ['desktop-devices', 'mobile-devices', 'device-errors']
+      },
+      {
+        tab: 'libraries',
+        urlPartList: ['all-libraries', 'system-library', 'trash-libraries', 'libraries/']
+      },
+    ];
+    const tmpTab = this.getCurrentTabForPageList(pageList);
     currentTab = tmpTab ? tmpTab : currentTab;
 
     this.setState({currentTab: currentTab});
   }
 
-  getCurrentTabForPageList = (pageUrlPartList, curTab) => {
+  getCurrentTabForPageList = (pageList) => {
+    let urlPartList, tab;
     const urlBase = `${siteRoot}sys/`;
-    for (let i = 0, len = pageUrlPartList.length; i < len; i++) {
-      if (location.href.indexOf(`${urlBase}${pageUrlPartList[i]}`) != -1) {
-        return curTab;
+    for (let i = 0, len = pageList.length; i < len; i++) {
+      urlPartList = pageList[i].urlPartList;
+      tab = pageList[i].tab;
+      for (let j = 0, jlen = urlPartList.length; j < jlen; j++) {
+        if (location.href.indexOf(`${urlBase}${urlPartList[j]}`) != -1) {
+          return tab;
+        }
       }
     }
   }
@@ -53,7 +71,7 @@ class SysAdmin extends React.Component {
   }
 
   tabItemClick = (param) => {
-    this.setState({currentTab: param});          
+    this.setState({currentTab: param});
   }  
 
   render() {
@@ -73,6 +91,10 @@ class SysAdmin extends React.Component {
             <DesktopDevices path={siteRoot + 'sys/desktop-devices'} />
             <MobileDevices path={siteRoot + 'sys/mobile-devices'} />
             <DeviceErrors path={siteRoot + 'sys/device-errors'} />
+            <AllRepos path={siteRoot + 'sys/all-libraries'} />
+            <SystemRepo path={siteRoot + 'sys/system-library'} />
+            <TrashRepos path={siteRoot + 'sys/trash-libraries'} />
+            <DirView path={siteRoot + 'sys/libraries/:repoID/*'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 

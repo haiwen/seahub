@@ -659,6 +659,12 @@ urlpatterns = [
     url(r'^sys/mobile-devices/$', sysadmin_react_fake_view, name="sys_mobile_devices"),
     url(r'^sys/device-errors/$', sysadmin_react_fake_view, name="sys_device_errors"),
     url(r'^sys/web-settings/$', sysadmin_react_fake_view, name="sys_web_settings"),
+    url(r'^sys/all-libraries/$', sysadmin_react_fake_view, name="sys_all_libraries"),
+    url(r'^sys/system-library/$', sysadmin_react_fake_view, name="sys_system_library"),
+    url(r'^sys/trash-libraries/$', sysadmin_react_fake_view, name="sys_trash_libraries"),
+    url(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/$', sysadmin_react_fake_view, name="sys_libraries_template"),
+    url(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', sysadmin_react_fake_view, name="sys_libraries_template_dirent"),
+
     url(r'^sys/work-weixin/$', sysadmin_react_fake_view, name="sys_work_weixin"),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
