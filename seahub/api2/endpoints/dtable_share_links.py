@@ -14,10 +14,12 @@ from seahub.api2.endpoints.dtable import WRITE_PERMISSION_TUPLE
 from seahub.api2.permissions import CanGenerateShareLink
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.dtable.models import DTables, DTableShareLink
+from seahub.dtable.models import DTables, DTableShareLink, Workspaces
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT, SHARE_LINK_PASSWORD_MIN_LENGTH
 from seahub.dtable.utils import gen_share_dtable_link, check_dtable_permission
+
+from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
 
@@ -85,19 +87,26 @@ class DTableShareLinksView(APIView):
         else:
             expire_date = timezone.now() + relativedelta(days=expire_days)
 
-        link_permission = None
-        for perm, desc in DTableShareLink.PERMISSION_CHOICES:
-            if request.data.get('permission') == perm:
-                link_permission = perm
-                break
-        link_permission = link_permission if link_permission else DTableShareLink.READ_ONLY
+        link_permission = request.data.get('permission')
+        if link_permission and link_permission not in [perm[0] for perm in DTableShareLink.PERMISSION_CHOICES]:
+            error_msg = _('Permission invalid')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # permission and resource check
+        # resource check
+        workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+        if not workspace:
+            error_msg = _('Workspace %(workspace)s not found' % {'workspace': workspace_id})
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo = seafile_api.get_repo(workspace.repo_id)
+        if not repo:
+            error_msg = _('Library %(workspace)s not found' % {'workspace': workspace_id})
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         dtable = DTables.objects.get_dtable(workspace_id, table_name)
         if not dtable:
-            error_msg = _('DTable: %(table_name)s not found.' % {'table_name': table_name})
+            error_msg = _('DTable %(table)s not found' % {'table': table_name})
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        # permission check
         if check_dtable_permission(request.user.username, dtable.workspace, dtable) not in WRITE_PERMISSION_TUPLE:
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

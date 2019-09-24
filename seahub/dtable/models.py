@@ -12,6 +12,7 @@ from constance import config
 from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.utils import gen_token
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -266,12 +267,9 @@ class ShareDTableLinksManager(models.Manager):
 
 class DTableShareLink(models.Model):
 
-    READ_ONLY = 'read-only'
-    READ_WRITE = 'read-write'
-
     PERMISSION_CHOICES = (
-        (READ_ONLY, 'read only'),
-        (READ_WRITE, 'read and write')
+        (PERMISSION_READ, 'read only'),
+        (PERMISSION_READ_WRITE, 'read and write')
     )
 
     dtable = models.ForeignKey(DTables, on_delete=models.CASCADE, db_index=True, db_column='dtable_id')
@@ -282,7 +280,7 @@ class DTableShareLink(models.Model):
     expire_date = models.DateTimeField(null=True)
     permission = models.CharField(max_length=50, db_index=True,
                                   choices=PERMISSION_CHOICES,
-                                  default=READ_ONLY)
+                                  default=PERMISSION_READ)
 
     objects = ShareDTableLinksManager()
 
