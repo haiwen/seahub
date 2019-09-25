@@ -1,22 +1,27 @@
 # -*- coding: utf-8 -*-
 import os
+import time
+import logging
+from urllib import request as requests
+import jwt
 
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from seaserv import seafile_api
 
-from seahub.dtable.models import Workspaces, DTables
+from seahub.dtable.models import Workspaces, DTables, DTableFormLinks
 from seahub.utils import normalize_file_path, render_error, render_permission_error, \
      gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url
 from seahub.auth.decorators import login_required
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, \
      SHARE_LINK_EXPIRE_DAYS_DEFAULT, DTABLE_SERVER_URL, SEAFILE_COLLAB_SERVER, MEDIA_URL, \
-     FILE_ENCODING_LIST
+     FILE_ENCODING_LIST, DTABLE_PRIVATE_KEY
 from seahub.dtable.utils import check_dtable_permission
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 from seahub.views.file import get_file_content
 
+logger = logging.getLogger(__name__)
 
 FILE_TYPE = '.dtable'
 WRITE_PERMISSION_TUPLE = (PERMISSION_READ_WRITE, PERMISSION_ADMIN)
@@ -176,3 +181,58 @@ def dtable_asset_file_view(request, workspace_id, dtable_id, path):
     }
 
     return render(request, 'dtable_asset_file_view_react.html', return_dict)
+
+
+@login_required
+def dtable_form_view(request, token):
+
+    # resource check
+    dtable_form_link = DTableFormLinks.objects.get_dtable_form_link_by_token(token)
+    if not dtable_form_link:
+        return render_error(request, 'DTable form_links does not exist.')
+
+    workspace_id = dtable_form_link.workspace_id
+    workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+    if not workspace:
+        return render_error(request, 'Workspace does not exist.')
+
+    repo_id = workspace.repo_id
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        return render_error(request, 'Library does not exist.')
+
+    dtable_uuid = dtable_form_link.dtable_uuid
+    dtable = DTables.objects.get_dtable_by_uuid(dtable_uuid)
+    if not dtable:
+        return render_error(request, 'DTable does not exist.')
+
+    # generate json web token
+    payload = {
+        'exp': int(time.time()) + 86400 * 3,
+        'dtable_uuid': dtable_uuid,
+        'username': request.user.username,
+    }
+
+    try:
+        access_token = jwt.encode(
+            payload, DTABLE_PRIVATE_KEY, algorithm='HS256'
+        )
+    except Exception as e:
+        logger.error(e)
+        return render_error(request, _('Internal Server Error'))
+
+    url_for_form = '%s/api/v1/dtables/%s/forms/%s/' % \
+        (DTABLE_SERVER_URL.strip('/'), dtable_uuid, dtable_form_link.form_id)
+    req_for_form = requests.Request(url_for_form, headers={"Authorization": "Token %s" % access_token.decode()})
+
+    try:
+        form_content = requests.urlopen(req_for_form).read().decode()
+    except Exception as e:
+        logger.error(e)
+        return render_error(request, _('Internal Server Error'))
+
+    return_dict = {
+        'form_content': form_content,
+    }
+
+    return render(request, 'dtable_form_view_react.html', return_dict)

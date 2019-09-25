@@ -224,6 +224,11 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/dtable-asset-file-view.js",
     ],
+    dtableFormView: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/dtable-form-view.js",
+    ],
   },
 
   output: {
