@@ -21,11 +21,10 @@ class SidePanel extends React.Component {
   }
 
   render() {
-
     return (
       <div className="side-panel">
         <div className="side-panel-north dtable-header">
-          <i className="sf3-font sf3-font-dtable-logo dtable-logo"></i>
+          <img src="/media/img/DTable_Logo48_48px.png" />
           <span className="dtable-text">DTable</span>
         </div>
         <div className="side-panel-center">

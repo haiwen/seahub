@@ -7,11 +7,10 @@
   height: 50px;
 }
 
-.dtable-header .dtable-logo {
-  padding-right: 6px;
-  font-size: 36px;
-  line-height: 36px;
-  color: #FEAC74;
+.dtable-header>img {
+  width: 36px;
+  height: 36px;
+  margin-right: 6px;
 }
 
 .dtable-header .dtable-text {
@@ -69,14 +68,17 @@
 }
 
 .dtable-header .common-toolbar>div {
-  padding-right: 1rem;
   cursor: pointer;
+  margin-left: 0.5rem;
 }
 
-.dtable-center .cur-view-title {
+.dtable-center .cur-view-header {
   line-height: 50px;
   font-size: 1.5rem;
-  padding-left: 12px;
+  padding: 0 16px;
+}
+
+.dtable-center .cur-view-header .cur-view-title {
   border-bottom: 1px solid #eee;
 }
 

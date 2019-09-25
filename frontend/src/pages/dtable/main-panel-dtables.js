@@ -104,8 +104,10 @@ class MainPanelDTables extends React.Component {
     return (
       <Fragment>
         <div className="main-panel-center dtable-center">
-          <div className="main-panel-container d-flex flex-1 flex-column">
-            <div className="cur-view-title">DTable</div>
+          <div className="cur-view-container d-flex flex-1 flex-column">
+            <div className="cur-view-header">
+              <div className="cur-view-title">DTable</div>
+            </div>
             <div className="cur-view-content">
               {this.state.errorMsg &&
                 <p className="error text-center">{this.state.errorMsg}</p>
