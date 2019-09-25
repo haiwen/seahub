@@ -52,6 +52,8 @@
   "Delete_Column": "删除",
   "Rename_Column": "重命名",
   "Hide_Column": "隐藏",
+  "Freeze_Column": "冻结首列",
+  "Unfreeze_Column": "取消冻结",
   "Edit_Single_Select": "编辑单选",
   "Edit_Multiple_Select": "编辑多选",
   "records": "行",
