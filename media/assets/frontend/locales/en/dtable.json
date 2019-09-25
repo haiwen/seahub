@@ -66,6 +66,8 @@
   "Hide_Columns": "Hide Columns",
   "1_Hidden_Column": "1 Hidden Column",
   "Hidden_Columns": "Hidden Columns",
+  "Freeze_Column": "Freeze Column",
+  "Unfreeze_Column": "Unfreeze Column",
   "Sort": "Sort",
   "Add_Filter": "Add Filter",
   "Add_Sort": "Add Sort",
