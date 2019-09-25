@@ -228,22 +228,15 @@ class DTableAPITokenView(APIView):
 class DTableAppAccessTokenView(APIView):
     throttle_classes = (AnonRateThrottle,)
 
-    def get(self, request, workspace_id, name):
-        """thirdpart app use dtable api token to get access token
+    def get(self, request):
+        """thirdpart app used dtable api token to get access token and dtable uuid
         """
-        table_name = name
-
         # argument check
         token_list = request.META.get('HTTP_AUTHORIZATION', '').split()
         if not token_list or token_list[0].lower() != 'token' or len(token_list) != 2:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         api_token = token_list[1]
-
-        # resource check
-        error, workspace, dtable = _resource_check(workspace_id, table_name)
-        if error:
-            return error
 
         # main
         try:
@@ -256,6 +249,16 @@ class DTableAppAccessTokenView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # resource check
+        dtable = api_token_obj.dtable
+
+        table_name = dtable.name
+        workspace_id = dtable.workspace_id
+
+        error, workspace, dtable = _resource_check(workspace_id, table_name)
+        if error:
+            return error
 
         # generate json web token
         payload = {

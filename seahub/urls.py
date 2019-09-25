@@ -392,7 +392,7 @@ urlpatterns = [
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/access-token/$', DTableAccessTokenView.as_view(), name='api-v2.1-dtable-access-token'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/api-tokens/$', DTableAPITokensView.as_view(), name='api-v2.1-dtable-api-tokens'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/api-tokens/(?P<app_name>.*)/$', DTableAPITokenView.as_view(), name='api-v2.1-dtable-api-token'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/app-access-token/$', DTableAppAccessTokenView.as_view(), name='api-v2.1-dtable-app-access-token'),
+    url(r'^api/v2.1/dtable/app-access-token/$', DTableAppAccessTokenView.as_view(), name='api-v2.1-dtable-app-access-token'),
     url(r'^api/v2.1/dtable-form-links/$', DTableFormLinksView.as_view(), name='api-v2.1-dtable-form-links'),
     url(r'^api/v2.1/dtable-form-links/(?P<token>[-0-9a-f]{36})/$', DTableFormLinkView.as_view(), name='api-v2.1-dtable-form-link'),
 
