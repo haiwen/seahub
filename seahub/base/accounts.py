@@ -92,7 +92,15 @@ class UserManager(object):
             raise User.DoesNotExist, 'User matching query does not exits.'
 
         if email:
-            emailuser = ccnet_threaded_rpc.get_emailuser(email)
+            local_users = ccnet_api.search_emailusers('DB', email, -1, -1)
+            if not db_users:
+                local_users = ccnet_api.search_emailusers('LDAP', email, -1, -1)
+
+            if not local_users:
+                raise User.DoesNotExist, 'User matching query does not exits.'
+
+            emailusers = local_users[0]
+
         if id:
             emailuser = ccnet_threaded_rpc.get_emailuser_by_id(id)
         if not emailuser:
