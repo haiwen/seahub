@@ -575,6 +575,23 @@ export const Utils = {
     }
   },
 
+  getDTableShareLinkPermissionObject: function(permission) {
+    switch (permission) {
+      case 'read-only':
+        return {
+          value: permission,
+          text: 'read-only',
+          permission: 'r'
+        };
+      case 'read-write':
+        return {
+          value: permission,
+          text: 'read-write',
+          permission: 'rw'
+        };
+    }
+  },
+
   formatSize: function(options) {
     /*
      * param: {bytes, precision}

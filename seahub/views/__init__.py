@@ -1272,4 +1272,8 @@ def react_fake_view(request, **kwargs):
 
 @login_required
 def dtable_fake_view(request, **kwargs):
-    return render(request, 'react_dtable.html')
+    return render(request, 'react_dtable.html', {
+        'share_link_expire_days_default': settings.SHARE_LINK_EXPIRE_DAYS_DEFAULT,
+        'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
+        'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+    })

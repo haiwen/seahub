@@ -254,7 +254,7 @@ class DTableAPIToken(models.Model):
 class DTableShareLinksManager(models.Manager):
 
     def create_link(self, dtable_id, username,
-                    password=None, expire_date=None, permission=None):
+                    password=None, expire_date=None, permission='r'):
         if password:
             password = make_password(password)
         token = gen_token(max_length=config.SHARE_LINK_TOKEN_LENGTH)
@@ -286,6 +286,9 @@ class DTableShareLinks(models.Model):
 
     class Meta:
         db_table = 'dtable_share_links'
+
+    def is_owner(self, username):
+        return self.username == username
 
 
 class DTableFormLinksManager(models.Manager):
