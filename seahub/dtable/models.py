@@ -3,6 +3,7 @@
 import uuid
 import hmac
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from hashlib import sha1
 import datetime
 
@@ -289,6 +290,12 @@ class DTableShareLinks(models.Model):
 
     def is_owner(self, username):
         return self.username == username
+
+    def is_expired(self):
+        if not self.expire_date:
+            return False
+        else:
+            return self.expire_date > timezone.now()
 
 
 class DTableFormLinksManager(models.Manager):

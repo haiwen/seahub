@@ -5,6 +5,7 @@ from django.conf.urls import url, include
 from django.views.generic import TemplateView
 
 from seahub.api2.endpoints.dtable_share_links import DTableShareLinksView, DTableSharedLinkView
+from seahub.dtable.views import dtable_from_link_view
 from seahub.views import *
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
@@ -241,6 +242,7 @@ urlpatterns = [
     url(r'^org/$', react_fake_view, name="org"),
     url(r'^invitations/$', react_fake_view, name="invitations"),
     url(r'^dtable/$', dtable_fake_view, name='dtable'),
+    url(r'^dtable/link/(?P<token>[-0-9a-f]+)/$', dtable_from_link_view, name='dtable_from_link'),
     url(r'^dtable/apps/$', dtable_fake_view, name='dtable_apps'),
     url(r'^dtable/templetes/$', dtable_fake_view, name='dtable_templetes'),
 

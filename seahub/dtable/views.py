@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from seaserv import seafile_api
 
-from seahub.dtable.models import Workspaces, DTables, DTableFormLinks
+from seahub.dtable.models import Workspaces, DTables, DTableFormLinks, DTableShareLinks
 from seahub.utils import normalize_file_path, render_error, render_permission_error, \
      gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url
 from seahub.auth.decorators import login_required
@@ -236,3 +236,48 @@ def dtable_form_view(request, token):
     }
 
     return render(request, 'dtable_form_view_react.html', return_dict)
+
+
+def dtable_from_link_view(request, token):
+    dsl = DTableShareLinks.objects.filter(token=token).first()
+    if not dsl:
+        return render_error(request, _('Share link does not exist'))
+    if dsl.is_expired():
+        return render_error(request, _('Share link has expired'))
+
+    # resource check
+    workspace_id = dsl.dtable.workspace.id
+    workspace = Workspaces.objects.get_workspace_by_id(workspace_id)
+    if not workspace:
+        raise Http404
+
+    repo_id = workspace.repo_id
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    name = dsl.dtable.name
+    dtable = DTables.objects.get_dtable(workspace, name)
+    if not dtable:
+        return render_error(request, _('File does not exist'))
+
+    table_file_name = name + FILE_TYPE
+    table_path = normalize_file_path(table_file_name)
+    table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
+    if not table_file_id:
+        return render_error(request, _('File does not exist'))
+
+    return_dict = {
+        'repo': repo,
+        'filename': name,
+        'path': table_path,
+        'filetype': 'dtable',
+        'workspace_id': workspace_id,
+        'dtable_uuid': dtable.uuid.hex,
+        'media_url': MEDIA_URL,
+        'dtable_server': DTABLE_SERVER_URL,
+        'dtable_socket': SEAFILE_COLLAB_SERVER,
+        'permission': dsl.permission
+    }
+
+    return render(request, 'dtable_file_link_view_react.html', return_dict)
