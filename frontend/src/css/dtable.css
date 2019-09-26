@@ -22,6 +22,10 @@
 
 .dtable-side-nav {
   padding: 12px;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
 .dtable-nav-title {
