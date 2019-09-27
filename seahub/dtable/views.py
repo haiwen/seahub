@@ -238,7 +238,7 @@ def dtable_form_view(request, token):
     return render(request, 'dtable_form_view_react.html', return_dict)
 
 
-def dtable_from_link_view(request, token):
+def dtable_share_link_view(request, token):
     dsl = DTableShareLinks.objects.filter(token=token).first()
     if not dsl:
         return render_error(request, _('Share link does not exist'))
@@ -259,13 +259,10 @@ def dtable_from_link_view(request, token):
     name = dsl.dtable.name
     dtable = DTables.objects.get_dtable(workspace, name)
     if not dtable:
-        return render_error(request, _('File does not exist'))
+        return render_error(request, _('DTable does not exist'))
 
     table_file_name = name + FILE_TYPE
     table_path = normalize_file_path(table_file_name)
-    table_file_id = seafile_api.get_file_id_by_path(repo_id, table_path)
-    if not table_file_id:
-        return render_error(request, _('File does not exist'))
 
     return_dict = {
         'repo': repo,
@@ -280,4 +277,4 @@ def dtable_from_link_view(request, token):
         'permission': dsl.permission
     }
 
-    return render(request, 'dtable_file_link_view_react.html', return_dict)
+    return render(request, 'dtable_share_link_view_react.html', return_dict)

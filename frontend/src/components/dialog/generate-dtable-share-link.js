@@ -51,8 +51,9 @@ class GenerateDTableShareLink extends React.Component {
     let workspaceID = this.props.workspaceID;
     let name = this.props.name;
     seafileAPI.getDTableShareLink(workspaceID, name).then((res) => {
-      if (res.data.length !== 0) {
-        let sharedLinkInfo = new ShareLink(res.data[0]);
+      window.res = res;
+      if (res.data.dtable_share_links.length !== 0) {
+        let sharedLinkInfo = new ShareLink(res.data.dtable_share_links[0]);
         this.setState({
           isLoading: false,
           sharedLinkInfo: sharedLinkInfo

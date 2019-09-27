@@ -56,11 +56,11 @@ class DTableShareLinksView(APIView):
         username = request.user.username
         workspace_id = request.GET.get('workspace_id')
         if not workspace_id:
-            error_msg = _('')
+            error_msg = _('workspace_id invalid.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         table_name = request.GET.get('table_name')
         if not table_name:
-            error_msg = _('')
+            error_msg = _('table_name invalid.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -80,7 +80,9 @@ class DTableShareLinksView(APIView):
         # get table's all links of user
         dsls = DTableShareLinks.objects.filter(dtable=dtable, username=username)
         results = [get_share_dtable_link_info(item, dtable) for item in dsls]
-        return Response(results)
+        return Response({
+            'dtable_share_links': results
+        })
 
     def post(self, request):
         # argument check
