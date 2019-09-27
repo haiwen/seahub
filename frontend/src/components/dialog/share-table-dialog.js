@@ -5,6 +5,7 @@ import {Modal, ModalHeader, ModalBody, Nav, NavItem, NavLink, TabContent, TabPan
 import ShareTableToUser from './share-table-to-user';
 
 import '../../css/share-link-dialog.css';
+import GenerateDTableShareLink from './generate-dtable-share-link';
 
 const propTypes = {
   currentTable: PropTypes.object.isRequired,
@@ -40,6 +41,13 @@ class ShareTableDialog extends React.Component {
                 >{gettext('Share to user')}
                 </NavLink>
               </NavItem>
+              <NavItem>
+                <NavLink
+                  className={activeTab === 'shareLink' ? 'active' : ''}
+                  onClick={this.toggle.bind(this, 'shareLink')}
+                >{gettext('Share link')}
+                </NavLink>
+              </NavItem>
             </Fragment>
           </Nav>
         </div>
@@ -51,6 +59,13 @@ class ShareTableDialog extends React.Component {
                   currentTable={this.props.currentTable}
                 />
               </TabPane>
+              {activeTab === 'shareLink' &&
+                <GenerateDTableShareLink
+                  workspaceID={this.props.currentTable.workspace_id}
+                  name={this.props.currentTable.name}
+                  closeShareDialog={this.props.ShareCancel}
+                />
+              }
             </Fragment>
           </TabContent>
         </div>

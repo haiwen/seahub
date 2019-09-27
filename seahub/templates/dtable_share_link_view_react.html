@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
-<title>DTable</title>
+<title>{{ filename }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -12,10 +12,9 @@
 <link rel="shortcut icon" href="{{ MEDIA_URL }}{% if filetype == 'dtable' %}{{ dtable_favicon_path }}{% else %}{{ favicon_path }}{% endif %}" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/dtable-font.css" />
-{% render_bundle 'appDTable' 'css' %}
+{% render_bundle 'viewDataGrid' 'css' %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
 </head>
@@ -34,7 +33,6 @@
             csrfToken: "{{ csrf_token }}",
             name: "{{request.user.username|email2nickname|escapejs}}",
             username: "{{request.user.username|escapejs}}",
-            contactEmail: "{{request.user.username|email2contact_email|escapejs}}",
 
             fileName: '{{ filename|escapejs }}',
             filePath: '{{ path|escapejs }}',
@@ -44,15 +42,13 @@
             dtableServer: '{{ dtable_server }}',
             dtableSocket: '{{ dtable_socket }}',
             lang: '{{ LANGUAGE_CODE }}',
-            shareLinkExpireDaysMin: '{{ share_link_expire_days_min }}',
-            shareLinkExpireDaysMax: '{{ share_link_expire_days_max }}',
-            shareLinkExpireDaysDefault: '{{ share_link_expire_days_default }}',
+            permission: '{{ permission }}',
         }
      };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
 {% render_bundle 'commons' %}
-{% render_bundle 'appDTable' 'js' %}
+{% render_bundle 'viewDataGrid' 'js' %}
 </body>
 </html>
 

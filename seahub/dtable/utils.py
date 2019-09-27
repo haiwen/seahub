@@ -81,4 +81,4 @@ def gen_share_dtable_link(token):
     service_url = get_service_url()
     assert service_url is not None
     service_url = service_url.rstrip('/')
-    return '%s/dtable/link/%s' % (service_url, token)
+    return '%s/dtable/links/%s' % (service_url, token)

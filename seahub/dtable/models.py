@@ -3,6 +3,7 @@
 import uuid
 import hmac
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from hashlib import sha1
 import datetime
 
@@ -254,7 +255,7 @@ class DTableAPIToken(models.Model):
 class DTableShareLinksManager(models.Manager):
 
     def create_link(self, dtable_id, username,
-                    password=None, expire_date=None, permission=None):
+                    password=None, expire_date=None, permission='r'):
         if password:
             password = make_password(password)
         token = gen_token(max_length=config.SHARE_LINK_TOKEN_LENGTH)
@@ -286,6 +287,15 @@ class DTableShareLinks(models.Model):
 
     class Meta:
         db_table = 'dtable_share_links'
+
+    def is_owner(self, username):
+        return self.username == username
+
+    def is_expired(self):
+        if not self.expire_date:
+            return False
+        else:
+            return self.expire_date < timezone.now()
 
 
 class DTableFormLinksManager(models.Manager):
