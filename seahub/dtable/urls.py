@@ -9,5 +9,5 @@ urlpatterns = [
     url(r'^workspace/(?P<workspace_id>\d+)/asset/(?P<dtable_id>[-0-9a-f]{36})/(?P<path>.*)$', dtable_asset_access, name='dtable_asset_access'),
     url(r'^workspace/(?P<workspace_id>\d+)/asset-file/(?P<dtable_id>[-0-9a-f]{36})/(?P<path>.*)$', dtable_asset_file_view, name='dtable_asset_file_view'),
     url(r'^dtable/forms/(?P<token>[-0-9a-f]{36})$', dtable_form_view, name='dtable_form_view'),
-    url(r'^dtable/link/(?P<token>[-0-9a-f]+)/$', dtable_share_link_view, name='dtable_share_link_view'),
+    url(r'^dtable/links/(?P<token>[-0-9a-f]+)/$', dtable_share_link_view, name='dtable_share_link_view'),
 ]

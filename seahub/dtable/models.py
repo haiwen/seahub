@@ -295,7 +295,7 @@ class DTableShareLinks(models.Model):
         if not self.expire_date:
             return False
         else:
-            return self.expire_date > timezone.now()
+            return self.expire_date < timezone.now()
 
 
 class DTableFormLinksManager(models.Manager):

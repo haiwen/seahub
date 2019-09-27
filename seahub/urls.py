@@ -4,7 +4,6 @@ from django.conf.urls import url, include
 # from django.views.generic.simple import direct_to_template
 from django.views.generic import TemplateView
 
-from seahub.api2.endpoints.dtable_share_links import DTableShareLinksView, DTableSharedLinkView
 from seahub.views import *
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
@@ -98,6 +97,7 @@ from seahub.api2.endpoints.dtable_forms import DTableFormLinksView, DTableFormLi
 from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
 from seahub.api2.endpoints.dtable_related_users import DTableRelatedUsersView
 from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
+from seahub.api2.endpoints.dtable_share_links import DTableShareLinksView, DTableSharedLinkView
 
 
 # Admin
