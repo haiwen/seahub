@@ -221,5 +221,13 @@
   "Server_is_not_connected_Operation_will_be_sent_to_server_later": "Server is not connected. Operation will be sent to server later.",
   "US": "US",
   "European": "European",
-  "ISO": "ISO"
+  "ISO": "ISO",
+  "Max": "Max",
+  "Min": "Min",
+  "Mean": "Mean",
+  "By_Day": "By Day",
+  "By_Week": "By Week",
+  "By_Month": "By Month",
+  "By_Year": "By Year",
+  "No_fields_that_can_be_returned": "No fields that can be returned."
 }
