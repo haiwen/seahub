@@ -8,7 +8,7 @@ import { Utils } from '../utils/utils';
 import toaster from './toast';
 import Group from '../models/group';
 
-import { canViewOrg, isDocs, isPro } from '../utils/constants';
+import { canViewOrg, isDocs, isPro, customNavItems } from '../utils/constants';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -164,6 +164,21 @@ class MainSideNav extends React.Component {
     );
   }
 
+  renderCustomNavItems() {
+    return (
+      customNavItems.map((item, idx) => {
+        return (
+          <li key={idx} className="nav-item">
+            <a href={item.link} className="nav-link ellipsis" title={item.desc}>
+              <span className={item.icon} aria-hidden="true"></span>
+              <span className="nav-text">{item.desc}</span>
+            </a>
+          </li>
+        );
+      })
+    );
+  }
+
   render() {
     let showActivity = isDocs || isPro; 
     return (
@@ -261,6 +276,7 @@ class MainSideNav extends React.Component {
               </a>
               {this.renderSharedAdmin()}
             </li>
+            {customNavItems && this.renderCustomNavItems()}
           </ul>
         </div>
 

@@ -16,6 +16,7 @@ class InstitutionMiddleware(object):
         try:
             inst_admin = InstitutionAdmin.objects.get(user=username)
         except InstitutionAdmin.DoesNotExist:
+            request.user.inst_admin = False
             return None
 
         request.user.institution = inst_admin.institution

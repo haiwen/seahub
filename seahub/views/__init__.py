@@ -63,6 +63,7 @@ from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
 from seahub.constants import HASH_URLS, PERMISSION_READ
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
+CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
 
 from constance import config
 
@@ -1267,7 +1268,8 @@ def react_fake_view(request, **kwargs):
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
         'folder_perm_enabled': folder_perm_enabled,
-        'file_audit_enabled' : FILE_AUDIT_ENABLED
+        'file_audit_enabled' : FILE_AUDIT_ENABLED,
+        'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
     })
 
 @login_required
