@@ -98,7 +98,6 @@ class Search extends Component {
         if (resultData.length > 0) {
           dtableNameList.push(...resultData);
         }
-        return;
       });
       this.setState({
         resultItems: dtableNameList,
@@ -173,7 +172,7 @@ class Search extends Component {
         {this.state.resultItems.map(item => {
           return (
             <SearchResultItem
-              key={item.index}
+              key={item.id}
               item={item}
               onItemClickHandler={this.onItemClickHandler}
             />
