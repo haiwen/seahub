@@ -216,14 +216,14 @@ class Command(BaseCommand):
             self.stdout.write('[%s] Set language code to %s for user: %s' % (
                 str(datetime.now()), user_language, username))
 
-            # get last_emailed_time if any, defaults to today
+            # get last_emailed_time if any, defaults to today 00:00:00.0
             last_emailed_time = user_last_emailed_time_dict.get(username, None)
             now = datetime.utcnow().replace(microsecond=0)
             if not last_emailed_time:
                 last_emailed_time = datetime.utcnow().replace(hour=0).replace(
                                     minute=0).replace(second=0).replace(microsecond=0)
             else:
-                if (now - last_emailed_time).seconds < interval_val:
+                if (now - last_emailed_time).total_seconds() < interval_val:
                     continue
 
             # get file updates(from: last_emailed_time, to: now) for repos
