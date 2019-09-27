@@ -21,13 +21,13 @@ class SidePanel extends React.Component {
   }
 
   render() {
-    
-    let imgUrl = siteRoot + 'media/img/DTable_Logo48_48px.png'
+    let imgUrl = siteRoot + 'media/img/dtable-logo.png'
     return (
       <div className="side-panel">
         <div className="side-panel-north dtable-header">
-          <img src={imgUrl} />
-          <span className="dtable-text">DTable</span>
+          <div className="dtable-logo">
+            <img src={imgUrl} height="32" />
+          </div>
         </div>
         <div className="side-panel-center">
           <div className="dtable-side-nav">
