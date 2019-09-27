@@ -51,11 +51,11 @@ class DTableWorkspaceShared extends React.Component {
 
   render() {
     if (this.state.isDataLoading) {
-      return <Loading />
+      return <Loading />;
     }
 
     if (!this.state.tableList.length) {
-      return "";
+      return '';
     }
 
     return (

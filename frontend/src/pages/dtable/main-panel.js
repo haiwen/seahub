@@ -1,10 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Router } from '@reach/router'
+import { Router } from '@reach/router';
+import Notification from '../../components/common/notification';
+import Account from '../../components/common/account';
+import Search from './search/search';
 import MainPanelDTables from './main-panel-dtables';
 import MainPanelApps from './main-panel-apps';
 import MainPanelTempletes from './main-panel-templetes';
 
+import '../../css/search.css';
 
 const siteRoot = window.app.config.siteRoot;
 
@@ -15,14 +19,25 @@ const propTypes = {
 
 class MainPanel extends React.Component {
 
+  onSearchedClick = (item) => {
+    let url = siteRoot + 'workspace/' + item.workspace_id + '/dtable/' + item.name + '/';
+    window.open(url)
+  }
+
   render() {
+
+    let searchPlaceholder = this.props.searchPlaceholder || 'Search Dtables';
+
     return (
       <div className="main-panel">
         <div className="main-panel-north dtable-header">
           <div className="common-toolbar">
-            <div className="search" title={'Search'}>Search</div>
-            <div className="notification" title={'Notification'}>Notification</div>
-            <div className="avatar" title={'Avatar'}></div>
+            <Search 
+              placeholder={searchPlaceholder}
+              onSearchedClick={this.onSearchedClick}
+            />
+            <Notification />
+            <Account />
           </div>
         </div>
         <Router className="reach-router">

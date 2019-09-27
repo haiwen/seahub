@@ -23,7 +23,7 @@ class MainPanelDTables extends React.Component {
       isWorkspaceListLoading: true,
       isSharedTableListLoading: true,
       isShowCreateDialog: false
-    }
+    };
   }
 
   componentDidMount() {
@@ -89,7 +89,7 @@ class MainPanelDTables extends React.Component {
   render() {
     let { isWorkspaceListLoading, isSharedTableListLoading } = this.state;
     if (isWorkspaceListLoading || isSharedTableListLoading) {
-      return <Loading />
+      return <Loading />;
     }
 
     let { workspaceList, sharedTableList } = this.state;
@@ -104,8 +104,10 @@ class MainPanelDTables extends React.Component {
     return (
       <Fragment>
         <div className="main-panel-center dtable-center">
-          <div className="main-panel-container d-flex flex-1 flex-column">
-            <div className="cur-view-title">DTable</div>
+          <div className="cur-view-container d-flex flex-1 flex-column">
+            <div className="cur-view-header">
+              <div className="cur-view-title">DTable</div>
+            </div>
             <div className="cur-view-content">
               {this.state.errorMsg &&
                 <p className="error text-center">{this.state.errorMsg}</p>
@@ -115,7 +117,7 @@ class MainPanelDTables extends React.Component {
                   <DTableWorkspaceCommon workspace={personalWorkspace} />
                   <DTableWorkspaceShared tableList={sharedTableList} />
                   {groupWorkspaceList.length > 0 && groupWorkspaceList.map((workspace, index) => {
-                    return (<DTableWorkspaceCommon key={index} workspace={workspace} />)
+                    return (<DTableWorkspaceCommon key={index} workspace={workspace} />);
                   })}
                   <button className="btn btn-secondary dtable-add-btn mb-4" onClick={this.onCreateTableToggle}>{gettext('New DTable')}</button>
                 </Fragment>
