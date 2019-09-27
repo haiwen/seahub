@@ -27,7 +27,7 @@ class DTableWorkspaceCommon extends React.Component {
       isShowSharedDialog: false,
       isShowAPITokenDialog: false,
       currentTable: null,
-    }
+    };
   }
 
   componentDidMount() {
@@ -138,7 +138,7 @@ class DTableWorkspaceCommon extends React.Component {
   render() {
     let { isDataLoading } = this.state;
     if (isDataLoading) {
-      return <Loading />
+      return <Loading />;
     }
 
     let { workspace } = this.props;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Router } from '@reach/router';
 import Notification from '../../components/common/notification';
 import Account from '../../components/common/account';
-import Search from '../../components/search/search';
+import Search from './search/search';
 import MainPanelDTables from './main-panel-dtables';
 import MainPanelApps from './main-panel-apps';
 import MainPanelTempletes from './main-panel-templetes';
@@ -19,9 +19,9 @@ const propTypes = {
 
 class MainPanel extends React.Component {
 
-  onSearchedClick = () => {
-    console.log(6543)
-    //todo
+  onSearchedClick = (item) => {
+    let url = siteRoot + 'workspace/' + item.workspace_id + '/dtable/' + item.name + '/';
+    window.open(url)
   }
 
   render() {

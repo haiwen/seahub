@@ -160,6 +160,7 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  min-height: 0;
 }
 .workspace .table-item-container .table-item {
   width: 48%;
@@ -184,6 +185,7 @@
   width: 15%;
   height: 100%;
   text-align: right;
+  position: relative;
 }
 .workspace .table-item .table-dropdown-menu .table-dropdown-menu-icon {
   width: 24px;
