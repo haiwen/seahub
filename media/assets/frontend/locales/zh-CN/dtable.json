@@ -221,5 +221,13 @@
   "Server_is_not_connected_Operation_will_be_sent_to_server_later": "服务器未连接。 操作稍后将发送到服务器。",
   "US": "美国格式",
   "European": "欧洲格式",
-  "ISO": "国际标准格式"
+  "ISO": "国际标准格式",
+  "Max": "最大值",
+  "Min": "最小值",
+  "Mean": "平均值",
+  "By_Day": "按天",
+  "By_Week": "按周",
+  "By_Month": "按月",
+  "By_Year": "按年",
+  "No_fields_that_can_be_returned": "没有可以被归总的字段。"  
 }
