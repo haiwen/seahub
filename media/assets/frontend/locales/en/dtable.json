@@ -178,8 +178,8 @@
   "this_year": "this year",
   "Or": "Or",
   "And": "And",
-  "Up": "Up",
-  "Down": "Down",
+  "up": "Up",
+  "down": "Down",
   "Format": "Format",
   "Format_Settings": "Format Settings",
   "Number_With_Commas": "Number With Commas",
@@ -229,5 +229,9 @@
   "By_Week": "By Week",
   "By_Month": "By Month",
   "By_Year": "By Year",
-  "No_fields_that_can_be_returned": "No fields that can be returned."
+  "No_fields_that_can_be_returned": "No fields that can be returned.",
+  "Group": "Group",
+  "No_groupings_applied_to_this_view": "No groupings applied to this view.",
+  "Add_a_column_to_group_by": "Add a column to group by",
+  "Grouped_by_1_column": "Grouped by 1 column"
 }
