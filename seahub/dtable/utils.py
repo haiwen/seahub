@@ -1,6 +1,9 @@
+import jwt
+
 from seahub.dtable.models import DTableShare
 from seahub.group.utils import is_group_member, is_group_admin_or_owner
 from seahub.constants import PERMISSION_READ_WRITE
+from seahub.settings import DTABLE_PRIVATE_KEY
 
 from seaserv import ccnet_api
 
@@ -82,3 +85,21 @@ def gen_share_dtable_link(token):
     assert service_url is not None
     service_url = service_url.rstrip('/')
     return '%s/dtable/links/%s' % (service_url, token)
+
+
+def is_valid_jwt_by_dtable_uuid(auth, dtable_uuid):
+    if not auth or auth[0].lower() != 'token' or len(auth) != 2:
+        return False
+
+    token = auth[1]
+    if not token or not dtable_uuid:
+        return False
+
+    try:
+        payload = jwt.decode(token, DTABLE_PRIVATE_KEY, algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        return False
+    if payload['dtable_uuid'] != dtable_uuid.hex:
+        return False
+
+    return True

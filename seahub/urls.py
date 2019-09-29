@@ -91,7 +91,8 @@ from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.dtable import WorkspacesView, DTableView, DTablesView, \
-     DTableAssetUploadLinkView, DTableAccessTokenView, DTableRowSharesView, DTableRowSharesView, DTableRowShareView
+     DTableAssetUploadLinkView, DTableAccessTokenView, DTableRowSharesView, DTableRowShareView, \
+     DTableAssetUpdateLinkView, DTableAssetDownloadLinkView
 from seahub.api2.endpoints.dtable_api_token import DTableAPITokensView, DTableAPITokenView, DTableAppAccessTokenView
 from seahub.api2.endpoints.dtable_forms import DTableFormLinksView, DTableFormLinkView
 from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
@@ -385,6 +386,8 @@ urlpatterns = [
     url(r'^api/v2.1/dtables/$', DTablesView.as_view(), name='api-v2.1-dtables'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/$', DTableView.as_view(), name='api-v2.1-workspace-dtable'),
     url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-asset-upload-link/$', DTableAssetUploadLinkView.as_view(), name='api-v2.1-workspace-dtable-asset-upload-link'),
+    url(r'^api/v2.1/dtable-internal/get-file-update-link/$', DTableAssetUpdateLinkView.as_view(), name='api-v2.1-dtable-update-link'),
+    url(r'^api/v2.1/dtable-internal/get-file-download-link/$', DTableAssetDownloadLinkView.as_view(), name='api-v2.1-dtable-download-link'),
     url(r'^api/v2.1/dtables/shared/$', SharedDTablesView.as_view(), name='api-v2.1-dtables-share'),
     url(r'^api/v2.1/dtables/share-links/$', DTableShareLinksView.as_view(), name='api-v2.1-dtables-share-links'),
     url(r'^api/v2.1/dtables/share-links/(?P<token>[0-9a-f]+)/$', DTableSharedLinkView.as_view(), name='api-v2.1-dtables-share-link'),

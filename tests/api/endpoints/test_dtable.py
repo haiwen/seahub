@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 
 from seaserv import seafile_api
 
-from seahub.dtable.models import Workspaces
+from seahub.dtable.models import Workspaces, DTables
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
@@ -214,3 +214,35 @@ class DTableTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertIsNotNone(json_resp["row_share"])
+
+    def test_can_get_download_link(self):
+        resp = self.client.post(self.url1, {'name': 'table12', 'owner': self.user.username})
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp["table"]["name"] == 'table12'
+
+        url = reverse('api-v2.1-dtable-download-link')
+        workspace = Workspaces.objects.get_workspace_by_id(self.workspace.id)
+        dtable = DTables.objects.get_dtable(workspace, 'table12')
+        resp = self.client.get(url + '?name=table12&repo_id=' + self.repo.id + '&dtable_uuid=' + dtable.uuid, {}, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        self.assertIsNotNone(json_resp["download_link"])
+
+    def test_can_get_update_link(self):
+        resp = self.client.post(self.url1, {'name': 'table13', 'owner': self.user.username})
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp["table"]["name"] == 'table13'
+
+        url = reverse('api-v2.1-dtable-update-link')
+        workspace = Workspaces.objects.get_workspace_by_id(self.workspace.id)
+        dtable = DTables.objects.get_dtable(workspace, 'table13')
+        resp = self.client.get(url + '?name=table13&repo_id=' + self.repo.id + '&dtable_uuid=' + dtable.uuid, {}, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        self.assertIsNotNone(json_resp["update_link"])

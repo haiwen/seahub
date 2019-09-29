@@ -22,9 +22,9 @@ from seahub.dtable.models import Workspaces, DTables, DTableRowShares
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.group.utils import group_id_to_name
 from seahub.utils import is_valid_dirent_name, is_org_context, normalize_file_path, \
-    check_filename_with_rename, gen_file_upload_url
+    check_filename_with_rename, gen_file_upload_url, get_fileserver_root, gen_file_get_url
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, DTABLE_PRIVATE_KEY
-from seahub.dtable.utils import check_dtable_permission
+from seahub.dtable.utils import check_dtable_permission, is_valid_jwt_by_dtable_uuid
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 
 
@@ -464,6 +464,123 @@ class DTableAssetUploadLinkView(APIView):
         res['upload_link'] = upload_link
         res['parent_path'] = asset_dir_path
         return Response(res)
+
+
+class DTableAssetUpdateLinkView(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """get table file update link
+
+        Permission:
+        1. use dtable.uuid verify jwt from dtable-server
+        """
+        # argument check
+        table_name = request.GET.get('name', None)
+        if not table_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_id = request.GET.get('repo_id', None)
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dtable_uuid = request.GET.get('dtable_uuid', None)
+        if not dtable_uuid:
+            error_msg = 'dtable_uuid invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dtable = DTables.objects.get_dtable_by_uuid(dtable_uuid)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        if not is_valid_jwt_by_dtable_uuid(auth, dtable.uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        username = request.user.username
+        try:
+            token = seafile_api.get_fileserver_access_token(repo_id, 'dummy', 'update',
+                                                            username, use_onetime=False)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        update_link = '%s/%s/%s' % (get_fileserver_root(), 'update-api', token)
+
+        return Response({'update_link': update_link})
+
+
+class DTableAssetDownloadLinkView(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """get table file download link
+
+        Permission:
+        1. use dtable.uuid verify jwt from dtable-server
+        """
+        # argument check
+        table_name = request.GET.get('name', None)
+        if not table_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_id = request.GET.get('repo_id', None)
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dtable_uuid = request.GET.get('dtable_uuid', None)
+        if not dtable_uuid:
+            error_msg = 'dtable_uuid invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dtable = DTables.objects.get_dtable_by_uuid(dtable_uuid)
+        if not dtable:
+            error_msg = 'dtable %s not found.' % table_name
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        if not is_valid_jwt_by_dtable_uuid(auth, dtable.uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        username = request.user.username
+        table_file_name = table_name + FILE_TYPE
+        try:
+            file_path = '/' + table_file_name
+            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download',
+                                                            username, use_onetime=False)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        download_link = gen_file_get_url(token, table_name)
+
+        return Response({'download_link': download_link})
 
 
 class DTableAccessTokenView(APIView):
