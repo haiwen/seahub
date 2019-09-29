@@ -17,6 +17,8 @@ export const fileServerRoot = window.app.config.fileServerRoot;
 export const seafileVersion = window.app.config.seafileVersion;
 export const serviceURL = window.app.config.serviceURL;
 export const appAvatarURL = window.app.config.avatarURL;
+export const faviconPath = window.app.config.faviconPath;
+export const loginBGPath = window.app.config.loginBGPath;
 
 //pageOptions
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;

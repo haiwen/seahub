@@ -672,6 +672,7 @@ urlpatterns = [
     url(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', sysadmin_react_fake_view, name="sys_libraries_template_dirent"),
 
     url(r'^sys/work-weixin/$', sysadmin_react_fake_view, name="sys_work_weixin"),
+    url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
 ]
