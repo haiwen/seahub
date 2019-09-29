@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Button, Label } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SettingItemBase from './setting-item-base';
 
 const propTypes = {
   postFile: PropTypes.func.isRequired,
@@ -20,8 +21,7 @@ class WebSettingFile extends Component {
     this.fileInput = React.createRef();
   }
 
-  uploadFile = (e) => {
-    // no file selected
+  uploadFile = () => {
     if (!this.fileInput.current.files.length) {
       return;
     }
@@ -34,25 +34,21 @@ class WebSettingFile extends Component {
   }
 
   render() {
-    let { helpTip, filePath, fileWidth, fileHeight, displayName } = this.props;
+    const { helpTip, filePath, fileWidth, fileHeight, displayName } = this.props;
     return (
-      <Fragment>
-        <Row>
-          <Col xs="3">
-            <Label className="font-weight-bold">{displayName}</Label>
-          </Col>
-          <Col xs="4">
-            {/* This will append the current timestamp automatically when render this component, 
-            and it will make the browser look again for the image instead of retrieving the one in the cache. */}
-            <img src={filePath + '?t=' + new Date().getTime()} alt="" width={fileWidth} height={fileHeight}/>
-            <p>{helpTip}</p>
-          </Col>
-          <Col xs="4">
-            <Button color="primary" onClick={this.openFileInput}>{gettext('Change')}</Button>
+      <SettingItemBase
+        displayName={displayName}
+        helpTip={helpTip}
+        mainContent={
+          <img src={filePath + '?t=' + new Date().getTime()} alt={displayName} width={fileWidth} height={fileHeight} className="mb-1" />
+        }
+        extraContent={
+          <Fragment>
+            <Button color="secondary" onClick={this.openFileInput}>{gettext('Change')}</Button>
             <input className="d-none" type="file" onChange={this.uploadFile} ref={this.fileInput} />
-          </Col>
-        </Row>
-      </Fragment>
+          </Fragment>
+        } 
+      />
     );
   }
 }

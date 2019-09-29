@@ -66,9 +66,9 @@ class SidePanel extends React.Component {
                 {constanceEnabled && canConfigSystem &&
                   <li className="nav-item">
                     <Link 
-                      className={`nav-link ellipsis ${this.getActiveClass('devices')}`}
+                      className={`nav-link ellipsis ${this.getActiveClass('web-settings')}`}
                       to={siteRoot + 'sys/web-settings/'}
-                      onClick={() => this.props.tabItemClick('settings')}
+                      onClick={() => this.props.tabItemClick('web-settings')}
                     >
                       <span className="sf2-icon-cog2" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Settings')}</span>

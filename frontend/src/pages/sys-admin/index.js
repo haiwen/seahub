@@ -4,19 +4,21 @@ import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
-import FileScanRecords from './file-scan-records';
-import WorkWeixinDepartments from './work-weixin-departments';
+
 import Info from './info';
 
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
-import WebSettings from './web-settings/web-settings';
 
 import AllRepos from './repos/all-repos';
 import SystemRepo from './repos/system-repo';
 import TrashRepos from './repos/trash-repos';
 import DirView from './repos/dir-view';
+
+import WebSettings from './web-settings/web-settings';
+import FileScanRecords from './file-scan-records';
+import WorkWeixinDepartments from './work-weixin-departments';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -29,7 +31,7 @@ class SysAdmin extends React.Component {
     super(props);
     this.state = {
       isSidePanelClosed: false,
-      currentTab: 'file-scan',
+      currentTab: 'file-scan'
     };
   }
 
@@ -96,18 +98,14 @@ class SysAdmin extends React.Component {
             <SystemRepo path={siteRoot + 'sys/system-library'} />
             <TrashRepos path={siteRoot + 'sys/trash-libraries'} />
             <DirView path={siteRoot + 'sys/libraries/:repoID/*'} />
-            <WebSettings
-              path={siteRoot + 'sys/web-settings'}
-              currentTab={currentTab}
-              tabItemClick={this.tabItemClick}
-            />
+            <WebSettings path={siteRoot + 'sys/web-settings'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
               tabItemClick={this.tabItemClick}
             />
             <WorkWeixinDepartments
-              path={siteRoot + 'sys/work-weixin/departments'}
+              path={siteRoot + 'sys/work-weixin'}
               currentTab={currentTab}
               tabItemClick={this.tabItemClick}
             />
