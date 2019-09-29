@@ -178,8 +178,8 @@
   "this_year": "今年",
   "Or": "或者",
   "And": "并且",
-  "Up": "升序",
-  "Down": "降序",
+  "up": "升序",
+  "down": "降序",
   "Format": "格式",
   "Format_Settings": "格式设置",
   "Number_With_Commas": "数字（逗号分隔）",
@@ -229,5 +229,9 @@
   "By_Week": "按周",
   "By_Month": "按月",
   "By_Year": "按年",
-  "No_fields_that_can_be_returned": "没有可以被归总的字段。"  
+  "No_fields_that_can_be_returned": "没有可以被归总的字段。",
+  "Grouped_by_1_column": "1 列分组",
+  "Group": "分组",
+  "No_groupings_applied_to_this_view": "没有应用于此视图的分组",
+  "Add_a_column_to_group_by": "添加列至分组依据"
 }
