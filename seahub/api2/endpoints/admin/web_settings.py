@@ -79,7 +79,7 @@ class AdminWebSettings(APIView):
                     error_msg = _(u'value invalid.')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if key in STRING_WEB_SETTINGS and not value:
+            if (key in STRING_WEB_SETTINGS and key != 'CUSTOM_CSS') and not value:
                 error_msg = _(u'value invalid.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
