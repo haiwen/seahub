@@ -10,7 +10,7 @@ import datetime
 from django.db import models
 from constance import config
 
-from seaserv import seafile_api, SERVICE_URL
+from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
@@ -311,7 +311,7 @@ class DTableFormLinksManager(models.Manager):
         )
         form_link_obj.save()
         form_link = form_link_obj.to_dict()
-        form_link["form_link"] = "%s/dtable/forms/%s" % (SERVICE_URL, token)
+        form_link["form_link"] = "%s/dtable/forms/%s" % (config.SERVICE_URL.rstrip('/'), token)
         return form_link
 
     def get_dtable_form_link(self, dtable_uuid, form_id):
@@ -320,7 +320,7 @@ class DTableFormLinksManager(models.Manager):
             form_link_obj = form_links[0]
             form_link = form_link_obj.to_dict()
             form_link["form_link"] = "%s/dtable/forms/%s" % \
-                                     (SERVICE_URL, form_link_obj.token)
+                                     (config.SERVICE_URL.rstrip('/'), form_link_obj.token)
             return form_link
         else:
             return None
@@ -379,7 +379,8 @@ class DTableRowSharesManager(models.Manager):
         )
         row_share_obj.save()
         row_share = row_share_obj.to_dict()
-        row_share["row_share_link"] = "%s/dtable/row-share-links/%s" % (SERVICE_URL, token)
+        row_share["row_share_link"] = "%s/dtable/row-share-links/%s" % \
+                                      (config.SERVICE_URL.rstrip('/'), token)
         return row_share
 
     def get_dtable_row_share(self, username, workspace_id, dtable_uuid, table_id, row_id):
@@ -394,7 +395,7 @@ class DTableRowSharesManager(models.Manager):
             row_share_obj = row_shares[0]
             row_share = row_share_obj.to_dict()
             row_share["row_share_link"] = "%s/dtable/row-share-links/%s" % \
-                                          (SERVICE_URL, row_share_obj.token)
+                                          (config.SERVICE_URL.rstrip('/'), row_share_obj.token)
             return row_share
         else:
             return None
