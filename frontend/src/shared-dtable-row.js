@@ -10,10 +10,11 @@ const { rowContent, columns } = window.shared.pageOptions;
 class SharedDTableRowView extends React.Component {
 
   render() {
+    
     return (
       <Fragment>
         <AppHeader />
-        <AppMain row={rowContent} columns={columns}/>
+        <AppMain row={JSON.parse(rowContent)['row']} columns={JSON.parse(columns)['columns']}/>
       </Fragment>
     );
   }

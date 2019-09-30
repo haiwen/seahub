@@ -24,12 +24,12 @@ class NumberUtils {
     return result.join('') + decimal;
   }
   
-  static formateValue(value, type) {
+  static formatValue(value, type) {
     if (typeof value !== 'number') {
       return value;
     }
-    const commaValue = toThousands(value);
-    const moneyCommaValue = toThousands(value.toFixed(2), true);
+    const commaValue = this.toThousands(value);
+    const moneyCommaValue = this.toThousands(value.toFixed(2), true);
     switch(type) {
       case 'number':
         return value;

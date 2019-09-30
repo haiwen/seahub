@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import RowItem from './row-item';
 
 const propTypes = {
   row: PropTypes.object.isRequired,
@@ -8,12 +9,33 @@ const propTypes = {
 
 class AppMain extends React.Component {
 
+  static defaultProps = {
+    mode: 'form_mode',
+  }
+
+  renderRowItems = () => {
+    let { mode, row, columns } = this.props;
+    let rows = [];
+    for (let key in row) {
+      if (key === '_id') {
+        continue;
+      }
+      let column = columns.find(column => { return column.key === key });
+      if (column.type !== 'number') {
+        continue;
+      }
+      let value = row[key];
+      let rowItem = <RowItem mode={mode} value={value} column={column}/>
+      rows.push(rowItem);
+    }
+    return rows;
+  }
+
   render() {
     return (
       <div className="app-main">
-        <div className="dtable-share-row-container">
-          <div className="rows">{this.props.row}</div>
-          <div className="columns">{this.props.columns}</div>
+        <div className={`${this.props.mode} dtable-share-row-container`}>
+          {this.renderRowItems()}
         </div>
       </div>
     );

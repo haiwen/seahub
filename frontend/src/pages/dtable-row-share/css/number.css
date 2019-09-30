@@ -1,6 +1,7 @@
 .grid_mode {
   background-color: #fff;
 }
-.form_mode {
+.form_mode .cell-formatter {
+  display: block;
   background-color: #fff;
 }

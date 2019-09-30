@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NumberUtils from '../value-utils/number-utils';
+import NumberUtils from '../data-utils/number-utils';
+import '../css/number.css'
 
 const propTypes = {
-  mode: PropTypes.oneOfType(['grid_mode', 'form_mode', 'grally_mode', 'calender_mode', 'kanban_mode']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   column: PropTypes.object,
 };
@@ -13,7 +13,7 @@ const DEFAULT_FORMATTER = 'number';
 
 class NumberFormatter extends React.Component {
 
-  formatValue = () => {
+  getValue = () => {
     let { value, column } = this.props;
     if (value !== '') {
       let formatType = (column.data && column.data.format) ? column.data.format : DEFAULT_FORMATTER;
@@ -24,7 +24,7 @@ class NumberFormatter extends React.Component {
 
   render() {
     return (
-      <div className={`${this.props.mode} cell-formatter grid-cell-type-number`}></div>
+      <input className="cell-formatter grid-cell-type-number" value={this.getValue()} readOnly/>
     );
   }
 }
