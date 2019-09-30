@@ -1,23 +1,23 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import CodeMirror from 'react-codemirror';
+import AppHeader from './pages/dtable-row-share/app-header';
+import AppMain from './pages/dtable-row-share/app-main';
 
-import 'codemirror/lib/codemirror.css';
-import './css/text-file-view.css';
+import './css/dtable-share-row.css';
 
 const { rowContent, columns } = window.shared.pageOptions;
 
 class SharedDTableRowView extends React.Component {
+
   render() {
     return (
-      <div className="shared-file-view-body text-file-view">
-        <CodeMirror
-          ref="code-mirror-editor"
-          value={rowContent + columns}
-        />
-      </div>
+      <Fragment>
+        <AppHeader />
+        <AppMain row={rowContent} columns={columns}/>
+      </Fragment>
     );
   }
+  
 }
 
 ReactDOM.render(
