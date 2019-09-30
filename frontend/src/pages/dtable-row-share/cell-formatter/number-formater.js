@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NumberUtils from '../data-utils/number-utils';
+import { formatNumberValue } from '../utils/utils';
 import '../css/number.css'
 
 const propTypes = {
@@ -17,7 +17,7 @@ class NumberFormatter extends React.Component {
     let { value, column } = this.props;
     if (value !== '') {
       let formatType = (column.data && column.data.format) ? column.data.format : DEFAULT_FORMATTER;
-      value = NumberUtils.formatValue(value, formatType);
+      value = formatNumberValue(value, formatType);
     }
     return value;
   }

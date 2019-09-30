@@ -14,18 +14,18 @@ class AppMain extends React.Component {
   }
 
   renderRowItems = () => {
-    let { mode, row, columns } = this.props;
+    let { row, columns } = this.props;
     let rows = [];
     for (let key in row) {
       if (key === '_id') {
         continue;
       }
       let column = columns.find(column => { return column.key === key });
-      if (column.type !== 'number') {
+      if (column.type !== 'number' && column.type !== 'text' && column.type !== 'date') {
         continue;
       }
       let value = row[key];
-      let rowItem = <RowItem mode={mode} value={value} column={column}/>
+      let rowItem = <RowItem value={value} column={column}/>
       rows.push(rowItem);
     }
     return rows;

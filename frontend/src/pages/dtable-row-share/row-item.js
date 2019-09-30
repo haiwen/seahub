@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CellLabel from './cell-label';
 import FormatterConfig from './cell-formatter/index';
+import './css/row-item.css';
 
 const propTypes = {
-  value: PropTypes.object.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.bool, PropTypes.number, PropTypes.object]),
   column: PropTypes.array.isRequired,
 };
 
