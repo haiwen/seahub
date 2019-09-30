@@ -114,9 +114,9 @@ class DTablesManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
-    def get_dtable_by_uuid(self, uuid):
+    def get_dtable_by_uuid(self, dtable_uuid):
         try:
-            return super(DTablesManager, self).get(uuid=uuid)
+            return super(DTablesManager, self).get(uuid=dtable_uuid)
         except self.model.DoesNotExist:
             return None
 
@@ -362,5 +362,80 @@ class DTableFormLinks(models.Model):
             'workspace_id': self.workspace_id,
             'dtable_uuid': self.dtable_uuid,
             'form_id': self.form_id,
+            'token': self.token,
+        }
+
+
+class DTableRowSharesManager(models.Manager):
+    def add_dtable_row_share(self, username, workspace_id, dtable_uuid, table_id, row_id):
+        token = uuid.uuid4()
+        row_share_obj = self.model(
+            username=username,
+            workspace_id=workspace_id,
+            dtable_uuid=dtable_uuid,
+            table_id=table_id,
+            row_id=row_id,
+            token=token
+        )
+        row_share_obj.save()
+        row_share = row_share_obj.to_dict()
+        row_share["row_share_link"] = "%s/dtable/row-share-links/%s" % (SERVICE_URL, token)
+        return row_share
+
+    def get_dtable_row_share(self, username, workspace_id, dtable_uuid, table_id, row_id):
+        row_shares = super(DTableRowSharesManager, self).filter(
+            username=username,
+            workspace_id=workspace_id,
+            dtable_uuid=dtable_uuid,
+            table_id=table_id,
+            row_id=row_id
+        )
+        if len(row_shares) > 0:
+            row_share_obj = row_shares[0]
+            row_share = row_share_obj.to_dict()
+            row_share["row_share_link"] = "%s/dtable/row-share-links/%s" % \
+                                          (SERVICE_URL, row_share_obj.token)
+            return row_share
+        else:
+            return None
+
+    def get_dtable_row_share_by_token(self, token):
+        try:
+            return super(DTableRowSharesManager, self).get(token=token)
+        except self.model.DoesNotExist:
+            return None
+
+    def delete_dtable_row_share(self, token):
+        try:
+            row_share = super(DTableRowSharesManager, self).get(token=token)
+            row_share.delete()
+            return True
+        except self.model.DoesNotExist:
+            return False
+
+
+class DTableRowShares(models.Model):
+
+    username = models.CharField(max_length=255, db_index=True)
+    workspace_id = models.IntegerField(db_index=True)
+    dtable_uuid = models.CharField(max_length=36, db_index=True)
+    table_id = models.CharField(max_length=36)
+    row_id = models.CharField(max_length=36, db_index=True)
+    token = models.CharField(max_length=100, unique=True)
+
+    objects = DTableRowSharesManager()
+
+    class Meta:
+        db_table = 'dtable_row_shares'
+
+    def to_dict(self):
+
+        return {
+            'id': self.pk,
+            'username': self.username,
+            'workspace_id': self.workspace_id,
+            'dtable_uuid': self.dtable_uuid,
+            'table_id': self.table_id,
+            'row_id': self.row_id,
             'token': self.token,
         }

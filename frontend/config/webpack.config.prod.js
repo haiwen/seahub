@@ -94,6 +94,7 @@ module.exports = {
     appDTable: [require.resolve('./polyfills'), paths.appSrc + "/app-dtable"],
     dtableAssetFileView: [require.resolve('./polyfills'), paths.appSrc + "/dtable-asset-file-view.js"],
     dtableFormView: [require.resolve('./polyfills'), paths.appSrc + "/dtable-form-view.js"],
+    sharedDTableRow: [require.resolve('./polyfills'), paths.appSrc + "/shared-dtable-row.js"],
   },
 
   output: {
