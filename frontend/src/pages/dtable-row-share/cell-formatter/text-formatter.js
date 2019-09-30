@@ -10,7 +10,7 @@ class TextFormatter extends React.Component {
 
   render() {
     return (
-      <input className="cell-formatter grid-cell-type-text" value={this.props.value} readOnly />
+      <div className="cell-formatter grid-cell-type-text">{this.props.value}</div>
     );
   }
 }

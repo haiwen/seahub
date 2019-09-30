@@ -24,7 +24,7 @@ class NumberFormatter extends React.Component {
 
   render() {
     return (
-      <input className="cell-formatter grid-cell-type-number" value={this.getValue()} readOnly/>
+      <div className="cell-formatter grid-cell-type-number">{this.getValue()}</div>
     );
   }
 }
