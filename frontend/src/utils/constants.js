@@ -21,6 +21,7 @@ export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
 
 //pageOptions
+export const dtableWebServer = window.app.pageOptions.dtableWebServer;
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
 export const name = window.app.pageOptions.name;
 export const contactEmail = window.app.pageOptions.contactEmail;

@@ -723,6 +723,12 @@ ENABLE_SUB_LIBRARY = True
 SEAFILE_COLLAB_SERVER = ''
 
 ##########################
+# Settings for dtable web  #
+##########################
+
+DTABLE_WEB_SERVER = ''
+
+##########################
 # Settings for dtable    #
 ##########################
 
