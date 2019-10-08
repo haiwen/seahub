@@ -1,7 +1,5 @@
-.form_mode .cell-label .label-icon {
-  background-color: #fff;
-}
-
-.form_mode .cell-label .label-name {
-  background-color: #fff;
+.form_mode .cell_label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
 }
