@@ -56,7 +56,8 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
-    SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
+    SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
+    DTABLE_WEB_SERVER
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
@@ -1254,6 +1255,7 @@ def react_fake_view(request, **kwargs):
     folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
 
     return render(request, "react_app.html", {
+        'dtable_web_server': DTABLE_WEB_SERVER,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,

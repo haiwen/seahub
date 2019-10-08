@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { Badge } from 'reactstrap';
-import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../utils/constants';
+import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -78,7 +78,7 @@ class MainSideNav extends React.Component {
   }
 
   onDTableClick = () => {
-    let url = siteRoot + 'dtable/'
+    let url =  dtableWebServer;
     window.open(url);
   }
   
