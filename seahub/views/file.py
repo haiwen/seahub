@@ -2165,7 +2165,9 @@ def view_media_file_via_share_link(request):
     serviceURL = get_service_url().rstrip('/')
     image_file_name = os.path.basename(image_path)
     image_file_name = urlquote(image_file_name)
-    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
+    image_url = '(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name)
+    image_url = urllib.parse.unquote(image_url)
+    p = re.compile(image_url)
     result = re.search(p, file_content)
     if not result:
         return render_error(request, 'Image does not exist')
