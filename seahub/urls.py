@@ -150,6 +150,7 @@ from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLib
 from seahub.api2.endpoints.admin.user_activities import UserActivitiesView
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
+from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
@@ -587,6 +588,8 @@ urlpatterns = [
 
     ## admin::notifications
     url(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
+    url(r'^api/v2.1/admin/sys-notifications/$', AdminSysNotificationsView.as_view(), name='api-2.1-admin-sys-notifications'),
+    url(r'^api/v2.1/admin/sys-notifications/(?P<nid>\d+)/$', AdminSysNotificationView.as_view(),name='api-2.1-admin-sys-notification'),
 
     ## admin::work weixin departments
     url(r'^api/v2.1/admin/work-weixin/departments/$', AdminWorkWeixinDepartments.as_view(), name='api-v2.1-admin-work-weixin-departments'),
