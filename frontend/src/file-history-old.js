@@ -68,7 +68,10 @@ class FileHistory extends React.Component {
     if (result.total_count < 5) {
       if (result.data.length) {
         let commitID = result.data[result.data.length-1].commit_id;
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
+        let path = result.data[result.data.length-1].path;
+        let oldPath = result.data[result.data.length-1].old_path;
+        path = oldPath ? oldPath : path;
+        seafileAPI.listOldFileHistoryRecords(historyRepoID, path, commitID).then((res) => {
           if (!res.data) {
             this.setState({isLoading: false});
             throw Error('There is an error in server.');
