@@ -18,6 +18,7 @@ import LabelRepoStateDialog from '../../components/dialog/label-repo-state-dialo
 import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
 import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
+import RepoAPITokenDialog from "../../components/dialog/repo-api-token-dialog";
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -46,6 +47,7 @@ class MylibRepoListItem extends React.Component {
       isResetPasswordDialogShow: false,
       isLabelRepoStateDialogOpen: false,
       isFolderPermissionDialogShow: false,
+      isAPITokenDialogShow: false,
     };
   }
 
@@ -99,6 +101,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'Label Current State':
         this.onLabelToggle();
+        break;
+      case 'API Token':
+        this.onAPITokenToggle();
         break;
       default:
         break;
@@ -169,6 +174,10 @@ class MylibRepoListItem extends React.Component {
 
   onFolderPermissionToggle = () => {
     this.setState({isFolderPermissionDialogShow: !this.state.isFolderPermissionDialogShow});
+  }
+
+  onAPITokenToggle = () => {
+    this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
   }
 
   onUnfreezedItem = () => {
@@ -406,6 +415,16 @@ class MylibRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
+
+        {this.state.isAPITokenDialogShow && (
+          <ModalPortal>
+            <RepoAPITokenDialog
+              repo={repo}
+              onRepoAPITokenToggle={this.onAPITokenToggle}
+            />
+          </ModalPortal>
+        )}
+
       </Fragment>
     );
   }
