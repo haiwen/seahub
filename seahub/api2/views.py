@@ -734,6 +734,7 @@ class Repos(APIView):
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
+                    "salt": r.salt if r.enc_version == 3 else '',
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -801,6 +802,7 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                     "group_name": library_group_name,
+                    "salt": r.salt if r.enc_version == 3 else '',
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
@@ -858,6 +860,7 @@ class Repos(APIView):
                     "share_from": r.user,
                     "share_from_name": nickname_dict.get(r.user, ''),
                     "share_from_contact_email": contact_email_dict.get(r.user, ''),
+                    "salt": r.salt if r.enc_version == 3 else '',
                 }
                 repos_json.append(repo)
 
@@ -898,6 +901,7 @@ class Repos(APIView):
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
+                    "salt": r.salt if r.enc_version == 3 else '',
                 }
                 repos_json.append(repo)
 
