@@ -283,7 +283,7 @@ class DTableAppAccessTokenTest(BaseTestCase):
 
         # url
         self.app_access_token_url = reverse(
-            'api-v2.1-dtable-app-access-token', args=[self.workspace.id, 'table9'])
+            'api-v2.1-dtable-app-access-token')
 
     def tearDown(self):
         assert len(Workspaces.objects.all()) == 1
