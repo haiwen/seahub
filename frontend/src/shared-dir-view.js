@@ -16,7 +16,7 @@ import './css/shared-dir-view.css';
 import './css/grid-view.css';
 
 let loginUser = window.app.pageOptions.name;
-const { token, trafficOverLimit, dirName, sharedBy, path, canDownload, mode, thumbnailSize } = window.shared.pageOptions;
+const { token, trafficOverLimit, dirName, sharedBy, path, canDownload, mode, thumbnailSize, zipped } = window.shared.pageOptions;
 
 const showDownloadIcon = !trafficOverLimit && canDownload;
 
@@ -93,28 +93,20 @@ class SharedDirView extends React.Component {
   }
 
   renderPath = () => {
-    // path: '/', or '/g/'
-    if (path == '/') {
-      return dirName;
-    }
-
-    let pathList = path.substr(0, path.length -1).split('/');
     return (
       <React.Fragment>
-        <a href={`?p=${encodeURIComponent('/')}&mode=${mode}`}>{dirName}</a>
-        <span> / </span>
-        {pathList.map((item, index) => {
-          if (index > 0 && index != pathList.length - 1) {
+        {zipped.map((item, index) => {
+          if (index != zipped.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href={`?p=${encodeURIComponent(pathList.slice(0, index+1).join('/'))}&mode=${mode}`}>{pathList[index]}</a>
+                <a href={`?p=${encodeURIComponent(item.path)}&mode=${mode}`}>{item.name}</a>
                 <span> / </span>
               </React.Fragment>
             );
           }
+        })
         }
-        )}
-        {pathList[pathList.length - 1]}
+        {zipped[zipped.length - 1].name}
       </React.Fragment>
     );
   }
