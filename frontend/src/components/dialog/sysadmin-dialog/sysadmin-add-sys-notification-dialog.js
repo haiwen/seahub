@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-  addNotification: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired
 };
 
 class SysAdminAddSysNotificationDialog extends React.Component {
@@ -14,26 +14,24 @@ class SysAdminAddSysNotificationDialog extends React.Component {
     super(props);
     this.state = {
       value: '',
-      isSubmitBtnActive: false,
+      isSubmitBtnActive: false
     };
   }
 
   handleChange = (e) => {
-    if (!e.target.value.trim()) {
+    const value = e.target.value;
+    if (!value.trim()) {
       this.setState({isSubmitBtnActive: false});
     } else {
       this.setState({isSubmitBtnActive: true});
     }
 
-    this.setState({value: e.target.value}) ;
+    this.setState({value: value});
   }
 
   handleSubmit = () => {
-    if (!this.state.isSubmitBtnActive) {
-      return;
-    }
-    this.props.addNotification(this.state.value);
     this.toggle();
+    this.props.addNotification(this.state.value.trim());
   }
 
   toggle = () => {
@@ -47,8 +45,8 @@ class SysAdminAddSysNotificationDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-              <textarea 
-                style={{width:'450px'}}
+              <Input
+                type="textarea"
                 value={this.state.value}
                 onChange={this.handleChange}
               />

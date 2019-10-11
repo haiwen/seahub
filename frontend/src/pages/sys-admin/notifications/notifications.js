@@ -1,19 +1,31 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
+import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import MainPanelTopbar from '../main-panel-topbar';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminAddSysNotificationDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-sys-notification-dialog';
-import CommonOperationDialog from '../../../components/dialog/common-operation-dialog';
+import MainPanelTopbar from '../main-panel-topbar';
+import OpMenu from './op-menu';
 
 class Content extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isItemFreezed: false
+    };
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   render() {
@@ -21,7 +33,7 @@ class Content extends Component {
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
-      return <p className="error text-center">{errorMsg}</p>;
+      return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
         <EmptyTip>
@@ -29,26 +41,27 @@ class Content extends Component {
         </EmptyTip>
       );
       const table = (
-        <Fragment>
-          <table className="table-hover">
-            <thead>
-              <tr>
-                <th width="85%">{gettext('Notification Detail')}</th>
-                <th width="15%">{gettext('Operations')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                  deleteNotification={this.props.deleteNotification}
-                  setToCurrent={this.props.setToCurrent}
-                />);
-              })}
-            </tbody>
-          </table>
-        </Fragment>
+        <table>
+          <thead>
+            <tr>
+              <th width="95%">{gettext('Notification Detail')}</th>
+              <th width="5%">{/*Operations*/}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => {
+              return (<Item
+                key={index}
+                item={item}
+                isItemFreezed={this.state.isItemFreezed}
+                onFreezedItem={this.onFreezedItem}
+                onUnfreezedItem={this.onUnfreezedItem}
+                deleteNotification={this.props.deleteNotification}
+                setToCurrent={this.props.setToCurrent}
+              />);
+            })}
+          </tbody>
+        </table>
       );
       return items.length ? table : emptyTip; 
     }
@@ -61,16 +74,35 @@ class Item extends Component {
     super(props);
     this.state = {
       isOpIconShown: false,
+      highlight: false,
       isDeleteDialogOpen: false
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: true,
+        highlight: true
+      });
+    }
   }
 
   handleMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: false,
+        highlight: false
+      });
+    }
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShow: false
+    });
+    this.props.onUnfreezedItem();
   }
 
   toggleDeleteDialog = (e) => {
@@ -81,7 +113,7 @@ class Item extends Component {
   }
 
   deleteNotification = () => {
-    this.props.deleteNotification(this.props.item.id)
+    this.props.deleteNotification(this.props.item.id);
     this.toggleDeleteDialog();
   }
 
@@ -89,37 +121,46 @@ class Item extends Component {
     this.props.setToCurrent(this.props.item.id);
   }
 
-  render() {
-    let {item } = this.props;
-    let { isOpIconShown, isDeleteDialogOpen } = this.state;
+  onMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'Set to current':
+        this.setToCurrent();
+        break;
+      case 'Delete':
+        this.toggleDeleteDialog();
+        break;
+    }
+  }
 
-    let msg = '<span class="op-target">' + Utils.HTMLescape(item.msg) + '</span>';
-    let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', msg);
+  render() {
+    const { item } = this.props;
+    const { isOpIconShown, isDeleteDialogOpen } = this.state;
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td>{item.msg}
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+          <td>
+            {item.msg}
             {item.is_current &&
-            <span dangerouslySetInnerHTML={{__html: '<span class="op-target">' + gettext('(current notification)') + '</span>'}}></span>
+              <span className="small text-orange">{gettext('(current notification)')}</span>
             }
           </td>
           <td>
             {isOpIconShown &&
-            <Fragment>
-              {!item.is_current &&
-                <a href="#" className="mr-2" title={gettext('Set to current')} onClick={this.setToCurrent}>{gettext('Set to current')}</a>
-              }
-              <a href="#" title={gettext('Delete')} onClick={this.toggleDeleteDialog}>{gettext('Delete')}</a>
-            </Fragment>
+            <OpMenu
+              item={item}
+              onMenuItemClick={this.onMenuItemClick}
+              onFreezedItem={this.props.onFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
+            />
             }
           </td>
         </tr>
         {isDeleteDialogOpen &&
-          <CommonOperationDialog
+          <CommonOperationConfirmationDialog
             title={gettext('Delete Notification')}
-            message={deleteDialogMsg}
-            toggle={this.toggleDeleteDialog}
+            message={gettext('Are you sure you want to delete the notification ?')}
+            toggleDialog={this.toggleDeleteDialog}
             executeOperation={this.deleteNotification}
             confirmBtnText={gettext('Delete')}
           />
@@ -137,7 +178,7 @@ class Notifications extends Component {
       loading: true,
       errorMsg: '',
       notificationList: [],
-      isAddNotificationDialogOpen: false,
+      isAddNotificationDialogOpen: false
     };
   }
 
@@ -171,7 +212,7 @@ class Notifications extends Component {
   }
 
   toggleAddNotificationDialog = () => {
-    this.setState({isAddNotificationDialogOpen: !this.state.isAddNotificationDialogOpen})
+    this.setState({isAddNotificationDialogOpen: !this.state.isAddNotificationDialogOpen});
   }
 
   addNotification = (msg) => {
@@ -191,6 +232,7 @@ class Notifications extends Component {
         return item.id != id;
       });
       this.setState({notificationList: notificationList});
+      toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -215,7 +257,7 @@ class Notifications extends Component {
   }
 
   render() {
-    let { isAddNotificationDialogOpen } = this.state;
+    const { isAddNotificationDialogOpen } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar>
@@ -223,12 +265,8 @@ class Notifications extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <div className="cur-view-path tab-nav-container">
-              <ul className="nav">
-                <li className="nav-item mt-3 mb-3">
-                  {gettext('All Notifications')}
-                </li>
-              </ul>
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('All Notifications')}</h3>
             </div>
             <div className="cur-view-content">
               <Content
@@ -243,8 +281,8 @@ class Notifications extends Component {
         </div>
         {isAddNotificationDialogOpen &&
           <SysAdminAddSysNotificationDialog
-            toggle={this.toggleAddNotificationDialog}
             addNotification={this.addNotification}
+            toggle={this.toggleAddNotificationDialog}
           />
         }
       </Fragment>

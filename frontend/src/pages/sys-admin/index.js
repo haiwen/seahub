@@ -10,7 +10,6 @@ import Info from './info';
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
-import Notifications from './notifications/notifications';
 
 import AllRepos from './repos/all-repos';
 import SystemRepo from './repos/system-repo';
@@ -18,6 +17,7 @@ import TrashRepos from './repos/trash-repos';
 import DirView from './repos/dir-view';
 
 import WebSettings from './web-settings/web-settings';
+import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 
