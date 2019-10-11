@@ -17,6 +17,7 @@ import TrashRepos from './repos/trash-repos';
 import DirView from './repos/dir-view';
 
 import WebSettings from './web-settings/web-settings';
+import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 
@@ -99,6 +100,7 @@ class SysAdmin extends React.Component {
             <TrashRepos path={siteRoot + 'sys/trash-libraries'} />
             <DirView path={siteRoot + 'sys/libraries/:repoID/*'} />
             <WebSettings path={siteRoot + 'sys/web-settings'} />
+            <Notifications path={siteRoot + 'sys/notifications'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
