@@ -90,14 +90,7 @@ from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
-from seahub.api2.endpoints.dtable import WorkspacesView, DTableView, DTablesView, \
-     DTableAssetUploadLinkView, DTableAccessTokenView, DTableRowSharesView, DTableRowSharesView, DTableRowShareView
-from seahub.api2.endpoints.dtable_api_token import DTableAPITokensView, DTableAPITokenView, DTableAppAccessTokenView
-from seahub.api2.endpoints.dtable_forms import DTableFormLinksView, DTableFormLinkView
-from seahub.api2.endpoints.dtable_share import SharedDTablesView, DTableShareView
-from seahub.api2.endpoints.dtable_related_users import DTableRelatedUsersView
 from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
-from seahub.api2.endpoints.dtable_share_links import DTableShareLinksView, DTableSharedLinkView
 
 
 # Admin
@@ -241,9 +234,6 @@ urlpatterns = [
     url(r'^my-libs/deleted/$', react_fake_view, name="my_libs_deleted"),
     url(r'^org/$', react_fake_view, name="org"),
     url(r'^invitations/$', react_fake_view, name="invitations"),
-    url(r'^dtable/$', dtable_fake_view, name='dtable'),
-    url(r'^dtable/apps/$', dtable_fake_view, name='dtable_apps'),
-    url(r'^dtable/templetes/$', dtable_fake_view, name='dtable_templetes'),
 
     ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
@@ -380,25 +370,6 @@ urlpatterns = [
 
     # public repos search
     url(r'^api/v2.1/published-repo-search/$', PublishedRepoSearchView.as_view(), name='api-v2.1-published-repo-search'),
-
-    # user: dtable
-    url(r'^api/v2.1/workspaces/$', WorkspacesView.as_view(), name='api-v2.1-workspaces'),
-    url(r'^api/v2.1/dtables/$', DTablesView.as_view(), name='api-v2.1-dtables'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/$', DTableView.as_view(), name='api-v2.1-workspace-dtable'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable-asset-upload-link/$', DTableAssetUploadLinkView.as_view(), name='api-v2.1-workspace-dtable-asset-upload-link'),
-    url(r'^api/v2.1/dtables/shared/$', SharedDTablesView.as_view(), name='api-v2.1-dtables-share'),
-    url(r'^api/v2.1/dtables/share-links/$', DTableShareLinksView.as_view(), name='api-v2.1-dtables-share-links'),
-    url(r'^api/v2.1/dtables/share-links/(?P<token>[0-9a-f]+)/$', DTableSharedLinkView.as_view(), name='api-v2.1-dtables-share-link'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/share/$', DTableShareView.as_view(), name='api-v2.1-dtable-share'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/related-users/$', DTableRelatedUsersView.as_view(), name='api-v2.1-dtable-related-users'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/access-token/$', DTableAccessTokenView.as_view(), name='api-v2.1-dtable-access-token'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/api-tokens/$', DTableAPITokensView.as_view(), name='api-v2.1-dtable-api-tokens'),
-    url(r'^api/v2.1/workspace/(?P<workspace_id>\d+)/dtable/(?P<name>.*)/api-tokens/(?P<app_name>.*)/$', DTableAPITokenView.as_view(), name='api-v2.1-dtable-api-token'),
-    url(r'^api/v2.1/dtable/app-access-token/$', DTableAppAccessTokenView.as_view(), name='api-v2.1-dtable-app-access-token'),
-    url(r'^api/v2.1/dtable-form-links/$', DTableFormLinksView.as_view(), name='api-v2.1-dtable-form-links'),
-    url(r'^api/v2.1/dtable-form-links/(?P<token>[-0-9a-f]{36})/$', DTableFormLinkView.as_view(), name='api-v2.1-dtable-form-link'),
-    url(r'^api/v2.1/dtable-row-shares/$', DTableRowSharesView.as_view(), name='api-v2.1-dtable-row-shares'),
-    url(r'^api/v2.1/dtable-row-shares/(?P<token>[-0-9a-f]{36})/$', DTableRowShareView.as_view(), name='api-v2.1-dtable-row-share'),
 
     url(r'^api/v2.1/recent-added-files/$', RecentAddedFilesView.as_view(), name='api-v2.1-recent-added-files'),
 
@@ -577,7 +548,6 @@ urlpatterns = [
     # Must specify a namespace if specifying app_name.
     url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki-unused')),
     url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
-    url(r'^', include('seahub.dtable.urls', app_name='dtable', namespace='workspace')),
 
     ## admin::address book
     url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),

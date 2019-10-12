@@ -1273,11 +1273,3 @@ def react_fake_view(request, **kwargs):
         'file_audit_enabled' : FILE_AUDIT_ENABLED,
         'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
     })
-
-@login_required
-def dtable_fake_view(request, **kwargs):
-    return render(request, 'react_dtable.html', {
-        'share_link_expire_days_default': settings.SHARE_LINK_EXPIRE_DAYS_DEFAULT,
-        'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
-        'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
-    })
