@@ -129,7 +129,7 @@ except ImportError:
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
 from seaserv import seafserv_threaded_rpc, \
-    get_personal_groups_by_user, get_session_info, is_personal_repo, \
+    get_personal_groups_by_user, is_personal_repo, \
     get_repo, check_permission, get_commits, is_passwd_set,\
     check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
     remove_share, get_group, \
@@ -608,7 +608,6 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
     # generate download url for client
-    relay_id = get_session_info().id
     addr, port = get_ccnet_server_addr_port()
     email = request.user.username
     if gen_sync_token:
@@ -628,7 +627,7 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
     calculate_repos_last_modify([repo])
 
     info_json = {
-        'relay_id': relay_id,
+        'relay_id': '44e8f253849ad910dc142247227c8ece8ec0f971',
         'relay_addr': addr,
         'relay_port': port,
         'email': email,
