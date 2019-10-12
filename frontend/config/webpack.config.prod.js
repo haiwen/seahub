@@ -88,13 +88,8 @@ module.exports = {
     repoFolderTrash: [require.resolve('./polyfills'), paths.appSrc + "/repo-folder-trash.js"],
     orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
     sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
-    viewDataGrid: [require.resolve('./polyfills'), paths.appSrc + "/view-file-dtable.js"],
     viewCdoc: [require.resolve('./polyfills'), paths.appSrc + "/view-file-cdoc.js"],
     search: [require.resolve('./polyfills'), paths.appSrc + "/pages/search"],
-    appDTable: [require.resolve('./polyfills'), paths.appSrc + "/app-dtable"],
-    dtableAssetFileView: [require.resolve('./polyfills'), paths.appSrc + "/dtable-asset-file-view.js"],
-    dtableFormView: [require.resolve('./polyfills'), paths.appSrc + "/dtable-form-view.js"],
-    sharedDTableRow: [require.resolve('./polyfills'), paths.appSrc + "/shared-dtable-row.js"],
   },
 
   output: {
