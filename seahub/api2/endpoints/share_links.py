@@ -29,7 +29,6 @@ from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
         normalize_dir_path, is_pro_version, get_file_type_and_ext
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
-from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
@@ -288,11 +287,12 @@ class ShareLinks(APIView):
 
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if parse_repo_perm(check_folder_permission(request, repo_id, path)).can_download is False:
+        username = request.user.username
+        permission_by_path = seafile_api.check_permission_by_path(repo_id, path, username)
+        if parse_repo_perm(permission_by_path).can_generate_share_link is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
         if s_type == 'f':
             fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)

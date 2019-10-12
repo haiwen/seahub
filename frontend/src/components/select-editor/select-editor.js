@@ -46,6 +46,10 @@ class SelectEditor extends React.Component {
     });
   }
 
+  componentWillReceiveProps() {
+    this.setOptions();
+  }
+
   componentWillUnmount() {
     document.removeEventListener('click', this.onHideSelect);
   }
