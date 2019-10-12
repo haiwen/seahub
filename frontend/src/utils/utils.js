@@ -109,6 +109,39 @@ export const Utils = {
     }
   },
 
+  getShareLinkPermissionList: function(itemType, permission, path) {
+    // itemType: library, dir, file
+    // permission: rw, r, admin, cloud-edit, preview
+
+    // if item is library, can preview and download, no need to check
+    // if item is dir, check can download
+    // if item is file, check can download and check can edit
+
+    let editDownloadOption = 'edit_download';
+    let editOnly = 'cloud_edit';
+    let downloadOption = 'preview_download';
+    let permissionOptions = ['preview_only'];
+
+    if (itemType === 'library') {
+      permissionOptions.push(downloadOption);
+    } else if (itemType === 'dir') {
+      if (permission == 'rw' || permission == 'admin' || permission == 'r') {
+        permissionOptions.push(downloadOption);
+      }
+    } else if (itemType === 'file') {
+      if (permission == 'rw' || permission == 'admin' || permission == 'r') {
+        permissionOptions.push(downloadOption);
+      }
+      if (this.isEditableOfficeFile(path) && (permission == 'rw' || permission == 'admin')) {
+        permissionOptions.push(editDownloadOption);
+      }
+      if (this.isEditableOfficeFile(path) && (permission == 'cloud-edit')) {
+        permissionOptions.push(editOnly);
+      }
+    }
+    return permissionOptions;
+  },
+
   isEditableOfficeFile: function(filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
@@ -562,7 +595,19 @@ export const Utils = {
             "can_download": true
           }
         };
+      case 'cloud_edit':
+        return {
+          value: permission,
+          text: gettext('Edit on cloud'),
+          permissionDetails: {
+            'can_edit': true,
+            "can_download": false
+          }
+        };
     }
+    return {
+      text: '',
+    };
   },
 
   formatSize: function(options) {

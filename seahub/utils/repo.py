@@ -54,6 +54,7 @@ def parse_repo_perm(perm):
         'can_edit_on_web',             # edit files on web
         'can_copy',                    # copy files/folders on web
         'can_preview',                 # preview files on web
+        'can_generate_share_link',     # generate share link
     ])
 
     RP.can_download = True if perm in [
@@ -68,6 +69,10 @@ def parse_repo_perm(perm):
     ] else False
     RP.can_preview = True if perm in [
         PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+        PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
+    ] else False
+    RP.can_generate_share_link = True if perm in [
+        PERMISSION_READ_WRITE, PERMISSION_READ, PERMISSION_ADMIN,
         PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
     ] else False
     return RP

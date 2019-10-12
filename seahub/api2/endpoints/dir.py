@@ -563,7 +563,8 @@ class DirDetailView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, path):
+        permission = check_folder_permission(request, repo_id, path)
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -579,6 +580,7 @@ class DirDetailView(APIView):
             'path': path,
             'name': dir_obj.obj_name,
             'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime),
+            'permission': permission,
         }
 
         return Response(dir_info)
