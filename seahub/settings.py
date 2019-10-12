@@ -253,7 +253,6 @@ INSTALLED_APPS = (
     'seahub.file_tags',
     'seahub.related_files',
     'seahub.work_weixin',
-    'seahub.dtable',
     'seahub.file_participants',
 )
 
@@ -524,7 +523,6 @@ LOGIN_BG_IMAGE_PATH = 'img/login-bg.jpg'
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
 FAVICON_PATH = 'img/favicon.ico'
-DTABLE_FAVICON_PATH = 'img/dtable-favicon.ico'
 
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'
@@ -727,16 +725,6 @@ SEAFILE_COLLAB_SERVER = ''
 ##########################
 
 DTABLE_WEB_SERVER = ''
-
-##########################
-# Settings for dtable    #
-##########################
-
-# dtable server url
-DTABLE_SERVER_URL = ''
-
-# dtable private key
-DTABLE_PRIVATE_KEY = ''
 
 ############################
 # Settings for Seahub Priv #

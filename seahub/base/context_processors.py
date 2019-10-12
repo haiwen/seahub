@@ -20,7 +20,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
-    ENABLE_SEAFILE_DOCS, DTABLE_FAVICON_PATH, LOGIN_BG_IMAGE_PATH, \
+    ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
     CUSTOM_LOGIN_BG_PATH
 
 from seahub.constants import DEFAULT_ADMIN
@@ -106,7 +106,6 @@ def base(request):
         'enable_branding_css': config.ENABLE_BRANDING_CSS,
         'favicon_path': favicon_path,
         'login_bg_path': login_bg_path,
-        'dtable_favicon_path': DTABLE_FAVICON_PATH,
         'logo_path': logo_path,
         'logo_width': LOGO_WIDTH,
         'logo_height': LOGO_HEIGHT,
