@@ -20,20 +20,14 @@ class ViaRepoDirTest(BaseTestCase):
 
     def setUp(self):
         self.login_as(self.user)
-        repo_id = self.create_repo(name='test-repo',
-                                   desc='',
-                                   username=self.user.username,
-                                   passwd=None)
 
-        self.repo_id = repo_id
-        self.folder_name = os.path.basename(self.create_folder(repo_id=self.repo_id,
-                                                               parent_dir='/',
-                                                               dirname='folder',
-                                                               username='test@test.com'))
-        self.file_name = os.path.basename(self.create_file(repo_id=self.repo_id,
-                                                           parent_dir='/',
-                                                           filename='test.txt',
-                                                           username='test@test.com'))
+        self.repo_id = self.repo.id
+
+        self.file_path = self.file
+        self.file_name = os.path.basename(self.file_path.rstrip('/'))
+
+        self.folder_path = self.folder
+        self.folder_name = os.path.basename(self.folder_path)
 
         self.r_app_name, permission = 'app_name', 'r'
         self.repo_r_api_token_obj = self._create_repo_api_token_obj(self.r_app_name, permission)
@@ -53,11 +47,11 @@ class ViaRepoDirTest(BaseTestCase):
         json_resp = json.loads(resp.content)
 
         self.assertEqual(200, resp.status_code)
-        assert len(json_resp) == 2
-        assert self.folder_name == json_resp[0]['name']
-        assert self.file_name == json_resp[1]['name']
-        assert len(json_resp[1]['modifier_name']) > 0
-        assert len(json_resp[1]['modifier_contact_email']) > 0
+        assert len(json_resp['dirent_list']) == 2
+        assert self.folder_name == json_resp['dirent_list'][0]['name']
+        assert self.file_name == json_resp['dirent_list'][1]['name']
+        assert len(json_resp['dirent_list'][1]['modifier_name']) > 0
+        assert len(json_resp['dirent_list'][1]['modifier_contact_email']) > 0
 
     def test_read_repo_from_invalid_token(self):
         unique = str(uuid.uuid4())
@@ -69,20 +63,20 @@ class ViaRepoDirTest(BaseTestCase):
     def test_mkdir_repo_from_valid_r_token(self):
         data = {
             'operation': 'mkdir',
-            'p': '/time'
         }
         headers = {'HTTP_AUTHORIZATION': 'token ' + self.repo_r_api_token_obj.token}
-        resp = self.client.post(self.url, data=data, **headers)
+        url = self.url + '?path=/new'
+        resp = self.client.post(url, data=data, **headers)
         self.assertEqual(403, resp.status_code)
 
     def test_mkdir_repo_from_valid_rw_token(self):
         data = {
             'operation': 'mkdir',
-            'p': '/time'
         }
         headers = {'HTTP_AUTHORIZATION': 'token ' + self.repo_rw_api_token_obj.token}
-        resp = self.client.post(self.url, data=data, **headers)
-        self.assertEqual(201, resp.status_code)
+        url = self.url + '?path=/new'
+        resp = self.client.post(url, data=data, **headers)
+        self.assertEqual(200, resp.status_code)
 
 
 class ViaUploadLinkTest(BaseTestCase):
@@ -122,7 +116,7 @@ class ViaUploadLinkTest(BaseTestCase):
 
     def test_get_upload_link_from_r_token(self):
         data = {
-            'p': '/',
+            'path': '/',
         }
         headers = {'HTTP_AUTHORIZATION': 'token ' + self.repo_r_api_token_obj.token}
         resp = self.client.get(self.url, data=data, **headers)
@@ -130,7 +124,7 @@ class ViaUploadLinkTest(BaseTestCase):
 
     def test_get_upload_link_from_rw_token(self):
         data = {
-            'p': '/',
+            'path': '/',
         }
         headers = {'HTTP_AUTHORIZATION': 'token ' + self.repo_rw_api_token_obj.token}
         resp = self.client.get(self.url, data=data, **headers)

@@ -134,10 +134,8 @@ class RepoAPITokenView(APIView):
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            repo = seafile_api.get_repo(repo_id)
-            if not repo:
-                error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
