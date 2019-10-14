@@ -1,23 +1,34 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
+import moment from 'moment';
+import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
-import EmptyTip from '../../../components/empty-tip';
-import moment from 'moment';
 import Loading from '../../../components/loading';
-import GroupsNav from './groups-nav';
-import MainPanelTopbar from '../main-panel-topbar';
-import CommonOperationDialog from '../../../components/dialog/common-operation-dialog';
-import SysAdminGroupTransferDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog';
-import SysAdminCreateGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-group-dialog';
+import EmptyTip from '../../../components/empty-tip';
 import Paginator from '../../../components/paginator';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import SysAdminCreateGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-group-dialog';
+import SysAdminTransferGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog';
+import MainPanelTopbar from '../main-panel-topbar';
+import OpMenu from './op-menu';
 
 class Content extends Component {
 
   constructor(props) {
     super(props);
+    this.state = { 
+      isItemFreezed: false
+    };  
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   getPreviousPage = () => {
@@ -33,7 +44,7 @@ class Content extends Component {
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
-      return <p className="error text-center">{errorMsg}</p>;
+      return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
         <EmptyTip>
@@ -42,13 +53,13 @@ class Content extends Component {
       );
       const table = (
         <Fragment>
-          <table className="table-hover">
+          <table>
             <thead>
               <tr>
-                <th width="30%">{gettext('Name')}</th>
+                <th width="35%">{gettext('Name')}</th>
                 <th width="40%">{gettext('Owner')}</th>
                 <th width="20%">{gettext('Created At')}</th>
-                <th width="10%">{/* operation */}</th>
+                <th width="5%">{/* operation */}</th>
               </tr>
             </thead>
             <tbody>
@@ -56,6 +67,9 @@ class Content extends Component {
                 return (<Item
                   key={index}
                   item={item}
+                  isItemFreezed={this.state.isItemFreezed}
+                  onFreezedItem={this.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
                   deleteGroup={this.props.deleteGroup}
                   transferGroup={this.props.transferGroup}
                 />);
@@ -82,17 +96,49 @@ class Item extends Component {
     super(props);
     this.state = {
       isOpIconShown: false,
+      highlight: false,
       isDeleteDialogOpen: false,
-      isTransferDialogOpen: false,
+      isTransferDialogOpen: false
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: true,
+        highlight: true
+      });
+    }
   }
 
   handleMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: false,
+        highlight: false
+      });
+    }
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShow: false
+    });
+    this.props.onUnfreezedItem();
+  }
+
+  onMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'Delete':
+        this.toggleDeleteDialog();
+        break;
+      case 'Transfer':
+        this.toggleTransferDialog();
+        break;
+      default:
+        break;
+    }
   }
 
   toggleDeleteDialog = (e) => {
@@ -111,52 +157,60 @@ class Item extends Component {
 
   deleteGroup = () => {
     this.props.deleteGroup(this.props.item.id);
-    this.toggleDeleteDialog();
   }
 
   transferGroup = (receiver) => {
-    this.props.transferGroup(receiver.email, this.props.item.id);
-    this.toggleTransferDialog();
+    this.props.transferGroup(this.props.item.id, receiver);
   }
 
   render() {
-    let { isOpIconShown, isDeleteDialogOpen, isTransferDialogOpen } = this.state;
-    let { item } = this.props;
-
-    let iconVisibility = isOpIconShown ? '' : ' invisible'; 
-    let deleteIconClassName = 'op-icon sf2-icon-delete' + iconVisibility;
-    let transferIconClassName = 'op-icon sf2-icon-move' + iconVisibility;
+    const { isOpIconShown, isDeleteDialogOpen, isTransferDialogOpen } = this.state;
+    const { item } = this.props;
 
     let groupName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', groupName);
 
+    const libUrl = item.parent_group_id == 0 ?
+      `${siteRoot}sys/groups/${item.id}/libraries/` :
+      `${siteRoot}sysadmin/#address-book/groups/${item.id}/`;
+
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td><a href={siteRoot + 'sys/groups/' + item.id + '/libs/'}>{item.name}</a></td>
-          <td><a href={siteRoot + 'sys/user-info/' + item.owner + '/'}>{item.owner_name}</a></td>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+          <td><a href={libUrl}>{item.name}</a></td>
           <td>
-            <span className="item-meta-info" title={moment(item.created_at).format('llll')}>{moment(item.created_at).fromNow()}</span>
+            {item.owner == 'system admin' ?
+              '--' :
+              <a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.owner)}/`}>{item.owner_name}</a>
+            }
           </td>
           <td>
-            <a href="#" className={deleteIconClassName} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
-            <a href="#" className={transferIconClassName} title={gettext('Transfer')} onClick={this.toggleTransferDialog}></a>
+            <span title={moment(item.created_at).format('llll')}>{moment(item.created_at).fromNow()}</span>
+          </td>
+          <td>
+            {(isOpIconShown && item.owner != 'system admin') &&
+            <OpMenu
+              onMenuItemClick={this.onMenuItemClick}
+              onFreezedItem={this.props.onFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
+            />
+            }
           </td>
         </tr>
         {isDeleteDialogOpen &&
-          <CommonOperationDialog
+          <CommonOperationConfirmationDialog 
             title={gettext('Delete Group')}
             message={deleteDialogMsg}
-            toggle={this.toggleDeleteDialog}
             executeOperation={this.deleteGroup}
             confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteDialog}
           />
         }
         {isTransferDialogOpen &&
-          <SysAdminGroupTransferDialog
+          <SysAdminTransferGroupDialog
             groupName={item.name}
-            toggle={this.toggleTransferDialog}
-            submit={this.transferGroup}
+            transferGroup={this.transferGroup}
+            toggleDialog={this.toggleTransferDialog}
           />
         }
       </Fragment>
@@ -174,7 +228,7 @@ class Groups extends Component {
       groupList: [],
       pageInfo: {},
       perPage: 100,
-      isCreateGroupDialogOpen: false,
+      isCreateGroupDialogOpen: false
     };
   }
 
@@ -238,13 +292,14 @@ class Groups extends Component {
       this.setState({
         groupList: newGroupList
       });
+      toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
   }
 
-  transferGroup = (receiverEmail, groupID) => {
+  transferGroup = (groupID, receiverEmail) => {
     seafileAPI.sysAdminTransferGroup(receiverEmail, groupID).then(res => {
       let newGroupList = this.state.groupList.map(item => {
         if (item.id == groupID) {
@@ -269,12 +324,14 @@ class Groups extends Component {
         <MainPanelTopbar>
           <Fragment>
             <Button className="operation-item" onClick={this.toggleCreateGroupDialog}>{gettext('New Group')}</Button>
-            <Button className="btn btn-secondary operation-item" ><a href={siteRoot+'sys/groupadmin/export-excel/'}>{gettext('Export Excel')}</a></Button>
+            <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/groupadmin/export-excel/`}>{gettext('Export Excel')}</a>
           </Fragment>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <GroupsNav currentItem="groups" />
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('Groups')}</h3>
+            </div>
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -290,8 +347,8 @@ class Groups extends Component {
         </div>
         {isCreateGroupDialogOpen &&
           <SysAdminCreateGroupDialog 
-            createGroupDialogToggle={this.toggleCreateGroupDialog}
             createGroup={this.createGroup}
+            toggleDialog={this.toggleCreateGroupDialog}
           />
         }
       </Fragment>

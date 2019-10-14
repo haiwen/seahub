@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
+import { siteRoot, loginUrl, gettext, isPro } from '../../../utils/constants';
 import { Label} from 'reactstrap';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -8,7 +8,9 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import GroupNav from './group-nav';
 import MainPanelTopbar from '../main-panel-topbar';
-import CommonOperationDialog from '../../../components/dialog/common-operation-dialog';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+
+const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
 class Content extends Component {
 
@@ -21,7 +23,7 @@ class Content extends Component {
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
-      return <p className="error text-center">{errorMsg}</p>;
+      return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
         <EmptyTip>
@@ -34,10 +36,10 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="5%">{/* icon */}</th>
-                <th width="25%">{gettext('Name')}</th>
-                <th width="20%">{gettext('Size')}</th>
-                <th width="30%">{gettext('Shared By')}</th>
-                <th width="20%">{gettext('Operations')}</th>
+                <th width="30%">{gettext('Name')}</th>
+                <th width="30%">{gettext('Size')}</th>
+                <th width="25%">{gettext('Shared By')}</th>
+                <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -45,7 +47,7 @@ class Content extends Component {
                 return (<Item
                   key={index}
                   item={item}
-                  deleteGroup={this.props.deleteGroup}
+                  unshareRepo={this.props.unshareRepo}
                 />);
               })}
             </tbody>
@@ -63,7 +65,7 @@ class Item extends Component {
     super(props);
     this.state = {
       isOpIconShown: false,
-      isDeleteDialogOpen: false
+      isUnshareRepoDialogOpen: false
     };
   }
 
@@ -75,49 +77,64 @@ class Item extends Component {
     this.setState({isOpIconShown: false});
   }
 
-  toggleDeleteDialog = (e) => {
+  toggleUnshareRepoDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({isUnshareRepoDialogOpen: !this.state.isUnshareRepoDialogOpen});
   }
 
-  deleteGroup = () => {
-    this.props.deleteGroup(this.props.item.repo_id);
-    this.toggleDeleteDialog();
+  unshareRepo = () => {
+    const { item } = this.props;
+    this.props.unshareRepo(item.repo_id, item.name);
+    this.toggleUnshareRepoDialog();
+  }
+
+  renderRepoName = () => {
+    const { item } = this.props;
+    const repo = item;
+    repo.id = item.repo_id;
+    if (repo.name) {
+      if (isPro && enableSysAdminViewRepo && !repo.encrypted) {
+        return <a href={`${siteRoot}sys/libraries/${repo.id}/`}>{repo.name}</a>;
+      } else {
+        return repo.name;
+      }   
+    } else {
+      return '--';
+    }   
   }
 
   render() {
-    let { isOpIconShown, isDeleteDialogOpen } = this.state;
+    let { isOpIconShown, isUnshareRepoDialogOpen } = this.state;
     let { item } = this.props;
 
     let iconUrl = Utils.getLibIconUrl(item);
     let iconTitle = Utils.getLibIconTitle(item);
 
-    let iconVisibility = isOpIconShown ? '' : ' invisible'; 
-    let deleteIconClassName = 'op-icon sf2-icon-delete' + iconVisibility;
-
     let repoName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
-    let deleteDialogMsg = gettext('Are you sure you want to unshare {placeholder} ?').replace('{placeholder}', repoName);
+    let dialogMsg = gettext('Are you sure you want to unshare {placeholder} ?').replace('{placeholder}', repoName);
 
     return (
       <Fragment>
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-          <td>{item.name}</td>
+          <td>{this.renderRepoName()}</td>
           <td>{Utils.bytesToSize(item.size)}</td>
-          <td><a href={siteRoot + 'sys/user-info/' + item.shared_by + '/'}>{item.shared_by_name}</a></td>
           <td>
-            <a href="#" className={deleteIconClassName} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.shared_by)}/`}>{item.shared_by_name}</a>
+          </td>
+          <td>
+            <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unshare')} onClick={this.toggleUnshareRepoDialog}></a>
           </td>
         </tr>
-        {isDeleteDialogOpen &&
-          <CommonOperationDialog
+        {isUnshareRepoDialogOpen &&
+          <CommonOperationConfirmationDialog 
             title={gettext('Unshare Library')}
-            message={deleteDialogMsg}
-            toggle={this.toggleDeleteDialog}
-            executeOperation={this.deleteGroup}
+            message={dialogMsg}
+            executeOperation={this.unshareRepo}
             confirmBtnText={gettext('Unshare')}
+            toggleDialog={this.toggleUnshareRepoDialog}
           />
         }
       </Fragment>
@@ -133,12 +150,12 @@ class GroupRepos extends Component {
       loading: true,
       errorMsg: '',
       groupName: '',
-      repoList: [],
+      repoList: []
     };
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminListReposOfGroup(this.props.groupID).then((res) => {
+    seafileAPI.sysAdminListGroupRepos(this.props.groupID).then((res) => {
       this.setState({
         loading: false,
         repoList: res.data.libraries,
@@ -167,18 +184,17 @@ class GroupRepos extends Component {
     });
   }
 
-  toggleCreateGroupDialog = () => {
-    this.setState({isCreateGroupDialogOpen: !this.state.isCreateGroupDialogOpen});
-  }
-
-  deleteGroup = (repoID) => {
-    seafileAPI.sysAdminDropRepoFromGroup(this.props.groupID, repoID).then(res => {
+  unshareRepo = (repoID, repoName) => {
+    seafileAPI.sysAdminUnshareRepoFromGroup(this.props.groupID, repoID).then(res => {
       let newRepoList = this.state.repoList.filter(item => {
         return item.repo_id != repoID;
       });
       this.setState({
         repoList: newRepoList
       });
+      const msg = gettext('Successfully unshared library {placeholder}')
+        .replace('{placeholder}', repoName);
+      toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -192,15 +208,16 @@ class GroupRepos extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <GroupNav 
-              currentItem={'repos'}
               groupID={this.props.groupID}
+              groupName={this.state.groupName}
+              currentItem="repos"
             />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.repoList}
-                deleteGroup={this.deleteGroup}
+                unshareRepo={this.unshareRepo}
               />
             </div>
           </div>

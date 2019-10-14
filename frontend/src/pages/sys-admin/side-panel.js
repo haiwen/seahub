@@ -97,7 +97,11 @@ class SidePanel extends React.Component {
                 }
                 {canManageGroup &&
                   <li className="nav-item">
-                    <Link className='nav-link ellipsis' to={siteRoot + 'sys/groups/'}>
+                    <Link 
+                      className={`nav-link ellipsis ${this.getActiveClass('groups')}`}
+                      to={siteRoot + 'sys/groups/'}
+                      onClick={() => this.props.tabItemClick('groups')}
+                    >
                       <span className="sf2-icon-group" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Groups')}</span>
                     </Link>

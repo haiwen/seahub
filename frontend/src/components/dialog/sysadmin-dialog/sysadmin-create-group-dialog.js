@@ -7,10 +7,10 @@ import UserSelect from '../../user-select';
 
 const propTypes = {
   createGroup: PropTypes.func.isRequired,
-  createGroupDialogToggle: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired
 };
 
-class SysAdminCreateRepoDialog extends React.Component {
+class SysAdminCreateGroupDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ class SysAdminCreateRepoDialog extends React.Component {
       ownerEmail: '',
       disabled: true,
       errMessage: '',
-      isSubmitBtnActive: false,
+      isSubmitBtnActive: false
     };
     this.newInput = React.createRef();
   }
@@ -39,9 +39,10 @@ class SysAdminCreateRepoDialog extends React.Component {
     this.props.createGroup(groupName, this.state.ownerEmail);
   }
 
-  handleSelectChange = (value) => {
+  handleSelectChange = (option) => {
+    // option can be null
     this.setState({
-      ownerEmail: value.email
+      ownerEmail: option ? option.email : ''
     });
   }
 
@@ -53,7 +54,7 @@ class SysAdminCreateRepoDialog extends React.Component {
   }
 
   toggle = () => {
-    this.props.createGroupDialogToggle();
+    this.props.toggleDialog();
   }
 
   componentDidMount() {
@@ -75,11 +76,14 @@ class SysAdminCreateRepoDialog extends React.Component {
                 value={this.state.groupName} 
                 onChange={this.handleRepoNameChange}
               />
-              <Label className="mt-2">{gettext('Owner')}</Label>
+              <Label className="mt-2">
+                {gettext('Owner')}
+                <span className="small text-secondary">{gettext('(If left blank, owner will be admin)')}</span>
+              </Label>
               <UserSelect
                 isMulti={false}
                 className="reviewer-select"
-                placeholder={gettext('Select users...')}
+                placeholder={gettext('Select a user')}
                 onSelectChange={this.handleSelectChange}
               />
             </FormGroup>
@@ -95,6 +99,6 @@ class SysAdminCreateRepoDialog extends React.Component {
   }
 }
 
-SysAdminCreateRepoDialog.propTypes = propTypes;
+SysAdminCreateGroupDialog.propTypes = propTypes;
 
-export default SysAdminCreateRepoDialog;
+export default SysAdminCreateGroupDialog;

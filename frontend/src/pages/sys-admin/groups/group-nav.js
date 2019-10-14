@@ -13,16 +13,19 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'repos', urlPart: 'groups/' + this.props.groupID + '/libs', text: gettext('Libraries')},
+      {name: 'repos', urlPart: 'groups/' + this.props.groupID + '/libraries', text: gettext('Libraries')},
       {name: 'members', urlPart: 'groups/' + this.props.groupID + '/members', text: gettext('Members')}
     ];
   }
 
   render() {
-    const { currentItem } = this.props;
+    const { groupName, currentItem } = this.props;
     return (
-      <div className="cur-view-path tab-nav-container">
-        <ul className="nav">
+      <div>
+        <div className="cur-view-path">
+          <h3 className="sf-heading"><Link to={`${siteRoot}sys/groups/`}>{gettext('Groups')}</Link> / {groupName}</h3>
+        </div>
+        <ul className="nav border-bottom mx-4">
           {this.navItems.map((item, index) => {
             return (
               <li className="nav-item" key={index}>
