@@ -77,7 +77,7 @@ class RepoAPITokensView(APIView):
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        rat = RepoAPITokens.objects.get_token_by_app_name_and_repo_id(app_name, repo_id)
+        rat = RepoAPITokens.objects.filter(app_name=app_name, repo_id=repo_id, generated_by=username).first()
         if rat:
             error_msg = _('app: %(app)s token already exists.' % {'app': app_name})
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

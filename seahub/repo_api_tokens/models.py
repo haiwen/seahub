@@ -9,10 +9,6 @@ from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 
 class RepoAPITokensManager(models.Manager):
 
-    def get_token_by_app_name_and_repo_id(self, app_name, repo_id):
-        rat = super(RepoAPITokensManager, self).filter(app_name=app_name, repo_id=repo_id).first()
-        return rat
-
     @staticmethod
     def generate_key():
         unique = str(uuid.uuid4())
