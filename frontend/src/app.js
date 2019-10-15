@@ -135,8 +135,13 @@ class App extends Component {
       navigate(url, {repalce: true});
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
+      let isWeChat = Utils.isWeChat();
+      if (!isWeChat) {
+        let newWindow = window.open('about:blank');
+        newWindow.location.href = url;
+      } else {
+        location.href = url;
+      }
     }
   }
 
