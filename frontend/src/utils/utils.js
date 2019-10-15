@@ -38,6 +38,13 @@ export const Utils = {
     return window.innerWidth >= 768;
   },
 
+  isWeChat: function() {
+    let ua = window.navigator.userAgent.toLowerCase();
+    let isWeChat = ua.match(/MicroMessenger/i) == 'micromessenger';
+    let isEnterpriseWeChat = ua.match(/MicroMessenger/i) == 'micromessenger' && ua.match(/wxwork/i) == 'wxwork';
+    return isEnterpriseWeChat || isWeChat;
+  },
+
   FILEEXT_ICON_MAP: {
 
     // text file

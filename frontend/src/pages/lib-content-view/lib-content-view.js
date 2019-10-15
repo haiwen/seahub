@@ -1068,9 +1068,14 @@ class LibContentView extends React.Component {
       if (this.state.currentMode === 'column' && Utils.isMarkdownFile(direntPath)) {
         this.showColumnMarkdownFile(direntPath);
       } else {
-        const w=window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
-        w.location.href = url;
+        let isWeChat = Utils.isWeChat();
+        if (!isWeChat) {
+          let newWindow = window.open('about:blank');
+          newWindow.location.href = url;
+        } else {
+          location.href = url;
+        }
       }
     }
   }
