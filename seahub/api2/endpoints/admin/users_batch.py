@@ -19,10 +19,73 @@ from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.institutions.models import Institution
 from seahub.utils.file_size import get_file_size_unit
+from seahub.utils import string2list, is_valid_username
 from seahub.admin_log.models import USER_DELETE
 from seahub.admin_log.signals import admin_operation
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.constants import DEFAULT_ADMIN
+from seahub.role_permissions.models import AdminRole
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.models import UserLastLogin
 
 logger = logging.getLogger(__name__)
+
+
+class AdminAdminUsersBatch(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def post(self, request):
+        """ Add admin in batch
+        """
+
+        emails = request.data.get('emails', None)
+        if not emails:
+            error_msg = 'emails invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        emails = string2list(emails)
+        new_admin_info = []
+
+        for email in emails:
+            if not is_valid_username(email):
+                error_msg = 'email %s invalid.' % email
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                error_msg = 'email %s invalid.' % email
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            user.is_staff = True
+            user.save()
+
+            profile = Profile.objects.get_profile_by_user(user.email)
+            user_info = {}
+            user_info['email'] = user.email
+            user_info['name'] = email2nickname(user.email)
+            user_info['contact_email'] = profile.contact_email if profile and profile.contact_email else ''
+            user_info['login_id'] = profile.login_id if profile and profile.login_id else ''
+
+            user_info['is_staff'] = user.is_staff
+            user_info['is_active'] = user.is_active
+
+            user_info['quota_total'] = seafile_api.get_user_quota(user.email)
+            user_info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
+
+            user_info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+            user_info['last_login'] = UserLastLogin.objects.get_by_username(user.email).last_login if UserLastLogin.objects.get_by_username(user.email) else ''
+
+            try:
+                admin_role = AdminRole.objects.get_admin_role(user.email)
+                user_info['admin_role'] = admin_role.role
+            except AdminRole.DoesNotExist:
+                user_info['admin_role'] = DEFAULT_ADMIN
+            new_admin_info.append(user_info)
+
+        return Response({'new_admin_user_list': new_admin_info})
 
 
 class AdminUsersBatch(APIView):

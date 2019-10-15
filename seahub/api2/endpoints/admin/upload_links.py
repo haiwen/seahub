@@ -86,6 +86,26 @@ class AdminUploadLink(APIView):
         link_info = get_upload_link_info(uploadlink)
         return Response(link_info)
 
+    def delete(self, request, token):
+        """ Remove a special upload link.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        try:
+            fs = UploadLinkShare.objects.get(token=token)
+        except UploadLinkShare.DoesNotExist:
+            return Response({'success': True})
+
+        try:
+            fs.delete()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
 
 class AdminUploadLinkUpload(APIView):
 

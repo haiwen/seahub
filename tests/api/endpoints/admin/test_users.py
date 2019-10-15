@@ -9,6 +9,7 @@ from seahub.test_utils import BaseTestCase
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import DetailedProfile
+from seahub.share.models import FileShare, UploadLinkShare
 from seahub.utils.file_size import get_file_size_unit
 
 try:
@@ -33,19 +34,14 @@ class AdminUsersTest(BaseTestCase):
 
         json_resp = json.loads(resp.content)
 
-        assert json_resp['total_count'] > 0
-        assert len(json_resp['data']) == json_resp['total_count']
-
         assert 'email' in json_resp['data'][0]
         assert 'name' in json_resp['data'][0]
         assert 'contact_email' in json_resp['data'][0]
         assert 'is_staff' in json_resp['data'][0]
         assert 'is_active' in json_resp['data'][0]
         assert 'create_time' in json_resp['data'][0]
-        assert 'department' in json_resp['data'][0]
         assert 'quota_total' in json_resp['data'][0]
         assert 'quota_usage' in json_resp['data'][0]
-        assert 'create_time' in json_resp['data'][0]
 
     def test_get_with_invalid_user_permission(self):
         self.login_as(self.user)
@@ -382,3 +378,101 @@ class AdminUserTest(BaseTestCase):
         data = {"email": self.tmp_email, "reference_id": ''}
         resp = self.client.put(self.url, json.dumps(data),
                 'application/json')
+
+
+class AdminUserShareLinksTest(BaseTestCase):
+
+    def setUp(self):
+        self.repo_id = self.repo.id
+        self.file_path= self.file
+        self.folder_path= self.folder
+        self.invalid_token = '00000000000000000000'
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def _add_file_share_link(self, password=None):
+        fs = FileShare.objects.create_file_link(
+                self.user.username, self.repo.id, self.file, password, None)
+
+        return fs.token
+
+    def _add_dir_share_link(self, password=None):
+        fs = FileShare.objects.create_dir_link(
+                self.user.username, self.repo.id, self.folder, password, None)
+
+        return fs.token
+
+    def _remove_share_link(self, token):
+        link = FileShare.objects.get(token=token)
+        link.delete()
+
+    def test_get_file_share_links(self):
+        self.login_as(self.admin)
+        token = self._add_file_share_link()
+
+        url = reverse('api-v2.1-admin-user-share-links', args=[self.admin.username])
+
+        resp = self.client.get(url)
+
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert len(json_resp) > 0
+
+        self._remove_share_link(token)
+
+
+class AdminUserUploadLinksTest(BaseTestCase):
+
+    def setUp(self):
+        self.repo_id = self.repo.id
+        self.folder_path= self.folder
+        self.invalid_token = '00000000000000000000'
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def _add_upload_link(self, password=None):
+        fs = UploadLinkShare.objects.create_upload_link_share(
+                self.user.username, self.repo.id, self.folder_path, password, None)
+
+        return fs.token
+
+    def _remove_upload_link(self, token):
+        link = UploadLinkShare.objects.get(token=token)
+        link.delete()
+
+    def test_get_file_share_links(self):
+        self.login_as(self.admin)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-admin-user-upload-links', args=[self.admin.username])
+        resp = self.client.get(url)
+
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert len(json_resp) > 0
+
+        self._remove_upload_link(token)
+
+
+class AdminAdminUsersTest(BaseTestCase):
+
+    def setUp(self):
+        self.url = reverse('api-v2.1-admin-admin-users')
+        self.tmp_email = '%s@email.com' % randstring(10)
+
+    def tearDown(self):
+        self.remove_user(self.tmp_email)
+
+    def test_get_admin_users(self):
+        self.login_as(self.admin)
+
+        resp = self.client.get(self.url)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+
+        for admin_user in json_resp['admin_user_list']:
+            assert admin_user['is_staff'] == True
+

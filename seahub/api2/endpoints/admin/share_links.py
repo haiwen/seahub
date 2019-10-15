@@ -108,6 +108,26 @@ class AdminShareLink(APIView):
         link_info = get_share_link_info(sharelink)
         return Response(link_info)
 
+    def delete(self, request, token):
+        """ Remove a special share link.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        try:
+            fs = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            return Response({'success': True})
+
+        try:
+            fs.delete()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
 
 class AdminShareLinkDirents(APIView):
 
