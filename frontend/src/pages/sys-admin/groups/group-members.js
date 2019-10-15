@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Label, Button} from 'reactstrap';
+import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
@@ -99,7 +99,7 @@ class Item extends Component {
     let { item } = this.props;
 
     let itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
-    let dialogMsg = gettext('Are you sure you want to remove {placeholder} ?'.replace('{placeholder}', itemName));
+    let dialogMsg = gettext('Are you sure you want to remove {placeholder} ?').replace('{placeholder}', itemName);
 
     return (
       <Fragment>
@@ -188,9 +188,22 @@ class GroupMembers extends Component {
   addMembers = (emails) => {
     seafileAPI.sysAdminAddGroupMember(this.props.groupID, emails).then(res => {
       let newMemberList = res.data.success;
-      newMemberList = newMemberList.concat(this.state.memberList);
-      this.setState({
-        memberList: newMemberList
+      if (newMemberList.length) {
+        newMemberList = newMemberList.concat(this.state.memberList);
+        this.setState({
+          memberList: newMemberList
+        });
+        newMemberList.map(item => {
+          const msg = gettext('Successfully added {email_placeholder}')
+            .replace('{email_placeholder}', item.email);
+          toaster.success(msg);
+        });
+      }
+      res.data.failed.map(item => {
+        const msg = gettext('Failed to add {email_placeholder}: {error_msg_placeholder}')
+          .replace('{email_placeholder}', item.email)
+          .replace('{error_msg_placeholder}', item.error_msg);
+        toaster.danger(msg, {duration: 3});
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

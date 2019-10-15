@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react';
+import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, loginUrl, gettext, isPro } from '../../../utils/constants';
-import { Label} from 'reactstrap';
 import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import GroupNav from './group-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import MainPanelTopbar from '../main-panel-topbar';
+import GroupNav from './group-nav';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 

@@ -28,7 +28,7 @@ class Nav extends React.Component {
         <ul className="nav border-bottom mx-4">
           {this.navItems.map((item, index) => {
             return (
-              <li className="nav-item" key={index}>
+              <li className="nav-item mr-2" key={index}>
                 <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link ${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
