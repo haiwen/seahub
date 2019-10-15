@@ -2,6 +2,7 @@
 import operator
 import datetime
 import logging
+import os
 
 from django.db import models
 from django.db.models import Q
@@ -365,6 +366,11 @@ class FileShare(models.Model):
         else:
             assert False
         return perm_dict
+
+    def get_obj_name(self):
+        if self.path:
+            return '/' if self.path == '/' else os.path.basename(self.path.rstrip('/'))
+        return ''
 
 
 class OrgFileShareManager(models.Manager):

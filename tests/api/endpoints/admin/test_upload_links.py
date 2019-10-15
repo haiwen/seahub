@@ -11,6 +11,47 @@ try:
 except ImportError:
     LOCAL_PRO_DEV_ENV = False
 
+
+class AdminUploadLinksTest(BaseTestCase):
+
+    def setUp(self):
+        self.repo_id = self.repo.id
+        self.folder_path= self.folder
+        self.invalid_token = '00000000000000000000'
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def _add_upload_link(self, password=None):
+        fs = UploadLinkShare.objects.create_upload_link_share(
+                self.user.username, self.repo.id, self.folder_path, password, None)
+
+        return fs.token
+
+    def _remove_upload_link(self, token):
+        link = UploadLinkShare.objects.get(token=token)
+        link.delete()
+
+    def test_get_share_links(self):
+        self.login_as(self.admin)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-admin-upload-links')
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+
+        self._remove_upload_link(token)
+
+    def test_get_share_links_with_invalid_permission(self):
+        self.login_as(self.user)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-admin-upload-links')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+        self._remove_upload_link(token)
+
 class AdminUploadLinkTest(BaseTestCase):
 
     def setUp(self):
@@ -62,6 +103,24 @@ class AdminUploadLinkTest(BaseTestCase):
                 args=[self.invalid_token])
         resp = self.client.get(url)
         self.assertEqual(404, resp.status_code)
+
+    def test_can_delete_upload_link_by_token(self):
+        self.login_as(self.admin)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-admin-upload-link', args=[token])
+        resp = self.client.delete(url)
+        self.assertEqual(200, resp.status_code)
+
+    def test_delete_upload_link_with_invalid_permission(self):
+        self.login_as(self.user)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-admin-upload-link', args=[token])
+        resp = self.client.delete(url)
+        self.assertEqual(403, resp.status_code)
+
+        self._remove_upload_link(token)
 
 
 class AdminUploadLinkUploadTest(BaseTestCase):

@@ -120,10 +120,10 @@ from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup
 from seahub.api2.endpoints.admin.group_libraries import AdminGroupLibraries, AdminGroupLibrary
 from seahub.api2.endpoints.admin.group_members import AdminGroupMembers, AdminGroupMember
 from seahub.api2.endpoints.admin.shares import AdminShares
-from seahub.api2.endpoints.admin.share_links import AdminShareLink, \
+from seahub.api2.endpoints.admin.share_links import AdminShareLinks, AdminShareLink, \
         AdminShareLinkDownload, AdminShareLinkCheckPassword, \
         AdminShareLinkDirents
-from seahub.api2.endpoints.admin.upload_links import AdminUploadLink, \
+from seahub.api2.endpoints.admin.upload_links import AdminUploadLinks, AdminUploadLink, \
         AdminUploadLinkUpload, AdminUploadLinkCheckPassword
 from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminUsersBatch
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
@@ -501,6 +501,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/admin-login-logs/$', AdminLoginLogs.as_view(), name='api-v2.1-admin-admin-login-logs'),
 
     ## admin::share-links
+    url(r'^api/v2.1/admin/share-links/$', AdminShareLinks.as_view(), name='api-v2.1-admin-share-links'),
     url(r'^api/v2.1/admin/share-links/(?P<token>[a-f0-9]+)/$', AdminShareLink.as_view(), name='api-v2.1-admin-share-link'),
     url(r'^api/v2.1/admin/share-links/(?P<token>[a-f0-9]+)/download/$',
             AdminShareLinkDownload.as_view(), name='api-v2.1-admin-share-link-download'),
@@ -510,6 +511,7 @@ urlpatterns = [
             AdminShareLinkDirents.as_view(), name='api-v2.1-admin-share-link-dirents'),
 
     ## admin::upload-links
+    url(r'^api/v2.1/admin/upload-links/$', AdminUploadLinks.as_view(), name='api-v2.1-admin-upload-links'),
     url(r'^api/v2.1/admin/upload-links/(?P<token>[a-f0-9]+)/$', AdminUploadLink.as_view(), name='api-v2.1-admin-upload-link'),
     url(r'^api/v2.1/admin/upload-links/(?P<token>[a-f0-9]+)/upload/$',
             AdminUploadLinkUpload.as_view(), name='api-v2.1-admin-upload-link-upload'),

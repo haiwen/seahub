@@ -13,6 +13,54 @@ try:
 except ImportError:
     LOCAL_PRO_DEV_ENV = False
 
+class AdminShareLinksTest(BaseTestCase):
+
+    def setUp(self):
+        self.repo_id = self.repo.id
+        self.file_path= self.file
+        self.folder_path= self.folder
+        self.invalid_token = '00000000000000000000'
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def _add_file_share_link(self, password=None):
+        fs = FileShare.objects.create_file_link(
+                self.user.username, self.repo.id, self.file, password, None)
+
+        return fs.token
+
+    def _add_dir_share_link(self, password=None):
+        fs = FileShare.objects.create_dir_link(
+                self.user.username, self.repo.id, self.folder, password, None)
+
+        return fs.token
+
+    def _remove_share_link(self, token):
+        link = FileShare.objects.get(token=token)
+        link.delete()
+
+    def test_get_share_links(self):
+        self.login_as(self.admin)
+        token1 = self._add_file_share_link()
+        token2 = self._add_dir_share_link()
+
+        url = reverse('api-v2.1-admin-share-links')
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+
+        self._remove_share_link(token1)
+        self._remove_share_link(token2)
+
+    def test_get_share_links_with_invalid_permission(self):
+        self.login_as(self.user)
+        token = self._add_file_share_link()
+
+        url = reverse('api-v2.1-admin-share-links')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+        self._remove_share_link(token)
 
 class AdminShareLinkTest(BaseTestCase):
 
@@ -89,6 +137,24 @@ class AdminShareLinkTest(BaseTestCase):
                 args=[self.invalid_token])
         resp = self.client.get(url)
         self.assertEqual(404, resp.status_code)
+
+    def test_can_delete_share_link_by_token(self):
+        self.login_as(self.admin)
+        token = self._add_dir_share_link()
+
+        url = reverse('api-v2.1-admin-share-link', args=[token])
+        resp = self.client.delete(url)
+        self.assertEqual(200, resp.status_code)
+
+    def test_delete_share_link_with_invalid_permission(self):
+        self.login_as(self.user)
+        token = self._add_dir_share_link()
+
+        url = reverse('api-v2.1-admin-share-link', args=[token])
+        resp = self.client.delete(url)
+        self.assertEqual(403, resp.status_code)
+
+        self._remove_share_link(token)
 
 
 class AdminShareLinkDirentsTest(BaseTestCase):

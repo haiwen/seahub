@@ -28,6 +28,7 @@ from seahub.utils import gen_file_get_url, gen_dir_zip_download_url, \
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.views.file import send_file_access_msg
+from seahub.wiki.models import Wiki
 
 logger = logging.getLogger(__name__)
 
@@ -86,6 +87,53 @@ def get_share_link_info(fileshare):
     return data
 
 
+class AdminShareLinks(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Get all share links.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = (current_page - 1) * per_page
+        end = start + per_page
+
+        share_links = FileShare.objects.all().order_by('ctime')[start:end]
+        count = FileShare.objects.all().count()
+
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        owner_email_set = set([link.username for link in share_links])
+        for e in owner_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+
+        share_links_info = []
+        for link in share_links:
+            link_info = {}
+            link_info['obj_name'] = link.get_obj_name()
+            link_info['token'] = link.token
+
+            owner_email = link.username
+            link_info['creator_email'] = owner_email
+            link_info['creator_name'] = nickname_dict.get(owner_email, '')
+            link_info['ctime'] = datetime_to_isoformat_timestr(link.ctime)
+            link_info['view_cnt'] = link.view_cnt
+            share_links_info.append(link_info)
+
+        return Response({"share_link_list": share_links_info, "count": count})
+
+
 class AdminShareLink(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -115,12 +163,24 @@ class AdminShareLink(APIView):
         1. only admin can perform this action.
         """
         try:
-            fs = FileShare.objects.get(token=token)
+            share_link = FileShare.objects.get(token=token)
         except FileShare.DoesNotExist:
             return Response({'success': True})
 
+        has_published_library = False
+        if share_link.path == '/':
+            try:
+                Wiki.objects.get(repo_id=share_link.repo_id)
+                has_published_library = True
+            except Wiki.DoesNotExist:
+                pass
+
+        if has_published_library:
+            error_msg = 'There is an associated published library.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         try:
-            fs.delete()
+            share_link.delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
