@@ -61,7 +61,7 @@ class Notification extends React.Component {
 
     return (
       <div id="notifications">
-        <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title="Notifications" aria-label="Notifications">
+        <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title="Notifications" aria-label={gettext('Notifications')}>
           <span className="sf2-icon-bell"></span>
           <span className={`num ${this.state.unseenCount ? '' : 'hide'}`}>{this.state.unseenCount}</span>
         </a>
