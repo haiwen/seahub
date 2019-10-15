@@ -63,6 +63,52 @@ def get_upload_link_info(uls):
 
     return data
 
+class AdminUploadLinks(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Get all upload links.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = (current_page - 1) * per_page
+        end = start + per_page
+
+        upload_links = UploadLinkShare.objects.all().order_by('ctime')[start:end]
+        count = UploadLinkShare.objects.all().count()
+
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        owner_email_set = set([link.username for link in upload_links])
+        for e in owner_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+
+        upload_links_info = []
+        for link in upload_links:
+            link_info = {}
+            link_info['path'] = link.path
+            link_info['token'] = link.token
+
+            owner_email = link.username
+            link_info['creator_email'] = owner_email
+            link_info['creator_name'] = nickname_dict.get(owner_email, '')
+            link_info['ctime'] = datetime_to_isoformat_timestr(link.ctime)
+            link_info['view_cnt'] = link.view_cnt
+            upload_links_info.append(link_info)
+
+        return Response({"upload_link_list": upload_links_info, "count": count})
+
 
 class AdminUploadLink(APIView):
 
@@ -93,12 +139,12 @@ class AdminUploadLink(APIView):
         1. only admin can perform this action.
         """
         try:
-            fs = UploadLinkShare.objects.get(token=token)
+            upload_link = UploadLinkShare.objects.get(token=token)
         except UploadLinkShare.DoesNotExist:
             return Response({'success': True})
 
         try:
-            fs.delete()
+            upload_link.delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
