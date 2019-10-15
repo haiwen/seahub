@@ -107,7 +107,8 @@ from seahub.api2.endpoints.admin.statistics import (
 )
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
-from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser
+from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserResetPassword, AdminAdminUsers, \
+    AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
@@ -124,7 +125,7 @@ from seahub.api2.endpoints.admin.share_links import AdminShareLink, \
         AdminShareLinkDirents
 from seahub.api2.endpoints.admin.upload_links import AdminUploadLink, \
         AdminUploadLinkUpload, AdminUploadLinkCheckPassword
-from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch
+from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminUsersBatch
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.organizations import AdminOrganizations, AdminOrganization
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
@@ -451,6 +452,13 @@ urlpatterns = [
     # [^...] Matches any single character not in brackets
     # + Matches between one and unlimited times, as many times as possible
     url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/$', AdminUser.as_view(), name='api-v2.1-admin-user'),
+    url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/reset-password/$', AdminUserResetPassword.as_view(), name='api-v2.1-admin-user-reset-password'),
+    url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/groups/$', AdminUserGroups.as_view(), name='api-v2.1-admin-user-groups'),
+    url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/share-links/$', AdminUserShareLinks.as_view(), name='api-v2.1-admin-user-share-links'),
+    url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/upload-links/$', AdminUserUploadLinks.as_view(), name='api-v2.1-admin-user-upload-links'),
+    url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/beshared-repos/$', AdminUserBeSharedRepos.as_view(), name='api-v2.1-admin-user-beshared-repos'),
+
+    url(r'^api/v2.1/admin/admin-users/$', AdminAdminUsers.as_view(), name='api-v2.1-admin-admin-users'),
 
     ## admin::devices
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
@@ -509,6 +517,7 @@ urlpatterns = [
             AdminUploadLinkCheckPassword.as_view(), name='api-v2.1-admin-upload-link-check-password'),
 
     ## admin::users
+    url(r'^api/v2.1/admin/admin-users/batch/$', AdminAdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
     url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
 
     ## admin::admin-role
@@ -649,6 +658,10 @@ urlpatterns = [
     url(r'^sys/groups/$', sysadmin_react_fake_view, name="sys_groups"),
     url(r'^sys/groups/(?P<group_id>\d+)/libraries/$', sysadmin_react_fake_view, name="sys_group_libraries"),
     url(r'^sys/groups/(?P<group_id>\d+)/members/$', sysadmin_react_fake_view, name="sys_group_members"),
+    url(r'^sys/users/$', sysadmin_react_fake_view, name="sys_users"),
+    url(r'^sys/users-all/$', sysadmin_react_fake_view, name="sys_users_all"),
+    url(r'^sys/users-admin/$', sysadmin_react_fake_view, name="sys_users_admin"),
+    url(r'^sys/user-info/(?P<email>[^/]+)/$', sysadmin_react_fake_view, name="sys_users"),
     url(r'^sys/work-weixin/$', sysadmin_react_fake_view, name="sys_work_weixin"),
     url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
 
