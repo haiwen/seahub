@@ -208,7 +208,7 @@ class Item extends Component {
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility; 
     let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
-
+    let shareRepoUrl =`${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
     const desktopItem = (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
@@ -217,7 +217,7 @@ class Item extends Component {
             {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
           </td>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-          <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link></td>
+          <td><Link to={shareRepoUrl}>{data.repo_name}</Link></td>
           <td>
             {(isPro && data.is_admin) &&
               <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
@@ -251,7 +251,7 @@ class Item extends Component {
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td>
-            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link><br />
+            <Link to={shareRepoUrl}>{data.repo_name}</Link><br />
             <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
             <span className="item-meta-info">{data.size}</span>
             <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
