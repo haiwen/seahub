@@ -37,8 +37,8 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-def get_org_user_info(org_id, email):
-    user = User.objects.get(email=email)
+def get_org_user_info(org_id, user_obj):
+    email = user_obj.email
     user_info = {}
 
     user_info['org_id'] = org_id
@@ -52,7 +52,7 @@ def get_org_user_info(org_id, email):
     org_user_quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
     user_info['quota_usage'] = org_user_quota_usage
 
-    user_info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+    user_info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
     user_info['last_login'] = UserLastLogin.objects.get_by_username(
         email).last_login if UserLastLogin.objects.get_by_username(email) else ''
 
@@ -123,7 +123,7 @@ class AdminOrgUsers(APIView):
         result = []
         org_users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
         for org_user in org_users:
-            user_info = get_org_user_info(org_id, org_user.email)
+            user_info = get_org_user_info(org_id, org_user)
             user_info['active'] = org_user.is_active
             result.append(user_info)
 
@@ -190,7 +190,7 @@ class AdminOrgUsers(APIView):
 
         # create user
         try:
-            User.objects.create_user(email, password, is_staff=False,
+            user = User.objects.create_user(email, password, is_staff=False,
                     is_active=is_active)
         except User.DoesNotExist as e:
             logger.error(e)
@@ -213,7 +213,7 @@ class AdminOrgUsers(APIView):
         if config.FORCE_PASSWORD_CHANGE:
             UserOptions.objects.set_force_passwd_change(email)
 
-        user_info = get_org_user_info(org_id, email)
+        user_info = get_org_user_info(org_id, user)
         user_info['active'] = is_active
         return Response(user_info)
 
@@ -249,7 +249,7 @@ class AdminOrgUser(APIView):
             error_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        user_info = get_org_user_info(org_id, email)
+        user_info = get_org_user_info(org_id, user_obj)
         user_info['active'] = user_obj.is_active
         return Response(user_info)
 
@@ -333,7 +333,7 @@ class AdminOrgUser(APIView):
 
             seafile_api.set_org_user_quota(org_id, email, user_quota)
 
-        user_info = get_org_user_info(org_id, email)
+        user_info = get_org_user_info(org_id, user)
         user_info['active'] = user.is_active
         return Response(user_info)
 

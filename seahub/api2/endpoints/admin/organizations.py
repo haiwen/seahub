@@ -94,7 +94,7 @@ def get_org_detailed_info(org):
     return org_info
 
 
-def gen_org_url_prefix(max_trial=None):
+def gen_org_url_prefix(max_trial=None, length=20):
     """Generate organization url prefix automatically.
     If ``max_trial`` is large than 0, then re-try that times if failed.
 
@@ -106,7 +106,7 @@ def gen_org_url_prefix(max_trial=None):
     """
     def _gen_prefix():
         url_prefix = 'org_' + get_random_string(
-            6, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789')
+            length, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789')
         if ccnet_api.get_org_by_url_prefix(url_prefix) is not None:
             logger.error("org url prefix, %s is duplicated" % url_prefix)
             return None
@@ -182,14 +182,14 @@ class AdminOrganizations(APIView):
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        password = request.data.get('password', None)
-        if not password:
-            error_msg = 'password invalid.'
+        owner_password = request.data.get('owner_password', None)
+        if not owner_password:
+            error_msg = 'owner_password invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        url_prefix = gen_org_url_prefix(5)
+        url_prefix = gen_org_url_prefix(5, 20)
         if ccnet_api.get_org_by_url_prefix(url_prefix):
-            error_msg = 'Failed to get org by url prefix.'
+            error_msg = 'Failed to create organization, please try again later.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
@@ -201,11 +201,11 @@ class AdminOrganizations(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            new_user = User.objects.create_user(owner_email, password,
+            new_user = User.objects.create_user(owner_email, owner_password,
                                                 is_staff=False, is_active=True)
         except User.DoesNotExist as e:
             logger.error(e)
-            error_msg = 'Failed to add user.'
+            error_msg = 'Failed to add user %s.' % owner_email
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
@@ -216,10 +216,6 @@ class AdminOrganizations(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         org = ccnet_api.get_org_by_id(org_id)
-        if not org:
-            error_msg = 'Organization %s not found.' % org_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         try:
             org_info = get_org_info(org)
         except Exception as e:

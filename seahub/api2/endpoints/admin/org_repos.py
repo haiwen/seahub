@@ -25,10 +25,7 @@ logger = logging.getLogger(__name__)
 def get_org_repo_info(repo):
     repo_info = {}
     repo_info['repo_name'] = repo.repo_name
-    owner_email = seafile_api.get_org_repo_owner(repo.id)
-    repo_info['owner_email'] = owner_email
-    repo_info['owner_name'] = email2nickname(owner_email)
-    repo_info['owner_contact_email'] = email2contact_email(owner_email)
+    repo_info['owner_email'] = seafile_api.get_org_repo_owner(repo.id)
     repo_info['repo_id'] = repo.id
 
     return repo_info
