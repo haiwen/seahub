@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from types import FunctionType
 
+from django.utils.translation import ugettext as _
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -10,7 +12,10 @@ from rest_framework import status
 from constance import config
 from seaserv import ccnet_api, seafile_api
 
-from seahub.utils import is_valid_email
+from seahub.settings import INIT_PASSWD, SEND_EMAIL_ON_RESETTING_USER_PASSWD
+from seahub.base.models import UserLastLogin
+from seahub.utils import is_valid_email, is_valid_username, IS_EMAIL_CONFIGURED, \
+    send_html_email, get_site_name
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.utils.file_size import get_file_size_unit
 from seahub.base.accounts import User
@@ -23,6 +28,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.endpoints.utils import is_org_user
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -32,6 +38,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def get_org_user_info(org_id, email):
+    user = User.objects.get(email=email)
     user_info = {}
 
     user_info['org_id'] = org_id
@@ -44,6 +51,10 @@ def get_org_user_info(org_id, email):
 
     org_user_quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
     user_info['quota_usage'] = org_user_quota_usage
+
+    user_info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+    user_info['last_login'] = UserLastLogin.objects.get_by_username(
+        email).last_login if UserLastLogin.objects.get_by_username(email) else ''
 
     return user_info
 
