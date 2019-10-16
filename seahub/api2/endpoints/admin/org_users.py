@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from types import FunctionType
 
+from django.utils.translation import ugettext as _
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -10,7 +12,10 @@ from rest_framework import status
 from constance import config
 from seaserv import ccnet_api, seafile_api
 
-from seahub.utils import is_valid_email
+from seahub.settings import INIT_PASSWD, SEND_EMAIL_ON_RESETTING_USER_PASSWD
+from seahub.base.models import UserLastLogin
+from seahub.utils import is_valid_email, is_valid_username, IS_EMAIL_CONFIGURED, \
+    send_html_email, get_site_name
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.utils.file_size import get_file_size_unit
 from seahub.base.accounts import User
@@ -23,6 +28,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.endpoints.utils import is_org_user
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -31,7 +37,8 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-def get_org_user_info(org_id, email):
+def get_org_user_info(org_id, user_obj):
+    email = user_obj.email
     user_info = {}
 
     user_info['org_id'] = org_id
@@ -44,6 +51,10 @@ def get_org_user_info(org_id, email):
 
     org_user_quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
     user_info['quota_usage'] = org_user_quota_usage
+
+    user_info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
+    user_info['last_login'] = UserLastLogin.objects.get_by_username(
+        email).last_login if UserLastLogin.objects.get_by_username(email) else ''
 
     return user_info
 
@@ -112,7 +123,7 @@ class AdminOrgUsers(APIView):
         result = []
         org_users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
         for org_user in org_users:
-            user_info = get_org_user_info(org_id, org_user.email)
+            user_info = get_org_user_info(org_id, org_user)
             user_info['active'] = org_user.is_active
             result.append(user_info)
 
@@ -179,7 +190,7 @@ class AdminOrgUsers(APIView):
 
         # create user
         try:
-            User.objects.create_user(email, password, is_staff=False,
+            user = User.objects.create_user(email, password, is_staff=False,
                     is_active=is_active)
         except User.DoesNotExist as e:
             logger.error(e)
@@ -202,7 +213,7 @@ class AdminOrgUsers(APIView):
         if config.FORCE_PASSWORD_CHANGE:
             UserOptions.objects.set_force_passwd_change(email)
 
-        user_info = get_org_user_info(org_id, email)
+        user_info = get_org_user_info(org_id, user)
         user_info['active'] = is_active
         return Response(user_info)
 
@@ -238,7 +249,7 @@ class AdminOrgUser(APIView):
             error_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        user_info = get_org_user_info(org_id, email)
+        user_info = get_org_user_info(org_id, user_obj)
         user_info['active'] = user_obj.is_active
         return Response(user_info)
 
@@ -322,7 +333,7 @@ class AdminOrgUser(APIView):
 
             seafile_api.set_org_user_quota(org_id, email, user_quota)
 
-        user_info = get_org_user_info(org_id, email)
+        user_info = get_org_user_info(org_id, user)
         user_info['active'] = user.is_active
         return Response(user_info)
 

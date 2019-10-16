@@ -91,6 +91,24 @@ class AdminOrganizationsTest(BaseTestCase):
         resp = self.client.get(self.orgs_url)
         self.assertEqual(403, resp.status_code)
 
+    def test_can_create_org(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+
+        org_name = randstring(6)
+        owner_email = '%s@%s.com' % (randstring(6), randstring(6))
+        password = randstring(6)
+        data = {'org_name': org_name, 'owner_email': owner_email, 'password': password}
+
+        resp = self.client.post(self.orgs_url, data)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert org_name == json_resp['org_name']
+        assert owner_email == json_resp['creator_email']
+
 
 @pytest.mark.skipif(TRAVIS, reason="pro only")
 class AdminOrganizationTest(BaseTestCase):
