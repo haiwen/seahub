@@ -673,7 +673,8 @@ urlpatterns = [
     url(r'^sys/organizations/(?P<org_id>\d+)/groups/$', sysadmin_org_react_fake_view, name="sys_organization_groups"),
     url(r'^sys/organizations/(?P<org_id>\d+)/libraries/$', sysadmin_org_react_fake_view, name="sys_organization_repos"),
     url(r'^sys/organizations/(?P<org_id>\d+)/settings/$', sysadmin_org_react_fake_view, name="sys_organization_settings"),
-
+    url(r'^sys/share-links/$', sysadmin_react_fake_view, name="sys_share_links"),
+    url(r'^sys/upload-links/$', sysadmin_react_fake_view, name="sys_upload_links"),
     url(r'^sys/work-weixin/$', sysadmin_react_fake_view, name="sys_work_weixin"),
     url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
 
