@@ -269,6 +269,11 @@ class AdminUsers(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
+        """List all users in DB or LDAPImport
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
 
         try:
             page = int(request.GET.get('page', '1'))
@@ -278,10 +283,23 @@ class AdminUsers(APIView):
             per_page = 25
 
         start = (page - 1) * per_page
-        end = start + per_page
-        users = ccnet_api.get_emailusers('DB', start, end)
-        total_count = ccnet_api.count_emailusers('DB') + \
-                ccnet_api.count_inactive_emailusers('DB')
+
+        # source: 'DB' or 'LDAPImport', default is 'DB'
+        source = request.GET.get('source', 'DB')
+        source = source.lower()
+        if source not in ['db', 'ldapimport']:
+            error_msg = 'source %s invalid.' % source
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if source == 'db':
+            users = ccnet_api.get_emailusers('DB', start, per_page)
+            total_count = ccnet_api.count_emailusers('DB') + \
+                          ccnet_api.count_inactive_emailusers('DB')
+        elif source == 'ldapimport':
+            users = ccnet_api.get_emailusers('LDAPImport', start, per_page)
+            # api param is 'LDAP', but actually get count of 'LDAPImport' users
+            total_count = ccnet_api.count_emailusers('LDAP') + \
+                          ccnet_api.count_inactive_emailusers('LDAP')
 
         data = []
         for user in users:
@@ -419,6 +437,49 @@ class AdminUsers(APIView):
 
         return Response(user_info)
 
+
+class AdminLDAPUsers(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request):
+        """List all users from LDAP server
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+
+        start = (page - 1) * per_page
+        end = page * per_page + 1
+        users = ccnet_api.get_emailusers('LDAP', start, end)
+
+        if len(users) == end - start:
+            users = users[:per_page]
+            has_next_page = True
+        else:
+            has_next_page = False
+
+        data = []
+        for user in users:
+            info = {}
+            info['email'] = user.email
+            info['quota_total'] = seafile_api.get_user_quota(user.email)
+            info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
+            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+            info['last_login'] = UserLastLogin.objects.get_by_username(user.email).last_login if UserLastLogin.objects.get_by_username(user.email) else ''
+            data.append(info)
+
+        result = {'ldap_user_list': data, 'has_next_page': has_next_page}
+        return Response(result)
 
 class AdminUser(APIView):
 

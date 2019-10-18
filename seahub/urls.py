@@ -108,7 +108,8 @@ from seahub.api2.endpoints.admin.statistics import (
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserResetPassword, AdminAdminUsers, \
-    AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos
+    AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos, \
+    AdminLDAPUsers
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
@@ -451,6 +452,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/statistics/system-user-storage/excel/$', SystemUserStorageExcelView.as_view(), name='api-v2.1-admin-statistics-system-user-storage-excel'),
     ## admin::users
     url(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
+    url(r'^api/v2.1/admin/ldap-users/$', AdminLDAPUsers.as_view(), name='api-v2.1-admin-ldap-users'),
     # [^...] Matches any single character not in brackets
     # + Matches between one and unlimited times, as many times as possible
     url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/$', AdminUser.as_view(), name='api-v2.1-admin-user'),
