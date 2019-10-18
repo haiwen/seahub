@@ -20,6 +20,10 @@ import Groups from './groups/groups';
 import GroupRepos from './groups/group-repos';
 import GroupMembers from './groups/group-members';
 
+import Departments from './departments/departments';
+import DepartmentsList from './departments/departments-list';
+import DepartmentItem from './departments/department-item';
+
 import ShareLinks from './links/share-links';
 import UploadLinks from './links/upload-links';
 
@@ -115,6 +119,10 @@ class SysAdmin extends React.Component {
             <Groups path={siteRoot + 'sys/groups'} />
             <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} />
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} />
+            <Departments path={siteRoot + 'sys/departments'}>
+              <DepartmentsList path='/'/>
+              <DepartmentItem path='/:groupID'/>
+            </Departments>
             <ShareLinks path={siteRoot + 'sys/share-links'} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} />
             <FileScanRecords
