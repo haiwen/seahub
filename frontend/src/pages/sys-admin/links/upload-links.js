@@ -136,10 +136,11 @@ class UploadLinks extends Component {
       currentPage: 1,
       hasNextPage: false,
     };
+    this.initPage = 1;
   }
 
   componentDidMount () {
-    this.getUploadLinksByPage(1);
+    this.getUploadLinksByPage(this.initPage);
   }
 
   getUploadLinksByPage = (page) => {
@@ -189,7 +190,7 @@ class UploadLinks extends Component {
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
-    }, () => this.getShareLinksByPage(1));
+    }, () => this.getShareLinksByPage(this.initPage));
   }
 
   render() {

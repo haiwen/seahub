@@ -108,18 +108,16 @@ class Item extends Component {
     let { item } = this.props;
     let deleteIcon = `op-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`;
     return (
-      <Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td>{item.obj_name}</td>
-          <td>{item.token}</td>
-          <td><a href={siteRoot + 'useradmin/info/' + item.creator_email + '/'}>{item.creator_name}</a></td>
-          <td>{moment(item.ctime).fromNow()}</td>
-          <td>{item.view_cnt}</td>
-          <td>
-            <a href="#" className={deleteIcon} title={gettext('delete')} onClick={this.deleteShareLink}></a>
-          </td>
-        </tr>
-      </Fragment>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <td>{item.obj_name}</td>
+        <td>{item.token}</td>
+        <td><a href={siteRoot + 'useradmin/info/' + item.creator_email + '/'}>{item.creator_name}</a></td>
+        <td>{moment(item.ctime).fromNow()}</td>
+        <td>{item.view_cnt}</td>
+        <td>
+          <a href="#" className={deleteIcon} title={gettext('delete')} onClick={this.deleteShareLink}></a>
+        </td>
+      </tr>
     );
   }
 }
@@ -136,10 +134,11 @@ class ShareLinks extends Component {
       currentPage: 1,
       hasNextPage: false,
     };
+    this.initPage = 1;
   }
 
   componentDidMount () {
-    this.getShareLinksByPage(1);
+    this.getShareLinksByPage(this.initPage);
   }
 
   getShareLinksByPage = (page) => {
@@ -189,7 +188,7 @@ class ShareLinks extends Component {
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
-    }, () => this.getShareLinksByPage(1));
+    }, () => this.getShareLinksByPage(this.initPage));
   }
 
   render() {

@@ -43,18 +43,9 @@ class Paginator extends Component {
         {this.props.canResetPerPage &&
           <div className="text-center">
             {gettext('Per page:')}{' '}
-            {curPerPage == 25 ?
-              <a className="mr-1" onClick={() => {return this.resetPerPage(25);}}>25</a> :
-              <a className="mr-1" href='#' onClick={() => {return this.resetPerPage(25);}}>25</a>
-            }
-            {curPerPage == 50 ?
-              <a className="mr-1" onClick={() => {return this.resetPerPage(50);}}>50</a> :
-              <a className="mr-1" href='#' onClick={() => {return this.resetPerPage(50);}}>50</a>
-            }
-            {curPerPage == 100 ?
-              <a onClick={() => {return this.resetPerPage(100);}}>100</a> :
-              <a href='#' onClick={() => {return this.resetPerPage(100);}}>100</a>
-            }
+            <span className={`${curPerPage === 25 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(25);}}>25</span>
+            <span className={`${curPerPage === 50 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(50);}}>50</span>
+            <span className={`${curPerPage === 100 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(100);}}>100</span>
           </div>
         }
       </Fragment>
