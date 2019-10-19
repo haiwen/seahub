@@ -109,10 +109,14 @@ class SidePanel extends React.Component {
                 }
                 {isPro && canManageGroup &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#address-book/'}>
-                      <span className="sf2-icon-organization" aria-hidden="true"></span>
+                    <Link 
+                      className={`nav-link ellipsis ${this.getActiveClass('departments')}`}
+                      to={siteRoot + 'sys/departments/'}
+                      onClick={() => this.props.tabItemClick('departments')}
+                    >
+                      <span className="sf2-icon-group" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Departments')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {multiTenancy && isDefaultAdmin &&
