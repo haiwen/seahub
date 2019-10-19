@@ -22,6 +22,7 @@ from seahub.admin_log.models import GROUP_CREATE, GROUP_DELETE, GROUP_TRANSFER
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
+from seahub.share.models import ExtraGroupsSharePermission
 
 logger = logging.getLogger(__name__)
 
@@ -264,8 +265,13 @@ class AdminGroup(APIView):
         group_name = group.group_name
 
         try:
-            ccnet_api.remove_group(group_id)
+            org_id = ccnet_api.get_org_id_by_group(group_id)
+            if org_id:
+                ccnet_api.remove_org_group(org_id, group_id)
+            else:
+                ccnet_api.remove_group(group_id)
             seafile_api.remove_group_repos(group_id)
+            ExtraGroupsSharePermission.objects.filter(group_id=group_id).delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
