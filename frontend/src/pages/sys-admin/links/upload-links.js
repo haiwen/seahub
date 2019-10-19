@@ -190,7 +190,7 @@ class UploadLinks extends Component {
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
-    }, () => this.getShareLinksByPage(this.initPage));
+    }, () => this.getUploadLinksByPage(this.initPage));
   }
 
   render() {
