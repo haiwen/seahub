@@ -7,7 +7,6 @@ import { Utils } from '../../../utils/utils.js';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
-import RoleEditor from '../../../components/select-editor/role-editor';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
 import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-member-dialog';
 import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog';
@@ -15,12 +14,19 @@ import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-a
 import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
 import DeleteDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-department-dialog';
 import SetGroupQuotaDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog';
-import { serviceURL, siteRoot, gettext, lang } from '../../../utils/constants';
+import { siteRoot, gettext, lang } from '../../../utils/constants';
+import GroupItem from './group-item';
+import MemberItem from './member-item';
+import RepoItem from './repo-item';
 import '../../../css/org-department-item.css';
 
 moment.locale(lang);
 
-class DepartmentItem extends React.Component {
+const DepartmentDetailPropTypes = {
+  groupID: PropTypes.string,
+};
+
+class DepartmentDetail extends React.Component {
 
   constructor(props) {
     super(props);
@@ -157,13 +163,11 @@ class DepartmentItem extends React.Component {
     const topbarChildren = (
       <Fragment>
         {groupID &&
-          <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
-        }
-        {groupID &&
-          <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
-        }
-        {groupID &&
-          <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>
+          <Fragment>
+            <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
+            <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
+            <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>
+          </Fragment>
         }
         {this.state.isShowAddMemberDialog && (
           <ModalPortal>
@@ -234,13 +238,13 @@ class DepartmentItem extends React.Component {
                     <tbody>
                       {groups.map((group, index) => {
                         return(
-                          <React.Fragment key={group.id}>
+                          <Fragment key={group.id}>
                             <GroupItem
                               group={group}
                               showDeleteDepartDialog={this.showDeleteDepartDialog}
                               showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
                             />
-                          </React.Fragment>
+                          </Fragment>
                         );
                       })}
                     </tbody>
@@ -269,7 +273,7 @@ class DepartmentItem extends React.Component {
                     <tbody>
                       {members.map((member, index) => {
                         return (
-                          <React.Fragment key={index}>
+                          <Fragment key={index}>
                             <MemberItem
                               member={member}
                               showDeleteMemberDialog={this.showDeleteMemberDialog}
@@ -278,7 +282,7 @@ class DepartmentItem extends React.Component {
                               toggleItemFreezed={this.toggleItemFreezed}
                               groupID={groupID}
                             />
-                          </React.Fragment>
+                          </Fragment>
                         );
                       })}
                     </tbody>
@@ -305,9 +309,9 @@ class DepartmentItem extends React.Component {
                     <tbody>
                       {repos.map((repo, index) => {
                         return(
-                          <React.Fragment key={index}>
+                          <Fragment key={index}>
                             <RepoItem repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog}/>
-                          </React.Fragment>
+                          </Fragment>
                         );
                       })}
                     </tbody>
@@ -318,224 +322,51 @@ class DepartmentItem extends React.Component {
             </div>
 
           </div>
-          <React.Fragment>
-            {this.state.showDeleteMemberDialog && (
-              <ModalPortal>
-                <DeleteMemberDialog
-                  toggle={this.toggleCancel}
-                  onMemberChanged={this.onMemberChanged}
-                  member={this.state.deletedMember}
-                  groupID={groupID}
-                />
-              </ModalPortal>
-            )}
-            {this.state.showDeleteRepoDialog && (
-              <ModalPortal>
-                <DeleteRepoDialog
-                  toggle={this.toggleCancel}
-                  onRepoChanged={this.onRepoChanged}
-                  repo={this.state.deletedRepo}
-                  groupID={groupID}
-                />
-              </ModalPortal>
-            )}
-            {this.state.showDeleteDepartDialog && (
-              <ModalPortal>
-                <DeleteDepartDialog
-                  toggle={this.toggleCancel}
-                  groupID={this.state.subGroupID}
-                  groupName={this.state.subGroupName}
-                  onDepartChanged={this.onSubDepartChanged}
-                />
-              </ModalPortal>
-            )}
-            {this.state.showSetGroupQuotaDialog && (
-              <ModalPortal>
-                <SetGroupQuotaDialog
-                  toggle={this.toggleCancel}
-                  groupID={this.state.subGroupID}
-                  onDepartChanged={this.onSubDepartChanged}
-                />
-              </ModalPortal>
-            )}
-          </React.Fragment>
+          {this.state.showDeleteMemberDialog && (
+            <ModalPortal>
+              <DeleteMemberDialog
+                toggle={this.toggleCancel}
+                onMemberChanged={this.onMemberChanged}
+                member={this.state.deletedMember}
+                groupID={groupID}
+              />
+            </ModalPortal>
+          )}
+          {this.state.showDeleteRepoDialog && (
+            <ModalPortal>
+              <DeleteRepoDialog
+                toggle={this.toggleCancel}
+                onRepoChanged={this.onRepoChanged}
+                repo={this.state.deletedRepo}
+                groupID={groupID}
+              />
+            </ModalPortal>
+          )}
+          {this.state.showDeleteDepartDialog && (
+            <ModalPortal>
+              <DeleteDepartDialog
+                toggle={this.toggleCancel}
+                groupID={this.state.subGroupID}
+                groupName={this.state.subGroupName}
+                onDepartChanged={this.onSubDepartChanged}
+              />
+            </ModalPortal>
+          )}
+          {this.state.showSetGroupQuotaDialog && (
+            <ModalPortal>
+              <SetGroupQuotaDialog
+                toggle={this.toggleCancel}
+                groupID={this.state.subGroupID}
+                onDepartChanged={this.onSubDepartChanged}
+              />
+            </ModalPortal>
+          )}
         </div>
       </Fragment>
     );
   }
 }
 
-class MemberItem extends React.Component {
+DepartmentDetail.propTypes = DepartmentDetailPropTypes;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      highlight: false,
-      showRoleMenu: false,
-    };
-    this.roles = ['Admin', 'Member'];
-  }
-
-  onMouseEnter = () => {
-    if (this.props.isItemFreezed) return;
-    this.setState({ highlight: true });
-  }
-
-  onMouseLeave = () => {
-    if (this.props.isItemFreezed) return;
-    this.setState({ highlight: false });
-  }
-
-  toggleMemberRoleMenu = () => {
-    this.setState({ showRoleMenu: !this.state.showRoleMenu });
-  }
-
-  onChangeUserRole = (role) => {
-    let isAdmin = role === 'Admin' ? true : false;
-    seafileAPI.sysAdminUpdateGroupMemberRole(this.props.groupID, this.props.member.email, isAdmin).then((res) => {
-      this.props.onMemberChanged();
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-    this.setState({
-      highlight: false,
-    });
-  }
-
-  render() {
-    const member = this.props.member;
-    const highlight = this.state.highlight;
-    let memberLink = serviceURL + '/useradmin/info/' + member.email + '/';
-    if (member.role === 'Owner') return null;
-    return (
-      <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img src={member.avatar_url} alt="member-header" width="24" className="avatar"/></td>
-        <td><a href={memberLink}>{member.name}</a></td>
-        <td>
-          <RoleEditor
-            isTextMode={true}
-            isEditIconShow={highlight}
-            currentRole={member.role}
-            roles={this.roles}
-            onRoleChanged={this.onChangeUserRole}
-            toggleItemFreezed={this.props.toggleItemFreezed}
-          />
-        </td>
-        {!this.props.isItemFreezed ?
-          <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
-            <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-          </td> : <td></td>
-        }
-      </tr>
-    );
-  }
-}
-
-const MemberItemPropTypes = {
-  groupID: PropTypes.string.isRequired,
-  member: PropTypes.object.isRequired,
-  isItemFreezed: PropTypes.bool.isRequired,
-  onMemberChanged: PropTypes.func.isRequired,
-  showDeleteMemberDialog: PropTypes.func.isRequired,
-  toggleItemFreezed: PropTypes.func.isRequired,
-};
-
-MemberItem.propTypes = MemberItemPropTypes;
-
-class RepoItem extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      highlight: false,
-    };
-  }
-
-  onMouseEnter = () => {
-    this.setState({ highlight: true });
-  }
-
-  onMouseLeave = () => {
-    this.setState({ highlight: false });
-  }
-
-  render() {
-    const repo = this.props.repo;
-    const highlight = this.state.highlight;
-    let iconUrl = Utils.getLibIconUrl(repo);
-    return (
-      <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img src={iconUrl} width="24" alt={gettext('icon')}/></td>
-        <td><a href={siteRoot + 'sys/libraries/' + repo.repo_id + '/' + repo.name + '/'}>{repo.name}</a></td>
-        <td>{Utils.bytesToSize(repo.size)}{' '}</td>
-        <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
-          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-        </td>
-      </tr>
-    );
-  }
-}
-
-const RepoItemPropTypes = {
-  repo: PropTypes.object.isRequired,
-  showDeleteRepoDialog: PropTypes.func.isRequired,
-};
-
-RepoItem.propTypes = RepoItemPropTypes;
-
-class GroupItem extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      highlight: false,
-    };
-  }
-
-  onMouseEnter = () => {
-    this.setState({ highlight: true });
-  }
-
-  onMouseLeave = () => {
-    this.setState({ highlight: false });
-  }
-
-  render() {
-    const group = this.props.group;
-    const highlight = this.state.highlight;
-    const newHref = siteRoot+ 'sys/departments/' + group.id + '/';
-    return (
-      <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><Link to={newHref}>{group.name}</Link></td>
-        <td>{moment(group.created_at).fromNow()}</td>
-        <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
-          {Utils.bytesToSize(group.quota)}{' '}
-          <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
-        </td>
-        <td className="cursor-pointer text-center" onClick={this.props.showDeleteDepartDialog.bind(this, group)}>
-          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-        </td>
-      </tr>
-    );
-  }
-}
-
-const GroupItemPropTypes = {
-  group: PropTypes.object.isRequired,
-  groupID: PropTypes.string,
-  showSetGroupQuotaDialog: PropTypes.func.isRequired,
-  showDeleteDepartDialog: PropTypes.func.isRequired,
-  isSubdepartChanged: PropTypes.bool,
-};
-
-GroupItem.propTypes = GroupItemPropTypes;
-
-
-const DepartmentItemPropTypes = {
-  groupID: PropTypes.string,
-};
-
-DepartmentItem.propTypes = DepartmentItemPropTypes;
-
-export default DepartmentItem;
+export default DepartmentDetail;

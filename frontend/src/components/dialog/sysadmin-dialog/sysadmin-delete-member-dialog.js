@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { gettext, orgID } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -33,13 +33,13 @@ class DeleteMemberDialog extends React.Component {
   }
 
   render() {
-    let subtitle = gettext('Are you sure you want to delete {placeholder} ?');
-    subtitle = subtitle.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.member.name) + '</span>');
+    let tipMessage = gettext('Are you sure you want to delete {placeholder} ?');
+    tipMessage = tipMessage.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.member.name) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Delete Member')}</ModalHeader>
         <ModalBody>
-          <div dangerouslySetInnerHTML={{__html: subtitle}}></div>
+          <div dangerouslySetInnerHTML={{__html: tipMessage}}></div>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.deleteMember}>{gettext('Delete')}</Button>

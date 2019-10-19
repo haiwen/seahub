@@ -33,13 +33,13 @@ class DeleteDepartDialog extends React.Component {
   }
 
   render() {
-    let subtitle = gettext('Are you sure you want to delete {placeholder} ?');
-    subtitle = subtitle.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.groupName) + '</span>');
+    let tipMessage = gettext('Are you sure you want to delete {placeholder} ?');
+    tipMessage = tipMessage.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.groupName) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Delete Department')}</ModalHeader>
         <ModalBody>
-          <div dangerouslySetInnerHTML={{__html: subtitle}}></div>
+          <div dangerouslySetInnerHTML={{__html: tipMessage}}></div>
           { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>

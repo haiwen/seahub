@@ -29,9 +29,9 @@ class SetGroupQuotaDialog extends React.Component {
   }
 
   setGroupQuota = () => {
-    const myReg = /^[1-9]\d*$/im;
+    const numberReg = /^[1-9]\d*$/im;
     let quota = this.state.quota;
-    if ((quota.length && myReg.test(quota)) || quota == -2) {
+    if ((quota.length && numberReg.test(quota)) || quota == -2) {
       this.setState({ errMessage: '' });
       let newQuota = this.state.quota == -2 ? this.state.quota : this.state.quota * 1000000;
       seafileAPI.sysAdminUpdateDepartmentQuota(this.props.groupID, newQuota).then((res) => {

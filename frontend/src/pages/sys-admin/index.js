@@ -22,7 +22,7 @@ import GroupMembers from './groups/group-members';
 
 import Departments from './departments/departments';
 import DepartmentsList from './departments/departments-list';
-import DepartmentItem from './departments/department-item';
+import DepartmentDetail from './departments/department-detail';
 
 import ShareLinks from './links/share-links';
 import UploadLinks from './links/upload-links';
@@ -121,7 +121,7 @@ class SysAdmin extends React.Component {
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} />
             <Departments path={siteRoot + 'sys/departments'}>
               <DepartmentsList path='/'/>
-              <DepartmentItem path='/:groupID'/>
+              <DepartmentDetail path='/:groupID'/>
             </Departments>
             <ShareLinks path={siteRoot + 'sys/share-links'} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} />

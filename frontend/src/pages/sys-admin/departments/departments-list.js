@@ -1,15 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Link } from '@reach/router';
-import { Utils } from '../../../utils/utils.js';
 import { seafileAPI } from '../../../utils/seafile-api';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
 import DeleteDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-department-dialog';
 import SetGroupQuotaDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog';
-import { siteRoot, gettext, lang } from '../../../utils/constants';
+import { gettext, lang } from '../../../utils/constants';
+import GroupItem from './group-item';
 import '../../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -102,13 +101,13 @@ class DepartmentsList extends React.Component {
                   <tbody>
                     {groups.map((group, index) => {
                       return(
-                        <React.Fragment key={group.id}>
+                        <Fragment key={group.id}>
                           <GroupItem
                             group={group}
                             showDeleteDepartDialog={this.showDeleteDepartDialog}
                             showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
                           />
-                        </React.Fragment>
+                        </Fragment>
                       );
                     })}
                   </tbody>
@@ -117,77 +116,30 @@ class DepartmentsList extends React.Component {
                 <p className="no-group">{gettext('No departments')}</p>
               }
             </div>
-            <React.Fragment>
-              {this.state.showDeleteDepartDialog && (
-                <ModalPortal>
-                  <DeleteDepartDialog
-                    toggle={this.toggleCancel}
-                    groupID={this.state.groupID}
-                    groupName={this.state.groupName}
-                    onDepartChanged={this.onDepartChanged}
-                  />
-                </ModalPortal>
-              )}
-              {this.state.showSetGroupQuotaDialog && (
-                <ModalPortal>
-                  <SetGroupQuotaDialog
-                    toggle={this.toggleCancel}
-                    groupID={this.state.groupID}
-                    onDepartChanged={this.onDepartChanged}
-                  />
-                </ModalPortal>
-              )}
-            </React.Fragment>
+            {this.state.showDeleteDepartDialog && (
+              <ModalPortal>
+                <DeleteDepartDialog
+                  toggle={this.toggleCancel}
+                  groupID={this.state.groupID}
+                  groupName={this.state.groupName}
+                  onDepartChanged={this.onDepartChanged}
+                />
+              </ModalPortal>
+            )}
+            {this.state.showSetGroupQuotaDialog && (
+              <ModalPortal>
+                <SetGroupQuotaDialog
+                  toggle={this.toggleCancel}
+                  groupID={this.state.groupID}
+                  onDepartChanged={this.onDepartChanged}
+                />
+              </ModalPortal>
+            )}
           </div>
         </div>
       </Fragment>
     );
   }
 }
-
-class GroupItem extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      highlight: false,
-    };
-  }
-
-  onMouseEnter = () => {
-    this.setState({ highlight: true });
-  }
-
-  onMouseLeave = () => {
-    this.setState({ highlight: false });
-  }
-
-  render() {
-    const group = this.props.group;
-    const highlight = this.state.highlight;
-    const newHref = siteRoot+ 'sys/departments/' + group.id + '/';
-    return (
-      <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><Link to={newHref}>{group.name}</Link></td>
-        <td>{moment(group.created_at).fromNow()}</td>
-        <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
-          {Utils.bytesToSize(group.quota)}{' '}
-          <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
-        </td>
-        <td className="cursor-pointer text-center" onClick={this.props.showDeleteDepartDialog.bind(this, group)}>
-          <span className={`sf2-icon-delete action-icon  ${highlight ? '' : 'vh'}`} title="Delete"></span>
-        </td>
-      </tr>
-    );
-  }
-}
-
-const GroupItemPropTypes = {
-  group: PropTypes.object.isRequired,
-  showSetGroupQuotaDialog: PropTypes.func.isRequired,
-  showDeleteDepartDialog: PropTypes.func.isRequired,
-};
-
-GroupItem.propTypes = GroupItemPropTypes;
 
 export default DepartmentsList;
