@@ -146,6 +146,8 @@ def sysadmin_react_fake_view(request, **kwargs):
         logger.error(e)
         expire_days = -1
 
+    #print(json.loads(get_available_roles()))
+
     return render(request, 'sysadmin/sysadmin_react_app.html', {
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'multi_tenancy': MULTI_TENANCY,
@@ -159,8 +161,9 @@ def sysadmin_react_fake_view(request, **kwargs):
         'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'enable_two_factor_auth': ENABLE_TWO_FACTOR_AUTH,
-        'available_roles': get_available_roles(),
-        'available_admin_roles': get_available_admin_roles()
+        'available_roles': json.dumps(get_available_roles()),
+        'available_admin_roles': json.dumps(get_available_admin_roles()),
+        'have_ldap': get_ldap_info(),
     })
 
 @login_required

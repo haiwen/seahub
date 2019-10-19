@@ -27,7 +27,8 @@
         {% endfor %}
         return list;
       })(),
-      available_admin_roles: '{{ available_admin_roles | escapejs }}',
+      availableAdminRoles: {% if available_admin_roles %} JSON.parse('{{ available_admin_roles | escapejs }}') {% else %} {{'[]'}} {% endif %},
+      haveLDAP: {% if have_ldap %} true {% else %} false {% endif %},
 			admin_permissions: {
         "can_view_system_info": {% if user.admin_permissions.can_view_system_info %} true {% else %} false {% endif %},
         "can_view_statistic": {% if user.admin_permissions.can_view_statistic %} true {% else %} false {% endif %},

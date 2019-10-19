@@ -11,6 +11,11 @@ import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
 
+import UsersAll from './users/users-all';
+import UsersLDAP from './users/users-ldap';
+import UsersAdmin from './users/users-admin';
+import UserInfo from './users/user-info';
+
 import AllRepos from './repos/all-repos';
 import SystemRepo from './repos/system-repo';
 import TrashRepos from './repos/trash-repos';
@@ -154,6 +159,11 @@ class SysAdmin extends React.Component {
             <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} />
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} />
             <AdminLoginLogs path={siteRoot + 'sys/admin-logs/login'} />
+            <UsersAll isLDAPImportUsers={false} path={siteRoot + 'sys/users-all'} />
+            <UsersLDAP path={siteRoot + 'sys/users-ldap'} />
+            <UsersAll isLDAPImportUsers={true} path={siteRoot + 'sys/users-ldap-import'} />
+            <UsersAdmin path={siteRoot + 'sys/users-admin'} />
+            <UserInfo path={siteRoot + 'sys/user-info/:email'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
