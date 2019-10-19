@@ -16,9 +16,9 @@ class SysAdminUserRoleEditor extends React.Component {
   translateRoles = (role) => {
     switch (role) {
       case 'default':
-        return gettext('default');
+        return gettext('Default');
       case 'guest':
-        return gettext('guest');
+        return gettext('Guest');
       default:
         return role;
     }

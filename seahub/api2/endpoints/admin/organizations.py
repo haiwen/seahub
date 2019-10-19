@@ -44,11 +44,6 @@ try:
 except ImportError:
     MULTI_TENANCY = False
 
-try:
-    from seahub_extra.organizations.settings import ORG_TRIAL_DAYS
-except ImportError:
-    ORG_TRIAL_DAYS = 0
-
 logger = logging.getLogger(__name__)
 
 def get_org_info(org):
@@ -85,11 +80,6 @@ def get_org_detailed_info(org):
     # groups
     groups = ccnet_api.get_org_groups(org_id, -1, -1)
     org_info['groups_count'] = len(groups)
-
-    if ORG_TRIAL_DAYS > 0:
-        org_info['expiration'] = datetime.datetime.fromtimestamp(org.ctime / 1e6) + timedelta(days=ORG_TRIAL_DAYS)
-    else:
-        org_info['expiration'] = ''
 
     return org_info
 

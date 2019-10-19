@@ -18,12 +18,16 @@
       enable_work_weixin: {% if enable_work_weixin %} true {% else %} false {% endif %},
       enableSysAdminViewRepo: {% if enable_sys_admin_view_repo %} true {% else %} false {% endif %},
       trashReposExpireDays: {{ trash_repos_expire_days }},
-            is_email_configured: {% if is_email_configured %} true {% else %} false {% endif %},
-            send_email_on_resetting_user_passwd: {% if send_email_on_resetting_user_passwd %} true {% else %} false {% endif %},
-            send_email_on_adding_system_member: {% if send_email_on_adding_system_member %} true {% else %} false {% endif %},
-            enable_two_factor_auth: {% if enable_two_factor_auth %} true {% else %} false {% endif %},
-            available_roles: '{{ available_roles | escapejs }}' ,
-            available_admin_roles: '{{ available_admin_roles | escapejs }}' ,
+      send_email_on_adding_system_member: {% if send_email_on_adding_system_member %} true {% else %} false {% endif %},
+      enable_two_factor_auth: {% if enable_two_factor_auth %} true {% else %} false {% endif %},
+      availableRoles: (function() {
+        var list = [];
+        {% for role in available_roles %}
+        list.push('{{role|escapejs}}');
+        {% endfor %}
+        return list;
+      })(),
+      available_admin_roles: '{{ available_admin_roles | escapejs }}',
 			admin_permissions: {
         "can_view_system_info": {% if user.admin_permissions.can_view_system_info %} true {% else %} false {% endif %},
         "can_view_statistic": {% if user.admin_permissions.can_view_statistic %} true {% else %} false {% endif %},

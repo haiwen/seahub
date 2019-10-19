@@ -150,8 +150,6 @@ def sysadmin_react_fake_view(request, **kwargs):
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'multi_tenancy': MULTI_TENANCY,
         'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
-        'is_email_configured': IS_EMAIL_CONFIGURED,
-        'send_email_on_resetting_user_passwd': SEND_EMAIL_ON_RESETTING_USER_PASSWD,
         'send_email_on_adding_system_member': SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER,
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
@@ -163,24 +161,6 @@ def sysadmin_react_fake_view(request, **kwargs):
         'enable_two_factor_auth': ENABLE_TWO_FACTOR_AUTH,
         'available_roles': get_available_roles(),
         'available_admin_roles': get_available_admin_roles()
-    })
-
-@login_required
-@sys_staff_required
-def sysadmin_org_react_fake_view(request, **kwargs):
-    return render(request, 'sysadmin/sysadmin_org_react_app.html', {
-        'org_id': kwargs['org_id'],
-        'is_email_configured': IS_EMAIL_CONFIGURED,
-        'send_email_on_resetting_user_passwd': SEND_EMAIL_ON_RESETTING_USER_PASSWD,
-    })
-
-@login_required
-@sys_staff_required
-def sysadmin_org_react_fake_view(request, **kwargs):
-    return render(request, 'sysadmin/sysadmin_org_react_app.html', {
-        'org_id': kwargs['org_id'],
-        'is_email_configured': IS_EMAIL_CONFIGURED,
-        'send_email_on_resetting_user_passwd': SEND_EMAIL_ON_RESETTING_USER_PASSWD,
     })
 
 @login_required

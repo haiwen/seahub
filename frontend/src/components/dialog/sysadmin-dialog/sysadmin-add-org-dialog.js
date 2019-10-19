@@ -1,112 +1,121 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 
 const propTypes = {
-  toggle: PropTypes.func.isRequired,
-  addOrg: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
+  addOrg: PropTypes.func.isRequired
 };
 
 class SysAdminAddOrgDialog extends React.Component {
   constructor(props) {
     super(props);
-    this.fileInputRef = React.createRef();
     this.state = {
-      errorMsg: '',
+      name: '',
+      email: '',
       password: '',
       passwordAgain: '',
-      email: '',
-      name: '',
+      errorMsg: '',
+      isSubmitBtnActive: false 
     };
   }
 
+  checkSubmitBtnActive = () => {
+    const { name, email, password, passwordAgain } = this.state;
+    let btnActive = true;
+    if (name !='' &&
+      email != '' &&
+      password != '' &&
+      passwordAgain != '') {
+      btnActive = true;
+    } else {
+      btnActive = false;
+    }
+    this.setState({
+      isSubmitBtnActive: btnActive
+    });
+  }
+
   toggle = () => {
-    this.props.toggle();
+    this.props.toggleDialog();
   }
 
   inputPassword = (e) => {
     let passwd = e.target.value.trim();
     this.setState({
-      password: passwd,
-      errorMsg: ''
-    });
+      password: passwd
+    }, this.checkSubmitBtnActive);
   }
 
   inputPasswordAgain = (e) => {
     let passwd = e.target.value.trim();
     this.setState({
-      passwordAgain: passwd,
-      errorMsg: ''
-    });
+      passwordAgain: passwd
+    }, this.checkSubmitBtnActive);
   }
 
   inputEmail = (e) => {
     let email = e.target.value.trim();
     this.setState({
-      email: email,
-      errorMsg: ''
-    });
+      email: email
+    }, this.checkSubmitBtnActive);
   }
 
   inputName = (e) => {
     let name = e.target.value.trim();
     this.setState({
-      name: name,
-      errorMsg: ''
-    });
+      name: name
+    }, this.checkSubmitBtnActive);
   }
 
   handleSubmit = () => {
-    let {email, password, passwordAgain, name, role } = this.state;
-    if (!Utils.isValidEmail(email)) {
-      this.setState({errorMsg: gettext('Email invalid.')});
-      return;
-    }
-    if (password === '') {
-      this.setState({errorMsg: gettext('Password invalid.')});
-      return;
-    }
+    let { name, email, password, passwordAgain } = this.state;
     if (password != passwordAgain) {
       this.setState({errorMsg: gettext('Passwords do not match.')});
       return;
     }
-    let newOrgInfo = {
-      email: email,
-      name: name,
-      password: password,
+    const data = {
+      orgName: name,
+      ownerEmail: email,
+      password: password
     };
-    this.props.addOrg(newOrgInfo);
+    this.props.addOrg(data);
+    this.toggle();
   }
 
   render() {
-    let { errorMsg, isPasswordVisible, password, passwordAgain, email, name } = this.state;
+    const { errorMsg, password, passwordAgain, email, name, isSubmitBtnActive } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Add organization')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Add Organization')}</ModalHeader>
         <ModalBody>
           <Form autoComplete="off">
             <FormGroup>
-              <Label className="font-weight-bold">{gettext('Name')}</Label>
-              <Input value={name} onChange={this.inputName}/> 
+              <Label>{gettext('Name')}</Label>
+              <Input value={name} onChange={this.inputName} /> 
             </FormGroup>
             <FormGroup>
-              <Label className="font-weight-bold">{gettext('Owner')}</Label>
-              <Input autoComplete="new-password" value={email} onChange={this.inputEmail}/> 
+              <Label>
+                {gettext('Owner')}
+                <span className="small text-secondary ml-1 fas fa-question-circle" title={gettext('Owner can use admin panel in an organization, must be a new account.')}></span>
+              </Label>
+              <Input value={email} onChange={this.inputEmail} /> 
             </FormGroup>
-            <FormGroup className="link-operation-content">
-              <Label className="font-weight-bold">{gettext('Password')}</Label>
-              <Input autoComplete="new-password" type={isPasswordVisible ? 'text' : 'password'} value={password || ''} onChange={this.inputPassword}/>
-              <Label className="font-weight-bold">{gettext('Password again')}</Label>
-              <Input className="passwd" type={isPasswordVisible ? 'text' : 'password'} value={passwordAgain || ''} onChange={this.inputPasswordAgain} />
+            <FormGroup>
+              <Label>{gettext('Password')}</Label>
+              <Input type="password" value={password} onChange={this.inputPassword} />
+            </FormGroup>
+            <FormGroup>
+              <Label>{gettext('Password again')}</Label>
+              <Input type="password" value={passwordAgain} onChange={this.inputPasswordAgain} />
             </FormGroup>
           </Form>
           {errorMsg && <Alert color="danger">{errorMsg}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

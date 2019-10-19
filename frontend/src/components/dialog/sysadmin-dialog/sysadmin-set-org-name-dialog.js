@@ -6,15 +6,15 @@ import { Utils } from '../../../utils/utils';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-  updateQuota: PropTypes.func.isRequired
+  updateName: PropTypes.func.isRequired
 };
 
-class SysAdminOrgSetQuotaDialog extends React.Component {
+class SysAdminSetOrgNameDialog extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      quota: '',
+      name: this.props.name,
       isSubmitBtnActive: false
     };
   }
@@ -23,10 +23,10 @@ class SysAdminOrgSetQuotaDialog extends React.Component {
     this.props.toggle();
   }
 
-  handleQuotaChange = (e) => {
+  handleInputChange = (e) => {
     const value = e.target.value.trim();
     this.setState({
-      quota: value,
+      name: value,
       isSubmitBtnActive: value != ''
     });
   }
@@ -39,35 +39,25 @@ class SysAdminOrgSetQuotaDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.updateQuota(this.state.quota);
+    this.props.updateName(this.state.name);
     this.toggle();
   }
 
   render() {
-    const { quota, isSubmitBtnActive } = this.state;
+    const { name, isSubmitBtnActive } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Set Quota')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Set Name')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <InputGroup>
                 <Input
                   type="text"
                   className="form-control"
-                  value={quota}
+                  value={name}
                   onKeyPress={this.handleKeyPress} 
-                  onChange={this.handleQuotaChange}
+                  onChange={this.handleInputChange}
                 />
-                <InputGroupAddon addonType="append">
-                  <InputGroupText>MB</InputGroupText>
-                </InputGroupAddon>
-              </InputGroup>
-              <p className="small text-secondary mt-2 mb-2">
-                {gettext('An integer that is greater than or equal to 0.')}
-                <br />
-                {gettext('Tip: 0 means default limit')}
-              </p>
             </FormGroup>
           </Form>
         </ModalBody>
@@ -80,6 +70,6 @@ class SysAdminOrgSetQuotaDialog extends React.Component {
   }
 }
 
-SysAdminOrgSetQuotaDialog.propTypes = propTypes;
+SysAdminSetOrgNameDialog.propTypes = propTypes;
 
-export default SysAdminOrgSetQuotaDialog;
+export default SysAdminSetOrgNameDialog;

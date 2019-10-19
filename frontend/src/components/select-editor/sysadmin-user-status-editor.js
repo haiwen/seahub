@@ -15,9 +15,9 @@ class SysAdminUserStatusEditor extends React.Component {
 
   translateStatus = (status) => {
     switch (status) {
-      case 'Active':
+      case 'active':
         return gettext('Active');
-      case 'Inactive':
+      case 'inactive':
         return gettext('Inactive');
     }
   }

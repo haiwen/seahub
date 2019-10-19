@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from 'react';
+import moment from 'moment';
+import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
-import moment from 'moment';
 import Loading from '../../../components/loading';
-import OrgNav from './org-nav';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
-import CommonOperationDialog from '../../../components/dialog/common-operation-dialog';
+import OrgNav from './org-nav';
 
 class Content extends Component {
 
@@ -21,11 +21,11 @@ class Content extends Component {
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
-      return <p className="error text-center">{errorMsg}</p>;
+      return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('This organization doesn\'t have any groups')}</h2>
+          <h2>{gettext('No groups')}</h2>
         </EmptyTip>
       );
       const table = (
@@ -35,8 +35,8 @@ class Content extends Component {
               <tr>
                 <th width="30%">{gettext('Name')}</th>
                 <th width="30%">{gettext('Creator')}</th>
-                <th width="30%">{gettext('Create At')}</th>
-                <th width="10%">{gettext('Operations')}</th>
+                <th width="30%">{gettext('Created At')}</th>
+                <th width="10%">{/* Operations */}</th>
               </tr>
             </thead>
             <tbody>
@@ -87,33 +87,33 @@ class Item extends Component {
   }
 
   render() {
-    let { item } = this.props;
-    let { isOpIconShown, isDeleteDialogOpen } = this.state;
+    const { item } = this.props;
+    const { isOpIconShown, isDeleteDialogOpen } = this.state;
 
-    let iconVisibility = isOpIconShown ? '' : ' invisible'; 
-    let deleteIconClassName = 'op-icon sf2-icon-delete' + iconVisibility;
+    const itemName = '<span class="op-target">' + Utils.HTMLescape(item.group_name) + '</span>';
+    const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
 
-    let groupName = '<span class="op-target">' + Utils.HTMLescape(item.group_name) + '</span>';
-    let deleteDialogMsg = gettext('Are you sure you want to delete group {placeholder} ?').replace('{placeholder}', groupName);
+    const groupUrl = item.parent_group_id == 0 ? 
+      `${siteRoot}sys/groups/${item.group_id}/libraries/` :
+      `${siteRoot}sysadmin/#address-book/groups/${item.group_id}/`;
 
     return (
       <Fragment>
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td><a href={siteRoot + 'group/' + item.group_id + '/'}>{item.group_name}</a></td>
-          <td>{item.creator_name}</td>
+          <td><a href={groupUrl}>{item.group_name}</a></td>
+          <td><a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.creator_email)}/`}>{item.creator_name}</a></td>
+          <td>{moment(item.created_at).format('YYYY-MM-DD hh:mm:ss')}</td>
           <td>
-            <span className="item-meta-info">{moment(item.created_at).format('YYYY-MM-DD hh:mm:ss')}</span>
+            <a href="#" className={`action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
-          <td>
-            <a href="#" className={deleteIconClassName} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>          </td>
         </tr>
         {isDeleteDialogOpen &&
-          <CommonOperationDialog
+          <CommonOperationConfirmationDialog
             title={gettext('Delete Group')}
             message={deleteDialogMsg}
-            toggle={this.toggleDeleteDialog}
             executeOperation={this.deleteGroup}
             confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteDialog}
           />
         }
       </Fragment>
@@ -128,15 +128,21 @@ class OrgGroups extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
+      orgName: '',
       groupList: []
     };
   }
 
   componentDidMount () {
+    seafileAPI.sysAdminGetOrgInfo(this.props.orgID).then((res) => {
+      this.setState({
+        orgName: res.data.org_name
+      });
+    });
     seafileAPI.sysAdminListAllOrgGroups(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
-        groupList: res.data.groups,
+        groupList: res.data.group_list
       });
     }).catch((error) => {
       if (error.response) {
@@ -167,7 +173,7 @@ class OrgGroups extends Component {
         return item.group_id != groupID;
       });
       this.setState({groupList: newGroupList});
-      toaster.success(gettext('Successfully deleted group.'));
+      toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -180,7 +186,11 @@ class OrgGroups extends Component {
         <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <OrgNav currentItem="groups" orgID={this.props.orgID} />
+            <OrgNav
+              currentItem="groups"
+              orgID={this.props.orgID}
+              orgName={this.state.orgName}
+            />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}

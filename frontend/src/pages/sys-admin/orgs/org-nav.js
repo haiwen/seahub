@@ -12,23 +12,27 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'users', urlPart: 'organization/' + this.props.orgID + '/users', text: gettext('Members')},
-      {name: 'groups', urlPart: 'organization/' + this.props.orgID + '/groups', text: gettext('Groups')},
-      {name: 'repos', urlPart: 'organization/' + this.props.orgID + '/libraries', text: gettext('Libraries')},
-      //{name: 'traffic', urlPart: 'organization/' + this.props.orgID + '/traffic', text: gettext('traffic')},
-      {name: 'settings', urlPart: 'organization/' + this.props.orgID + '/settings', text: gettext('Settings')}
+      {name: 'info', urlPart: 'info', text: gettext('Info')},
+      {name: 'users', urlPart: 'users', text: gettext('Members')},
+      {name: 'groups', urlPart: 'groups', text: gettext('Groups')},
+      {name: 'repos', urlPart: 'libraries', text: gettext('Libraries')},
+      //{name: 'traffic', urlPart: 'traffic', text: gettext('traffic')},
+      //{name: 'settings', urlPart: 'settings', text: gettext('Settings')}
     ];
   }
 
   render() {
-    const { currentItem } = this.props;
+    const { currentItem, orgID, orgName } = this.props;
     return (
-      <div className="cur-view-path tab-nav-container">
-        <ul className="nav">
+     <div>
+        <div className="cur-view-path">
+          <h3 className="sf-heading"><Link to={`${siteRoot}sys/organizations/`}>{gettext('Organizations')}</Link> / {orgName}</h3>
+        </div>
+        <ul className="nav border-bottom mx-4">
           {this.navItems.map((item, index) => {
             return (
-              <li className="nav-item" key={index}>
-                <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link ${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
+              <li className="nav-item mr-2" key={index}>
+                <Link to={`${siteRoot}sys/organizations/${orgID}/${item.urlPart}/`} className={`nav-link ${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
           })}
