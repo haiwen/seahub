@@ -53,3 +53,4 @@ Internationalization (I18n)
 ==========
 
 Please refer to https://github.com/haiwen/seafile/wiki/Seahub-Translation
+
