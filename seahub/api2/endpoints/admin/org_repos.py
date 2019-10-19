@@ -22,15 +22,6 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def get_org_repo_info(repo):
-    repo_info = {}
-    repo_info['repo_name'] = repo.repo_name
-    repo_info['owner_email'] = seafile_api.get_org_repo_owner(repo.id)
-    repo_info['repo_id'] = repo.id
-
-    return repo_info
-
-
 class AdminOrgRepos(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -60,8 +51,27 @@ class AdminOrgRepos(APIView):
             error_msg = "Internal Server Error"
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        repo_id_2_email_dict = {repo.id: seafile_api.get_org_repo_owner(repo.id) for repo in repos}
+        owner_email_set = set(repo_id_2_email_dict.values())
+        nickname_dict = {}
+        contact_email_dict = {}
+        for e in owner_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+
         repos_info = []
         for repo in repos:
-            repos_info.append(get_org_repo_info(repo))
+            repo_info = {}
+            repo_info['repo_name'] = repo.repo_name
+            owner_email = repo_id_2_email_dict.get(repo.id, '')
+            repo_info['owner_email'] = owner_email
+            repo_info['owner_name'] = nickname_dict.get(owner_email, '')
+            repo_info['owner_contact_email'] = contact_email_dict.get(owner_email, '')
+            repo_info['repo_id'] = repo.id
+
+            repos_info.append(repo_info)
 
         return Response({'repo_list': repos_info})

@@ -12,7 +12,9 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
+from seahub.utils import is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -20,16 +22,6 @@ except ImportError:
     ORG_MEMBER_QUOTA_ENABLED= False
 
 logger = logging.getLogger(__name__)
-
-
-def get_org_group_info(group):
-    group_info = {}
-    group_info['group_name'] = group.group_name
-    group_info['creator_name'] = group.creator_name
-    group_info['created_at'] = timestamp_to_isoformat_timestr(group.timestamp)
-    group_info['group_id'] = group.id
-
-    return group_info
 
 
 class AdminOrgGroups(APIView):
@@ -61,8 +53,27 @@ class AdminOrgGroups(APIView):
             error_msg = "Internal Server Error"
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        contact_email_dict = {}
+        creator_name_set = set([g.creator_name for g in groups])
+        for e in creator_name_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+
         groups_info = []
         for group in groups:
-            groups_info.append(get_org_group_info(group))
+            group_info = {}
+            group_info['group_name'] = group.group_name
+            group_info['creator_email'] = group.creator_name
+            group_info['creator_name'] = nickname_dict.get(group.creator_name, '')
+            group_info['creator_contact_email'] = contact_email_dict.get(group.creator_name, '')
+            group_info['created_at'] = timestamp_to_isoformat_timestr(group.timestamp)
+            group_info['parent_group_id'] = group.parent_group_id if is_pro_version() else 0
+            group_info['group_id'] = group.id
+
+            groups_info.append(group_info)
 
         return Response({'group_list': groups_info})
