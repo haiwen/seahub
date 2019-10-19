@@ -660,17 +660,27 @@ class AdminUserResetPassword(APIView):
         if config.FORCE_PASSWORD_CHANGE:
             UserOptions.objects.set_force_passwd_change(user.username)
 
-        if IS_EMAIL_CONFIGURED and SEND_EMAIL_ON_RESETTING_USER_PASSWD:
-            c = {'email': email, 'password': new_password}
-            try:
-                send_html_email(_(u'Password has been reset on %s') % get_site_name(),
-                                'sysadmin/user_reset_email.html', c, None, [email])
-            except Exception as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        if IS_EMAIL_CONFIGURED:
+            if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
+                c = {'email': email, 'password': new_password}
+                contact_email = Profile.objects.get_contact_email_by_user(email)
+                try:
+                    send_html_email(_(u'Password has been reset on %s') % get_site_name(),
+                                'sysadmin/user_reset_email.html', c, None, [contact_email])
+                    reset_tip = _('Successfully reset password to %(passwd)s, an email has been sent to %(user)s.') % \
+                        {'passwd': new_password, 'user': contact_email}
+                except Exception as e:
+                    logger.warning(e)
+                    reset_tip = _('Successfully reset password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration.') % \
+                        {'passwd': new_password, 'user': email}
+            else:
+                reset_tip = _('Successfully reset password to %(passwd)s for user %(user)s.') % \
+                    {'passwd': new_password, 'user': email}
+        else:
+            reset_tip = _('Successfully reset password to %(passwd)s for user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % \
+                {'passwd': new_password, 'user': email}
 
-        return Response({'new_password': new_password})
+        return Response({'new_password': new_password, 'reset_tip': reset_tip})
 
 
 class AdminUserGroups(APIView):
