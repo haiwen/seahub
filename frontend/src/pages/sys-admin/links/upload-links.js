@@ -26,7 +26,7 @@ class Content extends Component {
   }
 
   render() {
-    const { loading, errorMsg, items, perPage, currentPage , hasNextPage }= this.props;
+    const { loading, errorMsg, items, perPage, currentPage, hasNextPage } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
