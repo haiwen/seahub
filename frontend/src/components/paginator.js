@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
-import { Label } from 'reactstrap';
-
 
 const propTypes = {
   gotoPreviousPage: PropTypes.func.isRequired,
@@ -10,7 +8,8 @@ const propTypes = {
   currentPage: PropTypes.number.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
   canResetPerPage: PropTypes.bool.isRequired,
-  resetPerPage: PropTypes.func
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
 };
 
 class Paginator extends Component {
@@ -30,6 +29,7 @@ class Paginator extends Component {
   } 
 
   render() {
+    let { curPerPage } = this.props;
     return (
       <Fragment>
         <div className="my-6 text-center">
@@ -41,11 +41,11 @@ class Paginator extends Component {
           }
         </div>
         {this.props.canResetPerPage &&
-          <div>
+          <div className="text-center">
             {gettext('Per page:')}{' '}
-            <Label onClick={() => {return this.resetPerPage(25);}}>25</Label>
-            <Label onClick={() => {return this.resetPerPage(50);}}>50</Label>
-            <Label onClick={() => {return this.resetPerPage(100);}}>100</Label>
+            <span className={`${curPerPage === 25 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(25);}}>25</span>
+            <span className={`${curPerPage === 50 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(50);}}>50</span>
+            <span className={`${curPerPage === 100 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(100);}}>100</span>
           </div>
         }
       </Fragment>

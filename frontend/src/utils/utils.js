@@ -1192,6 +1192,12 @@ export const Utils = {
       result = '00:' + result;
     }
     return result;
+  },
+
+  hasNextPage(curPage, perPage, totalCount) {
+    // when curPage * perPage >= totalCount, do not have next page.
+    // so hasNextPage = true, when curPage * perPage < totalCount
+    return curPage * perPage < totalCount;
   }
 
 };

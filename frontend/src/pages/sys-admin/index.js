@@ -20,6 +20,9 @@ import Groups from './groups/groups';
 import GroupRepos from './groups/group-repos';
 import GroupMembers from './groups/group-members';
 
+import ShareLinks from './links/share-links';
+import UploadLinks from './links/upload-links';
+
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
@@ -112,6 +115,8 @@ class SysAdmin extends React.Component {
             <Groups path={siteRoot + 'sys/groups'} />
             <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} />
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} />
+            <ShareLinks path={siteRoot + 'sys/share-links'} />
+            <UploadLinks path={siteRoot + 'sys/upload-links'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
