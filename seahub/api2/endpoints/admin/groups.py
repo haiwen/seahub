@@ -266,7 +266,7 @@ class AdminGroup(APIView):
 
         try:
             org_id = ccnet_api.get_org_id_by_group(group_id)
-            if org_id:
+            if org_id >= 0:
                 ccnet_api.remove_org_group(org_id, group_id)
             else:
                 ccnet_api.remove_group(group_id)
