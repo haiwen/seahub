@@ -27,6 +27,12 @@ import DepartmentDetail from './departments/department-detail';
 import ShareLinks from './links/share-links';
 import UploadLinks from './links/upload-links';
 
+import Orgs from './orgs/orgs';
+import OrgInfo from './orgs/org-info';
+import OrgUsers from './orgs/org-users';
+import OrgGroups from './orgs/org-groups';
+import OrgRepos from './orgs/org-repos';
+
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
@@ -63,6 +69,10 @@ class SysAdmin extends React.Component {
       {
         tab: 'groups',
         urlPartList: ['groups/']
+      },
+      {
+        tab: 'organizations',
+        urlPartList: ['organizations/']
       },
     ];
     const tmpTab = this.getCurrentTabForPageList(pageList);
@@ -125,6 +135,11 @@ class SysAdmin extends React.Component {
             </Departments>
             <ShareLinks path={siteRoot + 'sys/share-links'} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} />
+            <Orgs path={siteRoot + 'sys/organizations'} />
+            <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} />
+            <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} />
+            <OrgGroups path={siteRoot + 'sys/organizations/:orgID/groups'} />
+            <OrgRepos path={siteRoot + 'sys/organizations/:orgID/libraries'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
