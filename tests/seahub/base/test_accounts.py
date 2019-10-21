@@ -13,8 +13,8 @@ from mock import patch
 TEST_CAN_ADD_PUBLICK_REPO_TRUE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
 TEST_CAN_ADD_PUBLICK_REPO_TRUE['default']['can_add_public_repo'] = True
 
-TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
-TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE['default']['can_use_wiki'] = False
+TEST_PUBLISH_REPO_CAN_PUBLISH_REPO_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
+TEST_PUBLISH_REPO_CAN_PUBLISH_REPO_FALSE['default']['can_publish_repo'] = False
 
 CLOUD_MODE_TRUE = True
 MULTI_TENANCY_TRUE = True
@@ -108,20 +108,20 @@ class UserPermissionsTest(BaseTestCase):
         assert self.user.permissions.can_add_public_repo() is False
 
     def test_can_publish_repo_permission(self):
-        # enableWIKI = True, and can_use_wiki = True
+        # enableWIKI = True, and can_publish_repo = True
         assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
         assert self.user.permissions.can_publish_repo() is True
 
     @override_settings(ENABLE_WIKI=False)
     def test_can_publish_repo_permission_with_enable_wiki_False(self):
-        # enableWIKI = False, and can_use_wiki = True
+        # enableWIKI = False, and can_publish_repo = True
         assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
         assert self.user.permissions.can_publish_repo() is False
 
-    def test_can_publish_repo_permission_with_can_use_wiki_False(self):
-        # enableWIKI = True, and can_use_wiki = False
-        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_PUBLISH_REPO_CAN_USE_WIKI_FALSE):
-            assert self.user.permissions._get_perm_by_roles('can_publish_repo') is True
+    def test_can_publish_repo_permission_with_can_publish_repo_False(self):
+        # enableWIKI = True, and can_publish_repo = False
+        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_PUBLISH_REPO_CAN_PUBLISH_REPO_FALSE):
+            assert self.user.permissions._get_perm_by_roles('can_publish_repo') is False
             assert self.user.permissions.can_publish_repo() is False
 
 

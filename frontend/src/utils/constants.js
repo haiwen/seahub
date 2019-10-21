@@ -47,7 +47,6 @@ export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDays
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
 export const shareLinkExpireDaysDefault = window.app.pageOptions.shareLinkExpireDaysDefault;
 export const maxFileName = window.app.pageOptions.maxFileName;
-export const enableWiki = window.app.pageOptions.enableWiki;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;
 export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary;
 export const enableRepoHistorySetting = window.app.pageOptions.enableRepoHistorySetting;

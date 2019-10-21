@@ -129,6 +129,7 @@ class ShareDialog extends React.Component {
                   itemPath={this.props.itemPath} 
                   repoID={this.props.repoID}
                   closeShareDialog={this.props.toggleDialog} 
+                  itemType={itemType}
                 />
               </TabPane>
             }
@@ -166,6 +167,7 @@ class ShareDialog extends React.Component {
 
   renderFileContent = () => {
     let activeTab = this.state.activeTab;
+    const { itemType } = this.props;
 
     return (
       <Fragment>
@@ -190,6 +192,7 @@ class ShareDialog extends React.Component {
                 itemPath={this.props.itemPath} 
                 repoID={this.props.repoID} 
                 closeShareDialog={this.props.toggleDialog}
+                itemType={itemType}
               />
             </TabPane>
             {activeTab === 'internalLink' &&

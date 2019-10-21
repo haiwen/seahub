@@ -85,7 +85,6 @@
             shareLinkExpireDaysMin: "{{ share_link_expire_days_min }}",
             shareLinkExpireDaysMax: "{{ share_link_expire_days_max }}",
             maxFileName: "{{ max_file_name }}",
-            enableWiki: {% if user.permissions.can_use_wiki %} true {% else %} false {% endif %},
             canPublishRepo: {% if user.permissions.can_publish_repo %} true {% else %} false {% endif %},
             enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},
             enableRepoHistorySetting: {% if enable_repo_history_setting %} true {% else %} false {% endif %},

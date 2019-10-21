@@ -628,7 +628,7 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
     calculate_repos_last_modify([repo])
 
     info_json = {
-        'relay_id': relay_id,
+        'relay_id': '44e8f253849ad910dc142247227c8ece8ec0f971',
         'relay_addr': addr,
         'relay_port': port,
         'email': email,

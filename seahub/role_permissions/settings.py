@@ -40,7 +40,6 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_export_files_via_mobile_client': True,
         'storage_ids': [],
         'role_quota': '',
-        'can_use_wiki': True,
         'can_publish_repo': True,
     },
     GUEST_USER: {
@@ -60,7 +59,6 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_export_files_via_mobile_client': False,
         'storage_ids': [],
         'role_quota': '',
-        'can_use_wiki': False,
         'can_publish_repo': False,
     },
 }

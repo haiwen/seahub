@@ -216,14 +216,8 @@ class UserPermissions(object):
     def storage_ids(self):
         return self._get_perm_by_roles('storage_ids')
 
-    def can_use_wiki(self):
-        if not settings.ENABLE_WIKI:
-            return False
-
-        return self._get_perm_by_roles('can_use_wiki')
-
     def can_publish_repo(self):
-        if not self.can_use_wiki():
+        if not settings.ENABLE_WIKI:
             return False
 
         return self._get_perm_by_roles('can_publish_repo')

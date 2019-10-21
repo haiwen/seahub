@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { Badge } from 'reactstrap';
-import { gettext, siteRoot, enableWiki, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer } from '../utils/constants';
+import { gettext, siteRoot, canPublishRepo, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -65,8 +65,8 @@ class MainSideNav extends React.Component {
   }
 
   tabItemClick = (e, param, id) => {
-    if (window.uploader && 
-      window.uploader.isUploadProgressDialogShow && 
+    if (window.uploader &&
+      window.uploader.isUploadProgressDialogShow &&
       window.uploader.totalProgress !== 100) {
         if (!window.confirm(gettext('A file is being uploaded. Are you sure you want to leave this page?'))) {
           e.preventDefault();
@@ -81,7 +81,7 @@ class MainSideNav extends React.Component {
     let url =  dtableWebServer;
     window.open(url);
   }
-  
+
   getActiveClass = (tab) => {
     return this.props.currentTab === tab ? 'active' : '';
   }
@@ -93,7 +93,7 @@ class MainSideNav extends React.Component {
     }
     return (
       <ul className={`nav sub-nav nav-pills flex-column grp-list ${this.state.groupsExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style}>
-        <li className="nav-item"> 
+        <li className="nav-item">
           <Link to={siteRoot + 'groups/'}  className={`nav-link ellipsis ${this.getActiveClass('groups')}`} onClick={(e) => this.tabItemClick(e, 'groups')}>
             <span className="sharp" aria-hidden="true">#</span>
             <span className="nav-text">{gettext('All Groups')}</span>
@@ -101,7 +101,7 @@ class MainSideNav extends React.Component {
         </li>
         {this.state.groupItems.map(item => {
           return (
-            <li key={item.id} className="nav-item"> 
+            <li key={item.id} className="nav-item">
               <Link to={siteRoot + 'group/' + item.id + '/'} className={`nav-link ellipsis ${this.getActiveClass(item.name)}`} onClick={(e) => this.tabItemClick(e, item.name, item.id)}>
                 <span className="sharp" aria-hidden="true">#</span>
                 <span className="nav-text">{item.name}</span>
@@ -180,7 +180,7 @@ class MainSideNav extends React.Component {
   }
 
   render() {
-    let showActivity = isDocs || isPro; 
+    let showActivity = isDocs || isPro;
     return (
       <div className="side-nav">
         <div className="side-nav-con">
@@ -235,7 +235,7 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
             }
-            {enableWiki &&
+            {canPublishRepo &&
               <li className="nav-item">
                 <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Published Libraries')} onClick={(e) => this.tabItemClick(e, 'published')}>
                   <span className="sf2-icon-wiki-view" aria-hidden="true"></span>
@@ -248,7 +248,7 @@ class MainSideNav extends React.Component {
                 <Link className={`nav-link ellipsis ${this.getActiveClass('drafts')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                   <span className="sf2-icon-edit" aria-hidden="true"></span>
                   <span className="draft-info nav-text">
-                    {gettext('Drafts')}  
+                    {gettext('Drafts')}
                     {this.props.draftCounts === 0 ? '' : <Badge color="info" pill>{this.props.draftCounts}</Badge>}
                   </span>
                 </Link>

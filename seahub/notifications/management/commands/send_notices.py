@@ -98,7 +98,7 @@ class Command(BaseCommand):
                 owner = seafile_api.get_repo_owner(repo_id)
                 repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        repo_url = reverse('lib_view', args=[repo_id, repo.name, ''])
+        repo_url = reverse('lib_view', args=[repo.id, repo.name, ''])
         notice.repo_url = repo_url
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
@@ -129,7 +129,7 @@ class Command(BaseCommand):
                 owner = seafile_api.get_repo_owner(repo_id)
                 repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        repo_url = reverse('lib_view', args=[repo_id, repo.name, ''])
+        repo_url = reverse('lib_view', args=[repo.id, repo.name, ''])
         notice.repo_url = repo_url
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name

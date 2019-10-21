@@ -91,56 +91,60 @@ class Item extends Component {
   constructor(props) {
     super(props);
 
-    const item = this.props.item;
-
-    if (isPro) {
-      this.editOption = 'edit_download';
-      this.permissionOptions = ['preview_download', 'preview_only'];
-      this.updatePermissionOptions();
-    }
-
     this.state = {
-      currentPermission: isPro ? this.getCurrentPermission() : '',
       isOpIconShown: false,
       isOpMenuOpen: false, // for mobile
       isPermSelectDialogOpen: false, // for mobile
-      isLinkDialogOpen: false
+      isLinkDialogOpen: false,
+      permissionOptions: [],
+      currentPermission: '',
     };
+  }
+
+  componentDidMount() {
+    if (isPro) {
+      this.updatePermissionOptions();
+    }
   }
 
   updatePermissionOptions = () => {
     const item = this.props.item;
-    let options = this.permissionOptions;
-  
-    if (!Utils.isEditableOfficeFile(item.obj_name)) {
-      return ;
+    if (item.is_dir && item.path === '/') {
+      let permissionOptions = Utils.getShareLinkPermissionList('library', '', item.path);
+      this.setState({
+        permissionOptions: permissionOptions,
+      });
+    } else {
+      let { repo_id, path } = item;
+      let getDirentInfoAPI = item.is_dir ? seafileAPI.getDirInfo(repo_id, path) : seafileAPI.getFileInfo(repo_id, path);
+      getDirentInfoAPI.then((res) => {
+        let itemType = item.is_dir ? 'dir' : 'file';
+        let permission = res.data.permission;
+        let permissionOptions = Utils.getShareLinkPermissionList(itemType, permission, item.path);
+        this.setState({
+          permissionOptions: permissionOptions,
+        });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
     }
-
-    if (item.permissions.can_edit) {
-      options.push(this.editOption);
-      return ;
-    }
-
-    seafileAPI.getFileInfo(item.repo_id, item.path).then((res) => {
-      if (res.data.can_edit) {
-        options.push(this.editOption);
-        return ;
-      }
-    }).catch(error => {
-      return ;
+    this.setState({
+      currentPermission: this.getCurrentPermission(),
     });
   }
 
   getCurrentPermission = () => {
-    const options = this.permissionOptions;
     const { can_edit, can_download } = this.props.item.permissions;
     switch (`${can_edit} ${can_download}`) {
       case 'false true':
-        return options[0];
+        return 'preview_download';
       case 'false false':
-        return options[1];
+        return 'preview_only';
       case 'true true':
-        return this.editOption;
+        return 'edit_download';
+      case 'true false':
+        return 'cloud_edit';
     }
   }
 
@@ -214,7 +218,7 @@ class Item extends Component {
 
   render() {
     const item = this.props.item;
-    const { currentPermission, isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
+    const { currentPermission, permissionOptions , isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
 
     let iconUrl, objUrl;
     if (item.is_dir) {
@@ -242,7 +246,7 @@ class Item extends Component {
             isTextMode={true}
             isEditIconShow={isOpIconShown && !item.is_expired}
             currentPermission={currentPermission}
-            permissionOptions={this.permissionOptions}
+            permissionOptions={permissionOptions}
             onPermissionChanged={this.changePerm}
           />
         </td>
@@ -294,7 +298,7 @@ class Item extends Component {
         {isPermSelectDialogOpen &&
         <ShareLinkPermissionSelect
           currentPerm={currentPermission}
-          permissions={this.permissionOptions}
+          permissions={permissionOptions}
           changePerm={this.changePerm}
           toggleDialog={this.togglePermSelectDialog}
         />
