@@ -1,4 +1,6 @@
 import json
+import time
+import datetime
 from mock import patch
 
 from seaserv import ccnet_api
@@ -6,6 +8,14 @@ from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
+
+from django.core.urlresolvers import reverse
+from seahub.test_utils import BaseTestCase
+
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
 
 class LogsTest(BaseTestCase):
 
@@ -180,3 +190,103 @@ class LogsTest(BaseTestCase):
 
         assert json_resp['total_count'] == 1
         assert json_resp['data'][0]['operation'] == 'repo_delete'
+
+
+class AdminLogsLoginTest(BaseTestCase):
+
+    def test_get_login_logs(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+        url = reverse('api-v2.1-admin-logs-login-logs')
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert type(json_resp['login_log_list']) is list
+
+    def test_get_login_logs_permision_denied(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.user)
+        url = reverse('api-v2.1-admin-logs-login-logs')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+
+class AdminLogsFileAccessTest(BaseTestCase):
+
+    def test_get_file_access_logs(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+        url = reverse('api-v2.1-admin-logs-file-access-logs')
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert type(json_resp['file_access_log_list']) is list
+
+    def test_get_file_access_logspermision_denied(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.user)
+        url = reverse('api-v2.1-admin-logs-file-access-logs')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+
+class AdminLogsFileUpdateTest(BaseTestCase):
+
+    def test_get_file_update_logs(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+        url = reverse('api-v2.1-admin-logs-file-update-logs')
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert type(json_resp['file_update_log_list']) is list
+
+    def test_get_file_update_logs_permision_denied(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.user)
+        url = reverse('api-v2.1-admin-logs-file-update-logs')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+
+class AdminLogsSharePermissionTest(BaseTestCase):
+
+    def test_get_share_permission_logs(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+        url = reverse('api-v2.1-admin-logs-share-permission-logs')
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert type(json_resp['share_permission_log_list']) is list
+
+    def test_get_share_permission_logs_permision_denied(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.user)
+        url = reverse('api-v2.1-admin-logs-share-permission-logs')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
