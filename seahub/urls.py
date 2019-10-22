@@ -148,6 +148,8 @@ from seahub.api2.endpoints.admin.user_activities import UserActivitiesView
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView
+from seahub.api2.endpoints.admin.logs import AdminLogsLoginLogs, AdminLogsFileAccessLogs, AdminLogsFileUpdateLogs, \
+    AdminLogsSharePermissionLogs
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
@@ -499,6 +501,12 @@ urlpatterns = [
 
     ## admin::shares
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
+
+    ## admin::logs
+    url(r'^api/v2.1/admin/logs/login-logs/$', AdminLogsLoginLogs.as_view(), name='api-v2.1-admin-logs-login-logs'),
+    url(r'^api/v2.1/admin/logs/file-access-logs/$', AdminLogsFileAccessLogs.as_view(), name='api-v2.1-admin-logs-file-access-logs'),
+    url(r'^api/v2.1/admin/logs/file-update-logs/$', AdminLogsFileUpdateLogs.as_view(), name='api-v2.1-admin-logs-file-update-logs'),
+    url(r'^api/v2.1/admin/logs/share-permission-logs/$', AdminLogsSharePermissionLogs.as_view(), name='api-v2.1-admin-logs-share-permission-logs'),
 
     ## admin::admin logs
     url(r'^api/v2.1/admin/admin-logs/$', AdminOperationLogs.as_view(), name='api-v2.1-admin-admin-operation-logs'),
