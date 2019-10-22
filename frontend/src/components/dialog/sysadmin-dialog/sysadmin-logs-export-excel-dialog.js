@@ -43,6 +43,7 @@ class LogsExportExcelDialog extends React.Component {
         break;
     }
     location.href = url + '?start=' + startDateStr + '&end=' + endDateStr;
+    this.props.toggle();
   }
 
   isValidDateStr = () => {
