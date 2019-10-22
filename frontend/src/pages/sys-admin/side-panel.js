@@ -165,10 +165,14 @@ class SidePanel extends React.Component {
                 }
                 {sysadminExtraEnabled && canViewUserLog &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sys/loginadmin/'}>
-                      <span className="sf2-icon-clock" aria-hidden="true"></span>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('logs')}`}
+                      to={siteRoot + 'sys/logs/login'}
+                      onClick={() => this.props.tabItemClick('logs')}
+                    >
+                      <span className="sf2-icon-msgs" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Logs')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {isPro && isDefaultAdmin && enableFileScan &&
