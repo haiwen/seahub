@@ -797,8 +797,13 @@ class LibContentView extends React.Component {
           this.showFile(path);
         } else {
           let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
-          let newWindow = window.open('about:blank');
-          newWindow.location.href = url;
+          let isWeChat = Utils.isWeChat();
+          if (!isWeChat) {
+            let newWindow = window.open('about:blank');
+            newWindow.location.href = url;
+          } else {
+            location.href = url;
+          }
         }
       }
     } else {
@@ -806,8 +811,13 @@ class LibContentView extends React.Component {
         this.showDir(path);
       } else {
         let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
-        let newWindow = window.open('about:blank');
-        newWindow.location.href = url;
+        let isWeChat = Utils.isWeChat();
+        if (!isWeChat) {
+          let newWindow = window.open('about:blank');
+          newWindow.location.href = url;
+        } else {
+          location.href = url;
+        }
       }
     }
   }
@@ -1069,6 +1079,7 @@ class LibContentView extends React.Component {
         this.showColumnMarkdownFile(direntPath);
       } else {
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+        
         let isWeChat = Utils.isWeChat();
         if (!isWeChat) {
           let newWindow = window.open('about:blank');
