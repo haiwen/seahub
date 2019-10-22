@@ -46,8 +46,10 @@ class LogsExportExcelDialog extends React.Component {
   }
 
   isValidDateStr = () => {
-    if (moment(this.state.startDateStr, 'YYYY-MM-DD', true).isValid() &&
-      moment(this.state.startDateStr, 'YYYY-MM-DD', true).isValid()
+    let { startDateStr, endDateStr } = this.state;
+    if (moment(startDateStr, 'YYYY-MM-DD', true).isValid() &&
+      moment(endDateStr, 'YYYY-MM-DD', true).isValid() &&
+      moment(startDateStr).isBefore(endDateStr)
     ) {
       return true;
     } else {
