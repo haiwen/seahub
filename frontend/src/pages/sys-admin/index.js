@@ -33,6 +33,11 @@ import OrgUsers from './orgs/org-users';
 import OrgGroups from './orgs/org-groups';
 import OrgRepos from './orgs/org-repos';
 
+import LoginLogs from './logs-page/login-logs';
+import FileAccessLogs from './logs-page/file-access-logs';
+import FileUpdateLogs from './logs-page/file-update-logs';
+import SharePermissionLogs from './logs-page/share-permission-logs';
+
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
@@ -140,6 +145,10 @@ class SysAdmin extends React.Component {
             <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} />
             <OrgGroups path={siteRoot + 'sys/organizations/:orgID/groups'} />
             <OrgRepos path={siteRoot + 'sys/organizations/:orgID/libraries'} />
+            <LoginLogs path={siteRoot + 'sys/logs/login'} />
+            <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} />
+            <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} />
+            <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} />
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
