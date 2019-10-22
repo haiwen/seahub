@@ -103,7 +103,7 @@ def get_user_share_link_info(fileshare):
     return data
 
 
-def update_user_info(request, user):
+def create_user_info(request, user):
 
     # update basic user info
     password = request.data.get("password")
@@ -119,12 +119,72 @@ def update_user_info(request, user):
     if is_active:
         is_active = to_python_boolean(is_active)
         user.is_active = is_active
-        if user.is_active:
-            try:
-                send_html_email(_(u'Your account on %s is activated') % get_site_name(),
-                                'sysadmin/user_activation_email.html', {'username': user.email}, None, [user.email])
-            except Exception as e:
-                logger.error(e)
+
+    # update user
+    user.save()
+
+    email = user.username
+
+    # update additional user info
+    if is_pro_version():
+        role = request.data.get("role")
+        if role:
+            User.objects.update_role(email, role)
+
+    nickname = request.data.get("name", None)
+    if nickname is not None:
+        Profile.objects.add_or_update(email, nickname)
+
+    # update account login_id
+    login_id = request.data.get("login_id", None)
+    if login_id is not None:
+        Profile.objects.add_or_update(email, login_id=login_id)
+
+    # update account contact email
+    contact_email = request.data.get('contact_email', None)
+    if contact_email is not None:
+        Profile.objects.add_or_update(email, contact_email=contact_email)
+        key = normalize_cache_key(email, CONTACT_CACHE_PREFIX)
+        cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
+
+    reference_id = request.data.get("reference_id", None)
+    if reference_id is not None:
+        if reference_id.strip():
+            ccnet_api.set_reference_id(email, reference_id.strip())
+        else:
+            # remove reference id
+            ccnet_api.set_reference_id(email, None)
+
+    department = request.data.get("department")
+    if department:
+        d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
+        if d_profile is None:
+            d_profile = DetailedProfile(user=email)
+
+        d_profile.department = department
+        d_profile.save()
+
+    quota_total_mb = request.data.get("quota_total")
+    if quota_total_mb:
+        quota_total = int(quota_total_mb) * get_file_size_unit('MB')
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            seafile_api.set_org_user_quota(org_id, email, quota_total)
+        else:
+            seafile_api.set_user_quota(email, quota_total)
+
+
+def update_user_info(request, user):
+
+    # update basic user info
+    password = request.data.get("password")
+    if password:
+        user.set_password(password)
+
+    is_staff = request.data.get("is_staff")
+    if is_staff:
+        is_staff = to_python_boolean(is_staff)
+        user.is_staff = is_staff
 
     # update user
     user.save()
@@ -418,7 +478,7 @@ class AdminUsers(APIView):
         # create user
         try:
             user_obj = User.objects.create_user(email)
-            update_user_info(request, user_obj)
+            create_user_info(request, user_obj)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -602,7 +662,31 @@ class AdminUser(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        is_active = request.data.get("is_active")
+        update_status_tip = ''
+        if is_active:
+            is_active = to_python_boolean(is_active)
+            user_obj.is_active = is_active
+            update_status_tip = _('Edit succeeded')
+            if user_obj.is_active and IS_EMAIL_CONFIGURED:
+                try:
+                    send_html_email(_(u'Your account on %s is activated') % get_site_name(),
+                                    'sysadmin/user_activation_email.html', {'username': user_obj.email}, None, [user_obj.email])
+                    update_status_tip = _('Edit succeeded, an email has been sent.')
+                except Exception as e:
+                    logger.error(e)
+                    update_status_tip = _('Edit succeeded, but failed to send email, please check your email configuration.')
+
+        # update user
+        try:
+            user_obj.save()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal server error.'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         user_info = get_user_info(email)
+        user_info['update_status_tip'] = update_status_tip
 
         return Response(user_info)
 
