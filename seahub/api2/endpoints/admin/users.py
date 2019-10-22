@@ -31,6 +31,7 @@ from seahub.utils import is_valid_username, is_org_context, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
 from seahub.constants import DEFAULT_ADMIN
 from seahub.role_permissions.models import AdminRole
@@ -319,9 +320,7 @@ class AdminUsers(APIView):
 
             info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
             info['last_login'] = UserLastLogin.objects.get_by_username(user.email).last_login if UserLastLogin.objects.get_by_username(user.email) else ''
-
-            if is_pro_version():
-                info['role'] = user.role
+            info['role'] = get_user_role(user)
 
             data.append(info)
 
