@@ -14,16 +14,18 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error
 
+from seahub_extra.sysadmin_extra.models import UserLoginLog
+
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils import get_file_audit_events, generate_file_audit_event_type, \
     get_file_update_events, get_perm_audit_events, is_valid_email
-from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_to_local
+from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
 
 logger = logging.getLogger(__name__)
 
 
-class AdminLogsLogin(APIView):
+class AdminLogsLoginLogs(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser, IsProVersion)
@@ -45,8 +47,6 @@ class AdminLogsLogin(APIView):
 
         start = (current_page - 1) * per_page
         end = start + per_page
-
-        from seahub_extra.sysadmin_extra.models import UserLoginLog
 
         logs = UserLoginLog.objects.all().order_by('-login_date')[start:end]
         count = UserLoginLog.objects.all().count()
@@ -81,7 +81,7 @@ class AdminLogsLogin(APIView):
         return Response(resp)
 
 
-class AdminLogsFileAccess(APIView):
+class AdminLogsFileAccessLogs(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser, IsProVersion)
@@ -114,26 +114,29 @@ class AdminLogsFileAccess(APIView):
         limit = per_page
 
         # org_id = 0, show all file audit
-        events = get_file_audit_events(user_selected, 0, repo_id_selected, start, limit)
-        if not events:
-            resp = {
-                'file_access_log_list': [],
-                'has_next_page': False,
-            }
-
-            return Response(resp)
+        events = get_file_audit_events(user_selected, 0, repo_id_selected, start, limit) or []
 
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
         contact_email_dict = {}
-        user_email_set = set([event.user for event in events])
+        repo_dict = {}
+        user_email_set = set()
+        repo_id_set = set()
+
+        for event in events:
+            user_email_set.add(event.user)
+            repo_id_set.add(event.repo_id)
+
         for e in user_email_set:
             if e not in nickname_dict:
                 nickname_dict[e] = email2nickname(e)
             if e not in contact_email_dict:
                 contact_email_dict[e] = email2contact_email(e)
+        for e in repo_id_set:
+            if e not in repo_dict:
+                repo_dict[e] = seafile_api.get_repo(e)
 
         events_info = []
         for ev in events:
@@ -145,15 +148,12 @@ class AdminLogsFileAccess(APIView):
 
             data['ip'] = ev.ip
             data['event_type'], data['device'] = generate_file_audit_event_type(ev)
-            data['date'] = utc_to_local(ev.timestamp)
+            data['time'] = utc_datetime_to_isoformat_timestr(ev.timestamp)
 
             repo_id = ev.repo_id
             data['repo_id'] = repo_id
-            repo = seafile_api.get_repo(repo_id)
-            if repo:
-                data['repo_name'] = repo.name
-            else:
-                data['repo_name'] = ''
+            repo = repo_dict.get(repo_id, None)
+            data['repo_name'] = repo.name if repo else ''
 
             if ev.file_path.endswith('/'):
                 data['file_or_dir_name'] = '/' if ev.file_path == '/' else os.path.basename(ev.file_path.rstrip('/'))
@@ -169,7 +169,7 @@ class AdminLogsFileAccess(APIView):
         return Response(resp)
 
 
-class AdminLogsFileUpdate(APIView):
+class AdminLogsFileUpdateLogs(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser, IsProVersion)
@@ -202,26 +202,29 @@ class AdminLogsFileUpdate(APIView):
         limit = per_page
 
         # org_id = 0, show all file audit
-        events = get_file_update_events(user_selected, 0, repo_id_selected, start, limit)
-        if not events:
-            resp = {
-                'file_access_log_list': [],
-                'has_next_page': False,
-            }
-
-            return Response(resp)
+        events = get_file_update_events(user_selected, 0, repo_id_selected, start, limit) or []
 
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
         contact_email_dict = {}
-        user_email_set = set([event.user for event in events])
+        repo_dict = {}
+        user_email_set = set()
+        repo_id_set = set()
+
+        for event in events:
+            user_email_set.add(event.user)
+            repo_id_set.add(event.repo_id)
+
         for e in user_email_set:
             if e not in nickname_dict:
                 nickname_dict[e] = email2nickname(e)
             if e not in contact_email_dict:
                 contact_email_dict[e] = email2contact_email(e)
+        for e in repo_id_set:
+            if e not in repo_dict:
+                repo_dict[e] = seafile_api.get_repo(e)
 
         events_info = []
         for ev in events:
@@ -230,17 +233,15 @@ class AdminLogsFileUpdate(APIView):
             data['email'] = user_email
             data['name'] = nickname_dict.get(user_email, '')
             data['contact_email'] = contact_email_dict.get(user_email, '')
-            data['date'] = utc_to_local(ev.timestamp)
+            data['time'] = utc_datetime_to_isoformat_timestr(ev.timestamp)
+
             repo_id = ev.repo_id
             data['repo_id'] = repo_id
-            repo = seafile_api.get_repo(repo_id)
-            if repo:
-                data['repo_name'] = repo.name
-                data['repo_encrypted'] = repo.encrypted
-            else:
-                data['repo_name'] = ''
-                data['repo_encrypted'] = None
-            data['action'] = ev.file_oper
+            repo = repo_dict.get(repo_id, None)
+            data['repo_name'] = repo.name if repo else ''
+            data['repo_encrypted'] = repo.encrypted if repo else None
+
+            data['file_operation'] = ev.file_oper
             data['commit_id'] = ev.commit_id
             events_info.append(data)
 
@@ -252,7 +253,7 @@ class AdminLogsFileUpdate(APIView):
         return Response(resp)
 
 
-class AdminLogsSharePermission(APIView):
+class AdminLogsSharePermissionLogs(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle,)
@@ -284,14 +285,7 @@ class AdminLogsSharePermission(APIView):
         limit = per_page
 
         # org_id = 0, show all file audit
-        events = get_perm_audit_events(user_selected, 0, repo_id_selected, start, limit)
-        if not events:
-            resp = {
-                'file_access_log_list': [],
-                'has_next_page': False,
-            }
-
-            return Response(resp)
+        events = get_perm_audit_events(user_selected, 0, repo_id_selected, start, limit) or []
 
         has_next_page = True if len(events) == per_page else False
 
@@ -300,8 +294,16 @@ class AdminLogsSharePermission(APIView):
         from_contact_email_dict = {}
         to_nickname_dict = {}
         to_contact_email_dict = {}
-        two_lists = list(zip(*[(event.from_user, event.to) for event in events]))
-        from_user_email_set, to_user_email_set = [set(e) for e in two_lists]
+        repo_dict = {}
+        from_user_email_set = set()
+        to_user_email_set = set()
+        repo_id_set = set()
+
+        for event in events:
+            from_user_email_set.add(event.from_user)
+            to_user_email_set.add(event.to)
+            repo_id_set.add(event.repo_id)
+
         for e in from_user_email_set:
             if e not in from_nickname_dict:
                 from_nickname_dict[e] = email2nickname(e)
@@ -312,6 +314,9 @@ class AdminLogsSharePermission(APIView):
                 to_nickname_dict[e] = email2nickname(e)
             if e not in to_contact_email_dict:
                 to_contact_email_dict[e] = email2contact_email(e)
+        for e in repo_id_set:
+            if e not in repo_dict:
+                repo_dict[e] = seafile_api.get_repo(e)
 
         events_info = []
         for ev in events:
@@ -330,14 +335,11 @@ class AdminLogsSharePermission(APIView):
 
             repo_id = ev.repo_id
             data['repo_id'] = repo_id
-            repo = seafile_api.get_repo(repo_id)
-            if repo:
-                data['repo_name'] = repo.name
-            else:
-                data['repo_name'] = ''
+            repo = repo_dict.get(repo_id, None)
+            data['repo_name'] = repo.name if repo else ''
 
             data['folder'] = '/' if ev.file_path == '/' else os.path.basename(ev.file_path.rstrip('/'))
-            data['date'] = utc_to_local(ev.timestamp)
+            data['date'] = utc_datetime_to_isoformat_timestr(ev.timestamp)
             events_info.append(data)
 
         resp = {
