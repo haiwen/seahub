@@ -25,7 +25,8 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.two_factor.models import default_device
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX
+from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX, \
+    NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT
 from seahub.utils import is_valid_username, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name
@@ -103,68 +104,22 @@ def get_user_share_link_info(fileshare):
     return data
 
 
-def create_user_info(request, user):
-
-    # update basic user info
-    password = request.data.get("password")
-    if password:
-        user.set_password(password)
-
-    is_staff = request.data.get("is_staff")
-    if is_staff:
-        is_staff = to_python_boolean(is_staff)
-        user.is_staff = is_staff
-
-    is_active = request.data.get("is_active")
-    if is_active:
-        is_active = to_python_boolean(is_active)
-        user.is_active = is_active
-
-    # update user
-    user.save()
-
-    email = user.username
-
+def create_user_info(request, email, role, nickname, contact_email, quota_total_mb):
     # update additional user info
-    if is_pro_version():
-        role = request.data.get("role")
-        if role:
-            User.objects.update_role(email, role)
 
-    nickname = request.data.get("name", None)
+    if is_pro_version() and role:
+        User.objects.update_role(email, role)
+
     if nickname is not None:
         Profile.objects.add_or_update(email, nickname)
+        key = normalize_cache_key(nickname, NICKNAME_CACHE_PREFIX)
+        cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
 
-    # update account login_id
-    login_id = request.data.get("login_id", None)
-    if login_id is not None:
-        Profile.objects.add_or_update(email, login_id=login_id)
-
-    # update account contact email
-    contact_email = request.data.get('contact_email', None)
     if contact_email is not None:
         Profile.objects.add_or_update(email, contact_email=contact_email)
         key = normalize_cache_key(email, CONTACT_CACHE_PREFIX)
         cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
 
-    reference_id = request.data.get("reference_id", None)
-    if reference_id is not None:
-        if reference_id.strip():
-            ccnet_api.set_reference_id(email, reference_id.strip())
-        else:
-            # remove reference id
-            ccnet_api.set_reference_id(email, None)
-
-    department = request.data.get("department")
-    if department:
-        d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
-        if d_profile is None:
-            d_profile = DetailedProfile(user=email)
-
-        d_profile.department = department
-        d_profile.save()
-
-    quota_total_mb = request.data.get("quota_total")
     if quota_total_mb:
         quota_total = int(quota_total_mb) * get_file_size_unit('MB')
         if is_org_context(request):
@@ -174,16 +129,14 @@ def create_user_info(request, user):
             seafile_api.set_user_quota(email, quota_total)
 
 
-def update_user_info(request, user):
+def update_user_info(request, user, password, is_staff, role,
+                     nickname, login_id, contact_email, reference_id, quota_total_mb):
 
     # update basic user info
-    password = request.data.get("password")
     if password:
         user.set_password(password)
 
-    is_staff = request.data.get("is_staff")
-    if is_staff:
-        is_staff = to_python_boolean(is_staff)
+    if is_staff is not None:
         user.is_staff = is_staff
 
     # update user
@@ -192,28 +145,22 @@ def update_user_info(request, user):
     email = user.username
 
     # update additional user info
-    if is_pro_version():
-        role = request.data.get("role")
-        if role:
-            User.objects.update_role(email, role)
+    if is_pro_version() and role:
+        User.objects.update_role(email, role)
 
-    nickname = request.data.get("name", None)
     if nickname is not None:
         Profile.objects.add_or_update(email, nickname)
+        key = normalize_cache_key(nickname, NICKNAME_CACHE_PREFIX)
+        cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
 
-    # update account login_id
-    login_id = request.data.get("login_id", None)
     if login_id is not None:
         Profile.objects.add_or_update(email, login_id=login_id)
 
-    # update account contact email
-    contact_email = request.data.get('contact_email', None)
     if contact_email is not None:
         Profile.objects.add_or_update(email, contact_email=contact_email)
         key = normalize_cache_key(email, CONTACT_CACHE_PREFIX)
         cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
 
-    reference_id = request.data.get("reference_id", None)
     if reference_id is not None:
         if reference_id.strip():
             ccnet_api.set_reference_id(email, reference_id.strip())
@@ -221,16 +168,6 @@ def update_user_info(request, user):
             # remove reference id
             ccnet_api.set_reference_id(email, None)
 
-    department = request.data.get("department")
-    if department:
-        d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
-        if d_profile is None:
-            d_profile = DetailedProfile(user=email)
-
-        d_profile.department = department
-        d_profile.save()
-
-    quota_total_mb = request.data.get("quota_total")
     if quota_total_mb:
         quota_total = int(quota_total_mb) * get_file_size_unit('MB')
         if is_org_context(request):
@@ -242,7 +179,6 @@ def update_user_info(request, user):
 def get_user_info(email):
 
     user = User.objects.get(email=email)
-    d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
     profile = Profile.objects.get_profile_by_user(email)
 
     info = {}
@@ -255,8 +191,6 @@ def get_user_info(email):
     info['is_active'] = user.is_active
     info['reference_id'] = user.reference_id if user.reference_id else ''
 
-    info['department'] = d_profile.department if d_profile else ''
-
     info['quota_total'] = seafile_api.get_user_quota(email)
     info['quota_usage'] = seafile_api.get_user_self_usage(email)
 
@@ -265,8 +199,7 @@ def get_user_info(email):
     info['has_default_device'] = True if default_device(user) else False
     info['is_force_2fa'] = UserOptions.objects.is_force_2fa(email)
 
-    if is_pro_version():
-        info['role'] = user.role
+    info['role'] = get_user_role(user)
 
     return info
 
@@ -433,11 +366,10 @@ class AdminUsers(APIView):
                 error_msg = "Name should not include '/'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        department = request.data.get("department", None)
-        if department:
-            if len(department) > 512:
-                error_msg = "Department is too long (maximum is 512 characters)."
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        contact_email = request.data.get('contact_email', None)
+        if contact_email or not is_valid_username(contact_email):
+            error_msg = 'contact_email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         quota_total_mb = request.data.get("quota_total", None)
         if quota_total_mb:
@@ -477,8 +409,10 @@ class AdminUsers(APIView):
 
         # create user
         try:
-            user_obj = User.objects.create_user(email)
-            create_user_info(request, user_obj)
+            user_obj = User.objects.create_user(email, password, is_staff, is_active)
+            create_user_info(request, email=user_obj.username, role=role,
+                             nickname=name, contact_email=contact_email,
+                             quota_total_mb=quota_total_mb)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -608,10 +542,8 @@ class AdminUser(APIView):
             if not is_valid_email(contact_email):
                 error_msg = 'Contact email invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            profile = Profile.objects.get_profile_by_contact_email(contact_email)
-            if profile:
-                error_msg = 'Contact email %s already exists.' % contact_email
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        password = request.data.get("password")
 
         reference_id = request.data.get("reference_id", "")
         if reference_id:
@@ -620,12 +552,6 @@ class AdminUser(APIView):
             primary_id = ccnet_api.get_primary_id(reference_id)
             if primary_id:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID %s already exists.' % reference_id)
-
-        department = request.data.get("department", None)
-        if department:
-            if len(department) > 512:
-                error_msg = "Department is too long (maximum is 512 characters)."
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         quota_total_mb = request.data.get("quota_total", None)
         if quota_total_mb:
@@ -656,16 +582,16 @@ class AdminUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            update_user_info(request, user_obj)
+            update_user_info(request, user=user_obj, password=password, is_staff=is_staff,
+                             role=role, nickname=name, login_id=login_id, contact_email=contact_email,
+                             reference_id=reference_id, quota_total_mb=quota_total_mb)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        is_active = request.data.get("is_active")
         update_status_tip = ''
-        if is_active:
-            is_active = to_python_boolean(is_active)
+        if is_active is not None:
             user_obj.is_active = is_active
             update_status_tip = _('Edit succeeded')
             if user_obj.is_active and IS_EMAIL_CONFIGURED:
