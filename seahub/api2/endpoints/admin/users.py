@@ -18,9 +18,10 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 
+import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
     SEND_EMAIL_ON_RESETTING_USER_PASSWD
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.two_factor.models import default_device
@@ -239,14 +240,27 @@ class AdminAdminUsers(APIView):
             profile = Profile.objects.get_profile_by_user(user.email)
             user_info['email'] = user.email
             user_info['name'] = email2nickname(user.email)
-            user_info['contact_email'] = profile.contact_email if profile and profile.contact_email else ''
+            user_info['contact_email'] = email2contact_email(user.email)
             user_info['login_id'] = profile.login_id if profile and profile.login_id else ''
 
             user_info['is_staff'] = user.is_staff
             user_info['is_active'] = user.is_active
 
-            user_info['quota_total'] = seafile_api.get_user_quota(user.email)
-            user_info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
+            orgs = ccnet_api.get_orgs_by_user(user.email)
+            try:
+                if orgs:
+                    org_id = orgs[0].org_id
+                    user_info['org_id'] = org_id
+                    user_info['org_name'] = orgs[0].org_name
+                    user_info['quota_usage'] = seafile_api.get_org_user_quota_usage(org_id, user.email)
+                    user_info['quota_total'] = seafile_api.get_org_user_quota(org_id, user.email)
+                else:
+                    user_info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
+                    user_info['quota_total'] = seafile_api.get_user_quota(user.email)
+            except Exception as e:
+                logger.error(e)
+                user_info['quota_usage'] = -1
+                user_info['quota_total'] = -1
 
             user_info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
             user_info['last_login'] = UserLastLogin.objects.get_by_username(user.email).last_login if UserLastLogin.objects.get_by_username(user.email) else ''
@@ -309,18 +323,33 @@ class AdminUsers(APIView):
             info = {}
             info['email'] = user.email
             info['name'] = email2nickname(user.email)
-            info['contact_email'] = profile.contact_email if profile and profile.contact_email else ''
+            info['contact_email'] = email2contact_email(user.email)
             info['login_id'] = profile.login_id if profile and profile.login_id else ''
 
             info['is_staff'] = user.is_staff
             info['is_active'] = user.is_active
 
-            info['quota_total'] = seafile_api.get_user_quota(user.email)
-            info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
+            orgs = ccnet_api.get_orgs_by_user(user.email)
+            try:
+                if orgs:
+                    org_id = orgs[0].org_id
+                    info['org_id'] = org_id
+                    info['org_name'] = orgs[0].org_name
+                    info['quota_usage'] = seafile_api.get_org_user_quota_usage(org_id, user.email)
+                    info['quota_total'] = seafile_api.get_org_user_quota(org_id, user.email)
+                else:
+                    info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
+                    info['quota_total'] = seafile_api.get_user_quota(user.email)
+            except Exception as e:
+                logger.error(e)
+                info['quota_usage'] = -1
+                info['quota_total'] = -1
 
             info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
             info['last_login'] = UserLastLogin.objects.get_by_username(user.email).last_login if UserLastLogin.objects.get_by_username(user.email) else ''
             info['role'] = get_user_role(user)
+            if getattr(settings, 'MULTI_INSTITUTION', False):
+                info['institution'] = profile.institution if profile else ''
 
             data.append(info)
 
