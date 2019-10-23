@@ -231,12 +231,12 @@ class OrgUsers extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminGetOrgInfo(this.props.orgID).then((res) => {
+    seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
       });
     });
-    seafileAPI.sysAdminListAllOrgUsers(this.props.orgID).then((res) => {
+    seafileAPI.sysAdminListOrgUsers(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         userList: res.data.users
@@ -295,7 +295,7 @@ class OrgUsers extends Component {
 
   updateStatus = (email, statusValue) => {
     const isActive = statusValue == 'active';
-    seafileAPI.sysAdminUpdateOrgUserInfo(this.props.orgID, email, 'active', isActive).then(res => {
+    seafileAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'active', isActive).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item.active = res.data.active;

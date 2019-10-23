@@ -138,12 +138,12 @@ class OrgRepos extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminGetOrgInfo(this.props.orgID).then((res) => {
+    seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
       }); 
     });
-    seafileAPI.sysAdminListAllOrgRepos(this.props.orgID).then((res) => {
+    seafileAPI.sysAdminListOrgRepos(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         repoList: res.data.repo_list

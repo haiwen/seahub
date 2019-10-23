@@ -121,7 +121,7 @@ class OrgInfo extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminGetOrgInfo(this.props.orgID).then((res) => {
+    seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         orgInfo: res.data
@@ -151,7 +151,7 @@ class OrgInfo extends Component {
 
   updateQuota = (quota) => {
     const data = {quota: quota};
-    seafileAPI.sysAdminUpdateOrgInfo(this.props.orgID, data).then(res => {
+    seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         quota: res.data.quota
       });
@@ -165,7 +165,7 @@ class OrgInfo extends Component {
 
   updateName = (orgName) => {
     const data = {orgName: orgName};
-    seafileAPI.sysAdminUpdateOrgInfo(this.props.orgID, data).then(res => {
+    seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         org_name: res.data.org_name
       });
@@ -179,7 +179,7 @@ class OrgInfo extends Component {
 
   updateMaxUserNumber = (newValue) => {
     const data = {maxUserNumber: newValue};
-    seafileAPI.sysAdminUpdateOrgInfo(this.props.orgID, data).then(res => {
+    seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         max_user_number: res.data.max_user_number
       });
