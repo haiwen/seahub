@@ -134,12 +134,12 @@ class OrgGroups extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminGetOrgInfo(this.props.orgID).then((res) => {
+    seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
       });
     });
-    seafileAPI.sysAdminListAllOrgGroups(this.props.orgID).then((res) => {
+    seafileAPI.sysAdminListOrgGroups(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         groupList: res.data.group_list

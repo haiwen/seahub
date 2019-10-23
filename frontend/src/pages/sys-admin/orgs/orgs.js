@@ -150,7 +150,7 @@ class Orgs extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminListAllOrgs().then((res) => {
+    seafileAPI.sysAdminListOrgs().then((res) => {
       this.setState({
         loading: false,
         orgList: res.data.organizations
@@ -185,7 +185,7 @@ class Orgs extends Component {
   updateRole = (orgID, role) => {
     let orgInfo = {};
     orgInfo.role = role;
-    seafileAPI.sysAdminUpdateOrgInfo(orgID, orgInfo).then(res => {
+    seafileAPI.sysAdminUpdateOrg(orgID, orgInfo).then(res => {
       let newOrgList = this.state.orgList.map(org => {
         if (org.org_id == orgID) {
           org.role = role;
