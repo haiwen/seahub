@@ -129,10 +129,13 @@ def create_user_info(request, email, role, nickname, contact_email, quota_total_
             seafile_api.set_user_quota(email, quota_total)
 
 
-def update_user_info(request, user, password, is_staff, role,
+def update_user_info(request, user, password, is_active, is_staff, role,
                      nickname, login_id, contact_email, reference_id, quota_total_mb):
 
     # update basic user info
+    if is_active is not None:
+        user.is_active = is_active
+
     if password:
         user.set_password(password)
 
@@ -582,7 +585,7 @@ class AdminUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            update_user_info(request, user=user_obj, password=password, is_staff=is_staff,
+            update_user_info(request, user=user_obj, password=password, is_active=is_active, is_staff=is_staff,
                              role=role, nickname=name, login_id=login_id, contact_email=contact_email,
                              reference_id=reference_id, quota_total_mb=quota_total_mb)
         except Exception as e:
@@ -590,9 +593,16 @@ class AdminUser(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # update user
+        try:
+            user_obj.save()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal server error.'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         update_status_tip = ''
         if is_active is not None:
-            user_obj.is_active = is_active
             update_status_tip = _('Edit succeeded')
             if user_obj.is_active and IS_EMAIL_CONFIGURED:
                 try:
@@ -602,14 +612,6 @@ class AdminUser(APIView):
                 except Exception as e:
                     logger.error(e)
                     update_status_tip = _('Edit succeeded, but failed to send email, please check your email configuration.')
-
-        # update user
-        try:
-            user_obj.save()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal server error.'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         user_info = get_user_info(email)
         user_info['update_status_tip'] = update_status_tip
