@@ -160,7 +160,8 @@ def sysadmin_react_fake_view(request, **kwargs):
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'enable_two_factor_auth': ENABLE_TWO_FACTOR_AUTH,
         'available_roles': get_available_roles(),
-        'available_admin_roles': get_available_admin_roles()
+        'available_admin_roles': get_available_admin_roles(),
+        'institutions': [inst.name for inst in Institution.objects.all()],
     })
 
 @login_required
