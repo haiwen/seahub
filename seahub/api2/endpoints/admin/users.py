@@ -39,7 +39,7 @@ from seahub.constants import DEFAULT_ADMIN
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.licenseparse import user_number_over_limit
-
+from seahub.institutions.models import Institution
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
 
@@ -131,7 +131,8 @@ def create_user_info(request, email, role, nickname, contact_email, quota_total_
 
 
 def update_user_info(request, user, password, is_active, is_staff, role,
-                     nickname, login_id, contact_email, reference_id, quota_total_mb):
+                     nickname, login_id, contact_email, reference_id, quota_total_mb,
+                     institution):
 
     # update basic user info
     if is_active is not None:
@@ -180,6 +181,9 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         else:
             seafile_api.set_user_quota(email, quota_total)
 
+    if institution is not None:
+        Profile.objects.add_or_update(email, institution=institution)
+
 def get_user_info(email):
 
     user = User.objects.get(email=email)
@@ -204,6 +208,8 @@ def get_user_info(email):
     info['is_force_2fa'] = UserOptions.objects.is_force_2fa(email)
 
     info['role'] = get_user_role(user)
+    if getattr(settings, 'MULTI_INSTITUTION', False):
+        info['institution'] = profile.institution if profile else ''
 
     return info
 
@@ -606,6 +612,13 @@ class AdminUser(APIView):
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        institution = request.data.get("institution", None)
+        if institution is not None:
+            all_institutions = [inst.name for inst in Institution.objects.all()]
+            if institution not in all_institutions + ['']:
+                error_msg = 'institution %s invalid.' % institution
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # query user info
         try:
             user_obj = User.objects.get(email=email)
@@ -616,7 +629,7 @@ class AdminUser(APIView):
         try:
             update_user_info(request, user=user_obj, password=password, is_active=is_active, is_staff=is_staff,
                              role=role, nickname=name, login_id=login_id, contact_email=contact_email,
-                             reference_id=reference_id, quota_total_mb=quota_total_mb)
+                             reference_id=reference_id, quota_total_mb=quota_total_mb, institution=institution)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
