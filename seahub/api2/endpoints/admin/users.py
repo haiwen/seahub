@@ -32,7 +32,7 @@ from seahub.utils import is_valid_username, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
 from seahub.constants import DEFAULT_ADMIN
@@ -259,7 +259,8 @@ class AdminAdminUsers(APIView):
                 user_info['quota_total'] = -1
 
             user_info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
-            user_info['last_login'] = UserLastLogin.objects.get_by_username(user.email).last_login if UserLastLogin.objects.get_by_username(user.email) else ''
+            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
+            user_info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
 
             try:
                 admin_role = AdminRole.objects.get_admin_role(user.email)
@@ -342,7 +343,8 @@ class AdminUsers(APIView):
                 info['quota_total'] = -1
 
             info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
-            info['last_login'] = UserLastLogin.objects.get_by_username(user.email).last_login if UserLastLogin.objects.get_by_username(user.email) else ''
+            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
+            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
             info['role'] = get_user_role(user)
             if getattr(settings, 'MULTI_INSTITUTION', False):
                 info['institution'] = profile.institution if profile else ''
@@ -500,7 +502,8 @@ class AdminLDAPUsers(APIView):
             info['quota_total'] = seafile_api.get_user_quota(user.email)
             info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
             info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
-            info['last_login'] = UserLastLogin.objects.get_by_username(user.email).last_login if UserLastLogin.objects.get_by_username(user.email) else ''
+            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
+            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
             data.append(info)
 
         result = {'ldap_user_list': data, 'has_next_page': has_next_page}
