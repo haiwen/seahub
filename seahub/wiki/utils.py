@@ -19,7 +19,7 @@ from seahub.utils import gen_file_get_url, get_file_type_and_ext, \
     gen_inner_file_get_url, get_site_scheme_and_netloc
 from seahub.utils.file_types import IMAGE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from .models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
+from .models import WikiPageMissing, WikiDoesNotExist, PersonalWiki
 
 logger = logging.getLogger(__name__)
 
@@ -75,29 +75,9 @@ def get_personal_wiki_repo(username):
     if not repo:
         raise WikiDoesNotExist
     return repo
-
-def get_group_wiki_repo(group, username):
-    try:
-        groupwiki = GroupWiki.objects.get(group_id=group.id)
-    except GroupWiki.DoesNotExist:
-        raise WikiDoesNotExist
-        
-    repos = seaserv.get_group_repos(group.id, username)
-    for repo in repos:
-        if repo.id == groupwiki.repo_id:
-            return repo
-    raise WikiDoesNotExist
     
 def get_personal_wiki_page(username, page_name):
     repo = get_personal_wiki_repo(username)
-    dirent = get_wiki_dirent(repo.id, page_name)
-    url = get_inner_file_url(repo, dirent.obj_id, dirent.obj_name)
-    file_response = urllib.request.urlopen(url)
-    content = file_response.read()
-    return content, repo, dirent
-
-def get_group_wiki_page(username, group, page_name):
-    repo = get_group_wiki_repo(group, username)
     dirent = get_wiki_dirent(repo.id, page_name)
     url = get_inner_file_url(repo, dirent.obj_id, dirent.obj_name)
     file_response = urllib.request.urlopen(url)
