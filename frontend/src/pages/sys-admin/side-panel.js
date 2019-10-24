@@ -213,10 +213,14 @@ class SidePanel extends React.Component {
                 }
                 {isPro && canViewAdminLog &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sysadmin/#admin-operation-logs/'}>
-                      <span className="sf2-icon-admin-log" aria-hidden="true"></span>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('adminLogs')}`}
+                      to={siteRoot + 'sys/admin-logs/operation'}
+                      onClick={() => this.props.tabItemClick('adminLogs')}
+                    >
+                      <span className="sf2-icon-msgs" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Admin Logs')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {isDefaultAdmin && enableWorkWeixin &&

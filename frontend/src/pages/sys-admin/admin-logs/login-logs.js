@@ -1,15 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, loginUrl, siteRoot } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
-import { Button } from 'reactstrap';
 import moment from 'moment';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LogsNav from './logs-nav';
 import MainPanelTopbar from '../main-panel-topbar';
-import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
-import ModalPortal from '../../../components/modal-portal';
 
 
 class Content extends Component {
@@ -35,7 +33,7 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('No File Access Logs.')}</h2>
+          <h2>{gettext('No Admin Login Logs.')}</h2>
         </EmptyTip>
       );
       const table = (
@@ -43,15 +41,13 @@ class Content extends Component {
           <table className="table-hover">
             <thead>
               <tr>
-                <th width="20%">{gettext('Name')}</th>
-                <th width="10%">{gettext('Type')}</th>
-                <th width="20%">{gettext('IP')}{' / '}{gettext('Device')}</th>
-                <th width="20%">{gettext('Date')}</th>
-                <th width="15%">{gettext('Library')}</th>
-                <th width="15%">{gettext('File')}{' / '}{gettext('Folder')}</th>
+                <th width="25%">{gettext('Name')}</th>
+                <th width="25%">{gettext('IP')}</th>
+                <th width="25%">{gettext('Status')}</th>
+                <th width="25%">{gettext('Time')}</th>
               </tr>
             </thead>
-            {items && 
+            {items &&
               <tbody>
                 {items.map((item, index) => {
                   return (<Item
@@ -82,21 +78,6 @@ class Item extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isOpIconShown: false,
-    };
-  }
-
-  handleMouseOver = () => {
-    this.setState({
-      isOpIconShown: true
-    });
-  }
-
-  handleMouseOut = () => {
-    this.setState({
-      isOpIconShown: false
-    });
   }
 
   render() {
@@ -104,17 +85,15 @@ class Item extends Component {
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><a href={siteRoot + 'useradmin/info/' + item.email + '/'}>{item.name}</a></td>
-        <td>{item.event_type}</td>
-        <td>{item.ip}{' / '}{item.device}</td>
-        <td>{moment(item.time).fromNow()}</td>
-        <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
-        <td>{item.file_or_dir_name}</td>
+        <td>{item.login_ip}</td>
+        <td>{item.login_success ? gettext('Success') : gettext('Failed')}</td>
+        <td>{moment(item.login_time).fromNow()}</td>
       </tr>
     );
   }
 }
 
-class FileAccessLogs extends Component {
+class AdminLoginLogs extends Component {
 
   constructor(props) {
     super(props);
@@ -125,13 +104,8 @@ class FileAccessLogs extends Component {
       perPage: 100,
       currentPage: 1,
       hasNextPage: false,
-      isExportExcelDialogOpen: false,
     };
     this.initPage = 1;
-  }
-
-  toggleExportExcelDialog = () => {
-    this.setState({isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen});
   }
 
   componentDidMount () {
@@ -140,12 +114,12 @@ class FileAccessLogs extends Component {
 
   getLogsByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListFileAccessLogs(page, perPage).then((res) => {
+    seafileAPI.sysAdminListAdminLoginLogs(page, perPage).then((res) => {
       this.setState({
-        logList: res.data.file_access_log_list,
+        logList: res.data.data,
         loading: false,
         currentPage: page,
-        hasNextPage: res.data.has_next_page,
+        hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count),
       });
     }).catch((error) => {
       if (error.response) {
@@ -177,15 +151,13 @@ class FileAccessLogs extends Component {
   }
 
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen } = this.state;
+    let { logList, currentPage, perPage, hasNextPage } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
-        </MainPanelTopbar>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LogsNav currentItem="fileAccessLogs" />
+            <LogsNav currentItem="adminLoginLogs" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -200,17 +172,9 @@ class FileAccessLogs extends Component {
             </div>
           </div>
         </div>
-        {isExportExcelDialogOpen &&
-        <ModalPortal>
-          <LogsExportExcelDialog
-            logType={'fileAccess'}
-            toggle={this.toggleExportExcelDialog}
-          />
-        </ModalPortal>
-        }
       </Fragment>
     );
   }
 }
 
-export default FileAccessLogs;
+export default AdminLoginLogs;
