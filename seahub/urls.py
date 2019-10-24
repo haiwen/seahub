@@ -136,7 +136,7 @@ from seahub.api2.endpoints.admin.org_stats import AdminOrgStatsTraffic
 from seahub.api2.endpoints.admin.logo import AdminLogo
 from seahub.api2.endpoints.admin.favicon import AdminFavicon
 from seahub.api2.endpoints.admin.license import AdminLicense
-from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvitationsView
+from seahub.api2.endpoints.admin.invitations import AdminInvitationsView, AdminInvitationView
 from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
 from seahub.api2.endpoints.admin.login_bg_image import AdminLoginBgImage
 from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
@@ -554,6 +554,7 @@ urlpatterns = [
 
     ## admin::invitations
     url(r'^api/v2.1/admin/invitations/$', AdminInvitationsView.as_view(), name='api-v2.1-admin-invitations'),
+    url(r'^api/v2.1/admin/invitations/(?P<token>[a-f0-9]{32})/$', AdminInvitationView.as_view(), name='api-v2.1-admin-invitation'),
 
     url(r'^avatar/', include('seahub.avatar.urls')),
     url(r'^notification/', include('seahub.notifications.urls')),
