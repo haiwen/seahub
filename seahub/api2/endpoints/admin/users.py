@@ -39,6 +39,7 @@ from seahub.constants import DEFAULT_ADMIN
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.licenseparse import user_number_over_limit
+from seahub.constants import DEFAULT_USER
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
@@ -366,21 +367,19 @@ class AdminUsers(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # basic user info check
-        is_staff = request.data.get("is_staff", None)
-        if is_staff:
-            try:
-                is_staff = to_python_boolean(is_staff)
-            except ValueError:
-                error_msg = 'is_staff invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        is_staff = request.data.get("is_staff", False)
+        try:
+            is_staff = to_python_boolean(is_staff)
+        except ValueError:
+            error_msg = 'is_staff invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        is_active = request.data.get("is_active", None)
-        if is_active:
-            try:
-                is_active = to_python_boolean(is_active)
-            except ValueError:
-                error_msg = 'is_active invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        is_active = request.data.get("is_active", True)
+        try:
+            is_active = to_python_boolean(is_active)
+        except ValueError:
+            error_msg = 'is_active invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # additional user info check
         role = request.data.get("role", None)
@@ -452,15 +451,19 @@ class AdminUsers(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        add_user_tip = _('Successfully added user %(user)s.') % email
         if IS_EMAIL_CONFIGURED and SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
             c = {'user': request.user.username, 'email': email, 'password': password}
             try:
                 send_html_email(_('You are invited to join %s') % get_site_name(),
                         'sysadmin/user_add_email.html', c, None, [email])
+                add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % email
             except Exception as e:
                 logger.error(str(e))
+                add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % email
 
         user_info = get_user_info(email)
+        user_info['add_user_tip'] = add_user_tip
 
         return Response(user_info)
 
