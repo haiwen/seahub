@@ -308,25 +308,6 @@ class CommandsLastCheck(models.Model):
     command_type = models.CharField(max_length=100)
     last_check = models.DateTimeField()
 
-###### Deprecated
-class InnerPubMsg(models.Model):
-    """
-    Model used for leave message on inner pub page.
-    """
-    from_email = models.EmailField()
-    message = models.CharField(max_length=500)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
-
-    class Meta:
-        ordering = ['-timestamp']
-
-class InnerPubMsgReply(models.Model):
-    reply_to = models.ForeignKey(InnerPubMsg)
-    from_email = models.EmailField()
-    message = models.CharField(max_length=150)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
-##############################
-
 class DeviceToken(models.Model):
     """
     The iOS device token model.
