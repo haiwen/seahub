@@ -18,7 +18,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 logger = logging.getLogger(__name__)
 
 
-class AdminInvitationsView(APIView):
+class AdminInvitations(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle, )
     permission_classes = (IsAdminUser, )
@@ -43,7 +43,7 @@ class AdminInvitationsView(APIView):
         start = per_page * (current_page - 1)
 
         invitations = Invitation.objects.all().order_by('-invite_time')[start:start + per_page]
-        count = Invitation.objects.all().count()
+        count = Invitation.objects.count()
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         inviter_email_set = set()
@@ -108,7 +108,7 @@ class AdminInvitationsView(APIView):
             return Response(status.HTTP_200_OK)
 
 
-class AdminInvitationView(APIView):
+class AdminInvitation(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle, )
