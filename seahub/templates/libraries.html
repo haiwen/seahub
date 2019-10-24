@@ -254,20 +254,6 @@ app["pageOptions"] = {
         {% endfor %}
         return storages;
     })(),
-    user_mods_available: (function () {
-        var mods_available = [];
-        {% for mod in request.user.mods_available %}
-        mods_available.push('{{mod}}');
-        {% endfor %}
-        return mods_available;
-    })(),
-    user_mods_enabled: (function () {
-        var mods_enabled = [];
-        {% for mod in request.user.mods_enabled %}
-        mods_enabled.push('{{mod}}');
-        {% endfor %}
-        return mods_enabled;
-    })(),
     username: "{{request.user.username|escapejs}}",
     name: "{{request.user.username|email2nickname|escapejs}}",
     contact_email: "{{ request.user.username|email2contact_email|escapejs }}",

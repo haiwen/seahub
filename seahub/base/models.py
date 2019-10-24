@@ -38,23 +38,6 @@ class TimestampedModel(models.Model):
         # default ordering for most models.
         ordering = ['-created_at', '-updated_at']
 
-
-class FileDiscuss(models.Model):
-    """
-    Model used to represents the relationship between group message and file/dir.
-    """
-    group_message = models.ForeignKey(GroupMessage)
-    repo_id = models.CharField(max_length=36)
-    path = models.TextField()
-    path_hash = models.CharField(max_length=12, db_index=True)
-
-    def save(self, *args, **kwargs):
-        if not self.path_hash:
-            self.path_hash = calc_file_path_hash(self.path)
-
-        super(FileDiscuss, self).save(*args, **kwargs)
-
-
 class FileCommentManager(models.Manager):
     def add(self, repo_id, parent_path, item_name, author, comment, detail=''):
         fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
@@ -258,15 +241,6 @@ class UserStarredFiles(models.Model):
 
     objects = UserStarredFilesManager()
 
-########## user/group modules
-class UserEnabledModule(models.Model):
-    username = models.CharField(max_length=255, db_index=True)
-    module_name = models.CharField(max_length=20)
-
-class GroupEnabledModule(models.Model):
-    group_id = models.CharField(max_length=10, db_index=True)
-    module_name = models.CharField(max_length=20)
-
 ########## misc
 class UserLastLoginManager(models.Manager):
     def get_by_username(self, username):
@@ -307,25 +281,6 @@ class CommandsLastCheck(models.Model):
     """
     command_type = models.CharField(max_length=100)
     last_check = models.DateTimeField()
-
-###### Deprecated
-class InnerPubMsg(models.Model):
-    """
-    Model used for leave message on inner pub page.
-    """
-    from_email = models.EmailField()
-    message = models.CharField(max_length=500)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
-
-    class Meta:
-        ordering = ['-timestamp']
-
-class InnerPubMsgReply(models.Model):
-    reply_to = models.ForeignKey(InnerPubMsg)
-    from_email = models.EmailField()
-    message = models.CharField(max_length=150)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
-##############################
 
 class DeviceToken(models.Model):
     """

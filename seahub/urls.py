@@ -71,7 +71,6 @@ from seahub.api2.endpoints.move_folder_merge import MoveFolderMergeView
 from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchView
 from seahub.api2.endpoints.invitation import InvitationView, InvitationRevokeView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
-from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
@@ -219,7 +218,6 @@ urlpatterns = [
     url(r'^custom-css/$', custom_css_view, name='custom_css'),
     url(r'^i18n/$', i18n, name='i18n'),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
-    url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
     url(r'^download_client_program/$', TemplateView.as_view(template_name="download.html"), name="download_client"),
     url(r'^choose_register/$', choose_register, name="choose_register"),
 
@@ -396,7 +394,6 @@ urlpatterns = [
 
     url(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
     url(r'^api/v2.1/notification/$', NotificationView.as_view(), name='api-v2.1-notification'),
-    url(r'^api/v2.1/user-enabled-modules/$', UserEnabledModulesView.as_view(), name='api-v2.1-user-enabled-module'),
 
     ## user::invitations
     url(r'^api/v2.1/invitations/$', InvitationsView.as_view()),

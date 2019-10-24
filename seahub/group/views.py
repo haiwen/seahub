@@ -37,8 +37,6 @@ from seahub.settings import SITE_ROOT
 from seahub.utils import render_error, send_html_email, is_org_context, \
     get_site_name
 from seahub.views import is_registered_user, check_folder_permission
-from seahub.views.modules import get_enabled_mods_by_group, \
-    get_available_mods_by_group
 from seahub.share.models import ExtraGroupsSharePermission
 
 from seahub.forms import SharedRepoCreateForm
@@ -199,8 +197,6 @@ def group_wiki(request, group, page_name="home"):
     username = request.user.username
 
     # get available modules(wiki, etc)
-    mods_available = get_available_mods_by_group(group.id)
-    mods_enabled = get_enabled_mods_by_group(group.id)
 
     wiki_exists = True
     try:
@@ -213,8 +209,6 @@ def group_wiki(request, group, page_name="home"):
                 "group": group,
                 "is_staff": group.is_staff,
                 "wiki_exists": wiki_exists,
-                "mods_enabled": mods_enabled,
-                "mods_available": mods_available,
                 "group_repos": group_repos,
                 })
     except WikiPageMissing:
@@ -268,8 +262,6 @@ def group_wiki(request, group, page_name="home"):
             "repo_id": repo.id,
             "search_repo_id": repo.id,
             "search_wiki": True,
-            "mods_enabled": mods_enabled,
-            "mods_available": mods_available,
             "repo_perm": repo_perm,
             "wiki_index_exists": wiki_index_exists,
             "index_content": index_content,
@@ -295,8 +287,6 @@ def group_wiki_pages(request, group):
         # when anonymous user visit public group wiki, set permission as preview only
         repo_perm = PERMISSION_PREVIEW
 
-    mods_available = get_available_mods_by_group(group.id)
-    mods_enabled = get_enabled_mods_by_group(group.id)
 
     return render(request, "group/group_wiki_pages.html", {
             "group": group,
@@ -306,8 +296,6 @@ def group_wiki_pages(request, group):
             "search_repo_id": repo.id,
             "search_wiki": True,
             "repo_perm": repo_perm,
-            "mods_enabled": mods_enabled,
-            "mods_available": mods_available,
             })
 
 @login_required_ajax

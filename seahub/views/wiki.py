@@ -29,7 +29,6 @@ from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
-from seahub.base.decorators import user_mods_check
 from seahub.wiki.models import PersonalWiki, WikiDoesNotExist, WikiPageMissing
 from seahub.wiki.utils import (get_personal_wiki_page,
                                get_personal_wiki_repo, get_wiki_pages,
@@ -42,7 +41,6 @@ from seahub.views import check_folder_permission
 logger = logging.getLogger(__name__)
 
 @login_required
-@user_mods_check
 def personal_wiki(request, page_name="home"):
     username = request.user.username
 
@@ -110,7 +108,6 @@ def personal_wiki(request, page_name="home"):
             })
 
 @login_required
-@user_mods_check
 def personal_wiki_pages(request):
     """
     List personal wiki pages.
