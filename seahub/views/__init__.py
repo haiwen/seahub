@@ -31,7 +31,7 @@ from seahub.auth.decorators import login_required
 from seahub.auth import login as auth_login
 from seahub.auth import get_backends
 from seahub.base.accounts import User
-from seahub.base.decorators import user_mods_check, require_POST
+from seahub.base.decorators import require_POST
 from seahub.base.models import ClientLoginToken
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
@@ -49,8 +49,6 @@ from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
-from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
-    disable_mod_for_user
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
@@ -694,7 +692,6 @@ def get_owned_repo_list(request):
         return seafile_api.get_owned_repo_list(username)
 
 @login_required
-@user_mods_check
 def libraries(request):
     """
     New URL to replace myhome
@@ -1129,29 +1126,6 @@ def convert_cmmt_desc_link(request):
                     reverse('view_common_lib_dir', args=[repo_id, new_dir]))
 
     raise Http404
-
-@login_required
-def toggle_modules(request):
-    """Enable or disable modules.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    referer = request.META.get('HTTP_REFERER', None)
-    next_page = settings.SITE_ROOT if referer is None else referer
-
-    username = request.user.username
-    personal_wiki = request.POST.get('personal_wiki', 'off')
-    if personal_wiki == 'on':
-        enable_mod_for_user(username, MOD_PERSONAL_WIKI)
-        messages.success(request, _('Successfully enable "Personal Wiki".'))
-    else:
-        disable_mod_for_user(username, MOD_PERSONAL_WIKI)
-        if referer.find('wiki') > 0:
-            next_page = settings.SITE_ROOT
-        messages.success(request, _('Successfully disable "Personal Wiki".'))
-
-    return HttpResponseRedirect(next_page)
 
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):

@@ -31,8 +31,6 @@ from seahub.group.views import remove_group_common
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, email2contact_email
-from seahub.views.modules import is_wiki_mod_enabled_for_group, \
-    enable_mod_for_group, disable_mod_for_group, MOD_GROUP_WIKI
 from seahub.share.models import ExtraGroupsSharePermission
 
 from .utils import api_check_group
@@ -66,7 +64,6 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
         "created_at": isoformat_timestr,
         "avatar_url": request.build_absolute_uri(avatar_url),
         "admins": get_group_admins(group.id),
-        "wiki_enabled": is_wiki_mod_enabled_for_group(group_id)
     }
     # parent_group_id = 0: non department group
     # parent_group_id = -1: top department group
@@ -345,12 +342,6 @@ class Group(APIView):
                 if wiki_enabled != 'true' and wiki_enabled != 'false':
                     error_msg = 'wiki_enabled invalid.'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-                # turn on/off group wiki
-                if wiki_enabled == 'true':
-                    enable_mod_for_group(group_id, MOD_GROUP_WIKI)
-                else:
-                    disable_mod_for_group(group_id, MOD_GROUP_WIKI)
 
             except SearpcError as e:
                 logger.error(e)

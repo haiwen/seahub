@@ -241,15 +241,6 @@ class UserStarredFiles(models.Model):
 
     objects = UserStarredFilesManager()
 
-########## user/group modules
-class UserEnabledModule(models.Model):
-    username = models.CharField(max_length=255, db_index=True)
-    module_name = models.CharField(max_length=20)
-
-class GroupEnabledModule(models.Model):
-    group_id = models.CharField(max_length=10, db_index=True)
-    module_name = models.CharField(max_length=20)
-
 ########## misc
 class UserLastLoginManager(models.Manager):
     def get_by_username(self, username):

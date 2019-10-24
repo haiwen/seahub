@@ -26,21 +26,6 @@ def sys_staff_required(func):
         return func(request, *args, **kwargs)
     return _decorated
 
-def user_mods_check(func):
-    """Decorator for views that need user's enabled/available modules.
-    Populate modules to ``request.user``.
-    
-    Arguments:
-    - `func`:
-    """
-    def _decorated(request, *args, **kwargs):
-        username = request.user.username
-        request.user.mods_available = get_available_mods_by_user(username)
-        request.user.mods_enabled = get_enabled_mods_by_user(username)
-        return func(request, *args, **kwargs)
-    _decorated.__name__ = func.__name__
-    return _decorated
-    
 def repo_passwd_set_required(func):
     """
     Decorator for views to redirect user to repo decryption page if repo is
@@ -81,6 +66,3 @@ def require_POST(func):
             return HttpResponseNotAllowed(['POST'])
         return func(request, *args, **kwargs)
     return decorated
-
-from seahub.views.modules import get_enabled_mods_by_user, \
-    get_available_mods_by_user  # Move here to avoid circular import

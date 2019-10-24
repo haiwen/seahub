@@ -11,7 +11,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
 from seahub.auth.decorators import login_required
-from seahub.base.decorators import user_mods_check
 from seahub.share.models import FileShare
 from seahub.wiki.models import Wiki
 from seahub.views import check_folder_permission
@@ -22,7 +21,6 @@ from seahub.utils.file_types import *
 logger = logging.getLogger(__name__)
 
 @login_required
-@user_mods_check
 def wiki_list(request):
 
     username = request.user.username
@@ -122,7 +120,6 @@ def slug(request, slug, file_path="home.md"):
 
 
 @login_required
-@user_mods_check
 def edit_page(request, slug, page_name="home"):
 
     # get wiki object or 404
