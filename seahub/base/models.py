@@ -38,23 +38,6 @@ class TimestampedModel(models.Model):
         # default ordering for most models.
         ordering = ['-created_at', '-updated_at']
 
-
-class FileDiscuss(models.Model):
-    """
-    Model used to represents the relationship between group message and file/dir.
-    """
-    group_message = models.ForeignKey(GroupMessage)
-    repo_id = models.CharField(max_length=36)
-    path = models.TextField()
-    path_hash = models.CharField(max_length=12, db_index=True)
-
-    def save(self, *args, **kwargs):
-        if not self.path_hash:
-            self.path_hash = calc_file_path_hash(self.path)
-
-        super(FileDiscuss, self).save(*args, **kwargs)
-
-
 class FileCommentManager(models.Manager):
     def add(self, repo_id, parent_path, item_name, author, comment, detail=''):
         fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
