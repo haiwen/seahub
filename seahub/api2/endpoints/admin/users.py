@@ -219,17 +219,11 @@ class AdminAdminUsers(APIView):
         """List all admins from database and ldap imported
         """
         try:
-            db_users = ccnet_api.get_emailusers('DB', -1, -1)
-            ldap_imported_users = ccnet_api.get_emailusers('LDAPImport', -1, -1)
+            admin_users = ccnet_api.get_superusers()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        admin_users = []
-        for user in db_users + ldap_imported_users:
-            if user.is_staff is True:
-                admin_users.append(user)
 
         admin_users_info = []
         for user in admin_users:
