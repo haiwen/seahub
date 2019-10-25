@@ -394,7 +394,7 @@ class AdminUsers(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         contact_email = request.data.get('contact_email', None)
-        if contact_email or not is_valid_username(contact_email):
+        if contact_email and not is_valid_username(contact_email):
             error_msg = 'contact_email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -445,16 +445,16 @@ class AdminUsers(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        add_user_tip = _('Successfully added user %(user)s.') % email
+        add_user_tip = _('Successfully added user %(user)s.') % {'user': email}
         if IS_EMAIL_CONFIGURED and SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
             c = {'user': request.user.username, 'email': email, 'password': password}
             try:
                 send_html_email(_('You are invited to join %s') % get_site_name(),
                         'sysadmin/user_add_email.html', c, None, [email])
-                add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % email
+                add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % {'user': email}
             except Exception as e:
                 logger.error(str(e))
-                add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % email
+                add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % {'user': email}
 
         user_info = get_user_info(email)
         user_info['add_user_tip'] = add_user_tip
