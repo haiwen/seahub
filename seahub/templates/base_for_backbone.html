@@ -46,11 +46,7 @@
                 <div class="side-panel col-md-3">
                     <div class="side-panel-top panel-top">
                         <a href="{{ SITE_ROOT }}" id="logo">
-                            {% if seacloud_mode %}
-                            <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
-                            {% else %}
                             <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
-                            {% endif %}
                         </a>
                         <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close side-panel-close op-icon hidden-md-up js-close"></a>
                     </div>
