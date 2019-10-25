@@ -3,7 +3,6 @@ future
 captcha
 django-compressor
 django-statici18n
-django-constance
 django-post_office
 django-webpack_loader
 gunicorn
