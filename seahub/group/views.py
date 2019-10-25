@@ -16,7 +16,6 @@ from seaserv import ccnet_threaded_rpc, seafile_api, \
     get_group_repos, get_group, \
     remove_repo, get_file_id_by_path, post_empty_file, del_file
 
-from .models import PublicGroup
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
@@ -82,10 +81,7 @@ def group_check(func):
             group_list_url = reverse('groups')
             return HttpResponseRedirect(group_list_url)
         group.is_staff = False
-        if PublicGroup.objects.filter(group_id=group.id):
-            group.is_pub = True
-        else:
-            group.is_pub = False
+        group.is_pub = False
 
         if not request.user.is_authenticated():
             if not group.is_pub:

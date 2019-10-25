@@ -13,12 +13,6 @@
         <img src={{notice.default_avatar_url}} width="32" height="32" class="avatar" />
     {% endif %}
 
-    {% if notice.is_group_msg %}
-        <p class="brief">{{ notice.format_group_message_title|safe }}</p>
-        {% if notice.format_group_message_detail %}
-        <p class="clear cspt detail">{{ notice.format_group_message_detail }}</p>
-        {% endif %}
-
     {% elif notice.is_file_uploaded_msg %}
         <p class="brief">{{ notice.format_file_uploaded_msg|safe }}</p>
 

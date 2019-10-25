@@ -145,11 +145,6 @@ def add_notice_from_info(notices):
             if d.get('msg_from') is not None:
                 notice.msg_from = d.get('msg_from')
 
-        elif notice.is_group_msg():
-            d = notice.group_message_detail_to_dict()
-            if d.get('msg_from') is not None:
-                notice.msg_from = d.get('msg_from')
-
         elif notice.is_repo_share_msg():
             try:
                 d = json.loads(notice.detail)

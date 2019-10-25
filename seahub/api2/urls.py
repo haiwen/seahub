@@ -13,8 +13,6 @@ from .endpoints.file_comment import FileCommentView
 from .endpoints.file_comments import FileCommentsView
 from .endpoints.file_comments_counts import FileCommentsCounts
 from .endpoints.search_user import SearchUser
-from .endpoints.group_discussions import GroupDiscussions
-from .endpoints.group_discussion import GroupDiscussion
 from .endpoints.send_share_link_email import SendShareLinkView
 from .endpoints.send_upload_link_email import SendUploadLinkView
 
@@ -102,8 +100,6 @@ urlpatterns = [
     url(r'^groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view()),
     url(r'^groups/(?P<group_id>\d+)/repos/$', GroupRepos.as_view(), name="api2-grouprepos"),
     url(r'^groups/(?P<group_id>\d+)/repos/(?P<repo_id>[-0-9a-f]{36})/$', GroupRepo.as_view(), name="api2-grouprepo"),
-    url(r'^groups/(?P<group_id>\d+)/discussions/$', GroupDiscussions.as_view(), name="api2-group-discussions"),
-    url(r'^groups/(?P<group_id>\d+)/discussions/(?P<discuss_id>\d+)/$', GroupDiscussion.as_view(), name="api2-group-discussion"),
 
     # Deprecated
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view(), name="api2-fileops-delete"),

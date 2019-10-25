@@ -23,13 +23,7 @@ You've got {{num}} new notices on {{ site_name }}:
         <tr>
             <td style="padding:8px 3px 5px; border-bottom: 1px solid #eee; text-align:center; vertical-align:top;"><img src="{{notice.avatar_src}}" width="32" height="32" alt="" style="border-radius:1000px;" /></td>
             <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">
-                {% if notice.is_group_msg %}
-                    <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with user=notice.notice_from grp_url=notice.group_url grp_name=notice.group_name%}{{user}} posted a new discussion in <a href="{{url_base}}{{grp_url}}">{{grp_name}}</a>{% endblocktrans %}</p>
-                    {% if notice.grp_msg %}
-                    <p style="line-height:1.5; margin:.2em 10px .2em 0;">{{notice.grp_msg}}</p>
-                    {% endif %}
-
-                {% elif notice.is_repo_share_msg %}
+                {% if notice.is_repo_share_msg %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">
                         {% if notice.shared_type == 'library' %}
                         {% include "notifications/notice_msg/repo_share_msg.html" with user=notice.notice_from lib_url=notice.repo_url lib_name=notice.repo_name %}
