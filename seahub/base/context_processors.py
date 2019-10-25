@@ -27,10 +27,6 @@ from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
-try:
-    from seahub.settings import SEACLOUD_MODE
-except ImportError:
-    SEACLOUD_MODE = False
 
 from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
 
@@ -109,7 +105,6 @@ def base(request):
         'logo_path': logo_path,
         'logo_width': LOGO_WIDTH,
         'logo_height': LOGO_HEIGHT,
-        'seacloud_mode': SEACLOUD_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,
         'site_name': get_site_name(),
