@@ -66,7 +66,6 @@ class NotificationForm(ModelForm):
         }
 
 ########## user notification
-MSG_TYPE_GROUP_MSG = 'group_msg'
 MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
 MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
@@ -204,37 +203,6 @@ class UserNotificationManager(models.Manager):
         return super(UserNotificationManager, self).filter(
             to_user=username, seen=False).count()
 
-    def bulk_add_group_msg_notices(self, to_users, detail):
-        """Efficiently add group message notices.
-
-        NOTE: ``pre_save`` and ``post_save`` signals will not be sent.
-
-        Arguments:
-        - `self`:
-        - `to_users`:
-        - `detail`:
-        """
-        user_notices = [ UserNotification(to_user=m,
-                                          msg_type=MSG_TYPE_GROUP_MSG,
-                                          detail=detail
-                                          ) for m in to_users ]
-        UserNotification.objects.bulk_create(user_notices)
-
-    def seen_group_msg_notices(self, to_user, group_id):
-        """Mark group message notices of a user as seen.
-        """
-        user_notices = super(UserNotificationManager, self).filter(
-            to_user=to_user, msg_type=MSG_TYPE_GROUP_MSG)
-        for notice in user_notices:
-            try:
-                gid = notice.group_message_detail_to_dict().get('group_id')
-                if gid == group_id:
-                    if notice.seen is False:
-                        notice.seen = True
-                        notice.save()
-            except UserNotification.InvalidDetailError:
-                continue
-
     def seen_user_msg_notices(self, to_user, from_user):
         """Mark priv message notices of a user as seen.
         """
@@ -246,13 +214,6 @@ class UserNotificationManager(models.Manager):
                 if notice.seen is False:
                     notice.seen = True
                     notice.save()
-
-    def remove_group_msg_notices(self, to_user, group_id):
-        """Remove group message notices of a user.
-        """
-        super(UserNotificationManager, self).filter(
-            to_user=to_user, msg_type=MSG_TYPE_GROUP_MSG,
-            detail=str(group_id)).delete()
 
     def add_group_join_request_notice(self, to_user, detail):
         """
@@ -382,14 +343,6 @@ class UserNotification(models.Model):
             self.save()
         return seen
 
-    def is_group_msg(self):
-        """Check whether is a group message notification.
-
-        Arguments:
-        - `self`:
-        """
-        return self.msg_type == MSG_TYPE_GROUP_MSG
-
     def is_file_uploaded_msg(self):
         """
 
@@ -453,39 +406,6 @@ class UserNotification(models.Model):
     def is_repo_transfer_msg(self):
         return self.msg_type == MSG_TYPE_REPO_TRANSFER
 
-    def group_message_detail_to_dict(self):
-        """Parse group message detail, returns dict contains ``group_id`` and
-        ``msg_from``.
-
-        NOTE: ``msg_from`` may be ``None``.
-
-        Arguments:
-        - `self`:
-
-        Raises ``InvalidDetailError`` if detail field can not be parsed.
-        """
-        assert self.is_group_msg()
-
-        try:
-            detail = json.loads(self.detail)
-        except ValueError:
-            raise self.InvalidDetailError('Wrong detail format of group message')
-        else:
-            if isinstance(detail, int): # Compatible with existing records
-                group_id = detail
-                msg_from = None
-                return {'group_id': group_id, 'msg_from': msg_from}
-            elif isinstance(detail, dict):
-                group_id = detail['group_id']
-                msg_from = detail['msg_from']
-                if 'message' in detail:
-                    message = detail['message']
-                    return {'group_id': group_id, 'msg_from': msg_from, 'message': message}
-                else:
-                    return {'group_id': group_id, 'msg_from': msg_from}
-            else:
-                raise self.InvalidDetailError('Wrong detail format of group message')
-
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
         ``msg_from``.
@@ -509,9 +429,7 @@ class UserNotification(models.Model):
 
     ########## functions used in templates
     def format_msg(self):
-        if self.is_group_msg():
-            return self.format_group_message_title()
-        elif self.is_file_uploaded_msg():
+        if self.is_file_uploaded_msg():
             return self.format_file_uploaded_msg()
         elif self.is_repo_share_msg():
             return self.format_repo_share_msg()
@@ -682,56 +600,6 @@ class UserNotification(models.Model):
 
         return msg
 
-    def format_group_message_title(self):
-        """
-
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.group_message_detail_to_dict()
-        except self.InvalidDetailError as e:
-            logger.error(e)
-            return _("Internal error")
-
-        group_id = d.get('group_id')
-        group = ccnet_api.get_group(group_id)
-        if group is None:
-            self.delete()
-            return None
-
-        msg_from = d.get('msg_from')
-
-        if msg_from is None:
-            msg = _("<a href='%(href)s'>%(group_name)s</a> has a new discussion.") % {
-                'href': HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id},
-                'group_name': group.group_name}
-        else:
-            msg = _("%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>.") % {
-                'href': HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id},
-                'user': escape(email2nickname(msg_from)),
-                'group_name': escape(group.group_name)
-            }
-        return msg
-
-    def format_group_message_detail(self):
-        """
-
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.group_message_detail_to_dict()
-        except self.InvalidDetailError as e:
-            logger.error(e)
-            return _("Internal error")
-
-        message = d.get('message')
-        if message is not None:
-            return message
-        else:
-            return None
-
     def format_group_join_request(self):
         """
 
@@ -901,7 +769,7 @@ class UserNotification(models.Model):
 from django.dispatch import receiver
 
 from seahub.signals import upload_file_successful, comment_file_successful, repo_transfer
-from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_group
+from seahub.group.signals import group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful
 from seahub.invitations.signals import accept_guest_invitation_successful
@@ -958,18 +826,6 @@ def add_share_repo_to_group_msg_cb(sender, **kwargs):
             continue
         detail = repo_share_to_group_msg_to_json(from_user, repo.id, group_id, path, org_id)
         UserNotification.objects.add_repo_share_to_group_msg(to_user, detail)
-
-@receiver(grpmsg_added)
-def grpmsg_added_cb(sender, **kwargs):
-    group_id = kwargs['group_id']
-    from_email = kwargs['from_email']
-    message = kwargs['message']
-    group_members = seaserv.get_group_members(int(group_id))
-
-    notify_members = [x.user_name for x in group_members if x.user_name != from_email]
-
-    detail = group_msg_to_json(group_id, from_email, message)
-    UserNotification.objects.bulk_add_group_msg_notices(notify_members, detail)
 
 @receiver(group_join_request)
 def group_join_request_cb(sender, **kwargs):

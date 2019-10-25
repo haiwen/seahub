@@ -67,19 +67,6 @@ class Command(BaseCommand):
         else:
             return ''
 
-    def format_group_message(self, notice):
-        d = notice.group_message_detail_to_dict()
-        group_id = d['group_id']
-        message = d['message']
-        group = ccnet_api.get_group(int(group_id))
-
-        notice.group_url = HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id}
-        notice.notice_from = escape(email2nickname(d['msg_from']))
-        notice.group_name = group.group_name
-        notice.avatar_src = self.get_avatar_src(d['msg_from'])
-        notice.grp_msg = message
-        return notice
-
     def format_repo_share_msg(self, notice):
         d = json.loads(notice.detail)
         repo_id = d['repo_id']
@@ -281,9 +268,6 @@ class Command(BaseCommand):
 
                 if notice.to_user != to_user:
                     continue
-
-                elif notice.is_group_msg():
-                    notice = self.format_group_message(notice)
 
                 elif notice.is_repo_share_msg():
                     notice = self.format_repo_share_msg(notice)

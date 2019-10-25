@@ -14,13 +14,7 @@
                 {% endif %}
             </td>
             <td>
-                {% if notice.is_group_msg %}
-                <p class="brief">{{ notice.format_group_message_title|safe }}</p>
-                    {% if notice.format_group_message_detail %}
-                <p class="detail">{{ notice.format_group_message_detail }}</p>
-                    {% endif %}
-
-                {% elif notice.is_file_uploaded_msg %}
+                {% if notice.is_file_uploaded_msg %}
                 <p class="brief">{{ notice.format_file_uploaded_msg|safe }}</p>
 
                 {% elif notice.is_repo_share_msg %}

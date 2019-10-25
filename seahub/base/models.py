@@ -10,7 +10,6 @@ from pysearpc import SearpcError
 from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
-from seahub.group.models import GroupMessage
 from seahub.utils import calc_file_path_hash, within_time_range, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
