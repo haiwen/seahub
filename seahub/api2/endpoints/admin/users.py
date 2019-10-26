@@ -40,6 +40,7 @@ from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.constants import DEFAULT_USER
+from seahub.institutions.models import Institution
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
@@ -132,7 +133,7 @@ def create_user_info(request, email, role, nickname, contact_email, quota_total_
 
 
 def update_user_info(request, user, password, is_active, is_staff, role,
-                     nickname, login_id, contact_email, reference_id, quota_total_mb):
+                     nickname, login_id, contact_email, reference_id, quota_total_mb, institution_name):
 
     # update basic user info
     if is_active is not None:
@@ -173,6 +174,9 @@ def update_user_info(request, user, password, is_active, is_staff, role,
             # remove reference id
             ccnet_api.set_reference_id(email, None)
 
+    if institution_name is not None:
+        Profile.objects.add_or_update(email, institution=institution_name)
+
     if quota_total_mb:
         quota_total = int(quota_total_mb) * get_file_size_unit('MB')
         if is_org_context(request):
@@ -203,6 +207,9 @@ def get_user_info(email):
 
     info['has_default_device'] = True if default_device(user) else False
     info['is_force_2fa'] = UserOptions.objects.is_force_2fa(email)
+
+    if getattr(settings, 'MULTI_INSTITUTION', False):
+        info['institution'] = profile.institution if profile else ''
 
     info['role'] = get_user_role(user)
 
@@ -606,6 +613,14 @@ class AdminUser(APIView):
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        institution = request.data.get("institution", None)
+        if institution:
+            try:
+                Institution.objects.get(name=institution)
+            except Institution.DoesNotExist:
+                error_msg = 'Institution %s does not exist' % institution
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # query user info
         try:
             user_obj = User.objects.get(email=email)
@@ -616,7 +631,7 @@ class AdminUser(APIView):
         try:
             update_user_info(request, user=user_obj, password=password, is_active=is_active, is_staff=is_staff,
                              role=role, nickname=name, login_id=login_id, contact_email=contact_email,
-                             reference_id=reference_id, quota_total_mb=quota_total_mb)
+                             reference_id=reference_id, quota_total_mb=quota_total_mb, institution_name=institution)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
