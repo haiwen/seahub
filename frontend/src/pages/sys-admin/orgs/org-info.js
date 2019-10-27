@@ -4,7 +4,7 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
-import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-quota-dialog';
+import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import SysAdminSetOrgNameDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog';
 import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
 import MainPanelTopbar from '../main-panel-topbar';

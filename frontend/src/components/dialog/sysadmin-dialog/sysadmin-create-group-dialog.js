@@ -17,7 +17,6 @@ class SysAdminCreateGroupDialog extends React.Component {
     this.state = {
       groupName: '',
       ownerEmail: '',
-      disabled: true,
       errMessage: '',
       isSubmitBtnActive: false
     };

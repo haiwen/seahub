@@ -14,8 +14,7 @@ class SysAdminImportUserDialog extends React.Component {
     super(props);
     this.fileInputRef = React.createRef();
     this.state = {
-      errorMsg: '',
-      exmapleFile: {},
+      errorMsg: ''
     };
   }
 
@@ -27,7 +26,7 @@ class SysAdminImportUserDialog extends React.Component {
     this.fileInputRef.current.click();
   }
 
-  uploadLicenseFile = (e) => {
+  uploadFile = (e) => {
     // no file selected
     if (!this.fileInputRef.current.files.length) {
       return;
@@ -50,10 +49,10 @@ class SysAdminImportUserDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Import users from a .xlsx file')}</ModalHeader>
         <ModalBody>
-          <a href={siteRoot+'useradmin/batchadduser/example/'}>{gettext('Download an example file')}</a>
+          <a href={`${siteRoot}useradmin/batchadduser/example/`}>{gettext('Download an example file')}</a>
           <br/>
           <button className="btn btn-outline-primary" onClick={this.openFileInput}>{gettext('Upload file')}</button>
-          <input className="d-none" type="file" onChange={this.uploadLicenseFile} ref={this.fileInputRef} />
+          <input className="d-none" type="file" onChange={this.uploadFile} ref={this.fileInputRef} />
           {errorMsg && <Alert color="danger">{errorMsg}</Alert>}
         </ModalBody>
         <ModalFooter>

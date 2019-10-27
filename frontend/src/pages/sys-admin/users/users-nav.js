@@ -12,17 +12,19 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'database', urlPart:'users-all', text: gettext('Database')}, 
-      {name: 'admin', urlPart:'users-admin', text: gettext('Admin')}
+      {name: 'database', urlPart: 'users', text: gettext('Database')}, 
+      {name: 'admin', urlPart: 'users/admins', text: gettext('Admin')}
     ];
+    /*
     if (haveLDAP) {
       this.navItems.splice(1, 0, 
-        {name: 'ldapimport', urlPart:'users-ldap-import', text: gettext('LDAP(imported)')}
+        {name: 'ldap-imported', urlPart: 'users/ldap-imported', text: gettext('LDAP(imported)')}
       );
       this.navItems.splice(1, 0, 
-        {name: 'ldap', urlPart:'users-ldap', text: gettext('LDAP')}
+        {name: 'ldap', urlPart: 'users/ldap', text: gettext('LDAP')}
       );
     }
+    */
   }
 
   render() {

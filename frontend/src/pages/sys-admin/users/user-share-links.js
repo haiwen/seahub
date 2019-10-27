@@ -5,7 +5,7 @@ import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import CommonOperationDialog from '../../../components/dialog/common-operation-dialog';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 
 class Content extends Component {
 
@@ -121,12 +121,12 @@ class Item extends Component {
           </td>
         </tr>
         {isDeleteDialogOpen &&
-          <CommonOperationDialog
+          <CommonOperationConfirmationDialog 
             title={gettext('Delete Link')}
             message={deleteDialogMsg}
-            toggle={this.toggleDeleteDialog}
             executeOperation={this.deleteLink}
             confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteDialog}
           />
         }
       </Fragment>

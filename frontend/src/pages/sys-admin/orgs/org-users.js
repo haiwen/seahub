@@ -106,26 +106,26 @@ class Item extends Component {
     }   
   }
 
-    onUnfreezedItem = () => {
-      this.setState({
-        highlight: false,
-        isOpIconShow: false
-      });
-      this.props.onUnfreezedItem();
-    }
-
-onMenuItemClick = (operation) => {
-  switch(operation) {
-    case 'Delete':
-      this.toggleDeleteDialog();
-      break;
-    case 'Reset Password':
-      this.toggleResetPasswordDialog();
-      break;
-    default:
-      break;
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShow: false
+    });
+    this.props.onUnfreezedItem();
   }
-}
+
+  onMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'Delete':
+        this.toggleDeleteDialog();
+        break;
+      case 'Reset Password':
+        this.toggleResetPasswordDialog();
+        break;
+      default:
+        break;
+    }
+  }
 
   toggleDeleteDialog = (e) => {
     if (e) {

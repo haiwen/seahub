@@ -7,7 +7,7 @@ import { username } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import moment from 'moment';
 import Loading from '../../../components/loading';
-import CommonOperationDialog from '../../../components/dialog/common-operation-dialog';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminRepoTransferDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog';
 
 class Content extends Component {
@@ -129,12 +129,12 @@ class Item extends Component {
           </td>
         </tr>
         {isDeleteDialogOpen &&
-          <CommonOperationDialog
+          <CommonOperationConfirmationDialog 
             title={gettext('Delete Library')}
             message={deleteDialogMsg}
-            toggle={this.toggleDeleteDialog}
             executeOperation={this.deleteRepo}
             confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteDialog}
           />
         }
         {isTransferDialogOpen &&

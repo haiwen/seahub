@@ -11,10 +11,11 @@ import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
 
-import UsersAll from './users/users-all';
+import Users from './users/users';
+import AdminUsers from './users/admin-users';
+import LDAPImportedUsers from './users/ldap-imported-users';
 import UsersLDAP from './users/users-ldap';
-import UsersAdmin from './users/users-admin';
-import UserInfo from './users/user-info';
+import User from './users/user-info';
 
 import AllRepos from './repos/all-repos';
 import SystemRepo from './repos/system-repo';
@@ -159,11 +160,13 @@ class SysAdmin extends React.Component {
             <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} />
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} />
             <AdminLoginLogs path={siteRoot + 'sys/admin-logs/login'} />
-            <UsersAll isLDAPImportUsers={false} path={siteRoot + 'sys/users-all'} />
-            <UsersLDAP path={siteRoot + 'sys/users-ldap'} />
-            <UsersAll isLDAPImportUsers={true} path={siteRoot + 'sys/users-ldap-import'} />
-            <UsersAdmin path={siteRoot + 'sys/users-admin'} />
-            <UserInfo path={siteRoot + 'sys/user-info/:email'} />
+            
+            <Users path={siteRoot + 'sys/users'} />
+            <AdminUsers path={siteRoot + 'sys/users/admins'} />
+            <LDAPImportedUsers path={siteRoot + 'sys/users/ldap-imported'} />
+            <UsersLDAP path={siteRoot + 'sys/users/ldap'} />
+            <User path={siteRoot + 'sys/users/:email'} />
+
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 

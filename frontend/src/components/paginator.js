@@ -9,7 +9,7 @@ const propTypes = {
   hasNextPage: PropTypes.bool.isRequired,
   canResetPerPage: PropTypes.bool.isRequired,
   resetPerPage: PropTypes.func,
-  curPerPage: PropTypes.number
+  curPerPage: PropTypes.number,
 };
 
 class Paginator extends Component {
@@ -38,26 +38,6 @@ class Paginator extends Component {
           }
           {this.props.hasNextPage &&
             <a href="#" onClick={this.goToNext} className="ml-4">{gettext('Next')}</a>
-          }
-          {this.props.canResetPerPage &&
-            <Fragment>
-              <span className="ml-2">{gettext('Per page:')}{' '}</span>
-              {curPerPage == 25 ?
-                <a>25</a>
-                :
-                <a href="#" onClick={(e) => {e.preventDefault(); return this.resetPerPage(25);}}>25</a>
-              }
-              {curPerPage == 50 ?
-                <a className="ml-1">50</a>
-                :
-                <a href="#" className="ml-1" onClick={(e) => {e.preventDefault(); return this.resetPerPage(50);}}>50</a>
-              }
-              {curPerPage == 100 ?
-                <a className="ml-1">100</a>
-                :
-                <a href="#" className="ml-1" onClick={(e) => {e.preventDefault(); return this.resetPerPage(100);}}>100</a>
-              }
-            </Fragment>
           }
         </div>
         {this.props.canResetPerPage &&

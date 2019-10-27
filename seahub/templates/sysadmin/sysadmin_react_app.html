@@ -10,6 +10,13 @@
 			constance_enabled: {% if constance_enabled %} true {% else %} false {% endif %},
 			multi_tenancy: {% if multi_tenancy %} true {% else %} false {% endif %},
 			multi_institution: {% if multi_institution %} true {% else %} false {% endif %},
+      institutions: (function() {
+        var list = [];
+        {% for inst in institutions %}
+        list.push('{{inst|escapejs}}');
+        {% endfor %}
+        return list;
+      })(),
 			sysadmin_extra_enabled: {% if sysadmin_extra_enabled %} true {% else %} false {% endif %},
 			enable_guest_invitation: {% if enable_guest_invitation %} true {% else %} false {% endif %},
 			enable_terms_and_conditions: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
@@ -27,7 +34,13 @@
         {% endfor %}
         return list;
       })(),
-      availableAdminRoles: {% if available_admin_roles %} JSON.parse('{{ available_admin_roles | escapejs }}') {% else %} {{'[]'}} {% endif %},
+      availableAdminRoles: (function() {
+        var list = [];
+        {% for role in available_admin_roles %}
+        list.push('{{role|escapejs}}');
+        {% endfor %}
+        return list;
+      })(),
       haveLDAP: {% if have_ldap %} true {% else %} false {% endif %},
 			admin_permissions: {
         "can_view_system_info": {% if user.admin_permissions.can_view_system_info %} true {% else %} false {% endif %},

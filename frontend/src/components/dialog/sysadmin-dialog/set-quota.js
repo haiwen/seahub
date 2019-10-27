@@ -9,7 +9,7 @@ const propTypes = {
   updateQuota: PropTypes.func.isRequired
 };
 
-class SysAdminOrgSetQuotaDialog extends React.Component {
+class SetQuotaDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -80,6 +80,6 @@ class SysAdminOrgSetQuotaDialog extends React.Component {
   }
 }
 
-SysAdminOrgSetQuotaDialog.propTypes = propTypes;
+SetQuotaDialog.propTypes = propTypes;
 
-export default SysAdminOrgSetQuotaDialog;
+export default SetQuotaDialog;

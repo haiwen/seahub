@@ -1,7 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Label, Input } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import UserSelect from '../../user-select';
 import { gettext } from '../../../utils/constants';
 
 const propTypes = {
@@ -12,10 +12,9 @@ const propTypes = {
 class SysAdminBatchAddAdminDialog extends React.Component {
   constructor(props) {
     super(props);
-    this.fileInputRef = React.createRef();
     this.state = {
-      errorMsg: '',
-      emailString: '',
+      options: null,
+      isSubmitBtnActive: false
     };
   }
 
@@ -23,32 +22,40 @@ class SysAdminBatchAddAdminDialog extends React.Component {
     this.props.toggle();
   }
 
-  inputEmail = (e) => {
-    let emailString = e.target.value.trim();
-    this.setState({
-      emailString: emailString,
-      errorMsg: ''
-    });
-  }
+ handleSelectChange = (options) => {
+   this.setState({
+     options: options,
+     isSubmitBtnActive: options.length > 0
+   });
+ }
 
-  addAdminInBatch = () => {
-    this.props.addAdminInBatch(this.state.emailString);
+ handleSubmit = () => {
+   this.props.addAdminInBatch(this.state.options.map(item => item.email));
+   this.toggle();
+ }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSubmit();
+      e.preventDefault();
+    }
   }
 
   render() {
-    let { errorMsg, emailString } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Add admins')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Add Admin')}</ModalHeader>
         <ModalBody>
-          <Label className="font-weight-bold">{gettext('Enter')}</Label>
-          <Input placeholder={gettext('Emails, separared by \' , \'')} value={emailString} onChange={this.inputEmail}/>
-          <Alert color="light">{gettext('Tip: the emails should be the users already added.')}</Alert>
-          {errorMsg && <Alert color="danger">{errorMsg}</Alert>}
+          <UserSelect
+            isMulti={true}
+            className="reviewer-select"
+            placeholder={gettext('Select users...')}
+            onSelectChange={this.handleSelectChange}
+          />  
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.addAdminInBatch}>{gettext('Add')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
