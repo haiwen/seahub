@@ -87,7 +87,6 @@ def work_weixin_oauth_callback(request):
         is_new_user = False
     else:
         email = gen_user_virtual_id()
-        SocialAuthUser.objects.add(email, WORK_WEIXIN_PROVIDER, uid)
         is_new_user = True
 
     try:
@@ -98,6 +97,9 @@ def work_weixin_oauth_callback(request):
     if not user:
         return render_error(
             request, _('Error, new user registration is not allowed, please contact administrator.'))
+
+    if is_new_user:
+        SocialAuthUser.objects.add(email, WORK_WEIXIN_PROVIDER, uid)
 
     # update user info
     if is_new_user or WORK_WEIXIN_USER_INFO_AUTO_UPDATE:
