@@ -125,7 +125,8 @@ from seahub.api2.endpoints.admin.share_links import AdminShareLinks, AdminShareL
         AdminShareLinkDirents
 from seahub.api2.endpoints.admin.upload_links import AdminUploadLinks, AdminUploadLink, \
         AdminUploadLinkUpload, AdminUploadLinkCheckPassword
-from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminUsersBatch
+from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminUsersBatch, \
+        AdminImportUsers
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.organizations import AdminOrganizations, AdminOrganization
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
@@ -527,9 +528,10 @@ urlpatterns = [
     url(r'^api/v2.1/admin/upload-links/(?P<token>[a-f0-9]+)/check-password/$',
             AdminUploadLinkCheckPassword.as_view(), name='api-v2.1-admin-upload-link-check-password'),
 
-    ## admin::users
+    ## admin::users-batch
     url(r'^api/v2.1/admin/admin-users/batch/$', AdminAdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
     url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
+    url(r'^api/v2.1/admin/import-users/$', AdminImportUsers.as_view(), name='api-v2.1-admin-import-users'),
 
     ## admin::admin-role
     url(r'^api/v2.1/admin/admin-role/$', AdminAdminRole.as_view(), name='api-v2.1-admin-admin-role'),
