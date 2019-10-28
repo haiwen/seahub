@@ -50,14 +50,20 @@ class AdminAdminUsersBatch(APIView):
         result['success'] = []
         for email in emails:
             if not is_valid_username(email):
-                error_msg = 'email %s invalid.' % email
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': 'email %s invalid.' % email
+                })
+                continue
 
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
-                error_msg = 'email %s invalid.' % email
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': 'user %s not found.' % email
+                })
+                continue
 
             user.is_staff = True
             try:
