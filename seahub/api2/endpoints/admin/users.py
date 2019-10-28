@@ -42,6 +42,8 @@ from seahub.utils.licenseparse import user_number_over_limit
 from seahub.constants import DEFAULT_USER
 from seahub.institutions.models import Institution
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.admin_log.signals import admin_operation
+from seahub.admin_log.models import USER_DELETE, USER_ADD
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
@@ -387,14 +389,14 @@ class AdminUsers(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # basic user info check
-        is_staff = request.data.get("is_staff", False)
+        is_staff = request.data.get("is_staff", 'False')
         try:
             is_staff = to_python_boolean(is_staff)
         except ValueError:
             error_msg = 'is_staff invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        is_active = request.data.get("is_active", True)
+        is_active = request.data.get("is_active", 'True')
         try:
             is_active = to_python_boolean(is_active)
         except ValueError:
@@ -484,6 +486,13 @@ class AdminUsers(APIView):
 
         user_info = get_user_info(email)
         user_info['add_user_tip'] = add_user_tip
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "email": email,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                             operation=USER_ADD, detail=admin_op_detail)
 
         return Response(user_info)
 
@@ -706,6 +715,13 @@ class AdminUser(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "email": email,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                             operation=USER_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})
 
