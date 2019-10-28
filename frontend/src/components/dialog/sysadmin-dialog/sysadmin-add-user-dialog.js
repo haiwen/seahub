@@ -21,6 +21,7 @@ class SysAdminAddUserDialog extends React.Component {
       passwordAgain: '',
       email: '',
       name: '',
+      role: 'default',
       isSubmitBtnActive: false
     };
   }
@@ -86,28 +87,40 @@ class SysAdminAddUserDialog extends React.Component {
     });
   }
 
+  updateRole = (role) => {
+    this.setState({
+      role: role
+    });         
+  }     
+
   handleSubmit = () => {
-    const { email, password, passwordAgain, name } = this.state;
+    const { email, password, passwordAgain, name, role } = this.state;
     if (password != passwordAgain) {
       this.setState({errorMsg: gettext('Passwords do not match.')});
       return;
     }
-    const data = {
+    let data = {
       email: email,
       name: name,
       password: password
     };
+    if (this.props.showRole) {
+      data.role = role;
+    }
     this.props.addUser(data);
     this.toggle();
   }
 
   render() {
-    const { errorMsg, isPasswordVisible, password, passwordAgain, email, name,
+    const { dialogTitle, showRole } = this.props;
+    const { 
+      errorMsg, isPasswordVisible, 
+      email, name, role, password, passwordAgain, 
       isSubmitBtnActive
     } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Add Member')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{dialogTitle || gettext('Add Member')}</ModalHeader>
         <ModalBody>
           <Form autoComplete="off">
             <FormGroup>
@@ -116,8 +129,23 @@ class SysAdminAddUserDialog extends React.Component {
             </FormGroup>
             <FormGroup>
               <Label>{gettext('Name(optional)')}</Label>
-              <Input autoComplete="new-password" value={name} onChange={this.inputName} /> 
+              <Input type="text" value={name} onChange={this.inputName} /> 
             </FormGroup>
+      {showRole && 
+            <FormGroup>
+              <Label>
+        {gettext('Role')}
+        <span className="small text-secondary ml-1 fas fa-question-circle" title={gettext('You can also add a user as a guest, who will not be allowed to create libraries and groups.')}></span>
+        </Label>
+              <SysAdminUserRoleEditor
+                isTextMode={false}
+                isEditIconShow={false}
+                currentRole={role}
+                roleOptions={this.props.availableRoles}
+                onRoleChanged={this.updateRole}
+              />  
+            </FormGroup>
+      }
             <FormGroup>
               <Label>{gettext('Password')}</Label>
               <InputGroup>

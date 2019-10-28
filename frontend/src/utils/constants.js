@@ -125,3 +125,7 @@ export const canViewUserLog = window.sysadmin ? window.sysadmin.pageOptions.admi
 export const canViewAdminLog = window.sysadmin ? window.sysadmin.pageOptions.admin_permissions.can_view_admin_log : '';
 export const enableWorkWeixin = window.sysadmin ? window.sysadmin.pageOptions.enable_work_weixin : '';
 export const enableSysAdminViewRepo = window.sysadmin ? window.sysadmin.pageOptions.enableSysAdminViewRepo : '';
+export const enableTwoFactorAuth = window.sysadmin ? window.sysadmin.pageOptions.enable_two_factor_auth : '';
+export const sendEmailOnResettingUserPasswd = window.sysadmin ? window.sysadmin.pageOptions.send_email_on_resetting_user_passwd : '';
+export const isEmailConfiguredInSysAdmin = window.sysadmin ? window.sysadmin.pageOptions.is_email_configured : ''; 
+export const haveLDAP = window.sysadmin ? window.sysadmin.pageOptions.haveLDAP : '';

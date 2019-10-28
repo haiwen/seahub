@@ -89,10 +89,14 @@ class SidePanel extends React.Component {
                 }
                 {canManageUser &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sys/useradmin/'}>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('users')}`}
+                      to={siteRoot + 'sys/users/'}
+                      onClick={() => this.props.tabItemClick('users')}
+                    >
                       <span className="sf2-icon-user" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Users')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {canManageGroup &&

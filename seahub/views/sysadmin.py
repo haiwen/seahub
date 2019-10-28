@@ -146,10 +146,16 @@ def sysadmin_react_fake_view(request, **kwargs):
         logger.error(e)
         expire_days = -1
 
+    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
+    institutions = None
+    if multi_institution:
+        institutions = [inst.name for inst in Institution.objects.all()]
+
     return render(request, 'sysadmin/sysadmin_react_app.html', {
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'multi_tenancy': MULTI_TENANCY,
-        'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
+        'multi_institution': multi_institution,
+        'institutions': institutions,
         'send_email_on_adding_system_member': SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER,
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
@@ -160,7 +166,8 @@ def sysadmin_react_fake_view(request, **kwargs):
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'enable_two_factor_auth': ENABLE_TWO_FACTOR_AUTH,
         'available_roles': get_available_roles(),
-        'available_admin_roles': get_available_admin_roles()
+        'available_admin_roles': get_available_admin_roles(),
+        'have_ldap': get_ldap_info(),
     })
 
 @login_required
