@@ -41,6 +41,7 @@ from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.constants import DEFAULT_USER
 from seahub.institutions.models import Institution
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
@@ -179,11 +180,16 @@ def update_user_info(request, user, password, is_active, is_staff, role,
 
     if quota_total_mb:
         quota_total = int(quota_total_mb) * get_file_size_unit('MB')
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            seafile_api.set_org_user_quota(org_id, email, quota_total)
-        else:
-            seafile_api.set_user_quota(email, quota_total)
+        orgs = ccnet_api.get_orgs_by_user(email)
+        try:
+            if orgs:
+                org_id = orgs[0].org_id
+                seafile_api.set_org_user_quota(org_id, email, quota_total)
+            else:
+                seafile_api.set_user_quota(email, quota_total)
+        except Exception as e:
+            logger.error(e)
+            seafile_api.set_user_quota(email, -1)
 
 def get_user_info(email):
 
@@ -200,8 +206,21 @@ def get_user_info(email):
     info['is_active'] = user.is_active
     info['reference_id'] = user.reference_id if user.reference_id else ''
 
-    info['quota_total'] = seafile_api.get_user_quota(email)
-    info['quota_usage'] = seafile_api.get_user_self_usage(email)
+    orgs = ccnet_api.get_orgs_by_user(email)
+    try:
+        if orgs:
+            org_id = orgs[0].org_id
+            info['org_id'] = org_id
+            info['org_name'] = orgs[0].org_name
+            info['quota_usage'] = seafile_api.get_org_user_quota_usage(org_id, user.email)
+            info['quota_total'] = seafile_api.get_org_user_quota(org_id, user.email)
+        else:
+            info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
+            info['quota_total'] = seafile_api.get_user_quota(user.email)
+    except Exception as e:
+        logger.error(e)
+        info['quota_usage'] = -1
+        info['quota_total'] = -1
 
     info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
 
@@ -521,6 +540,14 @@ class AdminUser(APIView):
 
     def get(self, request, email):
 
+        avatar_size = request.data.get('avatar_size', 64)
+        try:
+            avatar_size = int(avatar_size)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'avatar_size invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:
@@ -528,6 +555,8 @@ class AdminUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         user_info = get_user_info(email)
+        user_info['avatar_url'], _, _ = api_avatar_url(email, avatar_size)
+
         return Response(user_info)
 
     def put(self, request, email):
