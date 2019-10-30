@@ -44,6 +44,8 @@ from seahub.institutions.models import Institution
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+from seahub.group.utils import group_id_to_name
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
@@ -70,6 +72,7 @@ def get_user_upload_link_info(uls):
 
     data['repo_name'] = repo.repo_name if repo else ''
     data['path'] = path
+    data['token'] = uls.token
     data['obj_name'] = obj_name
     data['view_cnt'] = uls.view_cnt
 
@@ -93,6 +96,7 @@ def get_user_share_link_info(fileshare):
         obj_name = ''
 
     data['repo_name'] = repo.repo_name if repo else ''
+    data['token'] = fileshare.token
 
     data['path'] = path
     data['obj_name'] = obj_name
@@ -949,9 +953,14 @@ class AdminUserBeSharedRepos(APIView):
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
         owner_set = set([x.user for x in beshared_repos])
-        for e in owner_set:
-            if e not in nickname_dict:
-                nickname_dict[e] = email2nickname(e)
+        for email in owner_set:
+            if email not in nickname_dict:
+                if '@seafile_group' in email:
+                    group_id = get_group_id_by_repo_owner(email)
+                    group_name= group_id_to_name(group_id)
+                    nickname_dict[email] = group_name
+                else:
+                    nickname_dict[email] = email2nickname(email)
 
         repos_info = []
         for repo in beshared_repos:
