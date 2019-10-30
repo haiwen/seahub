@@ -149,7 +149,7 @@ class ShareToUser extends React.Component {
       }
     }
     if (this.props.isGroupOwnedRepo) {
-      seafileAPI.shareGroupOwnedRepoToUser(repoID, this.state.permission, users).then(res => {
+      seafileAPI.shareGroupOwnedRepoToUser(repoID, this.state.permission, users, path).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -216,7 +216,7 @@ class ShareToUser extends React.Component {
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
     if (this.props.isGroupOwnedRepo) {
-      seafileAPI.deleteGroupOwnedRepoSharedUserItem(repoID, username).then(res => {
+      seafileAPI.deleteGroupOwnedRepoSharedUserItem(repoID, username, path).then(res => {
         this.setState({
           sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
         });
@@ -241,7 +241,7 @@ class ShareToUser extends React.Component {
     let repoID = this.props.repoID;
     let username = item.user_info.name;
     if (this.props.isGroupOwnedRepo) {
-      seafileAPI.modifyGroupOwnedRepoUserSharedPermission(repoID, permission, username).then(() => {
+      seafileAPI.modifyGroupOwnedRepoUserSharedPermission(repoID, permission, username, path).then(() => {
         this.updateSharedItems(item, permission);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
