@@ -109,7 +109,7 @@ def get_user_share_link_info(fileshare):
         data['size'] = seafile_api.get_file_size(repo.store_id,
                 repo.version, obj_id)
     else:
-        data['size'] = ''
+        data['size'] = 0
 
     return data
 
