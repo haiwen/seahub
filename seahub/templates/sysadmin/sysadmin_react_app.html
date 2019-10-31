@@ -23,7 +23,6 @@
 			is_default_admin: {% if is_default_admin %} true {% else %} false {% endif %},
       enable_file_scan: {% if enable_file_scan %} true {% else %} false {% endif %},
       enable_work_weixin: {% if enable_work_weixin %} true {% else %} false {% endif %},
-<<<<<<< HEAD
       enableSysAdminViewRepo: {% if enable_sys_admin_view_repo %} true {% else %} false {% endif %},
       trashReposExpireDays: {{ trash_repos_expire_days }},
       send_email_on_adding_system_member: {% if send_email_on_adding_system_member %} true {% else %} false {% endif %},
@@ -43,9 +42,7 @@
         return list;
       })(),
       haveLDAP: {% if have_ldap %} true {% else %} false {% endif %},
-=======
       enable_share_link_report_abuse: {% if enable_share_link_report_abuse %} true {% else %} false {% endif %},
->>>>>>> add enableShareLinkReportAbuse in templates
 			admin_permissions: {
         "can_view_system_info": {% if user.admin_permissions.can_view_system_info %} true {% else %} false {% endif %},
         "can_view_statistic": {% if user.admin_permissions.can_view_statistic %} true {% else %} false {% endif %},
