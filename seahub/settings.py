@@ -127,6 +127,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
+    'seahub.institutions.middleware.InstitutionMiddleware',
 )
 
 

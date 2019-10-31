@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from seaserv import seafile_api
 from seahub.profile.models import Profile
-from seahub.institutions.models import InstitutionQuota
+from seahub.institutions.models import InstitutionQuota, InstitutionAdmin
 
 
 def get_institution_space_usage(inst):
@@ -23,3 +23,11 @@ def get_institution_available_quota(inst):
         allocated += seafile_api.get_user_quota(user)
 
     return 0 if allocated >= inst_quota else inst_quota - allocated
+
+
+def is_institution_admin(email):
+    try:
+        InstitutionAdmin.objects.get(user=email)
+        return True
+    except InstitutionAdmin.DoesNotExist:
+        return False
