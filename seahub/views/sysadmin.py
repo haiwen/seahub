@@ -76,15 +76,8 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
-<<<<<<< HEAD
-    ENABLE_LIMIT_IPADDRESS 
-=======
-<<<<<<< HEAD
-    ENABLE_LIMIT_IPADDRESS, ENABLE_TWO_FACTOR_AUTH
-=======
     ENABLE_LIMIT_IPADDRESS, ENABLE_SHARE_LINK_REPORT_ABUSE
->>>>>>> add enableShareLinkReportAbuse in templates
->>>>>>> add enableShareLinkReportAbuse in templates
+
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -176,7 +169,10 @@ def sysadmin_react_fake_view(request, **kwargs):
         'available_roles': get_available_roles(),
         'available_admin_roles': get_available_admin_roles(),
         'have_ldap': get_ldap_info(),
+<<<<<<< HEAD
         'two_factor_auth_enabled': has_two_factor_auth(),
+=======
+>>>>>>> sysadmin.py
         'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
     })
 
