@@ -30,7 +30,8 @@ from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX,
     NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT
 from seahub.utils import is_valid_username, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
-        IS_EMAIL_CONFIGURED, send_html_email, get_site_name
+        IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
+        gen_shared_link, gen_shared_upload_link
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
@@ -73,6 +74,7 @@ def get_user_upload_link_info(uls):
     data['repo_name'] = repo.repo_name if repo else ''
     data['path'] = path
     data['token'] = uls.token
+    data['link'] = gen_shared_upload_link(uls.token)
     data['obj_name'] = obj_name
     data['view_cnt'] = uls.view_cnt
 
@@ -97,6 +99,7 @@ def get_user_share_link_info(fileshare):
 
     data['repo_name'] = repo.repo_name if repo else ''
     data['token'] = fileshare.token
+    data['link'] = gen_shared_link(fileshare.token, fileshare.s_type)
 
     data['path'] = path
     data['obj_name'] = obj_name
