@@ -60,11 +60,10 @@ class AdminInstitutions(APIView):
     def post(self, request):
         """Create an Institution
         """
-        name = request.data.get('name', '')
-        if not name or name.strip() == '':
+        name = request.data.get('name', '').strip()
+        if not name:
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        name = name.strip()
 
         try:
             institution = Institution.objects.add_institution(name=name)
@@ -166,5 +165,4 @@ class AdminInstitution(APIView):
 
         # delete user and admin in institution
         institution_deleted.send(sender=None, inst_name=institution.name)
-        InstitutionAdmin.objects.filter(institution=institution).delete()
         return Response({'success': True})

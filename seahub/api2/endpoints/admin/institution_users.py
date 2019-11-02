@@ -59,16 +59,11 @@ class AdminInstitutionUsers(APIView):
             error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        get_admin = request.GET.get('get_admin')
-        if get_admin:
-            get_admin = get_admin.lower()
-            if get_admin not in ('true', 'false'):
-                error_msg = 'get_admin %s invalid' % get_admin
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            if get_admin == 'true':
-                emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
-
-        if not get_admin or get_admin == 'false':
+        is_institution_admin = request.GET.get('is_institution_admin', '')
+        # is_institution_admin = '', return all users, filter by page
+        # is_institution_admin = true, return admin users
+        # is_institution_admin = false, return none admin users
+        if not is_institution_admin:
             try:
                 current_page = int(request.GET.get('page', '1'))
                 per_page = int(request.GET.get('per_page', '100'))
@@ -79,6 +74,18 @@ class AdminInstitutionUsers(APIView):
             start = (current_page - 1) * per_page
             profiles = Profile.objects.filter(institution=institution.name)[start:start + per_page]
             emails = [x.user for x in profiles]
+        else:
+            is_institution_admin = is_institution_admin.lower()
+            if is_institution_admin not in ('true', 'false'):
+                error_msg = 'get_admin %s invalid' % is_institution_admin
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
+            if is_institution_admin == 'true':
+                emails = admin_emails
+            elif is_institution_admin == 'false':
+                profiles = Profile.objects.filter(institution=institution.name)
+                emails = [x.user for x in profiles if x.user not in admin_emails]
 
         user_objs = []
         for email in emails:
@@ -187,24 +194,22 @@ class AdminInstitutionUser(APIView):
             error_msg = _('Can not assign institutional administration roles to global administrators')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        is_institution_admin = request.data.get('is_institution_admin')
-        if not is_institution_admin:
-            error_msg = 'is_institution_admin invalid'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        is_institution_admin = is_institution_admin.lower()
-        if is_institution_admin not in ('true', 'false'):
-            error_msg = 'is_institution_admin %s invalid' % is_institution_admin
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        is_inst_admin = request.data.get('is_institution_admin')
+        if is_inst_admin:
+            is_inst_admin = is_inst_admin.lower()
+            if is_inst_admin not in ('true', 'false'):
+                error_msg = 'is_institution_admin %s invalid' % is_inst_admin
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            if is_institution_admin == 'true':
+            if is_inst_admin == 'true':
                 # if user is already inst admin, cannot set to institution admin
-                admins = InstitutionAdmin.objects.filter(user=email)
-                if len(admins) >= 1:
+                if is_institution_admin(email, institution):
                     error_msg = 'user %s is already admin' % email
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-                InstitutionAdmin.objects.create(institution=institution, user=email)
-            else:
+                else:
+                    InstitutionAdmin.objects.create(institution=institution, user=email)
+            elif is_inst_admin == 'false':
                 InstitutionAdmin.objects.filter(institution=institution, user=email).delete()
         except Exception as e:
             logging.error(e)

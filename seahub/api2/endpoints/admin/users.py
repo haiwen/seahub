@@ -46,6 +46,7 @@ from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.group.utils import group_id_to_name
+from seahub.institutions.models import InstitutionAdmin
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
@@ -183,6 +184,8 @@ def update_user_info(request, user, password, is_active, is_staff, role,
 
     if institution_name is not None:
         Profile.objects.add_or_update(email, institution=institution_name)
+        if institution_name == '':
+            InstitutionAdmin.objects.filter(user=email).delete()
 
     if quota_total_mb:
         quota_total = int(quota_total_mb) * get_file_size_unit('MB')

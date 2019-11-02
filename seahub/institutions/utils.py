@@ -30,6 +30,4 @@ def is_institution_admin(email, institution=None):
     # else, return if email is admin in all institutions
     if institution:
         admins = InstitutionAdmin.objects.filter(user=email, institution=institution)
-    else:
-        admins = InstitutionAdmin.objects.filter(user=email)
     return len(admins) >= 1
