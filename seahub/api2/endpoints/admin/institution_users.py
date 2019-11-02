@@ -77,7 +77,7 @@ class AdminInstitutionUsers(APIView):
         else:
             is_institution_admin = is_institution_admin.lower()
             if is_institution_admin not in ('true', 'false'):
-                error_msg = 'get_admin %s invalid' % is_institution_admin
+                error_msg = 'is_institution_admin %s invalid' % is_institution_admin
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
