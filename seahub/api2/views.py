@@ -1276,6 +1276,7 @@ class Repo(APIView):
             }
         if repo.encrypted:
             repo_json["enc_version"] = repo.enc_version
+            repo_json["salt"] = repo.salt if repo.enc_version == 3 else ''
             repo_json["magic"] = repo.magic
             repo_json["random_key"] = repo.random_key
 
