@@ -183,22 +183,14 @@ class Item extends Component {
           <td>
             {moment(item.create_time).format('YYYY-MM-DD hh:mm:ss')}{' / '}{item.last_login ? moment(item.last_login).fromNow() : '--'}
           </td>
-          {/* <td>
-            {isOpIconShown && (
-              item.is_institution_admin ?
-                <a href="#" onClick={this.toggleRevokeAdminDialog}>{gettext('Revoke Admin')}</a>
-                :<a href="#" onClick={this.toggleSetAdminDialog}>{gettext('Set Admin')}</a>
-            )
-            }
-          </td> */}
           <td>
             {isOpIconShown &&
-            <OpMenu
-              isInstitutionAdmin={item.is_institution_admin}
-              onMenuItemClick={this.onMenuItemClick}
-              onFreezedItem={this.props.onFreezedItem}
-              onUnfreezedItem={this.onUnfreezedItem}
-            />
+              <OpMenu
+                isInstitutionAdmin={item.is_institution_admin}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedItem={this.props.onFreezedItem}
+                onUnfreezedItem={this.onUnfreezedItem}
+              />
             }
           </td>
         </tr>

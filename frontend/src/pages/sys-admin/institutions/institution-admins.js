@@ -164,7 +164,7 @@ class Item extends Component {
         {isRevokeAdminDialogOpen &&
           <CommonOperationConfirmationDialog
             title={gettext('Revoke Admin')}
-            message={gettext('Sure?')}
+            message={gettext('Sure ?')}
             executeOperation={this.revokeAdmin}
             toggleDialog={this.toggleRevokeAdminDialog}
           />
