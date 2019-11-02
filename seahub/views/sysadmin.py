@@ -76,7 +76,7 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
-    ENABLE_LIMIT_IPADDRESS, ENABLE_TWO_FACTOR_AUTH
+    ENABLE_LIMIT_IPADDRESS 
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -164,10 +164,10 @@ def sysadmin_react_fake_view(request, **kwargs):
         'enable_work_weixin': ENABLE_WORK_WEIXIN,
         'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
-        'enable_two_factor_auth': ENABLE_TWO_FACTOR_AUTH,
         'available_roles': get_available_roles(),
         'available_admin_roles': get_available_admin_roles(),
         'have_ldap': get_ldap_info(),
+        'two_factor_auth_enabled': has_two_factor_auth(),
     })
 
 @login_required

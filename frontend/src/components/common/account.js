@@ -116,7 +116,7 @@ class Account extends Component {
     } else {
       if (isStaff) {
         data = {
-          url: `${siteRoot}sys/useradmin/`,
+          url: `${siteRoot}sys/info/`,
           text: gettext('System Admin')
         };
       } else if (isOrgStaff) {

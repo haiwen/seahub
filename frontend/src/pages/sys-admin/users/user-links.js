@@ -1,13 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from '@reach/router';
-import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
+import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import LinkDialog from '../../../components/dialog/share-admin-link';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
 import OpMenu from './user-op-menu';
@@ -38,7 +36,7 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('No groups')}</h2>
+          <h2>{gettext('No shared links')}</h2>
         </EmptyTip>
       );
       const table = (
@@ -46,9 +44,11 @@ class Content extends Component {
           <table>
             <thead>
               <tr>
-                <th width="35%">{gettext('Name')}</th>
-                <th width="30%">{gettext('Role')}</th>
-                <th width="30%">{gettext('Created At')}</th>
+                <th width="5%">{/* icon */}</th>
+                <th width="30%">{gettext('Name')}</th>
+                <th width="20%">{gettext('Size')}</th>
+                <th width="20%">{gettext('Type')}</th>
+                <th width="20%">{gettext('Visits')}</th>
                 <th width="5%">{/* Operations */}</th>
               </tr>
             </thead>
@@ -79,7 +79,7 @@ class Item extends Component {
     this.state = {
       isOpIconShown: false,
       highlight: false,
-      isDeleteDialogOpen: false
+      isLinkDialogOpen: false
     };
   }
 
@@ -109,17 +109,20 @@ class Item extends Component {
     this.props.onUnfreezedItem();
   }
 
-  toggleDeleteDialog = () => {
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+  toggleLinkDialog = () => {
+    this.setState({isLinkDialogOpen: !this.state.isLinkDialogOpen});
   }
 
   deleteItem = () => {
-    this.props.deleteItem(this.props.item.id);
+    this.props.deleteItem(this.props.item);
   }
 
   translateOperations = (item) => {
     let translateResult = ''; 
     switch (item) {
+      case 'View':
+        translateResult = gettext('View');
+        break;
       case 'Delete':
         translateResult = gettext('Delete');
         break;
@@ -130,8 +133,11 @@ class Item extends Component {
 
   onMenuItemClick = (operation) => {
     switch(operation) {
+      case 'View':
+        this.toggleLinkDialog();
+        break;
       case 'Delete':
-        this.toggleDeleteDialog();
+        this.deleteItem();
         break;
     }
   }
@@ -153,27 +159,45 @@ class Item extends Component {
     return roleText;
   }
 
+  getIconUrl = () => {
+    const { item } = this.props;
+    let url;
+    if (item.type == 'upload') {
+      url = Utils.getFolderIconUrl();
+    } else { // share link
+      if (item.is_dir) {
+        url = Utils.getFolderIconUrl();
+      } else {
+        url = Utils.getFileIconUrl(item.obj_name); 
+      }
+    }
+    return url;
+  }
+
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen } = this.state;
-
-    const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
-    const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
-
-    const url = item.parent_group_id == 0 ? 
-      `${siteRoot}sys/groups/${item.id}/libraries/` :
-      `${siteRoot}sys/departments/${item.id}/`;
+    const { isOpIconShown, isLinkDialogOpen } = this.state;
 
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td><Link to={url}>{item.name}</Link></td>
-          <td>{this.getRoleText()}</td>
-          <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm')}</td>
+          <td><img src={this.getIconUrl()} alt="" width="24" /></td>
+          <td>{item.obj_name == '/' ? item.repo_name : item.obj_name}</td>
+          {item.type == 'upload' ?
+            <Fragment>
+              <td></td>
+              <td>{gettext('Upload')}</td>
+            </Fragment> :
+            <Fragment>
+              <td>{item.is_dir ? null : Utils.bytesToSize(item.size)}</td>
+              <td>{gettext('Download')}</td>
+            </Fragment>
+          }
+          <td>{item.view_cnt}</td>
           <td>
-            {(isOpIconShown && item.parent_group_id == 0) &&
+            {isOpIconShown &&
             <OpMenu
-              operations={['Delete']}
+              operations={['View', 'Delete']}
               translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
@@ -182,13 +206,10 @@ class Item extends Component {
             }   
           </td>
         </tr>
-        {isDeleteDialogOpen &&
-          <CommonOperationConfirmationDialog
-            title={gettext('Delete Group')}
-            message={deleteDialogMsg}
-            executeOperation={this.deleteItem}
-            confirmBtnText={gettext('Delete')}
-            toggleDialog={this.toggleDeleteDialog}
+        {isLinkDialogOpen &&
+          <LinkDialog
+            link={item.link}
+            toggleDialog={this.toggleLinkDialog}
           />
         }
       </Fragment>
@@ -196,7 +217,7 @@ class Item extends Component {
   }
 }
 
-class Groups extends Component {
+class Links extends Component {
 
   constructor(props) {
     super(props);
@@ -204,7 +225,8 @@ class Groups extends Component {
       loading: true,
       errorMsg: '',
       userInfo: {},
-      items: []
+      uploadLinkItems: [],
+      shareLinkItems: []
     };
   }
 
@@ -214,10 +236,28 @@ class Groups extends Component {
         userInfo: res.data
       }); 
     });
-    seafileAPI.sysAdminListGroupsJoinedByUser(this.props.email).then(res => {
+
+    seafileAPI.sysAdminListShareLinksByUser(this.props.email).then(res => {
+      const items = res.data.share_link_list.map(item => {
+        item.type = 'download';
+        return item;
+      }); 
+      items.sort((a, b) => {
+        return a.is_dir ? -1 : 1;
+      });
       this.setState({
         loading: false,
-        items: res.data.group_list
+        shareLinkItems: items
+      }); 
+    });
+    seafileAPI.sysAdminListUploadLinksByUser(this.props.email).then(res => {
+      const items = res.data.upload_link_list.map(item => {
+        item.type = 'upload';
+        return item;
+      }); 
+      this.setState({
+        loading: false,
+        uploadLinkItems: items
       });
     }).catch((error) => {
       if (error.response) {
@@ -242,31 +282,51 @@ class Groups extends Component {
     });
   }
 
-  deleteItem = (groupID) => {
-    seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
-      let items = this.state.items.filter(item => {
-        return item.id != groupID;
+  deleteItem = (item) => {
+    const type = item.type;
+    const token = item.token;
+    if (type == 'download') {
+      seafileAPI.sysAdminDeleteShareLink(token).then(res => {
+        let items = this.state.shareLinkItems.filter(item=> {
+          return item.token != token;
+        }); 
+        this.setState({
+          shareLinkItems: items 
+        }); 
+        toaster.success(gettext('Successfully deleted 1 item.'));
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }); 
+    } else {
+      seafileAPI.sysAdminDeleteUploadLink(token).then(res => {
+        let items = this.state.uploadLinkItems.filter(item=> {
+          return item.token != token;
+        });
+        this.setState({
+          uploadLinkItems: items
+        });
+        toaster.success(gettext('Successfully deleted 1 item.'));
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
-      this.setState({items: items});
-      toaster.success(gettext('Successfully deleted 1 item.'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    }
   }
 
   render() {
+    const { shareLinkItems, uploadLinkItems } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <Nav currentItem="groups" email={this.props.email} userName={this.state.userInfo.name} />
+            <Nav currentItem="links" email={this.props.email} userName={this.state.userInfo.name} />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
-                items={this.state.items}
+                items={[].concat(uploadLinkItems, shareLinkItems)}
                 deleteItem={this.deleteItem}
               />
             </div>
@@ -277,4 +337,4 @@ class Groups extends Component {
   }
 }
 
-export default Groups;
+export default Links;

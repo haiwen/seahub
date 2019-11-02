@@ -11,7 +11,7 @@
 			multi_tenancy: {% if multi_tenancy %} true {% else %} false {% endif %},
 			multi_institution: {% if multi_institution %} true {% else %} false {% endif %},
       institutions: (function() {
-        var list = [];
+        var list = ['']; // institution can set to be ''
         {% for inst in institutions %}
         list.push('{{inst|escapejs}}');
         {% endfor %}
@@ -26,7 +26,7 @@
       enableSysAdminViewRepo: {% if enable_sys_admin_view_repo %} true {% else %} false {% endif %},
       trashReposExpireDays: {{ trash_repos_expire_days }},
       send_email_on_adding_system_member: {% if send_email_on_adding_system_member %} true {% else %} false {% endif %},
-      enable_two_factor_auth: {% if enable_two_factor_auth %} true {% else %} false {% endif %},
+      twoFactorAuthEnabled: {% if two_factor_auth_enabled %} true {% else %} false {% endif %},
       availableRoles: (function() {
         var list = [];
         {% for role in available_roles %}

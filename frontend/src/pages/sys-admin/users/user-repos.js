@@ -3,14 +3,17 @@ import { Link } from '@reach/router';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
+import { isPro, siteRoot, loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import TransferDialog from '../../../components/dialog/transfer-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
 import OpMenu from './user-op-menu';
+
+const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
 class Content extends Component {
 
@@ -38,7 +41,7 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('No groups')}</h2>
+          <h2>{gettext('No libraries')}</h2>
         </EmptyTip>
       );
       const table = (
@@ -46,9 +49,10 @@ class Content extends Component {
           <table>
             <thead>
               <tr>
+                <th width="5%"></th>
                 <th width="35%">{gettext('Name')}</th>
-                <th width="30%">{gettext('Role')}</th>
-                <th width="30%">{gettext('Created At')}</th>
+                <th width="30%">{gettext('Size')}</th>
+                <th width="25%">{gettext('Last Update')}</th>
                 <th width="5%">{/* Operations */}</th>
               </tr>
             </thead>
@@ -60,7 +64,8 @@ class Content extends Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
-                  deleteItem={this.props.deleteItem}
+                  deleteRepo={this.props.deleteRepo}
+                  transferRepo={this.props.transferRepo}
                 />);
               })}
             </tbody>
@@ -79,7 +84,8 @@ class Item extends Component {
     this.state = {
       isOpIconShown: false,
       highlight: false,
-      isDeleteDialogOpen: false
+      isDeleteDialogOpen: false,
+      isTransferDialogOpen: false
     };
   }
 
@@ -113,8 +119,32 @@ class Item extends Component {
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
   }
 
-  deleteItem = () => {
-    this.props.deleteItem(this.props.item.id);
+  deleteRepo = () => {
+    this.props.deleteRepo(this.props.item.id);
+  }
+
+  toggleTransferDialog = () => {
+    this.setState({isTransferDialogOpen: !this.state.isTransferDialogOpen});
+  }
+
+  transferRepo = (owner) => {
+    this.props.transferRepo(this.props.item.id, owner.email);
+    this.toggleTransferDialog();
+  }
+
+  renderRepoName = () => {
+    const { item } = this.props;
+    const repo = item;
+    if (repo.name) {
+      if (isPro && enableSysAdminViewRepo && !repo.encrypted) {
+        return <Link to={`${siteRoot}sys/libraries/${repo.id}/`}>{repo.name}</Link>;
+      } else {
+        return repo.name;
+      }   
+    } else {
+      return gettext('Broken ({repo_id_placeholder})')
+        .replace('{repo_id_placeholder}', repo.id);
+    }
   }
 
   translateOperations = (item) => {
@@ -122,6 +152,9 @@ class Item extends Component {
     switch (item) {
       case 'Delete':
         translateResult = gettext('Delete');
+        break;
+      case 'Transfer':
+        translateResult = gettext('Transfer');
         break;
     }
 
@@ -133,70 +166,64 @@ class Item extends Component {
       case 'Delete':
         this.toggleDeleteDialog();
         break;
-    }
-  }
-
-  getRoleText = () => {
-    let roleText;
-    const { item } = this.props;
-    switch(item.role) {
-      case 'Owner':
-        roleText = gettext('Owner');
-        break;
-      case 'Admin':
-        roleText = gettext('Admin');
-        break;
-      case 'Member':
-        roleText = gettext('Member');
+      case 'Transfer':
+        this.toggleTransferDialog();
         break;
     }
-    return roleText;
   }
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen } = this.state;
+    const { isOpIconShown, isDeleteDialogOpen, isTransferDialogOpen } = this.state;
+
+    const iconUrl = Utils.getLibIconUrl(item);
+    const iconTitle = Utils.getLibIconTitle(item);
 
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
 
-    const url = item.parent_group_id == 0 ? 
-      `${siteRoot}sys/groups/${item.id}/libraries/` :
-      `${siteRoot}sys/departments/${item.id}/`;
-
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td><Link to={url}>{item.name}</Link></td>
-          <td>{this.getRoleText()}</td>
-          <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm')}</td>
+          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+          <td>{this.renderRepoName()}</td>
+          <td>{Utils.bytesToSize(item.size)}</td>
+          <td>{moment(item.last_modify).fromNow()}</td>
           <td>
-            {(isOpIconShown && item.parent_group_id == 0) &&
+            {isOpIconShown &&
             <OpMenu
-              operations={['Delete']}
+              operations={['Delete', 'Transfer']}
               translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
-            />
+            />  
             }   
           </td>
         </tr>
         {isDeleteDialogOpen &&
           <CommonOperationConfirmationDialog
-            title={gettext('Delete Group')}
+            title={gettext('Delete Library')}
             message={deleteDialogMsg}
-            executeOperation={this.deleteItem}
+            executeOperation={this.deleteRepo}
             confirmBtnText={gettext('Delete')}
             toggleDialog={this.toggleDeleteDialog}
           />
         }
+        {isTransferDialogOpen &&
+        <TransferDialog
+          itemName={item.name}
+          submit={this.transferRepo}
+          canTransferToDept={false}
+          toggleDialog={this.toggleTransferDialog}
+        />
+        } 
       </Fragment>
     );
   }
 }
 
-class Groups extends Component {
+class Repos extends Component {
 
   constructor(props) {
     super(props);
@@ -204,7 +231,7 @@ class Groups extends Component {
       loading: true,
       errorMsg: '',
       userInfo: {},
-      items: []
+      repoList: []
     };
   }
 
@@ -214,10 +241,10 @@ class Groups extends Component {
         userInfo: res.data
       }); 
     });
-    seafileAPI.sysAdminListGroupsJoinedByUser(this.props.email).then(res => {
+    seafileAPI.sysAdminListReposByOwner(this.props.email).then(res => {
       this.setState({
         loading: false,
-        items: res.data.group_list
+        repoList: res.data.repos
       });
     }).catch((error) => {
       if (error.response) {
@@ -242,14 +269,28 @@ class Groups extends Component {
     });
   }
 
-  deleteItem = (groupID) => {
-    seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
-      let items = this.state.items.filter(item => {
-        return item.id != groupID;
+  deleteRepo = (repoID) => {
+    seafileAPI.sysAdminDeleteRepo(repoID).then(res => {
+      let newRepoList = this.state.repoList.filter(item => {
+        return item.id != repoID;
       });
-      this.setState({items: items});
+      this.setState({repoList: newRepoList});
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  transferRepo = (repoID, email) => {
+    seafileAPI.sysAdminTransferRepo(repoID, email).then((res) => {
+      let newRepoList = this.state.repoList.filter(item => {
+        return item.id != repoID;
+      });
+      this.setState({repoList: newRepoList});
+      let message = gettext('Successfully transferred the library.');
+      toaster.success(message);
+    }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -261,13 +302,14 @@ class Groups extends Component {
         <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <Nav currentItem="groups" email={this.props.email} userName={this.state.userInfo.name} />
+            <Nav currentItem="owned-repos" email={this.props.email} userName={this.state.userInfo.name} />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
-                items={this.state.items}
-                deleteItem={this.deleteItem}
+                items={this.state.repoList}
+                deleteRepo={this.deleteRepo}
+                transferRepo={this.transferRepo}
               />
             </div>
           </div>
@@ -277,4 +319,4 @@ class Groups extends Component {
   }
 }
 
-export default Groups;
+export default Repos;

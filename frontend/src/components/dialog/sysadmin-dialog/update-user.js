@@ -5,29 +5,25 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 
 const propTypes = {
-  toggle: PropTypes.func.isRequired,
-  updateName: PropTypes.func.isRequired
+  dialogTitle: PropTypes.string.isRequired,
+  updateValue: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired
 };
 
-class SysAdminSetOrgNameDialog extends React.Component {
+class UpdateUser extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.name,
+      value: this.props.value,
       isSubmitBtnActive: false
     };
-  }
-
-  toggle = () => {
-    this.props.toggle();
   }
 
   handleInputChange = (e) => {
     const value = e.target.value.trim();
     this.setState({
-      name: value,
-      isSubmitBtnActive: value != ''
+      value: value
     });
   }
 
@@ -39,21 +35,21 @@ class SysAdminSetOrgNameDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.updateName(this.state.name);
-    this.toggle();
+    this.props.updateValue(this.state.value);
+    this.props.toggleDialog();
   }
 
   render() {
-    const { name, isSubmitBtnActive } = this.state;
+    const  { dialogTitle, toggleDialog } = this.props;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Set Name')}</ModalHeader>
+      <Modal isOpen={true} toggle={toggleDialog}>
+        <ModalHeader toggle={toggleDialog}>{this.props.dialogTitle}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
                 <Input
                   type="text"
-                  value={name}
+                  value={this.state.value}
                   onKeyPress={this.handleKeyPress} 
                   onChange={this.handleInputChange}
                 />
@@ -61,14 +57,14 @@ class SysAdminSetOrgNameDialog extends React.Component {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit} disabled={!isSubmitBtnActive}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
   }
 }
 
-SysAdminSetOrgNameDialog.propTypes = propTypes;
+UpdateUser.propTypes = propTypes;
 
-export default SysAdminSetOrgNameDialog;
+export default UpdateUser;

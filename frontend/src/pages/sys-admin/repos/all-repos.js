@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from '@reach/router';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -201,7 +202,7 @@ class Item extends Component {
     const { repo } = this.props;
     if (repo.name) {
       if (isPro && enableSysAdminViewRepo && !repo.encrypted) {
-        return <a href={`${siteRoot}sys/libraries/${repo.id}/`}>{repo.name}</a>;
+        return <Link to={`${siteRoot}sys/libraries/${repo.id}/`}>{repo.name}</Link>;
       } else {
         return repo.name;
       }
@@ -229,8 +230,8 @@ class Item extends Component {
           <td>{repo.id}</td>
           <td>
             {isGroupOwnedRepo ?
-              <a href={`${siteRoot}sysadmin/#address-book/groups/${repo.owner_name}/`}>{repo.group_name}</a> :
-              <a href={`${siteRoot}useradmin/info/${encodeURIComponent(repo.owner_email)}/`}>{repo.owner_name}</a>
+              <Link to={`${siteRoot}sys/departments/${repo.owner_name}/`}>{repo.group_name}</Link> :
+              <Link to={`${siteRoot}sys/users/${encodeURIComponent(repo.owner_email)}/`}>{repo.owner_name}</Link>
             }
           </td>
           <td>
