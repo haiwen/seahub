@@ -43,6 +43,11 @@ import OrgUsers from './orgs/org-users';
 import OrgGroups from './orgs/org-groups';
 import OrgRepos from './orgs/org-repos';
 
+import Institutions from './institutions/institutions';
+import InstitutionInfo from './institutions/institution-info';
+import InstitutionUsers from './institutions/institution-users';
+import InstitutionAdmins from './institutions/institution-admins';
+
 import LoginLogs from './logs-page/login-logs';
 import FileAccessLogs from './logs-page/file-access-logs';
 import FileUpdateLogs from './logs-page/file-update-logs';
@@ -162,6 +167,10 @@ class SysAdmin extends React.Component {
             <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} />
             <OrgGroups path={siteRoot + 'sys/organizations/:orgID/groups'} />
             <OrgRepos path={siteRoot + 'sys/organizations/:orgID/libraries'} />
+            <Institutions path={siteRoot + 'sys/institutions'} />
+            <InstitutionInfo path={siteRoot + 'sys/institutions/:institutionID/info'} />
+            <InstitutionUsers path={siteRoot + 'sys/institutions/:institutionID/members'} />
+            <InstitutionAdmins path={siteRoot + 'sys/institutions/:institutionID/admins'} />
             <LoginLogs path={siteRoot + 'sys/logs/login'} />
             <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} />
             <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} />
