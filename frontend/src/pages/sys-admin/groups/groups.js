@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from '@reach/router';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
@@ -170,18 +171,18 @@ class Item extends Component {
     let groupName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', groupName);
 
-    const libUrl = item.parent_group_id == 0 ?
+    const groupUrl = item.parent_group_id == 0 ?
       `${siteRoot}sys/groups/${item.id}/libraries/` :
-      `${siteRoot}sysadmin/#address-book/groups/${item.id}/`;
+      `${siteRoot}sys/departments/${item.id}/`;
 
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td><a href={libUrl}>{item.name}</a></td>
+          <td><Link to={groupUrl}>{item.name}</Link></td>
           <td>
             {item.owner == 'system admin' ?
               '--' :
-              <a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.owner)}/`}>{item.owner_name}</a>
+              <Link to={`${siteRoot}sys/users/${encodeURIComponent(item.owner)}/`}>{item.owner_name}</Link>
             }
           </td>
           <td>

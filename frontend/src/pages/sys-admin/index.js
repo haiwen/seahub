@@ -14,8 +14,12 @@ import DeviceErrors from './devices/devices-errors';
 import Users from './users/users';
 import AdminUsers from './users/admin-users';
 import LDAPImportedUsers from './users/ldap-imported-users';
-import UsersLDAP from './users/users-ldap';
+import LDAPUsers from './users/ldap-users';
 import User from './users/user-info';
+import UserOwnedRepos from './users/user-repos';
+import UserSharedRepos from './users/user-shared-repos';
+import UserLinks from './users/user-links';
+import UserGroups from './users/user-groups';
 
 import AllRepos from './repos/all-repos';
 import SystemRepo from './repos/system-repo';
@@ -79,6 +83,10 @@ class SysAdmin extends React.Component {
       {
         tab: 'libraries',
         urlPartList: ['all-libraries', 'system-library', 'trash-libraries', 'libraries/']
+      },
+      {
+        tab: 'users',
+        urlPartList: ['users/']
       },
       {
         tab: 'groups',
@@ -164,8 +172,12 @@ class SysAdmin extends React.Component {
             <Users path={siteRoot + 'sys/users'} />
             <AdminUsers path={siteRoot + 'sys/users/admins'} />
             <LDAPImportedUsers path={siteRoot + 'sys/users/ldap-imported'} />
-            <UsersLDAP path={siteRoot + 'sys/users/ldap'} />
+            <LDAPUsers path={siteRoot + 'sys/users/ldap'} />
             <User path={siteRoot + 'sys/users/:email'} />
+            <UserOwnedRepos path={siteRoot + 'sys/users/:email/owned-libraries'} />
+            <UserSharedRepos path={siteRoot + 'sys/users/:email/shared-libraries'} />
+            <UserLinks path={siteRoot + 'sys/users/:email/shared-links'} />
+            <UserGroups path={siteRoot + 'sys/users/:email/groups'} />
 
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}

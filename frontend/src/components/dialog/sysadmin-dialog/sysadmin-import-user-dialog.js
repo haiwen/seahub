@@ -41,6 +41,7 @@ class SysAdminImportUserDialog extends React.Component {
     }
     const file = this.fileInputRef.current.files[0];
     this.props.importUserInBatch(file);
+    this.toggle();
   }
 
   render() {
@@ -49,8 +50,7 @@ class SysAdminImportUserDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Import users from a .xlsx file')}</ModalHeader>
         <ModalBody>
-          <a href={`${siteRoot}useradmin/batchadduser/example/`}>{gettext('Download an example file')}</a>
-          <br/>
+          <p><a className="text-secondary small" href={`${siteRoot}useradmin/batchadduser/example/`}>{gettext('Download an example file')}</a></p>
           <button className="btn btn-outline-primary" onClick={this.openFileInput}>{gettext('Upload file')}</button>
           <input className="d-none" type="file" onChange={this.uploadFile} ref={this.fileInputRef} />
           {errorMsg && <Alert color="danger">{errorMsg}</Alert>}

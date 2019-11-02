@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
-import { siteRoot, gettext, haveLDAP } from '../../../utils/constants';
+import { siteRoot, gettext, haveLDAP, isDefaultAdmin } from '../../../utils/constants';
 
 const propTypes = {
   currentItem: PropTypes.string.isRequired
@@ -12,19 +12,19 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'database', urlPart: 'users', text: gettext('Database')}, 
-      {name: 'admin', urlPart: 'users/admins', text: gettext('Admin')}
+      {name: 'database', urlPart: 'users', text: gettext('Database')} 
     ];
-    /*
     if (haveLDAP) {
-      this.navItems.splice(1, 0, 
+      this.navItems.push(
+        {name: 'ldap', urlPart: 'users/ldap', text: gettext('LDAP')},
         {name: 'ldap-imported', urlPart: 'users/ldap-imported', text: gettext('LDAP(imported)')}
       );
-      this.navItems.splice(1, 0, 
-        {name: 'ldap', urlPart: 'users/ldap', text: gettext('LDAP')}
+    }
+    if (isDefaultAdmin) {
+      this.navItems.push(
+        {name: 'admin', urlPart: 'users/admins', text: gettext('Admin')}
       );
     }
-    */
   }
 
   render() {

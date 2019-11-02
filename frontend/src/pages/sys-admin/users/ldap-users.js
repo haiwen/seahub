@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import EmptyTip from '../../../components/empty-tip';
+import { Link } from '@reach/router';
 import moment from 'moment';
+import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { gettext, siteRoot, loginUrl } from '../../../utils/constants';
+import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import UsersNav from './users-nav';
@@ -13,8 +14,6 @@ class Content extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-    };
   }
 
   getPreviousPage = () => {
@@ -30,7 +29,7 @@ class Content extends Component {
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
-      return <p className="error text-center">{errorMsg}</p>;
+      return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
         <EmptyTip>
@@ -42,23 +41,19 @@ class Content extends Component {
           <table className="table-hover">
             <thead>
               <tr>
-                <th width="34%">{gettext('Email')}</th>
-                <th width="33%">{gettext('Space Used')}{' / '}{gettext('Quota')}</th>
-                <th width="33%">{gettext('Create At')}{' / '}{gettext('Last Login')}</th>
+                <th width="40%">{gettext('Email')}</th>
+                <th width="30%">{gettext('Space Used')}{' / '}{gettext('Quota')}</th>
+                <th width="30%">{gettext('Last Login')}</th>
               </tr>
             </thead>
-            {items && 
-              <tbody>
-                {items.map((item, index) => {
-                  return (<Item
-                    key={index}
-                    item={item}
-                    deleteUser={this.props.deleteUser}
-                    onUserSelected={this.props.onUserSelected}
-                  />);
-                })}
-              </tbody>
-            }
+            <tbody>
+              {items.map((item, index) => {
+                return (<Item
+                  key={index}
+                  item={item}
+                />);
+              })}
+            </tbody>
           </table>
           <Paginator
             gotoPreviousPage={this.getPreviousPage}
@@ -81,39 +76,22 @@ class Item extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      quota_total: this.props.item.quota_total,
-    };
-  }
-
-  handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
-  }
-
-  handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
   }
 
   render() {
-    let { status, role, quota_total, isOpIconShown } = this.state;
-    let {item} = this.props;
-    let iconVisibility = this.state.isOpIconShown ? '' : ' invisible'; 
-    let pencilIconClassName = 'fa fa-pencil-alt attr-action-icon' + iconVisibility;
-
+    const { item } = this.props;
     let email = '<span class="op-target">' + Utils.HTMLescape(item.email) + '</span>';
-
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <tr>
           <td>
-            <div><a href={siteRoot + 'sys/user-info/' + item.email + '/'}>{item.email}</a></div>
-          </td>
-          <td>{Utils.bytesToSize(item.quota_usage)}{' / '}
-            {quota_total >= 0 ? Utils.bytesToSize(quota_total) : '--'}
+            <Link to={`${siteRoot}sys/users/${encodeURIComponent(item.email)}/`}>{item.email}</Link>
           </td>
           <td>
-            <div>{moment(item.create_time).format('YYYY-MM-DD HH:mm') }{' /'}</div>
-            <div>{item.last_login == '' ? '--' : moment(item.last_login).fromNow()}</div>
+            {`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}
+          </td>
+          <td>
+            {item.last_login ? moment(item.last_login).fromNow() : '--'}
           </td>
         </tr>
       </Fragment>
@@ -121,7 +99,7 @@ class Item extends Component {
   }
 }
 
-class UsersLDAP extends Component {
+class Users extends Component {
 
   constructor(props) {
     super(props);
@@ -131,22 +109,22 @@ class UsersLDAP extends Component {
       userList: {},
       hasNextPage: false,
       currentPage: 1,
-      perPage: 25,
+      perPage: 25
     };
   }
 
   componentDidMount () {
-    this.getUsersListByPage(1);   // init enter the first page
+    this.getUsersListByPage(1);
   }
 
   getUsersListByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListAllLDAPUsers(page, perPage).then(res => {
+    seafileAPI.sysAdminListLDAPUsers(page, perPage).then(res => {
       this.setState({
+        loading: false,
         userList: res.data.ldap_user_list,
         hasNextPage: res.data.has_next_page,
-        loading: false,
-        currentPage: page,
+        currentPage: page
       });
     }).catch((error) => {
       if (error.response) {
@@ -155,6 +133,7 @@ class UsersLDAP extends Component {
             loading: false,
             errorMsg: gettext('Permission denied')
           });
+          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,
@@ -179,11 +158,9 @@ class UsersLDAP extends Component {
   }
 
   render() {
-    //let {  } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
-        </MainPanelTopbar>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <UsersNav currentItem="ldap" />
@@ -206,4 +183,4 @@ class UsersLDAP extends Component {
   }
 }
 
-export default UsersLDAP;
+export default Users;

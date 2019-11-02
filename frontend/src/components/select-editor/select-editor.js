@@ -37,7 +37,11 @@ class SelectEditor extends React.Component {
     for (let i = 0, length = options.length; i < length; i++) {
       let option = {};
       option.value = options[i];
-      option.label = <div>{this.props.translateOption(options[i])}{ this.props.translateExplanation && <div className="permission-editor-explanation">{this.props.translateExplanation(options[i])}</div>}</div>;
+      if (!options[i].length) { // it's ''. for example, intitution option in 'system admin - users' page can be ''.
+        option.label = <div style={{minHeight: '1em'}}></div>;
+      } else {
+        option.label = <div>{this.props.translateOption(options[i])}{ this.props.translateExplanation && <div className="permission-editor-explanation">{this.props.translateExplanation(options[i])}</div>}</div>;
+      }
       this.options.push(option);
     }
 

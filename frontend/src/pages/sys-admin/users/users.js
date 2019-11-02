@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { isPro, username, gettext, multiInstitution, siteRoot } from '../../../utils/constants';
+import { isPro, username, gettext, multiInstitution, siteRoot, loginUrl } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -386,14 +386,14 @@ class Item extends Component {
           </td>
           {(multiInstitution && !isAdmin) &&
             <td>
-          <SelectEditor
-            isTextMode={true}
-            isEditIconShow={isOpIconShown && institutions.length > 0}
-            options={institutions}
-            currentOption={item.institution}
-            onOptionChanged={this.updateInstitution}
-            translateOption={this.translateInstitution}
-          />
+              <SelectEditor
+                isTextMode={true}
+                isEditIconShow={isOpIconShown && institutions.length > 0}
+                options={institutions}
+                currentOption={item.institution}
+                onOptionChanged={this.updateInstitution}
+                translateOption={this.translateInstitution}
+              />
             </td>
           }
           <td>
@@ -574,6 +574,7 @@ class UsersAll extends Component {
             loading: false,
             errorMsg: gettext('Permission denied')
           });
+          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,
@@ -597,7 +598,7 @@ class UsersAll extends Component {
         userList: users,
         loading: false,
         hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count),
-        currentPage: page,
+        currentPage: page
       });
     }).catch((error) => {
       if (error.response) {
@@ -659,17 +660,28 @@ class UsersAll extends Component {
       return user.email;
     });
     seafileAPI.sysAdminDeleteUserInBatch(emails).then(res => {
-      let oldUserList = this.state.userList;
-      let newUserList =  oldUserList.filter(oldUser => {
-        return !res.data.success.some(deletedUser =>{
-          return deletedUser.email == oldUser.email;
+      if (res.data.success.length) {
+        let oldUserList = this.state.userList;
+        let newUserList = oldUserList.filter(oldUser => {
+          return !res.data.success.some(deletedUser =>{
+            return deletedUser.email == oldUser.email;
+          });
         });
+        this.setState({
+          userList: newUserList,
+          hasUserSelected: emails.length != res.data.success.length
+        });
+        const length = res.data.success.length;
+        const msg = length == 1 ?
+          gettext('Successfully deleted 1 user.') :
+          gettext('Successfully deleted {user_number_placeholder} users.')
+            .replace('{user_number_placeholder}', length);
+        toaster.success(msg);
+      }
+      res.data.failed.map(item => {
+        const msg = `${item.email}: ${item.error_msg}`;
+        toaster.danger(msg);
       });
-      this.setState({
-        userList: newUserList,
-        hasUserSelected: emails.length != res .data.success.length
-      });
-      // todo: msg
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -678,13 +690,22 @@ class UsersAll extends Component {
 
   importUserInBatch = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
-    // TODO: the url needs to be changed
     seafileAPI.sysAdminImportUserViaFile(file).then((res) => {
-      // currently using old view in python, no return newUserList, 
-      // so after import new users, just send a get user list again.
-      this.toggleImportUserDialog();
-      this.getUsersListByPage(1);
-      toaster.success(gettext('Import succeeded.'));
+      if (res.data.success.length) {
+        const users = res.data.success.map(item => {
+          if (item.institution == undefined) {
+            item.institution = '';
+          }
+          return new SysAdminUser(item);
+        });
+        this.setState({
+          userList: users.concat(this.state.userList) 
+        });
+      }
+      res.data.failed.map(item => {
+        const msg = `${item.email}: ${item.error_msg}`;
+        toaster.danger(msg);
+      });
     }).catch((error) => {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
@@ -853,6 +874,7 @@ class UsersAll extends Component {
                 hasNextPage={this.state.hasNextPage}
                 curPerPage={this.state.perPage}
                 resetPerPage={this.resetPerPage}
+                getListByPage={this.getUsersListByPage}
                 updateUser={this.updateUser}
                 deleteUser={this.deleteUser}
                 updateAdminRole={this.updateAdminRole}
@@ -860,7 +882,6 @@ class UsersAll extends Component {
                 onUserSelected={this.onUserSelected}
                 isAllUsersSelected={this.isAllUsersSelected}
                 toggleSelectAllUsers={this.toggleSelectAllUsers}
-                getListByPage={this.getUsersListByPage}
               />
             </div>
           </div>
