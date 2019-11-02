@@ -11,6 +11,7 @@ from django.db.models.manager import EmptyManager
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
@@ -170,3 +171,7 @@ from registration.signals import user_deleted
 def user_deleted_cb(sender, **kwargs):
     username = kwargs['username']
     SocialAuthUser.objects.filter(username=username).delete()
+    # if user is institution admin, delete recored in InstitutionAdmin
+    if getattr(settings, 'MULTI_INSTITUTION', False):
+        from seahub.institutions.models import InstitutionAdmin
+        InstitutionAdmin.objects.filter(user=username).delete()

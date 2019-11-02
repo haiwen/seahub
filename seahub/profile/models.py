@@ -12,6 +12,7 @@ from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOU
 from seahub.institutions.models import Institution
 from registration.signals import user_registered
 from seahub.signals import institution_deleted
+from seahub.institutions.models import InstitutionAdmin
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -238,4 +239,5 @@ def update_profile_cache(sender, instance, **kwargs):
 def remove_user_for_inst_deleted(sender, **kwargs):
     inst_name = kwargs.get("inst_name", "")
     Profile.objects.filter(institution=inst_name).update(institution="")
+    InstitutionAdmin.objects.filter(institution__name=inst_name).delete()
 

@@ -189,3 +189,24 @@ def generate_links_header_for_paginator(base_url, page, per_page, total_count, o
                 (next_page_url, last_page_url, first_page_url, prev_page_url)
 
     return links_header
+
+
+def get_user_quota_usage_and_total(email, org_id=''):
+    try:
+        if org_id:
+            quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
+            quota_total = seafile_api.get_org_user_quota(org_id, email)
+        else:
+            orgs = ccnet_api.get_orgs_by_user(email)
+            if orgs:
+                org_id = orgs[0].org_id
+                quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
+                quota_total = seafile_api.get_org_user_quota(org_id, email)
+            else:
+                quota_usage = seafile_api.get_user_self_usage(email)
+                quota_total = seafile_api.get_user_quota(email)
+    except Exception as e:
+        logger.error(e)
+        quota_usage = -1
+        quota_total = -1
+    return quota_usage, quota_total
