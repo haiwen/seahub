@@ -15,16 +15,15 @@ from rest_framework.views import APIView
 from urllib.parse import quote
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
-from seahub.api2.endpoints.dir import get_dir_file_info_list
+from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 
 from seaserv import seafile_api, get_repo, check_quota
 from pysearpc import SearpcError
 
-from seahub.api2.views import get_dir_file_recursively
+from seahub.repo_api_tokens.utils import get_dir_file_recursively
 from seahub.constants import PERMISSION_READ
-from seahub.repo_api_tokens.utils import permission_check_admin_owner
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
@@ -45,11 +44,6 @@ def check_folder_permission_by_repo_api(request, repo_id, path):
     repo_status = seafile_api.get_repo_status(repo_id)
     if repo_status == 1:
         return PERMISSION_READ
-
-    username = request.token_creator.username  # check token_creator's permission
-
-    if not permission_check_admin_owner(username, repo_id):
-        return None
 
     return request.repo_api_token_obj.permission  # and return repo_api_token's permission
 
@@ -128,12 +122,11 @@ class ViaRepoDirView(APIView):
 
         # get dir/file list recursively
         # username = request.user.username
-        username = request.token_creator.username
+        username = seafile_api.get_repo_owner(repo_id)
         if recursive == '1':
 
             try:
-                dir_file_info_list = get_dir_file_recursively(username, repo_id,
-                                                              parent_dir, [])
+                dir_file_info_list = get_dir_file_recursively(repo_id, parent_dir, [])
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -205,7 +198,7 @@ class ViaRepoDirView(APIView):
         # argument check
         path = request.GET.get('path', None)
         if not path or path[0] != '/':
-            error_msg = 'p invalid.'
+            error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if path == '/':

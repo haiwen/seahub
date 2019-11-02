@@ -49,7 +49,7 @@ class RepoAPITokensView(APIView):
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        rats = RepoAPITokens.objects.filter(repo_id=repo_id, generated_by=username).order_by('-generated_at')
+        rats = RepoAPITokens.objects.filter(repo_id=repo_id).order_by('-generated_at')
         rat_infos = [_get_repo_token_info(rat) for rat in rats]
         return Response({'repo_api_tokens': rat_infos})
 
@@ -77,7 +77,7 @@ class RepoAPITokensView(APIView):
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        rat = RepoAPITokens.objects.filter(app_name=app_name, repo_id=repo_id, generated_by=username).first()
+        rat = RepoAPITokens.objects.filter(app_name=app_name, repo_id=repo_id).first()
         if rat:
             error_msg = _('app: %(app)s token already exists.' % {'app': app_name})
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -113,7 +113,7 @@ class RepoAPITokenView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            rat = RepoAPITokens.objects.filter(repo_id=repo_id, app_name=app_name, generated_by=username).first()
+            rat = RepoAPITokens.objects.filter(repo_id=repo_id, app_name=app_name).first()
             if not rat:
                 error_msg = _('api token not found')
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -143,7 +143,7 @@ class RepoAPITokenView(APIView):
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        rat = RepoAPITokens.objects.filter(app_name=app_name, repo_id=repo_id, generated_by=username).first()
+        rat = RepoAPITokens.objects.filter(app_name=app_name, repo_id=repo_id).first()
         if not rat:
             error_msg = _('api token not found')
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
