@@ -82,12 +82,12 @@ class AdminInstitutionUserTest(BaseTestCase):
         self._add_user_in_institution(self.user.email, inst.name)
 
         url = reverse('api-v2.1-admin-institution-user', args=[inst.id, self.user.email])
-        data = 'is_inst_admin=True'
+        data = 'is_institution_admin=True'
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
 
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['user']['is_inst_admin'] is True
+        assert json_resp['is_institution_admin'] is True
 
         inst.delete()
 
@@ -100,45 +100,5 @@ class AdminInstitutionUserTest(BaseTestCase):
         resp = self.client.delete(url)
 
         self.assertEqual(200, resp.status_code)
-
-        inst.delete()
-
-
-class AdminInstitutionAdminsTest(BaseTestCase):
-
-    def setUp(self):
-        pass
-
-    def _add_institution(self, name=''):
-        return Institution.objects.create(name=name)
-
-    def _delete_institution(self, name=''):
-        try:
-            institution = Institution.objects.get(name=name)
-            institution.delete()
-        except Exception as e:
-            logger.error(e)
-
-    def _add_user_in_institution(self, email, inst_name):
-        profile = Profile.objects.get_profile_by_user(email)
-        if not profile:
-            profile = Profile.objects.add_or_update(username=email)
-        else:
-            profile.institution = inst_name
-        profile.save()
-
-    def test_can_get(self):
-        self.login_as(self.admin)
-        inst = self._add_institution('int1')
-        self._add_user_in_institution(self.user.email, inst.name)
-        InstitutionAdmin.objects.create(institution=inst, user=self.user.email)
-
-        url = reverse('api-v2.1-admin-institution-admins', args=[inst.id])
-        resp = self.client.get(url)
-
-        self.assertEqual(200, resp.status_code)
-        json_resp = json.loads(resp.content)
-        assert type(json_resp['admin_user_list']) is list
-        assert json_resp['admin_user_list'][0]['email'] == self.user.email
 
         inst.delete()

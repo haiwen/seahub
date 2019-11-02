@@ -239,8 +239,6 @@ def get_api_token(request, keys=None, key_prefix='shib_'):
 def to_python_boolean(string):
     """Convert a string to boolean.
     """
-    if type(string) == bool:
-        return string
     string = string.lower()
     if string in ('t', 'true', '1'):
         return True

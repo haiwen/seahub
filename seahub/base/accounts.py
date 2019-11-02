@@ -413,15 +413,6 @@ class User(object):
             UserTermsAndConditions.objects.filter(username=username).delete()
         self.delete_user_options(username)
 
-        # if user is institution admin, delete recored in InstitutionAdmin
-        if getattr(settings, 'MULTI_INSTITUTION', False):
-            from seahub.institutions.models import InstitutionAdmin
-            try:
-                InstitutionAdmin.objects.get(user=username).delete()
-            except InstitutionAdmin.DoesNotExist:
-                pass
-
-
     def get_username(self):
         return self.username
 

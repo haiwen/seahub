@@ -46,12 +46,6 @@ class ProfileManager(models.Manager):
         if institution is not None:
             institution = institution.strip()
             profile.institution = institution
-            # if user is institution admin, delete recored in InstitutionAdmin
-            from seahub.institutions.models import InstitutionAdmin
-            try:
-                InstitutionAdmin.objects.get(user=username).delete()
-            except InstitutionAdmin.DoesNotExist:
-                pass
         if list_in_address_book is not None:
             profile.list_in_address_book = list_in_address_book.lower() == 'true'
 

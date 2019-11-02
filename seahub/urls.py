@@ -130,7 +130,7 @@ from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminU
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.organizations import AdminOrganizations, AdminOrganization
 from seahub.api2.endpoints.admin.institutions import AdminInstitutions, AdminInstitution
-from seahub.api2.endpoints.admin.institution_users import AdminInstitutionUsers, AdminInstitutionUser, AdminInstitutionAdmins
+from seahub.api2.endpoints.admin.institution_users import AdminInstitutionUsers, AdminInstitutionUser
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
 from seahub.api2.endpoints.admin.org_groups import AdminOrgGroups
 from seahub.api2.endpoints.admin.org_repos import AdminOrgRepos
@@ -549,10 +549,9 @@ urlpatterns = [
 
     ## admin::institutions
     url(r'^api/v2.1/admin/institutions/$', AdminInstitutions.as_view(), name='api-v2.1-admin-institutions'),
-    url(r'^api/v2.1/admin/institutions/(?P<inst_id>\d+)/$', AdminInstitution.as_view(), name='api-v2.1-admin-institution'),
-    url(r'^api/v2.1/admin/institutions/(?P<inst_id>\d+)/users/$', AdminInstitutionUsers.as_view(), name='api-v2.1-admin-institution-users'),
-    url(r'^api/v2.1/admin/institutions/(?P<inst_id>\d+)/users/(?P<email>[^/]+)/$', AdminInstitutionUser.as_view(), name='api-v2.1-admin-institution-user'),
-    url(r'^api/v2.1/admin/institutions/(?P<inst_id>\d+)/admins/$', AdminInstitutionAdmins.as_view(), name='api-v2.1-admin-institution-admins'),
+    url(r'^api/v2.1/admin/institutions/(?P<institution_id>\d+)/$', AdminInstitution.as_view(), name='api-v2.1-admin-institution'),
+    url(r'^api/v2.1/admin/institutions/(?P<institution_id>\d+)/users/$', AdminInstitutionUsers.as_view(), name='api-v2.1-admin-institution-users'),
+    url(r'^api/v2.1/admin/institutions/(?P<institution_id>\d+)/users/(?P<email>[^/]+)/$', AdminInstitutionUser.as_view(), name='api-v2.1-admin-institution-user'),
 
     ## admin::logo
     url(r'^api/v2.1/admin/logo/$', AdminLogo.as_view(), name='api-v2.1-admin-logo'),

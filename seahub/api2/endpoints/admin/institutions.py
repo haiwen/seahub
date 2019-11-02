@@ -15,7 +15,7 @@ from seahub.api2.utils import api_error
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.institutions.models import Institution, InstitutionQuota
+from seahub.institutions.models import Institution, InstitutionQuota, InstitutionAdmin
 from seahub.institutions.utils import get_institution_space_usage
 from seahub.signals import institution_deleted
 
@@ -74,10 +74,11 @@ class AdminInstitutions(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         info = {}
+        info['id'] = institution.id
         info['name'] = institution.name
         info['ctime'] = datetime_to_isoformat_timestr(institution.create_time)
 
-        return Response({'institution': info})
+        return Response(info)
 
 
 class AdminInstitution(APIView):
@@ -86,14 +87,14 @@ class AdminInstitution(APIView):
     permission_classes = (IsAdminUser, )
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, inst_id):
+    def get(self, request, institution_id):
         """Get an Institution's info
         """
         try:
-            institution = Institution.objects.get(id=inst_id)
+            institution = Institution.objects.get(id=institution_id)
         except Exception as e:
             logger.error(e)
-            error_msg = "institution %s not found." % inst_id
+            error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         info = {}
@@ -104,16 +105,16 @@ class AdminInstitution(APIView):
         info['quota_total'] = InstitutionQuota.objects.get_or_none(institution=institution)
         info['quota_used'] = get_institution_space_usage(institution)
 
-        return Response({'institution': info})
+        return Response(info)
 
-    def put(self, request, inst_id):
+    def put(self, request, institution_id):
         """Update (quota) of institution
         """
         try:
-            institution = Institution.objects.get(id=inst_id)
+            institution = Institution.objects.get(id=institution_id)
         except Exception as e:
             logger.error(e)
-            error_msg = "institution %s not found." % inst_id
+            error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         quota_mb = request.data.get('quota', '')
@@ -144,16 +145,16 @@ class AdminInstitution(APIView):
         info['quota_total'] = InstitutionQuota.objects.get_or_none(institution=institution)
         info['quota_used'] = get_institution_space_usage(institution)
 
-        return Response({'institution': info})
+        return Response(info)
 
-    def delete(self, request, inst_id):
+    def delete(self, request, institution_id):
         """Delete an Institution
         """
         try:
-            institution = Institution.objects.get(id=inst_id)
+            institution = Institution.objects.get(id=institution_id)
         except Exception as e:
             logger.error(e)
-            error_msg = "institution %s not found." % inst_id
+            error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
@@ -163,5 +164,7 @@ class AdminInstitution(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # delete user and admin in institution
         institution_deleted.send(sender=None, inst_name=institution.name)
+        InstitutionAdmin.objects.filter(institution=institution).delete()
         return Response({'success': True})

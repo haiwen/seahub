@@ -11,7 +11,7 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.utils import api_error
 
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.base.accounts import User
@@ -26,67 +26,86 @@ from seahub.institutions.utils import is_institution_admin
 logger = logging.getLogger(__name__)
 
 
+def get_institution_user_info(user_obj, institution):
+    info = {}
+    info['email'] = user_obj.email
+    info['name'] = email2nickname(user_obj.email)
+    info['contact_email'] = email2contact_email(user_obj.email)
+
+    info['quota_usage'], info['quota_total'] = get_user_quota_usage_and_total(user_obj.email)
+
+    info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
+    info['is_active'] = user_obj.is_active
+    info['is_institution_admin'] = is_institution_admin(user_obj.email, institution)
+
+    last_login_obj = UserLastLogin.objects.get_by_username(user_obj.email)
+    info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+
+    return info
+
+
 class AdminInstitutionUsers(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser, )
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, inst_id):
+    def get(self, request, institution_id):
         """List users of an Institution
         """
         try:
-            institution = Institution.objects.get(id=inst_id)
+            institution = Institution.objects.get(id=institution_id)
         except Institution.DoesNotExist:
-            error_msg = "institution %s not found." % inst_id
+            error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        try:
-            current_page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '100'))
-        except ValueError:
-            current_page = 1
-            per_page = 100
+        get_admin = request.GET.get('get_admin')
+        if get_admin:
+            get_admin = get_admin.lower()
+            if get_admin not in ('true', 'false'):
+                error_msg = 'get_admin %s invalid' % get_admin
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if get_admin == 'true':
+                emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
 
-        start = (current_page - 1) * per_page
+        if not get_admin or get_admin == 'false':
+            try:
+                current_page = int(request.GET.get('page', '1'))
+                per_page = int(request.GET.get('per_page', '100'))
+            except ValueError:
+                current_page = 1
+                per_page = 100
 
-        profiles = Profile.objects.filter(institution=institution.name)[start:start + per_page]
-        count = Profile.objects.filter(institution=institution.name).count()
-        emails = [x.user for x in profiles]
+            start = (current_page - 1) * per_page
+            profiles = Profile.objects.filter(institution=institution.name)[start:start + per_page]
+            emails = [x.user for x in profiles]
+
+        user_objs = []
+        for email in emails:
+            try:
+                user_obj = User.objects.get(email=email)
+                user_objs.append(user_obj)
+            except User.DoesNotExist:
+                continue
 
         user_info = []
-        for email in emails:
-            info = {}
-            info['email'] = email
-            info['name'] = email2nickname(email)
-            info['contact_email'] = email2contact_email(email)
-
-            info['quota_usage'], info['quota_total'] = get_user_quota_usage_and_total(email)
-
-            user_obj = User.objects.get(email=email)
-            info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
-            info['is_active'] = user_obj.is_active
-            info['is_inst_admin'] = is_institution_admin(email)
-
-            last_login_obj = UserLastLogin.objects.get_by_username(email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
-
-            user_info.append(info)
+        for user in user_objs:
+            user_info.append(get_institution_user_info(user, institution))
 
         resp = {
             'user_list': user_info,
-            'total_count': count,
+            'total_count': len(user_objs),
         }
         return Response(resp)
 
-    def post(self, request, inst_id):
+    def post(self, request, institution_id):
         """Add users to Institution
         """
 
         try:
-            institution = Institution.objects.get(id=inst_id)
+            institution = Institution.objects.get(id=institution_id)
         except Institution.DoesNotExist:
-            error_msg = "institution %s not found." % inst_id
+            error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # argument check
@@ -134,21 +153,7 @@ class AdminInstitutionUsers(APIView):
                 profile.institution = institution.name
             profile.save()
 
-            info = {}
-            info['email'] = email
-            info['name'] = email2nickname(email)
-            info['contact_email'] = email2contact_email(email)
-
-            info['quota_usage'], info['quota_total'] = get_user_quota_usage_and_total(email)
-
-            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
-            info['is_active'] = user.is_active
-            info['is_inst_admin'] = is_institution_admin(email)
-
-            last_login_obj = UserLastLogin.objects.get_by_username(email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
-
-            result['success'].append(info)
+            result['success'].append(get_institution_user_info(user, institution))
         return Response(result)
 
 
@@ -158,13 +163,13 @@ class AdminInstitutionUser(APIView):
     permission_classes = (IsAdminUser, )
     throttle_classes = (UserRateThrottle, )
 
-    def put(self, request, inst_id, email):
+    def put(self, request, institution_id, email):
         """ Update user of an institution
         """
         try:
-            institution = Institution.objects.get(id=inst_id)
+            institution = Institution.objects.get(id=institution_id)
         except Institution.DoesNotExist:
-            error_msg = "institution %s not found." % inst_id
+            error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
@@ -173,63 +178,48 @@ class AdminInstitutionUser(APIView):
             error_msg = "user %s not found." % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        profile = Profile.objects.get_profile_by_user(email)
+        if not profile or profile.institution != institution.name:
+            error_msg = 'email %s invalid' % email
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if user.is_staff:
             error_msg = _('Can not assign institutional administration roles to global administrators')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        is_admin = request.data.get('is_inst_admin', 'False')
+        is_institution_admin = request.data.get('is_institution_admin')
+        if not is_institution_admin:
+            error_msg = 'is_institution_admin invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        is_institution_admin = is_institution_admin.lower()
+        if is_institution_admin not in ('true', 'false'):
+            error_msg = 'is_institution_admin %s invalid' % is_institution_admin
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
-            is_admin = to_python_boolean(is_admin)
-        except Exception as e:
-            logging.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        try:
-            if is_admin:
-                # if user not in this institution, cannot set to institution admin
-                profile = Profile.objects.get_profile_by_user(email)
-                if not profile or profile.institution != institution.name:
-                    error_msg = 'email %s invalid' % email
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if is_institution_admin == 'true':
                 # if user is already inst admin, cannot set to institution admin
-                try:
-                    InstitutionAdmin.objects.get(user=email)
-                    error_msg = 'email %s invalid' % email
+                admins = InstitutionAdmin.objects.filter(user=email)
+                if len(admins) >= 1:
+                    error_msg = 'user %s is already admin' % email
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-                except InstitutionAdmin.DoesNotExist:
-                    pass
                 InstitutionAdmin.objects.create(institution=institution, user=email)
             else:
-                institution_admin = InstitutionAdmin.objects.filter(institution=institution, user=email)
-                institution_admin.delete()
+                InstitutionAdmin.objects.filter(institution=institution, user=email).delete()
         except Exception as e:
             logging.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        info = {}
-        info['email'] = email
-        info['name'] = email2nickname(email)
-        info['contact_email'] = email2contact_email(email)
+        return Response(get_institution_user_info(user, institution))
 
-        info['quota_usage'], info['quota_total'] = get_user_quota_usage_and_total(email)
-
-        info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
-        info['is_active'] = user.is_active
-        info['is_inst_admin'] = is_institution_admin(email)
-
-        last_login_obj = UserLastLogin.objects.get_by_username(email)
-        info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
-
-        return Response({'user': info})
-
-    def delete(self, request, inst_id, email):
+    def delete(self, request, institution_id, email):
         """ Delete user from an institution
         """
         try:
-            institution = Institution.objects.get(id=inst_id)
+            institution = Institution.objects.get(id=institution_id)
         except Institution.DoesNotExist:
-            error_msg = "institution %s not found." % inst_id
+            error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
@@ -250,47 +240,7 @@ class AdminInstitutionUser(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # if email is admin, delete from InstitutionAdmin table
+        InstitutionAdmin.objects.filter(user=email).delete()
+
         return Response({'success': True})
-
-
-class AdminInstitutionAdmins(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, inst_id):
-        """ List admin users of an Institution
-        """
-        try:
-            institution = Institution.objects.get(id=inst_id)
-        except Institution.DoesNotExist:
-            error_msg = "institution %s not found." % inst_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
-        user_info = []
-        for email in admin_emails:
-            try:
-                user_obj = User.objects.get(email=email)
-            except User.DoesNotExist:
-                continue
-
-            info = {}
-            info['email'] = email
-            info['name'] = email2nickname(email)
-            info['contact_email'] = email2contact_email(email)
-
-            info['quota_usage'], info['quota_total'] = get_user_quota_usage_and_total(email)
-
-            info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
-            info['is_active'] = user_obj.is_active
-
-            last_login_obj = UserLastLogin.objects.get_by_username(email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
-
-            user_info.append(info)
-
-        resp = {
-            'admin_user_list': user_info,
-        }
-        return Response(resp)

@@ -49,7 +49,7 @@ class InstitutionsTest(BaseTestCase):
         resp = self.client.post(url, data)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['institution']['name'] == institution_name
+        assert json_resp['name'] == institution_name
 
         self._delete_institution(institution_name)
 
@@ -78,8 +78,8 @@ class InstitutionTest(BaseTestCase):
 
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['institution']['id'] == inst.id
-        assert json_resp['institution']['name'] == institution_name
+        assert json_resp['id'] == inst.id
+        assert json_resp['name'] == institution_name
 
         inst.delete()
 
@@ -94,7 +94,7 @@ class InstitutionTest(BaseTestCase):
 
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['institution']['quota_total'] == 1024 * 1000 * 1000
+        assert json_resp['quota_total'] == 1024 * 1000 * 1000
 
         inst.delete()
 

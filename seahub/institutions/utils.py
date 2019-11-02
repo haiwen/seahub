@@ -25,9 +25,11 @@ def get_institution_available_quota(inst):
     return 0 if allocated >= inst_quota else inst_quota - allocated
 
 
-def is_institution_admin(email):
-    try:
-        InstitutionAdmin.objects.get(user=email)
-        return True
-    except InstitutionAdmin.DoesNotExist:
-        return False
+def is_institution_admin(email, institution=None):
+    # if institution_name is given, return if email is admin in institution
+    # else, return if email is admin in all institutions
+    if institution:
+        admins = InstitutionAdmin.objects.filter(user=email, institution=institution)
+    else:
+        admins = InstitutionAdmin.objects.filter(user=email)
+    return len(admins) >= 1
