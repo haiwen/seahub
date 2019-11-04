@@ -316,7 +316,7 @@ class InstitutionUsers extends Component {
   }
 
   addUser = (emails) => {
-    seafileAPI.sysAdminAddInstitutionUser(this.props.institutionID, emails).then(res => {
+    seafileAPI.sysAdminAddInstitutionUserBatch(this.props.institutionID, emails).then(res => {
       let successArray = res.data.success;
       let failedArray = res.data.failed;
       let tipStr = gettext('Add {totalCount} members. {successCount} success, {failedCount} failed.')
