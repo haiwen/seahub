@@ -53,7 +53,7 @@ class MylibRepoMenu extends React.Component {
   generatorOperations = () => {
     let repo = this.props.repo;
     let showResetPasswordMenuItem = repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
-    let operations = ['Rename', 'Transfer', 'History Setting'];
+    let operations = ['Rename', 'Transfer', 'History Setting', 'API Token'];
     if (repo.encrypted) {
       operations.push('Change Password');
     }
@@ -104,6 +104,9 @@ class MylibRepoMenu extends React.Component {
         break;
       case 'Label Current State':
         translateResult = gettext('Label Current State');
+        break;
+      case 'API Token':
+        translateResult = gettext('API Token');
         break;
       default:
         break;

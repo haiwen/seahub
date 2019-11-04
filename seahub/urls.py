@@ -90,6 +90,8 @@ from seahub.api2.endpoints.starred_items import StarredItems
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
+from seahub.api2.endpoints.repo_api_tokens import RepoAPITokensView, RepoAPITokenView
+from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLinkView
 
 
 # Admin
@@ -367,6 +369,14 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participants/$', FileParticipantsView.as_view(), name='api-v2.1-file-participants'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participant/$', FileParticipantView.as_view(), name='api-v2.1-file-participant'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/related-users/$', RepoRelatedUsersView.as_view(), name='api-v2.1-related-user'),
+
+    ## user:: repo-api-tokens
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/(?P<app_name>.*)/$', RepoAPITokenView.as_view(), name='api-v2.1-repo-api-token'),
+
+    ## access repo from repo_api_tokens
+    url(r'^api/v2.1/via-repo-token/(?P<repo_id>[-0-9a-f]{36})/dir/$', ViaRepoDirView.as_view(), name='via-repo-dir'),
+    url(r'^api/v2.1/via-repo-token/(?P<repo_id>[-0-9a-f]{36})/upload-link/$', ViaRepoUploadLinkView.as_view(), name='via-upload-link'),
 
     # user::related-files
     url(r'^api/v2.1/related-files/$', RelatedFilesView.as_view(), name='api-v2.1-related-files'),
