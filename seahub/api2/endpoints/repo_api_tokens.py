@@ -14,7 +14,7 @@ from seahub.api2.utils import api_error
 
 from seaserv import seafile_api
 
-from seahub.constants import PERMISSION_READ
+from seahub.constants import PERMISSION_READ_WRITE
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.repo_api_tokens.utils import permission_check_admin_owner
 
@@ -40,7 +40,7 @@ class RepoAPITokensView(APIView):
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = _('app_name invalid.')
+            error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -63,7 +63,7 @@ class RepoAPITokensView(APIView):
         if repo_permission and repo_permission not in [perm[0] for perm in RepoAPITokens.PERMISSION_CHOICES]:
             error_msg = _('permission invalid.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        repo_permission = repo_permission if repo_permission else PERMISSION_READ
+        repo_permission = repo_permission if repo_permission else PERMISSION_READ_WRITE
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
