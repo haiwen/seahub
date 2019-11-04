@@ -62,12 +62,13 @@ class APITokenItem extends React.Component {
             onPermissionChanged={this.onUpdateAPIToken}
           />
         </td>
-        <td>{item.api_token}</td>
         <td>
-          <span
-            className="far fa-copy action-icon"
-            onClick={this.onCopyAPIToken}
-          />
+          <Fragment>
+            <span>{item.api_token}</span>
+            {this.state.isOperationShow &&
+              <span className="far fa-copy action-icon" onClick={this.onCopyAPIToken} />
+            }
+          </Fragment>
         </td>
         <td>
           <span
@@ -95,7 +96,7 @@ class RepoAPITokenDialog extends React.Component {
     super(props);
     this.state = {
       apiTokenList: [],
-      permission: '',
+      permission: 'rw',
       appName: '',
       errorMsg: '',
       loading: true,
@@ -267,8 +268,7 @@ class RepoAPITokenDialog extends React.Component {
                     <th width="22%">{gettext('App Name')}</th>
                     <th width="15%">{gettext('Permission')}</th>
                     <th width="53%">{gettext('Access Token')}</th>
-                    <th width="5%"></th>
-                    <th width="5%"></th>
+                    <th width="10%"></th>
                   </tr>
                 </thead>
                 <tbody>
