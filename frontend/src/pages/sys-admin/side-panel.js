@@ -137,10 +137,14 @@ class SidePanel extends React.Component {
                 }
                 {multiInstitution && isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sys/instadmin/'}>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('institutions')}`}
+                      to={siteRoot + 'sys/institutions/'}
+                      onClick={() => this.props.tabItemClick('institutions')}
+                    >
                       <span className="sf2-icon-organization" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Institutions')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {isDefaultAdmin &&
