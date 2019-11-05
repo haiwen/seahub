@@ -10,6 +10,7 @@ const propTypes = {
   filePath: PropTypes.string.isRequired,
   toggleAddAbuseReportDialog: PropTypes.func.isRequired,
   isAddAbuseReportDialogOpen: PropTypes.bool.isRequired,
+  contactEmail: PropTypes.string.isRequired,
 };
 
 class AddAbuseReportDialog extends React.Component {
@@ -19,7 +20,7 @@ class AddAbuseReportDialog extends React.Component {
     this.state = {
       abuseType: 'copyright',
       description: '',
-      reporter: '',
+      reporter: this.props.contactEmail,
       errMessage: '',
     };
   }
@@ -77,7 +78,7 @@ class AddAbuseReportDialog extends React.Component {
             </FormGroup>
             <FormGroup>
               <Label>{gettext("Contact Information")}</Label>
-              <Input type="text" onChange={(event) => this.setReporter(event)}/>
+              <Input type="text" value={this.state.reporter} onChange={(event) => this.setReporter(event)}/>
             </FormGroup>
             <FormGroup>
               <Label>{gettext("Description")}</Label>

@@ -16,6 +16,7 @@ const propTypes = {
 };
 
 let loginUser = window.app.pageOptions.name;
+let contactEmail = window.app.pageOptions.contactEmail;
 const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload, zipped, filePath, enableShareLinkReportAbuse } = window.shared.pageOptions;
 
 class SharedFileView extends React.Component {
@@ -123,7 +124,7 @@ class SharedFileView extends React.Component {
               {(canDownload && !trafficOverLimit) &&
                 <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
               }{' '}
-              {enableShareLinkReportAbuse &&
+              {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) &&
                 <Button
                   onClick={this.toggleAddAbuseReportDialog}>{gettext('Report Abuse')}
                 </Button>
@@ -146,6 +147,7 @@ class SharedFileView extends React.Component {
             filePath={filePath}
             toggleAddAbuseReportDialog={this.toggleAddAbuseReportDialog}
             isAddAbuseReportDialogOpen={this.state.isAddAbuseReportDialogOpen}
+            contactEmail={contactEmail}
           />
         }
       </div>
