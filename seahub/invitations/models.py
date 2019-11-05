@@ -12,7 +12,7 @@ from seahub.utils import gen_token, get_site_name
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 
-GUEST = _('Guest')
+GUEST = 'Guest'
 
 class InvitationManager(models.Manager):
     def add(self, inviter, accepter, invite_type=GUEST):
