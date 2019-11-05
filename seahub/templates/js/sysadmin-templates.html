@@ -118,9 +118,16 @@
         </li>
         {% endif %}
 
+
         {% if is_default_admin and enable_work_weixin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/work-weixin/departments/"><span class="sf3-font-enterprise-wechat sf3-font"></span>企业微信集成</a>
+        </li>
+        {% endif %}
+
+        {% if is_default_admin and enable_share_link_report_abuse %}
+        <li class="tab<% if (cur_tab == 'abuse-reports') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}sys/abuse-reports/"><span class="sf2-icon-monitor"></span>{% trans "Abuse Reports" %}</a>
         </li>
         {% endif %}
 
@@ -1023,4 +1030,56 @@
     <% } %>
     </td>
     <td><time title="<%- time %>"><%- time_from_now %></time></td>
+</script>
+
+<script type="text/template" id="abuse-reports-tmpl">
+    <div class="hd ovhd">
+        <h3 class="fleft">{% trans "Abuse Reports" %}</h3>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <table>
+        <thead>
+            <tr>
+                <th width="5%"><!--icon--></th>
+                <th width="15%">{% trans "Library" %}</th>
+                <th width="20%">{% trans "File" %}</th>
+                <th width="10%">{% trans "Reporter" %}</th>
+                <th width="15%">{% trans "Abuse Type" %}</th>
+                <th width="15%">{% trans "Description" %}</th>
+                <th width="10%">{% trans "Time" %}</th>
+                <th width="5%">{% trans "Handled" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No abuse reports" %}</h2>
+    </div>
+    <p class="error error-tip hide"></p>
+</script>
+
+<script type="text/template" id="abuse-report-item-tmpl">
+    <td>
+        <img src="<%= icon_url %>" width="24" />
+    </td>
+    <td><%- repo_name %></td>
+    <td><%- file_path %></td>
+    <td>
+    <% if (reporter) { %>
+        <%- reporter %>
+    <% } else { %>
+        --
+    <% } %>
+    </td>
+    <td><%- abuse_type_output %></td>
+    <td>
+    <% if (description) { %>
+        <%- description %>
+    <% } else { %>
+        --
+    <% } %>
+    </td>
+    <td><time title="<%= time %>"><%= time_from_now %></time></td>
+    <td class='abuse-report-handle cspt' ><%- handled %></td>
 </script>

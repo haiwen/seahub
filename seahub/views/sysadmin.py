@@ -76,7 +76,8 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
-    ENABLE_LIMIT_IPADDRESS 
+    ENABLE_LIMIT_IPADDRESS, ENABLE_SHARE_LINK_REPORT_ABUSE
+
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -134,6 +135,7 @@ def sysadmin(request):
             'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
             'enable_file_scan': ENABLE_FILE_SCAN,
             'enable_work_weixin': ENABLE_WORK_WEIXIN,
+            'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
             })
 
 @login_required
@@ -168,6 +170,7 @@ def sysadmin_react_fake_view(request, **kwargs):
         'available_admin_roles': get_available_admin_roles(),
         'have_ldap': get_ldap_info(),
         'two_factor_auth_enabled': has_two_factor_auth(),
+        'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
     })
 
 @login_required
@@ -393,7 +396,7 @@ def sys_user_admin(request):
             profile = Profile.objects.get_profile_by_user(user.email)
             user.institution =  profile.institution if profile else ''
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_useradmin.html', {
             'users': users,
             'current_page': current_page,
@@ -598,7 +601,7 @@ def sys_user_admin_ldap_imported(request):
             profile = Profile.objects.get_profile_by_user(user.email)
             user.institution =  profile.institution if profile else ''
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_user_admin_ldap_imported.html', {
             'users': users,
             'current_page': current_page,
@@ -649,7 +652,7 @@ def sys_user_admin_ldap(request):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_useradmin_ldap.html', {
             'users': users,
             'current_page': current_page,
@@ -708,7 +711,7 @@ def sys_user_admin_admins(request):
     extra_admin_roles = [x for x in get_available_admin_roles()
                         if x not in get_basic_admin_roles()]
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_useradmin_admins.html', {
             'users': admin_users,
             'not_admin_users': not_admin_users,
@@ -851,7 +854,7 @@ def user_info(request, email):
 
     force_2fa = UserOptions.objects.is_force_2fa(user.username)
 
-    return render(request, 
+    return render(request,
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
             'space_quota': space_quota,
@@ -1446,7 +1449,7 @@ def sys_org_search(request):
 
     extra_org_roles = [x for x in get_available_roles() if x != DEFAULT_ORG]
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_org_search.html', {
             'orgs': orgs,
             'name': org_name,
@@ -1699,7 +1702,7 @@ def sys_publink_admin(request):
         else:
             l.name = os.path.dirname(l.path)
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_publink_admin.html', {
             'publinks': publinks,
             'current_page': current_page,
@@ -1740,7 +1743,7 @@ def sys_upload_link_admin(request):
     else:
         page_next = False
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_upload_link_admin.html', {
             'uploadlinks': uploadlinks,
             'current_page': current_page,
@@ -1804,7 +1807,7 @@ def sys_link_search(request):
         else:
             l.name = os.path.dirname(l.path)
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_link_search.html', {
             'publinks': publinks,
             'token': token
@@ -1953,7 +1956,7 @@ def sys_virus_scan_records(request):
         r.repo.owner = seafile_api.get_repo_owner(r.repo.repo_id)
         records.append(r)
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_virus_scan_records.html', {
             'records': records,
             'current_page': current_page,
@@ -2024,7 +2027,7 @@ def batch_add_user_example(request):
     if not next_page:
         next_page = SITE_ROOT
     data_list = []
-    head = [_('Email'), _('Password'), _('Name')+ '(' + _('Optional') + ')', 
+    head = [_('Email'), _('Password'), _('Name')+ '(' + _('Optional') + ')',
             _('Role') + '(' + _('Optional') + ')', _('Space Quota') + '(MB, ' + _('Optional') + ')']
     for i in range(5):
         username = "test" + str(i) +"@example.com"
@@ -2183,7 +2186,7 @@ def sys_sudo_mode(request):
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
-    return render(request, 
+    return render(request,
         'sysadmin/sudo_mode.html', {
             'password_error': password_error,
             'enable_sso': enable_shib_login or enable_adfs_login,
@@ -2329,7 +2332,7 @@ def sys_inst_admin(request):
     else:
         page_next = False
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_inst_admin.html', {
             'insts': insts[:per_page],
             'current_page': current_page,
@@ -2616,7 +2619,7 @@ def sys_invitation_admin(request):
     else:
         page_next = False
 
-    return render(request, 
+    return render(request,
         'sysadmin/sys_invitations_admin.html', {
             'invitations': invitations,
             'current_page': current_page,

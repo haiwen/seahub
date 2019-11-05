@@ -44,8 +44,8 @@ class FileContent extends React.Component {
       let imageUrl = innerNode.data.src;
 
       const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
-      
-      // different repo 
+
+      // different repo
       if (!re.test(imageUrl)) {
         return;
       }
@@ -78,7 +78,7 @@ class FileContent extends React.Component {
     return (
       <div className="shared-file-view-body">
         <div className="md-view">
-          <MarkdownViewer 
+          <MarkdownViewer
             markdownContent={this.state.markdownContent}
             showTOC={false}
             serviceURL={serviceURL}

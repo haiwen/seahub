@@ -255,6 +255,7 @@ INSTALLED_APPS = (
     'seahub.work_weixin',
     'seahub.file_participants',
     'seahub.repo_api_tokens',
+    'seahub.abuse_reports',
 )
 
 # Enable or disable view File Scan
@@ -346,6 +347,9 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
+
+# enable or disable report abuse file on share link page
+ENABLE_SHARE_LINK_REPORT_ABUSE = False
 
 # share link audit code timeout
 SHARE_LINK_AUDIT_CODE_TIMEOUT = 60 * 60

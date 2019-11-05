@@ -29,7 +29,8 @@ from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
     MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD, SHARE_LINK_EXPIRE_DAYS_MIN, \
-    SHARE_LINK_EXPIRE_DAYS_MAX, SEAFILE_COLLAB_SERVER
+    SHARE_LINK_EXPIRE_DAYS_MAX, SEAFILE_COLLAB_SERVER, \
+    ENABLE_SHARE_LINK_REPORT_ABUSE
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.constants import HASH_URLS
@@ -341,7 +342,8 @@ def view_shared_dir(request, fileshare):
             'mode': mode,
             'thumbnail_size': thumbnail_size,
             'dir_share_link': dir_share_link,
-            'desc_for_ogp': desc_for_ogp
+            'desc_for_ogp': desc_for_ogp,
+            'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
             })
 
 @share_link_audit

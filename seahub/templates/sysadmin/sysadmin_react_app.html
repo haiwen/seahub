@@ -42,6 +42,7 @@
         return list;
       })(),
       haveLDAP: {% if have_ldap %} true {% else %} false {% endif %},
+      enable_share_link_report_abuse: {% if enable_share_link_report_abuse %} true {% else %} false {% endif %},
 			admin_permissions: {
         "can_view_system_info": {% if user.admin_permissions.can_view_system_info %} true {% else %} false {% endif %},
         "can_view_statistic": {% if user.admin_permissions.can_view_statistic %} true {% else %} false {% endif %},

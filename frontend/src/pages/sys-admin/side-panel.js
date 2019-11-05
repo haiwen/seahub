@@ -5,7 +5,8 @@ import Logo from '../../components/logo';
 import { gettext, siteRoot, isPro, isDefaultAdmin, canViewSystemInfo, canViewStatistic,
   canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
   canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
-  enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin } from '../../utils/constants';
+  enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin,
+  enableShareLinkReportAbuse } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -244,6 +245,18 @@ class SidePanel extends React.Component {
                     >
                       <span className="sf3-font-enterprise-wechat sf3-font" aria-hidden="true"></span>
                       <span className="nav-text">{'企业微信集成'}</span>
+                    </Link>
+                  </li>
+                }
+                {isDefaultAdmin && enableShareLinkReportAbuse &&
+                  <li className="nav-item">
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('abuse-reports')}`}
+                      to={siteRoot + 'sys/abuse-reports/'}
+                      onClick={() => this.props.tabItemClick('abuse-reports')}
+                    >
+                      <span className="sf2-icon-monitor" aria-hidden="true"></span>
+                      <span className="nav-text">{gettext('Abuse Reports')}</span>
                     </Link>
                   </li>
                 }

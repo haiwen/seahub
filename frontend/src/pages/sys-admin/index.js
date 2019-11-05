@@ -10,6 +10,7 @@ import Info from './info';
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
+import AbuseReports from './abuse-reports';
 
 import Users from './users/users';
 import AdminUsers from './users/admin-users';
@@ -202,6 +203,7 @@ class SysAdmin extends React.Component {
               currentTab={currentTab}
               tabItemClick={this.tabItemClick}
             />
+            <AbuseReports path={siteRoot + 'sys/abuse-reports'} />
           </Router>
         </MainPanel>
       </div>
