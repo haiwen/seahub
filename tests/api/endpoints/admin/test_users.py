@@ -121,7 +121,6 @@ class AdminUserTest(BaseTestCase):
         assert 'is_staff' in json_resp
         assert 'is_active' in json_resp
         assert 'create_time' in json_resp
-        assert 'department' in json_resp
         assert 'quota_total' in json_resp
         assert 'quota_usage' in json_resp
 
@@ -265,23 +264,6 @@ class AdminUserTest(BaseTestCase):
                 'application/json')
         json_resp = json.loads(resp.content)
         self.assertEqual(400, resp.status_code)
-
-
-    def test_update_department(self):
-
-        self.login_as(self.admin)
-
-        # change user name
-        department = randstring(10)
-        data = {"email": self.tmp_email, "department": department}
-        resp = self.client.put(self.url, json.dumps(data),
-                'application/json')
-        json_resp = json.loads(resp.content)
-        self.assertEqual(200, resp.status_code)
-        assert json_resp['department'] == department
-
-        d_profile = DetailedProfile.objects.get_detailed_profile_by_user(self.tmp_email)
-        assert d_profile.department == department
 
     def test_update_quota_total(self):
 
