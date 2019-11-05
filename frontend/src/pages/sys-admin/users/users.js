@@ -452,7 +452,7 @@ class Item extends Component {
 }
 
 
-class UsersAll extends Component {
+class Users extends Component {
 
   constructor(props) {
     super(props);
@@ -927,4 +927,4 @@ class UsersAll extends Component {
   }
 }
 
-export default UsersAll;
+export default Users;

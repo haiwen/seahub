@@ -56,6 +56,8 @@ import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 
+import Invitations from './invitations/invitations';
+
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
 import '../../assets/css/fontawesome.css';
@@ -178,6 +180,8 @@ class SysAdmin extends React.Component {
             <UserSharedRepos path={siteRoot + 'sys/users/:email/shared-libraries'} />
             <UserLinks path={siteRoot + 'sys/users/:email/shared-links'} />
             <UserGroups path={siteRoot + 'sys/users/:email/groups'} />
+
+            <Invitations path={siteRoot + 'sys/invitations'} />
 
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
