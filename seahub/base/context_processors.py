@@ -15,7 +15,7 @@ from django.conf import settings as dj_settings
 from django.utils.functional import lazy
 from constance import config
 
-from seahub.settings import SEAFILE_VERSION, \
+from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
