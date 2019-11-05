@@ -26,6 +26,12 @@ class AddAbuseReportDialog extends React.Component {
   }
 
   onAbuseReport = () => {
+    if (!this.state.reporter) {
+      this.setState({
+        errMessage: gettext('Contact Information is required.')
+      });
+      return;
+    }
     seafileAPI.addAbuseReport(this.props.sharedToken, this.state.abuseType, this.state.description, this.state.reporter, this.props.filePath).then((res) => {
       this.props.toggleAddAbuseReportDialog();
       toaster.success(gettext('Success'), {duration: 2});
