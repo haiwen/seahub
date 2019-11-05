@@ -1,8 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import Account from '../../components/common/account';
-import {gettext, siteRoot} from '../../utils/constants';
-import {Utils} from '../../utils/utils';
-import {seafileAPI} from '../../utils/seafile-api';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';
 import moment from 'moment';
 
@@ -27,7 +27,7 @@ class AbuseReports extends Component {
 
   updateAbuseReport = (handled, abuseReportId) => {
     seafileAPI.sysAdminUpdateAbuseReport(handled, abuseReportId).then((res) => {
-      const abuseReportList = this.state.abuseReportList.filter((item, index) => {
+      const abuseReportList = this.state.abuseReportList.map((item, index) => {
         if (item.id === abuseReportId) {
           item.handled = res.data.handled;
         }
@@ -59,9 +59,10 @@ class AbuseReports extends Component {
       const handled = (!item.handled).toString();
       const abuseReportId = item.id;
       const fileUrl = siteRoot + 'lib/' + item.repo_id + '/file' + item.file_path;
+      let iconUrl = mediaUrl + 'img/lib/48/lib.png';
       return (
         <tr key={index}>
-          <td><img src="/media/img/lib/48/lib.png" width="24"/></td>
+          <td><img src={iconUrl} width="24"/></td>
           <td>{item.repo_name}</td>
           <td><a href={fileUrl} target="_blank">{item.file_path}</a></td>
           <td>{item.reporter}</td>

@@ -28,7 +28,7 @@ class AddAbuseReportDialog extends React.Component {
   onAbuseReport = () => {
     if (!this.state.reporter) {
       this.setState({
-        errMessage: gettext('Contact Information is required.')
+        errMessage: gettext('Contact information is required.')
       });
       return;
     }
@@ -46,24 +46,19 @@ class AddAbuseReportDialog extends React.Component {
 
   onAbuseTypeChange = (event) => {
     let type = event.target.value;
-    if (type === 'copyright') {
-      this.setState({abuseType: 'copyright'});
-    } else if (type === 'virus') {
-      this.setState({abuseType: 'virus'});
-    } else if (type === 'abuse_content') {
-      this.setState({abuseType: 'abuse_content'});
-    } else if (type === 'other') {
-      this.setState({abuseType: 'other'});
+    if (type === this.state.abuseType) {
+      return;
     }
+    this.setState({abuseType: type});
   };
 
   setReporter = (event) => {
-    let reporter = event.target.value;
+    let reporter = event.target.value.trim();
     this.setState({reporter: reporter});
   };
 
   setDescription = (event) => {
-    let desc = event.target.value;
+    let desc = event.target.value.trim();
     this.setState({description: desc});
   };
 
@@ -76,9 +71,9 @@ class AddAbuseReportDialog extends React.Component {
             <FormGroup>
               <Label for="abuse-type-select">{gettext('Abuse Type')}</Label>
               <Input type="select" id="abuse-type-select" onChange={(event) => this.onAbuseTypeChange(event)}>
-                <option value='copyright'>{gettext('Copyright infringement')}</option>
+                <option value='copyright'>{gettext('Copyright Infringement')}</option>
                 <option value='virus'>{gettext('Virus')}</option>
-                <option value='abuse_content'>{gettext('Abuse content')}</option>
+                <option value='abuse_content'>{gettext('Abuse Content')}</option>
                 <option value='other'>{gettext('Other')}</option>
               </Input>
             </FormGroup>

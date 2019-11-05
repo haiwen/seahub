@@ -69,8 +69,8 @@ body {
       fileType: '{{ filetype }}',
       fileExt: '{{ fileext }}',
       commitID: '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}',
-      enableShareLinkReportAbuse: '{{ enable_share_link_report_abuse }}' == 'True',
-
+      enableShareLinkReportAbuse: {% if enable_share_link_report_abuse %}true{% else %}false{% endif %},
+      
       // for 'view file in shared dir'
       {% if zipped %}
       zipped: (function() {
