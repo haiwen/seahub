@@ -59,10 +59,8 @@ class AbuseReports extends Component {
       const handled = (!item.handled).toString();
       const abuseReportId = item.id;
       const fileUrl = siteRoot + 'lib/' + item.repo_id + '/file' + item.file_path;
-      let iconUrl = mediaUrl + 'img/lib/48/lib.png';
       return (
         <tr key={index}>
-          <td><img src={iconUrl} width="24"/></td>
           <td>{item.repo_name}</td>
           <td><a href={fileUrl} target="_blank">{item.file_path}</a></td>
           <td>{item.reporter}</td>
@@ -96,12 +94,11 @@ class AbuseReports extends Component {
                 <thead>
                 {isDesktop ?
                   <tr>
-                    <th width="5%"></th>
-                    <th width="15%">{gettext("Library")}</th>
+                    <th width="20%">{gettext("Library")}</th>
                     <th width="20%">{gettext("File")}</th>
                     <th width="10%">{gettext("Reporter")}</th>
                     <th width="15%">{gettext("Abuse Type")}</th>
-                    <th width="15%">{gettext("Description")}</th>
+                    <th width="20%">{gettext("Description")}</th>
                     <th width="10%">{gettext("Time")}</th>
                     <th width="5%">{gettext("Handled")}</th>
                   </tr>
