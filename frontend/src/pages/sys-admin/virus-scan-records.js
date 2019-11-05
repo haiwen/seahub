@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast'
 import Account from '../../components/common/account';
 
@@ -59,6 +59,7 @@ RecordItem.propTypes = recordItemPropTypes;
 
 const recordListPropTypes = {
   loading: PropTypes.bool.isRequired,
+  isLoadingMore: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   records: PropTypes.array.isRequired,
 };
@@ -66,7 +67,7 @@ const recordListPropTypes = {
 class RecordList extends Component {
 
   render() {
-    let { loading, errorMsg, records } = this.props;
+    let { loading, isLoadingMore, errorMsg, records } = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -74,23 +75,26 @@ class RecordList extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       return (
-        <table width="100%" className="table table-hover table-vcenter">
-          <thead>
-            <tr>
-              <th width="28%">{gettext('Library')}</th>
-              <th width="28%">{gettext('Owner')}</th>
-              <th width="29%">{gettext('Virus File')}</th>
-              <th width="15%">{gettext('Operations')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {records.map((record, index) => {
-              return (
-                <RecordItem key={index} record={record} />
-              );
-            })}
-          </tbody>
-        </table>
+        <Fragment>
+          <table width="100%" className="table table-hover table-vcenter">
+            <thead>
+              <tr>
+                <th width="28%">{gettext('Library')}</th>
+                <th width="28%">{gettext('Owner')}</th>
+                <th width="29%">{gettext('Virus File')}</th>
+                <th width="15%">{gettext('Operations')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {records.map((record, index) => {
+                return (
+                  <RecordItem key={index} record={record} />
+                );
+              })}
+            </tbody>
+          </table>
+          {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
+        </Fragment>
       );
     }
   }
@@ -104,16 +108,56 @@ class VirusScanRecords extends Component {
     super(props);
     this.state = {
       loading: true,
+      isLoadingMore: false,
+      currentPage: 1,
+      hasMore: true,
       errorMsg: '',
       records: [],
     };
   }
 
+  getMore() {
+    let currentPage = this.state.currentPage;
+    seafileAPI.listVirusScanRecords(currentPage).then((res) => {
+      this.setState({
+        isLoadingMore: false,
+        records: [...this.state.records, ...res.data.record_list],
+        currentPage: currentPage + 1,
+        hasMore: res.data.record_list.length === 0 ? false : true,
+      });
+    }).catch((error) => {
+      if (error.response) {
+        this.setState({
+          isLoadingMore: false,
+          errorMsg: error.response.data.error_msg,
+        });
+        toaster.danger(this.state.errorMsg);
+      }
+    });
+  }
+
+  handleScroll = (event) => {
+    if (!this.state.isLoadingMore && this.state.hasMore) {
+      const clientHeight = event.target.clientHeight;
+      const scrollHeight = event.target.scrollHeight;
+      const scrollTop    = event.target.scrollTop;
+      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+      if (isBottom) {
+        this.setState({isLoadingMore: true}, () => {
+          this.getMore();
+        });
+      }
+    }
+  }
+
   componentDidMount() {
-    seafileAPI.listVirusScanRecords().then((res) => {
+    let currentPage = this.state.currentPage;
+    seafileAPI.listVirusScanRecords(currentPage).then((res) => {
       this.setState({
         loading: false,
         records: res.data.record_list,
+        currentPage: currentPage + 1,
+        hasMore: true,
       });
     }).catch((error) => {
       if (error.response) {
@@ -142,9 +186,10 @@ class VirusScanRecords extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Virus Scan Records')}</h3>
             </div>
-            <div className="cur-view-content">
+            <div className="cur-view-content" onScroll={this.handleScroll}>
               <RecordList 
                 loading={this.state.loading}
+                isLoadingMore={this.state.isLoadingMore}
                 errorMsg={this.state.errorMsg}
                 records={this.state.records}
               />
