@@ -40,7 +40,7 @@ class InvitationManager(models.Manager):
 
 class Invitation(models.Model):
     INVITE_TYPE_CHOICES = (
-        (GUEST, _('Guest')),
+        (GUEST, 'Guest'),
     )
 
     token = models.CharField(max_length=40, db_index=True)
