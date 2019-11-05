@@ -169,10 +169,7 @@ def sysadmin_react_fake_view(request, **kwargs):
         'available_roles': get_available_roles(),
         'available_admin_roles': get_available_admin_roles(),
         'have_ldap': get_ldap_info(),
-<<<<<<< HEAD
         'two_factor_auth_enabled': has_two_factor_auth(),
-=======
->>>>>>> sysadmin.py
         'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
     })
 
