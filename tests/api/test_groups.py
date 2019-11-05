@@ -29,7 +29,6 @@ class GroupsApiTest(ApiTestBase):
                 self.assertIsNotNone(group['ctime'])
                 self.assertIsNotNone(group['creator'])
                 self.assertIsNotNone(group['msgnum'])
-                self.assertIsNotNone(group['mtime'])
                 self.assertIsNotNone(group['id'])
                 self.assertIsNotNone(group['name'])
 

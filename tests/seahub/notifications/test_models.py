@@ -29,12 +29,6 @@ class UserNotificationTest(BaseTestCase):
                                                       'repo_name': self.repo.name,
                                                       'path': upload_to.strip('/')} in msg
 
-    def test_format_group_message_title(self):
-        detail = group_msg_to_json(self.group.id, 'from@email.com', 'message')
-        notice = UserNotification(to_user='to@user.com', msg_type='group_msg', detail=detail)
-        msg = notice.format_group_message_title()
-        assert '/#group/%(group_id)s/discussions/' % {'group_id': self.group.id} in msg
-
     def test_format_group_join_request(self):
         detail = group_join_request_to_json('group_join', self.group.id, 'join_request_msg')
         notice = UserNotification.objects.add_group_join_request_notice('group_join',

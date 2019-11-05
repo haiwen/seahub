@@ -130,12 +130,6 @@ class CommandTest(BaseTestCase):
         assert resp.repo_url == '/library/%(repo_id)s/%(repo_name)s/%(path)s' % {
                 'repo_id': self.repo.id, 'repo_name': self.repo.name, 'path': ''}
 
-    def test_format_group_message(self):
-        detail = group_msg_to_json(self.group.id, 'from@email.com', 'message')
-        notice = UserNotification(to_user= 'to@user.com', msg_type='group_msg', detail=detail)
-        resp = Command().format_group_message(notice)
-        assert resp.group_url == '/#group/%(group_id)s/discussions/' % {'group_id': self.group.id}
-
     def test_format_repo_share_to_group_msg(self):
         if not LOCAL_PRO_DEV_ENV:
             return

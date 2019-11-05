@@ -526,10 +526,6 @@ def gen_dir_zip_download_url(token):
     """
     return '%s/zip/%s' % (get_fileserver_root(), token)
 
-def get_ccnet_server_addr_port():
-    """get ccnet server host and port"""
-    return seaserv.CCNET_SERVER_ADDR, seaserv.CCNET_SERVER_PORT
-
 def string2list(string):
     """
     Split string contacted with different separators to a list, and remove

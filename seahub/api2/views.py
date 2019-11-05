@@ -65,7 +65,7 @@ from seahub.signals import (repo_created, repo_deleted, repo_transfer)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
-    get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, is_pro_version, \
+    get_user_events, EMPTY_SHA1, is_pro_version, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
@@ -608,8 +608,6 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
     # generate download url for client
-    relay_id = 0
-    addr, port = get_ccnet_server_addr_port()
     email = request.user.username
     if gen_sync_token:
         token = seafile_api.generate_repo_token(repo_id, email)
@@ -629,8 +627,8 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
 
     info_json = {
         'relay_id': '44e8f253849ad910dc142247227c8ece8ec0f971',
-        'relay_addr': addr,
-        'relay_port': port,
+        'relay_addr': '127.0.0.1',
+        'relay_port': '80',
         'email': email,
         'token': token,
         'repo_id': repo_id,

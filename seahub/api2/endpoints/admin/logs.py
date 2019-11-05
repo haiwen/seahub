@@ -14,8 +14,6 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error
 
-from seahub_extra.sysadmin_extra.models import UserLoginLog
-
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils import get_file_audit_events, generate_file_audit_event_type, \
     get_file_update_events, get_perm_audit_events, is_valid_email
@@ -48,6 +46,7 @@ class AdminLogsLoginLogs(APIView):
         start = (current_page - 1) * per_page
         end = start + per_page
 
+        from seahub_extra.sysadmin_extra.models import UserLoginLog
         logs = UserLoginLog.objects.all().order_by('-login_date')[start:end]
         count = UserLoginLog.objects.all().count()
 

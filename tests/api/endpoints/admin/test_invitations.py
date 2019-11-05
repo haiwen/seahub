@@ -4,6 +4,7 @@ from mock import patch
 
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.test import override_settings
 
 from seahub.test_utils import BaseTestCase
 from seahub.invitations.models import Invitation
@@ -12,10 +13,11 @@ from seahub.base.accounts import UserPermissions
 from seahub.invitations import models
 
 
+@patch('seahub.api2.endpoints.admin.invitations.ENABLE_GUEST_INVITATION', True)
 class InvitationsTest(BaseTestCase):
     def setUp(self):
         self.url = reverse('api-v2.1-admin-invitations')
-   
+
     @patch.object(CanInviteGuest, 'has_permission')
     @patch.object(UserPermissions, 'can_invite_guest')
     def test_can_del_all_expired_invitation(self, mock_has_permission, mock_can_invite_guest):
@@ -42,10 +44,9 @@ class InvitationsTest(BaseTestCase):
                          invite_type=models.GUEST,
                          expire_time=timezone.now())
         entry.save()
-        
+
     def test_get_invitations(self):
         self.login_as(self.admin)
-
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
@@ -63,6 +64,7 @@ class InvitationsTest(BaseTestCase):
         self.assertEqual(400, resp.status_code)
 
 
+@patch('seahub.api2.endpoints.admin.invitations.ENABLE_GUEST_INVITATION', True)
 class InvitationTest(BaseTestCase):
     def setUp(self):
         pass
@@ -83,6 +85,7 @@ class InvitationTest(BaseTestCase):
 
     def test_can_delete(self):
         self.login_as(self.admin)
+
         token = self._add_invitations('test@noway.com')
         url = reverse('api-v2.1-admin-invitation', args=[token])
         resp = self.client.delete(url)
