@@ -205,10 +205,14 @@ class SidePanel extends React.Component {
                 }
                 {enableGuestInvitation && isDefaultAdmin &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sys/invitationadmin/'}>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('invitations')}`}
+                      to={siteRoot + 'sys/invitations/'}
+                      onClick={() => this.props.tabItemClick('invitations')}
+                    >
                       <span className="sf2-icon-invite" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Invitations')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {isDefaultAdmin && enableTermsAndConditions &&

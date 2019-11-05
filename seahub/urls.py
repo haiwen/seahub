@@ -722,6 +722,7 @@ urlpatterns = [
     url(r'^sys/upload-links/$', sysadmin_react_fake_view, name="sys_upload_links"),
     url(r'^sys/work-weixin/$', sysadmin_react_fake_view, name="sys_work_weixin"),
     url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
+    url(r'^sys/invitations/$', sysadmin_react_fake_view, name="sys_invitations"),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
 ]
