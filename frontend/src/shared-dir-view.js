@@ -16,7 +16,7 @@ import './css/shared-dir-view.css';
 import './css/grid-view.css';
 
 let loginUser = window.app.pageOptions.name;
-const { token, trafficOverLimit, dirName, sharedBy, path, canDownload, mode, thumbnailSize, zipped, enableShareLinkReportAbuse } = window.shared.pageOptions;
+const { token, trafficOverLimit, dirName, sharedBy, path, canDownload, mode, thumbnailSize, zipped } = window.shared.pageOptions;
 
 const showDownloadIcon = !trafficOverLimit && canDownload;
 
