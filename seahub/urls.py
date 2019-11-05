@@ -156,6 +156,7 @@ from seahub.api2.endpoints.admin.logs import AdminLogsLoginLogs, AdminLogsFileAc
     AdminLogsSharePermissionLogs
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
+from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusScanRecords, AdminVirusScanRecord
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 
@@ -599,6 +600,10 @@ urlpatterns = [
     ## admin::file-scan-records
     url(r'^api/v2.1/admin/file-scan-records/$', AdminFileScanRecords.as_view(), name='api-v2.1-admin-file-scan-records'),
 
+    # admin::virus-scan-records
+    url(r'^api/v2.1/admin/virus-scan-records/$', AdminVirusScanRecords.as_view(), name='api-v2.1-admin-virus-scan-records'),
+    url(r'^api/v2.1/admin/virus-scan-records/(?P<virus_id>\d+)/$', AdminVirusScanRecord.as_view(), name='api-v2.1-admin-virus-scan-record'),
+
     ## admin::notifications
     url(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
     url(r'^api/v2.1/admin/sys-notifications/$', AdminSysNotificationsView.as_view(), name='api-2.1-admin-sys-notifications'),
@@ -738,8 +743,7 @@ if ENABLE_FILE_SCAN:
 from seahub.utils import EVENTS_ENABLED
 if EVENTS_ENABLED:
     urlpatterns += [
-        url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
-        url(r'^sys/virus_scan_records/delete/(?P<vid>\d+)/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
+        url(r'^sys/virus-scan-records/$', sysadmin_react_fake_view, name='sys_virus_scan_records'),
     ]
 
 if settings.SERVE_STATIC:
