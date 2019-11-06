@@ -60,6 +60,7 @@ import AdminLoginLogs from './admin-logs/login-logs';
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
+import VirusScanRecords from './virus-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 
 import Invitations from './invitations/invitations';
@@ -195,6 +196,11 @@ class SysAdmin extends React.Component {
 
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
+              currentTab={currentTab} 
+              tabItemClick={this.tabItemClick}
+            />
+            <VirusScanRecords
+              path={siteRoot + 'sys/virus-scan-records'}
               currentTab={currentTab} 
               tabItemClick={this.tabItemClick}
             />
