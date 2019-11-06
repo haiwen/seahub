@@ -59,6 +59,7 @@
 .sf2-icon-delete:before { content:"\e006"; }
 .sf2-icon-monitor:before { content:"\e007"; }
 .sf2-icon-download:before { content:"\e008"; }
+.sf2-icon-msgs:before { content:"\e00b"; }
 .sf2-icon-group:before { content:"\e00c"; }
 .sf2-icon-link:before { content:"\e00e"; }
 .sf2-icon-user:before { content:"\e00f"; }
@@ -81,7 +82,6 @@
 .sf2-icon-confirm:before {content:"\e01e"}
 .sf2-icon-cancel:before {content:"\e01f"}
 .sf2-icon-user2:before { content:"\e020"; }
-.sf2-icon-msgs:before { content:"\e021"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
 .sf2-icon-plus:before { content: "\e027"; }
