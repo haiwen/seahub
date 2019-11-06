@@ -11,6 +11,7 @@ const recordItemPropTypes = {
 };
 
 class RecordItem extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -104,6 +105,7 @@ RecordList.propTypes = recordListPropTypes;
 
 
 class VirusScanRecords extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
