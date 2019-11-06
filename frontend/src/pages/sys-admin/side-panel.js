@@ -118,7 +118,7 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/departments/'}
                       onClick={() => this.props.tabItemClick('departments')}
                     >
-                      <span className="sf2-icon-group" aria-hidden="true"></span>
+                      <span className="sf2-icon-organization" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Departments')}</span>
                     </Link>
                   </li>
@@ -166,7 +166,7 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/share-links/'}
                       onClick={() => this.props.tabItemClick('links')}
                     >
-                      <span className="sf2-icon-msgs" aria-hidden="true"></span>
+                      <span className="sf2-icon-link" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Links')}</span>
                     </Link>
                   </li>
@@ -178,7 +178,7 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/logs/login'}
                       onClick={() => this.props.tabItemClick('logs')}
                     >
-                      <span className="sf2-icon-msgs" aria-hidden="true"></span>
+                      <span className="sf2-icon-clock" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Logs')}</span>
                     </Link>
                   </li>
@@ -230,7 +230,7 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/admin-logs/operation'}
                       onClick={() => this.props.tabItemClick('adminLogs')}
                     >
-                      <span className="sf2-icon-msgs" aria-hidden="true"></span>
+                      <span className="sf2-icon-admin-log" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Admin Logs')}</span>
                     </Link>
                   </li>
