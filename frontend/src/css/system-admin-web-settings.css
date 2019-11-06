@@ -12,3 +12,6 @@
 .web-setting-textarea {
   min-height: 7rem;
 }
+.web-setting-label {
+  word-break: break-word;
+}

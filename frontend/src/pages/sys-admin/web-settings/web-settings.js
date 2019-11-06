@@ -107,7 +107,7 @@ class WebSettings extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Settings')}</h3>
             </div>
-            <div className="cur-view-content container">
+            <div className="cur-view-content container mw-100">
               {loading && <Loading />}
               {errorMsg && <p className="error text-center mt-4">{errorMsg}</p>}
               {(!loading && !errorMsg) && config_dict && 

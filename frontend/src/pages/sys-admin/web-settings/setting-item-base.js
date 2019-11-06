@@ -21,7 +21,7 @@ class SettingItemBase extends Component {
       <Fragment>
         <Row className="my-4">
           <Col md="3">
-            <Label>{displayName}</Label>
+            <Label className="web-setting-label">{displayName}</Label>
           </Col>
           <Col md="5">
             {mainContent}
