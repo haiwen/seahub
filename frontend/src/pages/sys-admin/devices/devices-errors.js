@@ -10,6 +10,7 @@ import Loading from '../../../components/loading';
 import { Link } from '@reach/router';
 import DevicesNav from './devices-nav';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 
 class Content extends Component {
 
@@ -76,7 +77,7 @@ class Item extends Component {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <td><Link to={`${siteRoot}useradmin/info/${encodeURIComponent(item.email)}/`}>{item.name}</Link></td>
+        <td><UserLink email={item.email} name={item.name} /></td>
         <td>{item.device_name}{' / '}{item.client_version}</td>
         <td>{item.device_ip}</td>
         <td><Link to={`${siteRoot}sysadmin/#libs/${item.repo_id}`}>{item.repo_name}</Link></td>

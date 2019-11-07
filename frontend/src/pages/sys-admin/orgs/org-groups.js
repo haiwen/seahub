@@ -8,6 +8,7 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import OrgNav from './org-nav';
 
 class Content extends Component {
@@ -101,7 +102,7 @@ class Item extends Component {
       <Fragment>
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><a href={groupUrl}>{item.group_name}</a></td>
-          <td><a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.creator_email)}/`}>{item.creator_name}</a></td>
+          <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
           <td>{moment(item.created_at).format('YYYY-MM-DD hh:mm:ss')}</td>
           <td>
             <a href="#" className={`action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>

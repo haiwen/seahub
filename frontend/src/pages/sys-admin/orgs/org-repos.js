@@ -7,6 +7,7 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import OrgNav from './org-nav';
 
 class Content extends Component {
@@ -103,7 +104,7 @@ class Item extends Component {
           <td>{item.repo_id}</td>
           <td>
             {item.owner_email ?
-              <a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.owner_email)}/`}>{item.owner_name}</a> :
+              <UserLink email={item.owner_email} name={item.owner_name} /> :
               '--'
             }
           </td>

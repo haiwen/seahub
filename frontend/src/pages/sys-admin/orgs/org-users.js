@@ -11,6 +11,7 @@ import SysAdminUserStatusEditor from '../../../components/select-editor/sysadmin
 import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import OrgNav from './org-nav';
 import OpMenu from './user-op-menu';
 
@@ -170,7 +171,7 @@ class Item extends Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td><a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.email)}/`}>{item.name}</a></td>
+          <td><UserLink email={item.email} name={item.name} /></td>
           <td>
             <SysAdminUserStatusEditor
               isTextMode={true}

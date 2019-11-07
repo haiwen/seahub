@@ -9,6 +9,7 @@ import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import UsersNav from './users-nav';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 
 class Content extends Component {
 
@@ -84,9 +85,7 @@ class Item extends Component {
     return (
       <Fragment>
         <tr>
-          <td>
-            <Link to={`${siteRoot}sys/users/${encodeURIComponent(item.email)}/`}>{item.email}</Link>
-          </td>
+          <td><UserLink email={item.email} name={item.email} /></td>
           <td>
             {`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}
           </td>

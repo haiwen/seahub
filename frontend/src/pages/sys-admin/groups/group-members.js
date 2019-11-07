@@ -10,6 +10,7 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import SysAdminGroupAddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog';
 import SysAdminGroupRoleEditor from '../../../components/select-editor/sysadmin-group-role-editor';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import GroupNav from './group-nav';
 
 class Content extends Component {
@@ -105,7 +106,7 @@ class Item extends Component {
       <Fragment>
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><img src={item.avatar_url} alt="" className="rounded-circle" width="24" /></td>
-          <td><a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.email)}/`}>{item.name}</a></td>
+          <td><UserLink email={item.email} name={item.name} /></td>
           <td>
             {item.role == 'Owner' ?
               gettext('Owner') :

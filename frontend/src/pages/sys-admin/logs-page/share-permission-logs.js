@@ -9,6 +9,7 @@ import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LogsNav from './logs-nav';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
 
@@ -116,8 +117,8 @@ class Item extends Component {
     let { item } = this.props;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><a href={siteRoot + 'useradmin/info/' + item.from_user_email + '/'}>{item.from_user_name}</a></td>
-        <td><a href={siteRoot + 'useradmin/info/' + item.to_user_email + '/'}>{item.to_user_name}</a></td>
+        <td><UserLink email={item.from_user_email} name={item.from_user_name} /></td>
+        <td><UserLink email={item.to_user_email} name={item.to_user_name} /></td>
         <td>{this.getActionTextByEType(item.etype)}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
         <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>

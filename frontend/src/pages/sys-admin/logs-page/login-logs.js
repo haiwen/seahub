@@ -9,6 +9,7 @@ import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LogsNav from './logs-nav';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
 
@@ -102,7 +103,7 @@ class Item extends Component {
     let { item } = this.props;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><a href={siteRoot + 'useradmin/info/' + item.email + '/'}>{item.name}</a></td>
+        <td><UserLink email={item.email} name={item.name} /></td>
         <td>{item.login_ip}</td>
         <td>{item.log_success ? gettext('Success') : gettext('Failed')}</td>
         <td>{moment(item.login_time).fromNow()}</td>

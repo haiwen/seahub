@@ -9,7 +9,7 @@ import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LinksNav from './links-nav';
 import MainPanelTopbar from '../main-panel-topbar';
-
+import UserLink from '../user-link';
 
 class Content extends Component {
 
@@ -111,7 +111,7 @@ class Item extends Component {
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td>{item.obj_name}</td>
         <td>{item.token}</td>
-        <td><a href={siteRoot + 'useradmin/info/' + item.creator_email + '/'}>{item.creator_name}</a></td>
+        <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
         <td>{moment(item.ctime).fromNow()}</td>
         <td>{item.view_cnt}</td>
         <td>

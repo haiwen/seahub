@@ -15,6 +15,7 @@ import SysAdminShareDialog from '../../../components/dialog/sysadmin-dialog/sysa
 import SysAdminLibHistorySettingDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog';
 import SysAdminCreateRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import ReposNav from './repos-nav';
 import RepoOpMenu from './repo-op-menu';
 
@@ -231,7 +232,7 @@ class Item extends Component {
           <td>
             {isGroupOwnedRepo ?
               <Link to={`${siteRoot}sys/departments/${repo.owner_name}/`}>{repo.group_name}</Link> :
-              <Link to={`${siteRoot}sys/users/${encodeURIComponent(repo.owner_email)}/`}>{repo.owner_name}</Link>
+              <UserLink email={repo.owner_email} name={repo.owner_name} />
             }
           </td>
           <td>
