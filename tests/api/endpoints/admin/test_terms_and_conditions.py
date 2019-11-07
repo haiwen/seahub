@@ -13,10 +13,11 @@ from seahub.base.accounts import UserPermissions
 from seahub.invitations import models
 from termsandconditions.models import TermsAndConditions, UserTermsAndConditions
 
-
-@patch('seahub.api2.endpoints.admin.terms_and_conditions.ENABLE_TERMS_AND_CONDITIONS', True)
 class AdminTermsAndConditionsTest(BaseTestCase):
     def setUp(self):
+        from constance import config
+        self.config = config
+        self.config.ENABLE_TERMS_AND_CONDITIONS = True
         self.url = reverse('api-v2.1-admin-terms-and-conditions')
 
     def _add_term(self, name, text, version_number):
@@ -54,8 +55,12 @@ class AdminTermsAndConditionsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
 
-@patch('seahub.api2.endpoints.admin.terms_and_conditions.ENABLE_TERMS_AND_CONDITIONS', True)
 class AdminTermAndConditionTest(BaseTestCase):
+
+    def setUp(self):
+        from constance import config
+        self.config = config
+        self.config.ENABLE_TERMS_AND_CONDITIONS = True
 
     def _add_term(self, name, text, version_number):
         return TermsAndConditions.objects.create(
