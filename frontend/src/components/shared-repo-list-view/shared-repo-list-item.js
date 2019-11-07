@@ -13,6 +13,7 @@ import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
 import toaster from '../toast';
+import RepoAPITokenDialog from "../dialog/repo-api-token-dialog";
 
 const propTypes = {
   currentGroup: PropTypes.object,
@@ -41,6 +42,7 @@ class SharedRepoListItem extends React.Component {
       isFolderPermissionDialogOpen: false,
       isHistorySettingDialogShow: false,
       isDeleteDialogShow: false,
+      isAPITokenDialogShow: false,
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -130,6 +132,9 @@ class SharedRepoListItem extends React.Component {
       case 'History Setting':
         this.onHistorySettingToggle();
         break;
+      case 'API Token':
+        this.onAPITokenToggle();
+        break;
       default:
         break;
     }
@@ -181,6 +186,10 @@ class SharedRepoListItem extends React.Component {
     this.setState({isShowSharedDialog: false});
   }
 
+  onAPITokenToggle = () => {
+    this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
+  }
+
   translateMenuItem = (menuItem) => {
     let translateResult = '';
     switch(menuItem) {
@@ -201,6 +210,9 @@ class SharedRepoListItem extends React.Component {
         break;
       case 'History Setting':
         translateResult = gettext('History Setting');
+        break;
+      case 'API Token':
+        translateResult = gettext('API Token');
         break;
       default:
         break;
@@ -225,6 +237,7 @@ class SharedRepoListItem extends React.Component {
           } else {
             operations = ['Rename', 'Details'];
           }
+          operations.push('API Token');
         } else {
           operations.push('Unshare');
         }
@@ -427,6 +440,14 @@ class SharedRepoListItem extends React.Component {
               repoID={repo.repo_id}
               itemName={repo.repo_name}
               toggleDialog={this.onHistorySettingToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isAPITokenDialogShow && (
+          <ModalPortal>
+            <RepoAPITokenDialog
+              repo={repo}
+              onRepoAPITokenToggle={this.onAPITokenToggle}
             />
           </ModalPortal>
         )}

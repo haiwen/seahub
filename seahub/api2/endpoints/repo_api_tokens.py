@@ -45,7 +45,7 @@ class RepoAPITokensView(APIView):
 
         # permission check
         username = request.user.username
-        if not permission_check_admin_owner(username, repo_id):
+        if not permission_check_admin_owner(username, repo_id, request):
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -73,7 +73,7 @@ class RepoAPITokensView(APIView):
 
         # permission check
         username = request.user.username
-        if not permission_check_admin_owner(username, repo_id):
+        if not permission_check_admin_owner(username, repo_id, request):
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -108,7 +108,7 @@ class RepoAPITokenView(APIView):
 
         username = request.user.username
         # permission check
-        if not permission_check_admin_owner(username, repo_id):
+        if not permission_check_admin_owner(username, repo_id, request):
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -139,7 +139,7 @@ class RepoAPITokenView(APIView):
 
         # permission check
         username = request.user.username
-        if not permission_check_admin_owner(username, repo_id):
+        if not permission_check_admin_owner(username, repo_id, request):
             error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

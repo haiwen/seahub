@@ -12,14 +12,26 @@ from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils import is_pro_version, FILEEXT_TYPE_MAP, IMAGE, XMIND, VIDEO
 from seahub.utils.file_tags import get_files_tags_in_dir
+from seahub.utils.repo import is_group_repo_staff
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 HTTP_520_OPERATION_FAILED = 520
 
 
-def permission_check_admin_owner(username, repo_id):  # maybe add more complex logic in the future
-    return username == seafile_api.get_repo_owner(repo_id)
+def permission_check_admin_owner(username, repo_id, request=None):  # maybe add more complex logic in the future
+    """
+    if repo is owned by user return true
+    or check whether repo is owned by group and whether user is group's staff
+    so finally the code is:
+    check user == repo's owner
+    else
+    check user is the such group's staff
+    """
+    if username == seafile_api.get_repo_owner(repo_id):
+        return True
+    else:
+        return is_group_repo_staff(request, repo_id, username)
 
 
 def get_dir_file_recursively(repo_id, path, all_dirs):
