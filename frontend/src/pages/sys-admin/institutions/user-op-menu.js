@@ -5,7 +5,7 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 
 const propTypes = {
-  isInstitutionAdmin: PropTypes.bool.isRequired,
+  operations: PropTypes.array.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
@@ -60,12 +60,6 @@ class OpMenu extends React.Component {
   }
 
   render() {
-    let operations = [];
-    if (this.props.isInstitutionAdmin) {
-      operations = ['Revoke Admin', 'Delete'];
-    } else {
-      operations = ['Set Admin', 'Delete'];
-    }
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle
@@ -76,7 +70,7 @@ class OpMenu extends React.Component {
           aria-expanded={this.state.isItemMenuShow}
         />
         <DropdownMenu className="mt-2 mr-2">
-          {operations.map((item, index )=> {
+          {this.props.operations.map((item, index )=> {
             return (<DropdownItem key={index} data-op={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
           })}
         </DropdownMenu>

@@ -83,6 +83,7 @@ class Item extends Component {
       highlight: false,
       isRevokeAdminDialogOpen: false,
     };
+    this.operations = ['Revoke Admin'];
   }
 
   handleMouseEnter = () => {
@@ -156,7 +157,7 @@ class Item extends Component {
           <td>
             {isOpIconShown &&
             <OpMenu
-              isInstitutionAdmin={item.is_institution_admin}
+              operations={this.operations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
