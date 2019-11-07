@@ -25,6 +25,7 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 from seahub.utils import  gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
     get_file_type_and_ext, get_service_url
+from seahub.utils.repo import is_repo_owner
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
@@ -189,12 +190,9 @@ def repo_snapshot(request, repo_id):
     if not current_commit:
         current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
 
-    repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_repo_owner = True if username == repo_owner else False
-
     return render(request, 'repo_snapshot_react.html', {
             'repo': repo,
-            "is_repo_owner": is_repo_owner,
+            "is_repo_owner": is_repo_owner(request, repo.id, username),
             'current_commit': current_commit,
             })
 
