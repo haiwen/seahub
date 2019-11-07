@@ -12,6 +12,7 @@ import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-u
 import SysAdminAddOrgDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-org-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 
 const { availableRoles } = window.sysadmin.pageOptions;
 
@@ -108,7 +109,9 @@ class Item extends Component {
       <Fragment>
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><Link to={`${siteRoot}sys/organizations/${item.org_id}/info/`}>{item.org_name}</Link></td>
-          <td><a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.creator_email)}/`}>{item.creator_name}</a></td>
+          <td>
+      <UserLink email={item.creator_email} name={item.creator_name} />
+          </td>
           <td>
             <SysAdminUserRoleEditor
               isTextMode={true}

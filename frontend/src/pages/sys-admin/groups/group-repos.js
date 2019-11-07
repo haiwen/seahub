@@ -7,6 +7,7 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import GroupNav from './group-nav';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
@@ -121,7 +122,7 @@ class Item extends Component {
           <td>{this.renderRepoName()}</td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td>
-            <a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.shared_by)}/`}>{item.shared_by_name}</a>
+            <UserLink email={item.shared_by} name={item.shared_by_name} />
           </td>
           <td>
             <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unshare')} onClick={this.toggleUnshareRepoDialog}></a>

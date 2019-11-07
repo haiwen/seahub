@@ -20,6 +20,7 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import SysAdminUser from '../../../models/sysadmin-user';
 import SysAdminAdminUser from '../../../models/sysadmin-admin-user';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import UsersNav from './users-nav';
 import OpMenu from './user-op-menu';
 
@@ -333,7 +334,7 @@ class Item extends Component {
             <input type="checkbox" className="vam" onChange={this.onUserSelected} checked={item.isSelected} />
           </td>
           <td>
-            <Link to={`${siteRoot}sys/users/${encodeURIComponent(item.email)}/`}>{item.name}</Link>
+            <UserLink email={item.email} name={item.name} />
             {item.contact_email && 
               <Fragment>
                 <br />

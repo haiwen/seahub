@@ -2,11 +2,12 @@ import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
+import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import UserLink from '../user-link';
 import MainPanelTopbar from '../main-panel-topbar';
 import InstitutionNav from './institution-nav';
 import OpMenu from './user-op-menu';
@@ -142,7 +143,9 @@ class Item extends Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td><a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.email)}/`}>{item.name}</a></td>
+          <td>
+            <UserLink email={item.email} name={item.name} />
+          </td>
           <td>
             {item.is_active ? gettext('Active') : gettext('Inactive')}
           </td>
@@ -224,7 +227,7 @@ class InstitutionAdmins extends Component {
   revokeAdmin = (email) => {
     seafileAPI.sysAdminUpdateInstitutionUser(this.props.institutionID, email, false).then(res => {
       let userList = this.state.userList.filter(user => {
-        return user.email != email
+        return user.email != email;
       });
       this.setState({userList: userList});
       toaster.success(gettext('Success'));

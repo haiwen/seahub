@@ -4,7 +4,7 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils.js';
 import toaster from '../../../components/toast';
 import RoleEditor from '../../../components/select-editor/role-editor';
-import { serviceURL } from '../../../utils/constants';
+import UserLink from '../user-link';
 
 const MemberItemPropTypes = {
   groupID: PropTypes.string.isRequired,
@@ -49,19 +49,18 @@ class MemberItem extends React.Component {
       toaster.danger(errMessage);
     });
     this.setState({
-      highlight: false,
+      highlight: false
     });
   }
 
   render() {
     const member = this.props.member;
     const highlight = this.state.highlight;
-    let memberLink = serviceURL + '/useradmin/info/' + member.email + '/';
     if (member.role === 'Owner') return null;
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={member.avatar_url} alt="member-header" width="24" className="avatar"/></td>
-        <td><a href={memberLink}>{member.name}</a></td>
+        <td><UserLink email={member.email} name={member.name} /></td>
         <td>
           <RoleEditor
             isTextMode={true}

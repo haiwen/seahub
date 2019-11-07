@@ -3,15 +3,16 @@ import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
+import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
+import Paginator from '../../../components/paginator';
 import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-institution-member-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import UserLink from '../user-link';
 import MainPanelTopbar from '../main-panel-topbar';
 import InstitutionNav from './institution-nav';
-import Paginator from '../../../components/paginator';
 import OpMenu from './user-op-menu';
 
 class Content extends Component {
@@ -175,7 +176,9 @@ class Item extends Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-          <td><a href={`${siteRoot}useradmin/info/${encodeURIComponent(item.email)}/`}>{item.name}</a></td>
+          <td>
+            <UserLink email={item.email} name={item.name} />
+          </td>
           <td>
             {item.is_active ? gettext('Active') : gettext('Inactive')}
           </td>

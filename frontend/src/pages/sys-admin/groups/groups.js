@@ -13,6 +13,7 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import SysAdminCreateGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-group-dialog';
 import SysAdminTransferGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import OpMenu from './op-menu';
 
 class Content extends Component {
@@ -182,7 +183,7 @@ class Item extends Component {
           <td>
             {item.owner == 'system admin' ?
               '--' :
-              <Link to={`${siteRoot}sys/users/${encodeURIComponent(item.owner)}/`}>{item.owner_name}</Link>
+              <UserLink email={item.owner} name={item.owner_name} />
             }
           </td>
           <td>

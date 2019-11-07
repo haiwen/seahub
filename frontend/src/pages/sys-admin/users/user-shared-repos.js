@@ -10,6 +10,7 @@ import Loading from '../../../components/loading';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import TransferDialog from '../../../components/dialog/transfer-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import Nav from './user-nav';
 import OpMenu from './user-op-menu';
 
@@ -82,17 +83,17 @@ class Item extends Component {
     }
   }
   
-  getOwnerUrl = () => {
-    let url;
+  getOwnerLink = () => {
+    let link;
     const { item } = this.props;
     const index = item.owner_email.indexOf('@seafile_group');
     if (index == -1) {
-      url = `${siteRoot}sys/users/${encodeURIComponent(item.owner_email)}/`;
+      link = <UserLink email={item.owner_email} name={item.owner_name} />;
     } else {
       const groupID = item.owner_email.substring(0, index);
-      url = `${siteRoot}sys/departments/${groupID}/`;
+      link = <Link to={`${siteRoot}sys/departments/${groupID}/`}>{item.owner_name}</Link>;
     }
-    return url;
+    return link;
   }
 
   render() {
@@ -104,7 +105,7 @@ class Item extends Component {
         <tr>
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td>{this.renderRepoName()}</td>
-          <td><Link to={this.getOwnerUrl()}>{item.owner_name}</Link></td>
+          <td>{this.getOwnerLink()}</td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td>{moment(item.last_modify).fromNow()}</td>
         </tr>

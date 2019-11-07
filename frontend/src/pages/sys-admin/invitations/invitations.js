@@ -10,6 +10,7 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import OpMenu from './op-menu';
 
 class Content extends Component {
@@ -174,11 +175,11 @@ class Item extends Component {
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td>
-            <Link to={`${siteRoot}sys/users/${encodeURIComponent(item.inviter_email)}/`}>{item.inviter_name}</Link>
+            <UserLink email={item.inviter_email} name={item.inviter_name} />
           </td>
           <td>
             {item.accept_time ?
-              <Link to={`${siteRoot}sys/users/${encodeURIComponent(item.accepter_email)}/`}>{item.accepter_name}</Link> :
+              <UserLink email={item.accepter_email} name={item.accepter_name} /> :
               item.accepter_email
             }
           </td>

@@ -8,6 +8,7 @@ import Paginator from '../../../components/paginator';
 import LogsNav from './logs-nav';
 import { Button } from 'reactstrap';
 import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import ModalPortal from '../../../components/modal-portal';
 import CommitDetails from '../../../components/dialog/commit-details';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
@@ -117,7 +118,7 @@ class Item extends Component {
     return (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td><a href={siteRoot + 'useradmin/info/' + item.email + '/'}>{item.name}</a></td>
+          <td><UserLink email={item.email} name={item.name} /></td>
           <td>{moment(item.time).fromNow()}</td>
           <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
           <td>

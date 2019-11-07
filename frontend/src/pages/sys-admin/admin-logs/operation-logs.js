@@ -8,7 +8,7 @@ import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LogsNav from './logs-nav';
 import MainPanelTopbar from '../main-panel-topbar';
-
+import UserLink from '../user-link';
 
 class Content extends Component {
 
@@ -180,7 +180,7 @@ class Item extends Component {
     let { item } = this.props;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><a href={siteRoot + 'useradmin/info/' + item.email + '/'}>{item.name}</a></td>
+        <td><UserLink email={item.email} name={item.name} /></td>
         <td>{this.getOperationText(item.operation)}</td>
         <td>
           <span dangerouslySetInnerHTML={{__html: this.getOperationDetail(item)}}></span>

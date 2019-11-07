@@ -1,15 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext ,siteRoot } from '../../../utils/constants';
-import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
-import EmptyTip from '../../../components/empty-tip';
 import moment from 'moment';
+import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { gettext } from '../../../utils/constants';
+import toaster from '../../../components/toast';
+import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import ModalPortal from '../../../components/modal-portal';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import UserLink from '../user-link';
 import ReposNav from './repos-nav';
 import MainPanelTopbar from '../main-panel-topbar';
 
@@ -155,7 +156,8 @@ class Item extends Component {
           <td>{repo.name}</td>
           <td>
             {repo.owner.indexOf('@seafile_group') == -1 ?
-              <a href={`${siteRoot}useradmin/info/${encodeURIComponent(repo.owner)}/`}>{repo.owner_name}</a> : repo.group_name}
+              <UserLink email={repo.owner} name={repo.owner_name} /> :
+              repo.group_name}
           </td>
           <td>{moment(repo.delete_time).fromNow()}</td>
           <td>
