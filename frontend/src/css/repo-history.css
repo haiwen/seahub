@@ -23,9 +23,6 @@ body {
   border-radius: 3px;
   white-space: nowrap;
 }
-.commit-detail-item {
-  list-style-type: none;
-}
 .go-back {
   color: #c0c0c0;
   font-size: 1.75rem;
