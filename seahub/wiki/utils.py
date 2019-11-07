@@ -19,7 +19,7 @@ from seahub.utils import gen_file_get_url, get_file_type_and_ext, \
     gen_inner_file_get_url, get_site_scheme_and_netloc
 from seahub.utils.file_types import IMAGE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from .models import WikiPageMissing, WikiDoesNotExist, PersonalWiki
+from .models import WikiPageMissing, WikiDoesNotExist
 
 logger = logging.getLogger(__name__)
 
@@ -65,24 +65,6 @@ def get_inner_file_url(repo, obj_id, file_name):
                                                            'view', '')
     url = gen_inner_file_get_url(access_token, file_name)
     return url
-
-def get_personal_wiki_repo(username):
-    try:
-        wiki = PersonalWiki.objects.get(username=username)
-    except PersonalWiki.DoesNotExist:
-        raise WikiDoesNotExist
-    repo = seaserv.get_repo(wiki.repo_id)
-    if not repo:
-        raise WikiDoesNotExist
-    return repo
-    
-def get_personal_wiki_page(username, page_name):
-    repo = get_personal_wiki_repo(username)
-    dirent = get_wiki_dirent(repo.id, page_name)
-    url = get_inner_file_url(repo, dirent.obj_id, dirent.obj_name)
-    file_response = urllib.request.urlopen(url)
-    content = file_response.read()
-    return content, repo, dirent
 
 def get_wiki_pages(repo):
     """

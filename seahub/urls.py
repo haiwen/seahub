@@ -17,9 +17,6 @@ from seahub.views.file import view_history_file, view_trash_file,\
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
 from .notifications.views import notification_list
-from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
-    personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
-    personal_wiki_page_delete, personal_wiki_use_lib
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
@@ -173,14 +170,6 @@ urlpatterns = [
     url(r'^$', libraries, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
-    url(r'^home/wiki/$', personal_wiki, name='personal_wiki'),
-    url(r'^home/wiki/(?P<page_name>[^/]+)$', personal_wiki, name='personal_wiki'),
-    url(r'^home/wiki_pages/$', personal_wiki_pages, name='personal_wiki_pages'),
-    url(r'^home/wiki_create/$', personal_wiki_create, name='personal_wiki_create'),
-    url(r'^home/wiki_use_lib/$', personal_wiki_use_lib, name='personal_wiki_use_lib'),
-    url(r'^home/wiki_page_new/$', personal_wiki_page_new, name='personal_wiki_page_new'),
-    url(r'^home/wiki_page_edit/(?P<page_name>[^/]+)$', personal_wiki_page_edit, name='personal_wiki_page_edit'),
-    url(r'^home/wiki_page_delete/(?P<page_name>[^/]+)$', personal_wiki_page_delete, name='personal_wiki_page_delete'),
 
     # revert repo
     url(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_history, name='repo_revert_history'),

@@ -12,8 +12,6 @@ from django.http import HttpRequest
 from django.test import TestCase
 
 from seahub.base.accounts import User
-from seahub.wiki.models import PersonalWiki
-from seahub.views.wiki import personal_wiki
 
 def setup():
     global repo_id, mock_content, mock_repo, mock_dirent, request
@@ -35,50 +33,6 @@ def setup():
         return context
     patch('seahub.views.wiki.render_to_response',
           render_to_response_echo).start()
-
-class PersonalWikiTest(TestCase):
-
-    @patch('seahub.views.wiki.seafile_api.get_owned_repo_list')
-    def test_wiki_does_not_exist(self, mock_get_owned_repo_list):
-        res = personal_wiki(request)
-
-        self.assertFalse(res.get('wiki_exists'))
-        self.assertEqual('wiki/personal_wiki.html', res.get('template_name'))
-
-    @patch('seahub.wiki.utils.seaserv.get_repo')
-    @patch('seahub.wiki.utils.seaserv.get_commits')
-    @patch('seahub.views.wiki.seaserv.post_empty_file')
-    def test_wiki_page_missing(self, mock_post_empty_file,
-                               mock_get_commits, mock_get_repo):
-        """
-        """
-        # setup personal wiki
-        PersonalWiki.objects.create(username=request.user.username,
-                                    repo_id=repo_id)
-
-        mock_get_repo.return_value = mock_repo
-        mock_get_commits.return_value = [None]
-
-        mock_post_empty_file.return_value = True
-        res = personal_wiki(request)
-        self.assertEqual('/home/wiki/home/', res['Location'])
-
-    @patch('seahub.views.wiki.utils.get_personal_wiki_page')
-    @patch('seahub.base.models.FileContributors.objects.get_file_contributors')
-    def test_wiki_found(self, mock_get_file_contributors,
-                        mock_get_personal_wiki_page):
-        mock_get_personal_wiki_page.return_value = (mock_content,
-                                                    mock_repo,
-                                                    mock_dirent)
-
-        mock_get_file_contributors.return_value = ([request.user.username],
-                                                   None, None)
-
-        res = personal_wiki(request)
-        self.assertEqual('fake content', res.get('content'))
-        self.assertEqual('fake content', res.get('index_content'))
-        self.assertEqual('home', res.get('page'))
-        self.assertEqual('wiki/personal_wiki.html', res.get('template_name'))
 
 ########## Helpler functions and classes
 def FakeRequestFactory(*args, **kwargs):

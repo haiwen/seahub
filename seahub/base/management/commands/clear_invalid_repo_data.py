@@ -4,7 +4,6 @@ from seaserv import seafile_api
 from seahub.tags.models import FileUUIDMap
 from seahub.base.models import UserStarredFiles
 from seahub.revision_tag.models import RevisionTags
-from seahub.wiki.models import PersonalWiki
 from seahub.share.models import ExtraGroupsSharePermission, \
         ExtraSharePermission, UploadLinkShare
 
@@ -21,7 +20,6 @@ class Command(BaseCommand):
 
         #on_delete is  CASCADE, so FileTag/FileComment will be deleted
         self.tables = {'FileUUIDMap': FileUUIDMap, 'RevisionTags': RevisionTags,
-                       'PersonalWiki': PersonalWiki,
                        'UserStarredFiles': UserStarredFiles,
                        'ExtraGroupsSharePermission': ExtraGroupsSharePermission,
                        'ExtraSharePermission': ExtraSharePermission,

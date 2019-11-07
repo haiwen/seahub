@@ -1611,9 +1611,6 @@ def file_edit_submit(request, repo_id):
 
         wiki_name = os.path.splitext(os.path.basename(path))[0]
         next_page = reverse('group_wiki', args=[gid, wiki_name])
-    elif req_from == 'personal_wiki_page_edit' or req_from == 'personal_wiki_page_new':
-        wiki_name = os.path.splitext(os.path.basename(path))[0]
-        next_page = reverse('personal_wiki', args=[wiki_name])
     elif req_from == 'wikis_wiki_page_edit' or req_from == 'wikis_wiki_page_new':
         wiki_slug = request.GET.get('wiki_slug', '')
         wiki_page_name = os.path.splitext(os.path.basename(path))[0]
@@ -1700,8 +1697,6 @@ def file_edit(request, repo_id):
     wiki_name = os.path.splitext(u_filename)[0]
     if page_from == 'wiki_page_edit' or page_from == 'wiki_page_new':
         cancel_url = reverse('group_wiki', args=[gid, wiki_name])
-    elif page_from == 'personal_wiki_page_edit' or page_from == 'personal_wiki_page_new':
-        cancel_url = reverse('personal_wiki', args=[wiki_name])
     elif page_from == 'wikis_wiki_page_edit' or page_from == 'wikis_wiki_page_new':
         wiki_page_name = wiki_name
         cancel_url = reverse('wiki:slug', args=[wiki_slug, wiki_page_name])
