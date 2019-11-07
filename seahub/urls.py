@@ -156,6 +156,7 @@ from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView
 from seahub.api2.endpoints.admin.logs import AdminLogsLoginLogs, AdminLogsFileAccessLogs, AdminLogsFileUpdateLogs, \
     AdminLogsSharePermissionLogs
+from seahub.api2.endpoints.admin.terms_and_conditions import AdminTermsAndConditions, AdminTermAndCondition
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
 from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusScanRecords, AdminVirusScanRecord
@@ -622,6 +623,10 @@ urlpatterns = [
     url(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
     url(r'^api/v2.1/admin/sys-notifications/$', AdminSysNotificationsView.as_view(), name='api-2.1-admin-sys-notifications'),
     url(r'^api/v2.1/admin/sys-notifications/(?P<nid>\d+)/$', AdminSysNotificationView.as_view(),name='api-2.1-admin-sys-notification'),
+
+    ## admin::terms and conditions
+    url(r'^api/v2.1/admin/terms-and-conditions/$', AdminTermsAndConditions.as_view(), name='api-v2.1-admin-terms-and-conditions'),
+    url(r'^api/v2.1/admin/terms-and-conditions/(?P<term_id>\d+)/$', AdminTermAndCondition.as_view(), name='api-v2.1-admin-term-and-condition'),
 
     ## admin::work weixin departments
     url(r'^api/v2.1/admin/work-weixin/departments/$', AdminWorkWeixinDepartments.as_view(), name='api-v2.1-admin-work-weixin-departments'),
