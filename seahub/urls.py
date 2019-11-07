@@ -731,6 +731,7 @@ urlpatterns = [
     url(r'^sys/institutions/(?P<inst_id>\d+)/info/$', sysadmin_react_fake_view, name="sys_institution_info"),
     url(r'^sys/institutions/(?P<inst_id>\d+)/members/$', sysadmin_react_fake_view, name="sys_institution_members"),
     url(r'^sys/institutions/(?P<inst_id>\d+)/admins/$', sysadmin_react_fake_view, name="sys_institution_admins"),
+    url(r'^sys/terms-and-conditions/$', sysadmin_react_fake_view, name="terms_and_conditions"),
     url(r'^sys/share-links/$', sysadmin_react_fake_view, name="sys_share_links"),
     url(r'^sys/upload-links/$', sysadmin_react_fake_view, name="sys_upload_links"),
     url(r'^sys/work-weixin/$', sysadmin_react_fake_view, name="sys_work_weixin"),

@@ -222,10 +222,14 @@ class SidePanel extends React.Component {
                 }
                 {isDefaultAdmin && enableTermsAndConditions &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sys/termsadmin/'}>
+                    <Link
+                      className={`nav-link ellipsis ${this.getActiveClass('termsandconditions')}`}
+                      to={siteRoot + 'sys/terms-and-conditions/'}
+                      onClick={() => this.props.tabItemClick('termsandconditions')}
+                    >
                       <span className="sf2-icon-wiki" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Terms and Conditions')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {isPro && canViewAdminLog &&
