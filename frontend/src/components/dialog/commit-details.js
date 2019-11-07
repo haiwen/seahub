@@ -7,6 +7,8 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
+import '../../css/commit-details.css';
+
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   commitID: PropTypes.string.isRequired,
