@@ -194,6 +194,127 @@ def get_time_offset():
     return offset[:3] + ':' + offset[3:]
 
 
+class SystemUserTrafficView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+
+        month = request.GET.get("month", "")
+        if not month:
+            error_msg = "month invalid."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            month_obj = datetime.datetime.strptime(month, "%Y%m")
+        except Exception as e:
+            logger.error(e)
+            error_msg = "month %s invalid" % month
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+        start = (page - 1) * per_page
+
+        # get one more item than per_page, to judge has_next_page
+        try:
+            traffics = seafevents_api.get_all_users_traffic_by_month(month_obj, start, start + per_page + 1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if len(traffics) == per_page + 1:
+            has_next_page = True
+            traffics = traffics[:per_page]
+        else:
+            has_next_page = False
+
+        user_monthly_traffic_list = []
+        for traffic in traffics:
+            info = {}
+            info['email'] = traffic['user']
+            info['name'] = email2nickname(traffic['user'])
+            info['sync_file_upload'] = traffic['sync_file_upload']
+            info['sync_file_download'] = traffic['sync_file_download']
+            info['web_file_upload'] = traffic['web_file_upload']
+            info['web_file_download'] = traffic['web_file_download']
+            info['link_file_upload'] = traffic['link_file_upload']
+            info['link_file_download'] = traffic['link_file_download']
+            user_monthly_traffic_list.append(info)
+
+        return Response({
+            'user_monthly_traffic_list': user_monthly_traffic_list,
+            'has_next_page': has_next_page
+        })
+
+
+class SystemOrgTrafficView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+
+        month = request.GET.get("month", "")
+        if not month:
+            error_msg = "month invalid."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            month_obj = datetime.datetime.strptime(month, "%Y%m")
+        except Exception as e:
+            logger.error(e)
+            error_msg = "month %s invalid" % month
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+        start = (page - 1) * per_page
+
+        # get one more item than per_page, to judge has_next_page
+        try:
+            traffics = seafevents_api.get_all_orgs_traffic_by_month(month_obj, start, start + per_page + 1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if len(traffics) == per_page + 1:
+            has_next_page = True
+            traffics = traffics[:per_page]
+        else:
+            has_next_page = False
+
+        org_monthly_traffic_list = []
+        for traffic in traffics:
+            info = {}
+            info['org_id'] = traffic['org_id']
+            org = ccnet_api.get_org_by_id(traffic['org_id'])
+            info['org_name'] = org.org_name if org else ''
+            info['sync_file_upload'] = traffic['sync_file_upload']
+            info['sync_file_download'] = traffic['sync_file_download']
+            info['web_file_upload'] = traffic['web_file_upload']
+            info['web_file_download'] = traffic['web_file_download']
+            info['link_file_upload'] = traffic['link_file_upload']
+            info['link_file_download'] = traffic['link_file_download']
+            org_monthly_traffic_list.append(info)
+
+        return Response({
+            'org_monthly_traffic_list': org_monthly_traffic_list,
+            'has_next_page': has_next_page,
+        })
+
+
 class SystemUserTrafficExcelView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
