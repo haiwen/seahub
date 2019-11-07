@@ -72,7 +72,6 @@ class Content extends Component {
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
                   setAdmin={this.props.setAdmin}
-                  revokeAdmin={this.props.revokeAdmin}
                   deleteUser={this.props.deleteUser}
                 />);
               })}
@@ -102,8 +101,12 @@ class Item extends Component {
       isOpIconShown: false,
       highlight: false,
       isSetAdminDialogOpen: false,
-      isRevokeAdminDialogOpen: false,
     };
+    if (this.props.item.is_institution_admin) {
+      this.operations = ['Delete'];
+    } else {
+      this.operations = ['Set Admin', 'Delete'];
+    }
   }
 
   handleMouseEnter = () => {
@@ -139,19 +142,8 @@ class Item extends Component {
     this.setState({isSetAdminDialogOpen: !this.state.isSetAdminDialogOpen});
   }
 
-  toggleRevokeAdminDialog = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-    this.setState({isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen});
-  }
-
   setAdmin = () => {
     this.props.setAdmin(this.props.item.email);
-  }
-
-  revokeAdmin = () => {
-    this.props.revokeAdmin(this.props.item.email);
   }
 
   onMenuItemClick = (operation) => {
@@ -161,16 +153,14 @@ class Item extends Component {
         break;
       case 'Set Admin':
         this.props.setAdmin(this.props.item.email);
-        break;
-      case 'Revoke Admin':
-        this.props.revokeAdmin(this.props.item.email);
+        this.operations = ['Delete'];
         break;
     }
   }
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isSetAdminDialogOpen, isRevokeAdminDialogOpen } = this.state;
+    const { isOpIconShown, isSetAdminDialogOpen } = this.state;
 
     return (
       <Fragment>
@@ -186,7 +176,7 @@ class Item extends Component {
           <td>
             {isOpIconShown &&
               <OpMenu
-                isInstitutionAdmin={item.is_institution_admin}
+                operations={this.operations}
                 onMenuItemClick={this.onMenuItemClick}
                 onFreezedItem={this.props.onFreezedItem}
                 onUnfreezedItem={this.onUnfreezedItem}
@@ -200,14 +190,6 @@ class Item extends Component {
             message={gettext('Sure?')}
             executeOperation={this.setAdmin}
             toggleDialog={this.toggleSetAdminDialog}
-          />
-        }
-        {isRevokeAdminDialogOpen &&
-          <CommonOperationConfirmationDialog
-            title={gettext('Revoke Admin')}
-            message={gettext('Sure?')}
-            executeOperation={this.revokeAdmin}
-            toggleDialog={this.toggleRevokeAdminDialog}
           />
         }
       </Fragment>
@@ -288,22 +270,6 @@ class InstitutionUsers extends Component {
       toaster.danger(errMessage);
     });
   }
-  
-  revokeAdmin = (email) => {
-    seafileAPI.sysAdminUpdateInstitutionUser(this.props.institutionID, email, false).then(res => {
-      let userList = this.state.userList.map(user => {
-        if (user.email == email) {
-          user.is_institution_admin = false;
-        }
-        return user;
-      });
-      this.setState({userList: userList});
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
 
   toggleAddUserDialog = () => {
     this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
@@ -370,7 +336,6 @@ class InstitutionUsers extends Component {
                 errorMsg={this.state.errorMsg}
                 items={this.state.userList}
                 setAdmin={this.setAdmin}
-                revokeAdmin={this.revokeAdmin}
                 deleteUser={this.deleteUser}
                 currentPage={currentPage}
                 perPage={perPage}
