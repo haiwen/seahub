@@ -1,5 +1,6 @@
 import logging
 from decimal import Decimal
+from constance import config
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -9,7 +10,6 @@ from rest_framework import status
 
 from django.utils import timezone
 
-from seahub.settings import ENABLE_TERMS_AND_CONDITIONS
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 def check_enable_terms_and_conditions(func):
     def _decorated(view, request, *args, **kwargs):
-        if not ENABLE_TERMS_AND_CONDITIONS:
+        if not config.ENABLE_TERMS_AND_CONDITIONS:
             error_msg = 'terms and conditions not enabled.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         return func(view, request, *args, **kwargs)
