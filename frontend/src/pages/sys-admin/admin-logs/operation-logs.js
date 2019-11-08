@@ -112,7 +112,7 @@ class Item extends Component {
     let repoPageUrl = '';
     let groupPageUrl = '';
     if (item.operation == 'repo_create' || item.operation == 'repo_delete' || item.operation == 'repo_transfer') {
-      repoPageUrl = siteRoot + 'sys/libraries/' + detail.id + '/' + detail.name + '/';
+      repoPageUrl = siteRoot + 'sys/libraries/' + detail.id + '/' + encodeURIComponent(detail.name) + '/';
     }
     if (item.operation == 'group_create' || item.operation == 'group_delete' || item.operation == 'group_transfer') {
       groupPageUrl = siteRoot + 'sys/groups/' + detail.id + '/libraries/';
