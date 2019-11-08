@@ -102,11 +102,11 @@ class Item extends Component {
 
     let ownerPageUrl = '';
     if (detail.owner) {
-      ownerPageUrl = siteRoot + 'useradmin/info/' + detail.owner + '/';
+      ownerPageUrl = siteRoot + 'sys/users/' + encodeURIComponent(detail.owner) + '/';
     }
     let userPageUrl = '';
     if (detail.email) {
-      userPageUrl = siteRoot + 'useradmin/info/' + detail.email + '/';
+      userPageUrl = siteRoot + 'sys/users/' + encodeURIComponent(detail.email) + '/';
     }
     let detailText = '';
     let repoPageUrl = '';
