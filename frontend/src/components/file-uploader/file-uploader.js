@@ -626,7 +626,7 @@ class FileUploader extends React.Component {
     let resumableFile = this.resumable.files[this.resumable.files.length - 1];
     let { repoID, path } = this.props;
     seafileAPI.getUploadLink(repoID, path).then((res) => {  // get upload link
-      this.resumable.opts.target = res.data;
+      this.resumable.opts.target = res.data + '?ret-json=1';
       this.setState({
         isUploadRemindDialogShow: false,
         isUploadProgressDialogShow: true,
