@@ -624,14 +624,22 @@ class FileUploader extends React.Component {
   
   uploadFile = () => {
     let resumableFile = this.resumable.files[this.resumable.files.length - 1];
-    this.setState({
-      isUploadRemindDialogShow: false,
-      isUploadProgressDialogShow: true,
-      uploadFileList: [...this.state.uploadFileList, resumableFile]
-    }, () => {
-      this.resumable.upload();
+    let { repoID, path } = this.props;
+    seafileAPI.getUploadLink(repoID, path).then((res) => {  // get upload link
+      this.resumable.opts.target = res.data;
+      this.setState({
+        isUploadRemindDialogShow: false,
+        isUploadProgressDialogShow: true,
+        uploadFileList: [...this.state.uploadFileList, resumableFile]
+      }, () => {
+        this.resumable.upload();
+      });
+      Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', true);
+
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
-    Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', true);
   }
 
   cancelFileUpload = () => {
