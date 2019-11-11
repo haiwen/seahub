@@ -37,7 +37,7 @@ class StatisticReports extends React.Component {
     if (type === 'month') {
       let pattern = /^([012]\d{3})(0[1-9]|1[012])$/;
       if (!pattern.test(month)) {
-        let errorMessage = gettext('The format is incorrect, the correct format is: yyyymm');
+        let errorMessage = gettext('Invalid month, should be yyyymm.');
         this.setState({
           errorTip: true,
           errorMessage: errorMessage

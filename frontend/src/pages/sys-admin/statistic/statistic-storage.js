@@ -33,7 +33,7 @@ class StatisticStorage extends React.Component {
           totalStorage.push(item.total_storage);
         });
         let total_storage = {
-          label: 'Total storage space',
+          label: gettext('Total storage space'),
           data: totalStorage, 
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};

@@ -33,7 +33,7 @@ class StatisticUsers extends React.Component {
           count.push(item.count);
         });
         let userCount = {
-          label: 'Active Users',
+          label: gettext('Active Users'),
           data: count, 
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};

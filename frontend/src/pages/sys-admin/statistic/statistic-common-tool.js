@@ -78,7 +78,7 @@ class StatisticCommonTool extends React.Component {
       return;
     }
     if (startDate > endDate) {
-      errorMessage = gettext('The initial date should be earlier than the end date.');
+      errorMessage = gettext('Start date should be earlier than end date.');
       this.setState({
         errorTip: true,
         errorMessage: errorMessage

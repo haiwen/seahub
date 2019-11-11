@@ -56,42 +56,42 @@ class StatisticTraffic extends React.Component {
           total_download.push(item['link-file-download'] + item['sync-file-download'] + item['web-file-download']);
         });
         let linkUpload = {
-          label: 'Upload',
+          label: gettext('Upload'),
           data: link_upload, 
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let linkDownload = {
-          label: 'Download',
+          label: gettext('Download'),
           data: link_download, 
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let syncUpload = {
-          label: 'Upload',
+          label: gettext('Upload'),
           data: sync_upload, 
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let syncDownload = {
-          label: 'Download',
+          label: gettext('Download'),
           data: sync_download, 
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let webUpload = {
-          label: 'Upload',
+          label: gettext('Upload'),
           data: web_upload, 
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let webDownload = {
-          label: 'Download',
+          label: gettext('Download'),
           data: web_download, 
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let totalUpload = {
-          label: 'Upload',
+          label: gettext('Upload'),
           data: total_upload, 
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let totalDownload = {
-          label: 'Download',
+          label: gettext('Download'),
           data: total_download, 
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};

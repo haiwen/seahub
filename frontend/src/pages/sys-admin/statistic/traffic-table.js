@@ -31,7 +31,7 @@ class TrafficTable extends React.Component {
       <table className="table-hover">
         <thead>
           <tr>
-            <th width="16%">{gettext(trafficTypeName)}</th>
+            <th width="16%">{gettext('{trafficTypeName}').replace('{trafficTypeName}', trafficTypeName)}</th>
             <th width="11%">{gettext('Sync Upload')}</th>
             <th width="14%">{gettext('Sync Download')}</th>
             <th width="11%">{gettext('Web Upload')}</th>
