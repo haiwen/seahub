@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Account from '../../components/common/account';
 
 const propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.object
 };
 
 class MainPanelTopbar extends Component {
@@ -18,6 +18,7 @@ class MainPanelTopbar extends Component {
           </div>
         </div>
         <div className="common-toolbar">
+         {this.props.search && this.props.search}
           <Account isAdminPanel={true} />
         </div>
       </div>

@@ -25,6 +25,7 @@ import UserGroups from './users/user-groups';
 import AllRepos from './repos/all-repos';
 import SystemRepo from './repos/system-repo';
 import TrashRepos from './repos/trash-repos';
+import SearchRepos from './repos/search-repos';
 import DirView from './repos/dir-view';
 
 import Groups from './groups/groups';
@@ -91,7 +92,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'libraries',
-        urlPartList: ['all-libraries', 'system-library', 'trash-libraries', 'libraries/']
+        urlPartList: ['all-libraries', 'search-libraries', 'system-library', 'trash-libraries', 'libraries/']
       },
       {
         tab: 'users',
@@ -154,6 +155,7 @@ class SysAdmin extends React.Component {
             <AllRepos path={siteRoot + 'sys/all-libraries'} />
             <SystemRepo path={siteRoot + 'sys/system-library'} />
             <TrashRepos path={siteRoot + 'sys/trash-libraries'} />
+            <SearchRepos path={siteRoot + 'sys/search-libraries'} />
             <DirView path={siteRoot + 'sys/libraries/:repoID/*'} />
             <WebSettings path={siteRoot + 'sys/web-settings'} />
             <Notifications path={siteRoot + 'sys/notifications'} />
