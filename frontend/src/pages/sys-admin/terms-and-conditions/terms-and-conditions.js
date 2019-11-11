@@ -8,6 +8,7 @@ import moment from 'moment';
 import Loading from '../../../components/loading';
 import MainPanelTopbar from '../main-panel-topbar';
 import AddOrUpdateTermDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog';
+import TermContentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-term-content-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import OpMenu from './op-menu';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
@@ -86,6 +87,7 @@ class Item extends Component {
       isOpIconShown: false,
       isUpdateDialogOpen: false,
       isDeleteDialogOpen: false,
+      isTermContentDialogOpen: false,
     };
   }
 
@@ -113,6 +115,10 @@ class Item extends Component {
 
   toggleDeleteDialog = (e) => {
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+  }
+
+  toggleTermContentDialog = (e) => {
+    this.setState({isTermContentDialogOpen: !this.state.isTermContentDialogOpen})
   }
 
   onMenuItemClick = (operation) => {
@@ -146,7 +152,7 @@ class Item extends Component {
 
   render() {
     let { item } = this.props;
-    let { isDeleteDialogOpen, isUpdateDialogOpen } = this.state;
+    let { isDeleteDialogOpen, isUpdateDialogOpen, isTermContentDialogOpen } = this.state;
     let term_text = '';
     if (item.text.length >= 20) {
       term_text = item.text.slice(0, 20) + '...';
@@ -160,7 +166,7 @@ class Item extends Component {
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td>{item.name}</td>
           <td>{item.version_number}</td>
-          <td><a href='#'>{term_text}</a></td>
+          <td><a href='#' onClick={this.toggleTermContentDialog}>{term_text}</a></td>
           <td>{moment(item.ctime).fromNow()}</td>
           <td>{item.activate_time ? moment(item.activate_time).fromNow() : '--'}</td>
           <td>
@@ -192,6 +198,14 @@ class Item extends Component {
               toggle={this.toggleUpdateDialog}
               isUpdate={true}
               oldTermObj={item}
+            />
+          </ModalPortal>
+        }
+        {isTermContentDialogOpen &&
+          <ModalPortal>
+            <TermContentDialog
+              toggle={this.toggleTermContentDialog}
+              contentText={item.text}
             />
           </ModalPortal>
         }
