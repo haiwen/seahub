@@ -3,16 +3,17 @@ import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext } from '../../../utils/constants';
+import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import ModalPortal from '../../../components/modal-portal';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import MainPanelTopbar from '../main-panel-topbar';
+import Search from '../search';
 import UserLink from '../user-link';
 import ReposNav from './repos-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 
 const { trashReposExpireDays } = window.sysadmin.pageOptions;
 
@@ -66,6 +67,7 @@ class Content extends Component {
               })}
             </tbody>
           </table>
+          {pageInfo &&
           <Paginator
             gotoPreviousPage={this.getPreviousPageList}
             gotoNextPage={this.getNextPageList}
@@ -73,6 +75,7 @@ class Content extends Component {
             hasNextPage={pageInfo.has_next_page}
             canResetPerPage={false}
           />
+          }
         </Fragment>
       );
 
@@ -227,8 +230,25 @@ class TrashRepos extends Component {
         loading: false
       });
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      if (error.response) {
+        if (error.response.status == 403) {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Permission denied')
+          });
+          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
+        } else {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Error')
+          });
+        }
+      } else {
+        this.setState({
+          loading: false,
+          errorMsg: gettext('Please check the network.')
+        });
+      }
     });
   }
 
@@ -260,12 +280,50 @@ class TrashRepos extends Component {
     });
   }
 
+  getSearch = () => {
+    return <Search
+      placeholder={gettext('Search libraries by owner')}
+      submit={this.searchRepos}
+    />;
+  }
+
+  searchRepos = (owner) => {
+    seafileAPI.sysAdminSearchTrashRepos(owner).then((res) => {
+      this.setState({
+        repos: res.data.repos,
+        pageInfo: null,
+        errorMsg: '', // necessary!
+        loading: false
+      });
+    }).catch((error) => {
+      if (error.response) {
+        if (error.response.status == 403) {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Permission denied')
+          });
+          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
+        } else {
+          this.setState({
+            loading: false,
+            errorMsg: gettext('Error')
+          });
+        }
+      } else {
+        this.setState({
+          loading: false,
+          errorMsg: gettext('Please check the network.')
+        });
+      }
+    });
+  }
+
   render() {
     const { isCleanTrashDialogOpen } = this.state;
     return (
       <Fragment>
         {this.state.repos.length ? (
-          <MainPanelTopbar>
+          <MainPanelTopbar search={this.getSearch()}>
             <Button className="operation-item" onClick={this.toggleCleanTrashDialog}>{gettext('Clean')}</Button>
           </MainPanelTopbar>
         ) : <MainPanelTopbar />
