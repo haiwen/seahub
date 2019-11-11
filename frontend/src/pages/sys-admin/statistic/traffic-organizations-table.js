@@ -21,7 +21,6 @@ class TrafficOrganizationsTable extends React.Component {
       hasNextPage: false,
       month: moment().format('YYYYMM'),
       isLoading: false,
-      errorTip: false,
       errorMessage: ''
     };
     this.initPage = 1;
@@ -54,7 +53,6 @@ class TrafficOrganizationsTable extends React.Component {
       if (!pattern.test(month)) {
         let errorMessage = gettext('Invalid month, should be yyyymm.');
         this.setState({
-          errorTip: true,
           errorMessage: errorMessage
         });
         return;
@@ -67,7 +65,7 @@ class TrafficOrganizationsTable extends React.Component {
 
   onGenerateReports = (month, page) => {
     let { perPage } = this.state;
-    this.setState({isLoading: true, errorTip: false});
+    this.setState({isLoading: true, errorMessage: ''});
     seafileAPI.sysAdminListOrgTraffic(month, page, perPage).then(res => {
       let userTrafficList = res.data.org_monthly_traffic_list.slice(0);
       this.setState({
@@ -88,18 +86,18 @@ class TrafficOrganizationsTable extends React.Component {
   }
 
   render() {
-    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorTip, errorMessage } = this.state;
+    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorMessage } = this.state;
     return (
       <Fragment>
         <div className="d-flex align-items-center mt-4">
           <span className="statistic-reports-tip">{gettext('Month:')}</span>
           <Input 
             className="statistic-reports-input" 
-            defaultValue={moment().format('YYYYMM')} 
-            onChange={this.handleChange} 
-            onKeyPress={this.handleKeyPress}   
+            defaultValue={moment().format('YYYYMM')}
+            onChange={this.handleChange}
+            onKeyPress={this.handleKeyPress}
           />
-          {errorTip && <div className="error">{errorMessage}</div>}
+          {errorMessage && <div className="error">{errorMessage}</div>}
         </div>
         {isLoading && <Loading />}
         {!isLoading && 

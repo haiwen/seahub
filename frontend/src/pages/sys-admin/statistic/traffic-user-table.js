@@ -21,7 +21,6 @@ class TrafficOrganizationsTable extends React.Component {
       currentPage: 1,
       month: moment().format('YYYYMM'),
       isLoading: false,
-      errorTip: false,
       errorMessage: ''
     };
     this.initPage = 1;
@@ -54,7 +53,6 @@ class TrafficOrganizationsTable extends React.Component {
       if (!pattern.test(month)) {
         let errorMessage = gettext('Invalid month, should be yyyymm.');
         this.setState({
-          errorTip: true,
           errorMessage: errorMessage
         });
         return;
@@ -69,7 +67,7 @@ class TrafficOrganizationsTable extends React.Component {
     let { perPage } = this.state;
     this.setState({
       isLoading: true,
-      errorTip: false
+      errorMessage: ''
     });
     seafileAPI.sysAdminListUserTraffic(month, page, perPage).then(res => {
       let userTrafficList = res.data.user_monthly_traffic_list.slice(0);
@@ -91,7 +89,7 @@ class TrafficOrganizationsTable extends React.Component {
   }
 
   render() {
-    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorTip, errorMessage } = this.state;
+    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorMessage } = this.state;
     return (
       <Fragment>
         <div className="d-flex align-items-center mt-4">
@@ -102,7 +100,7 @@ class TrafficOrganizationsTable extends React.Component {
             onChange={this.handleChange} 
             onKeyPress={this.handleKeyPress}   
           />
-          {errorTip && <div className="error">{errorMessage}</div>}
+          {errorMessage && <div className="error">{errorMessage}</div>}
         </div>
         {isLoading && <Loading />}
         {!isLoading && 

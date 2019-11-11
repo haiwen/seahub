@@ -11,7 +11,6 @@ class StatisticReports extends React.Component {
     super(props);
     this.state = {
       month: moment().format('YYYYMM'),
-      errorTip: false,
       errorMessage: ''
     };
   }
@@ -29,7 +28,6 @@ class StatisticReports extends React.Component {
     if (!month) {
       let errorMessage = gettext('Required field');
       this.setState({
-        errorTip: true,
         errorMessage: errorMessage
       });
       return;
@@ -39,7 +37,6 @@ class StatisticReports extends React.Component {
       if (!pattern.test(month)) {
         let errorMessage = gettext('Invalid month, should be yyyymm.');
         this.setState({
-          errorTip: true,
           errorMessage: errorMessage
         });
         return;
@@ -54,14 +51,14 @@ class StatisticReports extends React.Component {
         break;
     }
     this.setState({
-      errorTip: false
+      errorMessage: ''
     });
     window.location.href = url;
   }
 
   render() {
 
-    let { errorTip, errorMessage } = this.state;
+    let { errorMessage } = this.state;
     return(
       <Fragment>
         <MainPanelTopbar />
@@ -75,7 +72,7 @@ class StatisticReports extends React.Component {
                 <Input className="statistic-reports-input" defaultValue={moment().format('YYYYMM')} onChange={this.handleChange} />
                 <Button className="statistic-reports-submit operation-item" onClick={this.onGenerateReports.bind(this, 'month')}>{gettext('Create Report')}</Button>
               </div>
-              {errorTip && <div className="error">{errorMessage}</div>}
+              {errorMessage && <div className="error">{errorMessage}</div>}
             </div>
             <div className="statistic-reports">
               <div className="statistic-reports-title">{gettext('User Storage')}</div>

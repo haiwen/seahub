@@ -20,7 +20,6 @@ class StatisticCommonTool extends React.Component {
       itemActive: 'oneWeek',
       startDate: null,
       endDate: null,
-      errorTip: false,
       errorMessage: ''
     };
   }
@@ -54,7 +53,7 @@ class StatisticCommonTool extends React.Component {
     }
     this.setState({
       itemActive: activeName,
-      errorTip: false
+      errorMessage: ''
     });
     this.props.getActiviesFiles(startTime, endTime);
   }
@@ -80,14 +79,13 @@ class StatisticCommonTool extends React.Component {
     if (startDate > endDate) {
       errorMessage = gettext('Start date should be earlier than end date.');
       this.setState({
-        errorTip: true,
         errorMessage: errorMessage
       });
       return;
     }
     this.setState({
       itemActive: 'itemButton',
-      errorTip: false
+      errorMessage: ''
     });
     let startTime = moment(startDate).format('YYYY-MM-DD 00:00:00');
     let endTime = moment(endDate).format('YYYY-MM-DD 00:00:00');
@@ -96,7 +94,7 @@ class StatisticCommonTool extends React.Component {
   }
 
   render() {
-    let { itemActive, errorTip, errorMessage } = this.state;
+    let { itemActive, errorMessage } = this.state;
     return(
       <Fragment>
         {this.props.children}
@@ -115,7 +113,7 @@ class StatisticCommonTool extends React.Component {
               placeholderText="yyyy-mm-dd"
               className="system-statistic-input form-control"
             />
-            <span style={{padding: '0 5px', lineHeight: 1}}>-</span>
+            <span className="system-statistic-connect">-</span>
             <DatePicker
               dateFormat="yyyy-MM-dd"
               onChange={this.handleEndChange}
@@ -124,9 +122,9 @@ class StatisticCommonTool extends React.Component {
               placeholderText="yyyy-mm-dd"
               className="system-statistic-input form-control"
             />
-            <Button className="operation-item" style={{height: '31px',marginLeft: '1rem'}} onClick={this.onSubmit}>{gettext('Submit')}</Button>
+            <Button className="operation-item system-statistic-button" onClick={this.onSubmit}>{gettext('Submit')}</Button>
           </div>
-          {errorTip && 
+          {errorMessage && 
             <div className="error-tip">{errorMessage}</div>
           }
         </div>

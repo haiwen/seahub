@@ -91,3 +91,13 @@
   padding: 0 10px;
   font-size: 13px;
 }
+
+.system-statistic-connect {
+  padding: 0 5px;
+  line-height: 1;
+}
+
+.system-statistic-button {
+  height: 31px;
+  margin-left: 1rem;
+}
