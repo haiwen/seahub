@@ -29,6 +29,7 @@ import SearchRepos from './repos/search-repos';
 import DirView from './repos/dir-view';
 
 import Groups from './groups/groups';
+import SearchGroups from './groups/search-groups';
 import GroupRepos from './groups/group-repos';
 import GroupMembers from './groups/group-members';
 
@@ -100,7 +101,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'groups',
-        urlPartList: ['groups/']
+        urlPartList: ['groups/', 'search-groups/']
       },
       {
         tab: 'organizations',
@@ -160,6 +161,7 @@ class SysAdmin extends React.Component {
             <WebSettings path={siteRoot + 'sys/web-settings'} />
             <Notifications path={siteRoot + 'sys/notifications'} />
             <Groups path={siteRoot + 'sys/groups'} />
+            <SearchGroups path={siteRoot + 'sys/search-groups'} />
             <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} />
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} />
             <Departments path={siteRoot + 'sys/departments'}>
