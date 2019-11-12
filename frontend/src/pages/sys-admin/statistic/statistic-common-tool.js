@@ -2,15 +2,58 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
 import { gettext } from '../../../utils/constants';
-
-import 'react-datepicker/dist/react-datepicker.css';
+import Calendar from '@seafile/seafile-calendar';
+import DatePicker from '@seafile/seafile-calendar/lib/Picker';
+import '@seafile/seafile-calendar/assets/index.css';
 
 const propTypes = {
   getActiviesFiles: PropTypes.func.isRequired,
   children: PropTypes.object,
 };
+
+const now = moment();
+
+class Picker extends React.Component {
+
+  getFormat = () => {
+    return 'YYYY-MM-DD';
+  }
+
+  render() {
+    const props = this.props;
+    const calendar = (<Calendar
+      defaultValue={now}
+      disabledDate={props.disabledDate}
+      format={this.getFormat()}
+    />);
+    return (
+      <DatePicker
+        disabled={props.disabled}
+        calendar={calendar}
+        value={props.value}
+        onChange={props.onChange}
+      >
+      {
+        ({value}) => {
+          return (
+            <span>
+              <input 
+                placeholder="yyyy-mm-dd"
+                disabled={props.disabled}
+                tabIndex="-1"
+                readOnly
+                value={value && value.format(this.getFormat(props.showTime)) || ''}
+                className="form-control system-statistic-input"
+              />
+            </span>
+          );
+        }
+      }
+      </DatePicker>
+    );
+  }
+}
 
 class StatisticCommonTool extends React.Component {
 
@@ -18,9 +61,8 @@ class StatisticCommonTool extends React.Component {
     super(props);
     this.state = {
       itemActive: 'oneWeek',
-      startDate: null,
-      endDate: null,
-      errorMessage: ''
+      startValue: null,
+      endValue: null,
     };
   }
 
@@ -53,48 +95,59 @@ class StatisticCommonTool extends React.Component {
     }
     this.setState({
       itemActive: activeName,
-      errorMessage: ''
     });
     this.props.getActiviesFiles(startTime, endTime);
   }
 
-  handleChange = date => {
-    this.setState({
-      startDate: date
-    });
+  disabledStartDate = (startValue) => {
+    if (!startValue) {
+      return false;
+    }
+    let today = moment().format();
+    
+    const endValue = this.state.endValue;
+    if (!endValue) {
+      let startTime = moment(startValue).format();
+      return today < startTime
+    }
+    return endValue.isBefore(startValue) || moment(startValue).format() > today;
   }
 
-  handleEndChange = date => {
+  disabledEndDate = (endValue) => {
+    if (!endValue) {
+      return false;
+    }
+    let today = moment().format();
+    const startValue = this.state.startValue;
+    if (!startValue) {
+      let endTime = moment(endValue).format();
+      return today < endTime;
+    }
+    return endValue.isBefore(startValue) || moment(endValue).format() > today;
+  }
+
+  onChange = (field, value) => {
     this.setState({
-      endDate: date
+      [field]: value,
     });
   }
 
   onSubmit = () => {
-    let { startDate, endDate } = this.state;
-    let errorMessage;
-    if(!startDate || !endDate) {
-      return;
-    }
-    if (startDate > endDate) {
-      errorMessage = gettext('Start date should be earlier than end date.');
-      this.setState({
-        errorMessage: errorMessage
-      });
+    let { startValue, endValue } = this.state;
+    if(!startValue || !endValue) {
       return;
     }
     this.setState({
       itemActive: 'itemButton',
-      errorMessage: ''
     });
-    let startTime = moment(startDate).format('YYYY-MM-DD 00:00:00');
-    let endTime = moment(endDate).format('YYYY-MM-DD 00:00:00');
+    let startTime = moment(startValue).format('YYYY-MM-DD 00:00:00');
+    let endTime = moment(endValue).format('YYYY-MM-DD 00:00:00');
     let group_by = 'day';
     this.props.getActiviesFiles(startTime, endTime, group_by);
   }
 
   render() {
-    let { itemActive, errorMessage } = this.state;
+    let { itemActive, endValue, startValue } = this.state;
     return(
       <Fragment>
         {this.props.children}
@@ -105,28 +158,19 @@ class StatisticCommonTool extends React.Component {
             <div className={`system-statistic-item rounded-right ${itemActive === 'oneYear' ? 'item-active' : ''}`}  onClick={this.changeActive.bind(this, 'oneYear')}>{gettext('1 Year')}</div>
           </div>
           <div className="system-statistic-input-container">
-            <DatePicker
-              dateFormat="yyyy-MM-dd"
-              onChange={this.handleChange}
-              selected={this.state.startDate}
-              maxDate={new Date()}
-              placeholderText="yyyy-mm-dd"
-              className="system-statistic-input form-control"
+            <Picker
+              disabledDate={this.disabledStartDate}
+              value={startValue}
+              onChange={this.onChange.bind(this, 'startValue')}
             />
             <span className="system-statistic-connect">-</span>
-            <DatePicker
-              dateFormat="yyyy-MM-dd"
-              onChange={this.handleEndChange}
-              selected={this.state.endDate}
-              maxDate={new Date()}
-              placeholderText="yyyy-mm-dd"
-              className="system-statistic-input form-control"
+            <Picker
+              disabledDate={this.disabledEndDate}
+              value={endValue}
+              onChange={this.onChange.bind(this, 'endValue')}
             />
             <Button className="operation-item system-statistic-button" onClick={this.onSubmit}>{gettext('Submit')}</Button>
           </div>
-          {errorMessage && 
-            <div className="error-tip">{errorMessage}</div>
-          }
         </div>
       </Fragment>
     );

@@ -101,3 +101,11 @@
   height: 31px;
   margin-left: 1rem;
 }
+
+.rc-calendar table {
+  table-layout: initial;
+}
+
+.rc-calendar tbody tr {
+  height: 1.75rem;
+}
