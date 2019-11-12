@@ -1,43 +1,39 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@reach/router';
-import { Button } from 'reactstrap';
+import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
+import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import SysAdminCreateGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-group-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
-import Search from '../search';
 import Content from './groups-content';
 
-class Groups extends Component {
+class SearchGroups extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      name: '', 
+      isSubmitBtnActive: false, 
       loading: true,
       errorMsg: '',
       groupList: [],
-      pageInfo: {},
-      perPage: 100,
-      isCreateGroupDialogOpen: false
+      pageInfo: null
     };
   }
 
   componentDidMount () {
-    this.getGroupListByPage(1);
+    let params = (new URL(document.location)).searchParams;
+    this.setState({
+      name: params.get('name') || ''
+    }, this.getGroups);
   }
 
-  toggleCreateGroupDialog = () => {
-    this.setState({isCreateGroupDialogOpen: !this.state.isCreateGroupDialogOpen});
-  }
-
-  getGroupListByPage = (page) => {
-    seafileAPI.sysAdminListAllGroups(page, this.state.perPage).then((res) => {
+  getGroups = () => {
+    const { name } = this.state;
+    seafileAPI.sysAdminSearchGroups(name).then((res) => {
       this.setState({
         loading: false,
-        groupList: res.data.groups,
-        pageInfo: res.data.page_info
+        groupList: res.data.groups
       });
     }).catch((error) => {
       if (error.response) {
@@ -59,20 +55,6 @@ class Groups extends Component {
           errorMsg: gettext('Please check the network.')
         });
       }
-    });
-  }
-
-  createGroup = (groupName, OnwerEmail) => {
-    seafileAPI.sysAdminCreateNewGroup(groupName, OnwerEmail).then(res => {
-      let newGroupList = this.state.groupList;
-      newGroupList.unshift(res.data);
-      this.setState({
-        groupList: newGroupList
-      });
-      this.toggleCreateGroupDialog();
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
     });
   }
 
@@ -109,55 +91,64 @@ class Groups extends Component {
     });
   }
 
-  getSearch = () => {
-    return <Search
-      placeholder={gettext('Search groups by name')}
-      submit={this.searchGroups}
-    />; 
+  handleNameInputChange = (e) => {
+    this.setState({
+      name: e.target.value
+    }, this.checkSubmitBtnActive);
   }
 
-  searchGroups = (name) => {
-    navigate(`${siteRoot}sys/search-groups/?name=${encodeURIComponent(name)}`);
+  checkSubmitBtnActive = () => {
+    const { name } = this.state;
+    this.setState({
+      isSubmitBtnActive: name.trim()
+    });
   }
 
   render() {
-    let { isCreateGroupDialogOpen } = this.state;
+    const { name, isSubmitBtnActive } = this.state;
 
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}>
-          <Fragment>
-            <Button className="operation-item" onClick={this.toggleCreateGroupDialog}>{gettext('New Group')}</Button>
-            <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/groupadmin/export-excel/`}>{gettext('Export Excel')}</a>
-          </Fragment>
-        </MainPanelTopbar>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Groups')}</h3>
             </div>
             <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.groupList}
-                pageInfo={this.state.pageInfo}
-                deleteGroup={this.deleteGroup}
-                transferGroup={this.transferGroup}
-                getListByPage={this.getGroupListByPage}
-              />
+              <div className="mt-4 mb-6">
+                <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Groups')}</h4>
+                <p className="text-secondary small">{gettext('Tip: you can search by keyword in name.')}</p>
+                <Form>
+                  <FormGroup row>
+                    <Label for="name" sm={1}>{gettext('Name')}</Label>
+                    <Col sm={5}>
+                      <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} />
+                    </Col>
+                  </FormGroup>
+                  <FormGroup row>
+                    <Col sm={{size: 5, offset: 1}}>
+                      <button className="btn btn-outline-primary" disabled={!isSubmitBtnActive} onClick={this.getGroups}>{gettext('Submit')}</button>
+                    </Col>
+                  </FormGroup>
+                </Form>
+              </div>
+              <div className="mt-4 mb-6">
+                <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Result')}</h4>
+                <Content
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={this.state.groupList}
+                  deleteGroup={this.deleteGroup}
+                  transferGroup={this.transferGroup}
+                />
+              </div>
             </div>
           </div>
         </div>
-        {isCreateGroupDialogOpen &&
-          <SysAdminCreateGroupDialog 
-            createGroup={this.createGroup}
-            toggleDialog={this.toggleCreateGroupDialog}
-          />
-        }
       </Fragment>
     );
   }
 }
 
-export default Groups;
+export default SearchGroups;
