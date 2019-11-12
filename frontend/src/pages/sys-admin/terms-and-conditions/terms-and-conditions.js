@@ -56,11 +56,7 @@ class TermsAndConditions extends Component {
 
   addTerm = (name, versionNumber, text, isActive) => {
     seafileAPI.sysAdminAddTermAndCondition(name, versionNumber, text, isActive).then(res => {
-      let termList = this.state.termList;
-      termList.push(res.data);
-      this.setState({termList: termList});
-      toaster.success(gettext('Successfully added'));
-      this.toggleAddTermDialog();
+      location.reload();
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
