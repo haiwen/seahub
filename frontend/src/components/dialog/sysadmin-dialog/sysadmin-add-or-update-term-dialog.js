@@ -1,7 +1,19 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Alert, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import TermsPreviewWidget from '../terms-preview-widget';
+import TermsEditorDialog from '../terms-editor-dialog';
+
+import '../../../css/terms-conditions-editor.css';
+
+const propTypes = {
+  isUpdate: PropTypes.bool,
+  oldTermObj: PropTypes.object,
+  addTerm: PropTypes.func,
+  updateTerm: PropTypes.func,
+  toggle: PropTypes.func.isRequired,
+};
 
 class AddOrUpdateTermDialog extends React.Component {
 
@@ -10,42 +22,35 @@ class AddOrUpdateTermDialog extends React.Component {
     this.state = {
       name: '',
       versionNumber: '',
-      text: '',
+      text: {text: '', perview: ''},
       isActive: true,
       errorMsg: '',
+      isConditionsEditorDialogShow: false,
     };
   }
 
   componentDidMount() {
-    if (this.props.oldTermObj) {
+    let oldTermObj = this.props.oldTermObj;
+    if (oldTermObj) {
       this.setState({
-        name: this.props.oldTermObj.name,
-        versionNumber: this.props.oldTermObj.version_number,
-        text: this.props.oldTermObj.text,
-        isActive: !(this.props.oldTermObj.activate_time === ''),
+        name: oldTermObj.name,
+        versionNumber: oldTermObj.version_number,
+        text: JSON.parse(oldTermObj.text),
+        isActive: !(oldTermObj.activate_time === ''),
       });
     }
   }
 
   handleNameChange = (e) => {
-    this.setState({
-      name: e.target.value.trim(),
-      errMsg: ''
-    });
+    this.setState({name: e.target.value.trim()});
   }
 
   handleVersionNumberChange = (e) => {
-    this.setState({
-      versionNumber: e.target.value.trim(),
-      errMsg: ''
-    });
+    this.setState({versionNumber: e.target.value.trim()});
   }
 
   handleTextChange = (e) => {
-    this.setState({
-      text: e.target.value.trim(),
-      errMsg: ''
-    });
+    this.setState({text: e.target.value.trim()});
   }
 
   setActive = () => {
@@ -70,6 +75,7 @@ class AddOrUpdateTermDialog extends React.Component {
       this.setState({errMsg: gettext('Version Number must be a number.')});
       return;
     }
+    text = JSON.stringify(text);
     if (text === '') {
       this.setState({errMsg: gettext('Text is required.')});
       return;
@@ -81,55 +87,69 @@ class AddOrUpdateTermDialog extends React.Component {
     }
   }
 
+  onContentClick = () => {
+    this.setState({isConditionsEditorDialogShow: !this.state.isConditionsEditorDialogShow});
+  }
+
+  onCloseEditorDialog = () => {
+    this.setState({isConditionsEditorDialogShow: false});
+  }
+
+  onUpdateContent = (content) => {
+    this.setState({ text: content });
+  }
+
   render() {
+    let title = this.props.isUpdate ? gettext('Update Terms and Conditions') : gettext('Add Terms and Conditions');
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>
-          {this.props.isUpdate ? gettext('Update Terms and Conditions') : gettext('Add Terms and Conditions')}
-        </ModalHeader>
-        <ModalBody>
-          <FormGroup>
-            <Label for="name">{gettext('Name')}</Label>
-            <Input id="name" value={this.state.name} onChange={this.handleNameChange}/>
-          </FormGroup>
-          <FormGroup>
-            <Label>{gettext('Version Number')}</Label>
-            <Input value={this.state.versionNumber} onChange={this.handleVersionNumberChange}/>
-          </FormGroup>
-          <FormGroup>
-            <Label>{gettext('Text')}</Label>
-            <textarea value={this.state.text} onChange={this.handleTextChange} cols="55" />
-          </FormGroup>
-          <FormGroup tag="fieldset">
-            <Label>{gettext('Activated')}</Label>
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" checked={this.state.isActive} onChange={this.setActive} />{' '}{gettext('On')}
-              </Label>
+      <Fragment>
+        <Modal isOpen={true} toggle={this.props.toggle}>
+          <ModalHeader toggle={this.props.toggle}>{title}</ModalHeader>
+          <ModalBody>
+            <FormGroup>
+              <Label for="name">{gettext('Name')}</Label>
+              <Input id="name" value={this.state.name} onChange={this.handleNameChange}/>
             </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" checked={!this.state.isActive} onChange={this.setInActive} />{' '}{gettext('Off')}
-              </Label>
+            <FormGroup>
+              <Label>{gettext('Version Number')}</Label>
+              <Input value={this.state.versionNumber} onChange={this.handleVersionNumberChange}/>
             </FormGroup>
-          </FormGroup>
-          {this.state.errMsg && <Alert color="danger">{this.state.errMsg}</Alert>}
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={this.addTerm}>{gettext('Submit')}</Button>
-        </ModalFooter>
-      </Modal>
+            <FormGroup className="form-content">
+              <Label>{gettext('Text')}</Label>
+              <TermsPreviewWidget content={this.state.text} onContentClick={this.onContentClick}/>
+            </FormGroup>
+            <FormGroup tag="fieldset">
+              <Label>{gettext('Activated')}</Label>
+              <FormGroup check>
+                <Label check>
+                  <Input type="radio" checked={this.state.isActive} onChange={this.setActive} />
+                  {' '}{gettext('On')}
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input type="radio" checked={!this.state.isActive} onChange={this.setInActive} />
+                  {' '}{gettext('Off')}
+                </Label>
+              </FormGroup>
+            </FormGroup>
+            {this.state.errMsg && <Alert color="danger">{this.state.errMsg}</Alert>}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.addTerm}>{gettext('Submit')}</Button>
+          </ModalFooter>
+        </Modal>
+        {this.state.isConditionsEditorDialogShow && (
+          <TermsEditorDialog 
+            content={this.state.text}
+            onCommit={this.onUpdateContent}
+            onCloseEditorDialog={this.onCloseEditorDialog}
+          />
+        )}
+      </Fragment>
     );
   }
 }
-
-const propTypes = {
-  toggle: PropTypes.func.isRequired,
-  addTerm: PropTypes.func,
-  isUpdate: PropTypes.bool,
-  oldTermObj: PropTypes.object,
-  updateTerm: PropTypes.func,
-};
 
 AddOrUpdateTermDialog.propTypes = propTypes;
 

@@ -1,34 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { SimpleEditor } from '@seafile/seafile-editor';
 import getPreviewContent from '../../utils/markdown-utils';
+import { SimpleEditor } from '@seafile/seafile-editor';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
-  newValue: PropTypes.object,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  content: PropTypes.object,
   onCommit: PropTypes.func.isRequired,
   onCloseEditorDialog: PropTypes.func.isRequired,
 };
 
-class ConditionsEditorDialog extends React.Component {
+class TermsEditorDialog extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.timer = null;
-  }
-
-  componentDidMount() {
-    this.timer = setInterval(() => {
-      if (this.isContentChanged()) {
-        let currentContent = this.getCurrentContent();
-        this.props.onCommit(currentContent);
-      }
-    }, 6000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
+  static defaultProps = {
+    title: gettext('Terms'),
+    content: {text: '', preview: ''}
   }
 
   onKeyDown = (event) => {
@@ -50,8 +38,8 @@ class ConditionsEditorDialog extends React.Component {
   getCurrentContent = () => {
     let markdownContent = this.simpleEditor.getMarkdown();
     let { previewText , images, links } = getPreviewContent(markdownContent);
-    let newValue = Object.assign({}, this.value, { text: markdownContent, preview: previewText, images: images, links: links });
-    return newValue;
+    let content = Object.assign({}, this.value, { text: markdownContent, preview: previewText, images: images, links: links });
+    return content;
   }
 
   setSimpleEditorRef = (editor) => {
@@ -59,23 +47,23 @@ class ConditionsEditorDialog extends React.Component {
   }
 
   render() {
-    let { newValue, title } = this.props;
+    let { content, title } = this.props;
     return (
       <Modal 
         isOpen={true} 
         toggle={this.toggle} 
         onKeyDown={this.onKeyDown}
-        wrapClassName={'long-text-editor-dialog-wrapper'}
-        className={'long-text-editor-dialog'}
-        contentClassName={'long-text-editor-dialog-content'}
+        wrapClassName={'conditions-editor-dialog-wrapper'}
+        className={'conditions-editor-dialog'}
+        contentClassName={'conditions-editor-dialog-content'}
         size={'lg'}
         style={{width: 770}}
       >
-        <ModalHeader className="long-text-editor-dialog-title" toggle={this.toggle}>{title}</ModalHeader>
-        <ModalBody className={'long-text-editor-dialog-main'}>
+        <ModalHeader className="conditions-editor-dialog-title" toggle={this.toggle}>{title}</ModalHeader>
+        <ModalBody className={'conditions-editor-dialog-main'}>
           <SimpleEditor 
             onRef={this.setSimpleEditorRef.bind(this)}
-            value={newValue.text}
+            value={content.text || ''}
           />
         </ModalBody>
       </Modal>
@@ -83,6 +71,6 @@ class ConditionsEditorDialog extends React.Component {
   }
 }
 
-ConditionsEditorDialog.propTypes = propTypes;
+TermsEditorDialog.propTypes = propTypes;
 
-export default ConditionsEditorDialog;
+export default TermsEditorDialog;

@@ -4,7 +4,7 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import moment from 'moment';
 import AddOrUpdateTermDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog';
-import TermContentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-term-content-dialog';
+import TermsPerviewDialog from '../../../components/dialog/terms-preview-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import OpMenu from './op-menu';
@@ -26,7 +26,7 @@ class Item extends Component {
       isOpIconShown: false,
       isUpdateDialogOpen: false,
       isDeleteDialogOpen: false,
-      isTermContentDialogOpen: false,
+      isTermsPerviewDialogOpen: false,
     };
   }
 
@@ -56,8 +56,8 @@ class Item extends Component {
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
   }
 
-  toggleTermContentDialog = (e) => {
-    this.setState({isTermContentDialogOpen: !this.state.isTermContentDialogOpen})
+  toggleTermsContentDialog = (e) => {
+    this.setState({isTermsPerviewDialogOpen: !this.state.isTermsPerviewDialogOpen})
   }
 
   onMenuItemClick = (operation) => {
@@ -91,13 +91,8 @@ class Item extends Component {
 
   render() {
     let { item } = this.props;
-    let { isDeleteDialogOpen, isUpdateDialogOpen, isTermContentDialogOpen } = this.state;
-    let term_text = '';
-    if (item.text.length >= 20) {
-      term_text = item.text.slice(0, 20) + '...';
-    } else {
-      term_text = item.text;
-    }
+    let { isDeleteDialogOpen, isUpdateDialogOpen, isTermsPerviewDialogOpen } = this.state;
+    let termContent = item.text ? JSON.parse(item.text) : {};
     let itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     return (
@@ -105,7 +100,7 @@ class Item extends Component {
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td>{item.name}</td>
           <td>{item.version_number}</td>
-          <td><a href='#' onClick={this.toggleTermContentDialog}>{term_text}</a></td>
+          <td className="ellipsis"><a href='#' onClick={this.toggleTermsContentDialog}>{termContent.text}</a></td>
           <td>{moment(item.ctime).fromNow()}</td>
           <td>{item.activate_time ? moment(item.activate_time).fromNow() : '--'}</td>
           <td>
@@ -140,11 +135,11 @@ class Item extends Component {
             />
           </ModalPortal>
         }
-        {isTermContentDialogOpen &&
+        {isTermsPerviewDialogOpen &&
           <ModalPortal>
-            <TermContentDialog
-              toggle={this.toggleTermContentDialog}
-              contentText={item.text}
+            <TermsPerviewDialog
+              content={termContent}
+              onClosePreviewDialog={this.toggleTermsContentDialog}
             />
           </ModalPortal>
         }
