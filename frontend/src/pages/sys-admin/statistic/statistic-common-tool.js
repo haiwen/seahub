@@ -6,6 +6,8 @@ import { gettext } from '../../../utils/constants';
 import Calendar from '@seafile/seafile-calendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
 import '@seafile/seafile-calendar/assets/index.css';
+import enUS from '@seafile/seafile-calendar/lib/locale/en_US';
+import zhCN from '@seafile/seafile-calendar/lib/locale/zh_CN';
 
 const propTypes = {
   getActiviesFiles: PropTypes.func.isRequired,
@@ -16,16 +18,28 @@ const now = moment();
 
 class Picker extends React.Component {
 
+  componentDidMount() {
+    const isZhCh = (window.app.config.lang == 'zh-cn');
+    if (isZhCh) {
+      now.locale('zh-cn');
+    } else {
+      now.locale('en-gb');
+    }
+    this.defaultCalendarValue = now.clone();
+  }
+
   getFormat = () => {
     return 'YYYY-MM-DD';
   }
 
   render() {
     const props = this.props;
+    let lang = window.app.config.lang == 'zh-cn' ? zhCN : enUS;
     const calendar = (<Calendar
-      defaultValue={now}
+      defaultValue={this.defaultCalendarValue}
       disabledDate={props.disabledDate}
       format={this.getFormat()}
+      locale={lang}
     />);
     return (
       <DatePicker
