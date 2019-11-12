@@ -1,0 +1,26 @@
+.form-content .conditions-preview-container {
+  padding: 10px;
+  min-height: 38px;
+  max-height: 300px;
+  overflow: auto;
+  background-color: #f5f5f5;
+}
+
+.conditions-preview-wrapper .conditions-preview-container {
+  padding: 10px;
+  min-height: 300px;
+  overflow: auto;
+  background-color: #f5f5f5;
+}
+
+.conditions-preview-container ol,
+.conditions-preview-container ul {
+  padding-inline-start: 40px;
+  margin-bottom: 1em;
+}
+
+.conditions-editor-dialog-main {
+  padding: 0;
+  height: 600px;
+  overflow: hidden;
+}

@@ -59,6 +59,8 @@ import SharePermissionLogs from './logs-page/share-permission-logs';
 import AdminOperationLogs from './admin-logs/operation-logs';
 import AdminLoginLogs from './admin-logs/login-logs';
 
+import TermsAndConditions from './terms-and-conditions/terms-and-conditions';
+
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
@@ -197,6 +199,7 @@ class SysAdmin extends React.Component {
             <UserGroups path={siteRoot + 'sys/users/:email/groups'} />
 
             <Invitations path={siteRoot + 'sys/invitations'} />
+            <TermsAndConditions path={siteRoot + 'sys/terms-and-conditions/'} />
 
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
