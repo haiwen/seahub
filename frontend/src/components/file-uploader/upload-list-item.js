@@ -20,7 +20,7 @@ class UploadListItem extends React.Component {
     super(props);
     this.state = {
       uploadState: UPLOAD_UPLOADING
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,7 +49,7 @@ class UploadListItem extends React.Component {
 
   onUploadRetry = (e) => {
     e.preventDefault();
-    this.props.onUploadRetry(this.props.resumableFile)
+    this.props.onUploadRetry(this.props.resumableFile);
   }
 
   formatFileSize = (size) => {
