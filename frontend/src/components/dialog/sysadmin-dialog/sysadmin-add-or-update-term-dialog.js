@@ -88,35 +88,29 @@ class AddOrUpdateTermDialog extends React.Component {
           {this.props.isUpdate ? gettext('Update Terms and Conditions') : gettext('Add Terms and Conditions')}
         </ModalHeader>
         <ModalBody>
-          {gettext('Name')}
-          <Input
-            value={this.state.name}
-            onChange={this.handleNameChange}
-          />
-          <br/>
-          {gettext('Version Number')}
-          <Input
-            value={this.state.versionNumber}
-            onChange={this.handleVersionNumberChange}
-          />
-          <br/>
-          {gettext('Text')}<br/>
-          <textarea
-            value={this.state.text}
-            onChange={this.handleTextChange}
-            cols="55"
-          />
-          <br/>
-          <br/>
-          {gettext('Activated')}
+          <FormGroup>
+            <Label for="name">{gettext('Name')}</Label>
+            <Input id="name" value={this.state.name} onChange={this.handleNameChange}/>
+          </FormGroup>
+          <FormGroup>
+            <Label>{gettext('Version Number')}</Label>
+            <Input value={this.state.versionNumber} onChange={this.handleVersionNumberChange}/>
+          </FormGroup>
+          <FormGroup>
+            <Label>{gettext('Text')}</Label>
+            <textarea value={this.state.text} onChange={this.handleTextChange} cols="55" />
+          </FormGroup>
           <FormGroup tag="fieldset">
+            <Label>{gettext('Activated')}</Label>
             <FormGroup check>
               <Label check>
-                <Input type="radio" checked={this.state.isActive} onChange={this.setActive} />{' '}On</Label>
+                <Input type="radio" checked={this.state.isActive} onChange={this.setActive} />{' '}{gettext('On')}
+              </Label>
             </FormGroup>
             <FormGroup check>
               <Label check>
-                <Input type="radio" checked={!this.state.isActive} onChange={this.setInActive} />{' '}Off</Label>
+                <Input type="radio" checked={!this.state.isActive} onChange={this.setInActive} />{' '}{gettext('Off')}
+              </Label>
             </FormGroup>
           </FormGroup>
           {this.state.errMsg && <Alert color="danger">{this.state.errMsg}</Alert>}

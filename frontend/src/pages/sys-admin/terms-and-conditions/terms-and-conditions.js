@@ -56,6 +56,7 @@ class TermsAndConditions extends Component {
 
   addTerm = (name, versionNumber, text, isActive) => {
     seafileAPI.sysAdminAddTermAndCondition(name, versionNumber, text, isActive).then(res => {
+      // After adding the terms, you need to refresh the page.
       location.reload();
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
