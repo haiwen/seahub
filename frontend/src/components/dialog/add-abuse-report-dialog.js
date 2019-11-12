@@ -78,11 +78,11 @@ class AddAbuseReportDialog extends React.Component {
               </Input>
             </FormGroup>
             <FormGroup>
-              <Label>{gettext("Contact Information")}</Label>
+              <Label>{gettext('Contact Information')}</Label>
               <Input type="text" value={this.state.reporter} onChange={(event) => this.setReporter(event)}/>
             </FormGroup>
             <FormGroup>
-              <Label>{gettext("Description")}</Label>
+              <Label>{gettext('Description')}</Label>
               <Input type="textarea" onChange={(event) => this.setDescription(event)}/>
             </FormGroup>
           </Form>

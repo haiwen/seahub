@@ -23,7 +23,7 @@ class Nav extends React.Component {
   render() {
     const { currentItem, email, userName } = this.props;
     return (
-     <div>
+      <div>
         <div className="cur-view-path">
           <h3 className="sf-heading"><Link to={`${siteRoot}sys/users/`}>{gettext('Users')}</Link> / {userName}</h3>
         </div>
