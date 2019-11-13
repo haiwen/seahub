@@ -401,6 +401,5 @@ class RepoInfoView(APIView):
         data = {
             'repo_id': repo.id,
             'repo_name': repo.name,
-            'via_repo_url': reverse('via-repo-dir')
         }
         return Response(data)
