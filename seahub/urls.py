@@ -692,6 +692,11 @@ urlpatterns = [
     url(r'^useradmin/batchadduser/example/$', batch_add_user_example, name='batch_add_user_example'),
 
     url(r'^sys/info/$', sysadmin_react_fake_view, name="sys_info"),
+    url(r'^sys/statistics/file/$', sysadmin_react_fake_view, name="sys_statistics_file"),
+    url(r'^sys/statistics/storage/$', sysadmin_react_fake_view, name="sys_statistics_storage"),
+    url(r'^sys/statistics/user/$', sysadmin_react_fake_view, name="sys_statistics_user"),
+    url(r'^sys/statistics/traffic/$', sysadmin_react_fake_view, name="sys_statistics_traffic"),
+    url(r'^sys/statistics/reports/$', sysadmin_react_fake_view, name="sys_statistics_reports"),
     url(r'^sys/desktop-devices/$', sysadmin_react_fake_view, name="sys_desktop_devices"),
     url(r'^sys/mobile-devices/$', sysadmin_react_fake_view, name="sys_mobile_devices"),
     url(r'^sys/device-errors/$', sysadmin_react_fake_view, name="sys_device_errors"),

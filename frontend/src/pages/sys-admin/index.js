@@ -68,6 +68,11 @@ import VirusScanRecords from './virus-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 
 import Invitations from './invitations/invitations';
+import StatisticFile from './statistic/statistic-file';
+import StatisticStorage from './statistic/statistic-storage';
+import StatisticTraffic from './statistic/statistic-traffic';
+import StatisticUsers from './statistic/statistic-users';
+import StatisticReport from './statistic/statistic-reports';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -96,6 +101,10 @@ class SysAdmin extends React.Component {
       {
         tab: 'libraries',
         urlPartList: ['all-libraries', 'search-libraries', 'system-library', 'trash-libraries', 'libraries/']
+      },
+      {
+        tab: 'statistic',
+        urlPartList: ['statistics/file', 'statistics/storage', 'statistics/user', 'statistics/traffic', 'statistics/reports']
       },
       {
         tab: 'users',
@@ -152,6 +161,11 @@ class SysAdmin extends React.Component {
         <MainPanel>
           <Router className="reach-router">
             <Info path={siteRoot + 'sys/info'} />
+            <StatisticFile path={siteRoot + 'sys/statistics/file'} />
+            <StatisticStorage path={siteRoot + 'sys/statistics/storage'} />
+            <StatisticUsers path={siteRoot + 'sys/statistics/user'} />
+            <StatisticTraffic path={siteRoot + 'sys/statistics/traffic'} />
+            <StatisticReport path={siteRoot + 'sys/statistics/reports'} />
             <DesktopDevices path={siteRoot + 'sys/desktop-devices'} />
             <MobileDevices path={siteRoot + 'sys/mobile-devices'} />
             <DeviceErrors path={siteRoot + 'sys/device-errors'} />

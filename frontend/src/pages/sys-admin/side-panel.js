@@ -46,10 +46,13 @@ class SidePanel extends React.Component {
                 }
                 {isPro && canViewStatistic &&
                   <li className="nav-item">
-                    <a className='nav-link ellipsis' href={siteRoot + 'sys/statistic/file/'}>
+                    <Link className={`nav-link ellipsis ${this.getActiveClass('statistic')}`}
+                      to={siteRoot + 'sys/statistics/file/'}
+                      onClick={() => this.props.tabItemClick('statistic')}
+                    >
                       <span className="sf2-icon-histogram" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Statistic')}</span>
-                    </a>
+                    </Link>
                   </li>
                 }
                 {isDefaultAdmin &&
