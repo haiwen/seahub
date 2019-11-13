@@ -8,6 +8,7 @@
   margin: 0;
 }
 .content {
+  display: flex;
   padding: 0rem 1rem 8rem;
   overflow: auto;
 }
