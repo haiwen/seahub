@@ -51,7 +51,8 @@ class StatisticCommonTool extends React.Component {
     this.setState({
       statisticType: statisticTypeName,
     });
-    this.props.getActiviesFiles(startTime, endTime);
+    let group_by = 'day';
+    this.props.getActiviesFiles(startTime, endTime, group_by);
   }
 
   disabledStartDate = (startValue) => {
