@@ -21,7 +21,8 @@ class TrafficOrganizationsTable extends React.Component {
       hasNextPage: false,
       month: moment().format('YYYYMM'),
       isLoading: false,
-      errorMessage: ''
+      errorMessage: '',
+      sortOrder: 'asc'
     };
     this.initPage = 1;
     this.initMonth = moment().format('YYYYMM');
@@ -63,6 +64,15 @@ class TrafficOrganizationsTable extends React.Component {
     }
   }
 
+  sortBySize = (sortByType, sortOrder) => {
+    let { userTrafficList } = this.state;
+    let newUserTrafficList = Utils.sortTraffic(userTrafficList, sortByType, sortOrder);
+    this.setState({
+      userTrafficList: newUserTrafficList,
+      sortOrder: sortOrder
+    })
+  }
+
   onGenerateReports = (month, page) => {
     let { perPage } = this.state;
     this.setState({isLoading: true, errorMessage: ''});
@@ -86,7 +96,7 @@ class TrafficOrganizationsTable extends React.Component {
   }
 
   render() {
-    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorMessage } = this.state;
+    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorMessage, sortOrder } = this.state;
     return (
       <Fragment>
         <div className="d-flex align-items-center mt-4">
@@ -101,7 +111,7 @@ class TrafficOrganizationsTable extends React.Component {
         </div>
         {isLoading && <Loading />}
         {!isLoading && 
-          <TrafficTable type={'org'} >
+          <TrafficTable type={'org'} sortOrder={sortOrder} sortBySize={this.sortBySize} >
             {userTrafficList.length > 0 && userTrafficList.map((item, index) => {
               return(
                 <TrafficTableBody 

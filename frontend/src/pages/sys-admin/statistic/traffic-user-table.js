@@ -21,7 +21,8 @@ class TrafficOrganizationsTable extends React.Component {
       currentPage: 1,
       month: moment().format('YYYYMM'),
       isLoading: false,
-      errorMessage: ''
+      errorMessage: '',
+      sortOrder: 'asc'
     };
     this.initPage = 1;
     this.initMonth = moment().format('YYYYMM');
@@ -44,6 +45,15 @@ class TrafficOrganizationsTable extends React.Component {
     this.setState({
       month: month
     });
+  }
+
+  sortBySize = (sortByType, sortOrder) => {
+    let { userTrafficList } = this.state;
+    let newUserTrafficList = Utils.sortTraffic(userTrafficList, sortByType, sortOrder);
+    this.setState({
+      userTrafficList: newUserTrafficList,
+      sortOrder: sortOrder
+    })
   }
 
   handleKeyPress = (e) => {
@@ -89,7 +99,7 @@ class TrafficOrganizationsTable extends React.Component {
   }
 
   render() {
-    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorMessage } = this.state;
+    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorMessage, sortOrder } = this.state;
     return (
       <Fragment>
         <div className="d-flex align-items-center mt-4">
@@ -104,7 +114,7 @@ class TrafficOrganizationsTable extends React.Component {
         </div>
         {isLoading && <Loading />}
         {!isLoading && 
-          <TrafficTable type={'user'} >
+          <TrafficTable type={'user'} sortBySize={this.sortBySize} sortOrder={sortOrder}>
             {userTrafficList.length > 0 && userTrafficList.map((item, index) => {
               return(
                 <TrafficTableBody 

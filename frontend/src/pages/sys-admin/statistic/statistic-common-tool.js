@@ -3,78 +3,19 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import { gettext } from '../../../utils/constants';
-import Calendar from '@seafile/seafile-calendar';
-import DatePicker from '@seafile/seafile-calendar/lib/Picker';
-import '@seafile/seafile-calendar/assets/index.css';
-import enUS from '@seafile/seafile-calendar/lib/locale/en_US';
-import zhCN from '@seafile/seafile-calendar/lib/locale/zh_CN';
+import Picker from './picker';
 
 const propTypes = {
   getActiviesFiles: PropTypes.func.isRequired,
   children: PropTypes.object,
 };
 
-const now = moment();
-
-class Picker extends React.Component {
-
-  componentDidMount() {
-    const isZhCh = (window.app.config.lang == 'zh-cn');
-    if (isZhCh) {
-      now.locale('zh-cn');
-    } else {
-      now.locale('en-gb');
-    }
-    this.defaultCalendarValue = now.clone();
-  }
-
-  getFormat = () => {
-    return 'YYYY-MM-DD';
-  }
-
-  render() {
-    const props = this.props;
-    let lang = window.app.config.lang == 'zh-cn' ? zhCN : enUS;
-    const calendar = (<Calendar
-      defaultValue={this.defaultCalendarValue}
-      disabledDate={props.disabledDate}
-      format={this.getFormat()}
-      locale={lang}
-    />);
-    return (
-      <DatePicker
-        disabled={props.disabled}
-        calendar={calendar}
-        value={props.value}
-        onChange={props.onChange}
-      >
-      {
-        ({value}) => {
-          return (
-            <span>
-              <input 
-                placeholder="yyyy-mm-dd"
-                disabled={props.disabled}
-                tabIndex="-1"
-                readOnly
-                value={value && value.format(this.getFormat(props.showTime)) || ''}
-                className="form-control system-statistic-input"
-              />
-            </span>
-          );
-        }
-      }
-      </DatePicker>
-    );
-  }
-}
-
 class StatisticCommonTool extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      itemActive: 'oneWeek',
+      statisticType: 'oneWeek',
       startValue: null,
       endValue: null,
     };
@@ -88,15 +29,15 @@ class StatisticCommonTool extends React.Component {
     this.props.getActiviesFiles(startTime, endTime, group_by);
   }
 
-  changeActive = (activeName) => {
-    let { itemActive } = this.state;
-    if (itemActive === activeName) {
+  changeActive = (statisticTypeName) => {
+    let { statisticType } = this.state;
+    if (statisticType === statisticTypeName) {
       return;
     }
     let today = moment().format('YYYY-MM-DD 00:00:00');
     let endTime = today;
     let startTime;
-    switch(activeName) {
+    switch(statisticTypeName) {
       case 'oneWeek' : 
         startTime = moment().subtract(6,'d').format('YYYY-MM-DD 00:00:00');
         break;
@@ -108,7 +49,7 @@ class StatisticCommonTool extends React.Component {
         break;
     }
     this.setState({
-      itemActive: activeName,
+      statisticType: statisticTypeName,
     });
     this.props.getActiviesFiles(startTime, endTime);
   }
@@ -152,7 +93,7 @@ class StatisticCommonTool extends React.Component {
       return;
     }
     this.setState({
-      itemActive: 'itemButton',
+      statisticType: 'itemButton',
     });
     let startTime = moment(startValue).format('YYYY-MM-DD 00:00:00');
     let endTime = moment(endValue).format('YYYY-MM-DD 00:00:00');
@@ -161,15 +102,15 @@ class StatisticCommonTool extends React.Component {
   }
 
   render() {
-    let { itemActive, endValue, startValue } = this.state;
+    let { statisticType, endValue, startValue } = this.state;
     return(
       <Fragment>
         {this.props.children}
         <div className="system-statistic-time-range">
           <div className="sys-stat-tool">
-            <div className={`system-statistic-item border-right-0 rounded-left ${itemActive === 'oneWeek' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneWeek')}>{gettext('7 Days')}</div>
-            <div className={`system-statistic-item border-right-0 ${itemActive === 'oneMonth' ? 'item-active' : ''}`}  onClick={this.changeActive.bind(this, 'oneMonth')}>{gettext('30 Days')}</div>
-            <div className={`system-statistic-item rounded-right ${itemActive === 'oneYear' ? 'item-active' : ''}`}  onClick={this.changeActive.bind(this, 'oneYear')}>{gettext('1 Year')}</div>
+            <div className={`system-statistic-item border-right-0 rounded-left ${statisticType === 'oneWeek' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneWeek')}>{gettext('7 Days')}</div>
+            <div className={`system-statistic-item border-right-0 ${statisticType === 'oneMonth' ? 'item-active' : ''}`}  onClick={this.changeActive.bind(this, 'oneMonth')}>{gettext('30 Days')}</div>
+            <div className={`system-statistic-item rounded-right ${statisticType === 'oneYear' ? 'item-active' : ''}`}  onClick={this.changeActive.bind(this, 'oneYear')}>{gettext('1 Year')}</div>
           </div>
           <div className="system-statistic-input-container">
             <Picker
