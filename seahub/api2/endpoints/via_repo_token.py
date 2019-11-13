@@ -67,8 +67,8 @@ class ViaRepoDirView(APIView):
 
         return dir_info
 
-    def get(self, request, repo_id, format=None):
-
+    def get(self, request, format=None):
+        repo_id = request.repo_api_token_obj.repo_id
         # argument check
         recursive = request.GET.get('recursive', '0')
         if recursive not in ('1', '0'):
@@ -194,7 +194,8 @@ class ViaRepoDirView(APIView):
 
         return Response(response_dict)
 
-    def post(self, request, repo_id, format=None):
+    def post(self, request, format=None):
+        repo_id = request.repo_api_token_obj.repo_id
         # argument check
         path = request.GET.get('path', None)
         if not path or path[0] != '/':
@@ -341,7 +342,8 @@ class ViaRepoUploadLinkView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def get(self, request, repo_id, format=None):
+    def get(self, request, format=None):
+        repo_id = request.repo_api_token_obj.repo_id
         # recourse check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -383,3 +385,22 @@ class ViaRepoUploadLinkView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return Response(url)
+
+
+class RepoInfoView(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        repo_id = request.repo_api_token_obj.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        data = {
+            'repo_id': repo.id,
+            'repo_name': repo.name,
+            'via_repo_url': reverse('via-repo-dir')
+        }
+        return Response(data)
