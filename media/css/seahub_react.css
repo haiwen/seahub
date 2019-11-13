@@ -577,8 +577,13 @@ ul,ol,li {
 }
 
 .side-nav-con {
-    overflow: auto;
+    flex: 1;
     padding:12px;
+    overflow: hidden;
+}
+
+.side-nav-con:hover {
+    overflow-y: auto;
 }
 
 .side-nav-link {
