@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import Calendar from '@seafile/seafile-calendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
-import enUS from '@seafile/seafile-calendar/lib/locale/en_US';
-import zhCN from '@seafile/seafile-calendar/lib/locale/zh_CN';
+import { translateCalendar } from '../../../utils/date-format-utils';
 
 import '@seafile/seafile-calendar/assets/index.css';
 
@@ -14,8 +13,7 @@ const propsTypes = {
   onChange: PropTypes.func.isRequired,
 }
 
-const NOW = moment();
-window.app.config.lang == 'zh-cn' ? NOW.locale('zh-cn') : NOW.locale('en-gb');
+const FORMAT = 'YYYY-MM-DD';
 
 class Picker extends React.Component {
 
@@ -25,21 +23,17 @@ class Picker extends React.Component {
   }
 
   componentDidMount() {
-    this.defaultCalendarValue = NOW.clone();
-  }
-
-  getFormat = () => {
-    return 'YYYY-MM-DD';
+    let lang = window.app.config.lang;
+    this.defaultCalendarValue = moment().locale(lang).clone();
   }
 
   render() {
     const props = this.props;
-    let lang = window.app.config.lang == 'zh-cn' ? zhCN : enUS;
     const calendar = (<Calendar
       defaultValue={this.defaultCalendarValue}
       disabledDate={props.disabledDate}
-      format={this.getFormat()}
-      locale={lang}
+      format={FORMAT}
+      locale={translateCalendar()}
     />);
     return (
       <DatePicker
@@ -55,7 +49,7 @@ class Picker extends React.Component {
                 placeholder="yyyy-mm-dd"
                 tabIndex="-1"
                 readOnly
-                value={value && value.format(this.getFormat(props.showTime)) || ''}
+                value={value && value.format(FORMAT) || ''}
                 className="form-control system-statistic-input"
               />
             </span>

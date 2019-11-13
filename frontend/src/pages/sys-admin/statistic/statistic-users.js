@@ -60,7 +60,7 @@ class StatisticUsers extends React.Component {
           <div className="cur-view-content">
             <StatisticCommonTool getActiviesFiles={this.getActiviesFiles} />
             {isLoading && <Loading />}
-            {labels.length > 0 && !isLoading &&
+            {!isLoading && labels.length > 0 && 
               <StatisticChart 
                 labels={labels}
                 filesData={filesData}

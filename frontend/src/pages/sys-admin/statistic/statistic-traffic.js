@@ -147,7 +147,7 @@ class StatisticTraffic extends React.Component {
           <div className="cur-view-content">
             {this.renderCommonTool()}
             {isLoading && <Loading />}
-            {tabActive === 'system' && !isLoading &&
+            {!isLoading && tabActive === 'system' && 
               <div className="statistic-traffic-chart-container">
                 <div className="mb-4">
                   {labels.length > 0 && 
