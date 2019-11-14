@@ -1,61 +1,38 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@reach/router';
-import { Button } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { isPro, gettext, siteRoot, loginUrl } from '../../../utils/constants';
+import { gettext, loginUrl } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
-import SysAdminImportUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-import-user-dialog';
-import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
-import SysAdminBatchAddAdminDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import SysAdminUser from '../../../models/sysadmin-user';
-import SysAdminAdminUser from '../../../models/sysadmin-admin-user';
 import MainPanelTopbar from '../main-panel-topbar';
-import Search from '../search';
-import UsersNav from './users-nav';
 import Content from './users-content';
 
-const { availableRoles } = window.sysadmin.pageOptions;
 
-class Users extends Component {
+class SearchUsers extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      query: '',
+      isSubmitBtnActive: false,
       loading: true,
       errorMsg: '',
       userList: [],
-      totalItemCount: 0,
-      hasNextPage: false,
-      currentPage: 1,
-      perPage: 25,
       hasUserSelected: false,
       selectedUserList: [],
       isAllUsersSelected: false,
-      isImportUserDialogOpen: false,
-      isAddUserDialogOpen: false,
       isBatchSetQuotaDialogOpen: false,
-      isBatchDeleteUserDialogOpen: false,
-      isBatchAddAdminDialogOpen: false
+      isBatchDeleteUserDialogOpen: false
     };
   }
 
   componentDidMount () {
-    if (this.props.isAdmin) { // 'Admin' page
-      this.getUserList(); // no pagination
-    } else {
-      this.getUsersListByPage(1);
-    }
-  }
-
-  toggleImportUserDialog = () => {
-    this.setState({isImportUserDialogOpen: !this.state.isImportUserDialogOpen});
-  }
-
-  toggleAddUserDialog = () => {
-    this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
+    let params = (new URL(document.location)).searchParams;
+    this.setState({
+      query: params.get('query') || ''
+    }, this.getItems);
   }
 
   toggleBatchSetQuotaDialog = () => {
@@ -124,14 +101,10 @@ class Users extends Component {
     }
   }
 
-  getUserList = () => {
-  // get admins
-    seafileAPI.sysAdminListAdmins().then(res => {
-      let users = res.data.admin_user_list.map(user => {
-        return new SysAdminAdminUser(user);
-      });
+  getItems = () => {
+    seafileAPI.sysAdminSearchUsers(this.state.query.trim()).then(res => {
       this.setState({
-        userList: users,
+        userList: res.data.user_list,
         loading: false
       });
     }).catch((error) => {
@@ -142,38 +115,6 @@ class Users extends Component {
             errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
-    });
-  }
-
-  getUsersListByPage = (page) => {
-    let { perPage } = this.state;
-    seafileAPI.sysAdminListUsers(page, perPage, this.props.isLDAPImported).then(res => {
-      let users = res.data.data.map(user => {return new SysAdminUser(user);});
-      this.setState({
-        userList: users,
-        loading: false,
-        hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count),
-        currentPage: page
-      });
-    }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
         } else {
           this.setState({
             loading: false,
@@ -255,54 +196,6 @@ class Users extends Component {
     });
   }
 
-  importUserInBatch = (file) => {
-    toaster.notify(gettext('It may take some time, please wait.'));
-    seafileAPI.sysAdminImportUserViaFile(file).then((res) => {
-      if (res.data.success.length) {
-        const users = res.data.success.map(item => {
-          if (item.institution == undefined) {
-            item.institution = '';
-          }
-          return new SysAdminUser(item);
-        });
-        this.setState({
-          userList: users.concat(this.state.userList) 
-        });
-      }
-      res.data.failed.map(item => {
-        const msg = `${item.email}: ${item.error_msg}`;
-        toaster.danger(msg);
-      });
-    }).catch((error) => {
-      let errMsg = Utils.getErrorMsg(error);
-      toaster.danger(errMsg);
-    });
-  }
-
-  addUser = (data) => {
-    toaster.notify(gettext('It may take some time, please wait.'));
-    const { email, name, role, password } = data;
-    seafileAPI.sysAdminAddUser(email, name, role, password).then((res) => {
-      let userList = this.state.userList;
-      userList.unshift(res.data);
-      this.setState({
-        userList: userList
-      });
-      toaster.success(res.data.add_user_tip);
-    }).catch((error) => {
-      let errMsg = Utils.getErrorMsg(error);
-      toaster.danger(errMsg);
-    });
-  }
-
-  resetPerPage = (perPage) => {
-    this.setState({
-      perPage: perPage
-    }, () => {
-      this.getUsersListByPage(1);
-    });
-  }
-
   updateUser = (email, key, value) => {
     seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
       let newUserList = this.state.userList.map(item => {
@@ -352,137 +245,79 @@ class Users extends Component {
     });
   }
 
-  getOperationsForAll = () => {
-    const { isAdmin, isLDAPImported } = this.props;
+  handleInputChange = (e) => {
+    this.setState({ 
+      query: e.target.value
+    }, this.checkSubmitBtnActive);
+  }                 
 
-    if (isAdmin) {
-      return <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchAddAdminDialog}>{gettext('Add Admin')}</Button>;
-    }
-
-    if (isLDAPImported) {
-      return <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/useradmin/export-excel/`}>{gettext('Export Excel')}</a>;
-    }
-
-    // 'database'
-    return (
-      <Fragment>
-        <Button className="btn btn-secondary operation-item" onClick={this.toggleImportUserDialog}>{gettext('Import Users')}</Button>
-        <Button className="btn btn-secondary operation-item" onClick={this.toggleAddUserDialog}>{gettext('Add User')}</Button>
-        <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/useradmin/export-excel/`}>{gettext('Export Excel')}</a>
-      </Fragment>
-    );
-  }
-
-  getCurrentNavItem = () => {
-    const { isAdmin, isLDAPImported } = this.props;
-    let item = 'database';
-    if (isAdmin) {
-      item = 'admin';
-    } else if (isLDAPImported) {
-      item = 'ldap-imported';
-    }
-    return item;
-  }
-
-  toggleBatchAddAdminDialog = () => {
-    this.setState({isBatchAddAdminDialogOpen: !this.state.isBatchAddAdminDialogOpen});
-  }  
-
-  addAdminInBatch = (emails) => {
-    seafileAPI.sysAdminAddAdminInBatch(emails).then(res => {
-      let users = res.data.success.map(user => {
-        return new SysAdminAdminUser(user);
-      });
-      this.setState({
-        userList: users.concat(this.state.userList) 
-      });
-      res.data.failed.map(item => {
-        const msg = `${item.email}: ${item.error_msg}`;
-        toaster.danger(msg);
-      });
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+  checkSubmitBtnActive = () => {
+    const { email } = this.state;
+    this.setState({
+      isSubmitBtnActive: email.trim()
     });
   }
 
-  getSearch = () => {
-    if (this.props.isAdmin) {
-      return null;
-    }
-    // offer 'Search' for 'DB' & 'LDAPImported' users
-    return <Search
-      placeholder={gettext('Search users')}
-      submit={this.searchItems}
-    />; 
-  }
-
-  searchItems = (keyword) => {
-    navigate(`${siteRoot}sys/search-users/?query=${encodeURIComponent(keyword)}`);
-  }
-
   render() {
-    const { isAdmin, isLDAPImported } = this.props;
+    const { query, isSubmitBtnActive } = this.state;
     const {
       hasUserSelected, 
-      isImportUserDialogOpen,
-      isAddUserDialogOpen, 
       isBatchDeleteUserDialogOpen, 
-      isBatchSetQuotaDialogOpen,
-      isBatchAddAdminDialogOpen
+      isBatchSetQuotaDialogOpen
     } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}>
-          {hasUserSelected ?
+        {hasUserSelected ?
+          <MainPanelTopbar>
             <Fragment>
               <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchSetQuotaDialog}>{gettext('Set Quota')}</Button>
               <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchDeleteUserDialog}>{gettext('Delete Users')}</Button>
             </Fragment>
-            : this.getOperationsForAll()
-          }
-        </MainPanelTopbar>
+          </MainPanelTopbar> :
+          <MainPanelTopbar />
+        }
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <UsersNav currentItem={this.getCurrentNavItem()} />
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('Users')}</h3>
+            </div>
             <div className="cur-view-content">
-              <Content
-                isAdmin={isAdmin}
-                isLDAPImported={isLDAPImported}
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.userList}
-                currentPage={this.state.currentPage}
-                hasNextPage={this.state.hasNextPage}
-                curPerPage={this.state.perPage}
-                resetPerPage={this.resetPerPage}
-                getListByPage={this.getUsersListByPage}
-                updateUser={this.updateUser}
-                deleteUser={this.deleteUser}
-                updateAdminRole={this.updateAdminRole}
-                revokeAdmin={this.revokeAdmin}
-                onUserSelected={this.onUserSelected}
-                isAllUsersSelected={this.isAllUsersSelected}
-                toggleSelectAllUsers={this.toggleSelectAllUsers}
-              />
+              <div className="mt-4 mb-6">
+                <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Users')}</h4>
+                <Form>
+                  <FormGroup row>
+                    <Col sm={5}>
+                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} />
+                    </Col>
+                  </FormGroup>
+                  <FormGroup row>
+                    <Col sm={{size: 5}}>
+                      <button className="btn btn-outline-primary" disabled={!isSubmitBtnActive} onClick={this.getItems}>{gettext('Submit')}</button>
+                    </Col>
+                  </FormGroup>
+                </Form>
+              </div>
+              <div className="mt-4 mb-6">
+                <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Result')}</h4>
+                <Content
+                  isLDAPImported={false}
+                  isAdmin={false}
+                  isSearchResult={true}
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={this.state.userList}
+                  updateUser={this.updateUser}
+                  deleteUser={this.deleteUser}
+                  updateAdminRole={this.updateAdminRole}
+                  revokeAdmin={this.revokeAdmin}
+                  onUserSelected={this.onUserSelected}
+                  isAllUsersSelected={this.isAllUsersSelected}
+                  toggleSelectAllUsers={this.toggleSelectAllUsers}
+                />
+              </div>
             </div>
           </div>
         </div>
-        {isImportUserDialogOpen &&
-        <SysAdminImportUserDialog
-          toggle={this.toggleImportUserDialog}
-          importUserInBatch={this.importUserInBatch}
-        />
-        }
-        {isAddUserDialogOpen &&
-          <SysAdminAddUserDialog
-            dialogTitle={gettext('Add User')}
-            showRole={isPro}
-            availableRoles={availableRoles}
-            addUser={this.addUser}
-            toggleDialog={this.toggleAddUserDialog}
-          />
-        }
         {isBatchSetQuotaDialogOpen &&
           <SysAdminUserSetQuotaDialog
             toggle={this.toggleBatchSetQuotaDialog}
@@ -498,15 +333,9 @@ class Users extends Component {
             toggleDialog={this.toggleBatchDeleteUserDialog}
           />
         }
-        {isBatchAddAdminDialogOpen &&
-          <SysAdminBatchAddAdminDialog
-            addAdminInBatch={this.addAdminInBatch}
-            toggle={this.toggleBatchAddAdminDialog}
-          />
-        }
       </Fragment>
     );
   }
 }
 
-export default Users;
+export default SearchUsers;
