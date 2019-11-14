@@ -566,18 +566,18 @@ class AdminSearchUser(APIView):
         1. only admin can perform this action.
         """
 
-        email = request.GET.get('email', '').lower()
-        if not email:
-            error_msg = 'email invalid.'
+        query_str = request.GET.get('query', '').lower()
+        if not query_str:
+            error_msg = 'query invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         users = []
 
         # search user from ccnet db
-        users += ccnet_api.search_emailusers('DB', email, 0, 10)
+        users += ccnet_api.search_emailusers('DB', query_str, 0, 10)
 
         # search user from ccnet ldapimport
-        users += ccnet_api.search_emailusers('LDAP', email, 0, 10)
+        users += ccnet_api.search_emailusers('LDAP', query_str, 0, 10)
 
         ccnet_user_emails = [u.email for u in users]
 
@@ -594,8 +594,8 @@ class AdminSearchUser(APIView):
                 user.institution = user_institution_dict.get(user.email, '')
 
         # search user from profile
-        searched_profile = Profile.objects.filter((Q(nickname__icontains=email)) |
-                Q(contact_email__icontains=email))[:10]
+        searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) |
+                Q(contact_email__icontains=query_str))[:10]
 
         for profile in searched_profile:
             email = profile.user
