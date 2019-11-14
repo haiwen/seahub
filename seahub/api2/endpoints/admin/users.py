@@ -9,6 +9,8 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from django.db.models import Q
 from django.core.cache import cache
 from django.utils.translation import ugettext as _
 
@@ -25,7 +27,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.two_factor.models import default_device
-from seahub.profile.models import Profile, DetailedProfile
+from seahub.profile.models import Profile
 from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX, \
     NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT
 from seahub.utils import is_valid_username, is_org_context, \
@@ -40,7 +42,6 @@ from seahub.constants import DEFAULT_ADMIN
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.licenseparse import user_number_over_limit
-from seahub.constants import DEFAULT_USER
 from seahub.institutions.models import Institution
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.admin_log.signals import admin_operation
@@ -550,6 +551,103 @@ class AdminLDAPUsers(APIView):
 
         result = {'ldap_user_list': data, 'has_next_page': has_next_page}
         return Response(result)
+
+
+class AdminSearchUser(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request):
+        """Search user from DB, LDAPImport and Profile
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        email = request.GET.get('email', '').lower()
+        if not email:
+            error_msg = 'email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        users = []
+
+        # search user from ccnet db
+        users += ccnet_api.search_emailusers('DB', email, 0, 10)
+
+        # search user from ccnet ldapimport
+        users += ccnet_api.search_emailusers('LDAP', email, 0, 10)
+
+        ccnet_user_emails = [u.email for u in users]
+
+        # get institution for user from ccnet
+        if getattr(settings, 'MULTI_INSTITUTION', False):
+            user_institution_dict = {}
+            profiles = Profile.objects.filter(user__in=ccnet_user_emails)
+            for profile in profiles:
+                email = profile.user
+                if email not in user_institution_dict:
+                    user_institution_dict[email] = profile.institution
+
+            for user in users:
+                user.institution = user_institution_dict.get(user.email, '')
+
+        # search user from profile
+        searched_profile = Profile.objects.filter((Q(nickname__icontains=email)) |
+                Q(contact_email__icontains=email))[:10]
+
+        for profile in searched_profile:
+            email = profile.user
+            institution = profile.institution
+
+            # remove duplicate emails
+            if email not in ccnet_user_emails:
+                try:
+                    # get is_staff and is_active info
+                    user = User.objects.get(email=email)
+                    user.institution = institution
+                    users.append(user)
+                except User.DoesNotExist:
+                    continue
+
+        data = []
+        for user in users:
+
+            info = {}
+            info['email'] = user.email
+            info['name'] = email2nickname(user.email)
+            info['contact_email'] = email2contact_email(user.email)
+
+            info['is_staff'] = user.is_staff
+            info['is_active'] = user.is_active
+
+            info['source'] = user.source.lower()
+
+            orgs = ccnet_api.get_orgs_by_user(user.email)
+            if orgs:
+                org_id = orgs[0].org_id
+                info['org_id'] = org_id
+                info['org_name'] = orgs[0].org_name
+                info['quota_usage'] = seafile_api.get_org_user_quota_usage(org_id, user.email)
+                info['quota_total'] = seafile_api.get_org_user_quota(org_id, user.email)
+            else:
+                info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
+                info['quota_total'] = seafile_api.get_user_quota(user.email)
+
+            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
+            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            info['role'] = get_user_role(user)
+
+            if getattr(settings, 'MULTI_INSTITUTION', False):
+                info['institution'] = user.institution
+
+            data.append(info)
+
+        result = {'user_list': data}
+        return Response(result)
+
 
 class AdminUser(APIView):
 
