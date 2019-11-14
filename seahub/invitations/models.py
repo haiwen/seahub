@@ -11,6 +11,7 @@ from seahub.invitations.settings import INVITATIONS_TOKEN_AGE
 from seahub.utils import gen_token, get_site_name
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 
 GUEST = 'Guest'
 
@@ -102,3 +103,22 @@ class Invitation(models.Model):
             subject=subject,
             priority=MAIL_PRIORITY.now
         )
+
+
+class SharedRepoInvitationManager(models.Manager):
+    ...
+
+class SharedRepoInvitation(models.Model):
+    PERMISSION_CHOICES = (
+        (PERMISSION_READ, 'read only'),
+        (PERMISSION_READ_WRITE, 'read and write')
+    )
+
+    accepter = LowerCaseCharField(max_length=255)
+    repo_id = models.CharField(max_length=36)
+    path = models.TextField()
+    permission = models.CharField(
+        max_length=50, choices=PERMISSION_CHOICES, default=PERMISSION_READ)
+
+    objects = SharedRepoInvitationManager()
+

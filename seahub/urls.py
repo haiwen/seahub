@@ -408,9 +408,9 @@ urlpatterns = [
     url(r'^api/v2.1/invitations/batch/$', InvitationsBatchView.as_view()),
     url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/$', InvitationView.as_view()),
     url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/revoke/$', InvitationRevokeView.as_view()),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/invitations/$', InvitationsView.as_view(), name="api-v2.1-repo-invitations"),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/invitations/batch/$', InvitationsView.as_view(), name="api-v2.1-repo-invitations-batch"),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/invitation/$', InvitationsView.as_view(), name="api-v2.1-repo-invitation"),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/shared/invitations/$', InvitationsView.as_view(), name="api-v2.1-shared-repo-invitations"),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/shared/invitations/batch/$', InvitationsView.as_view(), name="api-v2.1-shared-repo-invitations-batch"),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/shared/invitation/$', InvitationsView.as_view(), name="api-v2.1-shared-repo-invitation"),
     ## user::avatar
     url(r'^api/v2.1/user-avatar/$', UserAvatarView.as_view(), name='api-v2.1-user-avatar'),
 
