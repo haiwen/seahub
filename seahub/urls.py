@@ -717,6 +717,7 @@ urlpatterns = [
     url(r'^sys/departments/$', sysadmin_react_fake_view, name="sys_departments"),
     url(r'^sys/departments/(?P<group_id>\d+)/$', sysadmin_react_fake_view, name="sys_department"),
     url(r'^sys/users/$', sysadmin_react_fake_view, name="sys_users"),
+    url(r'^sys/search-users/$', sysadmin_react_fake_view, name="sys_search_users"),
     url(r'^sys/users/admins/$', sysadmin_react_fake_view, name="sys_users_admin"),
     url(r'^sys/users/ldap/$', sysadmin_react_fake_view, name="sys_users_ldap"),
     url(r'^sys/users/ldap-imported/$', sysadmin_react_fake_view, name="sys_users_ldap_imported"),

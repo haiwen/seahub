@@ -16,6 +16,7 @@ import Users from './users/users';
 import AdminUsers from './users/admin-users';
 import LDAPImportedUsers from './users/ldap-imported-users';
 import LDAPUsers from './users/ldap-users';
+import SearchUsers from './users/search-users';
 import User from './users/user-info';
 import UserOwnedRepos from './users/user-repos';
 import UserSharedRepos from './users/user-shared-repos';
@@ -108,7 +109,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'users',
-        urlPartList: ['users/']
+        urlPartList: ['users/', 'search-users/']
       },
       {
         tab: 'groups',
@@ -206,6 +207,7 @@ class SysAdmin extends React.Component {
             <AdminUsers path={siteRoot + 'sys/users/admins'} />
             <LDAPImportedUsers path={siteRoot + 'sys/users/ldap-imported'} />
             <LDAPUsers path={siteRoot + 'sys/users/ldap'} />
+            <SearchUsers path={siteRoot + 'sys/search-users'} />
             <User path={siteRoot + 'sys/users/:email'} />
             <UserOwnedRepos path={siteRoot + 'sys/users/:email/owned-libraries'} />
             <UserSharedRepos path={siteRoot + 'sys/users/:email/shared-libraries'} />
