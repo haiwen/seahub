@@ -108,7 +108,7 @@ class AdminShareLinks(APIView):
         start = (current_page - 1) * per_page
         end = start + per_page
 
-        share_links = FileShare.objects.all().order_by('ctime')[start:end]
+        share_links = FileShare.objects.all().order_by('-ctime')[start:end]
         count = FileShare.objects.all().count()
 
         # Use dict to reduce memcache fetch cost in large for-loop.
