@@ -29,9 +29,9 @@ class SysAdminAddUserDialog extends React.Component {
   checkSubmitBtnActive = () => {
     const { email, password, passwordAgain } = this.state;
     let btnActive = true;
-    if (email != '' &&
-      password != '' &&
-      passwordAgain != '') {
+    if (email.trim() &&
+      password.trim() &&
+      passwordAgain.trim()) {
       btnActive = true;
     } else {
       btnActive = false;
@@ -50,7 +50,7 @@ class SysAdminAddUserDialog extends React.Component {
   }
 
   inputPassword = (e) => {
-    let passwd = e.target.value.trim();
+    let passwd = e.target.value;
     this.setState({
       password: passwd,
       errorMsg: ''
@@ -58,7 +58,7 @@ class SysAdminAddUserDialog extends React.Component {
   }
 
   inputPasswordAgain = (e) => {
-    let passwd = e.target.value.trim();
+    let passwd = e.target.value;
     this.setState({
       passwordAgain: passwd,
       errorMsg: ''
@@ -74,14 +74,14 @@ class SysAdminAddUserDialog extends React.Component {
   }
 
   inputEmail = (e) => {
-    let email = e.target.value.trim();
+    let email = e.target.value;
     this.setState({
       email: email
     }, this.checkSubmitBtnActive);
   }
 
   inputName = (e) => {
-    let name = e.target.value.trim();
+    let name = e.target.value;
     this.setState({
       name: name
     });
@@ -100,9 +100,9 @@ class SysAdminAddUserDialog extends React.Component {
       return;
     }
     let data = {
-      email: email,
-      name: name,
-      password: password
+      email: email.trim(),
+      name: name.trim(),
+      password: password.trim()
     };
     if (this.props.showRole) {
       data.role = role;
@@ -131,12 +131,12 @@ class SysAdminAddUserDialog extends React.Component {
               <Label>{gettext('Name(optional)')}</Label>
               <Input type="text" value={name} onChange={this.inputName} /> 
             </FormGroup>
-      {showRole && 
+            {showRole && 
             <FormGroup>
               <Label>
-        {gettext('Role')}
-        <span className="small text-secondary ml-1 fas fa-question-circle" title={gettext('You can also add a user as a guest, who will not be allowed to create libraries and groups.')}></span>
-        </Label>
+                {gettext('Role')}
+                <span className="small text-secondary ml-1 fas fa-question-circle" title={gettext('You can also add a user as a guest, who will not be allowed to create libraries and groups.')}></span>
+              </Label>
               <SysAdminUserRoleEditor
                 isTextMode={false}
                 isEditIconShow={false}
@@ -145,7 +145,7 @@ class SysAdminAddUserDialog extends React.Component {
                 onRoleChanged={this.updateRole}
               />  
             </FormGroup>
-      }
+            }
             <FormGroup>
               <Label>{gettext('Password')}</Label>
               <InputGroup>
