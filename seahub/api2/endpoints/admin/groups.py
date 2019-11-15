@@ -287,3 +287,30 @@ class AdminGroup(APIView):
                 operation=GROUP_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})
+
+
+class AdminSearchGroup(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+        """ Search group by name
+
+        Permission checking:
+        1. Admin user;
+        """
+
+        query_str = request.GET.get('query', '').lower().strip()
+        if not query_str:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        result = []
+        groups = ccnet_api.search_groups(query_str, 0, 25)
+        for group in groups:
+            group_info = get_group_info(group.id)
+            result.append(group_info)
+
+        return Response({"group_list": result})
