@@ -1,7 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-import datetime
-from datetime import timedelta
 
 from django.utils.crypto import get_random_string
 
@@ -83,7 +81,6 @@ def get_org_detailed_info(org):
 
     return org_info
 
-
 def gen_org_url_prefix(max_trial=None, length=20):
     """Generate organization url prefix automatically.
     If ``max_trial`` is large than 0, then re-try that times if failed.
@@ -148,9 +145,7 @@ class AdminOrganizations(APIView):
             org_info = get_org_info(org)
             result.append(org_info)
 
-
         return Response({'organizations': result})
-
 
     def post(self, request):
         """ Create an organization
@@ -381,3 +376,44 @@ class AdminOrganization(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class AdminSearchOrganization(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Search organization by name.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not (CLOUD_MODE and MULTI_TENANCY):
+            error_msg = 'Feature is not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        query_str = request.GET.get('query', '').lower().strip()
+        if not query_str:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            orgs = ccnet_api.get_all_orgs(-1, -1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = []
+        for org in orgs:
+
+            if query_str not in org.org_name.lower():
+                continue
+
+            org_info = get_org_info(org)
+            result.append(org_info)
+
+        return Response({'organization_list': result})
