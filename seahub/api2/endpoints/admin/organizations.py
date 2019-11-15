@@ -32,11 +32,6 @@ if ORG_MEMBER_QUOTA_ENABLED:
     from seahub_extra.organizations.models import OrgMemberQuota
 
 try:
-    from seahub.settings import CLOUD_MODE
-except ImportError:
-    CLOUD_MODE = False
-
-try:
     from seahub.settings import MULTI_TENANCY
     from seahub_extra.organizations.models import OrgSettings
 except ImportError:
@@ -129,7 +124,7 @@ class AdminOrganizations(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -153,7 +148,7 @@ class AdminOrganizations(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -224,7 +219,7 @@ class AdminOrganization(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -254,7 +249,7 @@ class AdminOrganization(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -340,7 +335,7 @@ class AdminOrganization(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -391,7 +386,7 @@ class AdminSearchOrganization(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
