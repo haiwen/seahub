@@ -735,6 +735,7 @@ urlpatterns = [
     url(r'^sys/admin-logs/operation/$', sysadmin_react_fake_view, name="sys_admin_logs_operation"),
     url(r'^sys/admin-logs/login/$', sysadmin_react_fake_view, name="sys_admin_logs_login"),
     url(r'^sys/organizations/$', sysadmin_react_fake_view, name="sys_organizations"),
+    url(r'^sys/search-organizations/$', sysadmin_react_fake_view, name="sys_search_organizations"),
     url(r'^sys/organizations/(?P<org_id>\d+)/info/$', sysadmin_react_fake_view, name="sys_organization_info"),
     url(r'^sys/organizations/(?P<org_id>\d+)/users/$', sysadmin_react_fake_view, name="sys_organization_users"),
     url(r'^sys/organizations/(?P<org_id>\d+)/groups/$', sysadmin_react_fake_view, name="sys_organization_groups"),

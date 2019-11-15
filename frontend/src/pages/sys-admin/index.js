@@ -42,6 +42,7 @@ import ShareLinks from './links/share-links';
 import UploadLinks from './links/upload-links';
 
 import Orgs from './orgs/orgs';
+import SearchOrgs from './orgs/search-orgs';
 import OrgInfo from './orgs/org-info';
 import OrgUsers from './orgs/org-users';
 import OrgGroups from './orgs/org-groups';
@@ -117,7 +118,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'organizations',
-        urlPartList: ['organizations/']
+        urlPartList: ['organizations/', 'search-organizations/']
       },
     ];
     const tmpTab = this.getCurrentTabForPageList(pageList);
@@ -188,6 +189,7 @@ class SysAdmin extends React.Component {
             <ShareLinks path={siteRoot + 'sys/share-links'} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} />
             <Orgs path={siteRoot + 'sys/organizations'} />
+            <SearchOrgs path={siteRoot + 'sys/search-organizations'} />
             <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} />
             <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} />
             <OrgGroups path={siteRoot + 'sys/organizations/:orgID/groups'} />

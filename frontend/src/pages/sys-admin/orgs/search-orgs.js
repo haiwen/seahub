@@ -1,33 +1,38 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@reach/router';
-import { Button } from 'reactstrap';
+import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
+import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import SysAdminAddOrgDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-org-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
-import Search from '../search';
 import Content from './orgs-content';
 
 
-class Orgs extends Component {
+class SearchOrgs extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      query: '',
+      isSubmitBtnActive: false,
       loading: true,
       errorMsg: '',
-      orgList: [],
-      isAddOrgDialogOpen: false
+      orgList: []
     };
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminListOrgs().then((res) => {
+    let params = (new URL(document.location)).searchParams;
+    this.setState({
+      query: params.get('query') || ''
+    }, this.getItems);
+  }
+
+  getItems = () => {
+    seafileAPI.sysAdminSearchOrgs(this.state.query.trim()).then(res => {
       this.setState({
         loading: false,
-        orgList: res.data.organizations
+        orgList: res.data.organization_list
       });
     }).catch((error) => {
       if (error.response) {
@@ -52,10 +57,6 @@ class Orgs extends Component {
     });
   }
 
-  toggleAddOrgDialog = () => {
-    this.setState({isAddOrgDialogOpen: !this.state.isAddOrgDialogOpen});
-  }
-
   updateRole = (orgID, role) => {
     let orgInfo = {};
     orgInfo.role = role;
@@ -68,18 +69,6 @@ class Orgs extends Component {
       });
       this.setState({orgList: newOrgList});
       toaster.success(gettext('Edit succeeded'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
-  addOrg = (data) => {
-    const { orgName, ownerEmail, password } = data;
-    seafileAPI.sysAdminAddOrg(orgName, ownerEmail, password).then(res => {
-      let orgList = this.state.orgList;
-      orgList.unshift(res.data);
-      this.setState({orgList: orgList});
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -99,49 +88,63 @@ class Orgs extends Component {
     });
   }
 
-  getSearch = () => {
-    return <Search
-      placeholder={gettext('Search organizations')}
-      submit={this.searchItems}
-    />; 
+  handleInputChange = (e) => {
+    this.setState({ 
+      query: e.target.value
+    }, this.checkSubmitBtnActive);
   }
 
-  searchItems = (keyword) => {
-    navigate(`${siteRoot}sys/search-organizations/?query=${encodeURIComponent(keyword)}`);
+  checkSubmitBtnActive = () => {
+    const { query } = this.state;
+    this.setState({
+      isSubmitBtnActive: query.trim()
+    }); 
   }
 
   render() {
-    const { isAddOrgDialogOpen } = this.state;
+    const { query, isSubmitBtnActive } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleAddOrgDialog}>{gettext('Add Organization')}</Button>
-        </MainPanelTopbar>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Organizations')}</h3>
             </div> 
             <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.orgList}
-                updateRole={this.updateRole}
-                deleteOrg={this.deleteOrg}
-              />
+              <div className="mt-4 mb-6">
+                <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Organizations')}</h4>
+                <p className="text-secondary small">{gettext('Tip: you can search by keyword in name.')}</p>
+                <Form>
+                  <FormGroup row>
+                    <Label for="name" sm={1}>{gettext('Name')}</Label>
+                    <Col sm={5}>
+                      <Input type="text" name="query" id="name" value={query} onChange={this.handleInputChange} />
+                    </Col>
+                  </FormGroup>
+                  <FormGroup row>
+                    <Col sm={{size: 5, offset: 1}}>
+                      <button className="btn btn-outline-primary" disabled={!isSubmitBtnActive} onClick={this.getItems}>{gettext('Submit')}</button>
+                    </Col>
+                  </FormGroup>
+                </Form>
+              </div>
+              <div className="mt-4 mb-6">
+                <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Result')}</h4>
+                <Content
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={this.state.orgList}
+                  updateRole={this.updateRole}
+                  deleteOrg={this.deleteOrg}
+                />
+              </div>
             </div>
           </div>
         </div>
-        {isAddOrgDialogOpen &&
-          <SysAdminAddOrgDialog
-            addOrg={this.addOrg}
-            toggleDialog={this.toggleAddOrgDialog}
-          />
-        }
       </Fragment>
     );
   }
 }
 
-export default Orgs;
+export default SearchOrgs;

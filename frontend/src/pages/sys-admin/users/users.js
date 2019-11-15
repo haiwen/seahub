@@ -414,7 +414,7 @@ class Users extends Component {
     return <Search
       placeholder={gettext('Search users')}
       submit={this.searchItems}
-    />; 
+    />;
   }
 
   searchItems = (keyword) => {

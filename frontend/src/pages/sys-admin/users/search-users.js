@@ -252,9 +252,9 @@ class SearchUsers extends Component {
   }                 
 
   checkSubmitBtnActive = () => {
-    const { email } = this.state;
+    const { query } = this.state;
     this.setState({
-      isSubmitBtnActive: email.trim()
+      isSubmitBtnActive: query.trim()
     });
   }
 
