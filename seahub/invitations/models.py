@@ -115,7 +115,7 @@ class SharedRepoInvitation(models.Model):
     )
 
     invitation = models.ForeignKey(Invitation, on_delete=models.CASCADE, related_name='shared_repo')
-    repo_id = models.CharField(max_length=36)
+    repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
     permission = models.CharField(
         max_length=50, choices=PERMISSION_CHOICES, default=PERMISSION_READ)
@@ -123,7 +123,4 @@ class SharedRepoInvitation(models.Model):
     objects = SharedRepoInvitationManager()
 
     class Meta:
-        indexes = [
-            models.Index(fields=['repo_id', 'path']),
-        ]
         db_table = 'shared_repo_invitation'
