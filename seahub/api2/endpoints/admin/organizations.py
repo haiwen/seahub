@@ -129,7 +129,17 @@ class AdminOrganizations(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            orgs = ccnet_api.get_all_orgs(-1, -1)
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+
+        start = (page - 1) * per_page
+
+        try:
+            orgs = ccnet_api.get_all_orgs(start, per_page)
+            total_count = ccnet_api.count_orgs()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -140,7 +150,7 @@ class AdminOrganizations(APIView):
             org_info = get_org_info(org)
             result.append(org_info)
 
-        return Response({'organizations': result})
+        return Response({'organizations': result, 'total_count': total_count})
 
     def post(self, request):
         """ Create an organization
