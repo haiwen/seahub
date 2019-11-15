@@ -5,6 +5,7 @@ import { Utils } from '../../../utils/utils';
 import { siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
+import Paginator from '../../../components/paginator';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
@@ -15,6 +16,14 @@ class Content extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  getPreviousPage = () => {
+    this.props.getListByPage(this.props.currentPage - 1);
+  }       
+            
+  getNextPage = () => {
+    this.props.getListByPage(this.props.currentPage + 1);
   }
 
   render() {
@@ -53,6 +62,17 @@ class Content extends Component {
               })}
             </tbody>
           </table>
+          {this.props.currentPage &&
+          <Paginator
+            currentPage={this.props.currentPage}
+            hasNextPage={this.props.hasNextPage}
+            curPerPage={this.props.curPerPage}
+            canResetPerPage={true}
+            resetPerPage={this.props.resetPerPage}
+            gotoPreviousPage={this.getPreviousPage}
+            gotoNextPage={this.getNextPage}
+          />
+          }
         </Fragment>
       );
       return items.length ? table : emptyTip; 

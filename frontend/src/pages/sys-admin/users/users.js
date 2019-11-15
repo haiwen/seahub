@@ -27,7 +27,6 @@ class Users extends Component {
       loading: true,
       errorMsg: '',
       userList: [],
-      totalItemCount: 0,
       hasNextPage: false,
       currentPage: 1,
       perPage: 25,

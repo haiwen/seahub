@@ -19,15 +19,25 @@ class Orgs extends Component {
       loading: true,
       errorMsg: '',
       orgList: [],
+      currentPage: 1,
+      perPage: 25,
+      hasNextPage: false,
       isAddOrgDialogOpen: false
     };
   }
 
-  componentDidMount () {
-    seafileAPI.sysAdminListOrgs().then((res) => {
+  componentDidMount() {
+    this.getItemsByPage(1);
+  }
+
+  getItemsByPage = (page) => {
+    const { perPage } = this.state;
+    seafileAPI.sysAdminListOrgs(page, perPage).then((res) => {
       this.setState({
         loading: false,
-        orgList: res.data.organizations
+        orgList: res.data.organizations,
+        currentPage: page,
+        hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count)
       });
     }).catch((error) => {
       if (error.response) {
@@ -49,6 +59,14 @@ class Orgs extends Component {
           errorMsg: gettext('Please check the network.')
         });
       }
+    });
+  }
+
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {  
+      this.getItemsByPage(1);
     });
   }
 
@@ -127,6 +145,11 @@ class Orgs extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.orgList}
+                currentPage={this.state.currentPage}
+                hasNextPage={this.state.hasNextPage}
+                curPerPage={this.state.perPage} 
+                resetPerPage={this.resetPerPage}
+                getListByPage={this.getItemsByPage}
                 updateRole={this.updateRole}
                 deleteOrg={this.deleteOrg}
               />
