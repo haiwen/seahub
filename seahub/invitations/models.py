@@ -106,7 +106,37 @@ class Invitation(models.Model):
 
 
 class SharedRepoInvitationManager(models.Manager):
-    ...
+    def add(self, invitation, repo_id, path, permission):
+        obj = self.model(
+            invitation=invitation,
+            repo_id=repo_id,
+            path=path,
+            permission=permission,
+        )
+        obj.save()
+        return obj
+    
+    def list_by_repo_id_and_path(self, repo_id, path):
+        shared_queryset = self.filter(
+            invitation__expire_time__gte=timezone.now(),
+            invitation__accept_time=None,
+            repo_id=repo_id,
+            path=path,
+            ).select_related('invitation')
+
+        shared_list = list()
+        for obj in shared_queryset:
+            data = {
+                'inviter': obj.invitation.inviter,
+                'accepter': obj.invitation.accepter,
+                'invite_time': obj.invitation.invite_time,
+                'expire_time': obj.invitation.expire_time,
+                'permission': obj.permission,
+            }
+            shared_list.append(data)
+
+        return shared_list
+
 
 class SharedRepoInvitation(models.Model):
     PERMISSION_CHOICES = (
