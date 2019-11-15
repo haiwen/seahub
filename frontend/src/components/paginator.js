@@ -39,15 +39,18 @@ class Paginator extends Component {
           {this.props.hasNextPage &&
             <a href="#" onClick={this.goToNext} className="ml-4">{gettext('Next')}</a>
           }
-        </div>
-        {this.props.canResetPerPage &&
-          <div className="text-center">
-            {gettext('Per page:')}{' '}
-            <span className={`${curPerPage === 25 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(25);}}>25</span>
+          {(this.props.currentPage != 1 || this.props.hasNextPage) &&
+            <span className="d-inline-block mx-2">|</span>
+          }
+          {this.props.canResetPerPage &&
+          <Fragment>
+            {gettext('Per page:')}
+            <span className={`${curPerPage === 25 ? '' : 'a-simulate '} mx-1`} onClick={() => {return this.resetPerPage(25);}}>25</span>
             <span className={`${curPerPage === 50 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(50);}}>50</span>
-            <span className={`${curPerPage === 100 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(100);}}>100</span>
-          </div>
-        }
+            <span className={`${curPerPage === 100 ? '' : 'a-simulate '}`} onClick={() => {return this.resetPerPage(100);}}>100</span>
+          </Fragment>
+          }
+        </div>
       </Fragment>
     );
   }
