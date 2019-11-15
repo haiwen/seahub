@@ -114,7 +114,7 @@ class SharedRepoInvitation(models.Model):
         (PERMISSION_READ_WRITE, 'read and write')
     )
 
-    accepter = LowerCaseCharField(max_length=255)
+    invitation = models.ForeignKey(Invitation, on_delete=models.CASCADE, related_name='shared_repo')
     repo_id = models.CharField(max_length=36)
     path = models.TextField()
     permission = models.CharField(
@@ -122,3 +122,8 @@ class SharedRepoInvitation(models.Model):
 
     objects = SharedRepoInvitationManager()
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['repo_id', 'path']),
+        ]
+        db_table = 'shared_repo_invitation'
