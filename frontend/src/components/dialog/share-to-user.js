@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {gettext, isPro, canInvitePeople, siteRoot} from '../../utils/constants';
+import {gettext, isPro, siteRoot} from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
@@ -339,12 +339,6 @@ class ShareToUser extends React.Component {
               onChangeUserPermission={this.onChangeUserPermission}
             />
           </table>
-          {canInvitePeople &&
-            <a href={siteRoot + 'invitations/'} className="invite-link-in-popup">
-              <i className="sf2-icon-invite invite-link-icon-in-popup"></i>
-              <span className="invite-link-icon-in-popup">{gettext('Invite People')}</span>
-            </a>
-          }
         </div>
       </Fragment>
     );
