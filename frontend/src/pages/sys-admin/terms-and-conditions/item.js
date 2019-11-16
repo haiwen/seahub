@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import moment from 'moment';
+import getPreviewContent from '../../../utils/markdown-utils';
 import AddOrUpdateTermDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog';
 import TermsPerviewDialog from '../../../components/dialog/terms-preview-dialog';
 import ModalPortal from '../../../components/modal-portal';
@@ -23,11 +25,30 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      itemContent: "...",
       isOpIconShown: false,
       isUpdateDialogOpen: false,
       isDeleteDialogOpen: false,
       isTermsPerviewDialogOpen: false,
     };
+  }
+
+  componentDidMount() {
+    let mdFile = this.props.item.text;
+    processor.process(mdFile).then((result) => {
+      let innerHtml = String(result);
+      this.setState({itemContent: innerHtml});
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.item.text !== this.props.item.text) {
+      let mdFile = nextProps.item.text;
+      processor.process(mdFile).then((result) => {
+        let innerHtml = String(result);
+        this.setState({itemContent: innerHtml});
+      });
+    }
   }
 
   handleMouseEnter = () => {
@@ -92,12 +113,7 @@ class Item extends Component {
   render() {
     let { item } = this.props;
     let { isDeleteDialogOpen, isUpdateDialogOpen, isTermsPerviewDialogOpen } = this.state;
-    let termContent = null;
-    if (item.text && item.text.indexOf('text:') > -1 && item.text.indexOf('preview:') > -1) {
-      termContent = JSON.parse(item.text);
-    } else if (item.text) {
-      termContent = { text: item.text, preview: ''};
-    }
+    let previewContent = getPreviewContent(item.text);
     let itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     return (
@@ -105,7 +121,9 @@ class Item extends Component {
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td>{item.name}</td>
           <td>{item.version_number}</td>
-          <td className="ellipsis"><a href='#' onClick={this.toggleTermsContentDialog}>{termContent.text}</a></td>
+          <td className="ellipsis">
+            <a href='#' onClick={this.toggleTermsContentDialog}>{previewContent.previewText}</a>
+          </td>
           <td>{moment(item.ctime).fromNow()}</td>
           <td>{item.activate_time ? moment(item.activate_time).fromNow() : '--'}</td>
           <td>
@@ -143,7 +161,7 @@ class Item extends Component {
         {isTermsPerviewDialogOpen &&
           <ModalPortal>
             <TermsPerviewDialog
-              content={termContent}
+              content={item.text}
               onClosePreviewDialog={this.toggleTermsContentDialog}
             />
           </ModalPortal>
