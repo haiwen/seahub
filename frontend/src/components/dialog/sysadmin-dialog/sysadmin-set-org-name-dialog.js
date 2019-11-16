@@ -51,12 +51,12 @@ class SysAdminSetOrgNameDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-                <Input
-                  type="text"
-                  value={name}
-                  onKeyPress={this.handleKeyPress} 
-                  onChange={this.handleInputChange}
-                />
+              <Input
+                type="text"
+                value={name}
+                onKeyPress={this.handleKeyPress} 
+                onChange={this.handleInputChange}
+              />
             </FormGroup>
           </Form>
         </ModalBody>

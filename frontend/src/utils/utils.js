@@ -292,7 +292,7 @@ export const Utils = {
   isSupportUploadFolder: function() {
     return navigator.userAgent.indexOf('Firefox')!=-1 ||
       navigator.userAgent.indexOf('Chrome') > -1 || 
-      navigator.userAgent.indexOf("Safari") > -1;
+      navigator.userAgent.indexOf('Safari') > -1;
   },
 
   isIEBrower: function() { // is ie <= ie11 not include Edge
@@ -591,7 +591,7 @@ export const Utils = {
           text: gettext('Preview and download'), 
           permissionDetails: {
             'can_edit': false,
-            "can_download": true
+            'can_download': true
           }
         };
       case 'preview_only':
@@ -600,7 +600,7 @@ export const Utils = {
           text: gettext('Preview only'), 
           permissionDetails: {
             'can_edit': false,
-            "can_download": false 
+            'can_download': false 
           }
         };
       case 'edit_download':
@@ -609,7 +609,7 @@ export const Utils = {
           text: gettext('Edit on cloud and download'), 
           permissionDetails: {
             'can_edit': true,
-            "can_download": true
+            'can_download': true
           }
         };
       case 'cloud_edit':
@@ -618,7 +618,7 @@ export const Utils = {
           text: gettext('Edit on cloud'),
           permissionDetails: {
             'can_edit': true,
-            "can_download": false
+            'can_download': false
           }
         };
     }

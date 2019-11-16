@@ -47,12 +47,12 @@ class UpdateUser extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-                <Input
-                  type="text"
-                  value={this.state.value}
-                  onKeyPress={this.handleKeyPress} 
-                  onChange={this.handleInputChange}
-                />
+              <Input
+                type="text"
+                value={this.state.value}
+                onKeyPress={this.handleKeyPress} 
+                onChange={this.handleInputChange}
+              />
             </FormGroup>
           </Form>
         </ModalBody>

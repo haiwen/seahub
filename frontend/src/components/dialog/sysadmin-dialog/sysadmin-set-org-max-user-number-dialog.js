@@ -51,13 +51,13 @@ class SysAdminSetOrgMaxUserNumberDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-                <Input
-                  type="text"
-                  className="form-control"
-                  value={value}
-                  onKeyPress={this.handleKeyPress} 
-                  onChange={this.handleInputChange}
-                />
+              <Input
+                type="text"
+                className="form-control"
+                value={value}
+                onKeyPress={this.handleKeyPress} 
+                onChange={this.handleInputChange}
+              />
             </FormGroup>
           </Form>
         </ModalBody>
