@@ -6,11 +6,11 @@ import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
+import OpMenu from '../../../components/dialog/op-menu';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
 import MainPanelTopbar from '../main-panel-topbar';
 import InstitutionNav from './institution-nav';
-import OpMenu from './user-op-menu';
 
 class Content extends Component {
 
@@ -83,7 +83,6 @@ class Item extends Component {
       highlight: false,
       isRevokeAdminDialogOpen: false,
     };
-    this.operations = ['Revoke Admin'];
   }
 
   handleMouseEnter = () => {
@@ -137,6 +136,16 @@ class Item extends Component {
     }
   }
 
+  translateOperations = (item) => {
+    let translateResult = ''; 
+    switch(item) {
+      case 'Revoke Admin':
+        translateResult = gettext('Revoke Admin');
+        break;
+    }   
+    return translateResult;
+  }
+
   render() {
     const { item } = this.props;
     const { isOpIconShown, isRevokeAdminDialogOpen } = this.state;
@@ -157,7 +166,8 @@ class Item extends Component {
           <td>
             {isOpIconShown &&
             <OpMenu
-              operations={this.operations}
+              operations={['Revoke Admin']}
+              translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}

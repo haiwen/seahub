@@ -8,12 +8,12 @@ import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
+import OpMenu from '../../../components/dialog/op-menu';
 import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-institution-member-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
 import MainPanelTopbar from '../main-panel-topbar';
 import InstitutionNav from './institution-nav';
-import OpMenu from './user-op-menu';
 
 class Content extends Component {
 
@@ -103,11 +103,6 @@ class Item extends Component {
       highlight: false,
       isSetAdminDialogOpen: false,
     };
-    if (this.props.item.is_institution_admin) {
-      this.operations = ['Delete'];
-    } else {
-      this.operations = ['Set Admin', 'Delete'];
-    }
   }
 
   handleMouseEnter = () => {
@@ -153,15 +148,40 @@ class Item extends Component {
         this.props.deleteUser(this.props.item.email);
         break;
       case 'Set Admin':
-        this.props.setAdmin(this.props.item.email);
-        this.operations = ['Delete'];
+        this.toggleSetAdminDialog();
         break;
     }
+  }
+
+  getOperations = () => {
+    let operations = [];
+    if (!this.props.item.is_institution_admin) {
+      operations.push('Set Admin');
+    }
+    operations.push('Delete');
+    return operations;
+  }
+
+  translateOperations = (item) => {
+    let translateResult = ''; 
+    switch(item) {
+      case 'Delete':
+        translateResult = gettext('Delete');
+        break;
+      case 'Set Admin':
+        translateResult = gettext('Set Admin');
+        break;
+    }   
+
+    return translateResult;
   }
 
   render() {
     const { item } = this.props;
     const { isOpIconShown, isSetAdminDialogOpen } = this.state;
+
+    const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
+    const dialogMsg = gettext('Are you sure you want to set {placeholder} as Admin?').replace('{placeholder}', itemName);
 
     return (
       <Fragment>
@@ -179,7 +199,8 @@ class Item extends Component {
           <td>
             {isOpIconShown &&
               <OpMenu
-                operations={this.operations}
+                operations={this.getOperations()}
+                translateOperations={this.translateOperations}
                 onMenuItemClick={this.onMenuItemClick}
                 onFreezedItem={this.props.onFreezedItem}
                 onUnfreezedItem={this.onUnfreezedItem}
@@ -190,9 +211,10 @@ class Item extends Component {
         {isSetAdminDialogOpen &&
           <CommonOperationConfirmationDialog
             title={gettext('Set Admin')}
-            message={gettext('Sure?')}
+            message={dialogMsg}
             executeOperation={this.setAdmin}
             toggleDialog={this.toggleSetAdminDialog}
+            confirmBtnText={gettext('Set Admin')}
           />
         }
       </Fragment>

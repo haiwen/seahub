@@ -24,7 +24,7 @@ class Nav extends React.Component {
   render() {
     const { currentItem, orgID, orgName } = this.props;
     return (
-     <div>
+      <div>
         <div className="cur-view-path">
           <h3 className="sf-heading"><Link to={`${siteRoot}sys/organizations/`}>{gettext('Organizations')}</Link> / {orgName}</h3>
         </div>

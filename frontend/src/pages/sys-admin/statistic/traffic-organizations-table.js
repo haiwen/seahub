@@ -70,7 +70,7 @@ class TrafficOrganizationsTable extends React.Component {
     this.setState({
       userTrafficList: newUserTrafficList,
       sortOrder: sortOrder
-    })
+    });
   }
 
   onGenerateReports = (month, page) => {

@@ -10,10 +10,10 @@ import Loading from '../../../components/loading';
 import SysAdminUserStatusEditor from '../../../components/select-editor/sysadmin-user-status-editor';
 import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import OrgNav from './org-nav';
-import OpMenu from './user-op-menu';
 
 class Content extends Component {
 
@@ -160,6 +160,20 @@ class Item extends Component {
     }); 
   }
 
+  translateOperations = (item) => {
+    let translateResult = ''; 
+    switch(item) {
+      case 'Delete':
+        translateResult = gettext('Delete');
+        break;
+      case 'Reset Password':
+        translateResult = gettext('Reset Password');
+        break;
+    }   
+
+    return translateResult;
+  }
+
   render() {
     const { item } = this.props;
     const { isOpIconShown, isDeleteDialogOpen, isResetPasswordDialogOpen } = this.state;
@@ -188,6 +202,8 @@ class Item extends Component {
           <td>
             {(isOpIconShown && item.email != username) &&
             <OpMenu
+              operations={['Delete', 'Reset Password']}
+              translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}

@@ -6,10 +6,10 @@ import { siteRoot, gettext } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
 import Paginator from '../../../components/paginator';
+import OpMenu from '../../../components/dialog/op-menu';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminTransferGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog';
 import UserLink from '../user-link';
-import OpMenu from './op-menu';
 
 class Content extends Component {
 
@@ -162,9 +162,23 @@ class Item extends Component {
     this.props.transferGroup(this.props.item.id, receiver);
   }
 
+  translateOperations = (item) => {
+    let translateResult = ''; 
+    switch(item) {
+      case 'Delete':
+        translateResult = gettext('Delete');
+        break;
+      case 'Transfer':
+        translateResult = gettext('Transfer');
+        break;
+    }   
+
+    return translateResult;
+  }
+
   render() {
-    const { isOpIconShown, isDeleteDialogOpen, isTransferDialogOpen } = this.state;
     const { item } = this.props;
+    const { isOpIconShown, isDeleteDialogOpen, isTransferDialogOpen } = this.state;
 
     let groupName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', groupName);
@@ -189,6 +203,8 @@ class Item extends Component {
           <td>
             {(isOpIconShown && item.owner != 'system admin') &&
             <OpMenu
+              operations={['Delete', 'Transfer']}
+              translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}

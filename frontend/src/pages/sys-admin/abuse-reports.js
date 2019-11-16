@@ -68,7 +68,7 @@ class AbuseReports extends Component {
           <td>{item.description}</td>
           <td>{moment(item.time).format('YYYY-MM-DD')}</td>
           <td><p onClick={this.updateAbuseReport.bind(this, handled, abuseReportId)}
-                 className="op-target ellipsis ellipsis-op-target cursor-pointer"
+            className="op-target ellipsis ellipsis-op-target cursor-pointer"
           >{gettext(item.handled.toString())}</p></td>
         </tr>
       );
@@ -92,25 +92,25 @@ class AbuseReports extends Component {
             <div className="cur-view-content">
               <table className={`table-hover${isDesktop ? '' : ' table-thead-hidden'}`}>
                 <thead>
-                {isDesktop ?
-                  <tr>
-                    <th width="20%">{gettext("Library")}</th>
-                    <th width="20%">{gettext("File")}</th>
-                    <th width="10%">{gettext("Reporter")}</th>
-                    <th width="15%">{gettext("Abuse Type")}</th>
-                    <th width="20%">{gettext("Description")}</th>
-                    <th width="10%">{gettext("Time")}</th>
-                    <th width="5%">{gettext("Handled")}</th>
-                  </tr>
-                  :
-                  <tr>
-                    <th width="92%"></th>
-                    <th width="8%"></th>
-                  </tr>
-                }
+                  {isDesktop ?
+                    <tr>
+                      <th width="20%">{gettext('Library')}</th>
+                      <th width="20%">{gettext('File')}</th>
+                      <th width="10%">{gettext('Reporter')}</th>
+                      <th width="15%">{gettext('Abuse Type')}</th>
+                      <th width="20%">{gettext('Description')}</th>
+                      <th width="10%">{gettext('Time')}</th>
+                      <th width="5%">{gettext('Handled')}</th>
+                    </tr>
+                    :
+                    <tr>
+                      <th width="92%"></th>
+                      <th width="8%"></th>
+                    </tr>
+                  }
                 </thead>
                 <tbody>
-                {AbuseReportList}
+                  {AbuseReportList}
                 </tbody>
               </table>
             </div>

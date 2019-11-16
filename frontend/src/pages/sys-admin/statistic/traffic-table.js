@@ -13,7 +13,7 @@ class TrafficTable extends React.Component {
     super(props);
     this.state = {
       showIconName: 'link_file_download'
-    }
+    };
   }
 
   componentDidMount() {
@@ -41,7 +41,7 @@ class TrafficTable extends React.Component {
     let newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     this.setState({
       showIconName: sortByType
-    })
+    });
 
     this.props.sortBySize(sortByType, newSortOrder);
   }

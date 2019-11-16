@@ -9,9 +9,9 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import TransferDialog from '../../../components/dialog/transfer-dialog';
+import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
-import OpMenu from './user-op-menu';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
