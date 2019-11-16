@@ -119,16 +119,21 @@ class SharedRepoInvitationsBatchView(APIView):
         if username != repo_owner and not is_repo_admin(username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+        
+        # main
         result = {}
         result['failed'] = []
         result['success'] = []
 
-        invitation_queryset = Invitation.objects.order_by('-invite_time').filter(
-                inviter=request.user.username, accept_time=None)
-        shared_queryset = SharedRepoInvitation.objects.list_by_repo_id_and_path(
-            repo_id=repo_id, path=path
-        )
+        try:
+            invitation_queryset = Invitation.objects.order_by('-invite_time').filter(
+                    inviter=request.user.username, accept_time=None)
+            shared_queryset = SharedRepoInvitation.objects.list_by_repo_id_and_path(
+                repo_id=repo_id, path=path)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for accepter in accepters:
 
@@ -162,7 +167,7 @@ class SharedRepoInvitationsBatchView(APIView):
                     continue
             except User.DoesNotExist:
                 pass
-
+            
             if invitation_queryset.filter(accepter=accepter).exists():
                 invitation_obj = invitation_queryset.filter(accepter=accepter)[0]
             else:
@@ -175,10 +180,17 @@ class SharedRepoInvitationsBatchView(APIView):
                         'error_msg': _('This item has been shared to %s.') % accepter
                     })
                     continue
-
-            SharedRepoInvitation.objects.add(
-                invitation=invitation_obj, repo_id=repo_id, path=path, permission=permission)
-
+            
+            try:
+                SharedRepoInvitation.objects.add(
+                    invitation=invitation_obj, repo_id=repo_id, path=path, permission=permission)
+            except Exception as e:
+                logger.error(e)
+                result['failed'].append({
+                    'email': accepter,
+                    'error_msg': _('Internal Server Error'),
+                })
+                
             data = invitation_obj.to_dict()
             data['permission'] = permission
             result['success'].append(data)
