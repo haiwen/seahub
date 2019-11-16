@@ -244,7 +244,7 @@ class ShareToInvitePeople extends React.Component {
         <table className="table-thead-hidden">
           <thead>
             <tr>
-              <th width="50%">{gettext('Invite people')}</th>
+              <th width="50%">{gettext('Invite People')}</th>
               <th width="35%">{gettext('Permission')}</th>
               <th width="15%"></th>
             </tr>

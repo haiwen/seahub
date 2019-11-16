@@ -113,18 +113,18 @@ class ShareDialog extends React.Component {
                     {gettext('Share to user')}
                   </NavLink>
                 </NavItem>
-                {canInvitePeople &&
-                <NavItem>
-                  <NavLink className={activeTab === 'invitePeople' ? 'active' : ''} onClick={this.toggle.bind(this, 'invitePeople')}>
-                    {gettext('Invite people')}
-                  </NavLink>
-                </NavItem>
-                }
                 <NavItem>
                   <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
                     {gettext('Share to group')}
                   </NavLink>
                 </NavItem>
+                {canInvitePeople &&
+                <NavItem>
+                  <NavLink className={activeTab === 'invitePeople' ? 'active' : ''} onClick={this.toggle.bind(this, 'invitePeople')}>
+                    {gettext('Invite People')}
+                  </NavLink>
+                </NavItem>
+                }
               </Fragment>
             }
           </Nav>
