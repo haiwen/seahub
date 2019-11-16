@@ -28,11 +28,11 @@ class DirPath extends React.Component {
     if (window.uploader && 
       window.uploader.isUploadProgressDialogShow && 
       window.uploader.totalProgress !== 100) {
-        if (!window.confirm(gettext('A file is being uploaded. Are you sure you want to leave this page?'))) {
-          e.preventDefault();
-          return false;
-        }
-        window.uploader.isUploadProgressDialogShow = false;
+      if (!window.confirm(gettext('A file is being uploaded. Are you sure you want to leave this page?'))) {
+        e.preventDefault();
+        return false;
+      }
+      window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.onTabNavClick(tabName, id);
   }

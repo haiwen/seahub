@@ -14,7 +14,7 @@ import Repo from '../../models/repo';
 import toaster from '../../components/toast';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
-import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
+// import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
 import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
 import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
@@ -414,9 +414,9 @@ class GroupView extends React.Component {
             <div className="operation">
               {((!isDepartmentGroup && canAddRepo) || (isDepartmentGroup && isStaff)) && (
                 Utils.isDesktop() ? (
-                <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
-                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
-                </button>
+                  <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
+                    <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+                  </button>
                 ) : (
                   <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateRepoToggle}></span>
                 )

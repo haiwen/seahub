@@ -13,7 +13,7 @@ import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
 import toaster from '../toast';
-import RepoAPITokenDialog from "../dialog/repo-api-token-dialog";
+import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 
 const propTypes = {
   currentGroup: PropTypes.object,

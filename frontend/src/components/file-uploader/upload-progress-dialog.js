@@ -42,7 +42,7 @@ class UploadProgressDialog extends React.Component {
 
   render() {
 
-    let uploadBitrate = Utils.formatBitRate(this.props.uploadBitrate)
+    let uploadBitrate = Utils.formatBitRate(this.props.uploadBitrate);
     let uploadedMessage = gettext('File Upload');
     let uploadingMessage = gettext('File Uploading...') + ' ' + this.props.totalProgress + '%' + ' (' + uploadBitrate + ')';
 

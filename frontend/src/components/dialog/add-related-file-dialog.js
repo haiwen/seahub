@@ -1,4 +1,4 @@
-import React ,{ Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';

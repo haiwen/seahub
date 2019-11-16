@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import Users from './users'
+import React, { Component } from 'react';
+import Users from './users';
 
 class LDAPImportedUsers extends Component {
   

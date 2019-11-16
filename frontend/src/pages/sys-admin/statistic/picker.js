@@ -11,7 +11,7 @@ const propsTypes = {
   disabledDate: PropTypes.func.isRequired,
   value: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-}
+};
 
 const FORMAT = 'YYYY-MM-DD';
 
@@ -41,21 +41,21 @@ class Picker extends React.Component {
         value={props.value}
         onChange={props.onChange}
       >
-      {
-        ({value}) => {
-          return (
-            <span>
-              <input 
-                placeholder="yyyy-mm-dd"
-                tabIndex="-1"
-                readOnly
-                value={value && value.format(FORMAT) || ''}
-                className="form-control system-statistic-input"
-              />
-            </span>
-          );
+        {
+          ({value}) => {
+            return (
+              <span>
+                <input 
+                  placeholder="yyyy-mm-dd"
+                  tabIndex="-1"
+                  readOnly
+                  value={value && value.format(FORMAT) || ''}
+                  className="form-control system-statistic-input"
+                />
+              </span>
+            );
+          }
         }
-      }
       </DatePicker>
     );
   }

@@ -19,7 +19,7 @@ class TermsPreviewWidget extends React.Component {
     this.state = {
       innerHtml: null,
       isFormatValue: true,
-    }
+    };
   }
 
   componentDidMount() {

@@ -551,20 +551,20 @@ class DirentListView extends React.Component {
       >
         <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
           {isDesktop ? (
-          <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
-            <tr>
-              <th width="3%" className="pl10">
-                <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
-              </th>
-              <th width="3%" className="pl10">{/*icon */}</th>
-              <th width="5%" className="pl10">{/*star */}</th>
-              <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-              <th width="6%">{/*tag */}</th>
-              <th width="18%">{/*operation */}</th>
-              <th width="11%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-              <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-            </tr>
-          </thead>
+            <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
+              <tr>
+                <th width="3%" className="pl10">
+                  <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
+                </th>
+                <th width="3%" className="pl10">{/*icon */}</th>
+                <th width="5%" className="pl10">{/*star */}</th>
+                <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                <th width="6%">{/*tag */}</th>
+                <th width="18%">{/*operation */}</th>
+                <th width="11%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+                <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+              </tr>
+            </thead>
           ) : (
             <thead>
               <tr>

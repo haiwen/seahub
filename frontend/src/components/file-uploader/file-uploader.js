@@ -463,13 +463,12 @@ class FileUploader extends React.Component {
 
   onFileUpload = () => {
     this.uploadInput.current.removeAttribute('webkitdirectory');
-
-      this.uploadInput.current.click();
+    this.uploadInput.current.click();
   }
 
   onFolderUpload = () => {
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
-      this.uploadInput.current.click();
+    this.uploadInput.current.click();
   }
 
   onDragStart = () => {
