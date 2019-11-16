@@ -38,7 +38,9 @@ class SharedRepoInvitationsView(APIView):
         """ List invitations by shared repo.
         """
         # argument check
-        path = request.GET.get('p', '/')
+        path = request.GET.get('path', None)
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
 
         # recourse check
         repo = seafile_api.get_repo(repo_id)
@@ -87,7 +89,9 @@ class SharedRepoInvitationsBatchView(APIView):
         """ repo shared in batches to inviters
         """
         # argument check
-        path = request.data.get('path', '/')
+        path = request.data.get('path', None)
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
 
         itype = request.data.get('type', '').lower()
         if not itype or itype != 'guest':
@@ -190,7 +194,7 @@ class SharedRepoInvitationsBatchView(APIView):
                     'email': accepter,
                     'error_msg': _('Internal Server Error'),
                 })
-                
+
             data = invitation_obj.to_dict()
             data['permission'] = permission
             result['success'].append(data)
