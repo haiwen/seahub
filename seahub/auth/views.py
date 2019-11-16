@@ -248,6 +248,8 @@ def logout(request, next_page=None,
         if shib_logout_return:
             shib_logout_url += shib_logout_return
         response = HttpResponseRedirect(shib_logout_url)
+        response.delete_cookie('seahub_auth')
+        return response
 
     # Local logout for cas user.
     if getattr(settings, 'ENABLE_CAS', False):
