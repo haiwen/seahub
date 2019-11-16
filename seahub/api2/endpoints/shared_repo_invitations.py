@@ -12,7 +12,6 @@ from post_office.models import STATUS
 
 from seaserv import seafile_api
 
-from seahub.utils import is_org_context
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import CanInviteGuest
 from seahub.api2.throttling import UserRateThrottle
@@ -22,9 +21,9 @@ from seahub.utils import is_valid_email
 from seahub.invitations.models import Invitation, SharedRepoInvitation
 from seahub.invitations.utils import block_accepter
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
-        PERMISSION_ADMIN
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.share.utils import is_repo_admin
+from seahub.utils import is_org_context
 
 json_content_type = 'application/json; charset=utf-8'
 logger = logging.getLogger(__name__)
@@ -173,12 +172,12 @@ class SharedRepoInvitationsBatchView(APIView):
                 pass
             
             if invitation_queryset.filter(accepter=accepter).exists():
-                invitation_obj = invitation_queryset.filter(accepter=accepter)[0]
+                invitation = invitation_queryset.filter(accepter=accepter)[0]
             else:
-                invitation_obj = Invitation.objects.add(
+                invitation = Invitation.objects.add(
                     inviter=request.user.username, accepter=accepter)
 
-            if shared_queryset.filter(invitation=invitation_obj).exists():
+            if shared_queryset.filter(invitation=invitation).exists():
                     result['failed'].append({
                         'email': accepter,
                         'error_msg': _('This item has been shared to %s.') % accepter
@@ -187,7 +186,7 @@ class SharedRepoInvitationsBatchView(APIView):
             
             try:
                 SharedRepoInvitation.objects.add(
-                    invitation=invitation_obj, repo_id=repo_id, path=path, permission=permission)
+                    invitation=invitation, repo_id=repo_id, path=path, permission=permission)
             except Exception as e:
                 logger.error(e)
                 result['failed'].append({
@@ -195,11 +194,11 @@ class SharedRepoInvitationsBatchView(APIView):
                     'error_msg': _('Internal Server Error'),
                 })
 
-            data = invitation_obj.to_dict()
+            data = invitation.to_dict()
             data['permission'] = permission
             result['success'].append(data)
 
-            m = invitation_obj.send_to(email=accepter)
+            m = invitation.send_to(email=accepter)
             if m.status != STATUS.sent:
                 result['failed'].append({
                     'email': accepter,
