@@ -86,7 +86,7 @@ class SharedRepoInvitationView(APIView):
         return Response({'success': True})
 
     def delete(self, request, repo_id, format=None):
-        """ Delete invitation by shared repo.
+        """ Delete shared repo invitation.
         """
         # argument check
         path = request.data.get('path', None)

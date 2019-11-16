@@ -80,15 +80,16 @@ def token_view(request, token):
         if NOTIFY_ADMIN_AFTER_REGISTRATION:
             notify_admins_on_register_complete(user.email)
 
-        # shared folder
+        # shared repos
         try:
             shared_queryset = SharedRepoInvitation.objects.list_by_invitation(invitation=i)
+            accepter = i.accepter
+
             for shared_obj in shared_queryset:
                 repo_id = shared_obj.repo_id
                 path = shared_obj.path
                 permission = shared_obj.permission
                 inviter = shared_obj.invitation.inviter
-                accepter = i.accepter
 
                 # recourse check
                 repo = seafile_api.get_repo(repo_id)
@@ -103,6 +104,9 @@ def token_view(request, token):
 
                 send_perm_audit_msg('modify-repo-perm', 
                     inviter, accepter, repo_id, path, permission)
+
+            # delete
+            shared_queryset.delete()
         except Exception as e:
             logger.error(e)
 
