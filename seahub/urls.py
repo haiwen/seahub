@@ -68,6 +68,7 @@ from seahub.api2.endpoints.move_folder_merge import MoveFolderMergeView
 from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchView
 from seahub.api2.endpoints.invitation import InvitationView, InvitationRevokeView
 from seahub.api2.endpoints.shared_repo_invitations import SharedRepoInvitationsView, SharedRepoInvitationsBatchView
+from seahub.api2.endpoints.shared_repo_invitation import SharedRepoInvitationView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
@@ -411,7 +412,7 @@ urlpatterns = [
     url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/revoke/$', InvitationRevokeView.as_view()),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/shared/invitations/$', SharedRepoInvitationsView.as_view(), name="api-v2.1-shared-repo-invitations"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/shared/invitations/batch/$', SharedRepoInvitationsBatchView.as_view(), name="api-v2.1-shared-repo-invitations-batch"),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/shared/invitation/$', InvitationsView.as_view(), name="api-v2.1-shared-repo-invitation"),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/shared/invitation/$', SharedRepoInvitationView.as_view(), name="api-v2.1-shared-repo-invitation"),
     ## user::avatar
     url(r'^api/v2.1/user-avatar/$', UserAvatarView.as_view(), name='api-v2.1-user-avatar'),
 

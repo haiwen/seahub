@@ -117,13 +117,21 @@ class SharedRepoInvitationManager(models.Manager):
         return obj
     
     def list_by_repo_id_and_path(self, repo_id, path):
-        return self.filter(
+        return self.select_related('invitation').filter(
             invitation__expire_time__gte=timezone.now(),
             invitation__accept_time=None,
             repo_id=repo_id,
             path=path,
-            ).select_related('invitation')
+            )
 
+    def get_by_token_and_path(self, token, repo_id, path):
+        qs = self.select_related('invitation').filter(
+            invitation__token=token, repo_id=repo_id, path=path,
+            )
+        if qs.exists():
+            return qs[0]
+        else:
+            return None
 
 class SharedRepoInvitation(models.Model):
     PERMISSION_CHOICES = (
