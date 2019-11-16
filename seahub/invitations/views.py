@@ -1,18 +1,26 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import logging
+
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 
 from django.utils.translation import ugettext as _
+from seaserv import seafile_api
 
 from seahub.auth import login as auth_login, authenticate
 from seahub.auth import get_backends
 from seahub.base.accounts import User
 from seahub.constants import GUEST_USER
-from seahub.invitations.models import Invitation
+from seahub.invitations.models import Invitation, SharedRepoInvitation
 from seahub.invitations.signals import accept_guest_invitation_successful
 from seahub.settings import SITE_ROOT, NOTIFY_ADMIN_AFTER_REGISTRATION
 from registration.models import notify_admins_on_register_complete
+from seahub.utils import send_perm_audit_msg
+from seahub.share.utils import share_dir_to_user
+
+logger = logging.getLogger(__name__)
+
 
 def token_view(request, token):
     """Show form to let user set password.
@@ -71,5 +79,31 @@ def token_view(request, token):
         # send email to notify admin
         if NOTIFY_ADMIN_AFTER_REGISTRATION:
             notify_admins_on_register_complete(user.email)
+
+        # shared folder
+        try:
+            shared_queryset = SharedRepoInvitation.objects.list_by_invitation(invitation=i)
+            for shared_obj in shared_queryset:
+                repo_id = shared_obj.repo_id
+                path = shared_obj.path
+                permission = shared_obj.permission
+                inviter = shared_obj.invitation.inviter
+                accepter = i.accepter
+
+                # recourse check
+                repo = seafile_api.get_repo(repo_id)
+                if not repo:
+                    continue
+                if seafile_api.get_dir_id_by_path(repo.id, path) is None:
+                    continue
+
+                repo_owner = seafile_api.get_repo_owner(repo_id)
+                share_dir_to_user(repo, path, repo_owner, 
+                    inviter, accepter, permission, None)
+
+                send_perm_audit_msg('modify-repo-perm', 
+                    inviter, accepter, repo_id, path, permission)
+        except Exception as e:
+            logger.error(e)
 
         return HttpResponseRedirect(SITE_ROOT)

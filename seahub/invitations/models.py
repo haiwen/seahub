@@ -132,6 +132,9 @@ class SharedRepoInvitationManager(models.Manager):
             return qs[0]
         else:
             return None
+    
+    def list_by_invitation(self, invitation):
+        return self.select_related('invitation').filter(invitation=invitation)
 
 class SharedRepoInvitation(models.Model):
     PERMISSION_CHOICES = (
