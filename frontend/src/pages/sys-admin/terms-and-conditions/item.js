@@ -92,7 +92,12 @@ class Item extends Component {
   render() {
     let { item } = this.props;
     let { isDeleteDialogOpen, isUpdateDialogOpen, isTermsPerviewDialogOpen } = this.state;
-    let termContent = item.text ? JSON.parse(item.text) : {};
+    let termContent = null;
+    if (item.text && item.text.indexOf('text:') > -1 && item.text.indexOf('preview:') > -1) {
+      termContent = JSON.parse(item.text);
+    } else if (item.text) {
+      termContent = { text: item.text, preview: ''};
+    }
     let itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     return (
