@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from post_office.models import STATUS
 
-from seaserv import seafile_api, ccnet_api
+from seaserv import seafile_api
 
 from seahub.utils import is_org_context
 from seahub.api2.authentication import TokenAuthentication
@@ -24,6 +24,7 @@ from seahub.invitations.utils import block_accepter
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
+from seahub.share.utils import is_repo_admin
 
 json_content_type = 'application/json; charset=utf-8'
 logger = logging.getLogger(__name__)
@@ -55,7 +56,7 @@ class SharedRepoInvitationsView(APIView):
         else:
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
-        if username != repo_owner:
+        if username != repo_owner and not is_repo_admin(username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -115,7 +116,7 @@ class SharedRepoInvitationsBatchView(APIView):
         else:
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
-        if username != repo_owner:
+        if username != repo_owner and not is_repo_admin(username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
