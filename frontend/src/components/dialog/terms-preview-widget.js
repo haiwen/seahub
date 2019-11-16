@@ -4,15 +4,11 @@ import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2h
 import Loading from '../loading';
 
 const propTypes = {
-  content: PropTypes.object,
+  content: PropTypes.string,
   onContentClick: PropTypes.func,
 };
 
 class TermsPreviewWidget extends React.Component {
-
-  static defaultProps = {
-    content: {text: '', perview: ''}
-  }
 
   constructor(props) {
     super(props);
@@ -24,9 +20,8 @@ class TermsPreviewWidget extends React.Component {
 
   componentDidMount() {
     let content = this.props.content;
-    let mdFile = content ? content.text : '';
-    if (mdFile) {
-      this.formatterLongTextValue(mdFile);
+    if (content) {
+      this.formatterLongTextValue(content);
     } else {
       this.setState({
         isFormatValue: false,
@@ -36,7 +31,7 @@ class TermsPreviewWidget extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let mdFile = nextProps.content.text;
+    let mdFile = nextProps.content;
     this.formatterLongTextValue(mdFile);
   }
 

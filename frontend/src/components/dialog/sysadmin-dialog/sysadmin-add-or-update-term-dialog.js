@@ -22,7 +22,7 @@ class AddOrUpdateTermDialog extends React.Component {
     this.state = {
       name: '',
       versionNumber: '',
-      text: {text: '', perview: ''},
+      text: '',
       isActive: true,
       errorMsg: '',
       isConditionsEditorDialogShow: false,
@@ -35,7 +35,7 @@ class AddOrUpdateTermDialog extends React.Component {
       this.setState({
         name: oldTermObj.name,
         versionNumber: oldTermObj.version_number,
-        text: JSON.parse(oldTermObj.text),
+        text: oldTermObj.text,
         isActive: !(oldTermObj.activate_time === ''),
       });
     }
@@ -75,7 +75,6 @@ class AddOrUpdateTermDialog extends React.Component {
       this.setState({errMsg: gettext('Version Number must be a number.')});
       return;
     }
-    text = JSON.stringify(text);
     if (text === '') {
       this.setState({errMsg: gettext('Text is required.')});
       return;

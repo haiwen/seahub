@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import getPreviewContent from '../../utils/markdown-utils';
 import { SimpleEditor } from '@seafile/seafile-editor';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
   title: PropTypes.string,
-  content: PropTypes.object,
+  content: PropTypes.string,
   onCommit: PropTypes.func.isRequired,
   onCloseEditorDialog: PropTypes.func.isRequired,
 };
@@ -16,7 +15,6 @@ class TermsEditorDialog extends React.Component {
 
   static defaultProps = {
     title: gettext('Terms'),
-    content: {text: '', preview: ''}
   }
 
   onKeyDown = (event) => {
@@ -37,9 +35,7 @@ class TermsEditorDialog extends React.Component {
 
   getCurrentContent = () => {
     let markdownContent = this.simpleEditor.getMarkdown();
-    let { previewText , images, links } = getPreviewContent(markdownContent);
-    let content = Object.assign({}, this.value, { text: markdownContent, preview: previewText, images: images, links: links });
-    return content;
+    return markdownContent;
   }
 
   setSimpleEditorRef = (editor) => {
@@ -63,7 +59,7 @@ class TermsEditorDialog extends React.Component {
         <ModalBody className={'conditions-editor-dialog-main'}>
           <SimpleEditor 
             onRef={this.setSimpleEditorRef.bind(this)}
-            value={content.text || ''}
+            value={content || ''}
           />
         </ModalBody>
       </Modal>

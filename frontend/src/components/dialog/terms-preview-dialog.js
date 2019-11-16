@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import ConditionsPreviewWidget from './terms-preview-widget';
+import TermsPreviewWidget from './terms-preview-widget';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -14,7 +14,6 @@ class TermsPreviewDialog extends React.Component {
 
   static defaultProps = {
     title: gettext('Terms'),
-    content: {text: '', perview: ''}
   }
 
 
@@ -34,7 +33,7 @@ class TermsPreviewDialog extends React.Component {
       >
         <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
         <ModalBody>
-          <ConditionsPreviewWidget content={content} />
+          <TermsPreviewWidget content={content} />
         </ModalBody>
       </Modal>
     );
