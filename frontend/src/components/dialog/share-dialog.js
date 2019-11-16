@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap'; 
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
+import ShareToInvitePeople from './share-to-invite-people';
 import GenerateShareLink from './generate-share-link';
 import GenerateUploadLink from './generate-upload-link';
 import InternalLink from './internal-link';
@@ -112,6 +113,13 @@ class ShareDialog extends React.Component {
                     {gettext('Share to user')}
                   </NavLink>
                 </NavItem>
+                {canInvitePeople &&
+                <NavItem>
+                  <NavLink className={activeTab === 'invitePeople' ? 'active' : ''} onClick={this.toggle.bind(this, 'invitePeople')}>
+                    {gettext('Invite people')}
+                  </NavLink>
+                </NavItem>
+                }
                 <NavItem>
                   <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
                     {gettext('Share to group')}
@@ -154,6 +162,11 @@ class ShareDialog extends React.Component {
                 <TabPane tabId="shareToUser">
                   <ShareToUser itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner}/>
                 </TabPane>
+                {canInvitePeople &&
+                <TabPane tabId="invitePeople">
+                  <ShareToInvitePeople itemPath={this.props.itemPath} repoID={this.props.repoID}/>
+                </TabPane>
+                }
                 <TabPane tabId="shareToGroup">
                   <ShareToGroup itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner}/>
                 </TabPane>
