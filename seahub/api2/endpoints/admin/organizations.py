@@ -406,7 +406,7 @@ class AdminSearchOrganization(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            orgs = ccnet_api.get_all_orgs(-1, -1)
+            orgs = ccnet_api.search_orgs(query_str)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -414,10 +414,6 @@ class AdminSearchOrganization(APIView):
 
         result = []
         for org in orgs:
-
-            if query_str not in org.org_name.lower():
-                continue
-
             org_info = get_org_info(org)
             result.append(org_info)
 
