@@ -33,7 +33,7 @@ class SearchGroups extends Component {
     seafileAPI.sysAdminSearchGroups(name).then((res) => {
       this.setState({
         loading: false,
-        groupList: res.data.groups
+        groupList: res.data.group_list
       });
     }).catch((error) => {
       if (error.response) {
