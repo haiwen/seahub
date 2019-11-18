@@ -18,7 +18,7 @@ const propsTypes = {
   onUnfreezedItem: PropTypes.func.isRequired,
   deleteTerm: PropTypes.func.isRequired,
   updateTerm: PropTypes.func.isRequired,
-}
+};
 
 class Item extends Component {
 
@@ -78,7 +78,7 @@ class Item extends Component {
   }
 
   toggleTermsContentDialog = (e) => {
-    this.setState({isTermsPerviewDialogOpen: !this.state.isTermsPerviewDialogOpen})
+    this.setState({isTermsPerviewDialogOpen: !this.state.isTermsPerviewDialogOpen});
   }
 
   onMenuItemClick = (operation) => {

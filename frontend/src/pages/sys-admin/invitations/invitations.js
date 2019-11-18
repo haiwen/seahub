@@ -1,17 +1,16 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from '@reach/router';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot, loginUrl } from '../../../utils/constants';
+import { gettext, loginUrl } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
+import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
-import OpMenu from './op-menu';
 
 class Content extends Component {
 

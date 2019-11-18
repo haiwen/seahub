@@ -5,10 +5,10 @@ import { loginUrl, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
+import OpMenu from '../../../components/dialog/op-menu';
 import LinkDialog from '../../../components/dialog/share-admin-link';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
-import OpMenu from './user-op-menu';
 
 class Content extends Component {
 

@@ -64,7 +64,7 @@ class StatisticCommonTool extends React.Component {
     const endValue = this.state.endValue;
     if (!endValue) {
       let startTime = moment(startValue).format();
-      return today < startTime
+      return today < startTime;
     }
     return endValue.isBefore(startValue) || moment(startValue).format() > today;
   }

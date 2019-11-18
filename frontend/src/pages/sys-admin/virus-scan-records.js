@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
-import toaster from '../../components/toast'
+import toaster from '../../components/toast';
 import Account from '../../components/common/account';
 
 
@@ -46,8 +46,8 @@ class RecordItem extends Component {
         <td>
           {
             this.state.handleStatus ?
-            <span style={{color: "green"}}>{gettext('Handled')}</span> :
-            <a style={{color: "red", cursor: "pointer"}} onClick={this.deleteVirusScanRecord}>{gettext('Delete')}</a>
+              <span style={{color: 'green'}}>{gettext('Handled')}</span> :
+              <a style={{color: 'red', cursor: 'pointer'}} onClick={this.deleteVirusScanRecord}>{gettext('Delete')}</a>
           }
         </td>
       </tr>

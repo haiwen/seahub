@@ -8,12 +8,12 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import ModalPortal from '../../../components/modal-portal';
+import OpMenu from '../../../components/dialog/op-menu';
 import TransferDialog from '../../../components/dialog/transfer-dialog';
 import DeleteRepoDialog from '../../../components/dialog/delete-repo-dialog';
 import SysAdminShareDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-share-dialog';
 import SysAdminLibHistorySettingDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog';
 import UserLink from '../user-link';
-import RepoOpMenu from './repo-op-menu';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
@@ -210,11 +210,46 @@ class Item extends Component {
     }
   }
 
+  translateOperations = (item) => {
+    let translateResult = ''; 
+    switch(item) {
+      case 'Share':
+        translateResult = gettext('Share');
+        break;
+      case 'Delete':
+        translateResult = gettext('Delete');
+        break;
+      case 'Transfer':
+        translateResult = gettext('Transfer');
+        break;
+      case 'History Setting':
+        translateResult = gettext('History Setting');
+        break;
+      default:
+        break;
+    }   
+
+    return translateResult;
+  }
+
+  getOperations = () => {
+    const { repo } = this.props;
+    let operations = ['Delete', 'Transfer'];
+    if (!repo.encrypted) {
+      operations.push('Share');
+    }
+    operations.push('History Setting');
+    return operations;
+  }
+
   render () {
-    let { repo } = this.props;
-    let { isOpIconShown,
-      isShareDialogOpen, isDeleteDialogOpen, 
-      isTransferDialogOpen, isHistorySettingDialogOpen
+    const { repo } = this.props;
+    const { 
+      isOpIconShown,
+      isShareDialogOpen,
+      isDeleteDialogOpen, 
+      isTransferDialogOpen,
+      isHistorySettingDialogOpen
     } = this.state;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
@@ -235,8 +270,9 @@ class Item extends Component {
           </td>
           <td>
             {(!isGroupOwnedRepo && isOpIconShown) &&
-            <RepoOpMenu
-              repo={repo}
+            <OpMenu
+              operations={this.getOperations()}
+              translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}

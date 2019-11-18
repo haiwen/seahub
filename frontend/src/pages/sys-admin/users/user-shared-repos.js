@@ -4,15 +4,11 @@ import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { isPro, siteRoot, loginUrl, gettext } from '../../../utils/constants';
-import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import TransferDialog from '../../../components/dialog/transfer-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import Nav from './user-nav';
-import OpMenu from './user-op-menu';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 

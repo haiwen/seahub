@@ -11,10 +11,10 @@ import Paginator from '../../../components/paginator';
 import SysAdminUserStatusEditor from '../../../components/select-editor/sysadmin-user-status-editor';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
 import SelectEditor from '../../../components/select-editor/select-editor';
+import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
-import OpMenu from './user-op-menu';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 
