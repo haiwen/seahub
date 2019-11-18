@@ -172,7 +172,7 @@ class ShareToInvitePeople extends React.Component {
       return false;
     }
 
-    this.setState({isSubmitting: true});
+    this.setState({ isSubmitting: true });
 
     const path = this.props.itemPath;
     const repoID = this.props.repoID;
@@ -200,11 +200,11 @@ class ShareToInvitePeople extends React.Component {
           toaster.danger(failedMsg);
         }
       }
-      this.setState({isSubmitting: false});
+      this.setState({ isSubmitting: false });
     }).catch((error) => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
-      this.setState({isSubmitting: false});
+      this.setState({ isSubmitting: false });
     });
   }
 
@@ -253,7 +253,7 @@ class ShareToInvitePeople extends React.Component {
             <tr>
               <th width="50%">{gettext('Invite People')}</th>
               <th width="35%">{gettext('Permission')}</th>
-              <th width="15%"></th>
+              <th width="15%">{''}</th>
             </tr>
           </thead>
           <tbody>
@@ -282,12 +282,12 @@ class ShareToInvitePeople extends React.Component {
                 >{isSubmitting ? <Loading /> : gettext('Submit')}</Button>
               </td>
             </tr>
-          </tbody>
-          {this.state.errorMsg &&
+            {this.state.errorMsg.length > 0 &&
             <tr key={'error'}>
               <td colSpan={3}><p className="error">{this.state.errorMsg}</p></td>
             </tr>
-          }
+            }
+          </tbody>
         </table>
         <div className="share-list-container">
           <table>
@@ -297,7 +297,7 @@ class ShareToInvitePeople extends React.Component {
                 <th width="20%">{gettext('Permission')}</th>
                 <th width="20%">{gettext('Expiration')}</th>
                 <th width="20%">{gettext('Inviter')}</th>
-                <th width="15%"></th>
+                <th width="15%">{''}</th>
               </tr>
             </thead>
             <UserList
