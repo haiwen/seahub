@@ -1,4 +1,4 @@
-Django==1.11.23
+Django==1.11.25
 future
 captcha
 django-compressor
