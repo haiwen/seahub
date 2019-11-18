@@ -123,7 +123,7 @@ class ShareToInvitePeople extends React.Component {
   componentDidMount() {
     const path = this.props.itemPath;
     const repoID = this.props.repoID;
-    seafileAPI.listSharedRepoInvitations(repoID, path).then((res) => {
+    seafileAPI.listRepoShareInvitations(repoID, path).then((res) => {
       if (res.data.length !== 0) {
         this.setState({ sharedItems: res.data.shared_invitation_list });
       }
@@ -171,7 +171,7 @@ class ShareToInvitePeople extends React.Component {
     const repoID = this.props.repoID;
     const permission = this.state.permission;
 
-    seafileAPI.sharedRepoInvitePeople(repoID, path, emailsArray, permission).then((res) => {
+    seafileAPI.addRepoShareInvitations(repoID, path, emailsArray, permission).then((res) => {
       const success = res.data.success;
       if (success.length) {
         let successMsg = '';
@@ -205,7 +205,7 @@ class ShareToInvitePeople extends React.Component {
     const path = this.props.itemPath;
     const repoID = this.props.repoID;
 
-    seafileAPI.deleteSharedRepoInvitation(repoID, path, token).then(res => {
+    seafileAPI.deleteRepoShareInvitation(repoID, path, token).then(res => {
       this.setState({
         sharedItems: this.state.sharedItems.filter(item => { return item.token !== token; })
       });
@@ -219,7 +219,7 @@ class ShareToInvitePeople extends React.Component {
     const path = this.props.itemPath;
     const repoID = this.props.repoID;
 
-    seafileAPI.updateSharedRepoInvitation(repoID, path, token, permission).then(() => {
+    seafileAPI.updateRepoShareInvitation(repoID, path, token, permission).then(() => {
       this.updateSharedItems(token, permission);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
