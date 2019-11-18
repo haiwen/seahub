@@ -73,7 +73,7 @@ class RepoShareInvitationView(APIView):
                 error_msg = 'repo share invitation not found.'
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
             if shared_obj.permission == permission:
-                error_msg = 'repo share invitation alreapy has %s premission.' % permission
+                error_msg = 'repo share invitation already has %s premission.' % permission
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             shared_obj.permission = permission

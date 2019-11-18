@@ -94,8 +94,10 @@ def token_view(request, token):
                 # recourse check
                 repo = seafile_api.get_repo(repo_id)
                 if not repo:
+                    logger.warning('[ %s ] repo not found when [ %s ] accepts the invitation to share repo') % (repo_id, accepter)
                     continue
                 if seafile_api.get_dir_id_by_path(repo.id, path) is None:
+                    logger.warning('[ %s ][ %s ] dir not found when [ %s ] accepts the invitation to share repo') % (repo_id, path, accepter)
                     continue
 
                 repo_owner = seafile_api.get_repo_owner(repo_id)
