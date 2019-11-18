@@ -433,3 +433,68 @@ class AdminLibrary(APIView):
         repo_info = get_repo_info(repo)
 
         return Response(repo_info)
+
+
+class AdminSearchLibrary(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request, format=None):
+        """ Search library by name.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        query_str = request.GET.get('query', '').lower().strip()
+        if not query_str:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repos = seafile_api.search_repos_by_name(query_str)
+
+        default_repo_id = get_system_default_repo_id()
+        repos = [r for r in repos if not r.is_virtual]
+        repos = [r for r in repos if r.repo_id != default_repo_id]
+
+        repo_id_owner_dict = {}
+        for repo in repos:
+
+            repo_id = repo.repo_id
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+            if not repo_owner:
+                try:
+                    org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
+                except Exception:
+                    org_repo_owner = ''
+
+            owner = repo_owner or org_repo_owner or ''
+
+            if '@seafile_group' in owner:
+                group_id = get_group_id_by_repo_owner(owner)
+                owner = group_id_to_name(group_id)
+
+            if repo_id not in repo_id_owner_dict:
+                repo_id_owner_dict[repo_id] = owner
+
+        result = []
+        for repo in repos:
+
+            info = {}
+            info['id'] = repo.repo_id
+            info['name'] = repo.repo_name
+
+            owner = repo_id_owner_dict.get(repo.repo_id, '')
+            info['owner_email'] = owner
+            info['owner_name'] = email2nickname(owner)
+            info['owner_contact_email'] = email2contact_email(owner)
+
+            info['size'] = repo.size
+            info['encrypted'] = repo.encrypted
+            info['file_count'] = repo.file_count
+            info['status'] = normalize_repo_status_code(repo.status)
+
+            result.append(info)
+
+        return Response({"repo_list": result})
