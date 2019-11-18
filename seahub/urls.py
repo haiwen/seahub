@@ -113,7 +113,8 @@ from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserRe
     AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos, \
     AdminLDAPUsers, AdminSearchUser
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
-from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
+from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary, \
+        AdminSearchLibrary
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary, \
         AdminSystemLibraryUploadLink
@@ -495,6 +496,7 @@ urlpatterns = [
 
     ## admin::libraries
     url(r'^api/v2.1/admin/libraries/$', AdminLibraries.as_view(), name='api-v2.1-admin-libraries'),
+    url(r'^api/v2.1/admin/search-library/$', AdminSearchLibrary.as_view(), name='api-v2.1-admin-search-library'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminLibrary.as_view(), name='api-v2.1-admin-library'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/history-limit/$', AdminLibraryHistoryLimit.as_view(), name="api-v2.1-admin-library-history-limit"),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
