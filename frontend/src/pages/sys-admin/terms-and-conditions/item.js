@@ -6,10 +6,10 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import getPreviewContent from '../../../utils/markdown-utils';
 import AddOrUpdateTermDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import TermsPerviewDialog from '../../../components/dialog/terms-preview-dialog';
 import ModalPortal from '../../../components/modal-portal';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import OpMenu from './op-menu';
+import OpMenu from '../../../components/dialog/op-menu';
 
 const propsTypes = {
   item: PropTypes.object.isRequired,
@@ -25,7 +25,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      itemContent: "...",
+      itemContent: '...',
       isOpIconShown: false,
       isUpdateDialogOpen: false,
       isDeleteDialogOpen: false,
@@ -110,6 +110,22 @@ class Item extends Component {
     this.toggleUpdateDialog();
   }
 
+  translateOperations = (item) => {
+    let translateResult = ''; 
+    switch(item) {
+      case 'Update':
+        translateResult = gettext('Update');
+        break;
+      case 'Delete':
+        translateResult = gettext('Delete');
+        break;
+      default:
+        break;
+    }   
+
+    return translateResult;
+  }
+
   render() {
     let { item } = this.props;
     let { isDeleteDialogOpen, isUpdateDialogOpen, isTermsPerviewDialogOpen } = this.state;
@@ -129,7 +145,8 @@ class Item extends Component {
           <td>
             {this.state.isOpIconShown &&
               <OpMenu
-                item={item}
+                operations={['Update', 'Delete']}
+                translateOperations={this.translateOperations}
                 onMenuItemClick={this.onMenuItemClick}
                 onFreezedItem={this.props.onFreezedItem}
                 onUnfreezedItem={this.onUnfreezedItem}
