@@ -21,7 +21,7 @@ from seahub.utils import is_valid_email
 from seahub.invitations.models import Invitation, RepoShareInvitation
 from seahub.invitations.utils import block_accepter
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, GUEST_USER
 from seahub.share.utils import is_repo_admin
 from seahub.utils import is_org_context
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -35,7 +35,7 @@ class RepoShareInvitationsView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id, format=None):
-        """ List invitations by shared repo.
+        """ List repo share invitations.
         """
         # argument check
         path = request.GET.get('path', None)
@@ -87,7 +87,7 @@ class RepoShareInvitationsBatchView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request, repo_id, format=None):
-        """ repo shared in batches to inviters
+        """ Batch add repo share invitations.
         """
         # argument check
         path = request.data.get('path', None)
@@ -95,11 +95,11 @@ class RepoShareInvitationsBatchView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid.')
 
         itype = request.data.get('type', '').lower()
-        if not itype or itype != 'guest':
+        if not itype or itype != GUEST_USER:
             return api_error(status.HTTP_400_BAD_REQUEST, 'type invalid.')
 
         accepters = request.data.get('accepters', None)
-        if not accepters:
+        if not accepters or not isinstance(accepters, list):
             return api_error(status.HTTP_400_BAD_REQUEST, 'accepters invalid.')
 
         permission = request.data.get('permission', PERMISSION_READ)

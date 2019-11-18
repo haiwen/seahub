@@ -16,6 +16,7 @@ from seahub.base.accounts import User
 from seahub.utils import is_valid_email
 from seahub.invitations.models import Invitation
 from seahub.invitations.utils import block_accepter
+from seahub.constants import GUEST_USER
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -38,7 +39,7 @@ class InvitationsView(APIView):
     def post(self, request, format=None):
         # Send invitation.
         itype = request.data.get('type', '').lower()
-        if not itype or itype != 'guest':
+        if not itype or itype != GUEST_USER:
             return api_error(status.HTTP_400_BAD_REQUEST, 'type invalid.')
 
         accepter = request.data.get('accepter', '').lower()

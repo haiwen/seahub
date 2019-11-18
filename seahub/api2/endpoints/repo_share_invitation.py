@@ -30,7 +30,7 @@ class RepoShareInvitationView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, repo_id, format=None):
-        """ Update shared repo permission in invitation.
+        """ Update permission in repo share invitation.
         """
         # argument check
         path = request.data.get('path', None)
@@ -70,10 +70,10 @@ class RepoShareInvitationView(APIView):
                 token=token, repo_id=repo_id, path=path
             )
             if not shared_obj:
-                error_msg = 'Shared repo invitation not found.'
+                error_msg = 'repo share invitation not found.'
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
             if shared_obj.permission == permission:
-                error_msg = 'Shared repo invitation alreapy has %s premission.' % permission
+                error_msg = 'repo share invitation alreapy has %s premission.' % permission
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             shared_obj.permission = permission
@@ -86,7 +86,7 @@ class RepoShareInvitationView(APIView):
         return Response({'success': True})
 
     def delete(self, request, repo_id, format=None):
-        """ Delete shared repo invitation.
+        """ Delete repo share invitation.
         """
         # argument check
         path = request.data.get('path', None)
@@ -122,7 +122,7 @@ class RepoShareInvitationView(APIView):
                 token=token, repo_id=repo_id, path=path
             )
             if not shared_obj:
-                error_msg = 'Shared repo invitation not found.'
+                error_msg = 'repo share invitation not found.'
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
             
             shared_obj.delete()
