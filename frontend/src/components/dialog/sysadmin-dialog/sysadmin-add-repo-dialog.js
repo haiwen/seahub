@@ -81,7 +81,7 @@ class AddRepoDialog extends React.Component {
               />
             </FormGroup>
           </Form>
-          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
+          {this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>

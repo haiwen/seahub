@@ -24,10 +24,10 @@ class SysAdminAddOrgDialog extends React.Component {
   checkSubmitBtnActive = () => {
     const { name, email, password, passwordAgain } = this.state;
     let btnActive = true;
-    if (name !='' &&
-      email != '' &&
-      password != '' &&
-      passwordAgain != '') {
+    if (name.trim() !='' &&
+      email.trim() != '' &&
+      password.trim() != '' &&
+      passwordAgain.trim() != '') {
       btnActive = true;
     } else {
       btnActive = false;
@@ -42,28 +42,28 @@ class SysAdminAddOrgDialog extends React.Component {
   }
 
   inputPassword = (e) => {
-    let passwd = e.target.value.trim();
+    let passwd = e.target.value;
     this.setState({
       password: passwd
     }, this.checkSubmitBtnActive);
   }
 
   inputPasswordAgain = (e) => {
-    let passwd = e.target.value.trim();
+    let passwd = e.target.value;
     this.setState({
       passwordAgain: passwd
     }, this.checkSubmitBtnActive);
   }
 
   inputEmail = (e) => {
-    let email = e.target.value.trim();
+    let email = e.target.value;
     this.setState({
       email: email
     }, this.checkSubmitBtnActive);
   }
 
   inputName = (e) => {
-    let name = e.target.value.trim();
+    let name = e.target.value;
     this.setState({
       name: name
     }, this.checkSubmitBtnActive);
@@ -76,9 +76,9 @@ class SysAdminAddOrgDialog extends React.Component {
       return;
     }
     const data = {
-      orgName: name,
-      ownerEmail: email,
-      password: password
+      orgName: name.trim(),
+      ownerEmail: email.trim(),
+      password: password.trim()
     };
     this.props.addOrg(data);
     this.toggle();

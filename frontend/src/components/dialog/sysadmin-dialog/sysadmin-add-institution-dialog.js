@@ -20,13 +20,10 @@ class SysAdminAddInstitutionDialog extends React.Component {
 
   handleChange = (e) => {
     const value = e.target.value;
-    if (!value.trim()) {
-      this.setState({isSubmitBtnActive: false});
-    } else {
-      this.setState({isSubmitBtnActive: true});
-    }
-
-    this.setState({value: value});
+    this.setState({
+      value: value,
+      isSubmitBtnActive: value.trim() != '' 
+    });
   }
 
   handleSubmit = () => {

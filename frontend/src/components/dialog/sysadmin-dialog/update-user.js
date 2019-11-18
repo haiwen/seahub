@@ -21,7 +21,7 @@ class UpdateUser extends React.Component {
   }
 
   handleInputChange = (e) => {
-    const value = e.target.value.trim();
+    const value = e.target.value;
     this.setState({
       value: value
     });
@@ -35,7 +35,7 @@ class UpdateUser extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.updateValue(this.state.value);
+    this.props.updateValue(this.state.value.trim());
     this.props.toggleDialog();
   }
 
