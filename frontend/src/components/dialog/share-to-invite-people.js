@@ -120,6 +120,13 @@ class ShareToInvitePeople extends React.Component {
     }
   }
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this.shareAndInvite();
+    }
+  }
+
   componentDidMount() {
     const path = this.props.itemPath;
     const repoID = this.props.repoID;
