@@ -120,6 +120,30 @@ class SysAdmin extends React.Component {
         tab: 'organizations',
         urlPartList: ['organizations/', 'search-organizations/']
       },
+      {
+        tab: 'links',
+        urlPartList: ['share-links/', 'upload-links/']
+      },
+      {
+        tab: 'institutions',
+        urlPartList: ['institutions/']
+      },
+      {
+        tab: 'termsandconditions',
+        urlPartList: ['terms-and-conditions/']
+      },
+      {
+        tab: 'departments',
+        urlPartList: ['departments/']
+      },
+      {
+        tab: 'logs',
+        urlPartList: ['logs/']
+      },
+      {
+        tab: 'adminLogs',
+        urlPartList: ['admin-logs/']
+      }
     ];
     const tmpTab = this.getCurrentTabForPageList(pageList);
     currentTab = tmpTab ? tmpTab : currentTab;
