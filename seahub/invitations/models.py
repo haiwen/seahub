@@ -105,7 +105,7 @@ class Invitation(models.Model):
         )
 
 
-class SharedRepoInvitationManager(models.Manager):
+class RepoShareInvitationManager(models.Manager):
     def add(self, invitation, repo_id, path, permission):
         obj = self.model(
             invitation=invitation,
@@ -136,19 +136,19 @@ class SharedRepoInvitationManager(models.Manager):
     def list_by_invitation(self, invitation):
         return self.select_related('invitation').filter(invitation=invitation)
 
-class SharedRepoInvitation(models.Model):
+class RepoShareInvitation(models.Model):
     PERMISSION_CHOICES = (
         (PERMISSION_READ, 'read only'),
         (PERMISSION_READ_WRITE, 'read and write')
     )
 
-    invitation = models.ForeignKey(Invitation, on_delete=models.CASCADE, related_name='shared_repo')
+    invitation = models.ForeignKey(Invitation, on_delete=models.CASCADE, related_name='repo_share')
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
     permission = models.CharField(
         max_length=50, choices=PERMISSION_CHOICES, default=PERMISSION_READ)
 
-    objects = SharedRepoInvitationManager()
+    objects = RepoShareInvitationManager()
 
     class Meta:
-        db_table = 'shared_repo_invitation'
+        db_table = 'repo_share_invitation'

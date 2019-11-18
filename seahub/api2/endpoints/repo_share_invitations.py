@@ -18,7 +18,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.base.accounts import User
 from seahub.utils import is_valid_email
-from seahub.invitations.models import Invitation, SharedRepoInvitation
+from seahub.invitations.models import Invitation, RepoShareInvitation
 from seahub.invitations.utils import block_accepter
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
@@ -29,7 +29,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 json_content_type = 'application/json; charset=utf-8'
 logger = logging.getLogger(__name__)
 
-class SharedRepoInvitationsView(APIView):
+class RepoShareInvitationsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, CanInviteGuest)
     throttle_classes = (UserRateThrottle,)
@@ -65,7 +65,7 @@ class SharedRepoInvitationsView(APIView):
         # main
         shared_list = list()
         try:
-            shared_queryset = SharedRepoInvitation.objects.list_by_repo_id_and_path(repo_id, path)
+            shared_queryset = RepoShareInvitation.objects.list_by_repo_id_and_path(repo_id, path)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -78,10 +78,10 @@ class SharedRepoInvitationsView(APIView):
 
             shared_list.append(data)
 
-        return Response({'shared_invitation_list': shared_list})
+        return Response({'repo_share_invitation_list': shared_list})
 
 
-class SharedRepoInvitationsBatchView(APIView):
+class RepoShareInvitationsBatchView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, CanInviteGuest)
     throttle_classes = (UserRateThrottle,)
@@ -134,7 +134,7 @@ class SharedRepoInvitationsBatchView(APIView):
         try:
             invitation_queryset = Invitation.objects.order_by('-invite_time').filter(
                     inviter=request.user.username, accept_time=None)
-            shared_queryset = SharedRepoInvitation.objects.list_by_repo_id_and_path(
+            shared_queryset = RepoShareInvitation.objects.list_by_repo_id_and_path(
                 repo_id=repo_id, path=path)
         except Exception as e:
             logger.error(e)
@@ -188,7 +188,7 @@ class SharedRepoInvitationsBatchView(APIView):
                     continue
             
             try:
-                SharedRepoInvitation.objects.add(
+                RepoShareInvitation.objects.add(
                     invitation=invitation, repo_id=repo_id, path=path, permission=permission)
             except Exception as e:
                 logger.error(e)

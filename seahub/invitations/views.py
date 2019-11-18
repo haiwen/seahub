@@ -12,7 +12,7 @@ from seahub.auth import login as auth_login, authenticate
 from seahub.auth import get_backends
 from seahub.base.accounts import User
 from seahub.constants import GUEST_USER
-from seahub.invitations.models import Invitation, SharedRepoInvitation
+from seahub.invitations.models import Invitation, RepoShareInvitation
 from seahub.invitations.signals import accept_guest_invitation_successful
 from seahub.settings import SITE_ROOT, NOTIFY_ADMIN_AFTER_REGISTRATION
 from registration.models import notify_admins_on_register_complete
@@ -80,9 +80,9 @@ def token_view(request, token):
         if NOTIFY_ADMIN_AFTER_REGISTRATION:
             notify_admins_on_register_complete(user.email)
 
-        # shared repos
+        # repo share invitation
         try:
-            shared_queryset = SharedRepoInvitation.objects.list_by_invitation(invitation=i)
+            shared_queryset = RepoShareInvitation.objects.list_by_invitation(invitation=i)
             accepter = i.accepter
 
             for shared_obj in shared_queryset:

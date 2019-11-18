@@ -14,7 +14,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import CanInviteGuest
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.invitations.models import Invitation, SharedRepoInvitation
+from seahub.invitations.models import Invitation, RepoShareInvitation
 from post_office.models import STATUS
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.share.utils import is_repo_admin
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 
-class SharedRepoInvitationView(APIView):
+class RepoShareInvitationView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, CanInviteGuest)
     throttle_classes = (UserRateThrottle, )
@@ -66,7 +66,7 @@ class SharedRepoInvitationView(APIView):
 
         # mian
         try:
-            shared_obj = SharedRepoInvitation.objects.get_by_token_and_path(
+            shared_obj = RepoShareInvitation.objects.get_by_token_and_path(
                 token=token, repo_id=repo_id, path=path
             )
             if not shared_obj:
@@ -118,7 +118,7 @@ class SharedRepoInvitationView(APIView):
 
         # mian
         try:
-            shared_obj = SharedRepoInvitation.objects.get_by_token_and_path(
+            shared_obj = RepoShareInvitation.objects.get_by_token_and_path(
                 token=token, repo_id=repo_id, path=path
             )
             if not shared_obj:
