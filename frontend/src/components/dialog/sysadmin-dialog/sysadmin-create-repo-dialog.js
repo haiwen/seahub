@@ -23,13 +23,11 @@ class SysAdminCreateRepoDialog extends React.Component {
   }
 
   handleRepoNameChange = (e) => {
-    if (!e.target.value.trim()) {
-      this.setState({isSubmitBtnActive: false});
-    } else {
-      this.setState({isSubmitBtnActive: true});
-    }
-
-    this.setState({repoName: e.target.value});
+    const value = e.target.value;
+    this.setState({
+      repoName: value,
+      isSubmitBtnActive: value.trim()
+    });
   }
 
   handleSubmit = () => {

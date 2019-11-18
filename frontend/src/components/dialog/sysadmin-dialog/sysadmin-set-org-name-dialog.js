@@ -24,10 +24,10 @@ class SysAdminSetOrgNameDialog extends React.Component {
   }
 
   handleInputChange = (e) => {
-    const value = e.target.value.trim();
+    const value = e.target.value;
     this.setState({
       name: value,
-      isSubmitBtnActive: value != ''
+      isSubmitBtnActive: value.trim() != ''
     });
   }
 
@@ -39,7 +39,7 @@ class SysAdminSetOrgNameDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.updateName(this.state.name);
+    this.props.updateName(this.state.name.trim());
     this.toggle();
   }
 
