@@ -90,7 +90,8 @@ from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
 from seahub.api2.endpoints.repo_api_tokens import RepoAPITokensView, RepoAPITokenView
-from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLinkView, RepoInfoView
+from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLinkView, RepoInfoView, \
+    ViaRepoDownloadLinkView
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
 
 # Admin
@@ -374,6 +375,7 @@ urlpatterns = [
     ## access repo from repo_api_tokens
     url(r'^api/v2.1/via-repo-token/dir/$', ViaRepoDirView.as_view(), name='via-repo-dir'),
     url(r'^api/v2.1/via-repo-token/upload-link/$', ViaRepoUploadLinkView.as_view(), name='via-upload-link'),
+    url(r'^api/v2.1/via-repo-token/download-link/$', ViaRepoDownloadLinkView.as_view(), name='via-download-link'),
     url(r'^api/v2.1/via-repo-token/repo-info/$', RepoInfoView.as_view(), name='via-fetch-repo'),
 
     # user::related-files

@@ -22,9 +22,11 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seaserv import seafile_api, get_repo, check_quota
 from pysearpc import SearpcError
 
+import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
 from seahub.constants import PERMISSION_READ
-from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name
+from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
+    normalize_file_path, render_error, gen_file_get_url
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
@@ -385,6 +387,32 @@ class ViaRepoUploadLinkView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return Response(url)
+
+
+class ViaRepoDownloadLinkView(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        path = request.GET.get('path')
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_id = request.repo_api_token_obj.repo_id
+        path = normalize_file_path(path)
+        filename = os.path.basename(path)
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not file_id:
+            error_msg = 'File not found'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        token = seafile_api.get_fileserver_access_token(
+            repo_id, file_id, 'download', request.repo_api_token_obj.app_name,
+            use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
+        download_url = gen_file_get_url(token, filename)
+        return Response(download_url)
 
 
 class RepoInfoView(APIView):
