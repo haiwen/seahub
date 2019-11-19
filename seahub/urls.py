@@ -375,7 +375,7 @@ urlpatterns = [
     ## access repo from repo_api_tokens
     url(r'^api/v2.1/via-repo-token/dir/$', ViaRepoDirView.as_view(), name='via-repo-dir'),
     url(r'^api/v2.1/via-repo-token/upload-link/$', ViaRepoUploadLinkView.as_view(), name='via-upload-link'),
-    url(r'^api/v2.1/via-repo-token/download-link(?P<path>.*)$', ViaRepoDownloadLinkView.as_view(), name='via-download-link'),
+    url(r'^api/v2.1/via-repo-token/download-link/$', ViaRepoDownloadLinkView.as_view(), name='via-download-link'),
     url(r'^api/v2.1/via-repo-token/repo-info/$', RepoInfoView.as_view(), name='via-fetch-repo'),
 
     # user::related-files

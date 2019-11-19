@@ -394,7 +394,12 @@ class ViaRepoDownloadLinkView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def get(self, request, path):
+    def get(self, request):
+        path = request.GET.get('path')
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         repo_id = request.repo_api_token_obj.repo_id
         path = normalize_file_path(path)
         filename = os.path.basename(path)
@@ -402,6 +407,7 @@ class ViaRepoDownloadLinkView(APIView):
         if not file_id:
             error_msg = 'File not found'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         token = seafile_api.get_fileserver_access_token(
             repo_id, file_id, 'download', request.repo_api_token_obj.app_name,
             use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
