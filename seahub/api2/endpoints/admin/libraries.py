@@ -458,9 +458,12 @@ class AdminSearchLibrary(APIView):
         repos = [r for r in repos if not r.is_virtual]
         repos = [r for r in repos if r.repo_id != default_repo_id]
 
-        repo_id_owner_dict = {}
+        email_dict = {}
+        name_dict = {}
+        contact_email_dict = {}
         for repo in repos:
 
+            # get owner email
             repo_id = repo.repo_id
             repo_owner = seafile_api.get_repo_owner(repo_id)
             if not repo_owner:
@@ -469,14 +472,31 @@ class AdminSearchLibrary(APIView):
                 except Exception:
                     org_repo_owner = ''
 
-            owner = repo_owner or org_repo_owner or ''
+            owner_email = repo_owner or org_repo_owner or ''
+            if repo_id not in email_dict:
+                email_dict[repo_id] = owner_email
 
-            if '@seafile_group' in owner:
-                group_id = get_group_id_by_repo_owner(owner)
-                owner = group_id_to_name(group_id)
+            # get owner name
+            if repo_id not in name_dict:
 
-            if repo_id not in repo_id_owner_dict:
-                repo_id_owner_dict[repo_id] = owner
+                # is department library
+                if '@seafile_group' in owner_email:
+                    group_id = get_group_id_by_repo_owner(owner_email)
+                    owner_name = group_id_to_name(group_id)
+                else:
+                    owner_name = email2nickname(owner_email)
+
+                name_dict[repo_id] = owner_name
+
+            # get owner contact_email
+            if repo_id not in contact_email_dict:
+
+                if '@seafile_group' in owner_email:
+                    owner_contact_email = ''
+                else:
+                    owner_contact_email = email2contact_email(owner_email)
+
+                contact_email_dict[repo_id] = owner_contact_email
 
         result = []
         for repo in repos:
@@ -485,10 +505,9 @@ class AdminSearchLibrary(APIView):
             info['id'] = repo.repo_id
             info['name'] = repo.repo_name
 
-            owner = repo_id_owner_dict.get(repo.repo_id, '')
-            info['owner_email'] = owner
-            info['owner_name'] = email2nickname(owner)
-            info['owner_contact_email'] = email2contact_email(owner)
+            info['owner_email'] = email_dict.get(repo.repo_id, '')
+            info['owner_name'] = name_dict.get(repo.repo_id, '')
+            info['owner_contact_email'] = contact_email_dict.get(repo.repo_id, '')
 
             info['size'] = repo.size
             info['encrypted'] = repo.encrypted
