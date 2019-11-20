@@ -253,7 +253,12 @@ class Item extends Component {
     } = this.state;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
-    let isGroupOwnedRepo = repo.owner.indexOf('@seafile_group') != -1;
+    const index = repo.owner_email.indexOf('@seafile_group');
+    let isGroupOwnedRepo = index != -1;
+    let departmentID;
+    if (isGroupOwnedRepo) {
+      departmentID = repo.owner_email.substring(0, index);
+    }
 
     return (
       <Fragment>
@@ -264,7 +269,7 @@ class Item extends Component {
           <td>{repo.id}</td>
           <td>
             {isGroupOwnedRepo ?
-              <Link to={`${siteRoot}sys/departments/${repo.owner_name}/`}>{repo.group_name}</Link> :
+              <Link to={`${siteRoot}sys/departments/${departmentID}/`}>{repo.owner_name}</Link> :
               <UserLink email={repo.owner_email} name={repo.owner_name} />
             }
           </td>

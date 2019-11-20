@@ -12,7 +12,6 @@ class SearchRepos extends Component {
     super(props);
     this.state = {
       name: '',
-      owner: '',
       isSubmitBtnActive: false, 
       loading: true,
       errorMsg: '',
@@ -23,17 +22,16 @@ class SearchRepos extends Component {
   componentDidMount() {
     let params = (new URL(document.location)).searchParams;
     this.setState({
-      name: params.get('name') || '',
-      owner: params.get('owner') || ''
+      name: params.get('name') || ''
     }, this.getRepos);
   }
 
   getRepos = () => {
-    const { name, owner } = this.state;
-    seafileAPI.sysAdminSearchRepos(name, owner).then((res) => {
+    const { name } = this.state;
+    seafileAPI.sysAdminSearchRepos(name).then((res) => {
       this.setState({
         loading: false,
-        repos: res.data.repos
+        repos: res.data.repo_list
       });
     }).catch((error) => {
       if (error.response) {
@@ -86,21 +84,15 @@ class SearchRepos extends Component {
     }, this.checkSubmitBtnActive);
   }
 
-  handleOwnerInputChange = (e) => {
-    this.setState({
-      owner: e.target.value
-    }, this.checkSubmitBtnActive);
-  }
-
   checkSubmitBtnActive = () => {
-    const { name, owner } = this.state;
+    const { name } = this.state;
     this.setState({
-      isSubmitBtnActive: name.trim() || owner.trim()
+      isSubmitBtnActive: name.trim()
     });
   }
 
   render() {
-    const { name, owner, isSubmitBtnActive } = this.state;
+    const { name, isSubmitBtnActive } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar />
@@ -112,18 +104,12 @@ class SearchRepos extends Component {
             <div className="cur-view-content">
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Libraries')}</h4>
-                <p className="text-secondary small">{gettext('Tip: you can search by keyword in name or owner or both.')}</p>
+                <p className="text-secondary small">{gettext('Tip: you can search by keyword in name.')}</p>
                 <Form>
                   <FormGroup row>
                     <Label for="name" sm={1}>{gettext('Name')}</Label>
                     <Col sm={5}>
                       <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} />
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Label for="owner" sm={1}>{gettext('Owner')}</Label>
-                    <Col sm={5}>
-                      <Input type="text" name="owner" id="owner" value={owner} onChange={this.handleOwnerInputChange} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>
