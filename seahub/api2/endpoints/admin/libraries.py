@@ -49,7 +49,6 @@ def get_repo_info(repo):
     result['name'] = repo.repo_name
     result['owner'] = owner
     result['owner_email'] = owner
-    result['owner_name'] = email2nickname(owner)
     result['owner_contact_email'] = email2contact_email(owner)
     result['size'] = repo.size
     result['size_formatted'] = filesizeformat(repo.size)
@@ -60,6 +59,9 @@ def get_repo_info(repo):
     if '@seafile_group' in owner:
         group_id = get_group_id_by_repo_owner(owner)
         result['group_name'] = group_id_to_name(group_id)
+        result['owner_name'] = group_id_to_name(group_id)
+    else:
+        result['owner_name'] = email2nickname(owner)
 
     return result
 
