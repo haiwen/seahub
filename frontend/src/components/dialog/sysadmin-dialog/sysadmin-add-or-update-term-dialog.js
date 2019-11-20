@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Alert, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import TermsPreviewWidget from '../terms-preview-widget';
+import TermsPreviewWidget from '../../terms-preview-widget';
 import TermsEditorDialog from '../terms-editor-dialog';
 
 import '../../../css/terms-conditions-editor.css';
