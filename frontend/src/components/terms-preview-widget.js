@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
-import Loading from '../loading';
+import Loading from './loading';
 
 const propTypes = {
   content: PropTypes.string,

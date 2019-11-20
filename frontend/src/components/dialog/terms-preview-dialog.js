@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import TermsPreviewWidget from './terms-preview-widget';
+import TermsPreviewWidget from '../terms-preview-widget';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
