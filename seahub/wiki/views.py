@@ -119,6 +119,7 @@ def slug(request, slug, file_path="home.md"):
     })
 
 
+'''
 @login_required
 def edit_page(request, slug, page_name="home"):
 
@@ -135,3 +136,4 @@ def edit_page(request, slug, page_name="home"):
             slug)
 
     return HttpResponseRedirect(url)
+'''
