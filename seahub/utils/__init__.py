@@ -1110,23 +1110,13 @@ if EVENTS_CONFIG_FILE:
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 if HAS_OFFICE_CONVERTER:
 
+    import time
+    import requests
+    import jwt
+
     OFFICE_HTML_DIR = get_office_converter_html_dir()
     OFFICE_PDF_DIR = get_office_converter_pdf_dir()
     OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
-
-    from seafevents.office_converter import OfficeConverterRpcClient
-    office_converter_rpc = None
-
-    def _get_office_converter_rpc():
-        global office_converter_rpc
-        if office_converter_rpc is None:
-            pool = ccnet.ClientPool(
-                seaserv.CCNET_CONF_PATH,
-                central_config_dir=seaserv.SEAFILE_CENTRAL_CONF_DIR
-            )
-            office_converter_rpc = OfficeConverterRpcClient(pool)
-
-        return office_converter_rpc
 
     def office_convert_cluster_token(file_id):
         from django.core import signing
@@ -1214,24 +1204,28 @@ if HAS_OFFICE_CONVERTER:
 
     @cluster_delegate(delegate_add_office_convert_task)
     def add_office_convert_task(file_id, doctype, raw_path):
-        rpc = _get_office_converter_rpc()
-        d = rpc.add_task(file_id, doctype, raw_path)
-        return {
-            'exists': False,
-        }
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
+        requests.get('http://127.0.0.1:6001/add-task', params, headers=headers)
+        return {'exists': False}
 
     @cluster_delegate(delegate_query_office_convert_status)
     def query_office_convert_status(file_id, doctype):
-        rpc = _get_office_converter_rpc()
-        d = rpc.query_convert_status(file_id, doctype)
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'file_id': file_id, 'doctype': doctype}
+        d = requests.get('http://127.0.0.1:6001/query-status', params, headers=headers)
+        d = d.json()
         ret = {}
-        if d.error:
-            ret['error'] = d.error
+        if 'error' in d:
+            ret['error'] = d['error']
             ret['status'] = 'ERROR'
         else:
             ret['success'] = True
-            ret['status'] = d.status
-            ret['info'] = d.info
+            ret['status'] = d['status']
         return ret
 
     @cluster_delegate(delegate_get_office_converted_page)
@@ -1248,8 +1242,9 @@ if HAS_OFFICE_CONVERTER:
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
         try:
             add_office_convert_task(obj_id, doctype, raw_path)
-        except:
-            logging.exception('failed to add_office_convert_task:')
+        except Exception as e:
+            print(e)
+            logging.exception('failed to add_office_convert_task: %s' % e)
             return _('Internal error')
         return None
 
