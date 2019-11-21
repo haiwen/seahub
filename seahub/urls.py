@@ -10,7 +10,7 @@ from seahub.views.ajax import *
 from seahub.views.sso import *
 
 from seahub.views.file import view_history_file, view_trash_file,\
-    view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
+    view_snapshot_file, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, download_file, view_lib_file, \
     file_access, view_lib_file_via_smart_link, view_media_file_via_share_link, \
     view_media_file_via_public_wiki
@@ -194,7 +194,6 @@ urlpatterns = [
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/file/edit/$', file_edit, name='file_edit'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/download/$', download_file, name='download_file'),
 
     ### lib (replace the old `repo` urls) ###
