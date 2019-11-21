@@ -166,9 +166,11 @@ def get_wiki_page_object(wiki_object, page_name):
 
     file_url = get_inner_file_url(repo, dirent.obj_id, dirent.obj_name)
 
+    '''
     edit_url = get_site_scheme_and_netloc().rstrip('/') + "%s?p=%s" % (
         reverse('file_edit', args=[repo_id]),
         urlquote(filepath.encode('utf-8')))
+    '''
 
     slug = wiki_object.slug
     page_url = get_site_scheme_and_netloc().rstrip('/') + reverse('wiki:slug',
@@ -181,7 +183,8 @@ def get_wiki_page_object(wiki_object, page_name):
     return {"name": page_name,
             "link": page_url,
             "file_link": file_url,
-            "file_edit_link": edit_url,
+            #"file_edit_link": edit_url,
+            "file_edit_link": '',
             "updated_at": timestamp_to_isoformat_timestr(last_modified),
             "last_modifier": latest_contributor,
             "last_modifier_contact_email": email2contact_email(latest_contributor),

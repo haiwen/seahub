@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 File related views, including view_file, view_history_file, view_trash_file,
-view_snapshot_file, view_shared_file, file_edit, etc.
+view_snapshot_file, view_shared_file, etc.
 """
 
 import sys
