@@ -1,0 +1,21 @@
+{% extends "base_for_react.html" %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+{% render_bundle 'TCAccept' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+  window.tc = {
+    termsName: '{{ form.initial.terms.name|escapejs }}',
+    formAction: '{% url 'tc_accept_page' %}',
+    formTerms: '{{ form.terms }}',
+    formReturnTo: '{{ form.returnTo }}',
+    logoutURL: '{% url 'auth_logout' %}',
+    termsText: "{{ form.initial.terms.text|escapejs }}"
+  };
+</script>
+{% render_bundle 'TCAccept' 'js' %}
+{% endblock %}

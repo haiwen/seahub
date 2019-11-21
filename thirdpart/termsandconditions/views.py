@@ -53,7 +53,8 @@ class AcceptTermsView(CreateView):
 
     model = UserTermsAndConditions
     form_class = UserTermsAndConditionsModelForm
-    template_name = "termsandconditions/tc_accept_terms.html"
+    #template_name = "termsandconditions/tc_accept_terms.html"
+    template_name = "termsandconditions/tc_accept_terms_react.html"
 
     def get_initial(self):
         """Override of CreateView method, queries for which T&C to accept and catches returnTo from URL"""

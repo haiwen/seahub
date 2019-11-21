@@ -59,6 +59,7 @@ module.exports = {
   // In production, we only want to load the polyfills and the app code.
   entry: {
     markdownEditor: [require.resolve('./polyfills'), paths.appIndexJs],
+    TCAccept: [require.resolve('./polyfills'), paths.appSrc + "/tc-accept.js"],
     wiki: [require.resolve('./polyfills'), paths.appSrc + "/wiki.js"],
     repoview: [require.resolve('./polyfills'), paths.appSrc + "/repo-wiki-mode.js"],
     fileHistory: [require.resolve('./polyfills'), paths.appSrc + "/file-history.js"],
