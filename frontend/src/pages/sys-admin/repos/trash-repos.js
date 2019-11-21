@@ -320,10 +320,12 @@ class TrashRepos extends Component {
 
   render() {
     const { isCleanTrashDialogOpen } = this.state;
+
+    // enable 'search': <MainPanelTopbar search={this.getSearch()}>
     return (
       <Fragment>
         {this.state.repos.length ? (
-          <MainPanelTopbar search={this.getSearch()}>
+          <MainPanelTopbar>
             <Button className="operation-item" onClick={this.toggleCleanTrashDialog}>{gettext('Clean')}</Button>
           </MainPanelTopbar>
         ) : <MainPanelTopbar />
