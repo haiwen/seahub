@@ -34,7 +34,7 @@ class ViaRepoDirTest(BaseTestCase):
         self.rw_app_name, permission = 'rw_app_name', 'rw'
         self.repo_rw_api_token_obj = self._create_repo_api_token_obj(self.rw_app_name, permission)
 
-        self.url = reverse('via-repo-dir', args=[self.repo_id])
+        self.url = reverse('via-repo-dir')
         self.logout()
 
     def tearDown(self):
@@ -107,7 +107,7 @@ class ViaUploadLinkTest(BaseTestCase):
         self.rw_app_name, permission = 'rw_app_name', 'rw'
         self.repo_rw_api_token_obj = self._create_repo_api_token_obj(self.rw_app_name, permission)
 
-        self.url = reverse('via-upload-link', args=[self.repo_id])
+        self.url = reverse('via-upload-link')
         self.logout()
 
     def tearDown(self):
