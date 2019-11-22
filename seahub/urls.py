@@ -77,7 +77,7 @@ from seahub.api2.endpoints.drafts import DraftsView, DraftView
 from seahub.api2.endpoints.draft_reviewer import DraftReviewerView
 from seahub.api2.endpoints.repo_draft_info import RepoDraftInfo, RepoDraftCounts
 from seahub.api2.endpoints.activities import ActivitiesView
-from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPagesDirView, WikiPageContentView
+from seahub.api2.endpoints.wiki_pages import WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
 from seahub.api2.endpoints.repo_tags import RepoTagsView, RepoTagView
@@ -427,10 +427,8 @@ urlpatterns = [
     ## user::wiki
     url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
-    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/$', WikiPagesView.as_view(), name='api-v2.1-wiki-pages'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/dir/$', WikiPagesDirView.as_view(), name='api-v2.1-wiki-pages-dir'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/content/$', WikiPageContentView.as_view(), name='api-v2.1-wiki-pages-content'),
-    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/(?P<page_name>[^/]+)/$', WikiPageView.as_view(), name='api-v2.1-wiki-page'),
     url(r'^view-image-via-public-wiki/$', view_media_file_via_public_wiki, name='view_media_file_via_public_wiki'),
 
     ## user::drafts
