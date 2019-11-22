@@ -606,7 +606,6 @@ urlpatterns = [
     url(r'^published/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
     url(r'^work-weixin/', include('seahub.work_weixin.urls')),
     # Must specify a namespace if specifying app_name.
-    url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki-unused')),
     url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
 
     ## admin::address book

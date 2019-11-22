@@ -20,24 +20,6 @@ from seahub.utils.file_types import *
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-@login_required
-def wiki_list(request):
-
-    username = request.user.username
-
-    if request.cloud_mode and request.user.org is not None:
-        org_id = request.user.org.org_id
-        joined_groups = seaserv.get_org_groups_by_user(org_id, username)
-    else:
-        joined_groups = seaserv.get_personal_groups_by_user(username)
-
-    if joined_groups:
-        joined_groups.sort(key=lambda x: x.group_name.lower())
-
-    return render(request, "wiki/wiki_list.html", {
-        "grps": joined_groups,
-    })
-
 
 def slug(request, slug, file_path="home.md"):
     """Show wiki page.
