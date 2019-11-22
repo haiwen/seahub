@@ -1730,21 +1730,21 @@ def text_diff(request, repo_id):
 @require_POST
 @csrf_exempt
 @json_response
-def office_convert_add_task(request):
-    try:
-        file_id = request.POST.get('file_id')
-        doctype = request.POST.get('doctype')
-        raw_path = request.POST.get('raw_path')
-    except KeyError:
-        return HttpResponseBadRequest('invalid params')
-
-    if not _check_cluster_internal_token(request, file_id):
-        return HttpResponseForbidden()
-
-    if len(file_id) != 40:
-        return HttpResponseBadRequest('invalid params')
-
-    return add_office_convert_task(file_id, doctype, raw_path, internal=True)
+# def office_convert_add_task(request):
+#     try:
+#         file_id = request.POST.get('file_id')
+#         doctype = request.POST.get('doctype')
+#         raw_path = request.POST.get('raw_path')
+#     except KeyError:
+#         return HttpResponseBadRequest('invalid params')
+#
+#     if not _check_cluster_internal_token(request, file_id):
+#         return HttpResponseForbidden()
+#
+#     if len(file_id) != 40:
+#         return HttpResponseBadRequest('invalid params')
+#
+#     return add_office_convert_task(file_id, doctype, raw_path, internal=True)
 
 def _check_office_convert_perm(request, repo_id, path, ret):
     token = request.GET.get('token', '')
@@ -1809,14 +1809,11 @@ def office_convert_query_status(request, cluster_internal=False):
         raise Http404
 
     doctype = request.GET.get('doctype', None)
-    if cluster_internal:
-        file_id = _office_convert_get_file_id_internal(request)
-    else:
-        file_id = _office_convert_get_file_id(request)
+    file_id = _office_convert_get_file_id(request)
 
     ret = {'success': False}
     try:
-        ret = query_office_convert_status(file_id, doctype, cluster_internal=cluster_internal)
+        ret = query_office_convert_status(file_id, doctype)
     except Exception as e:
         logging.exception('failed to call query_office_convert_status')
         ret['error'] = str(e)

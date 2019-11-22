@@ -115,10 +115,6 @@ try:
     from seahub.settings import OFFICE_CONVERTOR_ROOT
 except ImportError:
     OFFICE_CONVERTOR_ROOT = ''
-try:
-    from seahub.settings import OFFICE_CONVERTOR_NODE
-except ImportError:
-    OFFICE_CONVERTOR_NODE = False
 
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
@@ -1142,8 +1138,7 @@ if HAS_OFFICE_CONVERTER:
         '''
         def decorated(func):
             def real_func(*args, **kwargs):
-                cluster_internal = kwargs.pop('cluster_internal', False)
-                if CLUSTER_MODE and not OFFICE_CONVERTOR_NODE and not cluster_internal:
+                if CLUSTER_MODE:
                     return delegate_func(*args)
                 else:
                     return func(*args)
@@ -1151,45 +1146,23 @@ if HAS_OFFICE_CONVERTER:
 
         return decorated
 
-    def delegate_add_office_convert_task(file_id, doctype, raw_path):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/add-task/')
-        data = urllib.parse.urlencode({
-            'file_id': file_id,
-            'doctype': doctype,
-            'raw_path': raw_path,
-        })
-
-        headers = _office_convert_token_header(file_id)
-        ret = do_urlopen(url, data=data, headers=headers).read()
-
-        return json.loads(ret)
-
-    def delegate_query_office_convert_status(file_id, doctype):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/status/')
-        url += '?file_id=%s&doctype=%s' % (file_id, doctype)
-        headers = _office_convert_token_header(file_id)
-        ret = do_urlopen(url, headers=headers).read()
-
-        return json.loads(ret)
-
     def delegate_get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
-        url = urljoin(OFFICE_CONVERTOR_ROOT,
-                      '/office-convert/internal/static/%s/%s%s/%s' % (
-                          repo_id, commit_id, urlquote(path), urlquote(static_filename)))
-        url += '?file_id=' + file_id
-        headers = _office_convert_token_header(file_id)
-        timestamp = request.META.get('HTTP_IF_MODIFIED_SINCE')
-        if timestamp:
-            headers['If-Modified-Since'] = timestamp
-
+        office_out_dir = OFFICE_HTML_DIR
+        filepath = os.path.join(file_id, static_filename)
+        if static_filename.endswith('.pdf'):
+            office_out_dir = OFFICE_PDF_DIR
+            filepath = static_filename
+        full_path = os.path.join(office_out_dir, filepath)
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'full_path': full_path}
         try:
-            ret = do_urlopen(url, headers=headers)
-            data = ret.read()
+            ret = requests.get(url, params, headers=headers)
+            data = ret.text
         except urllib.error.HTTPError as e:
-            if timestamp and e.code == 304:
-                return HttpResponseNotModified()
-            else:
-                raise
+            raise Exception(e)
 
         content_type = ret.headers.get('content-type', None)
         if content_type is None:
@@ -1202,22 +1175,22 @@ if HAS_OFFICE_CONVERTER:
 
         return resp
 
-    @cluster_delegate(delegate_add_office_convert_task)
     def add_office_convert_task(file_id, doctype, raw_path):
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, 'secret', algorithm='HS256')
         headers = {"Authorization": "Token %s" % token.decode()}
         params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
-        requests.get('http://127.0.0.1:6001/add-task', params, headers=headers)
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
+        requests.get(url, params, headers=headers)
         return {'exists': False}
 
-    @cluster_delegate(delegate_query_office_convert_status)
     def query_office_convert_status(file_id, doctype):
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, 'secret', algorithm='HS256')
         headers = {"Authorization": "Token %s" % token.decode()}
         params = {'file_id': file_id, 'doctype': doctype}
-        d = requests.get('http://127.0.0.1:6001/query-status', params, headers=headers)
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
+        d = requests.get(url, params, headers=headers)
         d = d.json()
         ret = {}
         if 'error' in d:
