@@ -1116,7 +1116,7 @@ if HAS_OFFICE_CONVERTER:
 
     def add_office_convert_task(file_id, doctype, raw_path):
         payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
         headers = {"Authorization": "Token %s" % token.decode()}
         params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
@@ -1125,7 +1125,7 @@ if HAS_OFFICE_CONVERTER:
 
     def query_office_convert_status(file_id, doctype):
         payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
         headers = {"Authorization": "Token %s" % token.decode()}
         params = {'file_id': file_id, 'doctype': doctype}
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
@@ -1151,17 +1151,11 @@ if HAS_OFFICE_CONVERTER:
                                    document_root=office_out_dir)
 
     def cluster_get_office_converted_page(path, static_filename, file_id):
-        office_out_dir = OFFICE_HTML_DIR
-        filepath = os.path.join(file_id, static_filename)
-        if static_filename.endswith('.pdf'):
-            office_out_dir = OFFICE_PDF_DIR
-            filepath = static_filename
-        full_path = os.path.join(office_out_dir, filepath)
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
         payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
         headers = {"Authorization": "Token %s" % token.decode()}
-        params = {'full_path': full_path}
+        params = {'static_filename': static_filename, 'file_id': file_id}
         try:
             ret = requests.get(url, params, headers=headers)
             data = ret.text
