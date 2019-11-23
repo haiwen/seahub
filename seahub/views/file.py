@@ -80,8 +80,8 @@ from seahub.drafts.utils import get_file_draft, \
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
-        query_office_convert_status, add_office_convert_task,
-        prepare_converted_html, get_office_converted_page
+        query_office_convert_status, cluster_get_office_converted_page,
+        prepare_converted_html, get_office_converted_page, CLUSTER_MODE
     )
 
 import seahub.settings as settings
@@ -1804,8 +1804,8 @@ def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None
     return seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
 
 @json_response
-def office_convert_query_status(request, cluster_internal=False):
-    if not cluster_internal and not request.is_ajax():
+def office_convert_query_status(request):
+    if not request.is_ajax():
         raise Http404
 
     doctype = request.GET.get('doctype', None)
@@ -1821,7 +1821,7 @@ def office_convert_query_status(request, cluster_internal=False):
     return ret
 
 _OFFICE_PAGE_PATTERN = re.compile(r'^file\.css|file\.outline|index.html|index_html_.*.png|[a-z0-9]+\.pdf$')
-def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster_internal=False):
+def office_convert_get_page(request, repo_id, commit_id, path, filename):
     """Valid static file path inclueds:
     - index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
     - 77e168722458356507a1f373714aa9b575491f09.pdf
@@ -1833,16 +1833,16 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster
         return HttpResponseForbidden()
 
     path = '/' + path
-    if cluster_internal:
-        file_id = _office_convert_get_file_id_internal(request)
-    else:
-        file_id = _office_convert_get_file_id(request, repo_id, commit_id, path)
+    file_id = _office_convert_get_file_id(request, repo_id, commit_id, path)
 
     if filename.endswith('.pdf'):
         filename = "{0}.pdf".format(file_id)
 
-    resp = get_office_converted_page(
-        request, repo_id, commit_id, path, filename, file_id, cluster_internal=cluster_internal)
+    if CLUSTER_MODE:
+        resp = cluster_get_office_converted_page(path, filename, file_id)
+    else:
+        resp = get_office_converted_page(request, filename, file_id)
+
     if filename.endswith('.page'):
         content_type = 'text/html'
     else:

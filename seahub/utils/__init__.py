@@ -1114,39 +1114,43 @@ if HAS_OFFICE_CONVERTER:
     OFFICE_PDF_DIR = get_office_converter_pdf_dir()
     OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
 
-    def office_convert_cluster_token(file_id):
-        from django.core import signing
-        s = '-'.join([file_id, datetime.now().strftime('%Y%m%d')])
-        return signing.Signer().sign(s)
+    def add_office_convert_task(file_id, doctype, raw_path):
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
+        requests.get(url, params, headers=headers)
+        return {'exists': False}
 
-    def _office_convert_token_header(file_id):
-        return {
-            'X-Seafile-Office-Preview-Token': office_convert_cluster_token(file_id),
-        }
+    def query_office_convert_status(file_id, doctype):
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'file_id': file_id, 'doctype': doctype}
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
+        d = requests.get(url, params, headers=headers)
+        d = d.json()
+        ret = {}
+        if 'error' in d:
+            ret['error'] = d['error']
+            ret['status'] = 'ERROR'
+        else:
+            ret['success'] = True
+            ret['status'] = d['status']
+        return ret
 
-    def cluster_delegate(delegate_func):
-        '''usage:
+    def get_office_converted_page(request, static_filename, file_id):
+        office_out_dir = OFFICE_HTML_DIR
+        filepath = os.path.join(file_id, static_filename)
+        if static_filename.endswith('.pdf'):
+            office_out_dir = OFFICE_PDF_DIR
+            filepath = static_filename
+        return django_static_serve(request,
+                                   filepath,
+                                   document_root=office_out_dir)
 
-        @cluster_delegate(funcA)
-        def func(*args):
-            ...non-cluster logic goes here...
-
-        - In non-cluster mode, this decorator effectively does nothing.
-        - In cluster mode, if this node is not the office convert node,
-        funcA is called instead of the decorated function itself
-
-        '''
-        def decorated(func):
-            def real_func(*args, **kwargs):
-                if CLUSTER_MODE:
-                    return delegate_func(*args)
-                else:
-                    return func(*args)
-            return real_func
-
-        return decorated
-
-    def delegate_get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
+    def cluster_get_office_converted_page(path, static_filename, file_id):
         office_out_dir = OFFICE_HTML_DIR
         filepath = os.path.join(file_id, static_filename)
         if static_filename.endswith('.pdf'):
@@ -1174,43 +1178,6 @@ if HAS_OFFICE_CONVERTER:
             resp['Last-Modified'] = ret.headers.get('last-modified')
 
         return resp
-
-    def add_office_convert_task(file_id, doctype, raw_path):
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token.decode()}
-        params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
-        requests.get(url, params, headers=headers)
-        return {'exists': False}
-
-    def query_office_convert_status(file_id, doctype):
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token.decode()}
-        params = {'file_id': file_id, 'doctype': doctype}
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
-        d = requests.get(url, params, headers=headers)
-        d = d.json()
-        ret = {}
-        if 'error' in d:
-            ret['error'] = d['error']
-            ret['status'] = 'ERROR'
-        else:
-            ret['success'] = True
-            ret['status'] = d['status']
-        return ret
-
-    @cluster_delegate(delegate_get_office_converted_page)
-    def get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
-        office_out_dir = OFFICE_HTML_DIR
-        filepath = os.path.join(file_id, static_filename)
-        if static_filename.endswith('.pdf'):
-            office_out_dir = OFFICE_PDF_DIR
-            filepath = static_filename
-        return django_static_serve(request,
-                                   filepath,
-                                   document_root=office_out_dir)
 
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
         try:
