@@ -115,10 +115,6 @@ try:
     from seahub.settings import OFFICE_CONVERTOR_ROOT
 except ImportError:
     OFFICE_CONVERTOR_ROOT = ''
-try:
-    from seahub.settings import OFFICE_CONVERTOR_NODE
-except ImportError:
-    OFFICE_CONVERTOR_NODE = False
 
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
@@ -1110,96 +1106,61 @@ if EVENTS_CONFIG_FILE:
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 if HAS_OFFICE_CONVERTER:
 
+    import time
+    import requests
+    import jwt
+
     OFFICE_HTML_DIR = get_office_converter_html_dir()
     OFFICE_PDF_DIR = get_office_converter_pdf_dir()
     OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
 
-    from seafevents.office_converter import OfficeConverterRpcClient
-    office_converter_rpc = None
+    def add_office_convert_task(file_id, doctype, raw_path):
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
+        requests.get(url, params, headers=headers)
+        return {'exists': False}
 
-    def _get_office_converter_rpc():
-        global office_converter_rpc
-        if office_converter_rpc is None:
-            pool = ccnet.ClientPool(
-                seaserv.CCNET_CONF_PATH,
-                central_config_dir=seaserv.SEAFILE_CENTRAL_CONF_DIR
-            )
-            office_converter_rpc = OfficeConverterRpcClient(pool)
+    def query_office_convert_status(file_id, doctype):
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'file_id': file_id, 'doctype': doctype}
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
+        d = requests.get(url, params, headers=headers)
+        d = d.json()
+        ret = {}
+        if 'error' in d:
+            ret['error'] = d['error']
+            ret['status'] = 'ERROR'
+        else:
+            ret['success'] = True
+            ret['status'] = d['status']
+        return ret
 
-        return office_converter_rpc
+    def get_office_converted_page(request, static_filename, file_id):
+        office_out_dir = OFFICE_HTML_DIR
+        filepath = os.path.join(file_id, static_filename)
+        if static_filename.endswith('.pdf'):
+            office_out_dir = OFFICE_PDF_DIR
+            filepath = static_filename
+        return django_static_serve(request,
+                                   filepath,
+                                   document_root=office_out_dir)
 
-    def office_convert_cluster_token(file_id):
-        from django.core import signing
-        s = '-'.join([file_id, datetime.now().strftime('%Y%m%d')])
-        return signing.Signer().sign(s)
-
-    def _office_convert_token_header(file_id):
-        return {
-            'X-Seafile-Office-Preview-Token': office_convert_cluster_token(file_id),
-        }
-
-    def cluster_delegate(delegate_func):
-        '''usage:
-
-        @cluster_delegate(funcA)
-        def func(*args):
-            ...non-cluster logic goes here...
-
-        - In non-cluster mode, this decorator effectively does nothing.
-        - In cluster mode, if this node is not the office convert node,
-        funcA is called instead of the decorated function itself
-
-        '''
-        def decorated(func):
-            def real_func(*args, **kwargs):
-                cluster_internal = kwargs.pop('cluster_internal', False)
-                if CLUSTER_MODE and not OFFICE_CONVERTOR_NODE and not cluster_internal:
-                    return delegate_func(*args)
-                else:
-                    return func(*args)
-            return real_func
-
-        return decorated
-
-    def delegate_add_office_convert_task(file_id, doctype, raw_path):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/add-task/')
-        data = urllib.parse.urlencode({
-            'file_id': file_id,
-            'doctype': doctype,
-            'raw_path': raw_path,
-        })
-
-        headers = _office_convert_token_header(file_id)
-        ret = do_urlopen(url, data=data, headers=headers).read()
-
-        return json.loads(ret)
-
-    def delegate_query_office_convert_status(file_id, doctype):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/status/')
-        url += '?file_id=%s&doctype=%s' % (file_id, doctype)
-        headers = _office_convert_token_header(file_id)
-        ret = do_urlopen(url, headers=headers).read()
-
-        return json.loads(ret)
-
-    def delegate_get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
-        url = urljoin(OFFICE_CONVERTOR_ROOT,
-                      '/office-convert/internal/static/%s/%s%s/%s' % (
-                          repo_id, commit_id, urlquote(path), urlquote(static_filename)))
-        url += '?file_id=' + file_id
-        headers = _office_convert_token_header(file_id)
-        timestamp = request.META.get('HTTP_IF_MODIFIED_SINCE')
-        if timestamp:
-            headers['If-Modified-Since'] = timestamp
-
+    def cluster_get_office_converted_page(path, static_filename, file_id):
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'static_filename': static_filename, 'file_id': file_id}
         try:
-            ret = do_urlopen(url, headers=headers)
-            data = ret.read()
+            ret = requests.get(url, params, headers=headers)
+            data = ret.text
         except urllib.error.HTTPError as e:
-            if timestamp and e.code == 304:
-                return HttpResponseNotModified()
-            else:
-                raise
+            raise Exception(e)
 
         content_type = ret.headers.get('content-type', None)
         if content_type is None:
@@ -1212,44 +1173,12 @@ if HAS_OFFICE_CONVERTER:
 
         return resp
 
-    @cluster_delegate(delegate_add_office_convert_task)
-    def add_office_convert_task(file_id, doctype, raw_path):
-        rpc = _get_office_converter_rpc()
-        d = rpc.add_task(file_id, doctype, raw_path)
-        return {
-            'exists': False,
-        }
-
-    @cluster_delegate(delegate_query_office_convert_status)
-    def query_office_convert_status(file_id, doctype):
-        rpc = _get_office_converter_rpc()
-        d = rpc.query_convert_status(file_id, doctype)
-        ret = {}
-        if d.error:
-            ret['error'] = d.error
-            ret['status'] = 'ERROR'
-        else:
-            ret['success'] = True
-            ret['status'] = d.status
-            ret['info'] = d.info
-        return ret
-
-    @cluster_delegate(delegate_get_office_converted_page)
-    def get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
-        office_out_dir = OFFICE_HTML_DIR
-        filepath = os.path.join(file_id, static_filename)
-        if static_filename.endswith('.pdf'):
-            office_out_dir = OFFICE_PDF_DIR
-            filepath = static_filename
-        return django_static_serve(request,
-                                   filepath,
-                                   document_root=office_out_dir)
-
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
         try:
             add_office_convert_task(obj_id, doctype, raw_path)
-        except:
-            logging.exception('failed to add_office_convert_task:')
+        except Exception as e:
+            print(e)
+            logging.exception('failed to add_office_convert_task: %s' % e)
             return _('Internal error')
         return None
 
