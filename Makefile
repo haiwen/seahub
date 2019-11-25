@@ -5,7 +5,7 @@ develop: setup-git
 setup-git:
 	cd .git/hooks && ln -sf ../../hooks/* ./
 
-dist: locale uglify statici18n collectstatic
+dist: locale statici18n collectstatic
 
 locale:
 	@echo "--> Compile locales"
@@ -43,4 +43,4 @@ cleanpyc:
 	find . -name \*.pyc -exec rm -f {} \;
 	@echo ""
 
-.PHONY: develop setup-git dist locale uglify statici18n collectstatic compressstatic clean
+.PHONY: develop setup-git dist locale statici18n collectstatic compressstatic clean
