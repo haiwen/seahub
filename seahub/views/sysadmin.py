@@ -106,40 +106,6 @@ logger = logging.getLogger(__name__)
 
 @login_required
 @sys_staff_required
-def sysadmin(request):
-    max_upload_file_size = get_max_upload_file_size()
-
-    folder_perm_enabled = True if is_pro_version() and settings.ENABLE_FOLDER_PERM else False
-
-    try:
-        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
-    except Exception as e:
-        logger.error(e)
-        expire_days = -1
-
-    return render(request, 'sysadmin/sysadmin_backbone.html', {
-            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
-            'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
-            'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
-            'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
-            'enable_thumbnail': settings.ENABLE_THUMBNAIL,
-            'thumbnail_default_size': settings.THUMBNAIL_DEFAULT_SIZE,
-            'thumbnail_size_for_grid': settings.THUMBNAIL_SIZE_FOR_GRID,
-            'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
-            'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
-            'max_upload_file_size': max_upload_file_size,
-            'folder_perm_enabled': folder_perm_enabled,
-            'is_pro': True if is_pro_version() else False,
-            'file_audit_enabled': FILE_AUDIT_ENABLED,
-            'enable_limit_ipaddress': ENABLE_LIMIT_IPADDRESS,
-            'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
-            'enable_file_scan': ENABLE_FILE_SCAN,
-            'enable_work_weixin': ENABLE_WORK_WEIXIN,
-            'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
-            })
-
-@login_required
-@sys_staff_required
 def sysadmin_react_fake_view(request, **kwargs):
 
     try:

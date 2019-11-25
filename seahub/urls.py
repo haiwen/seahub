@@ -172,7 +172,7 @@ urlpatterns = [
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
 
-    url(r'^$', libraries, name='libraries'),
+    url(r'^$', react_fake_view, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 
@@ -201,12 +201,6 @@ urlpatterns = [
     url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     url(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', view_lib_as_wiki, name='view_lib_as_wiki'),
     url(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
-    url(r'^#common/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', fake_view, name='view_common_lib_dir'),
-    url(r'^#group/(?P<group_id>\d+)/$', fake_view, name='group_info'),
-    url(r'^#group/(?P<group_id>\d+)/members/$', fake_view, name='group_members'),
-    url(r'^#group/(?P<group_id>\d+)/discussions/$', fake_view, name='group_discuss'),
-    url(r'^#groups/', fake_view, name='group_list'),
-    url(r'^#group/(?P<group_id>\d+)/settings/$', fake_view, name='group_manage'),
 
     ### share/upload link ###
     url(r'^f/(?P<token>[a-f0-9]+)/$', view_shared_file, name='view_shared_file'),
@@ -633,7 +627,6 @@ urlpatterns = [
     url(r'^api/v2.1/admin/work-weixin/departments/import/$', AdminWorkWeixinDepartmentsImport.as_view(), name='api-v2.1-admin-work-weixin-department-import'),
 
     ### system admin ###
-    url(r'^sysadmin/$', sysadmin, name='sysadmin'),
     url(r'^sys/settings/$', sys_settings, name='sys_settings'),
     url(r'^sys/statistic/file/$', sys_statistic_file, name='sys_statistic_file'),
     url(r'^sys/statistic/storage/$', sys_statistic_storage, name='sys_statistic_storage'),
@@ -641,13 +634,6 @@ urlpatterns = [
     url(r'^sys/statistic/traffic/$', sys_statistic_traffic, name='sys_statistic_traffic'),
     url(r'^sys/statistic/reports/$', sys_statistic_reports, name='sys_statistic_reports'),
 
-    url(r'^sysadmin/#all-libs/$', fake_view, name='sys_repo_admin'),
-    url(r'^sysadmin/#libs/(?P<repo_id>[-0-9a-f]{36})/$', fake_view, name='sys_admin_repo'),
-    url(r'^sysadmin/#system-lib/$', fake_view, name='sys_list_system'),
-    url(r'^sysadmin/#trash-libs/$', fake_view, name='sys_repo_trash'),
-    url(r'^sysadmin/#search-libs/$', fake_view, name='sys_repo_search'),
-    url(r'^sysadmin/#search-trash-libs/$', fake_view, name='sys_trash_repo_search'),
-    url(r'^sysadmin/#search-groups/$', fake_view, name='sys_group_search'),
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/useradmin/export-excel/$', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
