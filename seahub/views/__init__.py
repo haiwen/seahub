@@ -692,92 +692,6 @@ def get_owned_repo_list(request):
         return seafile_api.get_owned_repo_list(username)
 
 @login_required
-def libraries(request):
-    """
-    New URL to replace myhome
-    """
-    username = request.user.username
-
-    # options
-    if request.cloud_mode and request.user.org is None:
-        allow_public_share = False
-    else:
-        allow_public_share = True
-    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-    max_upload_file_size = get_max_upload_file_size()
-    guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
-    if guide_enabled:
-        create_default_library(request)
-
-    folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
-
-    if request.cloud_mode and request.user.org is not None:
-        org_id = request.user.org.org_id
-        joined_groups = seaserv.get_org_groups_by_user(org_id, username)
-    else:
-        joined_groups = ccnet_api.get_groups(username, return_ancestors=True)
-
-    if joined_groups:
-        try:
-            joined_groups.sort(key=lambda x: x.group_name.lower())
-        except Exception as e:
-            logger.error(e)
-            joined_groups = []
-
-    joined_groups_exclude_address_book = [item for item in joined_groups if
-            item.parent_group_id == 0]
-
-    try:
-        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
-    except Exception as e:
-        logger.error(e)
-        expire_days = -1
-
-    # Whether use new index page
-    use_new_page = True
-    if request.GET.get('_old', None):
-        use_new_page = False
-
-    if use_new_page:
-        return react_fake_view(request)
-
-    return render(request, 'libraries.html', {
-            "allow_public_share": allow_public_share,
-            "guide_enabled": guide_enabled,
-            "sub_lib_enabled": sub_lib_enabled,
-            'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
-            'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
-            'resumable_upload_file_block_size': settings.RESUMABLE_UPLOAD_FILE_BLOCK_SIZE,
-            'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
-            'enable_thumbnail': settings.ENABLE_THUMBNAIL,
-            'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
-            'thumbnail_default_size': settings.THUMBNAIL_DEFAULT_SIZE,
-            'thumbnail_size_for_grid': settings.THUMBNAIL_SIZE_FOR_GRID,
-            'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
-            'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
-            'max_upload_file_size': max_upload_file_size,
-            'folder_perm_enabled': folder_perm_enabled,
-            'is_pro': True if is_pro_version() else False,
-            'file_audit_enabled': FILE_AUDIT_ENABLED,
-            'can_add_public_repo': request.user.permissions.can_add_public_repo(),
-            'joined_groups': joined_groups,
-            'joined_groups_exclude_address_book': joined_groups_exclude_address_book,
-            'storages': get_library_storages(request),
-            'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
-            'library_templates': list(LIBRARY_TEMPLATES.keys()) if \
-                    isinstance(LIBRARY_TEMPLATES, dict) else [],
-            'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS,
-            'enable_group_discussion': settings.ENABLE_GROUP_DISCUSSION,
-            'enable_file_comment': settings.ENABLE_FILE_COMMENT,
-            'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
-            'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
-            'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
-            'enable_office_web_app': ENABLE_OFFICE_WEB_APP,
-            'enable_onlyoffice': ENABLE_ONLYOFFICE,
-            'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
-            })
-
-@login_required
 def repo_set_access_property(request, repo_id):
     ap = request.GET.get('ap', '')
     seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
@@ -1176,15 +1090,6 @@ def underscore_template(request, template):
         raise Http404
 
     return render(request, template, {})
-
-def fake_view(request, **kwargs):
-    """
-    Used for 'view_common_lib_dir' and some other urls
-
-    As the urls start with '#',
-    http request will not access this function
-    """
-    return HttpResponse()
 
 def client_token_login(request):
     """Login from desktop client with a generated token.
