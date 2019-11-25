@@ -12,11 +12,6 @@ locale:
 	django-admin.py compilemessages
 	@echo ""
 
-uglify:
-	@echo "--> Uglify JS files to static/scripts/dist"
-	rm -rf static/scripts/dist 2> /dev/null
-	r.js -o static/scripts/build.js
-
 statici18n:
 	@echo "--> Generate JS locale files in static/scripts/i18n"
 	python manage.py compilejsi18n
