@@ -63,7 +63,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, DRAW, XMIND, CDOC)
+        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, XMIND, CDOC)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
         BadRequestException, RequestForbbiddenException
@@ -332,15 +332,12 @@ def can_preview_file(file_name, file_size, repo):
     filetype, fileext = get_file_type_and_ext(file_name)
 
     # Seafile defines 10 kinds of filetype:
-    # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG, DRAW
+    # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG 
     if filetype in (TEXT, MARKDOWN, IMAGE) or fileext in get_conf_text_ext():
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _('File size surpasses %s, can not be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
             return False, error_msg
-
-    elif filetype in (DRAW):
-        pass
 
     elif filetype in (DOCUMENT, SPREADSHEET):
 
@@ -724,15 +721,6 @@ def view_lib_file(request, repo_id, path):
         return_dict['raw_path'] = raw_path
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
-
-    elif filetype == DRAW:
-        return_dict['raw_path'] = raw_path
-        if permission == 'r':
-            template = 'view_file_draw_read.html'
-            return render(request, template, return_dict)
-        else:
-            template = 'view_file_%s.html' % filetype.lower()
-            return render(request, template, return_dict)
 
     elif filetype == XMIND:
         xmind_image_path = get_thumbnail_image_path(file_id, XMIND_IMAGE_SIZE)
