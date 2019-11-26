@@ -35,8 +35,8 @@ const useYarn = fs.existsSync(paths.yarnLockFile);
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
-const localesPath = '../media/assets/frontend/locales';
-const localesBuildPath = paths.appBuild + '/locales'; 
+const localesPath = 'src/assets/locales';
+const localesBuildPath = paths.appBuild + '/locales';
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appIndexJs])) {
   process.exit(1);
