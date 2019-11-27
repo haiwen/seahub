@@ -102,8 +102,7 @@ class SysAdminAddUserDialog extends React.Component {
     let data = {
       email: email.trim(),
       name: name.trim(),
-      password: password.trim(),
-      role: '',
+      password: password.trim()
     };
     if (this.props.showRole) {
       data.role = role;
