@@ -101,7 +101,7 @@ class InvitationRevokeView(APIView):
 
         # send email
         site_name = get_site_name()
-        subject = _('%(user)s revoke your access to %(site_name)s.') % {
+        subject = _('%(user)s revoked your access to %(site_name)s.') % {
             'user': inviter, 'site_name': site_name}
         context = {
             'inviter': inviter,
