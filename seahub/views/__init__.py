@@ -51,7 +51,7 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
-    ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
+    ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
@@ -448,7 +448,7 @@ def can_access_repo_setting(request, repo_id, username):
         return (False, None)
 
     # no settings for virtual repo
-    if ENABLE_SUB_LIBRARY and repo.is_virtual:
+    if repo.is_virtual:
         return (False, None)
 
     # check permission

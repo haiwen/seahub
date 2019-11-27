@@ -31,10 +31,6 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
 
 try:
-    from seahub.settings import ENABLE_PUBFILE
-except ImportError:
-    ENABLE_PUBFILE = False
-try:
     from seahub.settings import ENABLE_SYSADMIN_EXTRA
 except ImportError:
     ENABLE_SYSADMIN_EXTRA = False
@@ -111,7 +107,6 @@ def base(request):
         'enable_signup': config.ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,
-        'enable_pubfile': ENABLE_PUBFILE,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
         'share_link_password_min_length': config.SHARE_LINK_PASSWORD_MIN_LENGTH,
         'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
@@ -132,7 +127,6 @@ def base(request):
         'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
         'is_docs': ENABLE_SEAFILE_DOCS,
-        'enable_repo_wiki_mode': dj_settings.ENABLE_REPO_WIKI_MODE,
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
         'service_url': get_service_url().rstrip('/'),
@@ -153,8 +147,7 @@ def debug(request):
     """
     context_extras = {}
     if dj_settings.DEBUG and request.META.get('REMOTE_ADDR') in dj_settings.INTERNAL_IPS or \
-       dj_settings.DEBUG and request.GET.get('_dev', '') == '1' or \
-       dj_settings.DEBUG and not dj_settings.COMPRESS_ENABLED:
+       dj_settings.DEBUG and request.GET.get('_dev', '') == '1':
         context_extras['debug'] = True
         from django.db import connection
         # Return a lazy reference that computes connection.queries on access,
