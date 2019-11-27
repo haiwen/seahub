@@ -191,7 +191,7 @@ class AdminInstitutionUser(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if user.is_staff:
-            error_msg = 'Can not assign institutional administration roles to global administrators'
+            error_msg = "Can't assign system admin as institution admin"
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         is_inst_admin = request.data.get('is_institution_admin')
