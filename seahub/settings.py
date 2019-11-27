@@ -302,9 +302,6 @@ ENABLE_SEARCH_FROM_LDAP_DIRECTLY = False
 # show traffic on the UI
 SHOW_TRAFFIC = True
 
-# Enable or disable make group public
-ENABLE_MAKE_GROUP_PUBLIC = False
-
 # show or hide library 'download' button
 SHOW_REPO_DOWNLOAD_BUTTON = False
 
@@ -401,9 +398,6 @@ ENABLE_SHARE_TO_ALL_GROUPS = False
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 
-# Enable group discussion
-ENABLE_GROUP_DISCUSSION = True
-
 # Enable file comments
 ENABLE_FILE_COMMENT = True
 
@@ -440,18 +434,6 @@ LOG_DIR = os.environ.get('SEAHUB_LOG_DIR', '/tmp')
 CACHE_DIR = "/tmp"
 install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 central_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR', '')
-
-if 'win32' in sys.platform:
-    try:
-        CCNET_CONF_PATH = os.environ['CCNET_CONF_DIR']
-        if not CCNET_CONF_PATH: # If it's set but is an empty string.
-            raise KeyError
-    except KeyError:
-        raise ImportError("Settings cannot be imported, because environment variable CCNET_CONF_DIR is undefined.")
-    else:
-        LOG_DIR = os.environ.get('SEAHUB_LOG_DIR', os.path.join(CCNET_CONF_PATH, '..'))
-        CACHE_DIR = os.path.join(CCNET_CONF_PATH, '..')
-        install_topdir = os.path.join(CCNET_CONF_PATH, '..')
 
 CACHES = {
     'default': {
@@ -634,17 +616,6 @@ LOGIN_REMEMBER_DAYS = 7
 
 SEAFILE_VERSION = '6.3.3'
 
-# Compress static files(css, js)
-COMPRESS_ENABLED = False
-COMPRESS_URL = MEDIA_URL
-COMPRESS_ROOT = MEDIA_ROOT
-COMPRESS_DEBUG_TOGGLE = 'nocompress'
-COMPRESS_CSS_HASHING_METHOD = 'content'
-COMPRESS_CSS_FILTERS = [
-    'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSMinFilter',
-]
-
 CAPTCHA_IMAGE_SIZE = (90, 42)
 
 ###################
@@ -717,8 +688,6 @@ SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system
 # Settings for Extra App #
 ##########################
 
-ENABLE_SUB_LIBRARY = True
-
 ##########################
 # Settings for frontend  #
 ##########################
@@ -755,8 +724,6 @@ ENABLE_WIKI = True
 # Enable 'repo snapshot label' feature
 ENABLE_REPO_SNAPSHOT_LABEL = False
 
-#  Repo wiki mode
-ENABLE_REPO_WIKI_MODE = True
 
 ############################
 # Settings for SeafileDocs #
@@ -832,21 +799,15 @@ except ImportError:
 else:
     # In server release, sqlite3 db file is <topdir>/seahub.db
     DATABASES['default']['NAME'] = os.path.join(install_topdir, 'seahub.db')
-    if 'win32' not in sys.platform:
-        # In server release, gunicorn is used to deploy seahub
-        INSTALLED_APPS += ('gunicorn', )
+
+    # In server release, gunicorn is used to deploy seahub
+    INSTALLED_APPS += ('gunicorn', )
 
     load_local_settings(seahub_settings)
     del seahub_settings
 
 # Remove install_topdir from path
 sys.path.pop(0)
-
-if 'win32' in sys.platform:
-    INSTALLED_APPS += ('django_wsgiserver', )
-    fp = open(os.path.join(install_topdir, "seahub.pid"), 'w')
-    fp.write("%d\n" % os.getpid())
-    fp.close()
 
 # Following settings are private, can not be overwrite.
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
