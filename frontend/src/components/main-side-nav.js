@@ -280,11 +280,13 @@ class MainSideNav extends React.Component {
           </ul>
         </div>
 
-        <div className="side-nav-link" onClick={this.onDTableClick}>
-          <span className="link-icon icon-left sf3-font sf3-font-dtable-logo" aria-hidden="true"></span>
-          <span className="link-text">Database</span>
-          <span className="link-icon icon-right sf3-font sf3-font-arrow"></span>
-        </div>
+        {dtableWebServer &&
+          <div className="side-nav-link" onClick={this.onDTableClick}>
+            <span className="link-icon icon-left sf3-font sf3-font-dtable-logo" aria-hidden="true"></span>
+            <span className="link-text">SeaTable</span>
+            <span className="link-icon icon-right sf3-font sf3-font-arrow"></span>
+          </div>
+        }
       </div>
     );
   }
