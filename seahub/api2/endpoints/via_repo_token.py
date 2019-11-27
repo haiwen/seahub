@@ -364,7 +364,7 @@ class ViaRepoUploadLinkView(APIView):
                              'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
+            return api_error(HTTP_443_ABOVE_QUOTA, "Out of quota.")
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                                                         'dummy', 'upload', request.repo_api_token_obj.app_name,
@@ -424,7 +424,7 @@ class RepoInfoView(APIView):
         repo_id = request.repo_api_token_obj.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
+            error_msg = 'Library %(repo_id)s not found.' % {'repo_id': repo_id}
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         data = {
             'repo_id': repo.id,
