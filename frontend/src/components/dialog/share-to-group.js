@@ -105,12 +105,12 @@ class ShareToGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      options: [],
       selectedOption: null,
       errorMsg: [],
       permission: 'rw',
       sharedItems: []
     };
-    this.options = [];
     this.permissions = [];
     let { itemType, isRepoOwner } = props;
     if (itemType === 'library') {
@@ -134,14 +134,15 @@ class ShareToGroup extends React.Component {
 
   loadOptions = () => {
     seafileAPI.shareableGroups().then((res) => {
-      this.options = [];
+      let options = [];
       for (let i = 0 ; i < res.data.length; i++) {
         let obj = {};
         obj.value = res.data[i].name;
         obj.id = res.data[i].id;
         obj.label = res.data[i].name;
-        this.options.push(obj);
+        options.push(obj);
       }
+      this.setState({options: options});
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -303,7 +304,7 @@ class ShareToGroup extends React.Component {
                 <Select
                   isMulti
                   onChange={this.handleSelectChange}
-                  options={this.options}
+                  options={this.state.options}
                   placeholder={gettext('Select groups...')}
                   components={makeAnimated()}
                   maxMenuHeight={200}
