@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import Select from 'react-select';
-import makeAnimated from 'react-select/lib/animated';
 import { gettext, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
@@ -306,7 +305,6 @@ class ShareToGroup extends React.Component {
                   onChange={this.handleSelectChange}
                   options={this.state.options}
                   placeholder={gettext('Select groups...')}
-                  components={makeAnimated()}
                   maxMenuHeight={200}
                   inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
