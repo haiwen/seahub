@@ -17,3 +17,4 @@ python-dateutil
 requests
 pillow
 pyjwt
+pycryptodome
