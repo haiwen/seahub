@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
-import { siteRoot, gettext } from '../../../utils/constants';
+import { siteRoot, gettext, isPro } from '../../../utils/constants';
 
 const propTypes = {
   currentItem: PropTypes.string.isRequired
@@ -13,9 +13,11 @@ class Nav extends React.Component {
     super(props);
     this.navItems = [
       {name: 'desktop', urlPart:'desktop-devices', text: gettext('Desktop')}, 
-      {name: 'mobile', urlPart:'mobile-devices', text: gettext('Mobile')}, 
-      {name: 'errors', urlPart:'device-errors', text: gettext('Errors')} 
+      {name: 'mobile', urlPart:'mobile-devices', text: gettext('Mobile')}
     ];
+    if (isPro) {
+      this.navItems.push({name: 'errors', urlPart:'device-errors', text: gettext('Errors')});
+    }
   }
 
   render() {
