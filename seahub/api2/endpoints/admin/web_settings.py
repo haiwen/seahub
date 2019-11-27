@@ -65,22 +65,22 @@ class AdminWebSettings(APIView):
         for key, value in request.data.items():
 
             if key not in DIGIT_WEB_SETTINGS and key not in STRING_WEB_SETTINGS:
-                error_msg = _(u'setting invalid.')
+                error_msg = 'setting invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if key in DIGIT_WEB_SETTINGS:
                 if not value.isdigit():
-                    error_msg = _(u'value invalid.')
+                    error_msg = 'value invalid.'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                 else:
                     value = int(value)
 
                 if key == 'USER_PASSWORD_STRENGTH_LEVEL' and value not in (1, 2, 3, 4):
-                    error_msg = _(u'value invalid.')
+                    error_msg = 'value invalid.'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if (key in STRING_WEB_SETTINGS and key != 'CUSTOM_CSS') and not value:
-                error_msg = _(u'value invalid.')
+                error_msg = 'value invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             try:
