@@ -415,7 +415,9 @@ class AdminUsers(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # additional user info check
-        role = request.data.get("role", None)
+        role = ''
+        if is_pro_version():
+            role = request.data.get("role", None)
         if role:
             available_roles = get_available_roles()
             if role.lower() not in available_roles:
