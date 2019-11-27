@@ -40,13 +40,13 @@ class RepoAPITokensView(APIView):
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
+            error_msg = 'Library %(repo_id)s not found.' % {'repo_id': repo_id}
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
         if not permission_check_admin_owner(username, repo_id, request):
-            error_msg = _('Permission denied.')
+            error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         rats = RepoAPITokens.objects.filter(repo_id=repo_id).order_by('-generated_at')
@@ -57,29 +57,29 @@ class RepoAPITokensView(APIView):
         # arguments check
         app_name = request.data.get('app_name')
         if not app_name:
-            error_msg = _('app_name invalid.')
+            error_msg = 'app_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         repo_permission = request.data.get('permission')
         if repo_permission and repo_permission not in [perm[0] for perm in RepoAPITokens.PERMISSION_CHOICES]:
-            error_msg = _('permission invalid.')
+            error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         repo_permission = repo_permission if repo_permission else PERMISSION_READ_WRITE
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
+            error_msg = 'Library %(repo_id)s not found.' % {'repo_id': repo_id}
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
         if not permission_check_admin_owner(username, repo_id, request):
-            error_msg = _('Permission denied.')
+            error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         rat = RepoAPITokens.objects.filter(app_name=app_name, repo_id=repo_id).first()
         if rat:
-            error_msg = _('app: %(app)s token already exists.' % {'app': app_name})
+            error_msg = 'app: %(app)s token already exists.' % {'app': app_name}
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         try:
             rat = RepoAPITokens.objects.create_token(app_name=app_name,
@@ -88,7 +88,7 @@ class RepoAPITokensView(APIView):
                                                      permission=repo_permission)
         except Exception as e:
             logger.error('user: %s create repo: %s\'s token error: %s', username, repo_id, e)
-            error_msg = _('Internal Server Error.')
+            error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(_get_repo_token_info(rat))
@@ -103,24 +103,24 @@ class RepoAPITokenView(APIView):
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
+            error_msg = 'Library %(repo_id)s not found.' % {'repo_id': repo_id}
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         username = request.user.username
         # permission check
         if not permission_check_admin_owner(username, repo_id, request):
-            error_msg = _('Permission denied.')
+            error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             rat = RepoAPITokens.objects.filter(repo_id=repo_id, app_name=app_name).first()
             if not rat:
-                error_msg = _('api token not found')
+                error_msg = 'api token not found'
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
             rat.delete()
         except Exception as e:
             logger.error('user: %s delete repo: %s app_name: %s error: %s', username, repo_id, app_name, e)
-            error_msg = _('Internal Server Error.')
+            error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         return Response({'success': True})
 
@@ -134,18 +134,18 @@ class RepoAPITokenView(APIView):
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = _('Library %(repo_id)s not found.' % {'repo_id': repo_id})
+            error_msg = 'Library %(repo_id)s not found.' % {'repo_id': repo_id}
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
         if not permission_check_admin_owner(username, repo_id, request):
-            error_msg = _('Permission denied.')
+            error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         rat = RepoAPITokens.objects.filter(app_name=app_name, repo_id=repo_id).first()
         if not rat:
-            error_msg = _('api token not found')
+            error_msg = 'api token not found'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
@@ -153,7 +153,7 @@ class RepoAPITokenView(APIView):
             rat.save()
         except Exception as e:
             logger.error('user: %s update repo: %s app_name: %s error: %s', username, repo_id, app_name, e)
-            error_msg = _('Internal Server Error.')
+            error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(_get_repo_token_info(rat))

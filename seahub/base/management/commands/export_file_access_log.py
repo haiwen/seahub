@@ -94,5 +94,5 @@ class Command(BaseCommand):
             data_list.append(row)
 
         excel_name = 'file-access-logs.xlsx'
-        wb = write_xls(_('file-access-logs'), head, data_list)
+        wb = write_xls('file-access-logs', head, data_list)
         wb.save(posixpath.join(path, excel_name)) if path else wb.save(excel_name)
