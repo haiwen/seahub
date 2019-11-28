@@ -119,19 +119,13 @@ class Item extends Component {
   }
 
   revokeAdmin = () => {
-    this.props.revokeAdmin(this.props.item.email);
+    this.props.revokeAdmin(this.props.item);
   }
 
   onMenuItemClick = (operation) => {
     switch (operation) {
-      case 'Delete':
-        this.props.deleteUser(this.props.item.email);
-        break;
-      case 'Set Admin':
-        this.props.setAdmin(this.props.item.email);
-        break;
       case 'Revoke Admin':
-        this.props.revokeAdmin(this.props.item.email);
+        this.toggleRevokeAdminDialog();
         break;
     }
   }
@@ -149,6 +143,9 @@ class Item extends Component {
   render() {
     const { item } = this.props;
     const { isOpIconShown, isRevokeAdminDialogOpen } = this.state;
+
+    const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
+    const revokeAdminDialogMsg = gettext('Are you sure you want to revoke the admin permission of {placeholder} ?').replace('{placeholder}', itemName);
 
     return (
       <Fragment>
@@ -178,8 +175,9 @@ class Item extends Component {
         {isRevokeAdminDialogOpen &&
           <CommonOperationConfirmationDialog
             title={gettext('Revoke Admin')}
-            message={gettext('Sure ?')}
+            message={revokeAdminDialogMsg}
             executeOperation={this.revokeAdmin}
+            confirmBtnText={gettext('Revoke')}
             toggleDialog={this.toggleRevokeAdminDialog}
           />
         }
@@ -235,13 +233,15 @@ class InstitutionAdmins extends Component {
     });
   }
   
-  revokeAdmin = (email) => {
+  revokeAdmin = (item) => {
+    const email = item.email;
+    const name = item.name;
     seafileAPI.sysAdminUpdateInstitutionUser(this.props.institutionID, email, false).then(res => {
       let userList = this.state.userList.filter(user => {
         return user.email != email;
       });
       this.setState({userList: userList});
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Successfully revoked the admin permission of {placeholder}'.replace('{placeholder}', name)));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
