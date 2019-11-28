@@ -41,22 +41,22 @@ class StatisticFile extends React.Component {
           visited.push(item.visited);
         });
         let addedData = {
-          label: gettext('added'),
+          label: gettext('Added'),
           data: added, 
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let visitedData = {
-          label: gettext('visited'),
+          label: gettext('Visited'),
           data: visited, 
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let modifiedData = {
-          label: gettext('modified'),
+          label: gettext('Modified'),
           data: modified, 
           borderColor: '#72c3fc',
           backgroundColor: '#72c3fc'};
         let deletedData = {
-          label: gettext('deleted'),
+          label: gettext('Deleted'),
           data: deleted, 
           borderColor: '#f75356',
           backgroundColor: '#f75356'};
