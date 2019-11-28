@@ -190,10 +190,6 @@ class AdminInstitutionUser(APIView):
             error_msg = 'email %s invalid' % email
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if user.is_staff:
-            error_msg = "Can't assign system admin as institution admin"
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         is_inst_admin = request.data.get('is_institution_admin')
         if is_inst_admin:
             is_inst_admin = is_inst_admin.lower()
@@ -203,6 +199,9 @@ class AdminInstitutionUser(APIView):
 
         try:
             if is_inst_admin == 'true':
+                if user.is_staff:
+                    error_msg = "Can't assign system admin as institution admin"
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                 # if user is already inst admin, cannot set to institution admin
                 if is_institution_admin(email, institution):
                     error_msg = 'user %s is already admin' % email
