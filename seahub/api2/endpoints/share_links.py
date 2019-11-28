@@ -190,9 +190,26 @@ class ShareLinks(APIView):
 
                 fileshares = filter(lambda fs: fs.path == path, fileshares)
 
+        repo_folder_permission_dict = {}
+        for fileshare in fileshares:
+
+            if fileshare.s_type == 'd':
+                folder_path = normalize_dir_path(fileshare.path)
+            else:
+                file_path = normalize_file_path(fileshare.path)
+                folder_path = os.path.dirname(file_path)
+
+            repo_id = fileshare.repo_id
+            if repo_id not in repo_folder_permission_dict:
+                permission = seafile_api.check_permission_by_path(repo_id,
+                        folder_path, fileshare.username)
+                repo_folder_permission_dict[repo_id] = permission
+
         links_info = []
         for fs in fileshares:
             link_info = get_share_link_info(fs)
+            link_info['repo_folder_permission'] = \
+                    repo_folder_permission_dict.get(link_info['repo_id'], '')
             links_info.append(link_info)
 
         if len(links_info) == 1:
