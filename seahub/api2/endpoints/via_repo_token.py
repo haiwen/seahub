@@ -26,7 +26,7 @@ import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
 from seahub.constants import PERMISSION_READ
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
-    normalize_file_path, render_error, gen_file_get_url
+    normalize_file_path, render_error, gen_file_get_url, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
@@ -366,8 +366,9 @@ class ViaRepoUploadLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_443_ABOVE_QUOTA, "Out of quota.")
 
+        obj_id = json.dumps({'anonymous_user': request.repo_api_token_obj.app_name}) if is_pro_version() else 'dummy'
         token = seafile_api.get_fileserver_access_token(repo_id,
-                                                        'dummy', 'upload', request.repo_api_token_obj.app_name,
+                                                        obj_id, 'upload', '',
                                                         use_onetime=False)
 
         if not token:
