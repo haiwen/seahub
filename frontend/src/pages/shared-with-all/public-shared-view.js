@@ -58,7 +58,6 @@ class PublicSharedView extends React.Component {
             isLoading: false,
             errMessage: gettext('Permission denied')
           });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,

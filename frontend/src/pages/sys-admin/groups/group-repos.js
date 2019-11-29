@@ -168,7 +168,6 @@ class GroupRepos extends Component {
             loading: false,
             errorMsg: gettext('Permission denied')
           });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,

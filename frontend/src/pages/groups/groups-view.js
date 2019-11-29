@@ -149,7 +149,6 @@ class GroupsView extends React.Component {
             isLoading: false,
             errorMsg: gettext('Permission denied')
           });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,

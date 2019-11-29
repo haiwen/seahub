@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { navigate } from '@reach/router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
-import { gettext, loginUrl, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
 import ModalPortal from './components/modal-portal';
@@ -61,7 +61,6 @@ class RepoFolderTrash extends React.Component {
             isLoading: false,
             errorMsg: gettext('Permission denied')
           }); 
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
@@ -144,7 +143,6 @@ class RepoFolderTrash extends React.Component {
             isLoading: false,
             errorMsg: gettext('Permission denied')
           }); 
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
