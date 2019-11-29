@@ -615,7 +615,7 @@ export const Utils = {
       case 'cloud_edit':
         return {
           value: permission,
-          text: gettext('Edit on cloud'),
+          text: gettext('Edit on cloud only'),
           permissionDetails: {
             'can_edit': true,
             "can_download": false

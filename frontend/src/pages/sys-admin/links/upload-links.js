@@ -117,7 +117,7 @@ class Item extends Component {
           <td>{moment(item.ctime).fromNow()}</td>
           <td>{item.view_cnt}</td>
           <td>
-            <a href="#" className={deleteIcon} title={gettext('delete')} onClick={this.deleteUploadLink}></a>
+            <a href="#" className={deleteIcon} title={gettext('Remove')} onClick={this.deleteUploadLink}></a>
           </td>
         </tr>
       </Fragment>

@@ -238,7 +238,7 @@ class SearchUsers extends Component {
       this.setState({
         userList: userList
       });
-      toaster.success(gettext('Successfully revoked the admin permission of {placeholder}'.replace('{placeholder}', name)));
+      toaster.success(gettext('Successfully revoked the admin permission of {placeholder}.').replace('{placeholder}', name));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

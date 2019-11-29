@@ -176,7 +176,7 @@ class Item extends Component {
           <ModalPortal>
             <CommonOperationConfirmationDialog
               title={gettext('Delete Library')}
-              message={gettext('Are you sure you want to delete {repo_name} completely?').replace('{repo_name}', repoName)}
+              message={gettext('Are you sure you want to delete {placeholder} completely?').replace('{placeholder}', repoName)}
               executeOperation={this.onDeleteRepo}
               confirmBtnText={gettext('Delete')}
               toggleDialog={this.toggleDeleteRepoDialog}
@@ -187,7 +187,7 @@ class Item extends Component {
           <ModalPortal>
             <CommonOperationConfirmationDialog
               title={gettext('Restore Library')}
-              message={gettext('Are you sure you want to restore %s ?').replace('%s', repoName)}
+              message={gettext('Are you sure you want to restore {placeholder}?').replace('{placeholder}', repoName)}
               executeOperation={this.onRestoreRepo}
               confirmBtnText={gettext('Restore')}
               toggleDialog={this.toggleRestoreRepoDialog}
