@@ -212,7 +212,7 @@ class SharedRepoListItem extends React.Component {
         translateResult = gettext('History Setting');
         break;
       case 'API Token':
-        translateResult = gettext('API Token');
+        translateResult = 'API Token'; // translation is not needed here
         break;
       default:
         break;

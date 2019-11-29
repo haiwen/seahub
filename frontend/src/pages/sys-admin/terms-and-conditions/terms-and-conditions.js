@@ -74,7 +74,7 @@ class TermsAndConditions extends Component {
         }
       });
       this.setState({termList: termList});
-      toaster.success(gettext('Successfully update.'));
+      toaster.success(gettext('Update succeeded.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -85,7 +85,7 @@ class TermsAndConditions extends Component {
     seafileAPI.sysAdminDeleteTermAndCondition(termID).then(res => {
       let termList = this.state.termList.filter(item => item.id != termID);
       this.setState({termList: termList});
-      toaster.success(gettext('Successfully deleted.'));
+      toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

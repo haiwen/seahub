@@ -26,7 +26,7 @@ class StatisticReports extends React.Component {
     let url = siteRoot + 'api/v2.1/admin/statistics/';
     let { month } = this.state;
     if (!month) {
-      let errorMessage = gettext('Required field');
+      let errorMessage = gettext('It is required.');
       this.setState({
         errorMessage: errorMessage
       });

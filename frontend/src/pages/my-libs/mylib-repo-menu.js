@@ -106,7 +106,7 @@ class MylibRepoMenu extends React.Component {
         translateResult = gettext('Label Current State');
         break;
       case 'API Token':
-        translateResult = gettext('API Token');
+        translateResult = 'API Token'; // translation is not needed here
         break;
       default:
         break;

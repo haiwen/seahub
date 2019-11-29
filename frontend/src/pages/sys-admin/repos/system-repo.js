@@ -33,7 +33,7 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="33%">{gettext('Name')}</th>
-                <th width="34%">{gettext('ID')}</th>
+                <th width="34%">ID</th>
                 <th width="33%">{gettext('Description')}</th>
               </tr>
             </thead>

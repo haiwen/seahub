@@ -308,20 +308,16 @@ class InstitutionUsers extends Component {
 
   addUser = (emails) => {
     seafileAPI.sysAdminAddInstitutionUserBatch(this.props.institutionID, emails).then(res => {
+      this.toggleAddUserDialog();
       let successArray = res.data.success;
       let failedArray = res.data.failed;
-      let tipStr = gettext('Add {totalCount} members. {successCount} success, {failedCount} failed.')
-        .replace('{totalCount}', emails.length)
-        .replace('{successCount}', successArray.length)
-        .replace('{failedCount}', failedArray.length);
-      if (successArray.length > 0) {
-        toaster.success(tipStr);
-      } else {
-        toaster.danger(tipStr);
+      if (successArray.length) {
+        let newUserList = this.state.userList.concat(successArray);
+        this.setState({userList: newUserList});
       }
-      let newUserList = this.state.userList.concat(successArray);
-      this.setState({userList: newUserList});
-      this.toggleAddUserDialog();
+      failedArray.map((item) => {
+        toaster.danger(item.error_msg);
+      }); 
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

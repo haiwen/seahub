@@ -4,6 +4,7 @@ import {gettext} from '../../utils/constants';
 import {Modal, ModalHeader, ModalBody, Button, Input} from 'reactstrap';
 import RepoAPITokenPermissionEditor from '../select-editor/repo-api-token-permission-editor';
 import {seafileAPI} from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import copy from 'copy-to-clipboard';
 import Loading from '../loading';
@@ -45,7 +46,7 @@ class APITokenItem extends React.Component {
   onCopyAPIToken = () => {
     let api_token = this.props.item.api_token;
     copy(api_token);
-    toaster.success(gettext('API Token is copied to the clipboard.'));
+    toaster.success(gettext('API token is copied to the clipboard.'));
   };
 
   render() {
@@ -63,12 +64,10 @@ class APITokenItem extends React.Component {
           />
         </td>
         <td>
-          <Fragment>
-            <span>{item.api_token}</span>
-            {this.state.isOperationShow &&
-              <span className="far fa-copy action-icon" onClick={this.onCopyAPIToken} />
-            }
-          </Fragment>
+          <span>{item.api_token}</span>
+          {this.state.isOperationShow &&
+          <span className="far fa-copy action-icon" onClick={this.onCopyAPIToken} />
+          }
         </td>
         <td>
           <span
@@ -85,8 +84,6 @@ class APITokenItem extends React.Component {
 APITokenItem.propTypes = apiTokenItemPropTypes;
 
 const propTypes = {
-  // currentTable: PropTypes.object.isRequired,
-  // onTableAPITokenToggle: PropTypes.func.isRequired,
   repo: PropTypes.object.isRequired,
   onRepoAPITokenToggle: PropTypes.func.isRequired,
 };
@@ -217,6 +214,16 @@ class RepoAPITokenDialog extends React.Component {
       );
     });
 
+    const thead = (
+      <thead>
+        <tr>
+          <th width="22%">{gettext('App Name')}</th>
+          <th width="20%">{gettext('Permission')}</th>
+          <th width="48%">API Token</th>
+          <th width="10%"></th>
+        </tr>
+      </thead>
+    );
     return (
       <Fragment>
         {this.state.errorMsg &&
@@ -227,13 +234,7 @@ class RepoAPITokenDialog extends React.Component {
         {!this.state.errorMsg &&
         <div className='mx-5 mb-5' style={{height: 'auto'}}>
           <table>
-            <thead>
-              <tr>
-                <th width="45%">{gettext('App Name')}</th>
-                <th width="40%">{gettext('Permission')}</th>
-                <th width="15%"></th>
-              </tr>
-            </thead>
+            {thead}
             <tbody>
               <tr>
                 <td>
@@ -253,6 +254,7 @@ class RepoAPITokenDialog extends React.Component {
                     onPermissionChanged={this.setPermission}
                   />
                 </td>
+                <td><span className="text-secondary">--</span></td>
                 <td>
                   <Button onClick={this.addAPIToken} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
                 </td>
@@ -262,15 +264,8 @@ class RepoAPITokenDialog extends React.Component {
           {this.state.apiTokenList.length !== 0 &&
           <div className='o-auto' style={{height: 'calc(100% - 91px)'}}>
             <div className="h-100" style={{maxHeight: '18rem'}}>
-              <table>
-                <thead>
-                  <tr>
-                    <th width="22%">{gettext('App Name')}</th>
-                    <th width="15%">{gettext('Permission')}</th>
-                    <th width="53%">{gettext('Access Token')}</th>
-                    <th width="10%"></th>
-                  </tr>
-                </thead>
+              <table className="table-thead-hidden">
+                {thead}
                 <tbody>
                   {renderAPITokenList}
                 </tbody>
@@ -288,17 +283,18 @@ class RepoAPITokenDialog extends React.Component {
   };
 
   render() {
-    // let currentTable = this.props.currentTable;
-    // let name = currentTable.name;
     let repo = this.repo;
 
+    const itemName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name) + '</span>';
+    const title = gettext('{placeholder} API Token').replace('{placeholder}', itemName);
     return (
       <Modal
-        isOpen={true} className="share-dialog" style={{maxWidth: '720px'}}
+        isOpen={true} className="share-dialog" style={{maxWidth: '800px'}}
         toggle={this.props.onRepoAPITokenToggle}
       >
         <ModalHeader toggle={this.props.onRepoAPITokenToggle}>
-          {gettext('API Token')} <span className="op-target" title={repo.repo_name}>{repo.repo_name}</span></ModalHeader>
+          <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
+        </ModalHeader>
         <ModalBody className="share-dialog-content">
           {this.renderContent()}
         </ModalBody>
