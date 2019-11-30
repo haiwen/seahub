@@ -30,7 +30,7 @@ from seahub.two_factor.models import default_device
 from seahub.profile.models import Profile
 from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX, \
     NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT
-from seahub.utils import is_valid_username, is_org_context, \
+from seahub.utils import is_valid_username2, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
         gen_shared_link, gen_shared_upload_link
@@ -395,7 +395,7 @@ class AdminUsers(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         email = request.data.get('email', None)
-        if not email or not is_valid_username(email):
+        if not email or not is_valid_email(email):
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -435,7 +435,7 @@ class AdminUsers(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         contact_email = request.data.get('contact_email', None)
-        if contact_email and not is_valid_username(contact_email):
+        if contact_email and not is_valid_email(contact_email):
             error_msg = 'contact_email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -849,7 +849,7 @@ class AdminUserResetPassword(APIView):
         1. only admin can perform this action.
         """
 
-        if not is_valid_username(email):
+        if not is_valid_username2(email):
             error_msg = 'email invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -905,10 +905,6 @@ class AdminUserGroups(APIView):
         Permission checking:
         1. Admin user;
         """
-
-        if not is_valid_username(email):
-            error_msg = 'email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             User.objects.get(email=email)
@@ -971,9 +967,6 @@ class AdminUserShareLinks(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
-        if not is_valid_username(email):
-            error_msg = 'email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             User.objects.get(email=email)
@@ -1004,10 +997,6 @@ class AdminUserUploadLinks(APIView):
         1. only admin can perform this action.
         """
 
-        if not is_valid_username(email):
-            error_msg = 'email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         try:
             User.objects.get(email=email)
         except User.DoesNotExist as e:
@@ -1037,10 +1026,6 @@ class AdminUserBeSharedRepos(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
-
-        if not is_valid_username(email):
-            error_msg = 'email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             User.objects.get(email=email)
