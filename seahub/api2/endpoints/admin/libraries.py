@@ -56,7 +56,7 @@ def get_repo_info(repo):
     result['encrypted'] = repo.encrypted
     result['file_count'] = repo.file_count
     result['status'] = normalize_repo_status_code(repo.status)
-    result['last_modify'] = timestamp_to_isoformat_timestr(repo.last_modified)
+    result['last_modified'] = timestamp_to_isoformat_timestr(repo.last_modified)
 
     if '@seafile_group' in owner:
         group_id = get_group_id_by_repo_owner(owner)
