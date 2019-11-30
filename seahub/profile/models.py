@@ -23,7 +23,8 @@ class DuplicatedContactEmailError(Exception):
 
 class ProfileManager(models.Manager):
     def add_or_update(self, username, nickname=None, intro=None, lang_code=None,
-                      login_id=None, contact_email=None, institution=None, list_in_address_book=None):
+                      login_id=None, contact_email=None, institution=None, list_in_address_book=None,
+                      ocm_user=None, ocm_server=None):
         """Add or update user profile.
         """
         try:
@@ -49,6 +50,10 @@ class ProfileManager(models.Manager):
             profile.institution = institution
         if list_in_address_book is not None:
             profile.list_in_address_book = list_in_address_book.lower() == 'true'
+        if ocm_user is not None:
+            profile.ocm_user = ocm_user
+        if ocm_server is not None:
+            profile.ocm_server = ocm_server
 
         try:
             profile.save(using=self._db)
@@ -167,6 +172,9 @@ class Profile(models.Model):
     contact_email = models.EmailField(max_length=225, unique=True, null=True, blank=True)
     institution = models.CharField(max_length=225, db_index=True, null=True, blank=True, default='')
     list_in_address_book = models.BooleanField(default=False, db_index=True)
+    ocm_user = models.NullBooleanField(default=False, null=True, blank=True)
+    ocm_server = models.URLField(null=True, blank=True)
+
     objects = ProfileManager()
 
     def set_lang_code(self, lang_code):

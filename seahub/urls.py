@@ -93,6 +93,7 @@ from seahub.api2.endpoints.repo_api_tokens import RepoAPITokensView, RepoAPIToke
 from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLinkView, RepoInfoView, \
     ViaRepoDownloadLinkView
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
+from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMSharesReceivedView
 
 # Admin
 from seahub.api2.endpoints.admin.abuse_reports import AdminAbuseReportsView, AdminAbuseReportView
@@ -417,6 +418,13 @@ urlpatterns = [
 
     ## user::activities
     url(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
+
+    ## user::ocm
+    url(r'api/v2.1/ocm/ocm-provider/$', OCMProtocolView.as_view(), name='api-v2.1-ocm-protocol'),
+    url(r'api/v2.1/ocm/shares/$', OCMSharesView.as_view(), name='api-v2.1-ocm-shares'),
+    #url(r'api/v2.1/ocm/shares/notifications/$', OCMShareView.as_view(), name='api-v2.1-ocm-share'),
+    url(r'api/v2.1/ocm/shares-received/$', OCMSharesReceivedView.as_view(), name='api-v2.1-ocm-shares-received'),
+    #url(r'api/v2.1/ocm/shares-received/notifications/$', OCMShareReceivedView.as_view(), name='api-v2.1-ocm-share-received'),
 
     # admin: activities
     url(r'^api/v2.1/admin/user-activities/$', UserActivitiesView.as_view(), name='api-v2.1-admin-user-activity'),

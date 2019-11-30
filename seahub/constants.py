@@ -29,3 +29,7 @@ HASH_URLS = {
         'GROUP_DISCUSS': settings.SITE_ROOT + '#group/%(group_id)s/discussions/',
         'SYS_REPO_ADMIN': settings.SITE_ROOT + 'sysadmin/#all-libs/',
         }
+
+# ocm notification types
+OCM_NOTIFICATION_SHARE_DECLINED = 'SHARE_DECLINED'    # consumer delete a share
+OCM_NOTIFICATION_SHARE_UNSHARED = 'SHARE_UNSHARED'    # provider delete a share
