@@ -188,7 +188,7 @@ class Item extends Component {
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td>{this.renderRepoName()}</td>
           <td>{Utils.bytesToSize(item.size)}</td>
-          <td>{moment(item.last_modify).fromNow()}</td>
+          <td>{moment(item.last_modified).fromNow()}</td>
           <td>
             {isOpIconShown &&
             <OpMenu
