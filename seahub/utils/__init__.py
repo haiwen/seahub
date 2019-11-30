@@ -285,6 +285,11 @@ def is_valid_username(username):
     """
     return is_valid_email(username)
 
+def is_valid_username2(username):
+    """ New username check function, old version is used by many others, stay put
+    """
+    return (not username.startswith(' ')) and (not username.endswith(' '))
+
 def is_valid_dirent_name(name):
     """Check whether repo/dir/file name is valid.
     """
