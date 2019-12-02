@@ -114,7 +114,7 @@ class AdminSysNotificationView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        cache.set('CUR_TOPINFO', notification_list[0],
+        cache.set('CUR_TOPINFO', notification_list,
                   NOTIFICATION_CACHE_TIMEOUT)
 
         notification_info = get_notification_info(notification_list[0])
