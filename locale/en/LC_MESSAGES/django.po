@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-29 15:22+0800\n"
+"POT-Creation-Date: 2019-12-02 18:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,16 +113,16 @@ msgid ""
 "Failed to add %s to the institution: user already belongs to this institution"
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:230 seahub/views/sysadmin.py:1864
+#: seahub/api2/endpoints/admin/libraries.py:232 seahub/views/sysadmin.py:1864
 msgid "System library can not be deleted."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:347 seahub/api2/views.py:1606
+#: seahub/api2/endpoints/admin/libraries.py:349 seahub/api2/views.py:1606
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:368 seahub/api2/views.py:1611
+#: seahub/api2/endpoints/admin/libraries.py:370 seahub/api2/views.py:1611
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -2483,7 +2483,7 @@ msgstr[1] ""
 #: seahub/notifications/models.py:643 seahub/notifications/models.py:665
 #: seahub/notifications/models.py:691 seahub/notifications/models.py:708
 #: seahub/notifications/models.py:725 seahub/notifications/models.py:754
-#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1181
+#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1186
 msgid "Internal error"
 msgstr ""
 
