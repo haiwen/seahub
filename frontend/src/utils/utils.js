@@ -142,9 +142,12 @@ export const Utils = {
       if (this.isEditableOfficeFile(path) && (permission == 'rw' || permission == 'admin')) {
         permissionOptions.push(editDownloadOption);
       }
-      if (this.isEditableOfficeFile(path) && (permission == 'cloud-edit')) {
-        permissionOptions.push(editOnly);
-      }
+
+      // not support
+      // if (this.isEditableOfficeFile(path) && (permission == 'cloud-edit')) {
+      //   permissionOptions.push(editOnly);
+      // }
+
     }
     return permissionOptions;
   },
