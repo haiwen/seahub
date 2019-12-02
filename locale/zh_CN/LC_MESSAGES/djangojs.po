@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-29 15:22+0800\n"
-"PO-Revision-Date: 2019-11-29 08:18+0000\n"
+"POT-Creation-Date: 2019-12-02 18:10+0800\n"
+"PO-Revision-Date: 2019-12-02 10:20+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -323,7 +323,7 @@ msgstr "描述"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:64
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:45
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:60
-#: frontend/src/components/dialog/transfer-dialog.js:102
+#: frontend/src/components/dialog/transfer-dialog.js:104
 #: frontend/src/components/dialog/update-webdav-password.js:68
 #: frontend/src/components/dialog/upload-remind-dialog.js:44
 #: frontend/src/components/dialog/view-link-dialog.js:37
@@ -415,7 +415,7 @@ msgstr "取消"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:263
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:238
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:61
-#: frontend/src/components/dialog/transfer-dialog.js:103
+#: frontend/src/components/dialog/transfer-dialog.js:105
 #: frontend/src/components/dialog/transfer-group-dialog.js:69
 #: frontend/src/components/dialog/update-webdav-password.js:69
 #: frontend/src/components/dialog/wiki-select-dialog.js:83
@@ -1851,7 +1851,7 @@ msgstr "新建部门"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:39
 #: frontend/src/pages/org-admin/org-department-item.js:163
 #: frontend/src/pages/sys-admin/departments/department-detail.js:168
-#: frontend/src/pages/sys-admin/groups/group-members.js:253
+#: frontend/src/pages/sys-admin/groups/group-members.js:252
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:345
 #: frontend/src/pages/sys-admin/orgs/org-users.js:334
 msgid "Add Member"
@@ -2306,7 +2306,7 @@ msgstr "（如果为空，拥有者将为管理员）"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:85
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:86
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:51
-#: frontend/src/components/dialog/transfer-dialog.js:81
+#: frontend/src/components/dialog/transfer-dialog.js:83
 msgid "Select a user"
 msgstr "选择一个用户"
 
@@ -2354,7 +2354,7 @@ msgid "End date"
 msgstr "结束日期"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:34
-#: frontend/src/components/dialog/transfer-dialog.js:63
+#: frontend/src/components/dialog/transfer-dialog.js:65
 msgid "Transfer Library {library_name}"
 msgstr "转让资料库 {library_name}"
 
@@ -2392,15 +2392,15 @@ msgstr "断开连接"
 msgid "Terms"
 msgstr "使用条款"
 
-#: frontend/src/components/dialog/transfer-dialog.js:90
+#: frontend/src/components/dialog/transfer-dialog.js:92
 msgid "Select a department"
 msgstr "选择一个部门"
 
-#: frontend/src/components/dialog/transfer-dialog.js:97
+#: frontend/src/components/dialog/transfer-dialog.js:99
 msgid "Transfer to department"
 msgstr "转让给部门"
 
-#: frontend/src/components/dialog/transfer-dialog.js:97
+#: frontend/src/components/dialog/transfer-dialog.js:99
 msgid "Transfer to user"
 msgstr "转让给用户"
 
@@ -4497,15 +4497,15 @@ msgstr "确定要移除 {placeholder} 吗？"
 msgid "Remove Member"
 msgstr "移除成员"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:198
+#: frontend/src/pages/sys-admin/groups/group-members.js:197
 msgid "Successfully added {email_placeholder}"
 msgstr "成功添加 {email_placeholder}"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:204
+#: frontend/src/pages/sys-admin/groups/group-members.js:203
 msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
 msgstr "添加 {email_placeholder} 失败： {error_msg_placeholder}"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:223
+#: frontend/src/pages/sys-admin/groups/group-members.js:222
 msgid "Successfully removed {placeholder}."
 msgstr "成功移除 {placeholder}。"
 
@@ -5360,6 +5360,72 @@ msgstr "你也可以按→"
 #: frontend/src/tc-accept.js:41
 msgid "Accept"
 msgstr "接受"
+
+#: frontend/src/translate.js:3
+msgid "You have not shared any folders"
+msgstr "你还没有共享任何文件夹"
+
+#: frontend/src/translate.js:4
+msgid "You don't have any share links"
+msgstr "你没有任何分享链接。"
+
+#: frontend/src/translate.js:5
+msgid "You don't have any upload links"
+msgstr "你还没有任何上传外链"
+
+#: frontend/src/translate.js:6
+msgid "You don't have any favorite items yet"
+msgstr "你还没有任何星标项目"
+
+#: frontend/src/translate.js:7
+msgid "Modify"
+msgstr "修改"
+
+#: frontend/src/translate.js:8
+msgid "Import Users"
+msgstr "导入用户"
+
+#: frontend/src/translate.js:9
+msgid "No connected devices"
+msgstr "没有链接的客户端"
+
+#: frontend/src/translate.js:10
+msgid "No sync errors"
+msgstr "没有同步错误"
+
+#: frontend/src/translate.js:11
+msgid "No groups"
+msgstr "没有群组"
+
+#: frontend/src/translate.js:12
+msgid "No notifications"
+msgstr "没有通知"
+
+#: frontend/src/translate.js:13
+msgid "Notification Detail"
+msgstr "通知内容"
+
+#: frontend/src/translate.js:14
+msgid "No share links"
+msgstr "没有共享外链"
+
+#: frontend/src/translate.js:15
+msgid "No upload links"
+msgstr "没有上传外链"
+
+#: frontend/src/translate.js:16
+msgid "No invitations"
+msgstr "没有邀请"
+
+#: frontend/src/translate.js:17
+msgid "No terms and conditions"
+msgstr "没有条款"
+
+#: frontend/src/translate.js:18
+msgid ""
+"Tip: libraries deleted {trashReposExpireDays} days ago will be cleaned "
+"automatically."
+msgstr "提示：{trashReposExpireDays} 天前删除的资料库会被自动清空。"
 
 #: frontend/src/utils/text-translation.js:16
 msgid "Open via Client"

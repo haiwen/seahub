@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-29 15:22+0800\n"
-"PO-Revision-Date: 2019-11-29 11:01+0000\n"
-"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
+"POT-Creation-Date: 2019-12-02 18:10+0800\n"
+"PO-Revision-Date: 2019-12-02 10:10+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -325,7 +325,7 @@ msgstr "Beschreibung"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:64
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:45
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:60
-#: frontend/src/components/dialog/transfer-dialog.js:102
+#: frontend/src/components/dialog/transfer-dialog.js:104
 #: frontend/src/components/dialog/update-webdav-password.js:68
 #: frontend/src/components/dialog/upload-remind-dialog.js:44
 #: frontend/src/components/dialog/view-link-dialog.js:37
@@ -417,7 +417,7 @@ msgstr "Abbrechen"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:263
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:238
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:61
-#: frontend/src/components/dialog/transfer-dialog.js:103
+#: frontend/src/components/dialog/transfer-dialog.js:105
 #: frontend/src/components/dialog/transfer-group-dialog.js:69
 #: frontend/src/components/dialog/update-webdav-password.js:69
 #: frontend/src/components/dialog/wiki-select-dialog.js:83
@@ -1853,7 +1853,7 @@ msgstr "Neuer Bereich"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:39
 #: frontend/src/pages/org-admin/org-department-item.js:163
 #: frontend/src/pages/sys-admin/departments/department-detail.js:168
-#: frontend/src/pages/sys-admin/groups/group-members.js:253
+#: frontend/src/pages/sys-admin/groups/group-members.js:252
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:345
 #: frontend/src/pages/sys-admin/orgs/org-users.js:334
 msgid "Add Member"
@@ -2308,7 +2308,7 @@ msgstr "(Eigentümer/in wird Admin, wenn nichts anderes eingetragen)"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:85
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:86
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:51
-#: frontend/src/components/dialog/transfer-dialog.js:81
+#: frontend/src/components/dialog/transfer-dialog.js:83
 msgid "Select a user"
 msgstr "Benutzer/in auswählen"
 
@@ -2356,7 +2356,7 @@ msgid "End date"
 msgstr "Enddatum"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:34
-#: frontend/src/components/dialog/transfer-dialog.js:63
+#: frontend/src/components/dialog/transfer-dialog.js:65
 msgid "Transfer Library {library_name}"
 msgstr "Übertragen von Bibliothek {library_name}"
 
@@ -2394,15 +2394,15 @@ msgstr "Verbindung trennen"
 msgid "Terms"
 msgstr "Nutzungsbedingungen"
 
-#: frontend/src/components/dialog/transfer-dialog.js:90
+#: frontend/src/components/dialog/transfer-dialog.js:92
 msgid "Select a department"
 msgstr "Bereich auswählen"
 
-#: frontend/src/components/dialog/transfer-dialog.js:97
+#: frontend/src/components/dialog/transfer-dialog.js:99
 msgid "Transfer to department"
 msgstr "Übertragen auf Bereich"
 
-#: frontend/src/components/dialog/transfer-dialog.js:97
+#: frontend/src/components/dialog/transfer-dialog.js:99
 msgid "Transfer to user"
 msgstr "Übertragen auf Benutzer/in"
 
@@ -4499,15 +4499,15 @@ msgstr "Möchten Sie {placeholder} wirklich entfernen?"
 msgid "Remove Member"
 msgstr "Mitglied entfernen"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:198
+#: frontend/src/pages/sys-admin/groups/group-members.js:197
 msgid "Successfully added {email_placeholder}"
 msgstr "{email_placeholder} wurde hinzugefügt."
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:204
+#: frontend/src/pages/sys-admin/groups/group-members.js:203
 msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
 msgstr "Hinzufügen von {email_placeholder} fehlgeschlagen: {error_msg_placeholder}"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:223
+#: frontend/src/pages/sys-admin/groups/group-members.js:222
 msgid "Successfully removed {placeholder}."
 msgstr "{placeholder} ist entfernt."
 
@@ -5362,6 +5362,72 @@ msgstr "Sie können auch → (Pfeil rechts) verwenden "
 #: frontend/src/tc-accept.js:41
 msgid "Accept"
 msgstr "Annehmen"
+
+#: frontend/src/translate.js:3
+msgid "You have not shared any folders"
+msgstr "Sie haben keine Ordner freigegeben"
+
+#: frontend/src/translate.js:4
+msgid "You don't have any share links"
+msgstr "Sie haben keine geteilten Links"
+
+#: frontend/src/translate.js:5
+msgid "You don't have any upload links"
+msgstr "Sie haben keine Upload-Links"
+
+#: frontend/src/translate.js:6
+msgid "You don't have any favorite items yet"
+msgstr "Sie haben noch keine Objekte als Favoriten markiert"
+
+#: frontend/src/translate.js:7
+msgid "Modify"
+msgstr "Ändern"
+
+#: frontend/src/translate.js:8
+msgid "Import Users"
+msgstr ""
+
+#: frontend/src/translate.js:9
+msgid "No connected devices"
+msgstr "Keine Geräte verbunden"
+
+#: frontend/src/translate.js:10
+msgid "No sync errors"
+msgstr "Keine Fehler beim Synchronisieren"
+
+#: frontend/src/translate.js:11
+msgid "No groups"
+msgstr "Keine Gruppen"
+
+#: frontend/src/translate.js:12
+msgid "No notifications"
+msgstr ""
+
+#: frontend/src/translate.js:13
+msgid "Notification Detail"
+msgstr "Text"
+
+#: frontend/src/translate.js:14
+msgid "No share links"
+msgstr ""
+
+#: frontend/src/translate.js:15
+msgid "No upload links"
+msgstr ""
+
+#: frontend/src/translate.js:16
+msgid "No invitations"
+msgstr ""
+
+#: frontend/src/translate.js:17
+msgid "No terms and conditions"
+msgstr ""
+
+#: frontend/src/translate.js:18
+msgid ""
+"Tip: libraries deleted {trashReposExpireDays} days ago will be cleaned "
+"automatically."
+msgstr ""
 
 #: frontend/src/utils/text-translation.js:16
 msgid "Open via Client"

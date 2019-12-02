@@ -73,7 +73,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-29 15:22+0800\n"
+"POT-Creation-Date: 2019-12-02 18:10+0800\n"
 "PO-Revision-Date: 2019-11-29 10:54+0000\n"
 "Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
@@ -180,16 +180,16 @@ msgid ""
 "institution"
 msgstr "%s gehört bereits zu der Einrichtung und kann nicht erneut zugewiesen werden"
 
-#: seahub/api2/endpoints/admin/libraries.py:230 seahub/views/sysadmin.py:1864
+#: seahub/api2/endpoints/admin/libraries.py:232 seahub/views/sysadmin.py:1864
 msgid "System library can not be deleted."
 msgstr "Eine System-Bibliothek kann nicht gelöscht werden. "
 
-#: seahub/api2/endpoints/admin/libraries.py:347 seahub/api2/views.py:1606
+#: seahub/api2/endpoints/admin/libraries.py:349 seahub/api2/views.py:1606
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr "Fehler beim Übertragen: Die Rolle von %s ist %s. Die Bibliothek kann nicht zugeordnet werden."
 
-#: seahub/api2/endpoints/admin/libraries.py:368 seahub/api2/views.py:1611
+#: seahub/api2/endpoints/admin/libraries.py:370 seahub/api2/views.py:1611
 msgid "Library can not be transferred to owner."
 msgstr "Bibliotheken können nicht auf ihre Eigentümer/innen übertragen werden."
 
@@ -2562,7 +2562,7 @@ msgstr[1] "\nauf %(site_name)s gibt es %(num)s neue Mitteilungen für Sie:\n"
 #: seahub/notifications/models.py:643 seahub/notifications/models.py:665
 #: seahub/notifications/models.py:691 seahub/notifications/models.py:708
 #: seahub/notifications/models.py:725 seahub/notifications/models.py:754
-#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1181
+#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1186
 msgid "Internal error"
 msgstr "Interner Fehler"
 
