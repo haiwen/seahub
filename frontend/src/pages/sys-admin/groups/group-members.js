@@ -190,9 +190,8 @@ class GroupMembers extends Component {
     seafileAPI.sysAdminAddGroupMember(this.props.groupID, emails).then(res => {
       let newMemberList = res.data.success;
       if (newMemberList.length) {
-        newMemberList = newMemberList.concat(this.state.memberList);
         this.setState({
-          memberList: newMemberList
+          memberList: newMemberList.concat(this.state.memberList)
         });
         newMemberList.map(item => {
           const msg = gettext('Successfully added {email_placeholder}')
