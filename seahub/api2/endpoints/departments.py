@@ -14,6 +14,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, get_default_group_avatar_url
+from seahub.utils import is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import is_group_member
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
@@ -30,6 +31,9 @@ class Departments(APIView):
     def get(self, request):
         """list all departments
         """
+
+        if not is_pro_version():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             departments = ccnet_api.list_all_departments()
