@@ -109,28 +109,13 @@ class Item extends Component {
 
   updatePermissionOptions = () => {
     const item = this.props.item;
-    if (item.is_dir && item.path === '/') {
-      let permissionOptions = Utils.getShareLinkPermissionList('library', '', item.path);
-      this.setState({
-        permissionOptions: permissionOptions,
-      });
-    } else {
-      let { repo_id, path } = item;
-      let getDirentInfoAPI = item.is_dir ? seafileAPI.getDirInfo(repo_id, path) : seafileAPI.getFileInfo(repo_id, path);
-      getDirentInfoAPI.then((res) => {
-        let itemType = item.is_dir ? 'dir' : 'file';
-        let permission = res.data.permission;
-        let permissionOptions = Utils.getShareLinkPermissionList(itemType, permission, item.path);
-        this.setState({
-          permissionOptions: permissionOptions,
-        });
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
+    let itemType = item.is_dir ? (item.path === '/' ? 'library' : 'dir') : 'file';
+    let permission = item.repo_folder_permission;
+    let permissionOptions = Utils.getShareLinkPermissionList(itemType, permission, item.path);
+    let currentPermission = this.getCurrentPermission();
     this.setState({
-      currentPermission: this.getCurrentPermission(),
+      permissionOptions: permissionOptions,
+      currentPermission: currentPermission
     });
   }
 
