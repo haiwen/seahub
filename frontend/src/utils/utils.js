@@ -116,7 +116,7 @@ export const Utils = {
     }
   },
 
-  getShareLinkPermissionList: function(itemType, permission, path) {
+  getShareLinkPermissionList: function(itemType, permission = null, path, canEdit = null) {
     // itemType: library, dir, file
     // permission: rw, r, admin, cloud-edit, preview
 
@@ -139,7 +139,7 @@ export const Utils = {
       if (permission == 'rw' || permission == 'admin' || permission == 'r') {
         permissionOptions.push(downloadOption);
       }
-      if (this.isEditableOfficeFile(path) && (permission == 'rw' || permission == 'admin')) {
+      if (this.isEditableOfficeFile(path) && (permission == 'rw' || permission == 'admin') && canEdit) {
         permissionOptions.push(editDownloadOption);
       }
 

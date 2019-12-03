@@ -111,7 +111,7 @@ class Item extends Component {
     const item = this.props.item;
     let itemType = item.is_dir ? (item.path === '/' ? 'library' : 'dir') : 'file';
     let permission = item.repo_folder_permission;
-    let permissionOptions = Utils.getShareLinkPermissionList(itemType, permission, item.path);
+    let permissionOptions = Utils.getShareLinkPermissionList(itemType, permission, item.path, item.can_edit);
     let currentPermission = this.getCurrentPermission();
     this.setState({
       permissionOptions: permissionOptions,
