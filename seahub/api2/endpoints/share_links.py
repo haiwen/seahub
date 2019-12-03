@@ -88,6 +88,16 @@ def get_share_link_info(fileshare):
     data['expire_date'] = expire_date
     data['is_expired'] = fileshare.is_expired()
     data['permissions'] = fileshare.get_permissions()
+
+    data['can_edit'] = False
+    if repo and path != '/' and not data['is_dir']:
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
+        try:
+            can_edit, _ = can_edit_file(obj_name, dirent.size, repo)
+            data['can_edit'] = can_edit
+        except Exception as e:
+            logger.error(e)
+
     return data
 
 def check_permissions_arg(request):
@@ -141,7 +151,7 @@ class ShareLinks(APIView):
         if not repo_id and not path:
             fileshares = FileShare.objects.filter(username=username)
 
-        # only filter share links by repo
+        # share links in repo
         if repo_id and not path:
             repo = seafile_api.get_repo(repo_id)
             if not repo:
@@ -151,7 +161,7 @@ class ShareLinks(APIView):
             fileshares = FileShare.objects.filter(username=username) \
                                           .filter(repo_id=repo_id)
 
-        # filter share links by repo and path
+        # share links by repo and path
         if repo_id and path:
             repo = seafile_api.get_repo(repo_id)
             if not repo:
@@ -301,8 +311,8 @@ class ShareLinks(APIView):
             s_type = 'd' if stat.S_ISDIR(dirent.mode) else 'f'
             if s_type == 'f':
                 file_name = os.path.basename(path.rstrip('/'))
-                if not can_edit_file(file_name, dirent.size, repo) \
-                        and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
+                can_edit, _ = can_edit_file(file_name, dirent.size, repo)
+                if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         else:
@@ -418,8 +428,8 @@ class ShareLink(APIView):
 
         if fs.s_type == 'f':
             file_name = os.path.basename(fs.path.rstrip('/'))
-            if not can_edit_file(file_name, dirent.size, repo) \
-                    and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
+            can_edit, _ = can_edit_file(file_name, dirent.size, repo)
+            if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
