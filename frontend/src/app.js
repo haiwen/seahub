@@ -19,6 +19,7 @@ import ShareAdminFolders from './pages/share-admin/folders';
 import ShareAdminShareLinks from './pages/share-admin/share-links';
 import ShareAdminUploadLinks from './pages/share-admin/upload-links';
 import SharedLibraries from './pages/shared-libs/shared-libs';
+import ShareWithOCM from './pages/share-with-ocm/shared-with-ocm';
 import MyLibraries from './pages/my-libs/my-libs';
 import MyLibDeleted from './pages/my-libs/my-libs-deleted';
 import PublicSharedView from './pages/shared-with-all/public-shared-view';
@@ -38,6 +39,7 @@ const DraftsViewWrapper = MainContentWrapper(DraftsView);
 const StarredWrapper = MainContentWrapper(Starred);
 const LinkedDevicesWrapper = MainContentWrapper(LinkedDevices);
 const SharedLibrariesWrapper = MainContentWrapper(SharedLibraries);
+const SharedWithOCMWrapper = MainContentWrapper(ShareWithOCM);
 const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
 const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
 const ShareAdminShareLinksWrapper = MainContentWrapper(ShareAdminShareLinks);
@@ -257,6 +259,7 @@ class App extends Component {
               <ShareAdminShareLinksWrapper path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <SharedWithOCMWrapper path={siteRoot + 'shared-with-ocm'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
               <LibContentView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>

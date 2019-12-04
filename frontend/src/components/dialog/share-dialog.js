@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../../utils/constants';
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, enableOCM } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import ShareToInvitePeople from './share-to-invite-people';
 import GenerateShareLink from './generate-share-link';
 import GenerateUploadLink from './generate-upload-link';
+import ShareToOtherServer from './share-to-other-server';
 import InternalLink from './internal-link';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../loading';
@@ -127,6 +128,13 @@ class ShareDialog extends React.Component {
                 }
               </Fragment>
             }
+            {enableOCM && itemType === 'library' &&
+              <NavItem>
+                <NavLink className={activeTab === 'shareToOtherServer' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToOtherServer')}>
+                  {gettext('Share to other server')}
+                </NavLink>
+              </NavItem>
+            }
           </Nav>
         </div>
         <div className="share-dialog-main">
@@ -175,6 +183,11 @@ class ShareDialog extends React.Component {
                   </TabPane>
                 }
               </Fragment>
+            }
+            {enableOCM && itemType === 'library' && activeTab === 'shareToOtherServer' &&
+              <TabPane tabId="shareToOtherServer">
+                <ShareToOtherServer itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
+              </TabPane>
             }
           </TabContent>
         </div>
