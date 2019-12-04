@@ -93,7 +93,7 @@ def get_share_link_info(fileshare):
     if repo and path != '/' and not data['is_dir']:
         dirent = seafile_api.get_dirent_by_path(repo_id, path)
         try:
-            can_edit, _ = can_edit_file(obj_name, dirent.size, repo)
+            can_edit, error_msg = can_edit_file(obj_name, dirent.size, repo)
             data['can_edit'] = can_edit
         except Exception as e:
             logger.error(e)
@@ -311,7 +311,7 @@ class ShareLinks(APIView):
             s_type = 'd' if stat.S_ISDIR(dirent.mode) else 'f'
             if s_type == 'f':
                 file_name = os.path.basename(path.rstrip('/'))
-                can_edit, _ = can_edit_file(file_name, dirent.size, repo)
+                can_edit, error_msg = can_edit_file(file_name, dirent.size, repo)
                 if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -428,7 +428,7 @@ class ShareLink(APIView):
 
         if fs.s_type == 'f':
             file_name = os.path.basename(fs.path.rstrip('/'))
-            can_edit, _ = can_edit_file(file_name, dirent.size, repo)
+            can_edit, error_msg = can_edit_file(file_name, dirent.size, repo)
             if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
