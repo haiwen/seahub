@@ -198,6 +198,10 @@ class ContextMenu extends React.Component {
     this.props.onMenuItemClick(operation, currentObject, event);
   }
 
+  onContextMenu = (event) => {
+    event.stopPropagation();
+  }
+
   render() {
     const inlineStyle = { position: 'fixed', opacity: 0, pointerEvents: 'none', display: 'block' };
     return (
@@ -212,6 +216,7 @@ class ContextMenu extends React.Component {
                 className="seafile-contextmenu-item dropdown-item" 
                 data-operation={menuItem.key}
                 onClick={this.onMenuItemClick}
+                onContextMenu={this.onContextMenu}
               >
                 {menuItem.value}
               </button>

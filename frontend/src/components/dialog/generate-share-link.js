@@ -76,8 +76,9 @@ class GenerateShareLink extends React.Component {
           getDirentInfoAPI = seafileAPI.getDirInfo(repoID, path);
         }
         getDirentInfoAPI.then((res) => {
+          let canEdit = res.data.can_edit;
           let permission = res.data.permission;
-          let permissionOptions = Utils.getShareLinkPermissionList(this.props.itemType, permission, path);
+          let permissionOptions = Utils.getShareLinkPermissionList(this.props.itemType, permission, path, canEdit);
           this.setState({
             permissionOptions: permissionOptions,
             currentPermission: permissionOptions[0],
