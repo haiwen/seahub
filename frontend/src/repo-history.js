@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { navigate } from '@reach/router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
-import { gettext, loginUrl, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
 import ModalPortal from './components/modal-portal';
@@ -50,25 +50,10 @@ class RepoHistory extends React.Component {
         more: res.data.more
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Permission denied')
-          }); 
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Error')
-          }); 
-        }   
-      } else {
-        this.setState({
-          isLoading: false,
-          errorMsg: gettext('Please check the network.')
-        }); 
-      }   
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      }); 
     });
   }
 

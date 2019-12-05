@@ -3,7 +3,7 @@ import { navigate } from '@reach/router';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { loginUrl, gettext, siteRoot } from '../../../utils/constants';
+import { gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminCreateRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -41,25 +41,10 @@ class AllRepos extends Component {
         pageInfo: res.data.page_info
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          }); 
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          }); 
-        }   
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        }); 
-      }   
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

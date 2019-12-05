@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import InvitationsToolbar from '../../components/toolbar/invitations-toolbar';
@@ -238,25 +238,10 @@ class InvitationsView extends React.Component {
         loading: false
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          }); 
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     }); 
   }
 

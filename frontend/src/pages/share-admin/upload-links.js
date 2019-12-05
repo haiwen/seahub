@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, loginUrl, canGenerateShareLink } from '../../utils/constants';
+import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -208,25 +208,10 @@ class ShareAdminUploadLinks extends Component {
         items: items
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

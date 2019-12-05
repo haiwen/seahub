@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import EmptyTip from '../../components/empty-tip';
@@ -38,28 +39,13 @@ class Wikis extends Component {
     seafileAPI.listWikis().then(res => {
       this.setState({
         loading: false,
-        wikis: res.data.data,
+        wikis: res.data.data
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

@@ -3,6 +3,7 @@ import { Button } from 'reactstrap';
 import _ from 'lodash';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, isPro } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Account from '../../components/common/account';
 import { WorkWeixinDepartmentMembersList, WorkWeixinDepartmentsTreePanel } from './work-weixin';
@@ -279,12 +280,9 @@ class WorkWeixinDepartments extends Component {
     }
   };
 
-  handleError = (e) => {
-    if (e.response) {
-      toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), {duration: 3});
-    } else {
-      toaster.danger(gettext('Please check the network.'), {duration: 3});
-    }
+  handleError = (error) => {
+    const errorMsg = Utils.getErrorMsg(error);
+    toaster.danger(errorMsg);
   }
 
   componentDidMount() {

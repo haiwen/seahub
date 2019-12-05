@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, loginUrl, gettext } from '../../../utils/constants';
+import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
@@ -110,25 +110,10 @@ class DeviceErrors extends Component {
         isCleanBtnShown: res.data.length > 0
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          }); 
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          }); 
-        }   
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        }); 
-      }   
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });    
     });
   }
 
