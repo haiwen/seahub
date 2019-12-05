@@ -60,7 +60,6 @@ module.exports = {
   entry: {
     markdownEditor: [require.resolve('./polyfills'), paths.appIndexJs],
     wiki: [require.resolve('./polyfills'), paths.appSrc + "/wiki.js"],
-    repoview: [require.resolve('./polyfills'), paths.appSrc + "/repo-wiki-mode.js"],
     fileHistory: [require.resolve('./polyfills'), paths.appSrc + "/file-history.js"],
     fileHistoryOld: [require.resolve('./polyfills'), paths.appSrc + "/file-history-old.js"],
     app: [require.resolve('./polyfills'), paths.appSrc + "/app.js"],
