@@ -38,5 +38,4 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1
-          #./tests/install-deps.sh
           if ./tests/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
