@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot, loginUrl } from '../../../utils/constants';
+import { gettext, siteRoot } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
@@ -125,24 +125,10 @@ class Users extends Component {
         currentPage: page
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

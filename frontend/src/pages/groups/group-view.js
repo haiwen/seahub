@@ -2,7 +2,7 @@ import React,{ Fragment } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, siteRoot, username, loginUrl, canAddRepo } from '../../utils/constants';
+import { gettext, siteRoot, username, canAddRepo } from '../../utils/constants';
 import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -94,24 +94,10 @@ class GroupView extends React.Component {
       });
       this.loadRepos(groupID);
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errMessage: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            isLoading: false,
-            errMessage: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          isLoading: false,
-          errMessage: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      }); 
     });
   }
 
@@ -127,24 +113,10 @@ class GroupView extends React.Component {
         repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errMessage: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            isLoading: false,
-            errMessage: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          isLoading: false,
-          errMessage: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      }); 
     });
   }
 

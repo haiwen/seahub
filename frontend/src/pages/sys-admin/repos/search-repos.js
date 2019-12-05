@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { loginUrl, gettext } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import Content from './repos';
 
@@ -34,24 +35,10 @@ class SearchRepos extends Component {
         repos: res.data.repo_list
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          }); 
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          }); 
-        }   
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        }); 
-      }   
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

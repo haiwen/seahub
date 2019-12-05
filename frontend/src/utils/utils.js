@@ -1,6 +1,9 @@
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 import TextTranslation from './text-translation';
+import React from 'react';
+import toaster from '../components/toast';
+import SessionExpiredTip from '../components/session-expired-tip';
 
 export const Utils = {
 
@@ -966,10 +969,19 @@ export const Utils = {
   /*
    * only used in the 'catch' part of a seafileAPI request
    */
-  getErrorMsg: function(error) {
+  getErrorMsg: function(error, showLoginTipIf403) {
     let errorMsg = '';
     if (error.response) {
-      if (error.response.data && error.response.data['error_msg']) {
+      if (error.response.status == 403) {
+        if (showLoginTipIf403) {
+          toaster.danger(
+            <SessionExpiredTip />,
+            {id: 'session_expired', duration: 3600}
+          );
+        }
+        errorMsg = gettext('Permission denied');
+      } else if (error.response.data &&
+        error.response.data['error_msg']) {
         errorMsg = error.response.data['error_msg'];
       } else {
         errorMsg = gettext('Error');

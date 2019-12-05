@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import cookie from 'react-cookies';
 import { Link } from '@reach/router';
-import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
+import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -328,25 +328,10 @@ class SharedLibraries extends Component {
         items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import OrgAdminUserNav from '../../components/org-admin-user-nav';
@@ -29,24 +29,10 @@ class OrgUserProfile extends Component {
         loading: false
       }, res.data)); 
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          }); 
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          }); 
-        }   
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        }); 
-      }   
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     }); 
   }
 

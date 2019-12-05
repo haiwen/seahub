@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, loginUrl, canAddGroup } from '../../utils/constants';
+import { gettext, siteRoot, canAddGroup } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -143,24 +143,10 @@ class GroupsView extends React.Component {
         groupList: groupList,
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          isLoading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      }); 
     });
   }
 

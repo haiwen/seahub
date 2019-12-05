@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import { post } from 'axios';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { loginUrl, siteRoot, gettext } from '../../../utils/constants';
+import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import CreateFolderDialog from '../../../components/dialog/create-folder-dialog';
 import Dirent from '../../../models/system-admin/dirent';
@@ -82,24 +82,10 @@ class DirView extends Component {
         window.history.replaceState({url: url, path: path}, path, url);
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { loginUrl, gettext } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
@@ -196,24 +196,10 @@ class User extends Component {
         userInfo: res.data
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          }); 
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          }); 
-        }   
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

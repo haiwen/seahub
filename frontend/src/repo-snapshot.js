@@ -73,24 +73,10 @@ class RepoSnapshot extends React.Component {
         folderItems: res.data.dirent_list
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Permission denied')
-          }); 
-        } else {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Error')
-          }); 
-        }
-      } else {
-        this.setState({
-          isLoading: false,
-          errorMsg: gettext('Please check the network.')
-        }); 
-      }   
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      }); 
     });
   }
 

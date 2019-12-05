@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl} from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Repo from '../../models/repo';
@@ -51,24 +51,10 @@ class MyLibraries extends Component {
         repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          isLoading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 
 
@@ -93,24 +94,10 @@ class FileScanRecords extends Component {
         records: res.data.record_list,
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

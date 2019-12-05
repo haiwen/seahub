@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, loginUrl, siteRoot, enableSysAdminViewRepo, isPro } from '../../../utils/constants';
+import { gettext, siteRoot, enableSysAdminViewRepo, isPro } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import moment from 'moment';
@@ -220,24 +220,10 @@ class AdminOperationLogs extends Component {
         hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count),
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

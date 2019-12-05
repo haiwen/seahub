@@ -4,7 +4,7 @@ import cookie from 'react-cookies';
 import MediaQuery from 'react-responsive';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl, canAddPublicRepo } from '../../utils/constants';
+import { gettext, canAddPublicRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import toaster from '../../components/toast';
@@ -52,24 +52,10 @@ class PublicSharedView extends React.Component {
         repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errMessage: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            isLoading: false,
-            errMessage: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          isLoading: false,
-          errMessage: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

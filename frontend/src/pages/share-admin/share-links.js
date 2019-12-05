@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { isPro, gettext, siteRoot, loginUrl, canGenerateUploadLink } from '../../utils/constants';
+import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
 import ShareLink from '../../models/share-link';
 import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import Loading from '../../components/loading';
@@ -391,24 +391,10 @@ class ShareAdminShareLinks extends Component {
         items: this._sortItems(items, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

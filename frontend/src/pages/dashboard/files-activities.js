@@ -330,12 +330,10 @@ class FilesActivities extends Component {
         this.getMore();
       }
     }).catch(error => {
-      if (error.response.status == 403) {
-        this.setState({
-          isFirstLoading: false,
-          errorMsg: gettext('Permission denied')
-        });
-      }
+      this.setState({
+        isFirstLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 
@@ -415,12 +413,10 @@ class FilesActivities extends Component {
         this.getMore();
       }
     }).catch(error => {
-      if (error.response.status == 403) {
-        this.setState({
-          isLoadingMore: false,
-          errorMsg: gettext('Permission denied')
-        });
-      }
+      this.setState({
+        isLoadingMore: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 

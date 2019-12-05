@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import { Utils } from '../../utils/utils';
@@ -177,25 +177,10 @@ class LinkedDevices extends Component {
         items: res.data
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 
