@@ -1,0 +1,42 @@
+name: Seahub Test CI
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.6"
+
+      - name: apt install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libevent-dev libcurl4-openssl-dev libglib2.0-dev
+          sudo apt-get install -y uuid-dev intltool libsqlite3-dev build-essential
+          sudo apt-get install -y libarchive-dev libtool libjansson-dev valac
+          sudo apt-get install -y libfuse-dev cmake re2c flex sqlite3
+          sudo apt-get install -y libssl-dev libldap2-dev libonig-dev
+          sudo apt-get install -y libxml2 libxml2-dev
+
+      - name: clone and build
+        run: |
+          git clone --depth=1 --branch=master git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+          cd /tmp/seafile-test-deploy && git fetch origin python3:python3 && git checkout python3
+          ./bootstrap.sh
+
+      - name: pip install
+        run: |
+          cd $GITHUB_WORKSPACE
+          pip install -r test-requirements.txt
+
+      - name: run pytest
+        run: |
+          cd $GITHUB_WORKSPACE
+          export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1
+          #./tests/install-deps.sh
+          if ./tests/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
