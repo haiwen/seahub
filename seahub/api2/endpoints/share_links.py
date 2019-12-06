@@ -108,7 +108,7 @@ def check_permissions_arg(request):
 
     if isinstance(permissions, dict):
         perm_dict = permissions
-    elif isinstance(permissions, basestring):
+    elif isinstance(permissions, str):
         perm_dict = json.loads(str(permissions))
 
     can_edit = perm_dict.get('can_edit', False)
