@@ -97,6 +97,8 @@ from seahub.api2.endpoints.repo_api_tokens import RepoAPITokensView, RepoAPIToke
 from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLinkView, RepoInfoView, \
     ViaRepoDownloadLinkView
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
+from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMNotificationsView, \
+    OCMSharesPrepareView, OCMSharePrepareView, OCMSharesReceivedView, OCMShareReceivedView
 
 from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
 from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
@@ -177,6 +179,8 @@ from seahub.api2.endpoints.file_participants import FileParticipantsView, FilePa
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 
+from seahub.ocm.settings import OCM_ENDPOINT
+
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
 
@@ -246,6 +250,7 @@ urlpatterns = [
     url(r'^share-admin-share-links/$', react_fake_view, name="share_admin_share_links"),
     url(r'^share-admin-upload-links/$', react_fake_view, name="share_admin_upload_links"),
     url(r'^shared-libs/$', react_fake_view, name="shared_libs"),
+    url(r'^shared-with-ocm/$', react_fake_view, name="shared_with_ocm"),
     url(r'^my-libs/$', react_fake_view, name="my_libs"),
     url(r'^groups/$', react_fake_view, name="groups"),
     url(r'^group/(?P<group_id>\d+)/$', react_fake_view, name="group"),
@@ -446,6 +451,18 @@ urlpatterns = [
 
     ## user::activities
     url(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
+
+    ## user::ocm
+    # inter-server api, interact with other server
+    url(r'ocm-provider/$', OCMProtocolView.as_view(), name='api-v2.1-ocm-protocol'),
+    url(r'' + OCM_ENDPOINT + 'shares/$', OCMSharesView.as_view(), name='api-v2.1-ocm-shares'),
+    url(r'' + OCM_ENDPOINT + 'notifications/$', OCMNotificationsView.as_view(), name='api-v2.1-ocm-notifications'),
+
+    # local api, no interaction with other server
+    url(r'api/v2.1/ocm/shares-prepare/$', OCMSharesPrepareView.as_view(), name='api-v2.1-ocm-shares-prepare'),
+    url(r'api/v2.1/ocm/shares-prepare/(?P<pk>\d+)/$', OCMSharePrepareView.as_view(), name='api-v2.1-ocm-share-prepare'),
+    url(r'api/v2.1/ocm/shares-received/$', OCMSharesReceivedView.as_view(), name='api-v2.1-ocm-shares-received'),
+    url(r'api/v2.1/ocm/shares-received/(?P<pk>\d+)/$', OCMShareReceivedView.as_view(), name='api-v2.1-ocm-share-received'),
 
     # admin: activities
     url(r'^api/v2.1/admin/user-activities/$', UserActivitiesView.as_view(), name='api-v2.1-admin-user-activity'),
