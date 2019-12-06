@@ -167,7 +167,7 @@ from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusScanRecords
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 
-from seahub.settings import OCM_ENDPOINT
+from seahub.ocm.settings import OCM_ENDPOINT
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),

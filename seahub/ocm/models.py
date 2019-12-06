@@ -16,7 +16,7 @@ PERMISSION_CHOICES = (
 
 class OCMShareManager(models.Manager):
 
-    def create_ocm_share(self, shared_secret, from_user, to_user, to_server_url, repo_id, repo_name, permission, path='/'):
+    def add(self, shared_secret, from_user, to_user, to_server_url, repo_id, repo_name, permission, path='/'):
         ocm_share = super(OCMShareManager, self).create(shared_secret=shared_secret,
                                                   from_user=from_user,
                                                   to_user=to_user,
@@ -61,7 +61,7 @@ class OCMShare(models.Model):
 
 class OCMShareReceivedManager(models.Manager):
 
-    def create_ocm_share_received(self, shared_secret, from_user, to_user, from_server_url, repo_id, repo_name, permission, provider_id, path='/'):
+    def add(self, shared_secret, from_user, to_user, from_server_url, repo_id, repo_name, permission, provider_id, path='/'):
         ocm_share = super(OCMShareReceivedManager, self).create(shared_secret=shared_secret,
                                                   from_user=from_user,
                                                   to_user=to_user,

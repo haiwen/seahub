@@ -725,20 +725,6 @@ ENABLE_WIKI = True
 ENABLE_REPO_SNAPSHOT_LABEL = False
 
 
-# Enable OCM Protocol
-ENABLE_OCM = True
-OCM_PROVIDER_ID = '7079d886-3400-4454-abb7-165d0fe22d2a'
-OCM_SEAFILE_PROTOCOL = 'Seafile API'
-OCM_API_VERSION = '1.0-proposal1'
-OCM_RESOURCE_TYPE_FILE = 'file'
-OCM_RESOURCE_TYPE_LIBRARY = 'library'
-OCM_SHARE_TYPES = ['user']
-SUPPORTED_OCM_PROTOCOLS = (
-    OCM_SEAFILE_PROTOCOL,
-)
-OCM_ENDPOINT = 'api/v2.1/ocm/'
-
-
 ############################
 # Settings for SeafileDocs #
 ############################

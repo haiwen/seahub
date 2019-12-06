@@ -14,21 +14,26 @@ from rest_framework.views import APIView
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.settings import ENABLE_OCM, SUPPORTED_OCM_PROTOCOLS, \
-    OCM_SEAFILE_PROTOCOL, OCM_RESOURCE_TYPE_LIBRARY, OCM_API_VERSION, \
-    OCM_SHARE_TYPES, OCM_ENDPOINT, OCM_PROVIDER_ID
 
 from seaserv import seafile_api, ccnet_api
 
 from seahub.utils.repo import get_available_repo_perms, get_repo_owner
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
-    OCM_NOTIFICATION_TYPE_LIST, OCM_NOTIFICATION_SHARE_DECLINED, \
-    OCM_NOTIFICATION_SHARE_UNSHARED, OCM_PROTOCOL_URL, OCM_NOTIFICATION_URL, \
-    OCM_CREATE_SHARE_URL, SEAFILE_PERMISSION2OCM_PERMISSION
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.ocm.models import OCMShareReceived, OCMShare
+from seahub.ocm.settings import ENABLE_OCM, SUPPORTED_OCM_PROTOCOLS, \
+    OCM_SEAFILE_PROTOCOL, OCM_RESOURCE_TYPE_LIBRARY, OCM_API_VERSION, \
+    OCM_SHARE_TYPES, OCM_ENDPOINT, OCM_PROVIDER_ID, OCM_NOTIFICATION_TYPE_LIST, \
+    OCM_NOTIFICATION_SHARE_UNSHARED, OCM_NOTIFICATION_SHARE_DECLINED, OCM_PROTOCOL_URL, \
+    OCM_NOTIFICATION_URL, OCM_CREATE_SHARE_URL
 
 logger = logging.getLogger(__name__)
+
+# Convert seafile permission to ocm protocol standard permission
+SEAFILE_PERMISSION2OCM_PERMISSION = {
+    PERMISSION_READ: ['read'],
+    PERMISSION_READ_WRITE: ['read', 'write'],
+}
 
 
 def gen_shared_secret(length=23):
@@ -40,11 +45,17 @@ def get_remote_protocol(url):
     return json.loads(response.text)
 
 
-def check_url(url):
-    if not url.startswith('http://'):
-        url = 'http://' + url
+def is_valid_url(url):
+    if not url.startswith('https://') and not url.startswith('http://'):
+        return False
     if not url.endswith('/'):
-        url = url + '/'
+        return False
+    return True
+
+
+def check_url_slash(url):
+    if not url.endswith('/'):
+        url += '/'
     return url
 
 
@@ -56,6 +67,9 @@ class OCMProtocolView(APIView):
         """
         return ocm protocol info to remote server
         """
+        # TODO
+        # currently if ENABLE_OCM is False, return 404 as if ocm protocol is not implemented
+        # ocm protocol is not clear about this, https://github.com/GEANT/OCM-API/pull/37
         if not ENABLE_OCM:
             error_msg = 'feature not enabled.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -171,7 +185,7 @@ class OCMSharesView(APIView):
         else:
             permission = PERMISSION_READ
 
-        OCMShareReceived.objects.create_ocm_share_received(
+        OCMShareReceived.objects.add(
             shared_secret=shared_secret,
             from_user=sender,
             to_user=share_with,
@@ -288,8 +302,8 @@ class OCMSharesPrepareView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         to_server_url = request.data.get('to_server_url', '').lower().strip()
-        if not to_server_url:
-            error_msg = 'to_server_url invalid.'
+        if not to_server_url or not is_valid_url(to_server_url):
+            error_msg = 'to_server_url %s invalid.' % to_server_url
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo_id = request.data.get('repo_id', '')
@@ -302,21 +316,30 @@ class OCMSharesPrepareView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
         path = request.data.get('path', '/')
-        if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
-        if repo.encrypted and path != '/':
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Folder invalid.')
+        # TODO
+        # 1. folder check
+        # 2. encrypted repo check
+        #
+        # if seafile_api.get_dir_id_by_path(repo.id, path) is None:
+        #     return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
+        #
+        # if repo.encrypted and path != '/':
+        #     return api_error(status.HTTP_400_BAD_REQUEST, 'Folder invalid.')
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
             return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+        if repo_owner != username:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         consumer_protocol = get_remote_protocol(to_server_url + OCM_PROTOCOL_URL)
 
-        repo_owner = get_repo_owner(request, repo_id)
         shared_secret = gen_shared_secret()
-        from_user = request.user.username
+        from_user = username
         post_data = {
             'shareWith': to_user,
             'name': repo.repo_name,
@@ -334,7 +357,7 @@ class OCMSharesPrepareView(APIView):
                     'sharedSecret': shared_secret,
                     'permissions': SEAFILE_PERMISSION2OCM_PERMISSION[permission],
                     'repoId': repo_id,
-                    'seafileServiceURL': config.SERVICE_URL,
+                    'seafileServiceURL': check_url_slash(config.SERVICE_URL),
                 },
             },
         }
@@ -345,7 +368,7 @@ class OCMSharesPrepareView(APIView):
             logging.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        ocm_share = OCMShare.objects.create_ocm_share(
+        ocm_share = OCMShare.objects.add(
             shared_secret=shared_secret,
             from_user=request.user.username,
             to_user=to_user,
@@ -440,7 +463,7 @@ class OCMShareReceivedView(APIView):
         from_server_url = ocm_share_received.from_server_url
         shared_secret = ocm_share_received.shared_secret
 
-        provider_protocol = get_remote_protocol(check_url(from_server_url) + OCM_PROTOCOL_URL)
+        provider_protocol = get_remote_protocol(from_server_url + OCM_PROTOCOL_URL)
 
         # send unshare notification to consumer
         post_data = {
