@@ -59,6 +59,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
+from seahub.ocm.settings import ENABLE_OCM
 from seahub.constants import HASH_URLS, PERMISSION_READ
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
@@ -1150,4 +1151,5 @@ def react_fake_view(request, **kwargs):
         'folder_perm_enabled': folder_perm_enabled,
         'file_audit_enabled' : FILE_AUDIT_ENABLED,
         'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
+        'enable_ocm': ENABLE_OCM,
     })
