@@ -133,6 +133,9 @@ class ShareToOtherServer extends React.Component {
   startOCMShare = () => {
     let { repoID, itemPath } = this.props;
     let { toServerURL, toUser, permission } = this.state;
+    if (!toServerURL.endsWith('/')) {
+      toServerURL += '/';
+    }
     seafileAPI.addOCMSharePrepare(toUser, toServerURL, repoID, itemPath, permission).then((res) => {
       toaster.success(gettext('share success.'));
       let ocmShares = this.state.ocmShares;

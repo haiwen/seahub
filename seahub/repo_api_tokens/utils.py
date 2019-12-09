@@ -13,6 +13,7 @@ from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils import is_pro_version, FILEEXT_TYPE_MAP, IMAGE, XMIND, VIDEO
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.repo import is_group_repo_staff
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -58,7 +59,7 @@ def get_dir_file_recursively(repo_id, path, all_dirs):
         entry["parent_dir"] = path
         entry["id"] = dirent.obj_id
         entry["name"] = dirent.obj_name
-        entry["mtime"] = dirent.mtime
+        entry["mtime"] = timestamp_to_isoformat_timestr(dirent.mtime)
 
         all_dirs.append(entry)
 
@@ -113,7 +114,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             dir_info["type"] = "dir"
             dir_info["id"] = dirent.obj_id
             dir_info["name"] = dirent.obj_name
-            dir_info["mtime"] = dirent.mtime
+            dir_info["mtime"] = timestamp_to_isoformat_timestr(dirent.mtime)
             dir_info["permission"] = dirent.permission
             dir_info["parent_dir"] = parent_dir
             dir_info_list.append(dir_info)
@@ -156,7 +157,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             file_info["type"] = "file"
             file_info["id"] = file_obj_id
             file_info["name"] = file_name
-            file_info["mtime"] = dirent.mtime
+            file_info["mtime"] = timestamp_to_isoformat_timestr(dirent.mtime)
             file_info["permission"] = dirent.permission
             file_info["parent_dir"] = parent_dir
             file_info["size"] = dirent.size

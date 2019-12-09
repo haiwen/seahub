@@ -95,6 +95,8 @@ from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLi
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
 from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMNotificationsView, \
     OCMSharesPrepareView, OCMSharePrepareView, OCMSharesReceivedView, OCMShareReceivedView
+from seahub.api2.endpoints.ocm_repos import OCMReposDirView, OCMReposDownloadLinkView, \
+    OCMReposUploadLinkView
 
 # Admin
 from seahub.api2.endpoints.admin.abuse_reports import AdminAbuseReportsView, AdminAbuseReportView
@@ -236,6 +238,7 @@ urlpatterns = [
     url(r'^group/(?P<group_id>\d+)/$', react_fake_view, name="group"),
     url(r'^library/(?P<repo_id>[-0-9a-f]{36})/$', react_fake_view, name="library_view"),
     url(r'^library/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="lib_view"),
+    url(r'^remote-library/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="remote_lib_view"),
     url(r'^my-libs/deleted/$', react_fake_view, name="my_libs_deleted"),
     url(r'^org/$', react_fake_view, name="org"),
     url(r'^invitations/$', react_fake_view, name="invitations"),
@@ -424,16 +427,20 @@ urlpatterns = [
     url(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
 
     ## user::ocm
-    # inter-server api, interact with other server
+    # ocm inter-server api, interact with other server
     url(r'ocm-provider/$', OCMProtocolView.as_view(), name='api-v2.1-ocm-protocol'),
     url(r'' + OCM_ENDPOINT + 'shares/$', OCMSharesView.as_view(), name='api-v2.1-ocm-shares'),
     url(r'' + OCM_ENDPOINT + 'notifications/$', OCMNotificationsView.as_view(), name='api-v2.1-ocm-notifications'),
 
-    # local api, no interaction with other server
+    # ocm local api, no interaction with other server
     url(r'api/v2.1/ocm/shares-prepare/$', OCMSharesPrepareView.as_view(), name='api-v2.1-ocm-shares-prepare'),
     url(r'api/v2.1/ocm/shares-prepare/(?P<pk>\d+)/$', OCMSharePrepareView.as_view(), name='api-v2.1-ocm-share-prepare'),
     url(r'api/v2.1/ocm/shares-received/$', OCMSharesReceivedView.as_view(), name='api-v2.1-ocm-shares-received'),
     url(r'api/v2.1/ocm/shares-received/(?P<pk>\d+)/$', OCMShareReceivedView.as_view(), name='api-v2.1-ocm-share-received'),
+    # ocm local api, repo related operations
+    url(r'api/v2.1/ocm/repos/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/dir/$', OCMReposDirView.as_view(), name='api-v2.1-ocm-repos-dir'),
+    url(r'api/v2.1/ocm/repos/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/download-link/$', OCMReposDownloadLinkView.as_view(), name='api-v2.1-ocm-repos-dir'),
+    url(r'api/v2.1/ocm/repos/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/upload-link/$', OCMReposUploadLinkView.as_view(), name='api-v2.1-ocm-repos-dir'),
 
     # admin: activities
     url(r'^api/v2.1/admin/user-activities/$', UserActivitiesView.as_view(), name='api-v2.1-admin-user-activity'),
