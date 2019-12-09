@@ -16,7 +16,7 @@ class AdminUploadLinksTest(BaseTestCase):
 
     def setUp(self):
         self.repo_id = self.repo.id
-        self.folder_path= self.folder
+        self.folder_path = self.folder
         self.invalid_token = '00000000000000000000'
 
     def tearDown(self):
@@ -157,7 +157,7 @@ class AdminUploadLinkUploadTest(BaseTestCase):
         assert 'upload' in json_resp['upload_link']
 
         # test upload file via `upload_link`
-        upload_file_test(json_resp['upload_link'])
+        upload_file_test(json_resp['upload_link'], parent_dir=self.folder_path)
 
         self._remove_upload_link(token)
 

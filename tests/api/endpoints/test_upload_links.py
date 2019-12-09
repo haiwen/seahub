@@ -225,7 +225,7 @@ class UploadLinkUploadTest(BaseTestCase):
         assert 'upload' in json_resp['upload_link']
 
         # test upload file via `upload_link`
-        upload_file_test(json_resp['upload_link'])
+        upload_file_test(json_resp['upload_link'], parent_dir=self.folder_path)
 
         self._remove_upload_link(token)
 
