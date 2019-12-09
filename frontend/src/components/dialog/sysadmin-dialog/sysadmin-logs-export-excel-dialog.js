@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Alert } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { gettext, siteRoot } from '../../../utils/constants';
 import moment from 'moment';
 
@@ -82,20 +82,23 @@ class LogsExportExcelDialog extends React.Component {
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Choose date')}</ModalHeader>
         <ModalBody>
-          {gettext('Start date')}
-          <Input
-            value={this.state.startDateStr}
-            onChange={this.handleStartChange}
-            placeholder='YYYY-mm-dd'
-            innerRef={input => {this.newInput = input;}}
-          />
-          <br/>
-          {gettext('End date')}
-          <Input
-            value={this.state.endDateStr}
-            onChange={this.handleEndChange}
-            placeholder='YYYY-mm-dd'
-          />
+          <FormGroup>
+            <Label>{gettext('Start date')}</Label>
+            <Input
+              value={this.state.startDateStr}
+              onChange={this.handleStartChange}
+              placeholder='yyyy-mm-dd'
+              innerRef={input => {this.newInput = input;}}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>{gettext('End date')}</Label>
+            <Input
+              value={this.state.endDateStr}
+              onChange={this.handleEndChange}
+              placeholder='yyyy-mm-dd'
+            />
+          </FormGroup>
           {this.state.errMsg &&
             <Alert className="mt-2" color="danger">
               {gettext(this.state.errMsg)}
@@ -103,6 +106,7 @@ class LogsExportExcelDialog extends React.Component {
           }
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.downloadExcel}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
