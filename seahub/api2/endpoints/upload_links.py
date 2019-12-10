@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import json
 import logging
 from constance import config
 from dateutil.relativedelta import relativedelta
@@ -282,8 +283,9 @@ class UploadLinkUpload(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        obj_id = json.dumps({'parent_dir': path})
         token = seafile_api.get_fileserver_access_token(repo_id,
-                dir_id, 'upload-link', uls.username, use_onetime=False)
+                obj_id, 'upload-link', uls.username, use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
