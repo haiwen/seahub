@@ -382,7 +382,12 @@ def get_file_upload_url_ul(request, token):
                             status=403, content_type=content_type)
 
     dir_id = seafile_api.get_dir_id_by_path(uls.repo_id, uls.path)
-    args = [repo_id, dir_id, 'upload-link', shared_by]
+    if not dir_id:
+        return HttpResponse(json.dumps({"error": _("Directory does not exist.")}),
+                            status=404, content_type=content_type)
+
+    obj_id = json.dumps({'parent_dir': uls.path})
+    args = [repo_id, obj_id, 'upload-link', shared_by]
     kwargs = {
         'use_onetime': False,
     }

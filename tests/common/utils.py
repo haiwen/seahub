@@ -21,11 +21,11 @@ def urljoin(base, *args):
 def apiurl(*parts):
     return urljoin(BASE_URL, *parts)
 
-def upload_file_test(upload_link):
+def upload_file_test(upload_link, parent_dir='/'):
     file_name = randstring(6)
     files = {
         'file': (file_name, 'Some lines in this file'),
-        'parent_dir': '/',
+        'parent_dir': parent_dir,
     }
 
     resp = requests.post(upload_link, files=files)

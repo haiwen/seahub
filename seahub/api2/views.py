@@ -1784,8 +1784,9 @@ class UploadLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
+        obj_id = json.dumps({'parent_dir': parent_dir})
         token = seafile_api.get_fileserver_access_token(repo_id,
-                'dummy', 'upload', request.user.username, use_onetime=False)
+                obj_id, 'upload', request.user.username, use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
@@ -1876,8 +1877,9 @@ class UploadBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
+        obj_id = json.dumps({'parent_dir': parent_dir})
         token = seafile_api.get_fileserver_access_token(repo_id,
-                'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
+                obj_id, 'upload-blks-api', request.user.username, use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
@@ -1921,8 +1923,9 @@ class UploadBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
+        obj_id = json.dumps({'parent_dir': parent_dir})
         token = seafile_api.get_fileserver_access_token(repo_id,
-                'dummy', 'upload', request.user.username, use_onetime=False)
+                obj_id, 'upload', request.user.username, use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
