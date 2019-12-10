@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import json
 import logging
 
 from rest_framework.authentication import SessionAuthentication
@@ -75,8 +76,9 @@ class AdminSystemLibraryUploadLink(APIView):
             error_msg = 'Folder %s not found.' % parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        obj_id = json.dumps({'parent_dir': parent_dir})
         token = seafile_api.get_fileserver_access_token(repo_id,
-                'dummy', 'upload', 'system', use_onetime=False)
+                obj_id, 'upload', 'system', use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
