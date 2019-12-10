@@ -366,7 +366,10 @@ class ViaRepoUploadLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_443_ABOVE_QUOTA, "Out of quota.")
 
-        obj_id = json.dumps({'anonymous_user': request.repo_api_token_obj.app_name}) if is_pro_version() else 'dummy'
+        obj_data = {'parent_dir': parent_dir}
+        if is_pro_version():
+            obj_data['anonymous_user'] = request.repo_api_token_obj.app_name
+        obj_id = json.dumps(obj_data)
         token = seafile_api.get_fileserver_access_token(repo_id,
                                                         obj_id, 'upload', '',
                                                         use_onetime=False)
