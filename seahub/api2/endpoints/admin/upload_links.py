@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import json
 import logging
 
 from rest_framework.authentication import SessionAuthentication
@@ -179,11 +180,12 @@ class AdminUploadLinkUpload(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = uploadlink.path
-        obj_id = seafile_api.get_dir_id_by_path(repo_id, path)
-        if not obj_id:
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
             error_msg = 'Folder not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        obj_id = json.dumps({'parent_dir': path})
         upload_token = seafile_api.get_fileserver_access_token(repo_id,
                 obj_id, 'upload-link', uploadlink.username, use_onetime=False)
 
