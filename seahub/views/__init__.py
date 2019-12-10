@@ -781,19 +781,6 @@ def file_revisions(request, repo_id):
     use_new_api = True if file_ext in suffix_list else False
     use_new_style = True if use_new_api and filetype == 'markdown' else False
 
-    if request.GET.get('_new', None) is not None:
-        if request.GET.get('_new') == '0':
-            return render(request, 'file_revisions.html', {
-                'repo': repo,
-                'path': path,
-                'u_filename': u_filename,
-                'zipped': zipped,
-                'is_owner': is_owner,
-                'can_compare': can_compare,
-                'can_revert_file': can_revert_file,
-                'can_download_file': parse_repo_perm(repo_perm).can_download,
-            })
-
     if use_new_style:
         return render(request, 'file_revisions_new.html', {
             'repo': repo,
