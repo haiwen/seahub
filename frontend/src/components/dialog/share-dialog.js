@@ -128,7 +128,7 @@ class ShareDialog extends React.Component {
                 }
               </Fragment>
             }
-            {enableOCM && itemType === 'library' &&
+            {enableOCM && itemType === 'library' && this.state.isRepoOwner &&
               <NavItem>
                 <NavLink className={activeTab === 'shareToOtherServer' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToOtherServer')}>
                   {gettext('Share to other server')}
