@@ -655,32 +655,6 @@ def view_lib_file(request, repo_id, path):
 
     if filetype == MARKDOWN:
 
-        # get file size
-        if file_size > FILE_PREVIEW_MAX_SIZE:
-            error_msg = _('File size surpasses %s, can not be opened online.') % \
-                filesizeformat(FILE_PREVIEW_MAX_SIZE)
-
-            return_dict['err'] = error_msg
-            return render(request, 'view_file_base.html', return_dict)
-
-        file_enc = request.GET.get('file_enc', 'auto')
-        if file_enc not in FILE_ENCODING_LIST:
-            file_enc = 'auto'
-
-        error_msg, file_content, encoding = get_file_content(filetype,
-                inner_path, file_enc)
-        if error_msg:
-            return_dict['err'] = error_msg
-            return render(request, 'view_file_base.html', return_dict)
-
-        file_encoding_list = FILE_ENCODING_LIST
-        if encoding and encoding not in FILE_ENCODING_LIST:
-            file_encoding_list.append(encoding)
-
-        return_dict['file_enc'] = file_enc
-        return_dict['encoding'] = encoding
-        return_dict['file_encoding_list'] = file_encoding_list
-
         mode = request.GET.get('mode', '')
 
         is_draft = is_draft_file(repo.id, path)
@@ -693,7 +667,6 @@ def view_lib_file(request, repo_id, path):
 
         return_dict['protocol'] = request.is_secure() and 'https' or 'http'
         return_dict['domain'] = get_current_site(request).domain
-        return_dict['file_content'] = convert_md_link(file_content, repo_id, username)
         return_dict['serviceUrl'] = get_service_url().rstrip('/')
         return_dict['language_code'] = get_language()
         return_dict['mode'] = 'edit' if mode == 'edit' else 'viewer'
@@ -711,10 +684,8 @@ def view_lib_file(request, repo_id, path):
             can_edit_file = False
         elif is_locked and not locked_by_me:
             can_edit_file = False
-
         return_dict['can_edit_file'] = can_edit_file
 
-        template = 'view_file_%s.html' % filetype.lower()
         return render(request, template, return_dict)
 
     elif filetype in (VIDEO, AUDIO, PDF, SVG):
