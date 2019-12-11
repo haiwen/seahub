@@ -1,17 +1,10 @@
-import time
 import json
-from mock import patch
 
-from django.utils import timezone
 from django.core.urlresolvers import reverse
-from django.test import override_settings
 
 from seahub.test_utils import BaseTestCase
-from seahub.invitations.models import Invitation
-from seahub.api2.permissions import CanInviteGuest
-from seahub.base.accounts import UserPermissions
-from seahub.invitations import models
 from termsandconditions.models import TermsAndConditions, UserTermsAndConditions
+
 
 class AdminTermsAndConditionsTest(BaseTestCase):
     def setUp(self):

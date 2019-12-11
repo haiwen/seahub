@@ -53,7 +53,7 @@ class AdminTermsAndConditions(APIView):
             info['version_number'] = term.version_number
             info['text'] = term.text
             info['ctime'] = datetime_to_isoformat_timestr(term.date_created)
-            info['activate_time'] = datetime_to_isoformat_timestr(term.date_active)
+            info['activate_time'] = datetime_to_isoformat_timestr(term.date_active) if term.date_active else ''
             info_list.append(info)
 
         return Response({'term_and_condition_list': info_list})
@@ -109,7 +109,7 @@ class AdminTermsAndConditions(APIView):
         info['version_number'] = term.version_number
         info['text'] = term.text
         info['ctime'] = datetime_to_isoformat_timestr(term.date_created)
-        info['activate_time'] = datetime_to_isoformat_timestr(term.date_active)
+        info['activate_time'] = datetime_to_isoformat_timestr(term.date_active) if term.date_active else ''
 
         return Response(info)
 
@@ -179,7 +179,7 @@ class AdminTermAndCondition(APIView):
         info['version_number'] = term.version_number
         info['text'] = term.text
         info['ctime'] = datetime_to_isoformat_timestr(term.date_created)
-        info['activate_time'] = datetime_to_isoformat_timestr(term.date_active)
+        info['activate_time'] = datetime_to_isoformat_timestr(term.date_active) if term.date_active else ''
 
         return Response(info)
 

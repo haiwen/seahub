@@ -146,7 +146,7 @@ class Shares(BaseTestCase):
 
         self.login_as(self.admin)
 
-        invalid_group_id = 'invalid_group_id'
+        invalid_group_id = -100
         permission = 'r'
 
         data = {
@@ -167,7 +167,7 @@ class Shares(BaseTestCase):
 
         self.login_as(self.admin)
 
-        invalid_group_id = 'invalid_group_id'
+        invalid_group_id = -100
         permission = 'admin'
 
         data = {
