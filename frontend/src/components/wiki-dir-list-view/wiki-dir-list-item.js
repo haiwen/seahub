@@ -41,7 +41,8 @@ class WikiDirListItem extends React.Component {
     let href = siteRoot + 'published' + Utils.joinPath(path, dirent.name);
     let iconUrl = Utils.getDirentIcon(dirent);
 
-    return (
+    const isDesktop = Utils.isDesktop();
+    return isDesktop ? (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onContextMenu={this.onContextMenu}>
         <td className="text-center">
           <img src={iconUrl} width="24" alt="" />
@@ -50,7 +51,19 @@ class WikiDirListItem extends React.Component {
           <a href={href} onClick={this.onDirentClick}>{dirent.name}</a>
         </td>
         <td>{dirent.size}</td>
-        <td title={dirent.mtime_relative}>{dirent.mtime_relative}</td>
+        <td>{dirent.mtime_relative}</td>
+      </tr>
+    ) : (
+      <tr>
+        <td className="text-center">
+          <img src={iconUrl} width="24" alt="" />
+        </td>
+        <td>
+          <a href={href} onClick={this.onDirentClick}>{dirent.name}</a>
+          <br />
+          <span className="item-meta-info">{dirent.size}</span>
+          <span className="item-meta-info">{dirent.mtime_relative}</span>
+        </td>
       </tr>
     );
   }

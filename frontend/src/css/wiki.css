@@ -65,12 +65,6 @@ img[src=""] {
   min-height: 0;
 }
 
-.cur-view-content {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
 .cur-view-content .wiki-page-container {
   margin: -0.625rem -1rem -1.25rem;
   padding: 0.625rem 1rem 1.25rem;
