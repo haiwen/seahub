@@ -77,6 +77,8 @@ class MainPanel extends Component {
 
   render() {
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
+
+    const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
     return (
       <div className="main-panel wiki-main-panel o-hidden">
         <div className={`main-panel-north panel-top ${this.props.permission === 'rw' ? 'border-left-show' : ''}`}>
@@ -120,10 +122,10 @@ class MainPanel extends Component {
               {this.renderNavPath()}
             </div>
           </div>
-          <div className="cur-view-content">
+          <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
             {!this.props.pathExist && errMessage}
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
-            {(this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile) && (
+            {isViewingFile && (
               <WikiMarkdownViewer
                 markdownContent={this.props.content}
                 isFileLoading={this.props.isDataLoading}
