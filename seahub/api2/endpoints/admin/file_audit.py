@@ -69,6 +69,7 @@ class FileAudit(APIView):
                 ev_user_list.append(ev.user)
                 ev_repo_owner_list.append(ev.repo_owner)
 
+
             ev_user_name_dict = get_user_name_dict(ev_user_list)
             ev_user_contact_email_dict = get_user_contact_email_dict(ev_user_list)
             ev_repo_owner_name_dict = get_user_name_dict(ev_repo_owner_list)
