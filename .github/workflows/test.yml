@@ -15,7 +15,6 @@ jobs:
 
       - name: apt install
         run: |
-          sudo apt-get update
           sudo apt-get install -y libevent-dev libcurl4-openssl-dev libglib2.0-dev
           sudo apt-get install -y uuid-dev intltool libsqlite3-dev build-essential
           sudo apt-get install -y libarchive-dev libtool libjansson-dev valac
