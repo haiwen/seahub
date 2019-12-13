@@ -210,7 +210,7 @@ class CreateRepoDialog extends React.Component {
                 {!this.state.disabled && 
                   <FormGroup>
                     {/* todo translate */}
-                    <Label for="passwd1" className="font-weight-bold">{gettext('Password')}</Label><span className="tip">{' '}{gettext('(at least {placeholder} characters)').replace('{placeholder}', repoPasswordMinLength)}</span>
+                    <Label for="passwd1">{gettext('Password')}</Label><span className="tip">{' '}{gettext('(at least {placeholder} characters)').replace('{placeholder}', repoPasswordMinLength)}</span>
                     <Input 
                       id="passwd1" 
                       type="password"
@@ -223,7 +223,7 @@ class CreateRepoDialog extends React.Component {
                 }
                 {!this.state.disabled && 
                   <FormGroup>
-                    <Label for="passwd2" className="font-weight-bold">{gettext('Password again')}</Label>
+                    <Label for="passwd2">{gettext('Password again')}</Label>
                     <Input 
                       id="passwd2"
                       type="password"
